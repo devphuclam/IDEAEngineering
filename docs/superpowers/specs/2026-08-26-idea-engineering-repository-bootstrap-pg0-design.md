@@ -89,11 +89,15 @@ The following are deliberately deferred to requirements and implementation-archi
 
 ### 3.2 Applicable baseline
 
+The controlled product-local source of truth for editions, applicability, tailoring state, gate mapping, version watch and official links is
+[`IE-GOV-STD-001`](../../governance/standards-register.md). The table below is the architecture-level summary, not a substitute for that register or for lawfully accessed normative text.
+
 | Source | Intended use | Classification |
 |---|---|---|
 | ISO/IEC/IEEE 15288:2023 | Product/system lifecycle backbone | STANDARD |
 | ISO/IEC/IEEE 12207:2026 | Software lifecycle backbone | STANDARD |
 | ISO/IEC/IEEE 24748-1:2024 | Integrated lifecycle tailoring guidance | STANDARD-GUIDED |
+| ISO/IEC/IEEE 15289:2019 | Life-cycle information-item content guidance | STANDARD-GUIDED |
 | ISO/IEC/IEEE 29148:2018 | Stakeholder needs and system/software requirements | STANDARD |
 | ISO/IEC/IEEE 42010:2022 | Architecture description, stakeholders, concerns, viewpoints, views, models and rationale | STANDARD |
 | ISO/IEC 25010:2023 | Product quality model | STANDARD |
@@ -101,9 +105,11 @@ The following are deliberately deferred to requirements and implementation-archi
 | ISO/IEC/IEEE 29119 Parts 1–4 and TR 29119-6 | Risk-based V&V concepts, processes, documentation and techniques | STANDARD-GUIDED |
 | ISO 10007:2017 | Configuration identification, change control, status accounting and audit | STANDARD-GUIDED |
 | ISO/IEC 27001:2022 + Amd 1:2024, ISO/IEC 27002:2022 | Organization/project security governance where applicable | STANDARD-GUIDED until an organizational ISMS decision exists |
+| ISO/IEC 27034-1:2011 + Cor 1:2014 | Application-security integration guidance | STANDARD-GUIDED |
 | NIST SSDF v1.1, OWASP ASVS for applicable Web/API surfaces, SPDX and SLSA | Secure development, product verification and supply-chain evidence | STANDARD-GUIDED |
 
-Official edition references are maintained in controlled input `IE-GOV-STD-BASELINE-001`. Before a formal conformity claim, the organization must obtain lawful access to normative texts, approve a clause/process tailoring matrix and conduct a controlled gap assessment.
+Primary-source verification is retained in
+[`IE-RES-STD-SOURCE-001`](../research/2026-08-26-idea-engineering-standards-primary-source-check.md). Before a formal conformity claim, the organization must obtain lawful access to normative texts, approve a clause/process tailoring matrix and conduct a controlled gap assessment.
 
 No listed standard mandates `Web/CAD/Office`, a folder tree, monorepo, Git, GitHub, a branch name, a programming language or a framework. The repository and decomposition decisions below are PROJECT-CONVENTION choices justified by traceability, maintainability, flexibility, compatibility, security and reliability concerns.
 
@@ -113,11 +119,11 @@ No listed standard mandates `Web/CAD/Office`, a folder tree, monorepo, Git, GitH
 
 This design used the following independently identified research outputs:
 
-- `IE-GOV-STD-BASELINE-001` — standards and governance baseline;
+- `IE-GOV-STD-BASELINE-001` — external standards and governance research baseline used to author the product register;
 - `IE-REF-ASSESS-001` — CodespaceTemplate fit assessment;
 - accepted architecture decisions from the icVault/DDM research workspace concerning C1 evolution, no in-process design-tool code, immutable Generation, optimistic concurrency, atomic Change Set and external format processing.
 
-These inputs remain controlled outside this repository until their product-facing conclusions are independently authored and accepted here.
+The external raw/research inputs remain controlled outside this repository; their product-facing conclusions are independently authored and controlled here.
 
 ### 4.2 Physical and procedural separation
 
