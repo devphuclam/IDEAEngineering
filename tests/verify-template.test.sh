@@ -1649,6 +1649,20 @@ test_verification_does_not_require_realpath() {
   fi
 }
 
+test_tracked_shell_scripts_use_lf_checkouts() {
+  local output
+  output=$(git -C "$repo_root" ls-files '*.sh' | while IFS= read -r path; do
+    git -C "$repo_root" check-attr eol -- "$path"
+  done)
+
+  if [ -n "$output" ] && ! grep -vE ': eol: lf$' <<< "$output" | grep -q .; then
+    printf '%s\n' 'ok - tracked shell scripts use LF checkouts'
+  else
+    printf '%s\n' 'not ok - tracked shell scripts use LF checkouts'
+    failures=$((failures + 1))
+  fi
+}
+
 test_complete_fixture_success() {
   make_fixture
   output=$(bash "$repo_root/scripts/verify-template" --root "$fixture" 2>&1)
@@ -1760,6 +1774,7 @@ test_links_after_valid_fence_closers_are_checked
 test_references_outside_the_root_are_rejected
 test_symlinked_file_reference_outside_root_is_rejected
 test_verification_does_not_require_realpath
+test_tracked_shell_scripts_use_lf_checkouts
 test_complete_fixture_success
 test_unknown_argument
 
