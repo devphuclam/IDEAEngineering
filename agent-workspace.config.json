@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "provider": "github",
+  "runtimeProfile": null,
+  "github": { "remote": "origin" },
+  "verification": { "commands": ["./scripts/verify-template"] },
+  "reviewIntent": { "minimumHumanApprovals": 0, "authorSelfReview": true }
+}

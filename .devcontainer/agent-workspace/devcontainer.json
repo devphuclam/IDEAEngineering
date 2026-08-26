@@ -1,0 +1,16 @@
+{
+  "name": "Agent Workspace (Local Agent Runner V1)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "remoteUser": "node",
+  "postCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "typescript.tsdk": "tools/agent-workspace/node_modules/typescript/lib"
+      }
+    }
+  }
+}

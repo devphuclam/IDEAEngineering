@@ -1,0 +1,9 @@
+test/
+coverage/
+.worktrees/
+.workspace/
+.env*
+*.log
+Dockerfile
+.dockerignore
+package-lock.json

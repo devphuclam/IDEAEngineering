@@ -1,0 +1,36 @@
+schema_version: 1
+skills:
+  - name: implement
+    path: .agents/skills/implement/SKILL.md
+  - name: tdd
+    path: .agents/skills/tdd/SKILL.md
+  - name: code-review
+    path: .agents/skills/code-review/SKILL.md
+  - name: writing-for-agents
+    path: .agents/skills/writing-for-agents/SKILL.md
+  - name: research
+    path: .agents/skills/research/SKILL.md
+  - name: wizard
+    path: .agents/skills/wizard/SKILL.md
+  - name: resolving-merge-conflicts
+    path: .agents/skills/resolving-merge-conflicts/SKILL.md
+  - name: speckit-analyze
+    path: .agents/skills/speckit-analyze/SKILL.md
+  - name: speckit-checklist
+    path: .agents/skills/speckit-checklist/SKILL.md
+  - name: speckit-clarify
+    path: .agents/skills/speckit-clarify/SKILL.md
+  - name: speckit-constitution
+    path: .agents/skills/speckit-constitution/SKILL.md
+  - name: speckit-converge
+    path: .agents/skills/speckit-converge/SKILL.md
+  - name: speckit-implement
+    path: .agents/skills/speckit-implement/SKILL.md
+  - name: speckit-plan
+    path: .agents/skills/speckit-plan/SKILL.md
+  - name: speckit-specify
+    path: .agents/skills/speckit-specify/SKILL.md
+  - name: speckit-tasks
+    path: .agents/skills/speckit-tasks/SKILL.md
+  - name: speckit-taskstoissues
+    path: .agents/skills/speckit-taskstoissues/SKILL.md

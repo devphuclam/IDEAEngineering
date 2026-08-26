@@ -1,0 +1,30 @@
+{
+  "name": "agent-workspace",
+  "version": "0.1.0",
+  "description": "Optional Agent Orchestration Layer: coordinate shared Agent work through isolated runs (claim, start, checkpoint, handoff, integrate, status)",
+  "type": "module",
+  "bin": {
+    "workspace": "./src/cli/index.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test \"test/unit/**/*.ts\" \"test/contract/**/*.ts\"",
+    "test:blackbox": "node --test \"test/blackbox/test_*.ts\"",
+    "test:offline-pilot": "node --test test/blackbox/test_offline_pilot.ts",
+    "test:github:compatibility": "node --test test/contract/github-provider-compatibility.ts",
+    "test:azure:offline": "node --test test/blackbox/test_azure_offline_pilot.ts",
+    "test:azure:live": "node test/live/live_azure.ts",
+    "test:baseline": "node --test test/baseline/runtime-baselines.test.ts",
+    "test:runtime": "node --test test/unit/runtime-readiness.test.ts",
+    "test:secret-scan": "node --test test/unit/secret-scan.test.ts",
+    "test:live:gates": "node --test test/live/live-gates.test.ts",
+    "test:live": "node --test test/blackbox/live_github.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^5.6.0"
+  }
+}

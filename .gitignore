@@ -1,0 +1,21 @@
+.worktrees/
+.workspace/
+.workspace/validation/
+.firecrawl/
+
+# Node/TypeScript workspace outputs
+node_modules/
+dist/
+build/
+*.log
+.env*
+
+# Python test outputs
+__pycache__/
+*.py[cod]
+.coverage
+
+# agent-workspace disposable state (ledgers, mirrors, caches)
+.workspace-*/mirrors/
+*.agent-workspace-mirror/
+.tmp-validation/

@@ -1,0 +1,7 @@
+scripts/verify-template text eol=lf
+tests/*.sh text eol=lf
+.agents/skills/ui-ux-pro-max/data/google-fonts.csv text eol=lf
+.agents/skills/ui-ux-pro-max/data/google-font-licenses.json text eol=lf
+.agents/skills/ui-ux-pro-max/data/icons.csv text eol=lf
+.agents/skills/ui-ux-pro-max/data/phosphor-icons-upstream.json text eol=lf
+.agents/skills/ui-styling/canvas-fonts/*-OFL.txt -whitespace

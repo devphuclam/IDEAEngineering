@@ -1,0 +1,6 @@
+{
+  "name": "Development Workspace Template",
+  "image": "mcr.microsoft.com/devcontainers/base@sha256:1f8bb87ca6d342a587a9163a5a1ea8c487bcd4f149e8483a5ff711f795f0776d",
+  "remoteUser": "vscode",
+  "postCreateCommand": "./scripts/verify-template"
+}

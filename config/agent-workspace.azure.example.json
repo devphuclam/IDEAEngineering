@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "provider": "azure-devops",
+  "runtimeProfile": null,
+  "azureDevOps": {
+    "organizationUrl": "https://dev.azure.com/your-organization",
+    "project": {
+      "name": "<project-name>",
+      "expectedId": null
+    },
+    "repository": {
+      "name": "<repository-name>",
+      "expectedId": null
+    },
+    "integrationTarget": "refs/heads/main",
+    "process": {
+      "profile": "agile@1",
+      "workItemType": "User Story",
+      "expectedFingerprint": null,
+      "override": null
+    },
+    "authentication": {
+      "preferred": "entra-user",
+      "tenantId": null,
+      "patFallback": {
+        "mode": "disabled",
+        "secretEnvironmentVariable": "AGENT_WORKSPACE_AZURE_PAT"
+      }
+    },
+    "remoteRoles": {
+      "companyOrigin": "origin",
+      "templateUpstream": "template-upstream"
+    }
+  },
+  "verification": { "commands": ["./scripts/verify-template"] },
+  "reviewIntent": { "minimumHumanApprovals": 0, "authorSelfReview": true },
+  "liveValidation": {
+    "modeFlagEnvironmentVariable": "AGENT_WORKSPACE_AZURE_LIVE",
+    "allowlistEnvironmentPrefix": "AGENT_WORKSPACE_AZURE_LIVE_ALLOW_"
+  }
+}

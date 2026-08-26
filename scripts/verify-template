@@ -1,0 +1,1666 @@
+#!/usr/bin/env bash
+
+set -uo pipefail
+
+usage() {
+  printf '%s\n' 'Usage: ./scripts/verify-template [--root PATH]' >&2
+}
+
+root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --root)
+      if [ "$#" -lt 2 ]; then
+        usage
+        exit 2
+      fi
+      root=$2
+      shift 2
+      ;;
+    --help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'ERROR [USAGE] Unknown argument: %s\n' "$1" >&2
+      usage
+      exit 2
+      ;;
+  esac
+done
+
+if ! root=$(cd -- "$root" 2>/dev/null && pwd -P); then
+  printf 'ERROR [REPOSITORY_ACCESS] Cannot access repository root: %s\n' "$root" >&2
+  exit 1
+fi
+
+tracked_paths=()
+git_enumeration_complete=0
+while IFS= read -r -d '' tracked_path; do
+  if [ -z "$tracked_path" ]; then
+    git_enumeration_complete=1
+    continue
+  fi
+  tracked_paths+=("$tracked_path")
+done < <(git -c "safe.directory=$root" -C "$root" ls-files -z && printf '\0')
+
+if [ "$git_enumeration_complete" -ne 1 ]; then
+  printf 'ERROR [REPOSITORY_ACCESS] Unable to enumerate tracked repository files at: %s\n' "$root" >&2
+  exit 1
+fi
+
+violations=0
+required_files=(
+  'README.md'
+  'AGENTS.md'
+  'CONTEXT.md'
+  'docs/core-workspace.md'
+  'docs/agents/collaboration.md'
+  'docs/agents/local-skills.md'
+  'docs/agents/github-platform-adapter.md'
+  'docs/platform-adapters/azure.md'
+  '.agents/skills/manifest.yml'
+  '.github/pull_request_template.md'
+  '.github/workflows/verify-template.yml'
+  'docs/generated-projects.md'
+  'scripts/docker-wsl-recovery.sh'
+  'tests/generated-project-smoke.test.sh'
+  'config/template.env.example'
+  'config/azure-adapter.env.example'
+  '.template-version'
+  '.template-provenance'
+)
+
+for required_file in "${required_files[@]}"; do
+  if [ ! -f "$root/$required_file" ]; then
+    printf 'ERROR [CORE_REQUIRED_FILE] Missing required Core Workspace artifact: %s\n' "$required_file" >&2
+    violations=$((violations + 1))
+  fi
+done
+
+require_content_fragments() {
+  local relative_path=$1
+  shift
+  local content
+  local fragment
+
+  if [ ! -f "$root/$relative_path" ]; then
+    return
+  fi
+  if ! content=$(<"$root/$relative_path"); then
+    printf 'ERROR [REPOSITORY_ACCESS] Unable to read required Core Workspace artifact: %s\n' "$relative_path" >&2
+    violations=$((violations + 1))
+    return
+  fi
+
+  for fragment in "$@"; do
+    if [[ "$content" != *"$fragment"* ]]; then
+      printf 'ERROR [CORE_CONTENT] %s must contain required contract marker: %s\n' "$relative_path" "$fragment" >&2
+      violations=$((violations + 1))
+    fi
+  done
+}
+
+require_content_fragments 'README.md' \
+  'Development Workspace Template' \
+  './scripts/verify-template' \
+  'CONTEXT.md' \
+  'AGENTS.md' \
+  'docs/core-workspace.md' \
+  'config/template.env.example' \
+  'docs/development-environment.md' \
+  'docker-wsl-recovery.sh' \
+  '.template-provenance' \
+  'docs/releases/' \
+  'docs/template-migrations.md' \
+  'docs/platform-adapters/azure.md' \
+  'config/azure-adapter.env.example' \
+  'docs/generated-projects.md' \
+  'docs/agents/spec-kit.md'
+
+require_content_fragments 'docs/core-workspace.md' \
+  'collaboration rules' \
+  'agent guidance' \
+  'security defaults' \
+  'documentation conventions' \
+  'verification' \
+  'Stack Profiles' \
+  'setup' \
+  'lint' \
+  'test' \
+  'build' \
+  'Platform Adapters' \
+  'deploy' \
+  'V1' \
+  'no-op' \
+  'Template Release' \
+  'release metadata' \
+  'Azure is optional'
+
+compact_json() {
+  local source=$1
+  local result=
+  local in_string=0
+  local escaped=0
+  local index=0
+  local character
+
+  while (( index < ${#source} )); do
+    character=${source:index:1}
+    if (( in_string )); then
+      result+=$character
+      if (( escaped )); then
+        escaped=0
+      elif [[ "$character" == \\ ]]; then
+        escaped=1
+      elif [[ "$character" == '"' ]]; then
+        in_string=0
+      fi
+    else
+      case "$character" in
+        '"') in_string=1; result+=$character ;;
+        $' '|$'\t'|$'\n'|$'\r') ;;
+        *) result+=$character ;;
+      esac
+    fi
+    index=$((index + 1))
+  done
+
+  compact_json_result=$result
+}
+
+validate_devcontainer_contract() {
+  local devcontainer_path='.devcontainer/devcontainer.json'
+  local onboarding_path='docs/development-environment.md'
+  local devcontainer_source
+  local expected_devcontainer='{"name":"Development Workspace Template","image":"mcr.microsoft.com/devcontainers/base@sha256:1f8bb87ca6d342a587a9163a5a1ea8c487bcd4f149e8483a5ff711f795f0776d","remoteUser":"vscode","postCreateCommand":"./scripts/verify-template"}'
+  local required_marker
+  local onboarding_content
+  local onboarding_markers=(
+    'Docker Desktop'
+    'Docker Desktop + WSL2 recovery'
+    'Dev Containers'
+    'GitHub Codespaces'
+    'WSL2'
+    'Native Windows parity is not promised'
+    'personal themes'
+    'Stack Profile'
+    'Platform Adapter'
+    'setup'
+    'lint'
+    'test'
+    'build'
+    'deploy'
+  )
+
+  if [ ! -f "$root/$devcontainer_path" ]; then
+    printf 'ERROR [DEVCONTAINER] Missing required Dev Container configuration: %s\n' "$devcontainer_path" >&2
+    violations=$((violations + 1))
+  elif ! devcontainer_source=$(<"$root/$devcontainer_path"); then
+    printf 'ERROR [DEVCONTAINER] Unable to read %s\n' "$devcontainer_path" >&2
+    violations=$((violations + 1))
+  else
+    compact_json "$devcontainer_source"
+    if [ "$compact_json_result" != "$expected_devcontainer" ]; then
+      printf 'ERROR [DEVCONTAINER] %s must contain only the pinned foundational configuration with remoteUser vscode and postCreateCommand ./scripts/verify-template\n' "$devcontainer_path" >&2
+      violations=$((violations + 1))
+    fi
+  fi
+
+  if [ ! -f "$root/$onboarding_path" ]; then
+    printf 'ERROR [DEVCONTAINER] Missing required development environment onboarding: %s\n' "$onboarding_path" >&2
+    violations=$((violations + 1))
+  elif ! onboarding_content=$(<"$root/$onboarding_path"); then
+    printf 'ERROR [DEVCONTAINER] Unable to read %s\n' "$onboarding_path" >&2
+    violations=$((violations + 1))
+  else
+    for required_marker in "${onboarding_markers[@]}"; do
+      if [[ "$onboarding_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [DEVCONTAINER] %s must contain required onboarding marker: %s\n' "$onboarding_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+}
+
+validate_devcontainer_contract
+
+validate_docker_wsl_recovery_contract() {
+  local recovery_path='scripts/docker-wsl-recovery.sh'
+  local recovery_content
+
+  if [ ! -f "$root/$recovery_path" ]; then
+    printf 'ERROR [DOCKER_WSL_RECOVERY] Missing Docker Desktop + WSL recovery wizard: %s\n' "$recovery_path" >&2
+    violations=$((violations + 1))
+    return
+  fi
+
+  if ! recovery_content=$(<"$root/$recovery_path"); then
+    printf 'ERROR [DOCKER_WSL_RECOVERY] Unable to read recovery wizard: %s\n' "$recovery_path" >&2
+    violations=$((violations + 1))
+    return
+  fi
+
+  for required_marker in 'TOTAL_STAGES=5' 'check_integration' 'backend.sock' 'docker info' 'Factory Reset'; do
+    if [[ "$recovery_content" != *"$required_marker"* ]]; then
+      printf 'ERROR [DOCKER_WSL_RECOVERY] %s must contain recovery contract marker: %s\n' "$recovery_path" "$required_marker" >&2
+      violations=$((violations + 1))
+    fi
+  done
+
+  if ! bash -n "$root/$recovery_path" >/dev/null 2>&1; then
+    printf 'ERROR [DOCKER_WSL_RECOVERY] Invalid Bash syntax: %s\n' "$recovery_path" >&2
+    violations=$((violations + 1))
+  fi
+}
+
+validate_docker_wsl_recovery_contract
+
+validate_agent_collaboration_contract() {
+  local collaboration_path='docs/agents/collaboration.md'
+  local local_skills_path='docs/agents/local-skills.md'
+  local adapter_path='docs/agents/github-platform-adapter.md'
+  local manifest_path='.agents/skills/manifest.yml'
+  local review_template_path='.github/pull_request_template.md'
+  local collaboration_content
+  local local_skills_content
+  local adapter_content
+  local manifest_content
+  local review_template_content
+  local required_marker
+  local skill_path
+  local -a collaboration_markers=(
+    'Work Item'
+    'branch'
+    'worktree'
+    'pull request'
+    'handoff'
+    'concurrent Agent work'
+    'one human review'
+    'minimum_human_approvals: 0'
+    'provider-neutral'
+  )
+  local -a local_skills_markers=(
+    'project-local'
+    'global plugin'
+    '.agents/skills/implement/SKILL.md'
+    '.agents/skills/tdd/SKILL.md'
+    '.agents/skills/code-review/SKILL.md'
+    '.agents/skills/writing-for-agents/SKILL.md'
+  )
+  local -a adapter_markers=(
+    'Author self-review checklist'
+    'GitHub does not record'
+    'independent approval'
+    'requester vote'
+  )
+  local -a review_markers=(
+    'Review intent'
+    'minimum_human_approvals: 0'
+    'independent approval'
+  )
+  local -a required_skills=(
+    'implement'
+    'tdd'
+    'code-review'
+    'writing-for-agents'
+    'research'
+    'wizard'
+    'resolving-merge-conflicts'
+  )
+
+  if [ ! -f "$root/$collaboration_path" ]; then
+    printf 'ERROR [AGENT_COLLABORATION] Missing required collaboration workflow: %s\n' "$collaboration_path" >&2
+    violations=$((violations + 1))
+  else
+    collaboration_content=$(<"$root/$collaboration_path")
+    for required_marker in "${collaboration_markers[@]}"; do
+      if [[ "$collaboration_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [AGENT_COLLABORATION] %s must contain required workflow marker: %s\n' "$collaboration_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+    if [[ "$collaboration_content" == *'gh issue'* || "$collaboration_content" == *'gh pr'* || "$collaboration_content" == *'az boards'* || "$collaboration_content" == *'az repos'* ]]; then
+      printf 'ERROR [AGENT_COLLABORATION] %s must not prescribe provider-specific tracker commands\n' "$collaboration_path" >&2
+      violations=$((violations + 1))
+    fi
+  fi
+
+  if [ ! -f "$root/$local_skills_path" ]; then
+    printf 'ERROR [AGENT_SKILLS] Missing required local skill catalog: %s\n' "$local_skills_path" >&2
+    violations=$((violations + 1))
+  else
+    local_skills_content=$(<"$root/$local_skills_path")
+    for required_marker in "${local_skills_markers[@]}"; do
+      if [[ "$local_skills_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [AGENT_SKILLS] %s must contain required local skill marker: %s\n' "$local_skills_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ ! -f "$root/$manifest_path" ]; then
+    printf 'ERROR [AGENT_SKILLS] Missing required project-local skill manifest: %s\n' "$manifest_path" >&2
+    violations=$((violations + 1))
+  else
+    manifest_content=$(<"$root/$manifest_path")
+    if [[ "$manifest_content" != *'schema_version: 1'* ]]; then
+      printf 'ERROR [AGENT_SKILLS] %s must declare schema_version: 1\n' "$manifest_path" >&2
+      violations=$((violations + 1))
+    fi
+    for required_marker in "${required_skills[@]}"; do
+      if [[ "$manifest_content" != *"name: $required_marker"* ]]; then
+        printf 'ERROR [AGENT_SKILLS] %s must pin the project-local skill: %s\n' "$manifest_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+      skill_path=".agents/skills/$required_marker/SKILL.md"
+      if [[ "$manifest_content" != *"path: $skill_path"* ]]; then
+        printf 'ERROR [AGENT_SKILLS] %s must point %s to the pinned skill path: %s\n' "$manifest_path" "$required_marker" "$skill_path" >&2
+        violations=$((violations + 1))
+      fi
+      if [ ! -f "$root/$skill_path" ]; then
+        printf 'ERROR [AGENT_SKILLS] Missing pinned project-local skill file: %s\n' "$skill_path" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ ! -f "$root/$adapter_path" ]; then
+    printf 'ERROR [AGENT_REVIEW] Missing required tracker adapter documentation: %s\n' "$adapter_path" >&2
+    violations=$((violations + 1))
+  else
+    adapter_content=$(<"$root/$adapter_path")
+    for required_marker in "${adapter_markers[@]}"; do
+      if [[ "$adapter_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [AGENT_REVIEW] %s must contain required review marker: %s\n' "$adapter_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ ! -f "$root/$review_template_path" ]; then
+    printf 'ERROR [AGENT_REVIEW] Missing required pull request review template: %s\n' "$review_template_path" >&2
+    violations=$((violations + 1))
+  else
+    review_template_content=$(<"$root/$review_template_path")
+    for required_marker in "${review_markers[@]}"; do
+      if [[ "$review_template_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [AGENT_REVIEW] %s must contain required review marker: %s\n' "$review_template_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+}
+
+validate_agent_collaboration_contract
+
+validate_spec_kit_contract() {
+  local relative_path
+  local content
+  local required_marker
+  local -a spec_kit_files=(
+    '.specify/.gitignore'
+    '.specify/init-options.json'
+    '.specify/integration.json'
+    '.specify/integrations/codex.manifest.json'
+    '.specify/integrations/speckit.manifest.json'
+    '.specify/memory/.constitution-template.json'
+    '.specify/memory/constitution.md'
+    '.specify/scripts/powershell/check-prerequisites.ps1'
+    '.specify/scripts/powershell/common.ps1'
+    '.specify/scripts/powershell/create-new-feature.ps1'
+    '.specify/scripts/powershell/resolve-template.ps1'
+    '.specify/scripts/powershell/setup-plan.ps1'
+    '.specify/scripts/powershell/setup-tasks.ps1'
+    '.specify/templates/checklist-template.md'
+    '.specify/templates/constitution-template.md'
+    '.specify/templates/plan-template.md'
+    '.specify/templates/spec-template.md'
+    '.specify/templates/tasks-template.md'
+    '.specify/workflows/speckit/workflow.yml'
+    '.specify/workflows/workflow-registry.json'
+  )
+  local -a spec_kit_skills=(
+    'analyze'
+    'checklist'
+    'clarify'
+    'constitution'
+    'converge'
+    'implement'
+    'plan'
+    'specify'
+    'tasks'
+    'taskstoissues'
+  )
+
+  for relative_path in "${spec_kit_files[@]}"; do
+    if [ ! -f "$root/$relative_path" ]; then
+      printf 'ERROR [SPEC_KIT] Missing required Spec Kit artifact: %s\n' "$relative_path" >&2
+      violations=$((violations + 1))
+    fi
+  done
+
+  for relative_path in "${spec_kit_skills[@]}"; do
+    if [ ! -f "$root/.agents/skills/speckit-$relative_path/SKILL.md" ]; then
+      printf 'ERROR [SPEC_KIT] Missing required Codex Spec Kit skill: .agents/skills/speckit-%s/SKILL.md\n' "$relative_path" >&2
+      violations=$((violations + 1))
+    fi
+  done
+
+  if [ ! -f "$root/docs/agents/spec-kit.md" ]; then
+    printf 'ERROR [SPEC_KIT] Missing required Spec Kit and Matt Pocock workflow guide: docs/agents/spec-kit.md\n' >&2
+    violations=$((violations + 1))
+  else
+    content=$(<"$root/docs/agents/spec-kit.md")
+    for required_marker in 'Spec Kit' '$speckit-specify' '$implement' 'Matt Pocock'; do
+      if [[ "$content" != *"$required_marker"* ]]; then
+        printf 'ERROR [SPEC_KIT] docs/agents/spec-kit.md must contain workflow marker: %s\n' "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ -f "$root/.specify/init-options.json" ]; then
+    content=$(<"$root/.specify/init-options.json")
+    for required_marker in '"integration": "codex"' '"ai_skills": true' '"script": "ps"'; do
+      if [[ "$content" != *"$required_marker"* ]]; then
+        printf 'ERROR [SPEC_KIT] .specify/init-options.json must contain initialization marker: %s\n' "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ -f "$root/.specify/integration.json" ]; then
+    content=$(<"$root/.specify/integration.json")
+    for required_marker in '"integration": "codex"' '"default_integration": "codex"' '"skills": true'; do
+      if [[ "$content" != *"$required_marker"* ]]; then
+        printf 'ERROR [SPEC_KIT] .specify/integration.json must contain integration marker: %s\n' "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ -f "$root/.specify/integrations/codex.manifest.json" ]; then
+    content=$(<"$root/.specify/integrations/codex.manifest.json")
+    for required_marker in '"integration": "codex"' '.agents/skills/speckit-specify/SKILL.md'; do
+      if [[ "$content" != *"$required_marker"* ]]; then
+        printf 'ERROR [SPEC_KIT] Codex integration manifest must contain marker: %s\n' "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ -f "$root/.specify/integrations/speckit.manifest.json" ]; then
+    content=$(<"$root/.specify/integrations/speckit.manifest.json")
+    for required_marker in '"integration": "speckit"' '.specify/templates/spec-template.md'; do
+      if [[ "$content" != *"$required_marker"* ]]; then
+        printf 'ERROR [SPEC_KIT] Spec Kit infrastructure manifest must contain marker: %s\n' "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ -f "$root/.agents/skills/manifest.yml" ]; then
+    content=$(<"$root/.agents/skills/manifest.yml")
+    for relative_path in "${spec_kit_skills[@]}"; do
+      if [[ "$content" != *"name: speckit-$relative_path"* ]] || [[ "$content" != *"path: .agents/skills/speckit-$relative_path/SKILL.md"* ]]; then
+        printf 'ERROR [SPEC_KIT] .agents/skills/manifest.yml must pin the Spec Kit skill: speckit-%s\n' "$relative_path" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+}
+
+validate_spec_kit_contract
+
+version_file="$root/.template-version"
+if [ ! -f "$version_file" ]; then
+  printf 'ERROR [RELEASE_VERSION] Missing required release metadata: .template-version\n' >&2
+  violations=$((violations + 1))
+else
+  mapfile -t version_lines < "$version_file"
+  version=${version_lines[0]-}
+  version=${version%$'\r'}
+  if [ "${#version_lines[@]}" -ne 1 ] || ! [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+    printf 'ERROR [RELEASE_VERSION] Invalid release version in .template-version\n' >&2
+    violations=$((violations + 1))
+  fi
+fi
+
+validate_release_provenance_contract() {
+  local provenance_path='.template-provenance'
+  local release_notes_path
+  local migration_path='docs/template-migrations.md'
+  local provenance_line
+  local provenance_release
+  local provenance_release_notes_path
+  local release_notes_content
+  local migration_content
+  local required_marker
+  local release_version=${version-}
+  local release_to_check
+  local release_path_to_check
+  local release_checked=
+  local -a provenance_lines
+  local -a release_versions_to_check=()
+  local -a release_markers=(
+    'Template Release'
+    'Generated Projects'
+    'independently owned'
+    'no automatic'
+    'migration'
+    'Stack Profile'
+    'Platform Adapter'
+  )
+  local -a migration_markers=(
+    'Template Release'
+    'Generated Project'
+    'independently owned'
+    'retains origin'
+    'review'
+    'provenance'
+    'no silent'
+    'no forced'
+    'Stack Profile'
+    'Platform Adapter'
+  )
+
+  if [ ! -f "$root/$provenance_path" ]; then
+    printf 'ERROR [RELEASE_PROVENANCE] Missing required Template Release provenance: %s\n' "$provenance_path" >&2
+    violations=$((violations + 1))
+  else
+    mapfile -t provenance_lines < "$root/$provenance_path"
+    if [ "${#provenance_lines[@]}" -ne 2 ]; then
+      printf 'ERROR [RELEASE_PROVENANCE] %s must contain exactly template_name and template_release assignments\n' "$provenance_path" >&2
+      violations=$((violations + 1))
+    else
+      provenance_line=${provenance_lines[0]%$'\r'}
+      if [ "$provenance_line" != 'template_name=Development Workspace Template' ]; then
+        printf 'ERROR [RELEASE_PROVENANCE] %s must identify the Development Workspace Template\n' "$provenance_path" >&2
+        violations=$((violations + 1))
+      fi
+      provenance_line=${provenance_lines[1]%$'\r'}
+      if ! [[ "$provenance_line" =~ ^template_release=(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+        printf 'ERROR [RELEASE_PROVENANCE] %s must contain a semantic template_release value\n' "$provenance_path" >&2
+        violations=$((violations + 1))
+      else
+        provenance_release=${provenance_line#template_release=}
+        provenance_release_notes_path="docs/releases/$provenance_release.md"
+        release_versions_to_check+=("$provenance_release")
+        if [ ! -f "$root/$provenance_release_notes_path" ]; then
+          printf 'ERROR [RELEASE_PROVENANCE] Origin Template Release notes are missing: %s\n' "$provenance_release_notes_path" >&2
+          violations=$((violations + 1))
+        fi
+      fi
+    fi
+  fi
+
+  if [[ "$release_version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+    release_versions_to_check+=("$release_version")
+  fi
+
+  for release_to_check in "${release_versions_to_check[@]}"; do
+    if [ "$release_to_check" = "$release_checked" ]; then
+      continue
+    fi
+    release_checked=$release_to_check
+    release_path_to_check="docs/releases/$release_to_check.md"
+    if [ ! -f "$root/$release_path_to_check" ]; then
+      printf 'ERROR [RELEASE_DOCUMENTATION] Missing release notes for Template Release %s: %s\n' "$release_to_check" "$release_path_to_check" >&2
+      violations=$((violations + 1))
+      continue
+    fi
+    release_notes_content=$(<"$root/$release_path_to_check")
+    for required_marker in "${release_markers[@]}"; do
+      if [[ "$release_notes_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [RELEASE_DOCUMENTATION] %s must contain required release marker: %s\n' "$release_path_to_check" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  done
+
+  if [ ! -f "$root/$migration_path" ]; then
+    printf 'ERROR [RELEASE_DOCUMENTATION] Missing Template Release migration guidance: %s\n' "$migration_path" >&2
+    violations=$((violations + 1))
+  else
+    migration_content=$(<"$root/$migration_path")
+    for required_marker in "${migration_markers[@]}"; do
+      if [[ "$migration_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [RELEASE_DOCUMENTATION] %s must contain required migration marker: %s\n' "$migration_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+}
+
+validate_release_provenance_contract
+
+validate_azure_platform_adapter_contract() {
+  local adapter_path='docs/platform-adapters/azure.md'
+  local config_path='config/azure-adapter.env.example'
+  local adapter_content
+  local config_line
+  local config_key
+  local config_value
+  local expected_value
+  local required_marker
+  local forbidden_core_command
+  local -a forbidden_core_commands=(
+    'az login'
+    'az account '
+    'az devops '
+    'az deployment '
+    'az group '
+    'az resource '
+    'azd '
+    'terraform init'
+    'terraform plan'
+    'terraform apply'
+    'bicep build'
+    'bicep deploy'
+    'Azure account is required'
+    'Azure CLI is required'
+    'Azure credentials are required'
+    'requires Azure'
+    'must run az '
+    'run terraform '
+  )
+  local -a adapter_markers=(
+    'Azure Repos and work tracking'
+    'Azure Pipelines'
+    'Azure infrastructure'
+    'Independent adapter concerns'
+    'Azure DevOps Organization'
+    'Microsoft Entra tenant'
+    'approved source host'
+    'subscription scope'
+    'CI policy'
+    'role boundaries'
+    'network restrictions'
+    'responsible administrators'
+    'named developer identities'
+    'federated pipeline identities'
+    'managed runtime identities'
+    'approved secret store'
+    'does not provision'
+    'does not delete'
+    'does not mutate'
+    'no live check'
+    'Azure CLI'
+    'credentials'
+    'pipelines are optional'
+  )
+  local -a azure_keys=(
+    'AZURE_DEVOPS_ORGANIZATION'
+    'AZURE_DEVOPS_PROJECT'
+    'AZURE_APPROVED_SOURCE_HOST'
+    'AZURE_ENTRA_TENANT_ID'
+    'AZURE_SUBSCRIPTION_ID'
+    'AZURE_CI_IDENTITY'
+    'AZURE_RUNTIME_IDENTITY'
+    'AZURE_SECRET_STORE_URI'
+  )
+  local -A azure_values=()
+
+  if [ ! -f "$root/$adapter_path" ]; then
+    printf 'ERROR [AZURE_ADAPTER] Missing Azure Platform Adapter documentation: %s\n' "$adapter_path" >&2
+    violations=$((violations + 1))
+  else
+    adapter_content=$(<"$root/$adapter_path")
+    for required_marker in "${adapter_markers[@]}"; do
+      if [[ "$adapter_content" != *"$required_marker"* ]]; then
+        printf 'ERROR [AZURE_ADAPTER] %s must contain required adapter marker: %s\n' "$adapter_path" "$required_marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ ! -f "$root/$config_path" ]; then
+    printf 'ERROR [AZURE_CONFIG] Missing safe Azure adapter example configuration: %s\n' "$config_path" >&2
+    violations=$((violations + 1))
+  else
+    declare -A azure_expected=()
+    for config_key in "${azure_keys[@]}"; do
+      azure_expected[$config_key]=1
+    done
+    mapfile -t azure_config_lines < "$root/$config_path"
+    for ((line_index = 0; line_index < ${#azure_config_lines[@]}; line_index++)); do
+      config_line=${azure_config_lines[$line_index]%$'\r'}
+      line_number=$((line_index + 1))
+      if ! [[ "$config_line" =~ ^([A-Z][A-Z0-9_]*)=(.*)$ ]]; then
+        printf 'ERROR [AZURE_CONFIG] %s line %d must be an explicit uppercase placeholder assignment\n' "$config_path" "$line_number" >&2
+        violations=$((violations + 1))
+        continue
+      fi
+      config_key=${BASH_REMATCH[1]}
+      config_value=${BASH_REMATCH[2]}
+      if [ -n "${azure_values[$config_key]+_}" ]; then
+        printf 'ERROR [AZURE_CONFIG] %s line %d duplicates Azure key %s\n' "$config_path" "$line_number" "$config_key" >&2
+        violations=$((violations + 1))
+        continue
+      fi
+      if [ -z "${azure_expected[$config_key]+_}" ]; then
+        printf 'ERROR [AZURE_CONFIG] %s line %d contains unexpected Azure key %s\n' "$config_path" "$line_number" "$config_key" >&2
+        violations=$((violations + 1))
+        continue
+      fi
+      expected_value='${'"$config_key"'}'
+      if [ "$config_value" != "$expected_value" ]; then
+        printf 'ERROR [AZURE_CONFIG] %s line %d key %s must use the safe placeholder %s\n' "$config_path" "$line_number" "$config_key" "$expected_value" >&2
+        violations=$((violations + 1))
+      fi
+      azure_values[$config_key]=1
+    done
+    for config_key in "${azure_keys[@]}"; do
+      if [ -z "${azure_values[$config_key]+_}" ]; then
+        printf 'ERROR [AZURE_CONFIG] %s is missing required safe placeholder key %s\n' "$config_path" "$config_key" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ -f "$root/docs/core-workspace.md" ]; then
+    local core_content
+    core_content=$(<"$root/docs/core-workspace.md")
+    for forbidden_core_command in "${forbidden_core_commands[@]}"; do
+      if [[ "$core_content" == *"$forbidden_core_command"* ]]; then
+        printf 'ERROR [AZURE_COUPLING] Core Workspace documentation must not require Azure CLI or infrastructure commands: %s\n' "$forbidden_core_command" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+}
+
+validate_azure_platform_adapter_contract
+
+validate_template_publication_contract() {
+  local workflow_path='.github/workflows/verify-template.yml'
+  local onboarding_path='docs/generated-projects.md'
+  local smoke_path='tests/generated-project-smoke.test.sh'
+  local workflow_content
+  local onboarding_content
+  local smoke_content
+  local marker
+  local -a workflow_markers=(
+    'name: Verify Template'
+    'push:'
+    'pull_request:'
+    'contents: read'
+    './scripts/verify-template'
+    'bash tests/generated-project-smoke.test.sh'
+  )
+  local -a onboarding_markers=(
+    'GitHub Template Repository'
+    'Create a Generated Project'
+    './scripts/verify-template'
+    'development environment smoke test'
+    'independently owned'
+    '.template-provenance'
+    'intentionally extend'
+    'Stack Profile'
+    'Platform Adapter'
+    'without Azure'
+  )
+  local -a smoke_markers=(
+    'git archive HEAD'
+    '.template-provenance'
+    './scripts/verify-template'
+    'tests/devcontainer-smoke.test.sh'
+  )
+
+  if [ ! -f "$root/$workflow_path" ]; then
+    printf 'ERROR [TEMPLATE_CI] Missing public template workflow: %s\n' "$workflow_path" >&2
+    violations=$((violations + 1))
+  else
+    workflow_content=$(<"$root/$workflow_path")
+    for marker in "${workflow_markers[@]}"; do
+      if [[ "$workflow_content" != *"$marker"* ]]; then
+        printf 'ERROR [TEMPLATE_CI] %s must delegate verification through: %s\n' "$workflow_path" "$marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+    if [[ "$workflow_content" == *'az login'* || "$workflow_content" == *'az deployment'* || "$workflow_content" == *'terraform apply'* || "$workflow_content" == *'bicep build'* ]]; then
+      printf 'ERROR [TEMPLATE_CI] %s must not require Azure or infrastructure commands\n' "$workflow_path" >&2
+      violations=$((violations + 1))
+    fi
+  fi
+
+  if [ ! -f "$root/$onboarding_path" ]; then
+    printf 'ERROR [GENERATED_PROJECT] Missing Generated Project onboarding guidance: %s\n' "$onboarding_path" >&2
+    violations=$((violations + 1))
+  else
+    onboarding_content=$(<"$root/$onboarding_path")
+    for marker in "${onboarding_markers[@]}"; do
+      if [[ "$onboarding_content" != *"$marker"* ]]; then
+        printf 'ERROR [GENERATED_PROJECT] %s must contain onboarding marker: %s\n' "$onboarding_path" "$marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+
+  if [ ! -f "$root/$smoke_path" ]; then
+    printf 'ERROR [GENERATED_PROJECT] Missing Generated Project smoke harness: %s\n' "$smoke_path" >&2
+    violations=$((violations + 1))
+  else
+    smoke_content=$(<"$root/$smoke_path")
+    for marker in "${smoke_markers[@]}"; do
+      if [[ "$smoke_content" != *"$marker"* ]]; then
+        printf 'ERROR [GENERATED_PROJECT] %s must preserve and verify Generated Projects using: %s\n' "$smoke_path" "$marker" >&2
+        violations=$((violations + 1))
+      fi
+    done
+  fi
+}
+
+validate_template_publication_contract
+
+config_file="$root/config/template.env.example"
+if [ -f "$config_file" ]; then
+  declare -A expected_config_values=(
+    [PROJECT_NAME]='example-project'
+    [EXAMPLE_API_TOKEN]='${EXAMPLE_API_TOKEN}'
+  )
+  declare -A config_keys=()
+  declare -A config_values=()
+  mapfile -t config_lines < "$config_file"
+
+  for ((line_index = 0; line_index < ${#config_lines[@]}; line_index++)); do
+    config_line=${config_lines[$line_index]%$'\r'}
+    line_number=$((line_index + 1))
+
+    if [[ "$config_line" =~ ^[[:space:]]*$ ]] || [[ "$config_line" =~ ^[[:space:]]*# ]]; then
+      continue
+    fi
+
+    if ! [[ "$config_line" =~ ^[A-Z][A-Z0-9_]*=.*$ ]]; then
+      printf 'ERROR [CONFIG_SYNTAX] config/template.env.example line %d must be a blank line, comment, or UPPER_CASE_NAME=value assignment\n' "$line_number" >&2
+      violations=$((violations + 1))
+      continue
+    fi
+
+    config_key=${config_line%%=*}
+    config_value=${config_line#*=}
+    if [ "${config_keys[$config_key]+_}" ]; then
+      printf 'ERROR [CONFIG_SYNTAX] config/template.env.example line %d duplicates key %s; use a unique UPPER_CASE_NAME assignment\n' "$line_number" "$config_key" >&2
+      violations=$((violations + 1))
+      continue
+    fi
+
+    config_keys[$config_key]=1
+    if [ -z "${expected_config_values[$config_key]+_}" ]; then
+      printf 'ERROR [CONFIG_CONTRACT] config/template.env.example line %d contains unexpected key %s; remove it from the Core example\n' "$line_number" "$config_key" >&2
+      violations=$((violations + 1))
+      continue
+    fi
+
+    config_values[$config_key]=$config_value
+  done
+
+  for config_key in PROJECT_NAME EXAMPLE_API_TOKEN; do
+    if [ -z "${config_values[$config_key]+_}" ]; then
+      printf 'ERROR [CONFIG_CONTRACT] config/template.env.example is missing required key %s; add the required assignment\n' "$config_key" >&2
+      violations=$((violations + 1))
+    elif [ "${config_values[$config_key]}" != "${expected_config_values[$config_key]}" ]; then
+      printf 'ERROR [CONFIG_CONTRACT] config/template.env.example key %s has an incorrect value; restore the prescribed value\n' "$config_key" >&2
+      violations=$((violations + 1))
+    fi
+  done
+fi
+
+assignment_pattern="^[[:space:]]*[\"']?([A-Za-z_][A-Za-z0-9_.-]*)[\"']?[[:space:]]*[:=][[:space:]]*(.*)$"
+source_config_assignment_pattern="^[[:space:]]*(export[[:space:]]+)?(const|let|var)[[:space:]]+([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*(\:.*)?=[[:space:]]*(.*)$"
+source_config_incomplete_pattern="^[[:space:]]*(export[[:space:]]+)?(const|let|var)[[:space:]]+([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*(\:.*)?=[[:space:]]*$"
+source_single_literal_assignment_pattern="^[[:space:]]*(export[[:space:]]+)?(const|let|var)[[:space:]]+([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*('[^']*')[;,]?[[:space:]]*$"
+source_double_literal_assignment_pattern='^[[:space:]]*(export[[:space:]]+)?(const|let|var)[[:space:]]+([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*("[^"]*")[;,]?[[:space:]]*$'
+source_object_assignment_pattern='(^|[,{[:space:]])["'\'' ]?([A-Za-z_][A-Za-z0-9_.-]*)["'\'' ]?[[:space:]]*:[[:space:]]*(.*)$'
+json_key_pattern='(^[[:space:]]*|[,{][[:space:]]*)"([A-Za-z_][A-Za-z0-9_.-]*)"[[:space:]]*:[[:space:]]*'
+json_quoted_value_pattern='^"([^"\\]|\\.)*"'
+declare -A source_literal_values=()
+
+strip_inline_comment() {
+  local value=$1
+  local result=
+  local quote=
+  local index=0
+  local character
+  local previous_character
+
+  while (( index < ${#value} )); do
+    character=${value:index:1}
+    if [ -n "$quote" ]; then
+      result+=$character
+      if [[ "$quote" == '"' && "$character" == \\ ]]; then
+        if (( index + 1 < ${#value} )); then
+          index=$((index + 1))
+          result+=${value:index:1}
+        fi
+      elif [[ "$character" == "$quote" ]]; then
+        quote=
+      fi
+    elif [[ "$character" == '"' || "$character" == "'" ]]; then
+      quote=$character
+      result+=$character
+    elif [[ "$character" == '#' ]]; then
+      previous_character=${result: -1}
+      if [ -z "$result" ] || [[ "$previous_character" == [[:space:]] ]]; then
+        break
+      fi
+      result+=$character
+    else
+      result+=$character
+    fi
+    index=$((index + 1))
+  done
+
+  uncommented_value=$result
+}
+
+validate_sensitive_assignment() {
+  local assignment_key=$1
+  local assignment_value=$2
+  local assignment_path=$3
+  local assignment_line_number=$4
+  local normalized_key
+  local compact_key
+  local is_sensitive=0
+  local sensitive_fragment
+  local normalized_value
+
+  normalized_key=$(printf '%s' "$assignment_key" | tr '[:lower:]-.' '[:upper:]__')
+  compact_key=${normalized_key//_/}
+  if [ "$compact_key" = 'TOKENCOVERAGE' ]; then
+    return
+  fi
+  for sensitive_fragment in SECRET TOKEN PASSWORD PASSWD APIKEY PRIVATEKEY CLIENTSECRET CONNECTIONSTRING; do
+    if [[ "$compact_key" == *"$sensitive_fragment"* ]]; then
+      is_sensitive=1
+      break
+    fi
+  done
+  if [ "$is_sensitive" -eq 0 ]; then
+    return
+  fi
+
+  strip_inline_comment "$assignment_value"
+  normalized_value=${uncommented_value#"${uncommented_value%%[![:space:]]*}"}
+  normalized_value=${normalized_value%"${normalized_value##*[![:space:]]}"}
+  if [[ ( "$normalized_value" == \"*\" && "$normalized_value" == *\" ) || ( "$normalized_value" == \'*\' && "$normalized_value" == *\' ) ]]; then
+    normalized_value=${normalized_value:1:${#normalized_value}-2}
+    normalized_value=${normalized_value#"${normalized_value%%[![:space:]]*}"}
+    normalized_value=${normalized_value%"${normalized_value##*[![:space:]]}"}
+  fi
+
+  if [[ "$compact_key" == *SECRETENVIRONMENTVARIABLE ]] && [[ "$normalized_value" =~ ^[A-Z][A-Z0-9_]{3,}$ ]]; then
+    return
+  fi
+
+  if [ -n "$normalized_value" ] && ! [[ "$normalized_value" =~ ^\$\{[A-Z][A-Z0-9_]*\}$ ]]; then
+    printf 'ERROR [SECRET_LITERAL] %s line %d assigns a literal to sensitive key %s; use an empty value or ${UPPER_CASE_NAME}\n' "$assignment_path" "$assignment_line_number" "$normalized_key" >&2
+    violations=$((violations + 1))
+  fi
+}
+
+validate_source_config_assignment() {
+  local assignment_key=$1
+  local assignment_value=$2
+  local assignment_path=$3
+  local assignment_line_number=$4
+  local regex_literal_pattern='^[[:space:]]*/.*/[A-Za-z]*;?[[:space:]]*$'
+  local scalar_pattern='^[[:space:]]*(true|false|null|undefined|[0-9]+);?[[:space:]]*$'
+  local environment_pattern='^[[:space:]]*process\.env\.[A-Z][A-Z0-9_]*;?[[:space:]]*$'
+  local type_annotation_pattern='^[[:space:]]*[A-Za-z_$][A-Za-z0-9_$]*(<[^>]*>)?([[:space:]]*\[\])?[[:space:]]*;?[[:space:]]*$'
+  local member_expression_pattern='^[[:space:]]*[A-Za-z_$][A-Za-z0-9_$]*(\.[A-Za-z_$][A-Za-z0-9_$]*)+[[:space:]]*;?[[:space:]]*$'
+  local member_receiver
+  local compact_assignment_key
+
+  if [[ "$assignment_value" =~ $member_expression_pattern ]]; then
+    compact_assignment_key=$(printf '%s' "$assignment_key" | tr '[:lower:]-.' '[:upper:]__')
+    compact_assignment_key=${compact_assignment_key//_/}
+    if [[ "$compact_assignment_key" == *SECRETENVIRONMENTVARIABLE ]]; then
+      return
+    fi
+    member_receiver=${assignment_value%%.*}
+    member_receiver=${member_receiver#"${member_receiver%%[![:space:]]*}"}
+    member_receiver=${member_receiver%"${member_receiver##*[![:space:]]}"}
+    if [[ -n "${source_literal_values[$member_receiver]+_}" ]]; then
+      validate_sensitive_assignment "$assignment_key" "${source_literal_values[$member_receiver]}" "$assignment_path" "$assignment_line_number"
+    else
+      validate_sensitive_assignment "$assignment_key" "$assignment_value" "$assignment_path" "$assignment_line_number"
+    fi
+    return
+  fi
+
+  if [[ "$assignment_value" =~ $regex_literal_pattern ]] \
+    || [[ "$assignment_value" =~ $scalar_pattern ]] \
+    || [[ "$assignment_value" =~ $environment_pattern ]] \
+    || [[ "$assignment_value" =~ $type_annotation_pattern ]] \
+    || [[ "$assignment_value" =~ $member_expression_pattern ]]; then
+    return
+  fi
+  validate_sensitive_assignment "$assignment_key" "$assignment_value" "$assignment_path" "$assignment_line_number"
+}
+
+validate_yaml_assignment_segment() {
+  local segment=$1
+  local assignment_path=$2
+  local assignment_line_number=$3
+  local assignment_key
+  local assignment_value
+
+  segment=${segment#"${segment%%[![:space:]]*}"}
+  segment=${segment%"${segment##*[![:space:]]}"}
+  if [[ "$segment" =~ $assignment_pattern ]]; then
+    assignment_key=${BASH_REMATCH[1]}
+    assignment_value=${BASH_REMATCH[2]}
+    validate_sensitive_assignment "$assignment_key" "$assignment_value" "$assignment_path" "$assignment_line_number"
+  fi
+}
+
+validate_yaml_assignment_line() {
+  local assignment_line=$1
+  local assignment_path=$2
+  local assignment_line_number=$3
+  local segment=
+  local quote=
+  local nesting_depth=0
+  local index=0
+  local character
+
+  if [[ "$assignment_line" =~ ^[[:space:]]*-[[:space:]]+ ]]; then
+    assignment_line=${assignment_line:${#BASH_REMATCH[0]}}
+  fi
+  assignment_line=${assignment_line#"${assignment_line%%[![:space:]]*}"}
+  assignment_line=${assignment_line%"${assignment_line##*[![:space:]]}"}
+
+  if [[ "$assignment_line" == \{* ]]; then
+    strip_inline_comment "$assignment_line"
+    assignment_line=${uncommented_value#"${uncommented_value%%[![:space:]]*}"}
+    assignment_line=${assignment_line%"${assignment_line##*[![:space:]]}"}
+    if [[ "$assignment_line" == \{*\} ]]; then
+      assignment_line=${assignment_line:1:${#assignment_line}-2}
+    fi
+
+    while (( index < ${#assignment_line} )); do
+      character=${assignment_line:index:1}
+      if [ -n "$quote" ]; then
+        segment+=$character
+        if [[ "$quote" == '"' && "$character" == \\ ]]; then
+          if (( index + 1 < ${#assignment_line} )); then
+            index=$((index + 1))
+            segment+=${assignment_line:index:1}
+          fi
+        elif [[ "$character" == "$quote" ]]; then
+          quote=
+        fi
+      elif [[ "$character" == '"' || "$character" == "'" ]]; then
+        quote=$character
+        segment+=$character
+      elif [[ "$character" == '{' || "$character" == '[' ]]; then
+        nesting_depth=$((nesting_depth + 1))
+        segment+=$character
+      elif [[ "$character" == '}' || "$character" == ']' ]]; then
+        if (( nesting_depth > 0 )); then
+          nesting_depth=$((nesting_depth - 1))
+        fi
+        segment+=$character
+      elif [[ "$character" == ',' && "$nesting_depth" -eq 0 ]]; then
+        validate_yaml_assignment_segment "$segment" "$assignment_path" "$assignment_line_number"
+        segment=
+      else
+        segment+=$character
+      fi
+      index=$((index + 1))
+    done
+    validate_yaml_assignment_segment "$segment" "$assignment_path" "$assignment_line_number"
+  else
+    validate_yaml_assignment_segment "$assignment_line" "$assignment_path" "$assignment_line_number"
+  fi
+}
+
+classify_tracked_text_file() {
+  local tracked_file_path=$1
+  local -a classifier_statuses
+
+  LC_ALL=C od -A n -v -t x1 "$tracked_file_path" 2>/dev/null | awk '
+    {
+      for (field = 1; field <= NF; field++) {
+        if ($field == "00") {
+          found_nul = 1
+        }
+      }
+    }
+    END { exit found_nul ? 1 : 0 }
+  '
+  classifier_statuses=("${PIPESTATUS[@]}")
+
+  if [ "${classifier_statuses[0]}" -ne 0 ] || [ "${classifier_statuses[1]}" -gt 1 ]; then
+    return 2
+  fi
+  if [ "${classifier_statuses[1]}" -eq 1 ]; then
+    return 1
+  fi
+  return 0
+}
+
+for tracked_path in "${tracked_paths[@]}"; do
+  source_config_file=0
+  source_literal_values=()
+  case "$tracked_path" in
+    .env|.env.*|*.env|*.env.*|*.yaml|*.yml|*.json|*.toml|*.config) ;;
+    config/*|*/config/*)
+      case "$tracked_path" in
+        src/config/*|*/src/config/*)
+          case "$tracked_path" in
+            *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs) source_config_file=1 ;;
+          esac
+          ;;
+      esac
+      ;;
+    *) continue ;;
+  esac
+
+  tracked_file="$root/$tracked_path"
+  if [ ! -f "$tracked_file" ] || [ ! -s "$tracked_file" ]; then
+    continue
+  fi
+  classify_tracked_text_file "$tracked_file"
+  classifier_status=$?
+  if [ "$classifier_status" -eq 1 ]; then
+    continue
+  fi
+  if [ "$classifier_status" -ne 0 ]; then
+    printf 'ERROR [SECRET_SCAN_ACCESS] Unable to read or classify tracked configuration file: %s\n' "$tracked_path" >&2
+    violations=$((violations + 1))
+    continue
+  fi
+
+  mapfile -t tracked_lines < "$tracked_file"
+  source_config_pending=
+  source_config_pending_line=0
+  for ((line_index = 0; line_index < ${#tracked_lines[@]}; line_index++)); do
+    tracked_line=${tracked_lines[$line_index]%$'\r'}
+    line_number=$((line_index + 1))
+    assignment_key=
+    assignment_value=
+    assignment_line=$tracked_line
+
+    if [ "$source_config_file" -eq 1 ]; then
+      if [ -n "$source_config_pending" ]; then
+        assignment_line="$source_config_pending $tracked_line"
+        line_number=$source_config_pending_line
+        source_config_pending=
+        source_config_pending_line=0
+      fi
+      if [[ "$assignment_line" =~ $source_config_incomplete_pattern ]]; then
+        source_config_pending=$assignment_line
+        source_config_pending_line=$line_number
+        continue
+      fi
+      if [[ "$assignment_line" =~ $source_single_literal_assignment_pattern ]]; then
+        source_literal_values[${BASH_REMATCH[3]}]=${BASH_REMATCH[4]}
+      elif [[ "$assignment_line" =~ $source_double_literal_assignment_pattern ]]; then
+        source_literal_values[${BASH_REMATCH[3]}]=${BASH_REMATCH[4]}
+      fi
+    fi
+
+    if [[ "$tracked_path" == *.json ]]; then
+      json_remaining=$tracked_line
+      while [[ "$json_remaining" =~ $json_key_pattern ]]; do
+        json_match=${BASH_REMATCH[0]}
+        json_key=${BASH_REMATCH[2]}
+        json_remaining=${json_remaining#*"$json_match"}
+        if [[ "$json_remaining" =~ $json_quoted_value_pattern ]]; then
+          json_value=${BASH_REMATCH[0]}
+        else
+          json_value=${json_remaining%%[\},]*}
+        fi
+        validate_sensitive_assignment "$json_key" "$json_value" "$tracked_path" "$line_number"
+      done
+      continue
+    fi
+
+    if [[ "$tracked_path" == *.yaml || "$tracked_path" == *.yml ]]; then
+      validate_yaml_assignment_line "$assignment_line" "$tracked_path" "$line_number"
+      continue
+    fi
+
+    if [ "$source_config_file" -eq 1 ]; then
+      if [[ "$assignment_line" =~ $source_config_assignment_pattern ]]; then
+        assignment_key=${BASH_REMATCH[3]}
+        assignment_value=${BASH_REMATCH[5]}
+      else
+        if [[ "$assignment_line" =~ $source_object_assignment_pattern ]]; then
+          object_assignment_key=${BASH_REMATCH[2]}
+          object_assignment_value=${BASH_REMATCH[3]}
+          object_assignment_value=${object_assignment_value%%;*}
+          object_assignment_value=${object_assignment_value%%,*}
+          object_assignment_value=${object_assignment_value%%\}*}
+          validate_source_config_assignment "$object_assignment_key" "$object_assignment_value" "$tracked_path" "$line_number"
+        fi
+        continue
+      fi
+    else
+      if [[ "$assignment_line" =~ ^[[:space:]]*export[[:space:]]+ ]]; then
+        assignment_line=${assignment_line:${#BASH_REMATCH[0]}}
+      fi
+
+      if [[ "$assignment_line" =~ $assignment_pattern ]]; then
+        assignment_key=${BASH_REMATCH[1]}
+        assignment_value=${BASH_REMATCH[2]}
+      else
+        continue
+      fi
+    fi
+    if [ "$source_config_file" -eq 1 ]; then
+      validate_source_config_assignment "$assignment_key" "$assignment_value" "$tracked_path" "$line_number"
+      if [[ "$assignment_line" =~ $source_object_assignment_pattern ]]; then
+        object_assignment_key=${BASH_REMATCH[2]}
+        object_assignment_value=${BASH_REMATCH[3]}
+        object_assignment_value=${object_assignment_value%%;*}
+        object_assignment_value=${object_assignment_value%%,*}
+        object_assignment_value=${object_assignment_value%%\}*}
+        if [ "$object_assignment_key" != "$assignment_key" ]; then
+          validate_source_config_assignment "$object_assignment_key" "$object_assignment_value" "$tracked_path" "$line_number"
+        fi
+      fi
+    else
+      validate_sensitive_assignment "$assignment_key" "$assignment_value" "$tracked_path" "$line_number"
+    fi
+  done
+done
+
+markdown_fence_pattern='^ {0,3}(`{3,}|~{3,})'
+
+normalize_repo_relative_path() {
+  local source=$1
+  local segment
+  local normalized=
+  local -a segments=()
+  local -a normalized_segments=()
+
+  IFS='/' read -r -a segments <<< "$source"
+  for segment in "${segments[@]}"; do
+    case "$segment" in
+      ''|.) continue ;;
+      ..)
+        if [ "${#normalized_segments[@]}" -eq 0 ]; then
+          return 1
+        fi
+        unset 'normalized_segments[${#normalized_segments[@]}-1]'
+        ;;
+      *) normalized_segments+=("$segment") ;;
+    esac
+  done
+
+  for segment in "${normalized_segments[@]}"; do
+    if [ -n "$normalized" ]; then
+      normalized+='/'
+    fi
+    normalized+=$segment
+  done
+
+  normalized_relative_path=$normalized
+}
+
+extract_next_markdown_target() {
+  local source=$1
+  local source_length=${#source}
+  local label_start=0
+  local label_end
+  local label_depth
+  local target_index
+  local target_depth
+  local target=
+  local character
+
+  markdown_link_found=0
+  markdown_target=
+  markdown_remaining=
+
+  while (( label_start < source_length )); do
+    if [[ ${source:label_start:1} != '[' ]]; then
+      label_start=$((label_start + 1))
+      continue
+    fi
+
+    label_end=$((label_start + 1))
+    label_depth=1
+    while (( label_end < source_length )); do
+      character=${source:label_end:1}
+      if [[ "$character" == \\ ]] && (( label_end + 1 < source_length )); then
+        label_end=$((label_end + 2))
+        continue
+      fi
+      if [[ "$character" == '[' ]]; then
+        label_depth=$((label_depth + 1))
+      elif [[ "$character" == ']' ]]; then
+        label_depth=$((label_depth - 1))
+        if (( label_depth == 0 )); then
+          break
+        fi
+      fi
+      label_end=$((label_end + 1))
+    done
+    if (( label_depth != 0 )) || (( label_end + 1 >= source_length )) || [[ ${source:label_end + 1:1} != '(' ]]; then
+      label_start=$((label_start + 1))
+      continue
+    fi
+
+    target_index=$((label_end + 2))
+    target_depth=1
+    target=
+    while (( target_index < source_length )); do
+      character=${source:target_index:1}
+      if [[ "$character" == \\ ]] && (( target_index + 1 < source_length )); then
+        target+=$character${source:target_index + 1:1}
+        target_index=$((target_index + 2))
+        continue
+      fi
+      if [[ "$character" == '(' ]]; then
+        target_depth=$((target_depth + 1))
+        target+=$character
+      elif [[ "$character" == ')' ]]; then
+        target_depth=$((target_depth - 1))
+        if (( target_depth == 0 )); then
+          markdown_link_found=1
+          markdown_target=$target
+          markdown_remaining=${source:target_index + 1}
+          return
+        fi
+        target+=$character
+      else
+        target+=$character
+      fi
+      target_index=$((target_index + 1))
+    done
+
+    label_start=$((label_start + 1))
+  done
+}
+
+unescape_markdown_path() {
+  local source=$1
+  local result=
+  local index=0
+  local character
+  local next_character
+
+  while (( index < ${#source} )); do
+    character=${source:index:1}
+    if [[ "$character" == \\ ]] && (( index + 1 < ${#source} )); then
+      next_character=${source:index + 1:1}
+      if [[ "$next_character" == '(' || "$next_character" == ')' ]]; then
+        result+=$next_character
+        index=$((index + 2))
+        continue
+      fi
+    fi
+    result+=$character
+    index=$((index + 1))
+  done
+
+  markdown_unescaped_path=$result
+}
+
+extract_markdown_destination() {
+  local target=$1
+
+  markdown_destination_found=0
+  markdown_destination=
+  target=${target#"${target%%[![:space:]]*}"}
+
+  if [[ "$target" =~ ^\<([^\>]*)\>([[:space:]]|$) ]]; then
+    markdown_destination=${BASH_REMATCH[1]}
+  elif [[ "$target" =~ ^([^[:space:]]+) ]]; then
+    markdown_destination=${BASH_REMATCH[1]}
+  else
+    return
+  fi
+
+  markdown_destination_found=1
+}
+
+validate_markdown_destination() {
+  local destination=$1
+  local referring_path=$2
+  local referring_directory=$3
+  local markdown_path
+  local markdown_resolved_path
+  local markdown_resolved_parent
+  local markdown_resolved_directory
+
+  case "$destination" in
+    http://*|https://*|mailto:*|\#*) return ;;
+  esac
+
+  markdown_path=${destination%%#*}
+  unescape_markdown_path "$markdown_path"
+  markdown_path=$markdown_unescaped_path
+  if ! normalize_repo_relative_path "$referring_directory/$markdown_path"; then
+    printf 'ERROR [DOC_REFERENCE] %s references missing local path: %s\n' "$referring_path" "$destination" >&2
+    violations=$((violations + 1))
+    return
+  fi
+  markdown_resolved_path="$root/$normalized_relative_path"
+
+  if [ ! -e "$markdown_resolved_path" ]; then
+    printf 'ERROR [DOC_REFERENCE] %s references missing local path: %s\n' "$referring_path" "$destination" >&2
+    violations=$((violations + 1))
+    return
+  fi
+
+  if [ -L "$markdown_resolved_path" ]; then
+    printf 'ERROR [DOC_REFERENCE] %s references a symbolic link; use a non-symlink local path within the repository: %s\n' "$referring_path" "$destination" >&2
+    violations=$((violations + 1))
+    return
+  fi
+
+  markdown_resolved_parent=$(cd -- "$(dirname "$markdown_resolved_path")" 2>/dev/null && pwd -P) || markdown_resolved_parent=
+  case "$markdown_resolved_parent" in
+    "$root"|"$root"/*) ;;
+    *)
+      printf 'ERROR [DOC_REFERENCE] %s references missing local path: %s\n' "$referring_path" "$destination" >&2
+      violations=$((violations + 1))
+      return
+      ;;
+  esac
+
+  if [ -d "$markdown_resolved_path" ]; then
+    markdown_resolved_directory=$(cd -- "$markdown_resolved_path" 2>/dev/null && pwd -P) || markdown_resolved_directory=
+    case "$markdown_resolved_directory" in
+      "$root"|"$root"/*) ;;
+      *)
+        printf 'ERROR [DOC_REFERENCE] %s references missing local path: %s\n' "$referring_path" "$destination" >&2
+        violations=$((violations + 1))
+        ;;
+    esac
+  fi
+}
+
+strip_inline_code_spans() {
+  local source=$1
+  local visible=
+  local source_length=${#source}
+  local index=0
+  local search_index
+  local backslash_index
+  local slash_count
+  local delimiter_length
+  local closing_length
+  local delimiter
+  local character
+  local found_closer
+  local span_line_breaks
+  local backtick='`'
+
+  while (( index < source_length )); do
+    character=${source:index:1}
+    if [[ "$character" != "$backtick" ]]; then
+      visible+=$character
+      index=$((index + 1))
+      continue
+    fi
+
+    slash_count=0
+    backslash_index=$((index - 1))
+    while (( backslash_index >= 0 )) && [[ ${source:backslash_index:1} == \\ ]]; do
+      slash_count=$((slash_count + 1))
+      backslash_index=$((backslash_index - 1))
+    done
+    if (( slash_count % 2 == 1 )); then
+      visible+=$backtick
+      index=$((index + 1))
+      continue
+    fi
+
+    delimiter_length=0
+    while (( index + delimiter_length < source_length )) && [[ ${source:index + delimiter_length:1} == "$backtick" ]]; do
+      delimiter_length=$((delimiter_length + 1))
+    done
+    delimiter=${source:index:delimiter_length}
+    search_index=$((index + delimiter_length))
+    found_closer=0
+    span_line_breaks=
+
+    while (( search_index < source_length )); do
+      character=${source:search_index:1}
+      if [[ "$character" != "$backtick" ]]; then
+        if [[ "$character" == $'\n' ]]; then
+          span_line_breaks+=$'\n'
+        fi
+        search_index=$((search_index + 1))
+        continue
+      fi
+
+      slash_count=0
+      backslash_index=$((search_index - 1))
+      while (( backslash_index >= 0 )) && [[ ${source:backslash_index:1} == \\ ]]; do
+        slash_count=$((slash_count + 1))
+        backslash_index=$((backslash_index - 1))
+      done
+      if (( slash_count % 2 == 1 )); then
+        search_index=$((search_index + 1))
+        continue
+      fi
+
+      closing_length=0
+      while (( search_index + closing_length < source_length )) && [[ ${source:search_index + closing_length:1} == "$backtick" ]]; do
+        closing_length=$((closing_length + 1))
+      done
+      if (( closing_length == delimiter_length )); then
+        if [ -n "$span_line_breaks" ]; then
+          visible+=$span_line_breaks
+        else
+          visible+=' '
+        fi
+        index=$((search_index + closing_length))
+        found_closer=1
+        break
+      fi
+      search_index=$((search_index + closing_length))
+    done
+
+    if (( found_closer == 0 )); then
+      visible+=$delimiter
+      index=$((index + delimiter_length))
+    fi
+  done
+
+  markdown_visible_block=$visible
+}
+
+for tracked_path in "${tracked_paths[@]}"; do
+  case "$tracked_path" in
+    *.md) ;;
+    *) continue ;;
+  esac
+
+  tracked_file="$root/$tracked_path"
+  if [ ! -f "$tracked_file" ]; then
+    continue
+  fi
+
+  markdown_directory=$(dirname "$tracked_path")
+  markdown_fence_character=
+  markdown_fence_length=0
+  mapfile -t markdown_lines < "$tracked_file"
+  markdown_block_visibility=()
+
+  for ((markdown_line_index = 0; markdown_line_index < ${#markdown_lines[@]}; markdown_line_index++)); do
+    markdown_line=${markdown_lines[$markdown_line_index]%$'\r'}
+    if [ -n "$markdown_fence_character" ]; then
+      markdown_block_visibility[$markdown_line_index]=0
+      markdown_fence_close_pattern="^ {0,3}${markdown_fence_character}{${markdown_fence_length},}[[:space:]]*$"
+      if [[ "$markdown_line" =~ $markdown_fence_close_pattern ]]; then
+        markdown_fence_character=
+        markdown_fence_length=0
+      fi
+      continue
+    fi
+
+    if [[ "$markdown_line" =~ $markdown_fence_pattern ]]; then
+      markdown_fence=${BASH_REMATCH[1]}
+      markdown_fence_character=${markdown_fence:0:1}
+      markdown_fence_length=${#markdown_fence}
+      markdown_block_visibility[$markdown_line_index]=0
+      continue
+    fi
+
+    if [[ "$markdown_line" == '    '* ]]; then
+      markdown_block_visibility[$markdown_line_index]=0
+      continue
+    fi
+
+    markdown_block_visibility[$markdown_line_index]=1
+  done
+
+  markdown_text_block=
+  for ((markdown_line_index = 0; markdown_line_index <= ${#markdown_lines[@]}; markdown_line_index++)); do
+    if (( markdown_line_index < ${#markdown_lines[@]} )) && [[ ${markdown_block_visibility[$markdown_line_index]} == 1 ]]; then
+      markdown_line=${markdown_lines[$markdown_line_index]%$'\r'}
+      markdown_text_block+="$markdown_line"$'\n'
+      continue
+    fi
+
+    if [ -z "$markdown_text_block" ]; then
+      continue
+    fi
+
+    strip_inline_code_spans "$markdown_text_block"
+    markdown_visible_block=${markdown_visible_block%$'\n'}
+    while IFS= read -r markdown_visible_line; do
+      if [[ "$markdown_visible_line" =~ ^[[:space:]]*\[([^]]+)\]:[[:space:]]*(.*)$ ]]; then
+        markdown_definition_label=${BASH_REMATCH[1]}
+        markdown_definition_target=${BASH_REMATCH[2]}
+        if [[ "$markdown_definition_label" != ^* ]]; then
+          extract_markdown_destination "$markdown_definition_target"
+          if [ "$markdown_destination_found" -eq 1 ]; then
+            validate_markdown_destination "$markdown_destination" "$tracked_path" "$markdown_directory"
+          fi
+        fi
+      fi
+
+      markdown_remaining=$markdown_visible_line
+      while :; do
+        extract_next_markdown_target "$markdown_remaining"
+        if [ "$markdown_link_found" -ne 1 ]; then
+          break
+        fi
+
+        extract_markdown_destination "$markdown_target"
+        if [ "$markdown_destination_found" -ne 1 ]; then
+          continue
+        fi
+        validate_markdown_destination "$markdown_destination" "$tracked_path" "$markdown_directory"
+      done
+    done <<< "$markdown_visible_block"
+    markdown_text_block=
+  done
+done
+
+if [ "$violations" -ne 0 ]; then
+  exit 1
+fi
+
+printf '%s\n' 'Core Workspace contract verified'

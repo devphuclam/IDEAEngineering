@@ -1,0 +1,25 @@
+name: Verify Template
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Core and Generated Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out template
+        uses: actions/checkout@v4
+
+      - name: Verify Core Workspace
+        run: ./scripts/verify-template
+
+      - name: Install Development Containers CLI
+        run: npm install --global @devcontainers/cli
+
+      - name: Verify clean Generated Project and development environment
+        run: bash tests/generated-project-smoke.test.sh
