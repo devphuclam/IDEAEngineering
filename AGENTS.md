@@ -1,8 +1,12 @@
 ## Agent skills
 
+### IDEA product knowledge
+
+Before work involving PDM, PLM, document identity, Generation, Revision, Checkout, Reservation, Reference, product structure, CAD/Office formats, icVault, or DDM, read the [product knowledge index](docs/product/knowledge/README.md). Preserve each claim's evidence class; a competitor observation is never sufficient by itself to create an IDEA requirement.
+
 ### Work items
 
-Route Work Item reads, writes, triage, and wayfinding through `docs/agents/issue-tracker.md`. This template currently selects the GitHub Platform Adapter; Generated Projects may replace that adapter without changing Core Work Item concepts.
+Route Work Item reads, writes, triage, and wayfinding through `docs/agents/issue-tracker.md`. The inherited Core Workspace currently selects the GitHub Platform Adapter; its final PG0 disposition remains separate from C1 product behavior.
 
 ### Collaboration workflow
 

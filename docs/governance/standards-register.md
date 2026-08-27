@@ -36,8 +36,10 @@ Use this file before repeating standards research:
 
 The supporting public-source verification note is
 [`IE-RES-STD-SOURCE-001`](../superpowers/research/2026-08-26-idea-engineering-standards-primary-source-check.md).
-The architecture that applies this baseline is
-[`IE-ARC-BOOT-001`](../superpowers/specs/2026-08-26-idea-engineering-repository-bootstrap-pg0-design.md).
+The repository architecture that applies this baseline is
+[`IE-ARC-BOOT-001`](../superpowers/specs/2026-08-26-idea-engineering-repository-bootstrap-pg0-design.md);
+the product-behavior architecture is
+[`IE-ARC-C1-001`](../architecture/idea-product-lifecycle-architecture.md).
 
 This register intentionally paraphrases only public scope information. It does not reproduce protected normative clauses.
 
