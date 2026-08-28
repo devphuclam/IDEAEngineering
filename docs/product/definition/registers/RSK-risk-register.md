@@ -65,6 +65,23 @@ localization and clean-room risks explicitly when applicable. A missing owner or
 |---|---|---|---|
 | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 
+## Risk ownership and cross-document treatment
+
+Each material risk has one accountable owner and one authoritative treatment record. Core documents
+link the risk and summarize only the conclusion relevant to their authority; they do not duplicate
+the risk rule or residual disposition.
+
+| Risk concern | Required owner/treatment fields | Cross-document links |
+|---|---|---|
+| Requirements or scope | Trigger, affected baseline, treatment, acceptance impact and review trigger | `DOC-01`, `DOC-03`, `DOC-04`, `CHG` |
+| Architecture, data or integration | Failure mode, dependency, security/privacy impact, mitigation and verification | `DOC-05`, `DOC-06`, `VVP`, `VEV` |
+| UI/UX, accessibility or localization | Surface/locale cell, population, limitation, mitigation and evidence | `DOC-08`, `GOV`, `VVP`, `VEV` |
+| Release, rollback or operations | Exact release, residual risk, recovery evidence, escalation and expiry | `DOC-07`, `REL`, `OPS`, `CHG` |
+
+An unowned risk, missing evidence or expired action remains `UNKNOWN`/`BLOCKED`. A residual-risk
+acceptance names the authority, scope, expiry and review trigger; it cannot be hidden in a gate or
+roadmap status.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

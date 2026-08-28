@@ -127,6 +127,45 @@ dataset result does not become internal acceptance or rollout authorization auto
 |---|---|---|---|---|
 | `UNKNOWN` | `DEFER` or `EXCLUDE` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 
+## Internal-company value and claim boundary
+
+| Value/claim area | Required treatment | Status |
+|---|---|---|
+| Internal engineering outcome | Tie the increment to control, integrity, quality, release-risk, maintainability or measured efficiency | `UNKNOWN` |
+| Technical/pilot evidence | Pin dataset, environment, identities, scope, result and limitation | `NOT-RUN` |
+| Commercial objective | Pricing, revenue, customer acquisition, market-share, market-fit or external-buyer objective | `NOT APPLICABLE` |
+
+The roadmap may sequence work but cannot create a requirement, architecture decision, acceptance
+claim or release authorization by schedule assertion.
+
+## Pilot and rollout claim boundary
+
+| Claim status | Required evidence and authority | Prohibited inference | Result |
+|---|---|---|---|
+| `Canonical Demo Dataset` | Approved synthetic dataset, exact baseline and technical test result | Does not validate internal need or rollout | `NOT-RUN` |
+| `Technical Pilot Verification` | Bounded non-production execution, identities, environment and `VEV` evidence | Does not establish representative acceptance | `NOT-RUN` |
+| `Single-Actor Functional Acceptance` | One human with separately provisioned identities and explicit scope | Does not establish independent review or representative acceptance | `NOT-RUN` |
+| `Internal Operational Need Validation` | Representative internal roles/workflows and attributable need evidence | Does not by itself authorize release | `NOT-RUN` |
+| `Internal Pilot Acceptance` | Technical evidence, representative internal evidence and named Internal Adoption Authority | Does not authorize broader scope automatically | `NOT-RUN` |
+| Operational rollout authorization | Named authority, exact release scope, accepted residual risk and recovery readiness | Cannot exceed the approved baseline | `NOT-RUN` |
+
+Pilot status is recorded separately from increment status and gate outcome. Missing authority,
+representative population or evidence remains `UNKNOWN`, `BLOCKED` or `NOT-RUN`.
+
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-01/02/03 scope, option decision or approved requirement/design | `UNKNOWN` |
+| `DOWNSTREAM` | Affected DOCs, increment tasks, dependencies, operations and release package | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item, impact analysis and successor increment/baseline | `UNKNOWN` |
+| `VERIFICATION` | VVP/VEV exit evidence and exact reproduction/rollback result | `UNKNOWN` |
+| `RELEASE` | REL manifest and claim boundary for the increment | `UNKNOWN` |
+| `RENDITION` | Source-pinned roadmap/increment rendition metadata and state | `UNKNOWN` |
+
+Each indexed increment retains its own identity, source roadmap baseline, version, status, owner,
+gate and trace. A stale rendition never authorizes a different increment.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

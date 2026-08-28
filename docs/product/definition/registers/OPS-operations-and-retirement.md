@@ -79,6 +79,23 @@ The common envelope is explicit for this `OPS` instance:
 |---|---|---|---|---|
 | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 
+## 6. Gate-to-operation handoff
+
+| Handoff area | Required input / evidence | Owner / authority | Missing-work disposition |
+|---|---|---|---|
+| Support readiness | Approved `DOC-07` scope, support procedure, dependency inventory and contact path | Operations role when assigned; Product Decision Authority for scope | `BLOCKED` until an accountable owner exists |
+| Incident and recovery | Exact release baseline, incident severity/containment, recovery procedure and restore evidence | Operations/recovery owner | `NOT-RUN` if no execution evidence exists |
+| Retention and dependency | Classification, retention/hold, dependency/version watch and review trigger | Records/configuration owner | `UNKNOWN` or `BLOCKED` with resolution owner |
+| Operational learning | Validated observation, affected DOC/RSK/CHG and proposed disposition | Product Decision Authority | Must become a traceable change/need, not an informal note |
+
+## 7. Controlled retirement and feedback rules
+
+Retirement requires an exact affected baseline, dependency and data-export/hold assessment, support
+and recovery impact, accountable approval, effective date and retained result. Retirement is not
+deletion; superseded records remain traceable for the applicable retention period. A feedback record
+links to the owning `DOC-01`, `DOC-03`, `DOC-04` or `DOC-07` item and uses `RSK`/`CHG` when it changes
+scope, requirements, risks, operations or release claims.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

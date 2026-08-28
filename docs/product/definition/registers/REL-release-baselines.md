@@ -75,6 +75,50 @@ The common envelope is explicit for this `REL` instance:
 |---|---|---|---|---|
 | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 
+## 5. Release authorization minimum
+
+Before an authorization decision, the release record pins the exact scope and includes:
+
+| Required input | Minimum record |
+|---|---|
+| Manifest | Every included item ID/class, document version, Product Generation/Business Revision where applicable, immutable hash or controlled-storage pin |
+| Provenance | Source baseline, producer/tool identity where material, lawful-access and classification handling |
+| Verification | Linked `VEV` results, applicable `VVP` procedures, defects/waivers and coverage disposition |
+| Risk and recovery | Known issues, residual risk owner/disposition, rollback/recovery evidence and operational readiness |
+| Authority | Named release authority, reviewer/approver identities, competence/independence basis, decision date and one permitted outcome |
+| Claim boundary | Explicit pilot/claim status; lower evidence status cannot be promoted by release packaging |
+
+The release outcome is one of `PASS`, `PASS-WITH-ACTIONS`, `FAIL` or `BLOCKED`. A missing exact pin,
+required approval, verification result, residual-risk disposition or recovery evidence keeps release
+authorization `BLOCKED`. A successful technical or synthetic run does not create representative
+internal acceptance or operational rollout authorization.
+
+## 6. Rendition identity and claim restrictions
+
+Every distributed DOCX/PDF records a stable rendition ID, source document ID and version, exact source
+baseline, date, producer/tool identity where material, status (`Current`, `Stale`, `Superseded` or
+`Withdrawn`), classification, retention and trace links. A source change makes the old rendition
+`Stale` until regenerated; comments against it are redirected to the authoritative source.
+
+The release package preserves the distinct statuses `Canonical Demo Dataset`, `Technical Pilot
+Verification`, `Single-Actor Functional Acceptance`, `Internal Operational Need Validation`,
+`Internal Pilot Acceptance` and operational rollout authorization. No lower status is rewritten as a
+higher claim by a release manifest.
+
+## 7. Pilot claim matrix for release use
+
+| Claim status | Minimum release-linked evidence | Authority condition | Allowed release statement |
+|---|---|---|---|
+| `Canonical Demo Dataset` | Synthetic dataset and exact technical evidence | Technical verifier | Demonstration/technical verification only |
+| `Technical Pilot Verification` | Bounded non-production `VEV` result and environment pin | Pilot runner; adoption authority not required to run | Technical pilot scope only |
+| `Single-Actor Functional Acceptance` | One-human/two-identity record and limitations | Not independent approval | Functional exercise only |
+| `Internal Operational Need Validation` | Representative internal roles/workflows and need evidence | Product Decision Authority | Need validation for stated scope |
+| `Internal Pilot Acceptance` | Representative evidence plus named Internal Adoption Authority | Authority and exact scope required | Pilot acceptance for exact release scope |
+| Operational rollout authorization | Approved release, residual risk, recovery and named authority | Operational/product authority | Rollout only within the authorized baseline |
+
+The release record must preserve the lowest truthful status supported by evidence. Packaging or
+publishing a technically verified artifact cannot promote it to pilot acceptance or rollout.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

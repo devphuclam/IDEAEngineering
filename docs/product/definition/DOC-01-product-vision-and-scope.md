@@ -119,6 +119,32 @@ objectives in this document.
 | Later impact | DOC-02, DOC-03, DOC-07, `CHG`, verification and release links | `UNKNOWN` |
 | Review outcome | `PASS`, `PASS-WITH-ACTIONS`, `FAIL`, `BLOCKED`, or `NOT-RUN` as applicable | `NOT-RUN` |
 
+## Internal-company value boundary
+
+Record value as an internal operational outcome, not as a commercial promise.
+
+| Value dimension | Required evidence or measure | Status |
+|---|---|---|
+| Engineering-data integrity and control | Internal baseline, failure mode and measurable control outcome | `UNKNOWN` |
+| Release-risk reduction and quality | Internal risk/quality baseline and verification method | `UNKNOWN` |
+| Maintainability and evidenced efficiency | Defined scope, baseline, metric and evidence owner | `UNKNOWN` |
+| Commercial objectives | Pricing, revenue, customer acquisition, market-share, market-fit or external-buyer objective | `NOT APPLICABLE` |
+
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | Internal need, decision, evidence or accepted ADR with scope and limitation | `UNKNOWN` |
+| `DOWNSTREAM` | DOC-02, DOC-03, DOC-07 and any derived requirement/design item | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item, impact analysis and successor baseline | `UNKNOWN` |
+| `VERIFICATION` | `VVP` procedure and `VEV` result against an exact configuration | `UNKNOWN` |
+| `RELEASE` | `REL` manifest and `DOC-07` increment consuming this version | `UNKNOWN` |
+| `RENDITION` | DOCX/PDF rendition ID, source ID/version/baseline, date, status, classification and retention | `UNKNOWN` |
+
+Trace views are navigational and never a second authority. A stale, superseded or withdrawn rendition
+is redirected to this Markdown source; it cannot be edited into authority or approved against another
+baseline.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

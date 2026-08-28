@@ -20,16 +20,16 @@ efficiency. Commercial objectives do not belong here.
 
 ## Core catalogue
 
-| Class | Template | Authority boundary | Required inputs | Required outputs | First/later gates | Supporting records | Primary consumers |
-|---|---|---|---|---|---|---|---|
-| `DOC-01` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | Internal purpose, problem hypothesis, stakeholders, boundary, trajectory, non-goals and success measures | Internal need/evidence, accepted decisions | Scope, value, boundaries, success measures | `PG1` / `PG2`, `PG3`, `PG7` when changed | GOV, CLR, RSK, CHG | DOC-02, DOC-03, DOC-07 |
-| `DOC-02` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | Feasibility questions, current process, options, evidence, risks, prototype boundary and recommendation | DOC-01, current-process evidence, constraints | Option comparison, bounded recommendation, capability-profile decision | `PG1` / `PG2`, `PG4` when selected | GOV, CLR, RSK, VVP, CHG | DOC-01, DOC-04, DOC-05, DOC-07 |
-| `DOC-03` | [Business Requirements](DOC-03-business-requirements.md) | Internal stakeholder needs, actors, scenarios, business rules, priorities, constraints and acceptance intent | DOC-01, stakeholder evidence, decisions | Stable needs, scenarios, rules, acceptance intent | `PG1` / `PG2`, `PG3`, `PG7` | GOV, CLR, RSK, CHG | DOC-04, DOC-07, DOC-08 |
-| `DOC-04` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | Uniquely identified, verifiable functional and quality obligations | DOC-03, DOC-08, approved decisions | Requirement ledger, acceptance and verification obligations | `PG2` / `PG3`, `PG4`, `PG5`, `PG7` | GOV, VVP, VEV, RSK, CHG | DOC-05, DOC-06, DOC-07, DOC-08 |
-| `DOC-05` | [Architecture Description](DOC-05-architecture-description.md) | System context, boundaries, views, responsibilities, interfaces, quality scenarios, risks and ADR links | DOC-04, approved decisions and constraints | Architecture views, responsibilities, interfaces, quality implications | `PG3` / `PG4`, `PG5`, `PG7` | GOV, VVP, VEV, RSK, CHG | DOC-06, DOC-07, DOC-08 |
-| `DOC-06` | [Data, Integration, and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | Data ownership, identity, lifecycle, exchange, migration, reconciliation and failure obligations | DOC-04, DOC-05, data evidence and decisions | Data/integration contract, mapping, reconciliation and recovery obligations | `PG2` / `PG3`, `PG4`, `PG5` | GOV, VVP, VEV, RSK, CHG | DOC-05, DOC-07 |
-| `DOC-07` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | Bounded increments, release spine, dependencies, gate prerequisites, exit evidence and deferred scope | DOC-01/02/03, approved requirements/design | Increment records, dependency/exit plan, deferred-scope ledger | `PG1` / `PG2`, `PG3`, `PG4`, `PG7` | GOV, CMP, CHG, REL, OPS | All affected DOCs |
-| `DOC-08` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | Users, journeys, interaction states, usability, accessibility profiles, components and evaluation | DOC-03, DOC-04, HCD/accessibility evidence | Interaction, surface, locale and evaluation obligations | `PG1` / `PG2`, `PG3`, `PG4`, `PG5` | GOV, VVP, VEV, RSK, CHG | DOC-03, DOC-04, DOC-05 |
+| Class | Template | Authority boundary | Required inputs | Required outputs | First/later gates | Supporting records | Primary consumers | Accountable role | Explicit non-ownership boundary |
+|---|---|---|---|---|---|---|---|---|---|
+| `DOC-01` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | Internal purpose, problem hypothesis, stakeholders, boundary, trajectory, non-goals and success measures | Internal need/evidence, accepted decisions | Scope, value, boundaries, success measures | `PG1` / `PG2`, `PG3`, `PG7` when changed | GOV, CLR, RSK, CHG | DOC-02, DOC-03, DOC-07 | Product Decision Authority | Detailed software requirements, architecture, implementation and release execution |
+| `DOC-02` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | Feasibility questions, current process, options, evidence, risks, prototype boundary and recommendation | DOC-01, current-process evidence, constraints | Option comparison, bounded recommendation, capability-profile decision | `PG1` / `PG2`, `PG4` when selected | GOV, CLR, RSK, VVP, CHG | DOC-01, DOC-04, DOC-05, DOC-07 | Product Decision Authority-designated feasibility owner | Approved requirements, architecture or roadmap authority |
+| `DOC-03` | [Business Requirements](DOC-03-business-requirements.md) | Internal stakeholder needs, actors, scenarios, business rules, priorities, constraints and acceptance intent | DOC-01, stakeholder evidence, decisions | Stable needs, scenarios, rules, acceptance intent | `PG1` / `PG2`, `PG3`, `PG7` | GOV, CLR, RSK, CHG | DOC-04, DOC-07, DOC-08 | Product Decision Authority-designated business-needs owner | Implementation and architecture design |
+| `DOC-04` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | Uniquely identified, verifiable functional and quality obligations | DOC-03, DOC-08, approved decisions | Requirement ledger, acceptance and verification obligations | `PG2` / `PG3`, `PG4`, `PG5`, `PG7` | GOV, VVP, VEV, RSK, CHG | DOC-05, DOC-06, DOC-07, DOC-08 | Product Decision Authority-designated requirements owner | Business vision, architecture selection and delivery sequencing |
+| `DOC-05` | [Architecture Description](DOC-05-architecture-description.md) | System context, boundaries, views, responsibilities, interfaces, quality scenarios, risks and ADR links | DOC-04, approved decisions and constraints | Architecture views, responsibilities, interfaces, quality implications | `PG3` / `PG4`, `PG5`, `PG7` | GOV, VVP, VEV, RSK, CHG | DOC-06, DOC-07, DOC-08 | Product Decision Authority-designated architecture owner | Business-needs/requirements ownership and delivery priority |
+| `DOC-06` | [Data, Integration, and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | Data ownership, identity, lifecycle, exchange, migration, reconciliation and failure obligations | DOC-04, DOC-05, data evidence and decisions | Data/integration contract, mapping, reconciliation and recovery obligations | `PG2` / `PG3`, `PG4`, `PG5` | GOV, VVP, VEV, RSK, CHG | DOC-05, DOC-07 | Product Decision Authority-designated data/integration owner | Product scope, business need and architecture authority outside data/integration |
+| `DOC-07` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | Bounded increments, release spine, dependencies, gate prerequisites, exit evidence and deferred scope | DOC-01/02/03, approved requirements/design | Increment records, dependency/exit plan, deferred-scope ledger | `PG1` / `PG2`, `PG3`, `PG4`, `PG7` | GOV, CMP, CHG, REL, OPS | All affected DOCs | Product Decision Authority-designated delivery owner | Changing approved requirements or architecture by roadmap assertion |
+| `DOC-08` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | Users, journeys, interaction states, usability, accessibility profiles, components and evaluation | DOC-03, DOC-04, HCD/accessibility evidence | Interaction, surface, locale and evaluation obligations | `PG1` / `PG2`, `PG3`, `PG4`, `PG5` | GOV, VVP, VEV, RSK, CHG | DOC-03, DOC-04, DOC-05 | Product Decision Authority-designated product/HCD owner | Product vision, business needs, system architecture and requirements authority |
 
 Supporting class ownership remains exactly nine: `GOV`, `CLR`, `RSK`, `VVP`, `VEV`, `CMP`, `CHG`,
 `REL`, and `OPS`. The GOV-owned Material Coverage Inventory and Behavioral Coverage Register are
@@ -94,6 +94,37 @@ controlled guidance:
 - No production stack, API, database, deployment topology, copied implementation material or
   commercial objective is authorized by these templates. Production implementation remains gated by
   approved PG2 requirements, PG3 architecture/design and PG4 increment readiness.
+
+### Internal-company value boundary
+
+The eight core documents describe an internal company product. Permitted value statements concern
+engineering-data integrity, operational control, release-risk reduction, quality, maintainability and
+measured efficiency. Pricing, revenue, customer acquisition, market-share, market-fit and
+external-buyer objectives are `NOT APPLICABLE` to this baseline.
+
+### Typed trace and rendition navigation
+
+Each core/supporting item exposes typed `SOURCE`, `DOWNSTREAM`, `CHANGE`, `VERIFICATION`, `RELEASE`
+and, where distributed, `RENDITION` links. The links identify stable item IDs, versions and exact
+baselines. A trace view is navigational only; it never becomes a second authority or silently copies a
+statement into another document. A material change is recorded in `CHG`/Work Item, and a DOCX/PDF
+rendition records source ID/version/baseline, rendition date, producer where material, status,
+classification and retention. Source changes make old renditions `Stale`, deliberate replacement
+makes them `Superseded`, and withdrawal records its reason.
+
+### Supporting evidence and reference boundary
+
+Reference observations are retained in `CLR`, `GOV` coverage records, research or approved ADRs as
+`Reference-Coverage Evidence`. They may inform a bounded product hypothesis, but they do not become
+an internal need, requirement, acceptance or release claim without a separate IDEA decision and
+evidence chain. Restricted, unlicensed or production-sensitive material remains outside the
+repository; only approved metadata and controlled-storage links may be retained here.
+
+The `GOV`-owned Material Coverage Inventory is the closed denominator at an explicit as-of
+baseline/date. It has exactly one Behavioral Coverage Register record per inventory entry, including
+target evidence, limitations, proactive benchmark comparison, disposition, owner/rationale, IDEA
+trace, increment and verification. The coverage register is a sub-register, not a tenth supporting
+class.
 
 ## Contract references
 

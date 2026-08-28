@@ -89,6 +89,32 @@ do not prove internal need, acceptance or release readiness.
 | Requirement / verification | `UNKNOWN` | `UNKNOWN` |
 | Change / release impact | `UNKNOWN` | `UNKNOWN` |
 
+## 6. Permitted transfer chain and stop conditions
+
+The admissible transfer chain is:
+
+```text
+Authorized source observation
+  → classified finding / design lesson
+  → bounded inference
+  → IDEA decision or stakeholder need
+  → requirement / design response
+  → change / verification / release trace
+```
+
+| Transfer stage | Required identity and limit | Stop condition |
+|---|---|---|
+| Source observation | For transferred external research, fixed source-artifact SHA-256, URI/path or exact edition, lawful access basis, date, scope and limitation; direct public-source research may retain its public citation and access date without a repository transfer | Missing lawful access, source identity or required transfer hash is `BLOCKED` |
+| Finding / lesson | Neutral observation, evidence class and bounded interpretation | Do not infer an internal need or implementation detail |
+| IDEA decision / need | Separate authority, rationale, affected internal role and effective baseline | Reference evidence alone cannot create this record |
+| Requirement / design | Stable ID, acceptance, verification and typed upstream link | No copied code, schema, protocol, visual asset or licensed text |
+| Change / release | `CHG`, exact baseline, `VEV` result and `REL` pin | Missing permission, sanitization or retention leaves transfer unavailable |
+
+Restricted, unlicensed, proprietary or production-sensitive material remains outside the repository;
+retain only approved metadata and a controlled-storage reference. A reference observation is
+`Reference-Coverage Evidence` and must not be relabeled as internal validation, acceptance or release
+evidence without an independently justified IDEA decision.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

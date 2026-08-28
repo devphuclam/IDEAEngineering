@@ -131,6 +131,32 @@ the independent approver. Missing reviewer, competence or population remains `BL
 | HCD/accessibility review | Surface profile, conditional sources, manual/assistive evidence and specialist assessment | `UNKNOWN` |
 | Locale review | Nine cells complete or explicitly `UNKNOWN`/`BLOCKED` | `UNKNOWN` |
 
+## Standards applicability and objective evidence
+
+| Surface | Conditional source | Exact edition / scope | Classification | Applicability / tailoring | Evidence expectation | Status |
+|---|---|---|---|---|---|---|
+| Native Desktop | HCD/accessibility source selected in `GOV` | `UNKNOWN` | `STANDARD`, `STANDARD-GUIDED` or `PROJECT-CONVENTION` | `APPLY`, `TAILOR`, `NOT-APPLICABLE` or `BLOCKED` | Manual and assistive evidence appropriate to the surface | `UNKNOWN` |
+| Web | WCAG Web/rendered profile is required for applicable Web scope; WAI-ARIA is additive only where necessary custom Web semantics are not provided by native host-language semantics | `UNKNOWN` | `STANDARD`, `STANDARD-GUIDED, CONDITIONAL` or `REFERENCE/WATCH` | Exact scope, tailoring and native-semantic boundary | Keyboard, screen-reader and browser evidence where applicable | `UNKNOWN` |
+| Web-rendered Desktop | Conditional Web/HCD sources for the rendered region | `UNKNOWN` | `STANDARD-GUIDED, CONDITIONAL` or `PROJECT-CONVENTION` | Rendered-region boundary and approved applicability | Manual/assistive evidence for the rendered region | `UNKNOWN` |
+
+A citation or checklist score is not a conformity claim. Exact edition, lawful access, applicability,
+tailoring, owner and objective evidence are required before a claim is made. Native Desktop is not
+automatically treated as a Web conformance scope.
+
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-03 need, DOC-04 requirement, approved HCD decision or evidence | `UNKNOWN` |
+| `DOWNSTREAM` | Interaction requirement, architecture view, component contract, increment or locale evidence | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item covering interaction, accessibility, locale, risk, tests and release impact | `UNKNOWN` |
+| `VERIFICATION` | VVP/VEV manual, assistive, Unicode and cross-locale task-suite evidence | `UNKNOWN` |
+| `RELEASE` | REL baseline and approved claim scope | `UNKNOWN` |
+| `RENDITION` | Source-pinned Markdown/DOCX/PDF metadata and stale/superseded state | `UNKNOWN` |
+
+The complete locale/surface matrix remains the authority for product UI obligations. A translated or
+stale rendition cannot replace the English source or change an interaction requirement.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

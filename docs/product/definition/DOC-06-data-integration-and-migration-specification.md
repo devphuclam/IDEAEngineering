@@ -114,6 +114,21 @@ approval, production readiness or evidence of complete data fidelity.
 | Migration readiness | Mapping, reconciliation, rollback and approved data boundary | `UNKNOWN` |
 | Material change | `CHG`/Work Item with data/interface/security/operations/release impact | `UNKNOWN` |
 
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-03 need/rule, DOC-04 obligation, DOC-05 view or data evidence | `UNKNOWN` |
+| `DOWNSTREAM` | Interfaces, migration increment, DOC-07 scope, verification and operations | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item covering data, interface, security/privacy, migration, recovery and release impact | `UNKNOWN` |
+| `VERIFICATION` | Mapping/reconciliation procedure and exact VEV result | `UNKNOWN` |
+| `RELEASE` | REL baseline and data-boundary authorization | `UNKNOWN` |
+| `RENDITION` | Source document ID/version/baseline and rendition status if distributed | `UNKNOWN` |
+
+Trace links identify the source and target item versions; a trace view never becomes a schema or
+integration authority. A rendition cannot be edited into a different data baseline, and a stale
+rendition is redirected to the current Markdown source.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

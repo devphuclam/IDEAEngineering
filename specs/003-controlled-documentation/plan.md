@@ -89,9 +89,15 @@ Controlled-File Baseline and one later deep CAD capability profile.
 
 **Pre-Phase 0 result**: PASS — no constitutional violation or unresolved clarify question blocks
 research.
-**Post-Phase 1 result**: PASS after `data-model.md`, contracts and `quickstart.md` were updated with
-the coverage-register, locale and Validation Pack controls; final task/checklist reconciliation remains
-part of the polish phase.
+**Post-Phase 1 result**: PASS for the documentation-structure and artifact-consistency re-check at
+the parent commit `04e6a97e537eba51d5344f7b6f6f2d5edb87f9ee` plus the scoped
+`validation-baseline-manifest.sha256`: `data-model.md`, contracts, quickstart, the eight core
+templates, the nine supporting-record templates and the retained Validation Pack ledger carry the
+coverage, locale, trace, rendition and internal-value controls. The T053/T060 requirements-quality
+checklist retains 52/52 administrative markers under the Product Decision Authority's instruction;
+controlled reviewer attribution remains `BLOCKED` until an attributable identifier is supplied. This
+is not a product-baseline or gate approval; evidence-dependent, independent-specialist and
+representative-acceptance checks remain `NOT-RUN`/`BLOCKED` where their prerequisites are absent.
 
 ## Design decisions carried into Phase 1
 
@@ -133,6 +139,7 @@ specs/003-controlled-documentation/
 ├── data-model.md
 ├── quickstart.md
 ├── validation-results.md
+├── validation-baseline-manifest.sha256
 ├── contracts/
 │   ├── README.md
 │   ├── document-catalogue.md
@@ -256,7 +263,7 @@ After the design artifacts are generated, re-check that:
 - core-document paths and templates retain IDEA-only language;
 - evidence, reference hypotheses, internal validation, technical verification and pilot acceptance
   remain distinct;
-- all missing authority/evidence stays `UNKNOWN` or `BLOCKED`;
+- all missing authority/evidence stays `UNKNOWN`, `BLOCKED`, or `NOT-RUN`;
 - the eight-class and nine-class counts remain exact; and
 - the Material Coverage Inventory is closed at an explicit as-of baseline/date, every inventory entry
   has one GOV-owned coverage record with a proactive benchmark comparison before `ADOPT`, and core
@@ -267,7 +274,10 @@ After the design artifacts are generated, re-check that:
   and truthful `BLOCKED`/`NOT-RUN` results; and
 - validation commands report only checks actually executed.
 
-Task generation has completed: `tasks.md` is the current dependency-ordered task graph. Once the
-retained static, coverage, locale and reviewer checks are reconciled, the feature is ready for the
-template-authoring work and the next implementation lifecycle gate; this plan still authorizes no
-production application code.
+Task generation has completed: `tasks.md` is the current dependency-ordered task graph. The
+documentation-authoring delta is now recorded; structural checks are reproducible against the parent
+commit plus scoped SHA-256 manifest. The 52-item requirements-quality checklist retains administrative
+markers under the Product Decision Authority's instruction, while controlled reviewer attribution is
+`BLOCKED`. Coverage, locale, evidence, independent-specialist and representative-acceptance rows
+remain explicitly `NOT-RUN`/`BLOCKED` until their owners and inputs exist. No task or plan statement
+authorizes production application code before the PG2/PG3/PG4 gates.

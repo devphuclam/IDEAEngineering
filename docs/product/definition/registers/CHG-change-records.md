@@ -84,6 +84,32 @@ The common envelope is explicit for this `CHG` instance:
 | Superseded versions | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 | Closure verification | `UNKNOWN` | `UNKNOWN` | `NOT-RUN` |
 
+## 5. Typed trace and impact coverage
+
+Every material change uses typed links rather than a free-text list. The change owner records the
+source trigger, affected item/version, proposed successor and downstream verification/release use.
+
+| Link type | Required target | Minimum impact question |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | Stakeholder need, product decision, evidence or ADR | Why is the change necessary and what authority admits it? |
+| `AFFECTS` | DOC, requirement, architecture/design, data, interface, UI/UX, locale or standard | Which exact baseline and owner change? |
+| `MITIGATES` / `INTRODUCES` | `RSK` record | Does risk exposure or residual disposition change? |
+| `VERIFIED-BY` | `VVP` procedure / `VEV` result | What exact configuration and evidence must be rerun? |
+| `RELEASED-IN` | `REL` baseline / `DOC-07` increment | Which release or increment consumes the change? |
+| `SUPERSEDES` / `REPAIRS` | Prior change, item or broken link | Is history preserved and is the repaired link justified? |
+
+The impact review explicitly covers requirements, architecture, data, interfaces, UI/UX and locale,
+risks, tests, roadmap, operations, releases and recovery. An area may be `NOT APPLICABLE` only with
+an owner-approved rationale. A broken, orphaned, stale or unjustified circular link blocks the
+affected gate or receives an authorized disposition before closure.
+
+## 6. Review, approval and effective-baseline rule
+
+Review records name author/owner conflicts, reviewer competence and independence, decision date,
+affected baseline, approval authority, rollback/recovery evidence and the exact effective baseline.
+Approval does not silently edit a rendition or lower-authority document; successor versions and
+stale renditions remain linked through `CMP` and `REL`.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

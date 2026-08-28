@@ -120,6 +120,21 @@ Use `UNKNOWN` or `BLOCKED` when source access, authority, competence or configur
 | Gate outcome | `NOT-RUN` until an attributable review (`PASS`, `PASS-WITH-ACTIONS`, `FAIL`, or `BLOCKED`) |
 | Indexed trace to DOC-07 increment | `UNKNOWN` |
 
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-01 framing, internal process evidence, decision or accepted ADR | `UNKNOWN` |
+| `DOWNSTREAM` | DOC-04/05/06/07 consequence or indexed increment selected by this assessment | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item, affected option/profile and successor baseline | `UNKNOWN` |
+| `VERIFICATION` | VVP procedure, prototype limitation or VEV result with exact environment | `UNKNOWN` |
+| `RELEASE` | REL manifest only when an approved option is included in a release | `UNKNOWN` |
+| `RENDITION` | DOCX/PDF source instance ID, version, baseline, date and current/stale status | `UNKNOWN` |
+
+An indexed assessment retains its own identity and source baseline; a catalogue row or rendition is
+not an authority substitute. A rendition generated from an earlier assessment becomes `Stale` when
+the source instance changes, and comments are redirected to the authoritative Markdown instance.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

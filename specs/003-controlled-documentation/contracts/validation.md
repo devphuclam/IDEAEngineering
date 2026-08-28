@@ -9,7 +9,7 @@ Run from the repository root:
 
 ```powershell
 rg -n "^DOC-0[1-8]" docs/product/definition
-rg -n "NEEDS CLARIFICATION|TODO|TBD|\{\{|\}\}" specs/003-controlled-documentation
+rg -n "NEEDS CLARIFICATION|TODO|TBD|\{\{|\}\}" docs/product/definition specs/003-controlled-documentation -g '*.md' -g '!specs/003-controlled-documentation/contracts/validation.md' -g '!specs/003-controlled-documentation/checklists/requirements.md'
 git diff --check
 ```
 
@@ -19,6 +19,14 @@ Expected results for an approved template baseline:
 - no unresolved template marker remains in approved content;
 - links resolve to the intended source records;
 - `git diff --check` reports no whitespace errors.
+
+The retained Validation Pack must identify its source as an immutable parent commit plus a scoped
+SHA-256 manifest. The manifest hashes canonical LF-normalized UTF-8 content so Git line-ending
+conversion cannot change the assessed identity. It lists every assessed source artifact and excludes
+the result ledger itself to avoid circular hashing; a working-tree label without that manifest is not
+an exact baseline. The excluded ledger records the canonical SHA-256 of the completed manifest file
+and may additionally record the digest of its canonical entry set; those two values must be named
+separately.
 
 The first command is a content-presence check after the template files are created; it is not a
 substitute for reviewing authority boundaries.

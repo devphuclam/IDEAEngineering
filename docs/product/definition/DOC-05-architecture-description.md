@@ -99,6 +99,21 @@ unapproved product rule. If a technology is evaluated, link the approved decisio
 | Increment readiness | DOC-07 scope, dependencies, test design, migration and rollback are pinned | `UNKNOWN` |
 | Change impact | `CHG`/Work Item covers affected requirements, data, UI, tests, operations and release | `UNKNOWN` |
 
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-04 obligation, approved decision, ADR or constraint | `UNKNOWN` |
+| `DOWNSTREAM` | DOC-06 data/integration, DOC-07 increment, DOC-08 interaction and implementation design references | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item with architecture, data, interface, UI/UX, risk, test and release impact | `UNKNOWN` |
+| `VERIFICATION` | VVP/VEV quality, security, recovery, HCD or interface evidence | `UNKNOWN` |
+| `RELEASE` | REL exact baseline and authorized scope | `UNKNOWN` |
+| `RENDITION` | Source-pinned DOCX/PDF metadata and current/stale/superseded/withdrawn state | `UNKNOWN` |
+
+An architecture view can explain a requirement response but cannot silently override DOC-04. A
+changed source baseline invalidates the old rendition's current status and requires a traceable
+successor or withdrawal.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

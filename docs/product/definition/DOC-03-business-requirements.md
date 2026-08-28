@@ -103,6 +103,38 @@ Acceptance`, and operational rollout authorization. A lower status cannot be rel
 | First gate | `PG1` exact input baseline and outcome | `NOT-RUN` |
 | Change impact | `CHG`/Work Item when a material need changes | `UNKNOWN` |
 
+## Internal-company value and claim boundary
+
+| Value/claim area | Required treatment | Status |
+|---|---|---|
+| Internal operating outcome | State the affected company role, workflow, control, quality, maintainability or evidenced efficiency | `UNKNOWN` |
+| Technical or pilot claim | Link the exact evidence class, scope, limitation and authority; keep technical verification separate from acceptance | `UNKNOWN` |
+| Commercial objective | Pricing, revenue, customer acquisition, market-share, market-fit or external-buyer objective | `NOT APPLICABLE` |
+
+## Pilot claim/status matrix
+
+| Claim status | Minimum evidence | What it does not prove | Result |
+|---|---|---|---|
+| `Canonical Demo Dataset` | Approved synthetic dataset and exact test baseline | Internal need, pilot acceptance or rollout | `NOT-RUN` |
+| `Technical Pilot Verification` | Approved non-production execution, configuration and `VEV` result | Representative acceptance or rollout authority | `NOT-RUN` |
+| `Single-Actor Functional Acceptance` | One person operating separately provisioned identities, with scope and limitations | Independent review or representative-user acceptance | `NOT-RUN` |
+| `Internal Operational Need Validation` | Representative internal roles/workflows and attributable evidence | Technical readiness by itself or rollout authorization | `NOT-RUN` |
+| `Internal Pilot Acceptance` | Technical evidence, representative internal-user evidence and named authority | Broader rollout beyond approved scope | `NOT-RUN` |
+| Operational rollout authorization | Named authority, exact scope, accepted residual risk and release baseline | No claim outside the authorized scope | `NOT-RUN` |
+
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | Stakeholder evidence, internal decision or bounded reference finding | `UNKNOWN` |
+| `DOWNSTREAM` | DOC-04 requirement, DOC-07 increment, DOC-08 interaction or affected data/design | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item and impact across requirements, design, risks, tests, operations and release | `UNKNOWN` |
+| `VERIFICATION` | VVP/VEV method and exact result for the requirement-bearing consequence | `UNKNOWN` |
+| `RELEASE` | REL baseline and authorized claim scope | `UNKNOWN` |
+| `RENDITION` | Source-pinned DOCX/PDF metadata and stale/superseded disposition | `UNKNOWN` |
+
+Supporting records provide evidence and trace; they do not rewrite a business rule owned here.
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references

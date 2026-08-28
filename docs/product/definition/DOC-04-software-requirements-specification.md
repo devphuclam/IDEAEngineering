@@ -57,6 +57,7 @@ creates a `CHG`/Work Item and preserves the prior baseline.
 | Field | Required content |
 |---|---|
 | Requirement ID | Stable semantic ID, independent of path or Git commit |
+| Owning scope | Product area, increment or capability boundary that owns the obligation |
 | Type | Functional, interface, data, quality, security, privacy, operational, support, retirement, or localization |
 | Statement | One testable obligation with subject, condition and expected behavior |
 | Source / rationale | DOC-03 need, approved decision, evidence class and limitations |
@@ -71,9 +72,9 @@ creates a `CHG`/Work Item and preserves the prior baseline.
 
 ### 2.1 Requirement ledger
 
-| Requirement ID | Type | Obligation | Source / rationale | Acceptance and verification | Priority / status | Trace |
-|---|---|---|---|---|---|---|
-| `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
+| Requirement ID | Owning scope | Type | Obligation | Source / rationale | Acceptance and verification | Priority / status | Trace |
+|---|---|---|---|---|---|---|---|
+| `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 
 ## 3. Required requirement domains
 
@@ -138,6 +139,21 @@ the exact source before using a requirement as evidence.
 | PG2 requirements review | Complete requirement ledger, source/rationale, acceptance, verification and independent review where applicable | `NOT-RUN` |
 | Material change | `CHG`/Work Item with impact across requirements, design, data, UI, risks, tests, roadmap, operations and release | `UNKNOWN` |
 | Supersession | Prior version and affected renditions remain traceable | `UNKNOWN` |
+
+## Typed trace, supporting records and rendition controls
+
+| Link type | Required target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-03 need/rule, approved decision or evidence class with limitation | `UNKNOWN` |
+| `DOWNSTREAM` | DOC-05 architecture, DOC-06 data/integration, DOC-07 increment and DOC-08 interaction response | `UNKNOWN` |
+| `CHANGE` | `CHG`/Work Item with complete material-impact assessment | `UNKNOWN` |
+| `VERIFICATION` | VVP procedure and VEV result for each requirement or grouped justified set | `UNKNOWN` |
+| `RELEASE` | REL manifest, exact requirement version and approved claim boundary | `UNKNOWN` |
+| `RENDITION` | DOCX/PDF rendition ID, source ID/version/baseline, date, producer, status, classification and retention | `UNKNOWN` |
+
+Trace navigation may be bidirectional, but the requirement ledger remains authoritative. A stale,
+superseded or withdrawn rendition is never a substitute for this source and approvals against it are
+redirected through `CHG`/review records.
 
 <!-- AUTHOR CONTENT END -->
 

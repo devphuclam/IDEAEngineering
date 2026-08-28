@@ -79,6 +79,29 @@ source baseline changes.
 |---|---|---|---|---|
 | `UNKNOWN` → `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` | `UNKNOWN` |
 
+## 5. Controlled transition and action examples
+
+| Transition / action | Preconditions | Required record | Accountable authority | Failure consequence |
+|---|---|---|---|---|
+| `Draft` → `Proposed` | Required sections complete or every gap has owner/action/trigger | Review request, exact baseline and checklist result | Document owner and reviewer | Return to `Draft`; gate remains unavailable |
+| `Proposed` → `Approved` | Authority, evidence, trace and applicable gate decision present | Gate decision with one outcome and approval identities | Product Decision Authority / designated approver | `BLOCKED` or `FAIL`; no authority transfer |
+| `Approved` → `Superseded` | Successor approved and source identity retained | Successor link, effective baseline and rendition impact | Configuration/change authority | Old item remains visible and non-current |
+| `Approved` → `Retired` | Retention, dependency, export/hold and operational checks complete | Retirement record and effective date | Accountable product/operations authority | Retirement remains `BLOCKED` |
+| `PASS-WITH-ACTIONS` | Action does not invalidate requirements/design/test/recovery | Action owner, affected baseline, due condition/date, expiry and escalation | Gate authority | Expiry or missed condition reopens/blockades the affected gate |
+
+`PASS-WITH-ACTIONS` is not a document status. `Start` and `In Work` are product workflow states for
+a Business Revision; they are not substitutes for the document lifecycle vocabulary.
+
+## 6. Exact baseline and rendition watch
+
+| Watch item | Required fields | Rule |
+|---|---|---|
+| Baseline manifest | Stable item ID, class, instance, version, source pin/hash, effective date and scope | A manifest is immutable once used by a gate or release |
+| Version watch | Current and prior document versions, `CHG`/Work Item, impact and successor | A material authority or contract change increments the document major version; compatible content changes increment the minor version; both preserve history |
+| Generation/Revision watch | Product Generation, Business Revision and governing policy | These values are distinct from document version and Git commit |
+| Rendition watch | Rendition ID, source ID/version/baseline, date, producer, status, classification and retention | Source change makes a rendition `Stale`; replacement makes it `Superseded`; withdrawal records reason |
+| Git evidence | Commit/ref and repository state | Git proves the source snapshot only; it does not approve or redefine a document |
+
 <!-- AUTHOR CONTENT END -->
 
 ## Contract references
