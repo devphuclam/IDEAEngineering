@@ -16,6 +16,8 @@ This baseline records what DDM/CSI publicly published or demonstrated. It does n
 
 A tutorial frame proves the displayed vendor demonstration in its cited historical context. It cannot be relabelled as `TARGET-RUNTIME FACT`.
 
+Under the approved IDEA product strategy, each admitted externally observable DDM behavior is a default `ADOPT` candidate in the controlled coverage process. That product disposition does not widen the evidence: public material still cannot prove a current target build, internal implementation, enforcement, transactionality, security, performance, or complete parity.
+
 ## 2. First-party public propositions
 
 | ID | Vendor-public proposition | First-party source | Limit |
@@ -115,6 +117,6 @@ This baseline does not establish that DDM:
 - provides atomic Check-in or immutable Generations;
 - is secure or insecure based solely on public wording;
 - meets any performance, availability, recovery, or scalability target;
-- should be cloned by IDEA.
+- is sufficient by itself to specify DDM internals or prove complete behavioral parity against an unidentified target.
 
 The current acquisition recommendation is maintained separately in [DDM acquisition and audit decision](2026-08-27-ddm-acquisition-and-audit-decision.md).

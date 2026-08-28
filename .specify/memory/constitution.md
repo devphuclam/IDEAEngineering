@@ -1,41 +1,68 @@
 <!--
 Sync Impact Report:
-- Version change: 1.0.0 -> 2.0.0
+- Version change: 3.2.0 -> 3.3.0
 - Modified principles:
-  - I. Product-Neutral Core -> I. Stakeholder-Backed, Evidence-Bounded Product Definition
-  - II. Specifications Before Implementation -> II. Controlled Documentation Before Implementation
-  - III. Testable, Reproducible Verification -> IV. Measurable Quality, Verification, and Truthful Claims
-  - IV. Isolated Collaboration and Durable Handoffs -> III. End-to-End Traceability and Controlled Change
-  - V. Least-Privilege and Explicit Integration -> V. Secure, Least-Privilege, and Recoverable Delivery
+  - I. DDM Baseline, Aras-Informed Improvement, and Clean-Room Product Definition
 - Added guidance:
-  - standards applicability and tailoring vocabulary
-  - eight-document product-definition system plus supporting registers
-  - PG0-PG7 lifecycle gates and controlled gate outcomes
-- Removed sections: none
-- Follow-up work:
-  - select and baseline human-centred-design and accessibility sources for DOC-08
-  - create the approved DOC-01 through DOC-08 templates and supporting registers in a separate workflow
+  - IDEA Engineering is an internal company product, not a commercial multi-customer offering
+  - Business value means internal operational, control, quality, risk, and evidenced-efficiency value
+  - Sales, revenue, customer acquisition, buyer-persona, and market-fit requirements are out of scope
+- Removed guidance:
+  - Any assumption that the product is intended for external commercial adoption
+- Follow-up TODOs: none
 -->
 
 # IDEA Engineering Constitution
 
 ## Core Principles
 
-### I. Stakeholder-Backed, Evidence-Bounded Product Definition
+### I. DDM Baseline, Aras-Informed Improvement, and Clean-Room Product Definition
 
-Every approved requirement MUST trace to an identified stakeholder need or an approved IDEA
-product decision. It MUST state its rationale, acceptance criterion, and verification method.
-Competitor behavior, marketing, tutorials, public material, and authorized runtime observations
-MUST remain classified evidence, findings, unknowns, boundaries, or design lessons until the
-requirement-translation gate is satisfied.
+IDEA Engineering's primary product objective is to reproduce DDM's externally observable PDM and
+PLM capabilities, workflows, and user-visible semantics through an independently designed and
+implemented product. A behavior established by lawfully available official or authorized DDM
+evidence MUST default to `ADOPT` in the controlled DDM coverage register unless an approved IDEA
+product decision records `ADAPT`, `DEFER`, or `EXCLUDE` with rationale, impact, and verification.
 
-DDM, icVault, and other external products MAY motivate questions, risks, comparison dimensions,
-and independently authored design lessons. They MUST NOT be treated as parity specifications or
-copied into IDEA requirements, schemas, user interfaces, protocols, or implementation. `UNKNOWN`
-and `BLOCKED` MUST remain visible outcomes and MUST NOT be filled by assumption.
+Official Aras Innovator material MUST be evaluated proactively as a quality benchmark for each
+material product area, not only when DDM evidence is missing. Where evidenced Aras behavior offers
+a stronger pattern for usability, configurability, data integrity, security, auditability,
+extensibility, interoperability, lifecycle governance, or maintainability, the comparison MUST
+identify the DDM limitation, the Aras advantage, the affected stakeholders and risks, and a
+recommended `ADAPT-ARAS` IDEA behavior. A material adaptation MUST be presented to the Product Owner
+and MUST NOT silently replace the DDM reference behavior.
 
-Rationale: IDEA Engineering must solve evidenced stakeholder problems while preserving clean-room
-provenance and the scope of every claim.
+When DDM evidence is silent, ambiguous, or insufficient to define a behavior, official Aras
+Innovator documentation MUST also be evaluated as the first fallback. If neither source resolves
+the behavior, it MUST remain `UNKNOWN` until an approved IDEA decision supplies an independently
+justified, verifiable rule. Applicable law, standards, security, safety, accessibility, immutable
+product-baseline guarantees, and Organizational Isolation take precedence and MUST produce an
+explicit `ADAPT`, `ADAPT-ARAS`, or `EXCLUDE` disposition rather than a hidden divergence.
+
+Every resulting IDEA requirement MUST still have a stable identity, source trace, rationale,
+acceptance criterion, and verification method. DDM or Aras evidence establishes the reference
+behavior and scope; it does not authorize copying source code, binaries, database schemas,
+undocumented protocols, visual assets, proprietary documentation, trademarks, or other protected
+implementation material. "Copy DDM" means clean-room behavioral parity, not implementation,
+pixel, branding, or internal-schema identity.
+
+IDEA Engineering MUST be defined and governed as an internal product for the company's own
+engineering work. The reference-product strategy MUST serve evidenced internal needs and MUST NOT
+be used to invent commercial goals. In Core Product Documents, business value means internal
+operational control, engineering-data integrity, release risk reduction, quality, maintainability,
+and measured efficiency. Sales, revenue, customer acquisition, commercial buyer personas, market
+share, and market fit are outside the current product boundary unless a later constitutional
+amendment explicitly changes that boundary.
+
+MVP increments MAY deliver a controlled subset, but every omitted evidenced DDM capability MUST be
+visible as `DEFER` or `EXCLUDE`; absence from the current increment MUST NOT silently erase the
+long-term parity target. `UNKNOWN` and `BLOCKED` MUST remain visible and MUST NOT be filled by
+assumption. Complete DDM parity MUST NOT be claimed without an identified target version, edition,
+configuration, lawful evidence scope, and objective coverage results.
+
+Rationale: the stakeholder objective is an internal DDM-like product improved with the strongest
+evidenced Aras patterns, while clean-room provenance, traceability, explicit divergence controls,
+and an internal-value boundary keep the result lawful, relevant, testable, and maintainable.
 
 ### II. Controlled Documentation Before Implementation (NON-NEGOTIABLE)
 
@@ -121,6 +148,16 @@ boundaries, recoverable failure behavior, and honest treatment of environmental 
 
 ## Additional Constraints
 
+- IDEA Engineering is an internal company product. DOC-01 through DOC-08 MUST express company
+  stakeholders, internal operating contexts, internal governance, operational outcomes, and
+  evidenced engineering value. They MUST NOT introduce commercial customer segmentation, external
+  buyer journeys, pricing, revenue, market-share, or market-fit objectives.
+- DDM behavioral parity is the default long-term product target. The controlled coverage register
+  MUST identify each reference capability or behavior, DDM evidence and limitation, applicable Aras
+  comparison and evidenced advantage, IDEA disposition, owning requirement or decision, delivery
+  increment, and verification result. Aras is not a second full-product parity target; it is the
+  required quality benchmark and the first fallback for DDM gaps. The intended outcome is DDM
+  capability coverage with reviewed Aras-informed improvements.
 - IDEA Engineering is C1: an independently useful PDM product that evolves toward PLM inside the
   same product boundary. Platform D MUST NOT be implemented before an independent C2 and concrete
   cross-application requirements exist.
@@ -136,6 +173,11 @@ boundaries, recoverable failure behavior, and honest treatment of environmental 
   Specification, DOC-05 Architecture Description, DOC-06 Data, Integration, and Migration
   Specification, DOC-07 MVP Roadmap and Delivery Plan, and DOC-08 UI/UX and Interaction
   Specification.
+- DOC-01 through DOC-08 MUST use only IDEA product language and MUST NOT contain the name `Aras`,
+  Aras-specific citations, or competitor-comparison narrative. Aras evidence, provenance, and
+  comparisons MUST remain in supporting research, comparison or coverage registers, and ADR or
+  governance records; only the reviewed and approved IDEA need, requirement, behavior, design, or
+  decision may cross into a Core Product Document.
 - Supporting controlled information MUST cover governance and standards (`GOV`), clean-room
   provenance (`CLR`), risk (`RSK`), verification planning and evidence (`VVP` and `VEV`),
   configuration and change (`CMP` and `CHG`), release (`REL`), and operations (`OPS`). Traceability
@@ -143,9 +185,9 @@ boundaries, recoverable failure behavior, and honest treatment of environmental 
 - Markdown under version control is the authoritative editable source unless an approved information
   item explicitly defines another controlled format. DOCX and PDF renditions MUST identify the exact
   source baseline from which they were produced.
-- Raw proprietary evidence, licensed material without redistribution rights, credentials, customer
-  data, copied competitor implementation, and unsupported conformity claims MUST NOT enter the
-  product repository.
+- Raw proprietary evidence, licensed material without redistribution rights, credentials,
+  company-sensitive or production data not approved for repository use, copied competitor
+  implementation, and unsupported conformity claims MUST NOT enter the product repository.
 - Technology, deployment, identity-provider, database, storage, framework, and integration choices
   MUST remain open until controlled requirements and architecture decisions justify them.
 
@@ -196,12 +238,13 @@ Constitution versions follow semantic versioning:
 
 Every Work Item, review, gate, and release MUST assess the applicable constitutional principles.
 Approved deviations MUST record scope, rationale, risk, owner, approver, expiry, and remediation.
-No deviation may convert missing evidence into PASS, erase an `UNKNOWN` or `BLOCKED` result, or turn
-competitor evidence into an IDEA requirement.
+No deviation may convert missing evidence into PASS, erase an `UNKNOWN` or `BLOCKED` result, bypass
+the controlled DDM coverage and requirement-translation records, or treat competitor implementation
+material as IDEA implementation authority.
 
 The standards and policy baseline MUST be reviewed on its recorded cadence and when a source is
 published, amended, withdrawn, superseded, contractually required, or made applicable by a material
 change in system boundary or deployment. A new edition MUST enter through controlled impact and
 tailoring review; it MUST NOT silently replace the approved baseline.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-08-27
+**Version**: 3.3.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-08-27

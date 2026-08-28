@@ -92,6 +92,6 @@ DDM target discovery is sufficient to inform IDEA requirements only when:
 6. negative findings document entitlement, role, configuration, and search coverage;
 7. contradictions remain explicit or are resolved by stronger scoped evidence;
 8. legal, license, confidentiality, privacy, and non-redistribution review passes;
-9. every proposed IDEA requirement has independent stakeholder rationale and acceptance evidence.
+9. every adopted or adapted behavior has a controlled coverage disposition and an IDEA requirement or decision with scope, rationale, acceptance criteria, and verification evidence.
 
-Passing this plan still does not authorize copying DDM implementation or claiming parity.
+Passing this plan still does not authorize copying DDM implementation. It permits only parity claims scoped to the identified target, configuration, tested coverage, and retained objective evidence.

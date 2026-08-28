@@ -5,7 +5,7 @@
 | Document ID | `IE-KNW-DDM-002` |
 | Decision date | 2026-08-27 |
 | Evidence cut-off | 2026-08-27, Asia/Bangkok |
-| Status | Decided - acquire only through an authorized vendor path; runtime audit remains gated |
+| Status | Decided - pursue only an authorized vendor path; runtime audit is required before target-version parity claims and remains gated |
 | Source scope | DDM/CSI first-party public pages, first-party PDFs, and the official DesignDataManager video channel only |
 | Evidence classes | `VENDOR-PUBLIC`, `INFERENCE`, `UNKNOWN`, `IDEA DECISION` |
 | Related baseline | [DDM vendor-public capability baseline](ddm-vendor-public-baseline.md) |
@@ -26,7 +26,7 @@ Therefore:
 - `UNKNOWN`: whether a current self-service public trial or unauthenticated public installer exists. None was identified on the current first-party install, release, demo, support, legal, or sitemap surfaces reviewed. This is an evidence gap, not proof of absence.
 - `VENDOR-PUBLIC` (historical): CSI advertised a 60-day DDM trial in March 2016, but that historical post does not establish a trial duration, entitlement, build, or acquisition route in 2026 ([official 2016 trial post](https://www.designdatamanager.com/2016/03/01/tweet-undecided-on-a-plm-solution-trial-ddm-for-60-da/), accessed 2026-08-27).
 
-The recommendation is to **finish the public-evidence baseline now, then request an authorized evaluation package only if the implementation-sensitive unknowns matter to IDEA**. Tutorial evidence is sufficient for product vocabulary, visible happy paths, capability mapping, and test design. It is not sufficient for target-build behavior, entitlement, multi-user conflict semantics, transaction atomicity, security, recovery, API contracts, or measured performance.
+The recommendation is to **finish and use the public-evidence baseline now, then request an authorized evaluation package when company approval, license terms, environment, and resources permit**. Because DDM behavioral coverage is now an approved product objective, an identified authorized target is eventually required to resolve material target-specific unknowns and substantiate current-version parity claims. Tutorial evidence remains sufficient for historically demonstrated vocabulary, visible happy paths, initial coverage candidates, and test design; it is not sufficient for target-build behavior, entitlement, multi-user conflict semantics, transaction atomicity, security, recovery, API contracts, or measured performance.
 
 ## 2. Why a current target package cannot be inferred from the public material
 
@@ -56,8 +56,9 @@ The same caution applies to licensing. A still-published DDM CAD data sheet says
 | IDEA objective | Are tutorials enough? | Is authorized package/runtime evidence needed? |
 |---|---|---|
 | Establish vendor vocabulary and a preliminary capability map | Yes. Preserve vendor wording and evidence date. | No. |
-| Understand visible happy-path UX and derive interview questions | Yes. | No, unless current-build UX parity matters. |
-| Design IDEA's own PDM-to-PLM architecture | Yes as comparative input, not as an implementation specification. IDEA requirements still need independent stakeholder rationale and acceptance criteria. | No for architecture baseline; yes only to resolve a material behavior question. |
+| Understand historically demonstrated happy-path UX and derive interview questions | Yes. | Yes when the result is claimed against the selected current target. |
+| Establish the initial DDM behavioral coverage baseline | Yes for dated public behaviors with their evidence limits. | Yes to close material target-specific gaps and substantiate coverage of the selected version, edition, modules, and configuration. |
+| Design IDEA's independent PDM-to-PLM architecture | Yes as behavioral and comparative input, not as an implementation specification. IDEA requirements still need controlled rationale and acceptance criteria. | Not for the technology-independent foundation; yes to resolve material target-specific behavior. |
 | Claim exact DDM behavior or parity for a current build | No. | Yes. |
 | Resolve two-user Reserve/Reference, checkout, stale-write, or assembly/child conflict behavior | No. | Yes, with at least two authorized identities and a pinned build/configuration. |
 | Determine check-in transaction boundaries or failure recovery | No. | Yes, including controlled interruption and restore tests. |
@@ -74,9 +75,9 @@ Actions:
 
 1. Record only first-party propositions, dates, direct URLs, and visible tutorial behavior.
 2. Preserve contradictions and `UNKNOWN` outcomes, especially `2026.04` versus public `2026.07` compatibility wording ([release matrix](https://www.designdatamanager.com/services/ddm-release-matrix/), [support matrix](https://www.designdatamanager.com/services/system-requirements/); accessed 2026-08-27).
-3. Convert observations into candidate questions and test hypotheses, not IDEA requirements or DDM implementation claims.
+3. Convert observations into controlled coverage candidates, comparison questions, and test hypotheses; do not infer DDM internals or bypass IDEA requirement control.
 
-**Exit/stop rule:** if IDEA only needs capability discovery, vocabulary, and architecture inputs, stop here. There is no present need to acquire DDM.
+**Exit/stop rule:** public evidence may support documentation and early independent design, but it is not the terminal evidence state for the approved DDM behavioral target. Proceed to Gate 1 when the Product Decision Authority and company controls approve acquisition; until then, target-specific parity and unresolved runtime semantics remain `UNKNOWN` or `BLOCKED`.
 
 ### Gate 1 - Authorized acquisition
 

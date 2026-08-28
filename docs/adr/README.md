@@ -8,6 +8,12 @@
 - [ADR-0005 — Use immutable Generations and atomic Check-in Change Sets](0005-use-immutable-generations-and-atomic-change-sets.md)
 - [ADR-0006 — Bind Reservations to Document and Workspace](0006-bind-reservations-to-document-and-workspace.md)
 - [ADR-0007 — Use generic vaulting and external Format Intelligence](0007-use-generic-vaulting-and-external-format-intelligence.md)
+- [ADR-0008 — Treat core product documents as controlled information-item classes](0008-treat-core-product-documents-as-controlled-classes.md)
+
+### Proposed product decisions
+
+- [ADR-0009 — Use DDM as the behavioral baseline and Aras as the quality benchmark](0009-use-ddm-baseline-and-aras-quality-benchmark.md)
+- [ADR-0010 — Separate operational configuration, governed policy, and solution-package paths](0010-separate-configuration-governance-paths.md)
 
 ## Inherited template decision
 

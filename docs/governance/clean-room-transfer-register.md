@@ -12,7 +12,7 @@
 
 ## 1. Transfer rule
 
-IDEA Engineering accepts independently authored product knowledge, not competitor implementation material. Every transferred conclusion must preserve its evidence class and point to a fixed source artifact hash. A competitor observation may motivate a question or design lesson; it cannot become an IDEA requirement without an IDEA stakeholder need, rationale, acceptance criterion, and verification method.
+IDEA Engineering accepts independently authored product knowledge, not competitor implementation material. Every transferred conclusion must preserve its evidence class and point to a fixed source artifact hash. The approved DDM objective makes an evidenced externally observable DDM behavior a default coverage candidate, and the Aras Quality Benchmark may motivate an improvement; neither bypasses the controlled IDEA requirement or decision record with rationale, acceptance criterion, and verification method.
 
 The permitted chain is:
 
@@ -102,4 +102,4 @@ A transfer is complete only when:
 7. local Markdown links and the repository verifier pass;
 8. the Product Owner accepts the product-facing artifact.
 
-This register records knowledge admission, not ISO conformity, vendor parity, or authorization to inspect or redistribute proprietary material.
+This register records knowledge admission, not ISO conformity, unscoped or verified-complete vendor parity, or authorization to inspect or redistribute proprietary material.

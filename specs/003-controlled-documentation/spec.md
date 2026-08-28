@@ -7,20 +7,24 @@
 **Status**: Draft
 
 **Input**: Establish a controlled, standards-guided documentation system for `DOC-01` through
-`DOC-08` and their supporting registers before production implementation, while using DDM/icVault
-material only as bounded evidence and independently authored design input.
+`DOC-08` and their supporting registers before production implementation for the internal IDEA
+Engineering product. Use the DDM Reference Baseline as the default behavioral target, use the Aras
+Quality Benchmark only through classified supporting evidence, and keep the eight core documents
+free of competitor names or comparison narrative. Sync the templates with the approved MVP, pilot,
+evidence, governance, and internal-value decisions.
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Define the product through eight authoritative documents (Priority: P1)
+### User Story 1 - Define the internal product through eight authoritative documents (Priority: P1)
 
-As a Product Owner or product-definition author, I want one clearly bounded document set from
-vision through UI/UX so that the team knows what must be decided before code and does not use
-implementation or competitor behavior as the accidental source of truth.
+As a Product Decision Authority or Principal Product Author, I want one clearly bounded document set
+from vision through UI/UX so that the company knows what must be decided before code and does not use
+implementation or reference-product behavior as the accidental source of truth.
 
-**Why this priority**: The eight-document set is the primary product-definition baseline. Without
-clear ownership and content boundaries, later requirements, architecture, design, and delivery
-work will conflict or duplicate one another.
+**Why this priority**: The eight-document set is the primary internal product-definition baseline.
+Without clear ownership and content boundaries, later requirements, architecture, design, and
+delivery work will conflict or duplicate one another, and commercial assumptions could be introduced
+into an internal product.
 
 **Independent Test**: Give an author a representative set of vision, feasibility, business,
 software, architecture, data/integration, roadmap, and interaction information. The author can
@@ -35,12 +39,16 @@ identify the first gate at which each document must be reviewed.
 2. **Given** information relevant to more than one document, **When** the author records it,
    **Then** one document owns the authoritative statement and the other documents reference it
    without creating a competing source of truth.
-3. **Given** a DDM or icVault observation with no independent IDEA stakeholder need, **When** the
-   author considers it for a core document, **Then** it remains a classified finding, unknown,
-   boundary, or design lesson and is not written as an IDEA requirement.
+3. **Given** DDM, icVault, or another reference observation, **When** the author considers it for a
+   core document, **Then** it is recorded as classified Reference-Coverage Evidence and may support
+   a Reference-Backed Product Hypothesis, but it is not presented as Internal Operational Need
+   Validation or an IDEA requirement without the required decision and trace.
 4. **Given** a product question that available evidence cannot answer, **When** the document is
    prepared for review, **Then** the gap remains explicitly identified as `UNKNOWN` or `BLOCKED`
    with an owner or resolution path rather than being filled by assumption.
+5. **Given** the product is intended for the company's internal engineering work, **When** an author
+   defines value or scope, **Then** the document uses internal operational outcomes and excludes
+   pricing, revenue, customer acquisition, market-share, and market-fit objectives.
 
 ---
 
@@ -153,15 +161,57 @@ the reference back to the authoritative item.
 2. **Given** a rendition and its source have diverged, **When** the rendition is reviewed, **Then**
    it is visibly stale or superseded and cannot silently become the editable authority.
 
+---
+
+### User Story 6 - Bound internal MVP and pilot evidence (Priority: P2)
+
+As a Principal Product Author or gate reviewer, I want the documentation baseline to distinguish
+product direction, internal need validation, technical pilot verification, and internal pilot
+acceptance so that a one-person technical exercise cannot be mistaken for company-wide adoption
+evidence.
+
+**Why this priority**: IDEA Engineering is an internal product. The documentation must support
+useful progress with limited staffing while keeping claims, authority, pilot scope, and rollout
+readiness honest.
+
+**Independent Test**: Prepare a sample MVP and pilot package using the Canonical Demo Dataset, a
+sanitized Representative Pilot Project, two separately provisioned identities operated by one
+person, and a reference-product evidence record. A reviewer can distinguish which claims are
+reference-backed, technically verified, internally validated, independently reviewed, or still
+`UNKNOWN`/`BLOCKED`.
+
+**Acceptance Scenarios**:
+
+1. **Given** controlled reference evidence supports the product direction, **When** it is recorded,
+   **Then** the package may accept a Reference-Backed Product Hypothesis while leaving Internal
+   Operational Need Validation visibly `UNKNOWN` or `BLOCKED`.
+2. **Given** one person operates two separately provisioned identities in an approved non-production
+   environment, **When** the MVP Release Spine is executed, **Then** the result is labeled
+   Single-Actor Functional Acceptance and cannot be represented as representative-user acceptance or
+   independent review.
+3. **Given** a technical pilot has passed its functional checks, **When** no Internal Adoption
+   Authority or representative internal-user evidence exists, **Then** Internal Pilot Acceptance
+   and operational rollout remain unavailable.
+4. **Given** a pilot project contains sanitized or production-derived company data, **When** its
+   evidence is retained, **Then** it stays in a company-approved storage boundary with classification,
+   owner, access, retention, and handling records and is not automatically committed to Git.
+
 ### Edge Cases
 
 - An information item appears to belong in two core documents; the authority map must identify one
   owner and require references from the other document.
 - Existing accepted architecture or ADR content predates the new templates; it remains authoritative
   until a controlled adoption or migration decision references or supersedes it.
-- A stakeholder asks for a requirement solely because a competitor displays a feature; the request
-  remains a question or evidence-backed design lesson until an independent IDEA need and acceptance
-  basis exist.
+- A stakeholder asks for a requirement solely because a reference product displays a feature; the
+  observation remains Reference-Coverage Evidence and may support a Reference-Backed Product
+  Hypothesis, but it does not by itself establish Internal Operational Need Validation or a complete
+  requirement.
+- A one-person technical pilot uses two identities; the result may verify authorization and workflow
+  behavior but remains limited functional evidence, not independent user acceptance.
+- A Technical Pilot Verification has passed but no Internal Adoption Authority is named; technical
+  evidence may be retained, while Internal Pilot Acceptance and operational rollout remain blocked.
+- The product is internal rather than commercial; templates must not introduce pricing, revenue,
+  customer acquisition, market-share, or market-fit objectives.
 - A conditional standard applies to Web but not native Desktop, or to a Web-rendered region inside
   Desktop; the document must record the surface boundary instead of applying one profile universally.
 - A new standards edition is published after a document is approved; version watch opens an impact
@@ -182,7 +232,8 @@ the reference back to the authoritative item.
 
 #### Controlled set and authority
 
-- **FR-001**: The documentation baseline MUST define exactly these eight core product documents:
+- **FR-001**: The documentation baseline MUST define exactly these eight core product documents
+  for the internal IDEA Engineering product:
   `DOC-01 Product Vision and Scope`, `DOC-02 Feasibility and Options Assessment`,
   `DOC-03 Business Requirements`, `DOC-04 Software Requirements Specification`,
   `DOC-05 Architecture Description`, `DOC-06 Data, Integration, and Migration Specification`,
@@ -204,7 +255,8 @@ the reference back to the authoritative item.
 
 - **FR-006**: Every controlled template MUST require a stable document or record ID, title, owner,
   status, version, applicable baseline, effective date, authors, reviewers, approvers, source links,
-  downstream links, change history, access classification, and retention rule where applicable.
+  downstream links, evidence class or claim status where applicable, change history, access
+  classification, and retention rule where applicable.
 - **FR-007**: The documentation baseline MUST define one controlled status vocabulary and allowed
   transitions for drafts, reviews, approvals, supersession, and retirement; document status MUST
   remain distinct from gate outcome.
@@ -223,17 +275,23 @@ the reference back to the authoritative item.
 
 #### Core-document content contracts
 
-- **FR-013**: `DOC-01` MUST cover product purpose, problem and opportunity, stakeholders, intended
-  outcomes, system boundary, product trajectory, in-scope and out-of-scope areas, non-goals,
-  assumptions, constraints, success measures, and open decisions without inventing detailed
-  requirements.
+- **FR-013**: `DOC-01` MUST cover internal product purpose, the Problem Hypothesis and its evidence
+  class, Internal Operational Value, stakeholders, intended outcomes, system boundary, product
+  trajectory, in-scope and out-of-scope areas, non-goals, assumptions, constraints, success
+  measures, and open decisions without inventing detailed requirements. A Reference-Backed Product
+  Hypothesis MAY support product direction, but Internal Operational Need Validation MUST remain
+  explicit when it is not available.
 - **FR-014**: `DOC-02` MUST cover feasibility questions, available evidence, candidate options,
   evaluation criteria, constraints, dependencies, risks, unknowns, prototype boundaries, findings,
-  recommendation, and decision status; a prototype MUST be identified as throwaway unless it later
+  recommendation, and decision status. It MUST assess the current internal process, buy-and-
+  configure, adapt-or-integrate, and independently build options without treating the build
+  direction as feasibility evidence; a prototype MUST be identified as throwaway unless it later
   enters a separately approved production baseline.
-- **FR-015**: `DOC-03` MUST cover stakeholder and business needs, actors, business outcomes,
-  operational scenarios, business processes and rules, priorities, constraints, assumptions,
-  acceptance intent, and traceable sources without prescribing implementation.
+- **FR-015**: `DOC-03` MUST cover internal stakeholder and business needs, actors, Internal
+  Operational Value, operational scenarios, business processes and rules, priorities, constraints,
+  assumptions, acceptance intent, and traceable sources without prescribing implementation. It MUST
+  distinguish Reference-Backed Product Hypothesis, Internal Operational Need Validation, Technical
+  Pilot Verification, and Internal Pilot Acceptance.
 - **FR-016**: `DOC-04` MUST contain uniquely identified functional, interface, data, quality,
   security, privacy, operational, support, and retirement requirements as applicable. Every
   approved requirement MUST state its owning scope, stakeholder need or approved product-decision
@@ -252,7 +310,9 @@ the reference back to the authoritative item.
 - **FR-020**: `DOC-07` MUST organize delivery into bounded increments linked to approved
   requirements and risks, and MUST record objectives, dependencies, owners, gate prerequisites,
   exit evidence, acceptance, migration or rollback implications, and deferred scope without
-  changing requirements or architecture by roadmap assertion.
+  changing requirements or architecture by roadmap assertion. It MUST represent the MVP Release
+  Spine and the vertical-slice order from controlled identity through safe workspace publish,
+  engineering release, one deep format profile, and internal pilot/UX hardening.
 - **FR-021**: `DOC-08` MUST cover users and context of use, accessibility needs, journeys,
   information architecture, task flows, interaction states, interaction rationale, measurable
   usability objectives, surface-specific accessibility profiles, component interaction and
@@ -270,9 +330,12 @@ the reference back to the authoritative item.
 - **FR-024**: Research evidence, findings, inferences, unknowns, boundaries, blocked work, IDEA
   decisions, and IDEA requirements MUST preserve the evidence classes and permitted-transfer rules
   defined by the clean-room baseline.
-- **FR-025**: Competitor observations, tutorials, public claims, or authorized runtime findings MUST
-  NOT become IDEA requirements without a separately identified IDEA stakeholder need or approved
-  product decision, rationale, acceptance criterion, verification method, and approval.
+- **FR-025**: Reference-product observations, tutorials, public claims, or authorized runtime
+  findings MUST be recorded as Reference-Coverage Evidence. They MAY support a Reference-Backed
+  Product Hypothesis and product-direction decision, but MUST NOT be represented as Internal
+  Operational Need Validation or become an IDEA requirement without a separately identified IDEA
+  stakeholder need or approved product decision, rationale, acceptance criterion, verification
+  method, and approval.
 - **FR-026**: The documentation baseline MUST support a bidirectional trace from evidence or
   stakeholder need through requirement, architecture/interface/ADR, change, implementation
   revision when one exists, verification result, and release baseline.
@@ -305,6 +368,32 @@ the reference back to the authoritative item.
 - **FR-036**: Any external conformity or capability claim MUST require an approved scope, exact
   controlled baseline, applicability mapping, objective evidence, deviations and residual risks,
   and the applicable authorized assessment or decision.
+- **FR-037**: The documentation baseline MUST distinguish the Canonical Demo Dataset, Technical
+  Pilot Verification, Single-Actor Functional Acceptance, Internal Operational Need Validation,
+  Internal Pilot Acceptance, and operational rollout authorization. Passing one status MUST NOT be
+  represented as passing another.
+- **FR-038**: A Technical Pilot Verification MAY proceed in a non-production or explicitly approved
+  internal environment without an Internal Adoption Authority. Internal Pilot Acceptance and
+  operational rollout MUST require representative internal-user evidence and an attributable
+  Internal Adoption Authority disposition.
+- **FR-039**: If one human operates multiple separately provisioned identities, the resulting
+  evidence MUST be labeled Single-Actor Functional Acceptance and MUST NOT be represented as
+  independent review, representative-user acceptance, or company-wide authorization.
+- **FR-040**: The baseline MUST define the Internal Pilot Evidence Boundary: repository-safe
+  synthetic evidence may be committed to version control, while sanitized or production-derived
+  company data remains in an approved storage boundary with classification, owner, access,
+  retention, and handling records.
+- **FR-041**: The baseline MUST capture the MVP Release Spine and MVP Success Metric Set, including
+  exact Released Baseline reproduction, rejection of stale or unauthorized publication, preservation
+  of rejected local work, complete required audit and exact-pin evidence, and consistent restore
+  evidence; efficiency and adoption claims require separate measurement.
+- **FR-042**: The MVP format boundary MUST distinguish the Generic Controlled-File Baseline from
+  one DOC-02-selected deep CAD Format Capability Profile, with later profiles addable without
+  changing Controlled Product Data ownership or invariants.
+- **FR-043**: The baseline MUST state that IDEA Engineering is an internal company product and
+  MUST express business value as internal operational control, engineering-data integrity, release
+  risk reduction, quality, maintainability, and measured efficiency. It MUST NOT introduce pricing,
+  revenue, customer acquisition, market-share, or market-fit objectives.
 
 ### Key Entities
 
@@ -316,8 +405,20 @@ the reference back to the authoritative item.
   status, approval, links, history, classification, and retention information.
 - **Evidence Reference**: A link to an authorized source and evidence class, including its scope,
   provenance, and limitations without copying restricted material.
-- **Stakeholder Need**: An identified stakeholder problem or desired outcome that can justify one
-  or more requirements after review.
+- **Reference-Coverage Evidence**: Lawfully available or authorized evidence of an externally
+  observable reference-product capability or behavior; it can guide coverage and support a
+  Reference-Backed Product Hypothesis but cannot alone validate an internal need.
+- **Reference-Backed Product Hypothesis**: An approved product-direction hypothesis supported by
+  controlled reference evidence; it justifies continued documentation and feasibility work but is
+  not representative internal-user validation.
+- **Internal Operational Need Validation**: Controlled evidence from representative company roles,
+  workflows, or approved internal records confirming an internal problem, priority, context, and
+  desired outcome.
+- **Internal Operational Value**: Evidenced benefit to the company through engineering-data
+  integrity, release-risk reduction, protected work, traceability, recoverability, maintainability,
+  or measured workflow efficiency.
+- **Stakeholder Need**: An identified internal stakeholder problem or desired outcome that can justify
+  one or more requirements after review.
 - **Requirement**: A uniquely identified, stakeholder-backed or decision-backed, verifiable
   obligation with rationale, acceptance, verification method, state, and trace links.
 - **Trace Link**: A typed, directional relationship between authoritative information items; a
@@ -330,6 +431,23 @@ the reference back to the authoritative item.
   its scope, impact analysis, review, approval, and effective baseline.
 - **Rendition**: A non-authoritative DOCX or PDF representation tied to one exact authoritative
   source baseline.
+- **MVP Release Spine**: The mandatory end-to-end proof from New or Store Existing through controlled
+  workspace publish, exact Generation and structure, review, approval, release, export, and
+  reproduction, including negative paths.
+- **MVP Success Metric Set**: The initial correctness, safety, traceability, local-work preservation,
+  exact-pin, and restore outcomes required for the MVP; efficiency and adoption are later measures.
+- **Technical Pilot Verification**: A bounded non-production or approved internal execution of the
+  MVP Release Spine that may use Test Personas and does not authorize operational rollout.
+- **Single-Actor Functional Acceptance**: Limited functional evidence produced when one human operates
+  multiple separately provisioned identities; it is not independent review or representative-user
+  acceptance.
+- **Internal Pilot Acceptance**: The attributable decision allowing a controlled internal pilot after
+  representative internal-user evidence, readiness evidence, and Internal Adoption Authority
+  disposition are available.
+- **Internal Adoption Authority**: The named company role that authorizes Internal Pilot Acceptance
+  or broader operational rollout; it is not required merely to run a Technical Pilot Verification.
+- **Internal Pilot Evidence Boundary**: The separation between repository-safe synthetic evidence and
+  sanitized or production-derived company data held in an approved storage boundary.
 
 ## Success Criteria *(mandatory)*
 
@@ -340,18 +458,19 @@ the reference back to the authoritative item.
   catalogue entry.
 - **SC-002**: In a controlled review sample, 100% of approved documents contain every applicable
   common control field and contain zero unresolved template prompts or sample values.
-- **SC-003**: In a set of at least 20 representative information items, pilot authors place at
-  least 90% in the correct authoritative core document or supporting record without maintainer
-  assistance; every cross-document use points back to that authority.
+- **SC-003**: In a set of at least 20 representative information items, internal pilot authors
+  place at least 90% in the correct authoritative core document or supporting record without
+  maintainer assistance; every cross-document use points back to that authority.
 - **SC-004**: In the sample baseline, 100% of approved requirements have a unique identity, an
   eligible source need or decision, rationale, acceptance criterion, verification method, and
   upstream/downstream trace appropriate to their lifecycle state.
 - **SC-005**: A reviewer can traverse any sampled requirement from its origin to all existing
   downstream design, change, verification, and release references, and back again, in under 5
   minutes, with zero broken or orphaned links in a passing gate package.
-- **SC-006**: In 100% of seeded competitor-evidence cases, the evidence class and scope remain
-  visible and no competitor observation becomes an IDEA requirement without the independent
-  requirement-translation evidence required by this specification.
+- **SC-006**: In 100% of seeded reference-evidence cases, the evidence class and scope remain
+  visible; the case may support a Reference-Backed Product Hypothesis, but no reference observation
+  is represented as Internal Operational Need Validation or an IDEA requirement without the
+  independent requirement-translation evidence required by this specification.
 - **SC-007**: In 100% of gate-decision tests, the reviewer can identify the exact input baselines
   and one permitted outcome; all conditional actions include owner, affected baseline, due
   condition or date, expiry, and escalation path.
@@ -364,12 +483,47 @@ the reference back to the authoritative item.
 - **SC-010**: At least 90% of pilot gate reviewers can locate the required decision, evidence,
   owner, open risk, and next action for a sample increment within 10 minutes without consulting
   private chat transcripts or production source code.
+- **SC-011**: In 100% of core-document template checks, the internal-product boundary is explicit
+  and no template contains pricing, revenue, customer acquisition, market-share, market-fit, or
+  external buyer objectives.
+- **SC-012**: In 100% of pilot-evidence checks, Canonical Demo Dataset results, Technical Pilot
+  Verification, Single-Actor Functional Acceptance, Internal Operational Need Validation, Internal
+  Pilot Acceptance, and rollout authorization are distinguishable; no lower status is labeled as a
+  higher one.
+- **SC-013**: In 100% of MVP-scope checks, the template identifies the MVP Release Spine, the
+  Generic Controlled-File Baseline, the one selected deep CAD profile boundary, and the MVP Success
+  Metric Set without promising unsupported format breadth or efficiency gains.
+- **SC-014**: In 100% of pilot-data checks, repository content contains only approved synthetic or
+  metadata evidence, while sanitized or production-derived company data has a recorded approved
+  storage boundary, classification, owner, access, retention, and handling disposition.
+- **SC-015**: In a structured reviewer walkthrough, at least 90% of participants correctly explain
+  whether each sampled claim is reference-backed, internally validated, technically verified,
+  independently reviewed, or rollout-authorized without consulting private chat or source code.
 
 ## Assumptions
 
 - This feature creates the controlled templates, catalogue, guidance, trace contract, and
   supporting-record model. Populating all eight documents with a complete approved IDEA product
   baseline is subsequent product-definition work performed through PG1–PG3.
+- IDEA Engineering is an internal company product with one current Operating Organization. The
+  initial technical group and representative internal project remain open decisions; the templates
+  must not imply company-wide rollout or a commercial product model.
+- Controlled reference evidence is sufficient to accept a Reference-Backed Product Hypothesis for
+  product direction, documentation, and feasibility work. Internal Operational Need Validation,
+  representative user acceptance, and measured Internal Operational Value remain `UNKNOWN` or
+  `BLOCKED` until internal evidence exists.
+- A Technical Pilot Verification may proceed in a non-production or explicitly approved internal
+  environment without an Internal Adoption Authority. Internal Pilot Acceptance and operational
+  rollout require representative internal-user evidence and an attributable Internal Adoption
+  Authority disposition.
+- One human may operate two separately provisioned identities for bounded functional verification;
+  the result is Single-Actor Functional Acceptance and is not independent review or representative
+  user acceptance.
+- The MVP Release Spine, Generic Controlled-File Baseline, one DOC-02-selected deep CAD profile,
+  and MVP Success Metric Set are product-scope inputs to the templates, not implementation promises.
+- Pilot data derived from company projects remains in an approved storage boundary with its own
+  classification, owner, access, retention, and handling controls; it is not automatically committed
+  to version control.
 - Repository Markdown and field names remain in English to match the current controlled baseline;
   approved localized renditions may be added later without changing source authority.
 - The accepted constitution, `CONTEXT.md`, standards register, clean-room register, product
@@ -379,11 +533,13 @@ the reference back to the authoritative item.
   cannot be simulated by relabeling the principal author.
 - The registered standards are guidance or proposed project bases according to their recorded
   classifications. Lawful access and clause-level tailoring remain separate PG0 obligations.
-- DDM and icVault research may generate questions, evidence-bounded findings, risks, and design
-  lessons; the feature does not authorize acquisition, reverse engineering, redistribution, or
-  product parity claims.
-- No customer, EU procurement, regulatory, certification, or formal conformity scope is currently
-  baselined; future applicability enters through controlled change.
+- DDM, Aras, and icVault research may generate questions, classified reference evidence, evidence-
+  bounded findings, risks, and design lessons; the feature does not authorize acquisition, reverse
+  engineering, redistribution, or unscoped parity claims. Aras names and comparisons remain outside
+  DOC-01 through DOC-08.
+- No commercial customer, pricing, revenue, market-fit, EU procurement, regulatory, certification,
+  or formal conformity scope is currently baselined; future applicability enters through controlled
+  change.
 
 ## Out of Scope
 
@@ -391,11 +547,17 @@ the reference back to the authoritative item.
   the production baseline.
 - Fully authoring and approving the substantive IDEA contents of all eight core documents in this
   feature.
+- Conducting Internal Pilot Acceptance, authorizing operational rollout, or claiming company-wide
+  adoption; this feature only creates the documentation controls that record those later decisions.
+- Validating Internal Operational Need or measured efficiency through reference-product evidence
+  alone.
 - Replacing canonical domain language, accepted ADRs, the product architecture, the standards
   register, or the clean-room register without their own controlled change decisions.
 - Copying DDM/icVault source, schemas, binaries, licensed documentation, UI assets, or proprietary
   implementation details into IDEA documents.
 - Declaring formal ISO conformity or certification, WCAG/EN 301 549 conformance, legal compliance,
   or vendor parity.
+- Introducing commercial product objectives, customer segmentation, pricing, revenue, or market-fit
+  claims into the internal product-definition system.
 - Deciding the production stack, deployment topology, identity provider, database, object store,
   supported format list, PLM module sequence, C2, or Interoperability Fabric D.
