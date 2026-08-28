@@ -34,6 +34,9 @@
 - [x] Feature meets measurable outcomes defined in Success Criteria
 - [x] No implementation details leak into specification
 - [x] MVP Release Spine, pilot evidence boundary, and MVP Success Metric Set are bounded
+- [x] GOV-owned Behavioral Coverage Register, explicit dispositions, and omission visibility are bounded
+- [x] English controlled source is distinct from `en`/`vi`/`ja` product locale profiles
+- [x] Validation Pack sampling, independence, and representativeness rules are measurable
 
 ## Notes
 
@@ -44,8 +47,14 @@
   Pilot Verification, Single-Actor Functional Acceptance, Internal Pilot Acceptance, MVP Release
   Spine, pilot-data boundary, vertical-slice delivery order, and MVP Success Metric Set.
 - Validation iteration 2 passed all checklist items: required headings, eight core-document
-  contracts, nine supporting-record classes, 43 unique functional requirements, 15 unique success
-  criteria, and zero unresolved specification placeholders were verified.
+  contracts, nine supporting-record classes, 48 unique functional requirements, 19 unique success
+  criteria, GOV-owned coverage/locale/Validation Pack controls, and zero unresolved specification
+  placeholders were verified.
+- Validation iteration 3 (2026-08-28) resolved the cross-artifact findings from `$speckit-analyze`:
+  material DDM coverage now has a GOV-owned register with proactive benchmark comparison; source
+  language and product locales are separated; sampling and independent/representative review rules
+  are explicit; indexed DOC-02/DOC-07 instances use the common envelope; and retained validation
+  results have a dedicated ledger.
 - Q141=B is represented as the accepted product-direction layer only; the specification does not
   weaken the constitutional evidence rule that internal-need validation requires internal evidence.
 - The approved constitution, standards register, clean-room rules, product architecture, and

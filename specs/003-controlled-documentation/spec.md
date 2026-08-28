@@ -11,7 +11,8 @@
 Engineering product. Use the DDM Reference Baseline as the default behavioral target, use the Aras
 Quality Benchmark only through classified supporting evidence, and keep the eight core documents
 free of competitor names or comparison narrative. Sync the templates with the approved MVP, pilot,
-evidence, governance, and internal-value decisions.
+evidence, governance, internal-value, coverage-register, validation-sampling, and product-locale
+decisions.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -49,6 +50,10 @@ identify the first gate at which each document must be reviewed.
 5. **Given** the product is intended for the company's internal engineering work, **When** an author
    defines value or scope, **Then** the document uses internal operational outcomes and excludes
    pricing, revenue, customer acquisition, market-share, and market-fit objectives.
+6. **Given** an author specifies localized product behavior in `DOC-04` or `DOC-08`, **When** the
+   author records language and interaction obligations, **Then** the controlled English source is
+   kept distinct from the supported product UI locales `en`, `vi`, and `ja`, with locale parity,
+   resource-catalogue, fallback, review-status, Unicode, and Japanese-input considerations visible.
 
 ---
 
@@ -78,6 +83,10 @@ outcome, and distinguish completed evidence from blocked or unexecuted work.
 4. **Given** evidence was not produced or a check was not run, **When** the review package is
    examined, **Then** the item is reported as missing, blocked, failed, or not run and never as
    passed.
+5. **Given** a reviewer uses the Documentation Validation Pack, **When** a sample is selected and
+   executed, **Then** the prescribed population, strata, minimum counts, selection rationale,
+   reviewer independence, result status, and retained evidence are recorded; an unavailable human
+   population or reviewer produces `BLOCKED` or `NOT-RUN`, never an unqualified pass.
 
 ---
 
@@ -225,6 +234,15 @@ reference-backed, technically verified, internally validated, independently revi
 - An automated accessibility or documentation check reports a high score while manual or
   assistive-technology evidence is absent; the missing evidence remains visible and no conformance
   claim is made.
+- A material reference behavior has DDM evidence but no documented quality-benchmark comparison;
+  the coverage record remains incomplete and cannot be silently treated as `ADOPT` until the
+  required comparison or an explicit `UNKNOWN`/`BLOCKED` disposition is recorded.
+- The available reviewer or user population is smaller than the Validation Pack minimum, or a
+  proposed approver authored or owns the material decision; the result is recorded as `BLOCKED` or
+  `NOT-RUN` rather than being described as independent or representative.
+- A product locale is supported in the interface but has no reviewed resource entry, fallback rule,
+  or Japanese input/search scenario; the locale profile remains incomplete and cannot be claimed as
+  functionally equivalent.
 
 ## Requirements *(mandatory)*
 
@@ -358,8 +376,10 @@ reference-backed, technically verified, internally validated, independently revi
 #### Standards and claims
 
 - **FR-033**: Every standards or policy reference MUST identify its controlled source or exact
-  selected edition, project classification, applicability or tailoring disposition, affected
-  information items, evidence expectation, owner, and review trigger where applicable.
+   selected edition, project classification (`STANDARD`, `STANDARD-GUIDED`, `STANDARD-GUIDED,
+   CONDITIONAL`, `REFERENCE/WATCH`, or `PROJECT-CONVENTION`), applicability or tailoring disposition
+   (`APPLY`, `TAILOR`, `NOT-APPLICABLE`, or `BLOCKED`), affected information items, evidence
+   expectation, owner, and review trigger where applicable.
 - **FR-034**: The templates MUST paraphrase public scope information and link to lawfully accessed
   sources; they MUST NOT reproduce protected normative text or restricted competitor material.
 - **FR-035**: The baseline MUST NOT claim ISO conformity or certification, WCAG or EN 301 549
@@ -394,6 +414,58 @@ reference-backed, technically verified, internally validated, independently revi
   MUST express business value as internal operational control, engineering-data integrity, release
   risk reduction, quality, maintainability, and measured efficiency. It MUST NOT introduce pricing,
   revenue, customer acquisition, market-share, or market-fit objectives.
+- **FR-044**: The baseline MUST provide a GOV-owned Material Coverage Inventory and Behavioral Coverage
+  Register (implemented as a register, sub-register, or governed section rather than a tenth supporting
+  class). The inventory is a closed, versioned list of stable material-area IDs with an owner, inclusion
+  criterion, exclusion rationale where applicable, and an explicit as-of baseline/date. A material
+  behavior/product area is one that can affect an approved requirement, gate, risk, release, or
+  user-visible capability. The Behavioral Coverage Register MUST contain exactly one coverage record
+  for every inventory entry at that as-of baseline; new or changed areas enter through a `CHG` record
+  and a new inventory baseline. Each record MUST identify the behavior/material area,
+  DDM target version/edition/configuration, DDM evidence and limitations, a proactive applicable
+  quality-benchmark comparison and evidenced advantage or limitation (or an explicit
+  `NO-STRONGER-PATTERN` result when no applicable improvement is evidenced), affected stakeholders and
+  risks, the disposition (`ADOPT`, `ADAPT`, `ADAPT-ARAS`, `DEFER`, `EXCLUDE`, or `UNKNOWN`), decision
+  owner, rationale, owning IDEA requirement or decision, delivery increment, verification/evidence,
+  and visibility of every omitted evidenced DDM behavior as `DEFER` or `EXCLUDE`; unresolved source
+  or access gaps MUST remain `UNKNOWN` or `BLOCKED`.
+- **FR-045**: The baseline MUST distinguish the English controlled-document source language and
+  field vocabulary from the supported product UI locales `en`, `vi`, and `ja`. `DOC-04` and `DOC-08`
+  templates MUST capture functional parity across Desktop, Web, and Web-rendered regions using the
+  same cross-locale task suite plus reviewed catalogue/input/search scenarios, the Localized Resource
+  Catalogue with English fallback, Vietnamese/Japanese review status, persisted
+  locale preference, preservation of user-authored Unicode without runtime auto-translation as an
+  authority, and Japanese IME, normalization, width, search, font-fallback, and line-breaking
+  scenarios; localized DOCX/PDF renditions remain optional and do not replace the English source.
+- **FR-046**: The baseline MUST define and retain a Documentation Validation Pack with a
+  criterion-based, stratified sampling protocol. Placement items MUST be selected from authored and
+  supporting information items using the class/authority map, not convenience. The minimum pack MUST enumerate all 17 classes for
+  structural checks; at least 20 placement items spanning all eight core and nine supporting
+  classes; at least 8 requirements spanning functional, interface, data, quality, security/privacy,
+  operational, accessibility, and localization concerns; 6 reference-coverage cases (including
+  evidenced, ambiguous, unknown, stronger-benchmark, no-stronger-pattern, and restricted-evidence
+  cases); 4 gate outcomes; 3 surface profiles, each exercised in `en`, `vi`, and `ja` (9
+  locale-surface cells); 4 rendition states; and 6 distinct pilot/claim statuses. `DOC-04` and
+  `DOC-08` MUST declare the same 3-by-3 surface/locale matrix; a full review of one template therefore
+  has 9 locale-surface cells, and a pack claiming both templates fully reviewed MUST retain 18 cells.
+  Each selected item MUST have a stable ID, stratum, selection rationale, expected result, executed
+  result, evidence link, date, environment, and owner. A convenience sample MUST NOT be used to claim
+  universal coverage.
+- **FR-047**: The baseline MUST define independence and representativeness criteria for human
+  review and acceptance. An independent reviewer MUST neither author nor own the material decision
+  under review and MUST record relevant competence or a Specialist Review Gap. The Product Decision
+  Authority may decide scope, specification, or technology but does not by that role alone provide
+  specialist competence. When the minimum population is available, a human walkthrough MUST include
+  at least two participants (the Product Decision Authority and one intended document consumer);
+  the Principal Product Author may assist with usability but cannot count as independent approval.
+  If the required reviewer, competence, or participant population is unavailable, the outcome MUST
+  be `BLOCKED` or `NOT-RUN`; single-actor multi-identity evidence remains `Single-Actor Functional
+  Acceptance`.
+- **FR-048**: The common control envelope and authored-content/instruction delimiter MUST be applied
+  explicitly to every one of the eight core and nine supporting templates. Indexed `DOC-02`
+  feasibility instances and `DOC-07` increment records MUST each carry independent instance identity,
+  source baseline, status, version, owner, gate, and trace fields; their indexes MUST NOT become a
+  second authority for the underlying decision or roadmap content.
 
 ### Key Entities
 
@@ -448,6 +520,20 @@ reference-backed, technically verified, internally validated, independently revi
   or broader operational rollout; it is not required merely to run a Technical Pilot Verification.
 - **Internal Pilot Evidence Boundary**: The separation between repository-safe synthetic evidence and
   sanitized or production-derived company data held in an approved storage boundary.
+- **Behavioral Coverage Record**: A GOV-owned record for one material reference behavior or product
+  area containing DDM evidence, the proactive quality-benchmark comparison, disposition, decision
+  ownership, affected risks, requirement/decision trace, increment, and verification status. It is a
+  register record, not a tenth supporting class and not a core-document authority.
+- **Material Coverage Inventory**: The GOV-owned, versioned as-of list of stable material behavior or
+  product-area IDs that defines the denominator for Behavioral Coverage Register completeness, including
+  inclusion criteria, explicit exclusions, owner, effective baseline/date, and `CHG` history.
+- **Documentation Validation Pack**: The controlled set of stratified sample definitions, minimum
+  populations, expected outcomes, executed results, reviewer assessments, and retained evidence used
+  to validate this documentation baseline.
+- **Locale Profile**: A DOC-04/DOC-08 record keyed by one supported product locale and one surface.
+  The required Cartesian matrix is `en`/`vi`/`ja` × Desktop/Web/Web-rendered Desktop (9
+  locale-surface cells per core template), and each record captures the English source boundary,
+  resource-catalogue/fallback state, review status, Unicode/input/search cases, and parity evidence.
 
 ## Success Criteria *(mandatory)*
 
@@ -458,9 +544,10 @@ reference-backed, technically verified, internally validated, independently revi
   catalogue entry.
 - **SC-002**: In a controlled review sample, 100% of approved documents contain every applicable
   common control field and contain zero unresolved template prompts or sample values.
-- **SC-003**: In a set of at least 20 representative information items, internal pilot authors
-  place at least 90% in the correct authoritative core document or supporting record without
-  maintainer assistance; every cross-document use points back to that authority.
+- **SC-003**: In the Validation Pack's criterion-selected set of at least 20 representative
+   information items (including every class, a shared-fact case, and a non-ownership case), internal
+   pilot authors place at least 90% in the correct authoritative core document or supporting record
+   without maintainer assistance; every cross-document use points back to that authority.
 - **SC-004**: In the sample baseline, 100% of approved requirements have a unique identity, an
   eligible source need or decision, rationale, acceptance criterion, verification method, and
   upstream/downstream trace appropriate to their lifecycle state.
@@ -497,8 +584,31 @@ reference-backed, technically verified, internally validated, independently revi
   metadata evidence, while sanitized or production-derived company data has a recorded approved
   storage boundary, classification, owner, access, retention, and handling disposition.
 - **SC-015**: In a structured reviewer walkthrough, at least 90% of participants correctly explain
-  whether each sampled claim is reference-backed, internally validated, technically verified,
-  independently reviewed, or rollout-authorized without consulting private chat or source code.
+   whether each sampled claim is reference-backed, internally validated, technically verified,
+   independently reviewed, or rollout-authorized without consulting private chat or source code.
+- **SC-016**: In a seeded Behavioral Coverage Register review using the GOV-owned Material Coverage
+   Inventory as the exact denominator at its recorded as-of baseline/date, 100% of inventory entries
+   have one matching coverage record containing the required DDM evidence, target/configuration,
+   proactive benchmark comparison (or explicit `NO-STRONGER-PATTERN` result), affected stakeholder/
+   risk, disposition, owner/rationale, IDEA trace, increment, and verification fields; every omitted
+   evidenced behavior is visibly `DEFER` or `EXCLUDE`, and no case is silently marked `ADOPT` without
+   the required comparison.
+- **SC-017**: In 100% of the retained `DOC-04` and `DOC-08` locale-profile matrices, the English
+    controlled source is distinguished from `en`, `vi`, and `ja` product locales across all 9
+    locale-surface cells (3 locales × Desktop/Web/Web-rendered Desktop), the resource catalogue and
+    English fallback are identified, review status and persisted preference are recorded, user-authored
+    Unicode is preserved, and the same cross-locale task suite plus Japanese
+    IME/normalization/width/search/font/line-breaking scenarios are either evidenced or explicitly
+    `UNKNOWN`/`BLOCKED`.
+- **SC-018**: In every retained Documentation Validation Pack, all required strata and minimum sample
+   counts are enumerated, each item has a selection rationale and stable ID, and 100% of executed
+   checks have an attributable result (`PASS`, `PASS-WITH-ACTIONS`, `FAIL`, `BLOCKED`, or `NOT-RUN`)
+   with exact baseline, environment, date, owner, and evidence link; no convenience sample is used
+   to generalize beyond its stated scope.
+- **SC-019**: In 100% of sampled human review/acceptance records, independence, competence or a
+   Specialist Review Gap, representativeness, and author/owner separation are explicitly assessed;
+   when the minimum two-person population is available it is used, and when it is unavailable the
+   record is `BLOCKED` or `NOT-RUN` rather than an unqualified pass.
 
 ## Assumptions
 
@@ -525,7 +635,19 @@ reference-backed, technically verified, internally validated, independently revi
   classification, owner, access, retention, and handling controls; it is not automatically committed
   to version control.
 - Repository Markdown and field names remain in English to match the current controlled baseline;
-  approved localized renditions may be added later without changing source authority.
+  product UI behavior is separately specified for `en`, `vi`, and `ja`; approved localized renditions
+  may be added later without changing source authority.
+- The GOV-owned Material Coverage Inventory and Behavioral Coverage Register do not increase the
+  supporting-class count beyond nine. The inventory closes the material-area denominator at an explicit
+  as-of baseline/date; every inventory entry receives one coverage record and a proactive benchmark
+  comparison before a default `ADOPT` disposition. Inaccessible or insufficient evidence remains
+  `UNKNOWN`/`BLOCKED`.
+- The initial Documentation Validation Pack uses criterion-based stratified sampling with the
+  minimum populations and cases defined in FR-046. Human participation is attempted when available;
+  missing reviewers, competence, or representative participants are recorded as `BLOCKED`/`NOT-RUN`.
+- Product Decision Authority assignment can cover scope, specification, and technology decisions;
+  specialist review gaps and author/owner conflicts remain visible and cannot be cured by assigning
+  multiple logical roles to one person.
 - The accepted constitution, `CONTEXT.md`, standards register, clean-room register, product
   architecture, design-lesson register, and accepted ADRs remain authoritative within their
   current scope and are linked rather than copied.
@@ -561,3 +683,5 @@ reference-backed, technically verified, internally validated, independently revi
   claims into the internal product-definition system.
 - Deciding the production stack, deployment topology, identity provider, database, object store,
   supported format list, PLM module sequence, C2, or Interoperability Fabric D.
+- Treating the Behavioral Coverage Register as a tenth supporting class, or using a Validation Pack
+  result to claim product parity, formal conformity, representative adoption, or production readiness.
