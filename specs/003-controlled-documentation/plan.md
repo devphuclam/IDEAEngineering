@@ -94,10 +94,11 @@ the parent commit `04e6a97e537eba51d5344f7b6f6f2d5edb87f9ee` plus the scoped
 `validation-baseline-manifest.sha256`: `data-model.md`, contracts, quickstart, the eight core
 templates, the nine supporting-record templates and the retained Validation Pack ledger carry the
 coverage, locale, trace, rendition and internal-value controls. The T053/T060 requirements-quality
-checklist retains 52/52 administrative markers under the Product Decision Authority's instruction;
-controlled reviewer attribution remains `BLOCKED` until an attributable identifier is supplied. This
-is not a product-baseline or gate approval; evidence-dependent, independent-specialist and
-representative-acceptance checks remain `NOT-RUN`/`BLOCKED` where their prerequisites are absent.
+checklist was reviewed and satisfied `52/52` by the Product Decision Authority organizational role.
+Independent specialist/material-gate review remains `BLOCKED` because that reviewer owns material
+product decisions and no specialist reviewer is recorded. This is not a product-baseline or gate
+approval; evidence-dependent and representative-acceptance checks remain `NOT-RUN`/`BLOCKED` where
+their prerequisites are absent.
 
 ## Design decisions carried into Phase 1
 
@@ -276,8 +277,8 @@ After the design artifacts are generated, re-check that:
 
 Task generation has completed: `tasks.md` is the current dependency-ordered task graph. The
 documentation-authoring delta is now recorded; structural checks are reproducible against the parent
-commit plus scoped SHA-256 manifest. The 52-item requirements-quality checklist retains administrative
-markers under the Product Decision Authority's instruction, while controlled reviewer attribution is
-`BLOCKED`. Coverage, locale, evidence, independent-specialist and representative-acceptance rows
-remain explicitly `NOT-RUN`/`BLOCKED` until their owners and inputs exist. No task or plan statement
-authorizes production application code before the PG2/PG3/PG4 gates.
+commit plus scoped SHA-256 manifest. The 52-item controlled requirements-quality checklist is
+`52/52` reviewed and satisfied by the Product Decision Authority organizational role. Independent
+specialist/material-gate review remains `BLOCKED`; coverage, locale, evidence and
+representative-acceptance rows remain explicitly `NOT-RUN`/`BLOCKED` until their owners and inputs
+exist. No task or plan statement authorizes production application code before the PG2/PG3/PG4 gates.

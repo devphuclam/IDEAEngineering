@@ -77,14 +77,26 @@ $ids = [regex]::Matches($catalogue,'(?m)^\|\s*`DOC-0[1-8]`\s*\|') |
 "Core class rows: $($ids.Count)"
 rg -n '^\|\s*`(GOV|CLR|RSK|VVP|VEV|CMP|CHG|REL|OPS)`\s*\|' docs/product/definition
 rg -n -i -e 'Aras' -e 'Innovator' -e 'DDM' docs/product/definition -g 'DOC-*.md'
-rg -n '^\| Commercial objectives? \|' docs/product/definition -g 'DOC-*.md'
+$commercialPattern = '(?i)\bpricing\b|\brevenue\b|\bcustomer[\s-]+acquisition\b|\bmarket[\s-]+share\b|\bmarket[\s-]+fit\b|\bexternal[\s-]+buyer\s+objectives?\b'
+$commercialAllowed = '^\|\s*Commercial objectives?\s*\|\s*Pricing, revenue, customer acquisition, market-share, market-fit or external-buyer objective\s*\|\s*`NOT APPLICABLE`\s*\|$'
+$commercialMatches = @(
+  Get-ChildItem -LiteralPath 'docs/product/definition' -Filter 'DOC-*.md' |
+    ForEach-Object { Select-String -LiteralPath $_.FullName -Pattern $commercialPattern }
+)
+$commercialUnexpected = @($commercialMatches | Where-Object { $_.Line -notmatch $commercialAllowed })
+if ($commercialUnexpected.Count -gt 0) {
+  $commercialUnexpected | ForEach-Object { $_.Path + ':' + $_.LineNumber + ': ' + $_.Line }
+  throw 'Unexpected commercial objective term found in a core template'
+}
+"Commercial deny-list matches: $($commercialMatches.Count); allowed exclusion rows: $($commercialMatches.Count - $commercialUnexpected.Count); unexpected: $($commercialUnexpected.Count)"
 ```
 
 Expected result: exactly eight core rows and nine supporting rows; the competitor-name scan for
-`Aras`, `Innovator` and `DDM` returns no matches in core templates. The commercial-boundary scan returns only the three expected explicit
-`NOT APPLICABLE` exclusion rows in DOC-01, DOC-03 and DOC-07; commercial terms are never goals,
-metrics or requirements. Supporting research and GOV coverage records may contain reference-product
-names and comparison evidence.
+`Aras`, `Innovator` and `DDM` returns no matches in core templates. The commercial deny-list returns
+only the three exact allow-listed `NOT APPLICABLE` exclusion rows in DOC-01, DOC-03 and DOC-07 and
+reports `unexpected: 0`; any forbidden term in a metric, requirement, goal or other non-allow-listed
+line fails the command. Commercial terms are never goals, metrics or requirements. Supporting
+research and GOV coverage records may contain reference-product names and comparison evidence.
 
 ## 3. Validate common control and status rules
 
