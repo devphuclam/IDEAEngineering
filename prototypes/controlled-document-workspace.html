@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Throwaway UI prototype for the IDEA Engineering controlled document workspace.">
+  <title>IDEA Engineering — Controlled Document Workspace (Prototype)</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172433;
+      --muted: #607082;
+      --soft: #f4f7fa;
+      --surface: #ffffff;
+      --line: #dbe3ea;
+      --line-strong: #c8d4df;
+      --navy: #123452;
+      --navy-2: #1b496f;
+      --blue: #2f78aa;
+      --teal: #177c78;
+      --green: #217a55;
+      --amber: #9a6a13;
+      --red: #a13c45;
+      --purple: #6d57a4;
+      --shadow: 0 16px 44px rgba(24, 48, 73, .11);
+      --shadow-soft: 0 5px 18px rgba(24, 48, 73, .07);
+      --radius: 14px;
+      --radius-sm: 9px;
+      --focus: #f3a83b;
+      --mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: #eef3f7; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 78% -12%, rgba(82, 142, 184, .18), transparent 36rem),
+        linear-gradient(180deg, #f3f7fa 0%, #eef3f7 100%);
+      font: 14px/1.45 var(--sans);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+    a { color: var(--blue); }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    .app-shell { min-height: 100vh; padding-bottom: 90px; }
+    .topbar {
+      color: #fff;
+      background: linear-gradient(116deg, #102c46 0%, #183e5c 60%, #1b536e 100%);
+      border-bottom: 1px solid rgba(255,255,255,.13);
+      box-shadow: 0 5px 18px rgba(9, 29, 46, .18);
+    }
+    .topbar-inner {
+      width: min(1560px, calc(100% - 44px));
+      min-height: 86px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 13px; min-width: 250px; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      border-radius: 11px; color: #123452; background: #f7c46b;
+      font-weight: 900; letter-spacing: -.08em; box-shadow: inset 0 -3px 0 rgba(0,0,0,.12);
+    }
+    .brand-name { margin: 0; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; font-weight: 780; }
+    .brand-sub { margin: 1px 0 0; color: rgba(255,255,255,.68); font-size: 11px; letter-spacing: .05em; }
+    .topbar-controls { display: flex; align-items: center; justify-content: flex-end; gap: 9px; flex-wrap: wrap; }
+    .control-label { display: grid; gap: 2px; color: rgba(255,255,255,.68); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .control-label select {
+      min-width: 102px; padding: 7px 28px 7px 10px; border: 1px solid rgba(255,255,255,.26);
+      border-radius: 8px; color: #fff; background: rgba(255,255,255,.1);
+    }
+    .control-label select option { color: var(--ink); background: #fff; }
+    .topbar-btn {
+      min-height: 35px; padding: 7px 12px; border: 1px solid rgba(255,255,255,.28); border-radius: 8px;
+      color: #fff; background: rgba(255,255,255,.1); font-weight: 680;
+    }
+    .topbar-btn:hover { background: rgba(255,255,255,.18); }
+    .topbar-btn.primary { color: #17324b; background: #f5c56d; border-color: #f5c56d; }
+    .topbar-btn.primary:hover { background: #ffd98e; }
+
+    .prototype-strip {
+      width: min(1560px, calc(100% - 44px)); margin: 18px auto 0; padding: 10px 14px;
+      display: flex; align-items: center; gap: 10px; border: 1px solid #e1bd72; border-radius: 10px;
+      color: #644d1d; background: #fff8e8; box-shadow: var(--shadow-soft); font-size: 12px;
+    }
+    .prototype-strip strong { letter-spacing: .04em; text-transform: uppercase; }
+    .prototype-strip span { color: #7c6740; }
+    .prototype-strip .strip-spacer { flex: 1; }
+    .kbd { padding: 2px 6px; border: 1px solid #c7d0d8; border-bottom-width: 2px; border-radius: 5px; color: #526272; background: #f8fafb; font: 11px var(--mono); }
+
+    .page-wrap { width: min(1560px, calc(100% - 44px)); margin: 0 auto; }
+    .page-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 25px 0 18px; }
+    .page-intro h1 { margin: 0; color: var(--navy); font-size: clamp(24px, 3vw, 38px); line-height: 1.08; letter-spacing: -.04em; }
+    .page-intro p { max-width: 730px; margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .intro-aside { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .tiny-note { color: var(--muted); font-size: 11px; }
+
+    .workspace-grid { display: grid; gap: 14px; }
+    .panel, .card {
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-soft);
+    }
+    .panel { overflow: hidden; }
+    .panel-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .panel-header h2, .panel-header h3 { margin: 0; color: var(--navy); font-size: 14px; letter-spacing: -.01em; }
+    .panel-header p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .panel-body { padding: 15px 16px; }
+    .eyebrow { color: var(--teal); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    .mono { font-family: var(--mono); }
+    .small { font-size: 11px; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px; min-height: 24px; padding: 4px 8px;
+      border: 1px solid var(--line); border-radius: 999px; color: #4d5e70; background: #f7f9fb;
+      font-size: 11px; font-weight: 730; white-space: nowrap;
+    }
+    .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #93a1ad; }
+    .badge.navy { color: #1f547d; background: #edf6fc; border-color: #c9e1ef; }
+    .badge.navy::before { background: var(--blue); }
+    .badge.teal { color: #176862; background: #ecf8f6; border-color: #bfe5df; }
+    .badge.teal::before { background: var(--teal); }
+    .badge.green { color: #216443; background: #edf8f1; border-color: #c6e8d2; }
+    .badge.green::before { background: var(--green); }
+    .badge.amber { color: #765618; background: #fff7e7; border-color: #f0d79d; }
+    .badge.amber::before { background: #cf921f; }
+    .badge.red { color: #813941; background: #fff0f1; border-color: #efc5c8; }
+    .badge.red::before { background: var(--red); }
+    .badge.purple { color: #5b4989; background: #f4f0ff; border-color: #d9cef3; }
+    .badge.purple::before { background: var(--purple); }
+    .badge.plain::before { display: none; }
+
+    .doc-title { margin: 2px 0 4px; color: var(--navy); font-size: 20px; line-height: 1.15; letter-spacing: -.025em; }
+    .doc-subtitle { margin: 0; color: var(--muted); font-size: 12px; }
+    .doc-hero { padding: 18px; border-bottom: 1px solid var(--line); background: linear-gradient(120deg, #fff 0%, #f6fafc 100%); }
+    .doc-hero-top { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
+    .doc-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .identity-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 15px; }
+    .identity-cell { min-height: 62px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.82); }
+    .identity-cell dt { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .045em; text-transform: uppercase; }
+    .identity-cell dd { margin: 4px 0 0; color: var(--navy); font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+    .identity-cell dd.mono { font-size: 12px; }
+
+    .action-bar { padding: 13px 16px; border-bottom: 1px solid var(--line); background: #fbfcfd; }
+    .action-bar-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .action-bar h3 { margin: 0; color: var(--navy); font-size: 12px; }
+    .action-groups { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+    .action-group { display: flex; gap: 6px; flex-wrap: wrap; padding-right: 10px; margin-right: 2px; border-right: 1px solid var(--line); }
+    .action-group:last-child { padding-right: 0; border-right: 0; }
+    .action-btn {
+      min-height: 32px; padding: 6px 10px; border: 1px solid #cbd8e2; border-radius: 8px; color: #25465d;
+      background: #fff; font-size: 12px; font-weight: 730; transition: .15s ease;
+    }
+    .action-btn:hover { border-color: #8fb4ca; background: #f2f8fb; transform: translateY(-1px); }
+    .action-btn.primary { color: #fff; background: var(--navy-2); border-color: var(--navy-2); }
+    .action-btn.primary:hover { background: #236288; }
+    .action-btn.edge { color: #7b4f1b; border-color: #e3c27b; background: #fffaf0; }
+    .action-btn.danger { color: #873b42; border-color: #e6bcc0; background: #fff7f7; }
+    .action-btn.is-disabled { opacity: .55; filter: saturate(.55); }
+    .action-btn.is-disabled:hover { transform: none; border-color: #cbd8e2; background: #fff; }
+    .reason-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    .reason-row label { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .reason-row input { flex: 1; min-width: 180px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: #fff; }
+
+    .guided-panel { margin: 14px 16px; border: 1px solid #c9dce7; border-radius: 12px; background: #f5fbfd; overflow: hidden; }
+    .guided-head { padding: 12px 13px 9px; display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .guided-head h3 { margin: 0; color: #1b536b; font-size: 13px; }
+    .guided-head p { margin: 3px 0 0; color: #5e7785; font-size: 11px; }
+    .guided-tabs { display: flex; gap: 5px; overflow-x: auto; padding: 0 13px 10px; }
+    .guided-tab { flex: 0 0 auto; padding: 6px 9px; border: 1px solid #c9dce7; border-radius: 7px; color: #547182; background: #fff; font-size: 11px; font-weight: 700; }
+    .guided-tab[aria-selected="true"] { color: #fff; border-color: var(--teal); background: var(--teal); }
+    .guided-progress { height: 4px; margin: 0 13px; border-radius: 99px; background: #dbeaf0; overflow: hidden; }
+    .guided-progress > span { display: block; height: 100%; border-radius: inherit; background: var(--teal); transition: width .2s ease; }
+    .guided-body { padding: 12px 13px 13px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+    .guided-step { color: #254d60; font-size: 12px; }
+    .guided-step strong { display: block; margin-bottom: 3px; font-size: 13px; }
+    .guided-step span { color: #69818c; }
+    .guided-controls { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .guide-btn { min-height: 31px; padding: 6px 10px; border: 1px solid #b9d4de; border-radius: 7px; color: #1c6070; background: #fff; font-size: 11px; font-weight: 750; }
+    .guide-btn.primary { color: #fff; background: var(--teal); border-color: var(--teal); }
+    .guided-message { grid-column: 1 / -1; padding: 7px 9px; border-radius: 7px; color: #5b7180; background: rgba(255,255,255,.75); font-size: 11px; }
+
+    .state-card { padding: 14px 16px; border-top: 1px solid var(--line); background: #fafcfd; }
+    .state-card summary { cursor: pointer; color: var(--navy); font-weight: 760; }
+    .state-card summary::marker { color: var(--teal); }
+    .state-summary { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 8px; }
+    .state-json { max-height: 300px; overflow: auto; padding: 11px; border: 1px solid #d9e3ea; border-radius: 8px; color: #28465c; background: #f1f6f8; font: 11px/1.55 var(--mono); white-space: pre-wrap; }
+
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td { padding: 8px 6px; border-bottom: 1px solid #edf1f4; text-align: left; vertical-align: top; }
+    .data-table th { color: var(--muted); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .data-table td { color: #344c5e; font-size: 12px; }
+    .data-table tr:last-child td { border-bottom: 0; }
+    .data-table .value { color: var(--navy); font-weight: 750; }
+
+    .timeline { display: grid; gap: 0; }
+    .timeline-item { position: relative; display: grid; grid-template-columns: 69px 14px 1fr; gap: 8px; min-height: 52px; }
+    .timeline-item::before { content: ""; position: absolute; left: 75px; top: 14px; bottom: -4px; width: 1px; background: #dce6ec; }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-time { color: var(--muted); font: 10px var(--mono); padding-top: 2px; text-align: right; }
+    .timeline-dot { z-index: 1; width: 10px; height: 10px; margin-top: 3px; border: 2px solid #fff; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 1px #9bcfc9; }
+    .timeline-content strong { display: block; color: var(--navy); font-size: 12px; }
+    .timeline-content span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .timeline-content em { display: inline-block; margin-top: 4px; color: #567282; font-size: 10px; font-style: normal; }
+
+    .doc-list { display: grid; gap: 4px; padding: 8px; }
+    .doc-list-item { width: 100%; padding: 9px 10px; border: 1px solid transparent; border-radius: 9px; color: var(--ink); background: transparent; text-align: left; }
+    .doc-list-item:hover { background: #f1f7fa; }
+    .doc-list-item[aria-current="true"] { border-color: #b9d9e4; background: #edf8f8; }
+    .doc-list-item strong { display: block; color: var(--navy); font-size: 12px; line-height: 1.25; }
+    .doc-list-item span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .doc-list-item .list-meta { display: flex; align-items: center; gap: 5px; margin-top: 6px; }
+    .list-dot { width: 7px; height: 7px; border-radius: 50%; background: #9eacb5; }
+    .list-dot.green { background: var(--green); }
+    .list-dot.amber { background: #ca951e; }
+    .list-dot.blue, .list-dot.navy { background: var(--blue); }
+    .list-dot.red { background: var(--red); }
+
+    .metric-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+    .metric { padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .metric-label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+    .metric-value { margin-top: 5px; color: var(--navy); font-size: 21px; font-weight: 820; letter-spacing: -.03em; }
+    .metric-note { margin-top: 2px; color: var(--muted); font-size: 10px; }
+
+    /* Variant A: explorer */
+    .variant-a { display: grid; grid-template-columns: 230px minmax(0, 1fr) 285px; gap: 14px; align-items: start; }
+    .variant-a .nav-panel { position: sticky; top: 14px; }
+    .nav-panel .nav-section { padding: 13px 13px 7px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .nav-links { display: grid; gap: 3px; padding: 0 8px 10px; }
+    .nav-link { display: flex; align-items: center; gap: 8px; padding: 8px 9px; border-radius: 8px; color: #4e6677; font-size: 12px; font-weight: 650; }
+    .nav-link.active { color: #194f6c; background: #eaf5f8; }
+    .nav-link .nav-icon { width: 19px; color: #5a8797; text-align: center; font-size: 14px; }
+    .variant-a .main-panel { min-width: 0; }
+    .variant-a .right-rail { display: grid; gap: 14px; }
+    .linked-list { display: grid; gap: 7px; }
+    .linked-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 9px; border: 1px solid #edf1f4; border-radius: 8px; background: #fbfcfd; }
+    .linked-item strong { color: var(--navy); font-size: 11px; }
+    .linked-item span { color: var(--muted); font: 10px var(--mono); }
+
+    /* Variant B: task-first */
+    .variant-b { display: grid; grid-template-columns: 310px minmax(0, 1fr); gap: 14px; align-items: start; }
+    .task-panel { position: sticky; top: 14px; }
+    .task-list { display: grid; gap: 8px; padding: 13px; }
+    .task-item { padding: 11px 12px; border: 1px solid var(--line); border-left: 4px solid #9aaab5; border-radius: 10px; background: #fff; }
+    .task-item.priority { border-left-color: #d0962a; }
+    .task-item.blocked { border-left-color: var(--red); }
+    .task-item.done { border-left-color: var(--green); opacity: .78; }
+    .task-item h3 { margin: 0; color: var(--navy); font-size: 12px; }
+    .task-item p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+    .task-item .task-footer { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; color: #72818c; font-size: 10px; }
+    .focus-panel { min-width: 0; }
+    .focus-banner { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 13px 16px; border: 1px solid #c9dfe7; border-radius: 12px; background: linear-gradient(110deg, #effafa, #f7fbfc); }
+    .focus-banner strong { color: #1d5e6b; font-size: 13px; }
+    .focus-banner span { color: #66838d; font-size: 11px; }
+    .next-action { margin-top: 14px; padding: 17px; border: 1px solid #d6dfeb; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow-soft); }
+    .next-action h2 { margin: 2px 0 5px; color: var(--navy); font-size: 22px; letter-spacing: -.03em; }
+    .next-action p { margin: 0; color: var(--muted); }
+    .next-action .next-action-cta { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .b-split { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 14px; margin-top: 14px; }
+    .b-feed { display: grid; gap: 14px; }
+    .b-rail { display: grid; gap: 14px; align-content: start; }
+
+    /* Variant C: lifecycle board */
+    .variant-c { display: grid; gap: 14px; }
+    .board-toolbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: var(--shadow-soft); }
+    .board-toolbar h2 { margin: 0; color: var(--navy); font-size: 14px; }
+    .board-toolbar p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .board-toolbar .toolbar-actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .board { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 10px; overflow-x: auto; padding-bottom: 2px; }
+    .board-column { min-height: 430px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.68); overflow: hidden; }
+    .board-column-head { padding: 11px 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+    .board-column-head h3 { margin: 0; color: var(--navy); font-size: 12px; }
+    .column-count { min-width: 22px; padding: 2px 6px; border-radius: 99px; color: #537185; background: #edf3f6; font: 10px var(--mono); text-align: center; }
+    .column-start .board-column-head { border-top: 3px solid #9aaab5; }
+    .column-work .board-column-head { border-top: 3px solid var(--blue); }
+    .column-review .board-column-head { border-top: 3px solid var(--amber); }
+    .column-release .board-column-head { border-top: 3px solid var(--green); }
+    .board-cards { display: grid; gap: 8px; padding: 9px; }
+    .board-card { width: 100%; padding: 11px; border: 1px solid var(--line); border-radius: 9px; background: #fff; text-align: left; box-shadow: 0 2px 6px rgba(25, 53, 74, .04); }
+    .board-card:hover, .board-card[aria-current="true"] { border-color: #8bbbc8; box-shadow: 0 4px 11px rgba(34, 104, 125, .11); }
+    .board-card[aria-current="true"] { background: #f1fbfa; }
+    .board-card strong { display: block; color: var(--navy); font-size: 12px; line-height: 1.28; }
+    .board-card p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
+    .board-card .board-card-meta { display: flex; justify-content: space-between; gap: 5px; margin-top: 8px; color: #6a7d89; font: 10px var(--mono); }
+    .board-empty { padding: 16px 10px; color: #83939d; font-size: 11px; text-align: center; }
+    .c-detail { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 14px; }
+    .c-detail-main { min-width: 0; }
+    .c-drawer { position: sticky; top: 14px; }
+
+    .empty-state { padding: 30px 20px; color: var(--muted); text-align: center; }
+    .empty-state strong { display: block; margin-bottom: 4px; color: var(--navy); }
+
+    .review-overlay { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; padding: 22px; background: rgba(10, 29, 45, .56); }
+    .review-overlay[hidden] { display: none; }
+    .review-dialog { width: min(1100px, 100%); max-height: min(92vh, 920px); overflow: auto; border: 1px solid #c5d7e1; border-radius: 16px; background: #fff; box-shadow: 0 26px 80px rgba(5, 25, 42, .3); }
+    .review-head { position: sticky; top: 0; z-index: 1; padding: 17px 19px; display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); backdrop-filter: blur(8px); }
+    .review-head h2 { margin: 0; color: var(--navy); font-size: 22px; letter-spacing: -.03em; }
+    .review-head p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .close-btn { width: 31px; height: 31px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: #fff; font-size: 18px; line-height: 1; }
+    .review-body { padding: 18px 19px 22px; }
+    .review-alert { padding: 10px 12px; border: 1px solid #efd69d; border-radius: 9px; color: #72561d; background: #fff9eb; font-size: 11px; }
+    .review-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; margin: 14px 0; }
+    .review-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 14px; }
+    .variant-compare { width: 100%; border-collapse: collapse; }
+    .variant-compare th, .variant-compare td { padding: 10px 9px; border-bottom: 1px solid #e8eef2; text-align: left; vertical-align: top; }
+    .variant-compare th { color: var(--muted); background: #f6f9fb; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .variant-compare td { color: #3b5262; font-size: 11px; }
+    .variant-compare tr:last-child td { border-bottom: 0; }
+    .variant-key { color: var(--navy); font-weight: 820; }
+    .review-form { display: grid; gap: 10px; }
+    .review-form label { display: grid; gap: 5px; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .review-form select, .review-form textarea { width: 100%; padding: 8px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: #fff; }
+    .review-form textarea { min-height: 77px; resize: vertical; }
+    .review-footer { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 15px; padding-top: 13px; border-top: 1px solid var(--line); }
+    .review-footer-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+    .review-saved { color: var(--green); font-size: 11px; font-weight: 720; }
+
+    .variant-switcher {
+      position: fixed; z-index: 40; left: 50%; bottom: 17px; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 6px; padding: 7px 8px; border: 1px solid #2b5872;
+      border-radius: 999px; color: #fff; background: #173c55; box-shadow: 0 10px 28px rgba(9, 33, 51, .27);
+    }
+    .switcher-arrow { width: 30px; height: 30px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; color: #fff; background: rgba(255,255,255,.1); font-size: 16px; }
+    .switcher-arrow:hover { background: rgba(255,255,255,.2); }
+    .switcher-label { min-width: 180px; padding: 0 9px; text-align: center; }
+    .switcher-label strong { display: block; font-size: 11px; letter-spacing: .04em; }
+    .switcher-label span { display: block; color: rgba(255,255,255,.62); font-size: 10px; }
+    .toast { position: fixed; z-index: 70; right: 20px; bottom: 78px; max-width: min(430px, calc(100% - 40px)); padding: 11px 13px; border: 1px solid #aac2cf; border-radius: 9px; color: #21465a; background: #f3fbfd; box-shadow: var(--shadow); opacity: 0; transform: translateY(8px); pointer-events: none; transition: .2s ease; font-size: 12px; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { color: #7d3941; border-color: #e4bdc1; background: #fff4f5; }
+
+    .print-only { display: none; }
+    @media (max-width: 1220px) {
+      .variant-a { grid-template-columns: 205px minmax(0, 1fr); }
+      .variant-a .right-rail { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .identity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .board { grid-template-columns: repeat(4, minmax(205px, 1fr)); }
+    }
+    @media (max-width: 900px) {
+      .topbar-inner, .page-wrap, .prototype-strip { width: min(100% - 28px, 720px); }
+      .topbar-inner { min-height: auto; padding: 14px 0; align-items: flex-start; flex-direction: column; }
+      .topbar-controls { width: 100%; justify-content: flex-start; }
+      .page-intro { align-items: flex-start; flex-direction: column; padding-top: 20px; }
+      .intro-aside { justify-content: flex-start; }
+      .variant-a, .variant-b, .c-detail, .b-split, .review-grid { grid-template-columns: 1fr; }
+      .variant-a .nav-panel, .task-panel, .c-drawer { position: static; }
+      .variant-a .right-rail { grid-column: auto; grid-template-columns: 1fr; }
+      .board { grid-template-columns: repeat(4, minmax(220px, 1fr)); }
+      .review-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 580px) {
+      .topbar-inner, .page-wrap, .prototype-strip { width: calc(100% - 20px); }
+      .brand-lockup { min-width: 0; }
+      .prototype-strip { align-items: flex-start; flex-wrap: wrap; }
+      .prototype-strip .strip-spacer { display: none; }
+      .identity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .doc-hero-top { flex-direction: column; }
+      .doc-hero-actions { justify-content: flex-start; }
+      .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .guided-body { grid-template-columns: 1fr; }
+      .guided-controls { justify-content: flex-start; }
+      .reason-row { align-items: flex-start; flex-direction: column; }
+      .reason-row input { width: 100%; }
+      .review-overlay { padding: 8px; }
+      .review-head, .review-body { padding-left: 13px; padding-right: 13px; }
+      .review-metrics { grid-template-columns: 1fr 1fr; }
+      .switcher-label { min-width: 144px; }
+    }
+    @media print {
+      body { background: #fff; }
+      body * { visibility: hidden !important; }
+      .review-overlay, .review-overlay * { visibility: visible !important; }
+      .review-overlay { position: static; display: block; padding: 0; background: #fff; }
+      .review-dialog { width: 100%; max-height: none; border: 0; box-shadow: none; }
+      .review-head { position: static; }
+      .review-footer, .close-btn { display: none !important; }
+      .print-only { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+    'use strict';
+
+    /*
+      THREE VARIANTS OF THE CONTROLLED DOCUMENT WORKSPACE, SWITCHABLE VIA ?variant=A|B|C.
+      This is a throwaway UI prototype. It intentionally has in-memory state only and no
+      production routing, persistence, authentication, or file-format integration.
+    */
+
+    const VARIANTS = {
+      A: { name: 'Engineering Explorer', short: 'Explorer', promise: 'Cây tài liệu và inspector luôn cùng một tầm mắt.' },
+      B: { name: 'Task-first Workspace', short: 'Task-first', promise: 'Việc cần làm và blocker dẫn dắt màn hình.' },
+      C: { name: 'Lifecycle Board', short: 'Lifecycle board', promise: 'Nhìn nhanh tài liệu đang ở đâu trên release spine.' }
+    };
+
+    const I18N = {
+      vi: {
+        prototype: 'UI PROTOTYPE · THROWAWAY',
+        internal: 'Dùng nội bộ · dữ liệu synthetic',
+        language: 'Ngôn ngữ',
+        actor: 'Actor demo',
+        review: 'Executive Review',
+        reset: 'Reset demo',
+        workspace: 'Controlled Document Workspace',
+        intro: 'Một bề mặt để tìm, làm việc, review và release tài liệu kỹ thuật có kiểm soát.',
+        variant: 'Variant',
+        document: 'Tài liệu',
+        stableId: 'Stable Document ID',
+        documentClass: 'Document Class',
+        revision: 'Business Revision',
+        version: 'Document Version',
+        sequence: 'Version Sequence',
+        generation: 'Product Generation',
+        workflow: 'Workflow state',
+        status: 'Document status',
+        gate: 'Gate outcome',
+        reservation: 'Reservation',
+        none: '—',
+        actions: 'Context actions',
+        actionHint: 'Nút bị khóa vẫn hiện lý do để người dùng hiểu bước tiếp theo.',
+        reserve: 'Reserve',
+        open: 'Open working copy',
+        edit: 'Edit metadata',
+        publish: 'Publish',
+        submit: 'Submit for review',
+        approve: 'Approve',
+        reject: 'Reject',
+        release: 'Release',
+        createRevision: 'Create Revision',
+        externalAdvance: 'Simulate external advance',
+        refresh: 'Refresh / reapply',
+        recover: 'Recover reservation',
+        withdraw: 'Withdraw review',
+        reason: 'Reason for reject / recovery',
+        guided: 'Guided walkthrough',
+        guidedHint: 'Chạy từng kịch bản để demo với sếp; free-play vẫn mở bên dưới.',
+        runNext: 'Run next step',
+        restart: 'Reset scenario',
+        complete: 'Hoàn tất',
+        step: 'Bước',
+        stateSnapshot: 'Full state snapshot',
+        stateHint: 'Prototype state sau action gần nhất',
+        audit: 'Audit timeline',
+        metadata: 'Metadata & control',
+        linked: 'Linked records',
+        myWork: 'My work',
+        allDocuments: 'All documents',
+        recentReleases: 'Recent releases',
+        blockers: 'Blockers',
+        nextAction: 'Next action',
+        focus: 'Focused work item',
+        boardTitle: 'Release spine overview',
+        boardHint: 'Một Logical Document được chọn; các thẻ khác tạo mật độ cho màn hình.',
+        reviewTitle: 'Executive Review · UI prototype',
+        reviewSubtitle: 'Bản tóm tắt để quyết định cấu trúc UI tiếp theo — chưa phải product approval.',
+        compare: 'So sánh ba phương án',
+        recommendation: 'Khuyến nghị',
+        decision: 'Quyết định của sếp',
+        chooseVariant: 'Variant được chọn',
+        decisionNotes: 'Lý do / điều chỉnh cần giữ',
+        openQuestions: 'Open questions',
+        saveVerdict: 'Lưu verdict demo',
+        printPdf: 'In / Save as PDF',
+        copySummary: 'Copy summary',
+        close: 'Đóng',
+        verdictSaved: 'Verdict demo đã được lưu trong memory của prototype.',
+        noVerdict: 'Chưa ghi verdict',
+        synthetic: 'Synthetic dataset',
+        selected: 'Đang chọn',
+        released: 'Released',
+        start: 'Start',
+        inWork: 'In Work',
+        underReview: 'Under Review',
+        draft: 'Draft',
+        proposed: 'Proposed',
+        approved: 'Approved',
+        superseded: 'Superseded',
+        notRun: 'NOT-RUN',
+        pass: 'PASS',
+        fail: 'FAIL',
+        blocked: 'BLOCKED',
+        author: 'Author / Editor',
+        approver: 'Independent Approver',
+        administrator: 'PDM Administrator',
+        observer: 'Read-only Observer',
+        owned: 'Đang giữ bởi bạn',
+        unreserved: 'Chưa Reserve',
+        external: 'External workspace',
+        localPreserved: 'Local work được giữ lại',
+        noChange: 'NoChange',
+        registered: 'Registered',
+        scenarioHappy: 'Happy path',
+        scenarioStale: 'Stale conflict',
+        scenarioReject: 'Reject & recover',
+        scenarioSelf: 'Self-approval blocked',
+        scenarioRevision: 'Create Revision'
+      },
+      en: {
+        prototype: 'UI PROTOTYPE · THROWAWAY', internal: 'Internal use · synthetic data', language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', variant: 'Variant', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', focus: 'Focused work item', boardTitle: 'Release spine overview', boardHint: 'One Logical Document is selected; the other cards provide realistic density.', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', compare: 'Compare three approaches', recommendation: 'Recommendation', decision: 'Boss decision', chooseVariant: 'Chosen variant', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+      },
+      ja: {
+        prototype: 'UI PROTOTYPE · THROWAWAY', internal: '社内利用 · 合成データ', language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', variant: 'バリアント', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', focus: 'Focused work item', boardTitle: 'Release spine overview', boardHint: '1つの Logical Document を選択し、他のカードで実際の密度を示します。', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', compare: '3案を比較', recommendation: '推奨', decision: '上司の決定', chooseVariant: '選択するバリアント', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+      }
+    };
+
+    const ACTORS = {
+      author: { name: 'Linh Nguyễn', roleKey: 'author', role: 'Author / Editor', workspace: 'WS-LINH', kind: 'author' },
+      approver: { name: 'Minh Trần', roleKey: 'approver', role: 'Independent Approver', workspace: 'WS-MINH', kind: 'approver' },
+      admin: { name: 'Hana Sato', roleKey: 'administrator', role: 'PDM Administrator', workspace: 'WS-HANA', kind: 'admin' },
+      observer: { name: 'Sora Ito', roleKey: 'observer', role: 'Read-only Observer', workspace: 'WS-SORA', kind: 'observer' }
+    };
+
+    const DOC_TITLES = {
+      pump: { vi: 'Cụm bơm P-100 — Định nghĩa giao diện', en: 'P-100 Pump Assembly — Interface Definition', ja: 'P-100 ポンプアセンブリ — インターフェース定義' },
+      housing: { vi: 'Vỏ bơm P-100 — Mô hình CAD', en: 'P-100 Pump Housing — CAD Model', ja: 'P-100 ポンプハウジング — CADモデル' },
+      seal: { vi: 'Phớt trục P-100 — Đặc tính kỹ thuật', en: 'P-100 Shaft Seal — Technical Specification', ja: 'P-100 シャフトシール — 技術仕様' },
+      motor: { vi: 'Động cơ M-20 — Giao diện điện', en: 'M-20 Motor — Electrical Interface', ja: 'M-20 モーター — 電気インターフェース' },
+      test: { vi: 'Kế hoạch kiểm thử P-100', en: 'P-100 Verification Plan', ja: 'P-100 検証計画' },
+      drawing: { vi: 'Bản vẽ lắp P-100', en: 'P-100 Assembly Drawing', ja: 'P-100 組立図' },
+      material: { vi: 'Bảng vật liệu P-100', en: 'P-100 Material Register', ja: 'P-100 材料登録' },
+      release: { vi: 'Gói release P-100 / tháng 08', en: 'P-100 August Release Package', ja: 'P-100 8月リリースパッケージ' },
+      installation: { vi: 'Hướng dẫn lắp đặt P-100', en: 'P-100 Installation Guide', ja: 'P-100 取付ガイド' },
+      risk: { vi: 'Đánh giá rủi ro P-100', en: 'P-100 Risk Assessment', ja: 'P-100 リスク評価' }
+    };
+
+    const SEED_DOCS = [
+      { id: 'LD-P100-001', titleKey: 'pump', className: 'Engineering Definition', category: 'Product Definition', revision: 'A', documentVersion: '0.1', versionSequence: 0, generation: null, workflow: 'Start', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:9f01…a712', linked: ['LD-P100-002', 'LD-P100-003'], owner: 'Linh Nguyễn', note: 'Active demo record', structure: 'P-100 / root' },
+      { id: 'LD-P100-002', titleKey: 'housing', className: 'CAD Artifact', category: 'CAD', revision: 'A', documentVersion: '1.0', versionSequence: 4, generation: 'G-0004', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:2ac1…c991', linked: ['LD-P100-001'], owner: 'Linh Nguyễn', note: 'Released dependency', structure: 'P-100 / housing' },
+      { id: 'LD-P100-003', titleKey: 'seal', className: 'Technical Specification', category: 'Office', revision: 'B', documentVersion: '0.8', versionSequence: 3, generation: 'G-0011', workflow: 'Under Review', status: 'Proposed', gate: 'NOT-RUN', digest: 'sha256:7d11…e882', linked: ['LD-P100-001'], owner: 'Khoa Phạm', note: 'Awaiting independent review', structure: 'P-100 / seal' },
+      { id: 'LD-P100-004', titleKey: 'motor', className: 'Interface Specification', category: 'Office', revision: 'A', documentVersion: '0.4', versionSequence: 2, generation: 'G-0008', workflow: 'In Work', status: 'Draft', gate: 'BLOCKED', digest: 'sha256:4b20…b101', linked: ['LD-P100-001'], owner: 'Linh Nguyễn', note: 'Missing evidence', structure: 'P-100 / motor' },
+      { id: 'LD-P100-005', titleKey: 'test', className: 'Verification Plan', category: 'Quality', revision: 'A', documentVersion: '1.0', versionSequence: 2, generation: 'G-0007', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:1aa4…90f3', linked: ['LD-P100-001'], owner: 'Minh Trần', note: 'Released dependency', structure: 'P-100 / verification' },
+      { id: 'LD-P100-006', titleKey: 'drawing', className: 'Drawing', category: 'CAD', revision: 'A', documentVersion: '0.9', versionSequence: 5, generation: 'G-0013', workflow: 'In Work', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:bc31…d0a0', linked: ['LD-P100-001'], owner: 'Khoa Phạm', note: 'Editor has reservation', structure: 'P-100 / drawing' },
+      { id: 'LD-P100-007', titleKey: 'material', className: 'Controlled Register', category: 'Office', revision: 'A', documentVersion: '1.0', versionSequence: 1, generation: 'G-0006', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:0aa8…4e11', linked: ['LD-P100-001'], owner: 'Hana Sato', note: 'Released dependency', structure: 'P-100 / materials' },
+      { id: 'LD-P100-008', titleKey: 'release', className: 'Release Package', category: 'Release', revision: 'A', documentVersion: '1.0', versionSequence: 1, generation: 'G-0010', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:3f8d…a54a', linked: ['LD-P100-001', 'LD-P100-002'], owner: 'Minh Trần', note: 'Exact baseline package', structure: 'P-100 / release' },
+      { id: 'LD-P100-009', titleKey: 'installation', className: 'Work Instruction', category: 'Office', revision: 'A', documentVersion: '0.3', versionSequence: 1, generation: 'G-0012', workflow: 'Start', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:9c10…bb31', linked: ['LD-P100-001'], owner: 'Sora Ito', note: 'Not started', structure: 'P-100 / install' },
+      { id: 'LD-P100-010', titleKey: 'risk', className: 'Risk Assessment', category: 'Quality', revision: 'A', documentVersion: '0.6', versionSequence: 2, generation: 'G-0009', workflow: 'Under Review', status: 'Proposed', gate: 'BLOCKED', digest: 'sha256:bc42…11d0', linked: ['LD-P100-001'], owner: 'Hana Sato', note: 'Specialist gap', structure: 'P-100 / risk' }
+    ];
+
+    const SCENARIOS = {
+      happy: {
+        titleKey: 'scenarioHappy',
+        description: 'Từ tài liệu mới tới baseline đã release.',
+        steps: [
+          { title: 'Chọn Author persona', detail: 'Mô phỏng người chuẩn bị working copy.', action: 'switch-actor', payload: { actorId: 'author' } },
+          { title: 'Reserve tài liệu', detail: 'Reservation gắn với document, workspace và expected Generation.', action: 'reserve' },
+          { title: 'Mở working copy', detail: 'Tạo không gian chỉnh sửa cục bộ.', action: 'open' },
+          { title: 'Sửa metadata', detail: 'Đánh dấu local work đang thay đổi.', action: 'edit' },
+          { title: 'Publish Generation', detail: 'Publish lần đầu tạo Generation 1 và chuyển Revision A sang In Work.', action: 'publish' },
+          { title: 'Submit for review', detail: 'Pin đúng Generation để approver đánh giá.', action: 'submit' },
+          { title: 'Chuyển sang approver', detail: 'Kiểm tra actor separation.', action: 'switch-actor', payload: { actorId: 'approver' } },
+          { title: 'Approve', detail: 'Independent approver ghi decision trên Generation đã pin.', action: 'approve' },
+          { title: 'Release', detail: 'Tạo immutable Release Record cho exact Generation.', action: 'release' }
+        ]
+      },
+      stale: {
+        titleKey: 'scenarioStale',
+        description: 'Một workspace khác đã tiến Working Head trước khi publish.',
+        steps: [
+          { title: 'Chọn Author persona', detail: 'Bắt đầu bằng workspace của author.', action: 'switch-actor', payload: { actorId: 'author' } },
+          { title: 'Reserve tài liệu', detail: 'Giữ expected Generation ban đầu.', action: 'reserve' },
+          { title: 'Mở working copy', detail: 'Tạo local workspace được Reservation bảo vệ.', action: 'open' },
+          { title: 'Tạo baseline edit', detail: 'Chuẩn bị nội dung cho Generation đầu tiên.', action: 'edit' },
+          { title: 'Publish baseline đầu', detail: 'Tạo Generation đầu tiên.', action: 'publish' },
+          { title: 'Tạo local edit mới', detail: 'Working copy chưa publish.', action: 'edit' },
+          { title: 'External workspace advance', detail: 'Mô phỏng Working Head đã tăng.', action: 'external-advance' },
+          { title: 'Publish stale request', detail: 'Phải bị chặn; local work không được xóa.', action: 'publish', expectBlocked: true },
+          { title: 'Refresh / reapply', detail: 'Cập nhật expected Generation mà không tự động merge binary.', action: 'refresh' }
+        ]
+      },
+      reject: {
+        titleKey: 'scenarioReject',
+        description: 'Reject phải trả về In Work và giữ local work.',
+        steps: [
+          { title: 'Author chuẩn bị và publish', detail: 'Tạo Generation có thể review.', action: 'prepare-and-publish' },
+          { title: 'Submit for review', detail: 'Pin Generation đang review.', action: 'submit' },
+          { title: 'Chuyển sang approver', detail: 'Approver là identity độc lập.', action: 'switch-actor', payload: { actorId: 'approver' } },
+          { title: 'Reject có reason', detail: 'Review thất bại nhưng history và local work còn nguyên.', action: 'reject' },
+          { title: 'Trở lại Author', detail: 'Author nhận lại việc cần sửa.', action: 'switch-actor', payload: { actorId: 'author' } },
+          { title: 'Reserve lại', detail: 'Author lấy reservation mới.', action: 'reserve' },
+          { title: 'Mở local work đã giữ', detail: 'Không cần tạo lại từ đầu.', action: 'open' },
+          { title: 'Reapply edit', detail: 'Tiếp tục chỉnh sửa từ local work được giữ.', action: 'edit' }
+        ]
+      },
+      self: {
+        titleKey: 'scenarioSelf',
+        description: 'Author không được tự Approve hoặc Release Revision của mình.',
+        steps: [
+          { title: 'Author tạo bản review', detail: 'Chuẩn bị một pending review.', action: 'prepare-and-submit' },
+          { title: 'Author thử Approve', detail: 'Phải bị chặn bởi Approval Policy.', action: 'approve', expectBlocked: true },
+          { title: 'Chuyển sang approver', detail: 'Dùng identity độc lập.', action: 'switch-actor', payload: { actorId: 'approver' } },
+          { title: 'Approver Approve', detail: 'Decision được ghi cho đúng Generation.', action: 'approve' },
+          { title: 'Approver Release', detail: 'Approver có thể release theo seeded policy.', action: 'release' }
+        ]
+      },
+      revision: {
+        titleKey: 'scenarioRevision',
+        description: 'Baseline đã release tạo Revision kế tiếp với Version Sequence 1.',
+        steps: [
+          { title: 'Chuẩn bị baseline đã release', detail: 'Chạy nhanh happy path trong một bước.', action: 'prepare-and-release' },
+          { title: 'Chuyển sang Author', detail: 'Author bắt đầu business milestone mới.', action: 'switch-actor', payload: { actorId: 'author' } },
+          { title: 'Create Revision', detail: 'Revision B bắt đầu ở Start với baseline Generation mới.', action: 'create-revision' },
+          { title: 'Reserve Revision B', detail: 'Reservation mới không kế thừa lock cũ.', action: 'reserve' },
+          { title: 'Open baseline copy', detail: 'Mở bản copy của Revision B.', action: 'open' },
+          { title: 'Edit Revision B', detail: 'Tạo thay đổi mới trong Revision B.', action: 'edit' }
+        ]
+      }
+    };
+
+    let state = createInitialState();
+    let toastTimer = null;
+
+    function clone(value) { return JSON.parse(JSON.stringify(value)); }
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch]));
+    }
+    function t(key) { return (I18N[state.locale] && I18N[state.locale][key]) || I18N.en[key] || key; }
+    function titleOf(doc) { return (DOC_TITLES[doc.titleKey] && (DOC_TITLES[doc.titleKey][state.locale] || DOC_TITLES[doc.titleKey].en)) || doc.titleKey; }
+    function actorOf(id = state.actorId) { return ACTORS[id] || ACTORS.author; }
+    function activeDoc() { return state.docs.find(doc => doc.id === state.activeDocId) || state.docs[0]; }
+    function ownsReservation(doc = activeDoc()) {
+      const actor = actorOf();
+      return Boolean(doc.reservation && doc.reservation.owner === state.actorId && doc.reservation.workspace === actor.workspace);
+    }
+    function maxGeneration() {
+      return state.docs.reduce((max, doc) => {
+        const match = String(doc.generation || '').match(/(\d+)$/);
+        return Math.max(max, match ? Number(match[1]) : 0);
+      }, 0);
+    }
+    function nextGeneration() { return `G-${String(maxGeneration() + 1).padStart(4, '0')}`; }
+    function bumpMinor(version) {
+      const [major, minor] = String(version || '0.1').split('.').map(Number);
+      return `${Number.isFinite(major) ? major : 0}.${(Number.isFinite(minor) ? minor : 0) + 1}`;
+    }
+    function nextRevision(revision) {
+      const code = String(revision || 'A').charCodeAt(0);
+      return String.fromCharCode(code >= 90 ? 65 : code + 1);
+    }
+    function formatClock(minutes) {
+      const h = Math.floor(minutes / 60) % 24;
+      const m = minutes % 60;
+      return `2026-08-28 ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+    function statusClass(value) {
+      if (['Released', 'Approved', 'PASS'].includes(value)) return 'green';
+      if (['Under Review', 'Proposed'].includes(value)) return 'amber';
+      if (['BLOCKED', 'FAIL'].includes(value)) return 'red';
+      if (['In Work'].includes(value)) return 'navy';
+      if (['Start', 'Draft', 'NOT-RUN'].includes(value)) return 'plain';
+      return 'plain';
+    }
+    function workflowLabel(value) { return t(({ 'Start': 'start', 'In Work': 'inWork', 'Under Review': 'underReview', 'Released': 'released' })[value] || value); }
+    function statusLabel(value) { return t(({ Draft: 'draft', Proposed: 'proposed', Approved: 'approved', Superseded: 'superseded' })[value] || value); }
+    function gateLabel(value) { return t(({ 'NOT-RUN': 'notRun', PASS: 'pass', FAIL: 'fail', BLOCKED: 'blocked' })[value] || value); }
+    function reservationLabel(doc) {
+      if (!doc.reservation) return t('unreserved');
+      if (ownsReservation(doc)) return `${t('owned')} · ${doc.reservation.workspace}`;
+      return `${doc.reservation.ownerName} · ${doc.reservation.workspace}`;
+    }
+
+    function normalizeDoc(seed) {
+      return {
+        ...clone(seed),
+        workingHead: seed.generation,
+        workingCopy: { open: false, dirty: false, summary: '' },
+        reservation: null,
+        pendingReview: seed.workflow === 'Under Review' ? { generation: seed.generation, submittedBy: 'Khoa Phạm', decision: null } : null,
+        approvalDecision: null,
+        releaseRecord: seed.workflow === 'Released' ? { id: 'REL-000' + seed.versionSequence, generation: seed.generation, actor: 'Minh Trần' } : null,
+        conflict: null,
+        localWork: null,
+        revisionHistory: []
+      };
+    }
+    function createInitialState(overrides = {}) {
+      const docs = SEED_DOCS.map(normalizeDoc);
+      return {
+        locale: overrides.locale || 'vi',
+        variant: overrides.variant || readVariant(),
+        actorId: overrides.actorId || 'author',
+        activeDocId: overrides.activeDocId || 'LD-P100-001',
+        docs,
+        clock: 8 * 60 + 30,
+        audit: [{ time: '2026-08-28 08:30', type: 'Registered', actor: 'System', docId: 'LD-P100-001', detail: 'Logical Document registered; Revision A starts without Generation.' }],
+        guided: { scenario: overrides.scenario || 'happy', step: 0, completed: {}, message: '' },
+        draftReason: 'Bổ sung evidence và làm rõ acceptance path',
+        lastAction: { type: 'info', message: 'Demo state ready.' },
+        review: { open: false, chosenVariant: '', notes: '', questions: '', saved: false, savedAt: '' }
+      };
+    }
+    function readVariant() {
+      const value = new URLSearchParams(window.location.search).get('variant');
+      return VARIANTS[value] ? value : 'A';
+    }
+    function resetData({ keepGuide = false } = {}) {
+      const previous = state;
+      const next = createInitialState({ locale: previous.locale, variant: previous.variant, activeDocId: 'LD-P100-001', scenario: previous.guided.scenario });
+      if (keepGuide) next.guided = { scenario: previous.guided.scenario, step: 0, completed: previous.guided.completed, message: '' };
+      state = next;
+    }
+    function tick() { state.clock += 3; return formatClock(state.clock); }
+    function audit(type, detail, doc = activeDoc(), actorName = actorOf().name) {
+      state.audit.unshift({ time: tick(), type, actor: actorName, docId: doc && doc.id, detail });
+      if (state.audit.length > 30) state.audit.length = 30;
+    }
+    function success(message) { return { ok: true, message }; }
+    function blocked(message, code = 'BLOCKED') { return { ok: false, code, message }; }
+    function canAction(action, doc = activeDoc()) {
+      const actor = actorOf();
+      const hasOwner = ownsReservation(doc);
+      const prototypeMutations = ['reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'external-advance', 'refresh', 'recover', 'withdraw'];
+      if (doc.id !== 'LD-P100-001' && prototypeMutations.includes(action)) {
+        return blocked('Context record này chỉ để tạo mật độ UI. Chọn LD-P100-001 để chạy full interaction.');
+      }
+      switch (action) {
+        case 'reserve':
+          if (actor.kind === 'observer') return blocked('Read-only Observer không thể Reserve.');
+          if (doc.workflow === 'Released') return blocked('Released Revision là immutable; dùng Create Revision.');
+          if (doc.reservation && !hasOwner) return blocked(`Reservation đang thuộc ${doc.reservation.ownerName} tại ${doc.reservation.workspace}.`);
+          return success('');
+        case 'open':
+          if (!hasOwner) return blocked('Cần Reservation đúng owner và Workspace trước khi mở working copy.');
+          if (doc.workflow === 'Released') return blocked('Không mở chỉnh sửa trực tiếp trên Released Revision.');
+          return success('');
+        case 'edit':
+          if (actor.kind !== 'author') return blocked('Chỉ Author / Editor được sửa working copy trong seeded policy.');
+          if (!hasOwner) return blocked('Cần Reservation đúng owner và Workspace.');
+          if (!doc.workingCopy.open) return blocked('Hãy Open working copy trước.');
+          return success('');
+        case 'publish':
+          if (actor.kind !== 'author') return blocked('Publish yêu cầu Author / Editor của working copy.');
+          if (!hasOwner) return blocked('Publish bị chặn: Reservation không thuộc actor/workspace hiện tại.');
+          if (!doc.workingCopy.open) return blocked('Hãy Open working copy trước khi Publish.');
+          if (doc.conflict) return blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy Refresh / reapply.`);
+          if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) return success('');
+          return success('');
+        case 'submit':
+          if (actor.kind !== 'author') return blocked('Chỉ Author / Editor được Submit for review.');
+          if (!hasOwner) return blocked('Submit yêu cầu Reservation hiện tại.');
+          if (!doc.generation) return blocked('Chưa có Generation để pin vào review.');
+          if (doc.workingCopy.dirty) return blocked('Còn local changes chưa Publish.');
+          if (doc.workflow !== 'In Work') return blocked(`Submit chỉ hợp lệ từ In Work; hiện tại là ${workflowLabel(doc.workflow)}.`);
+          return success('');
+        case 'approve':
+          if (actor.kind !== 'approver') return blocked('Approval Policy yêu cầu Independent Approver.');
+          if (!doc.pendingReview) return blocked('Chưa có pending review.');
+          if (doc.pendingReview.submittedBy === actor.name) return blocked('Không được tự approve revision do chính mình submit.');
+          if (doc.pendingReview.generation !== doc.generation) return blocked('Pending review đã stale vì Generation thay đổi.');
+          return success('');
+        case 'reject':
+          if (actor.kind !== 'approver') return blocked('Reject yêu cầu Independent Approver.');
+          if (!doc.pendingReview) return blocked('Chưa có pending review.');
+          if (!String(state.draftReason).trim()) return blocked('Reject bắt buộc có reason.');
+          return success('');
+        case 'release':
+          if (actor.kind !== 'approver') return blocked('Release yêu cầu actor đủ quyền release.');
+          if (!doc.pendingReview || !doc.approvalDecision) return blocked('Cần Approval Decision trên exact Generation trước khi Release.');
+          if (doc.pendingReview.generation !== doc.generation) return blocked('Không Release được: pending Generation không còn là Working Head.');
+          return success('');
+        case 'create-revision':
+          if (actor.kind === 'observer') return blocked('Read-only Observer không thể Create Revision.');
+          if (doc.workflow !== 'Released') return blocked('Create Revision chỉ bắt đầu từ Released baseline.');
+          return success('');
+        case 'external-advance':
+          if (!doc.generation) return blocked('Cần Generation trước khi mô phỏng external advance.');
+          return success('');
+        case 'refresh':
+          if (!doc.conflict) return blocked('Hiện không có stale conflict cần refresh.');
+          if (!hasOwner) return blocked('Refresh / reapply cần Reservation của workspace hiện tại.');
+          return success('');
+        case 'recover':
+          if (actor.kind !== 'admin') return blocked('Reservation Recovery yêu cầu PDM Administrator.');
+          if (!doc.reservation) return blocked('Không có Reservation để recover.');
+          return success('');
+        case 'withdraw':
+          if (actor.kind !== 'author') return blocked('Withdraw yêu cầu Author / Editor.');
+          if (!doc.pendingReview) return blocked('Không có pending review.');
+          return success('');
+        default: return success('');
+      }
+    }
+
+    function dispatch(action, payload = {}) {
+      const doc = activeDoc();
+      let check;
+      if (!['reset', 'switch-actor', 'select-doc', 'guided-select', 'guided-reset', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review', 'guided-next'].includes(action)) {
+        check = canAction(action, doc);
+        if (!check.ok) { state.lastAction = { type: 'blocked', message: check.message, code: check.code }; return check; }
+      }
+      let result = success('');
+      const actor = actorOf();
+
+      switch (action) {
+        case 'reset':
+          resetData();
+          result = success('Demo state đã reset; mọi thay đổi trước đó chỉ là in-memory.');
+          break;
+        case 'select-doc':
+          if (state.docs.some(item => item.id === payload.id)) {
+            state.activeDocId = payload.id;
+            result = success(`Đã chọn ${payload.id}.`);
+          } else result = blocked('Không tìm thấy document synthetic này.');
+          break;
+        case 'switch-actor':
+          if (ACTORS[payload.actorId]) {
+            state.actorId = payload.actorId;
+            result = success(`Đang demo dưới identity ${ACTORS[payload.actorId].name}.`);
+          } else result = blocked('Actor không hợp lệ.');
+          break;
+        case 'reserve':
+          if (doc.reservation && ownsReservation(doc)) result = success('Reservation đã thuộc workspace hiện tại.');
+          else {
+            doc.reservation = { owner: state.actorId, ownerName: actor.name, workspace: actor.workspace, expectedGeneration: doc.generation, lease: '20 min' };
+            audit('Reserved', `Reservation bound to ${doc.id}; expected Generation ${doc.generation || '∅'}.`);
+            result = success(`Reserved ${doc.id} cho ${actor.workspace}.`);
+          }
+          break;
+        case 'open':
+          doc.workingCopy.open = true;
+          doc.workingCopy.summary = doc.localWork ? 'Reopened preserved local work after reject.' : 'Working copy opened from current Working Head.';
+          audit('WorkingCopyOpened', doc.workingCopy.summary);
+          result = success('Working copy đã mở; chưa tạo Generation mới.');
+          break;
+        case 'edit':
+          doc.workingCopy.dirty = true;
+          doc.workingCopy.summary = doc.localWork ? 'Local work re-applied; metadata delta pending.' : 'Metadata delta pending publish.';
+          doc.localWork = { preserved: Boolean(doc.localWork && doc.localWork.preserved), summary: doc.workingCopy.summary, sourceGeneration: doc.generation };
+          audit('LocalEdit', `${doc.workingCopy.summary} No Generation until Publish.`);
+          result = success('Local edit đã được hiển thị; Publish vẫn chưa xảy ra.');
+          break;
+        case 'publish': {
+          if (doc.reservation && doc.reservation.expectedGeneration !== doc.generation) {
+            doc.conflict = { expected: doc.reservation.expectedGeneration, current: doc.generation, detectedAt: formatClock(state.clock) };
+            result = blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Local work được giữ.`, 'STALE_GENERATION');
+            state.lastAction = { type: 'blocked', message: result.message, code: result.code };
+            break;
+          }
+          if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) {
+            audit('NoChange', 'Semantic equality with Working Head; no Generation created.', doc);
+            result = success('NoChange: không tạo Generation mới.');
+            break;
+          }
+          const previous = doc.generation;
+          const generation = nextGeneration();
+          doc.generation = generation;
+          doc.workingHead = generation;
+          doc.versionSequence = doc.versionSequence ? doc.versionSequence + 1 : 1;
+          if (previous) doc.documentVersion = bumpMinor(doc.documentVersion);
+          doc.workflow = 'In Work';
+          doc.status = 'Draft';
+          doc.gate = 'NOT-RUN';
+          doc.pendingReview = null;
+          doc.approvalDecision = null;
+          doc.releaseRecord = null;
+          doc.workingCopy.dirty = false;
+          doc.conflict = null;
+          doc.localWork = null;
+          if (doc.reservation) doc.reservation.expectedGeneration = generation;
+          audit('Published Generation', `${generation} / Version Sequence ${doc.versionSequence}; previous ${previous || '∅'}.`);
+          result = success(`Published ${generation}; Revision ${doc.revision} đang In Work.`);
+          break;
+        }
+        case 'submit':
+          doc.pendingReview = { generation: doc.generation, submittedBy: actor.name, submittedAt: formatClock(state.clock), decision: null };
+          doc.workflow = 'Under Review';
+          doc.status = 'Proposed';
+          doc.gate = 'NOT-RUN';
+          doc.reservation = null;
+          audit('Submitted for Review', `Pinned Generation ${doc.generation}; Reservation disposition: released.`);
+          result = success(`Submitted Generation ${doc.generation} cho review.`);
+          break;
+        case 'approve':
+          doc.approvalDecision = { outcome: 'Approved', generation: doc.generation, actor: actor.name, at: formatClock(state.clock), reason: 'Evidence set accepted for demo.' };
+          if (doc.pendingReview) doc.pendingReview.decision = 'Approved';
+          if (String(doc.documentVersion).startsWith('0.')) doc.documentVersion = '1.0';
+          doc.status = 'Approved';
+          doc.gate = 'PASS';
+          audit('Approval Decision', `Approved exact Generation ${doc.generation}.`);
+          result = success(`Approved ${doc.generation}; Release action đã mở.`);
+          break;
+        case 'reject':
+          doc.localWork = { preserved: true, summary: 'Rejected review local work retained for rework.', sourceGeneration: doc.generation, reason: state.draftReason };
+          doc.pendingReview = null;
+          doc.approvalDecision = null;
+          doc.workflow = 'In Work';
+          doc.status = 'Draft';
+          doc.gate = 'FAIL';
+          doc.workingCopy.open = true;
+          doc.workingCopy.dirty = true;
+          doc.workingCopy.summary = 'Rejected local work retained; rework required.';
+          doc.reservation = null;
+          audit('Rejected Review', `${state.draftReason} Local work preserved; returned to In Work.`);
+          result = success('Review bị Reject; Revision về In Work và local work vẫn còn.');
+          break;
+        case 'release':
+          doc.workflow = 'Released';
+          doc.status = 'Approved';
+          doc.gate = 'PASS';
+          doc.releaseRecord = { id: `REL-${String(state.clock).replace(/\D/g, '').slice(-6)}`, generation: doc.generation, actor: actor.name, at: formatClock(state.clock), immutable: true };
+          doc.pendingReview = null;
+          doc.reservation = null;
+          doc.workingCopy.open = false;
+          doc.workingCopy.dirty = false;
+          doc.localWork = null;
+          audit('Released', `Immutable Release Record ${doc.releaseRecord.id} pins ${doc.generation}.`);
+          result = success(`Released ${doc.generation}; Release Record đã immutable.`);
+          break;
+        case 'create-revision': {
+          const oldRevision = doc.revision;
+          const oldGeneration = doc.generation;
+          doc.revisionHistory.unshift({ revision: oldRevision, documentVersion: doc.documentVersion, generation: oldGeneration, digest: doc.digest, status: 'Released' });
+          doc.revision = nextRevision(oldRevision);
+          doc.documentVersion = '0.1';
+          doc.versionSequence = 1;
+          doc.generation = nextGeneration();
+          doc.workingHead = doc.generation;
+          doc.workflow = 'Start';
+          doc.status = 'Draft';
+          doc.gate = 'NOT-RUN';
+          doc.pendingReview = null;
+          doc.approvalDecision = null;
+          doc.releaseRecord = null;
+          doc.reservation = null;
+          doc.workingCopy = { open: false, dirty: false, summary: `Baseline reused by digest from Revision ${oldRevision}/${oldGeneration}.` };
+          doc.localWork = null;
+          doc.conflict = null;
+          audit('Created Business Revision', `Revision ${doc.revision} begins in Start with exact Version Sequence 1 baseline from ${oldRevision}/${oldGeneration}.`);
+          result = success(`Created Revision ${doc.revision}; workflow Start, Version Sequence 1.`);
+          break;
+        }
+        case 'external-advance': {
+          const previous = doc.generation;
+          const generation = nextGeneration();
+          doc.generation = generation;
+          doc.workingHead = generation;
+          doc.versionSequence += 1;
+          doc.documentVersion = bumpMinor(doc.documentVersion);
+          doc.workflow = 'In Work';
+          doc.status = 'Draft';
+          doc.gate = 'NOT-RUN';
+          if (doc.pendingReview) { doc.pendingReview = null; doc.approvalDecision = null; }
+          audit('External Workspace Advance', `Working Head advanced ${previous} → ${generation}; current reservation expected ${doc.reservation ? doc.reservation.expectedGeneration : '∅'}.`, doc, t('external'));
+          result = success(`External workspace advanced Working Head to ${generation}.`);
+          break;
+        }
+        case 'refresh':
+          doc.reservation.expectedGeneration = doc.generation;
+          doc.conflict = null;
+          audit('Refresh / Reapply', `Expected Generation updated to ${doc.generation}; local work remains dirty.`);
+          result = success(`Refreshed to ${doc.generation}; local work vẫn cần Publish.`);
+          break;
+        case 'recover':
+          audit('Reservation Recovery', `Administrator recovered reservation from ${doc.reservation.ownerName}; reason: ${state.draftReason}.`);
+          doc.reservation = null;
+          result = success('Reservation đã recover có audit evidence.');
+          break;
+        case 'withdraw':
+          doc.pendingReview = null;
+          doc.workflow = 'In Work';
+          doc.status = 'Draft';
+          doc.gate = 'NOT-RUN';
+          audit('Withdrawn Review', 'Review withdrawn by author; Generation remains unchanged.');
+          result = success('Review đã withdraw; Generation không đổi.');
+          break;
+        case 'guided-select':
+          if (SCENARIOS[payload.scenario]) {
+            state.guided.scenario = payload.scenario;
+            state.guided.step = 0;
+            state.guided.message = '';
+            resetData({ keepGuide: true });
+            result = success(`Scenario: ${t(SCENARIOS[payload.scenario].titleKey)}.`);
+          } else result = blocked('Scenario không hợp lệ.');
+          break;
+        case 'guided-reset':
+          resetData({ keepGuide: true });
+          result = success('Scenario đã reset.');
+          break;
+        case 'open-review': state.review.open = true; result = success(''); break;
+        case 'close-review': state.review.open = false; result = success(''); break;
+        case 'save-review':
+          state.review.chosenVariant = payload.chosenVariant || state.review.chosenVariant;
+          state.review.notes = payload.notes ?? state.review.notes;
+          state.review.questions = payload.questions ?? state.review.questions;
+          state.review.saved = true;
+          state.review.savedAt = formatClock(state.clock);
+          result = success(t('verdictSaved'));
+          break;
+        default: result = success('');
+      }
+      state.lastAction = { type: result.ok ? 'success' : 'blocked', message: result.message, code: result.code || '' };
+      return result;
+    }
+
+    function actionButton(action, labelKey, className = '', icon = '') {
+      const status = canAction(action);
+      const disabled = !status.ok;
+      return `<button type="button" class="action-btn ${className} ${disabled ? 'is-disabled' : ''}" data-action="${action}" aria-disabled="${disabled ? 'true' : 'false'}" title="${esc(disabled ? status.message : labelKey)}"><span aria-hidden="true">${icon}</span> ${esc(t(labelKey))}</button>`;
+    }
+    function chip(value, label, className = '') { return `<span class="badge ${className || statusClass(value)}">${esc(label)}</span>`; }
+    function metric(label, value, note = '') { return `<div class="metric"><div class="metric-label">${esc(label)}</div><div class="metric-value">${esc(value)}</div>${note ? `<div class="metric-note">${esc(note)}</div>` : ''}</div>`; }
+
+    function renderHeader() {
+      const actor = actorOf();
+      return `<header class="topbar"><div class="topbar-inner">
+        <div class="brand-lockup"><div class="brand-mark" aria-hidden="true">IE</div><div><p class="brand-name">IDEA Engineering</p><p class="brand-sub">Controlled engineering data · C1</p></div></div>
+        <div class="topbar-controls">
+          <label class="control-label">${esc(t('language'))}<select id="localeSelect" aria-label="${esc(t('language'))}"><option value="vi" ${state.locale === 'vi' ? 'selected' : ''}>VI · Tiếng Việt</option><option value="en" ${state.locale === 'en' ? 'selected' : ''}>EN · English</option><option value="ja" ${state.locale === 'ja' ? 'selected' : ''}>JA · 日本語</option></select></label>
+          <label class="control-label">${esc(t('actor'))}<select id="actorSelect" aria-label="${esc(t('actor'))}">${Object.entries(ACTORS).map(([id, item]) => `<option value="${id}" ${id === state.actorId ? 'selected' : ''}>${esc(item.name)} · ${esc(t(item.roleKey))}</option>`).join('')}</select></label>
+          <button type="button" class="topbar-btn primary" data-action="open-review">▣ ${esc(t('review'))}</button>
+          <button type="button" class="topbar-btn" data-action="reset">↺ ${esc(t('reset'))}</button>
+        </div>
+      </div></header>`;
+    }
+
+    function renderPrototypeStrip() {
+      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))} · ${esc(t('variant'))} ${state.variant}</span><span class="strip-spacer"></span><span>${esc(VARIANTS[state.variant].promise)}</span><span class="kbd">← →</span></div>`;
+    }
+
+    function renderPageIntro() {
+      const active = activeDoc();
+      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))} Đây là một prototype để chọn information hierarchy; state và action chỉ là mô phỏng.</p></div><div class="intro-aside">${chip(active.workflow, workflowLabel(active.workflow))}${chip(active.status, statusLabel(active.status))}${chip(active.gate, gateLabel(active.gate))}<span class="tiny-note">${esc(t('synthetic'))} · 10 records</span></div></div>`;
+    }
+
+    function renderIdentity(doc) {
+      const cells = [
+        [t('stableId'), doc.id, true], [t('documentClass'), doc.className, false], [t('revision'), doc.revision, false], [t('version'), doc.documentVersion, true], [t('sequence'), doc.versionSequence || '—', true], [t('generation'), doc.generation || '—', true]
+      ];
+      return `<dl class="identity-grid">${cells.map(([label, value, mono]) => `<div class="identity-cell"><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>`;
+    }
+
+    function renderDocHero(doc, includeActions = true) {
+      return `<section class="doc-hero"><div class="doc-hero-top"><div><div class="eyebrow">${esc(doc.category)} · ${esc(doc.className)}</div><h2 class="doc-title">${esc(titleOf(doc))}</h2><p class="doc-subtitle"><span class="mono">${esc(doc.id)}</span> · ${esc(doc.note)}</p></div>${includeActions ? `<div class="doc-hero-actions">${chip(doc.workflow, workflowLabel(doc.workflow))}${chip(doc.status, statusLabel(doc.status))}</div>` : ''}</div>${renderIdentity(doc)}</section>`;
+    }
+
+    function renderActionBar(doc) {
+      return `<section class="action-bar"><div class="action-bar-top"><div><h3>${esc(t('actions'))}</h3><div class="small muted">${esc(t('actionHint'))}</div></div><div class="badge-row">${chip(doc.reservation ? (ownsReservation(doc) ? 'owned' : 'external') : 'none', reservationLabel(doc), doc.reservation ? (ownsReservation(doc) ? 'teal' : 'amber') : 'plain')}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div></div><div class="action-groups"><div class="action-group">${actionButton('reserve', 'reserve', 'primary', '◈')}${actionButton('open', 'open', '', '□')}${actionButton('edit', 'edit', '', '✎')}${actionButton('publish', 'publish', 'primary', '↑')}</div><div class="action-group">${actionButton('submit', 'submit', '', '→')}${actionButton('approve', 'approve', '', '✓')}${actionButton('reject', 'reject', 'danger', '×')}${actionButton('release', 'release', 'primary', '◆')}</div><div class="action-group">${actionButton('create-revision', 'createRevision', '', '＋')}${actionButton('withdraw', 'withdraw', '', '↩')}</div><div class="action-group">${actionButton('external-advance', 'externalAdvance', 'edge', '↗')}${actionButton('refresh', 'refresh', 'edge', '⟳')}${actionButton('recover', 'recover', 'edge', '⚿')}</div></div><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></section>`;
+    }
+
+    function renderGuidedPanel() {
+      const guide = state.guided;
+      const scenario = SCENARIOS[guide.scenario];
+      const total = scenario.steps.length;
+      const complete = guide.step >= total;
+      const step = scenario.steps[Math.min(guide.step, total - 1)];
+      const progress = Math.round(Math.min(guide.step, total) / total * 100);
+      return `<section class="guided-panel" aria-labelledby="guided-title"><div class="guided-head"><div><h3 id="guided-title">◎ ${esc(t('guided'))}</h3><p>${esc(t('guidedHint'))}</p></div><span class="badge ${complete ? 'green' : 'teal'}">${complete ? esc(t('complete')) : `${esc(t('step'))} ${guide.step + 1}/${total}`}</span></div><div class="guided-tabs" role="tablist" aria-label="${esc(t('guided'))}">${Object.entries(SCENARIOS).map(([id, item]) => `<button type="button" class="guided-tab" role="tab" aria-selected="${guide.scenario === id ? 'true' : 'false'}" data-action="guided-select" data-scenario="${id}">${esc(t(item.titleKey))}${guide.completed[id] ? ' ✓' : ''}</button>`).join('')}</div><div class="guided-progress" aria-hidden="true"><span style="width:${progress}%"></span></div><div class="guided-body"><div class="guided-step">${complete ? `<strong>${esc(t('complete'))}: ${esc(t(scenario.titleKey))}</strong><span>${esc(scenario.description)}</span>` : `<strong>${esc(step.title)}</strong><span>${esc(step.detail)}</span>`}</div><div class="guided-controls">${complete ? '' : `<button type="button" class="guide-btn primary" data-action="guided-next">${esc(t('runNext'))} →</button>`}<button type="button" class="guide-btn" data-action="guided-reset">↺ ${esc(t('restart'))}</button></div>${guide.message ? `<div class="guided-message" role="status">${esc(guide.message)}</div>` : ''}</div></section>`;
+    }
+
+    function renderMetadata(doc) {
+      const rows = [
+        [t('workflow'), workflowLabel(doc.workflow)], [t('status'), statusLabel(doc.status)], [t('gate'), gateLabel(doc.gate)], [t('reservation'), reservationLabel(doc)], ['Working Head', doc.workingHead || '—'], ['Digest', doc.digest], ['Structure', doc.structure], ['Owner', doc.owner]
+      ];
+      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('metadata'))}</h2><p>Identity, state và exact pin nhìn thấy cùng nhau.</p></div></div><div class="panel-body"><table class="data-table"><tbody>${rows.map(([label, value]) => `<tr><th>${esc(label)}</th><td class="value">${esc(value)}</td></tr>`).join('')}</tbody></table>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
+    }
+
+    function renderLinked(doc) {
+      const linkedDocs = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean);
+      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('linked'))}</h2><p>Projection để điều hướng; không phải authority thứ hai.</p></div></div><div class="panel-body"><div class="linked-list">${linkedDocs.map(item => `<button type="button" class="linked-item" data-action="select-doc" data-doc-id="${esc(item.id)}"><strong>${esc(titleOf(item))}</strong><span>${esc(item.id)}</span></button>`).join('') || `<div class="empty-state"><strong>${esc(t('none'))}</strong></div>`}</div></div></section>`;
+    }
+
+    function renderAudit(limit = 8) {
+      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('audit'))}</h2><p>Attributable demo events; không chỉnh sửa được.</p></div><span class="badge plain">${state.audit.length}</span></div><div class="panel-body"><div class="timeline">${state.audit.slice(0, limit).map(event => `<div class="timeline-item"><div class="timeline-time">${esc(event.time.split(' ')[1] || event.time)}</div><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-content"><strong>${esc(event.type)}</strong><span>${esc(event.actor)} · <span class="mono">${esc(event.docId || 'workspace')}</span></span><em>${esc(event.detail)}</em></div></div>`).join('')}</div></div></section>`;
+    }
+
+    function renderStateSnapshot(doc) {
+      const snapshot = {
+        actor: { id: state.actorId, name: actorOf().name, role: actorOf().role, workspace: actorOf().workspace },
+        activeDocument: { id: doc.id, revision: doc.revision, documentVersion: doc.documentVersion, versionSequence: doc.versionSequence, generation: doc.generation, workingHead: doc.workingHead, workflow: doc.workflow, documentStatus: doc.status, gateOutcome: doc.gate },
+        reservation: doc.reservation,
+        workingCopy: doc.workingCopy,
+        pendingReview: doc.pendingReview,
+        approvalDecision: doc.approvalDecision,
+        releaseRecord: doc.releaseRecord,
+        localWork: doc.localWork,
+        conflict: doc.conflict,
+        lastAction: state.lastAction
+      };
+      return `<details class="state-card" ${state.lastAction.type === 'blocked' ? 'open' : ''}><summary>${esc(t('stateSnapshot'))} <span class="small muted">· ${esc(t('stateHint'))}</span></summary><div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div><pre class="state-json">${esc(JSON.stringify(snapshot, null, 2))}</pre></details>`;
+    }
+
+    function renderDocList() {
+      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('allDocuments'))}</h2><p>10 synthetic records · active row drives the demo.</p></div><span class="badge plain">10</span></div><div class="doc-list">${state.docs.map(doc => `<button type="button" class="doc-list-item" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><span>${esc(doc.id)} · Rev ${esc(doc.revision)} · ${esc(doc.generation || '∅')}</span><span class="list-meta"><i class="list-dot ${statusClass(doc.workflow)}"></i>${esc(workflowLabel(doc.workflow))}<span class="muted">· ${esc(statusLabel(doc.status))}</span></span></button>`).join('')}</div></section>`;
+    }
+
+    function renderVariantA(doc) {
+      return `<div class="variant-a"><aside class="panel nav-panel"><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">⌂</span>${esc(t('myWork'))}</span><span class="nav-link"><span class="nav-icon">▤</span>${esc(t('allDocuments'))}</span><span class="nav-link"><span class="nav-icon">◆</span>${esc(t('recentReleases'))}</span><span class="nav-link"><span class="nav-icon">!</span>${esc(t('blockers'))}</span></nav><div class="nav-section">Collections</div><nav class="nav-links"><span class="nav-link"><span class="nav-icon">◇</span>Product tree</span><span class="nav-link"><span class="nav-icon">↗</span>My reservations</span><span class="nav-link"><span class="nav-icon">⌁</span>Audit evidence</span></nav>${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Working Head', doc.generation || '∅', doc.workflow === 'Start' ? 'Chưa publish' : 'Exact current head')}${metric('Revision', doc.revision, `Version Sequence ${doc.versionSequence || '—'}`)}${metric('Review pin', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pending decision' : 'No pending review')}${metric('Local work', doc.workingCopy.dirty ? 'Dirty' : 'Clean', doc.localWork && doc.localWork.preserved ? 'Preserved after reject' : 'In-memory only')}</div></div>${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderMetadata(doc)}${renderLinked(doc)}${renderAudit(doc.id === state.activeDocId ? 7 : 4)}</aside></div>`;
+    }
+
+    function renderTask(doc, type, title, body, footer) { return `<article class="task-item ${type}"><h3>${esc(title)}</h3><p>${esc(body)}</p><div class="task-footer"><span>${esc(footer)}</span><span>›</span></div></article>`; }
+    function renderVariantB(doc) {
+      const next = doc.conflict ? ['Resolve stale conflict', 'Refresh expected Generation and reapply local work.', 'BLOCKED'] : doc.workflow === 'Start' ? ['Reserve the new document', 'Start the first controlled working session.', 'NEXT'] : doc.workflow === 'In Work' && doc.workingCopy.dirty ? ['Publish local changes', 'Create exactly one new Generation.', 'NEXT'] : doc.workflow === 'In Work' ? ['Submit for review', 'Pin the current Generation for an independent decision.', 'NEXT'] : doc.workflow === 'Under Review' && !doc.approvalDecision ? ['Independent approval', 'An eligible approver must decide on the pinned Generation.', 'WAITING'] : doc.workflow === 'Under Review' ? ['Release exact baseline', 'Create the immutable Release Record.', 'NEXT'] : ['Create next Revision', 'Start a new business milestone from this released baseline.', 'NEXT'];
+      return `<div class="variant-b"><aside class="panel task-panel"><div class="panel-header"><div><h2>${esc(t('nextAction'))}</h2><p>Task-first queue · blockers are explicit.</p></div><span class="badge amber">4</span></div><div class="task-list">${renderTask(doc, next[2] === 'BLOCKED' ? 'blocked' : 'priority', next[0], next[1], next[2])}${renderTask(doc, 'priority', 'Review P-100 seal', 'Independent review is waiting on a pinned Generation.', 'WAITING')}${renderTask(doc, 'done', 'Confirm released housing', 'Exact Generation G-0004 is already released.', 'DONE')}${renderTask(doc, 'blocked', 'Risk specialist evidence', 'Specialist Review Gap remains visible; no silent pass.', 'BLOCKED')}</div><div class="panel-body"><div class="eyebrow">Actor context</div><p class="small muted">${esc(actorOf().name)} · ${esc(t(actorOf().roleKey))}<br><span class="mono">${esc(actorOf().workspace)}</span></p>${chip(actorOf().kind === 'approver' ? 'approved' : 'work', actorOf().role, actorOf().kind === 'approver' ? 'green' : 'navy')}</div></aside><main class="focus-panel"><div class="focus-banner"><div><strong>Focus: ${esc(doc.id)}</strong><span> · ${esc(VARIANTS.B.promise)}</span></div>${chip(doc.workflow, workflowLabel(doc.workflow))}</div><section class="next-action"><div class="eyebrow">${esc(t('nextAction'))}</div><h2>${esc(next[0])}</h2><p>${esc(next[1])}</p><div class="next-action-cta">${next[2] === 'BLOCKED' ? actionButton('refresh', 'refresh', 'edge', '⟳') : actionButton(doc.workflow === 'Start' ? 'reserve' : doc.workflow === 'In Work' && doc.workingCopy.dirty ? 'publish' : doc.workflow === 'In Work' ? 'submit' : doc.workflow === 'Under Review' && !doc.approvalDecision ? 'approve' : doc.workflow === 'Under Review' ? 'release' : 'create-revision', doc.workflow === 'Start' ? 'reserve' : doc.workflow === 'In Work' && doc.workingCopy.dirty ? 'publish' : doc.workflow === 'In Work' ? 'submit' : doc.workflow === 'Under Review' && !doc.approvalDecision ? 'approve' : doc.workflow === 'Under Review' ? 'release' : 'createRevision', 'primary', '→')}${actionButton('open-review', 'review', '', '▣')}</div></section><section class="panel" style="margin-top:14px">${renderDocHero(doc, false)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="b-split"><div class="b-feed">${renderAudit(6)}${renderStateSnapshot(doc)}</div><aside class="b-rail">${renderMetadata(doc)}${renderLinked(doc)}</aside></div></section></main></div>`;
+    }
+
+    function boardCard(doc) {
+      return `<button type="button" class="board-card" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><p>${esc(doc.id)} · Rev ${esc(doc.revision)}</p><div class="board-card-meta"><span>${esc(doc.generation || '∅')}</span><span>${esc(statusLabel(doc.status))}</span></div></button>`;
+    }
+    function renderBoardColumn(workflow, className) {
+      const docs = state.docs.filter(doc => doc.workflow === workflow);
+      return `<section class="board-column ${className}"><div class="board-column-head"><h3>${esc(workflowLabel(workflow))}</h3><span class="column-count">${docs.length}</span></div><div class="board-cards">${docs.map(boardCard).join('') || `<div class="board-empty">${esc(t('none'))}</div>`}</div></section>`;
+    }
+    function renderVariantC(doc) {
+      return `<div class="variant-c"><section class="board-toolbar"><div><h2>${esc(t('boardTitle'))}</h2><p>${esc(t('boardHint'))}</p></div><div class="toolbar-actions">${chip(doc.id, `${t('selected')}: ${doc.id}`, 'navy')}${actionButton('open-review', 'review', '', '▣')}</div></section><div class="board" aria-label="${esc(t('boardTitle'))}">${renderBoardColumn('Start', 'column-start')}${renderBoardColumn('In Work', 'column-work')}${renderBoardColumn('Under Review', 'column-review')}${renderBoardColumn('Released', 'column-release')}</div><div class="c-detail"><main class="panel c-detail-main">${renderDocHero(doc)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Release pin', doc.releaseRecord ? doc.releaseRecord.generation : '—', doc.releaseRecord ? doc.releaseRecord.id : 'Not released')}${metric('Review', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pinned' : 'None')}${metric('Revisions', doc.revisionHistory.length + 1, 'History visible')}${metric('Dependencies', doc.linked.length, 'Structure projection')}</div></div>${renderStateSnapshot(doc)}</main><aside class="c-drawer">${renderMetadata(doc)}${renderAudit(8)}</aside></div></div>`;
+    }
+
+    function renderReviewPanel() {
+      if (!state.review.open) return '';
+      const active = activeDoc();
+      const chosen = state.review.chosenVariant || state.variant;
+      const rows = [
+        ['A', VARIANTS.A.name, 'Best object discoverability; strongest metadata/audit visibility.', 'Denser and more traditional; more navigation chrome.'],
+        ['B', VARIANTS.B.name, 'Best for clear next action and blocker-led demos.', 'Less overview of the whole document landscape.'],
+        ['C', VARIANTS.C.name, 'Best lifecycle storytelling; state transitions are immediately visible.', 'Board can oversimplify rich document relationships.']
+      ];
+      const summary = `Prototype: Controlled Document Workspace\nActive: ${active.id} / Revision ${active.revision} / Generation ${active.generation || '∅'}\nCurrent variant: ${state.variant}\nActor: ${actorOf().name} (${actorOf().role})\nVerdict: ${state.review.notes || t('noVerdict')}`;
+      return `<div class="review-overlay" role="presentation"><section class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-title"><header class="review-head"><div><h2 id="review-title">${esc(t('reviewTitle'))}</h2><p>${esc(t('reviewSubtitle'))}</p></div><button type="button" class="close-btn" data-action="close-review" aria-label="${esc(t('close'))}">×</button></header><div class="review-body"><div class="review-alert"><strong>${esc(t('recommendation'))}:</strong> A làm baseline cho object-heavy workspace; B phù hợp nếu màn hình chính là queue công việc; C dùng khi cần trình bày release spine với stakeholder. Chọn một hoặc phối hợp có lý do.</div><div class="review-metrics">${metric('Active document', active.id, `Revision ${active.revision}`)}${metric('Current UI', state.variant, VARIANTS[state.variant].name)}${metric('Walkthroughs', Object.keys(state.guided.completed).length, 'Completed in memory')}${metric('State events', state.audit.length, 'Audit entries')}</div><div class="review-grid"><section class="panel"><div class="panel-header"><div><h2>${esc(t('compare'))}</h2><p>Ba cấu trúc khác nhau; không chỉ đổi màu.</p></div></div><div class="panel-body" style="padding:0;overflow:auto"><table class="variant-compare"><thead><tr><th>${esc(t('variant'))}</th><th>Strength</th><th>Watch-out</th></tr></thead><tbody>${rows.map(row => `<tr><td class="variant-key">${row[0]} · ${esc(row[1])}</td><td>${esc(row[2])}</td><td>${esc(row[3])}</td></tr>`).join('')}</tbody></table></div></section><section class="panel"><div class="panel-header"><div><h2>${esc(t('decision'))}</h2><p>Ghi quyết định để đưa vào review note sau buổi demo.</p></div></div><div class="panel-body"><div class="review-form"><label>${esc(t('chooseVariant'))}<select id="reviewVariant"><option value="A" ${chosen === 'A' ? 'selected' : ''}>A · ${esc(VARIANTS.A.name)}</option><option value="B" ${chosen === 'B' ? 'selected' : ''}>B · ${esc(VARIANTS.B.name)}</option><option value="C" ${chosen === 'C' ? 'selected' : ''}>C · ${esc(VARIANTS.C.name)}</option><option value="MIX" ${chosen === 'MIX' ? 'selected' : ''}>MIX · Chọn thành phần</option></select></label><label>${esc(t('decisionNotes'))}<textarea id="reviewNotes" placeholder="Ví dụ: giữ header của A, queue của B...">${esc(state.review.notes)}</textarea></label><label>${esc(t('openQuestions'))}<textarea id="reviewQuestions" placeholder="Điều cần sếp quyết định tiếp...">${esc(state.review.questions)}</textarea></label></div></div></section></div><div class="review-footer"><span class="review-saved">${state.review.saved ? `✓ ${esc(t('verdictSaved'))} · ${esc(state.review.savedAt)}` : esc(t('noVerdict'))}</span><div class="review-footer-actions"><button type="button" class="action-btn" data-action="copy-review">▣ ${esc(t('copySummary'))}</button><button type="button" class="action-btn" data-action="print-review">⎙ ${esc(t('printPdf'))}</button><button type="button" class="action-btn primary" data-action="save-review">✓ ${esc(t('saveVerdict'))}</button></div></div><pre class="print-only">${esc(summary)}</pre></div></section></div>`;
+    }
+
+    function renderApp() {
+      const doc = activeDoc();
+      let variant = state.variant === 'A' ? renderVariantA(doc) : state.variant === 'B' ? renderVariantB(doc) : renderVariantC(doc);
+      return `${renderHeader()}${renderPrototypeStrip()}<main class="page-wrap">${renderPageIntro()}${variant}</main>${renderVariantSwitcher()}${renderReviewPanel()}`;
+    }
+    function renderVariantSwitcher() {
+      const item = VARIANTS[state.variant];
+      return `<nav class="variant-switcher" aria-label="Prototype variants"><button type="button" class="switcher-arrow" data-action="previous-variant" aria-label="Previous variant">←</button><div class="switcher-label"><strong>${esc(t('variant'))} ${state.variant} · ${esc(item.name)}</strong><span>${esc(item.promise)}</span></div><button type="button" class="switcher-arrow" data-action="next-variant" aria-label="Next variant">→</button></nav>`;
+    }
+    function render() {
+      document.documentElement.lang = state.locale;
+      document.getElementById('root').innerHTML = renderApp();
+    }
+    function showToast(message, isError = false) {
+      const node = document.getElementById('toast');
+      node.textContent = message || '';
+      node.className = `toast show${isError ? ' error' : ''}`;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { node.className = 'toast'; }, 3800);
+    }
+    function changeVariant(direction) {
+      const keys = Object.keys(VARIANTS);
+      const index = keys.indexOf(state.variant);
+      state.variant = keys[(index + direction + keys.length) % keys.length];
+      const url = new URL(window.location.href);
+      url.searchParams.set('variant', state.variant);
+      window.history.replaceState({}, '', url);
+      render();
+    }
+    function runGuidedNext() {
+      const guide = state.guided;
+      const scenario = SCENARIOS[guide.scenario];
+      if (!scenario || guide.step >= scenario.steps.length) return;
+      const step = scenario.steps[guide.step];
+      let result;
+      if (step.action === 'prepare-and-publish') {
+        dispatch('switch-actor', { actorId: 'author' }); dispatch('reserve'); dispatch('open'); dispatch('edit'); result = dispatch('publish');
+      } else if (step.action === 'prepare-and-submit') {
+        dispatch('switch-actor', { actorId: 'author' }); dispatch('reserve'); dispatch('open'); dispatch('edit'); dispatch('publish'); result = dispatch('submit');
+      } else if (step.action === 'prepare-and-release') {
+        dispatch('switch-actor', { actorId: 'author' }); dispatch('reserve'); dispatch('open'); dispatch('edit'); dispatch('publish'); dispatch('submit'); dispatch('switch-actor', { actorId: 'approver' }); dispatch('approve'); result = dispatch('release');
+      } else result = dispatch(step.action, step.payload || {});
+      const expectedBlocked = Boolean(step.expectBlocked);
+      const accepted = expectedBlocked ? !result.ok : result.ok;
+      if (accepted) {
+        guide.step += 1;
+        guide.message = expectedBlocked ? `✓ Expected block: ${result.message}` : `✓ ${result.message}`;
+        if (guide.step >= scenario.steps.length) guide.completed[guide.scenario] = true;
+      } else guide.message = `Chưa đạt bước này: ${result.message}`;
+      state.lastAction = { type: accepted ? 'success' : 'blocked', message: guide.message, code: result.code || '' };
+      render();
+      showToast(guide.message, !accepted);
+    }
+    function reviewPayload() {
+      return { chosenVariant: document.getElementById('reviewVariant')?.value || state.review.chosenVariant, notes: document.getElementById('reviewNotes')?.value || '', questions: document.getElementById('reviewQuestions')?.value || '' };
+    }
+    function copyReview() {
+      const active = activeDoc();
+      const payload = `IDEA Engineering — UI Prototype Review\nVariant: ${state.variant} · ${VARIANTS[state.variant].name}\nActive document: ${active.id} / Revision ${active.revision} / Generation ${active.generation || '∅'}\nActor: ${actorOf().name} · ${actorOf().role}\nDecision: ${state.review.notes || t('noVerdict')}\nOpen questions: ${state.review.questions || '—'}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(payload).then(() => showToast('Summary đã copy vào clipboard.')).catch(() => showToast(payload));
+      else showToast(payload);
+    }
+
+    document.addEventListener('click', event => {
+      const button = event.target.closest('[data-action]');
+      if (!button) return;
+      const action = button.dataset.action;
+      if (action === 'previous-variant') return changeVariant(-1);
+      if (action === 'next-variant') return changeVariant(1);
+      if (action === 'select-doc') {
+        const result = dispatch('select-doc', { id: button.dataset.docId }); render(); showToast(result.message, !result.ok); return;
+      }
+      if (action === 'guided-select') {
+        const result = dispatch('guided-select', { scenario: button.dataset.scenario }); render(); showToast(result.message, !result.ok); return;
+      }
+      if (action === 'guided-reset') {
+        const result = dispatch('guided-reset'); render(); showToast(result.message, !result.ok); return;
+      }
+      if (action === 'guided-next') return runGuidedNext();
+      if (action === 'open-review') {
+        state.review.open = true; render(); document.querySelector('.review-dialog')?.querySelector('select, textarea, button')?.focus(); return;
+      }
+      if (action === 'close-review') { state.review.open = false; render(); return; }
+      if (action === 'save-review') { const result = dispatch('save-review', reviewPayload()); render(); showToast(result.message, !result.ok); return; }
+      if (action === 'print-review') { window.print(); return; }
+      if (action === 'copy-review') { copyReview(); return; }
+      if (action === 'reset') { const result = dispatch('reset'); render(); showToast(result.message, !result.ok); return; }
+      if (button.getAttribute('aria-disabled') === 'true') { showToast(button.title, true); return; }
+      const result = dispatch(action);
+      render();
+      if (result.message) showToast(result.message, !result.ok);
+    });
+    document.addEventListener('change', event => {
+      if (event.target.id === 'localeSelect') { state.locale = event.target.value; render(); return; }
+      if (event.target.id === 'actorSelect') { const result = dispatch('switch-actor', { actorId: event.target.value }); render(); showToast(result.message, !result.ok); }
+    });
+    document.addEventListener('input', event => {
+      if (event.target.id === 'reasonInput') state.draftReason = event.target.value;
+      if (event.target.id === 'reviewNotes') state.review.notes = event.target.value;
+      if (event.target.id === 'reviewQuestions') state.review.questions = event.target.value;
+    });
+    document.addEventListener('keydown', event => {
+      const tag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || event.target?.isContentEditable) return;
+      if (event.key === 'ArrowLeft') { event.preventDefault(); changeVariant(-1); }
+      if (event.key === 'ArrowRight') { event.preventDefault(); changeVariant(1); }
+      if (event.key === 'Escape' && state.review.open) { state.review.open = false; render(); }
+    });
+    window.addEventListener('popstate', () => { state.variant = readVariant(); render(); });
+    render();
+  </script>
+</body>
+</html>
