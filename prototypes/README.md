@@ -49,7 +49,9 @@ The prototype uses one authoritative surface per fact so the PLM composition sta
 - **Overview:** only key properties, a lifecycle summary and a relationship count.
 - **Files / Structure / Lifecycle / Audit tabs:** the full representation, relationship table, lifecycle detail and
   audit timeline respectively. Other surfaces may show only a count or last-event reference.
-- **Right rail:** evidence summary and links to detail tabs; it is not a second metadata authority.
+- **Right rail:** evidence summary, the three latest item audit events and links to Files / Structure;
+  it is not a second metadata or audit authority. The recent-audit panel links to the full immutable
+  timeline in the Audit tab.
 - **Diagnostics, full properties, document list and guided walkthrough:** collapsed until requested.
 
 When adding a field, choose its owning surface first. Do not copy the same value into a badge, metric, inspector and

@@ -100,16 +100,6 @@
     .topbar-btn.primary { color: #17324b; background: #f5c56d; border-color: #f5c56d; }
     .topbar-btn.primary:hover { background: #ffd98e; }
 
-    .prototype-strip {
-      width: min(1560px, calc(100% - 44px)); margin: 18px auto 0; padding: 10px 14px;
-      display: flex; align-items: center; gap: 10px; border: 1px solid #e1bd72; border-radius: 10px;
-      color: #644d1d; background: #fff8e8; box-shadow: var(--shadow-soft); font-size: 12px;
-    }
-    .prototype-strip strong { letter-spacing: .04em; text-transform: uppercase; }
-    .prototype-strip span { color: #7c6740; }
-    .prototype-strip .strip-spacer { flex: 1; }
-    .direction-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid #D7E2EA; border-radius: 999px; color: #334155 !important; background: #fff; font-size: 11px; font-weight: 720; }
-    .direction-pill svg { width: 14px; height: 14px; color: var(--blue); }
     .kbd { padding: 2px 6px; border: 1px solid #c7d0d8; border-bottom-width: 2px; border-radius: 5px; color: #526272; background: #f8fafb; font: 11px var(--mono); }
 
     .page-wrap { width: min(1560px, calc(100% - 44px)); margin: 0 auto; }
@@ -117,7 +107,6 @@
     .page-intro > div { min-width: 0; }
     .page-intro h1 { margin: 0; color: var(--navy); font-size: clamp(24px, 3vw, 38px); line-height: 1.08; letter-spacing: -.04em; }
     .page-intro p { max-width: 730px; margin: 8px 0 0; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
-    .intro-aside { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
     .tiny-note { color: var(--muted); font-size: 11px; }
     .principle-row { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px; }
     .principle { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid #DCE6EE; border-radius: 7px; color: #334155; background: rgba(255,255,255,.7); font-size: 11px; font-weight: 680; }
@@ -294,10 +283,6 @@
     .app-menu-row { border-top: 0; border-bottom: 1px solid #e2e8ee; background: #f5f8fa; }
     .app-menu-item { color: #496173; }
     .app-menu-item:hover, .app-menu-item:focus-visible { color: #124d6d; background: #e7f1f5; }
-    .connection-card { display: flex; align-items: center; gap: 9px; min-width: 235px; padding: 8px 11px; border: 1px solid #d6e0e7; border-radius: 8px; background: #fff; box-shadow: 0 3px 12px rgba(15,23,42,.05); }
-    .connection-card .connection-mark { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: #16a34a; font-weight: 900; }
-    .connection-card strong { display: block; color: var(--navy); font-size: 11px; }
-    .connection-card span { display: block; margin-top: 1px; color: var(--muted); font-size: 10px; }
     .context-bar .crumb { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 4px 7px; border-radius: 5px; font-size: 11px; white-space: nowrap; }
     .context-bar .crumb svg { width: 14px; height: 14px; color: #487993; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .context-bar .crumb.current { color: var(--navy); background: #fff; font-weight: 760; box-shadow: inset 0 0 0 1px #d4e0e7; }
@@ -485,6 +470,16 @@
     .rail-link span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
     .rail-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
     .rail-link strong { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 99px; color: #24566e; background: #e7f2f6; font: 10px var(--mono); }
+    .recent-audit-list { display: grid; gap: 0; }
+    .recent-audit-item { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 8px; padding: 8px 0; border-bottom: 1px solid #edf1f4; }
+    .recent-audit-item:first-child { padding-top: 0; }
+    .recent-audit-item:last-child { padding-bottom: 0; border-bottom: 0; }
+    .recent-audit-time { color: var(--muted); font: 10px var(--mono); padding-top: 2px; }
+    .recent-audit-content { min-width: 0; }
+    .recent-audit-content strong { display: block; color: var(--navy); font-size: 10px; }
+    .recent-audit-content span { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; overflow-wrap: anywhere; }
+    .recent-audit-content em { display: block; margin-top: 3px; color: #567282; font-size: 9px; font-style: normal; overflow-wrap: anywhere; }
+    .audit-open-link { width: 100%; justify-content: center; margin-top: 9px; }
     .doc-list-disclosure { border-top: 1px solid var(--line); }
     .doc-list-disclosure > summary { display: flex; align-items: center; justify-content: space-between; min-height: 43px; padding: 8px 12px; color: #2e5368; cursor: pointer; font-size: 11px; font-weight: 760; list-style: none; }
     .doc-list-disclosure > summary::-webkit-details-marker { display: none; }
@@ -535,11 +530,10 @@
       .identity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 900px) {
-      .topbar-inner, .page-wrap, .prototype-strip, .app-menu { width: min(100% - 28px, 720px); }
+      .topbar-inner, .page-wrap, .app-menu { width: min(100% - 28px, 720px); }
       .topbar-inner { min-height: auto; padding: 14px 0; align-items: flex-start; flex-direction: column; }
       .topbar-controls { width: 100%; justify-content: flex-start; }
       .page-intro { align-items: flex-start; flex-direction: column; padding-top: 20px; }
-      .intro-aside { justify-content: flex-start; }
       .explorer-layout, .review-grid { grid-template-columns: 1fr; }
       .explorer-layout .nav-panel { position: static; }
       .explorer-layout .right-rail { grid-column: auto; grid-template-columns: 1fr; }
@@ -552,12 +546,8 @@
       .context-bar .context-spacer { display: none; }
     }
     @media (max-width: 580px) {
-      .topbar-inner, .page-wrap, .prototype-strip, .app-menu { width: calc(100% - 20px); }
+      .topbar-inner, .page-wrap, .app-menu { width: calc(100% - 20px); }
       .brand-lockup { min-width: 0; }
-      .prototype-strip { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
-      .prototype-strip .strip-spacer { display: none; }
-      .prototype-strip strong, .prototype-strip > span:not(.direction-pill) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
-      .prototype-strip .direction-pill { justify-self: start; }
       .identity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .doc-hero-top { flex-direction: column; }
       .doc-hero-actions { justify-content: flex-start; }
@@ -610,14 +600,11 @@
     */
 
     const UI_DIRECTION = {
-      name: 'Engineering Explorer',
-      promise: 'Identity, context actions and evidence share one workspace.'
+      name: 'Engineering Explorer'
     };
 
     const I18N = {
       vi: {
-        prototype: 'UI PROTOTYPE · THROWAWAY',
-        internal: 'Dùng nội bộ · dữ liệu synthetic',
         language: 'Ngôn ngữ',
         actor: 'Actor demo',
         review: 'Executive Review',
@@ -711,10 +698,10 @@
         scenarioRevision: 'Create Revision'
       },
       en: {
-        prototype: 'UI PROTOTYPE · THROWAWAY', internal: 'Internal use · synthetic data', language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       },
       ja: {
-        prototype: 'UI PROTOTYPE · THROWAWAY', internal: '社内利用 · 合成データ', language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       }
     };
 
@@ -728,7 +715,7 @@
         productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Mở rộng', collapse: 'Thu gọn',
         breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.', moreActions: 'Thêm thao tác', technicalActions: 'Kỹ thuật / recovery', reasonDisclosure: 'Reason cho Reject / Recovery', nextAction: 'Bước tiếp theo', blockingReason: 'Lý do đang chặn', evidenceSummary: 'Tóm tắt evidence', evidenceHint: 'Chỉ giữ các tín hiệu cần để quyết định.', lastEvent: 'Event gần nhất', linkedCount: 'Relationship', openTab: 'Mở tab', diagnostics: 'Diagnostics', allProperties: 'Tất cả properties', keyProperties: 'Key properties', overviewSummary: 'Tóm tắt item', currentState: 'Trạng thái hiện tại', nextState: 'Trạng thái kế tiếp', runWalkthrough: 'Chạy walkthrough', closeWalkthrough: 'Thu gọn walkthrough', openWalkthrough: 'Mở walkthrough', exactPin: 'Exact pin', noRecentEvent: 'Chưa có event gần đây'
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.', moreActions: 'Thêm thao tác', technicalActions: 'Kỹ thuật / recovery', reasonDisclosure: 'Reason cho Reject / Recovery', nextAction: 'Bước tiếp theo', blockingReason: 'Lý do đang chặn', evidenceSummary: 'Tóm tắt evidence', evidenceHint: 'Chỉ giữ các tín hiệu cần để quyết định.', linkedCount: 'Relationship', openTab: 'Mở tab', diagnostics: 'Diagnostics', allProperties: 'Tất cả properties', keyProperties: 'Key properties', overviewSummary: 'Tóm tắt item', currentState: 'Trạng thái hiện tại', nextState: 'Trạng thái kế tiếp', runWalkthrough: 'Chạy walkthrough', closeWalkthrough: 'Thu gọn walkthrough', openWalkthrough: 'Mở walkthrough', exactPin: 'Exact pin', recentAudit: 'Audit gần đây', recentAuditHint: 'Các event mới nhất của item đang chọn.', auditEmpty: 'Item này chưa có event.'
       },
       en: {
         navigator: 'Item navigator', item: 'Item', overview: 'Overview', files: 'Files / representations', structure: 'Structure / relationships', lifecycle: 'Lifecycle', auditTab: 'Audit',
@@ -736,7 +723,7 @@
         productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Expand', collapse: 'Collapse',
         breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.', moreActions: 'More actions', technicalActions: 'Technical / recovery', reasonDisclosure: 'Reason for Reject / Recovery', nextAction: 'Next action', blockingReason: 'Blocking reason', evidenceSummary: 'Evidence summary', evidenceHint: 'Keep only the signals needed for a decision.', lastEvent: 'Last event', linkedCount: 'Relationships', openTab: 'Open tab', diagnostics: 'Diagnostics', allProperties: 'All properties', keyProperties: 'Key properties', overviewSummary: 'Item summary', currentState: 'Current state', nextState: 'Next state', runWalkthrough: 'Run walkthrough', closeWalkthrough: 'Collapse walkthrough', openWalkthrough: 'Open walkthrough', exactPin: 'Exact pin', noRecentEvent: 'No recent event'
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.', moreActions: 'More actions', technicalActions: 'Technical / recovery', reasonDisclosure: 'Reason for Reject / Recovery', nextAction: 'Next action', blockingReason: 'Blocking reason', evidenceSummary: 'Evidence summary', evidenceHint: 'Keep only the signals needed for a decision.', linkedCount: 'Relationships', openTab: 'Open tab', diagnostics: 'Diagnostics', allProperties: 'All properties', keyProperties: 'Key properties', overviewSummary: 'Item summary', currentState: 'Current state', nextState: 'Next state', runWalkthrough: 'Run walkthrough', closeWalkthrough: 'Collapse walkthrough', openWalkthrough: 'Open walkthrough', exactPin: 'Exact pin', recentAudit: 'Recent audit', recentAuditHint: 'Latest events for the selected item.', auditEmpty: 'No events for this item.'
       },
       ja: {
         navigator: 'アイテム ナビゲーター', item: 'アイテム', overview: '概要', files: 'ファイル / 表現', structure: '構成 / 関係', lifecycle: 'ライフサイクル', auditTab: '監査',
@@ -744,7 +731,7 @@
         productRoot: 'P-100 ポンプアセンブリ', productDefinition: '製品定義', cadArtifacts: 'CAD 成果物', controlledRecords: '管理レコード', expand: '展開', collapse: '折りたたむ',
         breadcrumbHome: '自分の作業', breadcrumbProduct: '製品定義', breadcrumbItem: '選択アイテム', relation: '関係', itemId: 'アイテム ID', ownerShort: '所有者', category: 'カテゴリ', structureShort: '構成', workingHead: 'Working Head', stateShort: '状態', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'ファイル ロール', fileName: '表現', source: 'ソース', digestShort: 'ダイジェスト', current: 'Current', history: '履歴', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。', moreActions: 'その他の操作', technicalActions: '技術 / リカバリ', reasonDisclosure: 'Reject / Recovery の理由', nextAction: '次のアクション', blockingReason: 'ブロック理由', evidenceSummary: 'エビデンス概要', evidenceHint: '判断に必要なシグナルだけを表示します。', lastEvent: '最新イベント', linkedCount: '関係', openTab: 'タブを開く', diagnostics: '診断', allProperties: 'すべてのプロパティ', keyProperties: '主要プロパティ', overviewSummary: 'アイテム概要', currentState: '現在の状態', nextState: '次の状態', runWalkthrough: 'ウォークスルーを実行', closeWalkthrough: 'ウォークスルーを閉じる', openWalkthrough: 'ウォークスルーを開く', exactPin: 'Exact pin', noRecentEvent: '最近のイベントはありません'
+        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。', moreActions: 'その他の操作', technicalActions: '技術 / リカバリ', reasonDisclosure: 'Reject / Recovery の理由', nextAction: '次のアクション', blockingReason: 'ブロック理由', evidenceSummary: 'エビデンス概要', evidenceHint: '判断に必要なシグナルだけを表示します。', linkedCount: '関係', openTab: 'タブを開く', diagnostics: '診断', allProperties: 'すべてのプロパティ', keyProperties: '主要プロパティ', overviewSummary: 'アイテム概要', currentState: '現在の状態', nextState: '次の状態', runWalkthrough: 'ウォークスルーを実行', closeWalkthrough: 'ウォークスルーを閉じる', openWalkthrough: 'ウォークスルーを開く', exactPin: 'Exact pin', recentAudit: '最近の監査', recentAuditHint: '選択アイテムの最新イベント。', auditEmpty: 'このアイテムのイベントはありません。'
       }
     };
 
@@ -1321,13 +1308,8 @@
       </div><div class="app-menu-row"><nav class="app-menu" aria-label="Application menu"><span class="app-menu-item">File</span><span class="app-menu-item">Edit</span><span class="app-menu-item">View</span><span class="app-menu-item">Actions</span><span class="app-menu-item">Reports</span><span class="app-menu-item">Help</span></nav></div></header>`;
     }
 
-    function renderPrototypeStrip() {
-      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))}</span><span class="strip-spacer"></span><span class="direction-pill" title="${esc(UI_DIRECTION.promise)}">${svgIcon('tree')} ${esc(UI_DIRECTION.name)} · single direction</span></div>`;
-    }
-
     function renderPageIntro() {
-      const actor = actorOf();
-      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))}</p></div><div class="intro-aside"><div class="connection-card"><span class="connection-mark" aria-hidden="true">✓</span><div><strong>Connected workspace</strong><span>${esc(actor.workspace)} · ${esc(actor.name)}</span></div></div></div></div>`;
+      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))}</p></div></div>`;
     }
 
     function renderIdentity(doc) {
@@ -1486,22 +1468,26 @@
     }
 
     function renderEvidenceSummary(doc) {
-      const itemEvents = state.audit.filter(event => event.docId === doc.id);
-      const lastEvent = itemEvents[0] || null;
       const exactPin = doc.pendingReview ? doc.pendingReview.generation : (doc.releaseRecord ? doc.releaseRecord.generation : doc.generation);
       const rows = [
-        [t('reservation'), reservationLabel(doc), false], [ui('exactPin'), exactPin || '—', true], [t('gate'), gateLabel(doc.gate), false], [ui('lastEvent'), lastEvent ? `${lastEvent.type} · ${lastEvent.time.split(' ')[1] || lastEvent.time}` : ui('noRecentEvent'), false]
+        [t('reservation'), reservationLabel(doc), false], [ui('exactPin'), exactPin || '—', true], [t('gate'), gateLabel(doc.gate), false]
       ];
       return `<section class="panel evidence-panel"><div class="panel-header"><div><h2>${esc(ui('evidenceSummary'))}</h2><p>${esc(ui('evidenceHint'))}</p></div>${doc.conflict ? chip('conflict', 'STALE', 'red') : ''}</div><div class="panel-body"><dl class="evidence-list">${rows.map(([label, value, mono]) => `<div><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
     }
 
     function renderRailLinks(doc) {
       const linkedCount = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean).length;
-      const itemEventCount = state.audit.filter(event => event.docId === doc.id).length;
       const links = [
-        ['files', ui('files'), 3, 'file'], ['structure', ui('structure'), linkedCount, 'tree'], ['audit', ui('auditTab'), itemEventCount, 'audit']
+        ['files', ui('files'), 3, 'file'], ['structure', ui('structure'), linkedCount, 'tree']
       ];
       return `<section class="panel"><div class="panel-header"><div><h2>${esc(ui('openTab'))}</h2><p>${esc(ui('evidenceHint'))}</p></div></div><div class="panel-body"><div class="rail-links">${links.map(([tab, label, count, icon]) => `<button type="button" class="rail-link" data-action="item-tab" data-tab="${tab}"><span>${svgIcon(icon)} ${esc(label)}</span><strong>${count}</strong></button>`).join('')}</div></div></section>`;
+    }
+
+    function renderRecentAudit(doc) {
+      const itemEvents = state.audit.filter(event => event.docId === doc.id);
+      const events = itemEvents.slice(0, 3);
+      const rows = events.length ? events.map(event => `<div class="recent-audit-item"><div class="recent-audit-time">${esc(event.time.split(' ')[1] || event.time)}</div><div class="recent-audit-content"><strong>${esc(event.type)}</strong><span>${esc(event.actor)} · <span class="mono">${esc(event.docId || 'workspace')}</span></span><em>${esc(event.detail)}</em></div></div>`).join('') : `<div class="empty-state">${esc(ui('auditEmpty'))}</div>`;
+      return `<section class="panel recent-audit-panel"><div class="panel-header"><div><h2>${esc(ui('recentAudit'))}</h2><p>${esc(ui('recentAuditHint'))}</p></div><span class="badge plain">${itemEvents.length}</span></div><div class="panel-body"><div class="recent-audit-list">${rows}</div><button type="button" class="inline-link audit-open-link" data-action="item-tab" data-tab="audit">${svgIcon('audit')} ${esc(ui('openTab'))}</button></div></section>`;
     }
 
     function renderAudit(limit = 8) {
@@ -1543,7 +1529,7 @@
     }
 
     function renderExplorer(doc) {
-      return `<div class="item-workspace">${renderContextBar(doc)}<div class="explorer-layout"><aside class="panel nav-panel"><div class="panel-header"><div><h2>${esc(ui('navigator'))}</h2><p>${esc(ui('productRoot'))}</p></div></div><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span></nav>${renderItemTree()}${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderNextAction(doc)}${renderItemTabs()}${renderItemTabContent(doc)}${state.activeItemTab === 'overview' ? renderGuidedPanel() : ''}${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderEvidenceSummary(doc)}${renderRailLinks(doc)}</aside></div></div>`;
+      return `<div class="item-workspace">${renderContextBar(doc)}<div class="explorer-layout"><aside class="panel nav-panel"><div class="panel-header"><div><h2>${esc(ui('navigator'))}</h2><p>${esc(ui('productRoot'))}</p></div></div><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span></nav>${renderItemTree()}${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderNextAction(doc)}${renderItemTabs()}${renderItemTabContent(doc)}${state.activeItemTab === 'overview' ? renderGuidedPanel() : ''}${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderEvidenceSummary(doc)}${renderRailLinks(doc)}${renderRecentAudit(doc)}</aside></div></div>`;
     }
 
     function renderReviewPanel() {
@@ -1563,7 +1549,7 @@
 
     function renderApp() {
       const doc = activeDoc();
-      return `${renderHeader()}${renderPrototypeStrip()}<main class="page-wrap">${renderPageIntro()}${renderExplorer(doc)}</main>${renderReviewPanel()}`;
+      return `${renderHeader()}<main class="page-wrap">${renderPageIntro()}${renderExplorer(doc)}</main>${renderReviewPanel()}`;
     }
     function render() {
       document.documentElement.lang = state.locale;
