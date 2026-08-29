@@ -420,10 +420,13 @@
     .command-more[open] summary::after, .reason-disclosure[open] summary::after { content: '▴'; }
     .command-more-count { display: inline-grid; place-items: center; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 99px; color: #20536c; background: #e8f2f6; font: 10px var(--mono); }
     .command-more[open] { flex-basis: auto; }
-    .secondary-actions { display: flex; flex-wrap: wrap; gap: 5px; padding-top: 7px; border-top: 1px solid #d9e3e8; }
-    .command-more[open] .secondary-actions { position: absolute; z-index: 20; top: calc(100% + 6px); right: 0; width: min(640px, calc(100vw - 32px)); max-height: min(62dvh, 520px); overflow-y: auto; padding: 10px; border: 1px solid #c6d8e1; border-radius: 8px; background: #fff; box-shadow: 0 18px 42px rgba(5, 25, 42, .2); }
-    .command-secondary-label { flex-basis: 100%; padding-top: 3px; color: #718896; font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-    .command-utility-actions { display: flex; flex-wrap: wrap; gap: 5px; flex-basis: 100%; }
+    .secondary-actions { display: grid; gap: 8px; }
+    .command-more[open] .secondary-actions { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; width: min(360px, calc(100vw - 32px)); max-height: min(62dvh, 520px); overflow-y: auto; padding: 10px; border: 1px solid #c6d8e1; border-radius: 8px; background: #fff; box-shadow: 0 18px 42px rgba(5, 25, 42, .2); }
+    .command-action-group { display: grid; gap: 5px; min-width: 0; }
+    .command-action-group + .command-action-group { padding-top: 8px; border-top: 1px solid #d9e3e8; }
+    .command-secondary-label { padding: 0 2px; color: #718896; font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .command-utility-actions { display: grid; gap: 5px; }
+    .command-action-group .action-btn, .command-utility { width: 100%; justify-content: flex-start; text-align: left; white-space: normal; }
     .command-utility { min-height: 44px; padding: 7px 9px; border: 1px solid #cbd9e1; border-radius: 5px; color: #34566b; background: #fff; font-size: 11px; font-weight: 720; }
     .command-utility:hover { border-color: #8fb4ca; background: #f1f8fa; }
     .command-utility svg { width: 14px; height: 14px; vertical-align: -3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -607,9 +610,10 @@
       .property-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .overview-grid { grid-template-columns: 1fr; }
       .relationship-summary { grid-column: auto; }
-      .secondary-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .command-more[open] .secondary-actions { position: static; width: auto; max-height: none; overflow: visible; }
-      .command-utility-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .secondary-actions { display: grid; grid-template-columns: 1fr; }
+      .command-more[open] { flex-basis: 100%; min-width: 0; }
+      .command-more[open] .secondary-actions { position: static; width: 100%; max-height: none; margin-top: 6px; overflow: visible; }
+      .command-utility-actions { display: grid; grid-template-columns: 1fr; }
       .context-bar { align-items: flex-start; flex-wrap: wrap; }
       .context-bar .context-spacer { display: none; }
     }
@@ -709,7 +713,7 @@
         checkOut: 'Check-out',
         checkIn: 'Check-in',
         checkOutHint: 'Reservation + mở working copy trong workspace hiện tại.',
-        checkInHint: 'Publish working copy thành Generation immutable; Reservation disposition vẫn tách riêng.',
+        checkInHint: 'Kiểm tra Reservation và ghi working copy thành immutable Generation; Reservation disposition vẫn tách riêng.',
         open: 'Open working copy',
         edit: 'Edit metadata',
         publish: 'Publish',
@@ -822,29 +826,46 @@
     // Use the canonical product term "Checkout" consistently in all three locales.
     I18N.vi.checkOut = 'Checkout';
     I18N.en.checkOut = 'Checkout';
+    I18N.vi.checkInHint = 'Kiểm tra Reservation và ghi working copy thành immutable Generation; việc giữ hoặc nhả Reservation là quyết định riêng.';
+    I18N.en.checkInHint = 'Validate the Reservation and record the working copy as an immutable Generation; Reservation disposition remains separate.';
+    I18N.vi.releaseHint = 'Sau Approve, pin exact Generation vào Release Record và chuyển Revision sang Released; không tạo Generation mới.';
+    I18N.en.releaseHint = 'After approval, pin the exact Generation in a Release Record and move the Revision to Released; no new Generation is created.';
     Object.assign(I18N.ja, {
       checkOut: 'Checkout',
       checkIn: 'Check-in',
       checkOutHint: 'Reservation と作業コピーを現在の Workspace に準備します。',
-      checkInHint: '作業コピーを immutable Generation として Publish します。Reservation の扱いは別に決定します。'
+      checkInHint: 'Reservation を検証し、作業コピーを immutable Generation として記録します。Reservation の扱いは別に決定します。',
+      releaseHint: '承認後、正確な Generation を Release Record に固定し、Revision を Released に移します。新しい Generation は作成しません。'
     });
     Object.assign(UI_TEXT.vi, {
       stateInspector: 'Xem state & audit',
       stateInspectorHint: 'Mở snapshot JSON và audit event của prototype để kiểm tra demo.',
       diagnostics: 'State & audit',
-      openDiagnostics: 'Xem state & audit'
+      openDiagnostics: 'Xem state & audit',
+      lifecycleActions: 'Thao tác vòng đời',
+      recoveryActions: 'Xử lý xung đột',
+      demoTools: 'Công cụ demo',
+      viewsTools: 'Xem thêm'
     });
     Object.assign(UI_TEXT.en, {
       stateInspector: 'Inspect state & audit',
       stateInspectorHint: 'Open the prototype JSON snapshot and audit events for inspection.',
       diagnostics: 'State & audit',
-      openDiagnostics: 'Inspect state & audit'
+      openDiagnostics: 'Inspect state & audit',
+      lifecycleActions: 'Lifecycle actions',
+      recoveryActions: 'Conflict recovery',
+      demoTools: 'Demo tools',
+      viewsTools: 'More views'
     });
     Object.assign(UI_TEXT.ja, {
       stateInspector: '状態と監査を確認',
       stateInspectorHint: 'プロトタイプの JSON スナップショットと監査イベントを確認します。',
       diagnostics: '状態と監査',
-      openDiagnostics: '状態と監査を確認'
+      openDiagnostics: '状態と監査を確認',
+      lifecycleActions: 'ライフサイクル操作',
+      recoveryActions: '競合リカバリ',
+      demoTools: 'デモツール',
+      viewsTools: 'その他の表示'
     });
 
     const ACTORS = {
@@ -888,7 +909,7 @@
           { title: 'Chọn Author persona', detail: 'Mô phỏng người chuẩn bị working copy.', action: 'switch-actor', payload: { actorId: 'author' } },
           { title: 'Checkout tài liệu', detail: 'Lấy Reservation và materialize working copy trong workspace đã chọn.', action: 'check-out' },
           { title: 'Sửa metadata', detail: 'Đánh dấu local work đang thay đổi.', action: 'edit' },
-          { title: 'Check-in Generation', detail: 'Publish lần đầu tạo Generation 1; Reservation disposition vẫn tách riêng.', action: 'check-in' },
+          { title: 'Check-in Generation', detail: 'Check-in lần đầu tạo Generation 1; Reservation disposition vẫn tách riêng.', action: 'check-in' },
           { title: 'Submit for review', detail: 'Pin đúng Generation để approver đánh giá.', action: 'submit' },
           { title: 'Chuyển sang approver', detail: 'Kiểm tra actor separation.', action: 'switch-actor', payload: { actorId: 'approver' } },
           { title: 'Approve', detail: 'Independent approver ghi decision trên Generation đã pin.', action: 'approve' },
@@ -897,13 +918,13 @@
       },
       stale: {
         titleKey: 'scenarioStale',
-        description: 'Một workspace khác đã tiến Working Head trước khi publish.',
+        description: 'Một workspace khác đã tiến Working Head trước khi Check-in.',
         steps: [
           { title: 'Chọn Author persona', detail: 'Bắt đầu bằng workspace của author.', action: 'switch-actor', payload: { actorId: 'author' } },
           { title: 'Checkout tài liệu', detail: 'Giữ expected Generation và materialize working copy.', action: 'check-out' },
           { title: 'Tạo baseline edit', detail: 'Chuẩn bị nội dung cho Generation đầu tiên.', action: 'edit' },
           { title: 'Check-in baseline đầu', detail: 'Tạo Generation đầu tiên.', action: 'check-in' },
-          { title: 'Tạo local edit mới', detail: 'Working copy chưa publish.', action: 'edit' },
+          { title: 'Tạo local edit mới', detail: 'Working copy chưa Check-in.', action: 'edit' },
           { title: 'External workspace advance', detail: 'Mô phỏng Working Head đã tăng.', action: 'external-advance' },
           { title: 'Check-in stale request', detail: 'Phải bị chặn; local work không được xóa.', action: 'check-in', expectBlocked: true },
           { title: 'Refresh / reapply', detail: 'Cập nhật expected Generation mà không tự động merge binary.', action: 'refresh' }
@@ -913,7 +934,7 @@
         titleKey: 'scenarioReject',
         description: 'Reject phải trả về In Work và giữ local work.',
         steps: [
-          { title: 'Author chuẩn bị và publish', detail: 'Tạo Generation có thể review.', action: 'prepare-and-publish' },
+          { title: 'Author chuẩn bị và Check-in', detail: 'Tạo Generation có thể review.', action: 'prepare-and-publish' },
           { title: 'Submit for review', detail: 'Pin Generation đang review.', action: 'submit' },
           { title: 'Chuyển sang approver', detail: 'Approver là identity độc lập.', action: 'switch-actor', payload: { actorId: 'approver' } },
           { title: 'Reject có reason', detail: 'Review thất bại nhưng history và local work còn nguyên.', action: 'reject' },
@@ -1063,10 +1084,6 @@
     function canAction(action, doc = activeDoc()) {
       const actor = actorOf();
       const hasOwner = ownsReservation(doc);
-      const prototypeMutations = ['check-out', 'check-in', 'reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'external-advance', 'refresh', 'recover', 'withdraw'];
-      if (doc.id !== 'LD-P100-001' && prototypeMutations.includes(action)) {
-        return blocked('Context record này chỉ để tạo mật độ UI. Chọn LD-P100-001 để chạy full interaction.');
-      }
       switch (action) {
         case 'check-out':
           if (actor.kind === 'observer') return blocked('Read-only Observer không thể Checkout.');
@@ -1095,9 +1112,9 @@
           if (!doc.workingCopy.open) return blocked('Hãy Open working copy trước.');
           return success('');
         case 'publish':
-          if (actor.kind !== 'author') return blocked('Publish yêu cầu Author / Editor của working copy.');
-          if (!hasOwner) return blocked('Publish bị chặn: Reservation không thuộc actor/workspace hiện tại.');
-          if (!doc.workingCopy.open) return blocked('Hãy Open working copy trước khi Publish.');
+          if (actor.kind !== 'author') return blocked('Check-in yêu cầu Author / Editor của working copy.');
+          if (!hasOwner) return blocked('Check-in bị chặn: Reservation không thuộc actor/workspace hiện tại.');
+          if (!doc.workingCopy.open) return blocked('Hãy mở working copy trước khi Check-in.');
           if (doc.conflict) return blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy Refresh / reapply.`);
           if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) return success('');
           return success('');
@@ -1105,7 +1122,7 @@
           if (actor.kind !== 'author') return blocked('Chỉ Author / Editor được Submit for review.');
           if (!hasOwner) return blocked('Submit yêu cầu Reservation hiện tại.');
           if (!doc.generation) return blocked('Chưa có Generation để pin vào review.');
-          if (doc.workingCopy.dirty) return blocked('Còn local changes chưa Publish.');
+          if (doc.workingCopy.dirty) return blocked('Còn local changes chưa Check-in.');
           if (doc.workflow !== 'In Work') return blocked(`Submit chỉ hợp lệ từ In Work; hiện tại là ${workflowLabel(doc.workflow)}.`);
           return success('');
         case 'approve':
@@ -1212,10 +1229,7 @@
         }
         case 'check-in': {
           const publishResult = dispatch('publish');
-          if (publishResult.ok) {
-            audit('Checked In', `Check-in completed for ${doc.id}; Reservation disposition remains explicit until the next workflow action.`);
-            result = success(`Check-in hoàn tất: ${publishResult.message}`);
-          } else result = publishResult;
+          result = publishResult;
           break;
         }
         case 'reserve':
@@ -1234,10 +1248,10 @@
           break;
         case 'edit':
           doc.workingCopy.dirty = true;
-          doc.workingCopy.summary = doc.localWork ? 'Local work re-applied; metadata delta pending.' : 'Metadata delta pending publish.';
+          doc.workingCopy.summary = doc.localWork ? 'Local work re-applied; metadata delta pending.' : 'Metadata delta pending Check-in.';
           doc.localWork = { preserved: Boolean(doc.localWork && doc.localWork.preserved), summary: doc.workingCopy.summary, sourceGeneration: doc.generation };
-          audit('LocalEdit', `${doc.workingCopy.summary} No Generation until Publish.`);
-          result = success('Local edit đã được hiển thị; Publish vẫn chưa xảy ra.');
+          audit('LocalEdit', `${doc.workingCopy.summary} No Generation until Check-in.`);
+          result = success('Local edit đã được ghi nhận; chưa tạo Generation cho tới khi Check-in.');
           break;
         case 'publish': {
           if (doc.reservation && doc.reservation.expectedGeneration !== doc.generation) {
@@ -1247,8 +1261,8 @@
             break;
           }
           if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) {
-            audit('NoChange', 'Semantic equality with Working Head; no Generation created.', doc);
-            result = success('NoChange: không tạo Generation mới.');
+            audit('Check-in NoChange', 'Semantic equality with Working Head; no Generation created.', doc);
+            result = success('Check-in hoàn tất với NoChange; không tạo Generation mới.');
             break;
           }
           const previous = doc.generation;
@@ -1267,8 +1281,8 @@
           doc.conflict = null;
           doc.localWork = null;
           if (doc.reservation) doc.reservation.expectedGeneration = generation;
-          audit('Published Generation', `${generation} / Version Sequence ${doc.versionSequence}; previous ${previous || '∅'}.`);
-          result = success(`Published ${generation}; Revision ${doc.revision} đang In Work.`);
+          audit('Checked In', `${generation} / Version Sequence ${doc.versionSequence}; previous ${previous || '∅'}; Reservation disposition remains explicit.`);
+          result = success(`Check-in hoàn tất: đã tạo ${generation}; Revision ${doc.revision} đang In Work.`);
           break;
         }
         case 'submit':
@@ -1358,7 +1372,7 @@
           doc.reservation.expectedGeneration = doc.generation;
           doc.conflict = null;
           audit('Refresh / Reapply', `Expected Generation updated to ${doc.generation}; local work remains dirty.`);
-          result = success(`Refreshed to ${doc.generation}; local work vẫn cần Publish.`);
+          result = success(`Refreshed to ${doc.generation}; local work vẫn cần Check-in.`);
           break;
         case 'recover':
           audit('Reservation Recovery', `Administrator recovered reservation from ${doc.reservation.ownerName}; reason: ${state.draftReason}.`);
@@ -1477,14 +1491,19 @@
       };
       return `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || '<circle cx="12" cy="12" r="8"></circle>'}</svg>`;
     }
-    const ACTION_ORDER = ['check-out', 'check-in', 'reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'withdraw', 'external-advance', 'refresh', 'recover'];
+    // `publish` remains an internal Generation-write primitive used by Check-in; it is never rendered as a competing user command.
     const ACTION_META = {
       'check-out': ['checkOut', 'reserve', 'checkOutHint'], 'check-in': ['checkIn', 'publish', 'checkInHint'],
       reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit'], publish: ['publish', 'publish'],
-      submit: ['submit', 'arrow'], approve: ['approve', 'check'], reject: ['reject', 'close'], release: ['release', 'release'],
+      submit: ['submit', 'arrow'], approve: ['approve', 'check'], reject: ['reject', 'close'], release: ['release', 'release', 'releaseHint'],
       'create-revision': ['createRevision', 'plus'], withdraw: ['withdraw', 'back'], 'external-advance': ['externalAdvance', 'external'],
       refresh: ['refresh', 'refresh'], recover: ['recover', 'key']
     };
+    const SECONDARY_ACTION_GROUPS = [
+      { labelKey: 'lifecycleActions', actions: ['edit', 'submit', 'approve', 'reject', 'release', 'create-revision', 'withdraw'] },
+      { labelKey: 'recoveryActions', actions: ['refresh', 'recover'] },
+      { labelKey: 'demoTools', actions: ['external-advance'] }
+    ];
     function primaryActionsFor(doc) {
       if (doc.workflow === 'Start' || doc.workflow === 'In Work') {
         const next = nextActionFor(doc).action;
@@ -1492,9 +1511,19 @@
         if (next && !flow.includes(next)) flow.push(next);
         return flow;
       }
-      if (doc.workflow === 'Under Review') return ['approve', 'reject', 'release', 'withdraw'];
+      if (doc.workflow === 'Under Review') return ['approve', 'reject', 'release'];
       if (doc.workflow === 'Released') return ['create-revision'];
       return ['check-out', 'check-in'];
+    }
+    function secondaryActionGroupsFor(doc, primary) {
+      return SECONDARY_ACTION_GROUPS.map(group => ({
+        labelKey: group.labelKey,
+        actions: group.actions.filter(action => {
+          if (primary.includes(action) || !canAction(action, doc).ok) return false;
+          if (action === 'external-advance') return Boolean(doc.workingCopy.open && doc.workingCopy.dirty);
+          return true;
+        })
+      })).filter(group => group.actions.length);
     }
     function renderAction(action, prominent = false) {
       const [labelKey, iconName] = ACTION_META[action] || [action, 'file'];
@@ -1540,16 +1569,19 @@
       const preserved = doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : '';
       const reasonRelevant = doc.workflow === 'Under Review' || (doc.reservation && !ownsReservation(doc));
       const primary = primaryActionsFor(doc);
-      const secondary = ACTION_ORDER.filter(action => !primary.includes(action));
+      const secondaryGroups = secondaryActionGroupsFor(doc, primary);
       let prominentAssigned = false;
       const primaryMarkup = primary.map(action => {
         const prominent = !prominentAssigned && canAction(action, doc).ok;
         if (prominent) prominentAssigned = true;
         return renderAction(action, prominent);
       }).join('');
-      const secondaryMarkup = `${secondary.map(action => renderAction(action)).join('')}<div class="command-secondary-label">${esc(ui('details'))}</div><div class="command-utility-actions"><button type="button" id="open-properties" class="command-utility" data-action="item-tab" data-tab="properties">${svgIcon('file')} <span>${esc(ui('openProperties'))}</span></button><button type="button" id="open-guided" class="command-utility" data-action="guided-open">${svgIcon('route')} <span>${esc(ui('openGuided'))}</span></button><button type="button" id="open-diagnostics" class="command-utility" data-action="diagnostics-open" title="${esc(ui('stateInspectorHint'))}" aria-label="${esc(`${ui('stateInspector')}. ${ui('stateInspectorHint')}`)}">${svgIcon('audit')} <span>${esc(ui('stateInspector'))}</span></button></div>`;
+      const actionGroupsMarkup = secondaryGroups.map(group => `<div class="command-action-group"><div class="command-secondary-label">${esc(ui(group.labelKey))}</div>${group.actions.map(action => renderAction(action)).join('')}</div>`).join('');
+      const utilityMarkup = `<div class="command-action-group"><div class="command-secondary-label">${esc(ui('viewsTools'))}</div><div class="command-utility-actions"><button type="button" id="open-properties" class="command-utility" data-action="item-tab" data-tab="properties">${svgIcon('file')} <span>${esc(ui('openProperties'))}</span></button><button type="button" id="open-guided" class="command-utility" data-action="guided-open">${svgIcon('route')} <span>${esc(ui('openGuided'))}</span></button><button type="button" id="open-diagnostics" class="command-utility" data-action="diagnostics-open" title="${esc(ui('stateInspectorHint'))}" aria-label="${esc(`${ui('stateInspector')}. ${ui('stateInspectorHint')}`)}">${svgIcon('audit')} <span>${esc(ui('stateInspector'))}</span></button></div></div>`;
+      const menuCount = secondaryGroups.reduce((count, group) => count + group.actions.length, 3);
+      const secondaryMarkup = `${actionGroupsMarkup}${utilityMarkup}`;
       const reasonMarkup = reasonRelevant ? `<details class="reason-disclosure"><summary>${esc(ui('reasonDisclosure'))}${state.draftReason ? `<span class="reason-ready">●</span>` : ''}</summary><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></details>` : '';
-      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="primary-actions">${primaryMarkup}</div><details class="command-more"><summary>${esc(ui('moreActions'))}<span class="command-more-count">${secondary.length}</span></summary><div class="secondary-actions" aria-label="${esc(ui('technicalActions'))}">${secondaryMarkup}</div></details></div><div class="command-status"><div class="badge-row">${reservation}${preserved}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}</div></div>${reasonMarkup}</section>`;
+      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="primary-actions">${primaryMarkup}</div><details class="command-more"><summary>${esc(ui('moreActions'))}<span class="command-more-count">${menuCount}</span></summary><div class="secondary-actions" aria-label="${esc(ui('moreActions'))}">${secondaryMarkup}</div></details></div><div class="command-status"><div class="badge-row">${reservation}${preserved}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}</div></div>${reasonMarkup}</section>`;
     }
 
     function nextActionFor(doc) {

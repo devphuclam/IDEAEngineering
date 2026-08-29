@@ -24,9 +24,9 @@ parity or a copy of any vendor UI.
   actions, with Overview / Files / Structure / Lifecycle / Audit tabs for progressive detail.
 - **Navigator + relationships:** the same item can be reached from a product tree, a document list,
   or a relationship row without opening a second workspace.
-- **Command bar:** Checkout, Check-in, review and release actions stay beside the item; lower-level
-  Reserve / Open working copy / Publish commands remain under **More actions** for inspection and
-  unavailable actions remain visible with an explanatory reason.
+- **Command bar:** Checkout, Check-in, review and release actions stay beside the item. **More actions**
+  contains only currently usable lifecycle/recovery commands plus focused views and demo tools;
+  Reservation/Open/Generation-writing substeps are not exposed as competing commands.
 - **Lifecycle visibility:** the state path `Start → In Work → Under Review → Released` is a visible
   strip, while the right rail keeps edit ownership, the Generation under review and the check result in view.
 
@@ -92,13 +92,17 @@ table merely to keep it visible. A contextual reference is allowed only when it 
 
 ## Interaction boundary
 
-- `LD-P100-001` is the only fully interactive Logical Document.
-- The other synthetic records provide realistic information density and are read-only context.
+- Every synthetic Logical Document can be exercised from its seeded lifecycle state. The records
+  differ in Revision, Generation, ownership, workflow and gate outcome so reviewers can inspect
+  more than one state without encountering an artificial context-only block.
 - All state is in memory and disappears on reload.
-- Checkout requests a per-document Reservation and materializes a working copy. Check-in publishes that
-  working copy as an immutable Generation. Check-in does not silently release the Reservation; Reservation
+- Checkout requests a per-document Reservation and materializes a working copy. Check-in validates
+  ownership/staleness and records changed work as an immutable Generation. Check-in does not silently release the Reservation; Reservation
   disposition remains an explicit later decision. These actions, Review, Approve, Reject, Release, conflict
   handling and Create Revision are UI simulations of accepted domain semantics, not a backend implementation.
+- Check-in and Release are deliberately separate: Check-in may create the next immutable Generation while
+  the Business Revision remains `In Work`; Release occurs only after approval, pins the exact evaluated
+  Generation in a Release Record and changes the Revision to `Released` without creating another Generation.
 - The VI/EN/JA switch demonstrates label length, fallback and layout pressure. It is not a complete
   translation review or accessibility-conformance result.
 - The prototype uses no real company document, user identity, credential, file, integration or
