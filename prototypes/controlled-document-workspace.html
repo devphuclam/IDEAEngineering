@@ -271,6 +271,145 @@
     .linked-item strong { color: var(--navy); font-size: 11px; }
     .linked-item span { color: var(--muted); font: 10px var(--mono); }
 
+    /* PLM item-workspace composition: command chrome, navigator, item form and relationships. */
+    .app-menu-row { border-top: 1px solid rgba(255,255,255,.08); background: rgba(3, 13, 25, .28); }
+    .app-menu { width: min(1560px, calc(100% - 44px)); min-height: 38px; margin: 0 auto; display: flex; align-items: center; gap: 2px; overflow-x: auto; }
+    .app-menu-item { min-height: 34px; padding: 5px 12px; border: 0; border-radius: 5px; color: rgba(255,255,255,.78); background: transparent; font-size: 11px; font-weight: 680; white-space: nowrap; }
+    .app-menu-item:hover, .app-menu-item:focus-visible { color: #fff; background: rgba(255,255,255,.12); }
+    .context-bar { display: flex; align-items: center; gap: 7px; min-height: 42px; margin-bottom: 10px; padding: 6px 9px; border: 1px solid #d6e0e7; border-radius: 8px; color: #496173; background: #eef3f6; box-shadow: 0 2px 8px rgba(15,23,42,.04); }
+    .page-intro { align-items: center; padding: 17px 0 12px; }
+    .page-intro h1 { font-size: clamp(21px, 2.2vw, 28px); letter-spacing: -.025em; }
+    .page-intro p { margin-top: 5px; font-size: 12px; }
+    .topbar { color: var(--navy); background: #fff; border-bottom: 1px solid #dce5ea; box-shadow: 0 2px 10px rgba(15,23,42,.06); }
+    .topbar-inner { min-height: 64px; }
+    .brand-mark { color: #fff; background: var(--blue); box-shadow: inset 0 -3px 0 rgba(0,0,0,.14); }
+    .brand-sub { color: #718896; }
+    .control-label { color: #718896; }
+    .control-label select { color: var(--navy); border-color: #cbd9e1; background: #f7fafb; }
+    .control-label select option { color: var(--ink); background: #fff; }
+    .topbar-btn { color: #29465c; border-color: #cbd9e1; background: #fff; }
+    .topbar-btn:hover { color: #154f6d; border-color: #8fb4ca; background: #f2f8fb; }
+    .topbar-btn.primary { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .topbar-btn.primary:hover { color: #fff; background: #1d4ed8; }
+    .app-menu-row { border-top: 0; border-bottom: 1px solid #e2e8ee; background: #f5f8fa; }
+    .app-menu-item { color: #496173; }
+    .app-menu-item:hover, .app-menu-item:focus-visible { color: #124d6d; background: #e7f1f5; }
+    .connection-card { display: flex; align-items: center; gap: 9px; min-width: 235px; padding: 8px 11px; border: 1px solid #d6e0e7; border-radius: 8px; background: #fff; box-shadow: 0 3px 12px rgba(15,23,42,.05); }
+    .connection-card .connection-mark { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: #16a34a; font-weight: 900; }
+    .connection-card strong { display: block; color: var(--navy); font-size: 11px; }
+    .connection-card span { display: block; margin-top: 1px; color: var(--muted); font-size: 10px; }
+    .context-bar .crumb { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 4px 7px; border-radius: 5px; font-size: 11px; white-space: nowrap; }
+    .context-bar .crumb svg { width: 14px; height: 14px; color: #487993; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .context-bar .crumb.current { color: var(--navy); background: #fff; font-weight: 760; box-shadow: inset 0 0 0 1px #d4e0e7; }
+    .context-bar .crumb-separator { color: #8ca0ae; font-size: 15px; }
+    .context-bar .context-spacer { flex: 1; }
+    .context-bar .context-meta { color: #5b7484; font: 10px var(--mono); white-space: nowrap; }
+    .explorer-layout { grid-template-columns: 246px minmax(0, 1fr) 300px; gap: 10px; }
+    .explorer-layout .panel, .explorer-layout .right-rail > .panel { border-radius: 8px; box-shadow: 0 4px 14px rgba(15,23,42,.055); }
+    .explorer-layout .main-panel { border-radius: 8px; }
+    .nav-panel { background: #fbfcfd; }
+    .nav-panel > .panel-header { padding: 11px 12px 9px; background: #f5f8fa; }
+    .nav-panel > .panel-header h2 { font-size: 12px; }
+    .nav-panel > .panel-header p { font-size: 10px; }
+    .nav-tools { display: flex; gap: 4px; align-items: center; }
+    .nav-tool-btn { width: 32px; min-height: 32px; display: inline-grid; place-items: center; padding: 4px; border: 1px solid #cbd9e1; border-radius: 5px; color: #456a7b; background: #fff; }
+    .nav-tool-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .tree-view { padding: 8px 8px 10px; border-bottom: 1px solid var(--line); }
+    .tree-root, .tree-children { display: grid; gap: 2px; }
+    .tree-children { margin-left: 13px; padding-left: 9px; border-left: 1px solid #d8e3e9; }
+    .tree-node { display: flex; align-items: center; gap: 5px; min-height: 34px; padding: 4px 6px; border-radius: 5px; color: #3e596a; font-size: 11px; text-align: left; }
+    .tree-node:hover { background: #eef5f8; }
+    .tree-node.selected { color: #124d6d; background: #e3f1f5; font-weight: 760; }
+    .tree-node .tree-caret { width: 12px; color: #78909e; font-size: 12px; }
+    .tree-node svg { width: 15px; height: 15px; color: #377899; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .tree-node .tree-state { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; background: #9eacb5; }
+    .tree-node .tree-state.green { background: var(--green); }
+    .tree-node .tree-state.amber { background: #ca951e; }
+    .tree-node .tree-state.blue, .tree-node .tree-state.navy { background: var(--blue); }
+    .tree-node .tree-state.red { background: var(--red); }
+    .nav-panel .nav-section { padding: 11px 12px 5px; font-size: 9px; }
+    .nav-panel .nav-links { padding: 0 7px 7px; }
+    .nav-panel .nav-link { min-height: 36px; padding: 6px 8px; font-size: 11px; }
+    .nav-panel .nav-link .nav-icon { width: 17px; height: 17px; }
+    .nav-panel .doc-list-wrap { border-top: 1px solid var(--line); }
+    .nav-panel .doc-list-wrap .panel-header { padding: 10px 12px 8px; background: #f8fafb; }
+    .nav-panel .doc-list-wrap .panel-header h2 { font-size: 11px; }
+    .nav-panel .doc-list-wrap .panel-header p { font-size: 10px; }
+    .nav-panel .doc-list { max-height: 410px; overflow-y: auto; padding: 6px; gap: 2px; }
+    .nav-panel .doc-list-item { min-height: 47px; padding: 7px 8px; border-radius: 5px; }
+    .nav-panel .doc-list-item strong { font-size: 11px; }
+    .nav-panel .doc-list-item span { font-size: 9px; }
+    .nav-panel .doc-list-item .list-meta { margin-top: 4px; font-size: 10px; }
+    .command-bar { padding: 7px 11px 8px; border-bottom: 1px solid #dce5ea; background: #f4f7f9; }
+    .command-toolbar { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .command-caption { margin-right: 3px; color: #617887; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .command-divider { width: 1px; height: 24px; margin: 0 3px; background: #d3dfe5; }
+    .command-bar .action-btn { min-height: 36px; padding: 6px 9px; border-radius: 5px; font-size: 11px; }
+    .command-bar .action-btn svg { width: 14px; height: 14px; }
+    .command-bar .action-groups { display: contents; margin-top: 0; }
+    .command-bar .action-group { display: flex; gap: 4px; padding-right: 5px; margin-right: 1px; border-right: 1px solid #d3dfe5; }
+    .command-bar .action-group:last-child { padding-right: 0; border-right: 0; }
+    .command-status { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+    .command-status .small { font-size: 10px; }
+    .command-bar .reason-row { margin-top: 6px; }
+    .command-bar .reason-row input { min-height: 31px; padding: 5px 8px; font-size: 11px; }
+    .item-tabs { display: flex; gap: 0; padding: 0 11px; border-bottom: 1px solid #d7e2e8; background: #fff; overflow-x: auto; }
+    .item-tab { min-height: 43px; padding: 8px 12px; border: 0; border-bottom: 3px solid transparent; border-radius: 0; color: #607887; background: transparent; font-size: 11px; font-weight: 760; white-space: nowrap; }
+    .item-tab svg { width: 14px; height: 14px; vertical-align: -3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .item-tab:hover { color: #154f6d; background: #f4f8fa; }
+    .item-tab[aria-selected="true"] { color: #104d6b; border-bottom-color: var(--blue); background: #f4f8fa; }
+    .tab-panel { padding: 12px; border-bottom: 1px solid var(--line); }
+    .form-section { border: 1px solid #e0e8ed; border-radius: 6px; background: #fff; }
+    .form-section + .form-section { margin-top: 10px; }
+    .form-section-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border-bottom: 1px solid #e0e8ed; background: #f7f9fa; }
+    .form-section-header h3 { margin: 0; color: var(--navy); font-size: 11px; letter-spacing: .02em; }
+    .form-section-header span { color: #718896; font-size: 10px; }
+    .property-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: #e0e8ed; }
+    .property-field { min-width: 0; padding: 8px 9px; background: #fff; }
+    .property-field dt { color: #718896; font-size: 9px; font-weight: 760; letter-spacing: .06em; text-transform: uppercase; }
+    .property-field dd { margin: 3px 0 0; color: var(--navy); font-size: 11px; font-weight: 760; overflow-wrap: anywhere; }
+    .property-field dd.mono { font-family: var(--mono); font-size: 10px; }
+    .lifecycle-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; padding: 10px; }
+    .lifecycle-step { position: relative; min-height: 54px; padding: 8px 8px 7px 25px; border: 1px solid #dce6eb; border-radius: 5px; color: #6b818e; background: #fbfcfd; }
+    .lifecycle-step::before { content: ""; position: absolute; left: 9px; top: 11px; width: 8px; height: 8px; border: 2px solid #aec0c9; border-radius: 50%; background: #fff; }
+    .lifecycle-step::after { content: ""; position: absolute; top: 15px; right: -6px; width: 6px; height: 1px; background: #c4d2d9; }
+    .lifecycle-step:last-child::after { display: none; }
+    .lifecycle-step strong { display: block; color: #4a6473; font-size: 10px; }
+    .lifecycle-step span { display: block; margin-top: 2px; color: #8295a0; font-size: 9px; }
+    .lifecycle-step.done { border-color: #b8d9cf; background: #f2faf6; }
+    .lifecycle-step.done::before { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 2px #f2faf6; }
+    .lifecycle-step.current { border-color: #9bc9d6; background: #eef9fb; box-shadow: inset 3px 0 0 var(--teal); }
+    .lifecycle-step.current::before { border-color: var(--teal); background: var(--teal); box-shadow: 0 0 0 3px #d7eff2; }
+    .lifecycle-step.current strong { color: #165c72; }
+    .relationship-section { overflow: hidden; }
+    .relationship-table-wrap { overflow-x: auto; }
+    .relationship-table { table-layout: fixed; }
+    .relationship-table th, .relationship-table td { padding: 7px 7px; }
+    .relationship-table th { background: #f8fafb; }
+    .relationship-table th:nth-child(1) { width: 22%; }
+    .relationship-table th:nth-child(2) { width: 22%; }
+    .relationship-table th:nth-child(3) { width: 10%; }
+    .relationship-table th:nth-child(4) { width: 17%; }
+    .relationship-table th:nth-child(5) { width: 16%; }
+    .relationship-table th:nth-child(6) { width: 13%; }
+    .relationship-table td { overflow-wrap: anywhere; }
+    .relationship-table .item-link { display: inline-flex; align-items: center; gap: 4px; min-height: 30px; padding: 3px 5px; border: 0; border-radius: 4px; color: #1b5d7c; background: transparent; text-align: left; font-size: 11px; font-weight: 760; }
+    .relationship-table .item-link:hover { background: #edf6f8; }
+    .relationship-table .item-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .file-table td:first-child { color: var(--navy); font-weight: 760; }
+    .file-table .role-cell { color: #557181; font-size: 10px; }
+    .tab-empty { padding: 22px 12px; color: var(--muted); text-align: center; font-size: 11px; }
+    .inspector-summary { padding: 10px 11px; border-bottom: 1px solid var(--line); background: #f7fafb; }
+    .inspector-summary strong { display: block; color: var(--navy); font-size: 12px; }
+    .inspector-summary span { display: block; margin-top: 3px; color: var(--muted); font: 10px var(--mono); overflow-wrap: anywhere; }
+    .right-rail .panel-header { padding: 10px 12px 8px; }
+    .right-rail .panel-header h2 { font-size: 11px; }
+    .right-rail .panel-header p { font-size: 10px; }
+    .right-rail .panel-body { padding: 10px 11px; }
+    .right-rail .data-table th, .right-rail .data-table td { padding: 6px 5px; }
+    .right-rail .data-table th { font-size: 9px; }
+    .right-rail .data-table td { font-size: 10px; }
+
     .empty-state { padding: 30px 20px; color: var(--muted); text-align: center; }
     .empty-state strong { display: block; margin-bottom: 4px; color: var(--navy); }
 
@@ -313,7 +452,7 @@
       .identity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 900px) {
-      .topbar-inner, .page-wrap, .prototype-strip { width: min(100% - 28px, 720px); }
+      .topbar-inner, .page-wrap, .prototype-strip, .app-menu { width: min(100% - 28px, 720px); }
       .topbar-inner { min-height: auto; padding: 14px 0; align-items: flex-start; flex-direction: column; }
       .topbar-controls { width: 100%; justify-content: flex-start; }
       .page-intro { align-items: flex-start; flex-direction: column; padding-top: 20px; }
@@ -322,9 +461,12 @@
       .explorer-layout .nav-panel { position: static; }
       .explorer-layout .right-rail { grid-column: auto; grid-template-columns: 1fr; }
       .review-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .property-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .context-bar { align-items: flex-start; flex-wrap: wrap; }
+      .context-bar .context-spacer { display: none; }
     }
     @media (max-width: 580px) {
-      .topbar-inner, .page-wrap, .prototype-strip { width: calc(100% - 20px); }
+      .topbar-inner, .page-wrap, .prototype-strip, .app-menu { width: calc(100% - 20px); }
       .brand-lockup { min-width: 0; }
       .prototype-strip { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
       .prototype-strip .strip-spacer { display: none; }
@@ -338,6 +480,14 @@
       .guided-controls { justify-content: flex-start; }
       .reason-row { align-items: flex-start; flex-direction: column; }
       .reason-row input { width: 100%; }
+      .property-grid { grid-template-columns: 1fr; }
+      .lifecycle-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lifecycle-step:nth-child(2)::after { display: none; }
+      .relationship-table th:nth-child(1), .relationship-table td:nth-child(1), .relationship-table th:nth-child(5), .relationship-table td:nth-child(5) { display: none; }
+      .relationship-table th:nth-child(2) { width: 42%; }
+      .relationship-table th:nth-child(3) { width: 17%; }
+      .relationship-table th:nth-child(4) { width: 24%; }
+      .relationship-table th:nth-child(6) { width: 17%; }
       .review-overlay { padding: 8px; }
       .review-head, .review-body { padding-left: 13px; padding-right: 13px; }
       .review-metrics { grid-template-columns: 1fr 1fr; }
@@ -476,6 +626,36 @@
       }
     };
 
+    // Compact labels used by the PLM-style shell. Keeping these separate from the
+    // domain vocabulary makes the throwaway layout easy to tune without changing
+    // the controlled-document language above.
+    const UI_TEXT = {
+      vi: {
+        navigator: 'Item navigator', item: 'Item', overview: 'Overview', files: 'Files / representations', structure: 'Structure / relationships', lifecycle: 'Lifecycle', auditTab: 'Audit',
+        commands: 'Item commands', properties: 'Properties', relationships: 'Relationships', lifecycleMap: 'Lifecycle map', inspector: 'Inspector', selectedItem: 'Selected item',
+        productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Mở rộng', collapse: 'Thu gọn',
+        breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
+        fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.'
+      },
+      en: {
+        navigator: 'Item navigator', item: 'Item', overview: 'Overview', files: 'Files / representations', structure: 'Structure / relationships', lifecycle: 'Lifecycle', auditTab: 'Audit',
+        commands: 'Item commands', properties: 'Properties', relationships: 'Relationships', lifecycleMap: 'Lifecycle map', inspector: 'Inspector', selectedItem: 'Selected item',
+        productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Expand', collapse: 'Collapse',
+        breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
+        fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.'
+      },
+      ja: {
+        navigator: 'アイテム ナビゲーター', item: 'アイテム', overview: '概要', files: 'ファイル / 表現', structure: '構成 / 関係', lifecycle: 'ライフサイクル', auditTab: '監査',
+        commands: 'アイテム操作', properties: 'プロパティ', relationships: '関係', lifecycleMap: 'ライフサイクル マップ', inspector: 'インスペクター', selectedItem: '選択アイテム',
+        productRoot: 'P-100 ポンプアセンブリ', productDefinition: '製品定義', cadArtifacts: 'CAD 成果物', controlledRecords: '管理レコード', expand: '展開', collapse: '折りたたむ',
+        breadcrumbHome: '自分の作業', breadcrumbProduct: '製品定義', breadcrumbItem: '選択アイテム', relation: '関係', itemId: 'アイテム ID', ownerShort: '所有者', category: 'カテゴリ', structureShort: '構成', workingHead: 'Working Head', stateShort: '状態', revisionShort: 'Rev', generationShort: 'Generation',
+        fileRole: 'ファイル ロール', fileName: '表現', source: 'ソース', digestShort: 'ダイジェスト', current: 'Current', history: '履歴', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
+        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。'
+      }
+    };
+
     const ACTORS = {
       author: { name: 'Linh Nguyễn', roleKey: 'author', role: 'Author / Editor', workspace: 'WS-LINH', kind: 'author' },
       approver: { name: 'Minh Trần', roleKey: 'approver', role: 'Independent Approver', workspace: 'WS-MINH', kind: 'approver' },
@@ -588,6 +768,7 @@
       return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch]));
     }
     function t(key) { return (I18N[state.locale] && I18N[state.locale][key]) || I18N.en[key] || key; }
+    function ui(key) { return (UI_TEXT[state.locale] && UI_TEXT[state.locale][key]) || UI_TEXT.en[key] || key; }
     function titleOf(doc) { return (DOC_TITLES[doc.titleKey] && (DOC_TITLES[doc.titleKey][state.locale] || DOC_TITLES[doc.titleKey].en)) || doc.titleKey; }
     function actorOf(id = state.actorId) { return ACTORS[id] || ACTORS.author; }
     function activeDoc() { return state.docs.find(doc => doc.id === state.activeDocId) || state.docs[0]; }
@@ -653,6 +834,7 @@
         // The prototype intentionally has one UI direction; no layout selector is persisted.
         actorId: overrides.actorId || 'author',
         activeDocId: overrides.activeDocId || 'LD-P100-001',
+        activeItemTab: overrides.activeItemTab || 'overview',
         docs,
         clock: 8 * 60 + 30,
         audit: [{ time: '2026-08-28 08:30', type: 'Registered', actor: 'System', docId: 'LD-P100-001', detail: 'Logical Document registered; Revision A starts without Generation.' }],
@@ -664,7 +846,7 @@
     }
     function resetData({ keepGuide = false } = {}) {
       const previous = state;
-      const next = createInitialState({ locale: previous.locale, activeDocId: 'LD-P100-001', scenario: previous.guided.scenario });
+      const next = createInitialState({ locale: previous.locale, activeDocId: 'LD-P100-001', activeItemTab: previous.activeItemTab, scenario: previous.guided.scenario });
       if (keepGuide) next.guided = { scenario: previous.guided.scenario, step: 0, completed: previous.guided.completed, message: '' };
       state = next;
     }
@@ -753,7 +935,7 @@
     function dispatch(action, payload = {}) {
       const doc = activeDoc();
       let check;
-      if (!['reset', 'switch-actor', 'select-doc', 'guided-select', 'guided-reset', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review', 'guided-next'].includes(action)) {
+      if (!['reset', 'switch-actor', 'select-doc', 'item-tab', 'guided-select', 'guided-reset', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review', 'guided-next'].includes(action)) {
         check = canAction(action, doc);
         if (!check.ok) { state.lastAction = { type: 'blocked', message: check.message, code: check.code }; return check; }
       }
@@ -768,8 +950,15 @@
         case 'select-doc':
           if (state.docs.some(item => item.id === payload.id)) {
             state.activeDocId = payload.id;
+            state.activeItemTab = 'overview';
             result = success(`Đã chọn ${payload.id}.`);
           } else result = blocked('Không tìm thấy document synthetic này.');
+          break;
+        case 'item-tab':
+          if (['overview', 'files', 'structure', 'lifecycle', 'audit'].includes(payload.tab)) {
+            state.activeItemTab = payload.tab;
+            result = success(`Tab ${payload.tab} đã mở.`);
+          } else result = blocked('Item tab không hợp lệ.');
           break;
         case 'switch-actor':
           if (ACTORS[payload.actorId]) {
@@ -1008,16 +1197,17 @@
           <button type="button" class="topbar-btn primary" data-action="open-review">${svgIcon('report')} <span>${esc(t('review'))}</span></button>
           <button type="button" class="topbar-btn" data-action="reset">${svgIcon('reset')} <span>${esc(t('reset'))}</span></button>
         </div>
-      </div></header>`;
+      </div><div class="app-menu-row"><nav class="app-menu" aria-label="Application menu"><span class="app-menu-item">File</span><span class="app-menu-item">Edit</span><span class="app-menu-item">View</span><span class="app-menu-item">Actions</span><span class="app-menu-item">Reports</span><span class="app-menu-item">Help</span></nav></div></header>`;
     }
 
     function renderPrototypeStrip() {
-      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))}</span><span class="strip-spacer"></span><span class="direction-pill" title="${esc(UI_DIRECTION.promise)}">${svgIcon('list')} ${esc(UI_DIRECTION.name)} · single direction</span></div>`;
+      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))}</span><span>${esc(ui('layoutNote'))}</span><span class="strip-spacer"></span><span class="direction-pill" title="${esc(UI_DIRECTION.promise)}">${svgIcon('tree')} ${esc(UI_DIRECTION.name)} · single direction</span></div>`;
     }
 
     function renderPageIntro() {
       const active = activeDoc();
-      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))} Đây là một prototype tương tác để review với sếp; state và action chỉ là mô phỏng.</p><div class="principle-row"><span class="principle"><b>01</b> Identity first</span><span class="principle"><b>02</b> Contextual actions</span><span class="principle"><b>03</b> Evidence visible</span></div></div><div class="intro-aside">${chip(active.workflow, workflowLabel(active.workflow))}${chip(active.status, statusLabel(active.status))}${chip(active.gate, gateLabel(active.gate))}<span class="tiny-note">${esc(t('synthetic'))} · 10 records</span></div></div>`;
+      const actor = actorOf();
+      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))} Đây là một prototype tương tác để review với sếp; state và action chỉ là mô phỏng.</p></div><div class="intro-aside"><div class="connection-card"><span class="connection-mark" aria-hidden="true">✓</span><div><strong>Connected workspace</strong><span>${esc(actor.workspace)} · ${esc(actor.name)}</span></div></div><div class="badge-row">${chip(active.workflow, workflowLabel(active.workflow))}${chip(active.status, statusLabel(active.status))}${chip(active.gate, gateLabel(active.gate))}</div><span class="tiny-note">${esc(t('synthetic'))} · 10 records</span></div></div>`;
     }
 
     function renderIdentity(doc) {
@@ -1028,13 +1218,76 @@
     }
 
     function renderDocHero(doc, includeActions = true) {
-      return `<section class="doc-hero"><div class="doc-hero-top"><div><div class="eyebrow">${esc(doc.category)} · ${esc(doc.className)}</div><h2 class="doc-title">${esc(titleOf(doc))}</h2><p class="doc-subtitle"><span class="mono">${esc(doc.id)}</span> · ${esc(doc.note)}</p></div>${includeActions ? `<div class="doc-hero-actions">${chip(doc.workflow, workflowLabel(doc.workflow))}${chip(doc.status, statusLabel(doc.status))}</div>` : ''}</div>${renderIdentity(doc)}</section>`;
+      return `<section class="doc-hero" aria-labelledby="item-title"><div class="doc-hero-top"><div><div class="eyebrow">${esc(ui('item'))} · ${esc(doc.category)} · ${esc(doc.className)}</div><h2 id="item-title" class="doc-title">${esc(titleOf(doc))}</h2><p class="doc-subtitle"><span class="mono">${esc(doc.id)}</span> · ${esc(doc.note)}</p></div>${includeActions ? `<div class="doc-hero-actions"><span class="badge navy">${esc(ui('revisionShort'))} ${esc(doc.revision)}</span><span class="badge teal">${esc(ui('generationShort'))} ${esc(doc.generation || '—')}</span>${chip(doc.workflow, workflowLabel(doc.workflow))}${chip(doc.status, statusLabel(doc.status))}</div>` : ''}</div>${renderIdentity(doc)}</section>`;
     }
 
     function renderActionBar(doc) {
       const reservation = chip(doc.reservation ? (ownsReservation(doc) ? 'owned' : 'external') : 'none', reservationLabel(doc), doc.reservation ? (ownsReservation(doc) ? 'teal' : 'amber') : 'plain');
       const preserved = doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : '';
-      return `<section class="action-bar"><div class="action-bar-top"><div><h3>${esc(t('actions'))}</h3><div class="small muted">${esc(t('actionHint'))}</div></div><div class="badge-row">${reservation}${preserved}</div></div><div class="action-groups"><div class="action-group">${actionButton('reserve', 'reserve', 'primary', 'reserve')}${actionButton('open', 'open', '', 'file')}${actionButton('edit', 'edit', '', 'edit')}${actionButton('publish', 'publish', 'primary', 'publish')}</div><div class="action-group">${actionButton('submit', 'submit', '', 'arrow')}${actionButton('approve', 'approve', '', 'check')}${actionButton('reject', 'reject', 'danger', 'close')}${actionButton('release', 'release', 'primary', 'release')}</div><div class="action-group">${actionButton('create-revision', 'createRevision', '', 'plus')}${actionButton('withdraw', 'withdraw', '', 'back')}</div><div class="action-group">${actionButton('external-advance', 'externalAdvance', 'edge', 'external')}${actionButton('refresh', 'refresh', 'edge', 'refresh')}${actionButton('recover', 'recover', 'edge', 'key')}</div></div><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></section>`;
+      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="action-groups"><div class="action-group">${actionButton('reserve', 'reserve', 'primary', 'reserve')}${actionButton('open', 'open', '', 'file')}${actionButton('edit', 'edit', '', 'edit')}${actionButton('publish', 'publish', 'primary', 'publish')}</div><div class="action-group">${actionButton('submit', 'submit', '', 'arrow')}${actionButton('approve', 'approve', '', 'check')}${actionButton('reject', 'reject', 'danger', 'close')}${actionButton('release', 'release', 'primary', 'release')}</div><div class="action-group">${actionButton('create-revision', 'createRevision', '', 'plus')}${actionButton('withdraw', 'withdraw', '', 'back')}</div><div class="action-group">${actionButton('external-advance', 'externalAdvance', 'edge', 'external')}${actionButton('refresh', 'refresh', 'edge', 'refresh')}${actionButton('recover', 'recover', 'edge', 'key')}</div></div></div><div class="command-status"><div class="badge-row">${reservation}${preserved}</div><span class="small muted">${esc(t('actionHint'))}</span></div><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></section>`;
+    }
+
+    function renderItemTabs() {
+      const tabs = [
+        ['overview', ui('overview'), 'file'],
+        ['files', ui('files'), 'file'],
+        ['structure', ui('structure'), 'tree'],
+        ['lifecycle', ui('lifecycle'), 'route'],
+        ['audit', ui('auditTab'), 'audit']
+      ];
+      return `<div class="item-tabs" role="tablist" aria-label="${esc(ui('item'))}">${tabs.map(([id, label, icon]) => `<button type="button" class="item-tab" role="tab" aria-selected="${state.activeItemTab === id ? 'true' : 'false'}" aria-controls="item-tab-panel" data-action="item-tab" data-tab="${id}">${svgIcon(icon)} <span>${esc(label)}</span></button>`).join('')}</div>`;
+    }
+
+    function renderPropertyForm(doc) {
+      const rows = [
+        [t('document'), titleOf(doc), false], [t('documentClass'), doc.className, false], [ui('category'), doc.category, false], [ui('ownerShort'), doc.owner, false], [ui('structureShort'), doc.structure, false], [t('gate'), gateLabel(doc.gate), false], [t('reservation'), reservationLabel(doc), false], [ui('workingHead'), doc.workingHead || '—', true], [ui('digestShort'), doc.digest, true]
+      ];
+      return `<section class="form-section"><div class="form-section-header"><h3>${esc(ui('properties'))}</h3><span>${esc(ui('controlledForm'))}</span></div><dl class="property-grid">${rows.map(([label, value, mono]) => `<div class="property-field"><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl></section>`;
+    }
+
+    function renderLifecycle(doc) {
+      const states = [
+        ['Start', ui('startState')],
+        ['In Work', ui('inWorkState')],
+        ['Under Review', ui('reviewState')],
+        ['Released', ui('releasedState')]
+      ];
+      const currentIndex = Math.max(0, states.findIndex(([value]) => value === doc.workflow));
+      return `<section class="form-section"><div class="form-section-header"><h3>${esc(ui('lifecycleMap'))}</h3><span>${esc(workflowLabel(doc.workflow))} · ${esc(statusLabel(doc.status))}</span></div><div class="lifecycle-strip" aria-label="${esc(ui('lifecycle'))}">${states.map(([value, label], index) => `<div class="lifecycle-step ${index < currentIndex ? 'done' : ''} ${index === currentIndex ? 'current' : ''}"><strong>${esc(label)}</strong><span>${index < currentIndex ? 'Complete' : index === currentIndex ? 'Current state' : 'Next state'}</span></div>`).join('')}</div></section>`;
+    }
+
+    function relationLabel(item) {
+      if (item.category === 'CAD') return 'CAD representation';
+      if (item.category === 'Quality') return 'Verification / control';
+      if (item.category === 'Release') return 'Release package';
+      if (item.category === 'Office') return 'Controlled reference';
+      return 'Related document';
+    }
+
+    function renderRelationshipGrid(doc) {
+      const linkedDocs = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean);
+      return `<section class="form-section relationship-section"><div class="form-section-header"><h3>${esc(ui('relationships'))}</h3><span>${linkedDocs.length} linked item${linkedDocs.length === 1 ? '' : 's'}</span></div>${linkedDocs.length ? `<div class="relationship-table-wrap"><table class="data-table relationship-table"><thead><tr><th>${esc(ui('relation'))}</th><th>${esc(ui('itemId'))}</th><th>${esc(ui('revisionShort'))}</th><th>${esc(ui('generationShort'))}</th><th>${esc(ui('stateShort'))}</th><th>${esc(ui('ownerShort'))}</th></tr></thead><tbody>${linkedDocs.map(item => `<tr><td>${esc(relationLabel(item))}</td><td><button type="button" class="item-link" data-action="select-doc" data-doc-id="${esc(item.id)}">${svgIcon('external')}<span>${esc(item.id)}</span></button><div class="small muted">${esc(titleOf(item))}</div></td><td class="mono">${esc(item.revision)}</td><td class="mono">${esc(item.generation || '—')}</td><td>${chip(item.workflow, workflowLabel(item.workflow))}</td><td>${esc(item.owner)}</td></tr>`).join('')}</tbody></table></div>` : `<div class="tab-empty">${esc(ui('noRelations'))}</div>`}</section>`;
+    }
+
+    function renderFileRepresentations(doc) {
+      const rows = [
+        [ui('nativeFile'), `${doc.id}.source`, doc.workingCopy.open ? 'Workspace' : 'Vault', doc.generation || '—', doc.digest],
+        [ui('previewFile'), `${doc.id}.preview.pdf`, 'Derived', doc.generation || '—', 'sha256:preview…'],
+        [ui('evidenceFile'), `${doc.id}.release.json`, doc.releaseRecord ? 'Release Record' : 'Pending release', doc.releaseRecord ? doc.releaseRecord.generation : '—', doc.releaseRecord ? 'sha256:release…' : '—']
+      ];
+      return `<section class="form-section"><div class="form-section-header"><h3>${esc(ui('files'))}</h3><span>${esc(ui('current'))}: ${esc(doc.generation || '—')}</span></div><div class="relationship-table-wrap"><table class="data-table file-table"><thead><tr><th>${esc(ui('fileRole'))}</th><th>${esc(ui('fileName'))}</th><th>${esc(ui('source'))}</th><th>${esc(ui('generationShort'))}</th><th>${esc(ui('digestShort'))}</th></tr></thead><tbody>${rows.map(row => `<tr><td class="role-cell">${esc(row[0])}</td><td>${esc(row[1])}</td><td>${esc(row[2])}</td><td class="mono">${esc(row[3])}</td><td class="mono">${esc(row[4])}</td></tr>`).join('')}</tbody></table></div></section>`;
+    }
+
+    function renderItemTabContent(doc) {
+      let content;
+      switch (state.activeItemTab) {
+        case 'files': content = renderFileRepresentations(doc); break;
+        case 'structure': content = renderRelationshipGrid(doc); break;
+        case 'lifecycle': content = `${renderLifecycle(doc)}${renderAudit(10)}`; break;
+        case 'audit': content = renderAudit(14); break;
+        default: content = `${renderPropertyForm(doc)}${renderLifecycle(doc)}${renderRelationshipGrid(doc)}`;
+      }
+      return `<div id="item-tab-panel" class="tab-panel" role="tabpanel">${content}</div>`;
     }
 
     function renderGuidedPanel() {
@@ -1080,12 +1333,26 @@
       return `<details class="state-card" ${state.lastAction.type === 'blocked' ? 'open' : ''}><summary>${esc(t('stateSnapshot'))} <span class="small muted">· ${esc(t('stateHint'))}</span></summary><div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div><pre class="state-json">${esc(JSON.stringify(snapshot, null, 2))}</pre></details>`;
     }
 
+    function renderItemTree() {
+      const groups = [
+        { label: ui('productDefinition'), icon: 'tree', ids: ['LD-P100-001', 'LD-P100-003', 'LD-P100-004'] },
+        { label: ui('cadArtifacts'), icon: 'file', ids: ['LD-P100-002', 'LD-P100-006'] },
+        { label: ui('controlledRecords'), icon: 'audit', ids: ['LD-P100-005', 'LD-P100-007', 'LD-P100-008', 'LD-P100-009', 'LD-P100-010'] }
+      ];
+      const root = state.docs.find(item => item.id === 'LD-P100-001');
+      return `<section class="tree-view" aria-label="${esc(ui('navigator'))}"><div class="tree-root"><button type="button" class="tree-node ${state.activeDocId === root?.id ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(root?.id || '')}" aria-current="${state.activeDocId === root?.id ? 'true' : 'false'}"><span class="tree-caret" aria-hidden="true">▾</span>${svgIcon('tree')}<span>${esc(ui('productRoot'))}</span><i class="tree-state ${statusClass(root?.workflow || '')}" aria-hidden="true"></i></button>${groups.map(group => `<div class="tree-children"><div class="tree-node" role="heading" aria-level="2"><span class="tree-caret" aria-hidden="true">▾</span>${svgIcon(group.icon)}<span>${esc(group.label)}</span></div>${group.ids.map(id => { const item = state.docs.find(doc => doc.id === id); return item ? `<button type="button" class="tree-node ${state.activeDocId === item.id ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(item.id)}" aria-current="${state.activeDocId === item.id ? 'true' : 'false'}"><span class="tree-caret" aria-hidden="true">·</span>${svgIcon('file')}<span>${esc(item.id)}</span><i class="tree-state ${statusClass(item.workflow)}" aria-hidden="true"></i></button>` : ''; }).join('')}</div>`).join('')}</div></section>`;
+    }
+
     function renderDocList() {
-      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('allDocuments'))}</h2><p>10 synthetic records · active row drives the demo.</p></div><span class="badge plain">10</span></div><div class="doc-list">${state.docs.map(doc => `<button type="button" class="doc-list-item" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><span>${esc(doc.id)} · Rev ${esc(doc.revision)} · ${esc(doc.generation || '∅')}</span><span class="list-meta"><i class="list-dot ${statusClass(doc.workflow)}"></i>${esc(workflowLabel(doc.workflow))}<span class="muted">· ${esc(statusLabel(doc.status))}</span></span></button>`).join('')}</div></section>`;
+      return `<section class="doc-list-wrap"><div class="panel-header"><div><h2>${esc(t('allDocuments'))}</h2><p>10 synthetic records · active row drives the demo.</p></div><span class="badge plain">10</span></div><div class="doc-list">${state.docs.map(doc => `<button type="button" class="doc-list-item" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><span>${esc(doc.id)} · Rev ${esc(doc.revision)} · ${esc(doc.generation || '∅')}</span><span class="list-meta"><i class="list-dot ${statusClass(doc.workflow)}"></i>${esc(workflowLabel(doc.workflow))}<span class="muted">· ${esc(statusLabel(doc.status))}</span></span></button>`).join('')}</div></section>`;
+    }
+
+    function renderContextBar(doc) {
+      return `<div class="context-bar" aria-label="Breadcrumb"><button type="button" class="crumb" data-action="select-doc" data-doc-id="LD-P100-001">${svgIcon('home')}<span>${esc(ui('breadcrumbHome'))}</span></button><span class="crumb-separator" aria-hidden="true">/</span><span class="crumb">${svgIcon('tree')}<span>${esc(ui('breadcrumbProduct'))}</span></span><span class="crumb-separator" aria-hidden="true">/</span><span class="crumb current"><span class="mono">${esc(doc.id)}</span><span>${esc(ui('breadcrumbItem'))}</span></span><span class="context-spacer"></span><span class="context-meta">${esc(ui('revisionShort'))} ${esc(doc.revision)} · ${esc(ui('generationShort'))} ${esc(doc.generation || '—')}</span></div>`;
     }
 
     function renderExplorer(doc) {
-      return `<div class="explorer-layout"><aside class="panel nav-panel"><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('list')}</span>${esc(t('allDocuments'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('releases')}</span>${esc(t('recentReleases'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('warning')}</span>${esc(t('blockers'))}</span></nav><div class="nav-section">Collections</div><nav class="nav-links"><span class="nav-link"><span class="nav-icon">${svgIcon('tree')}</span>Product tree</span><span class="nav-link"><span class="nav-icon">${svgIcon('reserve')}</span>My reservations</span><span class="nav-link"><span class="nav-icon">${svgIcon('audit')}</span>Audit evidence</span></nav>${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Working Head', doc.generation || '∅', doc.workflow === 'Start' ? 'Chưa publish' : 'Exact current head')}${metric('Revision', doc.revision, `Version Sequence ${doc.versionSequence || '—'}`)}${metric('Review pin', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pending decision' : 'No pending review')}${metric('Local work', doc.workingCopy.dirty ? 'Dirty' : 'Clean', doc.localWork && doc.localWork.preserved ? 'Preserved after reject' : 'In-memory only')}</div></div>${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderMetadata(doc)}${renderLinked(doc)}${renderAudit(doc.id === state.activeDocId ? 7 : 4)}</aside></div>`;
+      return `<div class="item-workspace">${renderContextBar(doc)}<div class="explorer-layout"><aside class="panel nav-panel"><div class="panel-header"><div><h2>${esc(ui('navigator'))}</h2><p>${esc(ui('layoutNote'))}</p></div><div class="nav-tools"><button type="button" class="nav-tool-btn" data-action="reset" aria-label="${esc(t('reset'))}" title="${esc(t('reset'))}">${svgIcon('refresh')}</button></div></div><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('list')}</span>${esc(t('allDocuments'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('releases')}</span>${esc(t('recentReleases'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('warning')}</span>${esc(t('blockers'))}</span></nav>${renderItemTree()}${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderItemTabs()}${renderItemTabContent(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Working Head', doc.generation || '∅', doc.workflow === 'Start' ? 'Chưa publish' : 'Exact current head')}${metric('Revision', doc.revision, `Version Sequence ${doc.versionSequence || '—'}`)}${metric('Review pin', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pending decision' : 'No pending review')}${metric('Local work', doc.workingCopy.dirty ? 'Dirty' : 'Clean', doc.localWork && doc.localWork.preserved ? 'Preserved after reject' : 'In-memory only')}</div></div>${renderStateSnapshot(doc)}</main><aside class="right-rail"><section class="panel"><div class="inspector-summary"><strong>${esc(ui('selectedItem'))}</strong><span>${esc(doc.id)} · ${esc(doc.className)}</span><div class="badge-row" style="margin-top:7px">${chip(doc.workflow, workflowLabel(doc.workflow))}${chip(doc.status, statusLabel(doc.status))}</div></div></section>${renderMetadata(doc)}${renderLinked(doc)}${renderAudit(doc.id === state.activeDocId ? 7 : 4)}</aside></div></div>`;
     }
 
     function renderReviewPanel() {
@@ -1170,6 +1437,9 @@
       const action = button.dataset.action;
       if (action === 'select-doc') {
         const result = dispatch('select-doc', { id: button.dataset.docId }); render(); showToast(result.message, !result.ok); return;
+      }
+      if (action === 'item-tab') {
+        const result = dispatch('item-tab', { tab: button.dataset.tab }); render(); showToast(result.message, !result.ok); return;
       }
       if (action === 'guided-select') {
         const result = dispatch('guided-select', { scenario: button.dataset.scenario }); render(); showToast(result.message, !result.ok); return;

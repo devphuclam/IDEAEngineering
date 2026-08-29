@@ -12,8 +12,22 @@ Double-click [`controlled-document-workspace.html`](controlled-document-workspac
 no server, package installation, database or network connection.
 
 The file contains one UI direction: **Engineering Explorer**. There are no alternate layouts. The
-layout keeps the document tree, selected-object details, contextual actions and evidence inspector
-visible together so a reviewer can judge the information hierarchy in one pass.
+layout now follows a familiar item-centric PLM composition: application menu and command bar,
+breadcrumb to the selected item, a hierarchical navigator on the left, a tabbed item form in the
+center, relationship rows/lifecycle state in the working area, and an evidence inspector on the
+right. This is a clean-room information-architecture adaptation; it is not a claim of product
+parity or a copy of any vendor UI.
+
+## PLM layout cues carried into the prototype
+
+- **Item form first:** stable identity, revision, version, generation and state are read before
+  actions, with Overview / Files / Structure / Lifecycle / Audit tabs for progressive detail.
+- **Navigator + relationships:** the same item can be reached from a product tree, a document list,
+  or a relationship row without opening a second workspace.
+- **Command bar:** Reserve, working-copy, publish, review and release actions stay beside the item;
+  unavailable actions remain visible with an explanatory reason.
+- **Lifecycle visibility:** the state path `Start → In Work → Under Review → Released` is a visible
+  strip, while the right rail keeps reservation, exact pin and audit evidence in view.
 
 ## Applied UI direction
 
