@@ -176,6 +176,7 @@
     .action-btn.danger { color: #873b42; border-color: #e6bcc0; background: #fff7f7; }
     .action-btn.is-disabled { opacity: .55; filter: saturate(.55); }
     .action-btn.is-disabled:hover { transform: none; border-color: #cbd8e2; background: #fff; }
+    .action-btn.flow-action:not(.primary) { color: #1b5d72; border-color: #a8ced9; background: #f4fbfc; }
     .action-btn svg, .topbar-btn svg, .guide-btn svg, .close-btn svg { width: 16px; height: 16px; vertical-align: -3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .reason-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
     .reason-row label { color: var(--muted); font-size: 11px; white-space: nowrap; }
@@ -381,7 +382,12 @@
     .relationship-table th:nth-child(4) { width: 17%; }
     .relationship-table th:nth-child(5) { width: 16%; }
     .relationship-table th:nth-child(6) { width: 13%; }
-    .relationship-table td { overflow-wrap: anywhere; }
+    .relationship-table td { min-width: 0; overflow-wrap: anywhere; }
+    .relationship-table .badge {
+      box-sizing: border-box; max-width: 100%; min-width: 0; justify-content: center; text-align: center;
+      line-height: 1.2; white-space: normal; overflow-wrap: anywhere;
+    }
+    .relationship-table .badge::before { flex: 0 0 auto; }
     .relationship-table .item-link { display: inline-flex; align-items: center; gap: 4px; min-height: 30px; padding: 3px 5px; border: 0; border-radius: 4px; color: #1b5d7c; background: transparent; text-align: left; font-size: 11px; font-weight: 760; }
     .relationship-table .item-link:hover { background: #edf6f8; }
     .relationship-table .item-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -513,7 +519,7 @@
     .drawer-count { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; color: #24566e; background: #e7f2f6; font: 11px var(--mono); vertical-align: 2px; }
     .drawer-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 14px; }
     .detail-drawer .form-section + .form-section { margin-top: 10px; }
-    .detail-drawer .relationship-table-wrap { overflow-x: hidden; }
+    .detail-drawer .relationship-table-wrap { overflow-x: auto; }
     .detail-drawer .panel-body { padding: 14px; }
     .detail-drawer .audit-detail-section .form-section-header > div { min-width: 0; }
     .detail-drawer .audit-detail-section .form-section-header > div span { display: block; margin-top: 2px; color: #718896; font-size: 10px; }
@@ -700,6 +706,10 @@
         actions: 'Context actions',
         actionHint: 'Nút bị khóa vẫn hiện lý do để người dùng hiểu bước tiếp theo.',
         reserve: 'Reserve',
+        checkOut: 'Check-out',
+        checkIn: 'Check-in',
+        checkOutHint: 'Reservation + mở working copy trong workspace hiện tại.',
+        checkInHint: 'Publish working copy thành Generation immutable; Reservation disposition vẫn tách riêng.',
         open: 'Open working copy',
         edit: 'Edit metadata',
         publish: 'Publish',
@@ -772,7 +782,7 @@
         scenarioRevision: 'Create Revision'
       },
       en: {
-        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Publish the working copy as an immutable Generation; Reservation disposition stays separate.', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       },
       ja: {
         language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
@@ -808,6 +818,34 @@
         nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。', moreActions: 'その他の操作', technicalActions: '技術 / リカバリ', reasonDisclosure: 'Reject / Recovery の理由', nextAction: '次のアクション', blockingReason: 'ブロック理由', evidenceSummary: 'エビデンス概要', evidenceHint: '判断に必要なシグナルだけを表示します。', controlSummary: '管理情報', controlSummaryHint: '次の操作の前に確認する情報。', controlReservation: '編集権限', controlPin: '確認中の Generation', controlGate: 'チェック結果', linkedCount: '関係', openTab: 'タブを開く', details: '詳細', detailsHint: '必要な項目を開いて詳細を確認します。', relationshipHint: '構成を開くと一覧を確認できます。', openDetails: '詳細を開く', diagnostics: '診断', allProperties: 'すべてのプロパティ', keyProperties: '主要プロパティ', overviewSummary: 'アイテム概要', currentState: '現在の状態', nextState: '次の状態', runWalkthrough: 'ウォークスルーを実行', closeWalkthrough: 'ウォークスルーを閉じる', openWalkthrough: 'ウォークスルーを開く', exactPin: 'Exact pin', recentAudit: '最近の監査', recentAuditHint: '選択アイテムの最新イベント。', auditEmpty: 'このアイテムのイベントはありません。', detailHint: 'このパネルでは同じ種類のデータだけをスクロールします。', openProperties: 'すべてのプロパティ', openDiagnostics: '診断', openGuided: 'ウォークスルー'
       }
     };
+
+    // Use the canonical product term "Checkout" consistently in all three locales.
+    I18N.vi.checkOut = 'Checkout';
+    I18N.en.checkOut = 'Checkout';
+    Object.assign(I18N.ja, {
+      checkOut: 'Checkout',
+      checkIn: 'Check-in',
+      checkOutHint: 'Reservation と作業コピーを現在の Workspace に準備します。',
+      checkInHint: '作業コピーを immutable Generation として Publish します。Reservation の扱いは別に決定します。'
+    });
+    Object.assign(UI_TEXT.vi, {
+      stateInspector: 'Xem state & audit',
+      stateInspectorHint: 'Mở snapshot JSON và audit event của prototype để kiểm tra demo.',
+      diagnostics: 'State & audit',
+      openDiagnostics: 'Xem state & audit'
+    });
+    Object.assign(UI_TEXT.en, {
+      stateInspector: 'Inspect state & audit',
+      stateInspectorHint: 'Open the prototype JSON snapshot and audit events for inspection.',
+      diagnostics: 'State & audit',
+      openDiagnostics: 'Inspect state & audit'
+    });
+    Object.assign(UI_TEXT.ja, {
+      stateInspector: '状態と監査を確認',
+      stateInspectorHint: 'プロトタイプの JSON スナップショットと監査イベントを確認します。',
+      diagnostics: '状態と監査',
+      openDiagnostics: '状態と監査を確認'
+    });
 
     const ACTORS = {
       author: { name: 'Linh Nguyễn', roleKey: 'author', role: 'Author / Editor', workspace: 'WS-LINH', kind: 'author' },
@@ -848,10 +886,9 @@
         description: 'Từ tài liệu mới tới baseline đã release.',
         steps: [
           { title: 'Chọn Author persona', detail: 'Mô phỏng người chuẩn bị working copy.', action: 'switch-actor', payload: { actorId: 'author' } },
-          { title: 'Reserve tài liệu', detail: 'Reservation gắn với document, workspace và expected Generation.', action: 'reserve' },
-          { title: 'Mở working copy', detail: 'Tạo không gian chỉnh sửa cục bộ.', action: 'open' },
+          { title: 'Checkout tài liệu', detail: 'Lấy Reservation và materialize working copy trong workspace đã chọn.', action: 'check-out' },
           { title: 'Sửa metadata', detail: 'Đánh dấu local work đang thay đổi.', action: 'edit' },
-          { title: 'Publish Generation', detail: 'Publish lần đầu tạo Generation 1 và chuyển Revision A sang In Work.', action: 'publish' },
+          { title: 'Check-in Generation', detail: 'Publish lần đầu tạo Generation 1; Reservation disposition vẫn tách riêng.', action: 'check-in' },
           { title: 'Submit for review', detail: 'Pin đúng Generation để approver đánh giá.', action: 'submit' },
           { title: 'Chuyển sang approver', detail: 'Kiểm tra actor separation.', action: 'switch-actor', payload: { actorId: 'approver' } },
           { title: 'Approve', detail: 'Independent approver ghi decision trên Generation đã pin.', action: 'approve' },
@@ -863,13 +900,12 @@
         description: 'Một workspace khác đã tiến Working Head trước khi publish.',
         steps: [
           { title: 'Chọn Author persona', detail: 'Bắt đầu bằng workspace của author.', action: 'switch-actor', payload: { actorId: 'author' } },
-          { title: 'Reserve tài liệu', detail: 'Giữ expected Generation ban đầu.', action: 'reserve' },
-          { title: 'Mở working copy', detail: 'Tạo local workspace được Reservation bảo vệ.', action: 'open' },
+          { title: 'Checkout tài liệu', detail: 'Giữ expected Generation và materialize working copy.', action: 'check-out' },
           { title: 'Tạo baseline edit', detail: 'Chuẩn bị nội dung cho Generation đầu tiên.', action: 'edit' },
-          { title: 'Publish baseline đầu', detail: 'Tạo Generation đầu tiên.', action: 'publish' },
+          { title: 'Check-in baseline đầu', detail: 'Tạo Generation đầu tiên.', action: 'check-in' },
           { title: 'Tạo local edit mới', detail: 'Working copy chưa publish.', action: 'edit' },
           { title: 'External workspace advance', detail: 'Mô phỏng Working Head đã tăng.', action: 'external-advance' },
-          { title: 'Publish stale request', detail: 'Phải bị chặn; local work không được xóa.', action: 'publish', expectBlocked: true },
+          { title: 'Check-in stale request', detail: 'Phải bị chặn; local work không được xóa.', action: 'check-in', expectBlocked: true },
           { title: 'Refresh / reapply', detail: 'Cập nhật expected Generation mà không tự động merge binary.', action: 'refresh' }
         ]
       },
@@ -882,8 +918,7 @@
           { title: 'Chuyển sang approver', detail: 'Approver là identity độc lập.', action: 'switch-actor', payload: { actorId: 'approver' } },
           { title: 'Reject có reason', detail: 'Review thất bại nhưng history và local work còn nguyên.', action: 'reject' },
           { title: 'Trở lại Author', detail: 'Author nhận lại việc cần sửa.', action: 'switch-actor', payload: { actorId: 'author' } },
-          { title: 'Reserve lại', detail: 'Author lấy reservation mới.', action: 'reserve' },
-          { title: 'Mở local work đã giữ', detail: 'Không cần tạo lại từ đầu.', action: 'open' },
+          { title: 'Checkout lại', detail: 'Author lấy Reservation và mở local work đã giữ.', action: 'check-out' },
           { title: 'Reapply edit', detail: 'Tiếp tục chỉnh sửa từ local work được giữ.', action: 'edit' }
         ]
       },
@@ -905,8 +940,7 @@
           { title: 'Chuẩn bị baseline đã release', detail: 'Chạy nhanh happy path trong một bước.', action: 'prepare-and-release' },
           { title: 'Chuyển sang Author', detail: 'Author bắt đầu business milestone mới.', action: 'switch-actor', payload: { actorId: 'author' } },
           { title: 'Create Revision', detail: 'Revision B bắt đầu ở Start với baseline Generation mới.', action: 'create-revision' },
-          { title: 'Reserve Revision B', detail: 'Reservation mới không kế thừa lock cũ.', action: 'reserve' },
-          { title: 'Open baseline copy', detail: 'Mở bản copy của Revision B.', action: 'open' },
+          { title: 'Checkout Revision B', detail: 'Reservation mới không kế thừa và baseline được materialize vào workspace.', action: 'check-out' },
           { title: 'Edit Revision B', detail: 'Tạo thay đổi mới trong Revision B.', action: 'edit' }
         ]
       }
@@ -1009,7 +1043,7 @@
         audit: [{ time: '2026-08-28 08:30', type: 'Registered', actor: 'System', docId: 'LD-P100-001', detail: 'Logical Document registered; Revision A starts without Generation.' }],
         guided: { scenario: overrides.scenario || 'happy', step: 0, completed: {}, message: '', open: Boolean(overrides.guidedOpen) },
         draftReason: 'Bổ sung evidence và làm rõ acceptance path',
-        lastAction: { type: 'info', message: 'Demo state ready.' },
+        lastAction: { type: 'info', action: '', message: 'Demo state ready.' },
         review: { open: false, disposition: '', notes: '', questions: '', saved: false, savedAt: '' }
       };
     }
@@ -1029,11 +1063,23 @@
     function canAction(action, doc = activeDoc()) {
       const actor = actorOf();
       const hasOwner = ownsReservation(doc);
-      const prototypeMutations = ['reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'external-advance', 'refresh', 'recover', 'withdraw'];
+      const prototypeMutations = ['check-out', 'check-in', 'reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'external-advance', 'refresh', 'recover', 'withdraw'];
       if (doc.id !== 'LD-P100-001' && prototypeMutations.includes(action)) {
         return blocked('Context record này chỉ để tạo mật độ UI. Chọn LD-P100-001 để chạy full interaction.');
       }
       switch (action) {
+        case 'check-out':
+          if (actor.kind === 'observer') return blocked('Read-only Observer không thể Checkout.');
+          if (doc.workflow === 'Released') return blocked('Released Revision là immutable; dùng Create Revision.');
+          if (doc.reservation && !hasOwner) return blocked(`Reservation đang thuộc ${doc.reservation.ownerName} tại ${doc.reservation.workspace}.`);
+          if (doc.reservation && hasOwner && doc.workingCopy.open) return blocked('Document đã Checkout trong workspace hiện tại.');
+          return success('');
+        case 'check-in': {
+          const publishCheck = canAction('publish', doc);
+          if (!publishCheck.ok) return blocked(publishCheck.message.replace(/\bPublish\b/g, 'Check-in'), publishCheck.code);
+          if (!doc.workingCopy.dirty) return blocked('Chưa có local changes để Check-in; hãy Edit working copy trước.');
+          return success('');
+        }
         case 'reserve':
           if (actor.kind === 'observer') return blocked('Read-only Observer không thể Reserve.');
           if (doc.workflow === 'Released') return blocked('Released Revision là immutable; dùng Create Revision.');
@@ -1106,7 +1152,7 @@
       let check;
       if (!['reset', 'switch-actor', 'select-doc', 'toggle-tree', 'item-tab', 'detail-close', 'guided-select', 'guided-reset', 'guided-open', 'guided-close', 'guided-next', 'diagnostics-open', 'diagnostics-close', 'nav-open', 'nav-close', 'evidence-open', 'evidence-close', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review'].includes(action)) {
         check = canAction(action, doc);
-        if (!check.ok) { state.lastAction = { type: 'blocked', message: check.message, code: check.code }; return check; }
+        if (!check.ok) { state.lastAction = { type: 'blocked', action, message: check.message, code: check.code }; return check; }
       }
       let result = success('');
       const actor = actorOf();
@@ -1153,6 +1199,25 @@
             result = success(`Đang demo dưới identity ${ACTORS[payload.actorId].name}.`);
           } else result = blocked('Actor không hợp lệ.');
           break;
+        case 'check-out': {
+          const reusedReservation = Boolean(doc.reservation && ownsReservation(doc));
+          if (!doc.reservation) {
+            doc.reservation = { owner: state.actorId, ownerName: actor.name, workspace: actor.workspace, expectedGeneration: doc.generation, lease: '20 min' };
+          }
+          doc.workingCopy.open = true;
+          doc.workingCopy.summary = doc.localWork ? 'Preserved local work materialized in the managed workspace.' : 'Working copy materialized from current Working Head.';
+          audit('Checked Out', `${doc.id} materialized in ${actor.workspace}; ${reusedReservation ? 'existing' : 'new'} Reservation retained for explicit Check-in.`);
+          result = success(`Checkout hoàn tất: ${doc.id} đã mở trong ${actor.workspace}.`);
+          break;
+        }
+        case 'check-in': {
+          const publishResult = dispatch('publish');
+          if (publishResult.ok) {
+            audit('Checked In', `Check-in completed for ${doc.id}; Reservation disposition remains explicit until the next workflow action.`);
+            result = success(`Check-in hoàn tất: ${publishResult.message}`);
+          } else result = publishResult;
+          break;
+        }
         case 'reserve':
           if (doc.reservation && ownsReservation(doc)) result = success('Reservation đã thuộc workspace hiện tại.');
           else {
@@ -1178,7 +1243,7 @@
           if (doc.reservation && doc.reservation.expectedGeneration !== doc.generation) {
             doc.conflict = { expected: doc.reservation.expectedGeneration, current: doc.generation, detectedAt: formatClock(state.clock) };
             result = blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Local work được giữ.`, 'STALE_GENERATION');
-            state.lastAction = { type: 'blocked', message: result.message, code: result.code };
+            state.lastAction = { type: 'blocked', action: 'publish', message: result.message, code: result.code };
             break;
           }
           if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) {
@@ -1370,7 +1435,7 @@
           break;
         default: result = success('');
       }
-      state.lastAction = { type: result.ok ? 'success' : 'blocked', message: result.message, code: result.code || '' };
+      state.lastAction = { type: result.ok ? 'success' : 'blocked', action, message: result.message, code: result.code || '' };
       return result;
     }
 
@@ -1399,32 +1464,49 @@
         tree: '<path d="M6 4v16M6 8h7M6 16h7M13 8v4M13 12h5"></path><rect x="3" y="2" width="6" height="4" rx="1"></rect><rect x="10" y="6" width="6" height="4" rx="1"></rect><rect x="10" y="14" width="6" height="4" rx="1"></rect><rect x="16" y="10" width="5" height="4" rx="1"></rect>',
         audit: '<path d="M6 3h12v18H6z"></path><path d="M9 7h6M9 11h6M9 15h4"></path>',
         copy: '<rect x="8" y="8" width="11" height="12" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3"></path>',
-        print: '<path d="M6 9V3h12v6M6 17H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v7H6z"></path>'
+        print: '<path d="M6 9V3h12v6M6 17H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v7H6z"></path>',
+        definition: '<path d="m4 8 8-5 8 5-8 5z"></path><path d="m4 8 8 5 8-5M4 8v8l8 5 8-5V8"></path><path d="M12 13v8"></path>',
+        cad: '<path d="M5 19 19 5M7 5h12v12"></path><path d="M4 20h5M4 20v-5"></path><circle cx="12" cy="12" r="3"></circle>',
+        spec: '<path d="M6 3h8l4 4v14H6z"></path><path d="M14 3v5h4M9 12h6M9 16h6M9 20h4"></path>',
+        interface: '<path d="M8 7v5M16 7v5"></path><path d="M5 12h14"></path><path d="M8 4v3M16 4v3M8 12v5M16 12v5"></path><path d="M6 19h12"></path>',
+        checklist: '<path d="M6 3h12v18H6z"></path><path d="m8.5 9 1.5 1.5L12.5 8M14 9h2M8.5 14 10 15.5l2.5-2.5M14 14h2"></path>',
+        drawing: '<rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M8 16h8M8 12h8M8 8h4M16 8v8"></path>',
+        register: '<rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M4 9h16M4 14h16M10 4v16M16 4v16"></path>',
+        package: '<path d="m4 8 8-4 8 4-8 4z"></path><path d="M4 8v9l8 4 8-4V8M12 12v9"></path><path d="m8 6 8 4"></path>',
+        book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v17H6.5A2.5 2.5 0 0 0 4 22z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H12v17h5.5A2.5 2.5 0 0 1 20 22z"></path>'
       };
       return `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || '<circle cx="12" cy="12" r="8"></circle>'}</svg>`;
     }
-    const ACTION_ORDER = ['reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'withdraw', 'external-advance', 'refresh', 'recover'];
+    const ACTION_ORDER = ['check-out', 'check-in', 'reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'withdraw', 'external-advance', 'refresh', 'recover'];
     const ACTION_META = {
+      'check-out': ['checkOut', 'reserve', 'checkOutHint'], 'check-in': ['checkIn', 'publish', 'checkInHint'],
       reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit'], publish: ['publish', 'publish'],
       submit: ['submit', 'arrow'], approve: ['approve', 'check'], reject: ['reject', 'close'], release: ['release', 'release'],
       'create-revision': ['createRevision', 'plus'], withdraw: ['withdraw', 'back'], 'external-advance': ['externalAdvance', 'external'],
       refresh: ['refresh', 'refresh'], recover: ['recover', 'key']
     };
     function primaryActionsFor(doc) {
-      if (doc.workflow === 'Start') return ['reserve', 'open', 'edit', 'publish'];
-      if (doc.workflow === 'In Work') return ['open', 'edit', 'publish', 'submit'];
+      if (doc.workflow === 'Start' || doc.workflow === 'In Work') {
+        const next = nextActionFor(doc).action;
+        const flow = ['check-out', 'check-in'];
+        if (next && !flow.includes(next)) flow.push(next);
+        return flow;
+      }
       if (doc.workflow === 'Under Review') return ['approve', 'reject', 'release', 'withdraw'];
       if (doc.workflow === 'Released') return ['create-revision'];
-      return ['reserve', 'open'];
+      return ['check-out', 'check-in'];
     }
     function renderAction(action, prominent = false) {
       const [labelKey, iconName] = ACTION_META[action] || [action, 'file'];
-      return actionButton(action, labelKey, prominent ? 'primary' : '', iconName);
+      const flowClass = action === 'check-out' || action === 'check-in' ? 'flow-action' : '';
+      return actionButton(action, labelKey, `${prominent ? 'primary' : ''} ${flowClass}`.trim(), iconName);
     }
     function actionButton(action, labelKey, className = '', iconName = '') {
       const status = canAction(action);
       const disabled = !status.ok;
-      return `<button type="button" class="action-btn ${className} ${disabled ? 'is-disabled' : ''}" data-action="${action}" aria-disabled="${disabled ? 'true' : 'false'}" title="${esc(disabled ? status.message : t(labelKey))}">${svgIcon(iconName)} <span>${esc(t(labelKey))}</span></button>`;
+      const hintKey = ACTION_META[action] && ACTION_META[action][2];
+      const hint = hintKey ? t(hintKey) : t(labelKey);
+      return `<button type="button" class="action-btn ${className} ${disabled ? 'is-disabled' : ''}" data-action="${action}" aria-disabled="${disabled ? 'true' : 'false'}" title="${esc(disabled ? status.message : hint)}">${svgIcon(iconName)} <span>${esc(t(labelKey))}</span></button>`;
     }
     function chip(value, label, className = '') { return `<span class="badge ${className || statusClass(value)}">${esc(label)}</span>`; }
     function metric(label, value, note = '') { return `<div class="metric"><div class="metric-label">${esc(label)}</div><div class="metric-value">${esc(value)}</div>${note ? `<div class="metric-note">${esc(note)}</div>` : ''}</div>`; }
@@ -1459,8 +1541,13 @@
       const reasonRelevant = doc.workflow === 'Under Review' || (doc.reservation && !ownsReservation(doc));
       const primary = primaryActionsFor(doc);
       const secondary = ACTION_ORDER.filter(action => !primary.includes(action));
-      const primaryMarkup = primary.map((action, index) => renderAction(action, index === 0 && canAction(action, doc).ok)).join('');
-      const secondaryMarkup = `${secondary.map(action => renderAction(action)).join('')}<div class="command-secondary-label">${esc(ui('details'))}</div><div class="command-utility-actions"><button type="button" id="open-properties" class="command-utility" data-action="item-tab" data-tab="properties">${svgIcon('file')} <span>${esc(ui('openProperties'))}</span></button><button type="button" id="open-guided" class="command-utility" data-action="guided-open">${svgIcon('route')} <span>${esc(ui('openGuided'))}</span></button><button type="button" id="open-diagnostics" class="command-utility" data-action="diagnostics-open">${svgIcon('audit')} <span>${esc(ui('openDiagnostics'))}</span></button></div>`;
+      let prominentAssigned = false;
+      const primaryMarkup = primary.map(action => {
+        const prominent = !prominentAssigned && canAction(action, doc).ok;
+        if (prominent) prominentAssigned = true;
+        return renderAction(action, prominent);
+      }).join('');
+      const secondaryMarkup = `${secondary.map(action => renderAction(action)).join('')}<div class="command-secondary-label">${esc(ui('details'))}</div><div class="command-utility-actions"><button type="button" id="open-properties" class="command-utility" data-action="item-tab" data-tab="properties">${svgIcon('file')} <span>${esc(ui('openProperties'))}</span></button><button type="button" id="open-guided" class="command-utility" data-action="guided-open">${svgIcon('route')} <span>${esc(ui('openGuided'))}</span></button><button type="button" id="open-diagnostics" class="command-utility" data-action="diagnostics-open" title="${esc(ui('stateInspectorHint'))}" aria-label="${esc(`${ui('stateInspector')}. ${ui('stateInspectorHint')}`)}">${svgIcon('audit')} <span>${esc(ui('stateInspector'))}</span></button></div>`;
       const reasonMarkup = reasonRelevant ? `<details class="reason-disclosure"><summary>${esc(ui('reasonDisclosure'))}${state.draftReason ? `<span class="reason-ready">●</span>` : ''}</summary><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></details>` : '';
       return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="primary-actions">${primaryMarkup}</div><details class="command-more"><summary>${esc(ui('moreActions'))}<span class="command-more-count">${secondary.length}</span></summary><div class="secondary-actions" aria-label="${esc(ui('technicalActions'))}">${secondaryMarkup}</div></details></div><div class="command-status"><div class="badge-row">${reservation}${preserved}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}</div></div>${reasonMarkup}</section>`;
     }
@@ -1474,22 +1561,21 @@
         return { action: 'release', label: t('release'), role: t('approver') };
       }
       if (doc.workflow === 'Start') {
-        if (!doc.reservation || !ownsReservation(doc)) return { action: 'reserve', label: t('reserve') };
-        if (!doc.workingCopy.open) return { action: 'open', label: t('open') };
+        if (!doc.reservation || !ownsReservation(doc) || !doc.workingCopy.open) return { action: 'check-out', label: t('checkOut') };
         if (!doc.workingCopy.dirty) return { action: 'edit', label: t('edit') };
-        return { action: 'publish', label: t('publish') };
+        return { action: 'check-in', label: t('checkIn') };
       }
       if (doc.workflow === 'In Work') {
-        if (doc.workingCopy.dirty) return { action: 'publish', label: t('publish') };
-        if (!doc.reservation || !ownsReservation(doc)) return { action: 'reserve', label: t('reserve') };
+        if (!doc.reservation || !ownsReservation(doc) || !doc.workingCopy.open) return { action: 'check-out', label: t('checkOut') };
+        if (doc.workingCopy.dirty) return { action: 'check-in', label: t('checkIn') };
         return { action: 'submit', label: t('submit') };
       }
-      return { action: 'reserve', label: t('reserve') };
+      return { action: 'check-out', label: t('checkOut') };
     }
 
     function renderNextAction(doc) {
       const next = nextActionFor(doc);
-      const isBlocked = state.lastAction.type === 'blocked';
+      const isBlocked = state.lastAction.type === 'blocked' && state.lastAction.action === next.action;
       const nextCheck = next.action ? canAction(next.action, doc) : blocked('');
       const needsRole = Boolean(next.role && !nextCheck.ok);
       const actionUnavailable = Boolean(next.action && !nextCheck.ok);
@@ -1551,6 +1637,13 @@
       if (item.category === 'Release') return 'Release package';
       if (item.category === 'Office') return 'Controlled reference';
       return 'Related document';
+    }
+
+    function documentIcon(item) {
+      return ({
+        pump: 'definition', housing: 'cad', seal: 'spec', motor: 'interface', test: 'checklist',
+        drawing: 'drawing', material: 'register', release: 'package', installation: 'book', risk: 'warning'
+      })[item && item.titleKey] || 'file';
     }
 
     function renderRelationshipGrid(doc) {
@@ -1642,7 +1735,7 @@
       };
       const summary = `<div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div>`;
       const body = `${summary}<pre class="state-json">${esc(JSON.stringify(snapshot, null, 2))}</pre>`;
-      return expanded ? `<section class="diagnostics-snapshot">${body}</section>` : `<details class="state-card"><summary>${esc(ui('diagnostics'))} <span class="small muted">· ${esc(t('stateHint'))}</span></summary>${body}</details>`;
+      return expanded ? `<section class="diagnostics-snapshot">${body}</section>` : `<details class="state-card"><summary>${esc(ui('stateInspector'))} <span class="small muted">· ${esc(ui('stateInspectorHint'))}</span></summary>${body}</details>`;
     }
 
     function renderDetailDrawer(doc) {
@@ -1655,7 +1748,7 @@
 
     function renderDiagnosticsModal(doc) {
       if (!state.diagnosticsOpen) return '';
-      return `<div class="overlay-layer modal-layer diagnostics-layer"><div class="overlay-scrim" data-action="diagnostics-close" aria-hidden="true"></div><section class="diagnostics-dialog" role="dialog" aria-modal="true" aria-labelledby="diagnostics-title"><header class="modal-head"><div><div class="eyebrow">${esc(ui('openDiagnostics'))}</div><h2 id="diagnostics-title">${esc(ui('diagnostics'))}</h2><p>${esc(t('stateHint'))}</p></div><button type="button" class="close-btn" data-action="diagnostics-close" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="modal-body">${renderStateSnapshot(doc, true)}</div></section></div>`;
+      return `<div class="overlay-layer modal-layer diagnostics-layer"><div class="overlay-scrim" data-action="diagnostics-close" aria-hidden="true"></div><section class="diagnostics-dialog" role="dialog" aria-modal="true" aria-labelledby="diagnostics-title"><header class="modal-head"><div><div class="eyebrow">${esc(ui('details'))}</div><h2 id="diagnostics-title">${esc(ui('stateInspector'))}</h2><p>${esc(ui('stateInspectorHint'))}</p></div><button type="button" class="close-btn" data-action="diagnostics-close" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="modal-body">${renderStateSnapshot(doc, true)}</div></section></div>`;
     }
 
     function renderNavDrawer() {
@@ -1683,7 +1776,7 @@
         const expanded = !collapsed[group.key];
         const docsMarkup = expanded ? group.ids.map(id => {
           const item = state.docs.find(doc => doc.id === id);
-          return item ? `<button type="button" class="tree-node ${item.id === state.activeDocId ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(item.id)}" aria-current="${item.id === state.activeDocId ? 'true' : 'false'}"><span class="tree-caret" aria-hidden="true">·</span>${svgIcon('file')}<span>${esc(item.id)}</span><i class="tree-state ${statusClass(item.workflow)}" aria-hidden="true"></i></button>` : '';
+          return item ? `<button type="button" class="tree-node ${item.id === state.activeDocId ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(item.id)}" aria-current="${item.id === state.activeDocId ? 'true' : 'false'}" aria-label="${esc(`${item.id} · ${item.className}`)}" title="${esc(item.className)}"><span class="tree-caret" aria-hidden="true">·</span>${svgIcon(documentIcon(item))}<span>${esc(item.id)}</span><i class="tree-state ${statusClass(item.workflow)}" aria-hidden="true"></i></button>` : '';
         }).join('') : '';
         return `<div class="tree-children"><button type="button" class="tree-node tree-toggle" data-action="toggle-tree" data-tree-key="${esc(group.key)}" aria-expanded="${expanded ? 'true' : 'false'}" aria-label="${esc(toggleLabel(expanded, group.label))}"><span class="tree-caret" aria-hidden="true">${expanded ? '▾' : '▸'}</span>${svgIcon(group.icon)}<span>${esc(group.label)}</span></button>${docsMarkup}</div>`;
       }).join('') : '';
@@ -1762,7 +1855,7 @@
         guide.message = expectedBlocked ? `Expected block: ${result.message}` : `Done: ${result.message}`;
         if (guide.step >= scenario.steps.length) guide.completed[guide.scenario] = true;
       } else guide.message = `Chưa đạt bước này: ${result.message}`;
-      state.lastAction = { type: accepted ? 'success' : 'blocked', message: guide.message, code: result.code || '' };
+      state.lastAction = { type: accepted ? 'success' : 'blocked', action: step.action, message: guide.message, code: result.code || '' };
       render();
       focusDialog('.guided-dialog');
       showToast(guide.message, !accepted);

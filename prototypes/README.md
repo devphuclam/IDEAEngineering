@@ -24,7 +24,8 @@ parity or a copy of any vendor UI.
   actions, with Overview / Files / Structure / Lifecycle / Audit tabs for progressive detail.
 - **Navigator + relationships:** the same item can be reached from a product tree, a document list,
   or a relationship row without opening a second workspace.
-- **Command bar:** Reserve, working-copy, publish, review and release actions stay beside the item;
+- **Command bar:** Checkout, Check-in, review and release actions stay beside the item; lower-level
+  Reserve / Open working copy / Publish commands remain under **More actions** for inspection and
   unavailable actions remain visible with an explanatory reason.
 - **Lifecycle visibility:** the state path `Start → In Work → Under Review → Released` is a visible
   strip, while the right rail keeps edit ownership, the Generation under review and the check result in view.
@@ -52,8 +53,10 @@ The prototype uses one authoritative surface per fact so the PLM composition sta
 - **Right rail:** a plain-language control summary, the three latest item audit events and links to Files / Structure;
   it is not a second metadata or audit authority. The recent-audit panel links to the full immutable
   timeline in the Audit drawer.
-- **Full properties, Diagnostics and Guided walkthrough:** stay behind the More actions disclosure. Properties
-  use the detail drawer; Diagnostics and Guided use a modal so their longer content does not lengthen the page.
+- **Full properties, State & audit inspector and Guided walkthrough:** stay behind the More actions disclosure.
+  Properties use the detail drawer; the state inspector and Guided walkthrough use a modal so their longer
+  content does not lengthen the page. The state inspector is a prototype-debug view of in-memory JSON and
+  audit events, not an end-user production capability.
 - **Navigator and evidence rail:** remain bounded columns on desktop, so a long document tree or growing audit
   list scrolls inside its own rail rather than moving the whole decision viewport.
 - **Collapsible hierarchy:** the product root and each document class can be expanded or collapsed independently;
@@ -92,8 +95,10 @@ table merely to keep it visible. A contextual reference is allowed only when it 
 - `LD-P100-001` is the only fully interactive Logical Document.
 - The other synthetic records provide realistic information density and are read-only context.
 - All state is in memory and disappears on reload.
-- Reserve, Publish, Review, Approve, Reject, Release, conflict handling and Create Revision are UI
-  simulations of accepted domain semantics; they are not a backend implementation.
+- Checkout requests a per-document Reservation and materializes a working copy. Check-in publishes that
+  working copy as an immutable Generation. Check-in does not silently release the Reservation; Reservation
+  disposition remains an explicit later decision. These actions, Review, Approve, Reject, Release, conflict
+  handling and Create Revision are UI simulations of accepted domain semantics, not a backend implementation.
 - The VI/EN/JA switch demonstrates label length, fallback and layout pressure. It is not a complete
   translation review or accessibility-conformance result.
 - The prototype uses no real company document, user identity, credential, file, integration or
