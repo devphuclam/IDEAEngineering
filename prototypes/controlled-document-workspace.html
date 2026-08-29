@@ -306,6 +306,8 @@
     .tree-node { display: flex; align-items: center; gap: 5px; min-height: 34px; padding: 4px 6px; border-radius: 5px; color: #3e596a; font-size: 11px; text-align: left; }
     .tree-node { width: 100%; border: 0; background: transparent; font: 11px/1.4 var(--sans); }
     .tree-node:hover { background: #eef5f8; }
+    .tree-toggle { color: #315d72; font-weight: 700; }
+    .tree-toggle[aria-expanded="false"] { color: #607887; }
     .tree-node.selected { color: #124d6d; background: #e3f1f5; font-weight: 760; }
     .tree-node .tree-caret { width: 12px; color: #78909e; font-size: 12px; }
     .tree-node svg { width: 15px; height: 15px; color: #377899; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -787,7 +789,7 @@
         productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Mở rộng', collapse: 'Thu gọn',
         breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.', moreActions: 'Thêm thao tác', technicalActions: 'Kỹ thuật / recovery', reasonDisclosure: 'Reason cho Reject / Recovery', nextAction: 'Bước tiếp theo', blockingReason: 'Lý do đang chặn', evidenceSummary: 'Tóm tắt evidence', evidenceHint: 'Chỉ giữ các tín hiệu cần để quyết định.', linkedCount: 'Relationship', openTab: 'Mở tab', details: 'Chi tiết', openDetails: 'Mở chi tiết', diagnostics: 'Diagnostics', allProperties: 'Tất cả properties', keyProperties: 'Key properties', overviewSummary: 'Tóm tắt item', currentState: 'Trạng thái hiện tại', nextState: 'Trạng thái kế tiếp', runWalkthrough: 'Chạy walkthrough', closeWalkthrough: 'Thu gọn walkthrough', openWalkthrough: 'Mở walkthrough', exactPin: 'Exact pin', recentAudit: 'Audit gần đây', recentAuditHint: 'Các event mới nhất của item đang chọn.', auditEmpty: 'Item này chưa có event.', detailHint: 'Chỉ cuộn dữ liệu cùng loại trong panel này.', openProperties: 'Tất cả properties', openDiagnostics: 'Diagnostics', openGuided: 'Guided walkthrough'
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.', moreActions: 'Thêm thao tác', technicalActions: 'Kỹ thuật / recovery', reasonDisclosure: 'Reason cho Reject / Recovery', nextAction: 'Bước tiếp theo', blockingReason: 'Lý do đang chặn', evidenceSummary: 'Tóm tắt evidence', evidenceHint: 'Chỉ giữ các tín hiệu cần để quyết định.', controlSummary: 'Thông tin kiểm soát', controlSummaryHint: 'Kiểm tra nhanh trước khi thực hiện bước tiếp theo.', controlReservation: 'Quyền chỉnh sửa', controlPin: 'Generation đang xét', controlGate: 'Kết quả kiểm tra', linkedCount: 'Relationship', openTab: 'Mở tab', details: 'Chi tiết', detailsHint: 'Mở phần tương ứng để xem chi tiết.', relationshipHint: 'Mở Structure để xem danh sách đầy đủ.', openDetails: 'Mở chi tiết', diagnostics: 'Diagnostics', allProperties: 'Tất cả properties', keyProperties: 'Key properties', overviewSummary: 'Tóm tắt item', currentState: 'Trạng thái hiện tại', nextState: 'Trạng thái kế tiếp', runWalkthrough: 'Chạy walkthrough', closeWalkthrough: 'Thu gọn walkthrough', openWalkthrough: 'Mở walkthrough', exactPin: 'Exact pin', recentAudit: 'Audit gần đây', recentAuditHint: 'Các event mới nhất của item đang chọn.', auditEmpty: 'Item này chưa có event.', detailHint: 'Chỉ cuộn dữ liệu cùng loại trong panel này.', openProperties: 'Tất cả properties', openDiagnostics: 'Diagnostics', openGuided: 'Guided walkthrough'
       },
       en: {
         navigator: 'Item navigator', item: 'Item', overview: 'Overview', files: 'Files / representations', structure: 'Structure / relationships', lifecycle: 'Lifecycle', auditTab: 'Audit',
@@ -795,7 +797,7 @@
         productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Expand', collapse: 'Collapse',
         breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.', moreActions: 'More actions', technicalActions: 'Technical / recovery', reasonDisclosure: 'Reason for Reject / Recovery', nextAction: 'Next action', blockingReason: 'Blocking reason', evidenceSummary: 'Evidence summary', evidenceHint: 'Keep only the signals needed for a decision.', linkedCount: 'Relationships', openTab: 'Open tab', details: 'Details', openDetails: 'Open details', diagnostics: 'Diagnostics', allProperties: 'All properties', keyProperties: 'Key properties', overviewSummary: 'Item summary', currentState: 'Current state', nextState: 'Next state', runWalkthrough: 'Run walkthrough', closeWalkthrough: 'Collapse walkthrough', openWalkthrough: 'Open walkthrough', exactPin: 'Exact pin', recentAudit: 'Recent audit', recentAuditHint: 'Latest events for the selected item.', auditEmpty: 'No events for this item.', detailHint: 'Only this data type scrolls in this panel.', openProperties: 'All properties', openDiagnostics: 'Diagnostics', openGuided: 'Guided walkthrough'
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.', moreActions: 'More actions', technicalActions: 'Technical / recovery', reasonDisclosure: 'Reason for Reject / Recovery', nextAction: 'Next action', blockingReason: 'Blocking reason', evidenceSummary: 'Evidence summary', evidenceHint: 'Keep only the signals needed for a decision.', controlSummary: 'Control summary', controlSummaryHint: 'Quick checks before the next action.', controlReservation: 'Edit ownership', controlPin: 'Generation under review', controlGate: 'Check result', linkedCount: 'Relationships', openTab: 'Open tab', details: 'Details', detailsHint: 'Open a section when you need the full detail.', relationshipHint: 'Open Structure to see the full list.', openDetails: 'Open details', diagnostics: 'Diagnostics', allProperties: 'All properties', keyProperties: 'Key properties', overviewSummary: 'Item summary', currentState: 'Current state', nextState: 'Next state', runWalkthrough: 'Run walkthrough', closeWalkthrough: 'Collapse walkthrough', openWalkthrough: 'Open walkthrough', exactPin: 'Exact pin', recentAudit: 'Recent audit', recentAuditHint: 'Latest events for the selected item.', auditEmpty: 'No events for this item.', detailHint: 'Only this data type scrolls in this panel.', openProperties: 'All properties', openDiagnostics: 'Diagnostics', openGuided: 'Guided walkthrough'
       },
       ja: {
         navigator: 'アイテム ナビゲーター', item: 'アイテム', overview: '概要', files: 'ファイル / 表現', structure: '構成 / 関係', lifecycle: 'ライフサイクル', auditTab: '監査',
@@ -803,7 +805,7 @@
         productRoot: 'P-100 ポンプアセンブリ', productDefinition: '製品定義', cadArtifacts: 'CAD 成果物', controlledRecords: '管理レコード', expand: '展開', collapse: '折りたたむ',
         breadcrumbHome: '自分の作業', breadcrumbProduct: '製品定義', breadcrumbItem: '選択アイテム', relation: '関係', itemId: 'アイテム ID', ownerShort: '所有者', category: 'カテゴリ', structureShort: '構成', workingHead: 'Working Head', stateShort: '状態', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'ファイル ロール', fileName: '表現', source: 'ソース', digestShort: 'ダイジェスト', current: 'Current', history: '履歴', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。', moreActions: 'その他の操作', technicalActions: '技術 / リカバリ', reasonDisclosure: 'Reject / Recovery の理由', nextAction: '次のアクション', blockingReason: 'ブロック理由', evidenceSummary: 'エビデンス概要', evidenceHint: '判断に必要なシグナルだけを表示します。', linkedCount: '関係', openTab: 'タブを開く', details: '詳細', openDetails: '詳細を開く', diagnostics: '診断', allProperties: 'すべてのプロパティ', keyProperties: '主要プロパティ', overviewSummary: 'アイテム概要', currentState: '現在の状態', nextState: '次の状態', runWalkthrough: 'ウォークスルーを実行', closeWalkthrough: 'ウォークスルーを閉じる', openWalkthrough: 'ウォークスルーを開く', exactPin: 'Exact pin', recentAudit: '最近の監査', recentAuditHint: '選択アイテムの最新イベント。', auditEmpty: 'このアイテムのイベントはありません。', detailHint: 'このパネルでは同じ種類のデータだけをスクロールします。', openProperties: 'すべてのプロパティ', openDiagnostics: '診断', openGuided: 'ウォークスルー'
+        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。', moreActions: 'その他の操作', technicalActions: '技術 / リカバリ', reasonDisclosure: 'Reject / Recovery の理由', nextAction: '次のアクション', blockingReason: 'ブロック理由', evidenceSummary: 'エビデンス概要', evidenceHint: '判断に必要なシグナルだけを表示します。', controlSummary: '管理情報', controlSummaryHint: '次の操作の前に確認する情報。', controlReservation: '編集権限', controlPin: '確認中の Generation', controlGate: 'チェック結果', linkedCount: '関係', openTab: 'タブを開く', details: '詳細', detailsHint: '必要な項目を開いて詳細を確認します。', relationshipHint: '構成を開くと一覧を確認できます。', openDetails: '詳細を開く', diagnostics: '診断', allProperties: 'すべてのプロパティ', keyProperties: '主要プロパティ', overviewSummary: 'アイテム概要', currentState: '現在の状態', nextState: '次の状態', runWalkthrough: 'ウォークスルーを実行', closeWalkthrough: 'ウォークスルーを閉じる', openWalkthrough: 'ウォークスルーを開く', exactPin: 'Exact pin', recentAudit: '最近の監査', recentAuditHint: '選択アイテムの最新イベント。', auditEmpty: 'このアイテムのイベントはありません。', detailHint: 'このパネルでは同じ種類のデータだけをスクロールします。', openProperties: 'すべてのプロパティ', openDiagnostics: '診断', openGuided: 'ウォークスルー'
       }
     };
 
@@ -985,6 +987,7 @@
     }
     function createInitialState(overrides = {}) {
       const docs = SEED_DOCS.map(normalizeDoc);
+      const collapsed = overrides.treeCollapsed || {};
       return {
         locale: overrides.locale || 'vi',
         // The prototype intentionally has one UI direction; no layout selector is persisted.
@@ -995,6 +998,12 @@
          diagnosticsOpen: Boolean(overrides.diagnosticsOpen),
          navDrawerOpen: Boolean(overrides.navDrawerOpen),
          evidenceDrawerOpen: Boolean(overrides.evidenceDrawerOpen),
+         treeCollapsed: {
+           root: Boolean(collapsed.root),
+           productDefinition: Boolean(collapsed.productDefinition),
+           cadArtifacts: Boolean(collapsed.cadArtifacts),
+           controlledRecords: Boolean(collapsed.controlledRecords)
+         },
          docs,
         clock: 8 * 60 + 30,
         audit: [{ time: '2026-08-28 08:30', type: 'Registered', actor: 'System', docId: 'LD-P100-001', detail: 'Logical Document registered; Revision A starts without Generation.' }],
@@ -1095,7 +1104,7 @@
     function dispatch(action, payload = {}) {
       const doc = activeDoc();
       let check;
-      if (!['reset', 'switch-actor', 'select-doc', 'item-tab', 'detail-close', 'guided-select', 'guided-reset', 'guided-open', 'guided-close', 'guided-next', 'diagnostics-open', 'diagnostics-close', 'nav-open', 'nav-close', 'evidence-open', 'evidence-close', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review'].includes(action)) {
+      if (!['reset', 'switch-actor', 'select-doc', 'toggle-tree', 'item-tab', 'detail-close', 'guided-select', 'guided-reset', 'guided-open', 'guided-close', 'guided-next', 'diagnostics-open', 'diagnostics-close', 'nav-open', 'nav-close', 'evidence-open', 'evidence-close', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review'].includes(action)) {
         check = canAction(action, doc);
         if (!check.ok) { state.lastAction = { type: 'blocked', message: check.message, code: check.code }; return check; }
       }
@@ -1116,6 +1125,12 @@
             state.evidenceDrawerOpen = false;
             result = success(`Đã chọn ${payload.id}.`);
           } else result = blocked('Không tìm thấy document synthetic này.');
+          break;
+        case 'toggle-tree':
+          if (Object.prototype.hasOwnProperty.call(state.treeCollapsed, payload.key)) {
+            state.treeCollapsed[payload.key] = !state.treeCollapsed[payload.key];
+            result = success('');
+          } else result = blocked('Tree node không hợp lệ.');
           break;
         case 'item-tab':
           if (['overview', 'properties', 'files', 'structure', 'lifecycle', 'audit'].includes(payload.tab)) {
@@ -1427,10 +1442,6 @@
       </div><div class="app-menu-row"><nav class="app-menu" aria-label="Application menu"><span class="app-menu-item">File</span><span class="app-menu-item">Edit</span><span class="app-menu-item">View</span><span class="app-menu-item">Actions</span><span class="app-menu-item">Reports</span><span class="app-menu-item">Help</span></nav></div></header>`;
     }
 
-    function renderPageIntro() {
-      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))}</p></div></div>`;
-    }
-
     function renderIdentity(doc) {
       const cells = [
         [t('stableId'), doc.id, true], [t('documentClass'), doc.className, false], [t('revision'), doc.revision, false], [t('version'), doc.documentVersion, true], [t('sequence'), doc.versionSequence || '—', true], [t('generation'), doc.generation || '—', true]
@@ -1549,7 +1560,7 @@
 
     function renderOverview(doc) {
       const linkedCount = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean).length;
-      return `<div class="overview-grid">${renderPropertyForm(doc, true)}${renderLifecycleSummary(doc)}<section class="form-section overview-card relationship-summary"><div class="form-section-header"><h3>${esc(ui('relationships'))}</h3><span>${linkedCount}</span></div><div class="overview-summary-row"><div><strong>${linkedCount} linked item${linkedCount === 1 ? '' : 's'}</strong><span>${esc(ui('evidenceHint'))}</span></div><button type="button" id="overview-structure" class="inline-link" data-action="item-tab" data-tab="structure">${svgIcon('tree')} ${esc(ui('openDetails'))}</button></div></section></div>`;
+      return `<div class="overview-grid">${renderPropertyForm(doc, true)}${renderLifecycleSummary(doc)}<section class="form-section overview-card relationship-summary"><div class="form-section-header"><h3>${esc(ui('relationships'))}</h3><span>${linkedCount}</span></div><div class="overview-summary-row"><div><strong>${linkedCount} linked item${linkedCount === 1 ? '' : 's'}</strong><span>${esc(ui('relationshipHint'))}</span></div><button type="button" id="overview-structure" class="inline-link" data-action="item-tab" data-tab="structure">${svgIcon('tree')} ${esc(ui('openDetails'))}</button></div></section></div>`;
     }
 
     function renderFileRepresentations(doc) {
@@ -1589,9 +1600,9 @@
     function renderEvidenceSummary(doc) {
       const exactPin = doc.pendingReview ? doc.pendingReview.generation : (doc.releaseRecord ? doc.releaseRecord.generation : doc.generation);
       const rows = [
-        [t('reservation'), reservationLabel(doc), false], [ui('exactPin'), exactPin || '—', true], [t('gate'), gateLabel(doc.gate), false]
+        [ui('controlReservation'), reservationLabel(doc), false], [ui('controlPin'), exactPin || '—', true], [ui('controlGate'), gateLabel(doc.gate), false]
       ];
-      return `<section class="panel evidence-panel"><div class="panel-header"><div><h2>${esc(ui('evidenceSummary'))}</h2><p>${esc(ui('evidenceHint'))}</p></div>${doc.conflict ? chip('conflict', 'STALE', 'red') : ''}</div><div class="panel-body"><dl class="evidence-list">${rows.map(([label, value, mono]) => `<div><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
+      return `<section class="panel evidence-panel"><div class="panel-header"><div><h2>${esc(ui('controlSummary'))}</h2><p>${esc(ui('controlSummaryHint'))}</p></div>${doc.conflict ? chip('conflict', 'STALE', 'red') : ''}</div><div class="panel-body"><dl class="evidence-list">${rows.map(([label, value, mono]) => `<div><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
     }
 
     function renderRailLinks(doc) {
@@ -1599,7 +1610,7 @@
       const links = [
         ['files', ui('files'), 3, 'file'], ['structure', ui('structure'), linkedCount, 'tree']
       ];
-      return `<section class="panel"><div class="panel-header"><div><h2>${esc(ui('details'))}</h2><p>${esc(ui('evidenceHint'))}</p></div></div><div class="panel-body"><div class="rail-links">${links.map(([tab, label, count, icon]) => `<button type="button" id="rail-detail-${tab}" class="rail-link" data-action="item-tab" data-tab="${tab}"><span>${svgIcon(icon)} ${esc(label)}</span><strong>${count}</strong></button>`).join('')}</div></div></section>`;
+      return `<section class="panel"><div class="panel-header"><div><h2>${esc(ui('details'))}</h2><p>${esc(ui('detailsHint'))}</p></div></div><div class="panel-body"><div class="rail-links">${links.map(([tab, label, count, icon]) => `<button type="button" id="rail-detail-${tab}" class="rail-link" data-action="item-tab" data-tab="${tab}"><span>${svgIcon(icon)} ${esc(label)}</span><strong>${count}</strong></button>`).join('')}</div></div></section>`;
     }
 
     function renderRecentAudit(doc) {
@@ -1654,17 +1665,29 @@
 
     function renderEvidenceDrawer(doc) {
       if (!state.evidenceDrawerOpen) return '';
-      return `<div class="overlay-layer drawer-layer context-drawer-layer"><div class="overlay-scrim" data-action="evidence-close" aria-hidden="true"></div><aside id="evidence-drawer" class="detail-drawer context-drawer evidence-drawer" role="dialog" aria-modal="true" aria-labelledby="evidence-drawer-title"><header class="drawer-head"><div><div class="eyebrow">${esc(ui('evidenceSummary'))}</div><h2 id="evidence-drawer-title">${esc(ui('evidenceSummary'))}</h2><p><span class="mono">${esc(doc.id)}</span> · ${esc(ui('detailHint'))}</p></div><button type="button" class="close-btn" data-action="evidence-close" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="drawer-body evidence-drawer-body">${renderEvidenceSummary(doc)}${renderRailLinks(doc)}${renderRecentAudit(doc)}</div></aside></div>`;
+      return `<div class="overlay-layer drawer-layer context-drawer-layer"><div class="overlay-scrim" data-action="evidence-close" aria-hidden="true"></div><aside id="evidence-drawer" class="detail-drawer context-drawer evidence-drawer" role="dialog" aria-modal="true" aria-labelledby="evidence-drawer-title"><header class="drawer-head"><div><div class="eyebrow">${esc(ui('controlSummary'))}</div><h2 id="evidence-drawer-title">${esc(ui('controlSummary'))}</h2><p><span class="mono">${esc(doc.id)}</span> · ${esc(ui('controlSummaryHint'))}</p></div><button type="button" class="close-btn" data-action="evidence-close" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="drawer-body evidence-drawer-body">${renderEvidenceSummary(doc)}${renderRailLinks(doc)}${renderRecentAudit(doc)}</div></aside></div>`;
     }
 
     function renderItemTree() {
       const groups = [
-        { label: ui('productDefinition'), icon: 'tree', ids: ['LD-P100-001', 'LD-P100-003', 'LD-P100-004'] },
-        { label: ui('cadArtifacts'), icon: 'file', ids: ['LD-P100-002', 'LD-P100-006'] },
-        { label: ui('controlledRecords'), icon: 'audit', ids: ['LD-P100-005', 'LD-P100-007', 'LD-P100-008', 'LD-P100-009', 'LD-P100-010'] }
+        { key: 'productDefinition', label: ui('productDefinition'), icon: 'tree', ids: ['LD-P100-001', 'LD-P100-003', 'LD-P100-004'] },
+        { key: 'cadArtifacts', label: ui('cadArtifacts'), icon: 'file', ids: ['LD-P100-002', 'LD-P100-006'] },
+        { key: 'controlledRecords', label: ui('controlledRecords'), icon: 'audit', ids: ['LD-P100-005', 'LD-P100-007', 'LD-P100-008', 'LD-P100-009', 'LD-P100-010'] }
       ];
       const root = state.docs.find(item => item.id === 'LD-P100-001');
-      return `<section class="tree-view" aria-label="${esc(ui('navigator'))}"><div class="tree-root"><button type="button" class="tree-node ${state.activeDocId === root?.id ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(root?.id || '')}" aria-current="${state.activeDocId === root?.id ? 'true' : 'false'}"><span class="tree-caret" aria-hidden="true">▾</span>${svgIcon('tree')}<span>${esc(ui('productRoot'))}</span><i class="tree-state ${statusClass(root?.workflow || '')}" aria-hidden="true"></i></button>${groups.map(group => `<div class="tree-children"><div class="tree-node" role="heading" aria-level="2"><span class="tree-caret" aria-hidden="true">▾</span>${svgIcon(group.icon)}<span>${esc(group.label)}</span></div>${group.ids.map(id => { const item = state.docs.find(doc => doc.id === id); return item ? `<button type="button" class="tree-node ${state.activeDocId === item.id ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(item.id)}" aria-current="${state.activeDocId === item.id ? 'true' : 'false'}"><span class="tree-caret" aria-hidden="true">·</span>${svgIcon('file')}<span>${esc(item.id)}</span><i class="tree-state ${statusClass(item.workflow)}" aria-hidden="true"></i></button>` : ''; }).join('')}</div>`).join('')}</div></section>`;
+      const collapsed = state.treeCollapsed || {};
+      const toggleLabel = (expanded, label) => `${expanded ? ui('collapse') : ui('expand')} ${label}`;
+      const rootExpanded = !collapsed.root;
+      const rootMarkup = `<button type="button" class="tree-node tree-toggle" data-action="toggle-tree" data-tree-key="root" aria-expanded="${rootExpanded ? 'true' : 'false'}" aria-label="${esc(toggleLabel(rootExpanded, ui('productRoot')))}"><span class="tree-caret" aria-hidden="true">${rootExpanded ? '▾' : '▸'}</span>${svgIcon('tree')}<span>${esc(ui('productRoot'))}</span><i class="tree-state ${statusClass(root?.workflow || '')}" aria-hidden="true"></i></button>`;
+      const groupsMarkup = rootExpanded ? groups.map(group => {
+        const expanded = !collapsed[group.key];
+        const docsMarkup = expanded ? group.ids.map(id => {
+          const item = state.docs.find(doc => doc.id === id);
+          return item ? `<button type="button" class="tree-node ${item.id === state.activeDocId ? 'selected' : ''}" data-action="select-doc" data-doc-id="${esc(item.id)}" aria-current="${item.id === state.activeDocId ? 'true' : 'false'}"><span class="tree-caret" aria-hidden="true">·</span>${svgIcon('file')}<span>${esc(item.id)}</span><i class="tree-state ${statusClass(item.workflow)}" aria-hidden="true"></i></button>` : '';
+        }).join('') : '';
+        return `<div class="tree-children"><button type="button" class="tree-node tree-toggle" data-action="toggle-tree" data-tree-key="${esc(group.key)}" aria-expanded="${expanded ? 'true' : 'false'}" aria-label="${esc(toggleLabel(expanded, group.label))}"><span class="tree-caret" aria-hidden="true">${expanded ? '▾' : '▸'}</span>${svgIcon(group.icon)}<span>${esc(group.label)}</span></button>${docsMarkup}</div>`;
+      }).join('') : '';
+      return `<section class="tree-view" aria-label="${esc(ui('navigator'))}"><div class="tree-root">${rootMarkup}${groupsMarkup}</div></section>`;
     }
 
     function renderDocList() {
@@ -1680,7 +1703,7 @@
     }
 
     function renderMobileWorkspaceTools() {
-      return `<div class="mobile-workspace-tools"><button type="button" id="mobile-nav-open" class="mobile-tool" data-action="nav-open">${svgIcon('list')}<span>${esc(ui('navigator'))}</span></button><button type="button" id="mobile-evidence-open" class="mobile-tool" data-action="evidence-open">${svgIcon('audit')}<span>${esc(ui('evidenceSummary'))}</span></button></div>`;
+      return `<div class="mobile-workspace-tools"><button type="button" id="mobile-nav-open" class="mobile-tool" data-action="nav-open">${svgIcon('list')}<span>${esc(ui('navigator'))}</span></button><button type="button" id="mobile-evidence-open" class="mobile-tool" data-action="evidence-open">${svgIcon('audit')}<span>${esc(ui('controlSummary'))}</span></button></div>`;
     }
 
     function renderExplorer(doc) {
@@ -1704,7 +1727,7 @@
 
     function renderApp() {
       const doc = activeDoc();
-      return `${renderHeader()}<main class="page-wrap">${renderPageIntro()}${renderExplorer(doc)}</main>${renderDetailDrawer(doc)}${renderNavDrawer()}${renderEvidenceDrawer(doc)}${renderGuidedModal()}${renderDiagnosticsModal(doc)}${renderReviewPanel()}`;
+      return `${renderHeader()}<main class="page-wrap">${renderExplorer(doc)}</main>${renderDetailDrawer(doc)}${renderNavDrawer()}${renderEvidenceDrawer(doc)}${renderGuidedModal()}${renderDiagnosticsModal(doc)}${renderReviewPanel()}`;
     }
     function render() {
       document.documentElement.lang = state.locale;
@@ -1848,6 +1871,17 @@
       const button = event.target.closest('[data-action]');
       if (!button) return;
       const action = button.dataset.action;
+      if (action === 'toggle-tree') {
+        const key = button.dataset.treeKey;
+        const inNavDrawer = Boolean(button.closest('#nav-drawer'));
+        const result = dispatch('toggle-tree', { key });
+        render();
+        const scope = inNavDrawer ? document.querySelector('#nav-drawer') : document.querySelector('.nav-panel');
+        const target = [...(scope?.querySelectorAll('[data-action="toggle-tree"]') || [])].find(node => node.dataset.treeKey === key);
+        target?.focus();
+        if (!result.ok || result.message) showToast(result.message, !result.ok);
+        return;
+      }
       if (action === 'select-doc') {
         const fromNav = state.navDrawerOpen;
         const fromEvidence = state.evidenceDrawerOpen;
