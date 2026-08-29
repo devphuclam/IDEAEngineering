@@ -47,12 +47,28 @@ The prototype uses one authoritative surface per fact so the PLM composition sta
 - **Item header:** title, Stable Document ID, Class, Revision, Version, Generation and current state.
 - **Next-action card:** the next permitted step, role prerequisite, gate/conflict explanation and reservation signal.
 - **Overview:** only key properties, a lifecycle summary and a relationship count.
-- **Files / Structure / Lifecycle / Audit tabs:** the full representation, relationship table, lifecycle detail and
-  audit timeline respectively. Other surfaces may show only a count or last-event reference.
+- **Files / Structure / Lifecycle / Audit:** each opens in one reusable detail drawer. The drawer body is the
+  only scrolling surface for that data type; the Overview remains visible behind it as the stable context.
 - **Right rail:** evidence summary, the three latest item audit events and links to Files / Structure;
   it is not a second metadata or audit authority. The recent-audit panel links to the full immutable
-  timeline in the Audit tab.
-- **Diagnostics, full properties, document list and guided walkthrough:** collapsed until requested.
+  timeline in the Audit drawer.
+- **Full properties, Diagnostics and Guided walkthrough:** stay behind the More actions disclosure. Properties
+  use the detail drawer; Diagnostics and Guided use a modal so their longer content does not lengthen the page.
+- **Navigator and evidence rail:** remain bounded columns on desktop, so a long document tree or growing audit
+  list scrolls inside its own rail rather than moving the whole decision viewport.
+- **Narrow screens:** the Navigator and Evidence rail leave the page flow and are opened as focused drawers from
+  the compact workspace tools; the item workspace stays the primary surface.
+
+### Scroll and disclosure contract
+
+- The default desktop Overview targets one viewport: identity, next action, key properties, lifecycle summary,
+  relationships count and evidence signals are visible together.
+- At shorter desktop widths, the item remains the primary bounded viewport and Navigator/Evidence are disclosed
+  through the same focused drawers used on mobile.
+- A detail view owns its own vertical scroll. Opening a drawer or modal locks the page behind it, preserves focus,
+  closes with `Esc` or the scrim, and restores focus to the launching control.
+- At narrow widths, drawers and modals become full-width surfaces and item tabs wrap instead of introducing a
+  horizontal page scroll. This is a prototype interaction contract, not an accessibility-conformance claim.
 
 When adding a field, choose its owning surface first. Do not copy the same value into a badge, metric, inspector and
 table merely to keep it visible. A contextual reference is allowed only when it helps navigation or explains a decision.
