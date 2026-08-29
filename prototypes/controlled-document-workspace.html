@@ -8,39 +8,40 @@
   <style>
     :root {
       color-scheme: light;
-      --ink: #172433;
-      --muted: #607082;
-      --soft: #f4f7fa;
+      --ink: #0F172A;
+      --muted: #475569;
+      --soft: #F1F2F3;
       --surface: #ffffff;
-      --line: #dbe3ea;
-      --line-strong: #c8d4df;
-      --navy: #123452;
-      --navy-2: #1b496f;
-      --blue: #2f78aa;
-      --teal: #177c78;
-      --green: #217a55;
-      --amber: #9a6a13;
-      --red: #a13c45;
-      --purple: #6d57a4;
-      --shadow: 0 16px 44px rgba(24, 48, 73, .11);
-      --shadow-soft: 0 5px 18px rgba(24, 48, 73, .07);
+      --line: #E2E8F0;
+      --line-strong: #CBD5E1;
+      --navy: #0F172A;
+      --navy-2: #1E293B;
+      --blue: #2563EB;
+      --teal: #0369A1;
+      --green: #15803D;
+      --amber: #A16207;
+      --red: #DC2626;
+      --purple: #6D28D9;
+      --shadow: 0 16px 44px rgba(15, 23, 42, .11);
+      --shadow-soft: 0 5px 18px rgba(15, 23, 42, .07);
       --radius: 14px;
       --radius-sm: 9px;
-      --focus: #f3a83b;
-      --mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --focus: #B45309;
+      --mono: "Fira Code", "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+      --sans: "Fira Sans", "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     * { box-sizing: border-box; }
-    html { min-width: 320px; background: #eef3f7; }
+    html { min-width: 320px; background: #F8FAFC; scroll-padding-top: 108px; }
     body {
       margin: 0;
       min-height: 100vh;
+      overflow-x: hidden;
       color: var(--ink);
       background:
-        radial-gradient(circle at 78% -12%, rgba(82, 142, 184, .18), transparent 36rem),
-        linear-gradient(180deg, #f3f7fa 0%, #eef3f7 100%);
-      font: 14px/1.45 var(--sans);
+        radial-gradient(circle at 78% -12%, rgba(37, 99, 235, .11), transparent 36rem),
+        linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+      font: 16px/1.5 var(--sans);
     }
 
     button, input, select, textarea { font: inherit; }
@@ -48,6 +49,11 @@
     button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
       outline: 3px solid var(--focus);
       outline-offset: 2px;
+    }
+    button, input, select, textarea { border-radius: 8px; }
+    button { -webkit-tap-highlight-color: transparent; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
     }
     a { color: var(--blue); }
     .sr-only {
@@ -58,7 +64,7 @@
     .app-shell { min-height: 100vh; padding-bottom: 90px; }
     .topbar {
       color: #fff;
-      background: linear-gradient(116deg, #102c46 0%, #183e5c 60%, #1b536e 100%);
+      background: linear-gradient(116deg, #0F172A 0%, #1E293B 62%, #334155 100%);
       border-bottom: 1px solid rgba(255,255,255,.13);
       box-shadow: 0 5px 18px rgba(9, 29, 46, .18);
     }
@@ -87,7 +93,7 @@
     }
     .control-label select option { color: var(--ink); background: #fff; }
     .topbar-btn {
-      min-height: 35px; padding: 7px 12px; border: 1px solid rgba(255,255,255,.28); border-radius: 8px;
+      min-height: 44px; padding: 8px 13px; border: 1px solid rgba(255,255,255,.28); border-radius: 8px;
       color: #fff; background: rgba(255,255,255,.1); font-weight: 680;
     }
     .topbar-btn:hover { background: rgba(255,255,255,.18); }
@@ -102,14 +108,20 @@
     .prototype-strip strong { letter-spacing: .04em; text-transform: uppercase; }
     .prototype-strip span { color: #7c6740; }
     .prototype-strip .strip-spacer { flex: 1; }
+    .direction-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid #D7E2EA; border-radius: 999px; color: #334155 !important; background: #fff; font-size: 11px; font-weight: 720; }
+    .direction-pill svg { width: 14px; height: 14px; color: var(--blue); }
     .kbd { padding: 2px 6px; border: 1px solid #c7d0d8; border-bottom-width: 2px; border-radius: 5px; color: #526272; background: #f8fafb; font: 11px var(--mono); }
 
     .page-wrap { width: min(1560px, calc(100% - 44px)); margin: 0 auto; }
     .page-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 25px 0 18px; }
+    .page-intro > div { min-width: 0; }
     .page-intro h1 { margin: 0; color: var(--navy); font-size: clamp(24px, 3vw, 38px); line-height: 1.08; letter-spacing: -.04em; }
-    .page-intro p { max-width: 730px; margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .page-intro p { max-width: 730px; margin: 8px 0 0; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
     .intro-aside { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
     .tiny-note { color: var(--muted); font-size: 11px; }
+    .principle-row { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px; }
+    .principle { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid #DCE6EE; border-radius: 7px; color: #334155; background: rgba(255,255,255,.7); font-size: 11px; font-weight: 680; }
+    .principle b { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 5px; color: #fff; background: var(--blue); font: 10px var(--mono); }
 
     .workspace-grid { display: grid; gap: 14px; }
     .panel, .card {
@@ -164,7 +176,7 @@
     .action-group { display: flex; gap: 6px; flex-wrap: wrap; padding-right: 10px; margin-right: 2px; border-right: 1px solid var(--line); }
     .action-group:last-child { padding-right: 0; border-right: 0; }
     .action-btn {
-      min-height: 32px; padding: 6px 10px; border: 1px solid #cbd8e2; border-radius: 8px; color: #25465d;
+      min-height: 44px; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 8px; color: #1E3A5F;
       background: #fff; font-size: 12px; font-weight: 730; transition: .15s ease;
     }
     .action-btn:hover { border-color: #8fb4ca; background: #f2f8fb; transform: translateY(-1px); }
@@ -174,17 +186,22 @@
     .action-btn.danger { color: #873b42; border-color: #e6bcc0; background: #fff7f7; }
     .action-btn.is-disabled { opacity: .55; filter: saturate(.55); }
     .action-btn.is-disabled:hover { transform: none; border-color: #cbd8e2; background: #fff; }
+    .action-btn svg, .topbar-btn svg, .guide-btn svg, .close-btn svg { width: 16px; height: 16px; vertical-align: -3px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .reason-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
     .reason-row label { color: var(--muted); font-size: 11px; white-space: nowrap; }
     .reason-row input { flex: 1; min-width: 180px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: #fff; }
 
     .guided-panel { margin: 14px 16px; border: 1px solid #c9dce7; border-radius: 12px; background: #f5fbfd; overflow: hidden; }
     .guided-head { padding: 12px 13px 9px; display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
-    .guided-head h3 { margin: 0; color: #1b536b; font-size: 13px; }
+    .guided-head h3 { display: flex; align-items: center; gap: 6px; margin: 0; color: #1b536b; font-size: 13px; }
+    .section-icon { display: inline-flex; color: currentColor; }
+    .section-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .guided-head p { margin: 3px 0 0; color: #5e7785; font-size: 11px; }
     .guided-tabs { display: flex; gap: 5px; overflow-x: auto; padding: 0 13px 10px; }
-    .guided-tab { flex: 0 0 auto; padding: 6px 9px; border: 1px solid #c9dce7; border-radius: 7px; color: #547182; background: #fff; font-size: 11px; font-weight: 700; }
+    .guided-tab { flex: 0 0 auto; min-height: 40px; padding: 7px 10px; border: 1px solid #C9DCE7; border-radius: 7px; color: #547182; background: #fff; font-size: 11px; font-weight: 700; }
     .guided-tab[aria-selected="true"] { color: #fff; border-color: var(--teal); background: var(--teal); }
+    .guided-tab .completion-mark { display: inline-flex; margin-left: 4px; vertical-align: -3px; }
+    .guided-tab .completion-mark svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .guided-progress { height: 4px; margin: 0 13px; border-radius: 99px; background: #dbeaf0; overflow: hidden; }
     .guided-progress > span { display: block; height: 100%; border-radius: inherit; background: var(--teal); transition: width .2s ease; }
     .guided-body { padding: 12px 13px 13px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
@@ -192,7 +209,7 @@
     .guided-step strong { display: block; margin-bottom: 3px; font-size: 13px; }
     .guided-step span { color: #69818c; }
     .guided-controls { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .guide-btn { min-height: 31px; padding: 6px 10px; border: 1px solid #b9d4de; border-radius: 7px; color: #1c6070; background: #fff; font-size: 11px; font-weight: 750; }
+    .guide-btn { min-height: 44px; padding: 8px 12px; border: 1px solid #B9D4DE; border-radius: 7px; color: #1C6070; background: #fff; font-size: 11px; font-weight: 750; }
     .guide-btn.primary { color: #fff; background: var(--teal); border-color: var(--teal); }
     .guided-message { grid-column: 1 / -1; padding: 7px 9px; border-radius: 7px; color: #5b7180; background: rgba(255,255,255,.75); font-size: 11px; }
 
@@ -220,7 +237,7 @@
     .timeline-content em { display: inline-block; margin-top: 4px; color: #567282; font-size: 10px; font-style: normal; }
 
     .doc-list { display: grid; gap: 4px; padding: 8px; }
-    .doc-list-item { width: 100%; padding: 9px 10px; border: 1px solid transparent; border-radius: 9px; color: var(--ink); background: transparent; text-align: left; }
+    .doc-list-item { width: 100%; min-height: 52px; padding: 10px; border: 1px solid transparent; border-radius: 9px; color: var(--ink); background: transparent; text-align: left; }
     .doc-list-item:hover { background: #f1f7fa; }
     .doc-list-item[aria-current="true"] { border-color: #b9d9e4; background: #edf8f8; }
     .doc-list-item strong { display: block; color: var(--navy); font-size: 12px; line-height: 1.25; }
@@ -238,70 +255,21 @@
     .metric-value { margin-top: 5px; color: var(--navy); font-size: 21px; font-weight: 820; letter-spacing: -.03em; }
     .metric-note { margin-top: 2px; color: var(--muted); font-size: 10px; }
 
-    /* Variant A: explorer */
-    .variant-a { display: grid; grid-template-columns: 230px minmax(0, 1fr) 285px; gap: 14px; align-items: start; }
-    .variant-a .nav-panel { position: sticky; top: 14px; }
+    /* Object-centric Engineering Explorer */
+    .explorer-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr) 285px; gap: 14px; align-items: start; }
+    .explorer-layout .nav-panel { position: sticky; top: 14px; }
     .nav-panel .nav-section { padding: 13px 13px 7px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
     .nav-links { display: grid; gap: 3px; padding: 0 8px 10px; }
-    .nav-link { display: flex; align-items: center; gap: 8px; padding: 8px 9px; border-radius: 8px; color: #4e6677; font-size: 12px; font-weight: 650; }
+    .nav-link { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 9px; border-radius: 8px; color: #334155; font-size: 12px; font-weight: 650; }
     .nav-link.active { color: #194f6c; background: #eaf5f8; }
-    .nav-link .nav-icon { width: 19px; color: #5a8797; text-align: center; font-size: 14px; }
-    .variant-a .main-panel { min-width: 0; }
-    .variant-a .right-rail { display: grid; gap: 14px; }
+    .nav-link .nav-icon { width: 19px; height: 19px; display: inline-grid; place-items: center; color: #2563EB; text-align: center; }
+    .nav-link .nav-icon svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .explorer-layout .main-panel { min-width: 0; }
+    .explorer-layout .right-rail { display: grid; gap: 14px; }
     .linked-list { display: grid; gap: 7px; }
-    .linked-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 9px; border: 1px solid #edf1f4; border-radius: 8px; background: #fbfcfd; }
+    .linked-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; min-height: 44px; padding: 8px 9px; border: 1px solid #EDF1F4; border-radius: 8px; background: #FBFCFD; }
     .linked-item strong { color: var(--navy); font-size: 11px; }
     .linked-item span { color: var(--muted); font: 10px var(--mono); }
-
-    /* Variant B: task-first */
-    .variant-b { display: grid; grid-template-columns: 310px minmax(0, 1fr); gap: 14px; align-items: start; }
-    .task-panel { position: sticky; top: 14px; }
-    .task-list { display: grid; gap: 8px; padding: 13px; }
-    .task-item { padding: 11px 12px; border: 1px solid var(--line); border-left: 4px solid #9aaab5; border-radius: 10px; background: #fff; }
-    .task-item.priority { border-left-color: #d0962a; }
-    .task-item.blocked { border-left-color: var(--red); }
-    .task-item.done { border-left-color: var(--green); opacity: .78; }
-    .task-item h3 { margin: 0; color: var(--navy); font-size: 12px; }
-    .task-item p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
-    .task-item .task-footer { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; color: #72818c; font-size: 10px; }
-    .focus-panel { min-width: 0; }
-    .focus-banner { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 13px 16px; border: 1px solid #c9dfe7; border-radius: 12px; background: linear-gradient(110deg, #effafa, #f7fbfc); }
-    .focus-banner strong { color: #1d5e6b; font-size: 13px; }
-    .focus-banner span { color: #66838d; font-size: 11px; }
-    .next-action { margin-top: 14px; padding: 17px; border: 1px solid #d6dfeb; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow-soft); }
-    .next-action h2 { margin: 2px 0 5px; color: var(--navy); font-size: 22px; letter-spacing: -.03em; }
-    .next-action p { margin: 0; color: var(--muted); }
-    .next-action .next-action-cta { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .b-split { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 14px; margin-top: 14px; }
-    .b-feed { display: grid; gap: 14px; }
-    .b-rail { display: grid; gap: 14px; align-content: start; }
-
-    /* Variant C: lifecycle board */
-    .variant-c { display: grid; gap: 14px; }
-    .board-toolbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: var(--shadow-soft); }
-    .board-toolbar h2 { margin: 0; color: var(--navy); font-size: 14px; }
-    .board-toolbar p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
-    .board-toolbar .toolbar-actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
-    .board { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 10px; overflow-x: auto; padding-bottom: 2px; }
-    .board-column { min-height: 430px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.68); overflow: hidden; }
-    .board-column-head { padding: 11px 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
-    .board-column-head h3 { margin: 0; color: var(--navy); font-size: 12px; }
-    .column-count { min-width: 22px; padding: 2px 6px; border-radius: 99px; color: #537185; background: #edf3f6; font: 10px var(--mono); text-align: center; }
-    .column-start .board-column-head { border-top: 3px solid #9aaab5; }
-    .column-work .board-column-head { border-top: 3px solid var(--blue); }
-    .column-review .board-column-head { border-top: 3px solid var(--amber); }
-    .column-release .board-column-head { border-top: 3px solid var(--green); }
-    .board-cards { display: grid; gap: 8px; padding: 9px; }
-    .board-card { width: 100%; padding: 11px; border: 1px solid var(--line); border-radius: 9px; background: #fff; text-align: left; box-shadow: 0 2px 6px rgba(25, 53, 74, .04); }
-    .board-card:hover, .board-card[aria-current="true"] { border-color: #8bbbc8; box-shadow: 0 4px 11px rgba(34, 104, 125, .11); }
-    .board-card[aria-current="true"] { background: #f1fbfa; }
-    .board-card strong { display: block; color: var(--navy); font-size: 12px; line-height: 1.28; }
-    .board-card p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
-    .board-card .board-card-meta { display: flex; justify-content: space-between; gap: 5px; margin-top: 8px; color: #6a7d89; font: 10px var(--mono); }
-    .board-empty { padding: 16px 10px; color: #83939d; font-size: 11px; text-align: center; }
-    .c-detail { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 14px; }
-    .c-detail-main { min-width: 0; }
-    .c-drawer { position: sticky; top: 14px; }
 
     .empty-state { padding: 30px 20px; color: var(--muted); text-align: center; }
     .empty-state strong { display: block; margin-bottom: 4px; color: var(--navy); }
@@ -312,17 +280,11 @@
     .review-head { position: sticky; top: 0; z-index: 1; padding: 17px 19px; display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); backdrop-filter: blur(8px); }
     .review-head h2 { margin: 0; color: var(--navy); font-size: 22px; letter-spacing: -.03em; }
     .review-head p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
-    .close-btn { width: 31px; height: 31px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: #fff; font-size: 18px; line-height: 1; }
+    .close-btn { width: 44px; height: 44px; flex: 0 0 44px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: #fff; font-size: 18px; line-height: 1; }
     .review-body { padding: 18px 19px 22px; }
     .review-alert { padding: 10px 12px; border: 1px solid #efd69d; border-radius: 9px; color: #72561d; background: #fff9eb; font-size: 11px; }
     .review-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; margin: 14px 0; }
     .review-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 14px; }
-    .variant-compare { width: 100%; border-collapse: collapse; }
-    .variant-compare th, .variant-compare td { padding: 10px 9px; border-bottom: 1px solid #e8eef2; text-align: left; vertical-align: top; }
-    .variant-compare th { color: var(--muted); background: #f6f9fb; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
-    .variant-compare td { color: #3b5262; font-size: 11px; }
-    .variant-compare tr:last-child td { border-bottom: 0; }
-    .variant-key { color: var(--navy); font-weight: 820; }
     .review-form { display: grid; gap: 10px; }
     .review-form label { display: grid; gap: 5px; color: var(--muted); font-size: 11px; font-weight: 700; }
     .review-form select, .review-form textarea { width: 100%; padding: 8px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: #fff; }
@@ -330,27 +292,25 @@
     .review-footer { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 15px; padding-top: 13px; border-top: 1px solid var(--line); }
     .review-footer-actions { display: flex; gap: 7px; flex-wrap: wrap; }
     .review-saved { color: var(--green); font-size: 11px; font-weight: 720; }
+    .review-principles { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .review-principles li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; padding: 9px; border: 1px solid #E8EEF2; border-radius: 8px; color: #334155; background: #FBFCFD; font-size: 12px; }
+    .review-principles b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 7px; color: #fff; background: var(--blue); font: 10px var(--mono); }
+    .review-principles strong { display: block; color: var(--navy); }
+    .review-principles span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .scenario-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
+    .scenario-summary div { padding: 8px 9px; border: 1px solid #E8EEF2; border-radius: 8px; background: #fff; }
+    .scenario-summary strong { display: block; color: var(--navy); font-size: 11px; }
+    .scenario-summary span { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
 
-    .variant-switcher {
-      position: fixed; z-index: 40; left: 50%; bottom: 17px; transform: translateX(-50%);
-      display: flex; align-items: center; gap: 6px; padding: 7px 8px; border: 1px solid #2b5872;
-      border-radius: 999px; color: #fff; background: #173c55; box-shadow: 0 10px 28px rgba(9, 33, 51, .27);
-    }
-    .switcher-arrow { width: 30px; height: 30px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; color: #fff; background: rgba(255,255,255,.1); font-size: 16px; }
-    .switcher-arrow:hover { background: rgba(255,255,255,.2); }
-    .switcher-label { min-width: 180px; padding: 0 9px; text-align: center; }
-    .switcher-label strong { display: block; font-size: 11px; letter-spacing: .04em; }
-    .switcher-label span { display: block; color: rgba(255,255,255,.62); font-size: 10px; }
     .toast { position: fixed; z-index: 70; right: 20px; bottom: 78px; max-width: min(430px, calc(100% - 40px)); padding: 11px 13px; border: 1px solid #aac2cf; border-radius: 9px; color: #21465a; background: #f3fbfd; box-shadow: var(--shadow); opacity: 0; transform: translateY(8px); pointer-events: none; transition: .2s ease; font-size: 12px; }
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.error { color: #7d3941; border-color: #e4bdc1; background: #fff4f5; }
 
     .print-only { display: none; }
     @media (max-width: 1220px) {
-      .variant-a { grid-template-columns: 205px minmax(0, 1fr); }
-      .variant-a .right-rail { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .explorer-layout { grid-template-columns: 205px minmax(0, 1fr); }
+      .explorer-layout .right-rail { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .identity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .board { grid-template-columns: repeat(4, minmax(205px, 1fr)); }
     }
     @media (max-width: 900px) {
       .topbar-inner, .page-wrap, .prototype-strip { width: min(100% - 28px, 720px); }
@@ -358,17 +318,18 @@
       .topbar-controls { width: 100%; justify-content: flex-start; }
       .page-intro { align-items: flex-start; flex-direction: column; padding-top: 20px; }
       .intro-aside { justify-content: flex-start; }
-      .variant-a, .variant-b, .c-detail, .b-split, .review-grid { grid-template-columns: 1fr; }
-      .variant-a .nav-panel, .task-panel, .c-drawer { position: static; }
-      .variant-a .right-rail { grid-column: auto; grid-template-columns: 1fr; }
-      .board { grid-template-columns: repeat(4, minmax(220px, 1fr)); }
+      .explorer-layout, .review-grid { grid-template-columns: 1fr; }
+      .explorer-layout .nav-panel { position: static; }
+      .explorer-layout .right-rail { grid-column: auto; grid-template-columns: 1fr; }
       .review-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 580px) {
       .topbar-inner, .page-wrap, .prototype-strip { width: calc(100% - 20px); }
       .brand-lockup { min-width: 0; }
-      .prototype-strip { align-items: flex-start; flex-wrap: wrap; }
+      .prototype-strip { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
       .prototype-strip .strip-spacer { display: none; }
+      .prototype-strip strong, .prototype-strip > span:not(.direction-pill) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+      .prototype-strip .direction-pill { justify-self: start; }
       .identity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .doc-hero-top { flex-direction: column; }
       .doc-hero-actions { justify-content: flex-start; }
@@ -380,7 +341,7 @@
       .review-overlay { padding: 8px; }
       .review-head, .review-body { padding-left: 13px; padding-right: 13px; }
       .review-metrics { grid-template-columns: 1fr 1fr; }
-      .switcher-label { min-width: 144px; }
+      .scenario-summary { grid-template-columns: 1fr; }
     }
     @media print {
       body { background: #fff; }
@@ -401,15 +362,14 @@
     'use strict';
 
     /*
-      THREE VARIANTS OF THE CONTROLLED DOCUMENT WORKSPACE, SWITCHABLE VIA ?variant=A|B|C.
-      This is a throwaway UI prototype. It intentionally has in-memory state only and no
-      production routing, persistence, authentication, or file-format integration.
+      SINGLE UI DIRECTION: an object-centric Engineering Explorer for the controlled-document
+      workspace. This is a throwaway UI prototype. It intentionally has in-memory state only and
+      no production routing, persistence, authentication, or file-format integration.
     */
 
-    const VARIANTS = {
-      A: { name: 'Engineering Explorer', short: 'Explorer', promise: 'Cây tài liệu và inspector luôn cùng một tầm mắt.' },
-      B: { name: 'Task-first Workspace', short: 'Task-first', promise: 'Việc cần làm và blocker dẫn dắt màn hình.' },
-      C: { name: 'Lifecycle Board', short: 'Lifecycle board', promise: 'Nhìn nhanh tài liệu đang ở đâu trên release spine.' }
+    const UI_DIRECTION = {
+      name: 'Engineering Explorer',
+      promise: 'Identity, context actions and evidence share one workspace.'
     };
 
     const I18N = {
@@ -422,7 +382,6 @@
         reset: 'Reset demo',
         workspace: 'Controlled Document Workspace',
         intro: 'Một bề mặt để tìm, làm việc, review và release tài liệu kỹ thuật có kiểm soát.',
-        variant: 'Variant',
         document: 'Tài liệu',
         stableId: 'Stable Document ID',
         documentClass: 'Document Class',
@@ -467,15 +426,10 @@
         recentReleases: 'Recent releases',
         blockers: 'Blockers',
         nextAction: 'Next action',
-        focus: 'Focused work item',
-        boardTitle: 'Release spine overview',
-        boardHint: 'Một Logical Document được chọn; các thẻ khác tạo mật độ cho màn hình.',
         reviewTitle: 'Executive Review · UI prototype',
         reviewSubtitle: 'Bản tóm tắt để quyết định cấu trúc UI tiếp theo — chưa phải product approval.',
-        compare: 'So sánh ba phương án',
         recommendation: 'Khuyến nghị',
         decision: 'Quyết định của sếp',
-        chooseVariant: 'Variant được chọn',
         decisionNotes: 'Lý do / điều chỉnh cần giữ',
         openQuestions: 'Open questions',
         saveVerdict: 'Lưu verdict demo',
@@ -515,10 +469,10 @@
         scenarioRevision: 'Create Revision'
       },
       en: {
-        prototype: 'UI PROTOTYPE · THROWAWAY', internal: 'Internal use · synthetic data', language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', variant: 'Variant', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', focus: 'Focused work item', boardTitle: 'Release spine overview', boardHint: 'One Logical Document is selected; the other cards provide realistic density.', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', compare: 'Compare three approaches', recommendation: 'Recommendation', decision: 'Boss decision', chooseVariant: 'Chosen variant', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        prototype: 'UI PROTOTYPE · THROWAWAY', internal: 'Internal use · synthetic data', language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       },
       ja: {
-        prototype: 'UI PROTOTYPE · THROWAWAY', internal: '社内利用 · 合成データ', language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', variant: 'バリアント', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', focus: 'Focused work item', boardTitle: 'Release spine overview', boardHint: '1つの Logical Document を選択し、他のカードで実際の密度を示します。', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', compare: '3案を比較', recommendation: '推奨', decision: '上司の決定', chooseVariant: '選択するバリアント', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        prototype: 'UI PROTOTYPE · THROWAWAY', internal: '社内利用 · 合成データ', language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       }
     };
 
@@ -627,6 +581,7 @@
 
     let state = createInitialState();
     let toastTimer = null;
+    let reviewReturnFocus = null;
 
     function clone(value) { return JSON.parse(JSON.stringify(value)); }
     function esc(value) {
@@ -695,7 +650,7 @@
       const docs = SEED_DOCS.map(normalizeDoc);
       return {
         locale: overrides.locale || 'vi',
-        variant: overrides.variant || readVariant(),
+        // The prototype intentionally has one UI direction; no layout selector is persisted.
         actorId: overrides.actorId || 'author',
         activeDocId: overrides.activeDocId || 'LD-P100-001',
         docs,
@@ -704,16 +659,12 @@
         guided: { scenario: overrides.scenario || 'happy', step: 0, completed: {}, message: '' },
         draftReason: 'Bổ sung evidence và làm rõ acceptance path',
         lastAction: { type: 'info', message: 'Demo state ready.' },
-        review: { open: false, chosenVariant: '', notes: '', questions: '', saved: false, savedAt: '' }
+        review: { open: false, disposition: '', notes: '', questions: '', saved: false, savedAt: '' }
       };
-    }
-    function readVariant() {
-      const value = new URLSearchParams(window.location.search).get('variant');
-      return VARIANTS[value] ? value : 'A';
     }
     function resetData({ keepGuide = false } = {}) {
       const previous = state;
-      const next = createInitialState({ locale: previous.locale, variant: previous.variant, activeDocId: 'LD-P100-001', scenario: previous.guided.scenario });
+      const next = createInitialState({ locale: previous.locale, activeDocId: 'LD-P100-001', scenario: previous.guided.scenario });
       if (keepGuide) next.guided = { scenario: previous.guided.scenario, step: 0, completed: previous.guided.completed, message: '' };
       state = next;
     }
@@ -997,7 +948,7 @@
         case 'open-review': state.review.open = true; result = success(''); break;
         case 'close-review': state.review.open = false; result = success(''); break;
         case 'save-review':
-          state.review.chosenVariant = payload.chosenVariant || state.review.chosenVariant;
+          state.review.disposition = payload.disposition || state.review.disposition;
           state.review.notes = payload.notes ?? state.review.notes;
           state.review.questions = payload.questions ?? state.review.questions;
           state.review.saved = true;
@@ -1010,10 +961,39 @@
       return result;
     }
 
-    function actionButton(action, labelKey, className = '', icon = '') {
+    function svgIcon(name) {
+      const paths = {
+        report: '<rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M7 8h10M7 12h10M7 16h6"></path>',
+        reset: '<path d="M4 5v5h5"></path><path d="M5.2 10a7 7 0 1 0 1.2-4.1L4 10"></path>',
+        reserve: '<path d="M8 10V7a4 4 0 0 1 8 0v3"></path><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M12 14v3"></path>',
+        file: '<path d="M6 3h8l4 4v14H6z"></path><path d="M14 3v5h4M9 12h6M9 16h6"></path>',
+        edit: '<path d="m4 16-.8 4.8L8 20l10.5-10.5a2.1 2.1 0 0 0-3-3z"></path><path d="m14 7 3 3"></path>',
+        publish: '<path d="M12 19V5"></path><path d="m7 10 5-5 5 5"></path><path d="M5 20h14"></path>',
+        arrow: '<path d="M4 12h15"></path><path d="m14 7 5 5-5 5"></path>',
+        check: '<path d="m5 12 4 4L19 6"></path>',
+        close: '<path d="m6 6 12 12M18 6 6 18"></path>',
+        release: '<path d="M12 3 14.4 9l5.6.4-4.3 3.7 1.3 5.5L12 15.5 7 18.6l1.3-5.5L4 9.4 9.6 9z"></path>',
+        plus: '<path d="M12 5v14M5 12h14"></path>',
+        back: '<path d="M19 12H5"></path><path d="m11 6-6 6 6 6"></path>',
+        external: '<path d="M14 5h5v5"></path><path d="m19 5-8 8"></path><path d="M18 13v5H5V5h5"></path>',
+        refresh: '<path d="M4 12a8 8 0 0 1 13.7-5.7L20 8"></path><path d="M20 4v4h-4"></path><path d="M20 12a8 8 0 0 1-13.7 5.7L4 16"></path><path d="M4 20v-4h4"></path>',
+        key: '<circle cx="8" cy="15" r="4"></circle><path d="m11 12 8-8M16 5l3 3M14 7l3 3"></path>',
+        home: '<path d="m3 11 9-7 9 7"></path><path d="M5 10v10h14V10M9 20v-6h6v6"></path>',
+        list: '<path d="M8 6h11M8 12h11M8 18h11"></path><path d="M4 6h.01M4 12h.01M4 18h.01"></path>',
+        releases: '<path d="M12 3v18M3 12h18"></path><circle cx="12" cy="12" r="8"></circle>',
+        warning: '<path d="m12 3 9 17H3z"></path><path d="M12 9v5M12 17h.01"></path>',
+        route: '<circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="6" r="2"></circle><path d="M8 18h3a3 3 0 0 0 3-3V9a3 3 0 0 1 3-3"></path>',
+        tree: '<path d="M6 4v16M6 8h7M6 16h7M13 8v4M13 12h5"></path><rect x="3" y="2" width="6" height="4" rx="1"></rect><rect x="10" y="6" width="6" height="4" rx="1"></rect><rect x="10" y="14" width="6" height="4" rx="1"></rect><rect x="16" y="10" width="5" height="4" rx="1"></rect>',
+        audit: '<path d="M6 3h12v18H6z"></path><path d="M9 7h6M9 11h6M9 15h4"></path>',
+        copy: '<rect x="8" y="8" width="11" height="12" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3"></path>',
+        print: '<path d="M6 9V3h12v6M6 17H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v7H6z"></path>'
+      };
+      return `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || '<circle cx="12" cy="12" r="8"></circle>'}</svg>`;
+    }
+    function actionButton(action, labelKey, className = '', iconName = '') {
       const status = canAction(action);
       const disabled = !status.ok;
-      return `<button type="button" class="action-btn ${className} ${disabled ? 'is-disabled' : ''}" data-action="${action}" aria-disabled="${disabled ? 'true' : 'false'}" title="${esc(disabled ? status.message : labelKey)}"><span aria-hidden="true">${icon}</span> ${esc(t(labelKey))}</button>`;
+      return `<button type="button" class="action-btn ${className} ${disabled ? 'is-disabled' : ''}" data-action="${action}" aria-disabled="${disabled ? 'true' : 'false'}" title="${esc(disabled ? status.message : t(labelKey))}">${svgIcon(iconName)} <span>${esc(t(labelKey))}</span></button>`;
     }
     function chip(value, label, className = '') { return `<span class="badge ${className || statusClass(value)}">${esc(label)}</span>`; }
     function metric(label, value, note = '') { return `<div class="metric"><div class="metric-label">${esc(label)}</div><div class="metric-value">${esc(value)}</div>${note ? `<div class="metric-note">${esc(note)}</div>` : ''}</div>`; }
@@ -1025,19 +1005,19 @@
         <div class="topbar-controls">
           <label class="control-label">${esc(t('language'))}<select id="localeSelect" aria-label="${esc(t('language'))}"><option value="vi" ${state.locale === 'vi' ? 'selected' : ''}>VI · Tiếng Việt</option><option value="en" ${state.locale === 'en' ? 'selected' : ''}>EN · English</option><option value="ja" ${state.locale === 'ja' ? 'selected' : ''}>JA · 日本語</option></select></label>
           <label class="control-label">${esc(t('actor'))}<select id="actorSelect" aria-label="${esc(t('actor'))}">${Object.entries(ACTORS).map(([id, item]) => `<option value="${id}" ${id === state.actorId ? 'selected' : ''}>${esc(item.name)} · ${esc(t(item.roleKey))}</option>`).join('')}</select></label>
-          <button type="button" class="topbar-btn primary" data-action="open-review">▣ ${esc(t('review'))}</button>
-          <button type="button" class="topbar-btn" data-action="reset">↺ ${esc(t('reset'))}</button>
+          <button type="button" class="topbar-btn primary" data-action="open-review">${svgIcon('report')} <span>${esc(t('review'))}</span></button>
+          <button type="button" class="topbar-btn" data-action="reset">${svgIcon('reset')} <span>${esc(t('reset'))}</span></button>
         </div>
       </div></header>`;
     }
 
     function renderPrototypeStrip() {
-      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))} · ${esc(t('variant'))} ${state.variant}</span><span class="strip-spacer"></span><span>${esc(VARIANTS[state.variant].promise)}</span><span class="kbd">← →</span></div>`;
+      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))}</span><span class="strip-spacer"></span><span class="direction-pill" title="${esc(UI_DIRECTION.promise)}">${svgIcon('list')} ${esc(UI_DIRECTION.name)} · single direction</span></div>`;
     }
 
     function renderPageIntro() {
       const active = activeDoc();
-      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))} Đây là một prototype để chọn information hierarchy; state và action chỉ là mô phỏng.</p></div><div class="intro-aside">${chip(active.workflow, workflowLabel(active.workflow))}${chip(active.status, statusLabel(active.status))}${chip(active.gate, gateLabel(active.gate))}<span class="tiny-note">${esc(t('synthetic'))} · 10 records</span></div></div>`;
+      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))} Đây là một prototype tương tác để review với sếp; state và action chỉ là mô phỏng.</p><div class="principle-row"><span class="principle"><b>01</b> Identity first</span><span class="principle"><b>02</b> Contextual actions</span><span class="principle"><b>03</b> Evidence visible</span></div></div><div class="intro-aside">${chip(active.workflow, workflowLabel(active.workflow))}${chip(active.status, statusLabel(active.status))}${chip(active.gate, gateLabel(active.gate))}<span class="tiny-note">${esc(t('synthetic'))} · 10 records</span></div></div>`;
     }
 
     function renderIdentity(doc) {
@@ -1052,7 +1032,9 @@
     }
 
     function renderActionBar(doc) {
-      return `<section class="action-bar"><div class="action-bar-top"><div><h3>${esc(t('actions'))}</h3><div class="small muted">${esc(t('actionHint'))}</div></div><div class="badge-row">${chip(doc.reservation ? (ownsReservation(doc) ? 'owned' : 'external') : 'none', reservationLabel(doc), doc.reservation ? (ownsReservation(doc) ? 'teal' : 'amber') : 'plain')}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div></div><div class="action-groups"><div class="action-group">${actionButton('reserve', 'reserve', 'primary', '◈')}${actionButton('open', 'open', '', '□')}${actionButton('edit', 'edit', '', '✎')}${actionButton('publish', 'publish', 'primary', '↑')}</div><div class="action-group">${actionButton('submit', 'submit', '', '→')}${actionButton('approve', 'approve', '', '✓')}${actionButton('reject', 'reject', 'danger', '×')}${actionButton('release', 'release', 'primary', '◆')}</div><div class="action-group">${actionButton('create-revision', 'createRevision', '', '＋')}${actionButton('withdraw', 'withdraw', '', '↩')}</div><div class="action-group">${actionButton('external-advance', 'externalAdvance', 'edge', '↗')}${actionButton('refresh', 'refresh', 'edge', '⟳')}${actionButton('recover', 'recover', 'edge', '⚿')}</div></div><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></section>`;
+      const reservation = chip(doc.reservation ? (ownsReservation(doc) ? 'owned' : 'external') : 'none', reservationLabel(doc), doc.reservation ? (ownsReservation(doc) ? 'teal' : 'amber') : 'plain');
+      const preserved = doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : '';
+      return `<section class="action-bar"><div class="action-bar-top"><div><h3>${esc(t('actions'))}</h3><div class="small muted">${esc(t('actionHint'))}</div></div><div class="badge-row">${reservation}${preserved}</div></div><div class="action-groups"><div class="action-group">${actionButton('reserve', 'reserve', 'primary', 'reserve')}${actionButton('open', 'open', '', 'file')}${actionButton('edit', 'edit', '', 'edit')}${actionButton('publish', 'publish', 'primary', 'publish')}</div><div class="action-group">${actionButton('submit', 'submit', '', 'arrow')}${actionButton('approve', 'approve', '', 'check')}${actionButton('reject', 'reject', 'danger', 'close')}${actionButton('release', 'release', 'primary', 'release')}</div><div class="action-group">${actionButton('create-revision', 'createRevision', '', 'plus')}${actionButton('withdraw', 'withdraw', '', 'back')}</div><div class="action-group">${actionButton('external-advance', 'externalAdvance', 'edge', 'external')}${actionButton('refresh', 'refresh', 'edge', 'refresh')}${actionButton('recover', 'recover', 'edge', 'key')}</div></div><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></section>`;
     }
 
     function renderGuidedPanel() {
@@ -1062,7 +1044,8 @@
       const complete = guide.step >= total;
       const step = scenario.steps[Math.min(guide.step, total - 1)];
       const progress = Math.round(Math.min(guide.step, total) / total * 100);
-      return `<section class="guided-panel" aria-labelledby="guided-title"><div class="guided-head"><div><h3 id="guided-title">◎ ${esc(t('guided'))}</h3><p>${esc(t('guidedHint'))}</p></div><span class="badge ${complete ? 'green' : 'teal'}">${complete ? esc(t('complete')) : `${esc(t('step'))} ${guide.step + 1}/${total}`}</span></div><div class="guided-tabs" role="tablist" aria-label="${esc(t('guided'))}">${Object.entries(SCENARIOS).map(([id, item]) => `<button type="button" class="guided-tab" role="tab" aria-selected="${guide.scenario === id ? 'true' : 'false'}" data-action="guided-select" data-scenario="${id}">${esc(t(item.titleKey))}${guide.completed[id] ? ' ✓' : ''}</button>`).join('')}</div><div class="guided-progress" aria-hidden="true"><span style="width:${progress}%"></span></div><div class="guided-body"><div class="guided-step">${complete ? `<strong>${esc(t('complete'))}: ${esc(t(scenario.titleKey))}</strong><span>${esc(scenario.description)}</span>` : `<strong>${esc(step.title)}</strong><span>${esc(step.detail)}</span>`}</div><div class="guided-controls">${complete ? '' : `<button type="button" class="guide-btn primary" data-action="guided-next">${esc(t('runNext'))} →</button>`}<button type="button" class="guide-btn" data-action="guided-reset">↺ ${esc(t('restart'))}</button></div>${guide.message ? `<div class="guided-message" role="status">${esc(guide.message)}</div>` : ''}</div></section>`;
+      const tabs = Object.entries(SCENARIOS).map(([id, item]) => `<button type="button" class="guided-tab" role="tab" aria-selected="${guide.scenario === id ? 'true' : 'false'}" data-action="guided-select" data-scenario="${id}">${esc(t(item.titleKey))}${guide.completed[id] ? `<span class="completion-mark" aria-label="${esc(t('complete'))}">${svgIcon('check')}</span>` : ''}</button>`).join('');
+      return `<section class="guided-panel" aria-labelledby="guided-title"><div class="guided-head"><div><h3 id="guided-title"><span class="section-icon">${svgIcon('route')}</span>${esc(t('guided'))}</h3><p>${esc(t('guidedHint'))}</p></div><span class="badge ${complete ? 'green' : 'teal'}">${complete ? esc(t('complete')) : `${esc(t('step'))} ${guide.step + 1}/${total}`}</span></div><div class="guided-tabs" role="tablist" aria-label="${esc(t('guided'))}">${tabs}</div><div class="guided-progress" aria-hidden="true"><span style="width:${progress}%"></span></div><div class="guided-body"><div class="guided-step">${complete ? `<strong>${esc(t('complete'))}: ${esc(t(scenario.titleKey))}</strong><span>${esc(scenario.description)}</span>` : `<strong>${esc(step.title)}</strong><span>${esc(step.detail)}</span>`}</div><div class="guided-controls">${complete ? '' : `<button type="button" class="guide-btn primary" data-action="guided-next">${svgIcon('arrow')} <span>${esc(t('runNext'))}</span></button>`}<button type="button" class="guide-btn" data-action="guided-reset">${svgIcon('reset')} <span>${esc(t('restart'))}</span></button></div>${guide.message ? `<div class="guided-message" role="status">${esc(guide.message)}</div>` : ''}</div></section>`;
     }
 
     function renderMetadata(doc) {
@@ -1101,48 +1084,28 @@
       return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('allDocuments'))}</h2><p>10 synthetic records · active row drives the demo.</p></div><span class="badge plain">10</span></div><div class="doc-list">${state.docs.map(doc => `<button type="button" class="doc-list-item" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><span>${esc(doc.id)} · Rev ${esc(doc.revision)} · ${esc(doc.generation || '∅')}</span><span class="list-meta"><i class="list-dot ${statusClass(doc.workflow)}"></i>${esc(workflowLabel(doc.workflow))}<span class="muted">· ${esc(statusLabel(doc.status))}</span></span></button>`).join('')}</div></section>`;
     }
 
-    function renderVariantA(doc) {
-      return `<div class="variant-a"><aside class="panel nav-panel"><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">⌂</span>${esc(t('myWork'))}</span><span class="nav-link"><span class="nav-icon">▤</span>${esc(t('allDocuments'))}</span><span class="nav-link"><span class="nav-icon">◆</span>${esc(t('recentReleases'))}</span><span class="nav-link"><span class="nav-icon">!</span>${esc(t('blockers'))}</span></nav><div class="nav-section">Collections</div><nav class="nav-links"><span class="nav-link"><span class="nav-icon">◇</span>Product tree</span><span class="nav-link"><span class="nav-icon">↗</span>My reservations</span><span class="nav-link"><span class="nav-icon">⌁</span>Audit evidence</span></nav>${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Working Head', doc.generation || '∅', doc.workflow === 'Start' ? 'Chưa publish' : 'Exact current head')}${metric('Revision', doc.revision, `Version Sequence ${doc.versionSequence || '—'}`)}${metric('Review pin', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pending decision' : 'No pending review')}${metric('Local work', doc.workingCopy.dirty ? 'Dirty' : 'Clean', doc.localWork && doc.localWork.preserved ? 'Preserved after reject' : 'In-memory only')}</div></div>${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderMetadata(doc)}${renderLinked(doc)}${renderAudit(doc.id === state.activeDocId ? 7 : 4)}</aside></div>`;
-    }
-
-    function renderTask(doc, type, title, body, footer) { return `<article class="task-item ${type}"><h3>${esc(title)}</h3><p>${esc(body)}</p><div class="task-footer"><span>${esc(footer)}</span><span>›</span></div></article>`; }
-    function renderVariantB(doc) {
-      const next = doc.conflict ? ['Resolve stale conflict', 'Refresh expected Generation and reapply local work.', 'BLOCKED'] : doc.workflow === 'Start' ? ['Reserve the new document', 'Start the first controlled working session.', 'NEXT'] : doc.workflow === 'In Work' && doc.workingCopy.dirty ? ['Publish local changes', 'Create exactly one new Generation.', 'NEXT'] : doc.workflow === 'In Work' ? ['Submit for review', 'Pin the current Generation for an independent decision.', 'NEXT'] : doc.workflow === 'Under Review' && !doc.approvalDecision ? ['Independent approval', 'An eligible approver must decide on the pinned Generation.', 'WAITING'] : doc.workflow === 'Under Review' ? ['Release exact baseline', 'Create the immutable Release Record.', 'NEXT'] : ['Create next Revision', 'Start a new business milestone from this released baseline.', 'NEXT'];
-      return `<div class="variant-b"><aside class="panel task-panel"><div class="panel-header"><div><h2>${esc(t('nextAction'))}</h2><p>Task-first queue · blockers are explicit.</p></div><span class="badge amber">4</span></div><div class="task-list">${renderTask(doc, next[2] === 'BLOCKED' ? 'blocked' : 'priority', next[0], next[1], next[2])}${renderTask(doc, 'priority', 'Review P-100 seal', 'Independent review is waiting on a pinned Generation.', 'WAITING')}${renderTask(doc, 'done', 'Confirm released housing', 'Exact Generation G-0004 is already released.', 'DONE')}${renderTask(doc, 'blocked', 'Risk specialist evidence', 'Specialist Review Gap remains visible; no silent pass.', 'BLOCKED')}</div><div class="panel-body"><div class="eyebrow">Actor context</div><p class="small muted">${esc(actorOf().name)} · ${esc(t(actorOf().roleKey))}<br><span class="mono">${esc(actorOf().workspace)}</span></p>${chip(actorOf().kind === 'approver' ? 'approved' : 'work', actorOf().role, actorOf().kind === 'approver' ? 'green' : 'navy')}</div></aside><main class="focus-panel"><div class="focus-banner"><div><strong>Focus: ${esc(doc.id)}</strong><span> · ${esc(VARIANTS.B.promise)}</span></div>${chip(doc.workflow, workflowLabel(doc.workflow))}</div><section class="next-action"><div class="eyebrow">${esc(t('nextAction'))}</div><h2>${esc(next[0])}</h2><p>${esc(next[1])}</p><div class="next-action-cta">${next[2] === 'BLOCKED' ? actionButton('refresh', 'refresh', 'edge', '⟳') : actionButton(doc.workflow === 'Start' ? 'reserve' : doc.workflow === 'In Work' && doc.workingCopy.dirty ? 'publish' : doc.workflow === 'In Work' ? 'submit' : doc.workflow === 'Under Review' && !doc.approvalDecision ? 'approve' : doc.workflow === 'Under Review' ? 'release' : 'create-revision', doc.workflow === 'Start' ? 'reserve' : doc.workflow === 'In Work' && doc.workingCopy.dirty ? 'publish' : doc.workflow === 'In Work' ? 'submit' : doc.workflow === 'Under Review' && !doc.approvalDecision ? 'approve' : doc.workflow === 'Under Review' ? 'release' : 'createRevision', 'primary', '→')}${actionButton('open-review', 'review', '', '▣')}</div></section><section class="panel" style="margin-top:14px">${renderDocHero(doc, false)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="b-split"><div class="b-feed">${renderAudit(6)}${renderStateSnapshot(doc)}</div><aside class="b-rail">${renderMetadata(doc)}${renderLinked(doc)}</aside></div></section></main></div>`;
-    }
-
-    function boardCard(doc) {
-      return `<button type="button" class="board-card" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><p>${esc(doc.id)} · Rev ${esc(doc.revision)}</p><div class="board-card-meta"><span>${esc(doc.generation || '∅')}</span><span>${esc(statusLabel(doc.status))}</span></div></button>`;
-    }
-    function renderBoardColumn(workflow, className) {
-      const docs = state.docs.filter(doc => doc.workflow === workflow);
-      return `<section class="board-column ${className}"><div class="board-column-head"><h3>${esc(workflowLabel(workflow))}</h3><span class="column-count">${docs.length}</span></div><div class="board-cards">${docs.map(boardCard).join('') || `<div class="board-empty">${esc(t('none'))}</div>`}</div></section>`;
-    }
-    function renderVariantC(doc) {
-      return `<div class="variant-c"><section class="board-toolbar"><div><h2>${esc(t('boardTitle'))}</h2><p>${esc(t('boardHint'))}</p></div><div class="toolbar-actions">${chip(doc.id, `${t('selected')}: ${doc.id}`, 'navy')}${actionButton('open-review', 'review', '', '▣')}</div></section><div class="board" aria-label="${esc(t('boardTitle'))}">${renderBoardColumn('Start', 'column-start')}${renderBoardColumn('In Work', 'column-work')}${renderBoardColumn('Under Review', 'column-review')}${renderBoardColumn('Released', 'column-release')}</div><div class="c-detail"><main class="panel c-detail-main">${renderDocHero(doc)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Release pin', doc.releaseRecord ? doc.releaseRecord.generation : '—', doc.releaseRecord ? doc.releaseRecord.id : 'Not released')}${metric('Review', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pinned' : 'None')}${metric('Revisions', doc.revisionHistory.length + 1, 'History visible')}${metric('Dependencies', doc.linked.length, 'Structure projection')}</div></div>${renderStateSnapshot(doc)}</main><aside class="c-drawer">${renderMetadata(doc)}${renderAudit(8)}</aside></div></div>`;
+    function renderExplorer(doc) {
+      return `<div class="explorer-layout"><aside class="panel nav-panel"><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('list')}</span>${esc(t('allDocuments'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('releases')}</span>${esc(t('recentReleases'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('warning')}</span>${esc(t('blockers'))}</span></nav><div class="nav-section">Collections</div><nav class="nav-links"><span class="nav-link"><span class="nav-icon">${svgIcon('tree')}</span>Product tree</span><span class="nav-link"><span class="nav-icon">${svgIcon('reserve')}</span>My reservations</span><span class="nav-link"><span class="nav-icon">${svgIcon('audit')}</span>Audit evidence</span></nav>${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Working Head', doc.generation || '∅', doc.workflow === 'Start' ? 'Chưa publish' : 'Exact current head')}${metric('Revision', doc.revision, `Version Sequence ${doc.versionSequence || '—'}`)}${metric('Review pin', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pending decision' : 'No pending review')}${metric('Local work', doc.workingCopy.dirty ? 'Dirty' : 'Clean', doc.localWork && doc.localWork.preserved ? 'Preserved after reject' : 'In-memory only')}</div></div>${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderMetadata(doc)}${renderLinked(doc)}${renderAudit(doc.id === state.activeDocId ? 7 : 4)}</aside></div>`;
     }
 
     function renderReviewPanel() {
       if (!state.review.open) return '';
       const active = activeDoc();
-      const chosen = state.review.chosenVariant || state.variant;
-      const rows = [
-        ['A', VARIANTS.A.name, 'Best object discoverability; strongest metadata/audit visibility.', 'Denser and more traditional; more navigation chrome.'],
-        ['B', VARIANTS.B.name, 'Best for clear next action and blocker-led demos.', 'Less overview of the whole document landscape.'],
-        ['C', VARIANTS.C.name, 'Best lifecycle storytelling; state transitions are immediately visible.', 'Board can oversimplify rich document relationships.']
+       const disposition = state.review.disposition || 'KEEP';
+      const summary = `IDEA Engineering — Controlled Document Workspace UI Prototype\nDirection: Object-centric Engineering Explorer\nActive: ${active.id} / Revision ${active.revision} / Generation ${active.generation || '∅'}\nActor: ${actorOf().name} (${actorOf().role})\nDisposition: ${disposition}\nVerdict: ${state.review.notes || t('noVerdict')}\nOpen questions: ${state.review.questions || '—'}`;
+      const scenarioCards = [
+        ['01', 'Happy path', 'Identity → action → evidence, from Start to Released.'],
+        ['02', 'Conflict safety', 'Expected/current Generation are visible; no silent overwrite.'],
+        ['03', 'Recovery', 'Reject returns to In Work and preserves local work.'],
+        ['04', 'Actor separation', 'Author cannot self-approve or self-release.'],
+        ['05', 'Revision boundary', 'Released baseline stays immutable; next Revision starts cleanly.']
       ];
-      const summary = `Prototype: Controlled Document Workspace\nActive: ${active.id} / Revision ${active.revision} / Generation ${active.generation || '∅'}\nCurrent variant: ${state.variant}\nActor: ${actorOf().name} (${actorOf().role})\nVerdict: ${state.review.notes || t('noVerdict')}`;
-      return `<div class="review-overlay" role="presentation"><section class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-title"><header class="review-head"><div><h2 id="review-title">${esc(t('reviewTitle'))}</h2><p>${esc(t('reviewSubtitle'))}</p></div><button type="button" class="close-btn" data-action="close-review" aria-label="${esc(t('close'))}">×</button></header><div class="review-body"><div class="review-alert"><strong>${esc(t('recommendation'))}:</strong> A làm baseline cho object-heavy workspace; B phù hợp nếu màn hình chính là queue công việc; C dùng khi cần trình bày release spine với stakeholder. Chọn một hoặc phối hợp có lý do.</div><div class="review-metrics">${metric('Active document', active.id, `Revision ${active.revision}`)}${metric('Current UI', state.variant, VARIANTS[state.variant].name)}${metric('Walkthroughs', Object.keys(state.guided.completed).length, 'Completed in memory')}${metric('State events', state.audit.length, 'Audit entries')}</div><div class="review-grid"><section class="panel"><div class="panel-header"><div><h2>${esc(t('compare'))}</h2><p>Ba cấu trúc khác nhau; không chỉ đổi màu.</p></div></div><div class="panel-body" style="padding:0;overflow:auto"><table class="variant-compare"><thead><tr><th>${esc(t('variant'))}</th><th>Strength</th><th>Watch-out</th></tr></thead><tbody>${rows.map(row => `<tr><td class="variant-key">${row[0]} · ${esc(row[1])}</td><td>${esc(row[2])}</td><td>${esc(row[3])}</td></tr>`).join('')}</tbody></table></div></section><section class="panel"><div class="panel-header"><div><h2>${esc(t('decision'))}</h2><p>Ghi quyết định để đưa vào review note sau buổi demo.</p></div></div><div class="panel-body"><div class="review-form"><label>${esc(t('chooseVariant'))}<select id="reviewVariant"><option value="A" ${chosen === 'A' ? 'selected' : ''}>A · ${esc(VARIANTS.A.name)}</option><option value="B" ${chosen === 'B' ? 'selected' : ''}>B · ${esc(VARIANTS.B.name)}</option><option value="C" ${chosen === 'C' ? 'selected' : ''}>C · ${esc(VARIANTS.C.name)}</option><option value="MIX" ${chosen === 'MIX' ? 'selected' : ''}>MIX · Chọn thành phần</option></select></label><label>${esc(t('decisionNotes'))}<textarea id="reviewNotes" placeholder="Ví dụ: giữ header của A, queue của B...">${esc(state.review.notes)}</textarea></label><label>${esc(t('openQuestions'))}<textarea id="reviewQuestions" placeholder="Điều cần sếp quyết định tiếp...">${esc(state.review.questions)}</textarea></label></div></div></section></div><div class="review-footer"><span class="review-saved">${state.review.saved ? `✓ ${esc(t('verdictSaved'))} · ${esc(state.review.savedAt)}` : esc(t('noVerdict'))}</span><div class="review-footer-actions"><button type="button" class="action-btn" data-action="copy-review">▣ ${esc(t('copySummary'))}</button><button type="button" class="action-btn" data-action="print-review">⎙ ${esc(t('printPdf'))}</button><button type="button" class="action-btn primary" data-action="save-review">✓ ${esc(t('saveVerdict'))}</button></div></div><pre class="print-only">${esc(summary)}</pre></div></section></div>`;
+      return `<div class="review-overlay" role="presentation"><section class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-title"><header class="review-head"><div><h2 id="review-title">${esc(t('reviewTitle'))}</h2><p>${esc(t('reviewSubtitle'))}</p></div><button type="button" class="close-btn" data-action="close-review" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="review-body"><div class="review-alert"><strong>${esc(t('recommendation'))}:</strong> Giữ một hướng Explorer duy nhất: tài liệu và identity ở trung tâm, action theo context, evidence luôn nhìn thấy. Đây là decision aid cho prototype, không phải product approval.</div><div class="review-metrics">${metric('Active document', active.id, `Revision ${active.revision}`)}${metric('UI direction', UI_DIRECTION.name, 'Single direction')}${metric('Walkthroughs', Object.keys(state.guided.completed).length, 'Completed in memory')}${metric('State events', state.audit.length, 'Audit entries')}</div><div class="review-grid"><section class="panel"><div class="panel-header"><div><h2>Design principles</h2><p>Những điều sếp đang review trong màn hình này.</p></div></div><div class="panel-body"><ul class="review-principles"><li><b>01</b><div><strong>Identity first</strong><span>Stable ID, Revision, Version, Generation và status không bị gộp.</span></div></li><li><b>02</b><div><strong>Contextual actions</strong><span>Action hợp lệ mở theo state; action bị chặn giải thích được lý do.</span></div></li><li><b>03</b><div><strong>Evidence visible</strong><span>Reservation, audit, exact pin và conflict luôn có vị trí rõ ràng.</span></div></li></ul><div class="scenario-summary">${scenarioCards.map(([number, title, detail]) => `<div><strong>${number} · ${esc(title)}</strong><span>${esc(detail)}</span></div>`).join('')}</div></div></section><section class="panel"><div class="panel-header"><div><h2>${esc(t('decision'))}</h2><p>Ghi quyết định sau khi xem và chạy demo.</p></div></div><div class="panel-body"><div class="review-form"><label>Design disposition<select id="reviewDisposition"><option value="KEEP" ${disposition === 'KEEP' ? 'selected' : ''}>Keep this direction</option><option value="ADJUST" ${disposition === 'ADJUST' ? 'selected' : ''}>Keep, with adjustments</option><option value="STOP" ${disposition === 'STOP' ? 'selected' : ''}>Stop and revisit</option></select></label><label>${esc(t('decisionNotes'))}<textarea id="reviewNotes" placeholder="Ví dụ: ưu tiên metadata, đổi mật độ bảng...">${esc(state.review.notes)}</textarea></label><label>${esc(t('openQuestions'))}<textarea id="reviewQuestions" placeholder="Điều cần sếp quyết định tiếp...">${esc(state.review.questions)}</textarea></label></div></div></section></div><div class="review-footer"><span class="review-saved">${state.review.saved ? `<span class="status-icon">${svgIcon('check')}</span> ${esc(t('verdictSaved'))} · ${esc(state.review.savedAt)}` : esc(t('noVerdict'))}</span><div class="review-footer-actions"><button type="button" class="action-btn" data-action="copy-review">${svgIcon('copy')} <span>${esc(t('copySummary'))}</span></button><button type="button" class="action-btn" data-action="print-review">${svgIcon('print')} <span>${esc(t('printPdf'))}</span></button><button type="button" class="action-btn primary" data-action="save-review">${svgIcon('check')} <span>${esc(t('saveVerdict'))}</span></button></div></div><pre class="print-only">${esc(summary)}</pre></div></section></div>`;
     }
 
     function renderApp() {
       const doc = activeDoc();
-      let variant = state.variant === 'A' ? renderVariantA(doc) : state.variant === 'B' ? renderVariantB(doc) : renderVariantC(doc);
-      return `${renderHeader()}${renderPrototypeStrip()}<main class="page-wrap">${renderPageIntro()}${variant}</main>${renderVariantSwitcher()}${renderReviewPanel()}`;
-    }
-    function renderVariantSwitcher() {
-      const item = VARIANTS[state.variant];
-      return `<nav class="variant-switcher" aria-label="Prototype variants"><button type="button" class="switcher-arrow" data-action="previous-variant" aria-label="Previous variant">←</button><div class="switcher-label"><strong>${esc(t('variant'))} ${state.variant} · ${esc(item.name)}</strong><span>${esc(item.promise)}</span></div><button type="button" class="switcher-arrow" data-action="next-variant" aria-label="Next variant">→</button></nav>`;
+      return `${renderHeader()}${renderPrototypeStrip()}<main class="page-wrap">${renderPageIntro()}${renderExplorer(doc)}</main>${renderReviewPanel()}`;
     }
     function render() {
       document.documentElement.lang = state.locale;
@@ -1154,15 +1117,6 @@
       node.className = `toast show${isError ? ' error' : ''}`;
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => { node.className = 'toast'; }, 3800);
-    }
-    function changeVariant(direction) {
-      const keys = Object.keys(VARIANTS);
-      const index = keys.indexOf(state.variant);
-      state.variant = keys[(index + direction + keys.length) % keys.length];
-      const url = new URL(window.location.href);
-      url.searchParams.set('variant', state.variant);
-      window.history.replaceState({}, '', url);
-      render();
     }
     function runGuidedNext() {
       const guide = state.guided;
@@ -1181,7 +1135,7 @@
       const accepted = expectedBlocked ? !result.ok : result.ok;
       if (accepted) {
         guide.step += 1;
-        guide.message = expectedBlocked ? `✓ Expected block: ${result.message}` : `✓ ${result.message}`;
+        guide.message = expectedBlocked ? `Expected block: ${result.message}` : `Done: ${result.message}`;
         if (guide.step >= scenario.steps.length) guide.completed[guide.scenario] = true;
       } else guide.message = `Chưa đạt bước này: ${result.message}`;
       state.lastAction = { type: accepted ? 'success' : 'blocked', message: guide.message, code: result.code || '' };
@@ -1189,21 +1143,31 @@
       showToast(guide.message, !accepted);
     }
     function reviewPayload() {
-      return { chosenVariant: document.getElementById('reviewVariant')?.value || state.review.chosenVariant, notes: document.getElementById('reviewNotes')?.value || '', questions: document.getElementById('reviewQuestions')?.value || '' };
+      return { disposition: document.getElementById('reviewDisposition')?.value || state.review.disposition, notes: document.getElementById('reviewNotes')?.value || '', questions: document.getElementById('reviewQuestions')?.value || '' };
     }
     function copyReview() {
       const active = activeDoc();
-      const payload = `IDEA Engineering — UI Prototype Review\nVariant: ${state.variant} · ${VARIANTS[state.variant].name}\nActive document: ${active.id} / Revision ${active.revision} / Generation ${active.generation || '∅'}\nActor: ${actorOf().name} · ${actorOf().role}\nDecision: ${state.review.notes || t('noVerdict')}\nOpen questions: ${state.review.questions || '—'}`;
+      const payload = `IDEA Engineering — Controlled Document Workspace UI Prototype\nDirection: ${UI_DIRECTION.name}\nActive document: ${active.id} / Revision ${active.revision} / Generation ${active.generation || '∅'}\nActor: ${actorOf().name} · ${actorOf().role}\nDisposition: ${state.review.disposition || 'KEEP'}\nDecision: ${state.review.notes || t('noVerdict')}\nOpen questions: ${state.review.questions || '—'}`;
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(payload).then(() => showToast('Summary đã copy vào clipboard.')).catch(() => showToast(payload));
       else showToast(payload);
+    }
+    function focusReview() {
+      const dialog = document.querySelector('.review-dialog');
+      const firstControl = dialog?.querySelector('#reviewDisposition') || dialog?.querySelector('#reviewNotes') || dialog?.querySelector('button[data-action="close-review"]');
+      firstControl?.focus();
+    }
+    function closeReview() {
+      state.review.open = false;
+      render();
+      const target = reviewReturnFocus?.id ? document.getElementById(reviewReturnFocus.id) : reviewReturnFocus?.action ? document.querySelector(`[data-action="${reviewReturnFocus.action}"]`) : null;
+      target?.focus();
+      reviewReturnFocus = null;
     }
 
     document.addEventListener('click', event => {
       const button = event.target.closest('[data-action]');
       if (!button) return;
       const action = button.dataset.action;
-      if (action === 'previous-variant') return changeVariant(-1);
-      if (action === 'next-variant') return changeVariant(1);
       if (action === 'select-doc') {
         const result = dispatch('select-doc', { id: button.dataset.docId }); render(); showToast(result.message, !result.ok); return;
       }
@@ -1215,10 +1179,12 @@
       }
       if (action === 'guided-next') return runGuidedNext();
       if (action === 'open-review') {
-        state.review.open = true; render(); document.querySelector('.review-dialog')?.querySelector('select, textarea, button')?.focus(); return;
+        const active = document.activeElement;
+        reviewReturnFocus = active?.id ? { id: active.id } : active?.dataset?.action ? { action: active.dataset.action } : null;
+        state.review.open = true; render(); focusReview(); return;
       }
-      if (action === 'close-review') { state.review.open = false; render(); return; }
-      if (action === 'save-review') { const result = dispatch('save-review', reviewPayload()); render(); showToast(result.message, !result.ok); return; }
+      if (action === 'close-review') { closeReview(); return; }
+      if (action === 'save-review') { const result = dispatch('save-review', reviewPayload()); render(); focusReview(); showToast(result.message, !result.ok); return; }
       if (action === 'print-review') { window.print(); return; }
       if (action === 'copy-review') { copyReview(); return; }
       if (action === 'reset') { const result = dispatch('reset'); render(); showToast(result.message, !result.ok); return; }
@@ -1237,13 +1203,20 @@
       if (event.target.id === 'reviewQuestions') state.review.questions = event.target.value;
     });
     document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && state.review.open) { closeReview(); return; }
+      if (event.key === 'Tab' && state.review.open) {
+        const dialog = document.querySelector('.review-dialog');
+        const focusable = [...(dialog?.querySelectorAll('button, select, textarea, input, [tabindex]:not([tabindex="-1"])') || [])].filter(node => !node.disabled && node.offsetParent !== null);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        return;
+      }
       const tag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
       if (tag === 'input' || tag === 'textarea' || tag === 'select' || event.target?.isContentEditable) return;
-      if (event.key === 'ArrowLeft') { event.preventDefault(); changeVariant(-1); }
-      if (event.key === 'ArrowRight') { event.preventDefault(); changeVariant(1); }
-      if (event.key === 'Escape' && state.review.open) { state.review.open = false; render(); }
     });
-    window.addEventListener('popstate', () => { state.variant = readVariant(); render(); });
     render();
   </script>
 </body>
