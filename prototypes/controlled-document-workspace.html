@@ -662,6 +662,140 @@
       .guided-dialog, .diagnostics-dialog { max-height: calc(100dvh - 16px); border-radius: 10px; }
       .guided-dialog .guided-tab { flex-basis: calc(50% - 5px); }
     }
+
+    /* Readability scale pass: use the desktop canvas without adding more facts. */
+    @media (min-width: 901px) {
+      .topbar-inner, .page-wrap, .app-menu { width: min(1840px, calc(100% - 32px)); }
+      .topbar-inner { min-height: 66px; gap: 24px; }
+      .brand-lockup { gap: 14px; min-width: 270px; }
+      .brand-mark { width: 44px; height: 44px; border-radius: 12px; }
+      .brand-name { font-size: 16px; }
+      .brand-sub { font-size: 12px; }
+      .topbar-controls { gap: 10px; }
+      .control-label { font-size: 11px; }
+      .control-label select { min-width: 116px; min-height: 40px; padding: 8px 30px 8px 11px; font-size: 13px; }
+      .topbar-btn { min-height: 48px; padding: 9px 15px; font-size: 13px; }
+      .app-menu { min-height: 38px; gap: 3px; }
+      .app-menu-item { min-height: 36px; padding: 6px 14px; font-size: 12px; }
+      .page-intro { padding: 14px 0 11px; }
+      .page-intro h1 { font-size: clamp(26px, 2.35vw, 34px); }
+      .page-intro p { margin-top: 6px; font-size: 13px; }
+      .context-bar { min-height: 44px; margin-bottom: 8px; padding: 6px 10px; gap: 8px; }
+      .context-bar .crumb { min-height: 34px; padding: 5px 9px; font-size: 12px; }
+      .context-bar .crumb svg { width: 15px; height: 15px; }
+      .context-bar .context-meta { font-size: 11px; }
+      .explorer-layout { gap: 14px; }
+      .explorer-layout .right-rail { gap: 16px; }
+      .nav-panel > .panel-header { padding: 14px 15px 11px; }
+      .nav-panel > .panel-header h2 { font-size: 13px; }
+      .nav-panel > .panel-header p { font-size: 11px; }
+      .nav-tool-btn { width: 36px; min-height: 36px; }
+      .nav-tool-btn svg { width: 17px; height: 17px; }
+      .tree-view { padding: 10px 10px 12px; }
+      .tree-root, .tree-children { gap: 3px; }
+      .tree-node { min-height: 38px; padding: 5px 8px; gap: 6px; font-size: 12px; }
+      .tree-node .tree-caret { width: 14px; font-size: 13px; }
+      .tree-node svg { width: 17px; height: 17px; }
+      .tree-node .tree-state { width: 8px; height: 8px; }
+      .nav-panel .nav-section { padding: 13px 14px 6px; font-size: 10px; }
+      .nav-panel .nav-links { padding: 0 9px 9px; }
+      .nav-panel .nav-link { min-height: 42px; padding: 7px 9px; font-size: 12px; }
+      .nav-panel .nav-link .nav-icon { width: 19px; height: 19px; }
+      .nav-panel .doc-list-wrap .panel-header { padding: 12px 14px 10px; }
+      .nav-panel .doc-list-wrap .panel-header h2 { font-size: 12px; }
+      .nav-panel .doc-list-wrap .panel-header p { font-size: 11px; }
+      .nav-panel .doc-list { max-height: 460px; padding: 8px; gap: 3px; }
+      .nav-panel .doc-list-item { min-height: 52px; padding: 8px 9px; border-radius: 6px; }
+      .nav-panel .doc-list-item strong { font-size: 12px; }
+      .nav-panel .doc-list-item span { font-size: 10px; }
+      .nav-panel .doc-list-item .list-meta { margin-top: 5px; font-size: 11px; }
+      .doc-hero { padding: 18px 20px; }
+      .doc-hero-top { gap: 22px; }
+      .doc-title { font-size: 24px; }
+      .doc-subtitle { font-size: 13px; }
+      .eyebrow { font-size: 11px; }
+      .state-badge .badge { min-height: 32px; padding: 6px 11px; font-size: 12px; }
+      .identity-grid { gap: 8px; margin-top: 14px; }
+      .identity-cell { min-height: 68px; padding: 10px 11px; }
+      .identity-cell dt { font-size: 11px; }
+      .identity-cell dd { margin-top: 5px; font-size: 14px; }
+      .identity-cell dd.mono { font-size: 13px; }
+      .action-bar { padding: 8px 14px 9px; }
+      .command-toolbar { gap: 6px; }
+      .command-caption { font-size: 10px; }
+      .command-bar .action-btn { min-height: 48px; padding: 9px 13px; font-size: 13px; }
+      .command-bar .action-btn svg { width: 16px; height: 16px; }
+      .command-more summary { min-height: 48px; padding: 8px 12px; font-size: 12px; }
+      .command-more-count { min-width: 21px; height: 21px; font-size: 11px; }
+      .command-status { min-height: 28px; margin-top: 5px; }
+      .command-status .small { font-size: 11px; }
+      .reason-disclosure summary { min-height: 36px; padding: 5px 9px; font-size: 11px; }
+      .next-action-card { gap: 14px; margin: 9px 12px 0; padding: 11px 13px; }
+      .next-action-main > span { font-size: 10px; }
+      .next-action-main strong { font-size: 15px; }
+      .next-action-main small { font-size: 11px; }
+      .next-action-card p { margin-top: 6px; font-size: 12px; }
+      .item-tabs { padding: 0 13px; }
+      .item-tab { min-height: 49px; padding: 9px 14px; font-size: 12px; }
+      .item-tab svg { width: 15px; height: 15px; }
+      .tab-panel { padding: 11px 13px; }
+      .overview-grid { gap: 10px; }
+      .form-section-header { padding: 11px 12px; }
+      .form-section-header h3 { font-size: 12px; }
+      .form-section-header span { font-size: 11px; }
+      .property-field { padding: 10px 11px; }
+      .property-field dt { font-size: 10px; }
+      .property-field dd { margin-top: 4px; font-size: 12px; }
+      .property-field dd.mono { font-size: 11px; }
+      .lifecycle-strip { gap: 7px; padding: 12px; }
+      .lifecycle-step { min-height: 62px; padding: 10px 10px 9px 29px; }
+      .lifecycle-step::before { left: 10px; top: 13px; width: 9px; height: 9px; }
+      .lifecycle-step::after { top: 18px; }
+      .lifecycle-step strong { font-size: 11px; }
+      .lifecycle-step span { font-size: 10px; }
+      .relationship-table th, .relationship-table td { padding: 9px 8px; }
+      .relationship-table .item-link { min-height: 34px; font-size: 12px; }
+      .right-rail .panel-header { padding: 13px 14px 10px; }
+      .right-rail .panel-header h2 { font-size: 12px; }
+      .right-rail .panel-header p { font-size: 11px; }
+      .right-rail .panel-body { padding: 13px 14px; }
+      .right-rail .data-table th, .right-rail .data-table td { padding: 8px 6px; }
+      .right-rail .data-table th { font-size: 10px; }
+      .right-rail .data-table td { font-size: 11px; }
+      .rail-link { min-height: 48px; padding: 8px 10px; font-size: 11px; }
+      .rail-link strong { min-width: 24px; height: 24px; font-size: 11px; }
+      .recent-audit-item { grid-template-columns: 48px minmax(0, 1fr); gap: 9px; padding: 10px 0; }
+      .recent-audit-time { font-size: 11px; }
+      .recent-audit-content strong { font-size: 11px; }
+      .recent-audit-content span, .recent-audit-content em { font-size: 10px; }
+      .overview-summary-row { padding: 11px; }
+      .overview-summary-row strong { font-size: 14px; }
+      .overview-summary-row span { font-size: 11px; }
+      .inline-link { min-height: 40px; padding: 7px 10px; font-size: 11px; }
+      .lifecycle-summary { gap: 10px; padding: 11px; }
+      .lifecycle-summary div { padding: 9px; }
+      .lifecycle-summary strong { font-size: 12px; }
+      .lifecycle-summary span:not(.summary-arrow) { font-size: 10px; }
+      .detail-drawer { width: min(720px, 100%); }
+      .drawer-head { padding: 18px 20px 15px; }
+      .drawer-head h2 { font-size: 22px; }
+      .drawer-head p { font-size: 12px; }
+      .drawer-body { padding: 16px; }
+      .guided-dialog, .diagnostics-dialog { width: min(860px, 100%); }
+      .modal-head { padding: 18px 21px 15px; }
+      .modal-head h2 { font-size: 23px; }
+      .modal-head p, .modal-hint { font-size: 12px; }
+      .modal-body { padding: 17px 21px 21px; }
+      .review-dialog { width: min(1200px, 100%); }
+    }
+    @media (min-width: 1401px) {
+      .explorer-layout { grid-template-columns: clamp(250px, 17vw, 280px) minmax(0, 1fr) clamp(310px, 20vw, 360px); }
+    }
+    @media (min-width: 901px) and (max-width: 1400px), (min-width: 901px) and (max-width: 1500px) and (max-height: 850px) {
+      /* Give the single active scroll surface the extra vertical room used by the larger scale. */
+      .explorer-layout { max-height: calc(100dvh - 235px); }
+      .explorer-layout .main-panel { height: calc(100dvh - 235px); }
+    }
     @media print {
       body { background: #fff; }
       body * { visibility: hidden !important; }
