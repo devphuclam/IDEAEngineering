@@ -440,13 +440,16 @@
     .doc-hero { padding: 13px 14px; }
     .identity-grid { gap: 6px; margin-top: 10px; }
     .identity-cell { min-height: 54px; padding: 7px 8px; }
-    .next-action-card { display: flex; align-items: center; gap: 12px; margin: 7px 10px 0; padding: 8px 10px; border: 1px solid #c8dfe6; border-radius: 7px; color: #244f63; background: #f4fbfc; }
+    .next-action-card { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 7px 10px 0; padding: 8px 10px; border: 1px solid #c8dfe6; border-radius: 7px; color: #244f63; background: #f4fbfc; }
+    .next-action-card.waiting { border-color: #ecd8a7; color: #6b541f; background: #fffaf0; }
     .next-action-card.blocked { border-color: #e8c2c6; color: #743941; background: #fff6f6; }
     .next-action-main { display: flex; align-items: baseline; gap: 8px; min-width: 0; flex: 1; flex-wrap: wrap; }
     .next-action-main > span { color: #5e7a88; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
     .next-action-main strong { color: var(--navy); font-size: 13px; }
     .next-action-main small { color: var(--muted); font-size: 10px; }
-    .next-action-card p { flex-basis: 100%; margin: 5px 0 0; color: #7a3e45; font-size: 11px; }
+    .next-action-card > .badge { margin-left: auto; }
+    .next-action-card p { flex: 0 0 100%; width: 100%; margin: 5px 0 0; color: #7a3e45; font-size: 11px; }
+    .next-action-card.waiting p { color: #765d25; }
     .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .overview-grid > .form-section { min-width: 0; }
     .compact-properties { height: 100%; }
@@ -715,7 +718,8 @@
         checkOutHint: 'Reservation + mở working copy trong workspace hiện tại.',
         checkInHint: 'Kiểm tra Reservation và ghi working copy thành immutable Generation; Reservation disposition vẫn tách riêng.',
         open: 'Open working copy',
-        edit: 'Edit metadata',
+        edit: 'Chỉnh sửa bản làm việc',
+        editHint: 'Thực hiện thay đổi trên working copy; Check-in sẽ ghi thay đổi thành immutable Generation.',
         publish: 'Publish',
         submit: 'Submit for review',
         approve: 'Approve',
@@ -786,10 +790,10 @@
         scenarioRevision: 'Create Revision'
       },
       en: {
-        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Publish the working copy as an immutable Generation; Reservation disposition stays separate.', open: 'Open working copy', edit: 'Edit metadata', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Publish the working copy as an immutable Generation; Reservation disposition stays separate.', open: 'Open working copy', edit: 'Edit working copy', editHint: 'Make changes in the working copy; Check-in records them as an immutable Generation.', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       },
       ja: {
-        language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: 'メタデータを編集', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: '作業コピーを編集', editHint: '作業コピーを変更し、Check-in で immutable Generation として記録します。', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       }
     };
 
@@ -845,7 +849,9 @@
       lifecycleActions: 'Thao tác vòng đời',
       recoveryActions: 'Xử lý xung đột',
       demoTools: 'Công cụ demo',
-      viewsTools: 'Xem thêm'
+      viewsTools: 'Xem thêm',
+      waitingForRole: 'Đang chờ vai trò',
+      waitingForRoleHint: 'Chuyển actor sang persona được yêu cầu để tiếp tục Approve hoặc Reject.'
     });
     Object.assign(UI_TEXT.en, {
       stateInspector: 'Inspect state & audit',
@@ -855,7 +861,9 @@
       lifecycleActions: 'Lifecycle actions',
       recoveryActions: 'Conflict recovery',
       demoTools: 'Demo tools',
-      viewsTools: 'More views'
+      viewsTools: 'More views',
+      waitingForRole: 'Waiting for role',
+      waitingForRoleHint: 'Switch to the required persona to continue Approve or Reject.'
     });
     Object.assign(UI_TEXT.ja, {
       stateInspector: '状態と監査を確認',
@@ -865,7 +873,9 @@
       lifecycleActions: 'ライフサイクル操作',
       recoveryActions: '競合リカバリ',
       demoTools: 'デモツール',
-      viewsTools: 'その他の表示'
+      viewsTools: 'その他の表示',
+      waitingForRole: '役割待ち',
+      waitingForRoleHint: '必要なペルソナに切り替えて Approve または Reject を続行します。'
     });
 
     const ACTORS = {
@@ -908,7 +918,7 @@
         steps: [
           { title: 'Chọn Author persona', detail: 'Mô phỏng người chuẩn bị working copy.', action: 'switch-actor', payload: { actorId: 'author' } },
           { title: 'Checkout tài liệu', detail: 'Lấy Reservation và materialize working copy trong workspace đã chọn.', action: 'check-out' },
-          { title: 'Sửa metadata', detail: 'Đánh dấu local work đang thay đổi.', action: 'edit' },
+          { title: 'Chỉnh sửa bản làm việc', detail: 'Đánh dấu thay đổi trên working copy; Check-in sẽ tạo Generation.', action: 'edit' },
           { title: 'Check-in Generation', detail: 'Check-in lần đầu tạo Generation 1; Reservation disposition vẫn tách riêng.', action: 'check-in' },
           { title: 'Submit for review', detail: 'Pin đúng Generation để approver đánh giá.', action: 'submit' },
           { title: 'Chuyển sang approver', detail: 'Kiểm tra actor separation.', action: 'switch-actor', payload: { actorId: 'approver' } },
@@ -1248,10 +1258,10 @@
           break;
         case 'edit':
           doc.workingCopy.dirty = true;
-          doc.workingCopy.summary = doc.localWork ? 'Local work re-applied; metadata delta pending.' : 'Metadata delta pending Check-in.';
+          doc.workingCopy.summary = doc.localWork ? 'Local work re-applied; working-copy changes pending Check-in.' : 'Working-copy changes pending Check-in.';
           doc.localWork = { preserved: Boolean(doc.localWork && doc.localWork.preserved), summary: doc.workingCopy.summary, sourceGeneration: doc.generation };
           audit('LocalEdit', `${doc.workingCopy.summary} No Generation until Check-in.`);
-          result = success('Local edit đã được ghi nhận; chưa tạo Generation cho tới khi Check-in.');
+          result = success('Bản làm việc đã sẵn sàng để chỉnh sửa; Check-in sẽ ghi thay đổi thành Generation.');
           break;
         case 'publish': {
           if (doc.reservation && doc.reservation.expectedGeneration !== doc.generation) {
@@ -1494,7 +1504,7 @@
     // `publish` remains an internal Generation-write primitive used by Check-in; it is never rendered as a competing user command.
     const ACTION_META = {
       'check-out': ['checkOut', 'reserve', 'checkOutHint'], 'check-in': ['checkIn', 'publish', 'checkInHint'],
-      reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit'], publish: ['publish', 'publish'],
+      reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit', 'editHint'], publish: ['publish', 'publish'],
       submit: ['submit', 'arrow'], approve: ['approve', 'check'], reject: ['reject', 'close'], release: ['release', 'release', 'releaseHint'],
       'create-revision': ['createRevision', 'plus'], withdraw: ['withdraw', 'back'], 'external-advance': ['externalAdvance', 'external'],
       refresh: ['refresh', 'refresh'], recover: ['recover', 'key']
@@ -1608,13 +1618,15 @@
     function renderNextAction(doc) {
       const next = nextActionFor(doc);
       const isBlocked = state.lastAction.type === 'blocked' && state.lastAction.action === next.action;
-      const nextCheck = next.action ? canAction(next.action, doc) : blocked('');
-      const needsRole = Boolean(next.role && !nextCheck.ok);
+      const waitingForRole = Boolean(next.role && !next.action);
+      const nextCheck = next.action ? canAction(next.action, doc) : success('');
       const actionUnavailable = Boolean(next.action && !nextCheck.ok);
-      const cardBlocked = isBlocked || actionUnavailable || needsRole;
-      const statusLabelText = cardBlocked ? (needsRole ? next.role : ui('blockingReason')) : 'READY';
-      const reason = isBlocked ? state.lastAction.message : actionUnavailable ? nextCheck.message : '';
-      return `<section class="next-action-card ${cardBlocked ? 'blocked' : 'ready'}" aria-labelledby="next-action-title"><div class="next-action-main"><span id="next-action-title">${esc(ui('nextAction'))}</span><strong>${esc(next.label)}</strong>${next.role ? `<small>${esc(next.role)}</small>` : ''}</div>${cardBlocked ? chip('BLOCKED', statusLabelText, 'red') : chip('READY', statusLabelText, 'green')}${reason ? `<p>${esc(reason)}</p>` : ''}</section>`;
+      const cardBlocked = !waitingForRole && (isBlocked || actionUnavailable);
+      const cardState = waitingForRole ? 'waiting' : cardBlocked ? 'blocked' : 'ready';
+      const statusLabelText = waitingForRole ? ui('waitingForRole') : cardBlocked ? ui('blockingReason') : 'READY';
+      const reason = waitingForRole ? ui('waitingForRoleHint') : isBlocked ? state.lastAction.message : actionUnavailable ? nextCheck.message : '';
+      const statusChip = waitingForRole ? chip('WAITING', statusLabelText, 'amber') : cardBlocked ? chip('BLOCKED', statusLabelText, 'red') : chip('READY', statusLabelText, 'green');
+      return `<section class="next-action-card ${cardState}" aria-labelledby="next-action-title"><div class="next-action-main"><span id="next-action-title">${esc(ui('nextAction'))}</span><strong>${esc(next.label)}</strong>${next.role ? `<small>${esc(next.role)}</small>` : ''}</div>${statusChip}${reason ? `<p>${esc(reason)}</p>` : ''}</section>`;
     }
 
     function renderItemTabs() {
@@ -1671,11 +1683,18 @@
       return 'Related document';
     }
 
+    // Tree icons communicate the broad document category, while the class name
+    // remains the accessible textual label. This keeps all Office records
+    // visually consistent without losing their more specific class names.
+    const DOCUMENT_CATEGORY_ICONS = {
+      'Product Definition': 'definition',
+      CAD: 'cad',
+      Office: 'spec',
+      Quality: 'checklist',
+      Release: 'package'
+    };
     function documentIcon(item) {
-      return ({
-        pump: 'definition', housing: 'cad', seal: 'spec', motor: 'interface', test: 'checklist',
-        drawing: 'drawing', material: 'register', release: 'package', installation: 'book', risk: 'warning'
-      })[item && item.titleKey] || 'file';
+      return DOCUMENT_CATEGORY_ICONS[item && item.category] || 'file';
     }
 
     function renderRelationshipGrid(doc) {

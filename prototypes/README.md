@@ -27,6 +27,8 @@ parity or a copy of any vendor UI.
 - **Command bar:** Checkout, Check-in, review and release actions stay beside the item. **More actions**
   contains only currently usable lifecycle/recovery commands plus focused views and demo tools;
   Reservation/Open/Generation-writing substeps are not exposed as competing commands.
+- **Role hand-off:** a happy-path step owned by another persona is shown as an amber **Waiting for role**
+  state; red is reserved for a real blocked action or conflict.
 - **Lifecycle visibility:** the state path `Start → In Work → Under Review → Released` is a visible
   strip, while the right rail keeps edit ownership, the Generation under review and the check result in view.
 
@@ -59,6 +61,8 @@ The prototype uses one authoritative surface per fact so the PLM composition sta
   audit events, not an end-user production capability.
 - **Navigator and evidence rail:** remain bounded columns on desktop, so a long document tree or growing audit
   list scrolls inside its own rail rather than moving the whole decision viewport.
+- **Category icons:** navigator icons encode the broad document category (for example, all `Office` records use
+  the same document icon); the specific Document Class remains visible as text and in the accessible label.
 - **Collapsible hierarchy:** the product root and each document class can be expanded or collapsed independently;
   collapsing a branch hides only its children and keeps the selected item context intact.
 - **Narrow screens:** the Navigator and Evidence rail leave the page flow and are opened as focused drawers from
@@ -100,6 +104,8 @@ table merely to keep it visible. A contextual reference is allowed only when it 
   ownership/staleness and records changed work as an immutable Generation. Check-in does not silently release the Reservation; Reservation
   disposition remains an explicit later decision. These actions, Review, Approve, Reject, Release, conflict
   handling and Create Revision are UI simulations of accepted domain semantics, not a backend implementation.
+- **Edit working copy** names the mutation step directly; its hint explains that Check-in, not the edit action,
+  records the change as an immutable Generation.
 - Check-in and Release are deliberately separate: Check-in may create the next immutable Generation while
   the Business Revision remains `In Work`; Release occurs only after approval, pins the exact evaluated
   Generation in a Release Record and changes the Revision to `Released` without creating another Generation.
