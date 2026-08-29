@@ -101,13 +101,14 @@ table merely to keep it visible. A contextual reference is allowed only when it 
   more than one state without encountering an artificial context-only block.
 - All state is in memory and disappears on reload.
 - Checkout requests a per-document Reservation and materializes a working copy. Check-in validates
-  ownership/staleness and records changed work as an immutable Generation. Check-in does not silently release the Reservation; Reservation
-  disposition remains an explicit later decision. These actions, Review, Approve, Reject, Release, conflict
-  handling and Create Revision are UI simulations of accepted domain semantics, not a backend implementation.
+  ownership/staleness, records changed work as an immutable Generation, closes the working copy and releases
+  the Reservation (the prototype's single-document Check-in disposition). Submit for review then pins that Generation
+  for the next gate. These actions, Review, Approve,
+  Reject, Release, conflict handling and Create Revision are UI simulations of accepted domain semantics, not a backend implementation.
 - **Edit working copy** names the mutation step directly; its hint explains that Check-in, not the edit action,
-  records the change as an immutable Generation.
+  records the change as an immutable Generation and releases the edit hold.
 - Check-in and Release are deliberately separate: Check-in may create the next immutable Generation while
-  the Business Revision remains `In Work`; Release occurs only after approval, pins the exact evaluated
+  the Business Revision remains `In Work` and releases the edit hold; Release occurs only after approval, pins the exact evaluated
   Generation in a Release Record and changes the Revision to `Released` without creating another Generation.
 - The VI/EN/JA switch demonstrates label length, fallback and layout pressure. It is not a complete
   translation review or accessibility-conformance result.
