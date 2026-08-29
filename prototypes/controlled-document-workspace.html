@@ -443,6 +443,7 @@
     .next-action-card { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 7px 10px 0; padding: 8px 10px; border: 1px solid #c8dfe6; border-radius: 7px; color: #244f63; background: #f4fbfc; }
     .next-action-card.waiting { border-color: #ecd8a7; color: #6b541f; background: #fffaf0; }
     .next-action-card.blocked { border-color: #e8c2c6; color: #743941; background: #fff6f6; }
+    .next-action-card.recovery { border-color: #e4cf9d; color: #5c4b22; background: #fffaf0; }
     .next-action-main { display: flex; align-items: baseline; gap: 8px; min-width: 0; flex: 1; flex-wrap: wrap; }
     .next-action-main > span { color: #5e7a88; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
     .next-action-main strong { color: var(--navy); font-size: 13px; }
@@ -450,6 +451,35 @@
     .next-action-card > .badge { margin-left: auto; }
     .next-action-card p { flex: 0 0 100%; width: 100%; margin: 5px 0 0; color: #7a3e45; font-size: 11px; }
     .next-action-card.waiting p { color: #765d25; }
+    .next-action-card.recovery p { color: #6a5729; }
+    .conflict-recovery { flex: 0 0 100%; width: 100%; margin-top: 3px; padding: 10px; border: 1px solid #e8d7aa; border-radius: 7px; background: rgba(255, 255, 255, .78); }
+    .conflict-recovery-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .conflict-recovery-head > div { min-width: 0; }
+    .conflict-kicker { display: block; color: #826721; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .conflict-recovery-head strong { display: block; margin-top: 3px; color: var(--navy); font-size: 12px; line-height: 1.35; }
+    .conflict-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 9px; }
+    .conflict-facts > div { min-width: 0; padding: 7px 8px; border: 1px solid #eadfbe; border-radius: 5px; background: #fff; }
+    .conflict-facts span, .conflict-facts b { display: block; overflow-wrap: anywhere; }
+    .conflict-facts span { color: #8a7951; font-size: 9px; font-weight: 780; letter-spacing: .04em; text-transform: uppercase; }
+    .conflict-facts b { margin-top: 3px; color: var(--navy); font-size: 11px; line-height: 1.3; }
+    .conflict-facts b.mono { font-size: 10px; }
+    .conflict-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 9px 0 0; padding: 0; list-style: none; }
+    .conflict-step { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 7px; min-width: 0; padding: 8px; border: 1px solid #e1e6e7; border-radius: 6px; color: #6d7b80; background: #fbfcfc; }
+    .conflict-step.current { border-color: #d5bf7d; background: #fffdf5; box-shadow: inset 3px 0 0 #b78925; }
+    .conflict-step.done { border-color: #b9d7cd; background: #f4faf7; }
+    .conflict-step-number { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; background: #8c9da1; font: 11px var(--mono); }
+    .conflict-step.current .conflict-step-number { background: #b78925; }
+    .conflict-step.done .conflict-step-number { background: var(--green); }
+    .conflict-step > .conflict-step-number { grid-column: 1; grid-row: 1 / span 2; }
+    .conflict-step > div { grid-column: 2; min-width: 0; }
+    .conflict-step > div strong, .conflict-step > div span { display: block; overflow-wrap: anywhere; }
+    .conflict-step > div strong { color: var(--navy); font-size: 11px; line-height: 1.25; }
+    .conflict-step > div span { margin-top: 2px; color: #71838a; font-size: 10px; line-height: 1.3; }
+    .conflict-step > em { grid-column: 2; justify-self: start; margin-top: 5px; padding: 2px 5px; border-radius: 99px; color: #68787c; background: #eef2f3; font-size: 9px; font-style: normal; font-weight: 800; }
+    .conflict-step.current em { color: #765b18; background: #f7eac4; }
+    .conflict-step.done em { color: #176448; background: #dcf2e8; }
+    .conflict-note { display: flex; align-items: center; gap: 5px; margin: 9px 0 0 !important; color: #6f6240 !important; font-size: 10px !important; }
+    .conflict-note svg { flex: 0 0 auto; width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .overview-grid > .form-section { min-width: 0; }
     .compact-properties { height: 100%; }
@@ -640,6 +670,8 @@
       .next-action-card { align-items: flex-start; flex-wrap: wrap; }
       .next-action-card > .badge { margin-left: auto; }
       .next-action-card p { flex-basis: 100%; }
+      .conflict-recovery-head { flex-direction: column; }
+      .conflict-facts, .conflict-steps { grid-template-columns: 1fr; }
       .lifecycle-summary { grid-template-columns: 1fr; }
       .summary-arrow { display: none; }
       .reason-row { align-items: flex-start; flex-direction: column; }
@@ -861,7 +893,7 @@
         release: 'Release',
         createRevision: 'Create Revision',
         externalAdvance: 'Simulate external advance',
-        refresh: 'Refresh / reapply',
+        refresh: 'Refresh baseline',
         recover: 'Recover reservation',
         withdraw: 'Withdraw review',
         reason: 'Reason for reject / recovery',
@@ -924,10 +956,10 @@
         scenarioRevision: 'Create Revision'
       },
       en: {
-        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Validate the Reservation, record the working copy as an immutable Generation and close Checkout; the Reservation is released after Check-in.', open: 'Open working copy', edit: 'Edit working copy', editHint: 'Make changes in the working copy; Check-in records an immutable Generation and releases the Reservation.', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh / reapply', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Save demo verdict', printPdf: 'Print / Save as PDF', copySummary: 'Copy summary', close: 'Close', verdictSaved: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Validate the Reservation, record the working copy as an immutable Generation and close Checkout; the Reservation is released after Check-in.', open: 'Open working copy', edit: 'Edit working copy', editHint: 'Make changes in the working copy; Check-in records an immutable Generation and releases the Reservation.', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh baseline', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       },
       ja: {
-        language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: '作業コピーを編集', editHint: '作業コピーを変更し、Check-in で immutable Generation として記録して Reservation を解放します。', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: '更新 / 再適用', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+         language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: '作業コピーを編集', editHint: '作業コピーを変更し、Check-in で immutable Generation として記録して Reservation を解放します。', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: 'Baseline を更新', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       }
     };
 
@@ -1012,6 +1044,73 @@
       waitingForRoleHint: '必要なペルソナに切り替えて Approve または Reject を続行します。'
     });
 
+    // Stale recovery is intentionally expressed as two visible, ordered actions.
+    // The prototype does not attempt a CAD/Office merge; it only makes the
+    // baseline refresh and the explicit local reapply decision observable.
+    Object.assign(I18N.vi, {
+      refresh: 'Refresh baseline',
+      reapply: 'Reapply local changes',
+      refreshHint: 'Cập nhật baseline theo Working Head mới; không merge file.',
+      reapplyHint: 'Áp lại local work lên baseline mới; sau đó mới Check-in.',
+      staleRecoveryTitle: 'Xử lý stale conflict',
+      staleRecoverySummary: 'Reservation bắt đầu ở Generation cũ, còn Working Head đã tiến lên.',
+      staleExpected: 'Expected Generation',
+      staleCurrent: 'Working Head hiện tại',
+      staleLocalLabel: 'Local work',
+      staleLocalSafe: 'Local work vẫn được giữ an toàn.',
+      staleStepRefresh: 'Cập nhật baseline',
+      staleStepRefreshHint: 'Đọc Working Head mới và cập nhật Expected Generation.',
+      staleStepReapply: 'Áp lại thay đổi local',
+      staleStepReapplyHint: 'Đối chiếu local work với baseline mới trước khi Check-in.',
+      refreshRequired: 'Cần Refresh baseline',
+      reapplyRequired: 'Cần Reapply local work',
+      refreshDone: 'Đã Refresh',
+      reapplyPending: 'Chờ Reapply',
+      noBinaryMerge: 'Prototype không tự động merge file CAD/Office.'
+    });
+    Object.assign(I18N.en, {
+      refresh: 'Refresh baseline',
+      reapply: 'Reapply local changes',
+      refreshHint: 'Update the baseline to the latest Working Head; no file merge is performed.',
+      reapplyHint: 'Reapply local work onto the new baseline, then Check-in.',
+      staleRecoveryTitle: 'Resolve stale conflict',
+      staleRecoverySummary: 'The Reservation started from an older Generation, while Working Head moved forward.',
+      staleExpected: 'Expected Generation',
+      staleCurrent: 'Current Working Head',
+      staleLocalLabel: 'Local work',
+      staleLocalSafe: 'Local work remains safely preserved.',
+      staleStepRefresh: 'Refresh baseline',
+      staleStepRefreshHint: 'Read the latest Working Head and update Expected Generation.',
+      staleStepReapply: 'Reapply local changes',
+      staleStepReapplyHint: 'Compare local work with the new baseline before Check-in.',
+      refreshRequired: 'Refresh baseline required',
+      reapplyRequired: 'Reapply local work required',
+      refreshDone: 'Refreshed',
+      reapplyPending: 'Awaiting reapply',
+      noBinaryMerge: 'The prototype does not automatically merge CAD/Office files.'
+    });
+    Object.assign(I18N.ja, {
+      refresh: 'Baseline を更新',
+      reapply: 'ローカル変更を再適用',
+      refreshHint: '最新の Working Head に baseline を更新します。ファイルはマージしません。',
+      reapplyHint: '新しい baseline にローカル作業を再適用してから Check-in します。',
+      staleRecoveryTitle: 'Stale 競合を解決',
+      staleRecoverySummary: 'Reservation の開始時点より Working Head が先に進んでいます。',
+      staleExpected: 'Expected Generation',
+      staleCurrent: '現在の Working Head',
+      staleLocalLabel: 'ローカル作業',
+      staleLocalSafe: 'ローカル作業は安全に保持されます。',
+      staleStepRefresh: 'Baseline を更新',
+      staleStepRefreshHint: '最新の Working Head を読み、Expected Generation を更新します。',
+      staleStepReapply: 'ローカル変更を再適用',
+      staleStepReapplyHint: 'Check-in 前にローカル作業を新しい baseline と照合します。',
+      refreshRequired: 'Baseline の更新が必要',
+      reapplyRequired: 'ローカル変更の再適用が必要',
+      refreshDone: '更新済み',
+      reapplyPending: '再適用待ち',
+      noBinaryMerge: 'このプロトタイプは CAD / Office ファイルを自動マージしません。'
+    });
+
     const ACTORS = {
       author: { name: 'Linh Nguyễn', roleKey: 'author', role: 'Author / Editor', workspace: 'WS-LINH', kind: 'author' },
       approver: { name: 'Minh Trần', roleKey: 'approver', role: 'Independent Approver', workspace: 'WS-MINH', kind: 'approver' },
@@ -1072,7 +1171,8 @@
           { title: 'Tạo local edit mới', detail: 'Working copy chưa Check-in.', action: 'edit' },
           { title: 'External workspace advance', detail: 'Mô phỏng Working Head đã tăng.', action: 'external-advance' },
           { title: 'Check-in stale request', detail: 'Phải bị chặn; local work không được xóa.', action: 'check-in', expectBlocked: true },
-          { title: 'Refresh / reapply', detail: 'Cập nhật expected Generation mà không tự động merge binary.', action: 'refresh' }
+          { title: 'Refresh baseline', detail: 'Cập nhật expected Generation theo Working Head mới; local work vẫn giữ.', action: 'refresh' },
+          { title: 'Reapply local changes', detail: 'Đánh dấu local work đã đối chiếu; không tự động merge binary. Sau đó mới Check-in.', action: 'reapply' }
         ]
       },
       reject: {
@@ -1260,7 +1360,11 @@
           if (actor.kind !== 'author') return blocked('Check-in yêu cầu Author / Editor của working copy.');
           if (!hasOwner) return blocked('Check-in bị chặn: Reservation không thuộc actor/workspace hiện tại.');
           if (!doc.workingCopy.open) return blocked('Hãy mở working copy trước khi Check-in.');
-          if (doc.conflict) return blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy Refresh / reapply.`);
+          if (doc.conflict) {
+            return blocked(doc.conflict.refreshed
+              ? `Baseline đã Refresh lên ${doc.conflict.current}. Hãy Reapply local changes trước khi Check-in.`
+              : `Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy Refresh baseline trước, rồi Reapply local changes.`);
+          }
           if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) return success('');
           return success('');
         case 'submit':
@@ -1296,7 +1400,15 @@
           return success('');
         case 'refresh':
           if (!doc.conflict) return blocked('Hiện không có stale conflict cần refresh.');
-          if (!hasOwner) return blocked('Refresh / reapply cần Reservation của workspace hiện tại.');
+          if (!hasOwner) return blocked('Refresh baseline / Reapply local changes cần Reservation của workspace hiện tại.');
+          if (doc.conflict.refreshed) return blocked('Baseline đã được Refresh; bước kế tiếp là Reapply local changes.');
+          return success('');
+        case 'reapply':
+          if (!doc.conflict) return blocked('Hiện không có stale conflict cần Reapply.');
+          if (!hasOwner) return blocked('Reapply cần Reservation của workspace hiện tại.');
+          if (!doc.conflict.refreshed) return blocked('Hãy Refresh baseline trước khi Reapply local changes.');
+          if (!doc.reservation || doc.reservation.expectedGeneration !== doc.generation) return blocked('Working Head đã thay đổi thêm; hãy Refresh baseline lại.');
+          if (!doc.workingCopy.open || !doc.workingCopy.dirty) return blocked('Không còn local work đang mở để Reapply.');
           return success('');
         case 'recover':
           if (actor.kind !== 'admin') return blocked('Reservation Recovery yêu cầu PDM Administrator.');
@@ -1401,7 +1513,7 @@
           break;
         case 'publish': {
           if (doc.reservation && doc.reservation.expectedGeneration !== doc.generation) {
-            doc.conflict = { expected: doc.reservation.expectedGeneration, current: doc.generation, detectedAt: formatClock(state.clock) };
+            doc.conflict = { expected: doc.reservation.expectedGeneration, current: doc.generation, detectedAt: formatClock(state.clock), refreshed: false };
             result = blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Local work được giữ.`, 'STALE_GENERATION');
             state.lastAction = { type: 'blocked', action: 'publish', message: result.message, code: result.code };
             break;
@@ -1519,16 +1631,39 @@
           doc.status = 'Draft';
           doc.gate = 'NOT-RUN';
           if (doc.pendingReview) { doc.pendingReview = null; doc.approvalDecision = null; }
+          if (doc.conflict) {
+            // A second external advance invalidates the refreshed baseline and
+            // sends the recovery flow back to step 1 instead of dead-ending.
+            doc.conflict = { ...doc.conflict, expected: doc.reservation?.expectedGeneration || doc.conflict.expected, current: generation, refreshed: false };
+          }
           audit('External Workspace Advance', `Working Head advanced ${previous} → ${generation}; current reservation expected ${doc.reservation ? doc.reservation.expectedGeneration : '∅'}.`, doc, t('external'));
           result = success(`External workspace advanced Working Head to ${generation}.`);
           break;
         }
-        case 'refresh':
-          doc.reservation.expectedGeneration = doc.generation;
-          doc.conflict = null;
-          audit('Refresh / Reapply', `Expected Generation updated to ${doc.generation}; local work remains dirty.`);
-          result = success(`Refreshed to ${doc.generation}; local work vẫn cần Check-in.`);
+        case 'refresh': {
+          const previousExpected = doc.conflict.expected;
+          const currentGeneration = doc.generation;
+          doc.reservation.expectedGeneration = currentGeneration;
+          doc.conflict = { ...doc.conflict, current: currentGeneration, refreshed: true, refreshedAt: formatClock(state.clock) };
+          audit('Refresh Baseline', `Expected Generation updated ${previousExpected} → ${currentGeneration}; local work remains dirty. No CAD/Office binary merge performed.`);
+          result = success(`Baseline đã Refresh lên ${currentGeneration}; local work vẫn giữ. Tiếp theo: Reapply local changes.`);
           break;
+        }
+        case 'reapply': {
+          const conflict = doc.conflict;
+          const targetGeneration = doc.generation;
+          doc.localWork = {
+            ...(doc.localWork || {}),
+            preserved: true,
+            sourceGeneration: targetGeneration,
+            summary: `Local work re-applied onto ${targetGeneration}; working-copy changes pending Check-in.`
+          };
+          doc.workingCopy.summary = doc.localWork.summary;
+          doc.conflict = null;
+          audit('Reapplied Local Work', `Local changes from expected ${conflict.expected} re-applied onto ${targetGeneration}; no automatic CAD/Office binary merge.`);
+          result = success(`Local work đã Reapply trên ${targetGeneration}; kiểm tra rồi Check-in.`);
+          break;
+        }
         case 'recover':
           audit('Reservation Recovery', `Administrator recovered reservation from ${doc.reservation.ownerName}; reason: ${state.draftReason}.`);
           doc.reservation = null;
@@ -1647,19 +1782,21 @@
       return `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || '<circle cx="12" cy="12" r="8"></circle>'}</svg>`;
     }
     // `publish` remains an internal Generation-write primitive used by Check-in; it is never rendered as a competing user command.
+    // Stale recovery keeps Refresh and Reapply as separate user-visible actions.
     const ACTION_META = {
       'check-out': ['checkOut', 'reserve', 'checkOutHint'], 'check-in': ['checkIn', 'publish', 'checkInHint'],
       reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit', 'editHint'], publish: ['publish', 'publish'],
       submit: ['submit', 'arrow'], approve: ['approve', 'check'], reject: ['reject', 'close'], release: ['release', 'release', 'releaseHint'],
       'create-revision': ['createRevision', 'plus'], withdraw: ['withdraw', 'back'], 'external-advance': ['externalAdvance', 'external'],
-      refresh: ['refresh', 'refresh'], recover: ['recover', 'key']
+      refresh: ['refresh', 'refresh', 'refreshHint'], reapply: ['reapply', 'refresh', 'reapplyHint'], recover: ['recover', 'key']
     };
     const SECONDARY_ACTION_GROUPS = [
       { labelKey: 'lifecycleActions', actions: ['edit', 'submit', 'approve', 'reject', 'release', 'create-revision', 'withdraw'] },
-      { labelKey: 'recoveryActions', actions: ['refresh', 'recover'] },
+      { labelKey: 'recoveryActions', actions: ['refresh', 'reapply', 'recover'] },
       { labelKey: 'demoTools', actions: ['external-advance'] }
     ];
     function primaryActionsFor(doc) {
+      if (doc.conflict) return [nextActionFor(doc).action].filter(Boolean);
       if (doc.workflow === 'Start' || doc.workflow === 'In Work') {
         const next = nextActionFor(doc).action;
         const flow = ['check-out', 'check-in'];
@@ -1735,11 +1872,14 @@
       const menuCount = secondaryGroups.reduce((count, group) => count + group.actions.length, 3);
       const secondaryMarkup = `${actionGroupsMarkup}${utilityMarkup}`;
       const reasonMarkup = reasonRelevant ? `<details class="reason-disclosure"><summary>${esc(ui('reasonDisclosure'))}${state.draftReason ? `<span class="reason-ready">●</span>` : ''}</summary><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></details>` : '';
-      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="primary-actions">${primaryMarkup}</div><details class="command-more"><summary>${esc(ui('moreActions'))}<span class="command-more-count">${menuCount}</span></summary><div class="secondary-actions" aria-label="${esc(ui('moreActions'))}">${secondaryMarkup}</div></details></div><div class="command-status"><div class="badge-row">${reservation}${preserved}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}</div></div>${reasonMarkup}</section>`;
+      const conflictStatus = doc.conflict
+        ? chip('conflict', doc.conflict.refreshed ? t('reapplyRequired') : 'STALE GENERATION', doc.conflict.refreshed ? 'amber' : 'red')
+        : '';
+      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="primary-actions">${primaryMarkup}</div><details class="command-more"><summary>${esc(ui('moreActions'))}<span class="command-more-count">${menuCount}</span></summary><div class="secondary-actions" aria-label="${esc(ui('moreActions'))}">${secondaryMarkup}</div></details></div><div class="command-status"><div class="badge-row">${reservation}${preserved}${conflictStatus}</div></div>${reasonMarkup}</section>`;
     }
 
     function nextActionFor(doc) {
-      if (doc.conflict) return { action: 'refresh', label: t('refresh') };
+      if (doc.conflict) return { action: doc.conflict.refreshed ? 'reapply' : 'refresh', label: doc.conflict.refreshed ? t('reapply') : t('refresh') };
       if (doc.workflow === 'Released') return { action: 'create-revision', label: t('createRevision') };
       if (doc.workflow === 'Under Review') {
         if (actorOf().kind !== 'approver') return { action: null, label: `${t('approve')} / ${t('reject')}`, role: t('approver') };
@@ -1763,18 +1903,30 @@
       return { action: 'check-out', label: t('checkOut') };
     }
 
+    function renderConflictRecovery(doc) {
+      if (!doc.conflict) return '';
+      const refreshed = Boolean(doc.conflict.refreshed);
+      const refreshClass = refreshed ? 'done' : 'current';
+      const reapplyClass = refreshed ? 'current' : 'pending';
+      const refreshStatus = refreshed ? t('refreshDone') : t('refreshRequired');
+      const reapplyStatus = refreshed ? t('reapplyRequired') : t('reapplyPending');
+      return `<div class="conflict-recovery" aria-labelledby="conflict-recovery-title"><div class="conflict-recovery-head"><div><span class="conflict-kicker">${esc(t('staleRecoveryTitle'))}</span><strong id="conflict-recovery-title">${esc(t('staleRecoverySummary'))}</strong></div>${chip('WAITING', `${refreshed ? 2 : 1} / 2`, 'amber')}</div><div class="conflict-facts"><div><span>${esc(t('staleExpected'))}</span><b class="mono">${esc(doc.conflict.expected || '—')}</b></div><div><span>${esc(t('staleCurrent'))}</span><b class="mono">${esc(doc.conflict.current || '—')}</b></div><div><span>${esc(t('staleLocalLabel'))}</span><b>${esc(t('staleLocalSafe'))}</b></div></div><ol class="conflict-steps"><li class="conflict-step ${refreshClass}" ${!refreshed ? 'aria-current="step"' : ''}><span class="conflict-step-number">1</span><div><strong>${esc(t('staleStepRefresh'))}</strong><span>${esc(t('staleStepRefreshHint'))}</span></div><em>${esc(refreshStatus)}</em></li><li class="conflict-step ${reapplyClass}" ${refreshed ? 'aria-current="step"' : ''}><span class="conflict-step-number">2</span><div><strong>${esc(t('staleStepReapply'))}</strong><span>${esc(t('staleStepReapplyHint'))}</span></div><em>${esc(reapplyStatus)}</em></li></ol><p class="conflict-note">${svgIcon('warning')}<span>${esc(t('noBinaryMerge'))}</span></p></div>`;
+    }
+
     function renderNextAction(doc) {
       const next = nextActionFor(doc);
+      const hasConflict = Boolean(doc.conflict);
+      const recoveryNeedsRefresh = hasConflict && !doc.conflict.refreshed;
       const isBlocked = state.lastAction.type === 'blocked' && state.lastAction.action === next.action;
       const waitingForRole = Boolean(next.role && !next.action);
       const nextCheck = next.action ? canAction(next.action, doc) : success('');
       const actionUnavailable = Boolean(next.action && !nextCheck.ok);
-      const cardBlocked = !waitingForRole && (isBlocked || actionUnavailable);
-      const cardState = waitingForRole ? 'waiting' : cardBlocked ? 'blocked' : 'ready';
-      const statusLabelText = waitingForRole ? ui('waitingForRole') : cardBlocked ? ui('blockingReason') : 'READY';
-      const reason = waitingForRole ? ui('waitingForRoleHint') : isBlocked ? state.lastAction.message : actionUnavailable ? nextCheck.message : '';
-      const statusChip = waitingForRole ? chip('WAITING', statusLabelText, 'amber') : cardBlocked ? chip('BLOCKED', statusLabelText, 'red') : chip('READY', statusLabelText, 'green');
-      return `<section class="next-action-card ${cardState}" aria-labelledby="next-action-title"><div class="next-action-main"><span id="next-action-title">${esc(ui('nextAction'))}</span><strong>${esc(next.label)}</strong>${next.role ? `<small>${esc(next.role)}</small>` : ''}</div>${statusChip}${reason ? `<p>${esc(reason)}</p>` : ''}</section>`;
+      const cardBlocked = !waitingForRole && !hasConflict && (isBlocked || actionUnavailable);
+      const cardState = waitingForRole ? 'waiting' : hasConflict ? 'recovery' : cardBlocked ? 'blocked' : 'ready';
+      const statusLabelText = waitingForRole ? ui('waitingForRole') : hasConflict ? (recoveryNeedsRefresh ? t('refreshRequired') : t('reapplyRequired')) : cardBlocked ? ui('blockingReason') : 'READY';
+      const reason = waitingForRole ? ui('waitingForRoleHint') : hasConflict ? (actionUnavailable ? nextCheck.message : '') : isBlocked ? state.lastAction.message : actionUnavailable ? nextCheck.message : '';
+      const statusChip = waitingForRole ? chip('WAITING', statusLabelText, 'amber') : hasConflict ? chip('WAITING', statusLabelText, 'amber') : cardBlocked ? chip('BLOCKED', statusLabelText, 'red') : chip('READY', statusLabelText, 'green');
+      return `<section class="next-action-card ${cardState}" aria-labelledby="next-action-title"><div class="next-action-main"><span id="next-action-title">${esc(ui('nextAction'))}</span><strong>${esc(next.label)}</strong>${next.role ? `<small>${esc(next.role)}</small>` : ''}</div>${statusChip}${reason ? `<p>${esc(reason)}</p>` : ''}${hasConflict ? renderConflictRecovery(doc) : ''}</section>`;
     }
 
     function renderItemTabs() {
@@ -1894,7 +2046,10 @@
       const rows = [
         [ui('controlReservation'), reservationLabel(doc), false], [ui('controlPin'), exactPin || '—', true], [ui('controlGate'), gateLabel(doc.gate), false]
       ];
-      return `<section class="panel evidence-panel"><div class="panel-header"><div><h2>${esc(ui('controlSummary'))}</h2><p>${esc(ui('controlSummaryHint'))}</p></div>${doc.conflict ? chip('conflict', 'STALE', 'red') : ''}</div><div class="panel-body"><dl class="evidence-list">${rows.map(([label, value, mono]) => `<div><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
+      const conflictStatus = doc.conflict
+        ? chip('conflict', doc.conflict.refreshed ? t('reapplyRequired') : 'STALE', doc.conflict.refreshed ? 'amber' : 'red')
+        : '';
+      return `<section class="panel evidence-panel"><div class="panel-header"><div><h2>${esc(ui('controlSummary'))}</h2><p>${esc(ui('controlSummaryHint'))}</p></div>${conflictStatus}</div><div class="panel-body"><dl class="evidence-list">${rows.map(([label, value, mono]) => `<div><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
     }
 
     function renderRailLinks(doc) {
@@ -1932,7 +2087,10 @@
         conflict: doc.conflict,
         lastAction: state.lastAction
       };
-      const summary = `<div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div>`;
+      const conflictStatus = doc.conflict
+        ? chip('conflict', doc.conflict.refreshed ? t('reapplyRequired') : 'STALE GENERATION', doc.conflict.refreshed ? 'amber' : 'red')
+        : '';
+      const summary = `<div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${conflictStatus}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div>`;
       const body = `${summary}<pre class="state-json">${esc(JSON.stringify(snapshot, null, 2))}</pre>`;
       return expanded ? `<section class="diagnostics-snapshot">${body}</section>` : `<details class="state-card"><summary>${esc(ui('stateInspector'))} <span class="small muted">· ${esc(ui('stateInspectorHint'))}</span></summary>${body}</details>`;
     }
