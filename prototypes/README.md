@@ -40,6 +40,21 @@ parity or a copy of any vendor UI.
 - **Scope:** this is one decision aid for an internal boss review. It is not a production design system,
   conformance claim or backend implementation.
 
+## Information ownership policy
+
+The prototype uses one authoritative surface per fact so the PLM composition stays readable:
+
+- **Item header:** title, Stable Document ID, Class, Revision, Version, Generation and current state.
+- **Next-action card:** the next permitted step, role prerequisite, gate/conflict explanation and reservation signal.
+- **Overview:** only key properties, a lifecycle summary and a relationship count.
+- **Files / Structure / Lifecycle / Audit tabs:** the full representation, relationship table, lifecycle detail and
+  audit timeline respectively. Other surfaces may show only a count or last-event reference.
+- **Right rail:** evidence summary and links to detail tabs; it is not a second metadata authority.
+- **Diagnostics, full properties, document list and guided walkthrough:** collapsed until requested.
+
+When adding a field, choose its owning surface first. Do not copy the same value into a badge, metric, inspector and
+table merely to keep it visible. A contextual reference is allowed only when it helps navigation or explains a decision.
+
 ## Suggested boss-review walkthrough
 
 1. Identify the selected document's Stable Document ID, Business Revision,

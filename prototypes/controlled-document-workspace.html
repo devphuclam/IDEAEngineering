@@ -318,6 +318,7 @@
     .tree-root, .tree-children { display: grid; gap: 2px; }
     .tree-children { margin-left: 13px; padding-left: 9px; border-left: 1px solid #d8e3e9; }
     .tree-node { display: flex; align-items: center; gap: 5px; min-height: 34px; padding: 4px 6px; border-radius: 5px; color: #3e596a; font-size: 11px; text-align: left; }
+    .tree-node { width: 100%; border: 0; background: transparent; font: 11px/1.4 var(--sans); }
     .tree-node:hover { background: #eef5f8; }
     .tree-node.selected { color: #124d6d; background: #e3f1f5; font-weight: 760; }
     .tree-node .tree-caret { width: 12px; color: #78909e; font-size: 12px; }
@@ -410,6 +411,88 @@
     .right-rail .data-table th { font-size: 9px; }
     .right-rail .data-table td { font-size: 10px; }
 
+    /* Information-density pass: one authoritative surface per fact, with detail on demand. */
+    .doc-hero-actions { align-items: flex-start; }
+    .state-badge .badge { min-height: 28px; padding: 5px 10px; font-size: 11px; }
+    .primary-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+    .command-more { position: relative; }
+    .command-more summary, .reason-disclosure summary {
+      display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 6px 10px;
+      border: 1px solid #cbd9e1; border-radius: 5px; color: #34566b; background: #fff; cursor: pointer;
+      font-size: 11px; font-weight: 760; list-style: none;
+    }
+    .command-more summary::-webkit-details-marker, .reason-disclosure summary::-webkit-details-marker { display: none; }
+    .command-more summary::after, .reason-disclosure summary::after { content: '▾'; color: #6e8794; font-size: 12px; }
+    .command-more[open] summary::after, .reason-disclosure[open] summary::after { content: '▴'; }
+    .command-more-count { display: inline-grid; place-items: center; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 99px; color: #20536c; background: #e8f2f6; font: 10px var(--mono); }
+    .command-more[open] { flex-basis: 100%; }
+    .secondary-actions { display: flex; flex-wrap: wrap; gap: 5px; padding-top: 7px; border-top: 1px solid #d9e3e8; }
+    .command-bar .action-btn { min-height: 44px; }
+    .command-status { min-height: 25px; }
+    .reason-disclosure { margin-top: 5px; }
+    .reason-disclosure summary { min-height: 32px; padding: 4px 8px; border-color: transparent; color: #667f8d; background: transparent; font-size: 10px; }
+    .reason-disclosure summary:hover { border-color: #cbd9e1; background: #fff; }
+    .reason-ready { color: var(--green); font-size: 12px; line-height: 1; }
+    .reason-disclosure .reason-row { margin-top: 6px; }
+    .next-action-card { display: flex; align-items: center; gap: 12px; margin: 10px 11px 0; padding: 10px 12px; border: 1px solid #c8dfe6; border-radius: 7px; color: #244f63; background: #f4fbfc; }
+    .next-action-card.blocked { border-color: #e8c2c6; color: #743941; background: #fff6f6; }
+    .next-action-main { display: flex; align-items: baseline; gap: 8px; min-width: 0; flex: 1; flex-wrap: wrap; }
+    .next-action-main > span { color: #5e7a88; font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .next-action-main strong { color: var(--navy); font-size: 13px; }
+    .next-action-main small { color: var(--muted); font-size: 10px; }
+    .next-action-card p { flex-basis: 100%; margin: 5px 0 0; color: #7a3e45; font-size: 11px; }
+    .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .overview-grid > .form-section { min-width: 0; }
+    .compact-properties { height: 100%; }
+    .compact-properties .property-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .overview-card { height: 100%; }
+    .relationship-summary { grid-column: 1 / -1; }
+    .overview-summary-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; }
+    .overview-summary-row strong { display: block; color: var(--navy); font-size: 13px; }
+    .overview-summary-row span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .inline-link { display: inline-flex; align-items: center; gap: 5px; min-height: 36px; padding: 6px 9px; border: 1px solid #c8dce5; border-radius: 5px; color: #165472; background: #fff; font-size: 10px; font-weight: 760; white-space: nowrap; }
+    .inline-link:hover { border-color: #8fb4ca; background: #f1f8fa; }
+    .inline-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .lifecycle-summary { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 12px; }
+    .lifecycle-summary div { min-width: 0; padding: 9px; border: 1px solid #dce6eb; border-radius: 5px; background: #fbfcfd; }
+    .lifecycle-summary div:first-child { border-color: #9bc9d6; background: #eef9fb; }
+    .lifecycle-summary strong { display: block; color: var(--navy); font-size: 11px; }
+    .lifecycle-summary span:not(.summary-arrow) { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .summary-arrow { color: #76909d; font-size: 16px; }
+    .secondary-details { margin-top: 10px; border: 1px solid #dfe8ed; border-radius: 6px; background: #fbfcfd; }
+    .secondary-details > summary { min-height: 40px; padding: 10px; color: #34566b; cursor: pointer; font-size: 11px; font-weight: 760; list-style: none; }
+    .secondary-details > summary::-webkit-details-marker { display: none; }
+    .secondary-details > summary::after { content: '▾'; float: right; color: #7b919d; }
+    .secondary-details[open] > summary::after { content: '▴'; }
+    .secondary-details .form-section { border: 0; border-radius: 0; box-shadow: none; }
+    .guided-collapsed { margin: 10px 11px; }
+    .guided-compact { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; }
+    .guided-compact h3 { display: flex; align-items: center; gap: 6px; margin: 0; color: #1b536b; font-size: 12px; }
+    .guided-compact p { margin: 3px 0 0; color: #69818c; font-size: 10px; }
+    .guided-compact .guided-controls { flex: 0 0 auto; }
+    .guided-head-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .guided-collapse-btn { min-height: 30px; padding: 4px 8px; border: 1px solid #b9d4de; border-radius: 6px; color: #1c6070; background: #fff; font-size: 10px; font-weight: 720; }
+    .state-card { margin: 10px 11px 0; border: 1px solid #dfe8ed; border-top: 1px solid #dfe8ed; border-radius: 6px; }
+    .evidence-list { display: grid; gap: 0; margin: 0; }
+    .evidence-list > div { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 8px; padding: 7px 0; border-bottom: 1px solid #edf1f4; }
+    .evidence-list > div:last-child { border-bottom: 0; }
+    .evidence-list dt { color: var(--muted); font-size: 9px; font-weight: 760; letter-spacing: .05em; text-transform: uppercase; }
+    .evidence-list dd { margin: 0; color: var(--navy); font-size: 10px; font-weight: 740; overflow-wrap: anywhere; }
+    .evidence-list dd.mono { font: 10px var(--mono); }
+    .rail-links { display: grid; gap: 6px; }
+    .rail-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 42px; padding: 7px 9px; border: 1px solid #e3ebef; border-radius: 6px; color: #2b566d; background: #fbfcfd; text-align: left; font-size: 10px; font-weight: 740; }
+    .rail-link:hover { border-color: #a9c6d2; background: #f1f8fa; }
+    .rail-link span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
+    .rail-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .rail-link strong { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 99px; color: #24566e; background: #e7f2f6; font: 10px var(--mono); }
+    .doc-list-disclosure { border-top: 1px solid var(--line); }
+    .doc-list-disclosure > summary { display: flex; align-items: center; justify-content: space-between; min-height: 43px; padding: 8px 12px; color: #2e5368; cursor: pointer; font-size: 11px; font-weight: 760; list-style: none; }
+    .doc-list-disclosure > summary::-webkit-details-marker { display: none; }
+    .doc-list-disclosure > summary::after { content: '▾'; margin-left: auto; padding-left: 7px; color: #78909e; }
+    .doc-list-disclosure[open] > summary::after { content: '▴'; }
+    .doc-list-disclosure > summary strong { display: inline-grid; place-items: center; min-width: 22px; height: 22px; margin-left: auto; border-radius: 99px; color: #2a5c73; background: #e8f2f6; font: 10px var(--mono); }
+    .doc-list-disclosure .doc-list { max-height: 320px; }
+
     .empty-state { padding: 30px 20px; color: var(--muted); text-align: center; }
     .empty-state strong { display: block; margin-bottom: 4px; color: var(--navy); }
 
@@ -462,6 +545,9 @@
       .explorer-layout .right-rail { grid-column: auto; grid-template-columns: 1fr; }
       .review-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .property-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .overview-grid { grid-template-columns: 1fr; }
+      .relationship-summary { grid-column: auto; }
+      .secondary-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .context-bar { align-items: flex-start; flex-wrap: wrap; }
       .context-bar .context-spacer { display: none; }
     }
@@ -475,9 +561,15 @@
       .identity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .doc-hero-top { flex-direction: column; }
       .doc-hero-actions { justify-content: flex-start; }
-      .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .guided-body { grid-template-columns: 1fr; }
       .guided-controls { justify-content: flex-start; }
+      .guided-compact { align-items: flex-start; flex-direction: column; }
+      .guided-compact .guided-controls { width: 100%; }
+      .next-action-card { align-items: flex-start; flex-wrap: wrap; }
+      .next-action-card > .badge { margin-left: auto; }
+      .next-action-card p { flex-basis: 100%; }
+      .lifecycle-summary { grid-template-columns: 1fr; }
+      .summary-arrow { display: none; }
       .reason-row { align-items: flex-start; flex-direction: column; }
       .reason-row input { width: 100%; }
       .property-grid { grid-template-columns: 1fr; }
@@ -636,7 +728,7 @@
         productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Mở rộng', collapse: 'Thu gọn',
         breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.'
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'Chưa có relationship nào cho item này.', layoutNote: 'Bố cục item-centric: cây điều hướng, form, relationship và lifecycle cùng một workspace.', moreActions: 'Thêm thao tác', technicalActions: 'Kỹ thuật / recovery', reasonDisclosure: 'Reason cho Reject / Recovery', nextAction: 'Bước tiếp theo', blockingReason: 'Lý do đang chặn', evidenceSummary: 'Tóm tắt evidence', evidenceHint: 'Chỉ giữ các tín hiệu cần để quyết định.', lastEvent: 'Event gần nhất', linkedCount: 'Relationship', openTab: 'Mở tab', diagnostics: 'Diagnostics', allProperties: 'Tất cả properties', keyProperties: 'Key properties', overviewSummary: 'Tóm tắt item', currentState: 'Trạng thái hiện tại', nextState: 'Trạng thái kế tiếp', runWalkthrough: 'Chạy walkthrough', closeWalkthrough: 'Thu gọn walkthrough', openWalkthrough: 'Mở walkthrough', exactPin: 'Exact pin', noRecentEvent: 'Chưa có event gần đây'
       },
       en: {
         navigator: 'Item navigator', item: 'Item', overview: 'Overview', files: 'Files / representations', structure: 'Structure / relationships', lifecycle: 'Lifecycle', auditTab: 'Audit',
@@ -644,7 +736,7 @@
         productRoot: 'P-100 Pump Assembly', productDefinition: 'Product Definition', cadArtifacts: 'CAD artifacts', controlledRecords: 'Controlled records', expand: 'Expand', collapse: 'Collapse',
         breadcrumbHome: 'My work', breadcrumbProduct: 'Product Definition', breadcrumbItem: 'Selected item', relation: 'Relationship', itemId: 'Item ID', ownerShort: 'Owner', category: 'Category', structureShort: 'Structure', workingHead: 'Working Head', stateShort: 'State', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'File role', fileName: 'Representation', source: 'Source', digestShort: 'Digest', current: 'Current', history: 'History', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.'
+        nativeFile: 'Native file', previewFile: 'Preview', evidenceFile: 'Evidence', controlledForm: 'Controlled form', noRelations: 'No relationships are registered for this item.', layoutNote: 'Item-centric layout: navigator, form, relationships and lifecycle share one workspace.', moreActions: 'More actions', technicalActions: 'Technical / recovery', reasonDisclosure: 'Reason for Reject / Recovery', nextAction: 'Next action', blockingReason: 'Blocking reason', evidenceSummary: 'Evidence summary', evidenceHint: 'Keep only the signals needed for a decision.', lastEvent: 'Last event', linkedCount: 'Relationships', openTab: 'Open tab', diagnostics: 'Diagnostics', allProperties: 'All properties', keyProperties: 'Key properties', overviewSummary: 'Item summary', currentState: 'Current state', nextState: 'Next state', runWalkthrough: 'Run walkthrough', closeWalkthrough: 'Collapse walkthrough', openWalkthrough: 'Open walkthrough', exactPin: 'Exact pin', noRecentEvent: 'No recent event'
       },
       ja: {
         navigator: 'アイテム ナビゲーター', item: 'アイテム', overview: '概要', files: 'ファイル / 表現', structure: '構成 / 関係', lifecycle: 'ライフサイクル', auditTab: '監査',
@@ -652,7 +744,7 @@
         productRoot: 'P-100 ポンプアセンブリ', productDefinition: '製品定義', cadArtifacts: 'CAD 成果物', controlledRecords: '管理レコード', expand: '展開', collapse: '折りたたむ',
         breadcrumbHome: '自分の作業', breadcrumbProduct: '製品定義', breadcrumbItem: '選択アイテム', relation: '関係', itemId: 'アイテム ID', ownerShort: '所有者', category: 'カテゴリ', structureShort: '構成', workingHead: 'Working Head', stateShort: '状態', revisionShort: 'Rev', generationShort: 'Generation',
         fileRole: 'ファイル ロール', fileName: '表現', source: 'ソース', digestShort: 'ダイジェスト', current: 'Current', history: '履歴', startState: 'Start', inWorkState: 'In Work', reviewState: 'Under Review', releasedState: 'Released',
-        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。'
+        nativeFile: 'ネイティブ ファイル', previewFile: 'プレビュー', evidenceFile: 'エビデンス', controlledForm: '管理フォーム', noRelations: 'このアイテムには関係がありません。', layoutNote: 'アイテム中心の構成: ナビゲーター、フォーム、関係、ライフサイクルを一つのワークスペースに表示します。', moreActions: 'その他の操作', technicalActions: '技術 / リカバリ', reasonDisclosure: 'Reject / Recovery の理由', nextAction: '次のアクション', blockingReason: 'ブロック理由', evidenceSummary: 'エビデンス概要', evidenceHint: '判断に必要なシグナルだけを表示します。', lastEvent: '最新イベント', linkedCount: '関係', openTab: 'タブを開く', diagnostics: '診断', allProperties: 'すべてのプロパティ', keyProperties: '主要プロパティ', overviewSummary: 'アイテム概要', currentState: '現在の状態', nextState: '次の状態', runWalkthrough: 'ウォークスルーを実行', closeWalkthrough: 'ウォークスルーを閉じる', openWalkthrough: 'ウォークスルーを開く', exactPin: 'Exact pin', noRecentEvent: '最近のイベントはありません'
       }
     };
 
@@ -838,7 +930,7 @@
         docs,
         clock: 8 * 60 + 30,
         audit: [{ time: '2026-08-28 08:30', type: 'Registered', actor: 'System', docId: 'LD-P100-001', detail: 'Logical Document registered; Revision A starts without Generation.' }],
-        guided: { scenario: overrides.scenario || 'happy', step: 0, completed: {}, message: '' },
+        guided: { scenario: overrides.scenario || 'happy', step: 0, completed: {}, message: '', open: Boolean(overrides.guidedOpen) },
         draftReason: 'Bổ sung evidence và làm rõ acceptance path',
         lastAction: { type: 'info', message: 'Demo state ready.' },
         review: { open: false, disposition: '', notes: '', questions: '', saved: false, savedAt: '' }
@@ -846,7 +938,7 @@
     }
     function resetData({ keepGuide = false } = {}) {
       const previous = state;
-      const next = createInitialState({ locale: previous.locale, activeDocId: 'LD-P100-001', activeItemTab: previous.activeItemTab, scenario: previous.guided.scenario });
+      const next = createInitialState({ locale: previous.locale, activeDocId: 'LD-P100-001', activeItemTab: previous.activeItemTab, scenario: previous.guided.scenario, guidedOpen: previous.guided.open });
       if (keepGuide) next.guided = { scenario: previous.guided.scenario, step: 0, completed: previous.guided.completed, message: '' };
       state = next;
     }
@@ -935,7 +1027,7 @@
     function dispatch(action, payload = {}) {
       const doc = activeDoc();
       let check;
-      if (!['reset', 'switch-actor', 'select-doc', 'item-tab', 'guided-select', 'guided-reset', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review', 'guided-next'].includes(action)) {
+      if (!['reset', 'switch-actor', 'select-doc', 'item-tab', 'guided-select', 'guided-reset', 'guided-open', 'guided-close', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review', 'guided-next'].includes(action)) {
         check = canAction(action, doc);
         if (!check.ok) { state.lastAction = { type: 'blocked', message: check.message, code: check.code }; return check; }
       }
@@ -1126,13 +1218,24 @@
             state.guided.scenario = payload.scenario;
             state.guided.step = 0;
             state.guided.message = '';
+            state.guided.open = true;
             resetData({ keepGuide: true });
+            state.guided.open = true;
             result = success(`Scenario: ${t(SCENARIOS[payload.scenario].titleKey)}.`);
           } else result = blocked('Scenario không hợp lệ.');
           break;
         case 'guided-reset':
           resetData({ keepGuide: true });
+          state.guided.open = true;
           result = success('Scenario đã reset.');
+          break;
+        case 'guided-open':
+          state.guided.open = true;
+          result = success('');
+          break;
+        case 'guided-close':
+          state.guided.open = false;
+          result = success('');
           break;
         case 'open-review': state.review.open = true; result = success(''); break;
         case 'close-review': state.review.open = false; result = success(''); break;
@@ -1179,6 +1282,24 @@
       };
       return `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || '<circle cx="12" cy="12" r="8"></circle>'}</svg>`;
     }
+    const ACTION_ORDER = ['reserve', 'open', 'edit', 'publish', 'submit', 'approve', 'reject', 'release', 'create-revision', 'withdraw', 'external-advance', 'refresh', 'recover'];
+    const ACTION_META = {
+      reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit'], publish: ['publish', 'publish'],
+      submit: ['submit', 'arrow'], approve: ['approve', 'check'], reject: ['reject', 'close'], release: ['release', 'release'],
+      'create-revision': ['createRevision', 'plus'], withdraw: ['withdraw', 'back'], 'external-advance': ['externalAdvance', 'external'],
+      refresh: ['refresh', 'refresh'], recover: ['recover', 'key']
+    };
+    function primaryActionsFor(doc) {
+      if (doc.workflow === 'Start') return ['reserve', 'open', 'edit', 'publish'];
+      if (doc.workflow === 'In Work') return ['open', 'edit', 'publish', 'submit'];
+      if (doc.workflow === 'Under Review') return ['approve', 'reject', 'release', 'withdraw'];
+      if (doc.workflow === 'Released') return ['create-revision'];
+      return ['reserve', 'open'];
+    }
+    function renderAction(action, prominent = false) {
+      const [labelKey, iconName] = ACTION_META[action] || [action, 'file'];
+      return actionButton(action, labelKey, prominent ? 'primary' : '', iconName);
+    }
     function actionButton(action, labelKey, className = '', iconName = '') {
       const status = canAction(action);
       const disabled = !status.ok;
@@ -1201,13 +1322,12 @@
     }
 
     function renderPrototypeStrip() {
-      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))}</span><span>${esc(ui('layoutNote'))}</span><span class="strip-spacer"></span><span class="direction-pill" title="${esc(UI_DIRECTION.promise)}">${svgIcon('tree')} ${esc(UI_DIRECTION.name)} · single direction</span></div>`;
+      return `<div class="prototype-strip"><strong>${esc(t('prototype'))}</strong><span>${esc(t('internal'))}</span><span class="strip-spacer"></span><span class="direction-pill" title="${esc(UI_DIRECTION.promise)}">${svgIcon('tree')} ${esc(UI_DIRECTION.name)} · single direction</span></div>`;
     }
 
     function renderPageIntro() {
-      const active = activeDoc();
       const actor = actorOf();
-      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))} Đây là một prototype tương tác để review với sếp; state và action chỉ là mô phỏng.</p></div><div class="intro-aside"><div class="connection-card"><span class="connection-mark" aria-hidden="true">✓</span><div><strong>Connected workspace</strong><span>${esc(actor.workspace)} · ${esc(actor.name)}</span></div></div><div class="badge-row">${chip(active.workflow, workflowLabel(active.workflow))}${chip(active.status, statusLabel(active.status))}${chip(active.gate, gateLabel(active.gate))}</div><span class="tiny-note">${esc(t('synthetic'))} · 10 records</span></div></div>`;
+      return `<div class="page-intro"><div><div class="eyebrow">${esc(t('workspace'))}</div><h1>${esc(t('workspace'))}</h1><p>${esc(t('intro'))}</p></div><div class="intro-aside"><div class="connection-card"><span class="connection-mark" aria-hidden="true">✓</span><div><strong>Connected workspace</strong><span>${esc(actor.workspace)} · ${esc(actor.name)}</span></div></div></div></div>`;
     }
 
     function renderIdentity(doc) {
@@ -1218,13 +1338,52 @@
     }
 
     function renderDocHero(doc, includeActions = true) {
-      return `<section class="doc-hero" aria-labelledby="item-title"><div class="doc-hero-top"><div><div class="eyebrow">${esc(ui('item'))} · ${esc(doc.category)} · ${esc(doc.className)}</div><h2 id="item-title" class="doc-title">${esc(titleOf(doc))}</h2><p class="doc-subtitle"><span class="mono">${esc(doc.id)}</span> · ${esc(doc.note)}</p></div>${includeActions ? `<div class="doc-hero-actions"><span class="badge navy">${esc(ui('revisionShort'))} ${esc(doc.revision)}</span><span class="badge teal">${esc(ui('generationShort'))} ${esc(doc.generation || '—')}</span>${chip(doc.workflow, workflowLabel(doc.workflow))}${chip(doc.status, statusLabel(doc.status))}</div>` : ''}</div>${renderIdentity(doc)}</section>`;
+      return `<section class="doc-hero" aria-labelledby="item-title"><div class="doc-hero-top"><div><div class="eyebrow">${esc(ui('item'))} · ${esc(doc.category)} · ${esc(doc.className)}</div><h2 id="item-title" class="doc-title">${esc(titleOf(doc))}</h2><p class="doc-subtitle"><span class="mono">${esc(doc.id)}</span> · ${esc(doc.note)}</p></div>${includeActions ? `<div class="doc-hero-actions"><span class="state-badge">${chip(doc.workflow, `${workflowLabel(doc.workflow)} · ${statusLabel(doc.status)}`)}</span></div>` : ''}</div>${renderIdentity(doc)}</section>`;
     }
 
     function renderActionBar(doc) {
       const reservation = chip(doc.reservation ? (ownsReservation(doc) ? 'owned' : 'external') : 'none', reservationLabel(doc), doc.reservation ? (ownsReservation(doc) ? 'teal' : 'amber') : 'plain');
       const preserved = doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : '';
-      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="action-groups"><div class="action-group">${actionButton('reserve', 'reserve', 'primary', 'reserve')}${actionButton('open', 'open', '', 'file')}${actionButton('edit', 'edit', '', 'edit')}${actionButton('publish', 'publish', 'primary', 'publish')}</div><div class="action-group">${actionButton('submit', 'submit', '', 'arrow')}${actionButton('approve', 'approve', '', 'check')}${actionButton('reject', 'reject', 'danger', 'close')}${actionButton('release', 'release', 'primary', 'release')}</div><div class="action-group">${actionButton('create-revision', 'createRevision', '', 'plus')}${actionButton('withdraw', 'withdraw', '', 'back')}</div><div class="action-group">${actionButton('external-advance', 'externalAdvance', 'edge', 'external')}${actionButton('refresh', 'refresh', 'edge', 'refresh')}${actionButton('recover', 'recover', 'edge', 'key')}</div></div></div><div class="command-status"><div class="badge-row">${reservation}${preserved}</div><span class="small muted">${esc(t('actionHint'))}</span></div><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></section>`;
+      const reasonRelevant = doc.workflow === 'Under Review' || (doc.reservation && !ownsReservation(doc));
+      const primary = primaryActionsFor(doc);
+      const secondary = ACTION_ORDER.filter(action => !primary.includes(action));
+      const primaryMarkup = primary.map((action, index) => renderAction(action, index === 0 && canAction(action, doc).ok)).join('');
+      const secondaryMarkup = secondary.map(action => renderAction(action)).join('');
+      return `<section class="action-bar command-bar" aria-labelledby="command-title"><div class="command-toolbar"><span id="command-title" class="command-caption">${esc(ui('commands'))}</span><div class="primary-actions">${primaryMarkup}</div><details class="command-more"><summary>${esc(ui('moreActions'))}<span class="command-more-count">${secondary.length}</span></summary><div class="secondary-actions" aria-label="${esc(ui('technicalActions'))}">${secondaryMarkup}</div></details></div><div class="command-status"><div class="badge-row">${reservation}${preserved}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}</div></div><details class="reason-disclosure"><summary>${esc(ui('reasonDisclosure'))}${reasonRelevant && state.draftReason ? `<span class="reason-ready">●</span>` : ''}</summary><div class="reason-row"><label for="reasonInput">${esc(t('reason'))}</label><input id="reasonInput" value="${esc(state.draftReason)}" aria-label="${esc(t('reason'))}"></div></details></section>`;
+    }
+
+    function nextActionFor(doc) {
+      if (doc.conflict) return { action: 'refresh', label: t('refresh') };
+      if (doc.workflow === 'Released') return { action: 'create-revision', label: t('createRevision') };
+      if (doc.workflow === 'Under Review') {
+        if (actorOf().kind !== 'approver') return { action: null, label: `${t('approve')} / ${t('reject')}`, role: t('approver') };
+        if (!doc.approvalDecision) return { action: 'approve', label: t('approve'), role: t('approver') };
+        return { action: 'release', label: t('release'), role: t('approver') };
+      }
+      if (doc.workflow === 'Start') {
+        if (!doc.reservation || !ownsReservation(doc)) return { action: 'reserve', label: t('reserve') };
+        if (!doc.workingCopy.open) return { action: 'open', label: t('open') };
+        if (!doc.workingCopy.dirty) return { action: 'edit', label: t('edit') };
+        return { action: 'publish', label: t('publish') };
+      }
+      if (doc.workflow === 'In Work') {
+        if (doc.workingCopy.dirty) return { action: 'publish', label: t('publish') };
+        if (!doc.reservation || !ownsReservation(doc)) return { action: 'reserve', label: t('reserve') };
+        return { action: 'submit', label: t('submit') };
+      }
+      return { action: 'reserve', label: t('reserve') };
+    }
+
+    function renderNextAction(doc) {
+      const next = nextActionFor(doc);
+      const isBlocked = state.lastAction.type === 'blocked';
+      const nextCheck = next.action ? canAction(next.action, doc) : blocked('');
+      const needsRole = Boolean(next.role && !nextCheck.ok);
+      const actionUnavailable = Boolean(next.action && !nextCheck.ok);
+      const cardBlocked = isBlocked || actionUnavailable || needsRole;
+      const statusLabelText = cardBlocked ? (needsRole ? next.role : ui('blockingReason')) : 'READY';
+      const reason = isBlocked ? state.lastAction.message : actionUnavailable ? nextCheck.message : '';
+      return `<section class="next-action-card ${cardBlocked ? 'blocked' : 'ready'}" aria-labelledby="next-action-title"><div class="next-action-main"><span id="next-action-title">${esc(ui('nextAction'))}</span><strong>${esc(next.label)}</strong>${next.role ? `<small>${esc(next.role)}</small>` : ''}</div>${cardBlocked ? chip('BLOCKED', statusLabelText, 'red') : chip('READY', statusLabelText, 'green')}${reason ? `<p>${esc(reason)}</p>` : ''}</section>`;
     }
 
     function renderItemTabs() {
@@ -1238,11 +1397,21 @@
       return `<div class="item-tabs" role="tablist" aria-label="${esc(ui('item'))}">${tabs.map(([id, label, icon]) => `<button type="button" class="item-tab" role="tab" aria-selected="${state.activeItemTab === id ? 'true' : 'false'}" aria-controls="item-tab-panel" data-action="item-tab" data-tab="${id}">${svgIcon(icon)} <span>${esc(label)}</span></button>`).join('')}</div>`;
     }
 
-    function renderPropertyForm(doc) {
-      const rows = [
+    function propertyRows(doc, compact = false) {
+      if (compact) return [
+        [t('documentClass'), doc.className, false], [ui('category'), doc.category, false], [ui('ownerShort'), doc.owner, false], [ui('structureShort'), doc.structure, false]
+      ];
+      return [
         [t('document'), titleOf(doc), false], [t('documentClass'), doc.className, false], [ui('category'), doc.category, false], [ui('ownerShort'), doc.owner, false], [ui('structureShort'), doc.structure, false], [t('gate'), gateLabel(doc.gate), false], [t('reservation'), reservationLabel(doc), false], [ui('workingHead'), doc.workingHead || '—', true], [ui('digestShort'), doc.digest, true]
       ];
-      return `<section class="form-section"><div class="form-section-header"><h3>${esc(ui('properties'))}</h3><span>${esc(ui('controlledForm'))}</span></div><dl class="property-grid">${rows.map(([label, value, mono]) => `<div class="property-field"><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl></section>`;
+    }
+    function propertyGrid(rows) {
+      return `<dl class="property-grid">${rows.map(([label, value, mono]) => `<div class="property-field"><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>`;
+    }
+    function renderPropertyForm(doc, compact = false, includeHeader = true) {
+      const heading = compact ? ui('keyProperties') : ui('allProperties');
+      const header = includeHeader ? `<div class="form-section-header"><h3>${esc(heading)}</h3><span>${esc(ui('controlledForm'))}</span></div>` : '';
+      return `<section class="form-section ${compact ? 'compact-properties' : ''}">${header}${propertyGrid(propertyRows(doc, compact))}</section>`;
     }
 
     function renderLifecycle(doc) {
@@ -1253,7 +1422,14 @@
         ['Released', ui('releasedState')]
       ];
       const currentIndex = Math.max(0, states.findIndex(([value]) => value === doc.workflow));
-      return `<section class="form-section"><div class="form-section-header"><h3>${esc(ui('lifecycleMap'))}</h3><span>${esc(workflowLabel(doc.workflow))} · ${esc(statusLabel(doc.status))}</span></div><div class="lifecycle-strip" aria-label="${esc(ui('lifecycle'))}">${states.map(([value, label], index) => `<div class="lifecycle-step ${index < currentIndex ? 'done' : ''} ${index === currentIndex ? 'current' : ''}"><strong>${esc(label)}</strong><span>${index < currentIndex ? 'Complete' : index === currentIndex ? 'Current state' : 'Next state'}</span></div>`).join('')}</div></section>`;
+      return `<section class="form-section"><div class="form-section-header"><h3>${esc(ui('lifecycleMap'))}</h3><span>${esc(ui('currentState'))}</span></div><div class="lifecycle-strip" aria-label="${esc(ui('lifecycle'))}">${states.map(([value, label], index) => `<div class="lifecycle-step ${index < currentIndex ? 'done' : ''} ${index === currentIndex ? 'current' : ''}"><strong>${esc(label)}</strong><span>${index < currentIndex ? 'Complete' : index === currentIndex ? 'Current state' : 'Next state'}</span></div>`).join('')}</div></section>`;
+    }
+
+    function renderLifecycleSummary(doc) {
+      const states = ['Start', 'In Work', 'Under Review', 'Released'];
+      const currentIndex = Math.max(0, states.indexOf(doc.workflow));
+      const next = states[currentIndex + 1];
+      return `<section class="form-section overview-card"><div class="form-section-header"><h3>${esc(ui('lifecycle'))}</h3><span>${esc(ui('currentState'))}</span></div><div class="lifecycle-summary"><div><strong>${esc(workflowLabel(doc.workflow))}</strong><span>${esc(statusLabel(doc.status))}</span></div><span class="summary-arrow" aria-hidden="true">→</span><div><strong>${esc(next ? workflowLabel(next) : ui('releasedState'))}</strong><span>${esc(next ? ui('nextState') : ui('currentState'))}</span></div></div></section>`;
     }
 
     function relationLabel(item) {
@@ -1267,6 +1443,11 @@
     function renderRelationshipGrid(doc) {
       const linkedDocs = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean);
       return `<section class="form-section relationship-section"><div class="form-section-header"><h3>${esc(ui('relationships'))}</h3><span>${linkedDocs.length} linked item${linkedDocs.length === 1 ? '' : 's'}</span></div>${linkedDocs.length ? `<div class="relationship-table-wrap"><table class="data-table relationship-table"><thead><tr><th>${esc(ui('relation'))}</th><th>${esc(ui('itemId'))}</th><th>${esc(ui('revisionShort'))}</th><th>${esc(ui('generationShort'))}</th><th>${esc(ui('stateShort'))}</th><th>${esc(ui('ownerShort'))}</th></tr></thead><tbody>${linkedDocs.map(item => `<tr><td>${esc(relationLabel(item))}</td><td><button type="button" class="item-link" data-action="select-doc" data-doc-id="${esc(item.id)}">${svgIcon('external')}<span>${esc(item.id)}</span></button><div class="small muted">${esc(titleOf(item))}</div></td><td class="mono">${esc(item.revision)}</td><td class="mono">${esc(item.generation || '—')}</td><td>${chip(item.workflow, workflowLabel(item.workflow))}</td><td>${esc(item.owner)}</td></tr>`).join('')}</tbody></table></div>` : `<div class="tab-empty">${esc(ui('noRelations'))}</div>`}</section>`;
+    }
+
+    function renderOverview(doc) {
+      const linkedCount = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean).length;
+      return `<div class="overview-grid">${renderPropertyForm(doc, true)}${renderLifecycleSummary(doc)}<section class="form-section overview-card relationship-summary"><div class="form-section-header"><h3>${esc(ui('relationships'))}</h3><span>${linkedCount}</span></div><div class="overview-summary-row"><div><strong>${linkedCount} linked item${linkedCount === 1 ? '' : 's'}</strong><span>${esc(ui('evidenceHint'))}</span></div><button type="button" class="inline-link" data-action="item-tab" data-tab="structure">${svgIcon('tree')} ${esc(ui('openTab'))}</button></div></section></div><details class="secondary-details"><summary>${esc(ui('allProperties'))}<span class="small muted">${esc(ui('technicalActions'))}</span></summary>${renderPropertyForm(doc, false, false)}</details>`;
     }
 
     function renderFileRepresentations(doc) {
@@ -1283,9 +1464,9 @@
       switch (state.activeItemTab) {
         case 'files': content = renderFileRepresentations(doc); break;
         case 'structure': content = renderRelationshipGrid(doc); break;
-        case 'lifecycle': content = `${renderLifecycle(doc)}${renderAudit(10)}`; break;
+        case 'lifecycle': content = renderLifecycle(doc); break;
         case 'audit': content = renderAudit(14); break;
-        default: content = `${renderPropertyForm(doc)}${renderLifecycle(doc)}${renderRelationshipGrid(doc)}`;
+        default: content = renderOverview(doc);
       }
       return `<div id="item-tab-panel" class="tab-panel" role="tabpanel">${content}</div>`;
     }
@@ -1298,19 +1479,29 @@
       const step = scenario.steps[Math.min(guide.step, total - 1)];
       const progress = Math.round(Math.min(guide.step, total) / total * 100);
       const tabs = Object.entries(SCENARIOS).map(([id, item]) => `<button type="button" class="guided-tab" role="tab" aria-selected="${guide.scenario === id ? 'true' : 'false'}" data-action="guided-select" data-scenario="${id}">${esc(t(item.titleKey))}${guide.completed[id] ? `<span class="completion-mark" aria-label="${esc(t('complete'))}">${svgIcon('check')}</span>` : ''}</button>`).join('');
-      return `<section class="guided-panel" aria-labelledby="guided-title"><div class="guided-head"><div><h3 id="guided-title"><span class="section-icon">${svgIcon('route')}</span>${esc(t('guided'))}</h3><p>${esc(t('guidedHint'))}</p></div><span class="badge ${complete ? 'green' : 'teal'}">${complete ? esc(t('complete')) : `${esc(t('step'))} ${guide.step + 1}/${total}`}</span></div><div class="guided-tabs" role="tablist" aria-label="${esc(t('guided'))}">${tabs}</div><div class="guided-progress" aria-hidden="true"><span style="width:${progress}%"></span></div><div class="guided-body"><div class="guided-step">${complete ? `<strong>${esc(t('complete'))}: ${esc(t(scenario.titleKey))}</strong><span>${esc(scenario.description)}</span>` : `<strong>${esc(step.title)}</strong><span>${esc(step.detail)}</span>`}</div><div class="guided-controls">${complete ? '' : `<button type="button" class="guide-btn primary" data-action="guided-next">${svgIcon('arrow')} <span>${esc(t('runNext'))}</span></button>`}<button type="button" class="guide-btn" data-action="guided-reset">${svgIcon('reset')} <span>${esc(t('restart'))}</span></button></div>${guide.message ? `<div class="guided-message" role="status">${esc(guide.message)}</div>` : ''}</div></section>`;
+      if (!guide.open) {
+        return `<section class="guided-panel guided-collapsed" aria-labelledby="guided-title"><div class="guided-compact"><div><h3 id="guided-title"><span class="section-icon">${svgIcon('route')}</span>${esc(t('guided'))}</h3><p>${esc(t(scenario.titleKey))} · ${complete ? esc(t('complete')) : `${esc(t('step'))} ${guide.step + 1}/${total}`}</p></div><div class="guided-controls"><button type="button" class="guide-btn" data-action="guided-open">${svgIcon('file')} <span>${esc(ui('openWalkthrough'))}</span></button>${complete ? `<button type="button" class="guide-btn" data-action="guided-reset">${svgIcon('reset')} <span>${esc(t('restart'))}</span></button>` : `<button type="button" class="guide-btn primary" data-action="guided-next">${svgIcon('arrow')} <span>${esc(t('runNext'))}</span></button>`}</div></div></section>`;
+      }
+      return `<section class="guided-panel" aria-labelledby="guided-title"><div class="guided-head"><div><h3 id="guided-title"><span class="section-icon">${svgIcon('route')}</span>${esc(t('guided'))}</h3><p>${esc(t('guidedHint'))}</p></div><div class="guided-head-actions"><span class="badge ${complete ? 'green' : 'teal'}">${complete ? esc(t('complete')) : `${esc(t('step'))} ${guide.step + 1}/${total}`}</span><button type="button" class="guided-collapse-btn" data-action="guided-close">${esc(ui('closeWalkthrough'))}</button></div></div><div class="guided-tabs" role="tablist" aria-label="${esc(t('guided'))}">${tabs}</div><div class="guided-progress" aria-hidden="true"><span style="width:${progress}%"></span></div><div class="guided-body"><div class="guided-step">${complete ? `<strong>${esc(t('complete'))}: ${esc(t(scenario.titleKey))}</strong><span>${esc(scenario.description)}</span>` : `<strong>${esc(step.title)}</strong><span>${esc(step.detail)}</span>`}</div><div class="guided-controls">${complete ? '' : `<button type="button" class="guide-btn primary" data-action="guided-next">${svgIcon('arrow')} <span>${esc(t('runNext'))}</span></button>`}<button type="button" class="guide-btn" data-action="guided-reset">${svgIcon('reset')} <span>${esc(t('restart'))}</span></button></div>${guide.message ? `<div class="guided-message">${esc(guide.message)}</div>` : ''}</div></section>`;
     }
 
-    function renderMetadata(doc) {
+    function renderEvidenceSummary(doc) {
+      const itemEvents = state.audit.filter(event => event.docId === doc.id);
+      const lastEvent = itemEvents[0] || null;
+      const exactPin = doc.pendingReview ? doc.pendingReview.generation : (doc.releaseRecord ? doc.releaseRecord.generation : doc.generation);
       const rows = [
-        [t('workflow'), workflowLabel(doc.workflow)], [t('status'), statusLabel(doc.status)], [t('gate'), gateLabel(doc.gate)], [t('reservation'), reservationLabel(doc)], ['Working Head', doc.workingHead || '—'], ['Digest', doc.digest], ['Structure', doc.structure], ['Owner', doc.owner]
+        [t('reservation'), reservationLabel(doc), false], [ui('exactPin'), exactPin || '—', true], [t('gate'), gateLabel(doc.gate), false], [ui('lastEvent'), lastEvent ? `${lastEvent.type} · ${lastEvent.time.split(' ')[1] || lastEvent.time}` : ui('noRecentEvent'), false]
       ];
-      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('metadata'))}</h2><p>Identity, state và exact pin nhìn thấy cùng nhau.</p></div></div><div class="panel-body"><table class="data-table"><tbody>${rows.map(([label, value]) => `<tr><th>${esc(label)}</th><td class="value">${esc(value)}</td></tr>`).join('')}</tbody></table>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
+      return `<section class="panel evidence-panel"><div class="panel-header"><div><h2>${esc(ui('evidenceSummary'))}</h2><p>${esc(ui('evidenceHint'))}</p></div>${doc.conflict ? chip('conflict', 'STALE', 'red') : ''}</div><div class="panel-body"><dl class="evidence-list">${rows.map(([label, value, mono]) => `<div><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>${doc.baselineFrom ? `<p class="small muted">Baseline from: <span class="mono">${esc(doc.baselineFrom)}</span></p>` : ''}</div></section>`;
     }
 
-    function renderLinked(doc) {
-      const linkedDocs = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean);
-      return `<section class="panel"><div class="panel-header"><div><h2>${esc(t('linked'))}</h2><p>Projection để điều hướng; không phải authority thứ hai.</p></div></div><div class="panel-body"><div class="linked-list">${linkedDocs.map(item => `<button type="button" class="linked-item" data-action="select-doc" data-doc-id="${esc(item.id)}"><strong>${esc(titleOf(item))}</strong><span>${esc(item.id)}</span></button>`).join('') || `<div class="empty-state"><strong>${esc(t('none'))}</strong></div>`}</div></div></section>`;
+    function renderRailLinks(doc) {
+      const linkedCount = doc.linked.map(id => state.docs.find(item => item.id === id)).filter(Boolean).length;
+      const itemEventCount = state.audit.filter(event => event.docId === doc.id).length;
+      const links = [
+        ['files', ui('files'), 3, 'file'], ['structure', ui('structure'), linkedCount, 'tree'], ['audit', ui('auditTab'), itemEventCount, 'audit']
+      ];
+      return `<section class="panel"><div class="panel-header"><div><h2>${esc(ui('openTab'))}</h2><p>${esc(ui('evidenceHint'))}</p></div></div><div class="panel-body"><div class="rail-links">${links.map(([tab, label, count, icon]) => `<button type="button" class="rail-link" data-action="item-tab" data-tab="${tab}"><span>${svgIcon(icon)} ${esc(label)}</span><strong>${count}</strong></button>`).join('')}</div></div></section>`;
     }
 
     function renderAudit(limit = 8) {
@@ -1330,7 +1521,7 @@
         conflict: doc.conflict,
         lastAction: state.lastAction
       };
-      return `<details class="state-card" ${state.lastAction.type === 'blocked' ? 'open' : ''}><summary>${esc(t('stateSnapshot'))} <span class="small muted">· ${esc(t('stateHint'))}</span></summary><div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div><pre class="state-json">${esc(JSON.stringify(snapshot, null, 2))}</pre></details>`;
+      return `<details class="state-card"><summary>${esc(ui('diagnostics'))} <span class="small muted">· ${esc(t('stateHint'))}</span></summary><div class="state-summary">${chip(doc.workflow, `${t('workflow')}: ${workflowLabel(doc.workflow)}`)}${chip(doc.status, `${t('status')}: ${statusLabel(doc.status)}`)}${chip(doc.gate, `${t('gate')}: ${gateLabel(doc.gate)}`)}${doc.conflict ? chip('conflict', 'STALE GENERATION', 'red') : ''}${doc.localWork && doc.localWork.preserved ? chip('local', t('localPreserved'), 'purple') : ''}</div><pre class="state-json">${esc(JSON.stringify(snapshot, null, 2))}</pre></details>`;
     }
 
     function renderItemTree() {
@@ -1344,15 +1535,15 @@
     }
 
     function renderDocList() {
-      return `<section class="doc-list-wrap"><div class="panel-header"><div><h2>${esc(t('allDocuments'))}</h2><p>10 synthetic records · active row drives the demo.</p></div><span class="badge plain">10</span></div><div class="doc-list">${state.docs.map(doc => `<button type="button" class="doc-list-item" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><span>${esc(doc.id)} · Rev ${esc(doc.revision)} · ${esc(doc.generation || '∅')}</span><span class="list-meta"><i class="list-dot ${statusClass(doc.workflow)}"></i>${esc(workflowLabel(doc.workflow))}<span class="muted">· ${esc(statusLabel(doc.status))}</span></span></button>`).join('')}</div></section>`;
+      return `<details class="doc-list-disclosure"><summary><span>${esc(t('allDocuments'))}</span><strong>10</strong></summary><div class="doc-list">${state.docs.map(doc => `<button type="button" class="doc-list-item" data-action="select-doc" data-doc-id="${esc(doc.id)}" aria-current="${doc.id === state.activeDocId ? 'true' : 'false'}"><strong>${esc(titleOf(doc))}</strong><span>${esc(doc.id)} · ${esc(workflowLabel(doc.workflow))}</span></button>`).join('')}</div></details>`;
     }
 
     function renderContextBar(doc) {
-      return `<div class="context-bar" aria-label="Breadcrumb"><button type="button" class="crumb" data-action="select-doc" data-doc-id="LD-P100-001">${svgIcon('home')}<span>${esc(ui('breadcrumbHome'))}</span></button><span class="crumb-separator" aria-hidden="true">/</span><span class="crumb">${svgIcon('tree')}<span>${esc(ui('breadcrumbProduct'))}</span></span><span class="crumb-separator" aria-hidden="true">/</span><span class="crumb current"><span class="mono">${esc(doc.id)}</span><span>${esc(ui('breadcrumbItem'))}</span></span><span class="context-spacer"></span><span class="context-meta">${esc(ui('revisionShort'))} ${esc(doc.revision)} · ${esc(ui('generationShort'))} ${esc(doc.generation || '—')}</span></div>`;
+      return `<div class="context-bar" aria-label="Breadcrumb"><button type="button" class="crumb" data-action="select-doc" data-doc-id="LD-P100-001">${svgIcon('home')}<span>${esc(ui('breadcrumbHome'))}</span></button><span class="crumb-separator" aria-hidden="true">/</span><span class="crumb">${svgIcon('tree')}<span>${esc(ui('breadcrumbProduct'))}</span></span><span class="crumb-separator" aria-hidden="true">/</span><span class="crumb current" aria-current="page"><span class="mono">${esc(doc.id)}</span></span></div>`;
     }
 
     function renderExplorer(doc) {
-      return `<div class="item-workspace">${renderContextBar(doc)}<div class="explorer-layout"><aside class="panel nav-panel"><div class="panel-header"><div><h2>${esc(ui('navigator'))}</h2><p>${esc(ui('layoutNote'))}</p></div><div class="nav-tools"><button type="button" class="nav-tool-btn" data-action="reset" aria-label="${esc(t('reset'))}" title="${esc(t('reset'))}">${svgIcon('refresh')}</button></div></div><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('list')}</span>${esc(t('allDocuments'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('releases')}</span>${esc(t('recentReleases'))}</span><span class="nav-link"><span class="nav-icon">${svgIcon('warning')}</span>${esc(t('blockers'))}</span></nav>${renderItemTree()}${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderItemTabs()}${renderItemTabContent(doc)}${renderGuidedPanel()}<div class="panel-body"><div class="metric-row">${metric('Working Head', doc.generation || '∅', doc.workflow === 'Start' ? 'Chưa publish' : 'Exact current head')}${metric('Revision', doc.revision, `Version Sequence ${doc.versionSequence || '—'}`)}${metric('Review pin', doc.pendingReview ? doc.pendingReview.generation : '—', doc.pendingReview ? 'Pending decision' : 'No pending review')}${metric('Local work', doc.workingCopy.dirty ? 'Dirty' : 'Clean', doc.localWork && doc.localWork.preserved ? 'Preserved after reject' : 'In-memory only')}</div></div>${renderStateSnapshot(doc)}</main><aside class="right-rail"><section class="panel"><div class="inspector-summary"><strong>${esc(ui('selectedItem'))}</strong><span>${esc(doc.id)} · ${esc(doc.className)}</span><div class="badge-row" style="margin-top:7px">${chip(doc.workflow, workflowLabel(doc.workflow))}${chip(doc.status, statusLabel(doc.status))}</div></div></section>${renderMetadata(doc)}${renderLinked(doc)}${renderAudit(doc.id === state.activeDocId ? 7 : 4)}</aside></div></div>`;
+      return `<div class="item-workspace">${renderContextBar(doc)}<div class="explorer-layout"><aside class="panel nav-panel"><div class="panel-header"><div><h2>${esc(ui('navigator'))}</h2><p>${esc(ui('productRoot'))}</p></div></div><div class="nav-section">Workspace</div><nav class="nav-links" aria-label="Workspace navigation"><span class="nav-link active"><span class="nav-icon">${svgIcon('home')}</span>${esc(t('myWork'))}</span></nav>${renderItemTree()}${renderDocList()}</aside><main class="panel main-panel">${renderDocHero(doc)}${renderActionBar(doc)}${renderNextAction(doc)}${renderItemTabs()}${renderItemTabContent(doc)}${state.activeItemTab === 'overview' ? renderGuidedPanel() : ''}${renderStateSnapshot(doc)}</main><aside class="right-rail">${renderEvidenceSummary(doc)}${renderRailLinks(doc)}</aside></div></div>`;
     }
 
     function renderReviewPanel() {
@@ -1387,6 +1578,7 @@
     }
     function runGuidedNext() {
       const guide = state.guided;
+      guide.open = true;
       const scenario = SCENARIOS[guide.scenario];
       if (!scenario || guide.step >= scenario.steps.length) return;
       const step = scenario.steps[guide.step];
@@ -1441,6 +1633,9 @@
       if (action === 'item-tab') {
         const result = dispatch('item-tab', { tab: button.dataset.tab }); render(); showToast(result.message, !result.ok); return;
       }
+      if (action === 'guided-open' || action === 'guided-close') {
+        dispatch(action); render(); return;
+      }
       if (action === 'guided-select') {
         const result = dispatch('guided-select', { scenario: button.dataset.scenario }); render(); showToast(result.message, !result.ok); return;
       }
@@ -1458,10 +1653,10 @@
       if (action === 'print-review') { window.print(); return; }
       if (action === 'copy-review') { copyReview(); return; }
       if (action === 'reset') { const result = dispatch('reset'); render(); showToast(result.message, !result.ok); return; }
-      if (button.getAttribute('aria-disabled') === 'true') { showToast(button.title, true); return; }
+      if (button.getAttribute('aria-disabled') === 'true') { dispatch(action); render(); return; }
       const result = dispatch(action);
       render();
-      if (result.message) showToast(result.message, !result.ok);
+      if (result.message && result.ok) showToast(result.message, false);
     });
     document.addEventListener('change', event => {
       if (event.target.id === 'localeSelect') { state.locale = event.target.value; render(); return; }
