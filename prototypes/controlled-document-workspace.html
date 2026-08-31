@@ -455,6 +455,7 @@
     .conflict-recovery { flex: 0 0 100%; width: 100%; margin-top: 3px; padding: 10px; border: 1px solid #e8d7aa; border-radius: 7px; background: rgba(255, 255, 255, .78); }
     .conflict-recovery-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .conflict-recovery-head > div { min-width: 0; }
+    .conflict-recovery-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; flex: 0 0 auto; }
     .conflict-kicker { display: block; color: #826721; font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
     .conflict-recovery-head strong { display: block; margin-top: 3px; color: var(--navy); font-size: 12px; line-height: 1.35; }
     .conflict-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 9px; }
@@ -480,6 +481,8 @@
     .conflict-step.done em { color: #176448; background: #dcf2e8; }
     .conflict-note { display: flex; align-items: center; gap: 5px; margin: 9px 0 0 !important; color: #6f6240 !important; font-size: 10px !important; }
     .conflict-note svg { flex: 0 0 auto; width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .conflict-open-btn { min-height: 34px; flex: 0 0 auto; padding: 6px 9px; border: 1px solid #d8bf78; border-radius: 6px; color: #6f5315; background: #fffdf5; font-size: 10px; font-weight: 780; }
+    .conflict-open-btn:hover { border-color: #b58b27; background: #fff8df; }
     .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .overview-grid > .form-section { min-width: 0; }
     .compact-properties { height: 100%; }
@@ -571,8 +574,9 @@
     .mobile-tool:hover { border-color: #8fb4ca; background: #f1f8fa; }
     .mobile-tool svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .modal-layer { z-index: 45; display: grid; place-items: center; padding: 20px; }
+    .stale-layer { z-index: 60; }
     .modal-layer .overlay-scrim { background: rgba(10, 29, 45, .56); }
-    .guided-dialog, .diagnostics-dialog { position: relative; z-index: 1; display: grid; grid-template-rows: auto minmax(0, 1fr); width: min(780px, 100%); max-height: min(88dvh, 760px); overflow: hidden; border: 1px solid #c5d7e1; border-radius: 14px; background: #fff; box-shadow: 0 26px 80px rgba(5, 25, 42, .3); animation: modal-in .18s ease-out both; }
+    .guided-dialog, .diagnostics-dialog, .stale-dialog { position: relative; z-index: 1; display: grid; grid-template-rows: auto minmax(0, 1fr); width: min(780px, 100%); max-height: min(88dvh, 760px); overflow: hidden; border: 1px solid #c5d7e1; border-radius: 14px; background: #fff; box-shadow: 0 26px 80px rgba(5, 25, 42, .3); animation: modal-in .18s ease-out both; }
     .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 16px 18px 13px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.97); }
     .modal-head h2 { margin: 3px 0 0; color: var(--navy); font-size: 21px; letter-spacing: -.03em; }
     .modal-head p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
@@ -585,6 +589,31 @@
     .diagnostics-snapshot { display: grid; gap: 10px; }
     .diagnostics-snapshot .state-summary { margin: 0; }
     .diagnostics-snapshot .state-json { max-height: none; margin: 0; }
+    .stale-dialog { width: min(720px, 100%); border-color: #d8c58e; }
+    .stale-dialog .modal-head { background: #fffdf6; }
+    .stale-dialog .modal-head .eyebrow { color: #8a691d; }
+    .stale-dialog-body { display: grid; gap: 13px; }
+    .stale-dialog-choice-hint { margin: 0; color: var(--muted); font-size: 12px; }
+    .stale-version-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .stale-version-card { min-width: 0; padding: 10px; border: 1px solid #e6dfc5; border-radius: 8px; background: #fffef9; }
+    .stale-version-card span, .stale-version-card strong { display: block; overflow-wrap: anywhere; }
+    .stale-version-card span { color: #89784e; font-size: 10px; font-weight: 780; letter-spacing: .04em; text-transform: uppercase; }
+    .stale-version-card strong { margin-top: 4px; color: var(--navy); font-size: 13px; }
+    .stale-version-card small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .stale-warning { display: flex; align-items: flex-start; gap: 7px; margin: 0; padding: 9px 10px; border: 1px solid #ecd9a1; border-radius: 8px; color: #6f5a27; background: #fff9e9; font-size: 11px; }
+    .stale-warning svg { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 1px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .stale-choice-list { display: grid; gap: 8px; }
+    .stale-choice { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 9px; width: 100%; min-height: 58px; padding: 9px 11px; border: 1px solid #d6e1e7; border-radius: 8px; color: var(--ink); background: #fff; text-align: left; }
+    .stale-choice:hover { border-color: #8fb4ca; background: #f5fafc; }
+    .stale-choice.primary { border-color: #9bc9d6; background: #f1fafb; }
+    .stale-choice.primary:hover { border-color: var(--teal); background: #e9f7f8; }
+    .stale-choice-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; color: #24566e; background: #e7f2f6; }
+    .stale-choice-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .stale-choice-copy { min-width: 0; }
+    .stale-choice-title, .stale-choice-hint { display: block; overflow-wrap: anywhere; }
+    .stale-choice-title { color: var(--navy); font-size: 12px; font-weight: 800; }
+    .stale-choice-hint { margin-top: 2px; color: var(--muted); font-size: 10px; line-height: 1.35; }
+    .stale-choice-arrow { color: #78909e; font-size: 17px; }
     @keyframes drawer-in { from { opacity: .3; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
@@ -671,6 +700,7 @@
       .next-action-card > .badge { margin-left: auto; }
       .next-action-card p { flex-basis: 100%; }
       .conflict-recovery-head { flex-direction: column; }
+      .conflict-recovery-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
       .conflict-facts, .conflict-steps { grid-template-columns: 1fr; }
       .lifecycle-summary { grid-template-columns: 1fr; }
       .summary-arrow { display: none; }
@@ -691,7 +721,10 @@
       .review-metrics { grid-template-columns: 1fr 1fr; }
       .scenario-summary { grid-template-columns: 1fr; }
       .modal-layer { padding: 8px; }
-      .guided-dialog, .diagnostics-dialog { max-height: calc(100dvh - 16px); border-radius: 10px; }
+      .guided-dialog, .diagnostics-dialog, .stale-dialog { max-height: calc(100dvh - 16px); border-radius: 10px; }
+      .stale-version-grid { grid-template-columns: 1fr; }
+      .stale-choice { grid-template-columns: 28px minmax(0, 1fr); }
+      .stale-choice-arrow { display: none; }
       .guided-dialog .guided-tab { flex-basis: calc(50% - 5px); }
     }
 
@@ -814,6 +847,7 @@
       .drawer-head p { font-size: 12px; }
       .drawer-body { padding: 16px; }
       .guided-dialog, .diagnostics-dialog { width: min(860px, 100%); }
+      .stale-dialog { width: min(720px, 100%); }
       .modal-head { padding: 18px 21px 15px; }
       .modal-head h2 { font-size: 23px; }
       .modal-head p, .modal-hint { font-size: 12px; }
@@ -1044,9 +1078,9 @@
       waitingForRoleHint: '必要なペルソナに切り替えて Approve または Reject を続行します。'
     });
 
-    // Stale recovery is intentionally expressed as two visible, ordered actions.
-    // The prototype does not attempt a CAD/Office merge; it only makes the
-    // baseline refresh and the explicit local reapply decision observable.
+    // Stale recovery exposes explicit dispositions before the safe
+    // Refresh -> Reapply path. The prototype does not attempt a CAD/Office
+    // merge; every replacement or local-preservation choice is observable.
     Object.assign(I18N.vi, {
       refresh: 'Refresh baseline',
       reapply: 'Reapply local changes',
@@ -1066,7 +1100,27 @@
       reapplyRequired: 'Cần Reapply local work',
       refreshDone: 'Đã Refresh',
       reapplyPending: 'Chờ Reapply',
-      noBinaryMerge: 'Prototype không tự động merge file CAD/Office.'
+      noBinaryMerge: 'Prototype không tự động merge file CAD/Office.',
+      staleDialogTitle: 'Bản local đã cũ',
+      staleDialogSummary: 'Working Head trên server đã thay đổi sau khi bạn Checkout.',
+      staleDialogBase: 'Bản local bắt đầu từ',
+      staleDialogBaseHint: 'Expected lúc Checkout',
+      staleDialogCurrent: 'Bản server hiện tại',
+      staleDialogCurrentHint: 'Working Head mới nhất',
+      staleDialogChanges: 'Thay đổi cục bộ',
+      staleLocalChanges: 'Có thay đổi cục bộ',
+      staleDialogLocalHint: 'Local work được giữ an toàn',
+      staleDialogChoiceHint: 'Chọn cách tiếp tục. Không có lựa chọn nào tự động gộp file.',
+      staleGetLatest: 'Lấy bản mới nhất',
+      staleGetLatestHint: 'Bỏ thay đổi cục bộ và mở bản server hiện tại.',
+      staleKeepLocal: 'Giữ bản local',
+      staleKeepLocalHint: 'Giữ bản local để đối chiếu và áp dụng lại thủ công.',
+      staleCancel: 'Hủy',
+      staleCancelHint: 'Đóng lựa chọn và giữ nguyên trạng thái conflict.',
+      staleOpenChoices: 'Xem lựa chọn xử lý',
+      staleWarning: 'Không tự động gộp file CAD/Office.',
+      staleLatestMessage: 'Đã mở bản mới nhất; thay đổi cục bộ đã được bỏ.',
+      staleKeptMessage: 'Đã giữ bản local; hãy Refresh rồi Reapply trước khi Check-in.'
     });
     Object.assign(I18N.en, {
       refresh: 'Refresh baseline',
@@ -1087,7 +1141,27 @@
       reapplyRequired: 'Reapply local work required',
       refreshDone: 'Refreshed',
       reapplyPending: 'Awaiting reapply',
-      noBinaryMerge: 'The prototype does not automatically merge CAD/Office files.'
+      noBinaryMerge: 'The prototype does not automatically merge CAD/Office files.',
+      staleDialogTitle: 'Local copy is out of date',
+      staleDialogSummary: 'The server Working Head changed after you checked out this item.',
+      staleDialogBase: 'Local copy started from',
+      staleDialogBaseHint: 'Expected at Check-out',
+      staleDialogCurrent: 'Current server version',
+      staleDialogCurrentHint: 'Latest Working Head',
+      staleDialogChanges: 'Local changes',
+      staleLocalChanges: 'Local changes are present',
+      staleDialogLocalHint: 'Local work remains safe',
+      staleDialogChoiceHint: 'Choose how to continue. No option automatically merges files.',
+      staleGetLatest: 'Get latest version',
+      staleGetLatestHint: 'Discard local changes and open the current server version.',
+      staleKeepLocal: 'Keep local copy',
+      staleKeepLocalHint: 'Preserve the local copy for comparison and manual reapply.',
+      staleCancel: 'Cancel',
+      staleCancelHint: 'Close the choices and keep the conflict unchanged.',
+      staleOpenChoices: 'View resolution choices',
+      staleWarning: 'CAD/Office files are not automatically merged.',
+      staleLatestMessage: 'Latest version opened; local changes were discarded.',
+      staleKeptMessage: 'Local copy kept; Refresh and Reapply before Check-in.'
     });
     Object.assign(I18N.ja, {
       refresh: 'Baseline を更新',
@@ -1108,7 +1182,27 @@
       reapplyRequired: 'ローカル変更の再適用が必要',
       refreshDone: '更新済み',
       reapplyPending: '再適用待ち',
-      noBinaryMerge: 'このプロトタイプは CAD / Office ファイルを自動マージしません。'
+      noBinaryMerge: 'このプロトタイプは CAD / Office ファイルを自動マージしません。',
+      staleDialogTitle: 'ローカル コピーが古くなっています',
+      staleDialogSummary: 'Checkout 後にサーバーの Working Head が更新されました。',
+      staleDialogBase: 'ローカル コピーの開始点',
+      staleDialogBaseHint: 'Checkout 時の Expected',
+      staleDialogCurrent: '現在のサーバー版',
+      staleDialogCurrentHint: '最新の Working Head',
+      staleDialogChanges: 'ローカル変更',
+      staleLocalChanges: 'ローカル変更あり',
+      staleDialogLocalHint: 'ローカル作業は安全に保持',
+      staleDialogChoiceHint: '続行方法を選択してください。ファイルは自動マージされません。',
+      staleGetLatest: '最新バージョンを取得',
+      staleGetLatestHint: 'ローカル変更を破棄し、現在のサーバー版を開きます。',
+      staleKeepLocal: 'ローカル コピーを保持',
+      staleKeepLocalHint: '比較用に保持し、手動で再適用します。',
+      staleCancel: 'キャンセル',
+      staleCancelHint: '選択を閉じ、競合状態を維持します。',
+      staleOpenChoices: '解決方法を表示',
+      staleWarning: 'CAD / Office ファイルは自動マージされません。',
+      staleLatestMessage: '最新バージョンを開き、ローカル変更を破棄しました。',
+      staleKeptMessage: 'ローカル コピーを保持しました。Refresh と Reapply 後に Check-in してください。'
     });
 
     const ACTORS = {
@@ -1220,6 +1314,7 @@
     let diagnosticsReturnFocus = null;
     let navReturnFocus = null;
     let evidenceReturnFocus = null;
+    let staleReturnFocus = null;
 
     function clone(value) { return JSON.parse(JSON.stringify(value)); }
     function esc(value) {
@@ -1275,7 +1370,7 @@
       return {
         ...clone(seed),
         workingHead: seed.generation,
-        workingCopy: { open: false, dirty: false, summary: '' },
+        workingCopy: { open: false, hasLocalChanges: false, baseGeneration: seed.generation, summary: '' },
         reservation: null,
         pendingReview: seed.workflow === 'Under Review' ? { generation: seed.generation, submittedBy: 'Khoa Phạm', decision: null } : null,
         approvalDecision: null,
@@ -1296,6 +1391,7 @@
          activeItemTab: overrides.activeItemTab || 'overview',
          detailDrawer: { open: Boolean(overrides.detailOpen), tab: overrides.detailTab || 'files' },
          diagnosticsOpen: Boolean(overrides.diagnosticsOpen),
+         staleDialogOpen: Boolean(overrides.staleDialogOpen),
          navDrawerOpen: Boolean(overrides.navDrawerOpen),
          evidenceDrawerOpen: Boolean(overrides.evidenceDrawerOpen),
          treeCollapsed: {
@@ -1339,7 +1435,7 @@
         case 'check-in': {
           const publishCheck = canAction('publish', doc);
           if (!publishCheck.ok) return blocked(publishCheck.message.replace(/\bPublish\b/g, 'Check-in'), publishCheck.code);
-          if (!doc.workingCopy.dirty) return blocked('Chưa có local changes để Check-in; hãy Edit working copy trước.');
+          if (!doc.workingCopy.hasLocalChanges) return blocked('Chưa có thay đổi cục bộ để Check-in; hãy chỉnh sửa bản làm việc trước.');
           return success('');
         }
         case 'reserve':
@@ -1363,16 +1459,16 @@
           if (doc.conflict) {
             return blocked(doc.conflict.refreshed
               ? `Baseline đã Refresh lên ${doc.conflict.current}. Hãy Reapply local changes trước khi Check-in.`
-              : `Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy Refresh baseline trước, rồi Reapply local changes.`);
+              : `Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy mở lựa chọn xử lý trước khi tiếp tục.`);
           }
-          if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) return success('');
+          if (doc.workflow !== 'Start' && !doc.workingCopy.hasLocalChanges) return success('');
           return success('');
         case 'submit':
           if (actor.kind !== 'author') return blocked('Chỉ Author / Editor được Submit for review.');
           // A successful Check-in has already released the author's Reservation; another owner's hold still blocks submission.
           if (doc.reservation && !hasOwner) return blocked(`Submit bị chặn: Reservation đang thuộc ${doc.reservation.ownerName} tại ${doc.reservation.workspace}.`);
           if (!doc.generation) return blocked('Chưa có Generation để pin vào review.');
-          if (doc.workingCopy.dirty) return blocked('Còn local changes chưa Check-in.');
+          if (doc.workingCopy.hasLocalChanges) return blocked('Còn thay đổi cục bộ chưa Check-in.');
           if (doc.workflow !== 'In Work') return blocked(`Submit chỉ hợp lệ từ In Work; hiện tại là ${workflowLabel(doc.workflow)}.`);
           return success('');
         case 'approve':
@@ -1408,7 +1504,14 @@
           if (!hasOwner) return blocked('Reapply cần Reservation của workspace hiện tại.');
           if (!doc.conflict.refreshed) return blocked('Hãy Refresh baseline trước khi Reapply local changes.');
           if (!doc.reservation || doc.reservation.expectedGeneration !== doc.generation) return blocked('Working Head đã thay đổi thêm; hãy Refresh baseline lại.');
-          if (!doc.workingCopy.open || !doc.workingCopy.dirty) return blocked('Không còn local work đang mở để Reapply.');
+          if (!doc.workingCopy.open || !doc.workingCopy.hasLocalChanges) return blocked('Không còn thay đổi cục bộ đang mở để Reapply.');
+          return success('');
+        case 'stale-open':
+        case 'stale-get-latest':
+        case 'stale-keep-local':
+          return doc.conflict ? success('') : blocked('Hiện không có stale conflict.');
+        case 'stale-cancel':
+        case 'stale-close':
           return success('');
         case 'recover':
           if (actor.kind !== 'admin') return blocked('Reservation Recovery yêu cầu PDM Administrator.');
@@ -1425,7 +1528,7 @@
     function dispatch(action, payload = {}) {
       const doc = activeDoc();
       let check;
-      if (!['reset', 'switch-actor', 'select-doc', 'toggle-tree', 'item-tab', 'detail-close', 'guided-select', 'guided-reset', 'guided-open', 'guided-close', 'guided-next', 'diagnostics-open', 'diagnostics-close', 'nav-open', 'nav-close', 'evidence-open', 'evidence-close', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review'].includes(action)) {
+      if (!['reset', 'switch-actor', 'select-doc', 'toggle-tree', 'item-tab', 'detail-close', 'guided-select', 'guided-reset', 'guided-open', 'guided-close', 'guided-next', 'diagnostics-open', 'diagnostics-close', 'stale-open', 'stale-close', 'stale-get-latest', 'stale-keep-local', 'stale-cancel', 'nav-open', 'nav-close', 'evidence-open', 'evidence-close', 'open-review', 'close-review', 'save-review', 'print-review', 'copy-review'].includes(action)) {
         check = canAction(action, doc);
         if (!check.ok) { state.lastAction = { type: 'blocked', action, message: check.message, code: check.code }; return check; }
       }
@@ -1441,6 +1544,7 @@
           if (state.docs.some(item => item.id === payload.id)) {
             state.activeDocId = payload.id;
             state.activeItemTab = 'overview';
+            state.staleDialogOpen = false;
             state.detailDrawer.open = false;
             state.navDrawerOpen = false;
             state.evidenceDrawerOpen = false;
@@ -1480,6 +1584,7 @@
             doc.reservation = { owner: state.actorId, ownerName: actor.name, workspace: actor.workspace, expectedGeneration: doc.generation, lease: '20 min' };
           }
           doc.workingCopy.open = true;
+          doc.workingCopy.baseGeneration = doc.reservation.expectedGeneration;
           doc.workingCopy.summary = doc.localWork ? 'Preserved local work materialized in the managed workspace.' : 'Working copy materialized from current Working Head.';
           audit('Checked Out', `${doc.id} materialized in ${actor.workspace}; ${reusedReservation ? 'existing' : 'new'} Reservation held until Check-in.`);
           result = success(`Checkout hoàn tất: ${doc.id} đã mở trong ${actor.workspace}.`);
@@ -1500,12 +1605,13 @@
           break;
         case 'open':
           doc.workingCopy.open = true;
+          doc.workingCopy.baseGeneration = doc.reservation?.expectedGeneration || doc.generation;
           doc.workingCopy.summary = doc.localWork ? 'Reopened preserved local work after reject.' : 'Working copy opened from current Working Head.';
           audit('WorkingCopyOpened', doc.workingCopy.summary);
           result = success('Working copy đã mở; chưa tạo Generation mới.');
           break;
         case 'edit':
-          doc.workingCopy.dirty = true;
+          doc.workingCopy.hasLocalChanges = true;
           doc.workingCopy.summary = doc.localWork ? 'Local work re-applied; working-copy changes pending Check-in.' : 'Working-copy changes pending Check-in.';
           doc.localWork = { preserved: Boolean(doc.localWork && doc.localWork.preserved), summary: doc.workingCopy.summary, sourceGeneration: doc.generation };
           audit('LocalEdit', `${doc.workingCopy.summary} No Generation until Check-in.`);
@@ -1513,17 +1619,20 @@
           break;
         case 'publish': {
           if (doc.reservation && doc.reservation.expectedGeneration !== doc.generation) {
-            doc.conflict = { expected: doc.reservation.expectedGeneration, current: doc.generation, detectedAt: formatClock(state.clock), refreshed: false };
+            doc.conflict = { expected: doc.reservation.expectedGeneration, current: doc.generation, detectedAt: formatClock(state.clock), refreshed: false, choice: null };
+            state.staleDialogOpen = true;
             result = blocked(`Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Local work được giữ.`, 'STALE_GENERATION');
             state.lastAction = { type: 'blocked', action: 'publish', message: result.message, code: result.code };
             break;
           }
-          if (doc.workflow !== 'Start' && !doc.workingCopy.dirty) {
+          if (doc.workflow !== 'Start' && !doc.workingCopy.hasLocalChanges) {
             doc.workingCopy.open = false;
-            doc.workingCopy.dirty = false;
+            doc.workingCopy.hasLocalChanges = false;
+            doc.workingCopy.baseGeneration = doc.generation;
             doc.workingCopy.summary = 'NoChange checked in; Reservation released.';
             doc.reservation = null;
             doc.localWork = null;
+            state.staleDialogOpen = false;
             audit('Check-in NoChange', 'Semantic equality with Working Head; no Generation created; Reservation released.', doc);
             result = success('Check-in hoàn tất với NoChange; không tạo Generation mới và Reservation đã được nhả.');
             break;
@@ -1541,9 +1650,11 @@
           doc.approvalDecision = null;
           doc.releaseRecord = null;
           doc.workingCopy.open = false;
-          doc.workingCopy.dirty = false;
+          doc.workingCopy.hasLocalChanges = false;
+          doc.workingCopy.baseGeneration = generation;
           doc.conflict = null;
           doc.localWork = null;
+          state.staleDialogOpen = false;
           doc.workingCopy.summary = `Checked in ${generation}; Reservation released.`;
           doc.reservation = null;
           audit('Checked In', `${generation} / Version Sequence ${doc.versionSequence}; previous ${previous || '∅'}; Reservation released and working copy closed.`);
@@ -1557,7 +1668,8 @@
           doc.gate = 'NOT-RUN';
           doc.reservation = null;
           doc.workingCopy.open = false;
-          doc.workingCopy.dirty = false;
+          doc.workingCopy.hasLocalChanges = false;
+          doc.workingCopy.baseGeneration = doc.generation;
           audit('Submitted for Review', `Pinned Generation ${doc.generation}; Reservation was already released by Check-in.`);
           result = success(`Submitted Generation ${doc.generation} cho review.`);
           break;
@@ -1578,7 +1690,8 @@
           doc.status = 'Draft';
           doc.gate = 'FAIL';
           doc.workingCopy.open = true;
-          doc.workingCopy.dirty = true;
+          doc.workingCopy.hasLocalChanges = true;
+          doc.workingCopy.baseGeneration = doc.generation;
           doc.workingCopy.summary = 'Rejected local work retained; rework required.';
           doc.reservation = null;
           audit('Rejected Review', `${state.draftReason} Local work preserved; returned to In Work.`);
@@ -1592,7 +1705,8 @@
           doc.pendingReview = null;
           doc.reservation = null;
           doc.workingCopy.open = false;
-          doc.workingCopy.dirty = false;
+          doc.workingCopy.hasLocalChanges = false;
+          doc.workingCopy.baseGeneration = doc.generation;
           doc.localWork = null;
           audit('Released', `Immutable Release Record ${doc.releaseRecord.id} pins ${doc.generation}.`);
           result = success(`Released ${doc.generation}; Release Record đã immutable.`);
@@ -1613,7 +1727,7 @@
           doc.approvalDecision = null;
           doc.releaseRecord = null;
           doc.reservation = null;
-          doc.workingCopy = { open: false, dirty: false, summary: `Baseline reused by digest from Revision ${oldRevision}/${oldGeneration}.` };
+          doc.workingCopy = { open: false, hasLocalChanges: false, baseGeneration: doc.generation, summary: `Baseline reused by digest from Revision ${oldRevision}/${oldGeneration}.` };
           doc.localWork = null;
           doc.conflict = null;
           audit('Created Business Revision', `Revision ${doc.revision} begins in Start with exact Version Sequence 1 baseline from ${oldRevision}/${oldGeneration}.`);
@@ -1640,12 +1754,76 @@
           result = success(`External workspace advanced Working Head to ${generation}.`);
           break;
         }
+        case 'stale-open':
+          if (!doc.conflict) result = blocked('Hiện không có stale conflict.');
+          else result = success('');
+          state.staleDialogOpen = Boolean(doc.conflict);
+          break;
+        case 'stale-close':
+        case 'stale-cancel':
+          state.staleDialogOpen = false;
+          result = success('');
+          break;
+        case 'stale-get-latest': {
+          if (!doc.conflict) {
+            result = blocked('Hiện không có stale conflict.');
+            state.staleDialogOpen = false;
+            break;
+          }
+          const staleExpected = doc.conflict.expected;
+          const latestGeneration = doc.generation;
+          if (doc.reservation && ownsReservation(doc)) doc.reservation.expectedGeneration = latestGeneration;
+          doc.conflict = null;
+          doc.localWork = null;
+          doc.workingCopy.open = true;
+          doc.workingCopy.hasLocalChanges = false;
+          doc.workingCopy.baseGeneration = latestGeneration;
+          doc.workingCopy.summary = `Latest ${latestGeneration} opened; local changes discarded.`;
+          state.staleDialogOpen = false;
+          audit('Get Latest Version', `Local changes from ${staleExpected || 'unknown'} discarded; baseline ${latestGeneration} opened.`);
+          result = success(t('staleLatestMessage'));
+          if (state.guided.open && state.guided.scenario === 'stale') {
+            const staleScenario = SCENARIOS.stale;
+            const nextGuidedStep = staleScenario.steps[state.guided.step];
+            if (nextGuidedStep && nextGuidedStep.action === 'refresh') {
+              state.guided.step = staleScenario.steps.length;
+              state.guided.completed.stale = true;
+              state.guided.message = `Alternative path: ${result.message}`;
+            }
+          }
+          break;
+        }
+        case 'stale-keep-local': {
+          if (!doc.conflict) {
+            result = blocked('Hiện không có stale conflict.');
+            state.staleDialogOpen = false;
+            break;
+          }
+          const keptConflict = doc.conflict;
+          doc.localWork = {
+            ...(doc.localWork || {}),
+            preserved: true,
+            candidate: true,
+            sourceGeneration: keptConflict.expected,
+            serverGeneration: keptConflict.current,
+            summary: `Local work retained for comparison with ${keptConflict.current}.`
+          };
+          doc.workingCopy.hasLocalChanges = true;
+          doc.workingCopy.summary = doc.localWork.summary;
+          doc.conflict = { ...keptConflict, choice: 'keep-local' };
+          state.staleDialogOpen = false;
+          audit('Kept Local Candidate', `Local work from ${keptConflict.expected} retained while Working Head is ${keptConflict.current}.`);
+          result = success(t('staleKeptMessage'));
+          if (state.guided.open && state.guided.scenario === 'stale') state.guided.message = result.message;
+          break;
+        }
         case 'refresh': {
           const previousExpected = doc.conflict.expected;
           const currentGeneration = doc.generation;
           doc.reservation.expectedGeneration = currentGeneration;
           doc.conflict = { ...doc.conflict, current: currentGeneration, refreshed: true, refreshedAt: formatClock(state.clock) };
-          audit('Refresh Baseline', `Expected Generation updated ${previousExpected} → ${currentGeneration}; local work remains dirty. No CAD/Office binary merge performed.`);
+          doc.workingCopy.baseGeneration = currentGeneration;
+          audit('Refresh Baseline', `Expected Generation updated ${previousExpected} → ${currentGeneration}; local work remains available for review. No CAD/Office binary merge performed.`);
           result = success(`Baseline đã Refresh lên ${currentGeneration}; local work vẫn giữ. Tiếp theo: Reapply local changes.`);
           break;
         }
@@ -1659,6 +1837,8 @@
             summary: `Local work re-applied onto ${targetGeneration}; working-copy changes pending Check-in.`
           };
           doc.workingCopy.summary = doc.localWork.summary;
+          doc.workingCopy.hasLocalChanges = true;
+          doc.workingCopy.baseGeneration = targetGeneration;
           doc.conflict = null;
           audit('Reapplied Local Work', `Local changes from expected ${conflict.expected} re-applied onto ${targetGeneration}; no automatic CAD/Office binary merge.`);
           result = success(`Local work đã Reapply trên ${targetGeneration}; kiểm tra rồi Check-in.`);
@@ -1782,7 +1962,8 @@
       return `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || '<circle cx="12" cy="12" r="8"></circle>'}</svg>`;
     }
     // `publish` remains an internal Generation-write primitive used by Check-in; it is never rendered as a competing user command.
-    // Stale recovery keeps Refresh and Reapply as separate user-visible actions.
+    // Stale recovery offers explicit choices, then keeps Refresh and Reapply as
+    // separate user-visible actions for the manual reconciliation path.
     const ACTION_META = {
       'check-out': ['checkOut', 'reserve', 'checkOutHint'], 'check-in': ['checkIn', 'publish', 'checkInHint'],
       reserve: ['reserve', 'reserve'], open: ['open', 'file'], edit: ['edit', 'edit', 'editHint'], publish: ['publish', 'publish'],
@@ -1811,7 +1992,7 @@
         labelKey: group.labelKey,
         actions: group.actions.filter(action => {
           if (primary.includes(action) || !canAction(action, doc).ok) return false;
-          if (action === 'external-advance') return Boolean(doc.workingCopy.open && doc.workingCopy.dirty);
+          if (action === 'external-advance') return Boolean(doc.workingCopy.open && doc.workingCopy.hasLocalChanges);
           return true;
         })
       })).filter(group => group.actions.length);
@@ -1888,11 +2069,11 @@
       }
       if (doc.workflow === 'Start') {
         if (!doc.reservation || !ownsReservation(doc) || !doc.workingCopy.open) return { action: 'check-out', label: t('checkOut') };
-        if (!doc.workingCopy.dirty) return { action: 'edit', label: t('edit') };
+        if (!doc.workingCopy.hasLocalChanges) return { action: 'edit', label: t('edit') };
         return { action: 'check-in', label: t('checkIn') };
       }
       if (doc.workflow === 'In Work') {
-        if (doc.workingCopy.dirty) {
+        if (doc.workingCopy.hasLocalChanges) {
           if (!doc.reservation || !ownsReservation(doc) || !doc.workingCopy.open) return { action: 'check-out', label: t('checkOut') };
           return { action: 'check-in', label: t('checkIn') };
         }
@@ -1910,7 +2091,7 @@
       const reapplyClass = refreshed ? 'current' : 'pending';
       const refreshStatus = refreshed ? t('refreshDone') : t('refreshRequired');
       const reapplyStatus = refreshed ? t('reapplyRequired') : t('reapplyPending');
-      return `<div class="conflict-recovery" aria-labelledby="conflict-recovery-title"><div class="conflict-recovery-head"><div><span class="conflict-kicker">${esc(t('staleRecoveryTitle'))}</span><strong id="conflict-recovery-title">${esc(t('staleRecoverySummary'))}</strong></div>${chip('WAITING', `${refreshed ? 2 : 1} / 2`, 'amber')}</div><div class="conflict-facts"><div><span>${esc(t('staleExpected'))}</span><b class="mono">${esc(doc.conflict.expected || '—')}</b></div><div><span>${esc(t('staleCurrent'))}</span><b class="mono">${esc(doc.conflict.current || '—')}</b></div><div><span>${esc(t('staleLocalLabel'))}</span><b>${esc(t('staleLocalSafe'))}</b></div></div><ol class="conflict-steps"><li class="conflict-step ${refreshClass}" ${!refreshed ? 'aria-current="step"' : ''}><span class="conflict-step-number">1</span><div><strong>${esc(t('staleStepRefresh'))}</strong><span>${esc(t('staleStepRefreshHint'))}</span></div><em>${esc(refreshStatus)}</em></li><li class="conflict-step ${reapplyClass}" ${refreshed ? 'aria-current="step"' : ''}><span class="conflict-step-number">2</span><div><strong>${esc(t('staleStepReapply'))}</strong><span>${esc(t('staleStepReapplyHint'))}</span></div><em>${esc(reapplyStatus)}</em></li></ol><p class="conflict-note">${svgIcon('warning')}<span>${esc(t('noBinaryMerge'))}</span></p></div>`;
+      return `<div class="conflict-recovery" aria-labelledby="conflict-recovery-title"><div class="conflict-recovery-head"><div><span class="conflict-kicker">${esc(t('staleRecoveryTitle'))}</span><strong id="conflict-recovery-title">${esc(t('staleRecoverySummary'))}</strong></div><div class="conflict-recovery-actions">${chip('WAITING', `${refreshed ? 2 : 1} / 2`, 'amber')}<button type="button" class="conflict-open-btn" data-action="stale-open">${svgIcon('route')} <span>${esc(t('staleOpenChoices'))}</span></button></div></div><div class="conflict-facts"><div><span>${esc(t('staleExpected'))}</span><b class="mono">${esc(doc.conflict.expected || '—')}</b></div><div><span>${esc(t('staleCurrent'))}</span><b class="mono">${esc(doc.conflict.current || '—')}</b></div><div><span>${esc(t('staleLocalLabel'))}</span><b>${esc(t('staleLocalSafe'))}</b></div></div><ol class="conflict-steps"><li class="conflict-step ${refreshClass}" ${!refreshed ? 'aria-current="step"' : ''}><span class="conflict-step-number">1</span><div><strong>${esc(t('staleStepRefresh'))}</strong><span>${esc(t('staleStepRefreshHint'))}</span></div><em>${esc(refreshStatus)}</em></li><li class="conflict-step ${reapplyClass}" ${refreshed ? 'aria-current="step"' : ''}><span class="conflict-step-number">2</span><div><strong>${esc(t('staleStepReapply'))}</strong><span>${esc(t('staleStepReapplyHint'))}</span></div><em>${esc(reapplyStatus)}</em></li></ol><p class="conflict-note">${svgIcon('warning')}<span>${esc(t('noBinaryMerge'))}</span></p></div>`;
     }
 
     function renderNextAction(doc) {
@@ -2108,6 +2289,13 @@
       return `<div class="overlay-layer modal-layer diagnostics-layer"><div class="overlay-scrim" data-action="diagnostics-close" aria-hidden="true"></div><section class="diagnostics-dialog" role="dialog" aria-modal="true" aria-labelledby="diagnostics-title"><header class="modal-head"><div><div class="eyebrow">${esc(ui('details'))}</div><h2 id="diagnostics-title">${esc(ui('stateInspector'))}</h2><p>${esc(ui('stateInspectorHint'))}</p></div><button type="button" class="close-btn" data-action="diagnostics-close" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="modal-body">${renderStateSnapshot(doc, true)}</div></section></div>`;
     }
 
+    function renderStaleDialog(doc) {
+      if (!state.staleDialogOpen || !doc.conflict) return '';
+      const conflict = doc.conflict;
+      const localSummary = doc.workingCopy.hasLocalChanges ? t('staleLocalChanges') : t('none');
+      return `<div class="overlay-layer modal-layer stale-layer"><div class="overlay-scrim" data-action="stale-cancel" aria-hidden="true"></div><section class="stale-dialog" role="dialog" aria-modal="true" aria-labelledby="stale-dialog-title" aria-describedby="stale-dialog-summary"><header class="modal-head"><div><div class="eyebrow">${esc(t('scenarioStale'))}</div><h2 id="stale-dialog-title">${esc(t('staleDialogTitle'))}</h2><p id="stale-dialog-summary"><span class="mono">${esc(doc.id)}</span> · ${esc(t('staleDialogSummary'))}</p></div><button type="button" class="close-btn" data-action="stale-cancel" aria-label="${esc(t('staleCancel'))}">${svgIcon('close')}</button></header><div class="modal-body stale-dialog-body"><p class="stale-dialog-choice-hint">${esc(t('staleDialogChoiceHint'))}</p><div class="stale-version-grid"><div class="stale-version-card"><span>${esc(t('staleDialogBase'))}</span><strong class="mono">${esc(conflict.expected || '—')}</strong><small>${esc(t('staleDialogBaseHint'))}</small></div><div class="stale-version-card"><span>${esc(t('staleDialogCurrent'))}</span><strong class="mono">${esc(conflict.current || '—')}</strong><small>${esc(t('staleDialogCurrentHint'))}</small></div><div class="stale-version-card"><span>${esc(t('staleDialogChanges'))}</span><strong>${esc(localSummary)}</strong><small>${esc(t('staleDialogLocalHint'))}</small></div></div><p class="stale-warning">${svgIcon('warning')}<span>${esc(t('staleWarning'))}</span></p><div class="stale-choice-list"><button type="button" class="stale-choice primary" data-action="stale-keep-local"><span class="stale-choice-icon">${svgIcon('copy')}</span><span class="stale-choice-copy"><span class="stale-choice-title">${esc(t('staleKeepLocal'))}</span><span class="stale-choice-hint">${esc(t('staleKeepLocalHint'))}</span></span><span class="stale-choice-arrow" aria-hidden="true">→</span></button><button type="button" class="stale-choice" data-action="stale-get-latest"><span class="stale-choice-icon">${svgIcon('refresh')}</span><span class="stale-choice-copy"><span class="stale-choice-title">${esc(t('staleGetLatest'))}</span><span class="stale-choice-hint">${esc(t('staleGetLatestHint'))}</span></span><span class="stale-choice-arrow" aria-hidden="true">→</span></button><button type="button" class="stale-choice" data-action="stale-cancel"><span class="stale-choice-icon">${svgIcon('close')}</span><span class="stale-choice-copy"><span class="stale-choice-title">${esc(t('staleCancel'))}</span><span class="stale-choice-hint">${esc(t('staleCancelHint'))}</span></span><span class="stale-choice-arrow" aria-hidden="true">×</span></button></div></div></section></div>`;
+    }
+
     function renderNavDrawer() {
       if (!state.navDrawerOpen) return '';
       return `<div class="overlay-layer drawer-layer context-drawer-layer"><div class="overlay-scrim" data-action="nav-close" aria-hidden="true"></div><aside id="nav-drawer" class="detail-drawer context-drawer" role="dialog" aria-modal="true" aria-labelledby="nav-drawer-title"><header class="drawer-head"><div><div class="eyebrow">${esc(ui('navigator'))}</div><h2 id="nav-drawer-title">${esc(ui('productRoot'))}</h2><p>${esc(ui('detailHint'))}</p></div><button type="button" class="close-btn" data-action="nav-close" aria-label="${esc(t('close'))}">${svgIcon('close')}</button></header><div class="drawer-body">${renderNavigator()}</div></aside></div>`;
@@ -2177,7 +2365,7 @@
 
     function renderApp() {
       const doc = activeDoc();
-      return `${renderHeader()}<main class="page-wrap">${renderExplorer(doc)}</main>${renderDetailDrawer(doc)}${renderNavDrawer()}${renderEvidenceDrawer(doc)}${renderGuidedModal()}${renderDiagnosticsModal(doc)}${renderReviewPanel()}`;
+      return `${renderHeader()}<main class="page-wrap">${renderExplorer(doc)}</main>${renderDetailDrawer(doc)}${renderNavDrawer()}${renderEvidenceDrawer(doc)}${renderGuidedModal()}${renderDiagnosticsModal(doc)}${renderStaleDialog(doc)}${renderReviewPanel()}`;
     }
     function render() {
       document.documentElement.lang = state.locale;
@@ -2214,7 +2402,7 @@
       } else guide.message = `Chưa đạt bước này: ${result.message}`;
       state.lastAction = { type: accepted ? 'success' : 'blocked', action: step.action, message: guide.message, code: result.code || '' };
       render();
-      focusDialog('.guided-dialog');
+      focusDialog(state.staleDialogOpen ? '.stale-dialog' : '.guided-dialog');
       showToast(guide.message, !accepted);
     }
     function reviewPayload() {
@@ -2262,7 +2450,7 @@
       target?.focus();
     }
     function syncOverlayState() {
-      const locked = state.detailDrawer.open || state.guided.open || state.diagnosticsOpen || state.navDrawerOpen || state.evidenceDrawerOpen || state.review.open;
+      const locked = state.detailDrawer.open || state.guided.open || state.diagnosticsOpen || state.staleDialogOpen || state.navDrawerOpen || state.evidenceDrawerOpen || state.review.open;
       document.body.classList.toggle('overlay-open', locked);
     }
     function closeDetailDrawer() {
@@ -2285,6 +2473,14 @@
       render();
       restoreFocus(diagnosticsReturnFocus);
       diagnosticsReturnFocus = null;
+    }
+    function closeStaleDialog() {
+      if (!state.staleDialogOpen) return;
+      dispatch('stale-cancel');
+      render();
+      if (staleReturnFocus) restoreFocus(staleReturnFocus);
+      else if (state.guided.open) focusDialog('.guided-dialog');
+      staleReturnFocus = null;
     }
     function closeNavDrawer() {
       if (!state.navDrawerOpen) return;
@@ -2375,6 +2571,26 @@
       if (action === 'diagnostics-close') {
         closeDiagnosticsModal(); return;
       }
+      if (action === 'stale-open') {
+        staleReturnFocus = describeFocus(button);
+        const result = dispatch('stale-open');
+        render();
+        if (result.ok) focusDialog('.stale-dialog');
+        else showToast(result.message, true);
+        return;
+      }
+      if (action === 'stale-cancel' || action === 'stale-close') {
+        closeStaleDialog(); return;
+      }
+      if (action === 'stale-get-latest' || action === 'stale-keep-local') {
+        const result = dispatch(action);
+        render();
+        if (staleReturnFocus) restoreFocus(staleReturnFocus);
+        else if (state.guided.open) focusDialog('.guided-dialog');
+        staleReturnFocus = null;
+        showToast(result.message, !result.ok);
+        return;
+      }
       if (action === 'guided-select') {
         const result = dispatch('guided-select', { scenario: button.dataset.scenario }); render(); focusDialog('.guided-dialog'); showToast(result.message, !result.ok); return;
       }
@@ -2388,6 +2604,7 @@
         state.detailDrawer.open = false;
         state.guided.open = false;
         state.diagnosticsOpen = false;
+        state.staleDialogOpen = false;
         state.navDrawerOpen = false;
         state.evidenceDrawerOpen = false;
         state.review.open = true; render(); focusReview(); return;
@@ -2397,9 +2614,21 @@
       if (action === 'print-review') { window.print(); return; }
       if (action === 'copy-review') { copyReview(); return; }
       if (action === 'reset') { const result = dispatch('reset'); render(); showToast(result.message, !result.ok); return; }
-      if (button.getAttribute('aria-disabled') === 'true') { dispatch(action); render(); return; }
+      if (button.getAttribute('aria-disabled') === 'true') {
+        const disabledFocus = describeFocus(button);
+        const disabledResult = dispatch(action);
+        if (action === 'check-in' && activeDoc().conflict) {
+          staleReturnFocus = disabledFocus;
+          dispatch('stale-open');
+        }
+        render();
+        if (state.staleDialogOpen) focusDialog('.stale-dialog');
+        else if (disabledResult.message) showToast(disabledResult.message, true);
+        return;
+      }
       const result = dispatch(action);
       render();
+      if (state.staleDialogOpen) focusDialog('.stale-dialog');
       if (result.message && result.ok) showToast(result.message, false);
     });
     document.addEventListener('change', event => {
@@ -2413,6 +2642,7 @@
     });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
+        if (state.staleDialogOpen) { closeStaleDialog(); return; }
         if (state.review.open) { closeReview(); return; }
         if (state.detailDrawer.open) { closeDetailDrawer(); return; }
         if (state.navDrawerOpen) { closeNavDrawer(); return; }
@@ -2420,7 +2650,8 @@
         if (state.guided.open) { closeGuidedModal(); return; }
         if (state.diagnosticsOpen) { closeDiagnosticsModal(); return; }
       }
-      const dialogSelector = state.review.open ? '.review-dialog'
+      const dialogSelector = state.staleDialogOpen ? '.stale-dialog'
+        : state.review.open ? '.review-dialog'
         : state.detailDrawer.open ? '#detail-drawer'
         : state.navDrawerOpen ? '#nav-drawer'
         : state.evidenceDrawerOpen ? '#evidence-drawer'
