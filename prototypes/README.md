@@ -1,6 +1,12 @@
 # Controlled Document Workspace UI prototype
 
-> **THROWAWAY PROTOTYPE — NOT PRODUCTION CODE**
+> **ACCEPTED DESIGN REFERENCE — PROTOTYPE CODE, NOT PRODUCTION CODE**
+
+**Review disposition**: the single Engineering Explorer direction was accepted for use as input to
+the next requirements and interaction-design increment. The behavior snapshot is
+`7f66936725b9991230eb8b436e8df227d88d4cd0` (2026-08-31). Acceptance confirms the design direction;
+it does not approve a runtime architecture, production implementation, DDM parity or operational
+release.
 
 This prototype answers one design question: **does one object-centric Engineering Explorer make
 identity, lifecycle, permissions, conflicts and release evidence understandable to an internal
@@ -115,10 +121,15 @@ table merely to keep it visible. A contextual reference is allowed only when it 
 - The prototype uses no real company document, user identity, credential, file, integration or
   production service.
 
-## Capture policy
+## Retention and next use
 
-The prototype belongs on the throwaway branch
-`codex/prototype-controlled-document-workspace`. After review, record the chosen direction, retained
-elements and unresolved questions. Only the validated decision should be
-promoted to `main`; production UI must be rewritten under its own specification, tests and quality
-gates.
+The reviewed snapshot is retained on `main`; the former
+`codex/prototype-controlled-document-workspace` branch is historical and is not the active delivery
+location. Keep the prototype stable unless a product decision explicitly reopens its design question.
+
+For the next increment, transfer accepted behavior into the owning IDEA records before writing
+production code: actors and scenarios belong in `DOC-03`, verifiable behavior in `DOC-04`, identity
+and concurrency rules in `DOC-06`, and layout/interaction/accessibility behavior in `DOC-08`.
+Reference-product evidence remains in its governed research or coverage record. Production UI must
+be implemented under a new specification, tests and applicable quality gates rather than evolved
+directly from this HTML file.
