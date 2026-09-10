@@ -1,6 +1,6 @@
 # IDEA Engineering Product Vision and Scope
 
-> **Instance state**: controlled `Draft 0.5`. This document defines the internal product purpose,
+> **Instance state**: controlled `Draft 0.6`. This document defines the internal product purpose,
 > scope boundary and success intent for Core v0. It does not approve detailed requirements,
 > architecture, technology or implementation.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Product Vision and Scope |
 | Owner | `Principal Product Author`; named person attribution is `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.5` |
+| Document Version | `0.6` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity not yet recorded |
@@ -22,7 +22,7 @@
 | Source Links | [Product-knowledge index](../../knowledge/README.md), [accepted design lessons](../../knowledge/idea-design-lessons.md), [product architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [project domain language](../../../../CONTEXT.md) |
 | Downstream Links | [DOC-02](DOC-02-feasibility-and-options-assessment.md), [DOC-03](DOC-03-business-requirements.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [FEATURE-001](decision-briefs/FEATURE-001-feature-definition-and-scope.md), [coverage register](registers/GOV-material-and-behavioral-coverage.md) |
 | Evidence / Claim Status | Accepted scope decisions plus `Reference-Backed Product Hypothesis`; internal operational validation remains `BLOCKED` |
-| Change History | 0.5: reconcile the downstream Feature reference without changing product scope; [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md). 0.4 clarified that departmental handoffs contribute controlled documents, structure and evidence without turning time, cost, purchasing, manufacturing or project management into Core v0 capabilities. 0.3 refreshed the downstream Feature reference after the Version-model clarification. 0.2 confirmed operating context and native-account scope. 0.1 initial controlled draft. |
+| Change History | 0.6: distinguish Account, Project, Role and Product Configuration administration under one principal–role–scope model without changing Feature scope; [IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md). 0.5: reconcile the downstream Feature reference. Earlier history remains in controlled change records. |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational period is `UNKNOWN`, owned by Product Decision Authority and reviewed before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -64,10 +64,12 @@ context unless a later approved capability gives IDEA explicit authority for tha
 |---|---|---|---|
 | Design Engineer | Stores or creates engineering documents, works through normal Office/CAD applications, and needs safe Checkout, Reference, Check-in and recovery. | `BN-001`…`BN-004` in DOC-03 | Representative population `BLOCKED`; Product Decision Authority to nominate before pilot |
 | Reviewer / Approver | Must inspect and decide against one exact document and structure baseline. | `BN-005`, `BS-005` in DOC-03 | Seeded role accepted; independent eligible person not assigned |
-| PDM Administrator | Configures metadata, numbering, lifecycle, access and format policies without changing product code for ordinary policy variation. | `BN-006`, `BN-008` in DOC-03 | Role hypothesis; representative owner `UNKNOWN`, assign before PG3 |
+| Product Configuration Administrator | Configures metadata, numbering, lifecycle and format policies without changing product code for ordinary policy variation. | `BN-006`, `BN-008` in DOC-03 | Role accepted as a separate responsibility; representative owner `UNKNOWN`, assign before PG3 |
+| Project Administrator | Adds eligible people to one assigned Project, manages its direct Groups and assigns only approved Project roles. | `BN-006`, `BN-011`, `BS-011` in DOC-03 | Initial holder and delegation limits require controlled configuration before pilot |
+| Privileged Role Administrator | Maintains permitted Role Definitions and privileged Role Assignments under explicit Scope and delegation limits. | `BN-006`, `BR-030` in DOC-03 | Security review and production holder `BLOCKED` before live administration |
 | Quality / Audit | Needs attributable history and evidence that a released baseline can be explained and reproduced. | `BN-005`…`BN-007` in DOC-03 | Role hypothesis; specialist review `BLOCKED` until assigned |
 | Security / Operations | Needs controlled access, backup, restore and operational boundaries. | DOC-04/05/06 and `TECH-CTX-006/008` | User may operate initially; long-term owner, support coverage and validated thresholds remain open before PG3/PG4 |
-| Account Administrator | Issues and maintains IDEA accounts initially; does not automatically gain document or approval rights. | `BN-011`, `BR-025…028` in DOC-03 | Project user initially performs this role; detailed security policy requires review |
+| Account Administrator | Issues and maintains IDEA accounts and Login Identities; cannot add Project/Group membership or product roles by implication. | `BN-011`, `BR-025…030` in DOC-03 | Project user may perform this role during development; normal company holder is System Management; detailed security policy requires review |
 | Principal Product Author | Prepares the eight Core Product Documents and three decision briefs, maintains trace and records unresolved gaps honestly. | Instance README and DOC-07 | Assigned organizational role; named attribution pending |
 | Internal Document Reviewer | Project user reviews the assistant-authored documents for clarity and product fit; this does not establish specialist qualification or satisfy a required independent approval. | Instance README | User-assigned role; formal attribution pending |
 | Product Decision Authority | Decides exactly three axes in order: Feature, Spec and Tech. | DOC-07 decision plan | Organizational role accepted; named decision record pending |
@@ -98,9 +100,9 @@ Core v0 is the first bounded production implementation target of the MVP Release
 7. Submit, review, approve, reject, withdraw and release against exact pinned evidence.
 8. An immutable Release Record and Controlled Release Package that can reproduce the released
    baseline.
-9. Administrator-issued IDEA accounts and configurable, versioned access, audit, metadata,
-   numbering, lifecycle and format policies; account administration remains separate from product
-   approval authority.
+9. Administrator-issued IDEA accounts and configurable, versioned RBAC, audit, metadata, numbering,
+   lifecycle and format policies; Account, Project, Role and Product Configuration administration
+   remain separate assignments, and none grants product Approval or Release authority by implication.
 10. A Generic Controlled-File Baseline plus Office/PDF handling and IRONCAD as the first deep CAD
     Capability Profile, subject to DOC-02/DOC-06 evidence.
 11. User-interface resources for English, Vietnamese and Japanese, with English fallback.

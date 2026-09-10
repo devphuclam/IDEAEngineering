@@ -19,6 +19,7 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 | What must an authorized DDM target audit test? | [DDM target audit plan](ddm-target-audit-plan.md) |
 | How are DDM baseline behavior and Aras improvements governed? | [ADR-0009](../../adr/0009-use-ddm-baseline-and-aras-quality-benchmark.md) |
 | What Aras lifecycle and workflow patterns have been studied? | [Aras version/lifecycle research](../../research/2026-08-27-aras-innovator-version-lifecycle-model.md) and [workflow/approval comparison](../../research/2026-08-27-ddm-first-workflow-approval-policy.md) |
+| What evidence exists for Reservation expiry, modified Reference and multi-document Check-in? | [DDM/Aras Checkout, Reference and Check-in comparison](../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) and the bounded [Aras runtime Workspace experiment](../../research/2026-09-10-aras-runtime-workspace-experiment.md) |
 | Which product lessons were accepted from the research? | [IDEA design lessons](idea-design-lessons.md) |
 | What architecture applies those lessons? | [IDEA product lifecycle architecture](../../architecture/idea-product-lifecycle-architecture.md) |
 | Where did an admitted conclusion come from? | [Clean-room transfer register](../../governance/clean-room-transfer-register.md) |

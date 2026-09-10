@@ -14,6 +14,8 @@
 
 - [ADR-0009 — Use DDM as the behavioral baseline and Aras as the quality benchmark](0009-use-ddm-baseline-and-aras-quality-benchmark.md)
 - [ADR-0010 — Separate operational configuration, governed policy, and solution-package paths](0010-separate-configuration-governance-paths.md)
+- [ADR-0011 — Give each Logical Document one governing Project](0011-one-governing-project-per-logical-document.md)
+- [ADR-0012 — Use principal-role-scope RBAC for product and administration authority](0012-use-principal-role-scope-rbac.md)
 
 ## Inherited template decision
 

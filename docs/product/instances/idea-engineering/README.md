@@ -16,7 +16,7 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.5`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.6`; DOC-04/06 at `Draft 0.11`; DOC-05 at `Draft 0.10`; DOC-07 at `Draft 0.5`; DOC-08 at `Draft 0.7`; GOV at `Draft 0.3`; VVP at `Draft 0.11`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.12`; DOC-06 at `Draft 0.13`; DOC-07 at `Draft 0.5`; DOC-08 at `Draft 0.9`; GOV at `Draft 0.3`; VVP at `Draft 0.13`; CHG records at their catalogue versions |
 | First approved version | `Approved 1.0` only after the applicable controlled decision |
 
 ## December 2026 roadmap package
@@ -60,8 +60,8 @@ They are decision views, not parallel requirement or architecture sources.
 
 | Boss-facing brief | Decision axis | Detailed source set | Current state |
 |---|---|---|---|
-| [`FEATURE-001`](decision-briefs/FEATURE-001-feature-definition-and-scope.md) | Feature scope and priority | DOC-01, DOC-02, DOC-03, DOC-04, DOC-07 and governed reference coverage | `Draft 0.12`; 14 feature IDs retained; **stale** because it does not yet pin DOC-03@0.6/DOC-04@0.11; boss decision `NOT-RUN` |
-| [`SPEC-001`](decision-briefs/SPEC-001-product-specification.md) | Required behavior and acceptance | DOC-04, requirement-bearing DOC-06/08 content, VVP | `Draft 0.14`; 74 requirement IDs and seven open points retained; **stale** after DOC-04@0.11, DOC-06@0.11 and DOC-08@0.7; boss decision `NOT-RUN` |
+| [`FEATURE-001`](decision-briefs/FEATURE-001-feature-definition-and-scope.md) | Feature scope and priority | DOC-01, DOC-02, DOC-03, DOC-04, DOC-07 and governed reference coverage | `Draft 0.12`; 14 feature IDs retained; **stale** because it does not pin DOC-01@0.6, DOC-03@0.7 or DOC-04@0.13; boss decision `NOT-RUN` |
+| [`SPEC-001`](decision-briefs/SPEC-001-product-specification.md) | Required behavior and acceptance | DOC-04, requirement-bearing DOC-06/08 content, VVP | `Draft 0.14`; **stale** after DOC-04@0.13, DOC-06@0.13, DOC-08@0.9 and VVP@0.13 added the accepted RBAC/workspace/scale realization and checks; boss decision `NOT-RUN` |
 | [`TECH-001`](decision-briefs/TECH-001-technology-and-architecture-proposal.md) | Architecture and technology selection | DOC-02, DOC-04/05/06/08, accepted ADRs, confirmed context and official technology sources | `Draft 0.8`; **stale** after the architecture/data/UI source revisions; boss decision `NOT-RUN`; no selected production stack |
 
 A brief becomes `Stale` when a pinned source changes. A boss decision must identify the exact brief
@@ -81,8 +81,10 @@ decision. The proposal now reflects Windows engineering PCs, approximately 50–
 at one site, administrator-issued IDEA accounts first, temporary user-held bootstrap capability
 during development, normal Account Administration by named System Management personnel,
 and possible user-led operations without an assumed DevOps team. Company login is a future method,
-not an initial prerequisite. File volumes are unmeasured. RTO ≤4 working hours and RPO ≤1 hour are
-preliminary evaluation objectives, not a tested SLA or rollout acceptance.
+not an initial prerequisite. The design envelope now permits an individual multi-GB Artifact and a
+future Project corpus of hundreds of TB, but real size distribution, growth, concurrency and initial
+allocation remain unmeasured. RTO ≤4 working hours and RPO ≤1 hour are preliminary evaluation
+objectives, not a tested SLA or rollout acceptance.
 
 The project user previously accepted Feature 0.3 and Spec 0.4 in internal review:
 [RVW-FEATURE-SPEC-20260903-001](decision-briefs/VERSION-HISTORY.md#5-ghi-nhận-review-nội-bộ-ngày-03-09-2026).
@@ -143,24 +145,28 @@ deferred. WF-01…06 are planned checks and remain `NOT-RUN`. See
 [IE-CHG-WORKFLOW-001](registers/CHG-2026-09-07-workflow-configuration.md) for the accepted direction,
 predecessor archive and exact source impact.
 
-## Authorization and configuration-data clarification — 7 September 2026
+## Authorization and configuration-data clarification — 7–10 September 2026
 
 [SPEC-001 section 8.4](decision-briefs/SPEC-001-product-specification.md#84-thay-đổi-quyền-mà-không-sửa-code)
-and [VVP section 1.5](registers/VVP-core-v0-verification-validation-plan.md#15-authorization-and-policy-import-acceptance-detail)
-now separate Identity account/session eligibility from IDEA product authorization. Access Policy
-evaluates Actor, role/group, resource scope/state and action; the owning Server module enforces the
-decision under an exact activated policy version.
+records the earlier management explanation and is now stale. Current [VVP section 1.5](registers/VVP-core-v0-verification-validation-plan.md#15-project-access-rbac-and-governed-policy-acceptance-detail)
+checks one RBAC model: Security Principal + Role Definition + Authorization Scope = Role Assignment.
+Identity and Accounts establishes account/session eligibility, Project Governance owns Project and
+direct Group membership, Access Policy evaluates applicable Role Assignments, and the owning Server
+Module enforces its business gates.
 
-Ordinary access is assigned through groups/roles so personnel changes use Membership rather than
-per-document edits. A direct grant to one Actor is an explicit scoped, justified, time-bounded and
-audited exception, not the normal administration path.
+Group assignment is the normal personnel path. A direct Actor Role Assignment is also supported,
+visible and audited; it is not a second grant type. QLHT Account Administration creates/maintains
+accounts only. Project and privileged-role administrators operate under separate constrained Role
+Assignments.
 
 Authorized forms/API can change policy without owner-module code edits. JSON is optional seed or
 import/export transport and creates only a candidate; validation, preview and separate authorized
 activation are required before authority changes. ASP.NET Core Identity and PostgreSQL remain Tech
 proposals awaiting the boss's decision. AC-01…05 are planned checks and remain `NOT-RUN`. See
 [IE-CHG-AUTH-DATA-001](registers/CHG-2026-09-07-authorization-data-boundary.md) for the accepted
-direction, predecessor archive and exact source impact.
+direction, predecessor archive and exact source impact. The later
+[IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md) supersedes its role/
+group-assignment shape while retaining the identity-versus-product-authority boundary.
 
 ## Item, folder and copy-identity clarification — 7 September 2026
 
@@ -230,25 +236,45 @@ requirement IDs, adds no product permission and records no verification result. 
 briefs, VVP and roadmap source pins remain stale until a later controlled refresh; no prior review is
 inherited.
 
+The same date, internal design discussion then replaced the earlier Group/Project Role/Permission
+Set chain with one RBAC model: `Security Principal + Role Definition + Authorization Scope = Role
+Assignment`. Ten requirements `REQ-AUTH-001…010`, two Project/RBAC architecture views, a matching
+data model, separate Account/Project/Role/Product Configuration administration journeys, 14 planned
+PA/RBAC procedures and an architecture-diagram review policy now carry that design. This raises the
+current SRS from 74 to 84 requirement IDs and the VVP from 15 to 16 objectives. The project user's
+confirmation is internal design review only; Product Decision Authority decisions, specialist
+review, implementation and every procedure result remain `NOT-RUN`.
+
+Later on 10-09-2026, Q26–Q32 closed the remaining structural direction for Reservation expiry and
+recovery, modified Reference files, logical all-or-none multi-document Check-in, resumable multi-GB
+transfer, provider-neutral Artifact storage, product-owned Permission codes and request-time Scope
+inheritance. DOC-04 now has 87 requirement IDs; VVP has 17 objectives plus WS-01…08 and ST-01…04.
+The exact lease values, real workload/sizing, selected storage technology and executed IDEA evidence
+remain open. The public DDM/Aras comparison, initial read-only audit and later authorized test-fixture
+experiment are evidence with explicit limits, not copied product requirements or proof that IDEA
+already works. See
+[IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md).
+
 ## Core instance catalogue
 
 | Class | Stable Document ID | Instance | Current state |
 |---|---|---|---|
-| `DOC-01` | `IE-PROD-VISION-001` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | `Draft 0.5`; scope unchanged; current downstream source pin recorded |
+| `DOC-01` | `IE-PROD-VISION-001` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | `Draft 0.6`; scope unchanged; administration responsibilities separated |
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
-| `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.6`; Account/PDM administration and group/workflow-role responsibilities clarified |
-| `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.11`; sole normative SRS; 74 requirements retained; requirement record contract and administration boundary clarified |
-| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.10`; sole architecture description; responsibility boundaries corrected and maintained architecture views added |
-| `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.11`; data ownership and relationship views aligned with the administration boundary |
+| `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
+| `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.13`; sole normative SRS; 87 requirements including `REQ-AUTH-001…010`, `REQ-WS-014/015` and `REQ-OPS-006`; seven open Spec points remain |
+| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.12`; sole architecture description; RBAC plus modified-Reference, resumable-transfer and storage-evolution views/responses added |
+| `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.13`; RBAC, Reservation, transfer, Artifact Location and storage migration contracts aligned |
 | `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.5`; references synchronized; conditional December schedule, 56-task appendix and Gantt unchanged |
-| `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.7`; Workbench and Administration prototypes linked; account/group work separated from PDM policy/workflow work |
+| `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.9`; administration split retained; modified Reference, resumable transfer and uncertain Check-in result interactions specified; current admin prototype marked stale |
 
 ## Supporting instance catalogue
 
 | Class | Stable Record ID | Instance | Current state |
 |---|---|---|---|
 | `GOV` | `IE-GOV-COVERAGE-001` | [Material and Behavioral Coverage Register](registers/GOV-material-and-behavioral-coverage.md) | `Draft 0.3`; 16/16 public-baseline areas have explicit dispositions, not implementation coverage; target-runtime evidence remains `BLOCKED` |
-| `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.11`; 15 objectives retained; **stale** after the source re-baseline and requires account/group/policy separation coverage; execution `NOT-RUN` |
+| `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.13`; 17 objectives plus PA-01…04, RBAC-01…10, WS-01…08 and ST-01…04; product procedures remain `NOT-RUN`, while VVP-016 has bounded internal render evidence and remains `BLOCKED` overall |
+| `VEV` | `IE-VEV-ARCH-VIEW-001` | [Architecture View Source and Temporary Rendition Review](registers/VEV-2026-09-10-architecture-view-review.md) | `Draft 0.1`; 23/23 Mermaid views parsed/rendered and internally inspected; qualified architecture/HCD review and controlled-rendition acceptance `BLOCKED` |
 | `CHG` | `IE-CHG-TECH-001` | [Tech Context and Proposal Change Record](registers/CHG-2026-09-03-tech-context-and-proposal.md) | `Draft 0.1`; context source, material impact, retained versions and pending review |
 | `CHG` | `IE-CHG-VERSION-001` | [Version Model Clarification Change Record](registers/CHG-2026-09-04-version-model-clarification.md) | `Draft 0.1`; closes SPEC-OPEN-01 for internal drafting; boss decision remains `NOT-RUN` |
 | `CHG` | `IE-CHG-ROADMAP-001` | [Roadmap and Task Integration](registers/CHG-2026-09-05-roadmap-task-integration.md) | `Draft 0.1`; DOC-07@0.4 and schedule@0.1; planning only |
@@ -262,15 +288,20 @@ inherited.
 | `CHG` | `IE-CHG-SOURCE-RECON-001` | [Cross-document Source Reconciliation](registers/CHG-2026-09-09-cross-document-reconciliation.md) | `Draft 0.1`; current Markdown sources synchronized; no Feature/Spec/Tech choice, schedule or gate state changed |
 | `CHG` | `IE-CHG-ARTIFACT-CLEANUP-001` | [Obsolete Presentation Artifact Cleanup](registers/CHG-2026-09-09-obsolete-artifact-cleanup.md) | `Draft 0.2`; obsolete UI/report/rendition copies removed from active directories, with the superseded validation correction replaced by a Markdown resolution note; product content unchanged |
 | `CHG` | `IE-CHG-SPEC-ARCH-QUALITY-001` | [Spec and Architecture Quality Re-baseline](registers/CHG-2026-09-10-spec-architecture-quality-baseline.md) | `Draft 0.1`; establishes source authority, clarifies administration ownership and adds maintained architecture/data views; decision briefs/VVP pins stale; no product result or approval |
+| `CHG` | `IE-CHG-RBAC-ARCH-001` | [RBAC and Diagram Governance](registers/CHG-2026-09-10-rbac-and-diagram-governance.md) | `Draft 0.1`; records internally confirmed RBAC/admin boundaries, diagram policy and cross-document impact; no product result or Product Decision Authority approval |
+| `CHG` | `IE-CHG-WS-SCALE-001` | [Workspace, Transfer and Storage Re-baseline](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md) | `Draft 0.2`; records Q26–Q32, bounded DDM/Aras evidence, controlled Aras runtime experiment and cross-document impact; no IDEA product result or Product Decision Authority approval |
 
-The [technology research note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md)
-supports the proposal with official sources and their limitations. Source research is not a
-compatibility test, license approval or an IDEA product decision.
+The [technology research note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md),
+[RBAC/architecture-diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md) and
+[workspace/transfer comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), including the
+[controlled Aras runtime experiment](../../../research/2026-09-10-aras-runtime-workspace-experiment.md),
+support the proposals with official sources and their limitations. Source research is not a
+compatibility test, security proof, license approval or an IDEA product decision.
 
 ## Authoring and decision sequence
 
-1. Review DOC-03@0.6, DOC-04@0.11, DOC-05@0.10, DOC-06@0.11 and DOC-08@0.7; keep unresolved inputs explicit.
-2. Refresh the three concise decision briefs and VVP against those exact sources, then record
+1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.12, DOC-06@0.13, DOC-08@0.9 and VVP@0.13; keep unresolved inputs explicit.
+2. Resolve the exact Permission/Role/delegation seed under `SPEC-OPEN-03`, then refresh the three concise decision briefs against those exact sources and record
    Feature → Spec → Tech decisions against the versions actually presented to the boss.
 3. Obtain the required company deployment, security, operational and specialist dispositions;
    qualify the proposed stack, account boundary, file/format behavior and recovery design.

@@ -5,7 +5,7 @@
 | Document class | `DOC-05` |
 | Document ID | `IE-ARC-C1-001` |
 | Instance type | Living product baseline |
-| Version | `0.1` |
+| Version | `0.3` |
 | Document status | Proposed |
 | Prior authority | Accepted architecture baseline effective 2026-08-27 |
 | PG3 disposition | `BLOCKED` — independent reviewer unassigned |
@@ -31,7 +31,7 @@ Research findings are inputs through the [clean-room transfer register](../gover
 
 - deliver an internal company product for controlled engineering work, not a commercial multi-customer service;
 - deliver a useful PDM foundation without blocking PLM growth;
-- reproduce the controlled DDM Reference Baseline incrementally and keep deferred coverage visible;
+- reproduce the accepted controlled-document behavior incrementally and keep deferred coverage visible;
 - compare every material product area with approved external quality benchmarks and present stronger evidenced patterns for explicit adaptation;
 - preserve one stable identity/version model through PDM-to-PLM evolution;
 - support many design/document applications without running IDEA code inside them;
@@ -53,7 +53,7 @@ Research findings are inputs through the [clean-room transfer register](../gover
 - promising deep extraction for every format;
 - creating empty PLM modules before requirements exist;
 - implementing C2 or Interoperability Fabric D before a real cross-C use case;
-- claiming ISO conformity or complete DDM behavioral parity without a scoped target and objective coverage evidence.
+- claiming ISO conformity or complete reference-product parity without a scoped target and objective coverage evidence.
 
 ## 3. Evolution and system boundary
 
@@ -81,7 +81,10 @@ C1 must remain useful, deployable, testable, supportable, and authoritative whil
 |---|---|
 | Design engineer | Clear Checkout/Open/Save/Check-in; no lost local work; multi-tool support |
 | Reviewer/Approver | Exact Revision, Generation, Structure Snapshot, and evidence before release |
-| PDM administrator | Governable workflows, metadata, access policy, numbering, and format capability |
+| Account administrator | Governable account and Login Identity provisioning without implicit Project or product access |
+| Project administrator | Project-scoped membership, direct Groups and only the permitted Project Role Assignments |
+| Privileged role administrator | Protected Role Definitions and constrained administrative Role Assignments without self-escalation |
+| Product configuration administrator | Governable workflow, metadata, numbering, localization and format capability |
 | Auditor/Quality | Traceability, immutable history, approval evidence, and controlled export |
 | Security administrator | Least privilege, identity, credentials, audit, and incident response |
 | Platform operator | Availability, backup, restore, reconciliation, capacity, and observability |
@@ -115,10 +118,12 @@ Every later quality requirement records: ID, scope, stakeholder/concern, quality
 | `Q-FS-001` Correct version semantics | Stable Logical Document identity; immutable published Generation; distinct Business Revision and Version; changed Check-in creates one Generation; no-op creates none; revision transition and baseline Generation are atomic | State-machine and invariant tests with zero mutation of published Generations |
 | `Q-RL-001` Atomic Check-in | No visible Generation lacks verified artifacts/manifest; retry by OperationId is idempotent; multi-document publish is all-or-nothing; abandoned staging is reconciled | Fault injection at every publish step produces no partial Change Set |
 | `Q-RL-002` Stale-write protection | Every publish carries expected Generation; non-owner and stale requests fail; Reservation is per Document; local work is preserved; binary is not auto-merged | Concurrency suite rejects every stale/non-owner publish |
+| `Q-RL-003` Resumable large-Artifact transfer | Upload and materialization stream verified chunks, resume an interrupted operation without restarting accepted chunks, and do not require the complete Artifact in process memory | Interrupt and resume an approved multi-GB fixture at every transfer boundary; verify final digest, bounded memory and one logical result |
 | `Q-CP-001` Multi-format compatibility | Every accepted format supports generic control; deeper extraction is explicit and evidenced; no IDEA code runs inside design tools | Versioned Capability Profile and conformance suite per enabled format |
 | `Q-SE-001` No infrastructure credential in clients | Desktop/Workspace hold no database or permanent object-storage credential; all domain access crosses authenticated C1 interface | Package/config scan and direct-infrastructure denial tests |
 | `Q-MA-001` Module ownership | Module writes only owned state; projections are not authority; implementation replacement preserves interface | Dependency/schema ownership and module-interface tests |
-| `Q-MA-002` Authorization extensibility | MVP roles are seeded policy configuration; later company-specific roles and grants do not require changes to controlled-state owner modules | Replace the seeded policy profile and verify unchanged owner-module behavior through the Access Policy contract |
+| `Q-MA-002` Authorization extensibility | Built-in and versioned Custom Role Definitions are assigned to Actor or Group Principals at explicit Organization, Project or resource Scope; later company-specific roles do not require changes to controlled-state owner modules | Replace one Custom Role Definition version and Role Assignment, then verify unchanged owner-module behavior and exact historical decision pins through the Access Policy contract |
+| `Q-MA-003` Storage evolution | Logical Document, Generation and Artifact identities remain independent of filesystem, object-store provider, volume and physical path while the Artifact store can grow or migrate behind one controlled interface | Reconcile a representative dataset across two storage-adapter implementations and prove identical manifests, digests, access decisions and retained release reproduction |
 | `Q-EV-001` C1 autonomy | C1-local Check-in, workflow, search, and release work with D absent; other C/D cannot access C1 internal schema | Standalone conformance and architecture dependency tests |
 | `Q-IC-001` Actionable conflict UX | Conflict identifies document, permitted owner information, expected/current Generation, local-work safety, and valid next actions | Every conflict class satisfies the response contract |
 | `Q-IC-002` Locale parity and input | English, Vietnamese, and Japanese expose the same functions across Desktop and Web; Unicode user content is preserved; Japanese IME, normalization, width, search, font fallback, and line breaking are usable | Cross-locale task suite plus reviewed resource catalogues and Japanese input/search scenarios |
@@ -148,6 +153,9 @@ Numeric performance, availability, RPO, and RTO thresholds are deployment requir
 | `AP-14` | Release fails closed when the exact baseline or evidence is incomplete. |
 | `AP-15` | External design tools remain untouched by IDEA runtime code. |
 | `AP-16` | Organization policy, schema, numbering, workflow, and localization vary through versioned configuration rather than hard-coded owner-module behavior. |
+| `AP-17` | Product and administration authority use one Principal–Role Definition–Authorization Scope assignment model; authentication, membership, RBAC eligibility and owner business gates remain distinct. |
+| `AP-18` | Artifact transfer is streamed, resumable, checksummed and idempotent; file size must not force the whole Artifact into client or server memory. |
+| `AP-19` | Domain identity and authorization do not depend on a storage provider or physical path; storage capacity evolves behind one controlled Artifact-storage interface. |
 
 ## 8. Logical architecture
 
@@ -197,7 +205,8 @@ Workspace Service is a product term. Its initial deployment meaning is a user-se
 | Lifecycle Governance | Request transition; record decision; query allowed actions | versioned workflow and approval policy, configurable stages/quorum/actor separation, release gates, Revision Policy | WorkflowDefinitionVersion, WorkflowInstance, ApprovalPolicyVersion, ApprovalDecision, ReleaseRecord |
 | Information Model | Validate metadata; allocate number; query schema | schema evolution, classification, validation, numbering policy | MetadataSchemaVersion, Classification, NumberingPolicy |
 | Format Intelligence | Request analysis/representation; accept result; query capability | capability negotiation, adapter/tool provenance, extraction, warnings, derivative alignment | FormatCapability, AnalysisRequest/Result, Representation |
-| Access Policy | Authorize; explain decision; manage policy | organization-scoped, versioned, state-aware role/group grants; seeded profiles; future policy customization; decision evidence | AccessPolicyVersion, Grant, PolicyDecisionEvidence |
+| Project Governance | Create/resolve Project; manage Project Membership, direct Project Groups and Group Membership | Project isolation, membership effective period, stable Group identity and no Group nesting | Project, ProjectMembership, BusinessGroup, GroupMembership |
+| Access Policy | Authorize; explain decision; manage Role Definitions and Role Assignments | Security Principal + Role Definition + Authorization Scope; immutable active-role versions; supported assignment conditions/time; constrained delegation; additive grants; separate business gates | Permission, RoleDefinition/Version, AuthorizationScope reference, RoleAssignment, AuthorizationDecisionEvidence |
 | Discovery | Search; saved query; rebuild projection | indexing, ranking, filtering, pagination, projection recovery | Rebuildable search projection and saved query |
 | Audit Evidence | Query/export; controlled internal append | actor normalization, before/after, correlation, retention, tamper-evident export | Append-only EvidenceRecord |
 
@@ -209,8 +218,8 @@ Rules:
 - application coordination may span module interfaces;
 - an invariant requiring atomicity may share one unit of work while the modules are colocated, without allowing cross-owner writes;
 - extracting a module into a network process requires an explicit protocol/saga and reevaluation of affected quality scenarios;
-- authentication is an application/infrastructure concern; Access Policy owns policy while the resource-owning module enforces the final business decision;
-- controlled-state owner modules depend on the Access Policy decision contract and must not hard-code seeded role names or permission sets;
+- Identity and Accounts owns account/login eligibility, Project Governance owns Project/Group membership, Access Policy owns Role Definitions/Assignments and RBAC evaluation, while the resource-owning module enforces the final business decision;
+- controlled-state owner modules depend on the Access Policy decision contract and must not hard-code seeded role names or duplicate the Permission catalogue;
 - Discovery and representations are rebuildable projections, never authoritative substitutes;
 - storage, clock, identity provider, search engine, messaging, and transfer implementations are adapters/internal seams, not domain modules merely because code exists.
 
@@ -247,7 +256,7 @@ Rules:
 5. A Logical Document has at most one Working Head.
 6. Finalize succeeds only when actor/workspace owns a valid Reservation and expected Generation equals current Working Head.
 7. A change to artifact, versioned metadata, or Product Structure creates exactly one new Generation and increments Version within Revision once.
-8. Semantic equality with Working Head returns `NoChange`; it creates no Generation but records outcome and applies explicit Reservation Disposition.
+8. Semantic equality with Working Head returns `NoChange`; it creates no Generation, records the outcome, and releases every Reservation in the successfully confirmed Check-in scope.
 9. Version within Revision is unique and strictly increasing within each Logical Document plus Business Revision, beginning at `1`; there is no separate `Version Sequence` field.
 10. Creating a Business Revision creates a new baseline Generation `Version 1`; immutable Artifact content may be reused by digest.
 11. Every successful multi-document Check-in creates one Check-in Change Set; all changed entries publish or none publish.
@@ -279,22 +288,36 @@ Rules:
 37. A pending review and its Approval Decisions pin one exact Generation. Content change requires Withdraw or Reject to In Work; any later Generation invalidates the pending review rather than inheriting its decisions.
 38. Reject requires an attributable reason, returns the affected Business Revision to In Work according to policy, and retains the reviewed Generation and complete decision history.
 39. Reservation Recovery requires authorization, reason, and Audit Evidence; it never bypasses expected-Generation validation, permits stale overwrite, or deletes rejected local work.
-40. MVP workflow administration includes a validated Graphical Workflow Designer backed by the same governed definition as its property views; visual layout is never a second source of lifecycle authority.
+40. MVP workflow administration uses validated governed configuration and property/form views. A Graphical Workflow Designer is deferred; if later approved, its visual layout cannot become a second source of lifecycle authority.
 41. Activating a Workflow Definition Version or Approval Policy Version affects only new Workflow Instances in the Operating Organization. Existing instances remain pinned unless an authorized, impact-previewed, audited migration succeeds.
 42. The seeded MVP Approval Policy requires one independent approver: an author or editor cannot approve or release the affected Revision, while its independent approver may also perform Release. Alternative separation and quorum rules require a newly validated and activated policy version.
 43. Failure to resolve every required eligible actor blocks submission, workflow start, approval, and release as applicable, identifies the missing role or rule, and never silently weakens or bypasses policy.
 44. The Operating Organization owns its mutable workflow and approval policy versions. Seeded templates may be cloned, but no mutable policy instance or activation is shared across an unauthorized environment or later separately governed internal scope.
+45. Every Role Assignment binds exactly one Actor or Business Group Principal, one exact Role Definition version and one Authorization Scope; account creation and Group membership grant no product Permission by themselves.
+46. Core v0 Authorization Scope is Operating Organization → Project → individual governed resource. Folder, department, Document Class and lifecycle state are not Scope levels.
+47. Effective Permission is the union of positive Permissions from currently applicable direct and Group Role Assignments; absence of a grant blocks the request, and Core v0 has no general administrator-authored explicit-deny rule.
+48. RBAC grant establishes eligibility only. The authoritative owner still enforces lifecycle, Checkout owner/Workspace, expected Generation, review independence, evidence and Release-completeness gates.
+49. Account Administration owns Actor/account/Login Identity operations; Project Administration owns Project/Group membership in its assigned Project; Access Policy owns Role Definitions, Role Assignments and evaluation. None receives another responsibility by role name or account type.
+50. Built-in Role Definitions are protected; changing an active Custom Role creates an immutable successor. Delegated administration cannot broaden itself, and the last effective Super Administrator recovery path cannot be removed.
+51. A successful changed or No Change Check-in releases every Reservation in its confirmed scope; a failed or uncommitted Check-in releases none of them, although a Reservation may independently expire under its lease policy.
+52. Sign-out, client exit or network loss is not proof that local work was abandoned and does not immediately release a Reservation. Expiry removes publish entitlement without deleting local work or silently transferring authority.
+53. A locally modified Reference never grants publish entitlement. It may become a working copy only after a new Checkout succeeds against the same current Generation; otherwise the user must preserve, copy, discard or manually reapply the local work without automatic binary merge.
+54. Artifact transfers use resumable verified chunks under one stable operation identity; accepted chunks and a completed operation are safe to retry, and the complete Artifact is not required to fit in application memory.
+55. Permission codes are owned by the product. Parent-scope Role Assignments are evaluated for descendants at request time and are not copied into independently mutable per-document ACLs.
 
 Semantic no-change comparison includes Artifact digest, normalized versioned metadata, and semantic Structure Snapshot digest in the same Revision. Operation/actor/upload timestamps, cache, preview, and search fields are excluded unless policy explicitly promotes a derived value into Product Definition.
 
 ## 13. Storage model
 
 - relational persistence holds identities, relationships, policies, state machines, constraints, concurrency tokens, and outbox/evidence references;
-- private object storage holds immutable original Artifacts and derivatives;
+- private Artifact storage behind a controlled adapter holds immutable original Artifacts and derivatives;
 - search is a rebuildable index;
 - audit is append-only in the logical model with controlled retention/access;
 - uploads enter an expiring staging namespace;
-- content-addressed deduplication is optional and cannot erase logical identity or retention semantics.
+- each physical location is provider/path/volume metadata behind the adapter and is never a Logical Document, Generation or authorization identity;
+- transfer uses resumable checksummed chunks and does not require whole-file buffering;
+- content-addressed deduplication is optional and cannot erase logical identity or retention semantics; and
+- a later filesystem, object-storage or multi-volume implementation may replace the initial store only through a reconciled migration that preserves Artifact IDs and digests.
 
 A physical object may be deleted only when no retained Generation Manifest references it.
 
@@ -340,7 +363,7 @@ A read-only file attribute may be a convenience warning, never a security guaran
 1. The user saves in the external application and returns to IDEA Desktop.
 2. Workspace Service performs a full scan/hash and builds proposed manifests.
 3. Desktop displays changed, unchanged, unreserved-modified, missing, and unresolved entries.
-4. The user confirms one Check-in scope and Reservation Disposition.
+4. The user confirms one exact Check-in scope and is told that success, including No Change, ends Checkout for that scope.
 5. Unreserved changed dependencies block publish by default; any Draft exception requires explicit policy/evidence and Release always fails closed.
 6. Server issues scoped resumable staging authorization.
 7. Server validates content, digest, relation, metadata, authorization, Reservation, and expected Working Heads.
@@ -348,7 +371,7 @@ A read-only file attribute may be a convenience warning, never a security guaran
 9. Verified content is materialized at immutable object identity and read-checked before public metadata points to it.
 10. One transaction rechecks the complete set, publishes required Structure Snapshots and Generations, updates Working Heads, creates the Check-in Change Set, appends evidence/outbox, and marks Operation terminal.
 11. Public reads resolve only after commit.
-12. `Release | Retain` affects Reservations in scope only.
+12. Successful changed or No Change completion releases every in-scope Reservation; failure before commit releases none.
 13. Retry with the same OperationId returns the same result and cannot create duplicate Generations.
 14. Reconciliation removes expired staging and unreferenced private candidates.
 
@@ -362,6 +385,8 @@ A read-only file attribute may be a convenience warning, never a security guaran
 | Same actor, different Workspace | Reject implicit use; require authorized transfer/recovery |
 | Local work exists after rejection | Preserve it; do not overwrite or delete |
 | Local file changed without Reservation | Mark `ModifiedWithoutReservation`; exclude from publish |
+| Reference changed locally and its expected Generation is still current | Refuse direct Check-in; allow a separately confirmed conversion to Checkout, or preserve/copy/discard the local candidate |
+| Reference changed locally and its expected Generation is stale | Refuse conversion and direct Check-in; preserve the local candidate, materialize current content separately and require Save As or deliberate manual reapplication |
 | Two proprietary binaries changed | No auto-merge; human creates an explicit reconciled working copy |
 | Root selected but unreserved dependency also changed | Block by default because the structure would not be reproducible |
 | Dependency unchanged locally but server head advanced | Return `DependencyAdvanced`; require refresh or explicit Draft pin policy |
@@ -420,12 +445,14 @@ Published | Failed | Cancelled = terminal
 Requirements:
 
 - OperationId is unique and idempotent;
+- upload and download stream digest-verified chunks, persist resumable progress and never require the complete Artifact in process memory;
 - staged and private candidate data remain invisible to authoritative reads;
 - object existence/readability is verified before metadata publish;
 - transaction writes Working Heads, Change Set, evidence, and outbox together;
 - projections and notifications consume outbox after commit;
 - MVP workflow, rejection, approval, conflict, and release events produce in-application notifications from the committed outbox; email remains an optional later adapter and cannot become transaction authority;
 - reconciliation detects expired staging, unreferenced candidates, missing/corrupt objects, and projection drift;
+- Artifact identity is independent of provider/path/volume; storage migration is verified by manifest and digest reconciliation before a location becomes authoritative;
 - backup scope covers metadata, Artifacts, configuration, and required cryptographic material;
 - restore produces one consistent point and verifies every retained Generation digest;
 - RPO/RTO are measured deployment requirements, not inferred from successful backup jobs.
@@ -491,7 +518,7 @@ D is introduced only when C2 and concrete cross-C scenarios exist. D may route, 
 - The Canonical Demo Dataset provides deterministic synthetic verification. Pilot-Ready additionally requires a sanitized Representative Pilot Project with realistic metadata, mixed engineering documents and structure, and at least two distinct named identities. One human may operate those identities for bounded Single-Actor Functional Acceptance, but the result is limited functional evidence rather than representative-user acceptance or independent review.
 - A Technical Pilot Verification may be executed by the Principal Product Author with Test Personas and without an Internal Adoption Authority in a non-production or explicitly approved internal environment. Internal Pilot Acceptance is a separate disposition requiring representative internal-user evidence and an Internal Adoption Authority; Single-Actor Functional Acceptance cannot authorize company-wide rollout.
 - Repository-safe evidence is limited to the Canonical Demo Dataset and pilot metadata. Sanitized or production-derived pilot project data remains in a company-approved storage boundary with classification, owner, access, retention, and handling controls and is not automatically committed to Git.
-- DDM or other reference-product capability evidence can establish a Reference-Backed Product Hypothesis for documentation, feasibility analysis, coverage assessment, and candidate-requirement elicitation. It cannot substitute for Internal Operational Need Validation, representative user acceptance, measured internal operational value, or release readiness.
+- Lawfully available reference-product capability evidence can establish a Reference-Backed Product Hypothesis for documentation, feasibility analysis, coverage assessment, and candidate-requirement elicitation. It cannot substitute for Internal Operational Need Validation, representative user acceptance, measured internal operational value, or release readiness.
 - The initial MVP Success Metric Set requires exact Released Baseline reproduction, zero accepted stale or unauthorized publish/Release outcomes in the tested scope, preservation of every rejected local work item, complete required audit and exact-pin evidence, and a successful consistent restore drill. Efficiency and adoption metrics are measured separately.
 - MVP evidence may claim controlled-state correctness, conflict safety, traceability, exact-baseline reproducibility, controlled release, and tested restore only. Productivity, internal adoption, operational readiness, return on internal investment, and complete reference-product parity remain outside the evidence boundary until separately measured; commercial market-fit claims are not applicable.
 - Format scope is the Generic Controlled-File Baseline for explicitly enabled formats plus one deep CAD Format Capability Profile selected through DOC-02 and verified for an exact adapter/tool version. The extension seam must permit later format profiles without changing Controlled Product Data ownership or invariants.

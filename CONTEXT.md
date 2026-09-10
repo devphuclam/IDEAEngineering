@@ -40,37 +40,109 @@ _Avoid_: document owner role, open self-registration, company-login integration 
 A verified sign-in identity explicitly associated with an IDEA Account, such as its native login or a later approved provider-and-subject pair. Adding or changing a login method does not create document privileges, change the stable Actor, or merge accounts merely because names or email addresses match.
 _Avoid_: Actor ID, automatic email matching, group claim as final product permission
 
-**Account Administrator**:
-One or more explicitly authorized people who manage Actors, IDEA Accounts, Login Identities, Business Groups and explicit Business Group Membership within their delegated Administration Scope. In normal operation, named personnel from the System Management Department perform this duty rather than the department acting as an identity. They may give a person access by placing that person in a governed group, but cannot define or activate the group's Access Policy, edit PDM configuration, Approve or Release.
-_Avoid_: department account, document superuser, automatic approver, password reader, unrestricted server operator, hidden per-document permission
+**Security Principal**:
+An Actor or Business Group that may receive a Role Assignment. A future automated integration may use a separately governed service principal, but an IDEA Account, Login Identity, Organizational Department or job title is not itself the recipient of product authority.
+_Avoid_: username, session, department, document owner, implied administrator
 
-**PDM Administrator**:
-One or more explicitly authorized Actors who manage separable PDM administration capabilities such as document classes, numbering, Access Policy and Workflow definitions. They define what a governed group may do by document class, state, action and scope, but do not provision accounts or make routine Business Group Membership assignments. This role does not itself grant account recovery, controlled-document content access, Approval, Release, Audit alteration or authority for a candidate policy to adopt itself.
-_Avoid_: operations administrator, software administrator, business administrator, all-powerful administrator
+**Permission**:
+A stable locale-neutral action code owned by the IDEA product, such as `document.read`, `document.checkout`, `review.approve` or `project.membership.assign`. Administrators may compose supported Permissions into Role Definitions but cannot invent a new executable Permission through configuration alone. A Permission only establishes eligibility to attempt that action; the owning Module still enforces lifecycle, Checkout, current-Generation, independence and completeness rules.
+_Avoid_: button label, job title, unrestricted CRUD, business-rule bypass
+
+**Role Definition**:
+A stable named definition whose active immutable version contains a collection of Permissions and the resource kinds to which they may apply. Built-in Role Definitions are supplied by IDEA and cannot be edited; a Custom Role Definition is changed by creating, validating and activating a successor version rather than overwriting the active version. Activation makes that successor available for new Role Assignments; it does not silently retarget an existing Role Assignment, which remains pinned to its exact predecessor version until an authorized replacement is explicitly confirmed and audited.
+_Avoid_: Group, account type, Role Assignment, hard-coded named user, mutable permission list
+
+**Authorization Scope**:
+The identified resource boundary within which a Role Assignment applies. Core v0 uses the hierarchy Operating Organization (the whole IDEA system) → Project → individual governed resource; a parent assignment applies to descendants only where the Role Definition and optional condition cover the requested resource and action. This inheritance is evaluated from the governing Role Assignment at request time; it is not copied into an independent mutable ACL on every descendant. Document Folder, Organizational Department, Document Class and lifecycle state are not Scope levels.
+_Avoid_: UI location, department, matching group name, implicit global authority
+
+**Role Assignment**:
+The attributable association that grants one Security Principal one exact Role Definition version at one Authorization Scope, optionally constrained by an effective period and an explicit authorization condition. It may target an Actor directly or a Business Group; Group assignment is the normal personnel-management path, while every direct assignment remains visible and auditable. Changing the active Custom Role version does not mutate this association; moving it to a successor is a separate governed replacement.
+_Avoid_: Group Membership, Workflow Assignment, account creation, role name without scope
+
+**Administrator**:
+An Actor who has an effective Role Assignment containing one or more administration Permissions at an explicit Authorization Scope. Administrator is not an account type or a fixed rank: the same Actor may hold several independently assigned administrative roles, and none implies document, Approval or Release authority unless another applicable Role Assignment grants it.
+_Avoid_: all-powerful account, hidden superuser, department identity, administrator hierarchy
+
+**Account Administrator**:
+The built-in Role Definition that permits named personnel, normally from the System Management Department, to issue, activate, suspend, recover and maintain IDEA Accounts and Login Identities within the assigned Scope. It does not manage Project Membership, Business Group Membership, Role Definitions or Role Assignments and grants no document, Approval or Release authority.
+_Avoid_: department account, project access administrator, role administrator, document superuser, password reader
+
+**Super Administrator**:
+The protected built-in Role Definition used only for initial bootstrap and governed recovery of the highest administration authority. Only an effective Super Administrator may add or remove this role; IDEA refuses removal of the last effective recovery path. The role is not intended for routine engineering or administration and every assignment change is audited.
+_Avoid_: daily account, shared root password, invisible bypass, automatic document authority
+
+**Privileged Role Administrator**:
+The built-in Role Definition that manages non-Super-Administrator Role Definitions and administrative Role Assignments within its Scope. It cannot grant or revoke Super Administrator, cannot make a candidate policy authorize its own activation and receives no product-data authority merely by managing roles.
+_Avoid_: Super Administrator, Account Administrator, project member manager, self-authorizing policy
+
+**Product Configuration Administrator**:
+The built-in Role Definition that prepares and, where separately authorized, activates governed document-class, metadata, numbering, workflow, localization and format configuration. It does not provision accounts, manage Group Membership, assign privileged roles, or receive document, Approval or Release authority by implication.
+_Avoid_: PDM superuser, Account Administrator, Project Administrator, automatic approver
+
+**Project Administrator**:
+The built-in Role Definition that manages Project Membership, Project Groups and permitted product Role Assignments inside the assigned Project. It may assign only approved Role Definitions that are assignable at that Scope and cannot create accounts, change system-wide Role Definitions, grant Super Administrator or operate another Project.
+_Avoid_: Account Administrator, global role administrator, project owner with unrestricted data access
+
+**Audit Reader**:
+The built-in read-only Role Definition for viewing and exporting authorized Audit and access-decision evidence within its Scope. It cannot alter evidence, configuration, membership, Role Assignments or product state.
+_Avoid_: auditor with write access, log administrator, approval authority
 
 **Organizational Department**:
 The company unit associated with a person's IDEA Account for administration and wayfinding, such as Design Engineering or System Management. A department is neither an Actor nor an authorization grant.
 _Avoid_: login account, permission group, business role, authorization boundary
 
+**Project**:
+A governed engineering scope within which membership, groups, roles and product permissions are evaluated. Being eligible in one Project does not create eligibility or authority in another Project.
+_Avoid_: Document Folder, Product Structure root, Organizational Department, company-wide permission
+
+**Governing Project**:
+The single Project that owns authority to modify, review and Release one Logical Document. Use of that document by another Project does not transfer its ownership or permit the consuming Project to change its Product Definition.
+_Avoid_: current viewing Project, every Project that references the document, Document Folder, shared ownership
+
+**Project Membership**:
+The attributable association that makes an eligible Actor a participant in one Project for an effective period. Project Membership grants no document action by itself; applicable direct or Business-Group Role Assignments determine authority within that Project.
+_Avoid_: IDEA Account, company employment, implicit document access, membership inherited across Projects
+
+**Cross-Project Reference**:
+An attributable relationship from a consuming Project to one exact Released Business Revision and Generation governed by another Project. It grants no modification authority, never follows an unqualified latest version, and remains subject to access policy on both the consuming and governing scopes.
+_Avoid_: shared document ownership, editable copy, floating latest link, Document Placement
+
+**Shared Library**:
+A separately governed future scope that may own reusable Released Logical Documents for controlled use across Projects. It is not a folder or a shortcut for giving every Project authority over the same document.
+_Avoid_: public folder, company-wide write access, multiple Governing Projects, unmanaged file share
+
 **Business Group**:
-A governed collection of eligible Actors used as the normal unit for assigning product permissions. It is independent of Organizational Department and of the technical act of creating a login account; its purpose and active policy are defined by PDM administration, while Account Administration maintains its members.
-_Avoid_: department, shared account, direct user grant, document owner, login account
+A governed Security Principal with an explicit organization or Project scope. A Project-scoped Business Group contains eligible Project Members and may receive Role Assignments; membership or authority never carries to another Project merely because a Group has the same name. Core v0 does not allow one Business Group to contain another Business Group.
+_Avoid_: department, shared account, direct user grant, document owner, login account, group with implicit global scope
+
+**Project Group**:
+A Business Group whose scope is exactly one Project, such as that Project's mechanical-design group. Membership is evaluated only through an active Project Membership and does not carry to a similarly named group in another Project.
+_Avoid_: Organizational Department, global group by name, Product Structure branch, Workflow task
+
+**Project Role**:
+A business-facing name for a Role Definition intended to be assigned at Project Scope, such as Design Engineer, Reviewer or Release Authority. It is not a separate object nested inside a Project Group: a Role Assignment connects the Role Definition to an Actor or Project Group at the applicable Project Scope.
+_Avoid_: Login Identity, job title, Group Membership, Workflow Assignment, second role model
+
+**Permission Set**:
+An obsolete drafting term replaced by Role Definition. In the canonical RBAC model, a Role Definition version already contains its Permissions; IDEA must not maintain a second independently assignable Permission Set layer.
+_Avoid_: new domain object, second authorization hierarchy, separately assigned permission bundle
 
 **Workflow Role**:
-A policy-defined responsibility used to determine who is eligible for a Workflow assignment or decision, such as Approver or Release Authority. Holding the role does not create authority outside the applicable policy, scope and state.
+A policy-defined responsibility required by a Workflow step, such as Approver or Release Authority. It resolves eligible Actors from applicable Role Assignments, including assignments made to Project Groups; satisfying it does not create authority outside the applicable policy, Project, scope and state.
 _Avoid_: job title, account type, permanent global permission, named person
 
 **Business Group Membership**:
-The governed association that places an eligible Actor in a Business Group used by an Access Policy Version. Account Administration manages it as a deliberate access assignment, separately from the technical act of creating or activating a login account. Its retained history does not remain effective while the associated IDEA Account is suspended.
-_Avoid_: department identity, account permission, routine direct user grant, document ownership
+A governed association that places an eligible Actor or Project Member directly in one Business Group within its explicit scope. Project Administration manages Project-scoped membership separately from account provisioning; Core v0 has no Group-to-Group Membership, and membership alone grants nothing until a Role Assignment applies to that Group.
+_Avoid_: department identity, account permission, routine direct user grant, document ownership, membership inferred from a matching group name
 
 **Effective Permission**:
-The explainable allow-or-deny result for one Actor, action, resource scope and state under the active Access Policy Version. Its explanation identifies the group membership or approved direct exception that contributed to the result.
-_Avoid_: role-name guess, hidden permission, authentication success, administrator assumption
+The explainable allow-or-blocked result for one Actor, action, resource and current state. Core v0 combines positive Permissions from every currently valid direct or Business-Group Role Assignment whose Scope and condition cover the resource; absence of a grant means blocked and there is no general configurable explicit-deny rule. The explanation identifies the account eligibility, Group Memberships, Role Assignments, Role Definition versions, Scope resolution and subsequent business gates that contributed to the result.
+_Avoid_: role-name guess, hidden permission, authentication success, administrator assumption, general explicit-deny rule
 
 **Administration Scope**:
-The explicitly bounded organization, project or product area within which an administrative permission or access grant can take effect. A Document Folder and an Organizational Department are not Administration Scopes by themselves.
-_Avoid_: global authority by default, folder placement, department label, implicit scope
+The Authorization Scope of an administrative Role Assignment. It is not a separate hierarchy from product RBAC.
+_Avoid_: second scope model, global authority by default, folder placement, department label
 
 **Permission Inspection**:
 A read-only evaluation that explains an Actor's Effective Permission for a selected action, resource and state without creating a session as that Actor. Persona switching belongs only to Development Administration Mode.
@@ -306,28 +378,36 @@ The user action that requests Reservations for a confirmed scope and materialize
 _Avoid_: download, Reference, operating-system write permission
 
 **Reservation**:
-A temporary exclusive right for one actor and Managed Workspace to publish a new Generation for one Logical Document; it cannot prevent an external application from editing a local file.
+A server-authoritative temporary exclusive right for one actor and Managed Workspace to publish a new Generation for one Logical Document from one expected Generation; it cannot prevent an external application from editing a local file. At most one Reservation for the same Logical Document may be `Active` at a time.
 _Avoid_: assembly-wide lock, file-system lock, Reference
 
 **Reservation Lease**:
-The renewable period during which a Reservation remains valid. Expiry removes the right to publish but does not delete local work, waive expected-Generation validation, or permit a stale overwrite.
+The renewable period during which an `Active` Reservation remains valid. Loss of connectivity, sign-out or application exit does not immediately release it. Expiry removes the right to publish but does not delete local work, waive expected-Generation validation, silently transfer authority, or permit a stale overwrite.
 _Avoid_: permanent checkout, local-file expiry, silent force unlock
+
+**Reservation Status**:
+The server-recorded lifecycle of a Reservation: `Active` grants the bounded publish entitlement; `Expired` no longer grants it; `Released` records its normal end after successful changed or No Change Check-in or governed cancel; `Recovered` records that an authorized recovery ended or replaced the old entitlement. Recovery creates no right to publish stale work and never erases a user's local candidate.
+_Avoid_: Workflow State, local-file state, silent reassignment, evidence that a user abandoned work
 
 **Offline Workspace Operation**:
 The ability to open, reference, or edit already materialized workspace files while the service is unavailable. Offline operation cannot acquire a new Reservation, Check in, recover a Reservation, approve, or Release; reconnection revalidates the Reservation Lease and expected Generation, and any conflict fails closed while preserving local work.
 _Avoid_: full offline command replay, offline approval, stale overwrite, deletion of conflicting local work
 
 **Reference**:
-Workspace access to an exact Generation without a Reservation or permission to publish a new Generation for that Logical Document.
+Workspace access to an exact Generation without a Reservation or permission to publish a new Generation for that Logical Document. An external application may still modify the local bytes; that condition remains local work and cannot be Check-in to the original document unless a new Checkout is acquired against the same current Generation.
 _Avoid_: Checkout, untracked copy
 
 **Reservation Disposition**:
-The explicit Check-in outcome that releases or retains Reservations in the confirmed scope.
-_Avoid_: hidden auto-unlock, global cancel
+The attributable terminal outcome for each Reservation in a Check-in scope. A successful changed or No Change Check-in releases every confirmed in-scope Reservation; a failed or uncommitted operation does not release a still-valid Reservation. It is not a user option to keep Checkout after a successful Check-in.
+_Avoid_: retain-after-Check-in option, hidden auto-unlock, global cancel
 
 **Reservation Recovery**:
 An authorized, reasoned, and audited recovery or break of one Reservation. It may transfer or remove publish entitlement according to policy but never bypasses expected-Generation validation, deletes local work, or permits a stale overwrite.
 _Avoid_: force overwrite, silent administrator unlock, conflict resolution
+
+**Check-in Operation**:
+One server-tracked, idempotent attempt identified by a client-supplied `OperationId` to validate and publish one confirmed Check-in scope. It stages and verifies candidate Artifacts before one authoritative commit; retrying the same inputs resumes or returns the same logical result rather than creating another Generation or Change Set.
+_Avoid_: upload session alone, one operation per file in an atomic scope, new operation after an uncertain response
 
 ## Product structure and format
 
@@ -435,16 +515,24 @@ _Avoid_: Create command, Logical Document-wide state, empty Generation, released
 The attributable lifecycle execution owned by one Business Revision under one exact Workflow Definition Version. It owns the current Workflow State and transition history; Approval Decisions and Release Records pin the exact Generation evaluated, while the immutable Generation is not mutated merely to record a state transition.
 _Avoid_: Logical Document status, mutable Generation, Workflow Definition
 
+**Review Round**:
+One identified submission attempt inside a Workflow Instance, pinned to one exact Generation and review scope. Resubmission creates a new Review Round while the withdrawn, rejected, approved, or superseded round remains attributable history.
+_Avoid_: new Workflow Instance, overwritten review, mutable approval target
+
+**Review Withdrawal**:
+The attributable ending of the current Review Round by its submitter before Release, returning the Business Revision to In Work without recording a rejection. It is distinct from Reviewer rejection and governed administrative recovery.
+_Avoid_: Reject, Cancel Checkout, deleted review history, administrator override
+
 **Workflow Definition Version**:
 An immutable identified definition of states, transitions, eligible actors, decision rules, required evidence, notifications, and Revision or Release effects. Existing workflow history remains bound to the version that governed it when later definitions are added.
 _Avoid_: hard-coded state enum, mutable current workflow, graphical layout as business authority
 
 **Graphical Workflow Designer**:
-The validated no-code administration surface for composing and inspecting a Workflow Definition Version as states, activities, paths, assignments, decisions, evidence rules, and notifications. The graphical representation edits the same governed definition as its property views; canvas coordinates and visual styling are not lifecycle authority.
-_Avoid_: copied DDM user interface, unvalidated diagram, executable drawing separate from policy
+A deferred no-code administration surface that may later compose and inspect a Workflow Definition Version as states, activities, paths, assignments, decisions, evidence rules and notifications. Core v0 uses validated governed configuration/property forms instead. If the graphical surface is later approved, it edits the same definition; canvas coordinates and visual styling are not lifecycle authority.
+_Avoid_: Core v0 requirement, copied reference-product interface, unvalidated diagram, executable drawing separate from policy
 
 **Seeded Engineering Release Workflow**:
-The initial configurable Workflow Definition Version whose normal path is `Start` to `In Work` to `Under Review` to `Released`, with Reject or Rework returning to `In Work` and withdrawal available before the final decision. It may be cloned and changed through the Graphical Workflow Designer; it is a starter template rather than a hard-coded universal lifecycle.
+The initial configurable Workflow Definition Version whose normal path is `Start` to `In Work` to `Under Review` to `Released`, with Reject or Rework returning to `In Work` and withdrawal available before the final decision. It may be cloned and changed through validated governed configuration; it is a starter template rather than a hard-coded universal lifecycle.
 _Avoid_: immutable product-wide workflow, state enum, full change-order process
 
 **Workflow Definition Activation**:
@@ -472,7 +560,7 @@ A governed, identified traceability item required when creating a new Business R
 _Avoid_: unstructured comment, Audit Event alone, full change order
 
 **Access Policy Version**:
-An immutable identified policy definition that evaluates organization-scoped Actors, Business Groups or Workflow Roles, resource scope/state, and requested action. Identity and Accounts establishes who the Actor is and whether the account/session is eligible; it does not grant controlled-document authority by itself. The initial evaluation model denies by default and combines positive grants without an explicit deny rule. Ordinary authority is assigned through governed Business Group Membership so personnel changes do not require per-document edits; a direct Actor grant is an explicit scoped, justified, time-bounded and audited exception. Initial seeded roles are replaceable policy configuration and must not be hard-coded into the modules that own controlled product state. JSON may carry a candidate policy for validated import/export, but only an authorized activated version in the server-managed authoritative store has effect.
+An immutable identified policy definition that governs Role Definition versions, assignable Scope rules, Role Assignment conditions and authorization evaluation. Identity and Accounts establishes the Actor and account/session eligibility; it does not grant controlled-document authority by itself. Core v0 denies by default, combines positive Permissions from applicable direct and Business-Group Role Assignments and has no general configurable explicit-deny rule. Initial built-in roles are controlled configuration rather than hard-coded named users, while Custom Role changes create successor versions. JSON may carry a candidate policy for validated import/export, but only an authorized activated version in the server-managed authoritative store has effect.
 _Avoid_: authentication mechanism, Identity role treated as complete product authorization, routine per-user grants, role name embedded in domain logic, mutable unversioned permission table, editable JSON file treated as live authority, unexplained deny precedence
 
 ## Product-development documentation
@@ -554,7 +642,7 @@ The controlled separation between repository-safe synthetic verification and rep
 _Avoid_: private Git as a data-approval substitute, production data in source control, untracked pilot evidence
 
 **Test Persona**:
-A simulated product role used to execute a controlled demo or verification scenario, such as design engineer, second engineer, reviewer/approver, or PDM administrator; it is not evidence that representative users participated.
+A simulated product role used to execute a controlled demo or verification scenario, such as design engineer, second engineer, reviewer/approver, Account Administrator or Project Administrator; it is not evidence that representative users participated.
 _Avoid_: validated stakeholder, real-user study participant, shared production identity
 
 **Reference-Coverage Evidence**:

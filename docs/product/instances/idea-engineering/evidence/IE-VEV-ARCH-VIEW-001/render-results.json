@@ -1,0 +1,321 @@
+{
+  "renderedAt": "2026-09-10T09:53:59.307Z",
+  "mermaidUrl": "https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js",
+  "browserVersion": "152.0.7977.76",
+  "nodeVersion": "v24.16.0",
+  "platform": "win32-x64",
+  "sourcePins": [
+    {
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "sha256": "8d109cc265315b0ffea24c63897cda9f4b06dd99e8024be72cbad21b07d56512"
+    },
+    {
+      "source": "docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md",
+      "sha256": "acc93d54c735984e17d14abe317097d21c31c648286c91dc6f3abd17c4228f82"
+    }
+  ],
+  "contactSheets": [
+    {
+      "name": "contact-sheet-01.png",
+      "sha256": "3111c2a4ac0bddb70ea3010d4b4d96636d20f773ce6f6a8814a2e386fb4a06cb"
+    },
+    {
+      "name": "contact-sheet-02.png",
+      "sha256": "dbcb236939da2fd41c7fdf3402dee6d12f4dc9bae6855d5c4f06ddf1bbc2e5cd"
+    },
+    {
+      "name": "contact-sheet-03.png",
+      "sha256": "82be137fc78ead6a78193cab903c501f1504bcc1a69e8548992c852835e123e5"
+    },
+    {
+      "name": "contact-sheet-04.png",
+      "sha256": "e6f7e87c10aee88088a38ab8ea6166f0546b779de111422fd5668aae3e0e2e54"
+    },
+    {
+      "name": "contact-sheet-05.png",
+      "sha256": "a254397c7668b7418edc74b0cc7997ca0d6a9cf4194a8f7e8761156dba4192b2"
+    },
+    {
+      "name": "contact-sheet-06.png",
+      "sha256": "04e6041ac9c417602bf5e9228b91667943cbefbc73426a3caaa6f7fc7066268d"
+    }
+  ],
+  "results": [
+    {
+      "id": "ARCH-VIEW-CTX-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "01-ARCH-VIEW-CTX-001",
+      "svgSha256": "5b357b5f3dac35997c6c16ed7960ea65dc3e19e9315e8b6601e842def006e74a",
+      "width": 1400,
+      "height": 880,
+      "viewBoxWidth": 1296,
+      "viewBoxHeight": 814,
+      "labelCount": 20
+    },
+    {
+      "id": "ARCH-VIEW-CON-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "02-ARCH-VIEW-CON-001",
+      "svgSha256": "94865218631aec28d445ac818273eb7f2e22af66711555db2d0231b057731b43",
+      "width": 2332,
+      "height": 462,
+      "viewBoxWidth": 2332,
+      "viewBoxHeight": 461,
+      "labelCount": 24
+    },
+    {
+      "id": "ARCH-VIEW-DEP-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "03-ARCH-VIEW-DEP-001",
+      "svgSha256": "1079b78f79d28cf7ef9677af123bc4f7460f3ff325016d366b56bb2c34143506",
+      "width": 1635,
+      "height": 822,
+      "viewBoxWidth": 1635,
+      "viewBoxHeight": 821,
+      "labelCount": 20
+    },
+    {
+      "id": "ARCH-VIEW-MOD-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "04-ARCH-VIEW-MOD-001",
+      "svgSha256": "6dbe71daed289133d50b39181ca5a33b8b9d33097801dac30551f71e4e368366",
+      "width": 2242,
+      "height": 846,
+      "viewBoxWidth": 2242,
+      "viewBoxHeight": 846,
+      "labelCount": 31
+    },
+    {
+      "id": "ARCH-VIEW-RBAC-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "05-ARCH-VIEW-RBAC-001",
+      "svgSha256": "bc0319039e799c4b49ca15902e58a0bbe057803b46c579afbe91d9125f7c16b3",
+      "width": 1412,
+      "height": 887,
+      "viewBoxWidth": 1412,
+      "viewBoxHeight": 886,
+      "labelCount": 65
+    },
+    {
+      "id": "ARCH-VIEW-MOD-002",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "06-ARCH-VIEW-MOD-002",
+      "svgSha256": "f33a3f12b8b82609e9db4a82e26266cdf59067b0e3c985077d962de36aef4ee0",
+      "width": 1876,
+      "height": 1575,
+      "viewBoxWidth": 1876,
+      "viewBoxHeight": 1574,
+      "labelCount": 33
+    },
+    {
+      "id": "ARCH-VIEW-STATE-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "07-ARCH-VIEW-STATE-001",
+      "svgSha256": "9f9f445206f5d5858da020d0ac34450fb7d6444fdcd7a7e34cafca405d5be905",
+      "width": 1400,
+      "height": 101,
+      "viewBoxWidth": 1174,
+      "viewBoxHeight": 84,
+      "labelCount": 8
+    },
+    {
+      "id": "ARCH-VIEW-STATE-002",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "08-ARCH-VIEW-STATE-002",
+      "svgSha256": "6c468001cbc09c13a7f63bb04cf06ebf3666c8c79ae26c47183394e869ac816d",
+      "width": 1400,
+      "height": 388,
+      "viewBoxWidth": 1131,
+      "viewBoxHeight": 313,
+      "labelCount": 10
+    },
+    {
+      "id": "ARCH-VIEW-STATE-003",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "09-ARCH-VIEW-STATE-003",
+      "svgSha256": "609124d9c7edff32147690544e012a6dff522fa5677c9eb86d8434adce236002",
+      "width": 1400,
+      "height": 1209,
+      "viewBoxWidth": 952,
+      "viewBoxHeight": 822,
+      "labelCount": 15
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "10-ARCH-VIEW-SEQ-001",
+      "svgSha256": "10981cdf168581d0cc034f1371fc1be0d3193506602fdcd4bf9449c1548a8631",
+      "width": 2365,
+      "height": 1621,
+      "viewBoxWidth": 2365,
+      "viewBoxHeight": 1621,
+      "labelCount": 49
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-005",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "11-ARCH-VIEW-SEQ-005",
+      "svgSha256": "09cc47abfc80f0a8ee5f327ebf5198e32b69993e840a4e82ff7d0cc5dd719ec6",
+      "width": 1510,
+      "height": 1009,
+      "viewBoxWidth": 1510,
+      "viewBoxHeight": 1009,
+      "labelCount": 29
+    },
+    {
+      "id": "ARCH-VIEW-STATE-004",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "12-ARCH-VIEW-STATE-004",
+      "svgSha256": "a6f765cb58927e248c1a64ce0bc1173ab87a2b06ee26aafd4e3911662596678a",
+      "width": 1400,
+      "height": 1134,
+      "viewBoxWidth": 1067,
+      "viewBoxHeight": 864,
+      "labelCount": 17
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-002",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "13-ARCH-VIEW-SEQ-002",
+      "svgSha256": "f2caa59ca853d3af7f734e6259d2841d43f965799268ed8ba579203be3261145",
+      "width": 2330,
+      "height": 1519,
+      "viewBoxWidth": 2330,
+      "viewBoxHeight": 1519,
+      "labelCount": 48
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-007",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "14-ARCH-VIEW-SEQ-007",
+      "svgSha256": "4493a81adbd403412b5a867e92cabcfee960461e6167bf1c9eeb3a58983aa49e",
+      "width": 1956,
+      "height": 1489,
+      "viewBoxWidth": 1956,
+      "viewBoxHeight": 1489,
+      "labelCount": 44
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-003",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "15-ARCH-VIEW-SEQ-003",
+      "svgSha256": "64e1ef6f833416d41a09ac9f3a6a830f628dbbcb423c8b2e6984797aee7b96c3",
+      "width": 2255,
+      "height": 1022,
+      "viewBoxWidth": 2255,
+      "viewBoxHeight": 1022,
+      "labelCount": 36
+    },
+    {
+      "id": "ARCH-VIEW-ACT-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "16-ARCH-VIEW-ACT-001",
+      "svgSha256": "cc1a89542cce95e35f8c30b0fb49ea2f9bbe746bc6fcb56c2296058d0ecc9eee",
+      "width": 3131,
+      "height": 453,
+      "viewBoxWidth": 3130,
+      "viewBoxHeight": 453,
+      "labelCount": 19
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-004",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "17-ARCH-VIEW-SEQ-004",
+      "svgSha256": "ae1e927765f6a097d8339042573efc63eb4031847e8b7efb6234759222b3bec7",
+      "width": 1963,
+      "height": 992,
+      "viewBoxWidth": 1963,
+      "viewBoxHeight": 992,
+      "labelCount": 30
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-006",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "18-ARCH-VIEW-SEQ-006",
+      "svgSha256": "dff3afa561bb9bc4fe94711d0a50adcde9e8a91b0010e3dcb363e7c22bbe08e8",
+      "width": 1400,
+      "height": 994,
+      "viewBoxWidth": 1016,
+      "viewBoxHeight": 721,
+      "labelCount": 20
+    },
+    {
+      "id": "ARCH-VIEW-EVO-001",
+      "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+      "status": "PASS",
+      "stem": "19-ARCH-VIEW-EVO-001",
+      "svgSha256": "c51b9bc99a200ecfc242c9e758e5aa5f96c65a7c264cf88fb3a2c70ed9b20440",
+      "width": 1400,
+      "height": 422,
+      "viewBoxWidth": 1173,
+      "viewBoxHeight": 353,
+      "labelCount": 14
+    },
+    {
+      "id": "DATA-VIEW-CORE-001",
+      "source": "docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md",
+      "status": "PASS",
+      "stem": "20-DATA-VIEW-CORE-001",
+      "svgSha256": "93a466f4572db2bd6df54e0f53960e6a5d6f5887d471d669000a01fafb57e012",
+      "width": 1400,
+      "height": 2284,
+      "viewBoxWidth": 855,
+      "viewBoxHeight": 1395,
+      "labelCount": 26
+    },
+    {
+      "id": "DATA-VIEW-AUTH-001",
+      "source": "docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md",
+      "status": "PASS",
+      "stem": "21-DATA-VIEW-AUTH-001",
+      "svgSha256": "b84cece2df4a2dca868e7a3f7e77064901f7a88ed26411dd8e074d9d880e6f25",
+      "width": 2165,
+      "height": 840,
+      "viewBoxWidth": 2165,
+      "viewBoxHeight": 840,
+      "labelCount": 34
+    },
+    {
+      "id": "DATA-VIEW-ART-001",
+      "source": "docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md",
+      "status": "PASS",
+      "stem": "22-DATA-VIEW-ART-001",
+      "svgSha256": "064c1757d690622ad71d9c7165a566e8d3fd0d3c1131e838629bd800bd5e7ab8",
+      "width": 1400,
+      "height": 1442,
+      "viewBoxWidth": 816,
+      "viewBoxHeight": 840,
+      "labelCount": 15
+    },
+    {
+      "id": "DATA-VIEW-WS-001",
+      "source": "docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md",
+      "status": "PASS",
+      "stem": "23-DATA-VIEW-WS-001",
+      "svgSha256": "a1f3d71d191a84e8d8bde529e74f13a902ea0815f7291f8c1525ce845d0c471d",
+      "width": 1789,
+      "height": 847,
+      "viewBoxWidth": 1788,
+      "viewBoxHeight": 847,
+      "labelCount": 85
+    }
+  ]
+}
