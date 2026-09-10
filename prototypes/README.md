@@ -1,4 +1,39 @@
-# Controlled Document Workspace UI prototype
+# IDEA DDM UI prototypes
+
+> **PROTOTYPE CODE, NOT PRODUCTION CODE**
+
+## Which file to open
+
+| File | Disposition | Use |
+|---|---|---|
+| [`idea-ddm-workbench.html`](idea-ddm-workbench.html) | Current user prototype | Open this file for the IDEA DDM workbench, document operations, review and staged-release walkthrough. It contains no administration surface. |
+| [`idea-ddm-administration.html`](idea-ddm-administration.html) | Current administration prototype | Open this separate application for user/access administration and PDM operating-policy administration. The two administrator roles see different functions. |
+| [`controlled-document-workspace.html`](controlled-document-workspace.html) | Earlier accepted design reference | Retain the Engineering Explorer direction and its earlier review evidence. Do not treat it as the current workbench. |
+
+All three files are self-contained HTML simulations. They use in-memory sample data and require no
+server, package installation, database or network connection. New review changes belong in
+the corresponding IDEA DDM prototype; the Engineering Explorer remains stable as an earlier design reference.
+
+The Workbench and Administration files represent separate frontend applications that would use the
+same IDEA Server. They do not communicate directly. A CAD user does not see administration controls
+in the Workbench. A person may separately hold the PDM-administrator role and open the
+Administration application. The Account Administrator creates users and login accounts, maintains
+groups and assigns people to those groups; the PDM Administrator defines what the groups may do.
+They remain separate permission sets even when the company assigns both to one person.
+
+## Current IDEA DDM workbench
+
+The current prototype follows the DDM Office workbench direction while using IDEA terminology and
+branding. It covers document search and filtering, folder navigation, product structure/BOM,
+document details and preview, Checkout/Reference/Check-in, stale-work handling, review, approval,
+exact-scope release, history and basic document creation/organization operations.
+
+Approval and release are separate. An `Under Review` document cannot be released. After approval,
+the UI shows `Đã duyệt · Chờ phát hành`; release becomes available only when the exact scope and its
+mandatory dependencies pass the release gate. Releasing the pump subassembly does not release the
+cabinet or whole-machine dossier.
+
+## Earlier Engineering Explorer reference
 
 > **ACCEPTED DESIGN REFERENCE — PROTOTYPE CODE, NOT PRODUCTION CODE**
 
@@ -12,7 +47,7 @@ This prototype answers one design question: **does one object-centric Engineerin
 identity, lifecycle, permissions, conflicts and release evidence understandable to an internal
 reviewer?**
 
-## Open it
+### Open it
 
 Double-click [`controlled-document-workspace.html`](controlled-document-workspace.html). It requires
 no server, package installation, database or network connection.
@@ -24,7 +59,7 @@ center, relationship rows/lifecycle state in the working area, and an evidence i
 right. This is a clean-room information-architecture adaptation; it is not a claim of product
 parity or a copy of any vendor UI.
 
-## PLM layout cues carried into the prototype
+### PLM layout cues carried into the prototype
 
 - **Item form first:** stable identity, revision, version, generation and state are read before
   actions, with Overview / Files / Structure / Lifecycle / Audit tabs for progressive detail.
@@ -38,7 +73,7 @@ parity or a copy of any vendor UI.
 - **Lifecycle visibility:** the state path `Start → In Work → Under Review → Released` is a visible
   strip, while the right rail keeps edit ownership, the Generation under review and the check result in view.
 
-## Applied UI direction
+### Applied UI direction
 
 - **Hierarchy:** object identity is the first read; actions follow the selected object's state; evidence
   remains visible in the right rail and expandable state snapshot.
@@ -49,7 +84,7 @@ parity or a copy of any vendor UI.
 - **Scope:** this is one decision aid for an internal boss review. It is not a production design system,
   conformance claim or backend implementation.
 
-## Information ownership policy
+### Information ownership policy
 
 The prototype uses one authoritative surface per fact so the PLM composition stays readable:
 
@@ -74,7 +109,7 @@ The prototype uses one authoritative surface per fact so the PLM composition sta
 - **Narrow screens:** the Navigator and Evidence rail leave the page flow and are opened as focused drawers from
   the compact workspace tools; the item workspace stays the primary surface.
 
-### Scroll and disclosure contract
+#### Scroll and disclosure contract
 
 - The default desktop Overview targets one viewport: identity, next action, key properties, lifecycle summary,
   relationships count and control signals are visible together.
@@ -88,10 +123,11 @@ The prototype uses one authoritative surface per fact so the PLM composition sta
 When adding a field, choose its owning surface first. Do not copy the same value into a badge, metric, inspector and
 table merely to keep it visible. A contextual reference is allowed only when it helps navigation or explains a decision.
 
-## Suggested boss-review walkthrough
+### Suggested boss-review walkthrough
 
-1. Identify the selected document's Stable Document ID, Business Revision,
-   Document Version, Version Sequence and Product Generation.
+1. Identify the selected document's Stable Document ID, Business Revision, Version and Product
+   Generation. Version is the user-facing order inside the Revision; Generation is the exact
+   immutable system snapshot. There is no separate Version Sequence field.
 2. Run the **Happy path** guided walkthrough to move the synthetic record from `Start` through
    independent approval and `Released`.
 3. Run **Stale conflict** and confirm that expected/current Generations are visible and local work is
@@ -100,7 +136,7 @@ table merely to keep it visible. A contextual reference is allowed only when it 
 5. Open **Executive Review**, record the disposition and any adjustments, and use the browser's
    **Print / Save as PDF** command.
 
-## Interaction boundary
+### Interaction boundary
 
 - Every synthetic Logical Document can be exercised from its seeded lifecycle state. The records
   differ in Revision, Generation, ownership, workflow and gate outcome so reviewers can inspect
@@ -121,15 +157,20 @@ table merely to keep it visible. A contextual reference is allowed only when it 
 - The prototype uses no real company document, user identity, credential, file, integration or
   production service.
 
-## Retention and next use
+### Retention and next use
 
 The reviewed snapshot is retained on `main`; the former
 `codex/prototype-controlled-document-workspace` branch is historical and is not the active delivery
 location. Keep the prototype stable unless a product decision explicitly reopens its design question.
 
-For the next increment, transfer accepted behavior into the owning IDEA records before writing
-production code: actors and scenarios belong in `DOC-03`, verifiable behavior in `DOC-04`, identity
-and concurrency rules in `DOC-06`, and layout/interaction/accessibility behavior in `DOC-08`.
-Reference-product evidence remains in its governed research or coverage record. Production UI must
-be implemented under a new specification, tests and applicable quality gates rather than evolved
-directly from this HTML file.
+The [authored IDEA document set](../docs/product/instances/idea-engineering/README.md) now contains
+the product-specific requirements and interaction records. Use its current DOC-03, DOC-04, DOC-06
+and DOC-08 for actors, verifiable behavior, data rules and interaction design; use
+[DOC-07](../docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md)
+for the delivery sequence. The accepted snapshot above records an earlier review, not approval of
+every later working-file change.
+
+Record any later design change in its owning IDEA document before implementation. Reference-product
+evidence remains in its governed research or coverage record. Production UI must be implemented
+under a new specification, tests and applicable quality gates rather than evolved directly from
+this HTML file.

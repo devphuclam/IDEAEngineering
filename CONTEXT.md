@@ -28,12 +28,68 @@ _Avoid_: implementation status, evidence class, silent divergence
 The company governance boundary that owns and operates IDEA Engineering for internal use, including its applicable users, access policy, controlled product data, configuration, retention obligations, and audit evidence. The current product scope has one Operating Organization; a later separately governed internal scope requires an explicit product decision and does not turn the product into a commercial tenant service.
 _Avoid_: customer account, Microsoft Entra tenant, deployment instance, commercial tenant
 
+**Actor**:
+The stable accountable identity to which IDEA attributes a command, decision or Audit event within an Operating Organization. It remains distinguishable from the login name or authentication method used at the time, and an automated actor cannot substitute for a required eligible human approver.
+_Avoid_: username, email address, session token, assumed approval authority
+
+**IDEA Account**:
+An organization-owned account through which a person authenticates as a stable Actor, with explicit eligibility and recovery controls. Core v0 starts with administrator-issued native accounts; disabling or changing a login does not erase the Actor's retained product history.
+_Avoid_: document owner role, open self-registration, company-login integration assumed complete
+
+**Login Identity**:
+A verified sign-in identity explicitly associated with an IDEA Account, such as its native login or a later approved provider-and-subject pair. Adding or changing a login method does not create document privileges, change the stable Actor, or merge accounts merely because names or email addresses match.
+_Avoid_: Actor ID, automatic email matching, group claim as final product permission
+
+**Account Administrator**:
+One or more explicitly authorized people who manage Actors, IDEA Accounts, Login Identities, Business Groups and explicit Business Group Membership within their delegated Administration Scope. In normal operation, named personnel from the System Management Department perform this duty rather than the department acting as an identity. They may give a person access by placing that person in a governed group, but cannot define or activate the group's Access Policy, edit PDM configuration, Approve or Release.
+_Avoid_: department account, document superuser, automatic approver, password reader, unrestricted server operator, hidden per-document permission
+
+**PDM Administrator**:
+One or more explicitly authorized Actors who manage separable PDM administration capabilities such as document classes, numbering, Access Policy and Workflow definitions. They define what a governed group may do by document class, state, action and scope, but do not provision accounts or make routine Business Group Membership assignments. This role does not itself grant account recovery, controlled-document content access, Approval, Release, Audit alteration or authority for a candidate policy to adopt itself.
+_Avoid_: operations administrator, software administrator, business administrator, all-powerful administrator
+
+**Organizational Department**:
+The company unit associated with a person's IDEA Account for administration and wayfinding, such as Design Engineering or System Management. A department is neither an Actor nor an authorization grant.
+_Avoid_: login account, permission group, business role, authorization boundary
+
+**Business Group**:
+A governed collection of eligible Actors used as the normal unit for assigning product permissions. It is independent of Organizational Department and of the technical act of creating a login account; its purpose and active policy are defined by PDM administration, while Account Administration maintains its members.
+_Avoid_: department, shared account, direct user grant, document owner, login account
+
+**Workflow Role**:
+A policy-defined responsibility used to determine who is eligible for a Workflow assignment or decision, such as Approver or Release Authority. Holding the role does not create authority outside the applicable policy, scope and state.
+_Avoid_: job title, account type, permanent global permission, named person
+
+**Business Group Membership**:
+The governed association that places an eligible Actor in a Business Group used by an Access Policy Version. Account Administration manages it as a deliberate access assignment, separately from the technical act of creating or activating a login account. Its retained history does not remain effective while the associated IDEA Account is suspended.
+_Avoid_: department identity, account permission, routine direct user grant, document ownership
+
+**Effective Permission**:
+The explainable allow-or-deny result for one Actor, action, resource scope and state under the active Access Policy Version. Its explanation identifies the group membership or approved direct exception that contributed to the result.
+_Avoid_: role-name guess, hidden permission, authentication success, administrator assumption
+
+**Administration Scope**:
+The explicitly bounded organization, project or product area within which an administrative permission or access grant can take effect. A Document Folder and an Organizational Department are not Administration Scopes by themselves.
+_Avoid_: global authority by default, folder placement, department label, implicit scope
+
+**Permission Inspection**:
+A read-only evaluation that explains an Actor's Effective Permission for a selected action, resource and state without creating a session as that Actor. Persona switching belongs only to Development Administration Mode.
+_Avoid_: impersonation, login as user, hidden simulation, production persona switch
+
+**Account Suspension**:
+The reversible loss of sign-in eligibility for an IDEA Account while its Actor identity, attribution and retained membership history remain intact. Reactivation does not silently validate prior business access; applicable memberships must be reviewed before use resumes.
+_Avoid_: account deletion, Actor deletion, history removal, automatic access restoration
+
+**Development Administration Mode**:
+A non-operational test capability restricted to development environments that lets a designated developer exercise role-specific paths and manage synthetic data. It is absent from pilot and live operation and never constitutes an Actor's business authority.
+_Avoid_: superuser, production bypass, permanent administrator, hidden role
+
 **Bootstrap Custodian**:
 A named human identity designated when the Operating Organization is provisioned to activate its first Access Policy and establish a recoverable governance path. Normal policy authority replaces bootstrap authority after activation; the last effective recovery path cannot be removed without an eligible replacement, and a platform operator has no implicit company-data authority.
 _Avoid_: permanent super-administrator, unnamed deployment account, implicit provider access
 
 **Policy Adoption Authorization**:
-The authorization used to approve or activate a candidate Governed Policy Definition under the currently active policy or an explicit bootstrap or break-glass authority. A candidate policy can never grant the authority needed for its own adoption.
+The authorization used to approve or activate a candidate Governed Policy Definition under the currently active policy or an explicit bootstrap or break-glass authority. Where separation is required, the activating Actor differs from the author; a Single-Actor Governance Exception remains explicit, and a candidate policy can never grant the authority needed for its own adoption.
 _Avoid_: self-authorizing policy, proposed-role evaluation, silent privilege escalation
 
 **Single-Actor Governance Exception**:
@@ -71,6 +127,10 @@ _Avoid_: public-SaaS requirement, desktop-only product, selected deployment arch
 **Minimum Viable Product (MVP)**:
 The first minimum end-to-end IDEA Engineering product baseline verified against its approved requirements using the Canonical Demo Dataset. Its mandatory proof follows the MVP Release Spine and includes the Generic Controlled-File Baseline plus one evidenced deep CAD Format Capability Profile. The MVP label and synthetic-data results establish only the evidenced functional scope; internal user acceptance, productivity improvement, and operational readiness remain `UNKNOWN` until representative measurements exist, while commercial market viability is `NOT APPLICABLE`.
 _Avoid_: prototype, production-ready release, internal-adoption evidence, full PLM scope
+
+**Core v0**:
+The first bounded production-implementation target for the approved MVP Release Spine. It proves controlled identity, safe workspace publication, exact structure and release, and one deep CAD profile before broader PDM-to-PLM capabilities are added; the name does not mean the inherited Core Workspace, a prototype, the whole future PLM product, or production readiness before the applicable gates pass.
+_Avoid_: Core Workspace, UI prototype, complete DDM parity, full PLM scope, implementation authorization by name alone
 
 **Pilot-Ready Baseline**:
 An exact MVP baseline that has passed the Canonical Demo Dataset verification and a Representative Pilot Project verification using at least two distinct identities for Reservation, conflict, review, approval, and release paths. Those identities may be operated by one person for bounded functional verification under a Single-Actor Functional Acceptance; that evidence is explicitly limited and is not representative-user acceptance or independent review. A technical pilot verification may proceed without an Internal Adoption Authority, but Pilot-Ready does not authorize operational rollout. Pilot-Ready establishes readiness for a controlled internal pilot by evidencing correctness, conflict safety, traceability, exact-baseline reproduction, controlled release, and tested recovery; it does not establish company-wide acceptance, productivity improvement, operational authorization, or production readiness.
@@ -127,16 +187,55 @@ The governed artifacts, metadata, structure, and provenance required to reproduc
 _Avoid_: IDEA Product Definition Baseline, product-development documentation, current file folder, mutable latest data
 
 **Logical Document**:
-A controlled product-data identity that remains stable across Generations, Business Revisions, and workflow transitions.
-_Avoid_: physical file, path, one version
+A controlled product-data identity that remains stable across names, Document Placements, Generations, Business Revisions, and workflow transitions.
+_Avoid_: physical file, path, folder entry, one version
+
+**Document Class**:
+A configurable governed classification of Logical Documents that selects applicable metadata, numbering, Workflow, permitted source formats, and Release evidence. Engineering discipline, document purpose, file format, and folder placement remain separate classifications.
+_Avoid_: file extension, software application, department, folder, hard-coded type list
+
+**Engineering Discipline**:
+A configurable classification such as mechanical, electrical, pneumatic, or control engineering that describes the engineering domain of a Logical Document. It does not by itself determine file format, document authority, or access.
+_Avoid_: Document Class, Organizational Department, permission group, file format
+
+**Document Purpose**:
+A configurable classification describing why a Logical Document is used, such as design, manufacturing, procurement, assembly, inspection, or handover. It does not turn planning or operational activity into controlled product state.
+_Avoid_: Workflow State, Organizational Department, Document Class, business transaction
+
+**File Format**:
+The identified serialized form of an Artifact, such as IRONCAD `.ics`, PDF, STEP, DWG, XLSX, or DOCX, evaluated through an exact Format Capability Profile. A software product name, document purpose, or engineering discipline is not a File Format.
+_Avoid_: Document Class, application name alone, document purpose, unsupported format family claim
+
+**Business Document Number**:
+The organization-visible document number allocated, accepted from an existing convention, or received from an approved external source under a Numbering Policy. It is distinct from the stable DocumentId, display title, filename, Business Revision, and Version within Revision.
+_Avoid_: DocumentId, filename, Revision label, Generation identity
+
+**Document Folder**:
+An organization-owned logical container used to browse and organize Logical Documents and subordinate folders or dividers. It is independent of physical Artifact storage and a document's Managed Workspace path; placing a document in a folder does not itself grant or revoke access to its content.
+_Avoid_: physical directory, Artifact location, Logical Document identity, Product Structure, access-control boundary
+
+**Document Placement**:
+An identified relationship that makes a Logical Document visible in a Document Folder, either as its primary placement or as an explicit link. Moving or removing a placement does not rename, copy, revise, or create a Generation of the Logical Document; an exact historical link additionally pins the selected Business Revision and Generation.
+_Avoid_: physical file copy, Workspace Reference, Product Structure edge, document identity
+
+**Create Copy**:
+An explicit operation that creates a new Logical Document with a new `DocumentId` from a selected source and records the source relationship. It is distinct from renaming a document, moving a Document Placement, or adding a link to an existing document.
+_Avoid_: Rename, Move, Reference, physical deduplication
 
 **Artifact**:
 Immutable binary content identified by a digest and referenced by a Generation Manifest.
 _Avoid_: Logical Document, workspace path
 
+**Primary Artifact**:
+The source Artifact designated by a Generation Manifest as the authoritative file for that controlled content role. A PDF can be a Primary Artifact when it is the source document, while a PDF generated from CAD is a Representation of the CAD source.
+_Avoid_: preview, derivative chosen by extension alone, mutable working file, floating latest file
+
 **Generation**:
-An immutable published snapshot of a Logical Document's Product Definition at one point in time.
-_Avoid_: Business Revision, latest file, save operation
+An immutable controlled snapshot of a Logical Document's Product Definition, created by the first
+content Check-in, a successful changed Check-in, or the baseline of a new Business Revision.
+A Generation has a technical identity used for exact history,
+concurrency, review and Release pins.
+_Avoid_: Business Revision, Version within Revision, latest file, save operation
 
 **Generation Manifest**:
 The complete definition of a Generation, including artifact digests, versioned metadata, structure reference, and applicable provenance.
@@ -151,8 +250,10 @@ An immutable, organization-owned rule that defines the ordered Business Revision
 _Avoid_: free-text Revision, Generation counter, mutable global sequence, reused Revision label, implicit `AA` continuation
 
 **Version within Revision**:
-The ordered Generation number inside one Business Revision, beginning at `1` and increasing only when changed Product Definition is published.
-_Avoid_: Business Revision, local file version
+The business-visible order of Generations inside one Business Revision. It begins at `1`, increases
+exactly once when a changed Product Definition is successfully checked in, does not increase for a
+No Change Check-in, and resets to `1` when a new Business Revision is created.
+_Avoid_: Version Sequence, Business Revision, Generation identity, local file version, Controlled Document Version
 
 **Working Head**:
 The exact published Generation used as the concurrency base for the next controlled change to a Logical Document.
@@ -238,6 +339,30 @@ _Avoid_: attachment when the document participates in engineering structure
 An immutable occurrence/dependency graph that pins the identities needed to reproduce a Product Definition.
 _Avoid_: mutable assembly graph, flat file list, latest dependency
 
+**Bill of Materials (BOM)**:
+A governed, queryable view of one exact Structure Snapshot for one identified BOM View Profile. It presents controlled occurrence information such as component identity, exact Generation, quantity, position and applicable profile-defined fields; it is not an Excel, PDF or CSV file.
+_Avoid_: spreadsheet treated as Product Structure authority, generic "the BOM" without source or purpose, latest-at-read-time list
+
+**BOM View Profile**:
+A versioned definition of the purpose, included occurrence fields, filters, ordering and output rules used to produce a BOM view from an exact Structure Snapshot. Different engineering or handover views remain distinguishable rather than competing as one unnamed BOM.
+_Avoid_: file format alone, user-local column preference treated as a governed profile, mutable rule that reinterprets an old export
+
+**BOM Representation**:
+A non-authoritative Excel, PDF, CSV or other output tied to one exact Structure Snapshot and BOM View Profile, with its content digest and producer provenance. It may be regenerated; after its source or profile advances it remains historical and is identified as `Needs update` rather than current.
+_Avoid_: authoritative Product Structure, floating latest export, independent controlled parts-list document without an explicit source relationship
+
+**BOM Import Candidate**:
+A non-authoritative spreadsheet or structured payload proposed as changes to one exact base Structure Snapshot. It becomes authoritative only after validation, visible difference preview, user confirmation and one atomic publication that creates a new Structure Snapshot and Generation.
+_Avoid_: direct table overwrite, partial row import, uploaded file automatically treated as approved structure
+
+**Departmental Deliverable**:
+A governed Logical Document, Generation, Product Structure output, Release Record or other evidence that one department supplies or receives in an engineering handoff. The handoff describes responsibility; it does not make IDEA authoritative for the underlying time, cost, purchasing, manufacturing or project-management process.
+_Avoid_: every department output treated as a PDM feature, unversioned handoff file
+
+**Operational Reference Data**:
+Hours, cost estimates, purchasing or fabrication state, progress or completion information retained for engineering context without IDEA becoming the system that calculates or executes that business process.
+_Avoid_: Workflow State, Release state, authoritative ERP/MRP transaction
+
 **Structure Resolution Policy**:
 A versioned rule that determines whether a working view resolves stored exact pins, latest working Revisions, or latest Released Revisions. A dynamic view may reveal newer children but cannot rewrite a Structure Snapshot or Release Record; adopting a newer child is an explicit parent change.
 _Avoid_: silent update-to-latest, released baseline mutation, display filter treated as stored structure
@@ -251,8 +376,12 @@ The format-independent capability applied to each explicitly enabled file type: 
 _Avoid_: unrestricted arbitrary-file promise, deep format integration, unsupported semantic understanding
 
 **Format Capability Profile**:
-A versioned declaration of the evidenced generic-vaulting, extraction, structure, preview, conversion, and fidelity capability for one file format/tool combination.
+A versioned declaration of the evidenced generic-vaulting, extraction, structure, preview, conversion, and fidelity capability for one exact file-format and tool combination. New profiles can be added without changing Logical Document, Generation, Reservation, or Release semantics.
 _Avoid_: unsupported claim that a software product is simply "integrated"
+
+**Format Support Level**:
+A management-facing summary of an exact Format Capability Profile: Level 1 controls and reproduces the file, Level 2 also provides qualified viewing or basic extraction, and Level 3 provides every deeper behavior explicitly promised and verified for that format/tool combination. Level 3 capabilities differ by format and never imply that PDF, spreadsheet, software, and CAD files expose the same semantics.
+_Avoid_: one generic integration claim, support inferred from extension, all-formats parity, unverified capability
 
 **Representation**:
 A non-authoritative preview, thumbnail, neutral file, or other derivative tied to one exact source Generation and producer version. Failure to create it preserves the original Artifact and blocks Release only when the applicable Format Capability Profile or Release Policy makes that Representation required evidence.
@@ -343,8 +472,8 @@ A governed, identified traceability item required when creating a new Business R
 _Avoid_: unstructured comment, Audit Event alone, full change order
 
 **Access Policy Version**:
-An immutable identified policy definition that evaluates organization-scoped actors, roles or groups, resource state, and requested action. Initial seeded roles are replaceable policy configuration and must not be hard-coded into the modules that own controlled product state.
-_Avoid_: authentication mechanism, role name embedded in domain logic, mutable unversioned permission table
+An immutable identified policy definition that evaluates organization-scoped Actors, Business Groups or Workflow Roles, resource scope/state, and requested action. Identity and Accounts establishes who the Actor is and whether the account/session is eligible; it does not grant controlled-document authority by itself. The initial evaluation model denies by default and combines positive grants without an explicit deny rule. Ordinary authority is assigned through governed Business Group Membership so personnel changes do not require per-document edits; a direct Actor grant is an explicit scoped, justified, time-bounded and audited exception. Initial seeded roles are replaceable policy configuration and must not be hard-coded into the modules that own controlled product state. JSON may carry a candidate policy for validated import/export, but only an authorized activated version in the server-managed authoritative store has effect.
+_Avoid_: authentication mechanism, Identity role treated as complete product authorization, routine per-user grants, role name embedded in domain logic, mutable unversioned permission table, editable JSON file treated as live authority, unexplained deny precedence
 
 ## Product-development documentation
 
@@ -380,9 +509,21 @@ _Avoid_: approved baseline, gap-free knowledge, partially filled template
 The role that prepares product documents, recommendations, self-assessments, evidence, and remediation proposals. The role may perform work across an unstaffed specialty but cannot relabel its own work as the independent review required by a material gate.
 _Avoid_: automatic approver, independent reviewer of own work, unnamed document owner
 
+**Author Self-Review**:
+The Principal Product Author's attributable check of completeness, consistency, traceability, and readiness of authored material. It can find and remediate defects but cannot satisfy a requirement for independent, specialist, representative-user, or decision-authority review.
+_Avoid_: independent review, specialist approval, boss decision, second human by role label
+
 **Product Decision Authority**:
 The role accountable for deciding product specifications, feature scope, and selected technology or architecture proposals. In the current project this role is organizationally separate from the Principal Product Author; specialist competence and independent-gate obligations remain explicit rather than being implied by management authority.
 _Avoid_: author by default, universal specialist reviewer, undocumented approval
+
+**Product Decision Axis**:
+One of the three subjects decided by the Product Decision Authority: `Feature` defines approved capability scope and priority, `Spec` defines required observable behavior and acceptance, and `Tech` defines the selected architecture and technology realization. Roadmap, evidence, risk, standards, and gate records support these axes but do not create a fourth boss-approval subject.
+_Avoid_: eight-document approval checklist, roadmap approval by implication, feature/spec/technology mixed into one undocumented decision
+
+**Product Decision Brief**:
+A concise boss-facing controlled view for exactly one Product Decision Axis, pinned to the exact versions of the detailed Core Product Documents and supporting records it summarizes. It is not a second requirements or architecture authority; a source change makes the brief stale, and the attributable decision must be applied back to the affected controlled sources.
+_Avoid_: replacement for DOC-01 through DOC-08, unpinned presentation, second source of truth, verbal approval without baseline identity
 
 **Internal Adoption Authority**:
 The named company role accountable for authorizing `Internal Pilot Acceptance` or broader operational rollout against an exact baseline and its acceptance, risk, support, recovery, and readiness evidence. It is not required merely to execute synthetic verification or a bounded non-production technical pilot. It is distinct from Product Decision Authority even when the company assigns both authorities to the same person; an unassigned authority leaves the applicable adoption or rollout gate `BLOCKED`.

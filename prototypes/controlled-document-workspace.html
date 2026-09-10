@@ -153,7 +153,7 @@
     .doc-hero { padding: 18px; border-bottom: 1px solid var(--line); background: linear-gradient(120deg, #fff 0%, #f6fafc 100%); }
     .doc-hero-top { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
     .doc-hero-actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
-    .identity-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 15px; }
+    .identity-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 15px; }
     .identity-cell { min-height: 62px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.82); }
     .identity-cell dt { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .045em; text-transform: uppercase; }
     .identity-cell dd { margin: 4px 0 0; color: var(--navy); font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
@@ -902,8 +902,7 @@
         stableId: 'Stable Document ID',
         documentClass: 'Document Class',
         revision: 'Business Revision',
-        version: 'Document Version',
-        sequence: 'Version Sequence',
+        version: 'Version',
         generation: 'Product Generation',
         workflow: 'Workflow state',
         status: 'Document status',
@@ -990,10 +989,10 @@
         scenarioRevision: 'Create Revision'
       },
       en: {
-        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Validate the Reservation, record the working copy as an immutable Generation and close Checkout; the Reservation is released after Check-in.', open: 'Open working copy', edit: 'Edit working copy', editHint: 'Make changes in the working copy; Check-in records an immutable Generation and releases the Reservation.', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh baseline', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+        language: 'Language', actor: 'Demo actor', review: 'Executive Review', reset: 'Reset demo', workspace: 'Controlled Document Workspace', intro: 'One surface to find, work, review and release controlled engineering documents.', document: 'Document', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Version', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'Context actions', actionHint: 'Disabled actions remain visible with a reason so the next step is clear.', reserve: 'Reserve', checkOut: 'Check-out', checkIn: 'Check-in', checkOutHint: 'Reservation + open the working copy in the current workspace.', checkInHint: 'Validate the Reservation, record the working copy as an immutable Generation and close Checkout; the Reservation is released after Check-in.', open: 'Open working copy', edit: 'Edit working copy', editHint: 'Make changes in the working copy; Check-in records an immutable Generation and releases the Reservation.', publish: 'Publish', submit: 'Submit for review', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: 'Simulate external advance', refresh: 'Refresh baseline', recover: 'Recover reservation', withdraw: 'Withdraw review', reason: 'Reason for reject / recovery', guided: 'Guided walkthrough', guidedHint: 'Run each scenario for a boss demo; free-play remains available below.', runNext: 'Run next step', restart: 'Reset scenario', complete: 'Complete', step: 'Step', stateSnapshot: 'Full state snapshot', stateHint: 'Prototype state after the latest action', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: 'A decision aid for the next UI structure — not product approval.', recommendation: 'Recommendation', decision: 'Boss decision', decisionNotes: 'Rationale / details to keep', openQuestions: 'Open questions', saveVerdict: 'Demo verdict saved in prototype memory.', noVerdict: 'No verdict recorded', synthetic: 'Synthetic dataset', selected: 'Selected', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: 'Held by you', unreserved: 'Not reserved', external: 'External workspace', localPreserved: 'Local work preserved', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       },
       ja: {
-         language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Document Version', sequence: 'Version Sequence', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: '作業コピーを編集', editHint: '作業コピーを変更し、Check-in で immutable Generation として記録して Reservation を解放します。', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: 'Baseline を更新', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
+         language: '言語', actor: 'デモ担当者', review: 'Executive Review', reset: 'デモをリセット', workspace: 'Controlled Document Workspace', intro: '管理されたエンジニアリング文書を検索、作業、レビュー、リリースする画面です。', document: '文書', stableId: 'Stable Document ID', documentClass: 'Document Class', revision: 'Business Revision', version: 'Version', generation: 'Product Generation', workflow: 'Workflow state', status: 'Document status', gate: 'Gate outcome', reservation: 'Reservation', none: '—', actions: 'コンテキスト操作', actionHint: '無効な操作にも理由を表示し、次の手順を明確にします。', reserve: 'Reserve', open: '作業コピーを開く', edit: '作業コピーを編集', editHint: '作業コピーを変更し、Check-in で immutable Generation として記録して Reservation を解放します。', publish: 'Publish', submit: 'レビューへ提出', approve: 'Approve', reject: 'Reject', release: 'Release', createRevision: 'Create Revision', externalAdvance: '外部更新をシミュレート', refresh: 'Baseline を更新', recover: '予約を回復', withdraw: 'レビューを取り下げ', reason: '却下 / 回復の理由', guided: 'Guided walkthrough', guidedHint: '各シナリオを実行して説明できます。自由操作も利用できます。', runNext: '次のステップ', restart: 'シナリオをリセット', complete: '完了', step: 'ステップ', stateSnapshot: 'Full state snapshot', stateHint: '直前の操作後のプロトタイプ状態', audit: 'Audit timeline', metadata: 'Metadata & control', linked: 'Linked records', myWork: 'My work', allDocuments: 'All documents', recentReleases: 'Recent releases', blockers: 'Blockers', nextAction: 'Next action', reviewTitle: 'Executive Review · UI prototype', reviewSubtitle: '次の UI 構造を決めるための資料です。製品承認ではありません。', recommendation: '推奨', decision: '上司の決定', decisionNotes: '理由 / 残す要素', openQuestions: 'Open questions', saveVerdict: 'デモ判定を保存', printPdf: '印刷 / PDF保存', copySummary: '概要をコピー', close: '閉じる', verdictSaved: 'デモ判定をメモリに保存しました。', noVerdict: '判定未記録', synthetic: 'Synthetic dataset', selected: '選択中', released: 'Released', start: 'Start', inWork: 'In Work', underReview: 'Under Review', draft: 'Draft', proposed: 'Proposed', approved: 'Approved', superseded: 'Superseded', notRun: 'NOT-RUN', pass: 'PASS', fail: 'FAIL', blocked: 'BLOCKED', author: 'Author / Editor', approver: 'Independent Approver', administrator: 'PDM Administrator', observer: 'Read-only Observer', owned: '自分が保持', unreserved: '未予約', external: 'External workspace', localPreserved: 'ローカル作業を保持', noChange: 'NoChange', registered: 'Registered', scenarioHappy: 'Happy path', scenarioStale: 'Stale conflict', scenarioReject: 'Reject & recover', scenarioSelf: 'Self-approval blocked', scenarioRevision: 'Create Revision'
       }
     };
 
@@ -1226,16 +1225,16 @@
     };
 
     const SEED_DOCS = [
-      { id: 'LD-P100-001', titleKey: 'pump', className: 'Engineering Definition', category: 'Product Definition', revision: 'A', documentVersion: '0.1', versionSequence: 0, generation: null, workflow: 'Start', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:9f01…a712', linked: ['LD-P100-002', 'LD-P100-003'], owner: 'Linh Nguyễn', note: 'Active demo record', structure: 'P-100 / root' },
-      { id: 'LD-P100-002', titleKey: 'housing', className: 'CAD Artifact', category: 'CAD', revision: 'A', documentVersion: '1.0', versionSequence: 4, generation: 'G-0004', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:2ac1…c991', linked: ['LD-P100-001'], owner: 'Linh Nguyễn', note: 'Released dependency', structure: 'P-100 / housing' },
-      { id: 'LD-P100-003', titleKey: 'seal', className: 'Technical Specification', category: 'Office', revision: 'B', documentVersion: '0.8', versionSequence: 3, generation: 'G-0011', workflow: 'Under Review', status: 'Proposed', gate: 'NOT-RUN', digest: 'sha256:7d11…e882', linked: ['LD-P100-001'], owner: 'Khoa Phạm', note: 'Awaiting independent review', structure: 'P-100 / seal' },
-      { id: 'LD-P100-004', titleKey: 'motor', className: 'Interface Specification', category: 'Office', revision: 'A', documentVersion: '0.4', versionSequence: 2, generation: 'G-0008', workflow: 'In Work', status: 'Draft', gate: 'BLOCKED', digest: 'sha256:4b20…b101', linked: ['LD-P100-001'], owner: 'Linh Nguyễn', note: 'Missing evidence', structure: 'P-100 / motor' },
-      { id: 'LD-P100-005', titleKey: 'test', className: 'Verification Plan', category: 'Quality', revision: 'A', documentVersion: '1.0', versionSequence: 2, generation: 'G-0007', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:1aa4…90f3', linked: ['LD-P100-001'], owner: 'Minh Trần', note: 'Released dependency', structure: 'P-100 / verification' },
-      { id: 'LD-P100-006', titleKey: 'drawing', className: 'Drawing', category: 'CAD', revision: 'A', documentVersion: '0.9', versionSequence: 5, generation: 'G-0013', workflow: 'In Work', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:bc31…d0a0', linked: ['LD-P100-001'], owner: 'Khoa Phạm', note: 'Editor has reservation', structure: 'P-100 / drawing' },
-      { id: 'LD-P100-007', titleKey: 'material', className: 'Controlled Register', category: 'Office', revision: 'A', documentVersion: '1.0', versionSequence: 1, generation: 'G-0006', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:0aa8…4e11', linked: ['LD-P100-001'], owner: 'Hana Sato', note: 'Released dependency', structure: 'P-100 / materials' },
-      { id: 'LD-P100-008', titleKey: 'release', className: 'Release Package', category: 'Release', revision: 'A', documentVersion: '1.0', versionSequence: 1, generation: 'G-0010', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:3f8d…a54a', linked: ['LD-P100-001', 'LD-P100-002'], owner: 'Minh Trần', note: 'Exact baseline package', structure: 'P-100 / release' },
-      { id: 'LD-P100-009', titleKey: 'installation', className: 'Work Instruction', category: 'Office', revision: 'A', documentVersion: '0.3', versionSequence: 1, generation: 'G-0012', workflow: 'Start', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:9c10…bb31', linked: ['LD-P100-001'], owner: 'Sora Ito', note: 'Not started', structure: 'P-100 / install' },
-      { id: 'LD-P100-010', titleKey: 'risk', className: 'Risk Assessment', category: 'Quality', revision: 'A', documentVersion: '0.6', versionSequence: 2, generation: 'G-0009', workflow: 'Under Review', status: 'Proposed', gate: 'BLOCKED', digest: 'sha256:bc42…11d0', linked: ['LD-P100-001'], owner: 'Hana Sato', note: 'Specialist gap', structure: 'P-100 / risk' }
+      { id: 'LD-P100-001', titleKey: 'pump', className: 'Engineering Definition', category: 'Product Definition', revision: 'A', version: null, generation: null, workflow: 'Start', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:9f01…a712', linked: ['LD-P100-002', 'LD-P100-003'], owner: 'Linh Nguyễn', note: 'Active demo record', structure: 'P-100 / root' },
+      { id: 'LD-P100-002', titleKey: 'housing', className: 'CAD Artifact', category: 'CAD', revision: 'A', version: 4, generation: 'G-0004', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:2ac1…c991', linked: ['LD-P100-001'], owner: 'Linh Nguyễn', note: 'Released dependency', structure: 'P-100 / housing' },
+      { id: 'LD-P100-003', titleKey: 'seal', className: 'Technical Specification', category: 'Office', revision: 'B', version: 3, generation: 'G-0011', workflow: 'Under Review', status: 'Proposed', gate: 'NOT-RUN', digest: 'sha256:7d11…e882', linked: ['LD-P100-001'], owner: 'Khoa Phạm', note: 'Awaiting independent review', structure: 'P-100 / seal' },
+      { id: 'LD-P100-004', titleKey: 'motor', className: 'Interface Specification', category: 'Office', revision: 'A', version: 2, generation: 'G-0008', workflow: 'In Work', status: 'Draft', gate: 'BLOCKED', digest: 'sha256:4b20…b101', linked: ['LD-P100-001'], owner: 'Linh Nguyễn', note: 'Missing evidence', structure: 'P-100 / motor' },
+      { id: 'LD-P100-005', titleKey: 'test', className: 'Verification Plan', category: 'Quality', revision: 'A', version: 2, generation: 'G-0007', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:1aa4…90f3', linked: ['LD-P100-001'], owner: 'Minh Trần', note: 'Released dependency', structure: 'P-100 / verification' },
+      { id: 'LD-P100-006', titleKey: 'drawing', className: 'Drawing', category: 'CAD', revision: 'A', version: 5, generation: 'G-0013', workflow: 'In Work', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:bc31…d0a0', linked: ['LD-P100-001'], owner: 'Khoa Phạm', note: 'Editor has reservation', structure: 'P-100 / drawing' },
+      { id: 'LD-P100-007', titleKey: 'material', className: 'Controlled Register', category: 'Office', revision: 'A', version: 1, generation: 'G-0006', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:0aa8…4e11', linked: ['LD-P100-001'], owner: 'Hana Sato', note: 'Released dependency', structure: 'P-100 / materials' },
+      { id: 'LD-P100-008', titleKey: 'release', className: 'Release Package', category: 'Release', revision: 'A', version: 1, generation: 'G-0010', workflow: 'Released', status: 'Approved', gate: 'PASS', digest: 'sha256:3f8d…a54a', linked: ['LD-P100-001', 'LD-P100-002'], owner: 'Minh Trần', note: 'Exact baseline package', structure: 'P-100 / release' },
+      { id: 'LD-P100-009', titleKey: 'installation', className: 'Work Instruction', category: 'Office', revision: 'A', version: 1, generation: 'G-0012', workflow: 'Start', status: 'Draft', gate: 'NOT-RUN', digest: 'sha256:9c10…bb31', linked: ['LD-P100-001'], owner: 'Sora Ito', note: 'Not started', structure: 'P-100 / install' },
+      { id: 'LD-P100-010', titleKey: 'risk', className: 'Risk Assessment', category: 'Quality', revision: 'A', version: 2, generation: 'G-0009', workflow: 'Under Review', status: 'Proposed', gate: 'BLOCKED', digest: 'sha256:bc42…11d0', linked: ['LD-P100-001'], owner: 'Hana Sato', note: 'Specialist gap', structure: 'P-100 / risk' }
     ];
 
     const SCENARIOS = {
@@ -1295,7 +1294,7 @@
       },
       revision: {
         titleKey: 'scenarioRevision',
-        description: 'Baseline đã release tạo Revision kế tiếp với Version Sequence 1.',
+        description: 'Baseline đã release tạo Revision kế tiếp với Version 1.',
         steps: [
           { title: 'Chuẩn bị baseline đã release', detail: 'Chạy nhanh happy path trong một bước.', action: 'prepare-and-release' },
           { title: 'Chuyển sang Author', detail: 'Author bắt đầu business milestone mới.', action: 'switch-actor', payload: { actorId: 'author' } },
@@ -1336,10 +1335,6 @@
       }, 0);
     }
     function nextGeneration() { return `G-${String(maxGeneration() + 1).padStart(4, '0')}`; }
-    function bumpMinor(version) {
-      const [major, minor] = String(version || '0.1').split('.').map(Number);
-      return `${Number.isFinite(major) ? major : 0}.${(Number.isFinite(minor) ? minor : 0) + 1}`;
-    }
     function nextRevision(revision) {
       const code = String(revision || 'A').charCodeAt(0);
       return String.fromCharCode(code >= 90 ? 65 : code + 1);
@@ -1374,7 +1369,7 @@
         reservation: null,
         pendingReview: seed.workflow === 'Under Review' ? { generation: seed.generation, submittedBy: 'Khoa Phạm', decision: null } : null,
         approvalDecision: null,
-        releaseRecord: seed.workflow === 'Released' ? { id: 'REL-000' + seed.versionSequence, generation: seed.generation, actor: 'Minh Trần' } : null,
+        releaseRecord: seed.workflow === 'Released' ? { id: 'REL-000' + seed.version, generation: seed.generation, actor: 'Minh Trần' } : null,
         conflict: null,
         localWork: null,
         revisionHistory: []
@@ -1435,7 +1430,7 @@
         case 'check-in': {
           const publishCheck = canAction('publish', doc);
           if (!publishCheck.ok) return blocked(publishCheck.message.replace(/\bPublish\b/g, 'Check-in'), publishCheck.code);
-          if (!doc.workingCopy.hasLocalChanges) return blocked('Chưa có thay đổi cục bộ để Check-in; hãy chỉnh sửa bản làm việc trước.');
+          if (!doc.generation && !doc.workingCopy.hasLocalChanges) return blocked('Chưa có nội dung đầu tiên để Check-in; hãy chỉnh sửa bản làm việc trước.');
           return success('');
         }
         case 'reserve':
@@ -1461,7 +1456,6 @@
               ? `Baseline đã Refresh lên ${doc.conflict.current}. Hãy Reapply local changes trước khi Check-in.`
               : `Stale Generation: expected ${doc.conflict.expected}, current ${doc.conflict.current}. Hãy mở lựa chọn xử lý trước khi tiếp tục.`);
           }
-          if (doc.workflow !== 'Start' && !doc.workingCopy.hasLocalChanges) return success('');
           return success('');
         case 'submit':
           if (actor.kind !== 'author') return blocked('Chỉ Author / Editor được Submit for review.');
@@ -1625,7 +1619,7 @@
             state.lastAction = { type: 'blocked', action: 'publish', message: result.message, code: result.code };
             break;
           }
-          if (doc.workflow !== 'Start' && !doc.workingCopy.hasLocalChanges) {
+          if (doc.generation && !doc.workingCopy.hasLocalChanges) {
             doc.workingCopy.open = false;
             doc.workingCopy.hasLocalChanges = false;
             doc.workingCopy.baseGeneration = doc.generation;
@@ -1641,8 +1635,7 @@
           const generation = nextGeneration();
           doc.generation = generation;
           doc.workingHead = generation;
-          doc.versionSequence = doc.versionSequence ? doc.versionSequence + 1 : 1;
-          if (previous) doc.documentVersion = bumpMinor(doc.documentVersion);
+          doc.version = previous ? doc.version + 1 : 1;
           doc.workflow = 'In Work';
           doc.status = 'Draft';
           doc.gate = 'NOT-RUN';
@@ -1657,7 +1650,7 @@
           state.staleDialogOpen = false;
           doc.workingCopy.summary = `Checked in ${generation}; Reservation released.`;
           doc.reservation = null;
-          audit('Checked In', `${generation} / Version Sequence ${doc.versionSequence}; previous ${previous || '∅'}; Reservation released and working copy closed.`);
+          audit('Checked In', `${generation} / Version ${doc.version}; previous ${previous || '∅'}; Reservation released and working copy closed.`);
           result = success(`Check-in hoàn tất: đã tạo ${generation}; Reservation đã được nhả.`);
           break;
         }
@@ -1676,7 +1669,6 @@
         case 'approve':
           doc.approvalDecision = { outcome: 'Approved', generation: doc.generation, actor: actor.name, at: formatClock(state.clock), reason: 'Evidence set accepted for demo.' };
           if (doc.pendingReview) doc.pendingReview.decision = 'Approved';
-          if (String(doc.documentVersion).startsWith('0.')) doc.documentVersion = '1.0';
           doc.status = 'Approved';
           doc.gate = 'PASS';
           audit('Approval Decision', `Approved exact Generation ${doc.generation}.`);
@@ -1714,10 +1706,9 @@
         case 'create-revision': {
           const oldRevision = doc.revision;
           const oldGeneration = doc.generation;
-          doc.revisionHistory.unshift({ revision: oldRevision, documentVersion: doc.documentVersion, generation: oldGeneration, digest: doc.digest, status: 'Released' });
+          doc.revisionHistory.unshift({ revision: oldRevision, version: doc.version, generation: oldGeneration, digest: doc.digest, status: 'Released' });
           doc.revision = nextRevision(oldRevision);
-          doc.documentVersion = '0.1';
-          doc.versionSequence = 1;
+          doc.version = 1;
           doc.generation = nextGeneration();
           doc.workingHead = doc.generation;
           doc.workflow = 'Start';
@@ -1730,8 +1721,8 @@
           doc.workingCopy = { open: false, hasLocalChanges: false, baseGeneration: doc.generation, summary: `Baseline reused by digest from Revision ${oldRevision}/${oldGeneration}.` };
           doc.localWork = null;
           doc.conflict = null;
-          audit('Created Business Revision', `Revision ${doc.revision} begins in Start with exact Version Sequence 1 baseline from ${oldRevision}/${oldGeneration}.`);
-          result = success(`Created Revision ${doc.revision}; workflow Start, Version Sequence 1.`);
+          audit('Created Business Revision', `Revision ${doc.revision} begins in Start with exact Version 1 baseline from ${oldRevision}/${oldGeneration}.`);
+          result = success(`Created Revision ${doc.revision}; workflow Start, Version 1.`);
           break;
         }
         case 'external-advance': {
@@ -1739,8 +1730,7 @@
           const generation = nextGeneration();
           doc.generation = generation;
           doc.workingHead = generation;
-          doc.versionSequence += 1;
-          doc.documentVersion = bumpMinor(doc.documentVersion);
+          doc.version += 1;
           doc.workflow = 'In Work';
           doc.status = 'Draft';
           doc.gate = 'NOT-RUN';
@@ -2027,7 +2017,7 @@
 
     function renderIdentity(doc) {
       const cells = [
-        [t('stableId'), doc.id, true], [t('documentClass'), doc.className, false], [t('revision'), doc.revision, false], [t('version'), doc.documentVersion, true], [t('sequence'), doc.versionSequence || '—', true], [t('generation'), doc.generation || '—', true]
+        [t('stableId'), doc.id, true], [t('documentClass'), doc.className, false], [t('revision'), doc.revision, false], [t('version'), doc.version || '—', true], [t('generation'), doc.generation || '—', true]
       ];
       return `<dl class="identity-grid">${cells.map(([label, value, mono]) => `<div class="identity-cell"><dt>${esc(label)}</dt><dd class="${mono ? 'mono' : ''}">${esc(value)}</dd></div>`).join('')}</dl>`;
     }
@@ -2258,7 +2248,7 @@
     function renderStateSnapshot(doc, expanded = false) {
       const snapshot = {
         actor: { id: state.actorId, name: actorOf().name, role: actorOf().role, workspace: actorOf().workspace },
-        activeDocument: { id: doc.id, revision: doc.revision, documentVersion: doc.documentVersion, versionSequence: doc.versionSequence, generation: doc.generation, workingHead: doc.workingHead, workflow: doc.workflow, documentStatus: doc.status, gateOutcome: doc.gate },
+        activeDocument: { id: doc.id, revision: doc.revision, version: doc.version, generation: doc.generation, workingHead: doc.workingHead, workflow: doc.workflow, documentStatus: doc.status, gateOutcome: doc.gate },
         reservation: doc.reservation,
         workingCopy: doc.workingCopy,
         pendingReview: doc.pendingReview,

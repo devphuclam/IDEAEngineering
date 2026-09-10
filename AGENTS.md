@@ -20,6 +20,19 @@ Use the default Matt Pocock triage labels. See `docs/agents/triage-labels.md`.
 
 This is a single-context repo using `CONTEXT.md` and `docs/adr/`. See `docs/agents/domain.md`.
 
+### Product documents and planning
+
+Before authoring or reporting the status of DOC-01…DOC-08, Feature/Spec/Tech, or the roadmap, read
+the [IDEA instance catalogue](docs/product/instances/idea-engineering/README.md). It distinguishes
+authored instances, decision briefs, templates and their current versions. Follow its DOC-07
+links for task order and planning dependencies.
+
+### Management-facing Word documents
+
+Before creating, editing or comparing Word documents for management, read
+[management-document guidance](docs/agents/management-documents.md) for the Human editorial copies,
+source comparison, writing, logo, layout and verification rules.
+
 ### Spec Kit and Matt Pocock workflow
 
 When a Work Item is managed through Spec Kit, read [`docs/agents/spec-kit.md`](docs/agents/spec-kit.md)

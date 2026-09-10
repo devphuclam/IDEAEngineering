@@ -9,6 +9,12 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 | What does an IDEA domain term mean? | [Root domain language](../../../CONTEXT.md) |
 | What was directly observed in the identified icVault environment? | [icVault observed behavior](icvault-observed-behavior.md) |
 | What has DDM publicly claimed or demonstrated? | [DDM vendor-public baseline](ddm-vendor-public-baseline.md) |
+| Does DDM have a separate administration and permission UI? | [DDM administration and permission UI evidence](2026-09-09-ddm-administration-permissions-ui-evidence.md) |
+| Which Microsoft authorization patterns are useful for IDEA DDM? | [Microsoft authorization patterns for IDEA DDM](2026-09-09-microsoft-authorization-patterns-for-idea-ddm.md) |
+| Does DDM demonstrate releasing one subassembly before the whole product? | [DDM staged-release evidence finding](2026-09-07-ddm-staged-release-evidence.md) |
+| How does DDM handle PDF and neutral representations generated from CAD? | [DDM CAD neutral-representation evidence finding](2026-09-07-ddm-cad-neutral-representation-evidence.md) |
+| How does DDM distinguish an item from its visible name and folder placement? | [DDM item, name and folder identity evidence finding](2026-09-07-ddm-item-name-folder-identity-evidence.md) |
+| Is a BOM managed structure or only an Excel/PDF file? | [DDM Product Structure, BOM and export evidence finding](2026-09-07-ddm-bom-structure-representation-evidence.md) |
 | Is a DDM package/runtime audit still needed? | [DDM acquisition and audit decision](2026-08-27-ddm-acquisition-and-audit-decision.md) |
 | What must an authorized DDM target audit test? | [DDM target audit plan](ddm-target-audit-plan.md) |
 | How are DDM baseline behavior and Aras improvements governed? | [ADR-0009](../../adr/0009-use-ddm-baseline-and-aras-quality-benchmark.md) |

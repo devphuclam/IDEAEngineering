@@ -225,7 +225,7 @@ Rules:
 | `ArtifactId` | Logical reference to immutable binary content |
 | `ContentDigest` | Integrity/deduplication hash |
 | `RevisionId/RevisionCode` | Business Revision identity and label |
-| `VersionSequence` | Generation order inside one Business Revision |
+| `VersionWithinRevision` | Business-visible Generation order inside one Business Revision |
 | `WorkflowInstanceId` | Lifecycle execution identity owned by one Business Revision under one Workflow Definition Version |
 | `ApprovalPolicyVersion` | Exact stages, actor eligibility, quorum, self-approval, separation-of-duties, evidence, and decision-effect rules |
 | `WorkingHeadGenerationId` | Exact concurrency base for the next controlled change |
@@ -248,7 +248,7 @@ Rules:
 6. Finalize succeeds only when actor/workspace owns a valid Reservation and expected Generation equals current Working Head.
 7. A change to artifact, versioned metadata, or Product Structure creates exactly one new Generation and increments Version within Revision once.
 8. Semantic equality with Working Head returns `NoChange`; it creates no Generation but records outcome and applies explicit Reservation Disposition.
-9. VersionSequence is unique and strictly increasing within Document plus Business Revision, beginning at `1`.
+9. Version within Revision is unique and strictly increasing within each Logical Document plus Business Revision, beginning at `1`; there is no separate `Version Sequence` field.
 10. Creating a Business Revision creates a new baseline Generation `Version 1`; immutable Artifact content may be reused by digest.
 11. Every successful multi-document Check-in creates one Check-in Change Set; all changed entries publish or none publish.
 12. A Structure Snapshot pins exact identities needed for reproducibility; a Release Record always uses exact pins.
