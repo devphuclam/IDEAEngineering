@@ -16,8 +16,18 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.12`; DOC-06 at `Draft 0.13`; DOC-07 at `Draft 0.5`; DOC-08 at `Draft 0.9`; GOV at `Draft 0.3`; VVP at `Draft 0.13`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.13`; DOC-06 at `Draft 0.13`; DOC-07 at `Draft 0.5`; DOC-08 at `Draft 0.9`; GOV at `Draft 0.3`; VVP at `Draft 0.13`; CHG records at their catalogue versions |
 | First approved version | `Approved 1.0` only after the applicable controlled decision |
+
+## Architecture diagram package
+
+DOC-05@0.13 and DOC-06@0.13 contain **30 maintained architecture and data views**. The
+[local diagram gallery](evidence/IE-VEV-ARCH-VIEW-002/index.html) provides SVG and PNG renditions;
+[VEV-002](registers/VEV-2026-09-11-architecture-view-completion.md) records the bounded render and
+visual inspection. The seven views added in DOC-05@0.13 cover the end-to-end Release Spine, native
+account/session handling, governed Role configuration, BOM exchange, Representation production,
+coordinated recovery and security trust boundaries. They remain `Draft` architecture, not evidence
+that the runtime has been implemented or independently accepted.
 
 ## December 2026 roadmap package
 
@@ -263,7 +273,7 @@ already works. See
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
 | `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.13`; sole normative SRS; 87 requirements including `REQ-AUTH-001…010`, `REQ-WS-014/015` and `REQ-OPS-006`; seven open Spec points remain |
-| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.12`; sole architecture description; RBAC plus modified-Reference, resumable-transfer and storage-evolution views/responses added |
+| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.13`; sole architecture description; 26 maintained architecture views, including the end-to-end Release Spine and the seven-view completion set |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.13`; RBAC, Reservation, transfer, Artifact Location and storage migration contracts aligned |
 | `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.5`; references synchronized; conditional December schedule, 56-task appendix and Gantt unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.9`; administration split retained; modified Reference, resumable transfer and uncertain Check-in result interactions specified; current admin prototype marked stale |

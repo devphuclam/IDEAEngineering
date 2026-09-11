@@ -256,7 +256,7 @@ Rules:
 5. A Logical Document has at most one Working Head.
 6. Finalize succeeds only when actor/workspace owns a valid Reservation and expected Generation equals current Working Head.
 7. A change to artifact, versioned metadata, or Product Structure creates exactly one new Generation and increments Version within Revision once.
-8. Semantic equality with Working Head returns `NoChange`; it creates no Generation, records the outcome, and releases every Reservation in the successfully confirmed Check-in scope.
+8. Semantic equality with Working Head returns `NoChange`; it creates no Generation, records the outcome, and ends every Reservation in the successfully confirmed Check-in scope.
 9. Version within Revision is unique and strictly increasing within each Logical Document plus Business Revision, beginning at `1`; there is no separate `Version Sequence` field.
 10. Creating a Business Revision creates a new baseline Generation `Version 1`; immutable Artifact content may be reused by digest.
 11. Every successful multi-document Check-in creates one Check-in Change Set; all changed entries publish or none publish.
@@ -299,8 +299,8 @@ Rules:
 48. RBAC grant establishes eligibility only. The authoritative owner still enforces lifecycle, Checkout owner/Workspace, expected Generation, review independence, evidence and Release-completeness gates.
 49. Account Administration owns Actor/account/Login Identity operations; Project Administration owns Project/Group membership in its assigned Project; Access Policy owns Role Definitions, Role Assignments and evaluation. None receives another responsibility by role name or account type.
 50. Built-in Role Definitions are protected; changing an active Custom Role creates an immutable successor. Delegated administration cannot broaden itself, and the last effective Super Administrator recovery path cannot be removed.
-51. A successful changed or No Change Check-in releases every Reservation in its confirmed scope; a failed or uncommitted Check-in releases none of them, although a Reservation may independently expire under its lease policy.
-52. Sign-out, client exit or network loss is not proof that local work was abandoned and does not immediately release a Reservation. Expiry removes publish entitlement without deleting local work or silently transferring authority.
+51. A successful changed or No Change Check-in ends every Reservation in its confirmed scope; a failed or uncommitted Check-in ends none of them, although a Reservation may independently expire under its lease policy.
+52. Sign-out, client exit or network loss is not proof that local work was abandoned and does not immediately end a Reservation. Expiry removes publish entitlement without deleting local work or silently transferring authority.
 53. A locally modified Reference never grants publish entitlement. It may become a working copy only after a new Checkout succeeds against the same current Generation; otherwise the user must preserve, copy, discard or manually reapply the local work without automatic binary merge.
 54. Artifact transfers use resumable verified chunks under one stable operation identity; accepted chunks and a completed operation are safe to retry, and the complete Artifact is not required to fit in application memory.
 55. Permission codes are owned by the product. Parent-scope Role Assignments are evaluated for descendants at request time and are not copied into independently mutable per-document ACLs.
@@ -371,7 +371,7 @@ A read-only file attribute may be a convenience warning, never a security guaran
 9. Verified content is materialized at immutable object identity and read-checked before public metadata points to it.
 10. One transaction rechecks the complete set, publishes required Structure Snapshots and Generations, updates Working Heads, creates the Check-in Change Set, appends evidence/outbox, and marks Operation terminal.
 11. Public reads resolve only after commit.
-12. Successful changed or No Change completion releases every in-scope Reservation; failure before commit releases none.
+12. Successful changed or No Change completion ends every in-scope Reservation; failure before commit ends none.
 13. Retry with the same OperationId returns the same result and cannot create duplicate Generations.
 14. Reconciliation removes expired staging and unreferenced private candidates.
 
