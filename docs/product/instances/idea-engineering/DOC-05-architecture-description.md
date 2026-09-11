@@ -1,0 +1,1594 @@
+# IDEA Engineering Core v0 Architecture Description
+
+> **Instance state**: controlled `Draft 0.12`. This document describes a candidate architecture for
+> the recorded product direction and Draft requirements. It does not approve a technology stack,
+> authorize production implementation, or record a successful architecture review.
+
+## Control envelope
+
+| Field | Recorded value |
+|---|---|
+| Stable Document ID | `IE-PROD-ARCH-001` |
+| Document Class | `DOC-05` |
+| Title | IDEA Engineering Core v0 Architecture Description |
+| Owner | `Principal Product Author`; named person attribution required before `Proposed` |
+| Document Status | `Draft` |
+| Document Version | `0.12` |
+| Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
+| Requirements Input | `IE-PROD-SREQ-001@0.13`; Feature and Spec decisions remain `NOT-RUN` |
+| Effective Date | `NOT APPLICABLE` until approval |
+| Authors | `Principal Product Author`; named identity not yet recorded |
+| Reviewers | Project user performs internal document review; architecture review `NOT-RUN`; required independent/specialist reviewer unassigned |
+| Approvers | Product Decision Authority for Tech; identity, decision and date are `UNKNOWN` |
+| Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) |
+| Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
+| Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
+| Change History | 0.12: resolve the Q26–Q32 design frontier with explicit Reservation/Reference behavior, logical all-or-none Check-in, resumable large-Artifact transfer, storage evolution and request-time RBAC inheritance; complete the focused Workspace architecture, state, interaction and data-view package; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md). 0.11: implement principal-role-scope RBAC and controlled diagram governance. Earlier history remains in the controlled change records. |
+| Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
+
+<!-- AUTHOR CONTENT START -->
+
+## 1. System of interest and context
+
+The system of interest is `C1 — IDEA Engineering`, an internal product that controls engineering
+documents, immutable Generations, Product Structure, review decisions and exact Releases. It remains
+useful and deployable without a future platform or another product capability.
+
+The following view is the C4-style system context. Arrows show an allowed interaction, not shared
+database ownership. Dashed elements are future or external boundaries.
+
+**`ARCH-VIEW-CTX-001` — System context (conceptual).** **Model profile:** C4-style System Context;
+`Draft 0.12`; all stakeholders. **Question:** who uses IDEA, what is external and where does product
+authority stop? **Scope:** one Operating Organization. **Excludes:** internal Modules, database
+schema and physical deployment. **Trace:** DOC-03 actors, `REQ-GOV-001`, `REQ-AUTH-*`,
+`REQ-IAM-*`. **Legend:** solid arrows are current interactions; dashed arrows are future/optional;
+the central IDEA box is the system of interest.
+
+```mermaid
+flowchart LR
+    accTitle: IDEA Engineering system context
+    accDescr: Engineers, reviewers and scoped administrators use IDEA Engineering. Office and CAD applications are external editing tools, a company identity provider is a future option, and authorized recipients consume exact read-only Release Packages. IDEA remains the product-data authority.
+
+    engineer["Design Engineer"]
+    reviewer["Reviewer / Approver / Release Authority"]
+    accountAdmin["Account Administrator<br/>System Management"]
+    projectAdmin["Project Administrator"]
+    configAdmin["Product Configuration Administrator"]
+    roleAdmin["Privileged Role Administrator"]
+    idea["IDEA Engineering<br/>controlled product-data system"]
+    apps["Office and CAD applications<br/>external editing tools"]
+    companyId["Company identity provider<br/>future option"]
+    releaseConsumer["Authorized internal recipient<br/>Release Package consumer"]
+
+    engineer -->|find, Checkout, Reference, Check-in| idea
+    reviewer -->|review, decide, release| idea
+    accountAdmin -->|accounts and Login Identities| idea
+    projectAdmin -->|Project members, Groups and Role Assignments| idea
+    configAdmin -->|document, workflow and format configuration| idea
+    roleAdmin -->|protected roles and delegated administration| idea
+    idea -->|open ordinary workspace files| apps
+    apps -->|save ordinary workspace files| idea
+    idea -->|exact read-only package| releaseConsumer
+    companyId -.->|future verified login link| idea
+```
+
+| Context item | Description | Authority / evidence | Status |
+|---|---|---|---|
+| Internal actors | Engineer/Author, Reviewer, Independent Approver, Release Authority, Account Administrator, Project Administrator, Product Configuration Administrator, Privileged Role Administrator, Super Administrator, Quality/Audit Reader, Security reviewer and Operator. Each administrator capability is an independently scoped Role Assignment, not an account type or hierarchy. | DOC-03@0.7 actors; `REQ-AUTH-009/010`; DOC-08 profiles | `Draft` |
+| External applications | Configured Office/CAD applications read and write ordinary files in a Managed Workspace. Unsaved in-memory state is outside IDEA. | `REQ-FMT-001/004`; accepted product decision | `Draft` |
+| Accounts and login | Native IDEA accounts initially. During development the project user may hold temporary bootstrap capability; normal Account Administration is assigned to named System Management personnel. Other/company login is future scope, not an external prerequisite. | `REQ-IAM-001…007`; `TECH-CTX-003/004` | Responsibility model confirmed; production assignees, secure implementation and policy unqualified |
+| Data stores | Relational authoritative metadata plus private content-addressed Artifact storage. | `REQ-ID-*`, `REQ-STR-*`, `REQ-OPS-001/003/004`; DOC-06 | Architecture `Draft`; providers undecided |
+| Future integrations | Read-only Controlled Release Package export is in Core v0. General external integration, company login and write-back are deferred. | Feature exclusions; `REQ-LC-008` | `DEFER` for integrations; export required |
+| Product boundary | One internal product and one Organization boundary in the first deployment; Organization isolation remains enforced by design. | `REQ-GOV-001`; internal-company decision | `Draft` |
+
+Confirmed constraints are recorded in [TECH-CTX-001…008](registers/CHG-2026-09-03-tech-context-and-proposal.md) and refined by the current responsibility model: Windows engineering PCs, 50–100 total intended users at one site, company-controlled server to be proposed, native accounts first, temporary user-held bootstrap/possible operations during development, normal Account Administration by named System Management personnel, no assumed DevOps function, uncertain MB-to-GB related document sets and preliminary recovery objectives. None is measured capacity or a stack decision.
+
+## 2. Concerns, quality attributes and scenarios
+
+| Scenario / concern | Stimulus and operating condition | Required architecture response | Verification link | Current result |
+|---|---|---|---|---|
+| `QRS-001` Correct identity/version | Register, change, Check-in and revise one Logical Document. | One stable identity; immutable committed Generation; atomic first baseline and revision transition. | `REQ-ID-001…006`; `VVP-001/002` | `NOT-RUN` |
+| `QRS-002` Atomic multi-document Check-in | Failure occurs at any upload, validation, materialization or transaction point. | Candidate content remains private; every selected change commits together or none commits; retry is idempotent. | `REQ-WS-007/008/012`, `REQ-OPS-001`; `VVP-003` | `NOT-RUN` |
+| `QRS-003` Stale/non-owner protection | A stale, wrong-owner, wrong-Workspace or unauthorized publish is submitted. | Authoritative state is unchanged, local work remains safe, and an actionable conflict is returned. | `REQ-WS-010/011/013`; `VVP-004` | `NOT-RUN` |
+| `QRS-004` Exact release | Release is requested with missing, unresolved or unapproved content. | Lifecycle Governance fails closed; successful Release pins exact Generation, structure, policy and evidence. | `REQ-STR-003`, `REQ-LC-006…009`; `VVP-006` | `NOT-RUN` |
+| `QRS-005` Organization isolation | An identity attempts to resolve or command another Organization's resource. | Resource owner refuses the action and appends permitted Audit Evidence without cross-scope disclosure. | `REQ-GOV-001/002`; `VVP-007` | `NOT-RUN` |
+| `QRS-006` Exact restore | Metadata/content/configuration is restored from one approved recovery point. | Every retained Generation resolves and digest-checks; gaps are reported and cannot be called PASS. | `REQ-OPS-003/004`; `VVP-013` | `NOT-RUN` |
+| `QRS-007` Localized interaction | The same controlled task runs in each supported locale and surface. | Command/state/authority outcomes remain equal; user Unicode round-trips; missing resources use the declared fallback. | `REQ-UX-*`, `REQ-LOC-*`; `VVP-009/010` | `NOT-RUN` |
+| `QRS-008` Untrusted format input | A malformed, oversized or slow file is processed. | Bounded worker failure cannot change source Artifact or product state; results retain tool/profile provenance. | `REQ-FMT-002…005`, `REQ-SEC-004`; `VVP-008/011` | `NOT-RUN` |
+| Dense workspace usability | User performs a controlled task at the canonical 1440×900 demo viewport. | Context remains visible; same-type detail scrolls internally or opens in a drawer/modal; keyboard, focus and status semantics remain usable. | `REQ-UX-*`; `VVP-009` | `NOT-RUN` |
+| `QRS-009` Account eligibility and recovery | An account is provisioned, recovered, suspended or its sessions revoked. | Stable Actor history survives; old sessions cannot authorize subsequent protected requests, and account administration does not confer product privileges. | `REQ-IAM-*`; `VVP-015` | `NOT-RUN` |
+| `QRS-010` Governed authorization change | An administrator changes a Role Definition, Group membership or Role Assignment. | Identity establishes the eligible Actor; RBAC constrains the administrator's own role, principal and Scope boundary; versioned configuration and Audit prevent client-only change, stale activation or self-escalation from changing authority. | `REQ-AUTH-001…010`, `REQ-GOV-002/005`; `VVP-007/015`, RBAC-01…10 | `NOT-RUN` |
+
+RTO of four working hours and RPO of at most one hour are user-confirmed **planning objectives** for severe server failure, not achieved SLAs. Working-hour clock/coverage, workload, capacity, latency, availability, Reservation lease, transfer expiry and worker limits require approved measurement profiles. The project user may operate initially; a long-term operator and specialist review remain unassigned.
+
+## 3. Viewpoints and views
+
+This architecture description applies the project's tailored ISO/IEC/IEEE 42010:2022 profile: it
+identifies the system of interest, stakeholders/concerns, viewpoints, maintained views,
+correspondence rules, rationale, decisions and known gaps. A diagram is not accepted merely because
+it renders; every element must correspond to an owned responsibility, Interface, requirement or
+explicitly marked external/future boundary.
+
+| Viewpoint | Intended concern / audience | View maintained here | Correspondence rule | Review status |
+|---|---|---|---|---|
+| Context | Product Decision Authority and all stakeholders | System boundary and external actors in section 1 | No external actor/store becomes product authority. | `Draft` |
+| Responsibility | Maintainers and reviewers | Hosts and deep Modules in sections 4–5 | Every authoritative state has exactly one owner Module. | `Draft` |
+| Information | Product, data and quality owners | Identity/lifecycle implications in section 8 and DOC-06 | Persisted references use stable identities and exact version pins. | `Draft` |
+| Interaction | Engineer, reviewer and HCD owner | Checkout/Check-in and review/release sequences in section 7 | UI state is a view of server/workspace truth, not a second authority. | `Draft` |
+| Deployment | Operator and security owner | Host/trust-zone view in sections 4 and 9 | Client/worker packages cannot hold infrastructure credentials. | `Draft` |
+| Reliability | Operator, data and quality owners | Atomicity, idempotency, outbox, reconciliation and restore in section 9 | Public state appears only after a complete authoritative commit. | `Draft` |
+| Security | Security and policy owners | Trust seams and owner-enforced authorization in section 10 | Every access path reaches the authoritative owner policy. | `Draft` |
+| Evolution | Product and architecture owners | seams, candidate stack and deferred boundaries | A later Adapter may replace an Implementation without changing Module authority or accepted interface semantics. | `Draft` |
+
+### 3.1 Maintained view catalogue
+
+Each view has a stable ID so a review comment can identify the exact model rather than referring to
+“the diagram above”. All views are conceptual or candidate models; none is implementation evidence.
+
+| View ID | Type / location | Question answered | Scope and principal audience | Status / trace | Text alternative |
+|---|---|---|---|---|---|
+| `ARCH-VIEW-CTX-001` | C4-style System Context / section 1 | Who uses IDEA, what is external and where is the product boundary? | One Operating Organization; all stakeholders; excludes internal Modules and deployment nodes. | `Draft`; DOC-03 actors; `REQ-GOV-001`, `REQ-AUTH-*`, `REQ-IAM-*` | Context table and paragraph after the view. |
+| `ARCH-VIEW-CON-001` | C4-style Container / section 4.1 | Which executable/data containers exist and what responsibility crosses each interface? | Candidate logical runtime; maintainers/security; excludes physical host count. | `Draft`; `REQ-SEC-*`, `REQ-OPS-*`, `REQ-AUTH-*` | Numbered container description after the view. |
+| `ARCH-VIEW-DEP-001` | C4-style Deployment / section 4.2 | What runs on engineer/admin devices and server zone, and where are trust boundaries? | Initial candidate deployment; operations/security; technology remains unapproved. | `Draft`; `REQ-SEC-*`, `REQ-OPS-*` | Deployment explanation after the view. |
+| `ARCH-VIEW-MOD-001` | C4-style Component / section 5.1 | Which Server Module owns each authoritative state and interface? | IDEA Server logical Modules; maintainers/reviewers; excludes database tables. | `Draft`; `REQ-GOV-*`, `REQ-AUTH-*`, DOC-06 | Module rules following the view. |
+| `ARCH-VIEW-MOD-002` | C4 Component-level responsibility view / section 5.3 | Where is the seam around Checkout/Reference/Check-in, and which collaborators may affect an authoritative commit? | Controlled Product Data and its callers/collaborators; architecture/implementation/security reviewers; excludes classes and physical deployment. | `Draft`; `REQ-WS-001…015`, `REQ-OPS-001`; ADR C1-004/C1-005 | Numbered responsibility and seam description after the view. |
+| `ARCH-VIEW-RBAC-001` | UML-style class/domain view / section 5.2 | How do Principal, Group, Role Definition, Permission, Scope and Role Assignment relate? | Authorization domain; security/requirements/data reviewers. | `Draft`; `REQ-AUTH-001…010`; ADR C1-010 | Relationship list following the view. |
+| `ARCH-VIEW-STATE-001` | UML State Machine / section 7 | Which commands change Business Revision workflow state? | One Business Revision; lifecycle users/reviewers. | `Draft`; `REQ-LC-001…009` | State notes and section introduction. |
+| `ARCH-VIEW-STATE-002` | UML State Machine / section 7 | How does one Reservation end without being silently reactivated or transferred? | One server Reservation record; engineer/support/maintainer; excludes local file state and Workflow. | `Draft`; `REQ-WS-002/007…010/013`; ADR C1-005 | Numbered status rules after the view. |
+| `ARCH-VIEW-STATE-003` | UML State Machine / section 7 | How are Reference integrity and current-head freshness combined into safe user choices? | One local Workspace Entry materialized as Reference; engineer/support; excludes server document lifecycle. | `Draft`; `REQ-WS-003/010/011/014` | State explanation and action table after the view. |
+| `ARCH-VIEW-STATE-004` | UML State Machine / section 7.2 | Which Check-in Operation states are resumable, authoritative, terminal or held for reconciliation? | One OperationId; maintainer/operations/verification; excludes per-chunk state. | `Draft`; `REQ-WS-007…013/015`, `REQ-OPS-001/002` | State definitions and invariants after the view. |
+| `ARCH-VIEW-SEQ-001` | UML Sequence / section 7.1 | In what order is exact Checkout/Reference scope materialized safely? | One work-scope command; engineer/maintainer. | `Draft`; `REQ-WS-001…006/013` | Numbered steps before the view. |
+| `ARCH-VIEW-SEQ-002` | UML Sequence / section 7.2 | How does Check-in commit atomically or preserve local stale work? | One OperationId; engineer/maintainer/operations. | `Draft`; `REQ-WS-007…013`, `REQ-OPS-001` | Numbered steps before the view. |
+| `ARCH-VIEW-SEQ-003` | UML Sequence / section 7.3 | How are review decisions and an exact Release committed? | One Review Round and Release scope; reviewer/releaser. | `Draft`; `REQ-LC-001…009`, `REQ-STR-003` | Numbered steps before the view. |
+| `ARCH-VIEW-ACT-001` | UML-style activity/swimlane / section 7.5 | Who creates Linh's account and grants Design Engineer access in P-100? | Account and Project administration; administrators/support. | `Draft`; `REQ-AUTH-009/010`, `REQ-IAM-002/005` | Numbered responsibility explanation after the view. |
+| `ARCH-VIEW-SEQ-004` | UML Sequence / section 7.6 | How is Effective Permission evaluated and followed by business gates? | One protected request; security/maintainers/support. | `Draft`; `REQ-AUTH-003…008`, `REQ-GOV-002` | Evaluation algorithm before the view. |
+| `ARCH-VIEW-SEQ-005` | UML Sequence / section 7.1.1 | What happens when a Reference is modified locally? | One referenced Artifact and Logical Document; engineer/support; excludes semantic CAD/Office merge. | `Draft`; `REQ-WS-003/010/011/014` | Numbered paths and paragraph after the view. |
+| `ARCH-VIEW-SEQ-006` | UML Sequence / section 9.1 | How is a multi-GB Artifact transferred, resumed and verified without becoming public early? | One Artifact transfer inside one Check-in Operation; maintainers/operations/security; excludes final multi-document commit. | `Draft`; `REQ-WS-012/015`, `REQ-OPS-001` | Numbered transfer contract after the view. |
+| `ARCH-VIEW-SEQ-007` | UML Sequence / section 7.2.1 | How does a client distinguish pre-commit failure, interrupted work and a committed operation whose response was lost? | One OperationId across a connection/process failure; engineer/support/operations; excludes business retry with changed inputs. | `Draft`; `REQ-WS-007/010/012/013`, `REQ-OPS-001/002` | Numbered outcome-resolution description after the view. |
+| `ARCH-VIEW-EVO-001` | C4-style component/evolution view / section 9.2 | How can Artifact storage grow or change provider without changing product identity? | Artifact-storage seam and migration; architecture/operations/data owners; excludes selected vendor/topology. | `Draft`; `REQ-OPS-003…006`, `QRS-012` | Storage-boundary explanation after the view. |
+| `DATA-VIEW-CORE-001` | UML-style ER/domain view / DOC-06 section 1.1 | What identities reproduce an exact Release? | Controlled-data domain; data/quality owners. | `Draft`; `REQ-ID-*`, `REQ-STR-*`, `REQ-LC-006…009` | Structured explanation in DOC-06. |
+| `DATA-VIEW-AUTH-001` | UML-style RBAC data view / DOC-06 section 1.2 | What records persist account and RBAC authority without duplicating ownership? | Authorization data; data/security owners. | `Draft`; `REQ-AUTH-*`, `REQ-IAM-*` | Structured explanation in DOC-06. |
+| `DATA-VIEW-ART-001` | UML-style ER/domain view / DOC-06 section 1.3 | How do resumable transfer and replaceable storage preserve immutable Artifact identity? | Artifact transfer/custody data; data/operations/security owners; excludes provider schema. | `Draft`; `REQ-WS-012/015`, `REQ-OPS-001/003/004/006` | Structured explanation in DOC-06. |
+| `DATA-VIEW-WS-001` | UML Class/domain view / DOC-06 section 1.4 | Which local and server records prove Workspace mode, publish entitlement, expected head and one atomic Check-in result? | Workspace and publication data; data/architecture/verification owners; excludes table/ORM mapping and Artifact-location detail. | `Draft`; `REQ-WS-001…015`, `REQ-ID-002…004`; ADR C1-004/C1-005 | Structured relationship and authority explanation in DOC-06. |
+
+### 3.2 Diagram authoring and review policy
+
+This project tailors ISO/IEC/IEEE 42010:2022 for architecture-description organization, uses C4
+concepts for high-level static structure and selected UML model kinds for domain, state, activity
+and interaction questions. Mermaid stores editable diagram source only; it is not the architecture
+method, and the experimental Mermaid C4 syntax is not required. The evidence and limitations are
+recorded in [IE-RES-RBAC-ARC-001](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md).
+
+Every maintained diagram shall have, on or immediately beside it:
+
+1. a stable View ID, title, model kind, question answered and intended stakeholder/concern;
+2. explicit system/resource Scope, exclusions and one consistent abstraction level;
+3. status and source baseline distinguishing `Proposed/Draft`, `Accepted` and later `As-built`;
+4. named and typed elements with one responsibility, avoiding generic boxes such as “Business Logic”;
+5. directional relationships labelled with the action or information passed, plus protocol at a trust seam;
+6. a legend for every symbol, line or color convention; meaning shall not depend on color or position alone;
+7. stable terms from `CONTEXT.md`, with acronyms expanded on first use;
+8. requirement, Interface, ADR, risk and verification trace outside the graphic rather than prose crowded inside it;
+9. editable source under configuration control and a pinned rendering-tool/version record in the document build;
+10. a short text alternative and a nearby structured long description covering purpose, elements, relationships, conditions and conclusion;
+11. source validation plus inspection of the actual rendered output at its intended screen/page size for clipping, overlap, contrast, arrow direction and legibility; and
+12. controlled update of the view catalogue, text alternative and affected cross-view correspondence whenever the model changes.
+
+A diagram is ready for baseline review only when a reviewer can answer yes to all of the following:
+
+- question, audience, concern, type, Scope, exclusions and abstraction level are explicit;
+- every element, boundary, acronym and convention is understandable from labels and legend;
+- every meaningful relationship is directional and correctly labelled;
+- the diagram agrees with requirements, ADRs, Interface contracts, data ownership and other views;
+- the long description communicates the same essential information without relying on the image; and
+- the actual rendered artifact was inspected, not merely syntax-checked.
+
+The current diagrams remain `Draft`. Their source consistency can be checked now; rendered-output
+inspection and qualified architecture/security review remain `NOT-RUN` and must not be reported as
+architecture conformance.
+
+Unless a view declares a local override, diagrams use this legend: a solid arrow is an active
+call, information flow or state transition; a dashed arrow is a future/optional relationship; a
+cylinder is a persistent store; a `subgraph` is a runtime, responsibility or trust boundary; a
+sequence `alt` block contains mutually exclusive outcomes; and a state-machine arrow is labelled by
+the command/event that causes the transition. Color is decorative reinforcement only and never the
+sole carrier of meaning.
+
+## 4. Deployable hosts and responsibilities
+
+| Host | Responsibility | Must not do | Primary requirements |
+|---|---|---|---|
+| IDEA Server | Authenticate product requests; coordinate Modules; enforce RBAC and business gates; persist authoritative state; perform atomic Check-in, workflow and Release; append Audit/outbox. | Expose internal schema; let clients/workers decide authoritative state; require a future platform for local behavior. | `REQ-ID-*`, `REQ-WS-007…013`, `REQ-LC-*`, `REQ-GOV-*`, `REQ-AUTH-*` |
+| IDEA Web | Search/browse/view; review/approval; governed administration; policy-appropriate preview/download. | Write stores directly, trust client-side role visibility or duplicate identity, Check-in, authorization, approval or Release rules. | `REQ-LC-*`, `REQ-AUTH-*`, `REQ-UX-*`, `REQ-LOC-*` |
+| IDEA Desktop | Capture explicit Checkout/Open/Check-in/Cancel/Recover intent; confirm scope; show conflict/recovery; launch files by OS association. | Run in an external application; publish on Save; keep permanent store credentials. | `REQ-WS-*`, `REQ-FMT-001/004`, `REQ-UX-*` |
+| Workspace process | Per-user materialization, full scan/hash, cache, Workspace Manifest, resumable transfer and durable local recovery state. | Become product authority, approve/release, infer user intent or auto-merge binary changes. | `REQ-WS-001/003/004/006/009…013`, `REQ-SEC-003` |
+| Format Processing Runtime | Execute one bounded immutable-input analysis/preview/conversion job through a versioned Adapter. The Adapter may invoke a qualified export interface of an installed CAD application or an approved standalone converter; manual uploads enter through the same Representation acceptance boundary. | Mutate source content or product state; reuse broad credentials; claim undeclared capability; assume a universal CAD renderer; attach output to a floating/latest source. | `REQ-FMT-002…005`, `REQ-SEC-004` |
+| Relational store | Persist identity, metadata, heads, policies, structure, workflow, release, Audit and operation state transactionally. | Store user-editable working files or become an interface consumed by clients. | DOC-06; `REQ-OPS-003/004` |
+| Private Artifact store | Retain immutable content by digest and serve only through scoped authorized transfer. | Expose permanent credentials/public access or decide which content is authoritative. | `REQ-ID-003`, `REQ-SEC-001/002`, `REQ-OPS-001/003/004` |
+
+### 4.1 Candidate container view
+
+This logical view separates applications/processes and data stores without claiming how many
+physical machines will host them. Solid arrows are labelled requests or data flow; cylinders are
+authoritative/private stores; the Office/CAD tool is external to IDEA.
+
+**`ARCH-VIEW-CON-001` — Candidate logical containers.** **Model profile:** C4-style Container;
+`Draft 0.12`; maintainers and security/operations reviewers. **Question:** which executable or data
+container owns each runtime responsibility and interface? **Scope:** logical runtime, independent of
+host count. **Excludes:** internal classes and selected physical topology. **Trace:** `REQ-SEC-*`,
+`REQ-OPS-*`, `REQ-AUTH-*`. **Legend:** cylinders are private persistent stores; arrows are labelled
+calls/data flows; Office/CAD is external.
+
+```mermaid
+flowchart LR
+    accTitle: IDEA Engineering candidate container view
+    accDescr: Engineers use the Web workbench or Desktop. Administrators use the Administration Web application. All protected requests go to one IDEA Server, which owns authorization and product coordination and accesses the relational and private Artifact stores. The Workspace process alone manages local working files. Format processing is isolated from the main Server.
+
+    engineer["Engineer / reviewer"]
+    administrator["Authorized administrator"]
+    workbench["Workbench Web<br/>React UI"]
+    adminWeb["Administration Web<br/>React UI"]
+    desktop["IDEA Desktop<br/>Windows host"]
+    workspace["Workspace process<br/>local file custody"]
+    tools["Office / CAD<br/>external tools"]
+    server["IDEA Server<br/>authorization and product Modules"]
+    format["Format-processing runtime<br/>isolated jobs"]
+    db[("Relational store<br/>authoritative metadata")]
+    artifacts[("Private Artifact store<br/>immutable bytes")]
+
+    engineer -->|use| workbench
+    engineer -->|use| desktop
+    administrator -->|use| adminWeb
+    workbench -->|HTTPS commands and queries| server
+    adminWeb -->|HTTPS administration commands| server
+    desktop -->|HTTPS intent and status| server
+    desktop -->|local authenticated IPC| workspace
+    workspace <-->|ordinary managed files| tools
+    workspace -->|scoped transfer| server
+    server -->|transactional records| db
+    server -->|immutable content| artifacts
+    server -->|bounded job| format
+    format -->|read source / return derivative| artifacts
+```
+
+Long description and conclusion:
+
+1. Workbench Web, Administration Web and Desktop are presentation/interaction containers; none is authority.
+2. Desktop delegates per-user local file materialization and scanning to the Workspace process; Office/CAD reads and saves ordinary files there.
+3. Every protected product or administration command reaches the IDEA Server, which resolves account eligibility, RBAC and owner-Module business gates.
+4. The relational store and Artifact store are private implementation containers, never client integration interfaces.
+5. Format processing receives one bounded job and cannot mutate source or authoritative product state.
+
+### 4.2 Candidate deployment view
+
+This view separates deployable processes from domain Modules. The two Web front ends serve different
+jobs but use the same authenticated Server interfaces and the same product authority. Technology
+labels are candidates for Tech approval, not approved deployment facts.
+
+**`ARCH-VIEW-DEP-001` — Candidate deployment and trust zones.** **Model profile:** C4-style
+Deployment; `Draft 0.12`; operations, security and Tech reviewers. **Question:** what runs on each
+device/zone and where do trust seams cross? **Scope:** initial candidate topology. **Excludes:**
+approved sizing, high availability and final technology decision. **Trace:** `REQ-SEC-*`,
+`REQ-OPS-*`, `QRS-005/006`. **Legend:** each subgraph is a deployment/trust zone; arrows crossing a
+zone are labelled with transport; cylinders are private stores.
+
+```mermaid
+flowchart LR
+    accTitle: Candidate deployment and trust zones
+    accDescr: Engineer Windows PCs run browser, Desktop, Web-rendered Workbench, per-user Workspace process and external Office or CAD tools. Reviewer and administrator devices use separate Web entry points. All cross-device calls use HTTPS to a company-managed server zone containing the server, database, private Artifact store and isolated format runtime.
+
+    subgraph pc["Engineer Windows PC"]
+        browser["Browser"]
+        desktop["IDEA Desktop<br/>WPF host"]
+        webview["Workbench UI<br/>React in WebView2"]
+        workspace["Per-user Workspace process"]
+        files["Managed Workspace files"]
+        tools["Office / CAD applications"]
+
+        desktop --> webview
+        desktop --> workspace
+        workspace --> files
+        tools <--> files
+    end
+
+    subgraph adminPc["Reviewer or administrator device"]
+        reviewWeb["Workbench Web UI<br/>React"]
+        adminWeb["Administration Web UI<br/>React"]
+    end
+
+    subgraph serverZone["Company-managed server zone"]
+        server["IDEA Server<br/>modular monolith"]
+        db[("Relational database<br/>PostgreSQL candidate")]
+        artifacts[("Private Artifact store")]
+        format["Isolated format-processing runtime"]
+
+        server --> db
+        server --> artifacts
+        server --> format
+        format --> artifacts
+    end
+
+    browser -->|HTTPS| server
+    webview -->|HTTPS| server
+    workspace -->|HTTPS and scoped transfer| server
+    reviewWeb -->|HTTPS| server
+    adminWeb -->|HTTPS| server
+```
+
+The Workbench and Administration UI may share a component library and authentication/session
+mechanism, but they are separate entry points and permission surfaces. Hiding an administration
+button in the Workbench is not an authorization control; the Server applies the same policy to every
+request.
+
+The Workspace process initially means a protected per-user background process, not a privileged
+machine-wide Windows service. Process count and packaging remain a Tech decision.
+
+## 5. Deep Modules, Interfaces and ownership
+
+In this document, a **Module** owns a coherent responsibility and state; its **Interface** is the
+small contract callers need; its **Implementation** hides internal complexity; a **Seam** is a place
+where policy, technology or deployment can vary; and an **Adapter** translates across a Seam. These
+terms do not imply one network service per Module.
+
+| Module | Small Interface intent | Complexity hidden by Implementation | Authoritative state |
+|---|---|---|---|
+| Controlled Product Data | Register, resolve, organize, Rename, Create Copy, Checkout, prepare/commit Check-in, revise and retrieve exact content. | Stable identity, logical folder/placement relationships, copy provenance, Generation immutability, optimistic concurrency, staging, deduplication and atomic Change Sets. | Logical Document, Document Folder/Placement, source-copy relation, Artifact reference, Generation, Business Revision, Reservation, Working Head, Check-in Operation/Change Set. |
+| Product Structure | Resolve, validate and publish exact structure; query versioned BOM views; prepare/export BOM Representations; validate and atomically apply BOM Import Candidates. | Node/occurrence/dependency rules, cycles, unresolved members, semantic digest, exact pins, BOM View Profiles, source/output provenance, difference preview and stale-base protection. | Structure Snapshot, controlled relation identities, BOM View Profile versions, BOM Import Candidate/result and BOM Representation metadata. |
+| Lifecycle Governance | Validate/activate Workflow and Approval definitions, define Workflow Roles and their required RBAC eligibility, assign a default version by Document Class, start/transition an instance, record decisions, Release and resolve an exact baseline. | State/transition validation, definition/instance versioning, role eligibility and instance assignment, decision count/rule, required reason/evidence, invalidation, notifications, exceptions and release completeness. | Workflow Definition/Version, Workflow Role, eligibility rule, Document-Class Workflow Assignment, Workflow Instance/assignment, Review Round, Approval Policy/Decision and Release Record. |
+| Information Model | Validate metadata, classify and allocate governed numbers. | Schema versioning, numbering scope/idempotency and policy migration. | Metadata/Classification/Numbering Policy Definitions and allocations. |
+| Format Intelligence | Declare capability and request analysis/representation. | Execution mode (`None`, `Manual`, `Application-assisted`, `Parser`, `Standalone converter`), application/Adapter/tool versions, prerequisites, isolation, resource limits, provenance, stale derivative handling and Release-policy response. | Format Capability Profile, job/result identity and Representation metadata; never source authority. |
+| Project Governance | Create and govern Projects; maintain Project Membership, Project Groups and direct Group Membership through scoped commands. | Membership effective dates, Project isolation, direct-membership-only rule, duplicate/cycle refusal and stable Group identity. | Project, Project Membership, Business/Project Group and direct Group Membership; no account credential or Role Definition/Assignment authority. |
+| Access Policy | Prepare/validate/activate the RBAC policy and evaluate Effective Permission for an authoritative resource owner. | Permission catalogue; protected built-in and versioned Custom Role Definitions; Role Assignments over Actor/Group Principals and organization/Project/resource Scopes; supported conditions/effective periods; constrained delegation; additive evaluation; explanation and bootstrap/adoption safety. | Permission, Role Definition/Version, Role Assignment, Authorization Scope reference, delegation constraint, Access Policy Version and authorization-decision evidence. It references Actor eligibility from Identity and Accounts and membership from Project Governance. |
+| Discovery | Find/browse through rebuildable projections. | Indexing, query projection, lag and replay. | Search projection only; never product authority. |
+| Audit Evidence | Append and export attributable product events. | Correlation, completeness, ordering, retention reference and controlled export. | Append-only Audit records. |
+| Identity and Accounts | Provision/activate, authenticate, change/reset password, suspend and revoke sessions; resolve stable Actor context. | Maintained credential mechanisms, recovery tokens, account status, session invalidation and future login linking. | Organization-scoped Actor/IDEA Account, Login Identity and credential/session/recovery records; no Project Membership, Group, Role Assignment, Workflow Role, document ACL or approval authority. |
+
+### 5.1 Authority and module ownership view
+
+This diagram answers three different questions separately: who the person is, what policy applies,
+and which Module is allowed to change the product state. A policy decision never writes another
+Module's state.
+
+**`ARCH-VIEW-MOD-001` — Module authority (conceptual).** **Model profile:** C4 Component-level
+responsibility view; `Draft 0.12`; maintainers, security and architecture reviewers. **Question:**
+which Module owns each authoritative state and who may call it? **Scope:** logical IDEA Server
+Modules. **Excludes:** deployment processes, database tables and UI components. **Trace:**
+`REQ-GOV-*`, `REQ-AUTH-*`, DOC-06. **Legend:** arrows are governed calls or decisions; each Module
+writes only the state named in the ownership table.
+
+```mermaid
+flowchart TB
+    accTitle: IDEA Server Module authority
+    accDescr: Scoped administrators call only their owning Modules. Identity and Accounts supplies actor eligibility, Project Governance supplies memberships, and Access Policy returns permission decisions. Controlled Product Data, Product Structure and Lifecycle Governance retain their own business authority and append committed outcomes to Audit Evidence.
+
+    qlht["Account Administrator<br/>System Management"]
+    projectAdmin["Project Administrator"]
+    configAdmin["Product Configuration Administrator"]
+    roleAdmin["Privileged Role Administrator"]
+
+    iam["Identity and Accounts<br/>Actors, accounts, Login Identities"]
+    project["Project Governance<br/>Projects, Groups, membership"]
+    policy["Access Policy<br/>roles, assignments and evaluation"]
+    lifecycle["Lifecycle Governance<br/>workflow roles, decisions and release"]
+    product["Controlled Product Data<br/>documents, Generations, Checkout"]
+    structure["Product Structure<br/>snapshots and BOM"]
+    info["Information Model<br/>metadata and numbering"]
+    format["Format Intelligence<br/>capability and representations"]
+    audit["Audit Evidence<br/>append-only outcomes"]
+
+    qlht -->|manage accounts and Login Identities| iam
+    projectAdmin -->|manage Project members and Groups| project
+    projectAdmin -->|assign permitted Project roles| policy
+    roleAdmin -->|manage permitted roles and admin assignments| policy
+    configAdmin -->|define workflow and eligibility rules| lifecycle
+    configAdmin -->|define governed profiles| info
+    configAdmin -->|define governed profiles| format
+
+    iam -->|eligible Actor and session status| policy
+    project -->|Project and direct Group membership| policy
+    policy -->|granted or blocked with explanation| product
+    policy -->|granted or blocked with explanation| structure
+    policy -->|granted or blocked with explanation| lifecycle
+    product -->|committed outcome| audit
+    structure -->|committed outcome| audit
+    lifecycle -->|committed outcome| audit
+    iam -->|account outcome| audit
+    project -->|Project or Group outcome| audit
+    policy -->|policy outcome| audit
+```
+
+Module rules:
+
+1. A Module writes only its own authoritative state.
+2. Cross-Module work uses an Interface and explicit stable identities, not shared table mutation.
+3. The server transaction may coordinate multiple owner Implementations only through declared
+   contracts and one atomic business operation.
+4. Projections, caches, derivatives and UI view models are rebuildable and never become authority.
+5. Splitting a Module across a process Seam requires measured scale, isolation, ownership or failure
+   evidence and a new approved Tech decision.
+6. Identity and Accounts owns only Actor/account/login eligibility. Project Governance owns Project,
+   Project Membership and direct Business-Group membership. Access Policy owns Permission, Role
+   Definition, Role Assignment and evaluation; Lifecycle Governance owns Workflow Roles and instance
+   assignments. Every administrator is an explicit Role Assignment, not an account type or document superuser.
+7. One application transaction coordinates owner modules through a unit-of-work boundary; no owner exposes its database tables as the cross-module Interface. Transferring authority to a generic CRUD service is not the design.
+
+### 5.2 RBAC domain view
+
+This view uses UML-style class relationships. `1` and `0..*` express cardinality; the hollow-triangle
+arrow means “is a kind of”; labelled solid lines express governed associations. It shows the logical
+authorization model, not database tables or UI nesting.
+
+**`ARCH-VIEW-RBAC-001` — Principal-role-scope authorization model.** **Model profile:** UML Class
+domain view; `Draft 0.12`; requirements, security and data reviewers. **Question:** how is effective
+product permission assembled without treating an account, Group or administrator name as authority?
+**Scope:** logical authorization identities and associations. **Excludes:** credentials, UI nesting
+and database schema. **Trace:** `REQ-AUTH-001…010`, ADR C1-010, RBAC-01…10. **Legend:** hollow
+triangle is specialization; labelled lines and multiplicities are governed associations.
+
+```mermaid
+classDiagram
+    direction LR
+    accTitle: Principal role Scope authorization model
+    accDescr: Actors and Business Groups are security principals. Direct memberships connect Actors to Project Groups. Immutable Role Definition versions contain product Permissions, and each Role Assignment binds one principal and one role version to one Authorization Scope. Authorization decisions combine applicable assignments and retain a separate business-gate result.
+
+    class SecurityPrincipal {
+      <<abstract>>
+      PrincipalId
+    }
+    class Actor
+    class BusinessGroup
+    class GroupMembership
+    class Project
+    class ProjectMembership
+    class AuthorizationScope {
+      ScopeType
+      ResourceId
+    }
+    class RoleDefinition
+    class RoleDefinitionVersion {
+      BuiltInOrCustom
+      Version
+    }
+    class Permission {
+      ActionCode
+    }
+    class RoleAssignment {
+      Status
+      EffectiveFrom
+      EffectiveUntil
+      Reason
+    }
+    class AuthorizationDecision {
+      GrantedOrBlocked
+      BusinessGateResult
+    }
+
+    SecurityPrincipal <|-- Actor
+    SecurityPrincipal <|-- BusinessGroup
+    Actor "1" --> "0..*" GroupMembership : direct member
+    BusinessGroup "1" --> "0..*" GroupMembership : contains Actor
+    Actor "1" --> "0..*" ProjectMembership : participates through
+    Project "1" --> "0..*" ProjectMembership : admits Actor
+    Project "1" --> "0..*" BusinessGroup : scopes Project Group
+    AuthorizationScope "0..1" --> "0..*" AuthorizationScope : parent of
+    RoleDefinition "1" --> "1..*" RoleDefinitionVersion : has immutable versions
+    RoleDefinitionVersion "1" --> "1..*" Permission : contains
+    SecurityPrincipal "1" --> "0..*" RoleAssignment : receives
+    RoleDefinitionVersion "1" --> "0..*" RoleAssignment : grants role version
+    AuthorizationScope "1" --> "0..*" RoleAssignment : limits
+    RoleAssignment "0..*" --> "0..*" AuthorizationDecision : contributes to
+```
+
+Long description and conclusion:
+
+1. Actor and Business Group are the two Core v0 Security Principal kinds. Login Identity is absent because it authenticates an Actor and is not an authorization layer.
+2. An Actor joins a Business Group directly; no relationship permits a Business Group to contain another Group.
+3. A Role Definition has immutable versions, and each version contains stable Permission action codes.
+4. A Role Assignment binds one Principal, one exact Role Definition version and one Authorization Scope, with effective status/time and reason.
+5. Authorization Scope forms the organization → Project → individual-resource hierarchy. Project Membership and Project Group scope constrain Project access but do not grant an action by themselves.
+6. AuthorizationDecision is computed from every applicable assignment and records a separate business-gate result. Therefore “RBAC granted” may still end as “operation blocked by lifecycle/Checkout rules.”
+
+The model intentionally contains no separately assignable `Permission Set` and no object called an
+administrator account. `Design Engineer` and every administrator name are Role Definitions used in
+ordinary Role Assignments.
+
+### 5.3 Checkout, Reference and Check-in responsibility view
+
+This view focuses on the seam that implementation code and tests shall use. It deliberately does not
+turn every internal responsibility into a network service or public interface.
+
+**`ARCH-VIEW-MOD-002` — Controlled Workspace publication responsibilities.** **Model profile:** C4
+Component-level responsibility view; `Draft 0.12`; audience is architecture, implementation,
+security and verification reviewers. **Question:** which responsibility owns local custody,
+Reservation rules, candidate transfer, publication and uncertain-result recovery? **Scope:** one
+Checkout/Reference/Check-in path inside one Operating Organization. **Excludes:** UI layout,
+database tables, deployment nodes and a selected storage technology. **Trace:** `REQ-WS-001…015`,
+`REQ-OPS-001/002`, `IF-PRODUCT-COMMAND`, `IF-ARTIFACT-TRANSFER`, `IF-WORKSPACE-IPC`, ADR C1-004 and
+C1-005. **Legend:** a solid arrow is a permitted call or information flow; cylinders are private
+persistent stores; boxes inside the Controlled Product Data boundary are internal responsibilities,
+not separately deployable Modules.
+
+```mermaid
+flowchart TB
+    accTitle: Controlled Workspace publication responsibilities
+    accDescr: The Desktop and Workspace process call a small Controlled Product Data interface. Internal coordination validates Reservation and expected-head rules, stages candidate bytes through a storage adapter, and publishes through one authoritative database commit. A status query resolves an uncertain response by the same OperationId.
+
+    subgraph client["Client custody"]
+        direction TB
+        desktop["IDEA Desktop<br/>intent, scope confirmation and result"]
+        workspace["Workspace process<br/>manifest, scan, digest and local recovery"]
+        desktop -->|authenticated local command| workspace
+    end
+
+    subgraph product["Controlled Product Data Module"]
+        direction TB
+        command["Workspace Command Interface<br/>Checkout, Reference, prepare/commit Check-in"]
+        status["Operation Status Interface<br/>query or resume by OperationId"]
+        coordinator["Check-in coordination<br/>scope fingerprint, transfer and idempotency"]
+        reservation["Reservation rules<br/>actor, Workspace, lease and expected head"]
+        publisher["Authoritative publication<br/>Generation, head, Change Set and disposition"]
+
+        command -->|validated intent| coordinator
+        command -->|Checkout request| reservation
+        status -->|same OperationId| coordinator
+        coordinator -->|preflight and commit-time check| reservation
+        coordinator -->|verified complete scope| publisher
+    end
+
+    subgraph artifact["Artifact custody"]
+        direction TB
+        transfer["Artifact Storage Interface and Adapter<br/>resumable private candidate custody"]
+        staging[("Private candidate / Artifact storage")]
+        transfer -->|verified candidate bytes| staging
+    end
+
+    subgraph owners["Authoritative supporting owners"]
+        direction TB
+        policy["Access Policy Module<br/>Effective Permission decision"]
+        structure["Product Structure Module<br/>exact snapshot validation"]
+        database[("Relational unit of work<br/>authoritative records and outbox")]
+        audit["Audit Evidence Module<br/>attributable outcome"]
+        database -->|committed outbox record| audit
+    end
+
+    desktop -->|HTTPS intent and confirmation| command
+    workspace -->|HTTPS manifest, digest and chunks| command
+    desktop -->|HTTPS status query| status
+    command <-->|evaluate actor, action, resource and Scope<br/>then return grant or bounded refusal| policy
+    coordinator -->|begin or resume scoped transfer| transfer
+    publisher -->|validate exact structure when applicable| structure
+    publisher -->|one authoritative commit| database
+    status -->|read authoritative operation result| database
+```
+
+Long description and conclusion:
+
+1. Desktop captures intent and confirmation; the Workspace process owns local files, manifest,
+   hashing and safe recovery. Neither can create a Generation or decide that Check-in succeeded.
+2. Callers learn one small Workspace command interface and one status interface. Reservation,
+   transfer, deduplication, idempotency and commit ordering remain hidden implementation complexity.
+3. Access Policy supplies an eligibility decision. Controlled Product Data still applies the
+   current-head, owner, Workspace, lease, lifecycle and exact-scope business gates.
+4. Candidate bytes become durable and digest-verified through the Artifact Storage Interface before
+   publication. They remain private and are not a Generation.
+5. Authoritative publication is one database unit of work that records the complete logical result,
+   including changed Generations, Working Heads, any Change Set, Audit/outbox and every confirmed
+   Reservation disposition. A No Change entry creates no Generation but participates in the same
+   complete result.
+6. A client that loses the response asks the status interface about the same `OperationId`. It never
+   infers completion from upload progress and never creates a replacement operation with changed
+   inputs.
+7. The Artifact Adapter is a real Seam because filesystem and later object/multi-volume
+   Implementations may replace one another. Internal coordination responsibilities stay private
+   until an independently varying Implementation proves that another Seam is needed.
+
+## 6. Semantic interface catalogue
+
+The interfaces below define product meaning. Protocol, serialization and library choices are
+candidate Tech details; a later implementation must preserve the behavior and errors.
+
+| Interface ID | Owner / caller | Inputs and outputs | Contract and error behavior | Security / trace |
+|---|---|---|---|---|
+| `IF-PRODUCT-QUERY` | Owner Module / Web, Desktop | Organization, actor, stable identity, requested view → authorized exact state/projection. | No floating resolution where an exact pin is required; stale projection is identified; missing/unauthorized fails without data leakage. | Authenticated; owner-authorized; correlation/Audit where material. |
+| `IF-PRODUCT-COMMAND` | Owner Module / Web, Desktop | Actor, policy context, target, expected state, OperationId and payload → one accepted/refused outcome. | Optimistic preconditions and idempotency are explicit; no partial authoritative outcome. | Owner enforces final authorization; decision evidence pins policy version. |
+| `IF-ARTIFACT-TRANSFER` | Controlled Product Data / Workspace or authorized viewer | Exact Artifact/digest and operation scope → resumable bytes plus verification result. | Short-lived scoped grant; wrong object, expiry, replay or digest mismatch fails closed. | No permanent store credential in client; transfer correlated and auditable. |
+| `IF-WORKSPACE-IPC` | Workspace process / Desktop | Per-user authenticated commands, progress, manifest and local-state evidence. | Another user/session cannot command/read; reconnect does not invent server success. | Protected local transport; no secrets in diagnostic output. |
+| `IF-FORMAT-JOB` | Format Intelligence / isolated Adapter | Immutable source Generation/Artifact digest, Capability Profile and limits → typed result/Representation or typed failure. An application-assisted Adapter may invoke only the declared export interface/version. | Idempotent; returned source pin/digest must match the request; source advance changes the derivative to `Needs update`; failure preserves source and state. Manual upload uses the same validation boundary. | One-job least privilege; application/Adapter/tool provenance and output digest retained; Release blocks or warns only under its versioned policy. |
+| `IF-COMMITTED-EVENT` | Owner Module / projections and notifications | Committed event with identity, version, actor, correlation and source pins. | Published from transactional outbox only; replay repairs consumers; consumer failure cannot reverse/fabricate owner state. | Classification propagated; consumer access scoped. |
+| `IF-ACCOUNT-SESSION` | Identity and Accounts / Web, Desktop and Server | Credentials, recovery proof or session proof → stable Actor/Organization, account eligibility or bounded denial. | One-use expiring recovery; explicit revocation; no credential in logs and no public signup endpoint. Account/session eligibility is checked on every protected request, then revalidated with the owner before authoritative commit. | `REQ-IAM-001/003/004/006/007`; `VVP-015`; maintained framework mechanisms, not a custom OAuth server. |
+| `IF-DIRECTORY-ADMIN` | Identity and Accounts / Account Administration UI | Assigned Scope, expected version and account/Login-Identity command → one accepted/refused directory outcome. | Only an effective Account Administrator may issue, activate, suspend or recover accounts in Scope. The interface cannot create Project/Group membership, Role Definitions/Assignments, read an existing password or imply product authority. | `REQ-IAM-002/003/005…007`; actor, target, Scope, before/after identity and outcome audited without secrets. |
+| `IF-PROJECT-ACCESS-ADMIN` | Project Governance / Project Administration UI | Project Scope, expected version and Project-Membership/Group/Group-Membership command → one accepted/refused outcome. | The caller must have Project Administrator at that Project. Only direct Actor membership is accepted; another Project, a nested Group or a partial concurrent change is refused. Account and role state are not mutated. | `REQ-AUTH-003/005/009/010`; Project/Group/member identities, before/after values, actor, reason and outcome audited. |
+| `IF-RBAC-ADMIN` | Access Policy / Role Administration UI | Role Definition candidate or Role Assignment command, base version, Principal, exact Scope, effective interval/condition and reason → validation/diff or accepted/refused outcome. | Built-in roles cannot be edited; Custom Role change creates a successor version available to new assignments but never retargets an existing assignment implicitly. Moving an assignment to the successor is a separate previewed replacement. The caller's delegation limits are revalidated at commit; self-broadening, unapproved role/principal/Scope, non-Super highest-role change and last-recovery removal fail atomically. Serialized import is only a candidate and never self-authorizes activation. | `REQ-AUTH-001…010`, `REQ-GOV-005`; RBAC-01…10; exact role/assignment and before/after outcome audited. |
+| `IF-AUTHORIZATION-DECISION` | Access Policy / every authoritative owner Module | Eligible Actor, requested Permission, resource identity/state and current policy context → granted/blocked result, contributing assignment paths and policy/version pins. | Evaluation resolves direct and Group assignments, Scope, time and supported conditions; no grant blocks. The result exposes no unauthorized target detail and cannot commit owner state or bypass owner business gates. | `REQ-GOV-002`, `REQ-AUTH-003…008`; authorization decision and subsequent owner outcome share correlation identity. |
+| `IF-WORKFLOW-ADMIN` | Lifecycle Governance / Product Configuration Administration UI | Workflow/Approval definition candidate, Workflow Roles, RBAC eligibility rules and base version → validation/diff or activated version. | A definition cannot create accounts, Groups, memberships or Role Assignments. Missing roles/transitions/eligibility, stale base or self-authorizing adoption is refused; running instances remain pinned to prior versions. | `REQ-LC-001/003/005`, `REQ-GOV-005`, `REQ-AUTH-008`; WF-01…06; definition/version/actor/outcome audited. |
+| `IF-STRUCTURE-BOM` | Product Structure / Web, Desktop, controlled export | Exact Structure Snapshot and BOM View Profile → authorized BOM view or pinned BOM Representation; exact base snapshot plus candidate payload → validation/diff or one confirmed new Structure Snapshot/Generation. | A file upload is non-authoritative. Query/export never follows floating latest; invalid, unresolved, stale-base, unauthorized or faulted import changes no authoritative row and creates no partial snapshot. | `REQ-STR-004…006`; BM-01…06; snapshot/profile/candidate/output digests and actor/outcome audited. |
+| `IF-DESKTOP-BRIDGE` | Desktop / approved Web-rendered region | Versioned, allowlisted intent plus selected item/Workspace scope → progress/result. | Validate sender origin/frame, schema, session and manifest scope; no arbitrary path, shell command or generic host-object proxy. Navigation invalidates bridge authority; unsupported version fails safely. | `REQ-SEC-003`; `VVP-009/011`; native confirmation where scope changes. |
+| `IF-COMPANY-IDENTITY` | Future login Adapter / Identity and Accounts | Verified provider subject → explicitly linked internal Actor/Organization. | Future integration; failure cannot substitute another actor, auto-link by email or reinterpret retained Audit. Native login remains the initial method. | Protocol/provider and company authorization `UNKNOWN`; deferred, not implemented as an empty integration layer. |
+
+A supported public integration interface is outside Core v0. Internal versioned interfaces do not
+create a promise of ERP/MRP write-back, bidirectional synchronization or direct database access.
+
+## 7. Key interaction and state sequences
+
+Lifecycle state and edit entitlement are independent. `Under Review` answers where a Business
+Revision is in its Workflow; an active Checkout answers who may publish the next change from an
+expected Generation. Approval is a retained decision, not a second lifecycle state. Local file
+condition and Check-in progress are two further independent facts. The UI may show them together,
+but implementation and Audit shall not collapse them into one generic status.
+
+| Independent fact | Source of truth | Example values | It must never be used to infer |
+|---|---|---|---|
+| Business Revision workflow | Lifecycle Governance | `Start`, `In Work`, `Under Review`, `Released` | who holds publish entitlement or whether a local file changed |
+| Reservation status | Controlled Product Data | `Active`, `Released`, `Expired`, `Recovered` | workflow state, local file deletion or successful Check-in |
+| Workspace Entry condition | Workspace Manifest plus current authorized server query | `Reference`, `Checkout`; exact/changed locally; current/out of date | authoritative publication or permission by itself |
+| Check-in Operation status | Controlled Product Data | prepared, transferring, validating, ready, committed, refused or reconciliation needed | file integrity without digest evidence or user intent for a different operation |
+
+The diagrams below are conceptual state views; persisted codes remain governed by the selected
+definitions. Each state transition names the event or command that changes that one state owner.
+
+**`ARCH-VIEW-STATE-001` — Business Revision workflow state.** **Model profile:** UML State
+ Machine; `Draft 0.12`; lifecycle users and reviewers. **Question:** which governed commands move the
+Revision, independently of Checkout? **Scope:** one Business Revision and its seeded lifecycle.
+**Excludes:** Reservation, local
+Workspace and transfer state. **Trace:** `REQ-LC-001…009`, `VVP-006`. **Legend:** arrows are
+accepted commands; notes are invariant constraints, not additional states.
+
+```mermaid
+stateDiagram-v2
+    accTitle: Business Revision workflow state
+    accDescr: A first successful Check-in moves a Revision from Start to In Work. Submit moves it to Under Review. Reject or Withdraw returns it to In Work. Approval records a decision but the Revision remains Under Review until an eligible Release succeeds. Checkout never changes this workflow.
+    direction LR
+
+    state "In Work" as InWork
+    state "Under Review" as UnderReview
+    [*] --> Start
+    Start --> InWork: first successful Check-in
+    InWork --> UnderReview: Submit for review
+    UnderReview --> InWork: Reject or Withdraw review
+    UnderReview --> Released: Release after approval and gate validation
+    Released --> [*]
+```
+
+The principal conclusion is that Checkout, Check-in transfer progress and Approval do not silently
+advance this state machine. In particular, an approved Revision remains `Under Review` until the
+Release command passes its exact-scope gates.
+
+**`ARCH-VIEW-STATE-002` — Reservation record lifecycle.** **Model profile:** UML State Machine;
+`Draft 0.12`; engineer, support and implementation reviewers. **Question:** how does the temporary
+publish entitlement end? **Scope:** one server-authoritative `ReservationId` from creation through
+terminal disposition. **Excludes:** Workflow,
+local file and Check-in Operation state. **Trace:** `REQ-WS-002/007…010/013`, ADR C1-005,
+`WS-01…04`. **Legend:** each arrow changes the status of the same `ReservationId`; a new Checkout
+always creates a different Reservation record.
+
+```mermaid
+stateDiagram-v2
+    accTitle: Reservation record lifecycle
+    accDescr: A confirmed Checkout creates an Active Reservation. Renewal keeps that same record Active. A committed changed or No Change Check-in or governed cancel makes it Released. Lease timeout makes it Expired. Authorized recovery makes the old record Recovered. Released, Expired and Recovered records never become Active again; any later Checkout creates a new Reservation against the current head.
+    direction LR
+
+    [*] --> Active: confirmed Checkout creates ReservationId
+    Active --> Active: authorized renewal before lease deadline
+    Active --> Released: changed Check-in, No Change or cancel committed
+    Active --> Expired: server lease deadline reached
+    Active --> Recovered: authorized recovery ends old entitlement
+    Expired --> Recovered: authorized recovery disposition recorded
+```
+
+`Released`, `Expired` and `Recovered` grant no publish entitlement, but their records remain for
+Audit. Network loss, sign-out and application exit are not transitions. They stop renewal at most;
+the server clock and configured lease decide whether `Active` later becomes `Expired`. Reference
+never creates a Reservation. No administrator path reactivates the old record or bypasses the
+expected-Generation check.
+
+**`ARCH-VIEW-STATE-003` — Local Reference condition and safe exits.** **Model profile:** UML State
+Machine; `Draft 0.12`; engineer, support and interaction reviewers. **Question:** what may the user do
+when local content and the server head change independently? **Scope:** one Workspace Entry originally
+materialized as Reference and its pinned expected Generation. **Excludes:** server Workflow and
+semantic CAD/Office merge. **Trace:**
+`REQ-WS-003/010/011/014`, `QRS-003`, `WS-05/06`. **Legend:** each state combines two observed
+dimensions—local digest integrity and whether the pinned Generation is still the Working Head;
+transitions leaving Reference require an explicit user action and server result.
+
+```mermaid
+stateDiagram-v2
+    accTitle: Local Reference condition and safe exits
+    accDescr: A Reference starts with exact local bytes for the current server head. Local editing or a newer server head can occur independently. A modified current Reference can become a working copy only after the server grants Checkout against that same Generation. A modified out-of-date Reference cannot publish directly and remains safe while the user chooses a copy, a new document, deliberate reapplication to a fresh Checkout, or confirmed discard.
+
+    state "Reference<br/>Đúng file · Đúng bản hiện tại" as ExactCurrent
+    state "Reference<br/>Đã thay đổi trên máy · Đúng bản hiện tại" as ModifiedCurrent
+    state "Reference<br/>Đúng file · Có bản mới trên server" as ExactOlder
+    state "Reference<br/>Đã thay đổi trên máy · Có bản mới trên server" as ModifiedOlder
+    state "Checkout mới được cấp<br/>Giữ nguyên file local" as CheckoutGranted
+    state "Cần người dùng chọn cách xử lý<br/>File local vẫn được giữ an toàn" as SafeChoice
+
+    [*] --> ExactCurrent: materialize exact Generation and verify digest
+    ExactCurrent --> ModifiedCurrent: local digest changes
+    ExactCurrent --> ExactOlder: Working Head advances
+    ModifiedCurrent --> ModifiedOlder: Working Head advances
+    ExactOlder --> ModifiedOlder: local digest changes
+    ExactOlder --> ExactCurrent: confirm replace with current exact file
+    ModifiedCurrent --> CheckoutGranted: Checkout same expected Generation succeeds
+    ModifiedCurrent --> SafeChoice: Checkout refused or another safe path chosen
+    ModifiedOlder --> SafeChoice: direct conversion is stale and refused
+```
+
+| Observed Reference condition | Safe primary action | Server effect before any later Check-in |
+|---|---|---|
+| Exact local file; pinned Generation is current | Continue as Reference, or explicitly request Checkout. | Reference itself creates no Reservation. |
+| Changed locally; pinned Generation is current | Request **Chuyển thành bản làm việc**; keep the same local bytes only if Checkout is granted. | One new Reservation binds this Workspace and expected Generation. |
+| Exact local file; a newer Working Head exists | Keep the exact historical Reference or confirm replacement with the current exact file. | No publish and no merge. |
+| Changed locally; a newer Working Head exists | Keep a safe copy, Create Copy, or obtain current separately and deliberately reapply under a new current-head Checkout. | Original Logical Document remains unchanged; discard requires confirmation. |
+
+### 7.1 Checkout and materialization
+
+**`ARCH-VIEW-SEQ-001` — Confirmed Checkout/Reference materialization.** **Model profile:** UML
+Sequence; `Draft 0.12`; engineer, implementation and verification reviewers. **Question:** when are
+Reservations created, and how do exact files enter the Workspace? **Scope:** one confirmed root plus
+selected related documents in one Managed Workspace. **Excludes:** later Check-in and semantic
+content merge. **Trace:** `REQ-WS-001…006/013/015`,
+`IF-PRODUCT-COMMAND`, `IF-ARTIFACT-TRANSFER`, `WS-01`. **Legend:** `alt` branches are mutually
+exclusive outcomes; dashed returns contain results and no command; every file transfer is for an
+exact Artifact/digest.
+
+1. Desktop resolves the selected root and known Related Documents.
+2. User confirms each item as Checkout, Reference or excluded; no hidden assembly-wide cascade.
+3. Server authorizes the complete request and creates one Reservation per Checkout document against
+   its expected Generation. One conflict refuses the proposed set and returns affected entries.
+4. Controlled Product Data grants scoped Artifact transfer for the confirmed snapshot.
+5. Workspace process materializes every exact file, verifies the digest and records its Workspace
+   Manifest before Desktop reports completion and opens the root through the operating system.
+
+```mermaid
+sequenceDiagram
+    accTitle: Confirmed Checkout and Reference materialization
+    accDescr: The engineer first sees and confirms an exact document scope. The server evaluates permission and current state for every row. One conflict refuses the requested Reservation set. If valid, the server creates Reservations only for Checkout rows, returns exact Artifact pins for both modes, and the Workspace verifies each digest before updating its manifest or opening the root file.
+
+    actor Engineer
+    participant Desktop as IDEA Desktop
+    participant Workspace as Workspace process
+    participant Server as IDEA Server
+    participant Policy as Access Policy
+    participant Product as Controlled Product Data
+    participant Store as Private Artifact store
+    participant Tool as Office or CAD
+
+    Engineer->>Desktop: Select root and request work
+    Desktop->>Server: Preview root, relations and allowed modes
+    Server->>Product: Resolve exact current heads and dependencies
+    Product->>Policy: Evaluate actor, action and Scope per document
+    Policy-->>Product: Grant or bounded refusal with explanation
+    Product-->>Server: Proposed rows, pins, modes and blockers
+    Server-->>Desktop: Display exact proposed scope
+    Engineer->>Desktop: Confirm Checkout, Reference or excluded per row
+    Desktop->>Server: Submit confirmed work scope
+    Server->>Policy: Revalidate current eligibility
+    Server->>Product: Validate every head and conflicting Reservation
+    alt any requested Checkout row is invalid or unavailable
+        Product-->>Server: Refuse complete Reservation set with affected rows
+        Server-->>Desktop: No Reservation created and correction path shown
+    else complete scope is valid
+        Product->>Product: Create Reservation set for Checkout rows only
+        Product-->>Server: ReservationIds plus exact Artifact pins
+        Server-->>Desktop: Confirm modes, pins and scoped transfer identities
+        Desktop->>Workspace: Materialize confirmed entries
+        loop each exact Artifact
+            Workspace->>Server: Read pinned Artifact by scoped transfer
+            Server->>Store: Read immutable bytes by digest
+            Store-->>Workspace: Stream bytes
+            Workspace->>Workspace: Verify full digest and persist manifest entry
+        end
+        alt every required root file is verified
+            Workspace-->>Desktop: Materialization complete
+            Desktop->>Tool: Open ordinary managed file
+        else transfer interrupted or digest fails
+            Workspace-->>Desktop: Incomplete and verified progress preserved
+            Note over Desktop,Server: Resume or cancel explicitly and do not report Checkout complete
+        end
+    end
+```
+
+The Reservation-set creation is atomic for the confirmed Checkout rows; Reference rows never receive
+one. File transfer occurs afterward and may resume independently. Therefore materialization failure
+does not invent a successful local file, release the already granted Reservations or change a
+Generation. The user can resume, cancel under policy or let the lease expire; each path remains
+visible and attributable.
+
+### 7.1.1 Modified Reference handling
+
+**`ARCH-VIEW-SEQ-005` — Modified Reference decision sequence.** **Model profile:** UML Sequence;
+`Draft 0.12`; engineer and support reviewers. **Question:** which server check permits conversion,
+and what remains safe when it fails? **Scope:** one locally modified Reference entry, its Workspace
+and its expected Generation. **Excludes:**
+automatic CAD/Office merge and generic file comparison. **Trace:** `REQ-WS-003/010/011/014`,
+`QRS-003`, `WS-05/06`. **Legend:** `alt` branches are user-selected paths and mutually exclusive for
+this attempt. The user is choosing what to do with local bytes; none of these choices silently
+changes the original Logical Document.
+
+1. Workspace detects that a file materialized as Reference no longer matches its recorded digest and
+   reports **Đã thay đổi trên máy**.
+2. Direct Check-in is unavailable because Reference grants no publish entitlement.
+3. `Chuyển thành bản làm việc` asks Server for a new Checkout against the referenced expected
+   Generation. It succeeds only when that Generation remains current and no other active Reservation
+   exists.
+4. If the Generation is stale or unavailable, Workspace preserves the local candidate and lets the
+   user keep a safe copy, materialize the current Generation separately, create a new Logical
+   Document, or discard only after confirmation. CAD/Office content is never auto-merged.
+
+```mermaid
+sequenceDiagram
+    accTitle: Modified Reference decision sequence
+    accDescr: A changed local Reference cannot be checked in. The engineer may request Checkout against its exact expected Generation. Only a still-current and available Generation yields a new Reservation while keeping local bytes. Otherwise the original document is unchanged and the local candidate remains available for safe copy, current-file comparison, deliberate reapplication, Create Copy or confirmed discard.
+
+    actor Engineer
+    participant Desktop as IDEA Desktop
+    participant Workspace as Workspace process
+    participant Server as IDEA Server
+    participant Product as Controlled Product Data
+
+    Workspace->>Workspace: Compare local digest with Reference manifest
+    Workspace-->>Desktop: Reference changed locally
+    Desktop-->>Engineer: Show safe choices and direct Check-in unavailable
+    alt Convert to working copy
+        Engineer->>Desktop: Request Checkout for expected Generation
+        Desktop->>Server: Checkout(document, workspace, expected Generation)
+        Server->>Product: Revalidate current head and active Reservation
+        alt current and available
+            Product-->>Desktop: New active Reservation
+            Desktop-->>Engineer: Local candidate is now eligible for later Check-in
+        else stale or held by another actor
+            Product-->>Desktop: Refuse with current Generation and safe actions
+            Note over Workspace: Keep local candidate unchanged
+        end
+    else Keep latest and local work
+        Workspace->>Workspace: Preserve local copy and materialize current separately
+    else Create Copy or confirmed discard
+        Desktop->>Server: Create new document, or fetch current after confirmation
+    end
+```
+
+Text alternative: a modified Reference is detected locally and cannot be checked in. Conversion to
+a working copy requires a fresh server Checkout against the same current Generation. If that check
+fails, the original document remains unchanged and the user's local bytes remain available for safe
+copy, comparison/manual reapplication, Create Copy or confirmed discard.
+
+### 7.2 Check-in and stale recovery
+
+**`ARCH-VIEW-STATE-004` — Check-in Operation lifecycle.** **Model profile:** UML State Machine;
+`Draft 0.12`; implementation, operations and verification reviewers. **Question:** which
+operation-level states may resume, which state proves publication, and when is reconciliation
+required? **Scope:** one server-owned `OperationId` from registration through terminal resolution.
+**Excludes:** individual transfer/validation phases, chunk/range state and
+UI progress wording; those pre-commit phases are decomposed in the transition table below. **Trace:**
+`REQ-WS-007…013/015`, `REQ-OPS-001/002`, `QRS-001/002/011`, `WS-02/03/07/08`.
+**Legend:** arrows show principal operation-level transitions for the same immutable input
+fingerprint; `Ended without publication` groups the three distinct terminal outcomes `Refused`,
+`Failed` and `Cancelled` only to keep this overview readable. Their exact transitions remain in the
+table below. `Needs reconciliation` is a held operational state, not success.
+
+```mermaid
+stateDiagram-v2
+    accTitle: Check-in Operation lifecycle
+    accDescr: The server accepts one OperationId and input fingerprint into a private resumable pre-commit state. Only complete transfer and validation reach Ready to commit, and only the authoritative database commit reaches Committed. Refused, failed and cancelled operations are grouped as ended without publication in this overview and remain distinct in the transition table. An uncertain commit outcome is held for reconciliation before the client may treat it as committed or safely resumable.
+
+    direction TB
+
+    state "Pre-commit<br/>private and resumable" as PreCommit
+    state "Ready to commit<br/>all preconditions proven" as ReadyToCommit
+    state "Committing<br/>authoritative transaction" as Committing
+    state "Committed<br/>one complete result" as Committed
+    state "Ended without publication<br/>Refused · Failed · Cancelled" as EndedNoPublication
+    state "Needs reconciliation<br/>do not infer outcome" as NeedsReconciliation
+
+    [*] --> PreCommit: register OperationId and fingerprint
+    PreCommit --> ReadyToCommit: transfer and validation complete
+    PreCommit --> EndedNoPublication: refuse, fail or cancel before commit
+    ReadyToCommit --> EndedNoPublication: authorized cancel before commit
+    ReadyToCommit --> Committing: authoritative commit starts
+    Committing --> Committed: database transaction commits
+    Committing --> EndedNoPublication: rollback is proved
+    Committing --> NeedsReconciliation: outcome cannot be proved immediately
+    NeedsReconciliation --> Committed: complete commit evidence found
+    NeedsReconciliation --> PreCommit: no commit and verified progress is resumable
+    NeedsReconciliation --> EndedNoPublication: no commit and safe resume is impossible
+```
+
+`Pre-commit` is one operation-level state with three internal phases: `Prepared`, `Transferring` and
+`Validating`. Those phases may resume only with the same `OperationId` and identical declared-input
+fingerprint. A transport interruption alone does not make the operation `Failed`. `Refused`, `Failed`
+and `Cancelled` publish no Generation and do not release a still-valid Reservation merely because
+the Check-in attempt ended; an explicit Reservation cancel or independent lease expiry remains a
+separate event. `Needs reconciliation` prevents both a success claim and an unsafe replacement
+operation until authoritative evidence resolves it.
+
+| Source condition | Accepted event or proved fact | Target condition | Authoritative meaning |
+|---|---|---|---|
+| New request | Initial validation refuses the declared input. | `Refused` | No candidate or product state is published. |
+| New request | Server records one `OperationId` and immutable input fingerprint. | `Prepared` | The operation exists, but no product change is public. |
+| `Prepared` | Changed entries require bytes. | `Transferring` | Resumable private transfer may start. |
+| `Prepared` | Every entry is No Change and needs no candidate bytes. | `Validating` | The same operation still performs all current-state checks. |
+| `Transferring` | Every candidate digest is verified. | `Validating` | Complete immutable candidates exist privately. |
+| `Validating` | Permission, lifecycle, Reservation, expected head, scope and content checks all pass. | `Ready to commit` | This is the final safe point before authoritative publication. |
+| Any state before `Committing` | Authorized user cancels. | `Cancelled` | No product state is published; Reservation disposition follows the explicit cancel policy, not an inferred Check-in success. |
+| Any state before `Committing` | A business precondition is no longer valid. | `Refused` | No publication; affected facts and safe recovery actions are returned. |
+| Any state before `Committing` | A technical failure is known and safe resume is impossible. | `Failed` | No authoritative commit; local work remains recoverable. |
+| `Ready to commit` | The authoritative database transaction starts. | `Committing` | Client retry must query the same operation; it must not create another one. |
+| `Committing` | Transaction commit is proved. | `Committed` | The complete result is authoritative and all confirmed Reservations are ended. |
+| `Committing` | Rollback is proved. | `Failed` | None of the proposed product changes became authoritative. |
+| `Committing` | Immediate outcome cannot be proved. | `Needs reconciliation` | Neither success nor failure may be reported yet. |
+| `Needs reconciliation` | Commit evidence is found, or non-commit plus safe resumability is proved. | `Committed`, `Transferring` or `Failed` | Resolution follows authoritative evidence; it never guesses from client progress. |
+
+**`ARCH-VIEW-SEQ-002` — Atomic Check-in publication.** **Model profile:** UML Sequence; `Draft
+0.12`; engineer, implementation, operations and verification reviewers. **Question:** where is the
+last safe refusal point, and what exactly becomes authoritative together? **Scope:** one confirmed
+multi-document Check-in scope and one immutable `OperationId` input. **Excludes:** response-loss
+recovery, which is isolated in
+`ARCH-VIEW-SEQ-007`. **Trace:** `REQ-WS-006…013/015`, `REQ-OPS-001`, `IF-PRODUCT-COMMAND`,
+`IF-ARTIFACT-TRANSFER`, ADR C1-004/C1-005, `WS-02/03/07`. **Legend:** private staging is outside
+the authoritative database transaction; the `alt` paths are mutually exclusive results for the
+same operation.
+
+1. Workspace process scans/hashes the complete candidate scope and classifies unchanged, changed,
+   missing, Out of date and modified-without-Checkout entries using the approved UI terms.
+2. Desktop requires confirmation of exact scope and explains that a successful or No Change result ends Checkout for that scope. Core v0 offers no retain-after-Check-in option.
+3. Content is staged privately. Server validates identity, digest, metadata, relations, policy,
+   owner, Workspace, Reservation and expected Generation.
+4. Any invalid entry refuses the entire confirmed operation. Local work is preserved; the response
+   shows expected/current Generation and valid refresh/reapply, Save As, retry or governed recovery.
+5. Verify and durably materialize immutable candidate bytes in private storage **before** publication. A failed or uncertain file write cannot reach `Ready to commit`. No filesystem/object-store write is assumed to participate in a database transaction.
+6. One database transaction revalidates account/session eligibility, owner policy, Reservation, expected heads and scope, then records Artifact manifest references, required Structure Snapshots, Generations, Working Heads, a Change Set when at least one entry changed, the operation result, Audit/outbox and release of the in-scope Reservations. Each Module writes only its owned state through the shared unit of work.
+7. A semantic No Change result creates no Generation and still records the result and ends every hold in the confirmed scope. A mixed changed/unchanged scope ends all confirmed holds when the whole operation succeeds. Failure preserves local work and any still-valid entitlement.
+8. Retrying the same OperationId resolves the same operation; it does not create a duplicate Generation, Change Set or result. After a database failure, unused bytes remain private and are reconciled only after proving no live operation or retained Generation references them.
+
+```mermaid
+sequenceDiagram
+    accTitle: Atomic Check-in publication
+    accDescr: The engineer confirms an exact scope after a complete local scan. The server fixes the OperationId input fingerprint and checks authorization, current heads and Reservations. Changed bytes are staged and digest-verified privately. At commit time the server revalidates all gates and uses one database transaction to publish every changed Generation, update heads, record any Change Set plus the operation and outbox, and release all confirmed Reservations. Any refusal or pre-commit failure publishes none and preserves local work.
+
+    actor Engineer
+    participant Desktop as IDEA Desktop
+    participant Workspace as Workspace process
+    participant Server as IDEA Server
+    participant Policy as Access Policy
+    participant Product as Controlled Product Data
+    participant Store as Private Artifact store
+    participant DB as Relational store and unit of work
+
+    Engineer->>Desktop: Request Check-in
+    Desktop->>Workspace: Scan complete confirmed scope
+    Workspace-->>Desktop: Changed, unchanged, missing or out-of-date rows
+    Engineer->>Desktop: Confirm exact scope
+    Desktop->>Server: Prepare(OperationId, exact scope, input fingerprint)
+    Server->>Policy: Evaluate actor, action, resource and Scope
+    Policy-->>Server: Grant or bounded refusal with policy pins
+    Server->>Product: Preflight heads, holder, Workspace, lease and lifecycle
+    alt any entry is stale, unauthorized or invalid
+        Product-->>Server: Refuse with affected row and safe facts
+        Server->>DB: Record terminal Refused operation and Audit outcome
+        Server-->>Desktop: Conflict and allowed recovery actions
+        Note over Workspace: Local candidate remains intact
+    else declared scope passes preflight
+        Server->>DB: Record Prepared operation and immutable input fingerprint
+        loop each changed Artifact
+            Workspace->>Server: Upload or resume verified chunks
+            Server->>Store: Persist private candidate bytes
+        end
+        Server->>Store: Verify every complete size and full digest
+        Store-->>Server: Candidate set durable and exact
+        Server->>Product: Commit same OperationId
+        Product->>Policy: Revalidate current eligibility and policy pins
+        Policy-->>Product: Current decision
+        Product->>DB: BEGIN and lock/revalidate heads, Reservations and scope
+        Product->>DB: Insert changed Generations and record No Change rows
+        Product->>DB: Advance intended heads and add result, any Change Set and Audit/outbox
+        Product->>DB: Release every confirmed in-scope Reservation and COMMIT
+        DB-->>Product: One complete committed result
+        Product-->>Server: Generations, No Change rows and dispositions
+        Server-->>Desktop: Terminal Committed result for OperationId
+    end
+```
+
+Private Artifact writes are intentionally not presented as part of the relational ACID transaction.
+The invariant is logical all-or-none visibility: verified candidates may exist privately before
+commit, but authoritative readers see either the complete changed Change Set, the recorded No Change
+result, or the prior baseline. A known
+pre-commit failure changes no Working Head and releases no Reservation. Unreferenced private bytes
+remain subject to controlled reconciliation and cannot be treated as a Generation.
+
+### 7.2.1 Interrupted and uncertain Check-in result
+
+**`ARCH-VIEW-SEQ-007` — Resolve interruption by OperationId.** **Model profile:** UML Sequence;
+`Draft 0.12`; engineer, support, operations and verification reviewers. **Question:** how does the
+client distinguish safe resume from a commit whose response was lost? **Scope:** one interrupted
+client attempt and the same immutable `OperationId` input. **Excludes:** starting a different business
+operation or editing the declared scope. **Trace:** `REQ-WS-007/010/012/013`, `REQ-OPS-001/002`, `QRS-002`,
+`WS-03/07`. **Legend:** a crossed return is a response the client did not receive; status and
+reconciliation always use the original `OperationId`.
+
+```mermaid
+sequenceDiagram
+    accTitle: Resolve an interrupted or uncertain Check-in by OperationId
+    accDescr: If the commit succeeded but its response was lost, the client queries the same OperationId and receives the already committed result. If interruption occurred before commit, the server returns verified progress for safe resume. If authoritative evidence is inconsistent or temporarily unavailable, the operation is held for reconciliation and no new operation or success is inferred.
+
+    actor Engineer
+    participant Desktop as IDEA Desktop
+    participant Server as IDEA Server
+    participant DB as Relational authority
+    participant Staging as Private staging
+    participant Reconcile as Reconciliation worker
+
+    Note over Desktop,Server: Same OperationId and identical input fingerprint in every retry
+    alt authoritative commit succeeded but response was lost
+        Server->>DB: Commit operation, any Change Set, heads and dispositions
+        DB-->>Server: Committed
+        Server--xDesktop: Committed response lost
+        Desktop->>Server: Query status(OperationId, input fingerprint)
+        Server->>DB: Read authoritative operation result
+        DB-->>Server: Committed plus exact result identities
+        Server-->>Desktop: Return same committed result and create nothing new
+    else interruption occurred before authoritative commit
+        Server--xDesktop: Connection or process interrupted
+        Desktop->>Server: Query or resume same OperationId
+        Server->>DB: Read operation and commit evidence
+        DB-->>Server: No committed operation result
+        Server->>Staging: Read verified candidates and accepted ranges
+        alt progress is consistent and business gates still pass
+            Staging-->>Server: Verified progress and missing ranges
+            Server-->>Desktop: Resume same operation from safe point
+        else outcome cannot yet be proved safely
+            Server->>DB: Record NeedsReconciliation when authority is available
+            Server-->>Desktop: Hold result, preserve local work and do not start replacement
+            Reconcile->>DB: Compare operation, Generations, heads, dispositions and outbox
+            Reconcile->>Staging: Compare candidate references, ranges and digests
+            alt complete committed evidence exists
+                Reconcile->>DB: Settle as Committed
+            else no commit and verified work can resume
+                Reconcile->>DB: Settle at safe resumable state
+            else inconsistency remains
+                Reconcile->>DB: Retain hold and incident evidence
+            end
+        end
+    end
+```
+
+The Desktop clears the displayed Checkout entitlement only after the authoritative status is
+`Committed` and includes the Reservation dispositions for the confirmed scope. Reusing the same
+`OperationId` with a different document set, expected Generation, Reservation, Workspace, size or
+digest is an input mismatch and is refused; it is never interpreted as a retry.
+
+### 7.3 Review, approval and Release
+
+**`ARCH-VIEW-SEQ-003` — Review and exact Release sequence.** **Model profile:** UML Sequence;
+`Draft 0.12`; author, approver, Release Authority and lifecycle reviewers. **Question:** how does an
+exact reviewed Generation become part of one reproducible Release without changing unrelated work?
+**Scope:** one Review Round and one Release operation. **Excludes:** Workspace transfer and later
+Revision work. **Trace:** `REQ-LC-001…009`, `REQ-STR-003`, `VVP-006`, SR-01…06. **Legend:** `alt`
+branches are mutually exclusive lifecycle outcomes; dashed arrows are returned assignments/results.
+
+1. Submit creates a new identified Review Round and pins the exact Generation and review scope under one Workflow/Approval Policy Version.
+2. When an instance starts, Lifecycle Governance resolves the active default for its Document Class
+   or an explicitly permitted selection, then pins that Workflow Definition and Approval Policy.
+3. A later definition activation affects future instances only; migration of a running instance is
+   a separately authorized, previewed and audited operation.
+4. A content-changing Check-in is blocked while the Business Revision is Under Review. The submitter
+   may Withdraw or a reviewer may Reject; either closes the current Review Round and returns to In
+   Work. A later changed Check-in and resubmission creates a new Review Round and never inherits the
+   earlier decision.
+5. The seeded path requires one eligible independent approver and refuses self-approval/release.
+   Missing actors or invalid configuration block the affected action with an explainable result.
+6. Release revalidates exact Artifacts, Product Structure, decisions, exceptions, policy and Audit.
+7. Success creates an immutable Release Record and reproducible Controlled Release Package;
+   failure changes no release state and reports blocking entries.
+
+```mermaid
+sequenceDiagram
+    accTitle: Review approval and exact Release sequence
+    accDescr: An author submits one exact Generation into a Review Round pinned to workflow and approval policy versions. An eligible independent approver records a decision. Release then previews and revalidates the exact scope, structure and evidence; any blocker refuses the whole scope, while success creates one immutable Release Record without changing unrelated In Work documents.
+
+    actor Author
+    actor Approver
+    actor Releaser as Release Authority
+    participant UI as IDEA Workbench
+    participant Lifecycle as Lifecycle Governance
+    participant Structure as Product Structure
+    participant Product as Controlled Product Data
+    participant Audit as Audit Evidence
+
+    Author->>UI: Submit exact Generation for review
+    UI->>Lifecycle: Create Review Round with pinned workflow and approval policy
+    Lifecycle-->>Approver: Assigned review scope
+    Approver->>Lifecycle: Approve or reject exact Generation with reason
+    alt rejected or submitter withdraws
+        Lifecycle-->>UI: Close Round and return Revision to In Work
+    else approved decision retained
+        Releaser->>UI: Preview and confirm exact Release scope
+        UI->>Lifecycle: Release confirmed scope
+        Lifecycle->>Structure: Validate exact dependencies and exceptions
+        Lifecycle->>Product: Validate exact Generations and access
+        alt any required entry is missing, stale or ineligible
+            Lifecycle-->>UI: Refuse whole scope and list blockers
+        else scope is complete
+            Lifecycle->>Lifecycle: Atomically create immutable Release Record
+            Lifecycle->>Audit: Append decision and release evidence
+            Lifecycle-->>UI: Released exact confirmed scope
+            Note over UI: Other documents may remain In Work when not required by this scope
+        end
+    end
+```
+
+### 7.4 Account provisioning, Project access and session loss
+
+1. A controlled, one-time bootstrap creates a named first Super Administrator and an explicit
+   recovery path. This does not grant document, Approval or Release authority.
+2. An authorized Account Administrator issues Linh's Actor, IDEA Account and Login Identity in the
+   Operating Organization. Activation/password setup uses framework-managed, one-use expiring proof
+   through an approved delivery channel; open self-registration is disabled. The account alone grants
+   no Project or product authority.
+3. A Project Administrator assigned at Project `P-100` adds Linh to that Project and, when justified,
+   directly to the `Cơ khí P-100` Business Group. The Account Administrator cannot perform either
+   operation merely because it created the account.
+4. The `Cơ khí P-100` Group receives the `Design Engineer` Role Definition at `P-100` through a Role
+   Assignment. A Project Administrator may create that assignment only when its own delegated role,
+   principal class and Scope limits allow it. Changing the Role Definition itself belongs to an
+   authorized Privileged Role Administrator, not routine Project administration.
+5. Native IDEA login establishes a protected session. Every protected product request is still
+   evaluated from current account eligibility, Project Membership, Group Membership, applicable Role
+   Assignments and the resource owner's business gates. No username, email or provider claim is a
+   durable document-owner key.
+6. Password recovery invalidates prior recovery proof and affected sessions; suspension/revocation is
+   recorded transactionally with attributable Audit. Requests beginning after that commit are refused
+   for affected old sessions; commands revalidate eligibility before their own commit.
+7. Already running transfers are cancelled or revalidated at defined request/chunk checkpoints; bytes
+   already delivered and saved local work cannot be remotely erased. Resume requires fresh
+   authorization. Exact timing/checkpoints must be qualified, not described as instantaneous
+   revocation of every byte.
+8. UI explains reauthentication without deleting a local candidate. Re-enabling an account does not
+   resurrect old sessions. Account, Project, Group and Role Assignment changes do not rewrite
+   historical Actor, Approval or Audit records.
+
+### 7.5 Responsibility flow for granting Linh access to P-100
+
+**`ARCH-VIEW-ACT-001` — Account and Project access administration.** **Model profile:** UML-style
+activity/swimlane rendered as a flowchart; `Draft 0.12`; account, Project, access and support
+reviewers. **Question:** who makes Linh eligible to work as Design Engineer in P-100? **Scope:** one
+account and one Project access path. **Excludes:** password detail and document business gates beyond
+their final decision. **Trace:** `REQ-IAM-002/005`, `REQ-AUTH-003/005/009/010`, PA-01…04.
+**Legend:** each subgraph is an authority lane; arrows carry an outcome to the next authority and do
+not transfer ownership.
+
+```mermaid
+flowchart LR
+    accTitle: Account and Project access administration responsibility
+    accDescr: System Management creates and activates Linh's account without product access. A Project Administrator separately admits Linh to P-100 and its mechanical Group. Access Policy combines Group membership with a Design Engineer Role Assignment at P-100 Scope, after which the product Module still applies its business gates.
+
+    subgraph AA[Account administration — QLHT]
+        A1[Create Linh's Actor and IDEA Account]
+        A2[Activate Login Identity]
+        A1 --> A2
+    end
+
+    subgraph PA[Project administration — P-100]
+        P1[Add Linh as a Project Member]
+        P2[Add Linh to Cơ khí P-100 Group]
+        P1 --> P2
+    end
+
+    subgraph AP[Access policy]
+        R1[Role Assignment: Cơ khí P-100 + Design Engineer + Scope P-100]
+        R2[Calculate Effective Permission]
+        R1 --> R2
+    end
+
+    subgraph PD[Protected product action]
+        D1[Linh requests an action]
+        D2{RBAC and business gates pass?}
+        D3[Perform action and append Audit]
+        D4[Block action and explain reason]
+        D1 --> D2
+        D2 -->|Yes| D3
+        D2 -->|No| D4
+    end
+
+    A2 -->|Account exists; no product access yet| P1
+    P2 -->|Group membership contributes| R2
+    R2 -->|Eligibility result| D1
+```
+
+Reading order is left to right. QLHT creates and maintains the account only. The Project
+Administrator for `P-100` adds Linh to the Project and its mechanical Group. Access Policy combines
+that membership with the Group's `Design Engineer` Role Assignment at Project Scope. The product
+Module still checks lifecycle, Checkout owner, expected Generation and other business rules before
+committing an action. The same person may hold more than one administrative role only through
+separate, visible Role Assignments.
+
+### 7.6 Effective Permission and business-gate decision
+
+Before a protected command commits, the authoritative resource Module performs this sequence:
+
+1. establish the stable Actor and current account/session eligibility;
+2. resolve active Project and direct Group Memberships;
+3. collect valid direct-Actor and Group Role Assignments whose Scope covers the resource;
+4. use the immutable Role Definition versions to combine positive Permissions, applying only
+   supported effective-period and condition constraints;
+5. block when no Permission grants the action; and
+6. when RBAC grants eligibility, revalidate the resource owner's current business state before commit.
+
+**`ARCH-VIEW-SEQ-004` — Effective Permission followed by business gates.** **Model profile:** UML
+Sequence; `Draft 0.12`; security, implementation and Audit reviewers. **Question:** why can an RBAC
+grant still end in a blocked product command? **Scope:** one protected request at one resource.
+**Excludes:** administration that created the account, membership or assignment. **Trace:**
+`REQ-AUTH-003…008`, `REQ-GOV-002`, RBAC-04…10. **Legend:** `alt` paths separate RBAC denial,
+business-gate denial and successful commit; Audit records do not grant authority.
+
+```mermaid
+sequenceDiagram
+    accTitle: Effective Permission followed by business gates
+    accDescr: The authoritative resource Module resolves the current Actor and session, Project and direct Group memberships, then asks Access Policy to evaluate applicable assignments, immutable role versions, Scope, time and conditions. Even when RBAC grants the action, the owner Module revalidates current business state before committing.
+
+    actor Engineer
+    participant Owner as Authoritative resource Module
+    participant IAM as Identity and Accounts
+    participant Project as Project Governance
+    participant Policy as Access Policy
+    participant Audit as Audit Evidence
+
+    Engineer->>Owner: Request protected action on resource
+    Owner->>IAM: Resolve stable Actor and current session eligibility
+    IAM-->>Owner: Eligible Actor or blocked account reason
+    Owner->>Project: Resolve Project Membership and direct Group Memberships
+    Project-->>Owner: Active memberships at requested Project
+    Owner->>Policy: Evaluate Actor, groups, action, resource, Scope and time
+    Policy->>Policy: Resolve assignments, immutable role versions and supported conditions
+    Policy->>Audit: Append authorization decision and contributing assignment IDs
+    Policy-->>Owner: Granted or blocked with explanation
+    alt RBAC granted and business gates pass
+        Owner->>Owner: Revalidate expected state and commit atomically
+        Owner->>Audit: Append authoritative outcome
+        Owner-->>Engineer: Action completed
+    else RBAC granted but a business gate blocks
+        Owner-->>Engineer: Block without state change and show business reason
+    else RBAC blocked
+        Owner-->>Engineer: Block without state change and show safe access reason
+    end
+```
+
+The explanation can name the relevant account status, Project/Group membership, Role Assignment,
+Role Definition version, Scope and business gate, but it must not disclose data the requester is not
+authorized to see. Direct Actor assignments are supported but remain visible in administration and
+Audit; Group assignment is the normal personnel-management path. Core v0 has neither nested Groups
+nor a general user-configurable explicit-deny rule.
+
+### 7.7 Organize, rename and create a copy
+
+1. A query resolves the selected `DocumentId`, its authorized Document Placements and the displayed
+   folder/divider tree; no client receives or constructs an authoritative Artifact-storage path.
+2. Move or link commands authorize the source document, destination folder and requested mode, then
+   change only Placement state. An exact historical link pins its selected Revision and Generation.
+3. A navigation-alias Rename changes only the Placement label and Audit. A controlled Product
+   Definition name/title change enters the normal Checkout/Check-in path and creates a Generation.
+4. Create Copy reads one authorized exact source, allocates a new `DocumentId`, records source
+   provenance and initializes the new document under the normal New/first-publish rules. It does not
+   carry source Reservation, Approval or Released state.
+5. Every command revalidates authorization and expected state at commit. Failure leaves the prior
+   document, placements and source/copy relationship unchanged and returns one attributable result.
+
+### 7.8 View, export and import BOM data
+
+1. Product Structure resolves one exact Structure Snapshot and one versioned BOM View Profile; the
+   resulting view retains occurrence identities, exact component Generations and profile-defined
+   quantity, position and other fields.
+2. Export creates a BOM Representation with the source snapshot/profile, output digest, producer and
+   format. It is a read-only result, not Product Structure authority.
+3. A later source snapshot or profile version does not rewrite the old output. The old output stays
+   reproducible and is shown as `Needs update` when compared with the newer source/profile.
+4. Import first stores a non-authoritative candidate with its payload digest and exact base snapshot.
+   Server validation produces an add/change/remove preview without changing Product Structure.
+5. User confirmation sends the expected base and candidate identity. Product Structure revalidates
+   access and references, then publishes the new Structure Snapshot and owning Generation in one
+   atomic operation. Any stale, invalid or failed case changes neither.
+6. An independently controlled parts-list Logical Document follows ordinary Generation/workflow
+   rules and records an explicit exact relationship to its Structure Snapshot; it is never silently
+   substituted for, or by, a generated BOM Representation.
+
+## 8. Data, lifecycle and integration implications
+
+| Topic | Architectural implication | Detailed authority | Status |
+|---|---|---|---|
+| Identity/version | Stable Logical Document and Business Revision identities point to immutable Generations. Version within Revision is the business-visible Generation order; there is no separate Version Sequence field. | DOC-06 sections 2–3; `REQ-ID-*` | `Draft` |
+| Organization and copy | Document Folder/Placement identities are independent of physical storage. Move/link/unlink change organization only; Rename retains `DocumentId`; Create Copy allocates a new one with source provenance. | DOC-06 `DATA-REL-017…019`; `REQ-ID-007…009`; IF-01…06 | `Draft` |
+| Binary content | Artifact bytes are immutable and content-addressed; a Generation Manifest pins exact digests. | DOC-06; `REQ-ID-003/004` | `Draft` |
+| Structure | Structure Snapshot is immutable and members pin exact Generations; unresolved required dependencies remain visible. | DOC-06 `DATA-REL-005`; `REQ-STR-*` | `Draft` |
+| BOM views and files | BOM is a view of an exact Structure Snapshot under a versioned profile. Excel/PDF/CSV outputs remain pinned non-authoritative BOM Representations; imports remain candidates until previewed and atomically accepted. Independent controlled parts lists retain their own Logical Document/Generation identity and an exact structure relationship. | DOC-06 `DATA-REL-020…023`; `REQ-STR-004…006`; BM-01…06 | `Draft`; procedures `NOT-RUN` |
+| Workflow/release | Multiple definitions may coexist; a versioned assignment selects the active default per Document Class. Instances and decisions pin exact definition/policy versions, and Release never follows floating latest. A graphical designer is deferred; validated configuration data/forms are sufficient for Core v0. | DOC-06 `DATA-REL-008…010`; `REQ-LC-*` | `Draft` |
+| Policy/configuration | Identity establishes Actor/account eligibility; Access Policy separately owns versioned product authorization. Forms and optional JSON import create candidates only; Server-side validation and authorized activation are required before a new version has effect. Product defaults, governed policies and low-impact settings retain distinct change paths. | DOC-06 `DATA-REL-016`; `REQ-GOV-002/005`; AC-01…05 | `Draft`; approval pending |
+| Store Existing | Bounded onboarding maps ordinary files into the same identity/content model; duplicates are shown, never silently merged. | DOC-06 section 5; `REQ-ID-005/006` | `Draft` |
+| Export | Controlled Release Package is read-only and exact; external write-back remains deferred. | DOC-06 section 4; `REQ-LC-008` | `Draft` |
+| Audit/recovery | Evidence is append-only in the logical product model; backup/restore covers one consistent metadata/content/configuration point, including account/security records and required keys. | DOC-06 sections 7–8; `REQ-AUD-*`, `REQ-OPS-*` | `Draft`; procedures `NOT-RUN` |
+| Accounts/login | Stable Actor survives login-name changes, suspension and explicitly linked future authentication methods; credentials are not part of engineering-file manifests or exports. | DOC-06 `DATA-REL-013…015`; `REQ-IAM-*` | `Draft`; data migration only when approved |
+
+## 9. Reliability, deployment and operations
+
+### 9.1 Publication and background work
+
+The maintained Check-in Operation lifecycle is `ARCH-VIEW-STATE-004` in section 7.2; its
+interruption/status behavior is `ARCH-VIEW-SEQ-007`. Those views replace the former abbreviated
+pipeline so that resumable transfer, authoritative commit, terminal refusal and
+`NeedsReconciliation` are not collapsed into one progress line. Per-Artifact transfer state remains
+separate in `ARCH-VIEW-SEQ-006` below.
+
+Private durable materialization precedes database publication as specified in section 7.2. Database
+constraints, expected-state predicates and an appropriate locking/isolation strategy protect head,
+scope and operation identity; PostgreSQL's default isolation alone is not proof of correctness.
+Concurrent suspension, policy activation and publication need a defined serialization/revalidation
+rule and race tests, not just a pre-request check.
+
+Audit of the authoritative outcome and an outbox entry share the owner transaction. Projection/
+notification/representation work consumes only committed outcomes, with idempotent retry and
+bounded concurrency. No external broker, Redis or search service is required by this initial design.
+Discovery requirements still need SPEC-OPEN-02; no advanced-search scope is inferred.
+
+Reconciliation identifies abandoned staging, failed materialization, unreferenced private bytes,
+missing/corrupt objects and projection drift. Collection has a grace/in-flight-reference rule and
+a controlled record; it cannot delete an object required by a retained Generation or recovery set.
+Physical durability, concurrent content-addressed writes and crash behavior of the selected store
+must be qualified on the actual filesystem/storage stack.
+
+**`ARCH-VIEW-SEQ-006` — Resumable large-Artifact transfer.** **Model profile:** UML Sequence;
+`Draft 0.12`; implementation, operations and security reviewers. **Question:** how can one multi-GB
+Artifact resume without whole-file memory or premature publication? **Scope:** one transfer within
+one Check-in Operation. **Excludes:** final multi-document commit. **Trace:** `REQ-WS-012/015`,
+`REQ-OPS-001`, `QRS-011`, `WS-08`. **Legend:** the loop sends only missing ranges; `alt` isolates
+interruption handling. This view covers transfer into private staging only. Publication remains the
+separate sequence in section 7.2.
+
+```mermaid
+sequenceDiagram
+    accTitle: Resumable large Artifact transfer
+    accDescr: The Workspace begins or resumes one transfer bound to an OperationId, digest and size. The server reports accepted ranges so only missing chunks are sent. Private staging verifies each chunk and the full digest; completion makes a private candidate ready but never publishes a Generation.
+
+    participant Workspace as Workspace process
+    participant Server as IDEA Server
+    participant Staging as Private staging
+
+    Workspace->>Server: Begin or resume(OperationId, Artifact digest, size)
+    Server-->>Workspace: TransferId and accepted byte ranges
+    loop Missing chunks only
+        Workspace->>Server: Upload byte range plus chunk checksum
+        Server->>Staging: Persist verified chunk privately
+        Server-->>Workspace: Acknowledge accepted range
+    end
+    alt connection interrupted
+        Workspace->>Server: Resume same TransferId and OperationId
+        Server-->>Workspace: Return durable accepted ranges
+    end
+    Workspace->>Server: Complete transfer
+    Server->>Staging: Assemble or stream-read and verify full digest
+    Server-->>Workspace: Private candidate ready, or bounded failure
+```
+
+The transfer contract is range/chunk based, digest verified and idempotent. It does not require the
+complete Artifact in client or server memory. A corrupt chunk is rejected; an uncertain response is
+resolved by asking which ranges and terminal result the same operation already owns. A private
+candidate is not a Generation and remains invisible to authoritative reads until the Check-in commit.
+
+### 9.2 Initial deployment candidate
+
+Evaluate one company-controlled server/VM for the monolith, PostgreSQL and private Artifact volume,
+with separate process identities, least-privilege filesystem access and no database/public-file
+access from clients. This is a proposed evaluation topology, not demonstrated sizing or availability.
+
+Evaluate Ubuntu Server 24.04 LTS first only if IT can support it; Windows Server 2025 remains a
+company-skills/licensing alternative. Exact .NET/OS/package compatibility is pinned at qualification.
+The current .NET 10 OS matrix explicitly lists 24.04, not 26.04; do not assume a newer OS is qualified.
+The isolated format runtime may require a separate Windows worker host and license; that does not
+require moving product authority into the worker or changing the whole server OS.
+
+A single server is a single outage domain. No failover/zero-downtime claim is made. Reject or revise
+this topology if the approved outage/recovery objective cannot be met or the company requires more
+availability. A separate physical/administrative backup failure domain is required for the proposed
+severe-server-loss drill; a second folder, RAID or same-host snapshot alone is not that evidence.
+
+**`ARCH-VIEW-EVO-001` — Artifact-storage evolution boundary.** **Model profile:** C4-style
+Component/evolution view; `Draft 0.12`; architecture, data and operations reviewers. **Question:**
+how can storage capacity/provider change without changing product identity? **Scope:** Artifact
+storage Seam and controlled migration. **Excludes:** selected vendor, topology and capacity claim.
+**Trace:** `REQ-OPS-003…006`, `QRS-012`, `VVP-017`, ST-01…04. **Legend:** solid arrows are current
+required calls; dashed arrows are optional future Adapters; the cylinder is authoritative relational
+location metadata. The diagram selects no vendor and makes no claim that Core v0 initially stores
+hundreds of TB.
+
+```mermaid
+flowchart LR
+    accTitle: Artifact storage evolution boundary
+    accDescr: Controlled Product Data identifies Artifacts by stable identity and digest and calls one storage interface. A filesystem adapter is the current candidate; later object or multi-volume adapters can replace it. Migration copies and verifies bytes before changing location records, without changing Generations or Releases.
+
+    Product[Controlled Product Data] -->|Artifact ID, digest, operation| Port[Artifact Storage Port]
+    Port -->|current candidate| FS[Filesystem Adapter]
+    Port -.->|future option| OBJ[Object Storage Adapter]
+    Port -.->|future option| MULTI[Multi-volume or tiering Adapter]
+    Product -->|authoritative manifests and location records| DB[(Relational database)]
+    MIG[Migration and Reconciliation] -->|copy, verify digest, switch location| Port
+    MIG -->|record progress and outcome| DB
+```
+
+Text alternative: Controlled Product Data knows Artifact identities and digests, not physical paths.
+It calls one Artifact Storage Port. Core v0 may use a filesystem adapter; later object-storage or
+multi-volume adapters can be introduced behind the same port. Migration copies privately, verifies
+every digest, records progress and changes the authoritative location only after reconciliation, so
+Generation manifests and Release Records do not change.
+
+### 9.3 Recovery design and measurement
+
+- Database base backup plus continuous WAL archiving is the PostgreSQL PITR candidate. Track
+  archive failure/lag, not only job completion. Database WAL does not contain external Artifact bytes.
+- Back up immutable Artifacts continuously/in bounded batches plus manifests, configuration/policy
+  versions and required keys. A recovery-set record names the database recovery point and the
+  complete matching content/configuration/key set. Extra newer unreferenced bytes may remain private.
+- The usable recovery point is limited by the **oldest complete coordinated component**, not merely
+  the newest database backup. Do not restore a database point whose referenced content is absent.
+- Preliminary targets from TECH-CTX-008 are RTO ≤ four working hours and RPO ≤ one hour. Define
+  incident start, business calendar/coverage, restore corpus and healthy-service acceptance before
+  measuring. Record both elapsed wall time and agreed working-time measurement to avoid hiding delays.
+- Restore to an isolated replacement environment, reconcile every retained Generation in the
+  approved recovery scope and digest-check it, then exercise login, exact file open, Check-in and
+  release reproduction. Incomplete/corrupt recovery is not PASS even if the clock target was met.
+- Backups/keys require protected retention and recovery access; loss of credentials or encrypted
+  key material is part of the drill. Recovery must not silently re-enable revoked sessions; invalidate
+  restored sessions and reconcile account/security changes since the recovery point before reopening
+  access. The one-hour loss objective does not authorize forgotten access revocations.
+- The project user may operate initially. Name a backup operator/recovery custodian, supported hours,
+  escalation path and repeatable runbook before operational rollout; no 24/7 or DevOps team assumed.
+
+### 9.4 Delivery, rollback and observability
+
+Plan versioned release bundles, dependency/license inventory, signed Desktop delivery where company
+policy requires it, protected configuration, preflight checks, health checks and a documented
+maintenance window. IT approves installation and update routes; no installation occurs in this task.
+
+Test on a representative non-production environment before promotion. Database/account/policy
+migrations record the pre-change backup and reconciliation criteria; replacing old binaries is not
+automatically a safe schema downgrade. Choose forward repair or a proven full recovery path and
+record its data-loss/compatibility consequences.
+
+Monitor request failures/latency, database health/locks, disk free space and growth, digest failures,
+transfer interruption, abandoned operations, worker limits, outbox lag, backup lag and latest
+successful restore drill. Alert routes and ownership must be assigned; logs omit credentials and
+sensitive unnecessary content. Representative concurrent users, maximum files, total corpus,
+growth and resource thresholds are still measurement inputs, not invented server specifications.
+
+## 10. Security and privacy design
+
+Trust zones are browser, Web-rendered Desktop, native user session, Managed Workspace, Server,
+relational store, private Artifact store, isolated format runtime, backup store and external tools.
+
+| Control | Candidate design response | Required evidence |
+|---|---|---|
+| Native accounts and directory | ASP.NET Core Identity is a candidate for maintained credential/session mechanics behind Identity and Accounts; stable Actor and IDEA Account remain IDEA domain records, while Project Governance owns Project/Group membership. No public registration endpoint or shared default password. Account Administration grants neither Project access nor product authority. | REQ-IAM-001…007; REQ-AUTH-005/009; VVP-015, including least-privilege provisioning and session-revocation evidence |
+| Password and recovery | Use maintained hashing/reset/token mechanisms; never log, email back or expose an existing password. Approved one-use delivery, password/lockout/rate-limit/MFA/recovery policy remains to be specified. | Recovery/replay/brute-force and privileged-reset abuse cases; security-policy review |
+| Browser sessions | Same-origin HTTPS UI/API; Secure/HttpOnly session cookies and anti-CSRF protections on state changes. No session token in browser local storage. | CSRF, XSS/session, sign-out and suspension matrix |
+| Native sessions | Qualify supported framework session/bearer integration, protected per-user credential storage and renewal. Identity API tokens are proprietary, not an OAuth/OIDC server. No hand-written authorization-code protocol, token injection into JavaScript or promise of cross-surface SSO. | Exact maintained-library/flow review and old-token revocation tests; future standards-based provider requires separate selection |
+| Account administration | Identity and Accounts validates the Account Administrator's Role Assignment, Scope and expected version for Actor, account and Login Identity commands. It cannot write Project Membership, Business Group Membership, Access Policy, Workflow or document state. | Cross-scope account operation, suspended account, reset/recovery abuse, direct-store denial and separation-of-duty tests |
+| Project administration | Project Governance validates the Project Administrator's assignment before Project Membership, Group or direct Group Membership changes. It accepts only the assigned Project Scope and has no account or cross-Project authority. | Wrong Project, inactive Project Membership, nested-Group attempt, stale membership, removed Group and direct-store denial tests |
+| Role administration and delegation | Access Policy owns supported Permissions, immutable Role Definition versions and Role Assignments. Activating a Custom Role successor never retargets existing assignments; each intended assignment replacement is previewed, authorized and audited. Every assignment command checks which roles, principal classes and descendant Scopes the administrator may manage; self-broadening and last-Super-recovery removal are refused. | Direct/group assignment, custom-role successor and explicit assignment replacement, expired assignment, unsupported condition, cross-scope delegation, self-escalation, Super-role and Audit tests |
+| Eligibility and authorization | Identity and Accounts validates the current account/session; Project Governance supplies current memberships; Access Policy evaluates direct and Group assignments, Role Definition versions, Scope, time and supported conditions. The authoritative resource owner then enforces current business state. Races are revalidated or serialized before commit. | Old cookie/token, removed membership/assignment, concurrent suspension, expired assignment, Check-in/Release and transfer tests; fail closed if eligibility cannot be established |
+| Policy and workflow administration/import | Only Server endpoints accept form or serialized candidates. Schema/reference/semantic/base-version checks and preview precede authorized activation. Workflow roles reference RBAC eligibility but cannot change Group membership or Role Assignments; identity claims, client files and direct database paths are not product authority. | AC-01…05, WF-01…06 and REQ-AUTH-001…010; invalid/stale/self-authorizing import, missing Group/role, direct-store denial, version pin and Audit evidence |
+| File transfer | Server-mediated scoped short-lived transfer initially, with account/policy revalidation at each protected request and before resume. No permanent store credential/public URI. Long streams have defined cancellation/revalidation checkpoints. | Old-grant, wrong-object, expiry, replay, revoked-session and interrupted-transfer tests |
+| Local process | Authenticated per-user/session IPC, controlled startup and recovery manifests; no privileged machine-wide agent required. OS same-user isolation is not proof against every malicious same-user process. | Cross-user/session denial, spoofed connection, restart/update/logout and preserved-local-work evidence |
+| Web/native bridge | Only approved origins/frames, allowlisted versioned messages and exact manifest-scoped intentions; validate source on every navigation/message. No generic host object, arbitrary filesystem or shell access. External/untrusted content never shares a privileged bridge. | Malformed messages, iframe/origin navigation, path traversal, stale session and focus/scale tests |
+| Worker | Immutable input and bounded output; one-job least privilege and time/RAM/CPU/output quotas. Worker result is untrusted input to its owner. | Malformed/oversized/fault cases; original digest and product state unchanged |
+| Audit / privacy | Account/security events use stable Actor and correlation without secrets; product Audit append-only under ordinary admin. High-privilege OS/database/backup access remains an explicit operational risk. | Event completeness, mutation denial, log inspection and access-review evidence |
+| Secrets / backup | Protect TLS, server data-protection and recovery keys outside source; backup access separated from runtime access. Restored sessions invalidated; account/security changes reconciled before reopening. | Secret scan, access-denial tests and loss-of-server/key restore drill |
+| Delivery integrity | Pin source/dependencies/toolchain; review licenses including transitive components; apply verified patches and test rollback. | Version/license manifest, provenance and deployment evidence |
+
+The above are proposed implementation responses, not a claim of security from framework defaults.
+Identity cookie stamps default to periodic validation, and already issued bearer tokens may outlive
+a password change. The required eligibility check cannot be replaced by those defaults. Full MFA,
+password, lockout, session-expiry and recovery-channel policy is still a qualification prerequisite.
+
+## 11. Candidate technology decisions and trade-offs
+
+The recommendation decomposes the former A/B/C bundles into independent decisions. Mandatory
+criteria are the approved product invariants and company permissions; convenience cannot offset
+failure of those criteria. No performance score, approved numeric weighting, budget or expertise
+claim is invented.
+
+| Decision ID / concern | Recommended candidate | Alternative and selection trigger | Cost / limitation / evidence |
+|---|---|---|---|
+| TECH-STACK-001 — server | C#/.NET 10 LTS, ASP.NET Core, modular monolith | Java/Spring if established company skills/support justify a second runtime alongside Windows .NET; distributed services only with a separate measured need | Shared runtime family, not free implementation or presumed C# expertise; patch and supported-OS obligations |
+| TECH-DATA-001 — database | PostgreSQL 18, aligned EF10/Npgsql provider10/driver versions | SQL Server 2025 production-licensed edition if company entitlements and operations make it preferable | PostgreSQL license has no fee, but support/DBA/backup work remains; SQL Developer is not a production entitlement |
+| TECH-WEB-001 — Web UI | React + TypeScript SPA, Vite build, served with Server | React framework in SPA/static mode if routing/data/error handling is simpler and maintainable; SSR only for evidenced need | React normally recommends a framework. Vite alone is not routing/data/security design; no automatic extra Node production host is assumed |
+| TECH-DESKTOP-001 — Windows UI | WPF/.NET 10 shell + WebView2 rendered regions; shared React UI where appropriate | WinUI 3/Windows App SDK after focus/scaling/toolchain/support comparison; WinForms only if complex workspace fit is demonstrated | Microsoft recommends WinUI 3 for new native apps. WPF is an IDEA-specific runtime/tooling trade-off, with a separate WebView2 update/bridge obligation |
+| TECH-IDENTITY-001 — accounts and directory | ASP.NET Core Identity for native credential/session mechanics inside the monolith, with IDEA-owned stable Actor and Account records; Project Governance owns Project/Group membership | Future company login or maintained OIDC provider only when protocol/requirements/ownership are established | Identity roles/claims are not product RBAC. No public signup; delegated administration, membership/assignment races, recovery and revocation still require design and qualification |
+| TECH-FILES-001 — Artifacts | Private immutable content-addressed filesystem Adapter, server-only access | Private object-storage Adapter if shared/multi-node capacity or existing managed operations justify another dependency | Must qualify durable writes, digest, atomic naming, concurrent deduplication, capacity and coordinated backup; not a user SMB share or physical WORM guarantee |
+| TECH-HOST-001 — server OS | Evaluate Ubuntu Server 24.04 LTS with IT first | Windows Server 2025 when operator skills, support and licensing make it safer to maintain | Company decision outstanding; Windows design PCs do not determine server OS. No unsupported-OS or exact sizing claim |
+| TECH-OPS-001 — topology | Single server/VM candidate; separate backup failure domain; limited outbox/worker concurrency | Separate DB/file/worker hosts or stronger availability if measured needs/recovery results require it | One server remains an outage point; not a demonstrated 50–100-concurrent-user configuration |
+| TECH-FORMAT-001 — format runtime | Isolated external runner, exact versioned profiles; IRONCAD first deep profile | Add tools/profiles only after entitlement and conformance evidence | OS/license/resources can require a Windows worker independent of the main server; never an in-CAD add-in |
+
+Sources and licensing/support detail are retained in the
+[2026-09-03 primary-source note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md).
+The note documents .NET 10 support to 2028-11-14, .NET 8 to 2026-11-10, PostgreSQL 18 to 2030-11-14,
+actual provider-major dependencies, and the separate EF10 page date of 2028-11-10. Resolve the
+source-date discrepancy before adopting an upgrade calendar; do not silently promise the longer date.
+
+.NET has no use charge, but official Windows binaries are not uniformly MIT. PostgreSQL/Npgsql
+and EF/React/TypeScript/Vite carry their respective licenses; dependency trees, tooling, Windows,
+WebView2 and CAD/Office products need an actual inventory. No company entitlement or total-cost
+estimate is asserted. Vite and WebView2 have update obligations separate from .NET LTS.
+
+The selected .NET 10 OS matrix lists Ubuntu 24.04 and Windows Server 2025. Canonical currently lists
+24.04 standard security maintenance through May 2029. More recent OS releases are not automatically
+supported by the chosen component combination. Pin exact major/minor/patch, installer, runtime,
+dependency lockfiles, license notices and supported environment at qualification.
+
+WebView2 Evergreen is preferred if IT supports managed updates and compatibility testing; a Fixed
+Version requires explicit patch ownership and redistribution review. The native host must preserve
+local candidates during restart/update. Browser/renderer credentials and native Workspace session
+proof stay in their respective protected contexts; a shared UI does not imply a shared auth token.
+
+No additional Adapter/service abstraction is created solely for a possible future provider. Use
+small owned Interfaces at the file-store, authentication, format and client boundaries where
+variation or a genuine security seam already exists; defer unused integrations.
+
+## 12. Decisions, risks and constraints
+
+| Record | ID | Decision/risk/constraint | Owner / treatment | Status |
+|---|---|---|---|---|
+| Accepted ADR | `IE-ADR-C1-001` | C1 remains independently useful and evolves from PDM to PLM before any platform dependency. | Architecture owner; preserve stable contracts without premature distributed design. | `Accepted` |
+| Accepted ADR | `IE-ADR-C1-002` | No IDEA code runs inside design applications. | Desktop/Workspace/Format designs keep all execution external. | `Accepted` |
+| Accepted ADR | `IE-ADR-C1-003` | Start the Server as a modular monolith with deep Modules. | Enforce Interface/schema ownership; split only on evidence. | `Accepted` |
+| Accepted ADR | `IE-ADR-C1-004` | Immutable Generations and atomic Check-in Change Sets. | Transaction, staging, digest and idempotency design. | `Accepted` |
+| Accepted ADR | `IE-ADR-C1-005` | Reservation binds document, actor, Workspace, lease and expected Generation. | Optimistic concurrency and explicit recovery; no binary auto-merge. | `Accepted` |
+| Accepted ADR | `IE-ADR-C1-006` | Generic file control plus external Format Intelligence. | Versioned Capability Profiles and isolated Adapters. | `Accepted` |
+| Proposed decision | `IE-ADR-C1-008` | Separate operational settings, governed policies and solution changes. | Product Decision Authority must approve the boundary/defaults before reliance. | `Proposed`; Tech input only |
+| Proposed decision | `IE-ADR-C1-010` | Use Security Principal + Role Definition + Authorization Scope = Role Assignment; keep RBAC eligibility separate from business gates. | Product Decision Authority must approve the Spec/Tech baseline; preserve constrained delegation, immutable active role versions and last-Super recovery protection. | `Proposed`; internally reviewed design |
+| Tech choices | `TECH-STACK-001` and section 11 decision IDs | Choose each proposed component/topology or require a justified alternative; not a pre-approved bundle. | Product Decision Authority at Tech decision. | `NOT-RUN` |
+| Risk | `ARCH-RSK-001` | Planning context is confirmed, but IT allowlist, exact host/browser/CAD versions, license entitlements, support ownership and measured workload remain unknown. | Project user coordinates system management/technical support before final deployment qualification. | `PARTIALLY CLARIFIED`; no company deployment approval |
+| Risk | `ARCH-RSK-002` | One author is also reviewer; architecture/security/operations specialist review is unavailable. | Record the limitation; assign review before any gate requiring independence. | `BLOCKED` |
+| Risk | `ARCH-RSK-003` | Exact IRONCAD profile/tool version and isolated-processing entitlement are unknown. | Run a bounded non-production spike after exact environment/version is identified. | `BLOCKED` |
+| Risk | `ARCH-RSK-004` | One Proposed source decision describes broader workflow-design scope than the current Core v0 Feature boundary. | The current instance follows the user-reviewed Feature Draft: seeded configurable workflow is required and a full graphical designer is deferred; Product Decision Authority resolves the source difference in the Feature decision. | `OPEN`; does not authorize the deferred feature |
+| Risk | `ARCH-RSK-005` | Account recovery, Project/Group membership or Role Assignment administration can be abused; suspension/removal may leave old sessions or in-flight commands effective under library defaults. | Account, Project and Privileged Role administrators within their separate Scopes; delegated-scope checks, current eligibility revalidation, recovery controls and VVP-015 before live accounts. | `OPEN`; specialist unassigned |
+| Risk | `ARCH-RSK-009` | A broad or mistaken administrative Role Assignment could create privilege escalation across Projects or remove the only recovery path. | Constrained delegation, no implicit admin hierarchy, explicit effective-access preview, immutable assignment Audit and last-Super protection; security tests remain `NOT-RUN`. | `OPEN`; specialist review unassigned |
+| Risk | `ARCH-RSK-006` | Browser/native bridge exposes local work if origin, session or path validation fails. | Desktop/Workspace owner; narrow messages and VVP-009/011 before enabling bridge. | `OPEN` |
+| Risk | `ARCH-RSK-007` | One operator/server and mismatched DB/file backups could make recovery targets unattainable. | User coordinates backup operator/storage and executes VVP-013/014 before rollout; revise topology if unsuccessful. | `OPEN`; targets unqualified |
+| Risk | `ARCH-RSK-008` | Separate framework, OS, renderer, dependency and format-tool lifecycles create patch/license work. | Technical owner + IT; inventory, compatibility tests and upgrade budget before component pin. | `OPEN` |
+| Constraint | `ARCH-CON-001` | Full graphical workflow design, bulk migration, general external integration and multisite behavior are outside Core v0. | Preserve configuration/interfaces without implementing deferred capability. | `Draft boundary` |
+
+## 13. Verification and gate readiness
+
+| Gate / verification item | Required evidence | Result |
+|---|---|---|
+| Feature prerequisite | Product Decision Authority decision on an updated Feature brief that pins DOC-03@0.7 | `NOT-RUN`; current Feature brief is stale after source changes |
+| Spec prerequisite | Approved exact DOC-04@0.13 requirement baseline and resolved/owned requirement gaps, presented through an up-to-date Spec brief | `NOT-RUN`; DOC-04@0.13 is Draft and current Spec brief is stale |
+| Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
+| PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | All 23 DOC-05/DOC-06 blocks parsed and rendered in the internal temporary review `IE-VEV-ARCH-VIEW-001`; author source/visual review completed. Final controlled page/screen rendition and qualified architecture/HCD review remain `BLOCKED` under VVP-016. |
+| Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
+| Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
+| Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |
+| Change impact | CHG/Work Item covers requirement, data, interface, UX, security, test, operation and release impact | [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md) records the workspace/scale successor; the earlier RBAC/diagram re-baseline remains separately traceable; review/closure remains open |
+
+## 14. Typed trace, supporting records and rendition controls
+
+| Link type | Target and purpose | Result |
+|---|---|---|
+| `SOURCE-NEED` / `SOURCE-DECISION` | DOC-04 requirements; accepted ADRs; approved Feature/Spec decisions | Requirements/ADRs linked; Feature/Spec decisions `NOT-RUN` |
+| `SOURCE-EVIDENCE` | DOC-02 options, DOC-06 data contracts, DOC-08 interaction design and official technology lifecycle sources | Draft sources and confirmed planning context linked; target operational/IT evidence still missing |
+| `DOWNSTREAM` | DOC-06 realization constraints, DOC-07 increments, DOC-08 surfaces and future implementation contracts | Architecture response authored; downstream reconciliation required on change |
+| `CHANGE` | CHG with architecture, data, interface, UX, risk, tests, operations and release impact | Prior decisions remain traceable; [IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md) records this successor and retained predecessor evidence; no implementation authorization |
+| `VERIFICATION` | VVP/VEV requirement, quality, security, recovery, format and interaction evidence | VVP Draft exists; execution `NOT-RUN` |
+| `RELEASE` | REL exact source/technology/build baseline and authorized scope | `NOT APPLICABLE` at analysis/design stage |
+| `RENDITION` | Source-pinned DOCX/PDF with current/stale/superseded/withdrawn state | No rendition created |
+
+An architecture statement cannot override DOC-04. A technology selection cannot silently add a
+Feature or weaken acceptance/failure behavior. Any changed source baseline makes an earlier Tech
+brief/rendition stale until its manifest and impact are reviewed.
+
+<!-- AUTHOR CONTENT END -->
+
+## Contract references
+
+- [Core document catalogue](../../../../specs/003-controlled-documentation/contracts/document-catalogue.md)
+- [Evidence and trace](../../../../specs/003-controlled-documentation/contracts/evidence-and-trace.md)
+- [Gate package](../../../../specs/003-controlled-documentation/contracts/gate-package.md)
+- [Project domain language](../../../../CONTEXT.md)
+- [RBAC and architecture-diagram primary-source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md)

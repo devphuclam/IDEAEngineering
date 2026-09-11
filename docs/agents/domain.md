@@ -1,51 +1,24 @@
-# Domain Docs
+# Domain documentation
 
-How the engineering skills should consume this repo's domain documentation when exploring the codebase.
+IDEA Engineering uses one domain context. Before domain work, read [CONTEXT.md](../../CONTEXT.md)
+and the [ADR index](../adr/README.md), then the ADRs relevant to the proposed change. The index
+distinguishes product decisions from inherited workspace decisions.
 
-## Before exploring, read these
+## Use the right source
 
-- **`CONTEXT.md`** at the repo root, or
-- **`CONTEXT-MAP.md`** at the repo root if it exists — it points at one `CONTEXT.md` per context. Read each one relevant to the topic.
-- **`docs/adr/`** — read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
+- **Terminology:** use the definitions in CONTEXT.md in requirements, Work Items, designs and tests.
+  If a needed concept is missing, record the gap for domain review rather than introducing a
+  competing synonym.
+- **Product content:** use the [IDEA instance catalogue](../product/instances/idea-engineering/README.md)
+  to locate the owning DOC or supporting record and its current status. Class templates describe
+  how to author a document; they do not supply IDEA requirements.
+- **Reference-product claims:** follow the [knowledge index](../product/knowledge/README.md) and
+  preserve the evidence classification. An observation becomes an IDEA requirement only through
+  the documented product-decision process.
 
-If any of these files don't exist, proceed silently. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill creates them lazily when terms or decisions actually get resolved.
+## Handle conflicts explicitly
 
-## File structure
-
-Single-context repo (most repos):
-
-```text
-/
-├── CONTEXT.md
-├── docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
-└── src/
-```
-
-Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
-
-```text
-/
-├── CONTEXT-MAP.md
-├── docs/adr/                          # system-wide decisions
-└── src/
-    ├── ordering/
-    │   ├── CONTEXT.md
-    │   └── docs/adr/                  # context-specific decisions
-    └── billing/
-        ├── CONTEXT.md
-        └── docs/adr/
-```
-
-## Use the glossary's vocabulary
-
-When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, or a test name), use the term as defined in `CONTEXT.md`. Don't drift to synonyms the glossary explicitly avoids.
-
-If the concept you need isn't in the glossary yet, that is a signal — either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/domain-modeling`).
-
-## Flag ADR conflicts
-
-If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
-
-> _Contradicts ADR-0007 (event-sourced orders) — but worth reopening because…_
+If a proposed change conflicts with a documented decision, identify the affected ADR or controlled
+record, explain the conflict and obtain the required decision before changing the authoritative
+content. Preserve the earlier decision and its history. Keep navigation guides as pointers to these
+sources, not additional copies of the domain model.

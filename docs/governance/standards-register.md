@@ -5,7 +5,7 @@
 | Document ID | `IE-GOV-STD-001` |
 | Artifact status | Proposed for Product Owner review and PG0 approval |
 | System of interest | `C1 — IDEA Engineering` |
-| Baseline snapshot | 2026-08-26 |
+| Baseline snapshot | 2026-08-27 |
 | Accountable role | Life-cycle and Quality Authority |
 | Approval authority | Product Owner with the applicable PG0 authorities |
 | Supersedes | None |
@@ -34,10 +34,14 @@ Use this file before repeating standards research:
 | Has a newer edition appeared? | Section 7 |
 | What does a clause specifically require? | The lawfully obtained normative text and approved tailoring matrix, not this summary |
 
-The supporting public-source verification note is
-[`IE-RES-STD-SOURCE-001`](../superpowers/research/2026-08-26-idea-engineering-standards-primary-source-check.md).
-The architecture that applies this baseline is
-[`IE-ARC-BOOT-001`](../superpowers/specs/2026-08-26-idea-engineering-repository-bootstrap-pg0-design.md).
+The supporting public-source verification notes are
+[`IE-RES-STD-SOURCE-001`](../superpowers/research/2026-08-26-idea-engineering-standards-primary-source-check.md)
+and
+[`IE-RES-DOC08-STD-001`](../superpowers/research/2026-08-27-doc-08-hcd-accessibility-standards-primary-source-check.md).
+The repository architecture that applies this baseline is
+[`IE-ARC-BOOT-001`](../superpowers/specs/2026-08-26-idea-engineering-repository-bootstrap-pg0-design.md);
+the product-behavior architecture is
+[`IE-ARC-C1-001`](../architecture/idea-product-lifecycle-architecture.md).
 
 This register intentionally paraphrases only public scope information. It does not reproduce protected normative clauses.
 
@@ -88,7 +92,21 @@ Public catalog pages are adequate for edition selection and this design baseline
 | `STD-QUAL-001` | [ISO/IEC 25010:2023](https://www.iso.org/standard/78176.html), *Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — Product quality model* | `STANDARD` | Coverage model for product-quality concerns; prevents important quality characteristics from being omitted | Quality model, `REQ`, `ARC`, `RSK`, `VVP`; PG2–PG5 | Published Edition 2 |
 | `STD-QUAL-002` | [ISO/IEC 25030:2019](https://www.iso.org/standard/72116.html), *Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — Quality requirements framework* | `STANDARD` | Convert stakeholder quality needs into governed, measurable quality requirements and evaluation evidence | Quality objectives, `REQ`, acceptance criteria, `VVP`, `VEV`; PG2–PG5 | Published Edition 2; confirmed in 2025 |
 
-### 3.3 Testing and verification
+### 3.3 Human-centred design and accessibility
+
+| ID | Source and baselined edition | Project class | IDEA Engineering use | Operationalized through | Status note |
+|---|---|---|---|---|---|
+| `STD-HCD-001` | [ISO 9241-210:2019](https://www.iso.org/standard/77520.html), *Ergonomics of human-system interaction — Part 210: Human-centred design for interactive systems* | `STANDARD-GUIDED` | Govern evidence-backed human-centred design activities and iteration across the interactive-system life cycle | `CON`, `REQ`, `DOC-08`, `VVP`, `VEV`; PG1–PG5 | Published Edition 2; confirmed in 2025 |
+| `STD-HCD-002` | [ISO 9241-11:2018](https://www.iso.org/standard/63500.html), *Ergonomics of human-system interaction — Part 11: Usability: Definitions and concepts* | `STANDARD-GUIDED` | Define context-bound usability outcomes and measurable usability objectives | Quality model, `REQ`, `DOC-08`, `VVP`, `VEV`; PG1–PG5 | Published Edition 2; confirmed in 2023 |
+| `STD-HCD-003` | [ISO 9241-110:2020](https://www.iso.org/standard/75258.html), *Ergonomics of human-system interaction — Part 110: Interaction principles* | `STANDARD-GUIDED` | Review interaction requirements, flows, states and behaviour across Web and Desktop | `REQ`, `DOC-08`, design system, `VVP`, `VEV`; PG2–PG5 | Published Edition 2; confirmed in 2025 |
+| `STD-A11Y-001` | [ISO 9241-171:2025](https://www.iso.org/standard/86308.html), *Ergonomics of human-system interaction — Part 171: Software accessibility* | `STANDARD-GUIDED` | Cross-surface accessible-software requirements and guidance for Web and native Desktop | Accessibility `REQ`, `DOC-08`, component specifications, `VVP`, `VEV`; PG1–PG5 | Published Edition 2; replaces the withdrawn 2008 edition |
+| `STD-A11Y-002` | [W3C WCAG 2.2, Recommendation 2024-12-12](https://www.w3.org/TR/2024/REC-WCAG22-20241212/) | `STANDARD-GUIDED, CONDITIONAL` | Level A and AA coverage target for IDEA Web and Web-rendered content; an exact conformance claim requires a separate assessment | Web accessibility `REQ`, `DOC-08`, Web component acceptance, `VVP`, `VEV`; PG2–PG5 | Current WCAG 2.2 dated Recommendation; track errata and later Recommendations |
+| `STD-A11Y-003` | [ISO/IEC 40500:2025](https://www.iso.org/standard/91029.html), *Information technology — W3C Web Content Accessibility Guidelines (WCAG) 2.2* | `REFERENCE/WATCH` | ISO-designation compatibility for WCAG 2.2; activate only for an approved external requirement | Standards/contract mapping and accessibility profile | Published Edition 2 but already at stage 90.92 with a successor DIS; avoid duplicate operational mapping |
+| `STD-A11Y-004` | [ISO/IEC 29138-1:2018](https://www.iso.org/standard/71953.html), *Information technology — User interface accessibility — Part 1: User accessibility needs* | `REFERENCE/WATCH` | Optional accessibility-needs discovery inventory; not an implementation requirement or evaluation method | `CON`, stakeholder research and `DOC-08` evidence references | Published Edition 1; moved to revision on 2026-08-26; Edition 2 AWI under development |
+| `STD-A11Y-005` | [WAI-ARIA 1.2, Recommendation 2023-06-06](https://www.w3.org/TR/2023/REC-wai-aria-1.2-20230606/) | `STANDARD-GUIDED, CONDITIONAL` | Accessible semantics for custom Web widgets or structures when native host-language semantics are insufficient | Web component contracts, lint/validation, keyboard and assistive-technology tests; PG3–PG5 | WAI-ARIA 1.3 is a Working Draft and is not the baseline |
+| `STD-A11Y-006` | [EN 301 549 V3.2.1 (2021-03)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), *Accessibility requirements for ICT products and services* | `REFERENCE/WATCH` | Track the latest published and harmonised state; promote the exact relevant edition to `STANDARD-GUIDED, CONDITIONAL` only for an approved EU, procurement, customer, contractual or regulatory scope | Applicability register and version watch; if activated, `REQ`, `DOC-08`, `VVP`, `VEV`, release evidence | V3.2.1 is the latest published and WAD-harmonised edition at the snapshot; V4.1.0 is a final draft adopted for publication but is not yet the published or OJ baseline |
+
+### 3.4 Testing and verification
 
 | ID | Source and baselined edition | Project class | IDEA Engineering use | Operationalized through | Status note |
 |---|---|---|---|---|---|
@@ -99,7 +117,7 @@ Public catalog pages are adequate for edition selection and this design baseline
 | `STD-TEST-005` | [ISO/IEC/IEEE 29119-5:2024](https://www.iso.org/standard/87233.html), *Software and systems engineering — Software testing — Part 5: Keyword-driven testing* | `STANDARD-GUIDED, CONDITIONAL` | Apply only if IDEA adopts keyword-driven testing or compatible tool interchange | Conditional `VVP` and test assets | Published Edition 2; not part of the lean mandatory baseline |
 | `STD-TEST-006` | [ISO/IEC TR 29119-6:2021](https://www.iso.org/standard/81293.html), *Software and systems engineering — Software testing — Part 6: Guidelines for the use of ISO/IEC/IEEE 29119 (all parts) in agile projects* | `STANDARD-GUIDED` | Tailor the family for iterative/agile delivery without weakening controlled evidence | `VVP`, increment/review workflow; PG3–PG5 | Published Technical Report, Edition 1 |
 
-### 3.4 Configuration and security governance
+### 3.5 Configuration and security governance
 
 | ID | Source and baselined edition | Project class | IDEA Engineering use | Operationalized through | Status note |
 |---|---|---|---|---|---|
@@ -108,7 +126,7 @@ Public catalog pages are adequate for edition selection and this design baseline
 | `STD-SEC-002` | [ISO/IEC 27002:2022](https://www.iso.org/standard/75652.html), *Information security, cybersecurity and privacy protection — Information security controls* | `STANDARD-GUIDED` | Risk-selected security-control guidance for access, assets, change, suppliers, incidents and operations | `RSK`, security requirements, `OPS`; PG2–PG7 | Published Edition 3; guidance is not independently certifiable |
 | `STD-SEC-003` | [ISO/IEC 27034-1:2011](https://www.iso.org/standard/44378.html) with Cor 1:2014, *Information technology — Security techniques — Application security — Part 1: Overview and concepts* | `STANDARD-GUIDED` | Integrate application-security concerns into application-management and engineering processes | Security `REQ`, threat/risk treatment, `ARC`, `VVP`; PG2–PG5 | Published Edition 1; confirmed in 2022 |
 
-### 3.5 Primary open security and supply-chain supplements
+### 3.6 Primary open security and supply-chain supplements
 
 | ID | Source and baselined edition | Project class | IDEA Engineering use | Operationalized through | Status note |
 |---|---|---|---|---|---|
@@ -127,6 +145,10 @@ Public catalog pages are adequate for edition selection and this design baseline
 | Establish product context or stakeholder needs | `STD-LC-001`, `STD-REQ-001` | `CON` |
 | Write or review requirements | `STD-REQ-001`, `STD-QUAL-001`, `STD-QUAL-002` | `REQ` with measurable acceptance and verification method |
 | Describe or review architecture | `STD-ARC-001` plus requirement/quality sources | `ARC`, viewpoints/views/models, interfaces and ADRs |
+| Plan human-centred design or write `DOC-08` | `STD-HCD-001`–`STD-HCD-003`, `STD-A11Y-001` | Context evidence, usability objectives, interaction rationale, accessibility profile and evaluation plan |
+| Specify or evaluate IDEA Web accessibility | `STD-A11Y-001`, `STD-A11Y-002`; add `STD-A11Y-005` for custom semantics | Criterion-to-requirement/design/test mapping plus keyboard and assistive-technology evidence |
+| Specify or evaluate native Desktop accessibility | `STD-A11Y-001` plus selected platform accessibility guidance | Native accessibility requirements, component/accessibility-API contracts and verification evidence |
+| Assess an EU or customer accessibility obligation | `STD-A11Y-006`, the exact contract or law and competent advice | Approved applicability/version record, scoped requirement mapping and evidence; no inferred legal claim |
 | Plan testing and V&V | `STD-TEST-001`–`STD-TEST-004`; `STD-TEST-006` for iterative delivery | `VVP` and tailored `VEV` records |
 | Manage controlled versions and changes | `STD-CM-001` plus life-cycle sources | `CMP`, `CHG`, identified baselines and status accounting |
 | Govern organizational information security | `STD-SEC-001`, `STD-SEC-002` | ISMS-scoped project controls and risk evidence where applicable |
@@ -139,13 +161,13 @@ Public catalog pages are adequate for edition selection and this design baseline
 
 | Gate | Principal standards input | Minimum use at the gate |
 |---|---|---|
-| `PG0` | 15288, 12207, 24748-1, 15289, 10007; security governance as applicable | Approve system boundary, standards/tailoring register, roles, gates, clean-room/configuration foundations and version watch |
-| `PG1` | 15288, 12207, 29148 | Baseline stakeholders, operational context, authorized findings, needs, assumptions and initial risks |
-| `PG2` | 29148, 25010, 25030; 27002/27034/SSDF/ASVS as applicable | Baseline functional, interface, data, quality, security and operational requirements with measurable acceptance and traceability |
-| `PG3` | 42010, quality/security sources, 29119 family | Baseline architecture description, decisions, quality scenarios, risk treatment and V&V strategy |
-| `PG4` | 12207, 29119, 10007, SSDF, SPDX/SLSA as applicable | Authorize a bounded change with impact, test design, controlled dependencies/toolchain and rollback approach |
-| `PG5` | 29119 family, requirements/quality/security sources | Verify the exact controlled configuration; retain results, defects, waivers, coverage and acceptance disposition |
-| `PG6` | 15288/12207, 10007, SSDF, SPDX, SLSA | Authorize an immutable release with configuration audit, verification summary, hashes, SBOM, provenance, risk and recovery evidence |
+| `PG0` | 15288, 12207, 24748-1, 15289, 10007; HCD/accessibility and security governance as applicable | Approve system boundary, standards/tailoring register, roles, gates, lawful-access plan, conditional-scope rules, clean-room/configuration foundations and version watch |
+| `PG1` | 15288, 12207, 29148, `STD-HCD-001`, `STD-HCD-002`, `STD-A11Y-001` | Baseline stakeholders, operational context, authorized findings, user/accessibility needs, assumptions and initial usability/accessibility/product risks |
+| `PG2` | 29148, 25010, 25030, `STD-HCD-002`, `STD-HCD-003`, `STD-A11Y-001`; WCAG and security sources as applicable | Baseline functional, interface, data, quality, usability, accessibility, security and operational requirements with measurable acceptance, surface profile and traceability |
+| `PG3` | 42010, HCD/accessibility/quality/security sources, 29119 family | Baseline architecture, `DOC-08`, interaction and accessibility responses, component contracts, decisions, risk treatment and V&V/evaluation strategy |
+| `PG4` | 12207, 29119, 10007, HCD/accessibility sources, SSDF, SPDX/SLSA as applicable | Authorize a bounded change with impact, applicable UI states, test design, participant/assistive-technology needs, controlled dependencies/toolchain and rollback/recovery behaviour |
+| `PG5` | 29119 family, requirements/HCD/accessibility/quality/security sources | Verify the exact controlled configuration; retain manual and assistive-technology results where applicable, defects, waivers, coverage, residual risk and acceptance disposition |
+| `PG6` | 15288/12207, 10007, HCD/accessibility sources, SSDF, SPDX, SLSA | Authorize an immutable release with configuration audit, verification summary, accessibility profile and limitations, hashes, SBOM, provenance, risk, claims and recovery evidence |
 | `PG7` | 15288/12207, security and configuration guidance | Operate, support, respond, change and retire through controlled records and feedback |
 
 The gates are a `PROJECT-CONVENTION`. The cited sources inform the outcomes and information, but do not prescribe the names `PG0`–`PG7`.
@@ -154,13 +176,14 @@ The gates are a `PROJECT-CONVENTION`. The cited sources inform the outcomes and 
 
 ### 6.1 Baseline state
 
-| Item | Current state on 2026-08-26 | Required before PG0 PASS |
+| Item | Current state on 2026-08-27 | Required before PG0 PASS |
 |---|---|---|
-| Public edition/source verification | Complete; see `IE-RES-STD-SOURCE-001` | Review findings and resolve any discrepancy |
-| Lawful normative-text access for `STANDARD` rows | Not evidenced in the product repository | Record access authority/location without committing licensed text |
+| Public edition/source verification | Complete; see `IE-RES-STD-SOURCE-001` and `IE-RES-DOC08-STD-001` | Review findings and resolve any discrepancy |
+| Lawful normative-text access for clause-level use | Not evidenced in the product repository | Record access authority/location without committing licensed text; do not infer clause obligations from catalogue metadata |
 | Clause/process applicability map | Not yet created | Map apply/tailor/not-applicable decisions to IDEA processes and evidence |
 | Accountable role assignment | Roles defined; named assignments not yet baselined | Assign accountable and approving people or record the gate as BLOCKED |
 | Tailoring/deviation approval | Not yet approved | Record rationale, risk, approver and effective baseline |
+| Accessibility surface and external-obligation scope | IDEA Web and native IDEA Desktop are planned; no EU, customer, procurement, contractual or regulatory applicability decision is baselined | Approve surface profiles and the decision rule for activating conditional sources; record unresolved external scope as a risk or blocker |
 | Conformity/certification scope | None | No action unless a future contractual or organizational decision establishes scope |
 
 ### 6.2 Required tailoring-record fields
@@ -192,6 +215,11 @@ One integrated project process may satisfy multiple sources. Do not create dupli
 | SPDX 3.1 | RC1 pre-release | Do not baseline; reassess after stable community release |
 | SPDX / ISO/IEC 5962 | SPDX project 3.0.1 is newer than ISO/IEC 5962:2021, which represents SPDX 2.2.1 | Select and pin an operational schema after compatibility validation; never conflate the editions |
 | SLSA | v1.2 is Approved at the snapshot date | Pin the exact version in provenance policy and reassess later Approved revisions |
+| ISO/IEC 40500 | Edition 2 (2025) remains published but is at stage 90.92; a successor DIS is under development | Reassess on publication of the replacement International Standard or an approved external demand for the ISO designation |
+| ISO/IEC 29138-1 Edition 2 | AWI approved 2026-08-26 at stage 10.99 | Reassess on publication of Edition 2; do not baseline an AWI or Working Draft |
+| W3C WCAG 2.2 | Current dated Recommendation is 2024-12-12 and has an errata channel | Reassess on a revised Recommendation, material erratum or approved policy/contract version change |
+| WAI-ARIA 1.3 | Working Draft dated 2026-06-04 | Reassess after publication as a W3C Recommendation and a browser/assistive-technology support assessment |
+| EN 301 549 V4.1.0 | Final deliverable adopted for publication on 2026-08-24; V3.2.1 remains the latest published and currently WAD-harmonised edition at the snapshot | Check ETSI publication, then separately any Official Journal citation and applicability decision; never silently replace V3.2.1 |
 
 ### 7.1 Review triggers
 
@@ -229,7 +257,7 @@ Those are controlled `PROJECT-CONVENTION` or architecture decisions justified by
 
 ## 9. Official source ledger
 
-All source-status facts in this baseline were checked against first-party pages on 2026-08-26. The detailed evidence note records the verification result; this ledger is the durable navigation index.
+All source-status facts in this baseline were checked against first-party pages on 2026-08-26 or 2026-08-27. The two detailed evidence notes identify their respective cut-off dates; this ledger is the durable navigation index.
 
 | Source group | Official navigation |
 |---|---|
@@ -237,6 +265,10 @@ All source-status facts in this baseline were checked against first-party pages 
 | Information items | [15289:2019](https://www.iso.org/standard/74909.html) |
 | Requirements and architecture | [29148:2018](https://www.iso.org/standard/72089.html), [42010:2022](https://www.iso.org/standard/74393.html) |
 | Product quality | [25010:2023](https://www.iso.org/standard/78176.html), [25030:2019](https://www.iso.org/standard/72116.html) |
+| Human-centred design and usability | [ISO 9241-210:2019](https://www.iso.org/standard/77520.html), [ISO 9241-11:2018](https://www.iso.org/standard/63500.html), [ISO 9241-110:2020](https://www.iso.org/standard/75258.html) |
+| Software accessibility and user needs | [ISO 9241-171:2025](https://www.iso.org/standard/86308.html), [ISO/IEC 29138-1:2018](https://www.iso.org/standard/71953.html), [ISO/IEC AWI 29138-1](https://www.iso.org/standard/95214.html) |
+| Web accessibility and semantics | [W3C WCAG 2.2](https://www.w3.org/TR/2024/REC-WCAG22-20241212/), [ISO/IEC 40500:2025](https://www.iso.org/standard/91029.html), [WAI-ARIA 1.2](https://www.w3.org/TR/2023/REC-wai-aria-1.2-20230606/), [WAI-ARIA 1.3 Working Draft](https://www.w3.org/TR/2026/WD-wai-aria-1.3-20260604/) |
+| European ICT accessibility | [EN 301 549 V3.2.1](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), [V4.1.0 final draft](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/04.01.00_30/en_301549v040100va.pdf), [ETSI project status](https://labs.etsi.org/rep/HF/en301549), [European Commission harmonisation guidance](https://digital-strategy.ec.europa.eu/en/policies/web-accessibility-directive-standards-and-harmonisation) |
 | Testing | [29119-1:2022](https://www.iso.org/standard/81291.html), [29119-2:2021](https://www.iso.org/standard/79428.html), [29119-3:2021](https://www.iso.org/standard/79429.html), [29119-4:2021](https://www.iso.org/standard/79430.html), [29119-5:2024](https://www.iso.org/standard/87233.html), [TR 29119-6:2021](https://www.iso.org/standard/81293.html) |
 | Configuration management | [ISO 10007:2017](https://www.iso.org/standard/70400.html), [working draft Edition 4](https://www.iso.org/standard/92170.html) |
 | Information/application security | [27001:2022](https://www.iso.org/standard/27001), [27001 Amendment 1:2024](https://www.iso.org/standard/88435.html), [27002:2022](https://www.iso.org/standard/75652.html), [27034-1:2011](https://www.iso.org/standard/44378.html) |
@@ -250,6 +282,7 @@ All source-status facts in this baseline were checked against first-party pages 
 - Do not commit licensed ISO/IEC/IEEE normative text unless its license explicitly permits repository distribution.
 - Record the controlled access location and authorized readers rather than copying protected material.
 - Do not state `ISO compliant`, `ISO conformant` or `certified` without an approved scope, clause/process assessment, objective evidence and the applicable formal decision.
+- Do not state `WCAG conformant`, `EN 301 549 conformant` or legally compliant merely because requirements or `DOC-08` cite those sources; establish the exact surface, edition, criteria/clauses, controlled configuration, evidence, deviations and authorized assessment first.
 - ISO/IEC 27001 certification, if pursued, belongs to an organizational ISMS scope; repository structure cannot create it.
 - An official title, edition and high-level public scope summary are navigation metadata, not a substitute for the normative publication.
 
@@ -258,3 +291,4 @@ All source-status facts in this baseline were checked against first-party pages 
 | Version | Date | Status | Change |
 |---|---|---|---|
 | 0.1 | 2026-08-26 | Proposed | Initial product-local register derived from independently verified public sources and the approved architecture direction |
+| 0.2 | 2026-08-27 | Proposed | Added the primary-source-checked human-centred design, usability, interaction and accessibility baseline for `DOC-08`, including conditional Web semantics, regulatory watch items and gate routing |

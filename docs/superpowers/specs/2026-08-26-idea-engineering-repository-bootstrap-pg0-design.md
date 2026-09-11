@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Document ID | `IE-ARC-BOOT-001` |
-| Artifact status | Written design pending Product Owner review |
+| Artifact status | Accepted design; PG0 implementation pending |
 | Design decision | Approved in conversation on 2026-08-26 |
 | System of interest | `C1 — IDEA Engineering` |
 | Product trajectory | Engineering Data Management → PLM capabilities inside C1 → Platform only after an independent C2 exists |

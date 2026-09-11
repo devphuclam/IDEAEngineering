@@ -1,0 +1,41 @@
+# DVP-003-BASELINE-001 assessed artifact manifest
+# Parent commit: 04e6a97e537eba51d5344f7b6f6f2d5edb87f9ee
+# Hash algorithm: SHA-256 over canonical LF-normalized UTF-8 content bytes
+# Scope: all Markdown files under docs/product/definition and all feature Markdown artifacts under specs/003-controlled-documentation
+# Exclusions: validation-results.md (the retained ledger) and this manifest; excluding the ledger avoids circular hashing
+# Verify from repository root by normalizing CRLF/CR to LF, encoding UTF-8 without a BOM, and hashing each listed path.
+
+f0fe3436c269bed60ec454c7f67752e53cda33d50d4803cbd36682903bb025d3  docs/product/definition/DOC-01-product-vision-and-scope.md
+b0c4b21c1675cd80bea2eb4af311bf38f2bf523c81d4cf42b36e97f3d351d330  docs/product/definition/DOC-02-feasibility-and-options-assessment.md
+d79689db4ddea22f246ed19bccea21c6008789fd0f75172388ae701b09444aa3  docs/product/definition/DOC-03-business-requirements.md
+81b31b73c08889a8a65b0405b23cc85ab87a08aa4aa0e31d9f94f6a89abccef9  docs/product/definition/DOC-04-software-requirements-specification.md
+1db9da524736a0ee5634fb2e58165a9419989d36ceb4076e910f49a98c37d586  docs/product/definition/DOC-05-architecture-description.md
+2d2e63a2d90147baeedda554c246e1b8dca980c5333790afb3052213f03b6ba9  docs/product/definition/DOC-06-data-integration-and-migration-specification.md
+8354904fc17a676e60078b211d74d1001b67e5ad19d15ab5124b7105820bc6a9  docs/product/definition/DOC-07-mvp-roadmap-and-delivery-plan.md
+b777337cee5758660fc246d96d35613d97b8694e21eac2eabbb94a837dc0beef  docs/product/definition/DOC-08-ui-ux-and-interaction-specification.md
+1b502ac874c453d45418021a8d915fad921708e5da41a3fd9577d39f6cae1729  docs/product/definition/README.md
+63cfbaedf510c3b98dc270de2eb55a044a7cad17ce1f6c8e8aca79efc745d449  docs/product/definition/registers/CHG-change-records.md
+65e50debd1a1c2004215829f6257c42bd34a4127887940d3ae2fb7cd698317ae  docs/product/definition/registers/CLR-clean-room-provenance.md
+080ae9ea2a3fa283a63121ce13ef3990e18367afb3ba117413af52b3b6c3e245  docs/product/definition/registers/CMP-configuration-management.md
+286ed1a964c43366207392a16ec7d602649da06ba8c27c5c038307f5211ee9e5  docs/product/definition/registers/GOV-governance-and-standards.md
+04f7b8e9f4700f7e1359c0dea0872c3f142c99ac8da19c2d980d795baf5714da  docs/product/definition/registers/OPS-operations-and-retirement.md
+b72239ff1e8fee8e77ac09dce645fbeb96d65318fd963e6541f871ea57df28b4  docs/product/definition/registers/README.md
+cd92bdb22a48e0594460c774bb122870fe4b97cb3b29d49be6170b0e0d8cb973  docs/product/definition/registers/REL-release-baselines.md
+d52070cb4c53387a0ba20358829537c30649e09f35eba1b8b47fce269a48cc62  docs/product/definition/registers/RSK-risk-register.md
+9161ba89f8f36173fb04cdfae241ab2976cb1e01000503210931eaee5b746186  docs/product/definition/registers/VEV-verification-evidence.md
+2f30cc9c33c9750a4b08eea56e8b92cb0d6bc65b2c620a9a62e9af7bbda5e046  docs/product/definition/registers/VVP-verification-validation-plan.md
+77f48ea659620db7e0ecbe80ad7e82f34e5333adceb1b1721d5a305ce8dfe294  specs/003-controlled-documentation/checklists/controlled-documentation.md
+d4fff8b5234687e955113965d183fddba623c1099f3a5011081254a2651b3e6e  specs/003-controlled-documentation/checklists/requirements.md
+42121b611c6d348959265ae44eee193d30d3926c33ac10ecd9a5428f8ccfe7df  specs/003-controlled-documentation/contracts/control-fields-and-status.md
+8189c70671a47ac0a595e4e64339666d486a87f98d1a204583aaed82d2f8d9c3  specs/003-controlled-documentation/contracts/document-catalogue.md
+65634d815eb0ac654605e26ebaeb029573b4f538950e4a40e725d433f72b49dd  specs/003-controlled-documentation/contracts/evidence-and-trace.md
+20333f7714bae75638ec16c6800bd7ac21462ae11c04d041c3912f200f1196fa  specs/003-controlled-documentation/contracts/gate-package.md
+220f76e524e62205106899299db31df4ffc99b1f8edd9cc3eaf52c0cc8619af8  specs/003-controlled-documentation/contracts/README.md
+9b125b7edc3ac2039785bea8f42d828f733b6990edda18847dfed1a123de50a2  specs/003-controlled-documentation/contracts/rendition.md
+77088d8108b8f255c818c05dad091105e785c22110b543588eab96c69d37b8ff  specs/003-controlled-documentation/contracts/validation.md
+ab6ee4e34be8832c65fcd9aa5795435b664582632f0f980ffce90b17fcdf6f88  specs/003-controlled-documentation/data-model.md
+689db712026b2e76b648e6dff3ee05263ce14a55cf27d39d0835f8c8b5d10c02  specs/003-controlled-documentation/plan.md
+2bc82fd8373b98553645b02b488147476ea2ab9d8aa2cb12b761db3d605b641d  specs/003-controlled-documentation/quickstart.md
+1f1542d88dffda3f0d0b01ec65e0031a26f04c4d5eaeb5414d05179c4c2dc38e  specs/003-controlled-documentation/research.md
+8a6afe48e9b3f4300c0476dbb9b5b190ec4abf6c3fbed6381b695bce0f98e2c7  specs/003-controlled-documentation/spec.md
+de4ceb875d5f78ab3372efd78ad58f9b6e90c48ebf04d62a65ca89b2e04c7445  specs/003-controlled-documentation/tasks.md

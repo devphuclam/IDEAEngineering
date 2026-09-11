@@ -19,3 +19,8 @@ __pycache__/
 .workspace-*/mirrors/
 *.agent-workspace-mirror/
 .tmp-validation/
+
+# Local render, capture, and one-off verification artifacts
+tmp/
+~$*
+~WRL*.tmp

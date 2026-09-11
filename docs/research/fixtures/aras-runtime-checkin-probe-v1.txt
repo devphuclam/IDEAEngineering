@@ -1,0 +1,4 @@
+IDEA Engineering runtime probe
+Purpose: observe Aras Checkout and Check-in behavior on a dedicated test CAD.
+Payload version: 1
+No product or personal data.

@@ -15,6 +15,9 @@ jobs:
       - name: Check out template
         uses: actions/checkout@v4
 
+      - name: Verify shell script line endings
+        run: bash tests/shell-line-ending.test.sh
+
       - name: Verify Core Workspace
         run: ./scripts/verify-template
 

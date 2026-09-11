@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <!-- Giao diện mẫu IDEA DDM: dữ liệu chỉ dùng để minh họa thao tác. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="IDEA DDM — giao diện mẫu quản lý tài liệu kỹ thuật.">
+  <title>IDEA DDM — Tài liệu kỹ thuật</title>
+  <style>
+    :root {
+      --navy: #13233d;
+      --navy-2: #1d3557;
+      --blue: #1674d1;
+      --blue-2: #e8f2fb;
+      --teal: #0f7480;
+      --ink: #182638;
+      --muted: #63748a;
+      --line: #d9e1ea;
+      --line-2: #c4d1df;
+      --surface: #fff;
+      --canvas: #edf2f7;
+      --soft: #f6f8fb;
+      --green: #19734b;
+      --green-bg: #e9f7ef;
+      --amber: #946118;
+      --amber-bg: #fff5df;
+      --purple: #6045a3;
+      --purple-bg: #f2efff;
+      --red: #9b3d3d;
+      --red-bg: #fff0f0;
+      --shadow: 0 7px 20px rgba(17, 39, 68, .08);
+      --sans: "Segoe UI", "Fira Sans", Arial, sans-serif;
+      --mono: "Cascadia Mono", "Fira Code", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font: 13px/1.38 var(--sans);
+      overflow: hidden;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { color: inherit; cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    [hidden] { display: none !important; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #f0a400;
+      outline-offset: 2px;
+    }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    .icon { width: 15px; height: 15px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-fill { fill: currentColor; stroke: none; }
+
+    .app { height: 100vh; display: grid; grid-template-rows: 54px 31px 43px 1fr; }
+    .topbar {
+      color: #fff; background: var(--navy); display: flex; align-items: center;
+      justify-content: space-between; padding: 0 19px; gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 225px; }
+    .brand img { width: 31px; height: 31px; object-fit: contain; border-radius: 6px; background: #fff; }
+    .brand strong { display: block; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+    .brand small { display: block; color: #aec3da; font-size: 10px; letter-spacing: .02em; margin-top: 2px; }
+    .top-actions { display: flex; align-items: center; gap: 9px; }
+    .top-actions select, .actor-pill {
+      height: 31px; color: #ebf2f9; background: #203b5c; border: 1px solid #4a6584;
+      border-radius: 4px; padding: 0 9px;
+    }
+    .actor-pill { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .avatar { width: 21px; height: 21px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: #4a8ed3; font-size: 10px; font-weight: 700; }
+
+    .menubar {
+      display: flex; align-items: center; gap: 4px; padding: 0 19px;
+      background: #f7f9fb; border-bottom: 1px solid var(--line); color: #3b5068;
+    }
+    .menu-button { height: 26px; padding: 0 9px; border: 0; background: transparent; border-radius: 3px; font-size: 12px; }
+    .menu-button:hover { background: #e5edf5; color: var(--navy); }
+    .menu-button[aria-expanded="true"] { color: var(--navy); background: #e5edf5; }
+    .menu-spacer { flex: 1; }
+
+    .workbench-tabs {
+      display: flex; align-items: end; gap: 2px; padding: 0 19px;
+      background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 1px 3px rgba(17,39,68,.04);
+    }
+    .workbench-tab {
+      height: 42px; display: inline-flex; align-items: center; gap: 7px; padding: 0 15px;
+      border: 0; border-bottom: 3px solid transparent; background: transparent; color: #586b81;
+      font-weight: 600;
+    }
+    .workbench-tab:hover { color: var(--blue); background: #f8fbfe; }
+    .workbench-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .tab-count { min-width: 19px; height: 18px; display: inline-grid; place-items: center; padding: 0 5px; border-radius: 10px; background: #e9eff6; color: #4d647f; font-size: 11px; }
+    .workbench-tab.active .tab-count { background: #d9ecff; color: var(--blue); }
+
+    .workspace { min-height: 0; display: grid; grid-template-columns: 238px minmax(560px, 1fr) 326px; }
+    .rail, .main, .inspector { min-width: 0; min-height: 0; background: var(--surface); }
+    .rail { border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+    .rail-head { padding: 13px 14px 9px; border-bottom: 1px solid var(--line); }
+    .eyebrow { color: #64778d; font-size: 10px; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+    .rail-context { color: var(--navy); margin-top: 3px; font-size: 12px; font-weight: 700; }
+    .rail-scroll { min-height: 0; overflow: auto; padding: 9px 8px 15px; }
+    .rail-section { margin: 0 0 13px; }
+    .rail-section-title { display: flex; align-items: center; justify-content: space-between; padding: 0 7px 5px; color: #718298; font-size: 10px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+    .rail-link, .tree-row {
+      width: 100%; min-height: 31px; display: flex; align-items: center; gap: 7px; border: 0;
+      border-radius: 4px; background: transparent; color: #334d68; padding: 5px 8px; text-align: left;
+    }
+    .rail-link:hover, .tree-row:hover { background: #eef5fb; color: #0e5a9f; }
+    .rail-link.active, .tree-row.selected { color: #0c5fa7; background: #e2f0fb; font-weight: 700; }
+    .rail-link .icon, .tree-row .icon { color: #6c8198; }
+    .rail-link.active .icon, .tree-row.selected .icon { color: var(--blue); }
+    .rail-link span:nth-child(2), .tree-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rail-badge { margin-left: auto; color: #627891; font-size: 11px; }
+    .tree-row { padding-left: 3px; }
+    .tree-toggle { width: 17px; height: 20px; border: 0; background: transparent; display: grid; place-items: center; color: #778ba0; padding: 0; }
+    .tree-toggle .icon { width: 12px; height: 12px; }
+    .tree-indent { padding-left: 22px; }
+    .tree-indent-2 { padding-left: 43px; }
+    .tree-muted { color: #7990a7; font-size: 11px; }
+    .doc-dot { width: 6px; height: 6px; border-radius: 50%; margin-left: auto; background: #b0bdc9; }
+    .doc-dot.green { background: #27a05d; }
+    .doc-dot.amber { background: #dd9917; }
+    .doc-dot.blue { background: #297fd0; }
+    .doc-dot.purple { background: #7d5fc0; }
+    .rail-foot { margin-top: auto; padding: 10px 12px; background: #f8fafc; border-top: 1px solid var(--line); color: #6e8093; font-size: 11px; }
+
+    .main { display: flex; flex-direction: column; background: #f7f9fb; }
+    .main-head { flex: 0 0 auto; padding: 14px 18px 11px; background: #fff; border-bottom: 1px solid var(--line); }
+    .crumbs { display: flex; align-items: center; gap: 7px; color: #738398; font-size: 11px; }
+    .crumbs strong { color: #34506c; }
+    .head-line { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 7px; }
+    .head-line h1 { margin: 0; color: var(--navy); font-size: 22px; line-height: 1.1; }
+    .head-line p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .head-tools { display: flex; gap: 7px; align-items: center; }
+    .button { min-height: 30px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 10px; border: 1px solid var(--line-2); border-radius: 4px; background: #fff; color: #3e5872; font-weight: 600; }
+    .button:hover:not(:disabled) { background: #f1f7fc; border-color: #99b9d7; color: #0c5f9f; }
+    .button.primary { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .button.primary:hover:not(:disabled) { background: #0f63b8; }
+    .button.subtle { background: #f8fafc; }
+    .button.warning { color: #79500f; background: var(--amber-bg); border-color: #e3c982; }
+    .button.danger { color: #913c3c; background: #fff; border-color: #dfb7b7; }
+
+    .search-panel { flex: 0 0 auto; padding: 10px 18px; background: #fff; border-bottom: 1px solid var(--line); }
+    .search-row { display: grid; grid-template-columns: minmax(180px, 1fr) 155px 150px auto; gap: 7px; }
+    .field { height: 32px; display: flex; align-items: center; gap: 7px; border: 1px solid var(--line-2); border-radius: 4px; background: #fff; padding: 0 9px; }
+    .field:focus-within { border-color: #7db5e4; box-shadow: 0 0 0 2px rgba(22,116,209,.12); }
+    .field input, .field select { width: 100%; height: 28px; border: 0; background: transparent; color: var(--ink); outline: 0; }
+    .field select { cursor: pointer; }
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .chip { display: inline-flex; align-items: center; gap: 5px; min-height: 23px; padding: 0 8px; border: 1px solid #d6e2ee; border-radius: 12px; color: #4e6580; background: #f4f8fc; font-size: 11px; }
+    .chip button { width: 14px; height: 14px; padding: 0; border: 0; color: #7790a7; background: transparent; }
+
+    .bulkbar { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 7px 18px; background: #f5f8fb; border-bottom: 1px solid var(--line); }
+    .bulkbar strong { color: var(--navy); }
+    .bulkbar .separator { width: 1px; height: 22px; background: var(--line-2); margin: 0 2px; }
+    .scope-note { margin-left: auto; color: #718398; font-size: 11px; white-space: nowrap; }
+
+    .center-scroll { min-height: 0; overflow: auto; padding: 12px 18px 18px; }
+    .result-card { min-width: 0; background: #fff; border: 1px solid var(--line); border-radius: 5px; box-shadow: var(--shadow); overflow: hidden; }
+    .result-head { min-height: 42px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; border-bottom: 1px solid var(--line); }
+    .result-head h2 { margin: 0; font-size: 13px; color: var(--navy); }
+    .result-head small { color: #738398; }
+    .table-scroll { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { position: sticky; top: 0; z-index: 1; height: 31px; padding: 0 9px; color: #61758c; background: #f4f7fa; border-bottom: 1px solid var(--line); font-size: 10px; font-weight: 750; letter-spacing: .04em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+    td { height: 49px; padding: 6px 9px; border-bottom: 1px solid #edf1f5; color: #304860; vertical-align: middle; white-space: nowrap; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover { background: #f7fbff; }
+    tbody tr.selected { background: #eaf4fc; box-shadow: inset 3px 0 0 var(--blue); }
+    th:first-child, td:first-child { width: 33px; padding-left: 12px; }
+    input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--blue); cursor: pointer; }
+    .item-cell { display: flex; align-items: center; gap: 8px; min-width: 230px; }
+    .type-icon { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 4px; color: #3d6f9e; background: #edf5fb; border: 1px solid #d4e7f5; }
+    .type-icon.cad { color: #90671b; background: #fff7e6; border-color: #f0ddb0; }
+    .type-icon.office { color: #6c4d9d; background: #f5efff; border-color: #e2d6f7; }
+    .type-icon.record { color: #28745e; background: #eaf7f2; border-color: #cce9dd; }
+    .item-name { display: flex; flex-direction: column; gap: 1px; }
+    .item-name strong { color: #173653; font-size: 12px; }
+    .item-name small { color: #708196; font-size: 10px; }
+    .mono { font-family: var(--mono); font-size: 11px; }
+    .status { display: inline-flex; align-items: center; gap: 5px; min-height: 22px; padding: 0 7px; border-radius: 12px; border: 1px solid transparent; font-size: 11px; font-weight: 700; }
+    .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .status.green { color: var(--green); background: var(--green-bg); border-color: #c6ead5; }
+    .status.amber { color: var(--amber); background: var(--amber-bg); border-color: #f0dbab; }
+    .status.blue { color: #1d65a2; background: #e9f3fc; border-color: #c8e1f6; }
+    .status.purple { color: var(--purple); background: var(--purple-bg); border-color: #ddd5f5; }
+    .status.gray { color: #65788d; background: #f3f5f7; border-color: #dfe6ed; }
+    .scope-pill { color: #5c6e82; background: #f6f8fa; border: 1px solid #e0e6ec; border-radius: 3px; padding: 2px 6px; font-size: 10px; }
+
+    .structure-view { display: none; }
+    .structure-view.active { display: block; }
+    .structure-layout { display: grid; grid-template-columns: minmax(235px, .72fr) minmax(430px, 1.28fr); gap: 12px; }
+    .structure-card { background: #fff; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+    .structure-card h3 { margin: 0; padding: 11px 12px; border-bottom: 1px solid var(--line); color: var(--navy); font-size: 13px; }
+    .structure-tree { padding: 8px; min-height: 320px; }
+    .bom-note { margin: 10px 12px; padding: 9px; color: #526982; background: #f4f8fc; border: 1px solid #dce8f2; border-radius: 4px; font-size: 11px; }
+    .release-scope { margin: 0 12px 12px; border: 1px solid #dfebf3; border-radius: 4px; }
+    .release-scope header { padding: 8px 9px; color: #34546f; background: #f3f8fc; border-bottom: 1px solid #dfebf3; font-weight: 700; }
+    .release-scope label { display: flex; align-items: center; gap: 7px; padding: 8px 9px; border-bottom: 1px solid #eef2f5; }
+    .release-scope label:last-child { border-bottom: 0; }
+    .release-scope small { display: block; margin-left: 23px; color: #738398; }
+    .release-action { padding: 0 12px 12px; }
+    .release-blocker { display: block; margin-top: 7px; color: #9a5f10; font-size: 10px; line-height: 1.35; }
+    .release-blocker.ready { color: var(--green); }
+    .scope-pill.approved { color: var(--green); background: var(--green-bg); border-color: #c6ead5; }
+    .structure-toolbar { display: flex; gap: 7px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: #f8fafc; }
+
+    .review-view { display: none; }
+    .review-view.active { display: block; }
+    .review-grid { display: grid; grid-template-columns: minmax(360px, 1fr) 285px; gap: 12px; }
+    .review-card { background: #fff; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+    .review-card h3 { margin: 0; padding: 11px 12px; color: var(--navy); font-size: 13px; border-bottom: 1px solid var(--line); }
+    .review-item { width: 100%; display: grid; grid-template-columns: 30px 1fr auto; gap: 9px; align-items: center; padding: 11px 12px; border: 0; border-bottom: 1px solid #edf1f5; background: #fff; text-align: left; }
+    .review-item:hover, .review-item.selected { background: #eef6fd; }
+    .review-icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; color: #986b22; background: var(--amber-bg); }
+    .review-item strong { display: block; color: #193a58; font-size: 12px; }
+    .review-item small { color: #728399; }
+    .review-item time { color: #76899c; font-family: var(--mono); font-size: 10px; }
+    .review-summary { padding: 12px; }
+    .review-summary h4 { margin: 0 0 9px; color: var(--navy); }
+    .review-summary dl { margin: 0; }
+    .review-summary dl div { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid #edf1f5; }
+    .review-summary dt { color: #718398; }
+    .review-summary dd { margin: 0; color: #23415e; font-weight: 650; text-align: right; }
+
+    .inspector { border-left: 1px solid var(--line); display: flex; flex-direction: column; background: #fff; }
+    .inspector-head { padding: 13px 14px 10px; border-bottom: 1px solid var(--line); }
+    .inspector-head-line { display: flex; align-items: start; justify-content: space-between; gap: 10px; }
+    .inspector-head h2 { margin: 4px 0 0; color: var(--navy); font-size: 15px; line-height: 1.22; }
+    .inspector-head p { margin: 4px 0 0; color: #718398; font-size: 11px; }
+    .inspector-scroll { min-height: 0; overflow: auto; padding: 10px 12px 18px; }
+    .inspector-section { margin-bottom: 11px; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+    .section-title { min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; color: #3a5873; background: #f7f9fb; border-bottom: 1px solid var(--line); font-size: 11px; font-weight: 750; }
+    .section-body { padding: 10px; }
+    .property-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+    .property dt { color: #7a8b9d; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+    .property dd { margin: 2px 0 0; color: #223e5a; font-size: 11px; font-weight: 700; }
+    .next-step { padding: 10px; border-left: 3px solid #4b9bd5; background: #f1f8fd; }
+    .next-step.warning { border-left-color: #d39a2b; background: #fff9ed; }
+    .next-step strong { display: block; color: #214f75; font-size: 12px; }
+    .next-step.warning strong { color: #765019; }
+    .next-step p { margin: 4px 0 0; color: #5c6f82; font-size: 11px; }
+    .inspector-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--line); }
+    .inspector-tab { flex: 0 0 auto; height: 32px; padding: 0 10px; border: 0; border-bottom: 2px solid transparent; color: #63778d; background: #fff; font-size: 11px; font-weight: 650; }
+    .inspector-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .preview-sheet { min-height: 180px; padding: 10px; background: #e8edf2; }
+    .paper { min-height: 204px; padding: 13px; background: #fff; border: 1px solid #cdd7e1; box-shadow: 0 3px 9px rgba(14, 35, 60, .11); }
+    .paper-head { display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #dbe3eb; color: #234762; font-family: var(--mono); font-size: 9px; }
+    .paper-title { margin: 13px 0 10px; color: #193d59; font-size: 13px; font-weight: 750; }
+    .drawing { height: 87px; position: relative; border: 1px solid #c9d9e6; background: linear-gradient(transparent 96%, #edf3f7 96%), linear-gradient(90deg, transparent 96%, #edf3f7 96%); background-size: 23px 23px; }
+    .drawing::before, .drawing::after { content: ""; position: absolute; border: 2px solid #5792b9; }
+    .drawing::before { width: 64px; height: 34px; left: 44px; top: 25px; border-radius: 5px 17px 17px 5px; }
+    .drawing::after { width: 22px; height: 22px; left: 105px; top: 31px; border-radius: 50%; background: #e9f4fa; }
+    .paper-foot { display: flex; justify-content: space-between; margin-top: 9px; color: #7a8b9d; font-size: 9px; }
+    .file-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #edf1f5; }
+    .file-row:last-child { border-bottom: 0; }
+    .file-row strong { display: block; color: #2a4b67; font-size: 11px; }
+    .file-row small { color: #7a8b9d; }
+    .file-size { margin-left: auto; color: #7a8b9d; font-family: var(--mono); font-size: 10px; }
+    .history { position: relative; padding-left: 15px; }
+    .history::before { content: ""; position: absolute; left: 3px; top: 5px; bottom: 5px; width: 1px; background: #cfdce8; }
+    .history-event { position: relative; padding: 0 0 11px 10px; }
+    .history-event::before { content: ""; position: absolute; left: -15px; top: 4px; width: 7px; height: 7px; border-radius: 50%; background: #5797c8; border: 2px solid #e6f1fa; }
+    .history-event strong { display: block; color: #2a4b67; font-size: 11px; }
+    .history-event small { color: #798b9d; font-size: 10px; }
+
+    .empty { padding: 34px; color: #708196; text-align: center; }
+    .empty strong { display: block; margin-bottom: 5px; color: #395675; }
+
+    .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(17, 34, 54, .46); }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(570px, 100%); max-height: min(690px, calc(100vh - 40px)); display: flex; flex-direction: column; background: #fff; border: 1px solid #b9c9d9; border-radius: 6px; box-shadow: 0 18px 50px rgba(17, 34, 54, .26); }
+    .modal-head { display: flex; align-items: start; justify-content: space-between; gap: 14px; padding: 15px 17px 12px; border-bottom: 1px solid var(--line); }
+    .modal-head h2 { margin: 0; color: var(--navy); font-size: 17px; }
+    .modal-head p { margin: 4px 0 0; color: #718398; font-size: 11px; }
+    .modal-close { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid var(--line-2); border-radius: 4px; background: #fff; color: #5d7187; }
+    .modal-body { min-height: 0; overflow: auto; padding: 15px 17px; }
+    .modal-foot { display: flex; justify-content: flex-end; gap: 7px; padding: 11px 17px; border-top: 1px solid var(--line); background: #f8fafc; }
+    .modal-scope { margin-bottom: 13px; border: 1px solid var(--line); border-radius: 4px; }
+    .modal-scope-title { padding: 8px 10px; color: #506a83; background: #f5f8fb; border-bottom: 1px solid var(--line); font-weight: 700; }
+    .scope-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #edf1f5; }
+    .scope-row:last-child { border-bottom: 0; }
+    .scope-row small { margin-left: auto; color: #76899e; }
+    .choice-list { display: grid; gap: 7px; }
+    .choice { display: flex; align-items: start; gap: 8px; padding: 9px; border: 1px solid var(--line); border-radius: 4px; }
+    .choice:has(input:checked) { border-color: #8dbbe0; background: #f1f8fd; }
+    .choice strong { display: block; color: #2b4c68; }
+    .choice small { display: block; margin-top: 2px; color: #718398; }
+    .modal-callout { display: flex; gap: 8px; padding: 10px; margin-top: 12px; color: #5b6e81; background: #f5f8fb; border: 1px solid #dce6ef; border-radius: 4px; font-size: 11px; }
+    .modal-callout.warning { color: #765019; background: var(--amber-bg); border-color: #eedba9; }
+    .modal-callout.success { color: #256d4b; background: var(--green-bg); border-color: #cbe9d7; }
+    .modal-field { display: grid; gap: 5px; margin-top: 12px; color: #405b74; font-weight: 650; }
+    .modal-field input, .modal-field select, .modal-field textarea { width: 100%; min-height: 34px; padding: 7px 9px; color: var(--ink); background: #fff; border: 1px solid var(--line-2); border-radius: 4px; }
+    .modal-field textarea { min-height: 76px; resize: vertical; }
+    .modal-field small { color: #718398; font-weight: 400; }
+    .confirm-line { margin-top: 12px; display: flex; gap: 8px; align-items: center; color: #526a82; }
+    .toast { position: fixed; z-index: 20; right: 24px; bottom: 21px; max-width: 430px; display: none; padding: 11px 14px; color: #fff; background: #1b3a5e; border: 1px solid #547aa1; border-radius: 5px; box-shadow: var(--shadow); }
+    .toast.show { display: block; }
+    .context-menu { position: fixed; z-index: 30; min-width: 190px; padding: 4px; background: #fff; border: 1px solid #b9c8d7; border-radius: 5px; box-shadow: 0 10px 28px rgba(17, 34, 54, .2); }
+    .context-menu button { width: 100%; min-height: 31px; display: flex; align-items: center; gap: 8px; padding: 0 9px; border: 0; border-radius: 3px; color: #294761; background: transparent; text-align: left; }
+    .context-menu button:hover { color: #0c5f9f; background: #edf5fc; }
+    .context-menu button:disabled { color: #8291a1; background: transparent; }
+    .context-menu button.danger { color: var(--red); }
+    .context-menu .menu-rule { height: 1px; margin: 4px; background: var(--line); }
+
+    @media (max-width: 1120px) {
+      .workspace { grid-template-columns: 214px minmax(480px, 1fr) 285px; }
+      .search-row { grid-template-columns: minmax(150px, 1fr) 135px 135px auto; }
+      .top-actions .actor-pill { max-width: 185px; overflow: hidden; }
+    }
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100vh; grid-template-rows: auto auto auto auto; }
+      .topbar { min-height: 54px; flex-wrap: wrap; padding: 8px 12px; }
+      .top-actions { flex-wrap: wrap; }
+      .workspace { min-height: 860px; grid-template-columns: 200px minmax(0, 1fr); }
+      .inspector { display: none; }
+      .search-row { grid-template-columns: 1fr 1fr; }
+      .search-row .search-submit { grid-column: span 2; }
+      .review-grid, .structure-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 590px) {
+      .menubar { padding: 0 8px; overflow: auto; }
+      .workbench-tabs { padding: 0 8px; overflow: auto; }
+      .workbench-tab { padding: 0 10px; }
+      .workspace { grid-template-columns: 1fr; }
+      .rail { display: none; }
+      .main-head, .search-panel, .bulkbar, .center-scroll { padding-left: 11px; padding-right: 11px; }
+      .head-line { align-items: start; flex-direction: column; }
+      .search-row { grid-template-columns: 1fr; }
+      .search-row .search-submit { grid-column: auto; }
+      .scope-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5h7l2 2h9v9.8a1.7 1.7 0 0 1-1.7 1.7H4.7A1.7 1.7 0 0 1 3 18.3z"></path><path d="M3 9h18"></path></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4v13H6z"></path><path d="M14 3.5v4h4"></path><path d="M9 12h6M9 15.5h6"></path></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"></path><path d="m4 7.5 8 4.5 8-4.5M12 12v9"></path></symbol>
+    <symbol id="i-cad" viewBox="0 0 24 24"><path d="M5 4h14v16H5z"></path><circle cx="12" cy="12" r="4"></circle><path d="M12 8v8M8 12h8"></path></symbol>
+    <symbol id="i-record" viewBox="0 0 24 24"><path d="M5 3.5h14v17H5z"></path><path d="M8 7h8M8 11h8M8 15h5"></path></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"></path><circle cx="4" cy="6" r="1"></circle><circle cx="4" cy="12" r="1"></circle><circle cx="4" cy="18" r="1"></circle></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7v5l3 2"></path></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="m8 4 8 0 1 5-2.5 2.5v4L12 18l-2.5-2.5v-4L7 9z"></path><path d="M12 18v3"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"></path></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="m4 16.5-.8 4.3 4.3-.8L19 8.5 15.5 5z"></path><path d="m14.5 6 3.5 3.5"></path></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M9.5 14.5 14.5 9.5M8 17H6a4 4 0 0 1 0-8h4M16 7h2a4 4 0 0 1 0 8h-4"></path></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M3 12s3.3-5 9-5 9 5 9 5-3.3 5-9 5-9-5-9-5z"></path><circle cx="12" cy="12" r="2"></circle></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7"></path><path d="M4 5v4h4M12 8v4l3 2"></path></symbol>
+    <symbol id="i-structure" viewBox="0 0 24 24"><path d="M12 4v4M5 20v-4h14v4M12 8H5v4M12 8h7v4"></path><circle cx="12" cy="3" r="1.5"></circle><circle cx="5" cy="21" r="1.5"></circle><circle cx="19" cy="21" r="1.5"></circle></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"></path></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"></path></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+    <symbol id="i-warning" viewBox="0 0 24 24"><path d="m12 4 9 16H3z"></path><path d="M12 9v5M12 17.5h.01"></path></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"></circle><path d="M5 20c.6-3.2 3.1-5 7-5s6.4 1.8 7 5"></path></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4M5 20h14"></path></symbol>
+  </svg>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <img src="../logo-idea.png" alt="IDEA">
+        <div><strong>IDEA DDM</strong><small></small></div>
+      </div>
+      <div class="top-actions">
+        <label class="sr-only" for="language">Ngôn ngữ</label>
+        <select id="language" aria-label="Ngôn ngữ"><option>Tiếng Việt</option><option>English</option><option>日本語</option></select>
+        <div class="actor-pill"><span class="avatar">LN</span><span>Linh Nguyễn</span></div>
+      </div>
+    </header>
+    <nav class="menubar" aria-label="Thanh menu">
+      <button class="menu-button" id="file-menu-button" type="button" data-action="open-file-menu" aria-haspopup="menu" aria-expanded="false">Tệp</button>
+      <button class="menu-button" type="button">Sửa</button>
+      <button class="menu-button" type="button">Xem</button>
+      <button class="menu-button" id="actions-menu-button" type="button" data-action="open-actions-menu" aria-haspopup="menu" aria-expanded="false">Thao tác</button>
+      <button class="menu-button" type="button">Báo cáo</button>
+      <button class="menu-button" type="button">Trợ giúp</button>
+      <span class="menu-spacer"></span>
+    </nav>
+    <nav class="workbench-tabs" aria-label="Các workbench">
+      <button class="workbench-tab active" type="button" data-view="workbench"><svg class="icon"><use href="#i-list"></use></svg> Tài liệu của tôi <span class="tab-count" id="workbench-count">9</span></button>
+      <button class="workbench-tab" type="button" data-view="search"><svg class="icon"><use href="#i-search"></use></svg> Tìm kiếm</button>
+      <button class="workbench-tab" type="button" data-view="structure"><svg class="icon"><use href="#i-structure"></use></svg> Cấu trúc sản phẩm</button>
+      <button class="workbench-tab" type="button" data-view="review"><svg class="icon"><use href="#i-check"></use></svg> Việc chờ duyệt <span class="tab-count" id="review-tab-count">2</span></button>
+    </nav>
+
+    <div class="workspace">
+      <aside class="rail" aria-label="Điều hướng tài liệu">
+        <div class="rail-head"><div class="eyebrow">Không gian làm việc</div><div class="rail-context">P-100 Pump Assembly</div></div>
+        <div class="rail-scroll">
+          <section class="rail-section">
+            <div class="rail-section-title"><span>Của tôi</span><span>⌄</span></div>
+            <button class="rail-link active" type="button" data-nav="workbench"><svg class="icon"><use href="#i-list"></use></svg><span>Tài liệu của tôi</span><span class="rail-badge" id="rail-workbench-count">9</span></button>
+            <button class="rail-link" type="button" data-nav="editing"><svg class="icon"><use href="#i-edit"></use></svg><span>Đang sửa</span><span class="rail-badge">2</span></button>
+            <button class="rail-link" type="button" data-nav="references"><svg class="icon"><use href="#i-link"></use></svg><span>Đang tham chiếu</span><span class="rail-badge">3</span></button>
+            <button class="rail-link" type="button" data-nav="recent"><svg class="icon"><use href="#i-clock"></use></svg><span>Gần đây</span></button>
+            <button class="rail-link" type="button" data-nav="pinned"><svg class="icon"><use href="#i-pin"></use></svg><span>Đã ghim</span></button>
+          </section>
+          <section class="rail-section">
+            <div class="rail-section-title"><span>Thư mục</span><span>⌄</span></div>
+            <div class="tree-row selected" data-tree="root"><button class="tree-toggle" type="button" data-tree-toggle="root" aria-label="Thu gọn P-100"><svg class="icon"><use href="#i-arrow"></use></svg></button><svg class="icon"><use href="#i-cube"></use></svg><span class="tree-label">P-100 Pump Assembly</span></div>
+            <div id="tree-root">
+              <div class="tree-row tree-indent"><button class="tree-toggle" type="button" data-tree-toggle="product" aria-label="Thu gọn Product Definition"><svg class="icon"><use href="#i-arrow"></use></svg></button><svg class="icon"><use href="#i-folder"></use></svg><span class="tree-label">Product Definition</span></div>
+              <div id="tree-product"></div>
+              <div class="tree-row tree-indent"><button class="tree-toggle" type="button" data-tree-toggle="cad" aria-label="Mở rộng CAD files"><svg class="icon"><use href="#i-arrow"></use></svg></button><svg class="icon"><use href="#i-folder"></use></svg><span class="tree-label">CAD files</span></div>
+              <div id="tree-cad" hidden></div>
+              <div class="tree-row tree-indent"><button class="tree-toggle" type="button" data-tree-toggle="records" aria-label="Mở rộng Controlled records"><svg class="icon"><use href="#i-arrow"></use></svg></button><svg class="icon"><use href="#i-folder"></use></svg><span class="tree-label">Controlled records</span></div>
+              <div id="tree-records" hidden></div>
+            </div>
+          </section>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="main-head">
+          <div class="crumbs"><span>Tài liệu</span><span>›</span><strong id="crumb-current">P-100 Pump Assembly</strong></div>
+          <div class="head-line">
+            <div><h1 id="page-title">Tài liệu của tôi</h1><p id="page-subtitle">Tìm, chọn và làm việc với tài liệu kỹ thuật.</p></div>
+            <div class="head-tools"><button class="button subtle" type="button" data-action="refresh"><svg class="icon"><use href="#i-history"></use></svg> Làm mới</button></div>
+          </div>
+        </div>
+
+        <div class="search-panel" id="search-panel">
+          <div class="search-row">
+            <label class="field"><svg class="icon"><use href="#i-search"></use></svg><span class="sr-only">Từ khóa</span><input id="query" type="search" placeholder="Tìm theo mã, tên hoặc thuộc tính…" autocomplete="off"></label>
+            <label class="field"><span class="sr-only">Loại tài liệu</span><select id="type-filter"><option value="">Tất cả loại</option><option value="Engineering Definition">Engineering Definition</option><option value="Technical Specification">Technical Specification</option><option value="Interface Specification">Interface Specification</option><option value="CAD file">CAD file</option><option value="Controlled Record">Controlled Record</option><option value="Work Instruction">Work Instruction</option><option value="Risk Assessment">Risk Assessment</option></select></label>
+            <label class="field"><span class="sr-only">Trạng thái</span><select id="state-filter"><option value="">Tất cả trạng thái</option><option value="Draft">Draft</option><option value="In Work">In Work</option><option value="Under Review">Under Review / Đã duyệt</option><option value="Released">Released</option><option value="Needs update">Needs update</option></select></label>
+            <button class="button primary search-submit" type="button" data-action="search"><svg class="icon"><use href="#i-search"></use></svg> Tìm kiếm</button>
+          </div>
+          <div class="chips" id="active-chips"></div>
+        </div>
+
+        <div class="bulkbar">
+          <strong id="selection-label">Chưa chọn tài liệu</strong><span class="separator"></span>
+          <button class="button" type="button" data-action="open" id="action-open"><svg class="icon"><use href="#i-eye"></use></svg> Mở</button>
+          <button class="button" type="button" data-action="resolve-stale" id="action-stale">Xử lý bản cũ</button>
+          <button class="button primary" type="button" data-action="submit-review" id="action-submit-review" hidden>Gửi duyệt</button>
+          <button class="button primary" type="button" data-action="new-revision" id="action-new-revision" hidden>Tạo Revision mới</button>
+          <span class="scope-note">Phạm vi thao tác: tài liệu đang chọn</span>
+        </div>
+
+        <div class="center-scroll">
+          <section id="table-view" class="result-card">
+            <div class="result-head"><h2 id="result-title">Tài liệu của tôi</h2><small id="result-count">9 tài liệu</small></div>
+            <div class="table-scroll">
+              <table aria-label="Danh sách tài liệu">
+                <thead><tr><th><input id="select-all" type="checkbox" aria-label="Chọn tất cả"></th><th>Tài liệu</th><th>Loại</th><th>Rev / Version</th><th>Trạng thái</th><th>Người phụ trách</th><th>Cập nhật</th></tr></thead>
+                <tbody id="doc-table-body"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="structure-view" class="structure-view">
+            <div class="result-head" style="background:#fff;border:1px solid var(--line);border-radius:5px 5px 0 0"><div><h2>Cấu trúc sản phẩm · P-100 Pump Assembly</h2><small>Cây sản phẩm và BOM được xem riêng với thư mục tài liệu.</small></div></div>
+            <div class="structure-layout">
+              <section class="structure-card"><h3>Cấu trúc sản phẩm</h3><div class="structure-tree" id="structure-tree"></div><div class="bom-note"><strong>Phát hành theo cụm</strong><br>Cụm bơm có thể phát hành trước; tủ điện và hồ sơ toàn máy vẫn In Work.</div><div class="release-scope" id="release-scope"></div><div class="release-action"><button class="button primary" id="release-button" type="button" data-action="release" disabled><svg class="icon"><use href="#i-check"></use></svg> Xác nhận phát hành</button><small class="release-blocker" id="release-blocker"></small></div></section>
+              <section class="structure-card"><div class="table-scroll"><table aria-label="Bảng BOM"><thead><tr><th>Thành phần / tài liệu</th><th>Số lượng</th><th>Vị trí</th><th>Revision</th><th>Trạng thái</th></tr></thead><tbody id="bom-body"></tbody></table></div></section>
+            </div>
+          </section>
+          <section id="review-view" class="review-view">
+            <div class="review-grid"><section class="review-card"><h3 id="review-list-title">Việc chờ xử lý</h3><div id="review-items"></div></section><section class="review-card"><h3>Tóm tắt phê duyệt</h3><div class="review-summary" id="review-summary"></div></section></div>
+          </section>
+        </div>
+      </main>
+
+      <aside class="inspector" aria-label="Chi tiết tài liệu">
+        <div class="inspector-head"><div class="inspector-head-line"><div><div class="eyebrow">Chi tiết</div><h2 id="inspector-title">Chưa chọn tài liệu</h2><p id="inspector-id">Chọn một dòng để xem chi tiết</p></div><button class="button subtle" type="button" data-action="open" title="Mở tài liệu"><svg class="icon"><use href="#i-eye"></use></svg></button></div></div>
+        <div class="inspector-tabs" role="tablist">
+          <button class="inspector-tab active" type="button" data-inspector-tab="preview">Bản xem</button>
+          <button class="inspector-tab" type="button" data-inspector-tab="properties">Thông tin</button>
+          <button class="inspector-tab" type="button" data-inspector-tab="structure">Cấu trúc</button>
+          <button class="inspector-tab" type="button" data-inspector-tab="history">Lịch sử</button>
+        </div>
+        <div class="inspector-scroll" id="inspector-body"></div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="context-menu" id="file-menu" role="menu" hidden>
+    <button type="button" role="menuitem" data-file-action="create-document"><svg class="icon"><use href="#i-plus"></use></svg><span>Tạo tài liệu mới</span></button>
+    <button type="button" role="menuitem" data-file-action="intake-document"><svg class="icon"><use href="#i-download"></use></svg><span>Tiếp nhận file có sẵn</span></button>
+    <div class="menu-rule"></div>
+    <button type="button" role="menuitem" data-file-action="create-copy"><svg class="icon"><use href="#i-file"></use></svg><span>Create Copy từ tài liệu đang chọn</span></button>
+  </div>
+  <div class="context-menu" id="document-actions-menu" role="menu" hidden></div>
+  <div class="modal-backdrop" id="modal-backdrop" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head"><div><h2 id="modal-title">Thao tác</h2><p id="modal-subtitle">Phạm vi và kết quả sẽ được hiển thị trước khi xác nhận.</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Đóng"><svg class="icon"><use href="#i-close"></use></svg></button></div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-foot" id="modal-foot"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const documents = [
+      { id:'LD-P100-001', name:'Cụm bơm P-100 — Định nghĩa giao diện', type:'Engineering Definition', group:'Product Definition', rev:'A', version:'1', generation:'G-0014', state:'Under Review', approval:'Pending', owner:'Linh Nguyễn', updated:'08/09/2026 08:45', format:'CAD + PDF', scope:'editing', checkedOut:false, referenced:true, changed:false, stale:false, next:'Phê duyệt hoặc trả lại', nextHint:'Người duyệt độc lập xem và quyết định bản đang chờ duyệt.', audit:[['Đã gửi xét duyệt','Linh Nguyễn · hôm nay 08:42'],['Đã Check-in','Linh Nguyễn · hôm nay 08:39'],['Đã kết thúc Checkout','Linh Nguyễn · hôm nay 08:38']] },
+      { id:'LD-P100-003', name:'Phát triển tủ P-100 — Đặc tính kỹ thuật', type:'Technical Specification', group:'Product Definition', rev:'A', version:'2', generation:'G-0011', state:'In Work', owner:'Linh Nguyễn', updated:'08/09/2026 08:31', format:'Office + PDF', scope:'editing', checkedOut:true, referenced:false, changed:true, stale:true, expected:'G-0010', audit:[['Checkout','Linh Nguyễn · hôm nay 08:20'],['Đã sửa trên máy','Linh Nguyễn · hôm nay 08:31']] },
+      { id:'LD-P100-004', name:'Đồng bộ Cơ — Giao diện điện', type:'Interface Specification', group:'Product Definition', rev:'A', version:'2', generation:'G-0008', state:'In Work', owner:'Linh Nguyễn', updated:'07/09/2026 16:12', format:'Office + PDF', scope:'reference', checkedOut:false, referenced:true, changed:false, stale:false, audit:[['Đã tiếp nhận','Hệ thống · hôm qua 15:00']] },
+      { id:'LD-P100-002', name:'Vỏ bơm P-100 — Mô hình CAD', type:'CAD file', group:'CAD files', rev:'A', version:'1', generation:'G-0012', state:'Released', owner:'Linh Nguyễn', updated:'07/09/2026 15:40', format:'CAD', scope:'recent', checkedOut:false, referenced:true, changed:false, stale:false, audit:[['Released','Minh Trần · hôm qua 15:40'],['Checked in','Linh Nguyễn · hôm qua 15:32']] },
+      { id:'LD-P100-006', name:'Giao diện motor P-100 — Mô hình lắp', type:'CAD file', group:'CAD files', rev:'B', version:'1', generation:'G-0010', state:'In Work', owner:'Minh Trần', updated:'06/09/2026 11:06', format:'CAD', scope:'reference', checkedOut:false, referenced:true, changed:false, stale:false, audit:[['Checkout','Minh Trần · 06/09/2026']] },
+      { id:'LD-P100-005', name:'Biên bản thử áp lực P-100', type:'Controlled Record', group:'Controlled records', rev:'A', version:'1', generation:'G-0005', state:'Released', owner:'QA Team', updated:'05/09/2026 17:20', format:'PDF', scope:'recent', checkedOut:false, referenced:false, changed:false, stale:false, audit:[['Released','QA Team · 05/09/2026']] },
+      { id:'LD-P100-007', name:'Báo cáo kiểm tra đầu vào', type:'Controlled Record', group:'Controlled records', rev:'A', version:'1', generation:'G-0007', state:'Released', owner:'QA Team', updated:'05/09/2026 16:45', format:'PDF', scope:'recent', checkedOut:false, referenced:false, changed:false, stale:false, audit:[['Released','QA Team · 05/09/2026']] },
+      { id:'LD-P100-009', name:'Hướng dẫn lắp đặt P-100', type:'Work Instruction', group:'Controlled records', rev:'A', version:'1', generation:'G-0012', state:'Needs update', owner:'Sora Ito', updated:'04/09/2026 14:15', format:'Office + PDF', scope:'editing', checkedOut:false, referenced:false, changed:false, stale:false, audit:[['Cần cập nhật','Hệ thống · 04/09/2026']] },
+      { id:'LD-P100-010', name:'Đánh giá rủi ro P-100', type:'Risk Assessment', group:'Controlled records', rev:'A', version:'1', generation:'G-0009', state:'Under Review', approval:'Pending', owner:'Hana Sato', updated:'04/09/2026 10:28', format:'Office + PDF', scope:'review', checkedOut:false, referenced:false, changed:false, stale:false, next:'Phê duyệt hoặc trả lại', nextHint:'Đang chờ người duyệt độc lập; chưa thể chỉnh sửa.', audit:[['Đã gửi xét duyệt','Hana Sato · 04/09/2026']] },
+      { id:'LD-P100-011', name:'Danh sách linh kiện mua ngoài', type:'Controlled Record', group:'Controlled records', rev:'A', version:'1', generation:'G-0006', state:'Released', owner:'Procurement', updated:'03/09/2026 09:12', format:'Office + PDF', scope:'recent', checkedOut:false, referenced:false, changed:false, stale:false, audit:[['Released','Procurement · 03/09/2026']] }
+    ];
+
+    documents.forEach((doc) => {
+      doc.alias = doc.alias || doc.name;
+      doc.links = doc.links || [];
+      doc.approval = doc.approval || '';
+    });
+
+    const documentTypes = ['Engineering Definition','Technical Specification','Interface Specification','CAD file','Controlled Record','Work Instruction','Risk Assessment'];
+    const documentGroups = ['Product Definition','CAD files','Controlled records'];
+    function formatForType(type) {
+      if (type === 'CAD file') return 'CAD';
+      if (type === 'Controlled Record') return 'PDF';
+      return 'Office + PDF';
+    }
+    function nextDocumentId() {
+      const highest = documents.reduce((max, doc) => {
+        const match = doc.id.match(/LD-P100-(\d+)$/);
+        return match ? Math.max(max, Number(match[1])) : max;
+      }, 0);
+      return 'LD-P100-' + String(highest + 1).padStart(3, '0');
+    }
+    function nextGenerationId() {
+      const highest = documents.reduce((max, doc) => {
+        const match = String(doc.generation || '').match(/G-(\d+)$/);
+        return match ? Math.max(max, Number(match[1])) : max;
+      }, 0);
+      return 'G-' + String(highest + 1).padStart(4, '0');
+    }
+    function createDraft({ name, type, group, fileName = '', source = null }) {
+      const id = nextDocumentId();
+      const doc = {
+        id, name, alias:name, type, group, rev:'—', version:'—', generation:'—', state:'Draft',
+        owner:'Linh Nguyễn', updated:'09/09/2026 09:15', format:formatForType(type), scope:'editing',
+        checkedOut:true, referenced:false, changed:true, stale:false, approval:'', links:[], fileName, source,
+        audit:[[source ? 'Đã tạo bản sao' : (fileName ? 'Đã tiếp nhận file' : 'Đã tạo tài liệu'), 'Linh Nguyễn · vừa xong']]
+      };
+      documents.push(doc);
+      state.activeId = id;
+      state.selected.clear();
+      state.selected.add(id);
+      state.view = 'workbench';
+      state.nav = 'workbench';
+      state.inspectorTab = 'properties';
+      return doc;
+    }
+    function typeOptions(selected) {
+      return documentTypes.map((type) => '<option value="' + esc(type) + '" ' + (type === selected ? 'selected' : '') + '>' + esc(type) + '</option>').join('');
+    }
+    function groupOptions(selected, excluded = []) {
+      return documentGroups.filter((group) => !excluded.includes(group)).map((group) => '<option value="' + esc(group) + '" ' + (group === selected ? 'selected' : '') + '>' + esc(group) + '</option>').join('');
+    }
+
+    const bom = [
+      { id:'P-100', label:'P-100 Pump Assembly', qty:'1', pos:'root', rev:'A', state:'In Work', icon:'cube', cls:'engineering' },
+      { id:'P-100-PUMP', label:'Cụm bơm', qty:'1', pos:'10', rev:'A', state:'Under Review', icon:'cube', cls:'engineering' },
+      { id:'LD-P100-002', label:'Vỏ bơm P-100 — Mô hình CAD', qty:'1', pos:'10.10', rev:'A', state:'Released', icon:'cad', cls:'cad' },
+      { id:'LD-P100-001', label:'Định nghĩa giao diện', qty:'1', pos:'10.20', rev:'A', state:'Under Review', icon:'file', cls:'engineering' },
+      { id:'P-100-CAB', label:'Tủ điện P-100', qty:'1', pos:'20', rev:'A', state:'In Work', icon:'cube', cls:'engineering' },
+      { id:'LD-P100-004', label:'Đồng bộ Cơ — Giao diện điện', qty:'1', pos:'20.10', rev:'A', state:'In Work', icon:'record', cls:'office' },
+      { id:'P-100-DOC', label:'Hồ sơ toàn máy', qty:'1', pos:'90', rev:'A', state:'In Work', icon:'folder', cls:'record' }
+    ];
+    const state = { view:'workbench', nav:'workbench', selected:new Set(), activeId:'LD-P100-001', inspectorTab:'preview', modal:null, reviewId:'LD-P100-001', tree:{root:true,product:true,cad:false,records:false}, searchSubmitted:false };
+    const icon = (name) => '<svg class="icon"><use href="#i-' + name + '"></use></svg>';
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+    const statusClass = (value) => ({'Released':'green','Under Review':'amber','In Work':'blue','Needs update':'purple'}[value] || 'gray');
+    const displayStatus = (doc) => doc?.state === 'Under Review' && doc.approval === 'Approved'
+      ? { label:'Đã duyệt', className:'blue' }
+      : { label:doc?.state || '—', className:statusClass(doc?.state) };
+    const typeClass = (type) => type === 'CAD file' ? 'cad' : (type === 'Controlled Record' || type === 'Work Instruction' ? 'record' : 'office');
+    const typeIcon = (type) => type === 'CAD file' ? 'cad' : (type === 'Engineering Definition' ? 'cube' : (type === 'Controlled Record' || type === 'Work Instruction' ? 'record' : 'file'));
+    function getDoc(id) { return documents.find((doc) => doc.id === id); }
+    function currentDoc() { return getDoc(state.activeId) || documents[0]; }
+    function selectedDocs() { return Array.from(state.selected).map(getDoc).filter(Boolean); }
+    function reviewDocs() { return documents.filter((doc) => doc.state === 'Under Review' && doc.approval !== 'Approved'); }
+    function releaseEligibility() {
+      const candidate = getDoc('LD-P100-001');
+      const requiredCad = getDoc('LD-P100-002');
+      const blockers = [];
+      const released = candidate?.state === 'Released';
+      if (!candidate) blockers.push('Không tìm thấy hồ sơ của cụm bơm');
+      else if (!released) {
+        if (candidate.state !== 'Under Review') blockers.push(candidate.id + ' chưa ở bước xét duyệt');
+        if (candidate.approval !== 'Approved') blockers.push(candidate.id + ' chưa được phê duyệt');
+        if (candidate.checkedOut) blockers.push(candidate.id + ' vẫn đang Checkout');
+        if (candidate.stale) blockers.push(candidate.id + ' đang dùng bản cũ');
+      }
+      if (!requiredCad || requiredCad.state !== 'Released') blockers.push('LD-P100-002 chưa Released');
+      return { candidate, requiredCad, blockers, released, eligible:!released && blockers.length === 0 };
+    }
+    function renderDocumentTree() {
+      const targets = {
+        'Product Definition':'tree-product',
+        'CAD files':'tree-cad',
+        'Controlled records':'tree-records'
+      };
+      Object.entries(targets).forEach(([group, targetId]) => {
+        const target = document.getElementById(targetId);
+        target.innerHTML = documents.filter((doc) => doc.group === group || (doc.links || []).includes(group)).map((doc) => {
+          const linkedPlacement = doc.group !== group;
+          const dot = displayStatus(doc).className;
+          return '<button class="tree-row tree-indent-2" type="button" data-open-doc="' + esc(doc.id) + '" title="' + esc(doc.alias + (linkedPlacement ? ' · Liên kết' : '')) + '">' + icon(linkedPlacement ? 'link' : typeIcon(doc.type)) + '<span class="tree-label">' + esc(doc.id) + ' · ' + esc(doc.alias) + '</span><span class="doc-dot ' + dot + '"></span></button>';
+        }).join('');
+      });
+    }
+    function nextRevision(revision) {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const index = alphabet.indexOf(revision);
+      return index >= 0 && index < alphabet.length - 1 ? alphabet[index + 1] : null;
+    }
+    function showToast(message) { const el = document.getElementById('toast'); el.textContent = message; el.classList.add('show'); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => el.classList.remove('show'), 3100); }
+    function availableDocumentActions(doc) {
+      if (!doc) return [];
+      const actions = [{ id:'open', label:'Mở', icon:'eye' }];
+      const add = (id, label, iconName, enabled, reason) => actions.push({ id, label, icon:iconName, disabled:!enabled, title:enabled ? '' : reason });
+      if (doc.stale) {
+        add('checkout', 'Checkout', 'edit', false, 'Xử lý bản cũ trước');
+        add('reference', 'Reference', 'link', false, 'Xử lý bản cũ trước');
+        add('checkin', 'Check-in', 'check', false, 'Xử lý bản cũ trước');
+        actions.push({ id:'resolve-stale', label:'Xử lý bản cũ', icon:'warning' });
+      } else if (doc.state === 'Draft') {
+        add('checkout', 'Checkout', 'edit', !doc.checkedOut, 'Đang Checkout');
+        add('reference', 'Reference', 'link', !doc.checkedOut, 'Đang Checkout');
+        add('checkin', 'Check-in', 'check', doc.checkedOut, 'Tài liệu chưa Checkout');
+      } else if (doc.state === 'In Work') {
+        add('checkout', 'Checkout', 'edit', !doc.checkedOut && !doc.changed, doc.checkedOut ? 'Đang Checkout' : 'Còn thay đổi chưa Check-in');
+        add('reference', 'Reference', 'link', !doc.checkedOut, doc.checkedOut ? 'Đang Checkout' : '');
+        add('checkin', 'Check-in', 'check', doc.checkedOut, 'Tài liệu chưa Checkout');
+        if (!doc.changed) actions.push({ id:'submit-review', label:'Gửi duyệt', icon:'check' });
+      } else if (doc.state === 'Under Review') {
+        add('checkout', 'Checkout', 'edit', false, 'Đang chờ duyệt');
+        add('reference', 'Reference', 'link', false, 'Đang chờ duyệt');
+        add('checkin', 'Check-in', 'check', false, 'Đang chờ duyệt');
+        actions.push(doc.approval === 'Approved'
+          ? { id:'open-release-scope', label:'Mở phạm vi phát hành', icon:'structure' }
+          : { id:'open-review', label:'Mở việc duyệt', icon:'check' });
+      } else if (doc.state === 'Released') {
+        add('checkout', 'Checkout', 'edit', false, 'Tạo Revision mới trước');
+        add('reference', 'Reference', 'link', true, '');
+        add('checkin', 'Check-in', 'check', false, 'Tài liệu chưa Checkout');
+        actions.push({ id:'new-revision', label:'Tạo Revision mới', icon:'plus' });
+      } else {
+        add('checkout', 'Checkout', 'edit', false, 'Chưa sẵn sàng');
+        add('reference', 'Reference', 'link', true, '');
+        add('checkin', 'Check-in', 'check', false, 'Tài liệu chưa Checkout');
+      }
+      actions.push({ separator:true });
+      const canEditInfo = !doc.stale && doc.checkedOut && (doc.state === 'Draft' || doc.state === 'In Work');
+      add('edit-info', 'Sửa thông tin tài liệu', 'edit', canEditInfo, doc.stale ? 'Xử lý bản cũ trước' : 'Cần Checkout tài liệu đang làm');
+      actions.push({ id:'rename', label:'Đổi tên trong thư mục', icon:'edit' });
+      actions.push({ id:'move', label:'Chuyển thư mục', icon:'folder' });
+      actions.push({ id:'add-link', label:'Thêm liên kết', icon:'link' });
+      add('create-copy', 'Create Copy', 'file', !doc.stale, 'Xử lý bản cũ trước');
+      if (doc.state === 'Draft') {
+        actions.push({ separator:true });
+        actions.push({ id:'remove-draft', label:'Loại bỏ bản Draft', icon:'close', danger:true });
+      }
+      return actions;
+    }
+    function closeFileMenu() {
+      document.getElementById('file-menu').hidden = true;
+      document.getElementById('file-menu-button').setAttribute('aria-expanded', 'false');
+    }
+    function closeDocumentActions() {
+      const menu = document.getElementById('document-actions-menu');
+      menu.hidden = true;
+      document.getElementById('actions-menu-button').setAttribute('aria-expanded', 'false');
+    }
+    function closeMenus() { closeFileMenu(); closeDocumentActions(); }
+    function placeMenu(menu, x, y) {
+      const left = Math.max(7, Math.min(x, window.innerWidth - menu.offsetWidth - 7));
+      const top = Math.max(7, Math.min(y, window.innerHeight - menu.offsetHeight - 7));
+      menu.style.left = left + 'px';
+      menu.style.top = top + 'px';
+    }
+    function openFileMenu(anchor) {
+      closeDocumentActions();
+      const menu = document.getElementById('file-menu');
+      const copyButton = menu.querySelector('[data-file-action="create-copy"]');
+      copyButton.disabled = state.selected.size !== 1;
+      copyButton.title = copyButton.disabled ? 'Chọn một tài liệu trước' : '';
+      menu.hidden = false;
+      anchor.setAttribute('aria-expanded', 'true');
+      const rect = anchor.getBoundingClientRect();
+      placeMenu(menu, rect.left, rect.bottom + 3);
+    }
+    function openDocumentActions(doc, x, y, anchor) {
+      closeFileMenu();
+      const menu = document.getElementById('document-actions-menu');
+      const actions = availableDocumentActions(doc);
+      menu.innerHTML = actions.length ? actions.map((action) => action.separator ? '<div class="menu-rule"></div>' : '<button type="button" role="menuitem" data-document-action="' + action.id + '" class="' + (action.danger ? 'danger' : '') + '"' + (action.disabled ? ' disabled' : '') + (action.title ? ' title="' + esc(action.title) + '"' : '') + '>' + icon(action.icon) + '<span>' + esc(action.label) + '</span></button>').join('') : '<button type="button" disabled>Chọn một tài liệu</button>';
+      menu.hidden = false;
+      if (anchor) {
+        const rect = anchor.getBoundingClientRect();
+        x = rect.left;
+        y = rect.bottom + 3;
+        anchor.setAttribute('aria-expanded', 'true');
+      }
+      placeMenu(menu, x, y);
+    }
+    function runFileAction(action) {
+      closeFileMenu();
+      if (action === 'create-document' || action === 'intake-document') openModal(action);
+      else if (action === 'create-copy') {
+        if (state.selected.size !== 1) showToast('Hãy chọn một tài liệu trước.');
+        else openModal('create-copy');
+      }
+    }
+    function runDocumentAction(action) {
+      closeDocumentActions();
+      if (action === 'open') { state.inspectorTab = 'preview'; renderInspector(); }
+      else if (action === 'checkout' || action === 'reference' || action === 'checkin') openModal(action);
+      else if (action === 'resolve-stale') openModal('stale');
+      else if (action === 'submit-review') openModal('submit-review');
+      else if (action === 'new-revision') openModal('new-revision');
+      else if (action === 'edit-info' || action === 'rename' || action === 'move' || action === 'add-link' || action === 'create-copy' || action === 'remove-draft') openModal(action);
+      else if (action === 'open-review') { state.reviewId = currentDoc().id; state.view = 'review'; render(); }
+      else if (action === 'open-release-scope') { state.view = 'structure'; render(); }
+    }
+    function visibleDocs() {
+      const query = document.getElementById('query').value.trim().toLowerCase();
+      const type = document.getElementById('type-filter').value;
+      const stateFilter = document.getElementById('state-filter').value;
+      let list = documents.slice();
+      if (state.view === 'workbench') {
+        if (state.nav === 'editing') list = list.filter((doc) => doc.checkedOut);
+        else if (state.nav === 'references') list = list.filter((doc) => doc.referenced);
+        else if (state.nav === 'recent') list = list.filter((doc) => ['recent','editing'].includes(doc.scope));
+        else if (state.nav === 'pinned') list = list.filter((doc) => ['LD-P100-001','LD-P100-002','LD-P100-003'].includes(doc.id));
+        else list = list.filter((doc) => ['editing','reference','recent'].includes(doc.scope));
+      }
+      if (query) list = list.filter((doc) => [doc.id,doc.name,doc.alias,doc.type,doc.group,(doc.links || []).join(' '),doc.owner,doc.state,displayStatus(doc).label].join(' ').toLowerCase().includes(query));
+      if (type) list = list.filter((doc) => doc.type === type);
+      if (stateFilter) list = list.filter((doc) => doc.state === stateFilter);
+      return list;
+    }
+    function renderRows() {
+      const list = state.view === 'search' ? visibleDocs() : visibleDocs();
+      const body = document.getElementById('doc-table-body');
+      if (!list.length) { body.innerHTML = '<tr><td colspan="7"><div class="empty"><strong>Không tìm thấy tài liệu</strong>Thử đổi từ khóa hoặc bộ lọc.</div></td></tr>'; return; }
+      body.innerHTML = list.map((doc) => {
+        const selected = state.selected.has(doc.id);
+        const shownStatus = displayStatus(doc);
+        const hold = doc.checkedOut
+          ? '<span class="scope-pill">Đang sửa bởi Linh</span>'
+          : (doc.state === 'Under Review' && doc.approval === 'Approved'
+            ? '<span class="scope-pill">Chờ phát hành</span>'
+            : (doc.referenced ? '<span class="scope-pill">Reference</span>' : ''));
+        return '<tr class="' + (selected ? 'selected' : '') + '" data-row-id="' + esc(doc.id) + '">' +
+          '<td><input type="checkbox" data-select-id="' + esc(doc.id) + '" ' + (selected ? 'checked' : '') + ' aria-label="Chọn ' + esc(doc.id) + '"></td>' +
+          '<td><div class="item-cell"><span class="type-icon ' + typeClass(doc.type) + '">' + icon(typeIcon(doc.type)) + '</span><span class="item-name"><strong>' + esc(doc.name) + '</strong><small class="mono">' + esc(doc.id) + ' · ' + esc(doc.format) + '</small></span></div></td>' +
+          '<td>' + esc(doc.type) + '</td><td><span class="mono">' + esc(doc.rev) + ' / ' + esc(doc.version) + '</span></td>' +
+          '<td><span class="status ' + shownStatus.className + '">' + esc(shownStatus.label) + '</span><div style="margin-top:3px">' + hold + '</div></td>' +
+          '<td>' + esc(doc.owner) + '</td><td><span class="mono">' + esc(doc.updated) + '</span></td></tr>';
+      }).join('');
+      document.getElementById('result-count').textContent = list.length + ' tài liệu';
+      document.getElementById('select-all').checked = list.length > 0 && list.every((doc) => state.selected.has(doc.id));
+    }
+    function renderStructureTree() {
+      const target = document.getElementById('structure-tree');
+      const candidate = getDoc('LD-P100-001');
+      const pumpStage = candidate?.state === 'Released'
+        ? 'Released'
+        : (candidate?.approval === 'Approved' ? 'Đã duyệt · chờ phát hành' : 'Under Review · chờ duyệt');
+      const rows = [
+        ['P-100 Pump Assembly','Sản phẩm','cube','selected','0'],
+        ['Cụm bơm','Cụm lắp · ' + pumpStage,'cube','','1'],
+        ['Vỏ bơm P-100','Tài liệu CAD · Released','cad','','2'],
+        ['Định nghĩa giao diện','Tài liệu kỹ thuật · ' + pumpStage,'file','','2'],
+        ['Tủ điện P-100','Cụm lắp · In Work','cube','','1'],
+        ['Giao diện điện','Tài liệu kỹ thuật · In Work','record','','2'],
+        ['Hồ sơ toàn máy','Bộ hồ sơ · In Work','folder','','1']
+      ];
+      target.innerHTML = rows.map((row) => '<button class="tree-row ' + row[3] + '" type="button" data-structure-label="' + esc(row[0]) + '" style="padding-left:' + (8 + Number(row[4]) * 21) + 'px"><span class="tree-toggle">' + (Number(row[4]) < 2 ? icon('arrow') : '') + '</span>' + icon(row[2]) + '<span class="tree-label"><strong>' + esc(row[0]) + '</strong><small class="tree-muted"> · ' + esc(row[1]) + '</small></span></button>').join('');
+    }
+    function renderBom() {
+      const candidate = getDoc('LD-P100-001');
+      document.getElementById('bom-body').innerHTML = bom.map((row) => {
+        const controlled = getDoc(row.id);
+        const followsPumpRelease = row.id === 'P-100-PUMP' || row.id === 'LD-P100-001';
+        const rowState = followsPumpRelease ? candidate?.state : (controlled?.state || row.state);
+        const rowRevision = controlled?.rev || row.rev;
+        const shownStatus = followsPumpRelease && candidate
+          ? displayStatus(candidate)
+          : { label:rowState, className:statusClass(rowState) };
+        const releaseNote = followsPumpRelease && candidate?.state === 'Under Review' && candidate?.approval === 'Approved'
+          ? '<div style="margin-top:3px"><span class="scope-pill">Chờ phát hành</span></div>'
+          : '';
+        return '<tr data-bom-id="' + esc(row.id) + '"><td><div class="item-cell"><span class="type-icon ' + (row.cls === 'cad' ? 'cad' : row.cls === 'record' ? 'record' : 'office') + '">' + icon(row.icon) + '</span><span class="item-name"><strong>' + esc(row.label) + '</strong><small class="mono">' + esc(row.id) + '</small></span></div></td><td class="mono">' + row.qty + '</td><td class="mono">' + row.pos + '</td><td class="mono">' + esc(rowRevision) + '</td><td><span class="status ' + shownStatus.className + '">' + esc(shownStatus.label) + '</span>' + releaseNote + '</td></tr>';
+      }).join('');
+    }
+    function renderReleaseScope() {
+      const release = releaseEligibility();
+      const candidate = release.candidate;
+      const scope = document.getElementById('release-scope');
+      const button = document.getElementById('release-button');
+      const blocker = document.getElementById('release-blocker');
+      const candidateState = release.released
+        ? 'Released'
+        : (candidate?.approval === 'Approved' ? 'Đã duyệt · chờ phát hành' : 'Under Review · chờ phê duyệt');
+      scope.innerHTML = '<header>Phạm vi phát hành</header>' +
+        '<label><input type="checkbox" checked disabled> <span><strong>Cụm bơm P-100</strong><small>' + esc(candidateState) + '</small></span></label>' +
+        '<label><input type="checkbox" checked disabled> <span><strong>Vỏ bơm P-100 — Mô hình CAD</strong><small>Released · phụ thuộc bắt buộc</small></span></label>' +
+        '<label><input type="checkbox" disabled> <span><strong>Tủ điện P-100</strong><small>In Work · ngoài phạm vi</small></span></label>' +
+        '<label><input type="checkbox" disabled> <span><strong>Hồ sơ toàn máy</strong><small>In Work · ngoài phạm vi</small></span></label>';
+      button.disabled = !release.eligible;
+      button.innerHTML = icon('check') + (release.released ? ' Đã phát hành' : ' Xác nhận phát hành');
+      blocker.classList.toggle('ready', release.eligible || release.released);
+      blocker.textContent = release.released
+        ? 'Cụm bơm đã được phát hành.'
+        : (release.eligible
+          ? 'Đã đủ điều kiện. Kiểm tra phạm vi trước khi xác nhận.'
+          : 'Chưa thể phát hành: ' + release.blockers.join('; ') + '.');
+    }
+    function renderReview() {
+      const items = reviewDocs();
+      document.getElementById('review-tab-count').textContent = items.length;
+      document.getElementById('review-list-title').textContent = 'Việc chờ xử lý · ' + items.length;
+      if (!items.length) {
+        document.getElementById('review-items').innerHTML = '<div class="empty">Không có tài liệu chờ duyệt.</div>';
+        document.getElementById('review-summary').innerHTML = '<div class="empty">Chọn tài liệu sau khi gửi duyệt.</div>';
+        return;
+      }
+      if (!items.some((doc) => doc.id === state.reviewId)) state.reviewId = items[0].id;
+      document.getElementById('review-items').innerHTML = items.map((doc) => '<button class="review-item ' + (state.reviewId === doc.id ? 'selected' : '') + '" type="button" data-review-id="' + doc.id + '"><span class="review-icon">' + icon('check') + '</span><span><strong>' + esc(doc.name) + '</strong><small>' + esc(doc.id) + ' · Người duyệt độc lập</small></span><time>Chờ xử lý</time></button>').join('');
+      const doc = getDoc(state.reviewId);
+      document.getElementById('review-summary').innerHTML = '<h4>' + esc(doc.name) + '</h4><dl><div><dt>Người phụ trách</dt><dd>' + esc(doc.owner) + '</dd></div><div><dt>Revision / Version</dt><dd class="mono">' + esc(doc.rev + ' / ' + doc.version) + '</dd></div></dl><div style="display:flex;gap:7px;margin-top:12px"><button class="button primary" type="button" data-action="approve-review">Phê duyệt</button><button class="button danger" type="button" data-action="reject-review">Trả lại</button></div>';
+    }
+    function renderInspector() {
+      const doc = currentDoc();
+      document.getElementById('inspector-title').textContent = doc.name;
+      document.getElementById('inspector-id').textContent = doc.id + ' · ' + doc.type;
+      document.querySelectorAll('.inspector-tab').forEach((button) => button.classList.toggle('active', button.dataset.inspectorTab === state.inspectorTab));
+      const body = document.getElementById('inspector-body');
+      if (!doc) { body.innerHTML = '<div class="empty">Chưa có tài liệu được chọn.</div>'; return; }
+      if (state.inspectorTab === 'preview') body.innerHTML = renderPreview(doc);
+      else if (state.inspectorTab === 'properties') body.innerHTML = renderProperties(doc);
+      else if (state.inspectorTab === 'structure') body.innerHTML = renderInspectorStructure(doc);
+      else body.innerHTML = renderHistory(doc);
+    }
+    function nextStep(doc) {
+      if (doc.stale) return ['Xử lý bản cũ', 'Lấy bản hiện tại rồi áp dụng lại phần đã sửa.'];
+      if (doc.checkedOut) return ['Check-in', 'Ghi nhận thay đổi và kết thúc quyền giữ sửa.'];
+      if (doc.state === 'Under Review' && doc.approval === 'Approved') return ['Phát hành', 'Tài liệu đã được duyệt. Kiểm tra phạm vi trước khi phát hành.'];
+      if (doc.state === 'Under Review') return ['Chờ duyệt', 'Người duyệt phê duyệt hoặc trả lại.'];
+      if (doc.state === 'Released') return ['Tạo Revision mới', 'Nhập lý do khi cần sửa bản đã phát hành.'];
+      if (doc.state === 'In Work') return ['Gửi duyệt', 'Gửi Revision và Version hiện tại cho người duyệt.'];
+      return ['Checkout', 'Checkout tài liệu để bắt đầu sửa.'];
+    }
+    function renderPreview(doc) {
+      const step = nextStep(doc);
+      const approvedForRelease = doc.state === 'Under Review' && doc.approval === 'Approved';
+      const stepStatus = doc.stale ? 'Cần xử lý' : (approvedForRelease ? 'Sẵn sàng phát hành' : (doc.state === 'Under Review' ? 'Chờ duyệt' : (doc.state === 'Released' ? 'Đã phát hành' : 'Sẵn sàng')));
+      const stepStatusClass = doc.stale ? 'amber' : (approvedForRelease ? 'blue' : statusClass(doc.state));
+      return '<section class="inspector-section"><div class="section-title"><span>Bản xem</span><span class="scope-pill">' + esc(doc.format) + '</span></div><div class="preview-sheet"><div class="paper"><div class="paper-head"><span>IDEA DDM / ' + esc(doc.id) + '</span><span>Rev ' + esc(doc.rev) + ' · v' + esc(doc.version) + '</span></div><div class="paper-title">' + esc(doc.name) + '</div><div class="drawing"></div><div class="paper-foot"><span>Bản xem minh họa</span><span>Trang 1 / 1</span></div></div></div><div class="section-body"><button class="button primary" type="button" data-action="open-preview">' + icon('eye') + ' Mở lớn</button></div></section>' +
+      '<section class="inspector-section"><div class="section-title"><span>Bước tiếp theo</span><span class="status ' + stepStatusClass + '">' + esc(stepStatus) + '</span></div><div class="section-body"><div class="next-step ' + (doc.stale ? 'warning' : '') + '"><strong>' + esc(step[0]) + '</strong><p>' + esc(step[1]) + '</p></div></div></section>' +
+      '<section class="inspector-section"><div class="section-title"><span>Tệp đính kèm</span><span class="scope-pill">2</span></div><div class="section-body">' + fileRow('Tệp gốc', doc.type === 'CAD file' ? 'P100_Pump_Model.native' : 'P100_' + doc.id + '.source', '2.4 MB') + fileRow('PDF', 'P100_' + doc.id + '.pdf', '840 KB') + '</div></section>';
+    }
+    function fileRow(label, name, size) { return '<div class="file-row">' + icon(label === 'Tệp gốc' ? 'file' : 'eye') + '<span><strong>' + esc(label) + '</strong><small>' + esc(name) + '</small></span><span class="file-size">' + esc(size) + '</span></div>'; }
+    function renderProperties(doc) {
+      const shownStatus = displayStatus(doc);
+      const approval = doc.approval === 'Approved' ? 'Đã phê duyệt' : (doc.state === 'Under Review' ? 'Chờ quyết định' : '—');
+      return '<section class="inspector-section"><div class="section-title"><span>Thông tin tài liệu</span><span class="scope-pill">' + esc(shownStatus.label) + '</span></div><div class="section-body"><dl class="property-grid">' + property('Mã tài liệu', doc.id, true) + property('Loại', doc.type) + property('Revision', doc.rev, true) + property('Version', doc.version, true) + property('Mã hệ thống', doc.generation, true) + property('Kết quả duyệt', approval) + property('Người phụ trách', doc.owner) + property('Định dạng', doc.format) + property('Thư mục', doc.group) + '</dl></div></section>' +
+      '<section class="inspector-section"><div class="section-title"><span>Quyền sửa</span></div><div class="section-body"><div class="property-grid">' + property('Checkout', doc.checkedOut ? 'Đang giữ bởi Linh' : 'Không giữ') + property('Reference', doc.referenced ? 'Đang tham chiếu' : 'Chưa tham chiếu') + property('Thay đổi trên máy', doc.changed ? 'Có thay đổi' : 'Không có thay đổi') + '</div></div></section>';
+    }
+    function property(label, value, mono) { return '<div class="property"><dt>' + esc(label) + '</dt><dd class="' + (mono ? 'mono' : '') + '">' + esc(value) + '</dd></div>'; }
+    function renderInspectorStructure(doc) {
+      const placements = [
+        '<div class="file-row">' + icon('folder') + '<span><strong>' + esc(doc.group) + '</strong><small>Vị trí chính trong cây thư mục</small></span></div>'
+      ].concat((doc.links || []).map((group) => '<div class="file-row">' + icon('link') + '<span><strong>' + esc(group) + '</strong><small>Liên kết đến cùng tài liệu ' + esc(doc.id) + '</small></span></div>')).join('');
+      const source = doc.source ? '<div class="file-row">' + icon('file') + '<span><strong>Nguồn tạo bản sao</strong><small>' + esc(doc.source.id) + ' · Rev ' + esc(doc.source.rev) + ' · v' + esc(doc.source.version) + '</small></span></div>' : '';
+      const placementCount = 1 + (doc.links || []).length;
+      return '<section class="inspector-section"><div class="section-title"><span>Thư mục và liên kết</span><span class="scope-pill">' + placementCount + ' vị trí</span></div><div class="section-body">' + placements + source + '</div></section>' +
+      '<section class="inspector-section"><div class="section-title"><span>Cấu trúc sản phẩm</span></div><div class="section-body"><div class="file-row">' + icon('cube') + '<span><strong>Cụm bơm P-100</strong><small>Vị trí 10 trong cấu trúc sản phẩm</small></span></div><button class="button" type="button" data-view="structure">' + icon('structure') + ' Mở cấu trúc sản phẩm</button></div></section>' +
+      '<section class="inspector-section"><div class="section-title"><span>Nơi sử dụng</span></div><div class="section-body"><p style="margin:0;color:#64778d;font-size:11px">Tài liệu được dùng trong <strong>P-100 Pump Assembly</strong>.</p></div></section>';
+    }
+    function renderHistory(doc) {
+      return '<section class="inspector-section"><div class="section-title"><span>Lịch sử thao tác</span><span class="scope-pill">' + doc.audit.length + ' mục</span></div><div class="section-body"><div class="history">' + doc.audit.map((event) => '<div class="history-event"><strong>' + esc(event[0]) + '</strong><small>' + esc(event[1]) + '</small></div>').join('') + '</div></div></section>';
+    }
+    function updateHeader() {
+      const titles = {workbench:['Tài liệu của tôi','Tài liệu đang sửa, đang tham chiếu và gần đây.'],search:['Tìm kiếm','Tìm theo mã, tên, loại hoặc trạng thái.'],structure:['Cấu trúc sản phẩm','Xem cụm, chi tiết, số lượng và tài liệu liên quan.'],review:['Việc chờ duyệt','Các tài liệu đang chờ quyết định.']};
+      const current = titles[state.view];
+      document.getElementById('page-title').textContent = current[0];
+      document.getElementById('page-subtitle').textContent = current[1];
+      document.getElementById('crumb-current').textContent = state.view === 'structure' ? 'P-100 Pump Assembly' : (state.view === 'review' ? 'Việc chờ duyệt' : 'P-100 Pump Assembly');
+      document.querySelectorAll('.workbench-tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.view === state.view));
+      document.getElementById('search-panel').style.display = state.view === 'structure' || state.view === 'review' ? 'none' : '';
+      document.getElementById('table-view').style.display = state.view === 'structure' || state.view === 'review' ? 'none' : '';
+      document.getElementById('structure-view').classList.toggle('active', state.view === 'structure');
+      document.getElementById('review-view').classList.toggle('active', state.view === 'review');
+      document.getElementById('result-title').textContent = state.view === 'search' ? 'Kết quả tìm kiếm' : 'Tài liệu của tôi';
+      document.querySelector('.scope-note').textContent = state.view === 'review' ? 'Phạm vi: tài liệu đang chờ duyệt' : 'Phạm vi: tài liệu đang chọn';
+    }
+    function updateSelection() {
+      const count = state.selected.size;
+      const docs = selectedDocs();
+      const one = count === 1 ? docs[0] : null;
+      document.getElementById('selection-label').textContent = count ? count + ' tài liệu đang chọn' : 'Chưa chọn tài liệu';
+      document.getElementById('action-open').disabled = !count;
+      document.getElementById('action-stale').hidden = !one?.stale;
+      document.getElementById('action-submit-review').hidden = !(one?.state === 'In Work' && !one.checkedOut && !one.stale && !one.changed);
+      document.getElementById('action-new-revision').hidden = one?.state !== 'Released';
+      renderRows();
+    }
+    function render() {
+      updateHeader();
+      renderDocumentTree();
+      renderRows();
+      renderStructureTree();
+      renderBom();
+      renderReleaseScope();
+      renderReview();
+      renderInspector();
+      updateSelection();
+      document.querySelectorAll('.rail-link').forEach((link) => link.classList.toggle('active', link.dataset.nav === state.nav && state.view === 'workbench'));
+      const doc = currentDoc();
+      document.querySelectorAll('[data-open-doc]').forEach((node) => node.classList.toggle('selected', node.dataset.openDoc === doc.id));
+      const chips = document.getElementById('active-chips');
+      const q = document.getElementById('query').value.trim();
+      const typ = document.getElementById('type-filter').value;
+      const st = document.getElementById('state-filter').value;
+      const stateLabel = st ? document.getElementById('state-filter').selectedOptions[0].textContent : '';
+      chips.innerHTML = (q ? '<span class="chip">Từ khóa: ' + esc(q) + '<button type="button" data-clear-filter="query" aria-label="Xóa từ khóa">×</button></span>' : '') + (typ ? '<span class="chip">Loại: ' + esc(typ) + '<button type="button" data-clear-filter="type-filter" aria-label="Xóa loại">×</button></span>' : '') + (st ? '<span class="chip">Trạng thái: ' + esc(stateLabel) + '<button type="button" data-clear-filter="state-filter" aria-label="Xóa trạng thái">×</button></span>' : '');
+      const workbenchTotal = documents.filter((doc) => ['editing','reference','recent'].includes(doc.scope)).length;
+      document.getElementById('workbench-count').textContent = workbenchTotal;
+      document.getElementById('rail-workbench-count').textContent = workbenchTotal;
+    }
+    function openModal(kind) {
+      state.modal = kind;
+      const docs = selectedDocs();
+      const title = document.getElementById('modal-title');
+      const subtitle = document.getElementById('modal-subtitle');
+      const body = document.getElementById('modal-body');
+      const foot = document.getElementById('modal-foot');
+      const scope = docs.length ? docs : [currentDoc()];
+      const scopeHtml = '<div class="modal-scope"><div class="modal-scope-title">Phạm vi đang chọn · ' + scope.length + ' tài liệu</div>' + scope.map((doc) => '<div class="scope-row">' + icon(typeIcon(doc.type)) + '<span><strong>' + esc(doc.name) + '</strong><br><span class="mono">' + esc(doc.id) + ' · Rev ' + esc(doc.rev) + ' · v' + esc(doc.version) + '</span></span><small>' + esc(displayStatus(doc).label) + '</small></div>').join('') + '</div>';
+      if (kind === 'create-document') {
+        title.textContent = 'Tạo tài liệu mới'; subtitle.textContent = 'Tạo một tài liệu có mã riêng trong IDEA DDM.';
+        body.innerHTML = '<label class="modal-field">Tên tài liệu<input id="new-document-name" data-required-field="create-document" autocomplete="off"></label><label class="modal-field">Loại tài liệu<select id="new-document-type">' + typeOptions('Technical Specification') + '</select></label><label class="modal-field">Thư mục<select id="new-document-group">' + groupOptions('Product Definition') + '</select></label><div class="modal-callout">' + icon('edit') + '<span>Tài liệu mới ở trạng thái Draft và được Checkout cho Linh Nguyễn để bắt đầu làm việc.</span></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="create-document" disabled>Tạo tài liệu</button>';
+      } else if (kind === 'intake-document') {
+        title.textContent = 'Tiếp nhận file có sẵn'; subtitle.textContent = 'Tạo tài liệu mới từ một file đang có trên máy.';
+        body.innerHTML = '<label class="modal-field">Tên tài liệu<input id="intake-document-name" data-required-field="intake-document" autocomplete="off"></label><label class="modal-field">Tên file<input id="intake-file-name" data-required-field="intake-document" placeholder="Ví dụ: P100_Specification.docx" autocomplete="off"><small>Prototype chỉ ghi nhận tên file minh họa, chưa tải file thật.</small></label><label class="modal-field">Loại tài liệu<select id="intake-document-type">' + typeOptions('Technical Specification') + '</select></label><label class="modal-field">Thư mục<select id="intake-document-group">' + groupOptions('Product Definition') + '</select></label>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="intake-document" disabled>Tiếp nhận</button>';
+      } else if (kind === 'edit-info') {
+        const doc = scope[0];
+        title.textContent = 'Sửa thông tin tài liệu'; subtitle.textContent = 'Thay đổi được ghi vào bản làm việc và chỉ trở thành bản chính thức sau Check-in.';
+        body.innerHTML = scopeHtml + '<label class="modal-field">Tên tài liệu được kiểm soát<input id="edit-document-name" data-required-field="edit-info" value="' + esc(doc.name) + '" autocomplete="off"></label><label class="modal-field">Người phụ trách<input id="edit-document-owner" data-required-field="edit-info" value="' + esc(doc.owner) + '" autocomplete="off"></label>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="edit-info">Lưu vào bản làm việc</button>';
+      } else if (kind === 'rename') {
+        const doc = scope[0];
+        title.textContent = 'Đổi tên trong thư mục'; subtitle.textContent = 'Chỉ đổi tên hiển thị trong cây thư mục.';
+        body.innerHTML = scopeHtml + '<label class="modal-field">Tên hiển thị<input id="document-alias" data-required-field="rename" value="' + esc(doc.alias || doc.name) + '" autocomplete="off"></label><div class="modal-callout">' + icon('file') + '<span>Mã ' + esc(doc.id) + ', nội dung, Revision, Version và lịch sử không thay đổi.</span></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="rename">Đổi tên</button>';
+      } else if (kind === 'move') {
+        const doc = scope[0];
+        title.textContent = 'Chuyển thư mục'; subtitle.textContent = 'Thay đổi nơi hiển thị, không tạo tài liệu hoặc Version mới.';
+        body.innerHTML = scopeHtml + '<label class="modal-field">Thư mục hiện tại<input value="' + esc(doc.group) + '" disabled></label><label class="modal-field">Chuyển đến<select id="move-document-group">' + groupOptions('', [doc.group]) + '</select></label>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="move">Chuyển thư mục</button>';
+      } else if (kind === 'add-link') {
+        const doc = scope[0];
+        const unavailable = [doc.group].concat(doc.links || []);
+        title.textContent = 'Thêm liên kết'; subtitle.textContent = 'Hiển thị cùng tài liệu ở một thư mục khác.';
+        body.innerHTML = scopeHtml + '<label class="modal-field">Thêm vào thư mục<select id="link-document-group">' + groupOptions('', unavailable) + '</select></label><div class="modal-callout">' + icon('link') + '<span>Liên kết mới vẫn trỏ đến ' + esc(doc.id) + '; hệ thống không tạo bản sao.</span></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="add-link" ' + (unavailable.length >= documentGroups.length ? 'disabled' : '') + '>Thêm liên kết</button>';
+      } else if (kind === 'create-copy') {
+        const doc = scope[0];
+        title.textContent = 'Create Copy'; subtitle.textContent = 'Tạo tài liệu mới từ đúng bản đang chọn.';
+        body.innerHTML = scopeHtml + '<label class="modal-field">Tên tài liệu mới<input id="copy-document-name" data-required-field="create-copy" value="' + esc(doc.name + ' — Bản sao') + '" autocomplete="off"></label><label class="modal-field">Thư mục<select id="copy-document-group">' + groupOptions(doc.group) + '</select></label><div class="modal-callout">' + icon('file') + '<span>Bản sao nhận mã mới và giữ liên kết đến nguồn ' + esc(doc.id) + '. Trạng thái xét duyệt, Released và Checkout của nguồn không được mang sang.</span></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="create-copy">Tạo bản sao</button>';
+      } else if (kind === 'remove-draft') {
+        const doc = scope[0];
+        title.textContent = 'Loại bỏ bản Draft'; subtitle.textContent = 'Chỉ áp dụng cho tài liệu chưa có bản được ghi nhận.';
+        body.innerHTML = scopeHtml + '<div class="modal-callout warning">' + icon('warning') + '<span>Tài liệu ' + esc(doc.id) + ' sẽ bị loại khỏi danh sách demo. Tài liệu đã Check-in, xét duyệt hoặc phát hành không dùng thao tác này.</span></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button danger" type="button" data-modal-confirm="remove-draft">Loại bỏ Draft</button>';
+      } else if (kind === 'checkout') {
+        title.textContent = 'Checkout tài liệu'; subtitle.textContent = 'Xác nhận tài liệu cần sửa.';
+        body.innerHTML = scopeHtml + '<div class="choice-list"><label class="choice"><input type="radio" name="checkout-scope" checked><span><strong>Chỉ tài liệu đã chọn</strong><small>Các tài liệu khác không bị giữ theo.</small></span></label><label class="choice"><input type="radio" name="checkout-scope"><span><strong>Kèm tài liệu liên quan bắt buộc</strong><small>Chỉ dùng khi cần sửa cả nhóm phụ thuộc.</small></span></label></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="checkout">Xác nhận Checkout</button>';
+      } else if (kind === 'reference') {
+        title.textContent = 'Reference tài liệu'; subtitle.textContent = 'Tham chiếu tài liệu mà không giữ quyền sửa.';
+        body.innerHTML = scopeHtml;
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="reference">Xác nhận Reference</button>';
+      } else if (kind === 'checkin') {
+        title.textContent = 'Check-in tài liệu'; subtitle.textContent = 'Kết thúc quyền giữ sửa trong phạm vi xác nhận.';
+        const checked = scope.filter((doc) => doc.checkedOut);
+        body.innerHTML = scopeHtml + (checked.length ? '<div class="choice-list"><label class="choice"><input type="radio" name="checkin-change" value="changed" checked><span><strong>Có thay đổi</strong><small>Ghi nhận Version mới và kết thúc Checkout.</small></span></label><label class="choice"><input type="radio" name="checkin-change" value="nochange"><span><strong>Không có thay đổi</strong><small>Kết thúc Checkout, không tạo Version mới.</small></span></label></div>' : '<div class="modal-callout warning">' + icon('warning') + '<span>Chọn tài liệu đang Checkout để tiếp tục.</span></div>') + '<div class="modal-callout">' + icon('check') + '<span>Check-in thành công sẽ kết thúc quyền giữ sửa.</span></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="checkin" ' + (!checked.length ? 'disabled' : '') + '>Xác nhận Check-in</button>';
+      } else if (kind === 'submit-review') {
+        const doc = scope[0];
+        title.textContent = 'Gửi duyệt'; subtitle.textContent = 'Gửi đúng bản hiện tại cho người duyệt.';
+        body.innerHTML = scopeHtml + '<dl class="property-grid">' + property('Revision', doc.rev, true) + property('Version', doc.version, true) + property('Người duyệt', 'Người duyệt độc lập') + property('Kết quả', 'Under Review') + '</dl>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="submit-review">Gửi duyệt</button>';
+      } else if (kind === 'new-revision') {
+        const doc = scope[0];
+        const next = nextRevision(doc.rev);
+        title.textContent = 'Tạo Revision mới'; subtitle.textContent = 'Tạo từ bản đã phát hành.';
+        body.innerHTML = scopeHtml + (next ? '<dl class="property-grid">' + property('Revision hiện tại', doc.rev, true) + property('Revision mới', next, true) + property('Version mới', '1', true) + property('Trạng thái', 'In Work') + '</dl><label class="modal-field">Lý do thay đổi<textarea id="revision-reason" data-required-reason="new-revision" placeholder="Nhập lý do"></textarea></label>' : '<div class="modal-callout warning">' + icon('warning') + '<span>Không còn Revision tiếp theo trong quy tắc hiện tại.</span></div>');
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="new-revision" disabled>Tạo Revision</button>';
+      } else if (kind === 'reject-review') {
+        const doc = getDoc(state.reviewId);
+        title.textContent = 'Trả lại'; subtitle.textContent = 'Tài liệu sẽ trở về In Work.';
+        body.innerHTML = '<div class="modal-scope"><div class="modal-scope-title">Tài liệu</div><div class="scope-row">' + icon(typeIcon(doc.type)) + '<span><strong>' + esc(doc.name) + '</strong><br><span class="mono">' + esc(doc.id) + ' · Rev ' + esc(doc.rev) + ' · v' + esc(doc.version) + '</span></span><small>Under Review</small></div></div><label class="modal-field">Lý do trả lại<textarea id="reject-reason" data-required-reason="reject-review" placeholder="Nhập lý do"></textarea></label>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button danger" type="button" data-modal-confirm="reject-review" disabled>Trả lại</button>';
+      } else if (kind === 'stale') {
+        const doc = scope.find((row) => row.stale) || currentDoc();
+        title.textContent = 'Bản làm việc đã cũ'; subtitle.textContent = 'Bản trên hệ thống đã thay đổi kể từ khi Checkout.';
+        const refreshed = doc.staleStage === 'refreshed';
+        body.innerHTML = '<div class="modal-callout warning">' + icon('warning') + '<span>File đang làm được giữ lại. IDEA không tự gộp file CAD hoặc Office.</span></div><div class="property-grid" style="margin:14px 0">' + property('Bản đã lấy về', doc.expected || 'G-0010', true) + property('Bản hiện tại', doc.generation, true) + property('Thay đổi trên máy', doc.changed ? 'Có thay đổi' : 'Không có thay đổi') + property('Trạng thái', refreshed ? 'Đã lấy bản mới · chờ áp dụng lại' : 'Chưa lấy bản mới') + '</div><div class="choice-list"><label class="choice"><input type="radio" name="stale-choice" value="latest" ' + (!refreshed ? 'checked' : 'disabled') + '><span><strong>Lấy bản mới nhất</strong><small>Ngừng dùng bản đang làm và mở bản hiện tại.</small></span></label><label class="choice"><input type="radio" name="stale-choice" value="keep" ' + (refreshed ? 'checked' : '') + '><span><strong>Giữ thay đổi trên máy</strong><small>Lấy bản mới rồi tự áp dụng lại phần sửa trước Check-in.</small></span></label></div>';
+        foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button warning" type="button" data-modal-confirm="' + (refreshed ? 'reapply' : 'refresh') + '">' + (refreshed ? 'Áp dụng lại thay đổi' : 'Lấy bản mới') + '</button>';
+      } else if (kind === 'release') {
+        const release = releaseEligibility();
+        title.textContent = release.eligible ? 'Xác nhận phát hành' : 'Chưa thể phát hành';
+        subtitle.textContent = 'Phát hành đúng phạm vi đã được phê duyệt.';
+        if (!release.eligible) {
+          body.innerHTML = '<div class="modal-callout warning">' + icon('warning') + '<span>' + esc(release.released ? 'Cụm bơm đã được phát hành.' : release.blockers.join('; ') + '.') + '</span></div>';
+          foot.innerHTML = '<button class="button primary" type="button" data-action="close-modal">Đóng</button>';
+        } else {
+          body.innerHTML = '<div class="modal-callout success">' + icon('check') + '<span>Phạm vi đang chọn: <strong>Cụm bơm P-100</strong>. Tủ điện và hồ sơ toàn máy vẫn In Work.</span></div><div class="modal-scope"><div class="modal-scope-title">Tài liệu trong phạm vi</div><div class="scope-row">' + icon('cube') + '<span><strong>' + esc(release.candidate.name) + '</strong><br><span class="mono">' + esc(release.candidate.id) + ' · Rev ' + esc(release.candidate.rev) + ' · v' + esc(release.candidate.version) + '</span></span><span class="status green">Đã duyệt</span></div><div class="scope-row">' + icon('cad') + '<span><strong>' + esc(release.requiredCad.name) + '</strong><br><span class="mono">' + esc(release.requiredCad.id) + ' · Rev ' + esc(release.requiredCad.rev) + ' · v' + esc(release.requiredCad.version) + '</span></span><span class="status green">Released</span></div><div class="scope-row">' + icon('cube') + '<span><strong>Tủ điện P-100</strong><br><span class="mono">ngoài phạm vi</span></span><span class="status blue">In Work</span></div><div class="scope-row">' + icon('folder') + '<span><strong>Hồ sơ toàn máy</strong><br><span class="mono">ngoài phạm vi</span></span><span class="status blue">In Work</span></div></div>';
+          foot.innerHTML = '<button class="button" type="button" data-action="close-modal">Hủy</button><button class="button primary" type="button" data-modal-confirm="release">Xác nhận phát hành</button>';
+        }
+      } else if (kind === 'preview') {
+        const doc = currentDoc();
+        title.textContent = 'Bản xem · ' + doc.id; subtitle.textContent = 'Xem nhanh nội dung tài liệu.';
+        body.innerHTML = '<div class="preview-sheet"><div class="paper"><div class="paper-head"><span>IDEA DDM / ' + esc(doc.id) + '</span><span>Rev ' + esc(doc.rev) + ' · v' + esc(doc.version) + '</span></div><div class="paper-title">' + esc(doc.name) + '</div><div class="drawing"></div><div class="paper-foot"><span>Bản xem minh họa</span><span>Trang 1 / 1</span></div></div></div>';
+        foot.innerHTML = '<button class="button primary" type="button" data-action="close-modal">Đóng</button>';
+      }
+      document.getElementById('modal-backdrop').classList.add('open');
+    }
+    function closeModal() { state.modal = null; document.getElementById('modal-backdrop').classList.remove('open'); }
+    function updateRequiredConfirm(action) {
+      const button = document.querySelector('[data-modal-confirm="' + action + '"]');
+      const fields = Array.from(document.querySelectorAll('[data-required-field="' + action + '"]'));
+      if (button && fields.length) button.disabled = fields.some((field) => !field.value.trim());
+    }
+    function confirmModal(action) {
+      const docs = selectedDocs().length ? selectedDocs() : [currentDoc()];
+      if (action === 'create-document') {
+        const name = document.getElementById('new-document-name')?.value.trim();
+        const type = document.getElementById('new-document-type')?.value;
+        const group = document.getElementById('new-document-group')?.value;
+        if (!name || !type || !group) return;
+        const doc = createDraft({ name, type, group });
+        showToast('Đã tạo ' + doc.id + ' ở trạng thái Draft.');
+      } else if (action === 'intake-document') {
+        const name = document.getElementById('intake-document-name')?.value.trim();
+        const fileName = document.getElementById('intake-file-name')?.value.trim();
+        const type = document.getElementById('intake-document-type')?.value;
+        const group = document.getElementById('intake-document-group')?.value;
+        if (!name || !fileName || !type || !group) return;
+        const doc = createDraft({ name, type, group, fileName });
+        showToast('Đã tiếp nhận ' + fileName + ' thành ' + doc.id + '.');
+      } else if (action === 'edit-info') {
+        const doc = docs[0];
+        const name = document.getElementById('edit-document-name')?.value.trim();
+        const owner = document.getElementById('edit-document-owner')?.value.trim();
+        if (!doc || !name || !owner || doc.stale || !doc.checkedOut || !['Draft','In Work'].includes(doc.state)) return;
+        doc.name = name;
+        doc.owner = owner;
+        doc.changed = true;
+        doc.updated = '09/09/2026 09:15';
+        doc.audit.unshift(['Đã sửa thông tin trong bản làm việc','Linh Nguyễn · vừa xong']);
+        showToast('Đã lưu thông tin vào bản làm việc của ' + doc.id + '.');
+      } else if (action === 'rename') {
+        const doc = docs[0];
+        const alias = document.getElementById('document-alias')?.value.trim();
+        if (!doc || !alias) return;
+        doc.alias = alias;
+        doc.audit.unshift(['Đã đổi tên trong thư mục','Linh Nguyễn · vừa xong']);
+        showToast('Đã đổi tên hiển thị. Mã và Version không thay đổi.');
+      } else if (action === 'move') {
+        const doc = docs[0];
+        const group = document.getElementById('move-document-group')?.value;
+        if (!doc || !group || group === doc.group) return;
+        const from = doc.group;
+        doc.group = group;
+        doc.links = (doc.links || []).filter((linkedGroup) => linkedGroup !== group);
+        doc.audit.unshift(['Đã chuyển thư mục','Linh Nguyễn · vừa xong · ' + from + ' → ' + group]);
+        showToast('Đã chuyển ' + doc.id + ' đến ' + group + '.');
+      } else if (action === 'add-link') {
+        const doc = docs[0];
+        const group = document.getElementById('link-document-group')?.value;
+        if (!doc || !group || group === doc.group || (doc.links || []).includes(group)) return;
+        doc.links.push(group);
+        doc.audit.unshift(['Đã thêm liên kết','Linh Nguyễn · vừa xong · ' + group]);
+        showToast('Đã thêm liên kết đến ' + group + '.');
+      } else if (action === 'create-copy') {
+        const source = docs[0];
+        const name = document.getElementById('copy-document-name')?.value.trim();
+        const group = document.getElementById('copy-document-group')?.value;
+        if (!source || !name || !group || source.stale) return;
+        const doc = createDraft({ name, type:source.type, group, source:{ id:source.id, rev:source.rev, version:source.version, generation:source.generation } });
+        showToast('Đã tạo ' + doc.id + ' từ ' + source.id + '.');
+      } else if (action === 'remove-draft') {
+        const doc = docs[0];
+        if (!doc || doc.state !== 'Draft') return;
+        const index = documents.findIndex((item) => item.id === doc.id);
+        if (index >= 0) documents.splice(index, 1);
+        state.selected.clear();
+        state.activeId = documents[0]?.id || '';
+        state.inspectorTab = 'preview';
+        showToast('Đã loại bỏ bản Draft ' + doc.id + '.');
+      } else if (action === 'checkout') {
+        docs.forEach((doc) => { doc.checkedOut = true; doc.changed = false; doc.stale = false; doc.updated = '08/09/2026 09:02'; doc.audit.unshift(['Checkout','Linh Nguyễn · vừa xong']); });
+        showToast('Đã Checkout ' + docs.length + ' tài liệu.');
+      } else if (action === 'reference') {
+        docs.forEach((doc) => { doc.referenced = true; doc.audit.unshift(['Đã thêm Reference','Linh Nguyễn · vừa xong']); });
+        showToast('Đã thêm Reference cho ' + docs.length + ' tài liệu.');
+      } else if (action === 'checkin') {
+        const changed = document.querySelector('input[name="checkin-change"]:checked')?.value === 'changed';
+        docs.filter((doc) => doc.checkedOut).forEach((doc) => {
+          if (changed) {
+            if (doc.state === 'Draft') {
+              doc.rev = 'A';
+              doc.version = '1';
+              doc.generation = nextGenerationId();
+              doc.state = 'In Work';
+            } else {
+              doc.version = String(Number(doc.version) + 1);
+              doc.generation = nextGenerationId();
+            }
+          }
+          doc.changed = false;
+          doc.checkedOut = false;
+          doc.stale = false;
+          doc.staleStage = '';
+          doc.audit.unshift(['Đã Check-in','Linh Nguyễn · vừa xong']);
+        });
+        showToast('Check-in thành công. Quyền giữ sửa đã kết thúc, kể cả tài liệu không có thay đổi.');
+      } else if (action === 'submit-review') {
+        const doc = docs[0];
+        if (!doc || doc.state !== 'In Work' || doc.checkedOut || doc.stale || doc.changed) return;
+        doc.state = 'Under Review';
+        doc.approval = 'Pending';
+        doc.audit.unshift(['Đã gửi duyệt','Linh Nguyễn · vừa xong']);
+        state.reviewId = doc.id;
+        showToast('Đã gửi duyệt ' + doc.id + '.');
+      } else if (action === 'new-revision') {
+        const doc = docs[0];
+        const reason = document.getElementById('revision-reason')?.value.trim();
+        const next = doc ? nextRevision(doc.rev) : null;
+        if (!doc || doc.state !== 'Released' || !next || !reason) return;
+        doc.rev = next;
+        doc.version = '1';
+        doc.generation = 'G-' + String(Number(doc.generation.slice(2)) + 1).padStart(4,'0');
+        doc.state = 'In Work';
+        doc.checkedOut = false;
+        doc.referenced = false;
+        doc.changed = false;
+        doc.stale = false;
+        doc.approval = '';
+        doc.audit.unshift(['Đã tạo Revision ' + next, 'Linh Nguyễn · vừa xong · ' + reason]);
+        showToast('Đã tạo Revision ' + next + '.');
+      } else if (action === 'reject-review') {
+        const doc = getDoc(state.reviewId);
+        const reason = document.getElementById('reject-reason')?.value.trim();
+        if (!doc || doc.state !== 'Under Review' || !reason) return;
+        doc.state = 'In Work';
+        doc.approval = 'Rejected';
+        doc.audit.unshift(['Đã trả lại','Người duyệt độc lập · vừa xong · ' + reason]);
+        showToast('Đã trả ' + doc.id + ' về In Work.');
+      } else if (action === 'refresh') {
+        const doc = docs.find((row) => row.stale) || currentDoc(); doc.staleStage = 'refreshed'; doc.expected = doc.generation; doc.audit.unshift(['Đã lấy bản mới','Linh Nguyễn · vừa xong']); showToast('Đã lấy bản mới. Thay đổi trên máy vẫn được giữ.');
+      } else if (action === 'reapply') {
+        const doc = docs.find((row) => row.stale) || currentDoc(); doc.stale = false; doc.staleStage = 'reapplied'; doc.changed = true; doc.audit.unshift(['Đã áp dụng lại thay đổi','Linh Nguyễn · vừa xong']); showToast('Đã áp dụng lại thay đổi. Kiểm tra lại trước Check-in.');
+      } else if (action === 'release') {
+        const release = releaseEligibility();
+        if (!release.eligible) {
+          showToast(release.released ? 'Cụm bơm đã được phát hành.' : 'Chưa thể phát hành: ' + release.blockers.join('; ') + '.');
+          return;
+        }
+        const doc = release.candidate;
+        doc.state = 'Released';
+        doc.audit.unshift(['Đã phát hành','Người duyệt độc lập · vừa xong']);
+        showToast('Đã phát hành cụm bơm P-100. Tủ điện và hồ sơ toàn máy vẫn In Work.');
+      }
+      closeModal(); render();
+    }
+    document.addEventListener('click', (event) => {
+      const fileAction = event.target.closest('[data-file-action]');
+      if (fileAction) { runFileAction(fileAction.dataset.fileAction); return; }
+      const documentAction = event.target.closest('[data-document-action]');
+      if (documentAction) { runDocumentAction(documentAction.dataset.documentAction); return; }
+      if (!event.target.closest('#file-menu') && !event.target.closest('#file-menu-button')) closeFileMenu();
+      if (!event.target.closest('#document-actions-menu') && !event.target.closest('#actions-menu-button')) closeDocumentActions();
+      const tab = event.target.closest('[data-view]');
+      if (tab && tab.dataset.view) { state.view = tab.dataset.view; state.nav = 'workbench'; render(); return; }
+      const nav = event.target.closest('[data-nav]');
+      if (nav) { state.nav = nav.dataset.nav; state.view = 'workbench'; state.selected.clear(); render(); return; }
+      const treeToggle = event.target.closest('[data-tree-toggle]');
+      if (treeToggle) { const key = treeToggle.dataset.treeToggle; state.tree[key] = !state.tree[key]; const target = document.getElementById('tree-' + key) || document.getElementById('tree-root'); if (key === 'root') target.hidden = !state.tree.root; else target.hidden = !state.tree[key]; treeToggle.querySelector('.icon').style.transform = (state.tree[key] ? 'rotate(90deg)' : ''); return; }
+      const openDoc = event.target.closest('[data-open-doc]');
+      if (openDoc) { state.activeId = openDoc.dataset.openDoc; state.selected.clear(); state.selected.add(state.activeId); state.view = 'workbench'; render(); return; }
+      const row = event.target.closest('[data-row-id]');
+      if (row && !event.target.closest('input')) { state.activeId = row.dataset.rowId; state.selected.clear(); state.selected.add(state.activeId); render(); return; }
+      const review = event.target.closest('[data-review-id]');
+      if (review) { state.reviewId = review.dataset.reviewId; state.activeId = review.dataset.reviewId; state.selected.clear(); state.selected.add(state.activeId); render(); return; }
+      const inspectorTab = event.target.closest('[data-inspector-tab]');
+      if (inspectorTab) { state.inspectorTab = inspectorTab.dataset.inspectorTab; renderInspector(); return; }
+      const clear = event.target.closest('[data-clear-filter]');
+      if (clear) { const field = document.getElementById(clear.dataset.clearFilter); field.value = ''; render(); return; }
+      const action = event.target.closest('[data-action]');
+      if (action) {
+        const what = action.dataset.action;
+        if (what === 'close-modal') closeModal();
+        else if (what === 'open-file-menu') {
+          const menu = document.getElementById('file-menu');
+          if (!menu.hidden) closeFileMenu();
+          else openFileMenu(action);
+        }
+        else if (what === 'open-actions-menu') {
+          const menu = document.getElementById('document-actions-menu');
+          if (!menu.hidden) closeDocumentActions();
+          else openDocumentActions(state.selected.size === 1 ? selectedDocs()[0] : null, 0, 0, action);
+        }
+        else if (what === 'checkout' || what === 'reference' || what === 'checkin') openModal(what);
+        else if (what === 'open') { if (!state.selected.size) showToast('Hãy chọn một tài liệu trước.'); else { state.inspectorTab = 'preview'; renderInspector(); showToast('Đã mở phần chi tiết của tài liệu.'); } }
+        else if (what === 'resolve-stale') openModal('stale');
+        else if (what === 'submit-review') openModal('submit-review');
+        else if (what === 'new-revision') openModal('new-revision');
+        else if (what === 'release') openModal('release');
+        else if (what === 'open-preview') openModal('preview');
+        else if (what === 'refresh') showToast('Danh sách đã được làm mới.');
+        else if (what === 'approve-review') {
+          const doc = getDoc(state.reviewId);
+          if (doc && doc.state === 'Under Review' && doc.approval !== 'Approved') {
+            state.activeId = doc.id;
+            doc.approval = 'Approved';
+            doc.audit.unshift(['Đã phê duyệt','Người duyệt độc lập · vừa xong']);
+            showToast('Đã phê duyệt ' + doc.id + '. Kiểm tra phạm vi trước khi phát hành.');
+            render();
+          }
+        }
+        else if (what === 'reject-review') openModal('reject-review');
+      }
+      const confirm = event.target.closest('[data-modal-confirm]');
+      if (confirm) confirmModal(confirm.dataset.modalConfirm);
+    });
+    document.addEventListener('contextmenu', (event) => {
+      const target = event.target.closest('[data-row-id], [data-open-doc]');
+      if (!target) return;
+      event.preventDefault();
+      const id = target.dataset.rowId || target.dataset.openDoc;
+      const rect = target.getBoundingClientRect();
+      const x = event.clientX || rect.left + 18;
+      const y = event.clientY || rect.top + 18;
+      state.activeId = id;
+      state.selected.clear();
+      state.selected.add(id);
+      if (target.dataset.openDoc) state.view = 'workbench';
+      render();
+      openDocumentActions(getDoc(id), x, y);
+    });
+    document.addEventListener('change', (event) => {
+      const check = event.target.closest('[data-select-id]');
+      if (check) { if (check.checked) state.selected.add(check.dataset.selectId); else state.selected.delete(check.dataset.selectId); state.activeId = check.dataset.selectId; updateSelection(); renderInspector(); }
+      if (event.target.id === 'select-all') { visibleDocs().forEach((doc) => event.target.checked ? state.selected.add(doc.id) : state.selected.delete(doc.id)); updateSelection(); }
+    });
+    document.getElementById('query').addEventListener('input', () => render());
+    document.addEventListener('input', (event) => {
+      const field = event.target.closest('[data-required-reason]');
+      if (field) {
+        const button = document.querySelector('[data-modal-confirm="' + field.dataset.requiredReason + '"]');
+        if (button) button.disabled = !field.value.trim();
+      }
+      const required = event.target.closest('[data-required-field]');
+      if (required) updateRequiredConfirm(required.dataset.requiredField);
+    });
+    document.getElementById('type-filter').addEventListener('change', () => render());
+    document.getElementById('state-filter').addEventListener('change', () => render());
+    document.getElementById('modal-backdrop').addEventListener('click', (event) => { if (event.target.id === 'modal-backdrop') closeModal(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenus(); });
+    window.addEventListener('resize', closeMenus);
+    document.addEventListener('scroll', closeMenus, true);
+    render();
+  </script>
+</body>
+</html>
