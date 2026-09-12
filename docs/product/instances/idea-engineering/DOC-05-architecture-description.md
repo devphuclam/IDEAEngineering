@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.14`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.15`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.14` |
+| Document Version | `0.15` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
 | Requirements Input | `IE-PROD-SREQ-001@0.13`; Feature and Spec decisions remain `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
@@ -23,7 +23,7 @@
 | Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Change History | 0.14: correct cross-module custody, authorization, atomic-outcome, Release-structure, Reference-condition, recovery and trust-boundary views without adding requirements or selecting technology; [IE-CHG-ARCH-CORR-001](registers/CHG-2026-09-12-architecture-consistency-correction.md). 0.13: complete the logical-architecture view set for the Release Spine, native account/session control, governed Role change, BOM exchange, neutral Representation generation, coordinated recovery and security data flow; [IE-CHG-ARCH-VIEWS-001](registers/CHG-2026-09-11-architecture-view-completion.md). 0.12: resolve the Q26–Q32 Workspace/scale design frontier; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md). Earlier history remains in the controlled change records. |
+| Change History | 0.15: close remaining transaction/ownership gaps in BOM Import, material account mutation, commit-time refusal and Representation acceptance; make the read-only IAM eligibility query seam explicit without adding requirements or selecting technology; [IE-CHG-ARCH-CORR-002](registers/CHG-2026-09-12-architecture-consistency-correction-002.md). 0.14: correct cross-module custody, authorization, atomic-outcome, Release-structure, Reference-condition, recovery and trust-boundary views without adding requirements or selecting technology; [IE-CHG-ARCH-CORR-001](registers/CHG-2026-09-12-architecture-consistency-correction.md). 0.13: complete the logical-architecture view set for the Release Spine, native account/session control, governed Role change, BOM exchange, neutral Representation generation, coordinated recovery and security data flow; [IE-CHG-ARCH-VIEWS-001](registers/CHG-2026-09-11-architecture-view-completion.md). 0.12: resolve the Q26–Q32 Workspace/scale design frontier; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -148,8 +148,8 @@ Each view has a stable ID so a review comment can identify the exact model rathe
 | `ARCH-VIEW-ACT-002` | UML-style activity / section 7 introduction | How does one controlled document move from registration to an exactly reproducible Release without collapsing independent states? | One end-to-end Release Spine; product, architecture and delivery reviewers; excludes screen navigation and physical deployment. | `Draft`; `REQ-ID-*`, `REQ-WS-*`, `REQ-LC-*`, `REQ-STR-003`, `REQ-OPS-004` | Numbered Release Spine explanation following the view. |
 | `ARCH-VIEW-SEQ-008` | UML Sequence / section 7.4 | How are native sign-in, session eligibility, suspension and recovery handled without losing local work or rewriting Actor history? | One Actor/account across Web/Desktop and one protected operation; security/implementation/support reviewers. | `Draft`; `REQ-IAM-001…007`, `REQ-AUTH-008/009`, `REQ-SEC-001/003` | Numbered account/session rules before the view. |
 | `ARCH-VIEW-STATE-005` | UML State Machine / section 7.5.1 | How do Custom Role Definition versions and Role Assignments change without silently broadening existing authority? | One Custom Role family and one Role Assignment; access/security reviewers; excludes built-in Role editing. | `Draft`; `REQ-AUTH-001…010`, `REQ-GOV-005` | State rules and cross-lifecycle invariants following the view. |
-| `ARCH-VIEW-SEQ-009` | UML Sequence / section 7.8 | How are an exact BOM view, a pinned export and an import candidate kept distinct? | One Structure Snapshot and BOM View Profile; structure/data/implementation reviewers. | `Draft`; `REQ-STR-004…006`, `IF-STRUCTURE-BOM`, BM-01…06 | Six-step description and outcome rules beside the view. |
-| `ARCH-VIEW-SEQ-010` | UML Sequence / section 7.9 | How is a CAD/Office Representation produced or uploaded and tied to one exact source Generation? | One source Artifact and one Format Capability Profile; format/security/release reviewers. | `Draft`; `REQ-FMT-001…005`, `REQ-SEC-004`, `IF-FORMAT-JOB` | Generation, provenance and failure rules following the view. |
+| `ARCH-VIEW-SEQ-009` | UML Sequence / section 7.8 | How are an exact BOM view, a pinned export and an import candidate kept distinct? | One Structure Snapshot and BOM View Profile; structure/data/implementation reviewers. | `Draft`; `REQ-STR-004…006`, `IF-STRUCTURE-BOM`, `IF-AUTHORIZATION-DECISION`, `IF-IAM-ELIGIBILITY-QUERY`, BM-01…06 | Seven-step description and coordinator/UoW outcome rules beside the view. |
+| `ARCH-VIEW-SEQ-010` | UML Sequence / section 7.9 | How is a CAD/Office Representation produced or uploaded and tied to one exact source Generation? | One source Artifact and one Format Capability Profile; format/security/release reviewers. | `Draft`; `REQ-FMT-001…005`, `REQ-SEC-004`, `IF-FORMAT-JOB`, `IF-AUTHORIZATION-DECISION` | Generation, custody/metadata acceptance and failure rules following the view. |
 | `ARCH-VIEW-SEQ-011` | UML Sequence / section 9.3 | How is a coordinated recovery set restored and proved exact before service reopens? | One approved recovery point across database, Artifact, configuration and key custody; operations/data/security reviewers. | `Draft`; `REQ-OPS-003/004`, `REQ-IAM-004`, `QRS-006` | Recovery invariants and reopening conditions after the view. |
 | `ARCH-VIEW-SEC-001` | Trust-boundary data-flow view / section 10 | Which protected data crosses each trust zone, where is it authorized, and what may never cross? | Initial logical deployment trust zones; security/architecture/operations reviewers; excludes final ports and selected infrastructure. | `Draft`; `REQ-SEC-001…004`, `REQ-AUTH-008`, `REQ-AUD-*` | Threat/control table and trust-zone explanation beside the view. |
 | `ARCH-VIEW-EVO-001` | C4-style component/evolution view / section 9.2 | How can Artifact storage grow or change provider without changing product identity? | Artifact-storage seam and migration; architecture/operations/data owners; excludes selected vendor/topology. | `Draft`; `REQ-OPS-003…006`, `QRS-012` | Storage-boundary explanation after the view. |
@@ -190,9 +190,9 @@ A diagram is ready for baseline review only when a reviewer can answer yes to al
 - the long description communicates the same essential information without relying on the image; and
 - the actual rendered artifact was inspected, not merely syntax-checked.
 
-The current diagrams remain `Draft`. The corrected-baseline source consistency and internal
+The current diagrams remain `Draft`. The successor corrected-baseline source consistency and internal
 inspection of all 30 rendered views are recorded in
-[IE-VEV-ARCH-CORR-001](registers/VEV-2026-09-12-architecture-consistency-correction.md); earlier VEV
+[IE-VEV-ARCH-CORR-002](registers/VEV-2026-09-12-architecture-consistency-correction-002.md); predecessor and earlier VEV
 records remain historical evidence. Qualified architecture/security review remains `NOT-RUN`; render
 success must not be reported as architecture conformance or evidence that the software has been
 implemented.
@@ -353,7 +353,7 @@ terms do not imply one network service per Module.
 | Application Use-case Transaction Coordinator | Orchestrate one declared cross-module business operation such as Check-in or Release. | Input correlation, declared owner-call order, shared relational unit-of-work lifetime and abort handling. | No authoritative product state and no generic CRUD/resource authority. It calls owner Interfaces; each owner writes only its own state. |
 | Discovery | Find/browse through rebuildable projections. | Indexing, query projection, lag and replay. | Search projection only; never product authority. |
 | Audit Evidence | Append and export attributable product events. | Correlation, completeness, ordering, retention reference and controlled export. | Append-only Audit records, appended in the same relational unit of work as the authoritative outcome when the outcome is material. |
-| Identity and Accounts | Provision/activate, authenticate, change/reset password, suspend and revoke sessions; resolve stable Actor context. | Maintained credential mechanisms, recovery tokens, account status, session invalidation and future login linking. | Organization-scoped Actor/IDEA Account, Login Identity and credential/session/recovery records; no Project Membership, Group, Role Assignment, Workflow Role, document ACL or approval authority. |
+| Identity and Accounts | Provision/activate, authenticate, change/reset password, suspend and revoke sessions; resolve stable Actor context; expose a read-only IAM eligibility query port for Access Policy. | Maintained credential mechanisms, recovery tokens, account status, session invalidation, future login linking and the query-port read model. | Organization-scoped Actor/IDEA Account, Login Identity and credential/session/recovery records; no Project Membership, Group, Role Assignment, Workflow Role, document ACL or approval authority. |
 
 ### 5.1 Authority and module ownership view
 
@@ -362,7 +362,7 @@ and which Module is allowed to change the product state. A policy decision never
 Module's state.
 
 **`ARCH-VIEW-MOD-001` — Module authority (conceptual).** **Model profile:** C4 Component-level
-responsibility view; `Draft 0.14`; maintainers, security and architecture reviewers. **Question:**
+responsibility view; `Draft 0.15`; maintainers, security and architecture reviewers. **Question:**
 which Module owns each authoritative state and who may call it? **Scope:** logical IDEA Server
 Modules. **Excludes:** deployment processes, database tables and UI components. **Trace:**
 `REQ-GOV-*`, `REQ-AUTH-*`, DOC-06. **Legend:** arrows are governed calls or decisions; each Module
@@ -371,7 +371,7 @@ writes only the state named in the ownership table.
 ```mermaid
 flowchart TB
     accTitle: IDEA Server Module authority
-    accDescr: Scoped administrators call only their owning Modules. Identity and Accounts establishes actor context, Project Governance supplies membership facts to Access Policy, and Access Policy returns immutable authorization decisions. Artifact Custody owns bytes and locations while Controlled Product Data owns only Artifact References. A narrow use-case coordinator opens a shared relational unit of work for a named operation; it does not own state or generic CRUD authority.
+    accDescr: Scoped administrators call only their owning Modules. Identity and Accounts establishes actor context and exposes a read-only eligibility query port, Project Governance supplies membership facts to Access Policy, and Access Policy returns immutable authorization decisions. Access Policy never re-enters an IAM mutation command through that port. Artifact Custody owns bytes and locations while Controlled Product Data owns only Artifact References. A narrow use-case coordinator opens a shared relational unit of work for a named operation; it does not own state or generic CRUD authority.
 
     qlht["Account Administrator<br/>System Management"]
     projectAdmin["Project Administrator"]
@@ -398,7 +398,7 @@ flowchart TB
     configAdmin -->|define governed profiles| info
     configAdmin -->|define governed profiles| format
 
-    policy -->|resolve eligibility for server-established ActorContext| iam
+    policy -->|read-only IAM eligibility query port| iam
     policy -->|resolve Project and direct Group membership| project
     product -->|request authorization for owned command| policy
     structure -->|request authorization for owned command| policy
@@ -438,6 +438,10 @@ Module rules:
 8. Artifact Custody owns bytes, candidates and locations only. Controlled Product Data retains
    `ArtifactReference` and publication authority, while Product Structure and Format Intelligence
    call custody through its narrow Interface rather than write provider records.
+9. Access Policy resolves IAM eligibility only through `IF-IAM-ELIGIBILITY-QUERY`, a read-only
+   logical port implemented by Identity and Accounts. The query never re-enters an IAM mutation
+   command handler and does not hold an IAM mutation lock while resolving a decision; the command
+   dependency remains one-way.
 
 ### 5.2 RBAC domain view
 
@@ -664,15 +668,16 @@ candidate Tech details; a later implementation must preserve the behavior and er
 | `IF-ARTIFACT-CUSTODY` | Artifact Custody / owner Modules | Candidate or exact Artifact identity/digest plus server-issued operation scope → verified `ArtifactId`/digest, private-custody or read result. | Verification may deduplicate and allocate/reuse an Artifact identity but cannot publish a Generation or mutate owner business state. | Provider/path credentials remain server-only; every material custody result is correlated and auditable. |
 | `IF-ARTIFACT-TRANSFER` | Artifact Custody / Workspace or authorized viewer | Exact Artifact/digest and server-issued operation scope → resumable bytes plus verification result. | Short-lived scoped grant; wrong object, expiry, replay or digest mismatch fails closed. | No permanent store credential in client; server mediates transfer and correlates/audits it. |
 | `IF-WORKSPACE-IPC` | Workspace process / Desktop | Per-user authenticated commands, progress, manifest and local-state evidence. | Another user/session cannot command/read; reconnect does not invent server success. | Protected local transport; no secrets in diagnostic output. |
-| `IF-FORMAT-JOB` | Format Intelligence / isolated Adapter | Immutable source Generation/Artifact digest, Capability Profile and limits → typed result/Representation or typed failure. An application-assisted Adapter may invoke only the declared export interface/version. | Idempotent; returned source pin/digest must match the request; source advance changes the derivative to `Needs update`; failure preserves source and state. Manual upload uses the same validation boundary. | One-job least privilege; application/Adapter/tool provenance and output digest retained; Release blocks or warns only under its versioned policy. |
+| `IF-FORMAT-JOB` | Format Intelligence / isolated Adapter | Immutable source Generation/Artifact digest, Capability Profile and limits → typed candidate/result plus verified output digest. An application-assisted Adapter may invoke only the declared export interface/version. | Idempotent; returned source pin/digest must match the request; Artifact Custody only verifies and stores bytes, while Format Intelligence owns acceptance of Representation metadata; source advance changes the derivative to `Needs update`; failure preserves source and authoritative state. Manual upload uses the same acceptance boundary. | One-job least privilege; application/Adapter/tool provenance and output digest retained; accepted metadata, OwnerCommandOutcome, Audit Evidence and outbox commit in the Format owner unit of work; Release blocks or warns only under its versioned policy. |
 | `IF-COMMITTED-EVENT` | Owner Module / projections and notifications | Committed event with identity, version, actor, correlation and source pins. | Published from transactional outbox only; replay repairs consumers; consumer failure cannot reverse/fabricate owner state. | Classification propagated; consumer access scoped. |
-| `IF-ACCOUNT-SESSION` | Identity and Accounts / Web, Desktop and Server | Credentials, recovery proof or session proof → server-established `ActorContext` (stable Actor/Organization plus current session-security context), account eligibility or bounded denial. | One-use expiring recovery; explicit revocation; no credential in logs and no public signup endpoint. A client proof is not a trusted `ActorId`; account/session eligibility is checked on every protected request, then revalidated with the owner before authoritative commit. | `REQ-IAM-001/003/004/006/007`; `VVP-015`; maintained framework mechanisms, not a custom OAuth server. |
-| `IF-DIRECTORY-ADMIN` | Identity and Accounts / Account Administration UI | Assigned Scope, expected version and account/Login-Identity command → one accepted/refused directory outcome. | Only an effective Account Administrator may issue, activate, suspend or recover accounts in Scope. The interface cannot create Project/Group membership, Role Definitions/Assignments, read an existing password or imply product authority. | `REQ-IAM-002/003/005…007`; actor, target, Scope, before/after identity and outcome audited without secrets. |
+| `IF-ACCOUNT-SESSION` | Identity and Accounts / Web, Desktop and Server | Credentials, recovery proof or session proof → server-established `ActorContext` (stable Actor/Organization plus current session-security context), account eligibility or bounded denial. | One-use expiring recovery; explicit revocation; no credential in logs and no public signup endpoint. A client proof is not a trusted `ActorId`; account/session eligibility is checked on every protected request, then revalidated with the owner before authoritative commit. Material account/security mutation writes IAM-owned state, `OwnerCommandOutcome`, material Audit Evidence and applicable outbox in one owner unit of work before success; a failed sign-in has no authoritative account mutation and may use the independent sign-in audit path. | `REQ-IAM-001/003/004/006/007`; `VVP-015`; maintained framework mechanisms, not a custom OAuth server. |
+| `IF-IAM-ELIGIBILITY-QUERY` | Identity and Accounts (read-only query port) / Access Policy | Server-established `ActorContext` and request correlation → current account/session eligibility, security-version and bounded IAM facts, or unavailable/denied result. | Read-only logical seam for authorization resolution. It cannot mutate account, session or recovery state, issue/revoke commands, re-enter the IAM mutation command handler or hold an IAM mutation lock while resolving; missing evidence fails closed. It is not a new process or service. | No client-supplied `ActorId`; the query and returned security version are correlated to the immutable `AuthorizationDecision` without exposing protected credential data. |
+| `IF-DIRECTORY-ADMIN` | Identity and Accounts / Account Administration UI | Server-established `ActorContext`, assigned Scope, expected version and account/Login-Identity command → one accepted/refused directory outcome. | Only an effective Account Administrator may issue, activate, suspend or recover accounts in Scope. The interface cannot create Project/Group membership, Role Definitions/Assignments, read an existing password or imply product authority. A material accepted mutation commits IAM-owned state, `OwnerCommandOutcome`, Audit Evidence and applicable outbox atomically in one relational unit of work; stale, unauthorized or invalid commands mutate nothing and retain bounded refusal evidence. | `REQ-IAM-002/003/005…007`; actor, target, Scope, before/after identity and outcome audited without secrets. |
 | `IF-PROJECT-ACCESS-ADMIN` | Project Governance / Project Administration UI | Project Scope, expected version and Project-Membership/Group/Group-Membership command → one accepted/refused outcome. | The caller must have Project Administrator at that Project. Only direct Actor membership is accepted; another Project, a nested Group or a partial concurrent change is refused. Account and role state are not mutated. | `REQ-AUTH-003/005/009/010`; Project/Group/member identities, before/after values, actor, reason and outcome audited. |
 | `IF-RBAC-ADMIN` | Access Policy / Role Administration UI | Role Definition candidate or Role Assignment command, base version, Principal, exact Scope, effective interval/condition and reason → validation/diff or accepted/refused outcome. | Built-in roles cannot be edited; Custom Role change creates a successor version available to new assignments but never retargets an existing assignment implicitly. Moving an assignment to the successor is a separate previewed replacement. The caller's delegation limits are revalidated at commit; self-broadening, unapproved role/principal/Scope, non-Super highest-role change and last-recovery removal fail atomically. Serialized import is only a candidate and never self-authorizes activation. | `REQ-AUTH-001…010`, `REQ-GOV-005`; RBAC-01…10; exact role/assignment and before/after outcome audited. |
-| `IF-AUTHORIZATION-DECISION` | Access Policy / every authoritative owner Module | Server-established `ActorContext`, requested Permission, `ResourceId`, Scope and expected state → immutable `AuthorizationDecision`, contributing paths and policy/version pins. | Access Policy itself resolves current IAM eligibility, Project Membership, direct Group Membership, Role Assignments, Role Definition Versions and Scope hierarchy; no owner accepts a client policy snapshot. No grant blocks. The decision cannot commit owner state or bypass owner business gates. | `REQ-GOV-002`, `REQ-AUTH-003…008`; decision and separately owned `OwnerCommandOutcome` share a correlation identity. |
+| `IF-AUTHORIZATION-DECISION` | Access Policy / every authoritative owner Module | Server-established `ActorContext`, requested Permission, `ResourceId`, Scope and expected state → immutable `AuthorizationDecision`, contributing paths and policy/version pins. | Access Policy itself resolves current IAM eligibility through `IF-IAM-ELIGIBILITY-QUERY`, Project Membership, direct Group Membership, Role Assignments, Role Definition Versions and Scope hierarchy; no owner accepts a client policy snapshot. No grant blocks. The decision cannot commit owner state or bypass owner business gates. The read-only IAM query port never re-enters an IAM mutation command. | `REQ-GOV-002`, `REQ-AUTH-003…008`; decision and separately owned `OwnerCommandOutcome` share a correlation identity. |
 | `IF-WORKFLOW-ADMIN` | Lifecycle Governance / Product Configuration Administration UI | Workflow/Approval definition candidate, Workflow Roles, RBAC eligibility rules and base version → validation/diff or activated version. | A definition cannot create accounts, Groups, memberships or Role Assignments. Missing roles/transitions/eligibility, stale base or self-authorizing adoption is refused; running instances remain pinned to prior versions. | `REQ-LC-001/003/005`, `REQ-GOV-005`, `REQ-AUTH-008`; WF-01…06; definition/version/actor/outcome audited. |
-| `IF-STRUCTURE-BOM` | Product Structure / Web, Desktop, controlled export | Exact Structure Snapshot and BOM View Profile → authorized BOM view or pinned BOM Representation; exact base snapshot plus candidate payload → validation/diff or one confirmed new Structure Snapshot/Generation. | A file upload is non-authoritative. Query/export never follows floating latest; invalid, unresolved, stale-base, unauthorized or faulted import changes no authoritative row and creates no partial snapshot. | `REQ-STR-004…006`; BM-01…06; snapshot/profile/candidate/output digests and actor/outcome audited. |
+| `IF-STRUCTURE-BOM` | Product Structure / Web, Desktop, controlled export and named BOM Import coordinator | Exact Structure Snapshot and BOM View Profile → authorized BOM view or pinned BOM Representation; exact base snapshot plus candidate payload → validation/diff or one confirmed coordinator operation returning exact Structure Snapshot and Generation identities. | A file upload is non-authoritative. Query/export never follows floating latest. A named BOM Import coordinator opens one shared relational unit of work for confirmation, asks Product Structure and Controlled Product Data to write only their own state, and retains owner outcomes, Audit Evidence and outbox atomically. Invalid, unresolved, stale-base, unauthorized or faulted import changes no authoritative row and creates no partial snapshot or Generation. | `REQ-STR-004…006`; BM-01…06; snapshot/profile/candidate/output digests, owner outcomes and actor evidence audited. |
 | `IF-DESKTOP-BRIDGE` | Desktop / approved Web-rendered region | Versioned, allowlisted intent plus selected item/Workspace scope → progress/result. | Validate sender origin/frame, schema, session and manifest scope; no arbitrary path, shell command or generic host-object proxy. Navigation invalidates bridge authority; unsupported version fails safely. | `REQ-SEC-003`; `VVP-009/011`; native confirmation where scope changes. |
 | `IF-COMPANY-IDENTITY` | Future login Adapter / Identity and Accounts | Verified provider subject → explicitly linked internal Actor/Organization. | Future integration; failure cannot substitute another actor, auto-link by email or reinterpret retained Audit. Native login remains the initial method. | Protocol/provider and company authorization `UNKNOWN`; deferred, not implemented as an empty integration layer. |
 
@@ -1340,9 +1345,13 @@ sequenceDiagram
    document-owner key. Every protected product request is still evaluated from current account
    eligibility, Project Membership, Group Membership, applicable Role Assignments and the resource
    owner's business gates.
-6. Password recovery invalidates prior recovery proof and affected sessions; suspension/revocation is
-   recorded transactionally with attributable Audit. Requests beginning after that commit are refused
-   for affected old sessions; commands revalidate eligibility before their own commit.
+6. Password recovery invalidates prior recovery proof and affected sessions; a material
+   account/security mutation writes IAM-owned state, its `OwnerCommandOutcome`, material Audit
+   Evidence and applicable outbox in one owner unit of work before success. Refusal changes no
+   account state and retains bounded evidence. A failed sign-in has no authoritative account-state
+   mutation and may be audited through its independent sign-in path. Requests beginning after a
+   suspension/revocation commit are refused for affected old sessions; commands revalidate
+   eligibility before their own commit.
 7. Already running transfers are cancelled or revalidated at defined request/chunk checkpoints; bytes
    already delivered and saved local work cannot be remotely erased. Resume requires fresh
    authorization. Exact timing/checkpoints must be qualified, not described as instantaneous
@@ -1352,11 +1361,12 @@ sequenceDiagram
    historical Actor, Approval or Audit records.
 
 **`ARCH-VIEW-SEQ-008` — Native account, session revocation and recovery.** **Model profile:** UML
-Sequence; `Draft 0.14`; security, implementation and support reviewers. **Question:** how does IDEA
+Sequence; `Draft 0.15`; security, implementation and support reviewers. **Question:** how does IDEA
 establish and revoke a native session while preserving stable Actor history and local work?
 **Scope:** one Actor/account, one Web or Desktop session and one protected operation. **Excludes:**
 future company identity provider protocol and the detailed RBAC algorithm in section 7.6.
-**Trace:** `REQ-IAM-001…007`, `REQ-AUTH-008/009`, `REQ-SEC-001/003`, `IF-ACCOUNT-SESSION`.
+**Trace:** `REQ-IAM-001…007`, `REQ-AUTH-008/009`, `REQ-SEC-001/003`, `IF-ACCOUNT-SESSION`,
+`IF-IAM-ELIGIBILITY-QUERY`.
 **Legend:** solid arrows are commands or validation calls; dashed arrows are results; `alt` paths are
 mutually exclusive. Suspension/recovery changes account or session authority, never document
 ownership history.
@@ -1364,16 +1374,19 @@ ownership history.
 ```mermaid
 sequenceDiagram
     accTitle: Native account session revocation and recovery
-    accDescr: Linh signs in through the IDEA client and receives a bounded session only when the account is active. A client sends session proof, never a trusted ActorId; Server/IAM establishes ActorContext before the owner asks Access Policy and applies business gates. When an Account Administrator suspends the account or recovery changes credentials, affected sessions are revoked. Later requests and resumed transfers using an old session are refused, while local Workspace files remain safe. A fresh eligible sign-in keeps the same stable Actor history.
+    accDescr: Linh signs in through the IDEA client and receives a bounded session only when the account is active. A client sends session proof, never a trusted ActorId; Server/IAM establishes ActorContext before the owner asks Access Policy and applies business gates. Access Policy reads IAM eligibility through a read-only query port that never re-enters an IAM mutation command. A material account or security mutation writes IAM state, OwnerCommandOutcome, Audit Evidence and applicable outbox in one relational unit of work before success. A failed sign-in is audited independently because it has no authoritative account-state mutation. When an Account Administrator suspends the account or recovery changes credentials, affected sessions are revoked. Later requests and resumed transfers using an old session are refused, while local Workspace files remain safe. A fresh eligible sign-in keeps the same stable Actor history.
 
     actor Linh
     actor Admin as Account Administrator
     participant Client as Web or Desktop client
     participant Workspace as Workspace process
     participant IAM as Identity and Accounts
+    participant IAMQ as IAM eligibility query port
     participant Owner as Authoritative resource Module
     participant Policy as Access Policy
     participant Audit as Audit Evidence
+    participant UoW as Shared relational unit of work
+    participant Outbox as Transactional outbox
 
     Linh->>Client: Enter native IDEA credentials
     Client->>IAM: Sign in over protected channel
@@ -1384,19 +1397,60 @@ sequenceDiagram
         Owner->>IAM: Establish/revalidate current ActorContext from proof
         IAM-->>Owner: Server-established ActorContext or bounded denial
         Owner->>Policy: Authorize ActorContext, Permission, resource and Scope
+        Policy->>IAMQ: Read current IAM eligibility and security version
+        IAMQ-->>Policy: Read-only eligibility fact
         Policy-->>Owner: Granted or blocked with explanation
         Owner->>Owner: Commit only if eligibility, RBAC and current business gates revalidate
     else invalid, suspended or locked
-        IAM->>Audit: Append refused sign-in outcome without credential data
+        IAM->>Audit: Append failed sign-in attempt without credential data
+        Audit-->>IAM: Independent evidence retained
         IAM-->>Client: Refuse sign-in safely
     end
 
-    Admin->>IAM: Suspend account or complete governed recovery with reason
-    IAM->>Policy: Validate administrator Permission and target Scope
-    Policy-->>IAM: Authorized outcome required to continue
-    IAM->>IAM: Verify expected account state and required one-use recovery proof
-    IAM->>IAM: Commit account change and revoke affected sessions
-    IAM->>Audit: Append actor, target, reason and outcome
+    Admin->>IAM: Request suspend, recovery or session revoke with session proof and expected state
+    IAM->>IAM: Establish Admin ActorContext from session proof
+    IAM->>Policy: Authorize Account Administration with ActorContext, target and Scope
+    Policy->>IAMQ: Read IAM eligibility through read-only query port
+    IAMQ-->>Policy: Current eligibility and delegation facts
+    Policy-->>IAM: AuthorizationDecision or refusal
+    alt initial authorization granted
+        IAM->>UoW: BEGIN declared IAM owner operation
+        IAM->>Policy: Commit-time revalidate ActorContext, delegation and policy pins
+        Policy->>IAMQ: Read current eligibility through read-only query port
+        IAMQ-->>Policy: Current eligibility and security version
+        Policy-->>IAM: Current AuthorizationDecision or refusal
+        alt commit-time authorization remains granted
+            IAM->>IAM: Lock and revalidate expected account and security state
+            alt expected state remains valid
+                IAM->>IAM: Write owned account, session and recovery state
+                IAM->>UoW: Record IAM OwnerCommandOutcome
+                IAM->>Audit: Append material account and security evidence in same UoW
+                Audit->>UoW: Write append-only Audit Evidence
+                IAM->>Outbox: Retain applicable event in same UoW
+                Outbox->>UoW: Write transactional outbox entry
+                IAM->>UoW: COMMIT
+                IAM-->>Admin: Report successful mutation and revoked sessions
+            else expected state is stale or invalid
+                IAM->>UoW: ROLLBACK without account-state mutation
+                IAM->>UoW: BEGIN refusal-evidence UoW
+                IAM->>Audit: Append refused OwnerCommandOutcome and evidence
+                Audit->>UoW: Write append-only refusal evidence
+                IAM->>UoW: COMMIT refusal evidence only
+                IAM-->>Admin: Return typed conflict or refusal
+            end
+        else commit-time authorization is refused
+            IAM->>UoW: ROLLBACK without account-state mutation
+            IAM->>UoW: BEGIN refusal-evidence UoW
+            IAM->>Audit: Append refused OwnerCommandOutcome and evidence
+            Audit->>UoW: Write append-only refusal evidence
+            IAM->>UoW: COMMIT refusal evidence only
+            IAM-->>Admin: Return bounded refusal
+        end
+    else initial authorization is refused
+        IAM->>Audit: Append attributable refusal without account mutation
+        IAM-->>Admin: Return bounded refusal
+    end
+
     Linh->>Owner: Retry protected request using old session
     Owner->>IAM: Revalidate session eligibility
     IAM-->>Owner: Block old session
@@ -1408,15 +1462,19 @@ sequenceDiagram
 
     Linh->>Client: Sign in again after eligible recovery or reactivation
     Client->>IAM: Present new credential proof
-    IAM-->>Client: New session for the same stable ActorId
+    IAM-->>Client: New session for the same stable Actor
+    Note over IAMQ,Policy: Read-only logical port, no mutation command re-entry or IAM lock held during resolution
 ```
 
-The account change and session revocation commit together before they are reported as successful.
-An already-issued cookie or native token is therefore not accepted solely because its local expiry
-has not passed. A long transfer revalidates at declared checkpoints; the server can stop further
-authority or bytes but cannot erase a saved local candidate. Recovery may restore login eligibility,
-but it neither creates Project access nor changes the Actor identity used by retained Approval,
-ownership or Audit evidence.
+The account change and session revocation commit together with the IAM `OwnerCommandOutcome`,
+material Audit Evidence and applicable outbox before success is reported. A refusal either commits
+bounded refusal evidence without account mutation or follows the independent failed-sign-in audit
+path. An already-issued cookie or native token is therefore not accepted solely because its local
+expiry has not passed. A long transfer revalidates at declared checkpoints; the server can stop
+further authority or bytes but cannot erase a saved local candidate. Recovery may restore login
+eligibility, but it neither creates Project access nor changes the Actor identity used by retained
+Approval, ownership or Audit evidence. The Access Policy query seam is read-only and never invokes
+the IAM mutation command handler recursively.
 
 ### 7.5 Responsibility flow for granting Linh access to P-100
 
@@ -1556,9 +1614,10 @@ Before a protected command commits, the authoritative resource Module performs t
 2. have Server/IAM establish the stable `ActorContext` and current account/session-security context;
 3. request authorization from Access Policy with `ActorContext`, requested Permission, `ResourceId`,
    Scope and expected state;
-4. have Access Policy resolve current IAM eligibility, Project Membership, direct Group Membership,
-   applicable direct-Actor and Group Role Assignments, immutable Role Definition versions and Scope
-   hierarchy, then apply supported effective-period and condition constraints;
+4. have Access Policy resolve current IAM eligibility through the read-only
+   `IF-IAM-ELIGIBILITY-QUERY` port, then resolve Project Membership, direct Group Membership,
+   applicable direct-Actor and Group Role Assignments, immutable Role Definition versions and
+   Scope hierarchy, and apply supported effective-period and condition constraints;
 5. receive an immutable `AuthorizationDecision` and block when it grants no Permission;
 6. have the resource owner apply lifecycle, Checkout, expected-head, independence, completeness and
    other business gates, recording its separate `OwnerCommandOutcome`; and
@@ -1567,21 +1626,23 @@ Before a protected command commits, the authoritative resource Module performs t
    command before an authoritative outcome is committed.
 
 **`ARCH-VIEW-SEQ-004` — Effective Permission followed by business gates.** **Model profile:** UML
-Sequence; `Draft 0.14`; security, implementation and Audit reviewers. **Question:** why can an RBAC
+Sequence; `Draft 0.15`; security, implementation and Audit reviewers. **Question:** why can an RBAC
 grant still end in a blocked product command? **Scope:** one protected request at one resource.
 **Excludes:** administration that created the account, membership or assignment. **Trace:**
-`REQ-AUTH-003…008`, `REQ-GOV-002`, RBAC-04…10. **Legend:** `alt` paths separate RBAC denial,
-business-gate denial and successful commit; Audit records do not grant authority.
+`REQ-AUTH-003…008`, `REQ-GOV-002`, `IF-IAM-ELIGIBILITY-QUERY`, RBAC-04…10. **Legend:** `alt`
+paths separate initial denial, business-gate refusal, commit-time authorization refusal, stale owner
+state and successful commit; Audit records do not grant authority.
 
 ```mermaid
 sequenceDiagram
     accTitle: Effective Permission followed by business gates
-    accDescr: A client presents session proof and never supplies a trusted ActorId. Server/IAM establishes ActorContext. The owner asks Access Policy with ActorContext, Permission, ResourceId, Scope and expected state; Access Policy itself resolves IAM eligibility, Project and Group membership, assignments, role versions and Scope hierarchy and returns an immutable AuthorizationDecision. The owner records a separate business-gate/final outcome. At commit, authorization inputs and owner state revalidate inside one relational unit of work with Audit Evidence and outbox.
+    accDescr: A client presents session proof and never supplies a trusted ActorId. Server/IAM establishes ActorContext. The owner asks Access Policy with ActorContext, Permission, ResourceId, Scope and expected state; Access Policy resolves IAM eligibility through a read-only query port, then Project and Group membership, assignments, role versions and Scope hierarchy, and returns an immutable AuthorizationDecision. The owner records a separate business-gate/final outcome. At commit, authorization inputs and owner state revalidate inside one relational unit of work with Audit Evidence and outbox. A revoked decision cannot fall through to an owner write.
 
     actor Engineer
     participant Client as Web or Desktop client
     participant Owner as Authoritative resource Module
     participant IAM as Identity and Accounts
+    participant IAMQ as IAM eligibility query port
     participant Project as Project Governance
     participant Policy as Access Policy
     participant Audit as Audit Evidence
@@ -1592,27 +1653,61 @@ sequenceDiagram
     Owner->>IAM: Establish current ActorContext from session proof
     IAM-->>Owner: Server-established ActorContext or bounded denial
     Owner->>Policy: Authorize(ActorContext, Permission, ResourceId, Scope, expected state)
-    Policy->>IAM: Resolve current eligibility/security version
-    IAM-->>Policy: Current eligibility fact
+    Policy->>IAMQ: Read current eligibility and security version
+    IAMQ-->>Policy: Read-only eligibility fact
     Policy->>Project: Resolve Project and direct Group Memberships
     Project-->>Policy: Current membership facts
     Policy->>Policy: Resolve assignments, immutable role versions, Scope hierarchy, time and conditions
     Policy-->>Owner: Immutable AuthorizationDecision with permitted explanation
-    alt RBAC granted and business gates pass
-        Owner->>UoW: BEGIN declared owner operation
-        Owner->>Policy: Commit-time revalidate ActorContext and policy/membership pins
-        Policy-->>Owner: Current AuthorizationDecision or refusal
-        Owner->>Owner: Lock and revalidate expected business state
-        Owner->>UoW: Write owned state and OwnerCommandOutcome
-        Owner->>Audit: Append evidence in the same UoW
-        Audit->>UoW: Write append-only Audit Evidence
-        Owner->>UoW: Retain transactional outbox and COMMIT
-        Owner-->>Client: Action completed
-    else RBAC granted but a business gate blocks
-        Owner->>UoW: Record refused OwnerCommandOutcome and Audit atomically
-        Owner-->>Client: Block without state change and show business reason
-    else RBAC blocked
-        Owner->>UoW: Record refused OwnerCommandOutcome and Audit atomically
+    alt initial authorization granted
+        Owner->>Owner: Apply lifecycle and owner business gates
+        alt owner business gates pass
+            Owner->>UoW: BEGIN declared owner operation
+            Owner->>Policy: Commit-time revalidate ActorContext and policy/membership pins
+            Policy->>IAMQ: Read current eligibility through read-only query port
+            IAMQ-->>Policy: Current eligibility and security version
+            Policy-->>Owner: Current AuthorizationDecision or refusal
+            alt commit-time authorization remains granted
+                Owner->>Owner: Lock and revalidate expected business state and gates
+                alt owner state and gates remain valid
+                    Owner->>Owner: Write authoritative owner state
+                    Owner->>UoW: Record OwnerCommandOutcome
+                    Owner->>Audit: Append material evidence in the same UoW
+                    Audit->>UoW: Write append-only Audit Evidence
+                    Owner->>UoW: Retain transactional outbox and COMMIT
+                    Owner-->>Client: Action completed
+                else owner state or business gate is stale
+                    Owner->>UoW: ROLLBACK authoritative write set
+                    Owner->>UoW: BEGIN refusal-evidence UoW
+                    Owner->>UoW: Record refused OwnerCommandOutcome
+                    Owner->>Audit: Append typed conflict/refusal evidence
+                    Audit->>UoW: Write append-only refusal evidence
+                    Owner->>UoW: COMMIT refusal evidence only
+                    Owner-->>Client: Return typed conflict or refusal
+                end
+            else commit-time authorization is refused
+                Owner->>UoW: ROLLBACK without owner-state mutation
+                Owner->>UoW: BEGIN refusal-evidence UoW
+                Owner->>UoW: Record refused OwnerCommandOutcome
+                Owner->>Audit: Append attributable authorization-refusal evidence
+                Audit->>UoW: Write append-only refusal evidence
+                Owner->>UoW: COMMIT refusal evidence only
+                Owner-->>Client: Return bounded authorization refusal
+            end
+        else initial owner business gate blocks
+            Owner->>UoW: BEGIN refusal-evidence UoW
+            Owner->>UoW: Record refused OwnerCommandOutcome
+            Owner->>Audit: Append business-gate refusal evidence
+            Audit->>UoW: Write append-only refusal evidence
+            Owner->>UoW: COMMIT refusal evidence only
+            Owner-->>Client: Block without state change and show business reason
+        end
+    else initial authorization is refused
+        Owner->>UoW: BEGIN refusal-evidence UoW
+        Owner->>UoW: Record refused OwnerCommandOutcome
+        Owner->>Audit: Append authorization refusal evidence
+        Audit->>UoW: Write append-only refusal evidence
+        Owner->>UoW: COMMIT refusal evidence only
         Owner-->>Client: Block without state change and show safe access reason
     end
 ```
@@ -1622,8 +1717,9 @@ Role Definition version, Scope and owner business gate, but it must not disclose
 is not authorized to see. `AuthorizationDecision` remains Access-Policy-owned and immutable;
 `OwnerCommandOutcome` is the distinct owner record that states business-gate and final result.
 Direct Actor assignments are supported but remain visible in administration and Audit; Group
-assignment is the normal personnel-management path. Core v0 has neither nested Groups nor a general
-user-configurable explicit-deny rule.
+assignment is the normal personnel-management path. A commit-time refusal is terminal for that
+command: no owner write or success response follows it. Core v0 has neither nested Groups nor a
+general user-configurable explicit-deny rule.
 
 ### 7.7 Organize, rename and create a copy
 
@@ -1650,33 +1746,48 @@ user-configurable explicit-deny rule.
    reproducible and is shown as `Needs update` when compared with the newer source/profile.
 4. Import first stores a non-authoritative candidate with its payload digest and exact base snapshot.
    Server validation produces an add/change/remove preview without changing Product Structure.
-5. User confirmation sends the expected base and candidate identity. Product Structure revalidates
-   access and references, then publishes the new Structure Snapshot and owning Generation in one
-   atomic operation. Any stale, invalid or failed case changes neither.
-6. An independently controlled parts-list Logical Document follows ordinary Generation/workflow
+5. User confirmation sends the expected base and candidate identity to a named BOM Import
+   coordinator. The coordinator opens one shared relational unit of work, revalidates authorization
+   at commit time, and asks Product Structure and Controlled Product Data to write only their own
+   Structure Snapshot and Generation/Working Head state. Each owner records its own
+   `OwnerCommandOutcome`; Audit Evidence and the transactional outbox commit with the authoritative
+   outcome. Artifact bytes remain private external custody and are not part of the relational
+   transaction.
+6. If authorization, the exact base/difference, Checkout/lifecycle/expected-Generation or any owner
+   write fails, the coordinator rolls back all uncommitted authoritative writes, retains bounded
+   refusal evidence and returns no success. The candidate remains safe for governed reconciliation
+   or a fresh preview; no partial Structure Snapshot, Generation or Working Head is published.
+7. An independently controlled parts-list Logical Document follows ordinary Generation/workflow
    rules and records an explicit exact relationship to its Structure Snapshot; it is never silently
    substituted for, or by, a generated BOM Representation.
 
 **`ARCH-VIEW-SEQ-009` — Exact BOM view, export and controlled import.** **Model profile:** UML
-Sequence; `Draft 0.13`; product-structure, data, implementation and verification reviewers.
+Sequence; `Draft 0.15`; product-structure, data, implementation and verification reviewers.
 **Question:** how are an authoritative Structure Snapshot, a read-only BOM Representation and a
 proposed import kept distinct? **Scope:** one exact Structure Snapshot, one BOM View Profile and one
 optional import candidate. **Excludes:** spreadsheet authoring and physical storage-provider detail.
-**Trace:** `REQ-STR-004…006`, `IF-STRUCTURE-BOM`, BM-01…06. **Legend:** `opt` sections are independent
-user intentions; the `alt` branch is the only authoritative import outcome; dashed returns are views,
-previews or results and never mutate Product Structure.
+**Trace:** `REQ-STR-004…006`, `IF-STRUCTURE-BOM`, `IF-AUTHORIZATION-DECISION`, BM-01…06. **Legend:**
+`opt` sections are independent user intentions; the `alt` branches separate authorization, owner
+validation and committed import outcomes; dashed returns are views, previews or results and never
+mutate Product Structure before the coordinator commit.
 
 ```mermaid
 sequenceDiagram
     accTitle: Exact BOM view export and controlled import
-    accDescr: The user selects an exact Structure Snapshot and BOM View Profile. Product Structure returns an authorized BOM view that pins both identities. Export creates a non-authoritative BOM Representation with source and output provenance. Import first stores a candidate and validates it against an exact base snapshot, then shows an add-change-remove preview. Only a separately confirmed, revalidated request atomically publishes a new Structure Snapshot and owning Generation; stale, invalid or unauthorized input changes nothing.
+    accDescr: The user selects an exact Structure Snapshot and BOM View Profile. Product Structure returns an authorized BOM view that pins both identities. Export creates a non-authoritative BOM Representation with source and output provenance. Import first stores a candidate and validates it against an exact base snapshot, then shows an add-change-remove preview. A named BOM Import coordinator owns only the declared operation and shared relational unit of work. At commit it revalidates authorization, asks Product Structure to write only its Structure Snapshot and Controlled Product Data to write only its Generation and Working Head, records owner outcomes with Audit Evidence and outbox, and commits or refuses all authoritative state together. Artifact bytes remain private custody outside the relational transaction.
 
     actor User
     participant UI as Structure and BOM workspace
+    participant IAM as Identity and Accounts
+    participant IAMQ as IAM eligibility query port
+    participant Policy as Access Policy
+    participant Coord as BOM Import coordinator
+    participant UoW as Shared relational unit of work
     participant Structure as Product Structure
     participant Product as Controlled Product Data
     participant Artifacts as Artifact custody
     participant Audit as Audit Evidence
+    participant Outbox as Transactional outbox
 
     User->>UI: Select exact Structure Snapshot and BOM View Profile
     UI->>Structure: Query authorized BOM view with exact pins
@@ -1701,18 +1812,66 @@ sequenceDiagram
         Structure-->>UI: Add, change and remove preview or validation errors
         Note over UI,Structure: Confirmation is unavailable while validation errors remain
         User->>UI: Confirm the displayed candidate and difference set
-        UI->>Structure: Apply candidate with expected base and preview identity
-        Structure->>Structure: Revalidate base, references, authority and complete difference
-        alt valid and current
-            Structure->>Product: Validate Checkout and lifecycle then atomically publish snapshot and Generation
-            Product-->>Structure: Committed identities
-            Structure->>Audit: Append candidate, before/after pins and outcome
-            Structure-->>UI: Committed exact new snapshot
-        else stale, invalid or unauthorized
-            Structure->>Audit: Append refused outcome without changing authority
-            Structure-->>UI: Refuse and require correction or fresh preview
+        UI->>Coord: Execute named BOM Import with session proof, expected base and candidate
+        Coord->>IAM: Establish ActorContext from session proof
+        IAM-->>Coord: Server-established ActorContext or bounded denial
+        Coord->>Policy: Authorize ActorContext, Permission, resource and Scope
+        Policy->>IAMQ: Read current eligibility through read-only query port
+        IAMQ-->>Policy: Current eligibility and security version
+        Policy-->>Coord: AuthorizationDecision or refusal
+        alt initial authorization granted
+            Coord->>UoW: BEGIN declared BOM Import operation
+            Coord->>Policy: Commit-time revalidate ActorContext and policy/membership pins
+            Policy->>IAMQ: Read current eligibility through read-only query port
+            IAMQ-->>Policy: Current eligibility and security version
+            Policy-->>Coord: Current AuthorizationDecision or refusal
+            alt commit-time authorization remains granted
+                Coord->>Structure: Apply Structure Snapshot with expected base and preview identity
+                Structure->>Structure: Lock and revalidate base, references and complete difference
+                alt Structure owner gates pass
+                    Structure->>UoW: Write owned Structure Snapshot and OwnerCommandOutcome
+                    Coord->>Product: Accept imported Generation with expected Checkout and head
+                    Product->>Product: Lock and revalidate Checkout, lifecycle and expected Generation
+                    alt Product owner gates pass
+                        Product->>UoW: Write owned Generation and Working Head plus OwnerCommandOutcome
+                        Coord->>Audit: Append candidate, before/after pins and owner outcomes in same UoW
+                        Audit->>UoW: Write append-only Audit Evidence
+                        Coord->>Outbox: Retain transactional outbox in same UoW
+                        Outbox->>UoW: Write committed event
+                        Coord->>UoW: COMMIT
+                        Coord-->>UI: Return exact Structure Snapshot and Generation identities
+                    else Product state or gate is stale or invalid
+                        Coord->>UoW: ROLLBACK all uncommitted owner writes
+                        Coord->>UoW: BEGIN refusal-evidence UoW
+                        Coord->>Audit: Append refused owner outcomes and typed failure evidence
+                        Audit->>UoW: Write append-only refusal evidence
+                        Coord->>UoW: COMMIT refusal evidence only
+                        Coord-->>UI: Typed refusal, candidate remains safe
+                    end
+                else Structure base or gate is stale or invalid
+                    Coord->>UoW: ROLLBACK without authoritative owner commit
+                    Coord->>UoW: BEGIN refusal-evidence UoW
+                    Coord->>Audit: Append refused Structure outcome and typed failure evidence
+                    Audit->>UoW: Write append-only refusal evidence
+                    Coord->>UoW: COMMIT refusal evidence only
+                    Coord-->>UI: Typed refusal, candidate remains safe
+                end
+            else commit-time authorization is refused
+                Coord->>UoW: ROLLBACK without authoritative owner mutation
+                Coord->>UoW: BEGIN refusal-evidence UoW
+                Coord->>Audit: Append attributable authorization refusal evidence
+                Audit->>UoW: Write append-only refusal evidence
+                Coord->>UoW: COMMIT refusal evidence only
+                Coord-->>UI: Bounded refusal, candidate remains safe
+            end
+        else initial authorization is refused
+            Coord->>Audit: Append attributable refusal without owner mutation
+            Coord-->>UI: Refuse and require correction or fresh preview
         end
     end
+
+    Note over Coord,Product: Coordinator owns only operation orchestration and UoW lifetime. Each owner writes only its own authoritative state.
+    Note over Artifacts,UoW: Candidate bytes and Artifact custody stay outside the relational transaction. Only verified identities and digests cross the seam.
 ```
 
 The view returned first is authoritative only because it resolves one exact Structure Snapshot; the
@@ -1730,7 +1889,7 @@ manual paths meet at the same acceptance rules; neither path may attach an outpu
 latest document.
 
 **`ARCH-VIEW-SEQ-010` — Qualified neutral Representation production.** **Model profile:** UML
-Sequence; `Draft 0.13`; format, security, release and implementation reviewers. **Question:** how is
+Sequence; `Draft 0.15`; format, security, release and implementation reviewers. **Question:** how is
 a generated or manually supplied Representation accepted for one exact source without making the
 worker authoritative? **Scope:** one immutable source Generation, one Format Capability Profile and
 one requested Representation. **Excludes:** a universal CAD renderer, in-application IDEA add-in and
@@ -1741,7 +1900,7 @@ validate and register a Representation; `alt` paths are mutually exclusive termi
 ```mermaid
 sequenceDiagram
     accTitle: Qualified neutral Representation production
-    accDescr: Format Intelligence resolves one exact source Generation, Artifact digest and versioned capability profile. For an automatic path it grants a bounded immutable-input job to an isolated format adapter, which may invoke a qualified application export or standalone converter. For a manual path it receives an uploaded candidate. Both paths verify output, source pins and producer provenance before registering a non-authoritative Representation. Failure preserves the source and records a typed result. When the source later advances, the old Representation remains reproducible but is marked Needs update for the newer head.
+    accDescr: Format Intelligence resolves one exact source Generation, Artifact digest and versioned capability profile. For an automatic path it grants a bounded immutable-input job to an isolated format adapter, which may invoke a qualified application export or standalone converter. For a manual path it receives an uploaded candidate. Artifact Custody verifies and stores immutable output bytes and returns the exact Artifact identity and digest, but byte custody does not make a Representation authoritative. Format Intelligence alone validates and accepts Representation metadata, source pins and producer provenance in its owner unit of work, recording the Owner Command Outcome, Audit Evidence and applicable outbox atomically. If metadata acceptance fails after byte storage, the candidate remains private and unreferenced for governed reconciliation; the source is unchanged. When the source later advances, the old committed Representation remains reproducible but is marked Needs update for the newer head.
 
     actor User
     participant UI as Workbench
@@ -1751,6 +1910,8 @@ sequenceDiagram
     participant Artifacts as Artifact custody
     participant Lifecycle as Lifecycle Governance
     participant Audit as Audit Evidence
+    participant UoW as Shared relational unit of work
+    participant Outbox as Transactional outbox
 
     User->>UI: Request PDF or neutral Representation
     UI->>Format: Request output for exact Generation and profile
@@ -1771,8 +1932,27 @@ sequenceDiagram
     alt valid candidate matches requested source
         Format->>Artifacts: Store immutable Representation output by digest
         Artifacts-->>Format: Artifact identity and verified digest
-        Format->>Audit: Append source, profile, producer, output and outcome
-        Format-->>UI: Current for this exact source Generation
+        Note over Format,Artifacts: Artifact bytes remain external immutable custody. Only verified identity and digest cross the relational seam.
+        Format->>UoW: BEGIN Format owner operation
+        Format->>Format: Revalidate exact source Generation/Artifact, profile and business conditions
+        alt source/profile/business conditions remain valid
+            Format->>Format: Write accepted Representation metadata and status
+            Format->>UoW: Record Format OwnerCommandOutcome
+            Format->>Audit: Append source, profile, producer, output and outcome in same UoW
+            Audit->>UoW: Write append-only Audit Evidence
+            Format->>Outbox: Retain applicable event in same UoW
+            Outbox->>UoW: Write transactional outbox record
+            Format->>UoW: COMMIT
+            Format-->>UI: Accepted/current Representation for exact source Generation
+        else metadata conditions stale or invalid
+            Format->>UoW: ROLLBACK metadata UoW
+            Format->>UoW: BEGIN refusal-reconciliation UoW
+            Format->>UoW: Record refused Format OwnerCommandOutcome
+            Format->>Audit: Append typed refusal and candidate identity
+            Audit->>UoW: Write append-only refusal evidence
+            Format->>UoW: COMMIT refusal evidence only
+            Format-->>UI: Not accepted — private unreferenced candidate remains for reconciliation
+        end
     else timeout, malformed, mismatched or undeclared capability
         Format->>Audit: Append typed failure and bounded worker evidence
         Format-->>UI: Failed without changing source or product state
@@ -1784,7 +1964,11 @@ sequenceDiagram
 
 The worker is an Adapter at the format-processing Seam, not a product-authority Module. It receives
 one immutable input and bounded resources; it cannot change Product Definition, Generation or
-Release state. Format Intelligence accepts output only after digest, type, source and producer checks.
+Release state. Artifact Custody owns only immutable bytes and their verified identity/digest. Format
+Intelligence accepts output metadata only after digest, type, source and producer checks plus its
+owner-UoW revalidation; the committed metadata, Owner Command Outcome, Audit Evidence and outbox
+share that outcome. A byte-storage success or worker response alone never makes a Representation
+current, and a metadata refusal leaves the candidate private/unreferenced for reconciliation.
 Release blocks a missing or outdated Representation only when its pinned Release Policy requires
 that output; otherwise the user receives a warning. Exact application, Adapter, tool version and
 license remain values to qualify rather than assumptions embedded in this view.
@@ -2242,7 +2426,7 @@ variation or a genuine security seam already exists; defer unused integrations.
 | Spec prerequisite | Approved exact DOC-04@0.13 requirement baseline and resolved/owned requirement gaps, presented through an up-to-date Spec brief | `NOT-RUN`; DOC-04@0.13 is Draft and current Spec brief is stale |
 | Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
 | PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
-| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The corrected successor source/rendition audit is recorded in [IE-VEV-ARCH-CORR-001](registers/VEV-2026-09-12-architecture-consistency-correction.md); earlier VEV records remain historical evidence. Render success is distinct from architecture acceptance. |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The successor source/rendition audit is recorded in [IE-VEV-ARCH-CORR-002](registers/VEV-2026-09-12-architecture-consistency-correction-002.md); the predecessor VEV-001 and earlier VEV records remain historical evidence. Render success is distinct from architecture acceptance. |
 | Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
 | Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
 | Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |

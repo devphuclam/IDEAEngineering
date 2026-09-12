@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 UI/UX and Interaction Specification
 
-> **Instance state**: controlled `Draft 0.10`. This document defines proposed user journeys,
+> **Instance state**: controlled `Draft 0.11`. This document defines proposed user journeys,
 > information architecture, interaction states, accessibility and localization obligations. The
 > accepted HTML prototype is design evidence only; it is not a production UI or conformance result.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Core v0 UI/UX and Interaction Specification |
 | Owner | `Principal Product Author`; named product/design owner is `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.10` |
+| Document Version | `0.11` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; `IE-SPEC-CORE-V0-001@0.13` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors / Reviewers | Principal Product Author (assistant prepares) / project user (internal document review); required HCD, accessibility, Vietnamese and Japanese reviewers are not assigned |
@@ -21,7 +21,7 @@
 | Source Links | [DOC-03](DOC-03-business-requirements.md), [DOC-04](DOC-04-software-requirements-specification.md), [current IDEA DDM workbench prototype](../../../../prototypes/idea-ddm-workbench.html), [administration prototype](../../../../prototypes/idea-ddm-administration.html), [retained earlier prototype](../../../../prototypes/controlled-document-workspace.html), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [standards register](../../../governance/standards-register.md) |
 | Downstream Links | [DOC-05](DOC-05-architecture-description.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), future UI implementation/VEV |
 | Evidence / Claim Status | User-reviewed prototype direction; requirements/design are `Draft`; usability/accessibility/locale execution `NOT-RUN` |
-| Change History | 0.10: align the visible Reference condition axes, server-mediated Artifact transfer, authorization-decision/owner-outcome distinction and policy-selected Release Structure Pins with the architecture correction; [IE-CHG-ARCH-CORR-001](registers/CHG-2026-09-12-architecture-consistency-correction.md). 0.9: define visible modified-Reference choices, resumable large-file progress, uncertain Check-in status and unconditional release of in-scope Checkout after success; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md). 0.8: replace the former two-area administration split with separate Account, Project, Role Assignment/Definition, Product Configuration, Effective Access and Audit work areas. Earlier history remains in controlled change records. |
+| Change History | 0.11: refresh DOC-05/DOC-06 source pins after the architecture transaction/ownership correction; no UI behavior or requirement change; [IE-CHG-ARCH-CORR-002](registers/CHG-2026-09-12-architecture-consistency-correction-002.md). 0.10: align the visible Reference condition axes, server-mediated Artifact transfer, authorization-decision/owner-outcome distinction and policy-selected Release Structure Pins with the architecture correction; [IE-CHG-ARCH-CORR-001](registers/CHG-2026-09-12-architecture-consistency-correction.md). 0.9: define visible modified-Reference choices, resumable large-file progress, uncertain Check-in status and unconditional release of in-scope Checkout after success; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md). 0.8: replace the former two-area administration split with separate Account, Project, Role Assignment/Definition, Product Configuration, Effective Access and Audit work areas. Earlier history remains in controlled change records. |
 | Access Classification | `INTERNAL`; prototype uses synthetic data only |
 | Retention Rule | Retain with the requirements/design baseline; exact organizational period `UNKNOWN`, owner Product Decision Authority, trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit user-population and specialist-review gaps |
@@ -235,7 +235,7 @@ future implementation.
 |---|---|---|
 | Feature prerequisite | Product Decision Authority decision on an updated Feature brief that pins DOC-03@0.7 | `NOT-RUN`; current Feature brief is stale after source changes |
 | Requirements trace | Every material interaction obligation links to DOC-04 and DOC-06 | Draft trace complete; review `NOT-RUN` |
-| Design trace | Component/surface realization aligns with DOC-05@0.14 and DOC-06@0.14 | Source model reconciled; administration prototype replacement and review `NOT-RUN` |
+| Design trace | Component/surface realization aligns with DOC-05@0.15 and DOC-06@0.15 | Source model reconciled; administration prototype replacement and review `NOT-RUN` |
 | RBAC comprehension | Administrators complete UX-JRN-009/014/015 and explain effective access without relying on hidden rules | Objective authored; prototype/build and representative evaluation `NOT-RUN` |
 | HCD/accessibility review | Surface profile, manual/assistive evidence and specialist assessment | `BLOCKED` |
 | Locale review | Nine cells specified; catalogue and linguistic evidence executed | Matrix specified; execution `NOT-RUN` |
@@ -258,8 +258,8 @@ retained results are required before any accessibility or usability PASS.
 |---|---|---|
 | `SOURCE-NEED` / `SOURCE-DECISION` | DOC-03 needs, DOC-04 requirements, prototype feedback and approved HCD decision | Draft sources linked; Feature/Spec decisions `NOT-RUN` |
 | `DOWNSTREAM` | DOC-05 surface/interface design, DOC-07 increment, VVP/VEV and UI implementation | DOC-05 Draft maps Hosts, Interfaces and surfaces; review `NOT-RUN` |
-| `CHANGE` | CHG covering interaction, accessibility, locale, risk, tests and release impact | Prior decisions remain traceable; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md) records modified-Reference, transfer and uncertain-result interactions; [IE-CHG-ARCH-CORR-001](registers/CHG-2026-09-12-architecture-consistency-correction.md) records the later condition/authorization/Release-Pin correction; the earlier RBAC CHG retains the administration split |
-| `VERIFICATION` | VVP/VEV identity, Workspace/Reference/transfer, RBAC/delegation, administration comprehension, item-organization, BOM, manual, assistive, Unicode and cross-locale task evidence | Candidate `IE-VVP-CORE-001@0.14`; all product execution `NOT-RUN` |
+| `CHANGE` | CHG covering interaction, accessibility, locale, risk, tests and release impact | Prior decisions remain traceable; [IE-CHG-WS-SCALE-001](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md) records modified-Reference, transfer and uncertain-result interactions; [IE-CHG-ARCH-CORR-001](registers/CHG-2026-09-12-architecture-consistency-correction.md) is the predecessor and [IE-CHG-ARCH-CORR-002](registers/CHG-2026-09-12-architecture-consistency-correction-002.md) records the source-pin refresh; the earlier RBAC CHG retains the administration split |
+| `VERIFICATION` | VVP/VEV identity, Workspace/Reference/transfer, RBAC/delegation, administration comprehension, item-organization, BOM, manual, assistive, Unicode and cross-locale task evidence | Candidate `IE-VVP-CORE-001@0.15`; all product execution `NOT-RUN` |
 | `RELEASE` | Future REL baseline and approved UI/locale claim scope | `NOT APPLICABLE` to this Draft |
 | `RENDITION` | Source-pinned DOCX/PDF identity/status | No rendition generated |
 
