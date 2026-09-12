@@ -9,6 +9,7 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 | What does an IDEA domain term mean? | [Root domain language](../../../CONTEXT.md) |
 | What was directly observed in the identified icVault environment? | [icVault observed behavior](icvault-observed-behavior.md) |
 | What has DDM publicly claimed or demonstrated? | [DDM vendor-public baseline](ddm-vendor-public-baseline.md) |
+| What DDM capabilities map to IDEA coverage and gap decisions? | [DDM capability inventory and IDEA gap matrix](2026-09-12-ddm-capability-inventory-and-idea-gap-matrix.md) |
 | Does DDM have a separate administration and permission UI? | [DDM administration and permission UI evidence](2026-09-09-ddm-administration-permissions-ui-evidence.md) |
 | Which Microsoft authorization patterns are useful for IDEA DDM? | [Microsoft authorization patterns for IDEA DDM](2026-09-09-microsoft-authorization-patterns-for-idea-ddm.md) |
 | Does DDM demonstrate releasing one subassembly before the whole product? | [DDM staged-release evidence finding](2026-09-07-ddm-staged-release-evidence.md) |
@@ -45,6 +46,7 @@ As of 2026-08-27, the admitted baseline covers:
 |---|---|
 | icVault | 9 topology claims, 8 identity/version claims, all 22 Checkout/Reference/Check-in scenarios, structure/workflow/metadata, storage/security/recovery, unknowns, and prohibited overclaims |
 | DDM public evidence | 16 first-party propositions, 10 target-unknown groups, 8 public-source contradiction classes, and explicit tutorial limits |
+| DDM capability inventory | `IE-KNW-DDM-007`: 100 DDM-native capability rows across families A–S, with separate evidence class, IDEA coverage, relevance, gap severity and open-point impact |
 | DDM future target audit | 24 ranked questions with entry, legal/safety, evidence-output, stop, and exit gates |
 | Aras comparison | Official lifecycle/version and workflow/approval patterns admitted with explicit application and evidence limits |
 | IDEA translation | 22 accepted design lessons, 44 core invariants, 13 baseline quality scenarios, 7 accepted product ADRs, and 1 proposed product ADR |
