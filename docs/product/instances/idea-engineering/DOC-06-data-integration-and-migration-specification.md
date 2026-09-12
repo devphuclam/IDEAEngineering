@@ -60,7 +60,7 @@ authority.
 | BOM Representation | Non-authoritative Excel/PDF/CSV or other output from one exact Structure Snapshot and BOM View Profile, with output digest and producer provenance. | Product Structure owns source/profile relationship and status; Controlled Product Data holds immutable output bytes | Generated/served through controlled interfaces; never writable as authoritative structure | Retained when referenced by Release/history; otherwise governed derivative retention; `Current` only for its exact source/profile | `REQ-STR-005`, `REQ-LC-008` |
 | BOM Import Candidate | Non-authoritative proposed structure change with payload digest, exact base Structure Snapshot, mapping, validation result and visible add/change/remove difference. | Product Structure | Server-side candidate boundary; no query treats it as Product Structure before confirmed acceptance | Failed/abandoned candidate follows governed retention; accepted result links to the resulting snapshot/Generation | `REQ-STR-006` |
 | Independent controlled parts-list relationship | Exact relationship from a parts-list Logical Document Generation to the Structure Snapshot it describes. | Product Structure owns the relation; Controlled Product Data owns the document/Generation | Both objects keep their own identity, lifecycle and access | Retained with either object's release/history; later changes do not rewrite the prior relation | `REQ-STR-005`, `REQ-LC-008` |
-| Reservation | Temporary server-authoritative publish entitlement for one Logical Document, Actor, Workspace and expected Generation. | Controlled Product Data | Server authority; Workspace holds only its identity/status. At most one conflicting Reservation is `Active`. | Retain status transitions `Active`, `Expired`, `Released` and `Recovered` plus attributable Audit. Exact lease, renewal and grace durations remain `UNKNOWN`; disconnect, sign-out or app exit does not release immediately. | `REQ-WS-002/013` |
+| Reservation | Temporary server-authoritative publish entitlement for one Logical Document, Actor, Workspace and expected Generation. | Controlled Product Data | Server authority; Workspace holds only its identity/status. At most one conflicting Reservation is `Active`. | Retain status transitions `Active`, `Ended`, `Expired` and `Recovered` plus attributable Audit. Exact lease, renewal and grace durations remain `UNKNOWN`; disconnect, sign-out or app exit does not end it immediately. | `REQ-WS-002/013` |
 | Workspace Manifest | Local durable record of exact materialized Generations, digests, paths and Checkout/Reference modes. | Workspace implementation for local custody; server remains product authority | Protected per-user Workspace | Local operational data; cleanup/recovery policy pending Tech | `REQ-WS-001/003/004` |
 | Check-in Operation / Change Set | Idempotent attempt and successful atomic publication scope. | Controlled Product Data | Server authority; client retains operation reference | Operation/Audit retention tied to published or failed outcome | `REQ-WS-007/012` |
 | Workflow Definition / Version / Role / Assignment | Versioned states, transitions, Workflow Roles, required RBAC eligibility, decision rule, required reason/evidence and notification intent; one active default version may be assigned per Document Class. | Lifecycle Governance; Product Configuration Administration prepares governed definitions | Server authority; activation and assignment require governed administration; Workflow Role eligibility neither creates a Role Assignment nor grants authority outside the step | Every version, role and assignment referenced by an instance/history is retained | `REQ-LC-001/003/005`; `REQ-AUTH-008`; `REQ-GOV-005` |
@@ -121,14 +121,16 @@ which records preserve account eligibility, Project/Group participation and effe
 authority without duplicating ownership? **Scope:** Organization-level identity and RBAC records.
 **Excludes:** credential fields, UI and business-gate state. **Trace:** `REQ-IAM-*`,
 `REQ-AUTH-001…010`, PA-01…04, RBAC-01…10. **Legend:** crow's-foot marks logical cardinality;
-Actor and Business Group principal links to Role Assignment are an exclusive choice.
+Actor and Business Group are mutually exclusive kinds of Security Principal.
 
 ```mermaid
 erDiagram
     accTitle: Account Project and RBAC data relationships
-    accDescr: The Organization owns Actors, accounts, Projects, Groups, Role Definitions and Scopes. Project and Group membership are separate from Role Assignments. Each Role Assignment binds one Actor or Group principal, one immutable Role Definition version and one Scope, while authorization decisions retain the evaluated evidence.
+    accDescr: The Organization owns Security Principals, accounts, Projects, Role Definitions and Scopes. Actor and Business Group are mutually exclusive principal kinds. Project and Group membership are separate from Role Assignments. Each Role Assignment binds exactly one Security Principal, one immutable Role Definition version and one Scope. A decision may be supported by many applicable assignments, recorded through contribution rows. Scope parent-child rows make the hierarchy explicit without a recursive self-loop.
 
-    OPERATING_ORGANIZATION ||--o{ ACTOR : owns
+    OPERATING_ORGANIZATION ||--o{ SECURITY_PRINCIPAL : owns
+    SECURITY_PRINCIPAL ||--o| ACTOR : identifies_actor
+    SECURITY_PRINCIPAL ||--o| BUSINESS_GROUP : identifies_group
     ACTOR ||--o| IDEA_ACCOUNT : uses
     IDEA_ACCOUNT ||--o{ LOGIN_IDENTITY : authenticates_with
     OPERATING_ORGANIZATION ||--o{ PROJECT : owns
@@ -140,23 +142,30 @@ erDiagram
     ROLE_DEFINITION ||--|{ ROLE_DEFINITION_VERSION : versions
     ROLE_DEFINITION_VERSION ||--|{ ROLE_PERMISSION : contains
     PERMISSION ||--o{ ROLE_PERMISSION : included_in
-    AUTHORIZATION_SCOPE o|--o{ AUTHORIZATION_SCOPE : parent_of
+    OPERATING_ORGANIZATION ||--o{ ROLE_DEFINITION : owns
+    OPERATING_ORGANIZATION ||--o{ AUTHORIZATION_SCOPE : owns
+    AUTHORIZATION_SCOPE ||--o{ AUTHORIZATION_SCOPE_HIERARCHY : parent_scope
+    AUTHORIZATION_SCOPE ||--o| AUTHORIZATION_SCOPE_HIERARCHY : child_scope
     ROLE_DEFINITION_VERSION ||--o{ ROLE_ASSIGNMENT : assigned_as
     AUTHORIZATION_SCOPE ||--o{ ROLE_ASSIGNMENT : applies_at
-    ACTOR ||--o{ ROLE_ASSIGNMENT : direct_principal
-    BUSINESS_GROUP ||--o{ ROLE_ASSIGNMENT : group_principal
+    SECURITY_PRINCIPAL ||--o{ ROLE_ASSIGNMENT : receives
     ACTOR ||--o{ AUTHORIZATION_DECISION : requests
-    ROLE_ASSIGNMENT ||--o{ AUTHORIZATION_DECISION : contributes_to
+    ROLE_ASSIGNMENT ||--o{ AUTHORIZATION_CONTRIBUTION : contributes
+    AUTHORIZATION_DECISION ||--o{ AUTHORIZATION_CONTRIBUTION : records
 ```
 
 Identity and Accounts writes Actor/account/Login Identity records only. Project Governance writes
 Projects, Project Memberships, Business Groups and direct Group Memberships. Access Policy writes
-Permissions, immutable Role Definition versions, Role Assignments and authorization decisions. Each
-Role Assignment has exactly one principal: either an Actor directly or a Business Group; the two
-diagram relationships are an exclusive choice, not two simultaneous principals. At request time the
-product Module obtains the RBAC result and still revalidates its own lifecycle, Checkout, expected-
-Generation and completeness gates before committing. Organizational Department remains descriptive
-data and never substitutes for a Business Group or Authorization Scope.
+Permissions, immutable Role Definition versions, Role Assignments and authorization decisions.
+`SecurityPrincipal.PrincipalType` identifies exactly one kind: Actor or Business Group. A Role
+Assignment therefore has one principal link, never two optional links that can be misread as both
+being required. `AuthorizationScopeHierarchy` gives each non-root Scope at most one parent and lets a
+parent have many children. `AuthorizationContribution` preserves the many-to-many evidence between
+applicable Role Assignments and Authorization Decisions; a blocked decision may have no applicable
+assignment. At request time the product Module obtains the RBAC result and still revalidates its own
+lifecycle, Checkout, expected-Generation and completeness gates before committing. Organizational
+Department remains descriptive data and never substitutes for a Business Group or Authorization
+Scope.
 
 ### 1.3 Artifact transfer and storage identity view
 
@@ -305,7 +314,7 @@ Long description and consistency rules:
 | Artifact Location | Stable location-record identity points from one Artifact to one provider and opaque provider key. | It is not a Version, Generation or user-visible file identity. | Candidate → Verified → Retiring → Retired; at least one verified readable location must remain while the Artifact is retained. | Copy verification, cutover, reconciliation and retirement evidence identify provider and digest without exposing credentials. |
 | Artifact Transfer | `TransferId` is unique and correlated to one `OperationId`, direction, expected Artifact/candidate and Actor/Workspace. | Chunks/ranges do not create document Versions; only a committed Check-in may publish a Generation. | Preparing → Transferring → Verified → Consumed, or Failed/Expired/NeedsReconciliation. | Accepted ranges, checksums, retry status and terminal result permit safe resume without duplicate publication. |
 | Business Revision | Stable `RevisionId` plus policy-controlled `RevisionCode`. | Contains ordered Generations and one authoritative Workflow Instance selected from the permitted Document-Class assignment. | Seeded path `Start → In Work → Under Review → Released`; Reject/Withdraw returns to In Work according to the pinned policy. | Every transition pins workflow/policy version and actor/result. |
-| Reservation | Unique `ReservationId` bound to Document, Actor, Workspace, expected Generation and lease. | Does not create a Generation and does not propagate to parent/child. | `Active` may be renewed. Confirmed successful changed or No Change Check-in and governed Cancel produce `Released`; lease timeout produces `Expired`; authorized takeover is recorded as `Recovered` before any new Reservation. Disconnect/sign-out/app exit alone changes no status. | Every renewal, release, expiry and recovery is attributable; none bypasses expected-head validation or deletes/transfers local work. |
+| Reservation | Unique `ReservationId` bound to Document, Actor, Workspace, expected Generation and lease. | Does not create a Generation and does not propagate to parent/child. | `Active` may be renewed. Confirmed successful changed or No Change Check-in and governed Cancel produce `Ended`; lease timeout produces `Expired`; authorized takeover is recorded as `Recovered` before any new Reservation. Disconnect/sign-out/app exit alone changes no status. | Every renewal, normal end, expiry and recovery is attributable; none bypasses expected-head validation or deletes/transfers local work. |
 | Structure Snapshot | Unique immutable identity and semantic digest. | One published Generation may pin one required snapshot; members pin exact Generations. | New structure creates a new snapshot/Generation; old snapshot never changes. | Unresolved/manual/external links remain visible with disposition. |
 | BOM View Profile | Stable profile identity plus immutable activated versions. | A BOM view resolves one exact profile version over one exact Structure Snapshot; it is not a document Version or Generation. | Activating a later profile affects later queries/exports only; retained outputs keep their pinned profile. | Activation and use are attributable; old outputs remain reproducible. |
 | BOM Representation | Stable output identity with immutable bytes/digest and exact source/profile pins. | Many outputs/formats may derive from one snapshot/profile; none changes the source Generation. | `Current` for the pinned source/profile; comparison with a newer source/profile yields `Needs update`. | Producer, time, source/profile, format and output digest retained. |
@@ -372,7 +381,7 @@ These are semantic interfaces. Protocol and concrete adapter selection belong to
 | Workspace materialization | Server/Artifact authority | Per-user Workspace | Exact Workspace Manifest plus `TransferId`-scoped streaming of pinned Artifacts/digests; transfer reports accepted ranges and verified completion. | Interrupted multi-GB transfer resumes only the missing ranges/chunks. Digest mismatch remains not ready; retry cannot silently substitute another Artifact. | Short-lived object/operation-scoped authorization; protected local custody; no provider path or credential is exposed. |
 | Modified Reference conversion | Workspace | Controlled Product Data / Artifact authority | A locally changed Reference remains non-authoritative. An explicit request may convert it to Checkout only when the Reference's expected Generation is still current and the server grants a new Reservation. | If stale or held by another actor, publish is refused and local bytes remain. The user may keep a safe copy, obtain current bytes separately, create a new Logical Document or explicitly discard; no automatic CAD/Office merge or overwrite. | Actor, Workspace, source Generation, local digest, chosen path and result are attributable; `REQ-WS-014`. |
 | Check-in staging | Workspace | Artifact custody / private staging | One `CheckinOperationId` declares the confirmed document scope, expected Generations, Reservations, manifests, sizes and digests; each Artifact uses resumable checked chunks. | Repeating an accepted chunk/range is idempotent. Changed inputs cannot reuse the operation. Failed or incomplete candidates remain private and are expired/reconciled under policy. | No permanent storage credential; accepted ranges/checksums and every terminal transfer outcome are auditable. |
-| Check-in commit/status | Controlled Product Data | Controlled Product Data, Artifact references, Audit/outbox and Reservation records | After complete preflight and verified candidates, one database transaction publishes the full logical Change Set, advances every intended Working Head, records evidence and releases all confirmed in-scope Reservations. `No Change` publishes no Generation but still releases its in-scope Reservation. | Before-commit failure publishes none and releases none. The same `CheckinOperationId` returns the committed result, resumes safe missing work or reports an input conflict; an uncertain client response is resolved by status query before retry. | Owner/Workspace/current Generation and RBAC/business gates are revalidated at commit. Audit distinguishes committed, failed and `NeedsReconciliation`; local work is never deleted by server failure. |
+| Check-in commit/status | Controlled Product Data | Controlled Product Data, Artifact references, Audit/outbox and Reservation records | After complete preflight and verified candidates, one database transaction publishes the full logical Change Set, advances every intended Working Head, records evidence and marks all confirmed in-scope Reservations `Ended`. `No Change` publishes no Generation but still marks its in-scope Reservation `Ended`. | Before-commit failure publishes none and ends none. The same `CheckinOperationId` returns the committed result, resumes safe missing work or reports an input conflict; an uncertain client response is resolved by status query before retry. | Owner/Workspace/current Generation and RBAC/business gates are revalidated at commit. Audit distinguishes committed, failed and `NeedsReconciliation`; local work is never deleted by server failure. |
 | Format analysis / Representation | Controlled Product Data | Isolated Format Intelligence Adapter or attributable manual-upload boundary | Immutable source Generation/Artifact digest plus exact Format Capability Profile. Result includes execution mode, application/Adapter/tool versions, output digest and declared semantic output. | Retry by job identity; mismatched output is rejected; source advance yields `Needs update`; timeout/failure cannot change source/product state. | Least-privilege one-job scope and bounded resources; release response comes from the versioned Release Policy. |
 | BOM query/export | Web/Desktop or Release process | Product Structure / controlled Artifact custody | Exact Structure Snapshot plus BOM View Profile returns a governed view or a BOM Representation pinned to both inputs and its output digest. | Query/export may retry by operation identity; no request follows floating latest where an exact result is required; failed output changes no structure. | Owner authorization; source/profile/output/actor/result recorded; `REQ-STR-004/005`. |
 | BOM import | Authorized Web/Desktop administration/work surface | Product Structure | Payload and exact base snapshot create a non-authoritative candidate and validation/difference preview; separate confirmation may create one new snapshot/Generation. | Invalid/stale/unauthorized/faulted candidate is refused atomically; retry cannot create a duplicate result. | Server-only authority; candidate digest, base, mapping, actor, confirmation and outcome audited; `REQ-STR-006`. |

@@ -382,11 +382,11 @@ A server-authoritative temporary exclusive right for one actor and Managed Works
 _Avoid_: assembly-wide lock, file-system lock, Reference
 
 **Reservation Lease**:
-The renewable period during which an `Active` Reservation remains valid. Loss of connectivity, sign-out or application exit does not immediately release it. Expiry removes the right to publish but does not delete local work, waive expected-Generation validation, silently transfer authority, or permit a stale overwrite.
+The renewable period during which an `Active` Reservation remains valid. Loss of connectivity, sign-out or application exit does not immediately end it. Expiry removes the right to publish but does not delete local work, waive expected-Generation validation, silently transfer authority, or permit a stale overwrite.
 _Avoid_: permanent checkout, local-file expiry, silent force unlock
 
 **Reservation Status**:
-The server-recorded lifecycle of a Reservation: `Active` grants the bounded publish entitlement; `Expired` no longer grants it; `Released` records its normal end after successful changed or No Change Check-in or governed cancel; `Recovered` records that an authorized recovery ended or replaced the old entitlement. Recovery creates no right to publish stale work and never erases a user's local candidate.
+The server-recorded lifecycle of a Reservation: `Active` grants the bounded publish entitlement; `Ended` records its normal end after successful changed or No Change Check-in or governed cancel; `Expired` records that its lease elapsed; `Recovered` records that an authorized recovery ended or replaced the old entitlement. None of the three terminal states grants publish authority. Recovery creates no right to publish stale work and never erases a user's local candidate. `Released` is reserved for the product lifecycle and is not a Reservation status.
 _Avoid_: Workflow State, local-file state, silent reassignment, evidence that a user abandoned work
 
 **Offline Workspace Operation**:
@@ -398,7 +398,7 @@ Workspace access to an exact Generation without a Reservation or permission to p
 _Avoid_: Checkout, untracked copy
 
 **Reservation Disposition**:
-The attributable terminal outcome for each Reservation in a Check-in scope. A successful changed or No Change Check-in releases every confirmed in-scope Reservation; a failed or uncommitted operation does not release a still-valid Reservation. It is not a user option to keep Checkout after a successful Check-in.
+The attributable terminal outcome for each Reservation in a Check-in scope. A successful changed or No Change Check-in ends every confirmed in-scope Reservation; a failed or uncommitted operation does not end a still-valid Reservation. It is not a user option to keep Checkout after a successful Check-in.
 _Avoid_: retain-after-Check-in option, hidden auto-unlock, global cancel
 
 **Reservation Recovery**:

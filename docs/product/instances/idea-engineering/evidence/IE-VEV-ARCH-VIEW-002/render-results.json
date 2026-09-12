@@ -1,0 +1,227 @@
+{
+  "renderedAt": "2026-09-11T08:49:34.777Z",
+  "browser": "152.0.7977.83",
+  "mermaid": "11.12.0",
+  "sources": [
+    {
+      "name": "DOC-05-architecture-description.md",
+      "sha256": "ceddbc42d1609d3475d3dc94b74edb1e62e85faed3518282a2a7e26130555fa8"
+    },
+    {
+      "name": "DOC-06-data-integration-and-migration-specification.md",
+      "sha256": "802c42f21f955b6771e9236aa800c9a154e275c22c0b47f4c54e6fc18f814f58"
+    }
+  ],
+  "results": [
+    {
+      "id": "ARCH-VIEW-CTX-001",
+      "title": "IDEA Engineering system context",
+      "description": "Engineers, reviewers and scoped administrators use IDEA Engineering. Office and CAD applications are external editing tools, a company identity provider is a future option, and authorized recipients consume exact read-only Release Packages. IDEA remains the product-data authority.",
+      "status": "PASS — RENDER",
+      "svgSha256": "edb748c577dbfefdbb67a9b4283dc78aaaff3ad800f5f699e716c722268558e8"
+    },
+    {
+      "id": "ARCH-VIEW-CON-001",
+      "title": "IDEA Engineering candidate container view",
+      "description": "Engineers use the Web workbench or Desktop. Administrators use the Administration Web application. All protected requests go to one IDEA Server, which owns authorization and product coordination and accesses the relational and private Artifact stores. The Workspace process alone manages local working files. Format processing is isolated from the main Server.",
+      "status": "PASS — RENDER",
+      "svgSha256": "585e1748589b7e52172b7af4a457b27382120af3e5395ecaba6839f3f16c31ed"
+    },
+    {
+      "id": "ARCH-VIEW-DEP-001",
+      "title": "Candidate deployment and trust zones",
+      "description": "Engineer Windows PCs run browser, Desktop, Web-rendered Workbench, per-user Workspace process and external Office or CAD tools. Reviewer and administrator devices use separate Web entry points. All cross-device calls use HTTPS to a company-managed server zone containing the server, database, private Artifact store and isolated format runtime.",
+      "status": "PASS — RENDER",
+      "svgSha256": "19e3784e505dbdc9996c042a9d974fee54b7d43082173edf54f70c8a9a63a889"
+    },
+    {
+      "id": "ARCH-VIEW-MOD-001",
+      "title": "IDEA Server Module authority",
+      "description": "Scoped administrators call only their owning Modules. Identity and Accounts supplies actor eligibility, Project Governance supplies memberships, and Access Policy returns permission decisions. Controlled Product Data, Product Structure and Lifecycle Governance retain their own business authority and append committed outcomes to Audit Evidence.",
+      "status": "PASS — RENDER",
+      "svgSha256": "0a40be05c530641af380a873a8666f7f26581df9a5a74ea2f5f92fe85ec623f4"
+    },
+    {
+      "id": "ARCH-VIEW-RBAC-001",
+      "title": "Principal role Scope authorization model",
+      "description": "Actors and Business Groups are security principals. Direct memberships connect Actors to Project Groups. Immutable Role Definition versions contain product Permissions, and each Role Assignment binds one principal and one role version to one Authorization Scope. Authorization decisions combine applicable assignments and retain a separate business-gate result.",
+      "status": "PASS — RENDER",
+      "svgSha256": "85f274098851fd9d05af1a0e8a606b0db6c2034189ed4713e5e6fbad37effd0c"
+    },
+    {
+      "id": "ARCH-VIEW-MOD-002",
+      "title": "Controlled Workspace publication responsibilities",
+      "description": "The Desktop and Workspace process call a small Controlled Product Data interface. Internal coordination validates Reservation and expected-head rules, stages candidate bytes through a storage adapter, and publishes through one authoritative database commit. A status query resolves an uncertain response by the same OperationId.",
+      "status": "PASS — RENDER",
+      "svgSha256": "c95c9fef64ee1e2088598de70230bc4332bfa7d86c08443b8e945c458f78096d"
+    },
+    {
+      "id": "ARCH-VIEW-ACT-002",
+      "title": "End-to-end controlled Release Spine",
+      "description": "A Logical Document is registered, an exact Checkout or Reference scope is confirmed, work is performed in an ordinary local Workspace, and Check-in either publishes one immutable Generation or records No Change while ending the confirmed Reservation. The exact Generation is reviewed, approved and released only after scope revalidation. Any failed Check-in preserves local work and any failed Release leaves the scope unreleased. An exact Release Package can later be reproduced and restored.",
+      "status": "PASS — RENDER",
+      "svgSha256": "f1ebf8d99a7dee2df580f5cec419935987315a5d60d3d959e828e2762aaba9a6"
+    },
+    {
+      "id": "ARCH-VIEW-STATE-001",
+      "title": "Business Revision workflow state",
+      "description": "A first successful Check-in moves a Revision from Start to In Work. Submit moves it to Under Review. Reject or Withdraw returns it to In Work. Approval records a decision but the Revision remains Under Review until an eligible Release succeeds. Checkout never changes this workflow.",
+      "status": "PASS — RENDER",
+      "svgSha256": "656e21091d84e44599eca64149bbc76ddf361508dc4c780d86e2953d03bb5e10"
+    },
+    {
+      "id": "ARCH-VIEW-STATE-002",
+      "title": "Reservation record lifecycle",
+      "description": "A confirmed Checkout creates an Active Reservation. Renewal keeps that same record Active. A committed changed or No Change Check-in or governed cancel makes it Ended. Lease timeout makes it Expired. Authorized recovery makes the old record Recovered. Ended, Expired and Recovered records never become Active again; any later Checkout creates a new Reservation against the current head.",
+      "status": "PASS — RENDER",
+      "svgSha256": "c503f9b6e74fa0b7829fb83ac1c90b16a4bd655d49a828549d8000b640f1ba3e"
+    },
+    {
+      "id": "ARCH-VIEW-STATE-003",
+      "title": "Local Reference condition and safe exits",
+      "description": "A Reference starts with exact local bytes for the current server head. Local editing or a newer server head can occur independently. A modified current Reference can become a working copy only after the server grants Checkout against that same Generation. A modified out-of-date Reference cannot publish directly and remains safe while the user chooses a copy, a new document, deliberate reapplication to a fresh Checkout, or confirmed discard.",
+      "status": "PASS — RENDER",
+      "svgSha256": "c012f359d928ea17b11ab84b5ee56779a3a1d844ef19ee599369827db052336e"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-001",
+      "title": "Confirmed Checkout and Reference materialization",
+      "description": "The engineer first sees and confirms an exact document scope. The server evaluates permission and current state for every row. One conflict refuses the requested Reservation set. If valid, the server creates Reservations only for Checkout rows, returns exact Artifact pins for both modes, and the Workspace verifies each digest before updating its manifest or opening the root file.",
+      "status": "PASS — RENDER",
+      "svgSha256": "2690dc558c4de468d57e142507e174e207be499d485f3dc411957b15d3ae51f0"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-005",
+      "title": "Modified Reference decision sequence",
+      "description": "A changed local Reference cannot be checked in. The engineer may request Checkout against its exact expected Generation. Only a still-current and available Generation yields a new Reservation while keeping local bytes. Otherwise the original document is unchanged and the local candidate remains available for safe copy, current-file comparison, deliberate reapplication, Create Copy or confirmed discard.",
+      "status": "PASS — RENDER",
+      "svgSha256": "ae01ae3dedbb07567e469936d13c59728772735b5b56ef6d5ec2f66c336c3e77"
+    },
+    {
+      "id": "ARCH-VIEW-STATE-004",
+      "title": "Check-in Operation lifecycle",
+      "description": "The server accepts one OperationId and input fingerprint into a private resumable pre-commit state. Only complete transfer and validation reach Ready to commit, and only the authoritative database commit reaches Committed. Refused, failed and cancelled operations are grouped as ended without publication in this overview and remain distinct in the transition table. An uncertain commit outcome is held for reconciliation before the client may treat it as committed or safely resumable.",
+      "status": "PASS — RENDER",
+      "svgSha256": "2a935c89ce7c3bfd34aaed84c2c967651694f98595f760c5a7c932adab587e21"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-002",
+      "title": "Atomic Check-in publication",
+      "description": "The engineer confirms an exact scope after a complete local scan. The server fixes the OperationId input fingerprint and checks authorization, current heads and Reservations. Changed bytes are staged and digest-verified privately. At commit time the server revalidates all gates and uses one database transaction to publish every changed Generation, update heads, record any Change Set plus the operation and outbox, and end all confirmed Reservations. Any refusal or pre-commit failure publishes none and preserves local work.",
+      "status": "PASS — RENDER",
+      "svgSha256": "1e92d769e7e77e2a8b1bace0893603782ad1e5702b7e5bf9aa7a2360354e3320"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-007",
+      "title": "Resolve an interrupted or uncertain Check-in by OperationId",
+      "description": "If the commit succeeded but its response was lost, the client queries the same OperationId and receives the already committed result. If interruption occurred before commit, the server returns verified progress for safe resume. If authoritative evidence is inconsistent or temporarily unavailable, the operation is held for reconciliation and no new operation or success is inferred.",
+      "status": "PASS — RENDER",
+      "svgSha256": "f38e82e9f866edbe3f94568f34d6a458cffe9b386a8cabd3bc461f007c97d2f0"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-003",
+      "title": "Review approval and exact Release sequence",
+      "description": "An author submits one exact Generation into a Review Round pinned to workflow and approval policy versions. An eligible independent approver records a decision. Release then previews and revalidates the exact scope, structure and evidence; any blocker refuses the whole scope, while success creates one immutable Release Record without changing unrelated In Work documents.",
+      "status": "PASS — RENDER",
+      "svgSha256": "4c638aa7b07f0a65075b8e9900ffce8bcf3da0140a5e4c479a27f5ba9421c08b"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-008",
+      "title": "Native account session revocation and recovery",
+      "description": "Linh signs in through the IDEA client and receives a bounded session only when the account is active. Every protected resource Module asks Identity and Accounts for current eligibility before applying RBAC and its business gates. When an Account Administrator suspends the account or recovery changes credentials, affected sessions are revoked. Later requests and resumed transfers using an old session are refused, while local Workspace files remain safe. A fresh eligible sign-in keeps the same stable Actor history.",
+      "status": "PASS — RENDER",
+      "svgSha256": "cf9e2758ea6e405f77e39cd5b7855d6098ad0f9a20807c9b31ca28d6711d64da"
+    },
+    {
+      "id": "ARCH-VIEW-ACT-001",
+      "title": "Account and Project access administration responsibility",
+      "description": "System Management creates and activates Linh's account without product access. A Project Administrator separately admits Linh to P-100 and its mechanical Group. Access Policy combines Group membership with a Design Engineer Role Assignment at P-100 Scope, after which the product Module still applies its business gates.",
+      "status": "PASS — RENDER",
+      "svgSha256": "85e4dc26fa26678d19987d8c131c9f09a1a3d3d61865ccfc247679de8c1c53e1"
+    },
+    {
+      "id": "ARCH-VIEW-STATE-005",
+      "title": "Governed Role Definition and Role Assignment lifecycle",
+      "description": "A Custom Role Definition candidate is edited as Draft, validated and then either refused or activated as an immutable version. Activating a successor supersedes the former definition for new selection but never changes an existing assignment. A Role Assignment is separately proposed and authorized against one exact active Role Definition version and Scope. It becomes Active immediately or Scheduled for a future effective start, then ends explicitly or expires. Replacing it requires another reviewed assignment.",
+      "status": "PASS — RENDER",
+      "svgSha256": "f7c4eb0965433b1c0dfc763ec60fa54ff0361a700f9cb6e6957c3c5968600e48"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-004",
+      "title": "Effective Permission followed by business gates",
+      "description": "The authoritative resource Module resolves the current Actor and session, Project and direct Group memberships, then asks Access Policy to evaluate applicable assignments, immutable role versions, Scope, time and conditions. Even when RBAC grants the action, the owner Module revalidates current business state before committing.",
+      "status": "PASS — RENDER",
+      "svgSha256": "00a30e29db838d963e7a0fdc98748aa69ebf304edff26d500d79ec5604844aa6"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-009",
+      "title": "Exact BOM view export and controlled import",
+      "description": "The user selects an exact Structure Snapshot and BOM View Profile. Product Structure returns an authorized BOM view that pins both identities. Export creates a non-authoritative BOM Representation with source and output provenance. Import first stores a candidate and validates it against an exact base snapshot, then shows an add-change-remove preview. Only a separately confirmed, revalidated request atomically publishes a new Structure Snapshot and owning Generation; stale, invalid or unauthorized input changes nothing.",
+      "status": "PASS — RENDER",
+      "svgSha256": "ea1c92e6ffd9ec962c1a335e240f39673f5dd24c1f574158ee5c6de430ae83bf"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-010",
+      "title": "Qualified neutral Representation production",
+      "description": "Format Intelligence resolves one exact source Generation, Artifact digest and versioned capability profile. For an automatic path it grants a bounded immutable-input job to an isolated format adapter, which may invoke a qualified application export or standalone converter. For a manual path it receives an uploaded candidate. Both paths verify output, source pins and producer provenance before registering a non-authoritative Representation. Failure preserves the source and records a typed result. When the source later advances, the old Representation remains reproducible but is marked Needs update for the newer head.",
+      "status": "PASS — RENDER",
+      "svgSha256": "ae5e0c721c7b000263566b09254664c5bdbc344e657ff7518ce8cf1f6bd5fe29"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-006",
+      "title": "Resumable large Artifact transfer",
+      "description": "The Workspace begins or resumes one transfer bound to an OperationId, digest and size. The server reports accepted ranges so only missing chunks are sent. Private staging verifies each chunk and the full digest; completion makes a private candidate ready but never publishes a Generation.",
+      "status": "PASS — RENDER",
+      "svgSha256": "4dd2f2ced24132b5c99c2beba977c8f41ac87abd186af6ca5a84107f66361ead"
+    },
+    {
+      "id": "ARCH-VIEW-EVO-001",
+      "title": "Artifact storage evolution boundary",
+      "description": "Controlled Product Data identifies Artifacts by stable identity and digest and calls one storage interface. A filesystem adapter is the current candidate; later object or multi-volume adapters can replace it. Migration copies and verifies bytes before changing location records, without changing Generations or Releases.",
+      "status": "PASS — RENDER",
+      "svgSha256": "b4c9f5221e8266c12ad3036d784279fbf1fa67864779245a47b7df33d4967aea"
+    },
+    {
+      "id": "ARCH-VIEW-SEQ-011",
+      "title": "Coordinated exact backup and recovery",
+      "description": "A backup coordinator selects one recovery point and records a recovery-set manifest that joins the database point, every required immutable Artifact, active configuration and policy versions, and required protected key material. During recovery, an operator restores these parts into an isolated replacement environment, invalidates restored sessions, reconciles later security changes, resolves every retained Generation and verifies every digest. Only an exact result with required functional checks may reopen service; any missing or mismatched item leaves recovery blocked and visible.",
+      "status": "PASS — RENDER",
+      "svgSha256": "7a8e8781918472ac57a62c2f42375163d1115f78f38014f83d44652a8dbc4f9b"
+    },
+    {
+      "id": "ARCH-VIEW-SEC-001",
+      "title": "Protected data flow across trust zones",
+      "description": "Web and Desktop clients send authenticated commands to the IDEA Server over HTTPS and never receive database or permanent Artifact-store credentials. Desktop sends only allowlisted manifest-scoped commands to a per-user Workspace process over protected local IPC. Office and CAD applications edit ordinary local files and receive no IDEA authority. Server owner Modules revalidate account, RBAC and business state before using relational and Artifact stores. Format work runs in an isolated one-job zone and returns an untrusted candidate for validation. Coordinated backup copies cross into a separately controlled recovery zone and cannot reopen service without exact reconciliation.",
+      "status": "PASS — RENDER",
+      "svgSha256": "801097f5b9e9c580de83daac1626f6ee3d66dd3df49a8022ca38480baca0ab4a"
+    },
+    {
+      "id": "DATA-VIEW-CORE-001",
+      "title": "Released baseline identity",
+      "description": "An Operating Organization owns Logical Documents, each with Business Revisions and immutable Generations. Generation manifests identify Artifacts and may pin Structure Snapshots. A Release Record pins exact Generations, structure and approval evidence so later Working Heads cannot alter the released baseline.",
+      "status": "PASS — RENDER",
+      "svgSha256": "645eada47e4b5681b45a58d18ec8a1ce8af0c26680a7ee64bf1c6e73c056ab55"
+    },
+    {
+      "id": "DATA-VIEW-AUTH-001",
+      "title": "Account Project and RBAC data relationships",
+      "description": "The Organization owns Security Principals, accounts, Projects, Role Definitions and Scopes. Actor and Business Group are mutually exclusive principal kinds. Project and Group membership are separate from Role Assignments. Each Role Assignment binds exactly one Security Principal, one immutable Role Definition version and one Scope. A decision may be supported by many applicable assignments, recorded through contribution rows. Scope parent-child rows make the hierarchy explicit without a recursive self-loop.",
+      "status": "PASS — RENDER",
+      "svgSha256": "5989df4205216f36c43c9751842985bfc9c46d3750670e43547d024881c32bff"
+    },
+    {
+      "id": "DATA-VIEW-ART-001",
+      "title": "Artifact transfer and storage identity",
+      "description": "One Check-in Operation coordinates Artifact Transfers that assemble private staged candidates. Only a committed operation creates Generations whose manifests identify immutable Artifacts. Artifact Locations map each digest to replaceable storage providers without changing document or Generation identity.",
+      "status": "PASS — RENDER",
+      "svgSha256": "5b88831000f4694739dfd52e91acce274e9d88ba5a3175ad1e833f308198b83b"
+    },
+    {
+      "id": "DATA-VIEW-WS-001",
+      "title": "Workspace evidence, Reservation and Check-in result",
+      "description": "A local Workspace Manifest contains entries that pin documents and expected Generations with Checkout or Reference mode and digests. The server separately owns Logical Documents, Working Heads and Reservations. One Check-in Operation contains exact entries using Reservations and expected Generations; a committed changed entry can produce one immutable Generation, while a No Change entry produces none. A successful changed operation may create one Change Set covering all produced Generations.",
+      "status": "PASS — RENDER",
+      "svgSha256": "c8e44feed76ea7e21daa27bbb8b3c8ec15d6a94e63bec60629db580508cf92e1"
+    }
+  ]
+}

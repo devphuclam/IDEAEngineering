@@ -12,6 +12,8 @@ Route Work Item reads, writes, triage, and wayfinding through `docs/agents/issue
 
 Follow [`docs/agents/collaboration.md`](docs/agents/collaboration.md) for provider-neutral branch, worktree, pull request, review, and handoff rules. Use [`docs/agents/local-skills.md`](docs/agents/local-skills.md) and the pinned [`skill manifest`](.agents/skills/manifest.yml) before relying on an optional global Agent plugin.
 
+Lần sau tôi mà có nói là push lên main thì push lên luôn.
+
 ### Triage labels
 
 Use the default Matt Pocock triage labels. See `docs/agents/triage-labels.md`.
