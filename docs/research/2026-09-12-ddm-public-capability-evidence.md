@@ -4,13 +4,17 @@
 |---|---|
 | Research record | `RS-DDM-CAP-20260912-001` (supporting raw-evidence record; not a canonical IDEA knowledge ID) |
 | Document class | `RESEARCH-LOG` / source-bound evidence collection |
-| Status | Public-evidence collection for the DDM Capability Inventory and IDEA gap-matrix work item |
-| Normativity | `INFORMATIVE` |
+| Version | `0.1` |
+| Status | `Draft` |
+| Artifact Role | Supporting raw/source-bound research log; no admitted IDEA synthesis or product authority |
+| Product Normativity | `INFORMATIVE` — creates no IDEA requirement, decision or product behavior |
+| Repository Process Authority | `NOT-APPLICABLE` |
+| Repository Instruction State | `NOT-APPLICABLE` |
 | Owner / Author | DDM research owner `BLOCKED`; named author `BLOCKED` |
 | Reviewer / Acceptance authority | Reviewer `NOT-RUN`; acceptance `NOT-APPLICABLE` for this supporting log |
 | Publisher scope | Solidmakarna AB (DDM distributor/support partner) and Concurrent Systems Incorporation / DesignDataManager (DDM publisher) |
 | Access date | 2026-09-12 |
-| Applicable product/baseline | IDEA-C1-ANALYSIS-DESIGN-001; supporting input to `IE-KNW-DDM-007@0.2` |
+| Applicable product/baseline | IDEA-C1-ANALYSIS-DESIGN-001; supporting input to `IE-KNW-DDM-007@0.3` |
 | Classification | `INTERNAL` |
 | Source / upstream trace | Public URLs in the source catalogue; pre-existing `IE-KNW-DDM-001…006` findings |
 | Downstream trace | `IE-KNW-DDM-007`; `SPEC-OPEN-02…08`; `IE-VVP-DDM-001` questions |

@@ -52,7 +52,7 @@ foreach ($line in $lines[$sourceCatalogueIndex..($sourceCatalogueEnd - 1)]) {
 if ($sourceIds.Count -eq 0) { Fail 'no DDM-SRC source IDs found' }
 
 $rowLines = @($lines[($headerIndex + 2)..($summaryIndex - 1)] | Where-Object { $_ -match '^\| `DDM-CAP-[A-Z]+-\d{3}` \|' })
-if ($rowLines.Count -ne 100) { Fail "expected 100 matrix rows, found $($rowLines.Count)" }
+if ($rowLines.Count -lt 1) { Fail 'matrix contains no capability rows' }
 
 $allowedAuthority = @('PUBLISHER-PRIMARY', 'AUTHORIZED-PARTNER', 'OFFICIAL-DEMONSTRATION', 'SECONDARY', 'UNKNOWN')
 $allowedMode = @('DOCUMENTED', 'OBSERVED', 'INFERRED', 'UNKNOWN')
@@ -135,6 +135,7 @@ for ($i = $summaryIndex + 1; $i -lt $lines.Count; $i++) {
     }
 }
 if ($summaryHeader -lt 0) { Fail 'category summary header not found' }
+$summaryLabels = @{}
 for ($i = $summaryHeader + 2; $i -lt $lines.Count; $i++) {
     if ($lines[$i] -match '^\| (?:\*\*)?(?:[A-S] |Total)') {
         $summaryRows += ,(Cells $lines[$i])
@@ -142,13 +143,22 @@ for ($i = $summaryHeader + 2; $i -lt $lines.Count; $i++) {
         break
     }
 }
-if ($summaryRows.Count -ne 20) { Fail "expected 19 category rows plus total, found $($summaryRows.Count)" }
+if ($summaryRows.Count -ne ($categories.Count + 1)) { Fail "expected one summary row per category plus total, found $($summaryRows.Count)" }
 
 foreach ($summary in $summaryRows) {
     if ($summary.Count -ne 13) { Fail "summary row has $($summary.Count) columns" }
     $label = $summary[0].Trim('*')
+    if ($summaryLabels.ContainsKey($label)) { Fail "duplicate summary row for $label" }
+    $summaryLabels[$label] = $true
+    if ($label -ne 'Total' -and -not $categories.ContainsKey($label)) { Fail "summary contains unknown category $label" }
     $expected = if ($label -eq 'Total') { $rowLines.Count } else { $counts["category=$label"] }
     if ([int]$summary[1].Trim('*') -ne $expected) { Fail "summary total mismatch for $label" }
+    $expectedEvidence = 0
+    foreach ($line in $rowLines) {
+        $r = Cells $line
+        if ($r[5] -ne 'UNKNOWN' -and ($label -eq 'Total' -or $r[1] -eq $label)) { $expectedEvidence++ }
+    }
+    if ([int]$summary[2].Trim('*') -ne $expectedEvidence) { Fail "summary evidence-sourced mismatch for $label" }
     $fields = @('coverage=COVERED', 'coverage=PARTIAL', 'coverage=ABSENT', 'coverage=UNKNOWN', 'disposition=CORE-V0', 'disposition=POST-CORE', 'disposition=OUT-OF-SCOPE', 'disposition=NOT-APPLICABLE', 'disposition=RESEARCH-REQUIRED', 'disposition=UNDECIDED')
     for ($j = 0; $j -lt $fields.Count; $j++) {
         $actual = [int]$summary[$j + 3].Trim('*')
@@ -163,6 +173,65 @@ foreach ($summary in $summaryRows) {
         }
         if ($actual -ne $expected) { Fail "summary $name/$value mismatch for $label (expected $expected, got $actual)" }
     }
+}
+foreach ($category in $categories.Keys) {
+    if (-not $summaryLabels.ContainsKey($category)) { Fail "summary missing category $category" }
+}
+if (-not $summaryLabels.ContainsKey('Total')) { Fail 'summary total row missing' }
+
+$dimensionHeader = -1
+for ($i = $summaryIndex + 1; $i -lt $lines.Count; $i++) {
+    if ($lines[$i] -eq '| Dimension | Row totals |') {
+        $dimensionHeader = $i
+        break
+    }
+}
+if ($dimensionHeader -lt 0) { Fail 'normalized dimension totals table not found' }
+
+$dimensionExpected = @{
+    'Evidence Authority' = $allowedAuthority
+    'Evidence Mode' = $allowedMode
+    'Temporal Applicability' = $allowedTemporal
+    'IDEA Coverage' = $allowedCoverage
+    'Product Disposition' = $allowedDisposition
+    'Gap Criticality' = $allowedCriticality
+    'Product Priority' = $allowedPriority
+    'Gate Effect' = $allowedGate
+}
+$dimensionRows = @{}
+for ($i = $dimensionHeader + 2; $i -lt $lines.Count; $i++) {
+    if ($lines[$i] -notmatch '^\| (.+) \| (.+) \|$') { break }
+    $cells = Cells $lines[$i]
+    if ($cells.Count -ne 2) { Fail "normalized dimension row has $($cells.Count) columns" }
+    if (-not $dimensionExpected.ContainsKey($cells[0])) { Fail "unknown normalized dimension $($cells[0])" }
+    if ($dimensionRows.ContainsKey($cells[0])) { Fail "duplicate normalized dimension $($cells[0])" }
+    $dimensionRows[$cells[0]] = $cells[1]
+}
+foreach ($dimension in $dimensionExpected.Keys) {
+    if (-not $dimensionRows.ContainsKey($dimension)) { Fail "dimension total missing for $dimension" }
+    $declared = @{}
+    foreach ($match in [regex]::Matches($dimensionRows[$dimension], '([A-Z0-9/-]+)=(\d+)')) {
+        $declared[$match.Groups[1].Value] = [int]$match.Groups[2].Value
+    }
+    foreach ($declaredValue in $declared.Keys) {
+        if ($declaredValue -notin $dimensionExpected[$dimension]) { Fail "$dimension total has invalid value $declaredValue" }
+    }
+    foreach ($value in $dimensionExpected[$dimension]) {
+        if (-not $declared.ContainsKey($value)) { Fail "$dimension total missing value $value" }
+        $counter = switch ($dimension) {
+            'Evidence Authority' { 'authority' }
+            'Evidence Mode' { 'mode' }
+            'Temporal Applicability' { 'temporal' }
+            'IDEA Coverage' { 'coverage' }
+            'Product Disposition' { 'disposition' }
+            'Gap Criticality' { 'criticality' }
+            'Product Priority' { 'priority' }
+            'Gate Effect' { 'gate' }
+        }
+        $actual = if ($counts.ContainsKey("$counter=$value")) { $counts["$counter=$value"] } else { 0 }
+        if ($declared[$value] -ne $actual) { Fail "$dimension total mismatch for $value (expected $actual, got $($declared[$value]))" }
+    }
+    if (($declared.Values | Measure-Object -Sum).Sum -ne $rowLines.Count) { Fail "$dimension totals do not sum to actual row count" }
 }
 
 Write-Output ("PASS: {0} unique DDM-CAP rows; {1} sources; {2} categories; FTR-001…014 present; enums and summary totals valid." -f $ids.Count, $sourceIds.Count, $categories.Count)

@@ -5,9 +5,10 @@
 | Stable knowledge ID | `IE-KNW-DDM-007` |
 | Document Class | `IE-KNW` controlled research/evidence artifact |
 | Title | DDM Capability Inventory and IDEA Engineering Gap Matrix |
-| Version | `0.2` |
-| Status | Controlled research artifact; candidate input to Feature/Spec decisions, not a Core Product Document |
-| Normativity | `INFORMATIVE` |
+| Version | `0.3` |
+| Status | `Draft` |
+| Artifact Role | Controlled research artifact; candidate input to Feature/Spec decisions, not a Core Product Document |
+| Product Normativity | `INFORMATIVE` |
 | Owner | Product Decision Authority-designated knowledge owner; named owner `BLOCKED` |
 | Author | DDM research author; named attribution `BLOCKED` |
 | Reviewer | Product Decision Authority; review `NOT-RUN` |
@@ -16,10 +17,10 @@
 | Evidence date | 2026-09-12 (public material is scoped to the date/version stated per source) |
 | Applicable Product/Baseline | IDEA-C1-ANALYSIS-DESIGN-001; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.16, DOC-06@0.16, DOC-07@0.5, DOC-08@0.12, GOV@0.3, VVP@0.16 |
 | Classification | `INTERNAL` |
-| Source / Upstream Trace | `IE-KNW-DDM-001…006`; `RS-DDM-CAP-20260912-001`; knowledge index; current IDEA catalogue and standards register |
+| Source / Upstream Trace | `IE-KNW-DDM-001…006`; `RS-DDM-CAP-20260912-001`; knowledge index; current IDEA catalogue and standards register; `IE-STD-AUTH-001@0.2` |
 | Downstream Trace | Feature/Spec/Tech decision views; `SPEC-OPEN-02…08`; VVP, Product Decision and future change records |
-| Change Record | Normalization task 2026-09-12; predecessor `IE-KNW-DDM-007@0.1`, predecessor SHA `ea51d2a24fdf1a96331e61279d0335986580f939` |
-| Supersedes / Superseded by | Supersedes `IE-KNW-DDM-007@0.1`; superseded by `NOT-APPLICABLE` |
+| Change Record | Governance cleanup 2026-09-12; predecessor `IE-KNW-DDM-007@0.2`, predecessor SHA `a51948a8c2663f867dec95f2a3d0d877246a8ce5` |
+| Supersedes / Superseded by | Supersedes `IE-KNW-DDM-007@0.2`; superseded by `NOT-APPLICABLE` |
 | Review Trigger | New DDM target evidence, standards/control-envelope change, or product decision that adopts/adapts a row |
 | Retention Disposition | Retain as controlled research provenance; supersede only through an explicit change record |
 | Evidence Status | `CONTROLLED-PUBLIC-EVIDENCE`; target runtime `UNKNOWN` |
@@ -314,6 +315,23 @@ counts, so an `ABSENT` capability can legitimately be `POST-CORE`, `OUT-OF-SCOPE
 | S Other DDM | 3 | 2 | 1 | 1 | 0 | 1 | 2 | 0 | 0 | 0 | 1 | 0 |
 | **Total** | **100** | **85** | **35** | **39** | **12** | **14** | **65** | **12** | **6** | **1** | **15** | **1** |
 
+### 7.2 Machine-readable normalized dimension totals
+
+The following compact totals are part of the admitted matrix summary. They are recalculated from
+the current capability rows and checked by `scripts/validate-ddm-capability-matrix.ps1`; they are
+not a second classification source.
+
+| Dimension | Row totals |
+|---|---|
+| Evidence Authority | `PUBLISHER-PRIMARY=36`; `AUTHORIZED-PARTNER=0`; `OFFICIAL-DEMONSTRATION=49`; `SECONDARY=0`; `UNKNOWN=15` |
+| Evidence Mode | `DOCUMENTED=36`; `OBSERVED=48`; `INFERRED=1`; `UNKNOWN=15` |
+| Temporal Applicability | `CURRENT-PUBLIC=8`; `HISTORICAL=56`; `RELEASE-SPECIFIC=16`; `TARGET-UNKNOWN=20` |
+| IDEA Coverage | `COVERED=35`; `PARTIAL=39`; `ABSENT=12`; `UNKNOWN=14` |
+| Product Disposition | `CORE-V0=65`; `POST-CORE=12`; `OUT-OF-SCOPE=6`; `NOT-APPLICABLE=1`; `RESEARCH-REQUIRED=15`; `UNDECIDED=1` |
+| Gap Criticality | `CRITICAL=2`; `MAJOR=31`; `MINOR=11`; `N/A=56` |
+| Product Priority | `P0=2`; `P1=31`; `P2=11`; `P3=0`; `UNDECIDED=56` |
+| Gate Effect | `PG4-BLOCKING=6`; `PG4-NONBLOCKING=19`; `LATER-VERIFICATION=6`; `ROLLOUT-BLOCKING=1`; `NONE=54`; `UNASSESSED=14` |
+
 Evidence Authority totals are 36 `PUBLISHER-PRIMARY`, 49 `OFFICIAL-DEMONSTRATION`, 0
 `AUTHORIZED-PARTNER`, 0 `SECONDARY` and 15 `UNKNOWN`. Evidence Mode totals are 36
 `DOCUMENTED`, 48 `OBSERVED`, 1 `INFERRED` and 15 `UNKNOWN`; Temporal Applicability totals are
@@ -524,6 +542,23 @@ promoted to a PG4 blocker. These are candidate gaps or evidence requirements, no
 requirements. PG4 remains governed by the current DOC-07/VVP/GOV/RSK/CMP/CHG package and its
 unresolved reviewer, environment and decision states.
 
+### 13.1 PG4 label audit
+
+The six retained `PG4-BLOCKING` labels were checked against the current VVP gate mapping. They are
+design/readiness seams needed to bound an approved increment before implementation readiness, not
+claims that a runtime procedure has passed:
+
+| Capability IDs | Gate-contract trace | Decision and boundary |
+|---|---|---|
+| `DDM-CAP-SRCH-001/002/004` | VVP §4 requires an approved Feature/Spec/Tech package and a bounded increment; `SPEC-OPEN-02` leaves the Core search fields, scope, filtering, ordering and paging contract unresolved. | Retain `PG4-BLOCKING` as a pre-implementation design label. No search runtime result is being called a PG4 pass. |
+| `DDM-CAP-WRK-004` | VVP §4 requires a bounded increment whose dependencies and rollback are understood; `SPEC-OPEN-03` still owns Reservation cancel/expiry/recovery values needed to implement the Golden Path safely. | Retain `PG4-BLOCKING` for the unresolved Reservation design seam. `Ended / Expired / Recovered` lifecycle semantics are unchanged. |
+| `DDM-CAP-REL-004` | VVP §4 requires a bounded increment and rollback-safe release package; the current `REL-004` row identifies the exact Structure Snapshot, representations, digests and provenance contract that must be bounded before implementation readiness. | Retain `PG4-BLOCKING` for the design contract. `REL-005` remains `LATER-VERIFICATION`; no runtime reproduction is called a PG4 result. |
+| `DDM-CAP-SEC-007` | VVP §4 requires approved architecture/technology inputs for the increment; `SPEC-OPEN-06/08` and VVP-011/015 trace the cross-surface authorization and commit-time enforcement seam. | Retain `PG4-BLOCKING` for the design/readiness boundary. Runtime security evidence remains separately planned. |
+
+`DDM-CAP-OPS-004` remains `ROLLOUT-BLOCKING`, and `REL-005`, `CAD-004/005/008` and `PREV-001/005`
+remain later-verification or unassessed evidence as shown in the matrix. The DDM research artifact
+does not create an independent PG4 rule.
+
 ## 14. Recommendations and research limitations
 
 1. Use this matrix as a controlled input to the next Feature → Spec → Tech review; do not edit
@@ -548,13 +583,13 @@ isolation, evidence, stop and exit criteria.
 
 | Field | Value |
 |---|---|
-| Predecessor | `IE-KNW-DDM-007@0.1` at SHA `ea51d2a24fdf1a96331e61279d0335986580f939` |
-| Reason for change | Orthogonalize DDM evidence, IDEA coverage, product disposition, gap criticality, priority and gate effect; establish a durable control envelope; prevent the scratch research log from becoming a second capability authority. |
+| Predecessor | `IE-KNW-DDM-007@0.2` at SHA `a51948a8c2663f867dec95f2a3d0d877246a8ce5` |
+| Reason for change | Separate controlled lifecycle `Status` from `Artifact Role`, align the matrix with the repository authoring standard, add machine-readable dimension totals and remove the validator's fixed row-count assumption. |
 | Capability identity impact | None. All 100 existing `DDM-CAP-*` IDs are retained; no new capability ID was invented. |
-| Semantic impact | Coverage was independently recalculated as `COVERED/PARTIAL/ABSENT/UNKNOWN`; product disposition and severity/priority/gate axes were normalized and totals recomputed. `MISSING` and `DEFERRED` are no longer matrix enum values. |
+| Semantic impact | No capability semantics changed. The normalized coverage/disposition/severity/priority/gate axes and totals remain intact; only control metadata and summary-validation representation changed. `MISSING` and `DEFERRED` remain retired matrix enum values. |
 | Product scope impact | **No Product Scope Change.** FTRs, REQs, DOC-01/03/04, architecture semantics, Feature/Spec/Tech decisions and gate state are unchanged. |
 | Standards/tailoring impact | Uses the repository standards register and the new `IE-STD-AUTH-001` guide as `STANDARD-GUIDED` authoring discipline; no conformity claim is made. |
-| Review status | Draft correction; named reviewer and acceptance authority are `NOT-RUN`. Re-review on new DDM target evidence, standards/control-envelope change or product adoption of a row. |
+| Review status | `Draft`; named reviewer and acceptance authority are `NOT-RUN`. Re-review on new DDM target evidence, standards/control-envelope change or product adoption of a row. |
 
 ## 16. Traceability and change boundary
 

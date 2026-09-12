@@ -35,7 +35,10 @@ Before authoring a controlled product document, `IE-KNW-*` knowledge artifact, r
 ADR, decision brief or verification record, read the [product and research authoring standard](docs/agents/product-document-authoring-standard.md).
 It defines the control envelope, standards tailoring, evidence-to-decision separation,
 requirement/architecture/data/verification writing rules and explicit `UNKNOWN`/`BLOCKED`/
-`NOT-RUN` handling. It does not create product scope or gate decisions.
+`NOT-RUN` handling. Its document Status is `Draft`, but its Repository Instruction State is
+`Effective`; follow it as an active contributor/agent process instruction. This does not imply
+Product Decision Authority review or acceptance; it does not make the guide a Core Product
+Document, create product scope or change gate decisions.
 
 ### Management-facing Word documents
 

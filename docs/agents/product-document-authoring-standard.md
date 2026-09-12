@@ -5,19 +5,22 @@
 | Stable Document ID | `IE-STD-AUTH-001` |
 | Document Class | `AGENT-GUIDE` / product-information authoring standard |
 | Title | IDEA Engineering Product and Research Authoring Standard |
-| Version | `0.1` |
+| Version | `0.2` |
 | Status | `Draft` |
-| Normativity | `INFORMATIVE` for product scope; repository authoring instruction for contributors |
+| Artifact Role | Repository-local authoring standard for controlled product information, research and decision records; not a Core Product Document |
+| Product Normativity | `INFORMATIVE` — creates no IDEA product requirement and does not alter FTR, REQ or product behavior |
+| Repository Process Authority | `NORMATIVE` — contributors/agents authoring in-scope records are required to follow this guide while its instruction state is effective |
+| Repository Instruction State | `Effective` |
 | Owner | Product Decision Authority; named owner `BLOCKED` until assigned |
 | Author | Repository maintainers; named attribution `BLOCKED` |
 | Reviewer | Product Decision Authority; review `NOT-RUN` |
 | Acceptance Authority | Product Decision Authority; acceptance `NOT-RUN` |
 | Applicable Baseline | Current IDEA Engineering repository baseline |
-| Effective Date | `NOT-APPLICABLE` until accepted |
+| Effective Date | Repository instruction effective 2026-09-12; product baseline: `NOT-APPLICABLE` until accepted |
 | Classification | `INTERNAL` |
 | Source / Upstream Trace | [standards register](../governance/standards-register.md), [product-definition rules](../product/definition/README.md), [CONTEXT.md](../../CONTEXT.md) |
 | Downstream Trace | [AGENTS.md](../../AGENTS.md), controlled product documents, `IE-KNW-*`, research, ADRs, decision briefs and verification records |
-| Change Record | Task: “Standardize the DDM Capability Matrix and establish a durable IDEA Engineering authoring standard” (2026-09-12) |
+| Change Record | Predecessor `IE-STD-AUTH-001@0.1`; governance cleanup 2026-09-12 separates product normativity from repository process authority and records effective instruction state |
 | Supersedes / Superseded by | `NOT-APPLICABLE` |
 | Review Trigger | Standards-register edition/applicability change, control-envelope change, or material document-class change |
 | Retention Disposition | Retain while the repository governance baseline is active; supersede with an explicit change record |
@@ -27,8 +30,11 @@
 
 This guide is the repository-local authoring contract for controlled product information, admitted
 research and decision records. It applies the project standards register to the information items
-for which each source is relevant. It does not change IDEA product scope, Feature/Spec/Tech
-decisions, architecture semantics or gate state.
+for which each source is relevant. Its document `Status` is `Draft`, while its `Repository
+Instruction State` is `Effective`: contributors and agents must follow it for in-scope authoring.
+That process state is not Product Decision Authority acceptance, does not make this a Core Product
+Document, and does not change IDEA product scope, Feature/Spec/Tech decisions, architecture
+semantics or gate state. Product Decision Authority review and acceptance remain `NOT-RUN`.
 
 The [standards register](../governance/standards-register.md) is the authority for standard
 identifiers, editions, project classifications and watch status. A citation is not a conformity
@@ -45,7 +51,8 @@ control information.
 | Stable ID | Identity is independent of path, title and Git commit. Never reuse an ID for a different item. |
 | Document type/class and title | State one class and a human-readable title; a title is not identity. |
 | Version and status | Use a content version and a separate status (`Draft`, `Proposed`, `Approved`, `Superseded`, `Retired`). |
-| Normativity | State `NORMATIVE` or `INFORMATIVE`; research and `IE-KNW-*` artifacts are `INFORMATIVE`. |
+| Product normativity | State `NORMATIVE` or `INFORMATIVE` for product behavior; research and `IE-KNW-*` artifacts are `INFORMATIVE`. Repository process authority is a separate field. |
+| Repository process authority / instruction state | For a repository guide, state whether the process instruction is `NORMATIVE` and whether it is `Effective`; this does not imply product-document approval. Use `NOT-APPLICABLE` for non-instructional artifacts. |
 | Owner, author, reviewer, acceptance authority | Name the accountable role/person or record `UNKNOWN`/`BLOCKED`; include the authority basis where applicable. |
 | Product/baseline applicability | Pin the product, increment, policy, evidence date or gate baseline. |
 | Effective/evidence date | Use an exact date/time or `NOT-APPLICABLE`; do not imply an unapproved effective date. |
