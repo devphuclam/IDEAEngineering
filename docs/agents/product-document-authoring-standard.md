@@ -21,7 +21,7 @@
 | Source / Upstream Trace | [standards register](../governance/standards-register.md), [product-definition rules](../product/definition/README.md), [CONTEXT.md](../../CONTEXT.md) |
 | Downstream Trace | [AGENTS.md](../../AGENTS.md), controlled product documents, `IE-KNW-*`, research, ADRs, decision briefs and verification records |
 | Change Record | Predecessor `IE-STD-AUTH-001@0.1`; governance cleanup 2026-09-12 separates product normativity from repository process authority and records effective instruction state |
-| Supersedes / Superseded by | `NOT-APPLICABLE` |
+| Supersedes / Superseded by | Supersedes `IE-STD-AUTH-001@0.1`; superseded by `NOT-APPLICABLE` |
 | Review Trigger | Standards-register edition/applicability change, control-envelope change, or material document-class change |
 | Retention Disposition | Retain while the repository governance baseline is active; supersede with an explicit change record |
 | Evidence Status | `STANDARD-GUIDED`; no conformity or certification claim |
