@@ -17,14 +17,16 @@ This note tests two candidate directions for IDEA Engineering Core v0:
   system, license or resource profile requires it; scale out only when workload or availability
   evidence justifies the additional machinery.
 
-Four evidence classes are kept separate:
+The historical prose uses four evidence classes. They are normalized below so this note can be
+consumed with the other technology notes without turning guidance into a standard:
 
-| Evidence class | What it can establish | What it cannot establish |
-|---|---|---|
-| `NORMATIVE STANDARD` | Standard protocol or description semantics, such as HTTP idempotency or an API/event description format | That IDEA must use a particular architecture, broker, cloud or product |
-| `OFFICIAL GUIDANCE / PATTERN` | A known failure mode, a reusable response and its trade-offs | Qualification for IDEA's workload or organization |
-| `FIRST-PARTY PUBLIC PRACTICE` | A reputable product publicly exposes or reports a comparable practice | Its undisclosed internals, or an IDEA requirement merely because the company is successful |
-| `IDEA RECOMMENDATION` | A reasoned choice derived from IDEA requirements, context and the evidence above | Product approval, runtime proof, capacity proof or an SLA |
+| Normalized evidence class | Historical label in this note | What it can establish | What it cannot establish |
+|---|---|---|---|
+| `FORMAL-STANDARD` / `INDUSTRY-SPECIFICATION` | `NORMATIVE STANDARD` | Standard or specification semantics, such as HTTP, OpenAPI, CloudEvents or OIDC | That IDEA must use a particular architecture, broker, cloud or product |
+| `OFFICIAL-GUIDANCE-PATTERN` | `OFFICIAL GUIDANCE / PATTERN` | A known failure mode, reusable response and trade-offs | Qualification for IDEA's workload or organization |
+| `FIRST-PARTY-PUBLIC-PRACTICE` / `COMPETITOR-OBSERVATION` | `FIRST-PARTY PUBLIC PRACTICE` / `VENDOR-PUBLIC` | A reputable product exposes or reports a comparable practice | Undisclosed internals, or an IDEA requirement merely because the product is successful |
+| `IDEA-INFERENCE` | `IDEA RECOMMENDATION` | A bounded interpretation or recommendation derived from IDEA context and the evidence | Product approval, runtime proof, capacity proof or an SLA |
+| `QUALIFICATION-UNKNOWN` | `UNKNOWN` | The unresolved question and the evidence still required | A claim that the missing behavior exists or does not exist |
 
 Competitor observations remain reference evidence only. They do not create an IDEA requirement.
 
@@ -279,3 +281,21 @@ The evidence above supports the **shape** of Q5/Q10. It does not yet select:
 
 Those are Tech decisions or qualification facts. They should be resolved by the decision tree and
 evidence, not silently inherited from the example companies above.
+
+## 2026-09-13 correction addendum
+
+The 2026-09-11 source dates are intentionally retained. A current-date audit did not find a
+version-specific claim in this note that should be rewritten as a current runtime baseline; this
+note is about integration and deployment patterns. The normalized taxonomy above replaces the old
+labels for synthesis purposes. Current platform versions and support dates are recorded in the
+separate synthesis artifact.
+
+| Boundary | Correct reading |
+|---|---|
+| ISO/IETF/OpenAPI/CloudEvents/OIDC | `FORMAL-STANDARD` or `INDUSTRY-SPECIFICATION`; none mandates a broker, modular monolith or one VM. |
+| AWS/Microsoft/NIST patterns | `OFFICIAL-GUIDANCE-PATTERN`; they identify failure modes and trade-offs, not an IDEA capacity result. |
+| Shopify/GitLab/Stripe/GitHub/Aras/Windchill examples | `FIRST-PARTY-PUBLIC-PRACTICE` or `COMPETITOR-OBSERVATION`; no internal implementation is inferred. |
+| One VM, separate Format Worker, outbox, Adapter and recovery recommendations | `IDEA-INFERENCE`; preserve as candidates subject to qualification, not approved topology. |
+
+No product scope, Feature/Spec/Tech decision, architecture semantics, FTR/REQ, DDM capability or
+PG state is changed by this note.

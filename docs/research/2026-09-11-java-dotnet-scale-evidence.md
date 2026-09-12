@@ -5,13 +5,15 @@
 **Question:** Does Java/Spring or C#/.NET provide a materially stronger path for scaling IDEA
 Engineering into a large enterprise system?
 
-## Evidence classes
+## Normalized evidence classes
 
-| Class | Meaning in this note |
+| Normalized class | Historical label / meaning in this note |
 |---|---|
-| `OFFICIAL FACT` | A current first-party platform/project source states the capability, constraint or support term. |
-| `IDEA INFERENCE` | A bounded conclusion derived from official facts and IDEA's controlled requirements. It is not a measured result. |
-| `UNKNOWN` | The current IDEA evidence does not establish a result; qualification or a decision is still required. |
+| `OFFICIAL-PRODUCT-FACT` / `OFFICIAL-LIFECYCLE-LICENSING` | `OFFICIAL FACT`: a first-party platform/project source states a capability, constraint, support or license term. |
+| `IDEA-INFERENCE` | A bounded conclusion derived from official facts and IDEA's controlled requirements; it is not a measured result. |
+| `QUALIFICATION-UNKNOWN` | `UNKNOWN`: the current IDEA evidence does not establish a result; qualification or a decision is still required. |
+| `FORMAL-STANDARD` / `INDUSTRY-SPECIFICATION` | A cited standard/specification claim; it does not mandate Java or .NET. |
+| `COMPETITOR-OBSERVATION` | Evidence about another product, never an IDEA requirement. |
 
 No third-party language benchmark, consultancy comparison or competitor implementation is used as
 selection evidence here.
@@ -26,24 +28,25 @@ selection evidence here.
    requests. Multi-GB Artifact transfer must stream without whole-file buffering. A future Project
    corpus of hundreds of TB belongs in an independently scalable Artifact store, not in a Java or
    .NET process heap.
-3. **`IDEA INFERENCE`: Java/Spring has a real strategic edge, but not a proven raw-performance
+3. **`IDEA-INFERENCE`: Java/Spring has criterion-level advantages, but not a proven raw-performance
    edge.** Spring supplies first-party Modulith, Integration and Batch facilities directly relevant
    to IDEA's modular-monolith, ERP/MES/BI adapter and future migration/processing needs. Java 25 also
-   has a longer evidenced runtime support runway through named distribution/support programs.
+   has a longer evidenced runtime support runway through named distribution/support programs. These
+   findings do not own the complete cross-stack decision.
 4. **`IDEA INFERENCE`: .NET remains technically capable of the same system scale.** ASP.NET Core's
    asynchronous I/O, Kestrel, server/background GC, worker services and diagnostics form a credible
    large-server stack. A correct .NET implementation may beat an incorrect Java implementation and
    vice versa.
-5. **`UNKNOWN`: performance winner.** A selection document may prefer Java Server for ecosystem and
-   lifecycle reasons, but it must not claim “Java scales better/faster than .NET” until both
+5. **`QUALIFICATION-UNKNOWN`: performance winner.** A synthesis may record a criterion-level Java
+   ecosystem/lifecycle advantage, but it must not claim “Java scales better/faster than .NET” until both
    finalists run the same representative IDEA workload on the same hardware and PostgreSQL/storage
    topology.
 
-**Recommendation for the proposal:** make **Java 25 LTS + a named JDK distribution/support channel
-+ Spring Boot 4.1.x** the preferred IDEA Server candidate. Present .NET 10/ASP.NET Core as a
-credible alternative, not an inferior one. The reason for preferring Java is the combined
-modularity/integration/batch ecosystem and runtime-support optionality; generic performance folklore
-is not a valid reason.
+**Research disposition (criterion-level only):** carry **Java 25 LTS + a named JDK
+distribution/support channel + Spring Boot 4.1.x** as a strong Server candidate for modularity,
+integration/batch breadth and runtime-support optionality. Carry **.NET 10/ASP.NET Core** as an
+equally credible Server candidate with a Windows/tooling consolidation advantage. This note does not
+select an overall system winner; the cross-stack synthesis and qualification matrix own that scope.
 
 ## 1. What “scale” means for IDEA
 
@@ -312,7 +315,7 @@ failures, database-pool wait, worker queue depth/age, outbox lag, CPU/RSS/heap, 
 - `OFFICIAL FACT`: .NET 10 is LTS, released 2025-11-11 and supported through 2028-11-14. Microsoft
   requires supported deployments to stay current on released patches; even-numbered LTS releases
   receive three years of support.
-  [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
+  [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy)
 
 ### Comparison
 
@@ -390,14 +393,34 @@ into an approved performance claim:
 
 ## Final disposition for Q18
 
-Choose **Java for the Server proposal**, but state the decision accurately:
+This note owns Server-scale evidence, not the complete technology decision. Its final disposition is
+therefore **criterion-level findings only**:
 
-> Java 25 LTS with a named distribution and Spring Boot 4.1.x is preferred because Spring Modulith,
-> Spring Integration, Spring Batch and the longer runtime-support options align well with a
-> long-lived enterprise engineering-data system. Both Java/Spring and .NET/ASP.NET Core can scale
-> beyond the currently known IDEA load. Relative performance and capacity remain unproven until the
-> same representative IDEA workload is measured.
+- `ADVANTAGE` for Java/Spring on the currently evidenced Modulith, Integration and Batch ecosystem
+  and on runtime-distribution/support optionality.
+- `ADVANTAGE` for .NET on a single-vendor Windows/Server toolchain and the documented Windows
+  Workspace primitives considered elsewhere.
+- `UNKNOWN` for relative performance, capacity, total cost and company/team maintainability until
+  the same IDEA workload is executed on both finalists.
+- `FOLLOW-UP PRODUCT DECISION REQUIRED`: the overall Server + Web + Workspace selection belongs to
+  [`2026-09-13-technology-selection-evidence-synthesis.md`](2026-09-13-technology-selection-evidence-synthesis.md)
+  and later Tech review; this note does not approve Java or .NET.
 
-This is stronger and more defensible than “Java is khỏe hơn.” It names the actual benefits, retains
-the qualification boundary, and prevents a popular-language observation from being misreported as a
-performance fact.
+## 2026-09-13 current-version correction addendum
+
+The 2026-09-11 evidence date is retained for historical source claims. The following current
+release facts supersede any implication that an unqualified “latest” version is a reproducible
+baseline:
+
+| Component | Current fact at 2026-09-13 | IDEA interpretation / limitation |
+|---|---|---|
+| Java runtime | Java 25 is LTS; Oracle JDK 25 has Premier Support to Sep 2030 and Extended Support to Sep 2033 for entitled customers. Eclipse Temurin lists `25.0.4.1+1` and community availability at least to Sep 2031, without an Eclipse SLA ([Oracle roadmap](https://www.oracle.com/java/technologies/java-se-support-roadmap.html), [Temurin support](https://adoptium.net/support/), [Temurin release](https://adoptium.net/news/2026/09/eclipse-temurin-8u504-110321-170201-210121-25041-26021-available)) | Name the distribution and support channel; JDK lifecycle does not freeze Spring dependencies. |
+| Java 26 | Current non-LTS line; Oracle downloads list `26.0.2.1` and support only through Sep 2026 ([downloads](https://www.oracle.com/java/technologies/downloads/)) | Suitable for experiments, not the long-lived baseline without an explicit decision. |
+| Spring Boot / Framework | Boot `4.1.1`; system requirements require Java 17+ and Framework `7.0.9+` ([system requirements](https://docs.spring.io/spring-boot/system-requirements.html)) | Use the Boot BOM rather than independently pinning every Spring module. |
+| Spring modules | Modulith `2.1.1`, Security `7.1.1`, Data JPA `4.1.1`, Batch `6.0.5`, Integration `7.1.1` are current project lines; Boot compatibility remains the authority ([Modulith release](https://spring.io/blog/2026/08/26/spring-modulith-2-2-m1-2-1-1-2-0-8-and-1-4-13-released/), [Security](https://docs.spring.io/spring-security/reference/), [Data JPA](https://docs.spring.io/spring-data/jpa/reference/), [Batch release](https://spring.io/blog/2026/08/20/spring-batch-6-0-5-and-6-1-0-M1-available-now/), [Integration](https://docs.spring.io/spring-integration/reference/)) | Individual project release dates are not a shared “Java LTS” date; verify the selected Boot BOM in CI. |
+| .NET / EF Core | .NET `10.0.12` is the current patch and LTS ends 2028-11-14; EF Core 10 is supported through 2028-11-10 ([.NET policy](https://dotnet.microsoft.com/en-us/platform/support/policy), [EF10 lifecycle](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew)) | Patch the runtime/SDK and provider together; .NET LTS is not a Windows App SDK or WebView2 promise. |
+| Observability | Micrometer `1.17.x` is the current Spring support line; OpenTelemetry and JFR/.NET diagnostics remain separate supported toolchains ([Micrometer support](https://micrometer.io/support/), [OpenTelemetry](https://opentelemetry.io/docs/languages/)) | Confirm exporter, retention and incident runbooks in the qualification slice. |
+
+All rows are `OFFICIAL-PRODUCT-FACT` or `OFFICIAL-LIFECYCLE-LICENSING`; the IDEA implications are
+`IDEA-INFERENCE`; no row is a Tech approval. No product scope, Feature/Spec/Tech decision,
+architecture semantics, FTR/REQ, DDM capability or PG state is changed.

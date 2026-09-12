@@ -13,6 +13,24 @@ legacy interface is not enough to infer the language/framework of the whole prod
 also publish material for different product releases and deployment modes; those facts must not be
 silently combined into one timeless stack.
 
+## Evidence taxonomy and date boundary
+
+This is a historical competitor snapshot, not a current IDEA technology baseline. The controlled
+taxonomy for this research set is:
+
+| Normalized class | Use in this note |
+|---|---|
+| `OFFICIAL-PRODUCT-FACT` | Aras/CSI documentation directly states a supported product, release or interface fact. |
+| `OFFICIAL-LIFECYCLE-LICENSING` | A vendor support, edition or licensing term is stated directly. |
+| `COMPETITOR-OBSERVATION` | The observation concerns Aras or DDM and cannot create an IDEA requirement. |
+| `IDEA-INFERENCE` | A bounded comparison implication derived from the observation; it is not a product decision. |
+| `QUALIFICATION-UNKNOWN` | The public source does not establish the implementation, contract or IDEA applicability. |
+
+The older `VENDOR-PUBLIC`/`PUBLISHER-PRIMARY` wording in the source ledger is treated as
+`OFFICIAL-PRODUCT-FACT` or `OFFICIAL-LIFECYCLE-LICENSING` only where the publisher directly states
+the fact. `2026-09-11` remains the retrieval date for every historical claim below; a later release
+must not be silently projected backwards onto Platform 33, R39/R40 or DDM 2026.x.
+
 ## Aras Innovator
 
 | Layer | Vendor-public evidence | Limit |
@@ -69,3 +87,20 @@ These competitor observations support four comparison lessons, not requirements:
 No first-party evidence found here validates React, WPF/WebView2 or PostgreSQL by competitor imitation.
 Those remain IDEA-specific candidates to evaluate on maintainability, security, operator competence,
 support lifecycle and qualification results.
+
+## 2026-09-13 correction addendum
+
+The current-date audit found no evidence that requires rewriting the release-specific Aras or DDM
+claims above. The important correction is methodological: the R39/R40, Platform 33 and DDM 2026.x
+facts remain historical `COMPETITOR-OBSERVATION` entries, not a current IDEA stack recommendation.
+Current technology candidates are maintained in
+[`2026-09-13-technology-selection-evidence-synthesis.md`](2026-09-13-technology-selection-evidence-synthesis.md).
+
+| Claim boundary | Current disposition | Limitation |
+|---|---|---|
+| Aras R39 `.NET 10`, Platform 33 `.NET 8.0.1`, and R40 SaaS `.NET 10`/Ubuntu 24.04 | `OFFICIAL-PRODUCT-FACT` → `COMPETITOR-OBSERVATION`; retain each release context | No inference about all Aras deployments or IDEA's runtime. |
+| DDM 2026.x Windows Server/SQL Server matrix and WCF wording | `OFFICIAL-PRODUCT-FACT` → `COMPETITOR-OBSERVATION` | Supported environment is not implementation-language or ORM evidence. |
+| SQL Server prevalence in both products | `IDEA-INFERENCE` only | PostgreSQL remains an independently qualified IDEA candidate. |
+
+No product scope, Feature/Spec/Tech decision, architecture semantics, FTR/REQ, DDM capability or
+PG state is changed by this note.

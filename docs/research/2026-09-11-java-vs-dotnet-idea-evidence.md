@@ -10,10 +10,10 @@ There is no evidenced product or architecture constraint that prevents IDEA Engi
 Java/Spring. Java can implement the proposed modular monolith, HTTP Interfaces, relational
 transactions, PostgreSQL access, transactional publication and Linux/container deployment.
 
-The current preference for .NET is narrower: IDEA already proposes a Windows-native Desktop and
-Workspace. Using C#/.NET for both those components and the Server reduces the number of runtime and
-language families that a small initial team must build, patch and diagnose. That is an **IDEA
-inference**, not proof that Java is less capable, less enterprise-ready or slower.
+The current evidence gives .NET a criterion-level client/runtime-consolidation advantage only:
+IDEA's Windows Desktop and Workspace obligations make a single C#/.NET family easier to build,
+patch and diagnose for a small initial team. That is an **IDEA-INFERENCE**, not proof that Java is
+less capable, less enterprise-ready or slower, and it is not an overall system recommendation.
 
 This note therefore keeps three real options open:
 
@@ -21,26 +21,29 @@ This note therefore keeps three real options open:
 - **B — Java/Spring Server + .NET Windows client/Workspace**;
 - **C — Java/Spring Server + Java Desktop/Workspace**.
 
-The present evidence gives A a conditional maintainability advantage, not an approval. B can become
-the better choice if company Java/Spring skill and support are materially stronger. C is technically
-credible, but it changes the currently proposed desktop/rendered-UI boundary and has the largest
-qualification backlog.
+The present evidence gives A a conditional maintainability/client-consolidation advantage, not an
+approval. B can become the better Server choice if company Java/Spring skill and support are
+materially stronger. C is technically credible, but it changes the currently proposed
+desktop/rendered-UI boundary and has the largest qualification backlog. The overall comparison is
+deferred to the synthesis artifact.
 
 ## Evidence rules
 
-| Class | Meaning in this note |
+| Normalized class | Historical label / meaning in this note |
 |---|---|
-| `OFFICIAL FACT` | A current first-party project/vendor source states a capability, support period or license fact. |
-| `IDEA INFERENCE` | A consequence reasoned from IDEA's confirmed context: Windows engineering PCs, file/CAD work, one initial operator, 50–100 intended users and no dedicated DevOps role. |
-| `QUALIFICATION UNKNOWN` | Feasibility for IDEA has not been demonstrated with an exact version, machine, file corpus, installer, security boundary or recovery test. |
-| `COMPETITOR OBSERVATION` | Evidence about Aras or DDM; it is not sufficient by itself to create an IDEA requirement or select a stack. |
+| `OFFICIAL-PRODUCT-FACT` / `OFFICIAL-LIFECYCLE-LICENSING` | `OFFICIAL FACT`: a first-party source states a capability, support period or license fact. |
+| `IDEA-INFERENCE` | A consequence reasoned from IDEA's confirmed context; it is not a measured result or approval. |
+| `QUALIFICATION-UNKNOWN` | `QUALIFICATION UNKNOWN`: feasibility for IDEA has not been demonstrated with an exact version, machine, file corpus, installer, security boundary or recovery test. |
+| `COMPETITOR-OBSERVATION` | Evidence about Aras or DDM; it is not sufficient by itself to create an IDEA requirement or select a stack. |
+| `FORMAL-STANDARD` / `INDUSTRY-SPECIFICATION` | A cited standard/specification contract; it does not mandate Java or .NET. |
 
 ## 1. Runtime, lifecycle and licensing
 
 ### .NET candidate
 
-- `OFFICIAL FACT`: Microsoft's current [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)
-  lists .NET 10 as an active LTS release, released 2025-11-11 and supported through 2028-11-14.
+- `OFFICIAL-PRODUCT-FACT`: Microsoft's current [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy)
+  lists .NET 10 as an active LTS release, released 2025-11-11 and supported through 2028-11-14;
+  the current patch listed on 2026-09-13 is `10.0.12`.
   LTS receives three years of free patches, and a supported installation must remain current on
   released patches.
 - `OFFICIAL FACT`: Microsoft states that [.NET has no licensing costs, including commercial
@@ -139,13 +142,16 @@ criteria.
 
 ### What Java demonstrably provides
 
-- `OFFICIAL FACT`: JavaFX is available for Windows. The current
-  [JavaFX roadmap](https://gluonhq.com/products/javafx/) lists JavaFX 25 as an active LTS line and
+- `OFFICIAL-PRODUCT-FACT`: JavaFX is available for Windows. Oracle's Java Verified Portfolio / [JavaFX
+  Support Roadmap](https://www.oracle.com/java/technologies/jvp-support-roadmap.html) reintroduced
+  Oracle JavaFX support in 2026; JavaFX 25 corresponds to JDK 25 and is supported to September 2030
+  for the applicable Oracle support entitlement. The current [Gluon JavaFX roadmap](https://gluonhq.com/products/javafx/)
+  also lists JavaFX 25 as an active LTS line and
   provides Windows x64 artifacts. The OpenJFX
   [getting-started guide](https://openjfx.io/openjfx-docs/) supports Maven/Gradle dependency delivery,
   platform-specific native libraries and custom runtime images.
-- `OFFICIAL FACT`: JavaFX [`WebView`](https://openjfx.io/javadoc/26/javafx.web/javafx/scene/web/WebView.html)
-  displays Web content, and [`WebEngine`](https://openjfx.io/javadoc/26/javafx.web/javafx/scene/web/WebEngine.html)
+- `OFFICIAL-PRODUCT-FACT`: JavaFX [`WebView`](https://openjfx.io/javadoc/25/javafx.web/javafx/scene/web/WebView.html)
+   displays Web content, and [`WebEngine`](https://openjfx.io/javadoc/25/javafx.web/javafx/scene/web/WebEngine.html)
   supports JavaScript plus two-way communication between Java and page code. This makes a
   Java-hosted rendered region possible; it does not prove compatibility, security or UX parity with
   the current React + WebView2 concept.
@@ -153,14 +159,14 @@ criteria.
   [Foreign Function & Memory API](https://openjdk.org/jeps/454) was finalized in JDK 22 and enables
   Java code to call native libraries and process native data. JNI also remains available. It would
   therefore be unsupported to claim that Java lacks native interoperability.
-- `OFFICIAL FACT`: the JDK's
-  [`jpackage`](https://docs.oracle.com/en/java/javase/26/jpackage/packaging-overview.html) creates
+- `OFFICIAL-PRODUCT-FACT`: the JDK's
+  [`jpackage`](https://docs.oracle.com/en/java/javase/25/jpackage/packaging-overview.html) creates
   platform-specific installable packages for Windows, Linux and macOS, includes an application
   runtime, and supports file associations. Packaging a Java Windows application is feasible.
-- `OFFICIAL FACT`: JavaFX support is a separate decision from JDK support. Oracle's Java SE roadmap
-  explicitly excludes JavaFX from its general client/server support-table assurance, OpenJFX points
-  LTS questions to Gluon, and Gluon describes guaranteed security patches as part of its
-  [JavaFX LTS plans](https://gluonhq.com/services/javafx-support/).
+- `OFFICIAL-LIFECYCLE-LICENSING`: JavaFX support remains a separate decision from JDK support. Oracle's
+  JVP roadmap and [JavaFX downloads](https://www.oracle.com/java/technologies/downloads/javafx/) state
+  the corresponding JDK/support and licensing boundary; Gluon separately offers JavaFX LTS builds,
+  backports and direct engineering support through its [commercial support plans](https://gluonhq.com/services/javafx-support/).
 
 ### Safe desktop conclusion
 
@@ -247,22 +253,26 @@ The decisive facts are therefore not “Java versus .NET” in the abstract. The
 4. which exact support and licensing path the company is willing to own;
 5. which candidate passes the same transaction, file-transfer, restore and patch drill.
 
-## 6. Recommendation to carry into the Tech review
+## 6. Criterion-level posture for the Tech review
 
-Keep **A as the current slight recommendation**, because it preserves the proposed Windows client
-and minimizes runtime-family diversity under the known small-team operating context. Present it as
-a conditional maintainability choice, not as “Java cannot do this.”
+This note does not own the complete cross-stack decision and therefore does not declare A, B or C
+the overall winner. Its bounded findings are:
 
-Keep **B as a first-class alternative**. If the user's/company's maintainable expertise and support
-path are substantially Java/Spring-oriented, B should replace A for the Server despite the dual
-runtime. That private organizational fact cannot be inferred from public technical sources.
+- **A — Unified .NET:** `ADVANTAGE` on client/runtime consolidation and the current Windows
+  integration evidence; `QUALIFICATION REQUIRED` for the actual shell, installer and Workspace
+  journey.
+- **B — Java Server + .NET Workspace:** `ADVANTAGE` when Java/Spring modularity, integration/batch
+  breadth or the company's Java support path matters; `DISADVANTAGE` is the second runtime family;
+  company skill and operating cost remain `UNKNOWN`.
+- **C — Java Server + Java Desktop/Workspace:** technically credible, but `QUALIFICATION REQUIRED`
+  for JavaFX WebKit, per-user IPC, signed update/rollback and CAD/Office boundaries. It changes the
+  current desktop/rendered-UI boundary and cannot be treated as a Tech-only substitution.
 
-Keep **C as a qualified alternative**, not a paper equivalence. Advance it only after the same
-Desktop/Workspace slice is tested against WPF/WebView2 and demonstrates the required integration,
-security, update and recovery behavior.
+The overall candidate comparison belongs to
+[`2026-09-13-technology-selection-evidence-synthesis.md`](2026-09-13-technology-selection-evidence-synthesis.md).
 
 Do not use Aras's current .NET runtime as the deciding argument. It is a
-`COMPETITOR OBSERVATION` showing that .NET can serve a PLM product, not an IDEA requirement. The
+`COMPETITOR-OBSERVATION` showing that .NET can serve a PLM product, not an IDEA requirement. The
 public DDM evidence does not establish its internal implementation language. Neither competitor
 fact closes this decision.
 
@@ -279,3 +289,19 @@ fact closes this decision.
 - Produce a dependency/license inventory and a three-year patch/major-upgrade calendar for the full
   stack, not only the base runtime.
 - Select only after measured results and review; current status remains `NOT-RUN`.
+
+## 2026-09-13 current-version and JavaFX correction addendum
+
+The 2026-09-11 evidence date is retained for historical source claims. Current facts that affect
+this comparison are:
+
+| Component | Current fact at 2026-09-13 | IDEA interpretation / limitation |
+|---|---|---|
+| Java/JDK | Java 25 is LTS. Oracle lists JDK 25 Premier Support to Sep 2030 and Extended Support to Sep 2033 for entitled customers; Temurin lists `25.0.4.1+1` and community availability at least to Sep 2031 without an Eclipse SLA ([Oracle roadmap](https://www.oracle.com/java/technologies/java-se-support-roadmap.html), [Temurin support](https://adoptium.net/support/), [Temurin release](https://adoptium.net/news/2026/09/eclipse-temurin-8u504-110321-170201-210121-25041-26021-available)) | Name distribution, support contract and patch policy; Java LTS does not freeze Spring. |
+| Java 26 | Non-LTS; Oracle downloads list `26.0.2.1`, with support only through Sep 2026 ([downloads](https://www.oracle.com/java/technologies/downloads/)) | Keep as an experiment line, not an assumed baseline. |
+| Spring | Boot `4.1.1` requires Java 17+ and Framework `7.0.9+`; Security `7.1.1`, Modulith `2.1.1`, Data JPA `4.1.1`, Batch `6.0.5` and Integration `7.1.1` are current project lines ([Boot requirements](https://docs.spring.io/spring-boot/system-requirements.html), [Boot coordinates](https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html)) | Let the Boot BOM own compatible subversions and verify the full graph in CI. |
+| .NET / EF Core | .NET `10.0.12` is the current patch and LTS ends 2028-11-14; EF Core 10 is supported through 2028-11-10 ([.NET policy](https://dotnet.microsoft.com/en-us/platform/support/policy), [EF10 lifecycle](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew)) | This is not the lifecycle of Windows App SDK or WebView2. |
+| JavaFX | Oracle reintroduced JavaFX support in 2026. JavaFX 25 corresponds to JDK 25 and is supported to Sep 2030 under the applicable Oracle support arrangement; JavaFX 25.0.4 is available, while Gluon offers a separate LTS/commercial support path ([Oracle JVP roadmap](https://www.oracle.com/java/technologies/jvp-support-roadmap.html), [Oracle downloads](https://www.oracle.com/java/technologies/downloads/javafx/), [Gluon support](https://gluonhq.com/services/javafx-support/)) | Stronger lifecycle evidence than this note's original wording, but no conclusion about React/WebKit, IPC, update or CAD/Office fit. |
+
+No row is a product decision. No product scope, Feature/Spec/Tech decision, architecture semantics,
+FTR/REQ, DDM capability or PG state is changed.

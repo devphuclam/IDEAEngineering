@@ -47,11 +47,13 @@ one complete proposal can be put to management.
 
 ## Evidence classes
 
-| Class | Meaning in this note |
+| Normalized class | Historical label / meaning in this note |
 |---|---|
-| `OFFICIAL FACT` | A current IDEA normative/draft product document or first-party project/vendor source states the requirement, capability, lifecycle or packaging fact. |
-| `IDEA INFERENCE` | A consequence reasoned from IDEA's confirmed product boundary and the cited official facts. It is not presented as vendor fact. |
-| `QUALIFICATION UNKNOWN` | IDEA has not demonstrated the result on the exact Windows, CAD/Office, installer, network, file corpus and security configuration. |
+| `OFFICIAL-PRODUCT-FACT` / `OFFICIAL-LIFECYCLE-LICENSING` | `OFFICIAL FACT`: a current IDEA document or first-party project/vendor source states a requirement, capability, lifecycle, packaging or license fact. |
+| `IDEA-INFERENCE` | A consequence reasoned from IDEA's confirmed product boundary and cited official facts; it is not vendor fact or approval. |
+| `QUALIFICATION-UNKNOWN` | `QUALIFICATION UNKNOWN`: IDEA has not demonstrated the result on the exact Windows, CAD/Office, installer, network, file corpus and security configuration. |
+| `FORMAL-STANDARD` / `INDUSTRY-SPECIFICATION` | A cited standard/specification contract; it does not select a client toolkit. |
+| `COMPETITOR-OBSERVATION` | Evidence about Aras/DDM or another product; it cannot create an IDEA requirement. |
 
 No generic benchmark, popularity claim or vendor slogan is treated as selection evidence. Runtime
 RAM, start time, package size and multi-GB behavior remain unknown until the same IDEA vertical slice
@@ -108,9 +110,10 @@ evidence.
   ([pipe operations](https://learn.microsoft.com/en-us/dotnet/standard/io/pipe-operations),
   [named-pipe ACL creation](https://learn.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstreamacl.create?view=net-10.0),
   [data protection](https://learn.microsoft.com/en-us/dotnet/standard/security/how-to-use-data-protection)).
-- `OFFICIAL FACT`: .NET 10 is an LTS release supported through 2028-11-14. .NET LTS is three years,
+- `OFFICIAL-PRODUCT-FACT`: .NET `10.0.12` is the current patch as of 2026-09-13 and the LTS line is
+  supported through 2028-11-14. .NET LTS is three years,
   so “LTS” still requires planned major upgrades
-  ([.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)).
+  ([.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy)).
 - `OFFICIAL FACT`: a self-contained/single-file deployment includes the runtime and is specific to an
   OS and architecture; trimming is only safe for compatible applications
   ([single-file deployment](https://learn.microsoft.com/en-us/dotnet/core/deploying/single-file/overview)).
@@ -134,9 +137,11 @@ evidence.
 - `OFFICIAL FACT`: Microsoft recommends the automatically patched Evergreen WebView2 Runtime. A
   Fixed Version shifts patch ownership to IDEA and adds the renderer to delivery
   ([Evergreen versus Fixed](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/evergreen-vs-fixed-version)).
-- `OFFICIAL FACT`: Windows App SDK has its own servicing clock, separate from .NET LTS; the stable
-  channel publishes exact end-of-servicing dates
-  ([Windows App SDK stable channel](https://learn.microsoft.com/en-sg/windows/apps/windows-app-sdk/stable-channel)).
+- `OFFICIAL-LIFECYCLE-LICENSING`: Windows App SDK has its own servicing clock, separate from .NET
+  LTS. Stable Windows App SDK `2.4.0` was released 2026-08-13; the 2.x servicing family ends
+  2027-04-29, while the 1.8 maintenance window ends 2026-09-09
+  ([stable downloads](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads),
+  [release channels](https://learn.microsoft.com/en-sg/windows/apps/windows-app-sdk/release-channels)).
 - `IDEA INFERENCE`: this is the strongest installed-shell option if S1's browser-to-agent gate fails
   and Windows integration matters. It is not automatically safer than a browser: IDEA creates a
   privileged bridge and must keep its renderer, shell and agent versions compatible.
@@ -162,10 +167,15 @@ evidence.
   proves a native path exists, not that a supported Office/CAD COM layer exists
   ([JNI design](https://docs.oracle.com/en/java/javase/25/docs/specs/jni/design.html),
   [FFM API](https://docs.oracle.com/en/java/javase/25/core/foreign-function-and-memory-api.html)).
-- `OFFICIAL FACT`: Gluon lists JavaFX 25 as LTS, but guaranteed long-term builds, backports and
-  security fixes are a commercial support offering
-  ([JavaFX roadmap](https://gluonhq.com/products/javafx/),
-  [JavaFX support](https://gluonhq.com/services/javafx-support/)). This is distinct from choosing a
+- `OFFICIAL-LIFECYCLE-LICENSING`: Oracle's Java Verified Portfolio reintroduced JavaFX support in
+  2026. JavaFX 25 corresponds to Oracle JDK 25 and is supported to September 2030 under the
+  applicable Oracle support arrangement; JavaFX 25.0.4 is listed in the current downloads. Gluon
+  separately lists JavaFX 25 as LTS and offers guaranteed long-term builds, backports and security
+  fixes through a commercial support offering
+  ([Oracle JVP roadmap](https://www.oracle.com/java/technologies/jvp-support-roadmap.html),
+  [Oracle downloads](https://www.oracle.com/java/technologies/downloads/javafx/),
+  [Gluon roadmap](https://gluonhq.com/products/javafx/),
+  [Gluon support](https://gluonhq.com/services/javafx-support/)). This is distinct from choosing a
   Java 25 JDK distribution and its support entitlement.
 - `IDEA INFERENCE`: JavaFX is technically credible and a Java Server does not require or forbid it.
   It ranks below the shortlist because using native JavaFX loses React view reuse, while using its
@@ -205,9 +215,10 @@ evidence.
 
 ### 3.5 Tauri 2 shell plus Rust Workspace
 
-- `OFFICIAL FACT`: Tauri uses a Rust core and the operating system WebView; Windows development and
+- `OFFICIAL-PRODUCT-FACT`: Tauri `2.11.5` is the current core release listed on 2026-09-13. Tauri
+  uses a Rust core and the operating system WebView; Windows development and
   runtime use WebView2. It accepts React or another static Web frontend
-  ([Tauri prerequisites](https://v2.tauri.app/start/prerequisites/),
+  ([Tauri releases](https://v2.tauri.app/release/), [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/),
   [frontend configuration](https://v2.tauri.app/start/frontend/)).
 - `OFFICIAL FACT`: Tauri 2 capabilities restrict commands by window/WebView, origin and scoped
   permission. The documentation explicitly says this cannot protect against insecure Rust code,
@@ -225,9 +236,10 @@ evidence.
   [updater](https://v2.tauri.app/plugin/updater/),
   [Windows signing](https://v2.tauri.app/distribute/sign/windows/)). Updater signatures do not
   replace Windows Authenticode/enterprise trust policy.
-- `OFFICIAL FACT`: Rust stable preserves language compatibility through editions, but the Rust
-  project supports only the latest stable toolchain; a stable version is replaced after six weeks
-  ([edition stability](https://doc.rust-lang.org/edition-guide/editions/index.html),
+- `OFFICIAL-LIFECYCLE-LICENSING`: Rust stable preserves language compatibility through editions, but
+  the current stable toolchain is `1.98.1` (2026-09-03) and the Rust project supports only the latest
+  stable toolchain; a stable version is replaced after six weeks
+  ([Rust releases](https://blog.rust-lang.org/releases/), [edition stability](https://doc.rust-lang.org/edition-guide/editions/index.html),
   [Rust release channels](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html)). Tauri's
   security policy identifies supported major versions but publishes no fixed multi-year LTS period
   ([Tauri security policy](https://github.com/tauri-apps/tauri/security/policy)).
@@ -355,3 +367,21 @@ The defensible management proposal today is therefore: **approve a bounded clien
 bake-off, not .NET or Java by reputation**. Carry S1, S2 and S3 to the gates; keep the Server-runtime
 decision separate; then submit one complete stack with measured evidence and explicit residual
 risks for approval or rejection.
+
+## 2026-09-13 current-version and browser-policy correction addendum
+
+The 2026-09-12 evidence date is retained for its original Windows/CAD/Office experiments and
+historical source context. The following current facts correct version drift without selecting a
+client:
+
+| Component | Current fact at 2026-09-13 | IDEA implication / qualification |
+|---|---|---|
+| React / TypeScript / Vite | React `19.3.0` is the current stable release (2026-09-09); TypeScript `5.9` is the current stable handbook line; Vite `8.3` is the current patch line and Vite 8 requires Node `20.19+` or `22.12+` ([React versions](https://react.dev/versions), [React 19.3](https://react.dev/blog/2026/09/09/react-19-3), [TypeScript 5.9](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html), [Vite releases](https://vite.dev/releases), [Vite 8](https://vite.dev/blog/announcing-vite8)) | A client-only React CSR SPA backed by a separate IDEA Server remains a valid candidate; React's framework guidance is not a requirement for SSR/RSC. Choose Router declarative/data/framework mode only after routing, data-fetching and code-splitting needs are qualified. |
+| Web security | React Trusted Types support is defense-in-depth, not authentication or authorization ([React 19.3](https://react.dev/blog/2026/09/09/react-19-3)). Edge Local Network Access (LNA) prompts/governs public-origin access to local/loopback targets; the documented loopback allowlist policy applies to Edge `146+` ([Edge LNA](https://learn.microsoft.com/en-us/deployedge/ms-edge-local-network-access), [loopback policy](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/loopbacknetworkallowedforurls)) | `localhost + CORS` is insufficient. S1 must test secure context/TLS, authenticated loopback, origin allowlisting, anti-CSRF, DNS-rebinding defense, one-time pairing/replay protection, enterprise policy and denial behavior. Extension/native messaging requires an installed extension and registered host; custom-protocol launch still needs Server coordination. |
+| WebView2 | Evergreen is Microsoft's recommended automatically patched runtime; Fixed Version shifts patch/size/servicing ownership to IDEA ([Evergreen vs Fixed](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/evergreen-vs-fixed-version)) | Company-managed Windows images must be tested for runtime presence, offline bootstrap, navigation/message validation and host-object exposure. WebView2 servicing is separate from .NET and Windows App SDK. |
+| Tauri / Rust | Tauri core `2.11.5` is the current release line; Rust stable `1.98.1` was released 2026-09-03 ([Tauri releases](https://v2.tauri.app/release/), [Rust releases](https://blog.rust-lang.org/releases/)) | Tauri/Rust remains a challenger. Rust has no multi-year LTS contract; measure update, sidecar, IPC, native adapter and team support rather than calling it lighter. |
+| Windows App SDK / JavaFX | Windows App SDK `2.4.0` is stable, with 2.x servicing through 2027-04-29; Oracle JavaFX 25 support was reintroduced in 2026 and runs with JDK 25 through Sep 2030 under the applicable entitlement ([App SDK downloads](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads), [Oracle JVP roadmap](https://www.oracle.com/java/technologies/jvp-support-roadmap.html)) | These independent clocks require separate patch calendars. JavaFX's stronger support fact does not close WebKit/React, IPC, installer, update or CAD/Office qualification. |
+
+All rows are `OFFICIAL-PRODUCT-FACT` or `OFFICIAL-LIFECYCLE-LICENSING`; the IDEA conclusions are
+`IDEA-INFERENCE` or `QUALIFICATION-UNKNOWN`. No product scope, Feature/Spec/Tech decision,
+architecture semantics, FTR/REQ, DDM capability or PG state is changed.
