@@ -34,19 +34,19 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 4. Scope Aras claims to the cited official edition, application, configuration context, and demonstrated behavior; an application-specific Aras pattern is not automatically platform-wide.
 5. Treat `UNKNOWN` and `BLOCKED` as visible outcomes, not missing documentation to fill by assumption.
 6. Use [IDEA design lessons](idea-design-lessons.md) and ADR-0009 to cross the evidence-to-product seam.
-7. Record an evidenced DDM behavior as a default coverage candidate, compare applicable Aras behavior proactively, and keep evidence class separate from Behavioral Coverage Disposition.
+7. Record an evidenced DDM behavior as a coverage candidate, compare applicable Aras behavior proactively, and keep DDM Evidence Authority/Mode/Temporal separate from IDEA Coverage, Product Disposition, Gap Criticality, Product Priority and Gate Effect.
 8. Create each IDEA requirement with a stable identity, source trace, product rationale, acceptance criterion, and verification method; the approved DDM objective does not replace requirement control.
 9. Resolve conflicts in favor of newer controlled evidence only after recording the new source hash and supersession.
 
 ## Coverage snapshot
 
-As of 2026-08-27, the admitted baseline covers:
+As of 2026-09-12, the admitted baseline covers:
 
 | Area | Controlled coverage |
 |---|---|
 | icVault | 9 topology claims, 8 identity/version claims, all 22 Checkout/Reference/Check-in scenarios, structure/workflow/metadata, storage/security/recovery, unknowns, and prohibited overclaims |
 | DDM public evidence | 16 first-party propositions, 10 target-unknown groups, 8 public-source contradiction classes, and explicit tutorial limits |
-| DDM capability inventory | `IE-KNW-DDM-007`: 100 DDM-native capability rows across families A–S, with separate evidence class, IDEA coverage, relevance, gap severity and open-point impact |
+| DDM capability inventory | `IE-KNW-DDM-007@0.2`: 100 DDM-native capability rows across families A–S, with orthogonal Evidence Authority/Mode/Temporal axes, IDEA `COVERED/PARTIAL/ABSENT/UNKNOWN`, separate product disposition, gap criticality, priority, gate effect and open-point impact |
 | DDM future target audit | 24 ranked questions with entry, legal/safety, evidence-output, stop, and exit gates |
 | Aras comparison | Official lifecycle/version and workflow/approval patterns admitted with explicit application and evidence limits |
 | IDEA translation | 22 accepted design lessons, 44 core invariants, 13 baseline quality scenarios, 7 accepted product ADRs, and 1 proposed product ADR |

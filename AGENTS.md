@@ -29,6 +29,14 @@ the [IDEA instance catalogue](docs/product/instances/idea-engineering/README.md)
 authored instances, decision briefs, templates and their current versions. Follow its DOC-07
 links for task order and planning dependencies.
 
+### Product and research authoring standard
+
+Before authoring a controlled product document, `IE-KNW-*` knowledge artifact, research record,
+ADR, decision brief or verification record, read the [product and research authoring standard](docs/agents/product-document-authoring-standard.md).
+It defines the control envelope, standards tailoring, evidence-to-decision separation,
+requirement/architecture/data/verification writing rules and explicit `UNKNOWN`/`BLOCKED`/
+`NOT-RUN` handling. It does not create product scope or gate decisions.
+
 ### Management-facing Word documents
 
 Before creating, editing or comparing Word documents for management, read
