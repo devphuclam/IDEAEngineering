@@ -5,10 +5,14 @@ const {pathToFileURL} = require('node:url');
 const {chromium} = require(process.env.IDEA_PLAYWRIGHT_PATH || 'playwright');
 
 const root = path.resolve(__dirname, '..');
-const folder = path.join(
-  root,
-  'docs/product/instances/idea-engineering/evidence/IE-VEV-ARCH-VIEW-002'
-);
+const evidenceId = process.env.IDEA_ARCH_EVIDENCE_ID;
+if (!evidenceId) {
+  throw new Error('Set IDEA_ARCH_EVIDENCE_ID to the evidence record being checked.');
+}
+if (!/^IE-VEV-[A-Z0-9-]+$/.test(evidenceId)) {
+  throw new Error(`Invalid IDEA_ARCH_EVIDENCE_ID: ${evidenceId}`);
+}
+const folder = path.join(root, 'docs/product/instances/idea-engineering/evidence', evidenceId);
 
 (async () => {
   const browser = await chromium.launch({channel: 'chrome', headless: true});
@@ -35,6 +39,7 @@ const folder = path.join(
 
   await browser.close();
   const evidence = {
+    evidenceId,
     checkedAt: new Date().toISOString(),
     browser: browserVersion,
     check: 'Open each standalone SVG through the browser file URL and reject XML parser errors',

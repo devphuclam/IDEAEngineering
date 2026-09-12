@@ -40,6 +40,14 @@ _Avoid_: document owner role, open self-registration, company-login integration 
 A verified sign-in identity explicitly associated with an IDEA Account, such as its native login or a later approved provider-and-subject pair. Adding or changing a login method does not create document privileges, change the stable Actor, or merge accounts merely because names or email addresses match.
 _Avoid_: Actor ID, automatic email matching, group claim as final product permission
 
+**Actor Context**:
+The runtime identity and eligibility context established by Server/IAM from session proof for one protected request. It is not a client-provided or client-trusted `ActorId`, and it is not a durable product-data record.
+_Avoid_: browser-selected actor, unverified request field, permanent authorization grant
+
+**Restricted Recovery Mode**:
+The server state entered after restoring a coordinated recovery point. Restored sessions are invalidated; security or account changes after that point are not automatically reconciled. Each later change needs independent proof and a named governed reconciliation before an explicit reopen decision.
+_Avoid_: automatic access replay, silently resumed old session, assumed complete security reconstruction
+
 **Security Principal**:
 An Actor or Business Group that may receive a Role Assignment. A future automated integration may use a separately governed service principal, but an IDEA Account, Login Identity, Organizational Department or job title is not itself the recipient of product authority.
 _Avoid_: username, session, department, document owner, implied administrator
@@ -59,6 +67,14 @@ _Avoid_: UI location, department, matching group name, implicit global authority
 **Role Assignment**:
 The attributable association that grants one Security Principal one exact Role Definition version at one Authorization Scope, optionally constrained by an effective period and an explicit authorization condition. It may target an Actor directly or a Business Group; Group assignment is the normal personnel-management path, while every direct assignment remains visible and auditable. Changing the active Custom Role version does not mutate this association; moving it to a successor is a separate governed replacement.
 _Avoid_: Group Membership, Workflow Assignment, account creation, role name without scope
+
+**Authorization Decision**:
+The immutable Access Policy result for one request, recording the server-established ActorContext, Permission, resource/expected state, resolved eligibility, membership, Role Assignment/version and Scope evidence, and granted or blocked result. It establishes authorization eligibility only.
+_Avoid_: owner business-gate result, mutable current access row, client-side permission check
+
+**Owner Command Outcome**:
+The separate attributable result recorded by the authoritative resource owner after its lifecycle, Reservation/Workspace, expected-state, completeness and other business gates. It correlates to an Authorization Decision and commits atomically with authoritative owner state, Audit Evidence and transactional outbox where applicable.
+_Avoid_: Access Policy state, generic cross-module CRUD record, RBAC grant treated as final business success
 
 **Administrator**:
 An Actor who has an effective Role Assignment containing one or more administration Permissions at an explicit Authorization Scope. Administrator is not an account type or a fixed rank: the same Actor may hold several independently assigned administrative roles, and none implies document, Approval or Release authority unless another applicable Role Assignment grants it.
@@ -295,8 +311,16 @@ An explicit operation that creates a new Logical Document with a new `DocumentId
 _Avoid_: Rename, Move, Reference, physical deduplication
 
 **Artifact**:
-Immutable binary content identified by a digest and referenced by a Generation Manifest.
-_Avoid_: Logical Document, workspace path
+Immutable binary content identified by a digest. Artifact Custody verifies its private candidate, assigns or reuses its identity and manages its locations; a Generation Manifest retains only an Artifact Reference.
+_Avoid_: Logical Document, workspace path, storage-provider key
+
+**Artifact Custody**:
+The narrow Module that accepts/verifies private candidates, resolves exact immutable Artifact bytes, manages Artifact Location and Transfer records, and performs verified location migration. It does not own Logical Documents, Generations, Working Heads, Reservations, Release outcomes or a generic transaction API.
+_Avoid_: Controlled Product Data authority, general CRUD coordinator, provider path exposed to Workspace
+
+**Artifact Reference**:
+The Controlled Product Data manifest relation that pins one exact Artifact identity/digest and declared role for a Generation. It is not the Artifact bytes, provider location or transfer record.
+_Avoid_: physical storage record, filesystem path, mutable latest-file pointer
 
 **Primary Artifact**:
 The source Artifact designated by a Generation Manifest as the authoritative file for that controlled content role. A PDF can be a Primary Artifact when it is the source document, while a PDF generated from CAD is a Representation of the CAD source.
@@ -332,7 +356,7 @@ The exact published Generation used as the concurrency base for the next control
 _Avoid_: Released baseline, unqualified latest
 
 **Release Record**:
-Immutable evidence that pins a Business Revision to the exact Generation and Structure Snapshot that passed release gates.
+Immutable evidence that pins a Business Revision to exact Generations, approval/policy evidence and zero or more exact Structure Pins. The applicable Release Policy decides which Structure Pins are required for that scope; every selected pin resolves one exact Structure Snapshot.
 _Avoid_: current Workflow State, pointer that follows Working Head
 
 **Check-in Change Set**:
@@ -396,6 +420,10 @@ _Avoid_: full offline command replay, offline approval, stale overwrite, deletio
 **Reference**:
 Workspace access to an exact Generation without a Reservation or permission to publish a new Generation for that Logical Document. An external application may still modify the local bytes; that condition remains local work and cannot be Check-in to the original document unless a new Checkout is acquired against the same current Generation.
 _Avoid_: Checkout, untracked copy
+
+**Reference Condition**:
+The paired observation `LocalIntegrity × ServerFreshness` for one Reference. LocalIntegrity is `Exact`, `Modified`, `Missing/Unreadable` or `Unknown`; ServerFreshness is `Current`, `OutOfDate` or `Unknown`. Only server verification can establish Current/OutOfDate; any Unknown fails safe and grants neither conversion nor publish authority.
+_Avoid_: one overloaded stale flag, cached-current claim, automatic overwrite or CAD/Office merge
 
 **Reservation Disposition**:
 The attributable terminal outcome for each Reservation in a Check-in scope. A successful changed or No Change Check-in ends every confirmed in-scope Reservation; a failed or uncommitted operation does not end a still-valid Reservation. It is not a user option to keep Checkout after a successful Check-in.

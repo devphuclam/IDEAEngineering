@@ -5,7 +5,14 @@ const crypto = require('node:crypto');
 const { chromium } = require(process.env.IDEA_PLAYWRIGHT_PATH || 'playwright');
 const root = path.resolve(__dirname, '..');
 const base = 'docs/product/instances/idea-engineering';
-const out = path.join(root, base, 'evidence/IE-VEV-ARCH-VIEW-002');
+const evidenceId = process.env.IDEA_ARCH_EVIDENCE_ID;
+if (!evidenceId) {
+  throw new Error('Set IDEA_ARCH_EVIDENCE_ID to the new evidence record; do not overwrite historical evidence.');
+}
+if (!/^IE-VEV-[A-Z0-9-]+$/.test(evidenceId)) {
+  throw new Error(`Invalid IDEA_ARCH_EVIDENCE_ID: ${evidenceId}`);
+}
+const out = path.join(root, base, 'evidence', evidenceId);
 const sha = s => crypto.createHash('sha256').update(s).digest('hex');
 const html = s => String(s).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 (async () => {
@@ -45,8 +52,8 @@ const html = s => String(s).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>
   }
   const newIds=['ACT-002','SEQ-008','STATE-005','SEQ-009','SEQ-010','SEQ-011','SEC-001'].map(s=>'ARCH-VIEW-'+s);
   const cards=results.map(r=>`<article id="${r.id}"><h2>${html(r.title)}</h2><p><code>${r.id}</code> — ${html(r.description)}</p><a href="${r.id}.svg" aria-label="Mở ${html(r.id)} ở kích thước đầy đủ"><img src="${r.id}.svg" alt="${html(r.title)}"></a></article>`).join('');
-  fs.writeFileSync(path.join(out,'index.html'),`<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IDEA — Kiến trúc</title><style>body{font:16px Arial;margin:24px auto;padding:0 20px;max-width:1680px;color:#172b4d;line-height:1.45}nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin:20px 0}nav a{padding:10px;border:1px solid #ccd5df;border-radius:4px}article{border-top:1px solid #ccd5df;padding:24px 0}img{max-width:100%;height:auto}h2{font-size:20px;margin-bottom:4px}a{color:#155ca0}code{font-weight:bold}</style><h1>IDEA — Bộ sơ đồ kiến trúc</h1><p>${results.length} sơ đồ. Bấm hình để mở SVG ở kích thước đầy đủ. Đây là bản thiết kế Draft, chưa phải bằng chứng phần mềm đã triển khai.</p><h2>Bảy sơ đồ bổ sung</h2><nav>${newIds.map(id=>{const r=results.find(x=>x.id===id);return `<a href="#${id}"><code>${id}</code><br>${html(r.title)}</a>`}).join('')}</nav>${cards}</html>`);
-  fs.writeFileSync(path.join(out,'render-results.json'),JSON.stringify({renderedAt:new Date().toISOString(),browser:browser.version(),mermaid:'11.12.0',sources,results},null,2));
-  console.log(JSON.stringify({count:results.length,newIds,output:out}));
+  fs.writeFileSync(path.join(out,'index.html'),`<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IDEA — Kiến trúc</title><style>body{font:16px Arial;margin:24px auto;padding:0 20px;max-width:1680px;color:#172b4d;line-height:1.45}nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin:20px 0}nav a{padding:10px;border:1px solid #ccd5df;border-radius:4px}article{border-top:1px solid #ccd5df;padding:24px 0}img{max-width:100%;height:auto}h2{font-size:20px;margin-bottom:4px}a{color:#155ca0}code{font-weight:bold}</style><h1>IDEA — Bộ sơ đồ kiến trúc</h1><p>${results.length} sơ đồ. Bấm hình để mở SVG ở kích thước đầy đủ. Đây là bản thiết kế Draft, chưa phải bằng chứng phần mềm đã triển khai.</p><h2>Các sơ đồ trọng tâm</h2><nav>${newIds.map(id=>{const r=results.find(x=>x.id===id);return `<a href="#${id}"><code>${id}</code><br>${html(r.title)}</a>`}).join('')}</nav>${cards}</html>`);
+  fs.writeFileSync(path.join(out,'render-results.json'),JSON.stringify({evidenceId,renderedAt:new Date().toISOString(),browser:browser.version(),mermaid:'11.12.0',sources,results},null,2));
+  console.log(JSON.stringify({evidenceId,count:results.length,newIds,output:out}));
   await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

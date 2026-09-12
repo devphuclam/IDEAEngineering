@@ -18,11 +18,20 @@ Administrator is not an account type or rank. An Actor becomes an administrator 
 
 The RBAC result establishes eligibility to attempt an action. The authoritative resource Module still enforces lifecycle state, Checkout ownership, current Generation, author-review separation, required evidence and Release completeness. An RBAC grant cannot bypass those business gates.
 
+For every protected request, the client presents session proof rather than a trusted `ActorId`. Server/IAM
+establishes the `ActorContext`; the resource owner requests authorization with that context, the
+Permission, ResourceId, Scope and expected state. Access Policy resolves current IAM eligibility,
+Project Membership, Group Membership, Role Assignments, immutable Role Definition versions and Scope
+hierarchy itself, then emits an immutable `AuthorizationDecision`. The owner records its separate
+`OwnerCommandOutcome` after its business gates and commit-time revalidation. A client-supplied Actor
+identity, a prior decision or a granted RBAC result cannot bypass that final owner check.
+
 ## Consequences
 
 - Project authority does not carry to another Project merely because a Group or Role has the same name.
 - Core v0 does not support Group nesting; an Actor may instead belong directly to several Groups.
-- Every Effective Permission result identifies account eligibility, Group membership paths, Role Assignments, Role Definition versions, resolved Scope/conditions and the subsequent business-gate result.
+- Every immutable Authorization Decision identifies server-established ActorContext, account eligibility, Group membership paths, Role Assignments, Role Definition versions and resolved Scope/conditions. The authoritative owner's separate Command Outcome identifies the correlated business-gate and final command result.
+- Access Policy evaluates current authorization evidence itself, while resource owners revalidate authorization and their own expected state at commit time to prevent a time-of-check/time-of-use bypass.
 - Activating a Custom Role successor does not silently change anyone's current authority; administrators must preview and explicitly replace affected assignments when migration is intended.
 - Removing a membership or Role Assignment affects the next protected request; an existing login session does not preserve lost authority.
 - A Project Administrator may assign only the approved roles, principals and Scopes permitted by its own assignment and may not broaden its own privileged authority.
