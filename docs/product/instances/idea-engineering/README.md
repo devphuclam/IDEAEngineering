@@ -16,16 +16,17 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.15`; DOC-06 at `Draft 0.15`; DOC-07 at `Draft 0.5`; DOC-08 at `Draft 0.11`; GOV at `Draft 0.3`; VVP at `Draft 0.15`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.16`; DOC-06 at `Draft 0.16`; DOC-07 at `Draft 0.5`; DOC-08 at `Draft 0.12`; GOV at `Draft 0.3`; VVP at `Draft 0.16`; CHG records at their catalogue versions |
 | First approved version | `Approved 1.0` only after the applicable controlled decision |
 
 ## Architecture diagram package
 
-DOC-05@0.15 and DOC-06@0.15 contain **30 maintained architecture and data views**. The
-[successor architecture-correction gallery](evidence/IE-VEV-ARCH-CORR-002/index.html) provides the
-latest SVG and PNG renditions; [IE-VEV-ARCH-CORR-002](registers/VEV-2026-09-12-architecture-consistency-correction-002.md)
-records its bounded source/rendition audit. Predecessor [IE-VEV-ARCH-CORR-001](registers/VEV-2026-09-12-architecture-consistency-correction.md)
-remains immutable historical evidence. These records confirm only the documented author checks, not a
+DOC-05@0.16 and DOC-06@0.16 contain **30 maintained architecture and data views**. The
+[successor architecture-correction gallery](evidence/IE-VEV-ARCH-CORR-003/index.html) provides the
+latest SVG and PNG renditions; [IE-VEV-ARCH-CORR-003](registers/VEV-2026-09-12-architecture-consistency-correction-003.md)
+records its bounded source/rendition audit. Predecessors [IE-VEV-ARCH-CORR-001](registers/VEV-2026-09-12-architecture-consistency-correction.md)
+and [IE-VEV-ARCH-CORR-002](registers/VEV-2026-09-12-architecture-consistency-correction-002.md)
+remain immutable historical evidence. These records confirm only the documented author checks, not a
 runtime implementation or independently qualified architecture/HCD acceptance. The earlier
 [VEV-002 gallery](evidence/IE-VEV-ARCH-VIEW-002/index.html) and
 [VEV-002 record](registers/VEV-2026-09-11-architecture-view-completion.md) remain retained historical
@@ -73,7 +74,7 @@ They are decision views, not parallel requirement or architecture sources.
 | Boss-facing brief | Decision axis | Detailed source set | Current state |
 |---|---|---|---|
 | [`FEATURE-001`](decision-briefs/FEATURE-001-feature-definition-and-scope.md) | Feature scope and priority | DOC-01, DOC-02, DOC-03, DOC-04, DOC-07 and governed reference coverage | `Draft 0.12`; 14 feature IDs retained; **stale** because it does not pin DOC-01@0.6, DOC-03@0.7 or DOC-04@0.13; boss decision `NOT-RUN` |
-| [`SPEC-001`](decision-briefs/SPEC-001-product-specification.md) | Required behavior and acceptance | DOC-04, requirement-bearing DOC-06/08 content, VVP | `Draft 0.14`; **stale** after DOC-04@0.13, DOC-06@0.15, DOC-08@0.11 and VVP@0.15 added the accepted RBAC/workspace/scale and transaction/ownership realization and checks; boss decision `NOT-RUN` |
+| [`SPEC-001`](decision-briefs/SPEC-001-product-specification.md) | Required behavior and acceptance | DOC-04, requirement-bearing DOC-06/08 content, VVP | `Draft 0.14`; **stale** after DOC-04@0.13, DOC-06@0.16, DOC-08@0.12 and VVP@0.16 added the accepted RBAC/workspace/scale and transaction/ownership realization and checks; boss decision `NOT-RUN` |
 | [`TECH-001`](decision-briefs/TECH-001-technology-and-architecture-proposal.md) | Architecture and technology selection | DOC-02, DOC-04/05/06/08, accepted ADRs, confirmed context and official technology sources | `Draft 0.8`; **stale** after the architecture/data/UI source revisions; boss decision `NOT-RUN`; no selected production stack |
 
 A brief becomes `Stale` when a pinned source changes. A boss decision must identify the exact brief
@@ -275,20 +276,20 @@ already works. See
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
 | `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.13`; sole normative SRS; 87 requirements including `REQ-AUTH-001…010`, `REQ-WS-014/015` and `REQ-OPS-006`; seven open Spec points remain |
-| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.15`; sole architecture description; 26 maintained architecture views with explicit Artifact Custody, narrow named coordinators, read-only IAM eligibility seam, server-established authorization and corrected existing security/recovery views |
-| `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.15`; Artifact Custody, coordinator UoW, account outcome/audit atomicity, Representation acceptance, decision/outcome, Reference condition, Release Structure Pin and Restricted Recovery contracts aligned |
+| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.16`; sole architecture description; 30 maintained architecture/data views with explicit CPD versus owner-specific Artifact pins, Artifact Custody, narrow named coordinators, read-only IAM eligibility seam, server-established authorization and owner-owned refusal/BOM acceptance semantics |
+| `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.16`; CPD Generation-manifest `ArtifactReference`, owner-specific BOM/Format pins, Artifact Custody, coordinator UoW, owner outcome/Audit atomicity, Representation acceptance, Reference condition, Release Structure Pin and Restricted Recovery contracts aligned |
 | `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.5`; references synchronized; conditional December schedule, 56-task appendix and Gantt unchanged |
-| `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.11`; source pins refreshed after the architecture transaction/ownership correction; administration split, two-axis modified Reference, server-mediated transfer, decision/outcome and Release-Pin interactions retained; current admin prototype marked stale |
+| `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.12`; BOM export candidate/private versus retained/Current status is explicit after Product Structure owner-UoW acceptance; administration split, two-axis modified Reference, server-mediated transfer, decision/outcome and Release-Pin interactions retained; current admin prototype marked stale |
 
 ## Supporting instance catalogue
 
 | Class | Stable Record ID | Instance | Current state |
 |---|---|---|---|
 | `GOV` | `IE-GOV-COVERAGE-001` | [Material and Behavioral Coverage Register](registers/GOV-material-and-behavioral-coverage.md) | `Draft 0.3`; 16/16 public-baseline areas have explicit dispositions, not implementation coverage; target-runtime evidence remains `BLOCKED` |
-| `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.15`; 17 objectives plus PA-01…04, RBAC-01…10, WS-01…08 and ST-01…04; successor VVP-016 audit remains `BLOCKED` overall pending qualified review; product procedures remain `NOT-RUN` |
+| `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.16`; 17 objectives plus PA-01…04, RBAC-01…10, WS-01…08 and ST-01…04; successor VVP-016 audit remains `BLOCKED` overall pending qualified review; product procedures remain `NOT-RUN` |
 | `VEV` | `IE-VEV-ARCH-VIEW-001` | [Architecture View Source and Temporary Rendition Review](registers/VEV-2026-09-10-architecture-view-review.md) | `Draft 0.1`; 23/23 Mermaid views parsed/rendered and internally inspected; qualified architecture/HCD review and controlled-rendition acceptance `BLOCKED` |
 | `VEV` | `IE-VEV-ARCH-CORR-001` | [Architecture Consistency Correction Audit](registers/VEV-2026-09-12-architecture-consistency-correction.md) | `Draft 0.1`; predecessor historical source/rendition audit for 30 maintained views; retained unchanged |
-| `VEV` | `IE-VEV-ARCH-CORR-002` | [Architecture Consistency Correction Audit — Successor](registers/VEV-2026-09-12-architecture-consistency-correction-002.md) | `Draft 0.1`; successor focused source/rendition audit for all 30 maintained views; qualified review and controlled-rendition acceptance remain `BLOCKED` |
+| `VEV` | `IE-VEV-ARCH-CORR-002` | [Architecture Consistency Correction Audit — Predecessor](registers/VEV-2026-09-12-architecture-consistency-correction-002.md) | `Draft 0.1`; predecessor focused source/rendition audit for the DOC-05@0.15/DOC-06@0.15 baseline; retained unchanged |
 | `CHG` | `IE-CHG-TECH-001` | [Tech Context and Proposal Change Record](registers/CHG-2026-09-03-tech-context-and-proposal.md) | `Draft 0.1`; context source, material impact, retained versions and pending review |
 | `CHG` | `IE-CHG-VERSION-001` | [Version Model Clarification Change Record](registers/CHG-2026-09-04-version-model-clarification.md) | `Draft 0.1`; closes SPEC-OPEN-01 for internal drafting; boss decision remains `NOT-RUN` |
 | `CHG` | `IE-CHG-ROADMAP-001` | [Roadmap and Task Integration](registers/CHG-2026-09-05-roadmap-task-integration.md) | `Draft 0.1`; DOC-07@0.4 and schedule@0.1; planning only |
@@ -306,6 +307,8 @@ already works. See
 | `CHG` | `IE-CHG-WS-SCALE-001` | [Workspace, Transfer and Storage Re-baseline](registers/CHG-2026-09-10-workspace-transfer-storage-decisions.md) | `Draft 0.2`; records Q26–Q32, bounded DDM/Aras evidence, controlled Aras runtime experiment and cross-document impact; no IDEA product result or Product Decision Authority approval |
 | `CHG` | `IE-CHG-ARCH-CORR-001` | [Architecture Consistency Correction](registers/CHG-2026-09-12-architecture-consistency-correction.md) | `Draft 0.1`; records user-confirmed architecture correction, non-duplicate view guard and Reservation `Ended` guard; no Tech choice, product result or approval |
 | `CHG` | `IE-CHG-ARCH-CORR-002` | [Architecture Consistency Correction — Successor](registers/CHG-2026-09-12-architecture-consistency-correction-002.md) | `Draft 0.1`; closes remaining coordinator/UoW, account, authorization-refusal, IAM-query and Representation-acceptance gaps; no requirement/Tech choice, product result or approval |
+| `CHG` | `IE-CHG-ARCH-CORR-003` | [Architecture Consistency Correction — Final Micro Correction](registers/CHG-2026-09-12-architecture-consistency-correction-003.md) | `Draft 0.1`; aligns CPD/owner-specific Artifact pins, owner refusal outcomes, rollback vocabulary and BOM export owner-UoW retention; no requirement/Tech choice, product result or approval |
+| `VEV` | `IE-VEV-ARCH-CORR-003` | [Architecture Consistency Correction Audit — Final Micro Correction](registers/VEV-2026-09-12-architecture-consistency-correction-003.md) | `Draft 0.1`; focused 30-view source/rendition audit for DOC-05/06@0.16; qualified review and controlled-rendition acceptance remain `BLOCKED` |
 
 The [technology research note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md),
 [RBAC/architecture-diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md) and
@@ -316,7 +319,7 @@ compatibility test, security proof, license approval or an IDEA product decision
 
 ## Authoring and decision sequence
 
-1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.15, DOC-06@0.15, DOC-08@0.11 and VVP@0.15; keep unresolved inputs explicit.
+1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.16, DOC-06@0.16, DOC-08@0.12 and VVP@0.16; keep unresolved inputs explicit.
 2. Resolve the exact Permission/Role/delegation seed under `SPEC-OPEN-03`, then refresh the three concise decision briefs against those exact sources and record
    Feature → Spec → Tech decisions against the versions actually presented to the boss.
 3. Obtain the required company deployment, security, operational and specialist dispositions;
