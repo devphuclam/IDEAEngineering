@@ -16,12 +16,14 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.16`; DOC-06 at `Draft 0.16`; DOC-07 at `Draft 0.6`; DOC-08 at `Draft 0.12`; GOV at `Draft 0.3`; VVP at `Draft 0.16`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.17`; DOC-06 at `Draft 0.16`; DOC-07 at `Draft 0.7`; DOC-08 at `Draft 0.12`; GOV at `Draft 0.3`; VVP at `Draft 0.16`; CHG records at their catalogue versions |
 | First approved version | `Approved 1.0` only after the applicable controlled decision |
 
 ## Architecture diagram package
 
-DOC-05@0.16 and DOC-06@0.16 contain **30 maintained architecture and data views**. The
+DOC-05@0.17 and DOC-06@0.16 contain **30 maintained architecture and data views**. DOC-05@0.17
+changes only candidate Server technology wording; all diagram sources remain identical to the
+DOC-05@0.16 view baseline audited below. The
 [successor architecture-correction gallery](evidence/IE-VEV-ARCH-CORR-003/index.html) provides the
 latest SVG and PNG renditions; [IE-VEV-ARCH-CORR-003](registers/VEV-2026-09-12-architecture-consistency-correction-003.md)
 records its bounded source/rendition audit. Predecessors [IE-VEV-ARCH-CORR-001](registers/VEV-2026-09-12-architecture-consistency-correction.md)
@@ -102,15 +104,17 @@ objectives, not a tested SLA or rollout acceptance.
 The project user previously accepted Feature 0.3 and Spec 0.4 in internal review:
 [RVW-FEATURE-SPEC-20260903-001](decision-briefs/VERSION-HISTORY.md#5-ghi-nhận-review-nội-bộ-ngày-03-09-2026).
 That result remains attached to those exact versions. It does not automatically apply to Feature
-0.12, Spec 0.14 or Tech 0.9. The Version-model point was separately confirmed on 04-09-2026. The
-successor briefs still require Product Decision Authority review; Tech 0.9 now records an engineering
+0.12, Spec 0.14 or Tech 0.10. The Version-model point was separately confirmed on 04-09-2026. The
+successor briefs still require Product Decision Authority review; Tech 0.10 now records an engineering
 recommendation but not an approval.
 
 The [version history](decision-briefs/VERSION-HISTORY.md) records current identities, prior source
 snapshots and review inputs. The 09-09 source hashes and predecessor set remain in
 [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md); the Tech 0.8
 predecessor and 0.9 recommendation change are in
-[IE-CHG-TECH-DEC-001](registers/CHG-2026-09-13-technology-decision-recommendation.md); earlier
+[IE-CHG-TECH-DEC-001](registers/CHG-2026-09-13-technology-decision-recommendation.md). The Linux-first
+successor and DOC-05 candidate-row/DOC-07 routing change are in
+[IE-CHG-TECH-LINUX-001](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md); earlier
 archives, including [the pre-Tech-context set](history/2026-09-03-before-tech-context.zip), remain retained.
 No retained historical brief was overwritten. Earlier Spec 0.3 acceptance remains withdrawn.
 
@@ -177,8 +181,9 @@ Assignments.
 
 Authorized forms/API can change policy without owner-module code edits. JSON is optional seed or
 import/export transport and creates only a candidate; validation, preview and separate authorized
-activation are required before authority changes. ASP.NET Core Identity and PostgreSQL remain Tech
-proposals awaiting the boss's decision. AC-01…05 are planned checks and remain `NOT-RUN`. See
+activation are required before authority changes. The earlier ASP.NET Core Identity proposal is
+superseded for the current Server recommendation by Spring Security/Session JDBC in `TECH-001@0.10`;
+PostgreSQL remains recommended. Neither is approved by the boss. AC-01…05 remain `NOT-RUN`. See
 [IE-CHG-AUTH-DATA-001](registers/CHG-2026-09-07-authorization-data-boundary.md) for the accepted
 direction, predecessor archive and exact source impact. The later
 [IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md) supersedes its role/
@@ -239,8 +244,8 @@ versions only; it did not change product behavior, the roadmap schedule or any r
 | Retained source | Reconciled state |
 |---|---|
 | FEATURE-001@0.12 and SPEC-001@0.14 | Current Core/VVP pins are recorded. Full review and boss decisions remain `NOT-RUN`. |
-| TECH-001@0.8 | Historical source-reconciliation baseline; superseded by the current recommendation `TECH-001@0.9`. |
-| DOC-07@0.5 | Historical source-reconciliation baseline; superseded by `DOC-07@0.6` for the current roadmap route; schedule, 56 tasks and 756 hours remain unchanged. |
+| TECH-001@0.8 | Historical source-reconciliation baseline; superseded first by `TECH-001@0.9`, then by the current Linux-first recommendation `TECH-001@0.10`. |
+| DOC-07@0.5 | Historical source-reconciliation baseline; superseded first by `DOC-07@0.6`, then current routing-only `DOC-07@0.7`; schedule, 56 tasks and 756 hours remain unchanged. |
 | Existing Word/Human copies | Retain the submitted/editorial versions; they were not overwritten or silently regenerated. |
 
 On 10-09-2026, the controlled sources were re-baselined for requirement and architecture quality.
@@ -279,9 +284,9 @@ already works. See
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
 | `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.13`; sole normative SRS; 87 requirements including `REQ-AUTH-001…010`, `REQ-WS-014/015` and `REQ-OPS-006`; seven open Spec points remain |
-| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.16`; sole architecture description; 30 maintained architecture/data views with explicit CPD versus owner-specific Artifact pins, Artifact Custody, narrow named coordinators, read-only IAM eligibility seam, server-established authorization and owner-owned refusal/BOM acceptance semantics |
+| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.17`; candidate Server Tech rows synchronized to Linux-first recommendation; all 30 maintained view sources and architecture semantics unchanged from `0.16` |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.16`; CPD Generation-manifest `ArtifactReference`, owner-specific BOM/Format pins, Artifact Custody, coordinator UoW, owner outcome/Audit atomicity, Representation acceptance, Reference condition, Release Structure Pin and Restricted Recovery contracts aligned |
-| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.6`; current TECH-001@0.9 recommendation routed; conditional December schedule, 56-task appendix, Gantt and gate state unchanged |
+| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.7`; current TECH-001@0.10 recommendation routed; conditional December schedule, 56-task appendix, Gantt and gate state unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.12`; BOM export candidate/private versus retained/Current status is explicit after Product Structure owner-UoW acceptance; administration split, two-axis modified Reference, server-mediated transfer, decision/outcome and Release-Pin interactions retained; current admin prototype marked stale |
 
 ## Supporting instance catalogue
@@ -312,13 +317,16 @@ already works. See
 | `CHG` | `IE-CHG-ARCH-CORR-002` | [Architecture Consistency Correction — Successor](registers/CHG-2026-09-12-architecture-consistency-correction-002.md) | `Draft 0.1`; closes remaining coordinator/UoW, account, authorization-refusal, IAM-query and Representation-acceptance gaps; no requirement/Tech choice, product result or approval |
 | `CHG` | `IE-CHG-ARCH-CORR-003` | [Architecture Consistency Correction — Final Micro Correction](registers/CHG-2026-09-12-architecture-consistency-correction-003.md) | `Draft 0.1`; aligns CPD/owner-specific Artifact pins, owner refusal outcomes, rollback vocabulary and BOM export owner-UoW retention; no requirement/Tech choice, product result or approval |
 | `VEV` | `IE-VEV-ARCH-CORR-003` | [Architecture Consistency Correction Audit — Final Micro Correction](registers/VEV-2026-09-12-architecture-consistency-correction-003.md) | `Draft 0.1`; focused 30-view source/rendition audit for DOC-05/06@0.16; qualified review and controlled-rendition acceptance remain `BLOCKED` |
-| `KNW` | `IE-KNW-TECH-DEC-001` | [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) | `Draft 0.1`; one engineering-recommended stack, runner-ups and Q-01…Q-14 backlog; informative only; Product Decision Authority approval `NOT-RUN` |
+| `KNW` | `IE-KNW-TECH-DEC-001` | [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) | `Draft 0.2`; Linux-first Java Server recommendation, .NET runner-up, Q-01…Q-14 `NOT-RUN`; informative only; Product Decision Authority approval `NOT-RUN` |
 | `CHG` | `IE-CHG-TECH-DEC-001` | [Core v0 Technology Recommendation Change Record](registers/CHG-2026-09-13-technology-decision-recommendation.md) | `Draft 0.1`; records TECH-001@0.8 → 0.9 and the new matrix; no product scope, requirement, architecture semantic or gate change |
+| `CHG` | `IE-CHG-TECH-LINUX-001` | [Linux-first Server Runtime Re-evaluation](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md) | `Draft 0.1`; records Tech context, predecessor hashes, matrix `0.1 → 0.2`, TECH `0.9 → 0.10`, DOC-05 candidate rows and DOC-07 routing; no Product Scope or gate change |
 
 The [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md)
 is the current informative engineering recommendation and is presented to management through
-[`TECH-001@0.9`](decision-briefs/TECH-001-technology-and-architecture-proposal.md). It does not
-approve a stack or change the normative architecture. The [technology research note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md),
+[`TECH-001@0.10`](decision-briefs/TECH-001-technology-and-architecture-proposal.md). It does not
+approve a stack or change the normative architecture. The focused
+[Linux-first first-party support check](../../../research/2026-09-13-linux-first-server-platform-support-check.md),
+earlier [technology research note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md),
 [RBAC/architecture-diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md) and
 [workspace/transfer comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), including the
 [controlled Aras runtime experiment](../../../research/2026-09-10-aras-runtime-workspace-experiment.md),
@@ -327,7 +335,7 @@ compatibility test, security proof, license approval or an IDEA product decision
 
 ## Authoring and decision sequence
 
-1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.16, DOC-06@0.16, DOC-08@0.12 and VVP@0.16; keep unresolved inputs explicit.
+1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.17, DOC-06@0.16, DOC-08@0.12 and VVP@0.16; keep unresolved inputs explicit.
 2. Resolve the exact Permission/Role/delegation seed under `SPEC-OPEN-03`, then refresh the three concise decision briefs against those exact sources and record
    Feature → Spec → Tech decisions against the versions actually presented to the boss.
 3. Obtain the required company deployment, security, operational and specialist dispositions;

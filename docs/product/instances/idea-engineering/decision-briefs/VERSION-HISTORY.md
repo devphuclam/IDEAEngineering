@@ -11,12 +11,12 @@ quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu m�
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Draft; 14 mã FTR; nguồn hiện hành đã đồng bộ; toàn bộ bản mới chỉ `PARTIAL`, quyết định của sếp `NOT-RUN` |
 | [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Draft; 74 yêu cầu và bảy điểm Spec còn mở; nguồn hiện hành đã đồng bộ; toàn bản chưa review đầy đủ và quyết định của sếp `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.9 | Draft; engineering recommendation đã chọn một Core v0 stack; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.10 | Draft; Linux-first Java/Temurin/Spring Server engineering recommendation; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
 
 Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.16 có
 17 mục tiêu cùng các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6,
-DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05/06 ở Draft 0.16,
-DOC-07 ở Draft 0.6, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026, 56 task và
+DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05 ở Draft 0.17,
+DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.7, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026, 56 task và
 756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không tự chuyển sang toàn bộ nội dung mới.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
@@ -450,3 +450,21 @@ kết quả liên quan vẫn `NOT-RUN`. DOC-07 và Tech sẽ được đối chi
 Ma trận và brief phân biệt rõ `Research evidence → Engineering recommendation → Product Decision
 Authority approval`. Recommendation có thể bị đảo bởi Q-01…Q-14, company support/license evidence
 hoặc phản biện của sếp; không có kết quả kiểm chứng nào được suy diễn từ việc viết tài liệu.
+
+## 22. Mở lại Server runtime theo bối cảnh Linux-first — 13/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-TECH-LINUX-001](../registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md) — predecessor hashes, scope và kết quả verification thực chạy |
+| Nguồn fact mới | [IE-RES-TECH-LINUX-20260913-001](../../../../research/2026-09-13-linux-first-server-platform-support-check.md) — first-party Ubuntu, Temurin, Boot, PGDG, backup/monitoring; informative only |
+| Tech context của anh | Ưu tiên Linux-first Server; hạ tầng Windows Server sẵn có không có lợi thế chọn stack; Server được phép khác runtime với Windows Desktop/Workspace. Không phải Product Scope hoặc approval. |
+| Ma trận quyết định | `IE-KNW-TECH-DEC-001@0.1 → @0.2`; tách Server OS, Server runtime và Windows client runtime; chọn một Server stack Java 25/Temurin 25/Spring Boot 4.1.x/Modulith |
+| Tech | `TECH-001@0.9 → @0.10`; .NET 10/ASP.NET Core thành runner-up, PostgreSQL 18 giữ độc lập; Server-dependent JDBC/Flyway/Spring Security/Session/Integration/Batch/Actuator/Maven thay lựa chọn .NET tương ứng |
+| Server OS/packaging | Ubuntu 26.04 `SELECT — platform direction`; official base support có nguồn; exact build Q-14 `NOT-RUN`; signed/versioned executable-JAR bundle + systemd thay custom application `.deb` |
+| Windows client | WPF/WebView2 Desktop, .NET 10 per-user Workspace và Windows Format Worker riêng khi cần giữ nguyên; server/client contract HTTPS/JSON/OpenAPI, stable IDs và idempotency |
+| Core/roadmap | DOC-05 `0.16 → 0.17` chỉ đồng bộ candidate Server Tech rows; 30 diagram và architecture semantics không đổi. DOC-07 `0.6 → 0.7` chỉ route Tech mới; 56 task, 756 giờ và gate không đổi. |
+| Review, authority và qualification | Engineering Recommendation `COMPLETE`; Product Decision Authority Approval `NOT-RUN`; Q-01…Q-14 `NOT-RUN`; PG3/PG4 không `PASS` |
+| Product impact | **No Product Scope Change**; không đổi FTR, REQ, DOC-04/05/06/08 semantics, DDM capability semantics hoặc ADR meaning |
+
+Mục 21 và các ảnh chụp/version cũ ở trên là lịch sử đúng tại thời điểm ghi. Chúng không phải stack
+Server đang được khuyến nghị sau bản kế nhiệm này.

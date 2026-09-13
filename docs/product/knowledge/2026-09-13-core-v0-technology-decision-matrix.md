@@ -5,7 +5,7 @@
 | Stable knowledge ID | `IE-KNW-TECH-DEC-001` |
 | Document class | `IE-KNW` controlled engineering decision artifact |
 | Title | IDEA Engineering Core v0 Technology Decision Matrix |
-| Version | `0.1` |
+| Version | `0.2` |
 | Status | `Draft` |
 | Artifact role | `INFORMATIVE ENGINEERING RECOMMENDATION`; decision input for `TECH-001`, not a Core Product Document |
 | Product normativity | `INFORMATIVE` — this artifact creates no product requirement and does not approve a product, architecture or technology |
@@ -16,11 +16,11 @@
 | Reviewer | Product Decision Authority; review `NOT-RUN` |
 | Acceptance authority | Product Decision Authority; acceptance `NOT-RUN` |
 | Evidence / decision date | `2026-09-13` (Asia/Saigon) |
-| Applicable product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.16, DOC-06@0.16, DOC-07@0.6, DOC-08@0.12, GOV@0.3, VVP@0.16, accepted ADRs |
-| Source / upstream trace | [`IE-RES-TECH-20260913-001`](../../research/2026-09-13-technology-selection-evidence-synthesis.md); dated technology notes; [`CONTEXT.md`](../../../CONTEXT.md); [`DOC-04`](../instances/idea-engineering/DOC-04-software-requirements-specification.md); [`DOC-05`](../instances/idea-engineering/DOC-05-architecture-description.md); [`DOC-06`](../instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md); [`DOC-08`](../instances/idea-engineering/DOC-08-ui-ux-and-interaction-specification.md); accepted ADRs; [`IE-STD-AUTH-001@0.2`](../../agents/product-document-authoring-standard.md); [`standards register`](../../governance/standards-register.md) |
-| Downstream trace | [`TECH-001@0.9`](../instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md); instance catalogue; version history; [`IE-CHG-TECH-DEC-001`](../instances/idea-engineering/registers/CHG-2026-09-13-technology-decision-recommendation.md); future qualification records |
-| Change record | [`IE-CHG-TECH-DEC-001@0.1`](../instances/idea-engineering/registers/CHG-2026-09-13-technology-decision-recommendation.md); new artifact, no predecessor |
-| Supersedes / Superseded by | Supersedes `NOT-APPLICABLE`; superseded by `NOT-APPLICABLE` |
+| Applicable product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.17 (candidate Tech rows only), DOC-06@0.16, DOC-07@0.7, DOC-08@0.12, GOV@0.3, VVP@0.16, accepted ADRs |
+| Source / upstream trace | [`IE-RES-TECH-20260913-001`](../../research/2026-09-13-technology-selection-evidence-synthesis.md); fresh [`IE-RES-TECH-LINUX-20260913-001`](../../research/2026-09-13-linux-first-server-platform-support-check.md); dated Java/.NET and deployment notes; first-party support sources in section 2B; project-user Tech context recorded by [`IE-CHG-TECH-LINUX-001@0.1`](../instances/idea-engineering/registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md); [`CONTEXT.md`](../../../CONTEXT.md); [`DOC-04`](../instances/idea-engineering/DOC-04-software-requirements-specification.md); [`DOC-05`](../instances/idea-engineering/DOC-05-architecture-description.md); [`DOC-06`](../instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md); [`DOC-08`](../instances/idea-engineering/DOC-08-ui-ux-and-interaction-specification.md); accepted ADRs; [`IE-STD-AUTH-001@0.2`](../../agents/product-document-authoring-standard.md); [`standards register`](../../governance/standards-register.md) |
+| Downstream trace | [`TECH-001@0.10`](../instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md); instance catalogue; version history; [`IE-CHG-TECH-LINUX-001`](../instances/idea-engineering/registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md); future qualification records |
+| Change record | [`IE-CHG-TECH-LINUX-001@0.1`](../instances/idea-engineering/registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md); predecessor `IE-KNW-TECH-DEC-001@0.1`, SHA-256 `A8BB495522E012AB3E71A23441BA6B3F97E82640A71AF3A4727FEE8353640C34` |
+| Supersedes / Superseded by | Supersedes `IE-KNW-TECH-DEC-001@0.1`; superseded by `NOT-APPLICABLE` |
 | Review trigger | Product Decision Authority changes the stack; a selected component fails qualification; a support/licensing change; a material DOC-04/05/06/08 or ADR change; or a new company platform constraint |
 | Retention disposition | Retain as controlled engineering decision provenance; supersede only through an explicit change record |
 | Decision state | Engineering Recommendation: `COMPLETE`; Product Decision Authority Approval: `NOT-RUN`; PG3/PG4: `NOT-RUN` |
@@ -38,7 +38,7 @@ matrix.
 The authority chain is deliberately visible:
 
 ```text
-Primary/official evidence
+Primary/official evidence + Linux-first Tech context
         ↓
 IE-RES-TECH-20260913-001 (informative synthesis)
         ↓
@@ -49,10 +49,19 @@ TECH-001 (management decision view)
 Product Decision Authority approval (NOT-RUN)
 ```
 
-The recommendation optimizes for correctness, maintainability, Windows engineering integration,
-transaction integrity, recovery, security, modular boundaries and a small operating team. It does
-not optimize for theoretical maximum scale. Approximately 50–100 intended users is context, not a
-concurrency or capacity guarantee. Multi-GB Artifacts remain outside the relational database.
+The recommendation optimizes for correctness, maintainability, a Linux-first headless Server,
+Windows engineering integration, transaction integrity, recovery, security, modular boundaries and
+a small operating team. It does not optimize for theoretical maximum scale. Approximately 50–100
+intended users is context, not a concurrency or capacity guarantee. Multi-GB Artifacts remain outside
+the relational database.
+
+The project user supplied a new Tech-context input on 2026-09-13: prefer a Linux-first Server and give
+the existence of current Windows Server infrastructure **zero selection weight**. This is neither a
+Linux/Java approval nor Product Scope. Decision A (Server OS), Decision B (Server runtime/framework)
+and Decision C (Windows Desktop/Workspace runtime) are therefore evaluated independently. Sharing
+C#/.NET across B and C is a maintainability advantage only; it is not a Server architecture
+requirement because Linux Server and Windows client already have separate deployment, patching,
+supervision, diagnostics, installer and failure domains.
 
 Each matrix disposition uses the controlled vocabulary below:
 
@@ -85,16 +94,17 @@ does not mean the Product Decision Authority has approved it.
 
 | Layer | Classification | Selected technology | Core v0 boundary and qualification |
 |---|---|---|---|
-| Server language/runtime | `SELECT` | C# / `.NET 10 LTS` | One primary runtime family for Server, Desktop shell and Workspace. Use a supported `.NET 10.x` patch current at qualification; Q-01, Q-12 and Q-13 remain `NOT-RUN`. |
-| Server framework | `SELECT` | ASP.NET Core 10 / Kestrel | HTTPS JSON endpoints, hosted background workers and diagnostics. Module boundaries are enforced by solution/project references, analyzers and architecture tests; the framework does not supply IDEA ownership automatically. |
+| Server language/runtime | `SELECT` | Java 25 LTS / Eclipse Temurin 25 | Named Linux runtime distribution with community availability listed to at least September 2031; the Adoptium `resolute` feed publishes `temurin-25-jdk`. Use a supported current Java 25 patch; commercial SLA/support remains a separate Q-13 decision. |
+| Server framework | `SELECT` | Spring Boot 4.1.x + Spring Modulith 2.1.x | Boot 4.1.1 officially supports Java through 26. Modulith verifies module cycles, API-only access and declared dependencies; IDEA ownership still comes from the architecture, not framework defaults. |
+| Server build/dependency authority | `SELECT` | Maven Wrapper + Spring Boot dependency management/BOM | Pin Maven through `mvnw`, the Boot 4.1.x line and the resolved dependency graph; produce repeatable build, checksums, license inventory and SBOM. Exact patches and commercial-support entitlement remain Q-13/Q-14 `NOT-RUN`. |
 | Architecture style | `SELECT` | Deep-module modular monolith | One deployable Server with explicit owner Modules and narrow Interfaces; no generic CRUD authority and no service-per-module requirement. Extraction remains a measured future option. |
 | Database | `SELECT` | PostgreSQL 18 (major line) | Metadata, authorization, workflow, structure, Audit, search projection and outbox. Use the supported minor current at qualification (18.6 was the evidence-date minor); Q-02, Q-07 and Q-14 are `NOT-RUN`. |
-| Persistence | `SELECT` | EF Core 10 + Npgsql EF provider 10.x for ordinary owner aggregates; bounded raw Npgsql for named streaming/locking/bulk/search/outbox paths | One per-module ownership rule and shared relational UoW where the architecture requires atomic business outcomes. Dapper is not the default. Provider compatibility is tested, not inferred from matching version numbers. |
-| Schema migration | `SELECT` | EF Core reviewed migration bundles; expand–migrate–contract | One schema authority. Migrations run as an explicit release/preflight operation, are idempotent and reviewed; no automatic destructive down migration. Rollback uses forward repair or database restore, not an assumption that application rollback reverses schema. |
-| Account/authentication | `SELECT` | ASP.NET Core Identity for IDEA Login Identity, credentials, lockout, recovery and session primitives; custom stable Actor/Account domain records | Web uses secure HttpOnly, SameSite cookies plus CSRF protection. Server/IAM establishes `ActorContext`; a client-supplied ActorId is never trusted. Desktop bootstrap, refresh, revocation and DPAPI storage are Q-06/Q-08 `NOT-RUN`. |
+| Persistence | `SELECT` | Spring JDBC/`JdbcClient` + Boot-managed pgJDBC | SQL-first, module-owned mappings and queries make transaction/query ownership explicit. One Spring-managed relational transaction/UoW spans the named cross-module operation where required. JPA/Hibernate, Spring Data JDBC and jOOQ are not parallel defaults. |
+| Schema migration | `SELECT` | Boot-managed Flyway + versioned reviewed SQL; expand–migrate–contract | `flyway-core` plus `flyway-database-postgresql` is the sole schema authority and PostgreSQL 18 is a Flyway verified version. Migration runs as an explicit release/preflight operation; destructive down migration is not assumed. |
+| Account/authentication | `SELECT` | Spring Security 7.1.x + Spring Session JDBC for maintained credential/session primitives; custom stable Actor/Account/Login Identity records | Web uses secure HttpOnly, SameSite cookies plus CSRF protection. Spring roles/authorities never become IDEA Access Policy. Server/IAM establishes `ActorContext`; Desktop bootstrap, refresh, revocation and DPAPI storage are Q-06/Q-08 `NOT-RUN`. |
 | Authorization | `SELECT` | IDEA Access Policy module | Product authority evaluates server-established ActorContext, IAM eligibility, Project/Group membership, Role Assignments, Role Definition versions and scope hierarchy; owner business gates and commit-time revalidation follow. Framework roles/claims are not the product RBAC model. |
 | API | `SELECT` | Versioned HTTPS JSON REST with OpenAPI 3.1 contract | Server remains authoritative. Stable Resource/Operation IDs, explicit expected-state fields and idempotency keys are required at the contract level; no direct database access from clients. Tooling compatibility remains Q-01/Q-14 `NOT-RUN`. |
-| Integration publication | `SELECT` | Transactional outbox in PostgreSQL + bounded hosted dispatcher + per-system Adapter | Audit evidence/outbox and authoritative owner outcome commit in the declared relational UoW. Consumers are idempotent and tolerate duplicate/reordered delivery. No broker is mandatory initially. |
+| Integration publication | `SELECT` | Transactional outbox in PostgreSQL + bounded Spring dispatcher + per-system Spring Integration Adapter | Audit evidence/outbox and authoritative owner outcome commit in the declared relational UoW. Consumers are idempotent and tolerate duplicate/reordered delivery. No broker is mandatory initially. |
 | Web frontend | `SELECT` | React 19.3 client-side application | React major line is selected; patch is pinned in lockfile. Web is a CSR workbench served by IDEA Server; no SSR/RSC requirement is introduced. Accessibility, localization and security-surface tests remain `NOT-RUN`. |
 | Web language/compiler | `SELECT` | TypeScript 7.0 CLI/type-checking baseline | TypeScript 7 is the source compiler line, with exact patch pinned at qualification. A TypeScript 6 compatibility lane is `QUALIFICATION REQUIRED` only for plugins/tools that consume the not-yet-stable programmatic compiler API; it is not a second production compiler. |
 | Web build tool | `SELECT` | Vite 8.3 line | Static, reproducible build; Node build runtime is Node.js 22 LTS with the Vite minimum (`22.12+`) and a current supported patch. Use `npm ci` and committed `package-lock.json`; no server-side Node runtime is required in production. |
@@ -106,11 +116,11 @@ does not mean the Product Decision Authority has approved it.
 | Workspace IPC | `SELECT` | Current-user-restricted named pipes with authenticated, versioned, scope-bound messages | OS ACLs plus application authentication, replay/size/version checks and safe reconnect. No generic filesystem/shell/host-object command. Cross-user/cross-Workspace evidence is Q-08 `NOT-RUN`. |
 | Artifact store | `SELECT` | Provider-neutral private server-managed filesystem-backed adapter on a protected volume | Content-addressed immutable byte organization; IDEA Server is the only normal access path. Database stores metadata, IDs, digests and references; it does not store Artifact bytes. Direct SMB/user paths are outside the contract. |
 | Format Worker | `SELECT` | Separate Windows worker boundary/process with exact CAD/Office/Format Adapter profile | Worker creates a candidate; Format Intelligence/Product Structure owner validates and associates it with the exact source Generation. Manual representation upload remains a first-class fallback. IRONCAD automation, license and version are Q-09 `NOT-RUN`. |
-| Server OS | `SELECT` (conditional) | Ubuntu Server 26.04 LTS | Honors the current-LTS preference and fits `.NET` + PostgreSQL. Q-14 must prove every selected package/backup/monitoring component is officially supported. Ubuntu Server 24.04 LTS is the supported fallback if that matrix is not qualified; Windows Server 2025 is the company-policy fallback. |
-| Deployment packaging | `SELECT` | Versioned Debian package(s) + systemd services; configuration/secrets outside package | Native deployment minimizes storage and recovery layers for one operator. Release preflight, signed artifact/SBOM, migration bundle, health checks and recoverable rollback are required; exact IT signing/admin policy is Q-10/Q-14 `NOT-RUN`. |
+| Server OS | `SELECT — platform direction` | Ubuntu Server 26.04 LTS | Canonical maintenance, Temurin 25 packages, PostgreSQL PGDG and Nginx package availability are officially established. Exact IDEA hardening, certificates, update, monitoring, backup/restore and company-policy build remain Q-14 `NOT-RUN`; Ubuntu 24.04 is a compatibility alternative, not the default. |
+| Deployment packaging | `SELECT` | Signed/versioned Spring Boot executable-JAR application bundle + systemd; host-managed Temurin 25; configuration/secrets outside bundle | The Boot plugin and systemd support this smaller delivery authority. Release preflight, Flyway step, checksum/signature/SBOM, health check and recoverable rollback are required. A custom `.deb`, self-contained `jlink` image and container are not initial requirements. |
 | Reverse proxy / TLS posture | `SELECT` | Company-approved Nginx baseline in front of HTTPS Server; managed certificate and modern TLS policy | No claim that Nginx itself supplies identity or authorization. Certificate custody, headers, origin policy and renewal runbook are Q-06/Q-11/Q-14 `NOT-RUN`. |
-| Background processing | `SELECT` | ASP.NET Core hosted workers for bounded outbox/maintenance jobs; Format Worker remains separate | Jobs have Operation IDs, leases/retry limits and idempotent handlers. Kafka/RabbitMQ/Redis are not required for the initial workload. |
-| Observability | `SELECT` | OpenTelemetry SDK/instrumentation for .NET and Web + structured JSON logs + metrics/traces via OTLP; `dotnet-monitor`/EventPipe for diagnostics | Audit Evidence remains a separate authoritative record. Export backend/retention is replaceable and company-selected; cardinality, redaction and incident runbook are Q-12 `NOT-RUN`. |
+| Background processing | `SELECT` | Bounded Spring task execution/scheduling for outbox/maintenance; Spring Batch for restartable import/export; Format Worker separate | Jobs have Operation IDs, leases/retry limits and idempotent handlers. Spring Integration supplies per-system adapters. Kafka/RabbitMQ/Redis are not required initially. |
+| Observability | `SELECT` | Spring Boot Actuator + Micrometer Observation + OpenTelemetry/OTLP + structured JSON logs; JFR/`jcmd` for JVM diagnostics | Audit Evidence remains a separate authoritative record. Export backend/retention is replaceable and company-selected; cardinality, redaction, JVM diagnostic capture and incident runbook are Q-12 `NOT-RUN`. |
 | Backup/recovery posture | `SELECT` (qualification-gated) | PostgreSQL base backup + WAL/PITR, coordinated Artifact/config/policy/key backup, off-primary controlled target | Restore must produce a mutually usable DB + Artifact + configuration/key point. One VM is not HA. RTO ≤4 working hours and RPO ≤1 hour remain preliminary objectives and Q-07 `NOT-RUN`. |
 
 ## 2A. Decision register: why each selected layer is conditional but concrete
@@ -122,16 +132,17 @@ would reopen it.
 
 | Selected layer | Decision and evidence | Main trade-off | Qualification still required | Reconsideration trigger |
 |---|---|---|---|---|
-| Server language/runtime | Select C#/.NET 10 LTS; `OFFICIAL-LIFECYCLE-LICENSING` plus `IDEA-INFERENCE` on Windows-runtime consolidation | Java has stronger documented module/integration breadth; .NET adds Microsoft lifecycle dependency | Q-01, Q-12, Q-13 and named patch/SBOM runbook | Same-fixture Java slice materially wins correctness/support/cost or a mandatory Spring contract appears |
-| Server framework | Select ASP.NET Core 10/Kestrel; `OFFICIAL-PRODUCT-FACT` and .NET candidate evidence | Framework primitives do not enforce IDEA Module ownership automatically | Architecture tests, Q-01 and diagnostics run | Required protocol/diagnostic gap cannot be closed without disproportionate custom code |
+| Server language/runtime | Select Java 25 LTS / Eclipse Temurin 25; fresh official lifecycle, Linux artifact and Ubuntu 26.04 package-feed evidence plus Linux-first `IDEA-INFERENCE` | Adds a second runtime family beside the Windows client; community updates have no Eclipse SLA | Q-01, Q-12, Q-13/Q-14 patch/SBOM/support runbook | Exact Temurin/Boot build fails mandatory qualification or Q-13 proves materially unsustainable cross-runtime cost |
+| Server framework | Select Spring Boot 4.1.x + Spring Modulith 2.1.x; official compatibility and module-verification facts | Boot minor lifecycle is separate from the longer JDK line; framework does not create IDEA ownership | Architecture tests, Q-01 and diagnostics run | Upgrade/support cadence or mandatory Server behavior cannot be met on the supported Boot line |
+| Server build/dependency authority | Select Maven Wrapper + Boot BOM; official Maven/Boot build and dependency-management facts | Maven/JVM/Spring adds a toolchain beside .NET/NuGet on Windows | Q-13 reproducible build, dependency inventory, SBOM and patch drill | Required dependency cannot remain supported/reproducible or company policy mandates another controlled build path |
 | Architecture style | Select deep-module modular monolith; accepted ADRs + `OFFICIAL-GUIDANCE-PATTERN` + `IDEA-INFERENCE` | One process is a shared failure domain and needs disciplined boundaries | Boundary checks in Q-01/Q-13 and restore/incident evidence | Measured independent scale/isolation or independently staffed Module justifies extraction |
 | Database | Select PostgreSQL 18; `OFFICIAL-PRODUCT-FACT`/lifecycle/license plus `IDEA-INFERENCE` | Company must own PostgreSQL operations, collation and backup expertise | Q-02, Q-03, Q-07, Q-14 and production edition/support disposition | SQL Server estate has documented material DBA/license/restore advantage |
-| Persistence | Select EF Core 10 + Npgsql with bounded raw Npgsql; synthesis §7 `OFFICIAL-PRODUCT-FACT` + `IDEA-INFERENCE` | ORM translation/tracking can hide query cost; hybrid paths add conventions | Provider pair, lock/stream/bulk/outbox tests Q-01/Q-02/Q-04/Q-05 | Repeated mandatory paths require a different owner-safe data-access strategy |
-| Schema migration | Select reviewed EF migration bundles; `IDEA-INFERENCE` constrained by recovery/architecture rules | Application rollback does not undo a destructive schema change | Expand/contract rehearsal, backup/restore and migration review | Migration tooling cannot produce safe repeatable upgrades on the supported matrix |
-| Account/authentication | Select ASP.NET Identity plus custom Actor/Account; official Identity guidance + DOC-05/06 boundary | Native account/session and future company login need two evolution paths | Q-06, Q-08, Q-11, secure storage and revocation | Company identity mandate or native-session threat result makes the path unacceptable |
+| Persistence | Select Spring JDBC/`JdbcClient` + pgJDBC; synthesis §7 and official Spring/pgJDBC facts plus explicit-query `IDEA-INFERENCE` | More hand-written mapping/SQL than an ORM and therefore stronger review/test discipline | Exact driver, lock/stream/bulk/outbox and mapping tests Q-01/Q-02/Q-04/Q-05 | Mapping burden or correctness evidence shows a bounded JPA/Data JDBC addition is materially safer |
+| Schema migration | Select Boot-managed Flyway/versioned SQL; official Boot coordinates and Flyway PostgreSQL 18 verification | Application rollback does not undo a destructive schema change; Flyway adds its own release/license clock | Expand/contract rehearsal, license inventory, backup/restore and migration review | Tool/support/license cannot produce safe repeatable upgrades on the selected matrix |
+| Account/authentication | Select Spring Security + Spring Session JDBC plus custom Actor/Account/Login Identity; official Spring security/session facts + DOC-05/06 boundary | Native account/session and future company login need two evolution paths | Q-06, Q-08, Q-11, secure storage and revocation | Company identity mandate or native-session threat result makes the path unacceptable |
 | Authorization | Select IDEA Access Policy; accepted architecture/data contracts + `IDEA-INFERENCE` | Product policy engine remains custom and must not be replaced by framework roles | Q-01/Q-06/Q-11 authorization/refusal evidence | A later approved policy authority changes the ownership contract |
 | API | Select versioned HTTPS JSON REST/OpenAPI 3.1; `INDUSTRY-SPECIFICATION` + architecture fit | HTTP versioning and large-transfer controls require explicit design | Q-01/Q-04 contract, streaming and TLS tests | Named integration needs a materially different protocol with approved contract |
-| Integration publication | Select transactional outbox + bounded dispatcher/Adapters; `OFFICIAL-GUIDANCE-PATTERN` + architecture inference | In-process delivery has finite throughput and retry ownership | Q-05 and consumer contract tests | Measured delivery volume/isolation or company platform requires a broker |
+| Integration publication | Select transactional outbox + bounded Spring dispatcher/Integration Adapters; official Spring Integration facts + architecture inference | In-process delivery has finite throughput and retry ownership | Q-05 and consumer contract tests | Measured delivery volume/isolation or company platform requires a broker |
 | Web frontend | Select React 19.3 CSR; `OFFICIAL-PRODUCT-FACT` + DOC-08 fit | SPA owns client state/cache complexity and has no SSR fallback | Q-01/Q-10 accessibility, security and bundle tests | An approved product need for SEO/SSR or measured client limits appears |
 | Web compiler | Select TypeScript 7 CLI; official release fact | TS7 programmatic API compatibility is not yet universal | Plugin/compiler API inventory and Q-13 | Critical maintained plugin cannot support TS7 and TS6 lane cannot isolate it |
 | Web build tool | Select Vite 8.3 + Node 22 LTS build; official release/compatibility facts | Vite has no .NET-like LTS and plugin churn is an owner burden | Q-13 reproducible build, lockfile/SBOM and patch drill | Build/release policy or plugin compatibility cannot be maintained |
@@ -143,75 +154,115 @@ would reopen it.
 | Workspace IPC | Select current-user named pipes with app authentication; .NET platform fact + security inference | Same-user hostile clients and replay remain application responsibilities | Q-08/Q-11 cross-user, scope, replay and reconnect tests | Named-pipe threat/packaging constraints cannot meet the security contract |
 | Artifact store | Select private filesystem-backed adapter; DOC-05/06 + recovery guidance | One storage volume creates capacity/failure-domain and migration work | Q-04/Q-07 custody, digest, orphan and restore tests | Multiple nodes, storage policy or measured volume need justifies object storage |
 | Format Worker | Select isolated Windows worker + exact Adapter; PLM worker practice + DOC-05/06 | CAD/Office license/version matrix and worker operations are costly | Q-09 exact app/license/output/provenance tests | A named licensed converter/platform supplies a safer verified path |
-| Server OS | Select Ubuntu 26.04 LTS conditional; lifecycle facts + user context + `IDEA-INFERENCE` | Complete-stack package/support evidence is not yet demonstrated | Q-14; fallback 24.04/Windows policy disposition | Any selected component lacks official support or IT rejects Linux |
-| Deployment packaging | Select Debian package + systemd; topology/operations guidance + `IDEA-INFERENCE` | Native packages require careful service/secrets/rollback runbooks | Q-10/Q-14 install, patch, migration and rollback rehearsal | Company platform standard materially lowers risk for a supported container path |
+| Server OS | Select Ubuntu 26.04 LTS as platform direction; official Canonical/Adoptium/PGDG/Ubuntu-package facts + user context + `IDEA-INFERENCE` | Exact operational build and support ownership are still unproved | Q-14 hardening, patch, backup/restore, monitoring and policy build; 24.04 compatibility path | A selected dependency loses support, IT governance requires another OS, or Linux qualification fails |
+| Deployment packaging | Select signed/versioned executable-JAR bundle + systemd with host-managed Temurin; official Boot packaging/systemd facts + `IDEA-INFERENCE` | Application bundle and host JDK have coordinated but distinct rollback/patch steps | Q-14 install, patch, migration, signature/SBOM and rollback rehearsal | IT mandates a managed `.deb`/container or the bundle cannot meet provenance/rollback policy |
 | Reverse proxy/TLS | Select company-approved Nginx baseline; `IDEA-INFERENCE` deployment boundary | Certificate/header/origin operations remain company work | Q-06/Q-11/Q-14 TLS and renewal tests | Company standard proxy or managed gateway is demonstrably safer/easier |
-| Background processing | Select bounded ASP.NET hosted workers; official Worker Services fact + architecture inference | In-process workers share Server failure/restart and finite throughput | Q-05/Q-12 crash, retry, lease and lag tests | Workload needs independent scheduling/isolation or a supported broker |
-| Observability | Select OpenTelemetry/OTLP + structured logs/metrics/traces; official ecosystem facts | Protocol does not choose backend, retention or on-call ownership | Q-12 cardinality, redaction, correlation and incident drill | Company observability standard or diagnosis threshold cannot be met |
+| Background processing | Select bounded Spring task execution/scheduling plus Spring Batch where restartability is required; official Spring facts + architecture inference | In-process jobs share Server failure/restart; Batch metadata and retry policy require ownership | Q-05/Q-12 crash, retry, lease, restart and lag tests | Workload needs independent scheduling/isolation or a supported broker/platform |
+| Observability | Select Actuator/Micrometer + OpenTelemetry/OTLP + structured logs + JFR/`jcmd`; official ecosystem facts | Protocol/tools do not choose backend, retention or on-call ownership | Q-12 cardinality, redaction, correlation, JVM capture and incident drill | Company observability standard or diagnosis threshold cannot be met |
 | Backup/recovery | Select PostgreSQL base/WAL/PITR plus coordinated off-primary copies; official PostgreSQL/NIST guidance + architecture inference | Backup of DB alone cannot restore external Artifact bytes or keys | Q-07 measured restore and integrity/RTO/RPO | Company recovery policy or measured objective requires separate HA/storage topology |
 
-## 3. Server runtime decision — .NET is the Core v0 recommendation
+## 2B. Fresh Linux-first platform support check
+
+The following facts were retrieved again from first-party sources on 2026-09-13. They establish
+published platform/component support or availability; they are not an IDEA installation, security,
+backup or restore result.
+
+| Support question | First-party fact established | Decision consequence | IDEA qualification state |
+|---|---|---|---|
+| Ubuntu lifecycle | Canonical lists Ubuntu 26.04 LTS standard security maintenance through May 2031 and Ubuntu 24.04 LTS through May 2029 ([Ubuntu release cycle](https://ubuntu.com/about/release-cycle)). | 26.04 has the longer current LTS runway and is the Linux platform direction. | Exact patch source, hardening and company ownership `NOT-RUN` in Q-14. |
+| .NET alternative on 26.04 | Microsoft's Ubuntu install guide has an Ubuntu 26.04 section and lists .NET 10 in the Ubuntu package-manager feeds ([Microsoft guide](https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-install)). | The previous .NET finalist is not rejected for lack of Ubuntu 26.04 support. | IDEA .NET deployment qualification was not run. |
+| PostgreSQL 18 on 26.04 | PGDG lists `resolute (26.04, LTS)` among supported Ubuntu versions, and its package pool contains `postgresql-18_18.6-1.pgdg26.04+2_amd64.deb` ([PGDG Ubuntu](https://www.postgresql.org/download/linux/ubuntu/), [PGDG PostgreSQL 18 package pool](https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/)). | A PostgreSQL 18 package build for 26.04 is published; PostgreSQL 18 remains selected. | Repository provenance, pinning, upgrade and restore `NOT-RUN` in Q-07/Q-14. |
+| Named Java distribution on 26.04 | Adoptium lists Java 25 as LTS with community availability to at least September 2031, publishes Linux x64 Temurin 25 artifacts and DEB installation, and its `resolute` repository contains `temurin-25-jdk` ([support](https://adoptium.net/support/), [Linux install](https://adoptium.net/installation/linux/), [`resolute` Release](https://packages.adoptium.net/artifactory/deb/dists/resolute/Release), [`amd64` Packages](https://packages.adoptium.net/artifactory/deb/dists/resolute/main/binary-amd64/Packages)). | Eclipse Temurin 25 is the named selected JDK distribution and an official Ubuntu 26.04 package path exists. | Eclipse community updates carry no SLA; exact support owner, package pin and patch drill `NOT-RUN`. |
+| Spring/Java compatibility and service operation | Spring Boot 4.1.1 requires Java 17+, supports through Java 26, and its deployment guide documents executable JARs as `systemd` services ([requirements](https://docs.spring.io/spring-boot/system-requirements.html), [systemd deployment](https://docs.spring.io/spring-boot/how-to/deployment/installing.html)). | Java 25 is within Boot's stated range and native systemd operation is documented. | Exact Boot BOM/JDK/JDBC/Flyway graph and service hardening `NOT-RUN`. |
+| Database driver/migration chain | Boot 4.1.1 dependency management lists pgJDBC `42.7.13`, Flyway `12.4.0` and the PostgreSQL database module; Flyway lists PostgreSQL 18 as verified ([Boot coordinates](https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html), [Flyway PostgreSQL](https://documentation.red-gate.com/fd/postgresql-database-277579325.html)). | A coherent managed Java/PostgreSQL dependency chain is published; exact patches remain build inputs, not Product requirements. | Migration rehearsal, licensing inventory and schema rollback/restore `NOT-RUN`. |
+| Backup and monitoring dependencies | PostgreSQL 18 documents `pg_basebackup`, WAL archiving and PITR; Spring Boot documents Actuator/Micrometer metrics and OpenTelemetry support; Ubuntu 26.04 publishes Nginx ([base backup](https://www.postgresql.org/docs/18/app-pgbasebackup.html), [PITR](https://www.postgresql.org/docs/18/continuous-archiving.html), [Boot observability](https://docs.spring.io/spring-boot/reference/actuator/observability.html), [Nginx package](https://packages.ubuntu.com/resolute/nginx)). | Required primitives are available on the selected direction; no vendor backend or recovery result is inferred. | Coordinated DB/Artifact/config/key restore, telemetry backend, certificates and runbook remain Q-07/Q-12/Q-14 `NOT-RUN`. |
+
+Therefore Ubuntu 26.04 is no longer described as having unknown base Java/PostgreSQL compatibility.
+It is `SELECT — platform direction`; the complete operational build remains `QUALIFICATION REQUIRED`
+and Q-14 remains `NOT-RUN`.
+
+## 3. Server runtime decision — Java is the Core v0 recommendation
 
 ### 3.1 Final disposition
 
 | Candidate | Classification | Disposition |
 |---|---|---|
-| `.NET 10 LTS + ASP.NET Core 10 + C#` | `SELECT` | Recommended Core v0 Server baseline. |
-| `Java 25 LTS + Eclipse Temurin 25 + Spring Boot 4.1.x` | `ALTERNATIVE` | First-class runner-up; reconsider if the explicit triggers in section 3.3 occur. Temurin support/SLA and an Oracle JDK alternative remain a qualification input. |
+| `Java 25 LTS + Eclipse Temurin 25 + Spring Boot 4.1.x` | `SELECT` | Recommended Linux-first Core v0 Server baseline. |
+| `.NET 10 LTS + ASP.NET Core 10 + C#` | `ALTERNATIVE` | Credible runner-up with simpler cross-system language/tooling consolidation; reconsider only on the explicit triggers in section 3.3. |
 
-Both candidates are technically credible. The evidence does not establish a universal throughput,
-scalability or “enterprise-grade” winner. Java has real advantages: Spring Modulith offers directly
-documented module verification, and Spring Integration/Batch broaden the integration and batch
-portfolio. Java 25 also gives distribution/support optionality. Those advantages do not outweigh the
-Core v0 cost of introducing a second primary server runtime when the selected installed shell and
-the lowest-unknown Workspace path are already .NET on Windows.
+Both candidates are technically credible on Ubuntu 26.04. The evidence does not establish a universal
+throughput, scalability or “enterprise-grade” winner, so relative performance remains `UNKNOWN` until
+the same IDEA workload is executed. After existing Windows infrastructure receives zero weight and
+runtime-family consolidation is treated as one maintainability factor, Java wins the Server-specific
+decision for four concrete reasons:
 
-The recommendation is therefore based on operational consolidation, not a performance claim:
+1. Spring Modulith directly verifies module cycles, API-only access and allowed dependencies and
+   supports module-scoped tests. That is unusually well aligned with IDEA's deep-module modular
+   monolith and reduces reliance on locally assembled boundary conventions.
+2. Spring Integration and Spring Batch provide a broader maintained vocabulary for future
+   ERP/MES/BI adapters and restartable import/export work. They do not create scope, but they reduce
+   custom infrastructure if an approved contract later needs those patterns.
+3. Java 25 has a longer evidenced runtime runway and multiple distribution/support channels. The
+   selected Eclipse Temurin 25 path is published for Ubuntu 26.04; commercial SLA choice remains open.
+4. A JDBC-first persistence path keeps SQL, locks, transaction ownership, outbox and projection
+   behavior explicit, while Boot's BOM gives one managed dependency graph for the Server.
 
-1. The known engineering fleet is Windows and the Workspace must handle named pipes, current-user
-   isolation, DPAPI, COM/P/Invoke, external CAD/Office launch, file custody and diagnostics.
-2. A .NET Server, WPF shell and .NET Workspace give one main language/runtime/toolchain family for
-   the highest-risk cross-component debugging and patch runbook.
-3. ASP.NET Core, EF Core/Npgsql, Worker Services and OpenTelemetry provide credible primitives for
-   the modular monolith, explicit owner transactions, streaming and bounded background work.
-4. A future extraction boundary is preserved by Module ownership and HTTP/event contracts; Java is
-   not required to obtain scale or independent services later.
-5. At 50–100 intended users and one initial site, the evidence does not justify paying the second
-   server-runtime cost solely for Spring's broader integration portfolio.
+.NET retains real advantages: ASP.NET Core/Kestrel, async I/O, Worker Services, EF/Npgsql,
+OpenTelemetry/EventPipe tooling and C# reuse with the Windows Workspace are all credible. It also
+reduces language count and initial onboarding/build-tool breadth. Those benefits lose because they
+do not outweigh Java's direct modularity and integration/batch advantages under a Linux-first Server
+decision; they are not evidence that .NET is a weaker or less scalable platform.
 
-This does **not** claim .NET is faster, safer by default, more enterprise-grade or cheaper in every
-company. Q-01, Q-12 and Q-13 must exercise the same contract and failure cases against the selected
-baseline. If Java is later selected, the Server/Workspace contract and IDEA domain boundaries remain
-language-neutral.
+Two runtime families are an accepted, explicit cost. The Linux Server and Windows client already have
+different OS packages, supervisors, security boundaries, diagnostics and release cadences. Their
+coupling is controlled by versioned HTTPS/JSON/OpenAPI contracts, stable Resource/Operation IDs,
+expected state, idempotency and Server authority—not by shared in-process assemblies. WPF/WebView2 and
+the per-user .NET Workspace can therefore evolve behind that contract without making Java aware of
+named pipes, DPAPI, CAD/Office launch or local custody. Separate Maven/JVM/Spring and
+.NET/NuGet/WPF/WebView2 SBOMs, patch calendars and runbooks are required; Q-13 must measure that burden
+and may reopen the decision.
 
 ### 3.2 Criterion-level comparison
 
 | IDEA criterion | .NET candidate | Java candidate | Engineering reading |
 |---|---|---|---|
-| Owner transaction/correctness | ASP.NET Core + EF/Npgsql plus explicit relational UoW | Spring transactions plus JPA/JDBC/jOOQ | `DRAW`; Q-01/Q-02/Q-05, not framework marketing, decide. |
-| Module-boundary verification | Project/assembly rules, analyzers and architecture tests must be named and run | Spring Modulith 2.1.1 gives a stronger directly documented module-check path | Java `ADVANTAGE`; .NET qualification is explicit, not hidden. |
-| Integration/batch portfolio | Worker Services and named Adapters | Spring Integration/Batch are broader first-party offerings | Java `ADVANTAGE`, but no current IDEA requirement mandates that breadth. |
-| Windows Workspace/native boundary | First-party .NET named pipes, DPAPI, COM/P/Invoke and diagnostics | Java Server still needs a .NET/Rust/other Windows Workspace | .NET `ADVANTAGE` at the actual highest-unknown boundary. |
-| Streaming multi-GB bytes | Async streams and bounded buffers are available | Streams and bounded buffers are available | `DRAW`; Q-04 correctness and memory evidence decide. |
-| Runtime families | One primary family across Server/Desktop/Workspace, plus WebView2/App SDK clocks | Java Server plus .NET Workspace and the same client clocks | .NET `ADVANTAGE` for small-team consolidation; exact patch burden remains `UNKNOWN`. |
-| Lifecycle/support | Simple Microsoft .NET 10 LTS line through 2028-11-14 | JDK distribution optionality, but Spring/JDK/driver clocks must align | Java `ADVANTAGE` on optionality; support contract and patch calendar are Q-13/Q-14. |
-| Identity primitives | ASP.NET Core Identity cookie/session primitives | Spring Security/session primitives | `DRAW`; IDEA Account/Actor/Access Policy remain custom either way. |
-| Observability | OpenTelemetry, `dotnet-monitor`, EventPipe | OpenTelemetry, Actuator/Micrometer, JFR | `DRAW`; common redaction/runbook test Q-12. |
-| Future extraction | Stateless ASP.NET nodes/workers can split after measured trigger | Stateless Spring modules/workers can split after measured trigger | `DRAW`; module ownership, not language, controls extraction. |
-| Small-team support | Fewer primary runtime/toolchain families | Potentially better if the company has established Java support | `UNKNOWN`; company skill is evidence to collect, not infer. |
+| Ubuntu/Linux first-class operation | Microsoft publishes .NET 10 for Ubuntu 26.04 and Linux service/container paths | Temurin publishes Java 25 Linux artifacts and a `resolute` DEB feed; Boot documents systemd | `DRAW`; both have official paths, exact IDEA build Q-14 `NOT-RUN`. |
+| Modular-monolith boundary enforcement | Projects/assemblies, analyzers and architecture tests must be selected and composed | Spring Modulith verifies cycles, API-only access and allowed dependencies and supports module tests | Java `ADVANTAGE` directly aligned to the selected architecture. |
+| Transaction model | `TransactionScope`/EF/Npgsql can implement explicit relational UoW | Spring transaction management + JDBC can implement explicit relational UoW | `DRAW`; owner/UoW rules and Q-01/Q-02/Q-05 decide correctness. |
+| PostgreSQL integration | Npgsql/EF provider and raw Npgsql are mature candidates | pgJDBC, Spring JDBC and Boot-managed pool/dependencies are mature candidates | `DRAW`; exact driver/build tests remain `NOT-RUN`. |
+| SQL/query control | EF default needs explicit raw-Npgsql escapes and query-discipline checks | Selected JDBC-first path exposes owner SQL directly | Java `ADVANTAGE` for the selected explicit-query policy; not a performance claim. |
+| Background work | Worker Services, hosted services and bounded channels | Boot task execution/scheduling plus Spring Batch/Integration | Java `ADVANTAGE` in maintained breadth; both require leases/idempotency. |
+| Enterprise adapters | Named custom adapters plus broad .NET libraries | Spring Integration implements EIP adapters/gateways | Java `ADVANTAGE` for future heterogeneous integration; no new product integration is created. |
+| Batch/import/export | Custom Worker/queue patterns and third-party options | Spring Batch supplies restart/skip/retry/chunk/partition primitives | Java `ADVANTAGE` for restartable governed import/export work. |
+| Observability | OpenTelemetry, metrics, EventPipe and `dotnet-monitor` | Actuator, Micrometer/OpenTelemetry, JFR and `jcmd` | `DRAW`; Q-12 runbook/redaction/time-to-diagnose remains `NOT-RUN`. |
+| Security/account primitives | ASP.NET Core Identity and cookie/session controls | Spring Security and Spring Session JDBC | `DRAW`; IDEA Actor/Account/Access Policy remains custom either way. |
+| Streaming multi-GB transfers | Async streams and bounded buffers | Java streams/channels and bounded buffers | `DRAW`; memory, cancellation, resume and integrity require Q-04. |
+| Runtime lifecycle | .NET 10 LTS has a single Microsoft line through 2028-11-14 | Temurin 25 lists community availability to at least September 2031 and Java has multiple support channels | Java `ADVANTAGE` on runtime runway/optionality; entitlement still open. |
+| Framework lifecycle | .NET/ASP.NET Core follow a simple coordinated Microsoft lifecycle | Boot minor support clock is separate from JDK and dependencies | .NET `ADVANTAGE` for lifecycle simplicity; Java must maintain an upgrade calendar. |
+| Patch burden | One Microsoft Server/client family reduces language/tool familiarity | JDK, Boot and Maven graph add feeds beside the .NET Windows path | .NET `ADVANTAGE`; magnitude is `UNKNOWN` until Q-13. |
+| SBOM/dependency management | NuGet lock/central package and .NET tooling | Maven Wrapper + Boot BOM and dependency graph | `DRAW`; reproducibility/license/CVE evidence is Q-13/Q-14. |
+| systemd/native deployment | .NET supports Linux/systemd deployment | Boot documents executable JAR + systemd deployment | `DRAW`; both are native-service capable. |
+| Container optionality | Official .NET container images | Boot buildpacks/Dockerfiles and JDK images | `DRAW`; containers remain optional and Kubernetes is outside Core v0. |
+| Operational diagnosis | `dotnet-monitor`, EventPipe, dumps and counters | Actuator, JFR, `jcmd`, dumps and JVM tools | `DRAW`; real incident diagnosis must be measured. |
+| Future service extraction | Modules/endpoints/workers can be separated after a measured trigger | Modulith modules/endpoints/workers can be separated after a measured trigger | `DRAW`; ownership/contracts, not language, govern extraction. |
+| Future ERP/MES/BI integration | Custom adapters and .NET ecosystem | Spring Integration/Batch provide explicit EIP and restartable-job vocabulary | Java `ADVANTAGE`; every external contract still needs approval and its own Adapter. |
+| Team skill | No current repository evidence establishes greater .NET skill | No current repository evidence establishes greater Java skill | `UNKNOWN`; familiarity is not invented. |
+| Total cross-system toolchain count | C#/.NET/NuGet can span Server and Windows components | Java/JVM/Maven/Spring on Server plus C#/.NET/NuGet on Windows | .NET `ADVANTAGE`; accepted as a maintainability cost, Q-13 `NOT-RUN`. |
+| Relative workload performance | Credible high-throughput async Server | Credible high-throughput Server and virtual-thread option | `UNKNOWN`; no synthetic folklore or fake benchmark selects the winner. |
 
-### 3.3 Reconsideration triggers for Java
+### 3.3 Reconsideration triggers for .NET
 
-Engineering should switch the Server recommendation only if a recorded review shows one or more of
-the following, with evidence rather than preference:
+Engineering should switch the Server recommendation back to .NET only if a recorded review shows one
+or more of the following, with evidence rather than convenience:
 
-- the company has a supported Java 25 distribution, Spring BOM, security/operations owner and
-  incident support path that materially reduces risk;
-- Q-13 shows a material, agreed maintainability/support/cost advantage for Java;
-- Q-01 or Q-12 shows a mandatory .NET correctness/diagnostic gap while the equivalent Java slice
-  passes;
-- a future approved integration contract requires Spring-specific capability that cannot be added
-  as an Adapter without disproportionate risk.
+- Q-13 shows that owning Java/JVM/Maven/Spring plus the Windows .NET stack creates a material,
+  management-agreed support/onboarding/patch burden that the unified .NET path avoids;
+- the exact Temurin 25/Boot/JDBC/Flyway build loses supported status, cannot meet company provenance or
+  commercial-support policy, or fails Q-01/Q-12/Q-14 while the equivalent .NET build passes;
+- a named mandatory Server requirement exposes a Java-specific correctness, security, diagnostics or
+  operations gap and .NET supplies a proven lower-risk path;
+- the company adopts a maintained .NET Server platform and staffed support path that is materially
+  safer than the selected Java path, independent of existing Windows-machine ownership.
 
 The existence of Aras/DDM or another competitor using Java/.NET/SQL Server is not, by itself, a
 switch trigger. Those observations remain `COMPETITOR-OBSERVATION` evidence only.
@@ -222,7 +273,7 @@ switch trigger. Those observations remain `COMPETITOR-OBSERVATION` evidence only
 
 | Candidate | Classification | Why it won/lost for Core v0 |
 |---|---|---|
-| PostgreSQL 18 | `SELECT` | Provides the required relational transactions, row/optimistic locks, JSON and index families; has a long major support line to 2030-11-14 and license optionality; fits an Ubuntu-first topology and the selected .NET/Npgsql path. Operations, backup, collation and support still have real cost. |
+| PostgreSQL 18 | `SELECT` | Provides the required relational transactions, row/optimistic locks, JSON and index families; has a long major support line to 2030-11-14 and license optionality; fits the Linux-first topology and Boot-managed pgJDBC path. PGDG publishes the `resolute` package feed. Operations, backup, collation and support still have real cost. |
 | SQL Server 2025 | `ALTERNATIVE` | Mature Windows/Linux tooling, Japanese Full-Text Search and strong company DBA/support can materially reduce risk. It loses the initial recommendation because license/edition/backup/support facts are not yet provided and choosing it merely because DDM uses SQL Server would be an invalid competitor inference. |
 
 PostgreSQL is not selected because “free” means no cost. SQL Server is not rejected as weak, and its
@@ -246,19 +297,24 @@ choice, and edition is a separate decision.
 
 ### 4.3 Persistence and schema authority
 
-EF Core 10 + Npgsql EF 10.x is the default authoritative persistence path for ordinary aggregate
-owners. Each Module owns its mappings and queries; the Application Use-case Transaction Coordinator
-only orchestrates the declared operation and shared relational UoW. It is not a generic CRUD service.
+Spring JDBC/`JdbcClient` with Boot-managed pgJDBC is the default authoritative persistence path.
+Each Module owns SQL, mappings and queries; the Application Use-case Transaction Coordinator only
+orchestrates the declared operation and a shared Spring-managed relational transaction/UoW when the
+architecture requires atomic cross-module outcome. It is not a generic repository or CRUD service.
+The JDBC-first choice exposes locking, search projection, outbox and `COPY`/bulk behavior, while
+placing more mapping/review work on the team. Streaming multi-GB Artifact bytes remains an Artifact
+Custody concern, not an ORM query. Spring Data JPA/Hibernate, Spring Data JDBC and jOOQ were considered:
+JPA can hide flush/fetch/query behavior, Data JDBC's aggregate mapping is not a clear universal fit
+for IDEA structure, and jOOQ's exact Java 25/license support is not a safe unqualified default.
+A bounded additional mapper may be proposed only with owner-specific evidence and one migration
+authority; no persistence library owns business gates, Audit outcome or recovery semantics.
 
-Named raw Npgsql is allowed for measured multi-GB streaming, PostgreSQL `COPY`/bulk work, locking,
-search projection rebuilds and outbox delivery. It must remain inside the owning Module, use the same
-transaction where required, and retain mapping/retry/diagnostic tests. Dapper is not a default second
-convention. No persistence library owns IDEA's business gates, Audit outcome or recovery semantics.
-
-EF migration bundles are the sole schema authority. A release expands schema, deploys compatible
-code, migrates data, then contracts old columns only in a later controlled step. Destructive changes
-require an explicit backup/restore or forward-repair plan. Application rollback and database rollback
-are separate decisions.
+Boot-managed Flyway (`flyway-core` plus `flyway-database-postgresql`) and reviewed versioned SQL are
+the sole schema authority, including Spring Session/Batch infrastructure tables; disable competing
+framework schema auto-initialization. A release expands schema, deploys compatible code, migrates
+data, then contracts old columns only in a later controlled step. Run migrations as a preflight/release
+action, not an uncontrolled app-start mutation. Destructive changes require a backup/restore or
+forward-repair plan. Application rollback and database rollback are separate decisions.
 
 ## 5. Identity, authorization and API boundary
 
@@ -268,10 +324,12 @@ The selected account path keeps these identities distinct:
 Actor ≠ IDEA Account ≠ Login Identity ≠ Security Principal ≠ Role Assignment
 ```
 
-ASP.NET Core Identity supplies credential hashing, lockout, recovery and session primitives. It does
-not become the product's Principal–Role–Scope model. For the first-party Web UI, use secure HttpOnly
-SameSite cookies and anti-CSRF controls. Do not describe ASP.NET Identity's proprietary bearer token
-as OAuth, OIDC or JWT, and do not build an OAuth server merely to start Core v0.
+Spring Security supplies maintained authentication, password encoding, session-fixation and CSRF
+primitives; Spring Session JDBC supplies server-side session storage where needed. IDEA-owned Account
+and Login Identity records, lockout/recovery policy and stable Actor remain distinct. Spring roles or
+authorities do not become the product's Principal–Role–Scope model. For the first-party Web UI, use
+secure HttpOnly SameSite cookies and anti-CSRF controls. Do not build an OAuth/OIDC server merely to
+start Core v0.
 
 The server establishes the Actor from authenticated session proof. The client may request an
 operation, resource, scope and expected state, but never chooses the authoritative ActorId. Access
@@ -319,7 +377,7 @@ commands.
 WPF is selected over WinUI 3 for the first bake because:
 
 - mature Windows compatibility, accessibility and WebView2 hosting reduce first-bake unknowns;
-- the shell can use the same `.NET 10` family as Workspace and Server diagnostics;
+- the shell can use the same `.NET 10` family as Workspace diagnostics; this does not select the Server;
 - Windows App SDK has an independent and materially shorter servicing clock than .NET 10 LTS;
 - the internal engineering context values durable file/CAD/Office integration and recoverable
   rollout over adopting the newest native UI guidance alone.
@@ -383,15 +441,27 @@ automation works before Q-09.
 
 ## 8. Deployment, topology, observability and version policy
 
+### Decision A — Server OS, independent of Server and Windows-client runtimes
+
+| OS | Disposition | Support and operational reading | Reconsideration trigger |
+|---|---|---|---|
+| Ubuntu Server 26.04 LTS | `SELECT — platform direction` | Canonical standard security maintenance to May 2031; official Temurin 25/PGDG 18/Nginx paths; apt package management and systemd suit a long-lived headless Server. No Windows estate weight is applied. Q-07/Q-12/Q-14 still own restore, monitoring, hardening, certificate, patch, operator and licensing/provenance evidence. | Exact required component or company policy fails 26.04 qualification. |
+| Ubuntu Server 24.04 LTS | `ALTERNATIVE` compatibility path | Supported LTS to May 2029 and a viable Linux path when exact 26.04 dependency/policy support is absent; shorter remaining runway may require an earlier OS migration. | Switch only after a named Q-14 incompatibility or IT support condition, not preemptively. |
+| Windows Server 2025 | `ALTERNATIVE / CONTINGENCY` | Credible service/security/backup platform but its licensing, patch and operator cost must be evidenced. Existing company Windows machines or Windows engineering PCs do not make this a natural/equal fallback. | IT governance mandate, selected Server component/integration requiring Windows, failed Linux qualification, or materially stronger staffed security/operations support demonstrated. |
+
+There is no measured total-cost ranking or assigned 24/7 operator. Linux-first is the project user's
+Tech-context preference, not an approved platform deployment. Platform support is established at the
+published component level; the whole-stack operational build remains Q-14 `NOT-RUN`.
+
 ### 8.1 Initial logical/physical topology
 
 ```text
-Company-managed Ubuntu Server 26.04 LTS VM (single, non-HA candidate)
+Company-managed Ubuntu Server 26.04 LTS VM (selected platform direction; single, non-HA candidate)
 ├── Nginx / managed TLS entry
-├── IDEA Server (.NET 10 modular monolith)
+├── IDEA Server (Temurin 25 + Spring Boot 4.1.x modular monolith)
 │   ├── owner Modules + Application Use-case Transaction Coordinator
-│   ├── bounded outbox/background workers
-│   └── OpenTelemetry/structured diagnostics
+│   ├── bounded outbox/background jobs and per-system Adapters
+│   └── Actuator/Micrometer/OpenTelemetry + structured diagnostics
 ├── PostgreSQL 18
 └── protected private Artifact volume
 
@@ -406,10 +476,15 @@ Windows engineering PC (per user)
 └── IDEA Workspace (.NET 10, current-user named-pipe boundary)
 ```
 
-The VM is a simple initial failure domain, not HA and not a capacity claim. Native package deployment
-is selected over a production container requirement because one operator has fewer storage, startup,
-secret and recovery layers to own. Development may use disposable containers where convenient, but
-Docker/Compose is not a production authority. Kubernetes, service mesh and a microservice fleet are
+The VM is a simple initial failure domain, not HA and not a capacity claim. A signed/versioned
+Spring Boot executable-JAR bundle under systemd, with host-managed Temurin 25 and configuration/secrets
+outside the bundle, is selected over a mandatory production container or an internally maintained
+application `.deb`. Boot publishes the executable archive and systemd path. The release procedure must
+pin checksums/signatures and SBOM, preflight the Flyway migration, verify health and preserve a
+recoverable old application bundle. Framework-dependent host JDK patching is selected; a
+self-contained `jlink` image or internally managed `.deb` is `DEFER` unless IT policy or an evidenced
+provenance/rollback need requires it. Development may use disposable containers where convenient,
+but Docker/Compose is not production authority. Kubernetes, service mesh and a microservice fleet are
 `REJECT FOR CORE V0`; reconsider only with a supported company platform or measured independent-scale
 need.
 
@@ -426,7 +501,7 @@ The selected telemetry protocol is OpenTelemetry with replaceable OTLP export. M
   health, storage capacity, process/GC and recovery jobs;
 - traces carrying Operation ID and authorization/owner outcome correlation;
 - separate immutable Audit Evidence, not merely a log line;
-- `dotnet-monitor`/EventPipe or equivalent .NET diagnostics during an incident.
+- JVM process/GC diagnostics through JFR/`jcmd` or an equivalent supported JDK incident path.
 
 The repository does not select Grafana, a cloud vendor or a commercial backend. The company must
 name export, retention, access and on-call ownership in Q-12/Q-13.
@@ -435,26 +510,26 @@ name export, retention, access and on-call ownership in Q-12/Q-13.
 
 | Family | Selected policy | Qualification/deployment rule |
 |---|---|---|
-| .NET / ASP.NET Core | `.NET 10 LTS` family | Deploy a supported current patch; support date and security advisories are rechecked each release cycle. |
-| EF Core / Npgsql | EF Core 10 + Npgsql EF 10.x | Pin a tested compatible patch pair; do not infer provider compatibility from major numbers. |
+| Java distribution | Eclipse Temurin 25 LTS | Deploy a supported current patch from a verified Adoptium source; community availability is not a commercial SLA. |
+| Spring Boot / Modulith | Boot 4.1.x + compatible Modulith 2.1.x | Pin/test Boot BOM and Modulith versions; Boot minor support and patch clocks are distinct from Java 25 LTS. |
+| Maven / JDBC / Flyway | Maven Wrapper; Boot-managed pgJDBC and Flyway PostgreSQL module | Pin wrapper and resolved dependency graph, inventory licenses/SBOM and test exact driver/migration combination. |
 | PostgreSQL | Major 18 | Use the current supported minor at qualification and keep a tested upgrade/restore path; no patch is a product requirement. |
 | React | 19.3 major line | Pin exact package versions/lockfile and review React security advisories. |
 | TypeScript | 7.0 compiler line | Use TS6 only for explicitly identified compiler-API tooling compatibility; remove the lane when dependencies support TS7. |
 | Node.js | 22 LTS build line | Minimum 22.12 for Vite 8; build agents use a supported patch and reproducible lockfile. |
 | Vite | 8.3 line | Pin patch and review plugin compatibility. |
-| WPF / WebView2 | WPF on net10; WebView2 Evergreen | Evergreen patching is company-managed where permitted; Fixed Version requires an IDEA-owned patch calendar. |
-| Ubuntu | 26.04 LTS primary; 24.04 LTS fallback | Q-14 proves the complete selected stack, backup and monitoring matrix; OS patch ownership is explicit. |
-| Java alternative | Java 25 LTS + Eclipse Temurin 25 + Spring Boot 4.1.x | Not part of the selected production baseline; Temurin support/SLA, BOM, driver, support and cost remain `NOT-RUN`. |
+| Windows client .NET / WPF / WebView2 | .NET 10 per-user Workspace and WPF shell; WebView2 Evergreen | Separate from Server runtime. Evergreen patching is company-managed where permitted; Fixed Version requires an IDEA-owned patch calendar. |
+| Ubuntu | 26.04 LTS `SELECT — platform direction`; 24.04 LTS compatibility alternative | Official Java/PostgreSQL package paths are established; Q-14 proves the exact operational build and OS patch ownership. |
 | Dependency delivery | Lockfiles, SBOM and signed/versioned bundles | Monthly security patch review and quarterly planned updates are proposed operating cadence; management has not approved a SLA. |
 
 # Not selected for Core v0
 
 | Technology/approach | Classification | Why it is not the initial choice; reconsideration trigger |
 |---|---|---|
-| Java 25 + Spring Boot/Modulith | `ALTERNATIVE` | Strong module/integration/batch evidence, but adds a primary server runtime alongside the .NET Windows path. Reconsider on Q-01/Q-13 evidence or a supported company Java platform. |
+| .NET 10 + ASP.NET Core/Kestrel | `ALTERNATIVE` | Strong Linux support, async I/O, Worker/EF/Npgsql/diagnostics and one language family with Windows client. Reconsider if Q-01/Q-12/Q-13/Q-14 shows a material supported advantage over Java, not because Windows machines already exist. |
 | SQL Server 2025 | `ALTERNATIVE` | Credible and possibly better where company DBA/licensing/support already exists; no such advantage is evidenced here. Reconsider after edition/license/restore/FTS/platform qualification. |
-| Ubuntu Server 24.04 LTS | `ALTERNATIVE` fallback | Retained if Ubuntu 26.04 complete-stack support is not proven; not a discarded technology. |
-| Windows Server 2025 | `ALTERNATIVE` fallback | Use if company policy/support materially favors Windows or the Linux matrix fails; licensing and operations require evidence. |
+| Ubuntu Server 24.04 LTS | `ALTERNATIVE` compatibility path | Retained if an exact required component/backup/monitoring/security package or company policy cannot support 26.04 during Q-14; its standard security maintenance ends May 2029. |
+| Windows Server 2025 | `ALTERNATIVE / CONTINGENCY` | Use only if IT governance mandates Windows, a selected Server component/integration requires it, Q-14 Linux qualification fails, or a measured staffed security/operations advantage is material. Existing Windows infrastructure alone has zero selection weight. |
 | WinUI 3 / Windows App SDK | `ALTERNATIVE` | Microsoft’s new-app guidance is respected, but the separate shorter servicing clock and unrun packaging/accessibility tests make WPF lower risk for first bake. |
 | Browser + signed Workspace agent only | `ALTERNATIVE` / `FOLLOW-UP PRODUCT DECISION REQUIRED` | Could reduce embedded native surface, but cannot silently remove the current Web-rendered Desktop obligation; browser-to-agent security/LNA/installer tests are unrun. |
 | Tauri 2 + Rust | `ALTERNATIVE` challenger | React reuse and scoped capabilities are credible, but Rust has no multi-year LTS and adds toolchain/updater/IPC ownership. Reconsider only after G1–G10/Q-08/Q-10/Q-11 pass. |
@@ -462,8 +537,9 @@ name export, retention, access and on-call ownership in Q-12/Q-13.
 | JavaFX | `DEFER` | Corrected 2026 support evidence keeps it viable, but WebKit/React/SSO/IPC/installer/CAD behavior remains unqualified and it does not reduce the .NET Workspace boundary. |
 | Qt/C++ | `DEFER` | Adds a C++/Qt licensing and toolchain boundary without a demonstrated product need or React reuse advantage. |
 | TypeScript 6 as production compiler | `REJECT FOR CORE V0` | TS7 is the selected source compiler line; TS6 is retained only as a bounded tool/plugin compatibility lane. |
-| Dapper as default persistence | `DEFER` | Low mapping overhead alone does not supply aggregate ownership, migrations or UoW discipline; named raw Npgsql remains available where measured. |
-| jOOQ/JPA as selected Server persistence | `DEFER` | Applies to the Java branch; exact Java 25/JDK/licensing and hybrid rules are not qualified. |
+| JPA/Hibernate or Spring Data JDBC as default Server persistence | `DEFER` | Both can be useful for bounded aggregates, but neither is a proven universal fit for IDEA's explicit query/lock/outbox/structure ownership. Add only after measured module-specific need. |
+| jOOQ as default Server persistence | `DEFER` | Explicit SQL is attractive, but exact Java 25 edition/licensing/support must be qualified before replacing the selected JDBC-first baseline. |
+| Internally managed application `.deb` or self-contained Java image | `DEFER` | Adds release/package/JDK patch ownership without a demonstrated Core v0 requirement; adopt only if IT provenance, signing, support or rollback policy demands it. |
 | Elasticsearch/OpenSearch/Lucene | `DEFER` | Dedicated search adds an authority, backup and recovery surface before relational search triggers are measured. |
 | Redis | `REJECT FOR CORE V0` | No current cache/session/queue requirement justifies another stateful service; add only with a measured owner and recovery contract. |
 | Kafka/RabbitMQ/other mandatory broker | `DEFER` | Transactional outbox plus bounded workers covers the initial integration posture; add on measured volume/isolation or an adopted company platform. |
@@ -479,13 +555,15 @@ name export, retention, access and on-call ownership in Q-12/Q-13.
 
 | Question | Answer against the recommendation |
 |---|---|
-| 1. Strongest argument against the chosen Server runtime? | Java has stronger directly documented module verification and a broader Spring Integration/Batch portfolio. If Q-01/Q-13 shows those capabilities materially reduce defects or support cost, the second runtime family may be worth it. |
+| 1. Strongest argument against the chosen Server runtime? | Java adds a second language/runtime/build/diagnostic/patch family beside Windows .NET, while Boot minor support is shorter than Temurin 25's runtime runway. Q-13 must show a named team can own this cost. |
 | 2. Strongest argument against the chosen database? | PostgreSQL shifts more operational/backup/collation expertise to the company than an already-supported SQL Server estate might. A real DBA/support and restore comparison could reverse the choice. |
 | 3. Strongest argument against the chosen Desktop shell? | WPF is Windows-only and older than WinUI 3; WebView2 creates a privileged Web/native boundary and a separate patch clock. Accessibility, packaging or policy failure in Q-10/Q-11 would force a shell review. |
 | 4. Which decision has the highest chance of reversal after prototype evidence? | The client path: WPF + WebView2 versus browser + signed agent/Tauri, because IPC, dirty-workspace update, accessibility and CAD/Office behavior are still `NOT-RUN`. |
-| 5. Which technology creates the highest long-term patch/operations burden? | The combined Windows delivery surface (WPF, WebView2, Workspace and optional Format Worker), not one isolated library. It has multiple OS/app/license clocks and needs a signed rollback runbook. |
-| 6. Which decision most depends on unknown company skill? | Ubuntu/PostgreSQL operations, backup/key custody and Windows packaging/signing/support. Q-13/Q-14 must name owners; the recommendation does not assume the project user is a 24/7 operator. |
-| 7. What exact evidence would switch to the runner-up? | A same-fixture Java vertical slice passes correctness/security/recovery, the company provides a named supported JDK/Spring/BOM/runbook, and Q-13 documents a material agreed lifecycle/support advantage over the unified .NET path; or an explicit product/integration decision requires Spring-only capability. |
+| 5. Which technology creates the highest long-term patch/operations burden? | The combined Java Server plus Windows WPF/WebView2/.NET Workspace/optional Format Worker patch clocks. A Boot BOM does not make JDK, Windows renderer or CAD licenses share one lifecycle. |
+| 6. Which decision most depends on unknown company skill? | Owning Temurin/Boot/Maven/PostgreSQL operations alongside Windows packaging/signing, backup/key custody and incident response. Q-13/Q-14 must name owners; the project user is not assumed to be a 24/7 operator. |
+| 7. What exact evidence would switch to the runner-up? | A same-fixture .NET slice meets correctness/security/recovery while Java fails a mandatory condition, or Q-13/Q-14 proves a material, management-accepted total support/patch advantage for .NET independent of Windows-estate inertia. |
+| 8. Are we selecting .NET Server because it is the best Linux Server choice, or because Windows clients use .NET? | We are not selecting .NET Server. Its C# reuse is a real maintainability factor, but the Server choice is Java because direct module verification, Integration/Batch and JDK support optionality win after Linux-first criteria are separated. |
+| 9. If Desktop/Workspace were language-neutral black boxes behind stable HTTPS/IPC contracts, which Server runtime would Engineering choose? | Java 25/Temurin 25/Spring Boot 4.1.x. The counterfactual removes the only substantial cross-component .NET advantage without weakening Java's Server-specific advantages. IPC remains internal to Windows client; Server sees versioned HTTPS/JSON/OpenAPI contracts. |
 
 ## 11. PG3 readiness / pre-decision
 
@@ -494,12 +572,12 @@ matrix has made a coherent choice, not that the Product Decision Authority has a
 
 | Material Tech question | Status | Evidence still needed / owner |
 |---|---|---|
-| One Server runtime and framework | `RESOLVED BY ENGINEERING RECOMMENDATION` | .NET 10/ASP.NET Core selected; PDA review and Q-01/Q-13 remain open. |
-| One database and persistence/migration authority | `RESOLVED BY ENGINEERING RECOMMENDATION` | PostgreSQL 18 + EF/Npgsql + EF migration authority selected; Q-02/Q-07/Q-14 must qualify it. |
-| Identity/account versus product authorization boundary | `RESOLVED BY ENGINEERING RECOMMENDATION` | ASP.NET Identity + custom Actor/Account + IDEA Access Policy selected; security/session tests Q-06/Q-08/Q-11 remain `NOT-RUN`. |
+| One Server runtime and framework | `RESOLVED BY ENGINEERING RECOMMENDATION` | Java 25/Temurin 25 + Spring Boot 4.1.x/Modulith selected; PDA review and Q-01/Q-13 remain open. |
+| One database and persistence/migration authority | `RESOLVED BY ENGINEERING RECOMMENDATION` | PostgreSQL 18 + Spring JDBC/pgJDBC + sole Flyway/SQL migration authority selected; Q-02/Q-07/Q-14 must qualify it. |
+| Identity/account versus product authorization boundary | `RESOLVED BY ENGINEERING RECOMMENDATION` | Spring Security/Session JDBC + custom Actor/Account/Login Identity + IDEA Access Policy selected; Q-06/Q-08/Q-11 remain `NOT-RUN`. |
 | Web CSR and installed Desktop surface | `RESOLVED BY ENGINEERING RECOMMENDATION` | React CSR + WPF/WebView2 preserves current Spec surface; any removal/change requires a follow-up Product Decision. |
 | Workspace runtime and IPC | `RESOLVED BY ENGINEERING RECOMMENDATION` | .NET per-user process + current-user named pipe selected; Q-08 and Q-11 remain `NOT-RUN`. |
-| Ubuntu 26.04 complete-stack support | `QUALIFICATION REQUIRED` | Q-14 must verify official support for .NET, PostgreSQL packaging, backup/monitoring and signed packages; use 24.04 fallback if it fails. Platform/IT owner. |
+| Ubuntu 26.04 platform versus operational build | `SELECT — platform direction` / `QUALIFICATION REQUIRED` | Official Temurin 25, Boot Java 25/systemd and PGDG 18/`resolute` paths are established. Q-14 still builds/installs/hardens/patches/restores the exact IDEA stack; 24.04 is a compatibility alternative, Windows a contingency. |
 | Production edition, license, certificates, signing and support ownership | `BLOCKED` | Company must name the OS/DB edition, certificate/key custodian, backup target, support/on-call owner and permitted install/update policy. No repository evidence yet. |
 | Transaction, concurrency, outbox and module-boundary behavior | `QUALIFICATION REQUIRED` | Q-01, Q-02, Q-05 and architecture tests; Product/Tech/Data owners. |
 | Multi-GB transfer, Artifact custody and recovery | `QUALIFICATION REQUIRED` | Q-04 and Q-07 with representative files and failure injection; Workspace/Operations owners. |
@@ -507,14 +585,14 @@ matrix has made a coherent choice, not that the Product Decision Authority has a
 | CAD/Office/IRONCAD representation path | `QUALIFICATION REQUIRED` | Q-09 exact application/version/license/worker fixture; Format/Product owner. |
 | Client installation, WebView2, native boundary and rollback | `QUALIFICATION REQUIRED` | Q-10/Q-11 clean company images, threat cases and dirty Workspace; IT/Security/Release owners. |
 | Operations, observability and maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 telemetry runbook, SBOM, patch and support rotation; Operations/Engineering owners. |
-| Product Decision Authority review/acceptance of TECH-001@0.9 | `NOT-RUN` | Boss reviews the exact brief and source pins; no approval is implied by this artifact. |
+| Product Decision Authority review/acceptance of TECH-001@0.10 | `NOT-RUN` | Boss reviews the exact brief and source pins; no approval is implied by this artifact. |
 | PG3 gate disposition | `NOT-RUN` | GOV/DOC-07/VVP gate owner records the decision after applicable review; this matrix never writes `PASS`. |
 
 ### 11.1 Minimum evidence before a Tech approval request
 
 The following is the minimum decision packet, not a claim that it exists:
 
-1. PDA review of `TECH-001@0.9` and this matrix, including the Java/SQL Server alternatives and
+1. PDA review of `TECH-001@0.10` and this matrix, including the .NET/SQL Server alternatives and
    explicit switch triggers.
 2. Company disposition for Ubuntu 26.04 versus 24.04/Windows Server, production PostgreSQL edition,
    certificates/keys, backup target, signing and named support owners.
@@ -534,20 +612,20 @@ comparative branch marked `DEFERRED` means it was not executed; it is not a fail
 
 | ID / question | Selected stack / comparison | Preconditions | Exact test and retained evidence | Gate relevance / owner | Status |
 |---|---|---|---|---|---|
-| `Q-01` Server vertical slice | .NET 10/ASP.NET Core + PostgreSQL/EF/Npgsql; Java branch `DEFERRED` | Same API contract, schema, Artifact adapter and TLS | Implement authenticated Check-out/Reference/Check-in/Release with immutable Generation, `AuthorizationDecision`, commit-time revalidation, outbox and idempotent retry; retain source, migration, trace, Audit/outbox rows and failure log | Tech/Product correctness; Product/Tech reviewers | `NOT-RUN` |
+| `Q-01` Server vertical slice | Java 25/Temurin 25 + Boot 4.1.x/Modulith + PostgreSQL/JDBC/Flyway; .NET branch `DEFERRED` | Same API contract, schema, Artifact adapter and TLS | Implement authenticated Check-out/Reference/Check-in/Release with immutable Generation, `AuthorizationDecision`, commit-time revalidation, outbox and idempotent retry; retain source, migration, module-verification result, trace, Audit/outbox rows and failure log | Tech/Product correctness; Product/Tech reviewers | `NOT-RUN` |
 | `Q-02` DB transaction/concurrency | PostgreSQL 18 selected; SQL Server branch `DEFERRED` | Same fixture and isolation goals | Conflicting Reservation/Generation/Release operations, optimistic/pessimistic locks, deadlock/timeout/retry; retain plans, lock graphs, terminal states and timings | Data/Tech; no lost update or unauthorized commit | `NOT-RUN` |
 | `Q-03` Search Unicode/JA | PostgreSQL projection selected; SQL Server projection `DEFERRED` | Approved permission model and Vietnamese/Japanese corpus | ID/title/filter/sort/page, case/width/normalization/contains, permission changes and rebuild; retain recall/precision, plans, p95/p99 and rebuild duration | Product/Data thresholds | `NOT-RUN` |
-| `Q-04` Multi-GB transfer/custody | .NET Workspace + filesystem Artifact Store; browser/Tauri branches `DEFERRED` | Representative 1/5/10+ GB files and failure injector | Stream Store→Server→Workspace upload/download, digest, network/process/power interruption, resume ranges and duplicate OperationId; retain digests, journal, memory/RSS and orphan report | Workspace; no corruption or duplicate publish | `NOT-RUN` |
-| `Q-05` Outbox/idempotency | PostgreSQL outbox + hosted dispatcher; broker branch `DEFERRED` | Same DB and event contract | Crash before/after commit and during delivery; duplicates/reordering/same-key-different-input; retain transaction log, Event IDs, dedupe and replay report | Integration; one authoritative outcome | `NOT-RUN` |
-| `Q-06` Account/session revocation | ASP.NET Identity + cookie/bootstrap path; Java branch `DEFERRED` | Cookie/session policy and two sessions | Fixation, CSRF, concurrent sessions, logout, revoke, expiry, reauth and Workspace binding; retain security traces/session evidence and denial proof | Security; revoked session cannot command owner operation | `NOT-RUN` |
+| `Q-04` Multi-GB transfer/custody | Temurin/Boot Server + .NET Workspace + filesystem Artifact Store; browser/Tauri branches `DEFERRED` | Representative 1/5/10+ GB files and failure injector | Stream Store→Server→Workspace upload/download, digest, network/process/power interruption, resume ranges and duplicate OperationId; retain digests, journal, both-process memory/RSS and orphan report | Workspace/Server; no corruption or duplicate publish | `NOT-RUN` |
+| `Q-05` Outbox/idempotency | PostgreSQL outbox + bounded Spring dispatcher/Integration Adapter; broker branch `DEFERRED` | Same DB and event contract | Crash before/after commit and during delivery; duplicates/reordering/same-key-different-input; retain transaction log, Event IDs, dedupe and replay report | Integration; one authoritative outcome | `NOT-RUN` |
+| `Q-06` Account/session revocation | Spring Security + Spring Session JDBC cookie/bootstrap path; .NET branch `DEFERRED` | Cookie/session policy and two sessions | Fixation, CSRF, concurrent sessions, logout, revoke, expiry, reauth and Workspace binding; retain security traces/session evidence and denial proof | Security; revoked session cannot command owner operation | `NOT-RUN` |
 | `Q-07` Backup/restore | PostgreSQL PITR + Artifact/config/key coordinated backup | Off-primary target and key custody | Restore DB, Artifact, config/policy/crypto material; replay outbox and simulate severe failure; retain transcript, measured RTO/RPO and integrity report | Operations; preliminary RTO/RPO only if measured/approved | `NOT-RUN` |
 | `Q-08` Windows Workspace IPC | .NET named pipes; Rust/JavaFX branches `DEFERRED` | Two Windows users, two Workspaces, elevated/non-elevated processes | Cross-user/cross-Workspace, replayed, oversized and wrong-version messages; reconnect; retain ACL/config/protocol traces and refusal evidence | Security/Workspace | `NOT-RUN` |
 | `Q-09` Office/IRONCAD open/save | WPF/WebView2 + .NET Workspace + separate Windows worker | Exact company app/OS/bitness/license fixture | Materialize verified file, launch by association, edit/save/close, detect stale/in-use/error without add-in; retain app matrix, custody journal and state mapping | Workspace/Product/Format | `NOT-RUN` |
 | `Q-10` Client install/update/rollback | WPF + Evergreen WebView2; WinUI/browser/Tauri branches `DEFERRED` | Clean company images, signer and offline policy | Per-user/admin install, missing WebView2, online/offline update, dirty Workspace, forced failure, rollback/version skew; retain logs, signatures, SBOM/license inventory and local-work preservation | IT/Release | `NOT-RUN` |
 | `Q-11` Web/native attack surface | WebView2 + WPF + named-pipe boundary | Threat model and test origins | Navigation/redirect/iframe/popup/forged messages, LNA/CSRF/DNS rebinding/hostile origin/custom protocol replay; retain security report and policy settings | Security; no generic filesystem/shell/host object | `NOT-RUN` |
-| `Q-12` Observability/incident diagnosis | OpenTelemetry + structured logs/metrics/traces | Common schema and redaction policy | Inject transfer failure, deadlock, auth denial, outbox lag and worker crash; diagnose from telemetry; retain dashboards, trace correlation, runbook and time-to-diagnose | Operations | `NOT-RUN` |
-| `Q-13` Team/toolchain maintainability | Unified .NET versus Java runner-up; client alternatives `DEFERRED` | Named maintainers/support owners | Build/patch/debug same slice, rotate incident, update dependencies and reproduce build; retain steps, SBOM, patch inventory, support cost and defects | Engineering/management | `NOT-RUN` |
-| `Q-14` DB/platform compatibility | .NET 10 + PostgreSQL 18 + Ubuntu 26.04 native package; 24.04/Windows/Java branches `DEFERRED` | Candidate package/native images and backup target | Build/restore exact matrix; verify official support, driver/provider, package, monitoring and SQL Server comparison paths; retain SBOM, lifecycle matrix and restore logs | Platform/IT; no unsupported production combination | `NOT-RUN` |
+| `Q-12` Observability/incident diagnosis | Actuator/Micrometer/OpenTelemetry + logs/metrics/traces + JFR/`jcmd` | Common schema and redaction policy | Inject transfer failure, deadlock, auth denial, outbox lag and worker crash; diagnose from telemetry/JVM capture; retain dashboards, trace correlation, runbook and time-to-diagnose | Operations | `NOT-RUN` |
+| `Q-13` Team/toolchain maintainability | Java Server + .NET Windows client versus unified .NET runner-up | Named maintainers/support owners | Build/patch/debug same slice, rotate incident, update Temurin/Boot/Maven/.NET dependencies and reproduce both builds; retain steps, two SBOMs, patch inventory, support entitlement/cost and defects | Engineering/management | `NOT-RUN` |
+| `Q-14` DB/platform compatibility | Temurin 25 + Boot 4.1.x/JDBC/Flyway + PostgreSQL 18 + Ubuntu 26.04 executable-JAR/systemd; 24.04/.NET/Windows branches `DEFERRED` | Official base support established; exact signed bundle, repositories, backup target and monitoring fixture | Build/install/harden/patch/restore the exact matrix; prove package provenance, driver/Flyway compatibility, certificates, systemd, monitoring and PostgreSQL/Artifact recovery; retain SBOM, lifecycle matrix and restore logs. Recheck vendor support rather than retesting whether published 26.04 paths exist | Platform/IT; no unsupported production combination | `NOT-RUN` |
 
 ## 13. Trace, change and non-impact statement
 
