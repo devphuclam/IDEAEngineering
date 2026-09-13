@@ -3,16 +3,16 @@
 | Thông tin | Nội dung |
 |---|---|
 | Mã tài liệu / Stable ID | `TECH-001` |
-| Phiên bản / ngày soạn | `0.10` / `13-09-2026` |
+| Phiên bản / ngày soạn | `0.11` / `13-09-2026` |
 | Trạng thái | `Draft` — Engineering Recommendation đã hoàn tất; Product Decision Authority review/approval `NOT-RUN` |
 | Vai trò | Brief tiếng Việt để sếp xem xét trục Tech; không phải Core Product Document và không tự phê duyệt stack |
 | Người soạn / review | Principal Product Author — trợ lý soạn; review nội bộ đầy đủ `NOT-RUN` |
 | Người quyết định | Sếp — `Product Decision Authority` |
 | Product Normativity | `INFORMATIVE` — không tạo FTR/REQ và không đổi hành vi sản phẩm |
-| Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.2`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-RES-TECH-20260913-001`](../../../../research/2026-09-13-technology-selection-evidence-synthesis.md); first-party Linux support pins trong matrix §2B |
-| Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.17 (chỉ cập nhật candidate Tech rows), DOC-06@0.16, DOC-07@0.7, DOC-08@0.12, GOV@0.3, VVP@0.16 và các ADR đã Accepted |
-| Change Record | [`IE-CHG-TECH-LINUX-001@0.1`](../registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md); predecessor `TECH-001@0.9`, SHA-256 `B1A67D253066765B9834EF232648394B5F585B2A7B2B30ACF7D5B79984BCE04C` |
-| Supersedes / Superseded by | Supersedes `TECH-001@0.9`; superseded by `NOT-APPLICABLE` |
+| Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.3`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-RES-TECH-20260913-001`](../../../../research/2026-09-13-technology-selection-evidence-synthesis.md); first-party Linux support pins trong matrix §2B |
+| Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.18 (technology-neutral architecture wording), DOC-06@0.16, DOC-07@0.7, DOC-08@0.12, GOV@0.3, VVP@0.16 và các ADR đã Accepted |
+| Change Record | [`IE-CHG-TECH-LINUX-002@0.1`](../registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md); predecessor `TECH-001@0.10`, SHA-256 `1F8B236E4747AB64559F25EA85EC2B5908600887D24F9F5D7C963FD76CBC128F` |
+| Supersedes / Superseded by | Supersedes `TECH-001@0.10`; superseded by `NOT-APPLICABLE` |
 | Giới hạn | Chỉ phân tích và đề xuất. Chưa viết production code, chưa cài đặt/triển khai, chưa mua license/hạ tầng, chưa có kết quả qualification và không tuyên bố PG3/PG4 `PASS`. |
 | Trạng thái quyết định | Engineering Recommendation: `COMPLETE`; Product Decision Authority Approval: `NOT-RUN` |
 
@@ -24,7 +24,8 @@ Engineering đề xuất **một bộ Core v0 cụ thể**:
 Ubuntu Server 26.04 LTS — SELECT platform direction; exact build Q-14 NOT-RUN
 Java 25 LTS / Eclipse Temurin 25 / Spring Boot 4.1.x + Spring Modulith 2.1.x
 PostgreSQL 18 + Spring JDBC/JdbcClient/pgJDBC + Flyway versioned SQL
-Maven Wrapper + Boot BOM; Spring Security/Session JDBC; Spring Integration/Batch
+Maven Wrapper + Boot BOM; Spring Security với ordinary server-side sessions
+Bounded Spring tasks + transactional outbox dispatcher; Actuator/Micrometer/OTel/JFR
 React 19.3 + TypeScript 7 + Vite 8.3 / Node 22 LTS build
 WPF net10.0-windows + WebView2 Evergreen
 Workspace .NET 10 riêng theo từng Windows user, IPC named pipe có xác thực
@@ -37,9 +38,11 @@ Actuator/Micrometer/OpenTelemetry/JFR + PostgreSQL PITR/WAL và backup độc l�
 Đây là **khuyến nghị kỹ thuật**, không phải quyết định của sếp. Bối cảnh mới do anh cung cấp:
 ưu tiên Linux-first cho Server; hạ tầng Windows Server hiện có được tính **0 điểm lợi thế**; Server
 được phép khác runtime với Windows client. Vì thế quyết định OS Server, runtime Server và runtime
-Desktop/Workspace được tách ra. Sau khi tính lại, Java/Spring thắng ở kiểm tra ranh giới Module,
-Integration/Batch và lựa chọn vòng đời JDK; .NET/ASP.NET Core là runner-up mạnh nhờ một ngôn ngữ
-chung và hệ công cụ gọn hơn. Không có kết luận Java nhanh hơn hoặc “enterprise-grade” hơn.
+Desktop/Workspace được tách ra. Sau khi tính lại, Java/Spring thắng **hẹp** nhờ Spring Modulith phù hợp
+trực tiếp với modular monolith, nền tảng Linux Server trưởng thành và optionality phân phối/hỗ trợ JDK.
+.NET/ASP.NET Core là runner-up mạnh nhờ một ngôn ngữ chung và hệ công cụ gọn hơn. Spring Integration/
+Batch chỉ là optionality có điều kiện; JDBC không phải lợi thế riêng của Java. Không có kết luận Java
+nhanh hơn, scale hơn hoặc “enterprise-grade” hơn.
 
 ## 2. Recommended Core v0 Stack
 
@@ -52,10 +55,10 @@ chung và hệ công cụ gọn hơn. Không có kết luận Java nhanh hơn ho
 | Database | `SELECT` | PostgreSQL 18 | Metadata, workflow, structure, authorization, Audit, search projection và outbox; Artifact bytes ở kho riêng. Minor dùng bản supported tại qualification. |
 | Persistence | `SELECT` | Spring JDBC/`JdbcClient` + Boot-managed pgJDBC | SQL/mapping thuộc từng owner Module; shared Spring relational UoW cho operation cần atomicity. JPA/Data JDBC/jOOQ không là default song song. |
 | Schema migration | `SELECT` | Boot-managed Flyway + reviewed versioned SQL, expand–migrate–contract | Một schema authority; preflight release riêng, không tự destructive down migration; rollback DB bằng forward repair/restore. |
-| Account/authentication | `SELECT` | Spring Security 7.1.x + Spring Session JDBC + IDEA Actor/Account/Login Identity domain | Framework cho authentication/session/CSRF; IDEA Access Policy tự quyết định quyền sản phẩm. Web dùng HttpOnly SameSite cookie. |
+| Account/authentication | `SELECT` | Spring Security 7.1.x ordinary server-side sessions + IDEA Actor/Account/Login Identity domain | Framework cho authentication/session/CSRF; one-instance registry/invalidation và request/commit revalidation xử lý revoke. Restart kết thúc session an toàn; Spring Session JDBC chỉ `CONDITIONAL`. |
 | Authorization | `SELECT` | IDEA Access Policy | Server/IAM establish `ActorContext`; policy resolve IAM eligibility + Project/Group + Role Assignment/version + Scope; owner gate và commit-time revalidation sau đó. |
 | API | `SELECT` | Versioned HTTPS JSON REST + OpenAPI 3.1 | Stable Resource/Operation ID, expected state và idempotency key; client không truy cập DB và không tự gửi ActorId có thẩm quyền. |
-| Integration publication | `SELECT` | PostgreSQL transactional outbox + bounded Spring dispatcher + per-system Spring Integration Adapter | Outcome/Audit/outbox atomic trong relational UoW; consumer idempotent. Broker chưa bắt buộc. |
+| Integration publication | `SELECT` | PostgreSQL transactional outbox + bounded Spring dispatcher + plain owner-specific Adapter | Outcome/Audit/outbox atomic trong relational UoW; consumer idempotent. Spring Integration chỉ `CONDITIONAL` khi có contract cụ thể; broker chưa bắt buộc. |
 | Web frontend | `SELECT` | React 19.3 CSR | Web workbench nội bộ; static build được Server phục vụ; không thêm SSR/RSC. |
 | Web compiler | `SELECT` | TypeScript 7.0 | CLI/type-checking line được chọn; TS6 chỉ là compatibility lane cho plugin dùng compiler API chưa ổn định. |
 | Web build | `SELECT` | Vite 8.3 + Node.js 22 LTS build line | `Node >=22.12` cho Vite 8; `npm ci` + `package-lock.json` và SBOM. Node không chạy như production Server. |
@@ -70,9 +73,19 @@ chung và hệ công cụ gọn hơn. Không có kết luận Java nhanh hơn ho
 | Server OS | `SELECT — platform direction` | Ubuntu Server 26.04 LTS | Canonical lifecycle, Temurin 25 và PGDG PostgreSQL 18 package paths đã có official source; Q-14 vẫn phải qualify exact operational build. |
 | Deployment packaging | `SELECT` | Signed/versioned executable-JAR bundle + systemd, Temurin host-managed; config/secrets ngoài bundle | Ít lớp hơn custom `.deb`; preflight Flyway, signature/SBOM, health check, patch và rollback phải thử. |
 | Reverse proxy/TLS | `SELECT` | Company-approved Nginx baseline + managed certificate | TLS/origin/header policy thuộc deployment; Nginx không thay Access Policy. |
-| Background jobs | `SELECT` | Bounded Spring task execution/scheduling + Spring Batch cho import/export cần restart | Outbox/maintenance có Operation ID, bounded retry/lease và idempotency; Format Worker tách riêng. |
+| Background jobs | `SELECT` | Bounded Spring task execution/scheduling; Format Worker tách riêng | Outbox/maintenance có Operation ID, persisted state, bounded retry/lease và idempotency. Spring Batch chỉ `CONDITIONAL` khi có workload restartable/chunked thực tế. |
 | Observability | `SELECT` | Spring Actuator/Micrometer + OpenTelemetry/OTLP + structured JSON logs + JFR/`jcmd` | Audit Evidence tách khỏi log; backend/export/retention để company chọn và phải qualify. |
 | Backup/recovery | `SELECT` có điều kiện | PostgreSQL base backup + WAL/PITR + coordinated Artifact/config/policy/key backup ở failure domain khác | RTO ≤4 giờ làm việc và RPO ≤1 giờ chỉ là mục tiêu sơ bộ; chưa có đo đạt. Một VM không phải HA. |
+
+### 2.1 Phân loại dependency
+
+| Class | Thành phần | Quy tắc |
+|---|---|---|
+| `CORE BASELINE` | Java 25/Temurin; Boot Web; Modulith; Security với ordinary server-side sessions; JDBC/`JdbcClient`/pgJDBC; Flyway/versioned SQL; PostgreSQL 18; Maven Wrapper/BOM; bounded task scheduling + outbox dispatcher; Actuator/Micrometer/OpenTelemetry/JFR | Có trong dependency graph ban đầu, nhưng mọi qualification Q-01…Q-14 vẫn `NOT-RUN`. |
+| `CONDITIONAL` | Spring Session JDBC | Chỉ thêm khi có yêu cầu được duyệt về multi-instance/session survival hoặc measured coordination need mà one-instance design không đáp ứng an toàn. |
+| `CONDITIONAL` | Spring Integration | Chỉ thêm khi một external contract cụ thể được duyệt chứng minh EIP/adapter value tốt hơn plain owner-specific Adapter. |
+| `CONDITIONAL` | Spring Batch | Chỉ thêm khi có workload restartable/chunked/skippable và recovery contract thực tế. |
+| `DEFERRED` | JPA/Hibernate, Spring Data JDBC, jOOQ, broker, Redis, Elasticsearch/OpenSearch và infrastructure authority khác | Không cài mặc định; cần owner, measured need, lifecycle/recovery impact và change decision. |
 
 ## 3. Server decision: vì sao Java thắng sau khi tách khỏi Windows client
 
@@ -92,19 +105,24 @@ Các fact và link first-party nằm ở [matrix §2B](../../../knowledge/2026-0
 |---|---|---|---|
 | Linux/systemd, PostgreSQL, transaction, security/session, streaming, telemetry, container tùy chọn và tách service sau này | Có đường chính thức/có thể làm | Có đường chính thức/có thể làm | `DRAW` hoặc phụ thuộc Q-01/Q-04/Q-12/Q-14; không có kết luận hiệu năng. |
 | Kiểm tra ranh giới modular monolith | Tự ghép project/analyzer/architecture tests | Spring Modulith kiểm tra cycle, API package và dependency, hỗ trợ module-scoped tests | Java lợi thế trực tiếp với architecture đã chọn. |
-| Adapter doanh nghiệp, batch/import/export | Worker Services và adapter tự tổ chức | Spring Integration EIP/adapters; Spring Batch restart/skip/chunk/partition | Java có breadth giảm hạ tầng tự viết khi contract được duyệt. |
-| SQL/query ownership | EF/Npgsql mạnh nhưng cần quy tắc query/raw path | JDBC-first bộc lộ SQL, lock và owner transaction rõ | Java stack được chọn có lợi thế về sự tường minh, không phải tốc độ. |
-| Runtime/framework lifecycle | .NET 10 tới 14-11-2028, lịch Microsoft đơn giản | Temurin 25 community tới ít nhất 09/2031, nhưng Boot minor có lịch riêng | Java lợi thế runtime optionality; .NET lợi thế đơn giản lịch patch. |
+| Explicit SQL/query ownership | Raw Npgsql bộc lộ SQL, lock và owner transaction rõ | Spring JDBC/`JdbcClient` bộc lộ SQL, lock và owner transaction rõ | `DRAW`; JDBC được chọn bên trong Java vì hợp convention IDEA, không phải Java superiority. |
+| ORM path | EF Core/Npgsql là ORM trưởng thành | JPA/Hibernate/Spring Data là ORM trưởng thành | `DRAW / QUALIFY`; cả hai không là default ban đầu và phải có module-specific evidence. |
+| Adapter doanh nghiệp | Plain adapter + thư viện .NET; integration library tùy nhu cầu | Plain adapter + thư viện Java; Spring Integration có điều kiện | `DRAW`; chưa có contract Core v0 bắt buộc Integration. |
+| Batch/import/export | Worker/persisted-operation pattern; library tùy nhu cầu | Task/persisted-operation pattern; Spring Batch có điều kiện | `DRAW / CONDITIONAL`; chưa có workload restartable đủ để chọn Batch. |
+| Runtime distribution/support | .NET 10 tới 14-11-2028 theo Microsoft | Temurin 25 community tới ít nhất 09/2031 và có nhiều distribution/support channel | Java chỉ lợi thế về runtime optionality; entitlement chưa chốt. |
+| Full-stack lifecycle | Runtime/ASP.NET Core/NuGet dependencies đều phải theo dõi | JDK/Boot/Modulith/Maven/transitives có các clock riêng | `UNKNOWN / QUALIFY`; JDK runway không kéo dài Spring, và mốc .NET 2028 không chứng minh tổng burden cao hơn. |
 | Số toolchain toàn hệ thống | C#/.NET/NuGet dùng chung với Windows client | Java/JVM/Maven/Spring thêm vào C#/.NET/NuGet/WPF/WebView2 | .NET lợi thế maintainability; mức chi phí thật Q-13 `NOT-RUN`. |
 | Tải tương đương của IDEA | Chưa chạy | Chưa chạy | Relative performance `UNKNOWN`; không gán Java hoặc .NET thắng scale. |
 
-Java thắng vì ba lợi thế Server-specific có bằng chứng (Modulith, Integration/Batch, JDK support
-optionality) có liên hệ trực tiếp với mục tiêu Module sâu và khả năng giao tiếp ERP/MES/BI lâu dài.
-.NET thắng về đơn giản ngôn ngữ/toolchain và có ASP.NET Core/Kestrel, async I/O, Worker Services,
-EF/Npgsql và diagnostics rất tốt, nhưng điểm dùng chung C# không phải yêu cầu architecture Server.
-Linux Server và Windows Workspace vốn đã tách OS, triển khai, patch, supervision, security, incident
-và failure domain. Vì thế lợi thế hợp nhất này không đủ đảo các điểm Server-specific. Câu hỏi nếu
-Desktop/Workspace là hộp đen độc lập ngôn ngữ: Engineering vẫn chọn Java.
+Java thắng hẹp nhờ Spring Modulith kiểm tra cycle/API/dependency và hỗ trợ module test/documentation/
+observability khi áp dụng, cộng với một Linux Server platform trưởng thành và optionality phân phối/
+hỗ trợ JDK. IDEA domain ownership vẫn là architecture authority; framework không tự tạo boundary.
+Spring Integration/Batch không góp điểm vì chưa có contract/workload bắt buộc. Spring JDBC cũng không
+góp điểm so với raw Npgsql. .NET thắng về đơn giản ngôn ngữ/toolchain và có ASP.NET Core/Kestrel,
+async I/O, Worker Services, EF/Npgsql và diagnostics rất tốt, nhưng điểm dùng chung C# không phải yêu
+cầu architecture Server. Linux Server và Windows Workspace vốn đã tách OS, triển khai, patch,
+supervision, security, incident và failure domain. Câu hỏi nếu Desktop/Workspace là hộp đen độc lập
+ngôn ngữ: Engineering vẫn chọn Java, nhưng chỉ với chênh lệch hẹp này.
 
 Hai runtime là chi phí có thật, không bị che. Q-13 phải đo build, cập nhật CVE, SBOM, onboarding,
 debug/incident rotation và support owner cho cả Java Server lẫn .NET Windows. Ngôn ngữ không rò qua
@@ -114,8 +132,10 @@ idempotency và Server authority; named pipe chỉ ở nội bộ Windows client
 ### 3.2 Điều kiện chuyển lại .NET
 
 Chỉ chuyển khi Q-01/Q-12/Q-14 cho thấy Java không qua điều kiện correctness/security/diagnostics/
-platform bắt buộc mà .NET qua, hoặc Q-13 chứng minh chi phí hỗ trợ hai runtime material đến mức
-management không chấp nhận, hoặc công ty có một .NET Server support platform thực sự an toàn hơn.
+platform bắt buộc mà equivalent .NET candidate qua; hoặc Q-13 đo staffing, patching, onboarding,
+incident và SBOM burden vượt ngưỡng material do management duyệt trong khi equivalent .NET candidate
+đạt mọi mandatory behavior với tổng rủi ro thấp hơn; hoặc công ty có một .NET Server support platform
+thực sự an toàn hơn.
 Windows Server đang có sẵn, PC kỹ sư chạy Windows, hay DDM/Aras dùng stack nào đều không phải lý do.
 
 ## 4. Database và persistence
@@ -139,6 +159,9 @@ Audit, projection, configuration và outbox; Artifact Store giữ bytes/digest/l
 
 - Spring JDBC/`JdbcClient` + Boot-managed pgJDBC là default SQL-first. Từng Module sở hữu query,
   mapping, lock và projection của mình; `COPY`/bulk, outbox và search đều theo boundary owner.
+- Đây là lựa chọn bên trong Java vì hợp với explicit transaction/query ownership của IDEA. Raw Npgsql
+  cho .NET cung cấp cách explicit-SQL tương đương; ở tầng ORM, EF Core và JPA/Hibernate/Spring Data
+  đều là mature candidates cần qualify theo Module. Không dùng JDBC làm lý do Java thắng.
 - JPA/Hibernate và Spring Data JDBC là lựa chọn bổ sung có giới hạn nếu một aggregate cụ thể chứng
   minh lợi ích; jOOQ cần xác nhận Java 25 edition/license. Không có hai default convention hay
   generic repository/CRUD authority.
@@ -146,17 +169,24 @@ Audit, projection, configuration và outbox; Artifact Store giữ bytes/digest/l
   báo. Owner outcome, Audit Evidence và outbox commit theo boundary hiện hành.
 
 Boot-managed Flyway (`flyway-core` + `flyway-database-postgresql`) với reviewed versioned SQL là schema
-authority duy nhất, kể cả bảng hạ tầng Spring Session/Batch; tắt framework schema auto-initialization
-cạnh tranh. PostgreSQL 18 có trong danh sách Flyway verified versions. Release dùng
+authority duy nhất cho mọi Core component được cài; tắt framework schema auto-initialization cạnh
+tranh. Conditional dependency nào được thêm sau cũng phải đưa migration đã review vào cùng authority.
+PostgreSQL 18 có trong danh sách Flyway verified versions. Release dùng
 expand–migrate–contract và chạy migration như bước preflight riêng, không tự migrate lúc app start.
 Application rollback không tự rollback schema; destructive change cần forward repair hoặc restore.
 
 ## 5. Identity và authorization
 
-Spring Security 7.1.x và Spring Session JDBC được chọn cho authentication, password encoding,
-session-fixation/CSRF và persisted session primitives. IDEA vẫn sở hữu Actor, Account, Login Identity,
-eligibility, lockout/recovery policy và Audit. Web dùng secure HttpOnly/SameSite cookie và CSRF
-protection; không tạo OAuth/OIDC server mới.
+Spring Security 7.1.x với ordinary server-side sessions được chọn cho authentication, password
+encoding, session-fixation và CSRF. IDEA vẫn sở hữu Actor, Account, Login Identity, eligibility,
+lockout/recovery policy và Audit. Web dùng secure HttpOnly/SameSite cookie và CSRF protection; không
+tạo OAuth/OIDC server mới.
+
+Core v0 ban đầu là một Server instance. `REQ-IAM-004` được đáp ứng bằng one-instance session registry/
+invalidation, từ chối ở protected request kế tiếp và revalidate eligibility/authorization trước
+commit. Restart làm mọi session hết hiệu lực; đây là fail-safe vì Workspace giữ local candidates.
+Spring Session JDBC là `CONDITIONAL`, chỉ thêm khi có yêu cầu được duyệt về multi-instance/session
+survival hoặc measured coordination need đủ bù DB tables, cleanup, backup và lifecycle burden.
 
 Desktop/WebView2 khởi tạo một binding session ngắn hạn do Server cấp; Workspace lưu material theo
 Windows user bằng protected storage (DPAPI là candidate). Password/token không đi qua page JavaScript.
@@ -298,8 +328,8 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 
 | Family | Policy |
 |---|---|
-| Java/Temurin | Java 25 LTS, patch Temurin 25 có provenance; community availability tới ít nhất 09/2031 không phải SLA |
-| Spring Boot/Modulith | Boot 4.1.x + Modulith 2.1.x tương thích; Boot minor có support clock riêng |
+| Java/Temurin | Java 25 LTS, patch Temurin 25 có provenance; community availability tới ít nhất 09/2031 không phải SLA và không kéo dài lifecycle Spring |
+| Spring Boot/Modulith | Boot 4.1.x + Modulith 2.1.x tương thích; Boot/Modulith/transitive dependencies có support clock riêng |
 | Maven/pgJDBC/Flyway | Maven Wrapper và Boot BOM ghim graph; exact driver/migration patch + license/SBOM phải build/test |
 | PostgreSQL | Major 18, minor supported hiện hành tại qualification; support table recheck |
 | React/TypeScript/Vite | React 19.3, TS7, Vite 8.3; exact packages/lockfile/SBOM |
@@ -322,6 +352,9 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 | Electron | `REJECT FOR CORE V0` | Bundled Chromium/Node và cadence patch thêm burden không được chứng minh cần. |
 | JavaFX / Qt | `DEFER` | Support evidence không đóng unknown WebKit/native/installer/CAD; thêm runtime/licensing boundary. |
 | TypeScript 6 production | `REJECT FOR CORE V0` | Chỉ compatibility lane cho tooling. |
+| Spring Session JDBC | `CONDITIONAL` | One-instance Core v0 dùng ordinary Spring Security sessions; chỉ thêm khi approved multi-instance/session-survival hoặc measured coordination need xuất hiện. |
+| Spring Integration | `CONDITIONAL` | Không thêm cho optionality giả định; cần external contract cụ thể chứng minh EIP/adapter value. |
+| Spring Batch | `CONDITIONAL` | Không thêm khi chưa có restartable/chunked/skippable workload và recovery contract thực tế. |
 | JPA/Hibernate hoặc Spring Data JDBC default | `DEFER` | Chỉ thêm theo aggregate có bằng chứng; SQL-first owner path hiện chọn không được mất transaction/query ownership. |
 | jOOQ default | `DEFER` | Phải qualify exact Java 25 edition/license/support; không tạo convention thứ hai mặc định. |
 | Custom application `.deb` / self-contained `jlink` | `DEFER` | Chỉ thêm nếu IT provenance/patch/rollback policy hoặc kết quả Q-14 yêu cầu. |
@@ -336,24 +369,27 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 
 ## 11. Architecture Review Challenge
 
-1. **Phản biện mạnh nhất với Java:** hai runtime/toolchain trên toàn hệ thống và Boot minor clock riêng
-   có thể quá sức cho đội nhỏ. Q-13 phải ghi người chịu trách nhiệm và đo burden thực tế.
-2. **Phản biện mạnh nhất với PostgreSQL:** công ty có thể đã có SQL Server DBA/license/restore runbook
-   tốt hơn. Q-02/Q-07/Q-14 có thể đảo database.
-3. **Phản biện mạnh nhất với WPF:** WPF cũ hơn WinUI, Windows-only, và WebView2 là boundary đặc quyền
-   cần bảo vệ. Q-10/Q-11 có thể buộc chọn shell khác.
-4. **Dễ bị đảo nhất:** Desktop/Workspace delivery, vì IPC, accessibility, dirty-workspace update,
-   CAD/Office và WebView2 hiện chưa chạy.
-5. **Burden patch/ops dài hạn lớn nhất:** Java/JDK/Boot/Maven phía Server cộng Windows
-   WPF/WebView2/.NET Workspace/Format Worker, không một package riêng lẻ.
-6. **Phụ thuộc skill công ty nhất:** Temurin/Boot/PostgreSQL, backup/key custody, Windows
-   signing/packaging và người trực incident; không giả định project user trực 24/7.
-7. **Bằng chứng đổi sang runner-up:** Java fail một mandatory Q-01/Q-12/Q-14 mà .NET qua, hoặc Q-13
-   chứng minh chi phí hai runtime material/không có owner và .NET có support path an toàn hơn.
-8. **Có phải chọn .NET Server chỉ vì client Windows cũng .NET?** Không. Dùng chung C# chỉ là lợi thế
-   maintainability. Server được chọn là Java vì Modulith, Integration/Batch và JDK optionality.
-9. **Nếu Desktop/Workspace là black box độc lập ngôn ngữ?** Engineering vẫn chọn Java Server;
-   Server chỉ giao tiếp qua HTTPS/JSON/OpenAPI, còn IPC nội bộ Windows không quyết định runtime Server.
+1. **Java còn thắng nếu bỏ Integration/Batch khỏi baseline không?** Có, nhưng thắng hẹp nhờ Modulith
+   alignment và JDK distribution/support optionality. Integration/Batch không góp điểm quyết định.
+2. **So persistence đã công bằng với raw Npgsql chưa?** Có: raw Npgsql và Spring JDBC/`JdbcClient`
+   đều là explicit-SQL path nên `DRAW`; EF Core và JPA/Hibernate/Spring Data là ORM paths cần qualify.
+3. **Lợi thế lifecycle Java còn bao nhiêu khi nhìn full stack?** Chỉ xác lập runtime distribution/
+   support optionality. JDK runway không kéo dài Boot/Modulith/Maven/transitives; mốc .NET 2028 cũng
+   không chứng minh tổng burden cao hơn. Full-stack result là Q-13 `NOT-RUN`.
+4. **Spring Session JDBC có bắt buộc không?** Không. Ordinary session + one-instance invalidation +
+   request/commit revalidation đáp ứng design ban đầu; restart invalidates sessions an toàn. Chỉ thêm
+   khi approved session-survival/multi-instance hoặc measured coordination need xuất hiện.
+5. **DOC-05 đã bỏ volatile technology details chưa?** Có: giữ Linux-first Server boundary và Windows
+   Format Worker riêng; exact distro/runtime/framework/database/package thuộc TECH/matrix hiện hành.
+6. **Q-13 trigger chính xác để đổi sang .NET?** Measured staffing/patch/onboarding/incident/SBOM burden
+   vượt management-approved threshold và equivalent .NET candidate đáp ứng toàn bộ mandatory behavior
+   với total risk thấp hơn; hoặc Java fail mandatory qualification mà equivalent .NET qua.
+7. **Phản biện mạnh nhất với Java:** hai runtime/toolchain và nhiều dependency clock có thể quá sức
+   đội nhỏ; Q-13 phải ghi owner và đo burden.
+8. **Phản biện mạnh nhất với PostgreSQL:** company SQL Server DBA/license/restore path có thể tốt hơn;
+   Q-02/Q-07/Q-14 có thể đảo DB độc lập với runtime.
+9. **Nếu Desktop/Workspace là language-neutral black box?** Engineering vẫn chọn Java hẹp; HTTPS/
+   JSON/OpenAPI giữ Java Server và .NET Windows client tách biệt.
 
 ## 12. PG3 readiness / pre-decision (không PASS)
 
@@ -361,7 +397,7 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 |---|---|---|
 | Chọn Server runtime/framework | `RESOLVED BY ENGINEERING RECOMMENDATION` | Java 25/Temurin 25 + Spring Boot 4.1.x/Modulith; PDA review và Q-01/Q-13 chưa chạy. |
 | Chọn DB/persistence/migration | `RESOLVED BY ENGINEERING RECOMMENDATION` | PostgreSQL 18 + Spring JDBC/pgJDBC + một Flyway/SQL migration authority; Q-02/Q-07/Q-14 `NOT-RUN`. |
-| Identity/Access Policy boundary | `RESOLVED BY ENGINEERING RECOMMENDATION` | Identity không thay Access Policy; Q-06/Q-08/Q-11 `NOT-RUN`. |
+| Identity/Access Policy boundary | `RESOLVED BY ENGINEERING RECOMMENDATION` | Ordinary Spring Security sessions + one-instance invalidation được chọn; Spring Session JDBC `CONDITIONAL`; Identity không thay Access Policy; Q-06/Q-08/Q-11 `NOT-RUN`. |
 | Web/Desktop/Workspace shape | `RESOLVED BY ENGINEERING RECOMMENDATION` | WPF/WebView2 + per-user Workspace giữ surface hiện hành; bỏ surface cần Product Decision riêng. |
 | Ubuntu 26.04 platform / full operational build | `SELECT — platform direction` / `QUALIFICATION REQUIRED` | Official Temurin/Boot/PGDG base path đã có; Q-14 vẫn phải xác nhận exact bundle/driver/migration/backup/monitoring/hardening và company policy. |
 | License, certificate, signing, support/on-call | `BLOCKED` | Cần người/đơn vị công ty xác nhận; repository chưa có evidence. |
@@ -371,7 +407,7 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 | CAD/Office/IRONCAD | `QUALIFICATION REQUIRED` | Q-09 exact app/version/license/worker. |
 | Install/update/WebView2/native attack | `QUALIFICATION REQUIRED` | Q-10/Q-11 clean image/threat cases. |
 | Observability/maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 runbook/SBOM/support rotation. |
-| Sếp duyệt TECH-001@0.10 | `NOT-RUN` | Brief này chỉ trình recommendation. |
+| Sếp duyệt TECH-001@0.11 | `NOT-RUN` | Brief này chỉ trình recommendation. |
 | PG3 | `NOT-RUN` | Gate owner phải đánh giá theo GOV/DOC-07/VVP; không có PASS trong tài liệu này. |
 
 Minimum evidence trước khi sếp có thể quyết định Tech: xem đúng matrix/brief/source pins; xác nhận
@@ -388,23 +424,23 @@ Q-09/Q-10/Q-12/Q-13 còn lại là qualification triển khai/operational theo g
 | `Q-02` | PostgreSQL transaction, optimistic/pessimistic lock, deadlock/timeout/retry và không lost update | `NOT-RUN` |
 | `Q-03` | PostgreSQL projection với Vietnamese/Japanese, normalization/width/case, permission filter, p95/p99 và rebuild | `NOT-RUN` |
 | `Q-04` | Temurin/Boot Server ↔ .NET Workspace: Store→Server→Workspace multi-GB stream, digest, interruption/resume, journal và duplicate OperationId | `NOT-RUN` |
-| `Q-05` | Spring dispatcher/Integration Adapter + outbox crash/duplicate/reorder/replay và consumer idempotency | `NOT-RUN` |
-| `Q-06` | Spring Security/Session JDBC cookie/session fixation, CSRF, revoke/expiry/reauth và Workspace binding | `NOT-RUN` |
+| `Q-05` | Plain owner-specific Adapter + bounded Spring outbox dispatcher: crash/duplicate/reorder/replay và consumer idempotency; Spring Integration `CONDITIONAL` | `NOT-RUN` |
+| `Q-06` | Spring Security ordinary session: fixation, CSRF, one-instance revoke/suspend, next-request refusal, commit race, restart invalidation, expiry/reauth và Workspace binding; Spring Session JDBC `CONDITIONAL` | `NOT-RUN` |
 | `Q-07` | Restore DB + Artifact + config/policy/key về mốc dùng được, đo RTO/RPO | `NOT-RUN` |
 | `Q-08` | Named pipe cross-user/cross-Workspace, replay/oversize/version/reconnect refusal | `NOT-RUN` |
 | `Q-09` | Exact Office/IRONCAD open/save, stale/in-use/error và Representation provenance | `NOT-RUN` |
 | `Q-10` | WPF/WebView2 install, Evergreen/Fixed, online/offline update, dirty Workspace rollback, signing/SBOM | `NOT-RUN` |
 | `Q-11` | WebView2 navigation/message, CSRF/DNS rebinding/origin/host-object attack boundary | `NOT-RUN` |
 | `Q-12` | Actuator/Micrometer/OpenTelemetry/JFR/log/metric/trace incident diagnosis, redaction/cardinality/runbook | `NOT-RUN` |
-| `Q-13` | Java Server + .NET Windows build/patch/debug/incident rotation, hai SBOM, support/entitlement burden và .NET Server comparison | `NOT-RUN` |
-| `Q-14` | Exact Temurin/Boot/JDBC/Flyway/PostgreSQL/Ubuntu 26.04 bundle/systemd/backup/monitoring/restore; official base support đã có nhưng operational build `NOT-RUN`; 24.04/.NET/Windows branches `DEFERRED` | `NOT-RUN` |
+| `Q-13` | So equivalent Java Server + .NET Windows với unified-.NET candidate: staffing, patch, onboarding, incident rotation, full dependency clocks, hai-ecosystem SBOM/support burden; đổi chỉ khi vượt management threshold và .NET đạt mandatory behavior với lower total risk | `NOT-RUN` |
+| `Q-14` | Exact `CORE BASELINE`: Temurin + Boot Web/Modulith/Security ordinary sessions/JDBC/Flyway/task-outbox/observability + PostgreSQL/Ubuntu 26.04 bundle/systemd/backup/monitoring/restore; conditional dependencies không có trong graph nếu chưa trigger; 24.04/.NET/Windows branches `DEFERRED` | `NOT-RUN` |
 
 Không có comparative branch nào được giả làm đã chạy. “Deferred” chỉ nghĩa chưa thực hiện vì không
 phải Core v0 baseline.
 
 ## 14. Product impact và governance
 
-`TECH-001@0.10` chỉ trình bày một recommendation để sếp phản biện:
+`TECH-001@0.11` chỉ trình bày một recommendation để sếp phản biện:
 
 - **No Product Scope Change.** Không đổi FTR, REQ, Feature, Spec, DOC-01…DOC-08 hay DDM capability
   semantics.

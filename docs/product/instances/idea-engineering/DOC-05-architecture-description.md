@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.17`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.18`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.17` |
+| Document Version | `0.18` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
 | Requirements Input | `IE-PROD-SREQ-001@0.13`; Feature and Spec decisions remain `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
@@ -23,7 +23,7 @@
 | Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Change History | 0.17: synchronize only Server-side candidate Tech rows and OS-support wording to the Linux-first `TECH-001@0.10` engineering recommendation; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-001](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md). 0.16: clarify CPD Generation-manifest `ArtifactReference` versus owner-specific BOM/Format ArtifactId/digest pins; make SEQ-008/SEQ-009 refusal outcomes owner-recorded and make BOM export retention contingent on Product Structure owner-UoW acceptance; [IE-CHG-ARCH-CORR-003](registers/CHG-2026-09-12-architecture-consistency-correction-003.md). Earlier history remains in the controlled change records. |
+| Change History | 0.18: restore architecture-first wording for deployment, maintained authentication/session mechanics and candidate technology rows; exact volatile distro/runtime/framework/database/package choices remain in `TECH-001@0.11` and its matrix; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-002](registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md). 0.17: synchronize only Server-side candidate Tech rows and OS-support wording to the Linux-first `TECH-001@0.10` engineering recommendation; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-001](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -2047,7 +2047,7 @@ separate in `ARCH-VIEW-SEQ-006` below.
 
 Private durable materialization precedes database publication as specified in section 7.2. Database
 constraints, expected-state predicates and an appropriate locking/isolation strategy protect head,
-scope and operation identity; PostgreSQL's default isolation alone is not proof of correctness.
+scope and operation identity; a selected database's default isolation alone is not proof of correctness.
 Concurrent suspension, policy activation and publication need a defined serialization/revalidation
 rule and race tests, not just a pre-request check.
 
@@ -2102,20 +2102,17 @@ candidate is not a Generation and remains invisible to authoritative reads until
 
 ### 9.2 Initial deployment candidate
 
-Evaluate one company-controlled server/VM for the monolith, PostgreSQL and private Artifact volume,
+Evaluate one company-controlled server/VM for the monolith, relational database and private Artifact volume,
 with separate process identities, least-privilege filesystem access and no database/public-file
 access from clients. This is a proposed evaluation topology, not demonstrated sizing or availability.
 
-Engineering now recommends Ubuntu Server 26.04 LTS as the Linux-first platform direction, with
-Java 25/Eclipse Temurin 25, Spring Boot 4.1.x and PostgreSQL 18 as dependent candidate technology
-choices in [`TECH-001@0.10`](decision-briefs/TECH-001-technology-and-architecture-proposal.md).
-First-party Temurin and PGDG package paths for Ubuntu 26.04 are documented; exact installed,
-hardened, backed-up and monitored IDEA operation remains Q-14 `NOT-RUN`. Ubuntu 24.04 LTS is a
-compatibility alternative; Windows Server 2025 is a contingency only for a concrete IT mandate,
-required component/integration, failed Linux qualification or evidenced material operations benefit.
-Existing Windows machines carry no Server selection weight.
-The isolated format runtime may require a separate Windows worker host and license; that does not
-require moving product authority into the worker or changing the whole server OS.
+The architecture direction is a Linux-first headless Server boundary, independently deployable from
+the Windows Desktop/Workspace boundary. The exact Linux distribution, Server runtime/framework,
+database, package versions and operational bundle are volatile technology decisions owned by the
+current [`TECH-001`](decision-briefs/TECH-001-technology-and-architecture-proposal.md) and its linked
+decision matrix; their qualification remains `NOT-RUN`. Existing Windows machines carry no Server
+selection weight. The isolated format runtime may require a separate Windows worker host and license;
+that does not require moving product authority into the worker or changing the whole Server OS.
 
 A single server is a single outage domain. No failover/zero-downtime claim is made. Reject or revise
 this topology if the approved outage/recovery objective cannot be met or the company requires more
@@ -2157,8 +2154,9 @@ not change.
 
 ### 9.3 Recovery design and measurement
 
-- Database base backup plus continuous WAL archiving is the PostgreSQL PITR candidate. Track
-  archive failure/lag, not only job completion. Database WAL does not contain external Artifact bytes.
+- Database-native base backup plus continuous transaction-log archiving is the point-in-time-recovery
+  candidate; the exact database mechanism belongs to current Tech authority. Track archive failure/lag,
+  not only job completion. A database transaction log does not contain external Artifact bytes.
 - Back up immutable Artifacts continuously/in bounded batches plus manifests, configuration/policy
   versions and required keys. A recovery-set record names the database recovery point and the
   complete matching content/configuration/key set. Extra newer unreferenced bytes may remain private.
@@ -2379,7 +2377,7 @@ deployment design after the technology and company environment are selected.
 
 | Control | Candidate design response | Required evidence |
 |---|---|---|
-| Native accounts and directory | Spring Security and Spring Session JDBC are the current engineering candidates for maintained credential/session mechanics behind Identity and Accounts; stable Actor, IDEA Account and Login Identity remain IDEA domain records, while Project Governance owns Project/Group membership. No public registration endpoint or shared default password. Account Administration grants neither Project access nor product authority. | REQ-IAM-001…007; REQ-AUTH-005/009; VVP-015, including least-privilege provisioning and session-revocation evidence |
+| Native accounts and directory | Use a maintained authentication/session framework behind Identity and Accounts; the exact framework and session-persistence choice belong to the current Tech authority. Stable Actor, IDEA Account and Login Identity remain IDEA domain records, while Project Governance owns Project/Group membership. No public registration endpoint or shared default password. Account Administration grants neither Project access nor product authority. | REQ-IAM-001…007; REQ-AUTH-005/009; VVP-015, including least-privilege provisioning and session-revocation evidence |
 | Password and recovery | Use maintained hashing/reset/token mechanisms; never log, email back or expose an existing password. Approved one-use delivery, password/lockout/rate-limit/MFA/recovery policy remains to be specified. | Recovery/replay/brute-force and privileged-reset abuse cases; security-policy review |
 | Browser sessions | Same-origin HTTPS UI/API; Secure/HttpOnly session cookies and anti-CSRF protections on state changes. No session token in browser local storage. | CSRF, XSS/session, sign-out and suspension matrix |
 | Native sessions | Qualify supported framework session/bearer integration, protected per-user credential storage and renewal. A framework session mechanism is not automatically an OAuth/OIDC server. No hand-written authorization-code protocol, token injection into JavaScript or promise of cross-surface SSO. | Exact maintained-library/flow review and old-token revocation tests; future standards-based provider requires separate selection |
@@ -2410,25 +2408,22 @@ claim is invented.
 
 | Decision ID / concern | Recommended candidate | Alternative and selection trigger | Cost / limitation / evidence |
 |---|---|---|---|
-| TECH-STACK-001 — server | Java 25 LTS/Eclipse Temurin 25 + Spring Boot 4.1.x/Modulith modular monolith; current engineering recommendation, not Product Decision Authority approval | .NET 10/ASP.NET Core if Q-01/Q-12/Q-13/Q-14 shows a material supported advantage; distributed services only with a separate measured need | Linux-first Server choice independent of Windows client; two runtime families require named patch/support owners |
-| TECH-DATA-001 — database | PostgreSQL 18 with Spring JDBC/pgJDBC and one Flyway/versioned-SQL migration authority | SQL Server 2025 production-licensed edition if company entitlements and operations make it preferable | PostgreSQL license has no fee, but support/DBA/backup work remains; SQL Developer is not a production entitlement |
+| TECH-STACK-001 — server | Linux-first headless runtime/framework supporting the deep-module modular monolith and enforceable Module boundaries; exact selection is owned by current TECH/matrix | An alternative supported Server stack if qualification shows lower total risk; distributed services only with a separate measured need | Runtime, framework, dependency graph and support/patch owners remain volatile Tech decisions, not architecture semantics |
+| TECH-DATA-001 — database | Relational database plus explicit, owner-respecting persistence and one reviewed schema-migration authority; exact selection is owned by current TECH/matrix | Another supported relational stack if transaction, recovery, operations and entitlement evidence makes it preferable | Must preserve shared relational UoW where declared, owner query/state authority, Audit/outbox atomicity and independent Artifact-byte custody |
 | TECH-WEB-001 — Web UI | React + TypeScript SPA, Vite build, served with Server | React framework in SPA/static mode if routing/data/error handling is simpler and maintainable; SSR only for evidenced need | React normally recommends a framework. Vite alone is not routing/data/security design; no automatic extra Node production host is assumed |
 | TECH-DESKTOP-001 — Windows UI | WPF/.NET 10 shell + WebView2 rendered regions; shared React UI where appropriate | WinUI 3/Windows App SDK after focus/scaling/toolchain/support comparison; WinForms only if complex workspace fit is demonstrated | Microsoft recommends WinUI 3 for new native apps. WPF is an IDEA-specific runtime/tooling trade-off, with a separate WebView2 update/bridge obligation |
-| TECH-IDENTITY-001 — accounts and directory | Spring Security/Session JDBC for native credential/session mechanics inside the monolith, with IDEA-owned stable Actor, Account and Login Identity records; Project Governance owns Project/Group membership | Future company login or maintained OIDC provider only when protocol/requirements/ownership are established | Framework roles/authorities are not product RBAC. No public signup; delegated administration, membership/assignment races, recovery and revocation still require design and qualification |
+| TECH-IDENTITY-001 — accounts and directory | Maintained authentication/session framework inside the monolith, with IDEA-owned stable Actor, Account and Login Identity records; exact framework/session persistence is owned by current TECH/matrix; Project Governance owns Project/Group membership | Future company login or maintained OIDC provider only when protocol/requirements/ownership are established | Framework roles/authorities are not product RBAC. No public signup; delegated administration, membership/assignment races, recovery and revocation still require design and qualification |
 | TECH-FILES-001 — Artifacts | Private immutable content-addressed filesystem Adapter, server-only access | Private object-storage Adapter if shared/multi-node capacity or existing managed operations justify another dependency | Must qualify durable writes, digest, atomic naming, concurrent deduplication, capacity and coordinated backup; not a user SMB share or physical WORM guarantee |
-| TECH-HOST-001 — server OS | Ubuntu Server 26.04 LTS `SELECT — platform direction`; exact operational build Q-14 `NOT-RUN` | Ubuntu 24.04 compatibility alternative; Windows Server 2025 only concrete IT/component/qualification/operations contingency | Canonical/Temurin/PGDG support facts established; company approval, security, backup and restore remain unrun. Windows estate does not determine Server OS |
+| TECH-HOST-001 — server OS | Linux-first Server host boundary; exact distribution/release is owned by current TECH/matrix and operational qualification remains `NOT-RUN` | Another supported host only for a concrete IT/component/qualification/operations trigger | Windows estate does not determine Server OS; the separate Windows Format Worker does not move Server product authority or force a Windows Server host |
 | TECH-OPS-001 — topology | Single server/VM candidate; separate backup failure domain; limited outbox/worker concurrency | Separate DB/file/worker hosts or stronger availability if measured needs/recovery results require it | One server remains an outage point; not a demonstrated 50–100-concurrent-user configuration |
 | TECH-FORMAT-001 — format runtime | Isolated external runner, exact versioned profiles; IRONCAD first deep profile | Add tools/profiles only after entitlement and conformance evidence | OS/license/resources can require a Windows worker independent of the main server; never an in-CAD add-in |
 
-Sources and licensing/support detail are retained in the
-[2026-09-03 primary-source note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md).
-The earlier note retains .NET/EF/Npgsql facts for the runner-up; it does not select the current
-Server. The focused [Linux-first support check](../../../research/2026-09-13-linux-first-server-platform-support-check.md)
-records current Canonical, Adoptium, Spring, PGDG and dependency publications. Temurin community
-updates are not a commercial SLA. PostgreSQL, pgJDBC, Flyway, Spring, Maven, React/TypeScript/Vite,
-Windows .NET/WebView2 and CAD/Office products need exact dependency/license/support inventory. No
-company entitlement or total-cost estimate is asserted. Pin exact patch, package provenance,
-installer/bundle, dependency graph, license notices and supported environment at qualification.
+Current exact selections, alternatives, primary-source links and licensing/support detail are owned by
+[`TECH-001`](decision-briefs/TECH-001-technology-and-architecture-proposal.md) and its linked matrix and
+research records. This architecture does not freeze a runtime, framework, database, package or patch.
+Every selected implementation still needs an exact dependency/license/support inventory; no company
+entitlement or total-cost estimate is asserted. Pin exact patch, package provenance, installer/bundle,
+dependency graph, license notices and supported environment at qualification.
 
 WebView2 Evergreen is preferred if IT supports managed updates and compatibility testing; a Fixed
 Version requires explicit patch ownership and redistribution review. The native host must preserve

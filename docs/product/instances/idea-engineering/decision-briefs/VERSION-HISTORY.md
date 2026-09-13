@@ -11,11 +11,11 @@ quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu m�
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Draft; 14 mã FTR; nguồn hiện hành đã đồng bộ; toàn bộ bản mới chỉ `PARTIAL`, quyết định của sếp `NOT-RUN` |
 | [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Draft; 74 yêu cầu và bảy điểm Spec còn mở; nguồn hiện hành đã đồng bộ; toàn bản chưa review đầy đủ và quyết định của sếp `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.10 | Draft; Linux-first Java/Temurin/Spring Server engineering recommendation; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.11 | Draft; narrow Linux-first Java/Temurin/Spring Server recommendation với dependency classes và comparison đã chỉnh; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
 
 Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.16 có
 17 mục tiêu cùng các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6,
-DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05 ở Draft 0.17,
+DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05 ở Draft 0.18,
 DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.7, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026, 56 task và
 756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không tự chuyển sang toàn bộ nội dung mới.
 
@@ -468,3 +468,17 @@ hoặc phản biện của sếp; không có kết quả kiểm chứng nào đ�
 
 Mục 21 và các ảnh chụp/version cũ ở trên là lịch sử đúng tại thời điểm ghi. Chúng không phải stack
 Server đang được khuyến nghị sau bản kế nhiệm này.
+
+## 23. Chỉnh lý rationale và dependency của Linux Server — 13/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-TECH-LINUX-002](../registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md) — focused correction, predecessor hashes và verification thực chạy |
+| Ma trận quyết định | `IE-KNW-TECH-DEC-001@0.2 → @0.3`; Java vẫn thắng hẹp nhờ Modulith alignment và JDK distribution/support optionality; không dùng JDBC, Integration/Batch, performance, scale hay “enterprise” làm lợi thế |
+| Tech | `TECH-001@0.10 → @0.11`; persistence so đối xứng, full-stack lifecycle tách khỏi JDK runway, session choice và Q-05/Q-06/Q-13/Q-14 được làm rõ |
+| Dependency classes | Core baseline không chứa Spring Session JDBC, Spring Integration hay Spring Batch; ba thành phần này chỉ `CONDITIONAL` theo trigger cụ thể; ORM/broker/Redis/dedicated search và authority khác tiếp tục `DEFERRED` |
+| DOC-05 | `0.17 → 0.18`; giữ Linux-first Server và Windows Format Worker riêng, nhưng exact distro/runtime/framework/database/package thuộc TECH/matrix; toàn bộ Mermaid source và architecture semantics không đổi |
+| DOC-07 | Giữ nguyên `0.7` và historical route tới TECH@0.10; catalogue/change record route TECH@0.11 hiện hành; lịch, task, giờ và gate không đổi |
+| Independent choices | PostgreSQL 18, Ubuntu 26.04 platform direction, executable-JAR/systemd và .NET Windows client giữ nguyên |
+| Review, authority và qualification | Product Decision Authority `NOT-RUN`; Q-01…Q-14 `NOT-RUN`; PG3/PG4 không `PASS` |
+| Product impact | **No Product Scope Change**; không đổi FTR, REQ, Feature, Spec, DDM capability semantics, architecture invariant, ADR hay gate state |

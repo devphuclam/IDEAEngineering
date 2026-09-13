@@ -48,7 +48,7 @@ As of 2026-09-13, the admitted baseline covers:
 | icVault | 9 topology claims, 8 identity/version claims, all 22 Checkout/Reference/Check-in scenarios, structure/workflow/metadata, storage/security/recovery, unknowns, and prohibited overclaims |
 | DDM public evidence | 16 first-party propositions, 10 target-unknown groups, 8 public-source contradiction classes, and explicit tutorial limits |
 | DDM capability inventory | `IE-KNW-DDM-007@0.3`: 100 DDM-native capability rows across families A–S, with orthogonal Evidence Authority/Mode/Temporal axes, IDEA `COVERED/PARTIAL/ABSENT/UNKNOWN`, separate product disposition, gap criticality, priority, gate effect and open-point impact |
-| Technology decision | `IE-KNW-TECH-DEC-001@0.2`: Linux-first Java/Temurin/Spring Server engineering recommendation, .NET runner-up, PostgreSQL and Windows client independently decided; Q-01…Q-14 `NOT-RUN`, no Tech or gate approval |
+| Technology decision | `IE-KNW-TECH-DEC-001@0.3`: narrow Linux-first Java/Temurin/Spring Server recommendation; symmetric explicit-SQL/ORM and full-stack lifecycle comparison; Core/Conditional/Deferred dependencies explicit; PostgreSQL and Windows client independently decided; Q-01…Q-14 `NOT-RUN`, no Tech or gate approval |
 | DDM future target audit | 24 ranked questions with entry, legal/safety, evidence-output, stop, and exit gates |
 | Aras comparison | Official lifecycle/version and workflow/approval patterns admitted with explicit application and evidence limits |
 | IDEA translation | 22 accepted design lessons, 44 core invariants, 13 baseline quality scenarios, 7 accepted product ADRs, and 1 proposed product ADR |
