@@ -1,6 +1,6 @@
 # Phiên bản và nguồn của Feature / Spec / Tech
 
-Ngày cập nhật: 09-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
+Ngày cập nhật: 13-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
 
 Đây là sổ tra cứu phiên bản, nguồn và xác nhận review nội bộ. Không phải báo cáo kiểm thử,
 quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu mới.
@@ -11,13 +11,13 @@ quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu m�
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Draft; 14 mã FTR; nguồn hiện hành đã đồng bộ; toàn bộ bản mới chỉ `PARTIAL`, quyết định của sếp `NOT-RUN` |
 | [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Draft; 74 yêu cầu và bảy điểm Spec còn mở; nguồn hiện hành đã đồng bộ; toàn bản chưa review đầy đủ và quyết định của sếp `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.8 | Draft; đề xuất công nghệ không đổi; nguồn hiện hành đã đồng bộ; toàn bộ review nội bộ và quyết định Tech `NOT-RUN` |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.9 | Draft; engineering recommendation đã chọn một Core v0 stack; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
 
-Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.11 vẫn có
-15 nhóm kiểm tra; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01/03 ở Draft 0.5; DOC-04/06 ở Draft
-0.10; DOC-05 ở Draft 0.9; DOC-07 ở Draft 0.5; DOC-08 ở Draft 0.6; DOC-02 ở Draft 0.2 và GOV ở
-Draft 0.3. Lịch tháng 12/2026, 56 task và 756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không
-tự chuyển sang toàn bộ nội dung mới.
+Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.16 có
+17 mục tiêu cùng các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6,
+DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05/06 ở Draft 0.16,
+DOC-07 ở Draft 0.6, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026, 56 task và
+756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không tự chuyển sang toàn bộ nội dung mới.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
 được đồng bộ trong lần 09/09/2026; việc đồng bộ nguồn không phải quyết định duyệt tính năng. Các
@@ -432,3 +432,21 @@ kết quả liên quan vẫn `NOT-RUN`. DOC-07 và Tech sẽ được đối chi
 | Được giữ nguyên | Markdown có thẩm quyền, lịch sử thay đổi, prototype IDEA DDM hiện hành, prototype Engineering Explorer dùng làm bằng chứng lịch sử, logo PNG, bản Word người dùng đang dùng và tài liệu nguồn quản lý cung cấp. |
 | Khả năng khôi phục | 18 file nằm trong [archive bản trình bày lỗi thời](../history/2026-09-09-obsolete-presentation-artifacts.zip), SHA-256 `2b071c1d597f4536851e5e479f18ed2a8c97257b0cfc6769b73c187a9ddf48cb`. |
 | Ảnh hưởng nội dung | Không đổi Feature, Spec, Tech, DOC-01…08, yêu cầu, roadmap, trạng thái review hay quyết định của sếp. |
+
+## 21. Đề xuất một bộ công nghệ Core v0 — 13/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-TECH-DEC-001](../registers/CHG-2026-09-13-technology-decision-recommendation.md) |
+| Ma trận quyết định | [IE-KNW-TECH-DEC-001@0.1](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) — artifact `INFORMATIVE`, recommendation kỹ thuật, không phải Product Decision |
+| Tech | `0.8 → 0.9`; chọn rõ `.NET 10/ASP.NET Core`, PostgreSQL 18, EF/Npgsql, React/TypeScript/Vite, WPF/WebView2, Workspace .NET, filesystem Artifact Store và Ubuntu-first native topology; Java/Spring và SQL Server giữ làm runner-up |
+| Engineering status | `COMPLETE` ở mức recommendation; Q-01…Q-14 vẫn `NOT-RUN`, các nhánh so sánh không chạy được ghi `DEFERRED` |
+| Product Decision Authority | `NOT-RUN`; brief chỉ trình sếp xem xét, không ghi nhận approval |
+| Gate | PG3/PG4 không đổi và không `PASS`; gate owner vẫn phải xét theo GOV/DOC-07/VVP |
+| Product impact | **No Product Scope Change**; không đổi FTR, REQ, DOC-01…DOC-08, DDM capability semantics, architecture semantics hay VVP result |
+| Bản trước | `TECH-001@0.8`; SHA-256 `F9B7959B94EF854AB1E08651FD81BB4AA9C03E84F0D9C1CAF08EB3F59A39136F` |
+| Roadmap metadata | `DOC-07@0.5 → DOC-07@0.6`; chỉ cập nhật route của `TECH-001@0.9` và các ô tham chiếu Tech; lịch, task, giờ, semantics và gate giữ nguyên. |
+
+Ma trận và brief phân biệt rõ `Research evidence → Engineering recommendation → Product Decision
+Authority approval`. Recommendation có thể bị đảo bởi Q-01…Q-14, company support/license evidence
+hoặc phản biện của sếp; không có kết quả kiểm chứng nào được suy diễn từ việc viết tài liệu.

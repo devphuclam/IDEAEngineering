@@ -1,6 +1,6 @@
 # IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap
 
-> **Instance state**: controlled `Draft 0.5`. This roadmap plans work and decision presentations. It
+> **Instance state**: controlled `Draft 0.6`. This roadmap plans work and decision presentations. It
 > does not create or approve Feature, Spec or Tech content by schedule assertion, and it does not
 > authorize production implementation or release.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap |
 | Owner | `Principal Product Author`; named person attribution `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.5` |
+| Document Version | `0.6` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity to be recorded before `Proposed` |
@@ -22,7 +22,7 @@
 | Source Links | [Product templates](../../definition/README.md), [domain language](../../../../CONTEXT.md), [architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [design lessons](../../knowledge/idea-design-lessons.md) |
 | Downstream Links | [Task appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt view](planning/idea-roadmap-december-2026.html), three decision briefs, supporting records and later implementation increments |
 | Evidence / Claim Status | `IDEA DECISION` for accepted planning rules; execution and gate evidence remains `NOT-RUN` |
-| Change History | 0.5: reconcile current Feature/Spec/Tech/Core/VVP/GOV references and remove a stray file label; schedule, 56 tasks, 756 hours and all decision/gate states remain unchanged; [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md). 0.4 incorporated the conditional December 2026 schedule, 56-task appendix and unchanged Gantt. 0.3 recorded closure of SPEC-OPEN-01. 0.2 added account/context/recovery preparation. |
+| Change History | 0.6: route the current `TECH-001@0.9` engineering recommendation and replace three stale Tech 0.8 references; schedule, 56 tasks, 756 hours and all decision/gate states remain unchanged; [IE-CHG-TECH-DEC-001](registers/CHG-2026-09-13-technology-decision-recommendation.md). 0.5: reconcile current Feature/Spec/Tech/Core/VVP/GOV references and remove a stray file label; schedule, 56 tasks, 756 hours and all decision/gate states remain unchanged; [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md). Earlier history remains in the linked change records. |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational retention period is `UNKNOWN`, owner `Product Decision Authority`, review trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -35,10 +35,10 @@ exit evidence. The roadmap index is navigation only.
 
 | Increment Record ID | Source Roadmap Baseline | Status | Version | Owner | First / later gate | Requirement and design trace | Exit evidence |
 |---|---|---|---|---|---|---|---|
-| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.5` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
-| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.5` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
-| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.5` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
-| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.5` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
+| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.6` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
+| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.6` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
+| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.6` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
+| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.6` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
 
 <!-- AUTHOR CONTENT START -->
 
@@ -61,15 +61,16 @@ set. Each brief pins its exact source versions and presents one decision axis on
 |---|---|---|---|---|---|
 | `FEATURE-001` | Confirm Core v0 capability scope, priority and exclusions | DOC-01/02/03 drafts, closed material inventory, coverage dispositions, updated DOC-07 | Accepted interactive prototype as design evidence; feature map and deferred-scope list | Approve, require changes, defer or reject the Feature baseline | `Draft 0.12`: 14 FTR; source pins current; full review and boss decision remain `NOT-RUN` |
 | `SPEC-001` | Confirm observable behavior, rules, failure handling and acceptance | Approved Feature baseline; DOC-04 plus requirement-bearing DOC-06/08 content; VVP trace | Release Spine scenarios including stale, unauthorized, wrong-workspace and recovery paths | Approve, require changes, defer or reject the Spec baseline | `Draft 0.14`: 74 requirements; seven points remain open; full review and Feature decision remain prerequisites |
-| `TECH-001` | Confirm architecture and technology choices | Approved Spec baseline; DOC-02/04/05/06/08 design; technology ADRs and risk analysis | Architecture views, deployable hosts, data flow, candidate comparison and bounded technical spikes | Approve, require changes, defer or reject the Tech baseline | `Draft 0.8`: technology choices unchanged and source pins current; internal review, Spec decision, IT constraints and qualification remain open |
+| `TECH-001` | Confirm architecture and technology choices | Approved Spec baseline; DOC-02/04/05/06/08 design; technology ADRs and risk analysis | Architecture views, deployable hosts, data flow, candidate comparison and bounded technical spikes | Approve, require changes, defer or reject the Tech baseline | `Draft 0.9`: Engineering recommendation is recorded; internal review, Spec decision, IT constraints and qualification remain open |
 
 The briefs may be rendered as DOCX or PDF for the meeting. A rendition never replaces its pinned
 Markdown source. A changed source makes the earlier rendition `Stale`.
 
 The states above identify the current synchronized Draft sources. This source reconciliation is not
 a fresh review or approval: prior exact-version review evidence remains attached to the versions on
-which it was recorded. Spec behavior, technology selections and schedule content are unchanged;
-do not reopen them or infer a new approval from the version update.
+which it was recorded. Spec behavior and schedule content are unchanged; the separate
+`IE-KNW-TECH-DEC-001`/`TECH-001@0.9` recommendation is not a Product Decision Authority approval.
+Do not infer a new approval from a version update.
 
 ## 3. Bounded analysis and design increments
 
@@ -251,7 +252,7 @@ not add a fourth product decision axis.
 | Requirement acceptance | Scenario, acceptance criterion and verification method for every approved obligation | `IE-PROD-SREQ-001@0.10` and `IE-VVP-CORE-001@0.11` | Principal Product Author | Draft authored; review/approval `NOT-RUN` |
 | Migration / reconciliation | Store Existing duplicate handling, staging cleanup, digest validation and reconciliation | `IE-PROD-DATA-001@0.10` / future approved Spec baseline | Principal Product Author | Draft authored; execution `NOT-RUN` |
 | Rollback / recovery | Stale conflict, preserved local work, Reservation Recovery, failed publish and restore procedures | DOC-04/05/06 and VVP Draft baselines | Principal Product Author | Draft authored; procedures not executed |
-| Operational handoff | Deploy/update/rollback, account administration, monitored coordinated backup/restore and primary/backup operator assignment | Tech 0.8, DOC-05@0.9, DOC-06@0.10, future OPS baseline | User may operate initially; system management/technical support approve install/deploy; long-term owner and backup unassigned | `BLOCKED` for rollout |
+| Operational handoff | Deploy/update/rollback, account administration, monitored coordinated backup/restore and primary/backup operator assignment | Tech 0.9, DOC-05@0.9, DOC-06@0.10, future OPS baseline | User may operate initially; system management/technical support approve install/deploy; long-term owner and backup unassigned | `BLOCKED` for rollout |
 
 ## 7. MVP Success Metric Set
 
@@ -290,7 +291,7 @@ disposition. Deferral does not erase the long-term target.
 
 | Work | Owner / needed input | Exit before next commitment |
 |---|---|---|
-| Review current decision briefs | Project user; assistant prepares | Feature 0.12, Spec 0.14 and Tech 0.8 reviewed for their exact source set; no inherited `PASS` |
+| Review current decision briefs | Project user; assistant prepares | Feature 0.12, Spec 0.14 and Tech 0.9 presented against their exact source set; no inherited `PASS` |
 | Resolve remaining specification gaps | Principal Product Author; user and Product Decision Authority | SPEC-OPEN-02…08 resolved or explicitly dispositioned at the relevant decision; context confirmation is only partial closure of 05/06 |
 | Gather IT and format constraints | User with system management/technical support | OS/browser/CAD and license inventory, approved host/install/update/security boundary |
 | Prepare workload and recovery evaluation | User/assigned Operations authority | Representative file/corpus/concurrency profile, backup location/custody, incident clock and primary/backup operator |
@@ -323,10 +324,10 @@ disposition. Deferral does not erase the long-term target.
 | `SOURCE-DECISION` | Accepted constitution, product ADRs and stakeholder decisions establishing internal scope, Release Spine and three boss decision axes | Linked at repository baseline; exact decision ledger to be instantiated before `Proposed` |
 | `SOURCE-EVIDENCE` | Product knowledge, reference-coverage records and prototype evidence | Knowledge sources and `IE-GOV-COVERAGE-001@0.3` exist; exact target-runtime evidence remains `BLOCKED` |
 | `DOWNSTREAM` | DOC-01…DOC-08, three decision briefs and later increments | Eight Core Drafts, three brief Drafts and initial GOV/VVP records instantiated |
-| `CHANGE` | [IE-CHG-ROADMAP-001](registers/CHG-2026-09-05-roadmap-task-integration.md), [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md) and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | DOC-07 0.4 retained before source reconciliation; Draft 0.5 changes references only; no schedule, approval or gate promoted |
+| `CHANGE` | [IE-CHG-ROADMAP-001](registers/CHG-2026-09-05-roadmap-task-integration.md), [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md), [IE-CHG-TECH-DEC-001](registers/CHG-2026-09-13-technology-decision-recommendation.md) and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | DOC-07 0.4 retained before source reconciliation; Draft 0.5 synchronized the earlier source set; Draft 0.6 changes Tech references only; no schedule, approval or gate promoted |
 | `VERIFICATION` | VVP/VEV gate and Release Spine evidence | `NOT-RUN` |
 | `RELEASE` | REL manifest for a future implementation/release | `NOT APPLICABLE` to this draft |
-| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md) and [Gantt](planning/idea-roadmap-december-2026.html); source pins in the change records | Appendix remains applicable to Draft 0.5; Gantt remains the frozen schedule 0.1 view copied unchanged. No DOC-07 Word/PDF created; existing submitted Word originals are not rewritten. |
+| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md) and [Gantt](planning/idea-roadmap-december-2026.html); source pins in the change records | Appendix remains applicable to Draft 0.6 because the schedule is unchanged; Gantt remains the frozen schedule 0.1 view copied unchanged. No DOC-07 Word/PDF created; existing submitted Word originals are not rewritten. |
 
 <!-- AUTHOR CONTENT END -->
 
