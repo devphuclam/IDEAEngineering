@@ -1,5 +1,26 @@
 # IDEA Enterprise Integration and Deployment Evidence
 
+| Control field | Value |
+|---|---|
+| Stable Research ID | `IE-RES-TECH-INTEGRATION-20260911-001` |
+| Document class / version / status | `RESEARCH-OPTIONS-NOTE` / `0.1` / `Draft` |
+| Product normativity | `INFORMATIVE`; candidates are not approved product obligations |
+| Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
+| Reviewer / acceptance authority | Project user for internal review; Product Decision Authority acceptance `NOT-RUN` |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; Q5/Q10 candidate comparison |
+| Evidence date / control update | 2026-09-11 / 2026-09-14 |
+| Classification / retention | `INTERNAL`; retain with the Tech evidence chain |
+| Source / upstream trace | Formal specifications and first-party guidance cited below; [DOC-04](../product/instances/idea-engineering/DOC-04-software-requirements-specification.md) for IDEA obligations |
+| Downstream trace | [Technology evidence synthesis](2026-09-13-technology-selection-evidence-synthesis.md), [technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md) |
+| Change record / predecessor | [IE-CHG-DOC-REVIEW-001](../product/instances/idea-engineering/registers/CHG-2026-09-14-post-pull-document-review-corrections.md); previously uncontrolled note SHA-256 `15a847795fe85ee5686bb206c7a6184a39cfffdb6b657adcfeaee30a9b2985a5` |
+| Supersession / review trigger | No controlled predecessor; review when integration consumer, deployment constraints or cited guidance changes |
+| Evidence status | Dated external guidance and IDEA inferences; production sizing and qualification `NOT-RUN` |
+
+Control tailoring under `IE-STD-AUTH-001@0.2`: this research comparison preserves evidence
+classification, limitations and downstream decision trace. It has no independent product
+requirement, effective product date, controlled predecessor version or executed test result.
+
 Date and retrieval snapshot: 2026-09-11
 
 Status: research evidence and architecture-decision input; no Tech approval, production sizing or

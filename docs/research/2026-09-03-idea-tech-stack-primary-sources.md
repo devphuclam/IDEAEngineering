@@ -1,5 +1,26 @@
 # IDEA Technology Stack: Primary-Source Evidence
 
+| Control field | Value |
+|---|---|
+| Stable Research ID | `IE-RES-TECH-20260903-001` |
+| Document class / version / status | `RESEARCH-SOURCE-NOTE` / `0.1` / `Draft` |
+| Product normativity | `INFORMATIVE`; neither a product requirement nor a technology approval |
+| Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
+| Reviewer / acceptance authority | Project user for internal review; Product Decision Authority acceptance `NOT-RUN` |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; dated technology evidence, not a selected stack |
+| Evidence date / control update | 2026-09-03 / 2026-09-14 |
+| Classification / retention | `INTERNAL`; retain with the Tech evidence chain and successor source checks |
+| Source / upstream trace | First-party URLs and dates cited in the claim register below; confirmed project context in [CONTEXT](../../CONTEXT.md) |
+| Downstream trace | [Technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md), [TECH-001](../product/instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md) |
+| Change record / predecessor | [IE-CHG-DOC-REVIEW-001](../product/instances/idea-engineering/registers/CHG-2026-09-14-post-pull-document-review-corrections.md); previously uncontrolled note SHA-256 `ed1a347321728b26e2d624310432104b9336b1c56ce536f8199e0b89126d5206` |
+| Supersession / review trigger | No controlled predecessor; revisit when a cited support policy changes or this dated note is used for a new Tech baseline |
+| Evidence status | Dated first-party publication checks and IDEA inferences only; implementation and operational qualification `NOT-RUN` |
+
+Control tailoring under `IE-STD-AUTH-001@0.2`: this research note retains identity, evidence date,
+source/decision separation and review state. It has no independent requirement, effective product
+date, controlled predecessor version or verification result.
+
 Date and retrieval snapshot: 2026-09-03
 
 Status: research evidence and qualification input; no stack approval or production implementation.

@@ -1,5 +1,26 @@
 # Java 25/Spring Boot 4.1 versus .NET 10/ASP.NET Core for IDEA Server scale
 
+| Control field | Value |
+|---|---|
+| Stable Research ID | `IE-RES-TECH-SCALE-20260911-001` |
+| Document class / version / status | `RESEARCH-COMPARISON` / `0.1` / `Draft` |
+| Product normativity | `INFORMATIVE`; no Server technology or capacity approval |
+| Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
+| Reviewer / acceptance authority | Project user for internal review; Product Decision Authority acceptance `NOT-RUN` |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; Server-scale comparison, not client selection |
+| Evidence date / control update | 2026-09-11; dated source addendum 2026-09-13 / control update 2026-09-14 |
+| Classification / retention | `INTERNAL`; retain with the Tech evidence chain |
+| Source / upstream trace | Official runtime/framework sources cited per claim; [DOC-04](../product/instances/idea-engineering/DOC-04-software-requirements-specification.md) for IDEA scale obligations |
+| Downstream trace | [Technology evidence synthesis](2026-09-13-technology-selection-evidence-synthesis.md), [technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md) |
+| Change record / predecessor | [IE-CHG-DOC-REVIEW-001](../product/instances/idea-engineering/registers/CHG-2026-09-14-post-pull-document-review-corrections.md); previously uncontrolled note SHA-256 `6f2d3060fa26546ac3166297e6a9983046c91aa02c38111489d30de50657883a` |
+| Supersession / review trigger | No controlled predecessor; recheck on runtime/framework lifecycle change or approved workload evidence |
+| Evidence status | Dated official publication facts and IDEA inferences; performance and operations qualification `NOT-RUN` |
+
+Control tailoring under `IE-STD-AUTH-001@0.2`: this comparison preserves source date, evidence
+classes and limits. It has no independent product requirement, effective product date, controlled
+predecessor version or benchmark result.
+
 **Evidence snapshot:** 2026-09-11  
 **Scope:** Server runtime only. This note does not select the Windows Desktop/Workspace stack.  
 **Question:** Does Java/Spring or C#/.NET provide a materially stronger path for scaling IDEA

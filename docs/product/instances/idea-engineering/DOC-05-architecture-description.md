@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.18`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.19`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.18` |
+| Document Version | `0.19` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
 | Requirements Input | `IE-PROD-SREQ-001@0.13`; Feature and Spec decisions remain `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
@@ -23,7 +23,7 @@
 | Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Change History | 0.18: restore architecture-first wording for deployment, maintained authentication/session mechanics and candidate technology rows; exact volatile distro/runtime/framework/database/package choices remain in `TECH-001@0.11` and its matrix; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-002](registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md). 0.17: synchronize only Server-side candidate Tech rows and OS-support wording to the Linux-first `TECH-001@0.10` engineering recommendation; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-001](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md). Earlier history remains in the controlled change records. |
+| Change History | 0.19: make Submit/Approve authorization and attributable outcome explicit in `ARCH-VIEW-SEQ-003`, identify the delegated administrator who requests a Group Role Assignment in `ARCH-VIEW-ACT-001`, and replace ambiguous Checkout-entitlement wording; no new product requirement or gate decision; [IE-CHG-DOC-REVIEW-001](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). 0.18: restore architecture-first wording for deployment, maintained authentication/session mechanics and candidate technology rows; exact volatile distro/runtime/framework/database/package choices remain in `TECH-001@0.11` and its matrix; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-002](registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -725,7 +725,7 @@ flowchart TB
     Eligible -->|Yes| Checkin{Check-in validates and commits?}
     Eligible -->|No| Safe[Preserve local work and resolve safely]
     Checkin -->|Changed| Generation[Publish immutable Generation]
-    Checkin -->|No Change| SameHead[Keep current Generation and end confirmed hold]
+    Checkin -->|No Change| SameHead[Keep current Generation and end confirmed Reservation]
     Checkin -->|Refused or uncertain| Safe
     Generation --> Review[Submit exact Generation for review]
     SameHead --> Review
@@ -1099,7 +1099,7 @@ same operation.
    Generations, Working Heads, a Change Set when at least one entry changed, the owner command
    outcome, Audit Evidence, outbox and the end of the in-scope Reservations. Each Module writes only
    its owned state through that unit of work.
-7. A semantic No Change result creates no Generation and still records the result and ends every hold in the confirmed scope. A mixed changed/unchanged scope ends all confirmed holds when the whole operation succeeds. Failure preserves local work and any still-valid entitlement.
+7. A semantic No Change result creates no Generation and still records the result and ends every Reservation in the confirmed scope. A mixed changed/unchanged scope ends all confirmed Reservations when the whole operation succeeds. Failure preserves local work and any still-valid entitlement.
 8. Retrying the same OperationId resolves the same operation; it does not create a duplicate Generation, Change Set or result. After a database failure, unused bytes remain private and are reconciled only after proving no live operation or retained Generation references them.
 
 ```mermaid
@@ -1219,7 +1219,7 @@ sequenceDiagram
             Server-->>Desktop: Resume same operation from safe point
         else outcome cannot yet be proved safely
             Server->>DB: Record NeedsReconciliation when authority is available
-            Server-->>Desktop: Hold result, preserve local work and do not start replacement
+            Server-->>Desktop: Keep result pending, preserve local work and do not start replacement
             Reconcile->>DB: Compare operation, Generations, heads, dispositions and outbox
             Reconcile->>Staging: Compare candidate references, ranges and digests
             alt complete committed evidence exists
@@ -1241,10 +1241,11 @@ digest is an input mismatch and is refused; it is never interpreted as a retry.
 ### 7.3 Review, approval and Release
 
 **`ARCH-VIEW-SEQ-003` — Review and exact Release sequence.** **Model profile:** UML Sequence;
-`Draft 0.14`; author, approver, Release Authority and lifecycle reviewers. **Question:** how does an
+`Draft 0.15`; author, approver, Release Authority and lifecycle reviewers. **Question:** how does an
 exact reviewed Generation become part of one reproducible Release without changing unrelated work?
 **Scope:** one Review Round and one Release operation. **Excludes:** Workspace transfer and later
-Revision work. **Trace:** `REQ-LC-001…009`, `REQ-STR-003`, `VVP-006`, SR-01…06. **Legend:** `alt`
+Revision work; the separate authorized Withdraw command is described in rule 4 but not drawn.
+**Trace:** `REQ-LC-001…009`, `REQ-AUTH-006…008`, `REQ-STR-003`, `VVP-006`, SR-01…06. **Legend:** `alt`
 branches are mutually exclusive lifecycle outcomes; dashed arrows are returned assignments/results.
 
 1. Submit creates a new identified Review Round and pins the exact Generation and review scope under one Workflow/Approval Policy Version.
@@ -1266,10 +1267,17 @@ branches are mutually exclusive lifecycle outcomes; dashed arrows are returned a
    reproducible Controlled Release Package; failure changes no release state and reports blocking
    entries. No global rule infers that every Release must have, or must lack, structure.
 
+Submit and Approve/Reject are protected Lifecycle commands, not UI-only transitions. For each,
+the Server establishes the ActorContext from session proof, Access Policy evaluates the requested
+action and exact resource, and Lifecycle revalidates the actor's eligibility, exact Generation,
+workflow rules and current authority before commit. Lifecycle owns each accepted or refused
+`OwnerCommandOutcome`; Audit Evidence appends the attributable result without becoming the decision
+owner. A refused command never creates a Review Round or Approval Decision.
+
 ```mermaid
 sequenceDiagram
     accTitle: Review approval and exact Release sequence
-    accDescr: An author submits one exact Generation into a Review Round pinned to workflow and approval policy versions. An eligible independent approver records a decision. Server/IAM establishes ActorContext from the release request. The narrow Release coordinator invokes Lifecycle Governance, which asks Access Policy and resolves Release Policy. The coordinator then invokes the selected owner validations. Any blocker refuses the whole scope; success atomically records one Release Record, zero or more Structure Pins, owner outcome, Audit Evidence and outbox without changing unrelated In Work documents.
+    accDescr: An author submits one exact Generation with server-established ActorContext and current authorization. Lifecycle commits one Review Round, its owner outcome and Audit evidence or refuses without creating the round. An independent approver's decision is separately authenticated, authorized, checked against the pinned Generation and policy, and committed with owner outcome and Audit. A rejected round returns to In Work. For an approved round, the narrow Release coordinator obtains fresh authorization, validates the exact confirmed scope and either refuses all of it or atomically records one Release Record, applicable Structure Pins, owner outcome, Audit Evidence and outbox. Unrelated documents may remain In Work.
 
     actor Author
     actor Approver
@@ -1284,43 +1292,84 @@ sequenceDiagram
     participant Audit as Audit Evidence
     participant UoW as Shared relational unit of work
 
-    Author->>UI: Submit exact Generation for review
-    UI->>Lifecycle: Create Review Round with pinned workflow and approval policy
-    Lifecycle-->>Approver: Assigned review scope
-    Approver->>Lifecycle: Approve or reject exact Generation with reason
-    alt rejected or submitter withdraws
-        Lifecycle-->>UI: Close Round and return Revision to In Work
-    else approved decision retained
-        Releaser->>UI: Preview and confirm exact Release scope
-        UI->>Coordinator: Release confirmed scope with session proof
-        Coordinator->>IAM: Establish ActorContext from session proof
-        IAM-->>Coordinator: Server-established ActorContext
-        Coordinator->>Lifecycle: Start declared Release with ActorContext
-        Lifecycle->>Policy: Authorize(ActorContext, Permission, ResourceId, Scope, expected state)
-        Policy-->>Lifecycle: Immutable AuthorizationDecision
-        Lifecycle->>Lifecycle: Validate workflow, approval and Release Policy
-        Lifecycle-->>Coordinator: Required/selected StructurePin policy result
-        Coordinator->>Structure: Validate selected 0..* exact Structure Pins and exceptions
-        Coordinator->>Product: Validate exact Generations and access
-        alt any required entry is missing, stale or ineligible
-            Coordinator->>UoW: BEGIN declared Release operation
-            Lifecycle->>UoW: Write refused Lifecycle OwnerCommandOutcome only
-            Lifecycle->>Audit: Append refusal evidence in same UoW
+    Author->>UI: Submit exact Generation and review scope
+    UI->>Lifecycle: Submit with session proof and expected state
+    Lifecycle->>IAM: Establish ActorContext from session proof
+    IAM-->>Lifecycle: Server-established ActorContext
+    Lifecycle->>Policy: Authorize requested Submit action and exact resource
+    Policy-->>Lifecycle: Current AuthorizationDecision
+    Lifecycle->>Lifecycle: Validate Generation, scope and pinned workflow policy
+    Lifecycle->>UoW: BEGIN Submit operation
+    Lifecycle->>Policy: Revalidate authority and membership at commit
+    Policy-->>Lifecycle: Current AuthorizationDecision
+    alt Submit unauthorized, stale or invalid
+        Lifecycle->>UoW: Record refused Lifecycle OwnerCommandOutcome
+        Lifecycle->>Audit: Append refused Submit evidence in same UoW
+        Audit->>UoW: Write append-only evidence only
+        Lifecycle->>UoW: COMMIT refusal evidence without Review Round
+        Lifecycle-->>UI: Refuse Submit and explain blocker
+    else Submit accepted
+        Lifecycle->>UoW: Create pinned Review Round and OwnerCommandOutcome
+        Lifecycle->>Audit: Append Submit evidence in same UoW
+        Audit->>UoW: Write append-only evidence only
+        Lifecycle->>UoW: Retain outbox and COMMIT
+        Lifecycle-->>UI: Return Review Round identity and assignment
+        Approver->>UI: Approve or reject exact Round with reason
+        UI->>Lifecycle: Decide with session proof and expected Round state
+        Lifecycle->>IAM: Establish ActorContext from session proof
+        IAM-->>Lifecycle: Server-established ActorContext
+        Lifecycle->>Policy: Authorize requested decision and exact resource
+        Policy-->>Lifecycle: Current AuthorizationDecision
+        Lifecycle->>Lifecycle: Check independent eligibility, pinned Generation and reason
+        Lifecycle->>UoW: BEGIN decision operation
+        Lifecycle->>Policy: Revalidate authority and membership at commit
+        Policy-->>Lifecycle: Current AuthorizationDecision
+        alt Decision unauthorized, stale or invalid
+            Lifecycle->>UoW: Record refused Lifecycle OwnerCommandOutcome
+            Lifecycle->>Audit: Append refused decision evidence in same UoW
             Audit->>UoW: Write append-only evidence only
-            Lifecycle->>UoW: Retain transactional outbox and COMMIT
-            Coordinator-->>UI: Refuse whole scope and list blockers
-        else scope is complete
-            Coordinator->>UoW: BEGIN declared Release operation
-            Coordinator->>Lifecycle: Commit Release under shared UoW
-            Lifecycle->>Policy: Commit-time revalidate ActorContext and policy/membership inputs
-            Policy-->>Lifecycle: Current AuthorizationDecision
-            Lifecycle->>Lifecycle: Lock/revalidate Release business state
-            Lifecycle->>UoW: Create Release Record, 0..* StructurePins and OwnerCommandOutcome
-            Lifecycle->>Audit: Append decision/release evidence in same UoW
+            Lifecycle->>UoW: COMMIT refusal evidence without Approval Decision
+            Lifecycle-->>UI: Refuse decision and explain blocker
+        else Decision accepted
+            Lifecycle->>UoW: Record exact Approval Decision and OwnerCommandOutcome
+            Lifecycle->>Audit: Append decision evidence in same UoW
             Audit->>UoW: Write append-only evidence only
-            Lifecycle->>UoW: Retain transactional outbox and COMMIT
-            Coordinator-->>UI: Released exact confirmed scope
-            Note over UI: Other documents may remain In Work when not required by this scope
+            Lifecycle->>UoW: Retain outbox and COMMIT
+            alt rejected
+                Lifecycle-->>UI: Close Round and return Revision to In Work
+            else approved decision retained
+                Releaser->>UI: Preview and confirm exact Release scope
+                UI->>Coordinator: Release confirmed scope with session proof
+                Coordinator->>IAM: Establish ActorContext from session proof
+                IAM-->>Coordinator: Server-established ActorContext
+                Coordinator->>Lifecycle: Start declared Release with ActorContext
+                Lifecycle->>Policy: Authorize(ActorContext, Permission, ResourceId, Scope, expected state)
+                Policy-->>Lifecycle: Immutable AuthorizationDecision
+                Lifecycle->>Lifecycle: Validate workflow, approval and Release Policy
+                Lifecycle-->>Coordinator: Required/selected StructurePin policy result
+                Coordinator->>Structure: Validate selected 0..* exact Structure Pins and exceptions
+                Coordinator->>Product: Validate exact Generations and access
+                alt any required entry is missing, stale or ineligible
+                    Coordinator->>UoW: BEGIN declared Release operation
+                    Lifecycle->>UoW: Write refused Lifecycle OwnerCommandOutcome only
+                    Lifecycle->>Audit: Append refusal evidence in same UoW
+                    Audit->>UoW: Write append-only evidence only
+                    Lifecycle->>UoW: Retain transactional outbox and COMMIT
+                    Coordinator-->>UI: Refuse whole scope and list blockers
+                else scope is complete
+                    Coordinator->>UoW: BEGIN declared Release operation
+                    Coordinator->>Lifecycle: Commit Release under shared UoW
+                    Lifecycle->>Policy: Commit-time revalidate ActorContext and policy/membership inputs
+                    Policy-->>Lifecycle: Current AuthorizationDecision
+                    Lifecycle->>Lifecycle: Lock/revalidate Release business state
+                    Lifecycle->>UoW: Create Release Record, 0..* StructurePins and OwnerCommandOutcome
+                    Lifecycle->>Audit: Append decision/release evidence in same UoW
+                    Audit->>UoW: Write append-only evidence only
+                    Lifecycle->>UoW: Retain transactional outbox and COMMIT
+                    Coordinator-->>UI: Released exact confirmed scope
+                    Note over UI: Other documents may remain In Work when not required by this scope
+                end
+            end
         end
     end
 ```
@@ -1486,7 +1535,7 @@ seam is read-only and never invokes the IAM mutation command handler recursively
 ### 7.5 Responsibility flow for granting Linh access to P-100
 
 **`ARCH-VIEW-ACT-001` — Account and Project access administration.** **Model profile:** UML-style
-activity/swimlane rendered as a flowchart; `Draft 0.14`; account, Project, access and support
+activity/swimlane rendered as a flowchart; `Draft 0.15`; account, Project, access and support
 reviewers. **Question:** who makes Linh eligible to work as Design Engineer in P-100? **Scope:** one
 account and one Project access path. **Excludes:** password detail and document business gates beyond
 their final decision. **Trace:** `REQ-IAM-002/005`, `REQ-AUTH-003/005/009/010`, PA-01…04.
@@ -1496,7 +1545,7 @@ not transfer ownership.
 ```mermaid
 flowchart TB
     accTitle: Account and Project access administration responsibility
-    accDescr: System Management creates and activates Linh's account without product access. A Project Administrator separately admits Linh to P-100 and its mechanical Group. Access Policy records the Design Engineer Role Assignment at P-100 Scope. Only when Linh later requests a named action on a named resource does Access Policy calculate Effective Permission; the owner then applies its separate business gates.
+    accDescr: System Management creates and activates Linh's account without product access. A Project Administrator separately admits Linh to P-100 and its mechanical Group. If the Group lacks an applicable Design Engineer Role Assignment, a Project Administrator with sufficient delegated authority explicitly requests one for the Group at P-100 Scope. Access Policy refuses an out-of-delegation request or records the exact assignment and Audit evidence. Only when Linh later requests an action on a resource does Access Policy calculate Effective Permission; the owner then applies separate business gates.
 
     subgraph AA[Account administration — QLHT]
         direction LR
@@ -1509,13 +1558,19 @@ flowchart TB
         direction LR
         P1[Add Linh as a Project Member]
         P2[Add Linh to Cơ khí P-100 Group]
+        P3[Project Administrator requests Group Role Assignment if missing]
         P1 --> P2
     end
 
     subgraph AP[Access policy]
         direction LR
-        R1[Role Assignment: Cơ khí P-100 + Design Engineer + Scope P-100]
+        R0{Applicable Group Role Assignment already exists?}
+        R1{Delegation permits this Role, Group and Scope?}
+        R3[Record version-pinned Role Assignment and Audit]
+        R4[Refuse assignment request and append Audit]
         R2[Calculate Effective Permission for requested action and resource]
+        R1 -->|Yes| R3
+        R1 -->|No| R4
     end
 
     subgraph PD[Protected product action]
@@ -1532,16 +1587,23 @@ flowchart TB
     end
 
     A2 -->|Account exists; no product access yet| P1
-    P2 -->|Group membership may contribute later| R1
-    R1 -->|Assignment exists; it grants no action by itself| D1
+    P2 -->|Group membership alone grants no action| R0
+    R0 -->|Yes, use current assignment| D1
+    R0 -->|No| P3
+    P3 -->|Explicit request by authorized administrator| R1
+    R3 -->|Assignment exists; no permanent permission is calculated| D1
     D1 -->|server-established ActorContext, action and resource| R2
     R2 -->|immutable AuthorizationDecision| D2
 ```
 
 Reading order follows the downward flow; the grouped authority lanes identify ownership. QLHT creates and maintains the account only. The Project
-Administrator for `P-100` adds Linh to the Project and its mechanical Group. Access Policy records
-the Group's `Design Engineer` Role Assignment at Project Scope, but does not calculate a permanent
-permission merely because the assignment exists. A later protected action supplies the
+Administrator for `P-100` adds Linh to the Project and its mechanical Group. If a valid Group Role
+Assignment already exists, Linh may use that path. If it is missing, a Project Administrator must
+explicitly request the `Design Engineer` assignment at Project Scope and may do so only when its own
+delegation covers that Role Definition, Group principal and Scope. Access Policy checks those limits,
+records the exact assignment and Audit evidence, or refuses the request. It does not create an
+assignment on its own or calculate a permanent permission merely because an assignment exists. A
+later protected action supplies the
 server-established ActorContext, action and resource to Access Policy; the resulting immutable
 `AuthorizationDecision` is distinct from the product Module's later `OwnerCommandOutcome`. The
 owner then checks lifecycle, Checkout owner, expected Generation and other business rules before
@@ -2466,7 +2528,7 @@ variation or a genuine security seam already exists; defer unused integrations.
 | Spec prerequisite | Approved exact DOC-04@0.13 requirement baseline and resolved/owned requirement gaps, presented through an up-to-date Spec brief | `NOT-RUN`; DOC-04@0.13 is Draft and current Spec brief is stale |
 | Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
 | PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
-| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The successor source/rendition audit is recorded in [IE-VEV-ARCH-CORR-003](registers/VEV-2026-09-12-architecture-consistency-correction-003.md); predecessor VEV-001/002 and earlier VEV records remain historical evidence. Render success is distinct from architecture acceptance. |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The current source/rendition record is [IE-VEV-ARCH-CORR-004](registers/VEV-2026-09-14-post-pull-architecture-view-correction.md); predecessor VEV-003 and earlier records remain historical evidence. A rendered picture does not imply independent architecture acceptance. |
 | Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
 | Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
 | Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |

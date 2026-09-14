@@ -1,5 +1,26 @@
 # Greenfield Desktop and Workspace stack evidence for IDEA Engineering
 
+| Control field | Value |
+|---|---|
+| Stable Research ID | `IE-RES-TECH-DESKTOP-20260912-001` |
+| Document class / version / status | `RESEARCH-COMPARISON` / `0.1` / `Draft` |
+| Product normativity | `INFORMATIVE`; Desktop/Workspace candidates are not an approved Tech choice |
+| Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
+| Reviewer / acceptance authority | Project user for internal review; Product Decision Authority acceptance `NOT-RUN` |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; Windows Desktop/Workspace candidate comparison |
+| Evidence date / control update | 2026-09-12; dated source addendum 2026-09-13 / control update 2026-09-14 |
+| Classification / retention | `INTERNAL`; retain with the Tech evidence chain |
+| Source / upstream trace | Official client/runtime sources cited per claim; [DOC-05](../product/instances/idea-engineering/DOC-05-architecture-description.md) and [DOC-08](../product/instances/idea-engineering/DOC-08-ui-ux-and-interaction-specification.md) for IDEA boundaries |
+| Downstream trace | [Technology evidence synthesis](2026-09-13-technology-selection-evidence-synthesis.md), [technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md) |
+| Change record / predecessor | [IE-CHG-DOC-REVIEW-001](../product/instances/idea-engineering/registers/CHG-2026-09-14-post-pull-document-review-corrections.md); previously uncontrolled note SHA-256 `e5a345ba8c3cd84441387a34d6e482b03816eb3b2ec36ca57782ce143176dbcb` |
+| Supersession / review trigger | No controlled predecessor; review when supported client runtimes or approved Workspace constraints change |
+| Evidence status | Dated first-party publication facts and IDEA inferences; installed-client and security qualification `NOT-RUN` |
+
+Control tailoring under `IE-STD-AUTH-001@0.2`: this comparison preserves source dates, limitations
+and decision trace. It has no independent product requirement, effective product date, controlled
+predecessor version or executed client result.
+
 **Evidence snapshot:** 2026-09-12  
 **Question:** Starting from a clean slate, which client architecture and technology candidates best
 fit IDEA Engineering's Windows Desktop and Managed Workspace obligations, without assuming .NET?

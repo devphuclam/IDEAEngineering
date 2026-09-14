@@ -1,5 +1,26 @@
 # Aras Innovator and DDM Technology-Stack Evidence
 
+| Control field | Value |
+|---|---|
+| Stable Research ID | `IE-RES-COMP-TECH-20260911-001` |
+| Document class / version / status | `COMPETITOR-RESEARCH` / `0.1` / `Draft` |
+| Product normativity | `INFORMATIVE`; competitor facts cannot approve an IDEA stack or create a requirement |
+| Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
+| Reviewer / acceptance authority | Project user for internal review; Product Decision Authority acceptance `NOT-RUN` |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; historical vendor-release comparison only |
+| Evidence date / control update | 2026-09-11 / 2026-09-14 |
+| Classification / retention | `INTERNAL`; retain as a dated competitor observation, not a current support promise |
+| Source / upstream trace | Vendor first-party sources and release contexts cited below; [product knowledge reading rules](../product/knowledge/README.md) |
+| Downstream trace | [Technology evidence synthesis](2026-09-13-technology-selection-evidence-synthesis.md), [technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md) |
+| Change record / predecessor | [IE-CHG-DOC-REVIEW-001](../product/instances/idea-engineering/registers/CHG-2026-09-14-post-pull-document-review-corrections.md); previously uncontrolled note SHA-256 `15ed52811aa5fd97e7ec636c7f5c72e8b7cd8c229e9081104c3a1370a1c2be7e` |
+| Supersession / review trigger | No controlled predecessor; recheck the exact vendor release/source before reusing a claim |
+| Evidence status | Bounded public vendor claims and explicitly labeled inference; IDEA runtime qualification `NOT-RUN` |
+
+Control tailoring under `IE-STD-AUTH-001@0.2`: this competitor note preserves release/date context,
+source class and limits. It has no independent product requirement, effective product date,
+controlled predecessor version or implementation result.
+
 Date and retrieval snapshot: 2026-09-11
 
 Status: competitor/vendor research input only. It does not approve an IDEA technology, topology,

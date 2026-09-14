@@ -1,5 +1,26 @@
 # Java/Spring versus C#/.NET for IDEA Engineering
 
+| Control field | Value |
+|---|---|
+| Stable Research ID | `IE-RES-TECH-JAVA-DOTNET-20260911-001` |
+| Document class / version / status | `RESEARCH-COMPARISON` / `0.1` / `Draft` |
+| Product normativity | `INFORMATIVE`; candidate comparison, not a stack decision |
+| Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
+| Reviewer / acceptance authority | Project user for internal review; Product Decision Authority acceptance `NOT-RUN` |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; Server and Windows client candidate comparison |
+| Evidence date / control update | 2026-09-11; dated source addendum 2026-09-13 / control update 2026-09-14 |
+| Classification / retention | `INTERNAL`; retain with the Tech evidence chain |
+| Source / upstream trace | Official platform and framework sources cited per claim; [DOC-05](../product/instances/idea-engineering/DOC-05-architecture-description.md) for architectural boundaries |
+| Downstream trace | [Technology evidence synthesis](2026-09-13-technology-selection-evidence-synthesis.md), [technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md) |
+| Change record / predecessor | [IE-CHG-DOC-REVIEW-001](../product/instances/idea-engineering/registers/CHG-2026-09-14-post-pull-document-review-corrections.md); previously uncontrolled note SHA-256 `2e1667f392fbbdb3fe948a527163d90b772a3663bb311d4a1fb891915dace387` |
+| Supersession / review trigger | No controlled predecessor; review when candidate lifecycle, client constraints or approved Tech context changes |
+| Evidence status | Official publication facts and bounded IDEA inference; stack selection and compatibility qualification `NOT-RUN` |
+
+Control tailoring under `IE-STD-AUTH-001@0.2`: this comparison preserves source context and
+evidence-to-decision separation. It has no independent product requirement, effective product date,
+controlled predecessor version or measured performance result.
+
 **Evidence snapshot:** 2026-09-11  
 **Question:** Is there a sound reason IDEA Engineering should not use Java, and what actually
 distinguishes Java/Spring from C#/.NET for the proposed Server, Windows Desktop and Workspace?
