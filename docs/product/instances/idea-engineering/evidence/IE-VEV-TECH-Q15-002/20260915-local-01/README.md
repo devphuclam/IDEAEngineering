@@ -16,6 +16,7 @@ The predecessor package remains historical and is not overwritten.
 | [`environment.json`](environment.json) | Exact local machine, toolchain, fixture and fairness snapshot. |
 | [`execution-results.json`](execution-results.json) | Normalized command/test ledger with raw-result links and explicit blocked/not-run outcomes. |
 | [`option-a-installed-ui-integration.json`](option-a-installed-ui-integration.json) | Machine-generated Option A React → WebView2 → WPF → Workspace installed-flow report. |
+| [`option-a-bridge-smoke.json`](option-a-bridge-smoke.json) | Retained predecessor WPF/WebView2 runtime bridge smoke; kept distinct from the installed full UI flow. |
 | [`option-b-windows-ui-integration.json`](option-b-windows-ui-integration.json) | Machine-generated Option B Windows UI/direct-FFI runner summary; UI and direct FFI lanes remain separate entries. |
 | [`option-b-api-workspace-smoke.json`](option-b-api-workspace-smoke.json) | Machine-generated direct API/Workspace smoke; `kind` explicitly identifies it as non-UI evidence. |
 | [`ffi-fault-summary.json`](ffi-fault-summary.json) | Machine-generated ten-case controlled FFI failure classification summary. |

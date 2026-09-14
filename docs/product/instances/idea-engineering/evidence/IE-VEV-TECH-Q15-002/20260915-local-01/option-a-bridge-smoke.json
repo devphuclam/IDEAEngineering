@@ -1,0 +1,10 @@
+{
+  "candidate": "option-a",
+  "webViewLoaded": true,
+  "bridgeOriginValidated": true,
+  "workspaceRoundTrip": "Accepted",
+  "code": "WORKSPACE_READY",
+  "preservesLocalCandidate": true,
+  "webView2Runtime": "152.0.4191.66",
+  "startupToRoundTripMs": 1208.389
+}

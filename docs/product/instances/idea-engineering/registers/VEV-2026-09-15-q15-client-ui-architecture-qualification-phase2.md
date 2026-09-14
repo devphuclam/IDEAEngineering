@@ -65,7 +65,7 @@ The complete machine ledger and raw links are in [`execution-results.json`](../e
 |---|---|---|
 | Shared Workspace protocol | `PASS`, 18/18 | Existing framed/HMAC/version/session/replay/correlation/path-boundary suite; multi-user/elevation remains blocked |
 | Shared API harness | `PASS`, 10/10 | Qualification test double only; not Java/Spring/PostgreSQL evidence |
-| Option A bridge | `PASS`, 8/8 | Typed WebView2 origin/schema/version/allowlist checks |
+| Option A bridge | `PASS`, 8/8 plus retained runtime smoke | Typed WebView2 origin/schema/version/allowlist checks; predecessor runtime smoke remains separate from the installed full flow |
 | Option A installed full UI flow | `PASS`, 1/1 | Login → search 100k×20 → detail → checkout → open Workspace → check-in; report asserts UI/bridge/IPC boundary |
 | Option A production Web | `PASS`, 6/6 | Edge direct URL, keyboard critical flow, locale/failure states, alignment/refresh and resource-transfer attachment |
 | Option B Flutter Windows UI | `PASS`, 1/1 | Critical widget flow reaches authoritative check-in; test runner output retained |

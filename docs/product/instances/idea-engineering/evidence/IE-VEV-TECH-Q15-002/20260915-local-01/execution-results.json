@@ -39,6 +39,14 @@
       "raw": "raw/net-tests/phase2-bridge.trx"
     },
     {
+      "id": "RUN-A-BRIDGE-SMOKE-001",
+      "command": "inherited Phase 1 WPF/WebView2 bridge smoke retained as predecessor provenance",
+      "surface": "Option A WPF/WebView2 runtime bridge",
+      "result": "PASS",
+      "raw": "option-a-bridge-smoke.json",
+      "provenance": "IE-VEV-TECH-Q15-001 predecessor evidence; not conflated with the installed full UI flow"
+    },
+    {
       "id": "RUN-A-UNIT-001",
       "command": "npm test -- --run",
       "surface": "Option A React unit tests",
