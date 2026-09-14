@@ -3,16 +3,16 @@
 | Thông tin | Nội dung |
 |---|---|
 | Mã tài liệu / Stable ID | `TECH-001` |
-| Phiên bản / ngày soạn | `0.12` / `14-09-2026` |
+| Phiên bản / ngày soạn | `0.13` / `14-09-2026` |
 | Trạng thái | `Draft` — Engineering Recommendation đã hoàn tất; Product Decision Authority review/approval `NOT-RUN` |
 | Vai trò | Brief tiếng Việt để sếp xem xét trục Tech; không phải Core Product Document và không tự phê duyệt stack |
 | Người soạn / review | Principal Product Author — trợ lý soạn; review nội bộ đầy đủ `NOT-RUN` |
 | Người quyết định | Sếp — `Product Decision Authority` |
 | Product Normativity | `INFORMATIVE` — không tạo FTR/REQ và không đổi hành vi sản phẩm |
-| Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.4`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-RES-TECH-CLIENT-20260914-001@0.2`](../../../../research/2026-09-14-flutter-client-ui-stack-evidence.md); [`IE-RES-TECH-20260913-001`](../../../../research/2026-09-13-technology-selection-evidence-synthesis.md); first-party source pins trong matrix |
-| Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.9 (routing-only refresh), DOC-08@0.12, GOV@0.3, VVP@0.16 và các ADR đã Accepted |
-| Change Record | [`IE-CHG-TECH-CLIENT-001@0.1`](../registers/CHG-2026-09-14-client-ui-stack-re-evaluation.md); predecessor `TECH-001@0.11`, SHA-256 `C60C3497CC32D10744DEFF0AD01A5D30341944C635DFD7DF3564790629BB241C` |
-| Supersedes / Superseded by | Supersedes `TECH-001@0.11`; superseded by `NOT-APPLICABLE` |
+| Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.5`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-RES-TECH-CLIENT-20260914-001@0.3`](../../../../research/2026-09-14-flutter-client-ui-stack-evidence.md); [`IE-RES-TECH-20260913-001`](../../../../research/2026-09-13-technology-selection-evidence-synthesis.md); first-party source pins trong matrix |
+| Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.10 (routing-only refresh), DOC-08@0.12, GOV@0.3, VVP@0.16 và các ADR đã Accepted |
+| Change Record | [`IE-CHG-TECH-CLIENT-002@0.1`](../registers/CHG-2026-09-14-client-ui-stack-review-correction.md); predecessor `TECH-001@0.12`, SHA-256 `9CF823287CB494F266302FDC5ED269D89A3EE9CEBC42C1AC79FA3D0F0B00357F` |
+| Supersedes / Superseded by | Supersedes `TECH-001@0.12`; superseded by `NOT-APPLICABLE` |
 | Giới hạn | Chỉ phân tích và đề xuất. Chưa viết production code, chưa cài đặt/triển khai, chưa mua license/hạ tầng, chưa có kết quả qualification và không tuyên bố PG3/PG4 `PASS`. |
 | Trạng thái quyết định | Engineering Recommendation: `COMPLETE`; Product Decision Authority Approval: `NOT-RUN`; Q-01…Q-15 and PG3/PG4: `NOT-RUN` |
 
@@ -39,10 +39,11 @@ Kết luận Client/UI sau khi mở lại sáu candidate là:
 
 > **KEEP CURRENT BASELINE, BUT FLUTTER REMAINS QUALIFICATION CHALLENGER.**
 
-React + WPF/WebView2 chưa được giữ lại vì quán tính. Nó được giữ vì hiện là đường ít seam chưa được
-sở hữu hơn để đồng thời đáp ứng Browser, Desktop/Web-rendered Desktop và `.NET Workspace` trên
-Windows. Flutter Web + Flutter Windows là runner-up nghiêm túc và được đưa vào Q-15 cùng một vertical
-slice; không có benchmark, accessibility, IME, IPC hay installer result nào được giả định là PASS.
+React + WPF/WebView2 không được tuyên bố là đường ít seam hoặc lower-risk hơn. Nó được giữ làm
+**provisional qualification control** vì là proposal hiện hành để tạo reference implementation và
+reference result ổn định cho Q-15. Flutter Web + Flutter Windows là challenger nghiêm túc trên cùng
+vertical slice; không có benchmark, accessibility, IME, IPC, installer hay seam-risk result nào được
+giả định là PASS.
 
 Đây là **khuyến nghị kỹ thuật**, không phải quyết định của sếp. Bối cảnh mới do anh cung cấp:
 ưu tiên Linux-first cho Server; hạ tầng Windows Server hiện có được tính **0 điểm lợi thế**; Server
@@ -68,12 +69,12 @@ nhanh hơn, scale hơn hoặc “enterprise-grade” hơn.
 | Authorization | `SELECT` | IDEA Access Policy | Server/IAM establish `ActorContext`; policy resolve IAM eligibility + Project/Group + Role Assignment/version + Scope; owner gate và commit-time revalidation sau đó. |
 | API | `SELECT` | Versioned HTTPS JSON REST + OpenAPI 3.1 | Stable Resource/Operation ID, expected state và idempotency key; client không truy cập DB và không tự gửi ActorId có thẩm quyền. |
 | Integration publication | `SELECT` | PostgreSQL transactional outbox + bounded Spring dispatcher + plain owner-specific Adapter | Outcome/Audit/outbox atomic trong relational UoW; consumer idempotent. Spring Integration chỉ `CONDITIONAL` khi có contract cụ thể; broker chưa bắt buộc. |
-| Web frontend | `SELECT` | React 19.3 CSR | Web workbench nội bộ; static build được Server phục vụ; không thêm SSR/RSC. Giữ sau Flutter challenge nhưng Q-15 vẫn `NOT-RUN`. |
+| Web frontend | `SELECT — PROVISIONAL QUALIFICATION CONTROL` | React 19.3 CSR | Web workbench của Option A control; static build được Server phục vụ; không thêm SSR/RSC. Q-15 vẫn `NOT-RUN`. |
 | Web compiler | `SELECT` | TypeScript 7.0 | CLI/type-checking line được chọn; TS6 chỉ là compatibility lane cho plugin dùng compiler API chưa ổn định. |
 | Web build | `SELECT` | Vite 8.3 + Node.js 22 LTS build line | `Node >=22.12` cho Vite 8; `npm ci` + `package-lock.json` và SBOM. Node không chạy như production Server. |
 | Web routing | `SELECT` | React Router 7 data APIs | Loaders/actions/error boundaries ở client; API/authorization vẫn do Server quyết định. |
 | Search | `SELECT` | Rebuildable PostgreSQL Discovery Projection | ID/title/filter/sort/page/permission predicates; Japanese tokenization và FTS semantics chưa được chứng minh. |
-| Desktop shell | `SELECT` | WPF `net10.0-windows` + embedded React | Giữ bề mặt Web/Desktop/Web-rendered Desktop hiện có, native code chỉ expose intent commands; Q-10/Q-11/Q-15 chưa chạy. |
+| Desktop shell | `SELECT — PROVISIONAL QUALIFICATION CONTROL` | WPF `net10.0-windows` + embedded React | Giữ bề mặt Web/Desktop/Web-rendered Desktop làm Option A control; native code chỉ expose intent commands. Không claim lower risk; Q-10/Q-11/Q-15 chưa chạy. |
 | Embedded renderer | `SELECT` | WebView2 Evergreen | Ưu tiên runtime được IT cập nhật tập trung; Fixed chỉ là fallback khi policy/offline bắt buộc. |
 | Workspace runtime | `SELECT` | Separate per-user `.NET 10` process | Local materialization/custody, hash, journal, resume, external CAD/Office launch và recovery; không sở hữu Product Definition. |
 | Workspace IPC | `SELECT` | Current-user named pipes + authenticated/versioned/scope-bound messages | ACL không đủ một mình; có replay/size/version checks, cross-user refusal và reconnect an toàn. |
@@ -237,29 +238,39 @@ API ổn định hơn trong quá trình qualify.
 Flutter Web 3.47.2 đã được đánh giá như một app-centric SPA challenger, không bị loại bằng nhận xét
 “chỉ dành cho mobile”. Nó có JavaScript target và Wasm target kèm JavaScript fallback, nhưng
 browser/renderer parity, Semantics accessibility, history, grid/tree, EN/VI/JA IME, copy/paste,
-printing và performance trên IDEA vẫn `NOT-RUN`. React giữ vị trí đề xuất vì phù hợp trực tiếp với
-browser DOM hiện tại và cùng business UI được reuse trong WebView2; đây là inference cần Q-15 chứng
-minh, không phải tuyên bố React luôn tốt hơn Flutter.
+printing và performance trên IDEA vẫn `NOT-RUN`. React giữ vị trí provisional control vì phù hợp
+trực tiếp với browser DOM và cùng business UI được reuse trong WebView2 theo proposal hiện hành; đây
+không phải kết quả chứng minh React tốt hơn hoặc ít rủi ro hơn Flutter.
 
 ## 7. Desktop và Workspace
 
 ### 7.1 Shell được chọn
 
 SRS hiện có Web, Desktop và Web-rendered Desktop obligations. Vì vậy browser-only + agent không thể
-được chọn âm thầm mà không có follow-up Product Decision. Core v0 chọn **WPF + WebView2 Evergreen**.
+được chọn âm thầm mà không có follow-up Product Decision. Q-15 dùng **WPF + WebView2 Evergreen** làm
+provisional qualification control.
 
 WPF chỉ làm shell hẹp: window/lifecycle, WebView2 host, Workspace status và approved native intent
-bridge. Business UI không được viết lại song song bằng WPF. Nó giữ vị trí first bake vì `.NET` có
-đường IPC current-user trực tiếp tới Workspace và WebView2 reuse React; không phải vì WPF mới hơn
-hoặc luôn tốt hơn. WinUI 3 là alternative nếu Q-10/Q-15 chứng minh lợi ích material về UI,
+bridge. Business UI không được viết lại song song bằng WPF. Nó giữ vị trí control vì là candidate đã
+được mô tả đầy đủ để triển khai đối chứng; không phải vì WPF mới hơn, ít seam hơn hoặc đã được chứng
+minh lower-risk. WinUI 3 là alternative nếu Q-10/Q-15 chứng minh lợi ích material về UI,
 accessibility, packaging hoặc support.
 
 Flutter Windows có thể bỏ cả WPF và WebView2 khỏi installed presentation, dùng Dart/Flutter chung
-với Flutter Web và gọi C ABI/host C++ qua FFI/platform channel. Nhưng cơ chế in-process đó không tự
-giải quyết authenticated IPC tới external `.NET Workspace`. IDEA vẫn phải sở hữu Dart/C++/FFI IPC
-client, plugin/native supply chain, native dialog/process launch, multi-window/monitor/DPI,
+với Flutter Web. Q-15 thử direct Dart FFI tới Win32 named-pipe client API trước; chỉ thêm narrow C
+ABI/C++ shim hoặc Flutter plugin khi có blocker đo được. FFI không tự giải quyết authentication,
+framing, replay, native handle/memory, async/cancellation hoặc recovery với external `.NET
+Workspace`. IDEA vẫn phải sở hữu native dialog/process launch, multi-window/monitor/DPI,
 accessibility, EN/VI/JA IME và update/rollback. Vì vậy Flutter là `ALTERNATIVE` +
 `QUALIFICATION REQUIRED`, không phải lựa chọn bị bác.
+
+Hai topology được đưa vào đo, không dùng để suy diễn winner:
+
+```text
+A control: React → WebView2 message → WPF → Win32 named pipe → .NET Workspace
+B primary: Dart → FFI → Win32 named pipe → .NET Workspace
+B fallback: Dart → narrow C ABI/C++ shim or plugin → Win32 named pipe → .NET Workspace
+```
 
 Evergreen được chọn khi IT cho phép runtime cập nhật tập trung. Fixed Version chỉ dùng khi offline hoặc
 policy cấm Evergreen; khi đó IDEA phải sở hữu binary, CVE response, rollout và rollback renderer.
@@ -365,7 +376,7 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 ## 10. Alternatives not selected
 
 Client comparison đầy đủ theo 12 tiêu chí nằm ở
-[`IE-KNW-TECH-DEC-001@0.4` §6.4](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md#64-client-technology-decision-matrix).
+[`IE-KNW-TECH-DEC-001@0.5` §6.4](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md#64-client-technology-decision-matrix).
 Không candidate nào được chấm numeric score hoặc giả định đã benchmark.
 
 | Lựa chọn | Phân loại | Vì sao chưa chọn / khi nào xem lại |
@@ -374,7 +385,7 @@ Không candidate nào được chấm numeric score hoặc giả định đã be
 | SQL Server 2025 | `ALTERNATIVE` | Xem lại khi company DBA/license/edition/restore support có bằng chứng vượt PostgreSQL. |
 | Ubuntu 24.04 | `ALTERNATIVE` compatibility | Dùng khi exact 26.04 dependency hoặc policy không qua Q-14; không phải bị loại về chất lượng. |
 | Windows Server 2025 | `ALTERNATIVE / CONTINGENCY` | Chỉ dùng khi IT policy, dependency/integration, Linux qualification failure hoặc lợi thế operations/security material; không vì máy Windows hiện có. |
-| Flutter Web + Flutter Windows + `.NET Workspace` | `ALTERNATIVE` + `QUALIFICATION REQUIRED` challenger | Một Dart presentation model là lợi thế thật, nhưng Q-15 chưa chứng minh grid/tree, Web/Windows accessibility, EN/VI/JA IME, external-process IPC, native workflow, installer/update/rollback và support ownership. Reopen khi mobile/additional desktop trở thành roadmap thật, baseline fail gate, hoặc Flutter pass cùng slice với total risk thấp hơn. |
+| Flutter Web + Flutter Windows + `.NET Workspace` | `ALTERNATIVE` + `QUALIFICATION REQUIRED` challenger | Một Dart presentation model là lợi thế thật, nhưng Q-15 chưa chứng minh grid/tree, Web/Windows accessibility, EN/VI/JA IME, direct-FFI Workspace IPC, native workflow, installer/update/rollback và support ownership. Reopen khi mobile/additional desktop trở thành roadmap thật, baseline fail gate, hoặc Flutter pass cùng slice với total risk thấp hơn. |
 | WinUI 3 | `ALTERNATIVE` | Q-10 phải chứng minh lợi ích UI/accessibility/packaging bù servicing clock. |
 | Browser + agent only | `CONDITIONAL` + `FOLLOW-UP PRODUCT DECISION REQUIRED` | Không được tự xóa Web-rendered Desktop surface; LNA/IPC/install chưa qualify. |
 | Tauri/Rust | `ALTERNATIVE` + `QUALIFICATION REQUIRED` challenger | React reuse tốt nhưng thêm Rust/updater/IPC và chưa có multi-year Tauri LTS evidence; Q-08/Q-10/Q-11/Q-15 phải pass. |
@@ -408,7 +419,8 @@ khỏi Desktop cũng bỏ WebView2 message bridge ở installed presentation.
 ### Strongest case AGAINST Flutter
 
 Core v0 hiện cần browser + Windows Workspace/CAD/Office, không cần mobile. Flutter không bỏ `.NET
-Workspace`; nó thêm Dart/Flutter, JS/Wasm Web branches và một IPC/native bridge phải tự sở hữu.
+Workspace`; nó thêm Dart/Flutter, JS/Wasm Web branches và direct FFI/Win32 IPC phải tự sở hữu, cộng
+thêm shim/plugin chỉ khi direct FFI gặp blocker.
 Grid/tree enterprise, browser behavior, Web/Windows accessibility, EN/VI/JA IME, DPI/multi-monitor,
 installer/rollback và servicing đều chưa có IDEA result. Đổi ngay sẽ tăng unknown chứ chưa chứng minh
 giảm total risk.
@@ -416,9 +428,9 @@ giảm total risk.
 ### Strongest case FOR current React + WPF/WebView2
 
 React đi thẳng vào browser DOM và cùng business UI chạy trong WebView2; WPF chỉ là shell hẹp, còn
-`.NET` có named-pipe/current-user path trực tiếp tới Workspace. Shape này giữ đúng ba surface hiện
-có và ít seam chưa được thiết kế hơn. Evergreen có thể chuyển renderer servicing cho managed runtime
-khi IT cho phép.
+`.NET` có named-pipe/current-user primitives cho Workspace. Shape này giữ đúng ba surface hiện có và
+là control đã được mô tả; số seam thực tế và total risk vẫn do Q-15 đo. Evergreen có thể chuyển
+renderer servicing cho managed runtime khi IT cho phép.
 
 ### Strongest case AGAINST current React + WPF/WebView2
 
@@ -458,7 +470,7 @@ Flutter pass cùng slice với lifecycle risk thấp hơn, giữ WPF/WebView2 ch
 | Chọn Server runtime/framework | `RESOLVED BY ENGINEERING RECOMMENDATION` | Java 25/Temurin 25 + Spring Boot 4.1.x/Modulith; PDA review và Q-01/Q-13 chưa chạy. |
 | Chọn DB/persistence/migration | `RESOLVED BY ENGINEERING RECOMMENDATION` | PostgreSQL 18 + Spring JDBC/pgJDBC + một Flyway/SQL migration authority; Q-02/Q-07/Q-14 `NOT-RUN`. |
 | Identity/Access Policy boundary | `RESOLVED BY ENGINEERING RECOMMENDATION` | Ordinary Spring Security sessions + one-instance invalidation được chọn; Spring Session JDBC `CONDITIONAL`; Identity không thay Access Policy; Q-06/Q-08/Q-11 `NOT-RUN`. |
-| Web/Desktop/Workspace shape | `RESOLVED BY ENGINEERING RECOMMENDATION` | React + WPF/WebView2 + per-user Workspace giữ surface hiện hành; Flutter là Q-15 challenger; bỏ surface cần Product Decision riêng. |
+| Web/Desktop/Workspace shape | `PROVISIONAL ENGINEERING CONTROL` | React + WPF/WebView2 + per-user Workspace giữ surface hiện hành làm Q-15 control; Flutter là challenger; seam/risk comparison `NOT-RUN`; bỏ surface cần Product Decision riêng. |
 | Ubuntu 26.04 platform / full operational build | `SELECT — platform direction` / `QUALIFICATION REQUIRED` | Official Temurin/Boot/PGDG base path đã có; Q-14 vẫn phải xác nhận exact bundle/driver/migration/backup/monitoring/hardening và company policy. |
 | License, certificate, signing, support/on-call | `BLOCKED` | Cần người/đơn vị công ty xác nhận; repository chưa có evidence. |
 | Transaction/concurrency/outbox/module boundary | `QUALIFICATION REQUIRED` | Q-01/Q-02/Q-05 và architecture tests, toàn bộ `NOT-RUN`. |
@@ -467,7 +479,7 @@ Flutter pass cùng slice với lifecycle risk thấp hơn, giữ WPF/WebView2 ch
 | CAD/Office/IRONCAD | `QUALIFICATION REQUIRED` | Q-09 exact app/version/license/worker. |
 | Client UI/install/update/native attack | `QUALIFICATION REQUIRED` | Q-10/Q-11/Q-15 dùng cùng clean image, data/locale fixture, threat cases và dirty Workspace cho React/WPF và Flutter. |
 | Observability/maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 runbook/SBOM/support rotation. |
-| Sếp duyệt TECH-001@0.12 | `NOT-RUN` | Brief này chỉ trình recommendation. |
+| Sếp duyệt TECH-001@0.13 | `NOT-RUN` | Brief này chỉ trình recommendation. |
 | PG3 | `NOT-RUN` | Gate owner phải đánh giá theo GOV/DOC-07/VVP; không có PASS trong tài liệu này. |
 
 Minimum evidence trước khi sếp có thể quyết định Tech: xem đúng matrix/brief/source pins; xác nhận
@@ -488,21 +500,21 @@ operational theo gate owner, không được
 | `Q-05` | Plain owner-specific Adapter + bounded Spring outbox dispatcher: crash/duplicate/reorder/replay và consumer idempotency; Spring Integration `CONDITIONAL` | `NOT-RUN` |
 | `Q-06` | Spring Security ordinary session: fixation, CSRF, one-instance revoke/suspend, next-request refusal, commit race, restart invalidation, expiry/reauth và Workspace binding; Spring Session JDBC `CONDITIONAL` | `NOT-RUN` |
 | `Q-07` | Restore DB + Artifact + config/policy/key về mốc dùng được, đo RTO/RPO | `NOT-RUN` |
-| `Q-08` | Named pipe cross-user/cross-Workspace, replay/oversize/version/reconnect refusal; alternate Flutter/Tauri client nếu nhánh đó vào PoC | `NOT-RUN` |
+| `Q-08` | `.NET` named-pipe baseline giữ `SELECT`; Flutter alternate IPC client được chạy trong Q-15 bằng direct Dart FFI trước; Tauri/Rust/JavaFX vẫn `DEFERRED` nếu chưa được chọn riêng | `NOT-RUN` |
 | `Q-09` | Exact Office/IRONCAD open/save, stale/in-use/error và Representation provenance; Flutter native bridge so cùng fixture ở Q-15 | `NOT-RUN` |
-| `Q-10` | WPF/WebView2 và Flutter install/runtime, online/offline update, dirty Workspace rollback, signing/SBOM trên cùng image | `NOT-RUN` |
+| `Q-10` | Option A provisional control và Flutter active challenger cùng chạy install/runtime, online/offline update, dirty Workspace rollback, signing/SBOM trên cùng image; các branch khác chưa được chọn vẫn `DEFERRED` | `NOT-RUN` |
 | `Q-11` | WebView2 và Flutter Web/Windows navigation/message/origin/IPC attack boundary, CSRF/DNS rebinding và hostile-client refusal | `NOT-RUN` |
 | `Q-12` | Actuator/Micrometer/OpenTelemetry/JFR/log/metric/trace incident diagnosis, redaction/cardinality/runbook | `NOT-RUN` |
 | `Q-13` | So equivalent Java Server + .NET Windows với unified-.NET candidate: staffing, patch, onboarding, incident rotation, full dependency clocks, hai-ecosystem SBOM/support burden; đổi chỉ khi vượt management threshold và .NET đạt mandatory behavior với lower total risk | `NOT-RUN` |
 | `Q-14` | Exact `CORE BASELINE`: Temurin + Boot Web/Modulith/Security ordinary sessions/JDBC/Flyway/task-outbox/observability + PostgreSQL/Ubuntu 26.04 bundle/systemd/backup/monitoring/restore; conditional dependencies không có trong graph nếu chưa trigger; 24.04/.NET/Windows branches `DEFERRED` | `NOT-RUN` |
-| `Q-15` | Cùng vertical slice Login → Search → Browser → Detail → Checkout → Open/Workspace → Check-in status trên A và B; đo grid/tree, keyboard, accessibility, EN/VI/JA IME, multi-window/DPI, authenticated IPC, startup/memory/render, installer/update/rollback và security theo frozen measurable envelope trong matrix §12.1 | `NOT-RUN` |
+| `Q-15` | Cùng vertical slice Login → Search → Browser → Detail → Checkout → Open/Workspace → Check-in status trên A provisional control và B challenger; B dùng direct Dart FFI named-pipe trước, fallback shim/plugin chỉ khi ghi nhận blocker; đo grid/tree, keyboard, accessibility, EN/VI/JA IME, multi-window/DPI, authenticated IPC, startup/memory/render, installer/update/rollback và security theo frozen measurable envelope trong matrix §12.1 | `NOT-RUN` |
 
 Không có comparative branch nào được giả làm đã chạy. “Deferred” chỉ nghĩa chưa thực hiện vì không
 phải Core v0 baseline.
 
 ## 14. Product impact và governance
 
-`TECH-001@0.12` chỉ trình bày một recommendation để sếp phản biện:
+`TECH-001@0.13` chỉ trình bày một recommendation để sếp phản biện:
 
 - **No Product Scope Change.** Không đổi FTR, REQ, Feature, Spec, DOC-01…DOC-08 hay DDM capability
   semantics.

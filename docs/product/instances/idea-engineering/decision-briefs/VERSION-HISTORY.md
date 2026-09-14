@@ -11,12 +11,12 @@ quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu m�
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Draft; 14 mã FTR; nguồn hiện hành đã đồng bộ; toàn bộ bản mới chỉ `PARTIAL`, quyết định của sếp `NOT-RUN` |
 | [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Draft; 74 yêu cầu và bảy điểm Spec còn mở; nguồn hiện hành đã đồng bộ; toàn bản chưa review đầy đủ và quyết định của sếp `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.12 | Draft; Linux-first Java/Temurin/Spring Server giữ nguyên; React/WPF/WebView2 giữ làm Client baseline và Flutter là Q-15 qualification challenger; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.13 | Draft; Linux-first Java/Temurin/Spring Server giữ nguyên; React/WPF/WebView2 là provisional Q-15 control và Flutter là direct-FFI-first challenger; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
 
 Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.16 có
 17 mục tiêu cùng các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6,
 DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05 ở Draft 0.20,
-DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.9, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026,
+DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.10, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026,
 56 task và 756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không tự chuyển sang toàn bộ nội dung mới.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
@@ -495,3 +495,16 @@ Server đang được khuyến nghị sau bản kế nhiệm này.
 | Candidate disposition | A `SELECT` + qualification; B Flutter `ALTERNATIVE` + qualification challenger; C cần Product Decision riêng; D reject cho Core v0; E/F alternative cần qualification |
 | Qualification | Q-15 same-slice PoC có acceptance envelope đo được nhưng chưa thực hiện; mọi test/benchmark/approval vẫn `NOT-RUN`, ngưỡng chưa được authority chốt giữ `BLOCKED` |
 | Product impact | **No Product Scope Change**; không đổi FTR, REQ, Feature, Spec, DOC-01…06/08 semantics, architecture, DDM capability semantics, ADR hay PG state |
+
+## 25. Sửa review Client/UI control và Flutter IPC — 14/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-TECH-CLIENT-002](../registers/CHG-2026-09-14-client-ui-stack-review-correction.md) — successor correction với predecessor hashes và verifier provenance |
+| Nguồn research | `IE-RES-TECH-CLIENT-20260914-001@0.2 → @0.3`; A trở thành `SELECT — PROVISIONAL QUALIFICATION CONTROL`; không claim fewer seams/lower risk |
+| Ma trận quyết định | `IE-KNW-TECH-DEC-001@0.4 → @0.5`; sửa Q-08 và Q-10 để Flutter là active Q-15 challenger thay vì deferred |
+| Tech | `TECH-001@0.12 → @0.13`; làm rõ topology A/B và giữ nguyên recommendation `KEEP CURRENT BASELINE, BUT FLUTTER REMAINS QUALIFICATION CHALLENGER` |
+| Flutter IPC | Q-15 thử direct Dart FFI → Win32 named pipe trước; chỉ thêm narrow C ABI/C++ shim hoặc Flutter plugin khi có blocker đo được và ghi nhận |
+| Roadmap metadata | `DOC-07@0.9 → @0.10`; chỉ route research/matrix/Tech correction; lịch, 56 task, 756 giờ, requirement và gate không đổi |
+| Verification | Repository/diagram validators tiếp tục `NOT-RUN` theo direct user execution override; không có GitHub status-check evidence và không suy diễn PASS |
+| Product impact | **No Product Scope Change**; không đổi FTR, REQ, Feature, Spec, DOC-01…06/08 semantics, architecture, Server stack, DDM capability semantics, ADR hay PG state |

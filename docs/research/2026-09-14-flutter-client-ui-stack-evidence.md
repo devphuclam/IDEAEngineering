@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Research ID | `IE-RES-TECH-CLIENT-20260914-001` |
-| Document class / version / status | `RESEARCH-COMPARISON` / `0.2` / `Draft` |
+| Document class / version / status | `RESEARCH-COMPARISON` / `0.3` / `Draft` |
 | Product normativity | `INFORMATIVE`; this study creates no Product requirement and approves no Tech choice |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
 | Reviewer / acceptance authority | Product Decision Authority; review and acceptance `NOT-RUN` |
-| Applicable baseline | IDEA Engineering Core v0 Client/UI candidate baseline at repository `main` SHA `30ecb802bf414df33dd076bfdc83652f7d3aa67a` |
+| Applicable baseline | IDEA Engineering Core v0 Client/UI candidate baseline at repository `main` SHA `814b81bc3dcdd9caa0203b5aa62ccaf909514e97` |
 | Evidence date / retrieval | `2026-09-14` (Asia/Saigon) |
 | Classification / retention | `INTERNAL`; retain with the Tech evidence chain |
 | Source / upstream trace | Current [IDEA catalogue](../product/instances/idea-engineering/README.md), [DOC-05](../product/instances/idea-engineering/DOC-05-architecture-description.md), [DOC-08](../product/instances/idea-engineering/DOC-08-ui-ux-and-interaction-specification.md), [TECH-001](../product/instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md), [technology decision matrix](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md) and dated first-party sources cited below |
-| Downstream trace | Current successor [technology matrix `IE-KNW-TECH-DEC-001@0.4`](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md), [TECH-001@0.12](../product/instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md), DOC-07@0.9 routing and [change record `IE-CHG-TECH-CLIENT-001@0.1`](../product/instances/idea-engineering/registers/CHG-2026-09-14-client-ui-stack-re-evaluation.md); no downstream approval is created here |
-| Change record / predecessor | [IE-CHG-TECH-CLIENT-001@0.1](../product/instances/idea-engineering/registers/CHG-2026-09-14-client-ui-stack-re-evaluation.md); predecessor `IE-RES-TECH-CLIENT-20260914-001@0.1` at repository commit `30ecb802bf414df33dd076bfdc83652f7d3aa67a`, SHA-256 `B6CF568DC397408B438BAAE5AFD98BF45965EE470B3FFEEF0E24BEB06106E196`; revision `0.2` closes the complete-task coverage gaps for the 16 Flutter questions, six-candidate comparison, architecture challenge and measurable qualification proposal; Product Scope impact `NONE` |
-| Supersedes / Superseded by | Supersedes `IE-RES-TECH-CLIENT-20260914-001@0.1`; superseded by `NOT-APPLICABLE` |
+| Downstream trace | Current successor [technology matrix `IE-KNW-TECH-DEC-001@0.5`](../product/knowledge/2026-09-13-core-v0-technology-decision-matrix.md), [TECH-001@0.13](../product/instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md), DOC-07@0.10 routing and [change record `IE-CHG-TECH-CLIENT-002@0.1`](../product/instances/idea-engineering/registers/CHG-2026-09-14-client-ui-stack-review-correction.md); no downstream approval is created here |
+| Change record / predecessor | [IE-CHG-TECH-CLIENT-002@0.1](../product/instances/idea-engineering/registers/CHG-2026-09-14-client-ui-stack-review-correction.md); predecessor `IE-RES-TECH-CLIENT-20260914-001@0.2` at repository commit `814b81bc3dcdd9caa0203b5aa62ccaf909514e97`, SHA-256 `29EC4980B7555BA391B3EC15F400C9FA65830699642DE3CEFC6149225237083D`; revision `0.3` makes Option A a provisional qualification control, corrects the Flutter Q-15 IPC branch to direct Dart FFI-first and preserves all unrun outcomes; Product Scope impact `NONE` |
+| Supersedes / Superseded by | Supersedes `IE-RES-TECH-CLIENT-20260914-001@0.2`; superseded by `NOT-APPLICABLE` |
 | Review trigger | Product Decision Authority review; approved Client/UI requirement or roadmap change; relevant framework/runtime support change; or completion of the controlled Option A/Option B qualification |
 | Evidence status | Publication facts current at retrieval; IDEA Client/UI benchmark and qualification evidence `NOT-RUN` |
 
@@ -62,7 +62,7 @@ No popularity claim, unsourced benchmark or numeric score is used.
 
 | Option | Candidate | Disposition | Controlled rationale |
 |---|---|---|---|
-| A | React + WPF + WebView2 + `.NET Workspace` | `SELECT`; `QUALIFICATION REQUIRED` | Retain as the engineering recommendation because React serves the browser and the same business UI can run in WebView2, while the small WPF/.NET shell and Workspace use directly documented Windows and same-user IPC primitives. The exact IDEA vertical slice, accessibility, deployment and resource envelope remain `NOT-RUN`. |
+| A | React + WPF + WebView2 + `.NET Workspace` | `SELECT — PROVISIONAL QUALIFICATION CONTROL`; `QUALIFICATION REQUIRED` | Retain as the controlled starting/reference implementation because it matches the current documented Web/Desktop proposal and supplies a consistent comparator for Q-15. This is not evidence that its hop count, implementation effort or lifecycle risk is lower; the exact IDEA vertical slice, accessibility, deployment and resource envelope remain `NOT-RUN`. |
 | B | Flutter Web + Flutter Windows + `.NET Workspace` | `ALTERNATIVE`; `QUALIFICATION REQUIRED` | Flutter is a serious challenger with supported Web and Windows targets, one Dart presentation model and first-party native-extension seams. It has not yet demonstrated IDEA's data-heavy grid/tree behavior, browser-native behavior, Web/Windows accessibility, EN/VI/JA IME, secure external-process Workspace IPC, signed update/rollback or support policy. |
 | C | React browser-first + `.NET Workspace` | `CONDITIONAL`; `FOLLOW-UP PRODUCT DECISION REQUIRED` | It could remove an installed shell and embedded-renderer bridge, but the current Spec explicitly carries Desktop and Web-rendered Desktop surface obligations. Removing them is not a Tech-only substitution. Browser-to-agent discovery and authentication also remain unqualified. |
 | D | React + Electron | `REJECT FOR CORE V0` | It reuses React, but IDEA would own a bundled Chromium, Node and Electron patch train. Electron supports only its latest three stable majors and releases a major approximately every eight weeks. That extra runtime authority has no evidenced Core v0 advantage over the current WebView2 route. |
@@ -70,7 +70,8 @@ No popularity claim, unsourced benchmark or numeric score is used.
 | F | WinUI 3 + WebView2 | `ALTERNATIVE`; `QUALIFICATION REQUIRED` | It preserves React/WebView2 reuse and supplies a current Windows-native shell. It does not yet show a product benefit over WPF sufficient to justify migration, and the Windows App SDK has its own servicing clock. |
 
 This is an engineering recommendation, not Product Decision Authority acceptance. Option A's
-`SELECT` therefore means “keep as the proposal taken into qualification,” not “approved for build.”
+`SELECT` means “use as the provisional qualification control,” not “proven lower-risk,” “winner of
+Q-15” or “approved for build.”
 
 ## 3. Why Flutter remains a serious challenger
 
@@ -168,23 +169,39 @@ This is an engineering recommendation, not Product Decision Authority acceptance
 
 ### 3.6 Windows native integration and Workspace IPC
 
-- `OFFICIAL-PRODUCT-FACT`: Flutter Windows uses a C++ host and supports Win32/COM-facing integration
-  through plugins, platform channels and Dart FFI
+- `OFFICIAL-PRODUCT-FACT`: Flutter Windows uses a C++ host and supports native integration through
+  plugins, platform channels and Dart FFI. Current Flutter guidance allows FFI binding to Windows
+  system DLLs without requiring a custom Flutter plugin
   ([Windows integration](https://docs.flutter.dev/platform-integration/windows/building),
   [platform channels](https://docs.flutter.dev/platform-integration/platform-channels),
   [FFI](https://docs.flutter.dev/platform-integration/bind-native-code)).
 - `OFFICIAL-PRODUCT-FACT`: platform channels join Dart to host code inside the Flutter application;
   FFI calls a C ABI. Neither mechanism by itself specifies authenticated IPC with the separate
   `.NET Workspace` process.
+- `OFFICIAL-PRODUCT-FACT`: a Win32 named-pipe client opens the pipe with `CreateFile`/`WaitNamedPipe`
+  and exchanges bytes with `ReadFile`/`WriteFile`; these are C-callable Windows system APIs
+  ([Win32 named-pipe client](https://learn.microsoft.com/en-us/windows/win32/ipc/named-pipe-client)).
 - `OFFICIAL-PRODUCT-FACT`: .NET 10 exposes `PipeOptions.CurrentUserOnly`; on Windows it verifies the
   user account and elevation level for named-pipe peers
   ([.NET PipeOptions](https://learn.microsoft.com/en-us/dotnet/api/system.io.pipes.pipeoptions?view=net-10.0)).
-- `IDEA-INFERENCE`: Option A can implement the current same-user Workspace candidate directly in
-  .NET. Option B needs a Dart/C++/FFI or another deliberately designed client for the same protocol.
-  Localhost, a local socket or process stdio is not authorization by itself.
+- `IDEA-INFERENCE`: Option A can implement the current same-user Workspace candidate in .NET.
+  Option B's first Q-15 branch should bind the Win32 named-pipe client API directly with Dart FFI.
+  A narrow C ABI/C++ shim or Flutter plugin is a fallback only if a measured FFI blocker requires
+  it. Localhost, a local socket, process stdio or FFI itself is not authorization.
 - `QUALIFICATION-UNKNOWN`: endpoint discovery, current-user/session isolation, mutual proof,
   framing, size limits, replay defense, version negotiation, restart handshake, malformed-message
   handling and CAD/Office/file-dialog flows.
+
+The installed-client hop inventory is a hypothesis to measure, not a risk conclusion:
+
+```text
+A control:  React → WebView2 message → WPF → Win32 named pipe → .NET Workspace
+B primary:  Dart → FFI → Win32 named pipe → .NET Workspace
+B fallback: Dart → narrow C ABI/C++ shim or plugin → Win32 named pipe → .NET Workspace
+```
+
+Fewer visible boxes do not prove lower implementation, security, diagnostic or lifecycle risk.
+Q-15 must record the implemented boundaries, code and dependency owners, failure modes and results.
 
 Under the current architecture, multi-GB staging, digesting, resume, journal and recovery remain in
 the Workspace rather than crossing a presentation channel as buffered UI data.
@@ -227,7 +244,7 @@ official source establishes only a mechanism, the IDEA-specific outcome remains
 | 8 | **No first-party evidence reviewed establishes a production-ready enterprise BOM grid/tree for IDEA.** | Flutter core offers `DataTable`, pagination, lazy lists, focus and shortcut primitives, but its own [`DataTable` API](https://api.flutter.dev/flutter/material/DataTable-class.html) warns about whole-child mounting/painting with `SingleChildScrollView`. React core likewise does not ship an enterprise grid. Exact dependency, license, virtualization, edit, keyboard and semantic behavior is `QUALIFICATION REQUIRED` for both A and B. |
 | 9 | **Single-window Windows, DPI and input plumbing are implemented; multi-window, multi-monitor and mixed-DPI product behavior remains unqualified.** | The Windows embedder reacts to DPI changes when a window moves across displays ([Flutter window source](https://api.flutter.dev/windows-embedder/flutter__window_8h_source.html)). Official guidance states that an external native window requires explicit lifecycle-message forwarding ([external windows](https://docs.flutter.dev/platform-integration/windows/extern_win)). Proposed qualification covers window creation, ownership, focus, restoration, monitor removal and mixed-DPI placement; no PASS is claimed. |
 | 10 | **Yes, Flutter Windows can integrate with the separate per-user `.NET Workspace`, provided the external-process protocol is explicitly implemented and secured.** | Platform channels and FFI connect Dart to code in the Flutter host; they do not authenticate another process. The `.NET Workspace` remains separate and authoritative for its assigned local-custody responsibilities. Discovery, peer identity, request binding, replay defense and recovery remain `QUALIFICATION REQUIRED`. |
-| 11 | **The preferred PoC mechanism is a narrow Windows C++ plugin acting as a client of the existing versioned `.NET` named-pipe protocol.** This is a candidate for qualification, not an approved architecture decision. | The Workspace side can enforce `PipeOptions.CurrentUserOnly`; on Windows .NET documents account and elevation checks ([`PipeOptions`](https://learn.microsoft.com/en-us/dotnet/api/system.io.pipes.pipeoptions?view=net-10.0)). The candidate plugin exposes typed operations rather than arbitrary command, path or filesystem proxies. Its proposed test covers per-session proof, length limits, nonce/request correlation, timeout, restart, malformed frames and version negotiation. |
+| 11 | **The preferred first PoC mechanism is direct Dart FFI binding to the Win32 named-pipe client API.** Add a narrow C ABI/C++ shim or Flutter plugin only when a measured direct-FFI blocker requires it; neither branch is an approved architecture decision. | Dart FFI calls native C APIs, and the Win32 named-pipe client uses C-callable `CreateFile`/`WaitNamedPipe` plus `ReadFile`/`WriteFile`. The Workspace side can enforce `PipeOptions.CurrentUserOnly`; on Windows .NET documents account and elevation checks ([`PipeOptions`](https://learn.microsoft.com/en-us/dotnet/api/system.io.pipes.pipeoptions?view=net-10.0)). Both branches must expose typed operations rather than arbitrary command/path/filesystem proxies and test native handle/memory lifetime, overlapped I/O or bounded blocking, cancellation, session proof, framing/length, replay, correlation, timeout, restart, malformed frames and version negotiation. |
 | 12 | **Flutter supports build and package paths for Windows, but IDEA does not yet have a complete managed-update contract.** | Official Flutter guidance lists the executable, Flutter/plugin DLLs, data and Visual C++ runtime and documents Store/MSIX or traditional distribution ([Windows build](https://docs.flutter.dev/platform-integration/windows/building), [Windows deployment](https://docs.flutter.dev/deployment/windows)). Signing identity, staged rollout, offline installation, atomic rollback, updater ownership and Workspace-compatible migration remain `QUALIFICATION-UNKNOWN`. |
 | 13 | **A full Flutter Windows presentation can remove WPF and WebView2 from the installed Desktop UI; it cannot remove the browser, the Server API, or the `.NET Workspace`.** | Flutter Windows owns its Win32 runner and engine. Flutter Web remains a browser-delivered target. Native file custody, resumable transfer, recovery and CAD/Office integration do not become presentation responsibilities merely because WebView2 is removed. |
 | 14 | **Removing WebView2 removes an embedded browser/DOM host, not every Web capability.** | Flutter's [`Router`](https://docs.flutter.dev/ui/navigation) integrates with browser History and Flutter supports [deep links](https://docs.flutter.dev/ui/navigation/deep-linking). The trade is that ordinary HTML controls/DOM semantics, CSS/Web-component reuse and browser inspection are no longer the primary UI substrate; Flutter supplies its own widget inspector and [DevTools](https://docs.flutter.dev/tools/devtools). Browser-native selection, printing, password-manager/autofill, file interaction and automation therefore require explicit qualification rather than assumed parity. |
@@ -240,7 +257,7 @@ official source establishes only a mechanism, the IDEA-specific outcome remains
 |---|---|---|---|---|---|---|
 | Web SPA | Native browser DOM/React candidate; `QUALIFICATION REQUIRED` | Supported app-centric Web target; JS/Wasm branches require qualification | Same Web candidate as A | Web build reused inside bundled Chromium | Web build reused inside system WebView | Same WebView2 content as A |
 | Windows Desktop | Narrow WPF shell plus reused Web UI | Native-compiled Flutter Windows presentation | Installed shell removed or reduced; product decision required | Chromium/Node desktop shell | Rust/system-WebView shell | Current Windows-native shell |
-| Workspace IPC | Direct .NET same-user named-pipe path | Custom Dart/C++/FFI external-process client required | Secure browser-agent bridge unproved | Node/native bridge plus Workspace protocol | Rust command/capability bridge plus Workspace protocol | Direct .NET path |
+| Workspace IPC | .NET same-user named-pipe client behind WPF/WebView2 messaging | Direct Dart FFI → Win32 named-pipe client first; narrow shim/plugin only on measured blocker | Secure browser-agent bridge unproved | Node/native bridge plus Workspace protocol | Rust command/capability bridge plus Workspace protocol | Direct .NET path |
 | Security surface | Browser + WebView2 + narrow .NET bridge | Browser renderer + Dart engine/plugins + custom IPC | Browser-origin/local-agent bridge | Electron + Chromium + Node + npm + IPC | Tauri + Rust + system WebView + capabilities | Windows App SDK + WebView2 + narrow .NET bridge |
 | Maintained ecosystems | React/TS toolchain and .NET client/Workspace | Flutter/Dart and .NET Workspace | React/TS and .NET Workspace | React/TS, Electron/Node and .NET Workspace | React/TS, Rust/Tauri and .NET Workspace | React/TS, Windows App SDK and .NET Workspace |
 | UI reuse | One React business UI across Web and embedded Desktop; native shell remains narrow | Potentially one Dart widget model across Web and Windows | One React Web UI | One React UI | One React UI | One React business UI; native shell remains narrow |
@@ -258,7 +275,7 @@ official source establishes only a mechanism, the IDEA-specific outcome remains
 | Candidate | Strongest evidenced fit | Material weakness / cost | Unknowns that prevent unconditional selection | Minimum next qualification |
 |---|---|---|---|---|
 | A — React + WPF/WebView2 | Direct browser-DOM Web path; one React business UI can serve browser and embedded Desktop; narrow .NET shell aligns with current `.NET Workspace` and named-pipe candidate | WebView2 bridge, WPF shell, React bundle and Workspace have coordinated version/failure boundaries; Windows-only shell | Exact grid/tree dependency, bridge hardening, browser/embedded parity, accessibility, resource envelope and signed coordinated update | Full same-slice Option A reference run; use its raw result as the comparison control, not an assumed PASS |
-| B — Flutter Web + Flutter Windows | Official Web and Windows targets; potentially one Dart widget/state/localization/test model; first-party C++/channel/FFI extension seams; strongest mobile optionality | Flutter-rendered Web semantics and custom native/Workspace boundary both need proof; `.NET Workspace` remains, and platform code reduces actual reuse | Grid/tree maturity, browser-native behavior, Web/Windows accessibility, IME, multi-window/DPI, secure IPC, package/update/rollback and measured code reuse | Implement the same slice as A with a named-pipe plugin prototype and frozen Web/Windows qualification matrix |
+| B — Flutter Web + Flutter Windows | Official Web and Windows targets; potentially one Dart widget/state/localization/test model; first-party native/FFI extension seams; strongest mobile optionality | Flutter-rendered Web semantics and the direct-FFI/native Workspace boundary both need proof; `.NET Workspace` remains, and platform code reduces actual reuse | Grid/tree maturity, browser-native behavior, Web/Windows accessibility, IME, multi-window/DPI, secure IPC, package/update/rollback and measured code reuse | Implement the same slice as A using direct Dart FFI first; add and separately account for a shim/plugin only on a recorded blocker |
 | C — React browser-first | Fewest UI containers; direct browser DOM, browser delivery and React reuse | Browser cannot simply assume local filesystem/process authority; the current installed Desktop surface cannot be removed by a Tech study | Secure local-agent discovery/authentication, enterprise browser policy, native dialog/process launch UX, offline/recovery behavior and Product Decision Authority disposition | Threat-model and prototype a no-generic-proxy local bridge; separately obtain the required product-surface decision |
 | D — React + Electron | Reuses React and supplies a documented multi-process desktop runtime with one bundled browser version | IDEA owns Electron, bundled Chromium and Node patching plus its bridge and `.NET Workspace`; a safe candidate deliberately excludes broad Node/native exposure | No evidenced Core v0 benefit that offsets runtime/patch ownership; resource, update, accessibility and IPC remain unmeasured | Defer implementation unless a requirement appears that A cannot meet; if reopened, run the same slice and patch-latency/update drill |
 | E — React + Tauri | Reuses React; official capabilities/runtime authority can limit WebView command access | Adds Rust/Tauri/plugin ownership while `.NET Workspace` remains; system-WebView behavior and updater-key custody join the operational boundary | Exact command scopes, IPC topology, accessibility, runtime compatibility, signing/update/recovery and team ownership | Threat-model capability files and typed commands, then run same slice plus updater-key recovery exercise |
@@ -272,7 +289,7 @@ reopened. The client-side comparison counts the Workspace even when the UI is sh
 | Candidate | Toolchains/ecosystems that still require named ownership | Build, diagnosis and patch implication |
 |---|---|---|
 | A | React/TypeScript package graph; WPF/WebView2 and `.NET Workspace` NuGet graph | Web/browser diagnostics plus .NET/native-shell and IPC diagnosis; coordinate Web bundle, shell, Evergreen policy and Workspace compatibility |
-| B | Flutter/Dart pub graph; `.NET Workspace`; C++/CMake or FFI binding code when required by Windows integration | Flutter/Chrome DevTools plus native C++ and .NET/IPC diagnosis; coordinate Web output, Flutter engine/plugins, signed Windows bundle and Workspace |
+| B | Flutter/Dart pub graph; `.NET Workspace`; Dart FFI bindings; C/C++ shim or plugin only if a recorded blocker requires it | Flutter/Chrome DevTools plus FFI/Win32 and .NET/IPC diagnosis; add native C/C++ diagnosis and supply-chain ownership only if the fallback is used; coordinate Web output, signed Windows bundle and Workspace |
 | C | React/TypeScript; `.NET Workspace`/local agent and its browser-facing bridge | Web diagnosis plus a separate local-agent/security harness; Web and agent versions need explicit negotiation rather than silent divergence |
 | D | React/TypeScript, Electron/Node/native dependencies and `.NET Workspace` | Browser/renderer, Electron main process, native module and Workspace diagnosis; Electron/Chromium/Node patch cadence becomes an IDEA-owned release input |
 | E | React/TypeScript, Rust/Cargo/Tauri plugins and `.NET Workspace` | WebView, Rust command/capability and Workspace diagnosis; Tauri/plugin/system-WebView and signing-key changes require coordinated ownership |
@@ -285,7 +302,7 @@ build baseline, each option needs named owners, reproducible CI, locked direct/t
 inventory, licenses/SBOM, security-advisory intake, patch target, debugging/profiling runbook and a
 second maintainer capable of recovery. Flutter therefore does **not** reduce the ecosystem count
 while `.NET Workspace` remains; it replaces the React/WPF presentation toolchain with Dart/Flutter
-and, for the proposed native seam, C++/FFI responsibilities.
+and direct FFI/Win32 responsibilities, plus C/C++ ownership only if the fallback is justified.
 
 ## 6. Security and lifecycle facts for the comparison controls
 
@@ -344,8 +361,8 @@ boundary controls.
 Flutter can make Web and installed Windows two targets of one presentation architecture rather than
 one Web application hosted by two different containers. Shared Dart widgets, state/presentation
 logic, validation, localization and widget tests can reduce renderer-bridge-specific UI behavior.
-On Windows, a Flutter runner can own native windowing and a deliberately narrow plugin can call the
-Workspace protocol, native dialogs and approved OS services; the WebView2 message bridge and WPF
+On Windows, a Flutter runner can own native windowing and direct Dart FFI can call the Win32
+Workspace protocol client; a deliberately narrow shim/plugin remains a measured fallback. The WebView2 message bridge and WPF
 presentation shell can disappear. That is a genuine simplification if the measured product slice
 shows high source reuse, native-quality Windows behavior and acceptable Web semantics. If IDEA later
 approves first-class mobile clients, Flutter's supported Android/iOS targets make this option more
@@ -362,9 +379,9 @@ Flutter would replace a Web implementation that directly uses the browser DOM wi
 rendering and Semantics model, while IDEA's most demanding screens are precisely custom grid/tree,
 keyboard, clipboard, IME and accessibility workflows. The current first-party evidence establishes
 mechanisms, not the result IDEA needs. The Windows target also does not eliminate the `.NET
-Workspace`; it adds a Dart-to-C++/FFI-to-named-pipe client and potentially custom COM/vendor-SDK
-bridges. Those are security, lifecycle and debugging seams that the current .NET shell can implement
-without crossing a language ABI.
+Workspace`; it adds Dart FFI-to-Win32 named-pipe bindings and, only if needed, a custom shim/plugin.
+Native handle/memory, async/cancellation, security, lifecycle and debugging remain qualification
+seams that the current .NET shell does not cross through FFI.
 
 The strongest anti-Flutter case is consequently the concentration of unresolved risk at both ends:
 browser-native behavior on Web and Windows-native/Workspace behavior on Desktop. Rewriting the
@@ -381,8 +398,9 @@ hardening and Evergreen lifecycle guidance. Under the current Web plus Windows s
 shortest path from repository architecture to a testable vertical slice and introduces no new UI
 language or native ABI bridge.
 
-The strongest case is therefore architectural continuity with fewer new ownership seams—not
-popularity, developer familiarity or a claim that WebView2/WPF is automatically secure or fast.
+The strongest case is therefore continuity with the current documented proposal and a well-defined
+control implementation—not evidence of fewer actual seams, lower lifecycle risk, or a claim that
+WebView2/WPF is automatically secure or fast.
 
 ### 7.4 Strongest case AGAINST current React + WPF/WebView2
 
@@ -440,7 +458,11 @@ The proposed slice covers:
 9. Web and Desktop build reproducibility, dependency/SBOM/license inventory, signing, upgrade,
    rollback and preservation of the Workspace directory.
 10. Unit/component/widget, browser E2E, Windows full-system automation, accessibility, visual and
-    IPC contract tests, with limitations recorded rather than silently skipped.
+     IPC contract tests, with limitations recorded rather than silently skipped.
+
+For Option B, the first implementation lane is direct Dart FFI to the Win32 named-pipe client API.
+Only a recorded direct-FFI blocker may introduce the fallback shim/plugin, which must then be measured
+and inventoried as an additional boundary rather than silently folded into Flutter.
 
 ### 8.1 Proposed measurable acceptance record
 
@@ -479,12 +501,13 @@ same-slice qualification. Do not approve Flutter, reject Flutter or publish perf
 documentation alone. Do not remove the Desktop/Web-rendered Desktop surface through this research
 record.
 
-The material reason is not that React is more popular or that Flutter is mobile-oriented. It is that
-Option A currently has fewer unowned seams against IDEA's Windows-only local custody boundary:
-React already covers the Web surface, WebView2 reuses that UI in Desktop, and .NET supplies the
-current Workspace and same-user IPC path. Flutter's stronger presentation-code reuse and future
-platform optionality are real, but the latter is not a current requirement and the former does not
-remove the `.NET Workspace` ecosystem.
+The material reason is not that React is more popular or that Flutter is mobile-oriented. Option A
+is retained as the **provisional qualification control** because it is the current documented
+proposal: React covers the Web surface, WebView2 reuses that UI in Desktop, and .NET supplies the
+current Workspace client. This establishes a consistent starting comparator, not a proven seam-count
+or lower-risk advantage. Flutter's stronger presentation-code reuse and future platform optionality
+are real, but the latter is not a current requirement and the former does not remove the `.NET
+Workspace` ecosystem. Q-15 decides the implemented boundary and risk comparison.
 
 Reopen the recommendation when at least one of these evidence-bearing triggers occurs:
 
