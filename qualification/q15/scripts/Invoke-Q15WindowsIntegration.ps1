@@ -1,5 +1,6 @@
 param(
-    [string]$FlutterCommand = 'flutter'
+    [string]$FlutterCommand = 'flutter',
+    [string]$OutputDirectory = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -7,16 +8,23 @@ Set-StrictMode -Version Latest
 
 $q15Root = Split-Path -Parent $PSScriptRoot
 $repositoryRoot = (Resolve-Path "$q15Root/../..").Path
-$runtimeRoot = "$q15Root/.runtime/windows-integration"
+$runtimeRoot = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) { "$q15Root/.runtime/windows-integration" } else { $OutputDirectory }
 New-Item -ItemType Directory -Force -Path $runtimeRoot | Out-Null
+$runtimeRoot = (Resolve-Path -LiteralPath $runtimeRoot).Path
 
 $secretBytes = [byte[]]::new(32)
 [Security.Cryptography.RandomNumberGenerator]::Fill($secretBytes)
 $encodedSecret = [Convert]::ToBase64String($secretBytes).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-$previousSecret = [Environment]::GetEnvironmentVariable('IDEA_Q15_WORKSPACE_SECRET', 'Process')
-$previousCustodyRoot = [Environment]::GetEnvironmentVariable('IDEA_Q15_CUSTODY_ROOT', 'Process')
+$pipeName = "idea-q15-workspace-$([Guid]::NewGuid().ToString('N'))"
+$previous = @{}
+foreach ($name in @('IDEA_Q15_WORKSPACE_SECRET', 'IDEA_Q15_CUSTODY_ROOT', 'IDEA_Q15_PIPE_NAME', 'IDEA_Q15_WORKSPACE_ID', 'IDEA_Q15_WORKSPACE_SESSION')) {
+    $previous[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
+}
 $env:IDEA_Q15_WORKSPACE_SECRET = $encodedSecret
 $env:IDEA_Q15_CUSTODY_ROOT = "$runtimeRoot/custody"
+$env:IDEA_Q15_PIPE_NAME = $pipeName
+$env:IDEA_Q15_WORKSPACE_ID = 'WS-Q15-001'
+$env:IDEA_Q15_WORKSPACE_SESSION = 'SESSION-Q15-001'
 
 $apiProject = "$q15Root/shared/dotnet/Idea.Q15.ApiHarness/Idea.Q15.ApiHarness.csproj"
 $workspaceProject = "$q15Root/shared/dotnet/Idea.Q15.Workspace/Idea.Q15.Workspace.csproj"
@@ -52,14 +60,18 @@ try {
 
     Push-Location "$q15Root/option-b/flutter"
     try {
-        foreach ($testFile in @(
+        $results = [Collections.Generic.List[object]]::new()
+    foreach ($testFile in @(
             'integration_test/direct_ffi_workspace_test.dart',
             'integration_test/critical_surface_test.dart'
         )) {
-            & $FlutterCommand test $testFile -d windows --reporter expanded
+            $kind = if ($testFile -like '*critical_surface*') { 'windows-ui-integration' } else { 'direct-ffi-ipc' }
+            $logPath = Join-Path $runtimeRoot ("$kind.runner.log")
+            & $FlutterCommand test $testFile -d windows --reporter expanded 2>&1 | Tee-Object -FilePath $logPath
             if ($LASTEXITCODE -ne 0) {
                 throw "$testFile exited with code $LASTEXITCODE."
             }
+            $results.Add([ordered]@{ test = $testFile; kind = $kind; result = 'PASS'; rawOutput = $logPath })
         }
     }
     finally {
@@ -73,8 +85,10 @@ finally {
             $childProcess.WaitForExit()
         }
     }
-    [Environment]::SetEnvironmentVariable('IDEA_Q15_WORKSPACE_SECRET', $previousSecret, 'Process')
-    [Environment]::SetEnvironmentVariable('IDEA_Q15_CUSTODY_ROOT', $previousCustodyRoot, 'Process')
+    foreach ($name in $previous.Keys) {
+        [Environment]::SetEnvironmentVariable($name, $previous[$name], 'Process')
+    }
 }
 
-Write-Host 'Q-15 Windows integration completed. Repository verifiers were NOT-RUN.'
+$results | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $runtimeRoot 'windows-integration-summary.json') -Encoding utf8
+Write-Host "Q-15 Windows integration completed. Raw outputs: $runtimeRoot. Repository verifiers were NOT-RUN."

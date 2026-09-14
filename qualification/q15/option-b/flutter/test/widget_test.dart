@@ -129,6 +129,55 @@ void main() {
       expect(find.text('設計変更・Cụm bơm'), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'grid generation resets paging state and shares horizontal scroll',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 700);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      Widget grid(String generation) => MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            height: 500,
+            child: PagedDocumentGrid(
+              total: 100000,
+              columns: List.generate(20, (index) => 'field${index + 1}'),
+              rows: {0: fixtureRow(0)},
+              selected: -1,
+              onNeedRow: (_) {},
+              onSelect: (_) {},
+              onOpen: (_) {},
+              label: 'Controlled document results',
+              editLabel: 'Edit title',
+              menuLabel: 'Document actions',
+              pagingKey: generation,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpWidget(grid('generation-a'));
+      final horizontal = tester.widget<SingleChildScrollView>(
+        find.byKey(const Key('grid-horizontal-scroll')),
+      );
+      expect(horizontal.controller, isNotNull);
+      await tester.drag(
+        find.byKey(const Key('grid-horizontal-scroll')),
+        const Offset(-500, 0),
+      );
+      await tester.pump();
+      expect(horizontal.controller!.offset, greaterThan(0));
+      await tester.pumpWidget(grid('generation-b'));
+      await tester.pump();
+      final reset = tester.widget<SingleChildScrollView>(
+        find.byKey(const Key('grid-horizontal-scroll')),
+      );
+      expect(reset.controller!.offset, 0);
+      expect(find.byKey(const Key('grid-header-cell-0')), findsOneWidget);
+      expect(find.byKey(const Key('grid-cell-0-0')), findsOneWidget);
+    },
+  );
 }
 
 final messages = Q15Messages.fromCatalog({

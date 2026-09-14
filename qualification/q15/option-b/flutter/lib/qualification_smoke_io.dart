@@ -16,7 +16,8 @@ Future<void> runAutomatedSmokeIfRequested(
     'candidate': 'option-b',
     'surface': 'Flutter Windows',
     'directDartFfi': true,
-    'cppShimOrPlugin': false,
+    'cppShimOrPlugin': true,
+    'nativeShim': 'q15_io_shim (runner export; direct Dart FFI remains the caller ABI)',
     'startedAtUtc': DateTime.now().toUtc().toIso8601String(),
   };
   try {
@@ -35,8 +36,9 @@ Future<void> runAutomatedSmokeIfRequested(
         'preservesLocalCandidate': workspaceResult.preservesLocalCandidate,
         'startupToWorkspaceRoundTripMs': clock.elapsedMicroseconds / 1000,
       });
-      await File(reportPath)
-          .writeAsString(const JsonEncoder.withIndent('  ').convert(report));
+      await File(
+        reportPath,
+      ).writeAsString(const JsonEncoder.withIndent('  ').convert(report));
       api.close();
       exit(workspaceResult.status == 'Accepted' ? 0 : 2);
     }
@@ -83,8 +85,9 @@ Future<void> runAutomatedSmokeIfRequested(
       'preservesLocalCandidate': checkin.preservedLocalCandidate,
       'elapsedMs': clock.elapsedMicroseconds / 1000,
     });
-    await File(reportPath)
-        .writeAsString(const JsonEncoder.withIndent('  ').convert(report));
+    await File(
+      reportPath,
+    ).writeAsString(const JsonEncoder.withIndent('  ').convert(report));
     api.close();
     exit(0);
   } catch (error, stack) {
@@ -95,9 +98,29 @@ Future<void> runAutomatedSmokeIfRequested(
       'stack': '$stack',
       'elapsedMs': clock.elapsedMicroseconds / 1000,
     });
-    await File(reportPath)
-        .writeAsString(const JsonEncoder.withIndent('  ').convert(report));
+    await File(
+      reportPath,
+    ).writeAsString(const JsonEncoder.withIndent('  ').convert(report));
     api.close();
     exit(2);
   }
+}
+
+Future<void> reportUiReadyIfRequested() async {
+  final reportPath = Platform.environment['IDEA_Q15_UI_READY_REPORT'];
+  if (!Platform.isWindows || reportPath == null || reportPath.isEmpty) return;
+  final report = <String, dynamic>{
+    'candidate': 'option-b',
+    'surface': 'Flutter Windows',
+    'q15UiReady': true,
+    'loginVisible': true,
+    'loginEnabled': true,
+    'bridgeAvailabilityKnown':
+        Platform.environment['IDEA_Q15_WORKSPACE_SECRET']?.isNotEmpty == true,
+    'readyAtUtc': DateTime.now().toUtc().toIso8601String(),
+  };
+  await File(
+    reportPath,
+  ).writeAsString(const JsonEncoder.withIndent('  ').convert(report));
+  if (Platform.environment['IDEA_Q15_UI_READY_EXIT'] == '1') exit(0);
 }

@@ -25,7 +25,7 @@ async function replaceText(page: Page, textboxName: string, value: string) {
 test("Flutter Web executes login, large search, detail and locale switch", async ({ page }) => {
   await page.goto("/");
   await enableSemantics(page);
-  await expect(page.getByText("IDEA Engineering Q-15").first()).toBeVisible();
+  await expect(page.getByRole("group", { name: /IDEA Engineering Q-15/ })).toBeVisible();
 
   await replaceText(page, "Username", "engineer");
   await replaceText(page, "Password", "q15-engineer-only");
@@ -63,4 +63,25 @@ test("Flutter Web exposes distinct empty, refused, error and expired states", as
   await replaceText(page, "Tìm tài liệu được kiểm soát", "__expire__");
   await page.getByRole("button", { name: "Tìm kiếm" }).click();
   await expect(page.getByText(/SESSION_EXPIRED/).first()).toBeVisible();
+});
+
+test("Flutter Web records transfer metrics for the large-fixture surface", async ({ page }, testInfo) => {
+  await page.goto("/");
+  await enableSemantics(page);
+  await expect(page.getByRole("textbox").first()).toBeVisible();
+  const resources = await page.evaluate(() => performance.getEntriesByType("resource").map((entry) => {
+    const resource = entry as PerformanceResourceTiming;
+    return {
+      name: resource.name,
+      durationMs: resource.duration,
+      transferSize: resource.transferSize,
+      encodedBodySize: resource.encodedBodySize,
+      decodedBodySize: resource.decodedBodySize
+    };
+  }));
+  await testInfo.attach("flutter-web-transfer-metrics.json", {
+    body: JSON.stringify({ candidate: "option-b", surface: "Flutter Web", resources }, null, 2),
+    contentType: "application/json"
+  });
+  expect(resources.some((resource) => resource.name.includes("flutter_bootstrap.js") || resource.name.includes("main.dart.js") || resource.name.includes("main.dart.wasm"))).toBe(true);
 });

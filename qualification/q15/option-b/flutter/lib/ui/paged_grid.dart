@@ -18,6 +18,7 @@ class PagedDocumentGrid extends StatefulWidget {
     required this.label,
     required this.editLabel,
     required this.menuLabel,
+    this.pagingKey = '',
   });
   final int total;
   final List<String> columns;
@@ -30,12 +31,17 @@ class PagedDocumentGrid extends StatefulWidget {
   final String editLabel;
   final String menuLabel;
 
+  /// A new query/profile generation invalidates all page, focus and edit state.
+  final String pagingKey;
+
   @override
   State<PagedDocumentGrid> createState() => _PagedDocumentGridState();
 }
 
 class _PagedDocumentGridState extends State<PagedDocumentGrid> {
   final _focus = FocusNode(debugLabel: 'Q15 document grid');
+  final _horizontal = ScrollController();
+  final _editorController = TextEditingController();
   final _requested = <int>{};
   final _multiSelected = <int>{};
   int? _editing;
@@ -50,25 +56,55 @@ class _PagedDocumentGridState extends State<PagedDocumentGrid> {
   @override
   void didUpdateWidget(covariant PagedDocumentGrid oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selected != oldWidget.selected) _cursor = widget.selected;
+    if (widget.pagingKey != oldWidget.pagingKey ||
+        widget.total != oldWidget.total ||
+        widget.columns.length != oldWidget.columns.length) {
+      _requested.clear();
+      _multiSelected.clear();
+      _editing = null;
+      _editorController.clear();
+      _cursor = widget.selected;
+      if (_horizontal.hasClients) _horizontal.jumpTo(0);
+    } else if (widget.selected != oldWidget.selected) {
+      _cursor = widget.selected;
+    }
   }
 
   @override
   void dispose() {
     _focus.dispose();
+    _horizontal.dispose();
+    _editorController.dispose();
     super.dispose();
   }
 
   void _need(int index) {
+    if (index < 0 || index >= widget.total) return;
     final page = (index ~/ 200) * 200;
     if (_requested.add(page)) scheduleMicrotask(() => widget.onNeedRow(page));
   }
 
   void _move(int delta) {
+    if (widget.total == 0) return;
     final next = (_cursor < 0 ? 0 : _cursor + delta).clamp(0, widget.total - 1);
     setState(() => _cursor = next);
     widget.onSelect(next);
     _need(next);
+  }
+
+  void _selectBoundary(int index) {
+    if (widget.total == 0) return;
+    final next = index.clamp(0, widget.total - 1);
+    setState(() => _cursor = next);
+    widget.onSelect(next);
+    _need(next);
+  }
+
+  void _startEditing(int index) {
+    final row = widget.rows[index];
+    if (row == null) return;
+    _editorController.text = row.title;
+    setState(() => _editing = index);
   }
 
   @override
@@ -92,20 +128,29 @@ class _PagedDocumentGridState extends State<PagedDocumentGrid> {
             _move(-1);
             return KeyEventResult.handled;
           }
+          if (event.logicalKey == LogicalKeyboardKey.home) {
+            _selectBoundary(0);
+            return KeyEventResult.handled;
+          }
+          if (event.logicalKey == LogicalKeyboardKey.end) {
+            _selectBoundary(widget.total - 1);
+            return KeyEventResult.handled;
+          }
           if (event.logicalKey == LogicalKeyboardKey.enter && _cursor >= 0) {
             widget.onOpen(_cursor);
             return KeyEventResult.handled;
           }
           if (event.logicalKey == LogicalKeyboardKey.space && _cursor >= 0) {
             setState(
-              () => _multiSelected.contains(_cursor)
-                  ? _multiSelected.remove(_cursor)
-                  : _multiSelected.add(_cursor),
+              () =>
+                  _multiSelected.contains(_cursor)
+                      ? _multiSelected.remove(_cursor)
+                      : _multiSelected.add(_cursor),
             );
             return KeyEventResult.handled;
           }
           if (event.logicalKey == LogicalKeyboardKey.f2 && _cursor >= 0) {
-            setState(() => _editing = _cursor);
+            _startEditing(_cursor);
             return KeyEventResult.handled;
           }
           if (event.logicalKey == LogicalKeyboardKey.f10 &&
@@ -120,125 +165,161 @@ class _PagedDocumentGridState extends State<PagedDocumentGrid> {
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xffcbd5e1)),
           ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 36,
-                child: SingleChildScrollView(
+          child: LayoutBuilder(
+            builder:
+                (context, constraints) => SingleChildScrollView(
+                  key: const Key('grid-horizontal-scroll'),
+                  controller: _horizontal,
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
                     width: width,
-                    child: Row(
-                      children: widget.columns
-                          .map((column) => _cell(column, header: true))
-                          .toList(),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: width,
-                    child: ListView.builder(
-                      itemExtent: 38,
-                      itemCount: widget.total,
-                      itemBuilder: (context, index) {
-                        final row = widget.rows[index];
-                        if (row == null) {
-                          _need(index);
-                          return const _SkeletonRow();
-                        }
-                        final active = _cursor == index;
-                        return Semantics(
-                          excludeSemantics: true,
-                          selected: active || _multiSelected.contains(index),
-                          button: true,
-                          label:
-                              '${row.documentId}, ${row.title}, ${row.state}',
-                          onTap: () {
-                            setState(() => _cursor = index);
-                            widget.onSelect(index);
-                            widget.onOpen(index);
-                          },
-                          child: GestureDetector(
-                            onTap: () {
-                              _focus.requestFocus();
-                              setState(() => _cursor = index);
-                              widget.onSelect(index);
-                            },
-                            onDoubleTap: () => widget.onOpen(index),
-                            onSecondaryTapDown: (details) {
-                              setState(() => _cursor = index);
-                              widget.onSelect(index);
-                              _showMenu(context, details.globalPosition);
-                            },
-                            child: ColoredBox(
-                              color: active
-                                  ? const Color(0xffdbeafe)
-                                  : _multiSelected.contains(index)
-                                  ? const Color(0xffeff6ff)
-                                  : Colors.transparent,
-                              child: Row(
-                                children: [
-                                  _cell(
-                                    _editing == index ? '' : row.title,
-                                    child: _editing == index
-                                        ? TextField(
-                                            key: const Key('inline-editor'),
-                                            autofocus: true,
-                                            controller: TextEditingController(
-                                              text: row.title,
-                                            ),
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              labelText: widget.editLabel,
-                                            ),
-                                            onSubmitted: (_) =>
-                                                setState(() => _editing = null),
-                                          )
-                                        : null,
-                                  ),
-                                  ...row.values.skip(1).map(_cell),
-                                ],
-                              ),
-                            ),
+                    height: constraints.maxHeight,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 36,
+                          child: Row(
+                            children:
+                                widget.columns
+                                    .asMap()
+                                    .entries
+                                    .map(
+                                      (entry) => _cell(
+                                        entry.value,
+                                        header: true,
+                                        key: Key(
+                                          'grid-header-cell-${entry.key}',
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
                           ),
-                        );
-                      },
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemExtent: 38,
+                            itemCount: widget.total,
+                            itemBuilder: (context, index) {
+                              final row = widget.rows[index];
+                              if (row == null) {
+                                _need(index);
+                                return _SkeletonRow(
+                                  columns: widget.columns.length,
+                                );
+                              }
+                              final active = _cursor == index;
+                              return Semantics(
+                                excludeSemantics: true,
+                                selected:
+                                    active || _multiSelected.contains(index),
+                                button: true,
+                                label:
+                                    '${row.documentId}, ${row.title}, ${row.state}',
+                                onTap: () {
+                                  setState(() => _cursor = index);
+                                  widget.onSelect(index);
+                                  widget.onOpen(index);
+                                },
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _focus.requestFocus();
+                                    setState(() => _cursor = index);
+                                    widget.onSelect(index);
+                                  },
+                                  onDoubleTap: () => widget.onOpen(index),
+                                  onSecondaryTapDown: (details) {
+                                    setState(() => _cursor = index);
+                                    widget.onSelect(index);
+                                    _showMenu(context, details.globalPosition);
+                                  },
+                                  child: ColoredBox(
+                                    color:
+                                        active
+                                            ? const Color(0xffdbeafe)
+                                            : _multiSelected.contains(index)
+                                            ? const Color(0xffeff6ff)
+                                            : Colors.transparent,
+                                    child: Row(
+                                      children: [
+                                        _cell(
+                                          _editing == index ? '' : row.title,
+                                          key: Key('grid-cell-$index-0'),
+                                          child:
+                                              _editing == index
+                                                  ? TextField(
+                                                    key: const Key(
+                                                      'inline-editor',
+                                                    ),
+                                                    autofocus: true,
+                                                    controller:
+                                                        _editorController,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      labelText:
+                                                          widget.editLabel,
+                                                    ),
+                                                    onSubmitted:
+                                                        (_) => setState(() {
+                                                          _editing = null;
+                                                        }),
+                                                  )
+                                                  : null,
+                                        ),
+                                        ...row.values
+                                            .skip(1)
+                                            .toList()
+                                            .asMap()
+                                            .entries
+                                            .map(
+                                              (entry) => _cell(
+                                                entry.value,
+                                                key: Key(
+                                                  'grid-cell-$index-${entry.key + 1}',
+                                                ),
+                                              ),
+                                            ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _cell(String value, {bool header = false, Widget? child}) => Container(
-    width: 148,
-    height: 38,
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.symmetric(horizontal: 8),
-    decoration: BoxDecoration(
-      color: header ? const Color(0xffe2e8f0) : null,
-      border: const Border(
-        right: BorderSide(color: Color(0xffe2e8f0)),
-        bottom: BorderSide(color: Color(0xffe2e8f0)),
-      ),
-    ),
-    child:
-        child ??
-        Text(
-          value,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: header ? const TextStyle(fontWeight: FontWeight.w700) : null,
+  Widget _cell(String value, {bool header = false, Widget? child, Key? key}) =>
+      Container(
+        key: key,
+        width: 148,
+        height: 38,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: header ? const Color(0xffe2e8f0) : null,
+          border: const Border(
+            right: BorderSide(color: Color(0xffe2e8f0)),
+            bottom: BorderSide(color: Color(0xffe2e8f0)),
+          ),
         ),
-  );
+        child:
+            child ??
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  header ? const TextStyle(fontWeight: FontWeight.w700) : null,
+            ),
+      );
 
   Future<void> _showMenu(BuildContext context, Offset position) async {
     await showMenu<void>(
@@ -255,7 +336,7 @@ class _PagedDocumentGridState extends State<PagedDocumentGrid> {
           child: Text(widget.menuLabel),
         ),
         PopupMenuItem<void>(
-          onTap: _cursor < 0 ? null : () => setState(() => _editing = _cursor),
+          onTap: _cursor < 0 ? null : () => _startEditing(_cursor),
           child: Text(widget.editLabel),
         ),
       ],
@@ -264,17 +345,20 @@ class _PagedDocumentGridState extends State<PagedDocumentGrid> {
 }
 
 class _SkeletonRow extends StatelessWidget {
-  const _SkeletonRow();
+  const _SkeletonRow({required this.columns});
+  final int columns;
+
   @override
-  Widget build(BuildContext context) => const Row(
-    children: [
-      SizedBox(
+  Widget build(BuildContext context) => Row(
+    children: List.generate(
+      columns,
+      (_) => const SizedBox(
         width: 148,
         child: DecoratedBox(
           decoration: BoxDecoration(color: Color(0xfff1f5f9)),
           child: SizedBox(height: 30),
         ),
       ),
-    ],
+    ),
   );
 }

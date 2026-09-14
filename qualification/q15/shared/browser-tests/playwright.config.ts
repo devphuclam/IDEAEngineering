@@ -7,7 +7,7 @@ export default defineConfig({
   retries: 0,
   reporter: [["list"], ["json", { outputFile: "test-results/option-b-web.json" }]],
   use: {
-    baseURL: "http://127.0.0.1:5174",
+    baseURL: process.env.Q15_BROWSER_BASE_URL ?? "http://127.0.0.1:5174",
     browserName: "chromium",
     channel: "msedge",
     trace: "retain-on-failure",

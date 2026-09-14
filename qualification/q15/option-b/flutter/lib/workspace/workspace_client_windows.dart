@@ -18,6 +18,17 @@ WorkspaceClient createWorkspaceClient() =>
 
 class DirectFfiWorkspaceClient implements WorkspaceClient {
   DirectFfiWorkspaceClient._(this._config);
+  DirectFfiWorkspaceClient.forTesting({
+    required String pipeName,
+    required String workspaceId,
+    required String sessionId,
+    required String encodedSecret,
+  }) : _config = _NativeConfig(
+         pipeName: pipeName,
+         workspaceId: workspaceId,
+         sessionId: sessionId,
+         encodedSecret: encodedSecret,
+       );
   factory DirectFfiWorkspaceClient.fromEnvironment() =>
       DirectFfiWorkspaceClient._(
         _NativeConfig(
@@ -63,14 +74,29 @@ class DirectFfiWorkspaceClient implements WorkspaceClient {
     final responseBytes = await Isolate.run(
       () => _roundTrip(_config.pipeName, bytes, timeout.inMilliseconds),
     );
-    final response = jsonDecode(utf8.decode(responseBytes)) as JsonMap;
+    final dynamic decoded;
+    try {
+      decoded = jsonDecode(utf8.decode(responseBytes));
+    } on Object catch (error) {
+      throw WorkspaceProtocolException('MALFORMED_RESPONSE', cause: error);
+    }
+    if (decoded is! Map) {
+      throw const WorkspaceProtocolException('MALFORMED_RESPONSE');
+    }
+    final response = decoded.cast<String, dynamic>();
     if (response['requestId'] != requestId) {
-      throw const FormatException('WORKSPACE_RESPONSE_CORRELATION');
+      throw const WorkspaceProtocolException('RESPONSE_REQUEST_ID_MISMATCH');
     }
-    if (!_verifyResponse(response, _decodeSecret(_config.encodedSecret))) {
-      throw const FormatException('WORKSPACE_RESPONSE_AUTHENTICATION');
+    try {
+      if (!_verifyResponse(response, _decodeSecret(_config.encodedSecret))) {
+        throw const WorkspaceProtocolException('INVALID_RESPONSE_MAC');
+      }
+      return WorkspaceResult.fromJson(response);
+    } on WorkspaceProtocolException {
+      rethrow;
+    } on Object catch (error) {
+      throw WorkspaceProtocolException('INVALID_RESPONSE', cause: error);
     }
-    return WorkspaceResult.fromJson(response);
   }
 }
 
@@ -92,15 +118,15 @@ void _validateIntent(String operation, Map<String, String> payload) {
   }
   if (payload.length != expected.length ||
       payload.keys.any((key) => !expected.contains(key))) {
-    throw const FormatException('PAYLOAD_SCHEMA');
+    throw const WorkspaceProtocolException('PAYLOAD_SCHEMA');
   }
   if (payload.keys.any(
     (key) => RegExp(r'path|command|shell', caseSensitive: false).hasMatch(key),
   )) {
-    throw const FormatException('FORBIDDEN_PROXY');
+    throw const WorkspaceProtocolException('FORBIDDEN_PROXY');
   }
   if (payload.values.any((value) => value.isEmpty || value.length > 128)) {
-    throw const FormatException('PAYLOAD_BOUNDS');
+    throw const WorkspaceProtocolException('PAYLOAD_BOUNDS');
   }
 }
 
@@ -166,11 +192,12 @@ String _uuid() {
   final bytes = List<int>.generate(16, (_) => Random.secure().nextInt(256));
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
   bytes[8] = (bytes[8] & 0x3f) | 0x80;
-  String part(int start, int length) => bytes
-      .skip(start)
-      .take(length)
-      .map((value) => value.toRadixString(16).padLeft(2, '0'))
-      .join();
+  String part(int start, int length) =>
+      bytes
+          .skip(start)
+          .take(length)
+          .map((value) => value.toRadixString(16).padLeft(2, '0'))
+          .join();
   return '${part(0, 4)}-${part(4, 2)}-${part(6, 2)}-${part(8, 2)}-${part(10, 6)}';
 }
 
@@ -201,66 +228,60 @@ final class _Overlapped extends Struct {
 
 typedef _WaitNamedPipeNative = Int32 Function(Pointer<Utf16>, Uint32);
 typedef _WaitNamedPipeDart = int Function(Pointer<Utf16>, int);
-typedef _CreateFileNative = IntPtr Function(
-  Pointer<Utf16>,
-  Uint32,
-  Uint32,
-  Pointer<Void>,
-  Uint32,
-  Uint32,
-  IntPtr,
-);
-typedef _CreateFileDart = int Function(
-  Pointer<Utf16>,
-  int,
-  int,
-  Pointer<Void>,
-  int,
-  int,
-  int,
-);
-typedef _IoNative = Int32 Function(
-  IntPtr,
-  Pointer<Void>,
-  Uint32,
-  Pointer<Uint32>,
-  Pointer<_Overlapped>,
-);
-typedef _IoDart = int Function(
-  int,
-  Pointer<Void>,
-  int,
-  Pointer<Uint32>,
-  Pointer<_Overlapped>,
-);
-typedef _CreateEventNative = IntPtr Function(
-  Pointer<Void>,
-  Int32,
-  Int32,
-  Pointer<Utf16>,
-);
-typedef _CreateEventDart = int Function(
-  Pointer<Void>,
-  int,
-  int,
-  Pointer<Utf16>,
-);
+typedef _CreateFileNative =
+    IntPtr Function(
+      Pointer<Utf16>,
+      Uint32,
+      Uint32,
+      Pointer<Void>,
+      Uint32,
+      Uint32,
+      IntPtr,
+    );
+typedef _CreateFileDart =
+    int Function(Pointer<Utf16>, int, int, Pointer<Void>, int, int, int);
+typedef _StartIoNative =
+    Int32 Function(
+      IntPtr,
+      Int32,
+      Pointer<Void>,
+      Uint32,
+      Pointer<_Overlapped>,
+      Pointer<Uint32>,
+    );
+typedef _StartIoDart =
+    int Function(
+      int,
+      int,
+      Pointer<Void>,
+      int,
+      Pointer<_Overlapped>,
+      Pointer<Uint32>,
+    );
+typedef _CreateEventNative =
+    IntPtr Function(Pointer<Void>, Int32, Int32, Pointer<Utf16>);
+typedef _CreateEventDart =
+    int Function(Pointer<Void>, int, int, Pointer<Utf16>);
 typedef _WaitNative = Uint32 Function(IntPtr, Uint32);
 typedef _WaitDart = int Function(int, int);
 typedef _CancelNative = Int32 Function(IntPtr, Pointer<_Overlapped>);
 typedef _CancelDart = int Function(int, Pointer<_Overlapped>);
-typedef _ResultNative = Int32 Function(
-  IntPtr,
-  Pointer<_Overlapped>,
-  Pointer<Uint32>,
-  Int32,
-);
-typedef _ResultDart = int Function(
-  int,
-  Pointer<_Overlapped>,
-  Pointer<Uint32>,
-  int,
-);
+typedef _FinishIoNative =
+    Int32 Function(
+      IntPtr,
+      Pointer<_Overlapped>,
+      Pointer<Uint32>,
+      Int32,
+      Pointer<Uint32>,
+    );
+typedef _FinishIoDart =
+    int Function(
+      int,
+      Pointer<_Overlapped>,
+      Pointer<Uint32>,
+      int,
+      Pointer<Uint32>,
+    );
 typedef _CloseNative = Int32 Function(IntPtr);
 typedef _CloseDart = int Function(int);
 typedef _LastErrorNative = Uint32 Function();
@@ -269,7 +290,7 @@ typedef _LastErrorDart = int Function();
 Uint8List _roundTrip(String pipeName, Uint8List payload, int timeoutMs) {
   const maximumFrame = 65536;
   if (payload.isEmpty || payload.length > maximumFrame) {
-    throw const FormatException('FRAME_SIZE');
+    throw const WorkspaceProtocolException('FRAME_SIZE');
   }
   final kernel = DynamicLibrary.open('kernel32.dll');
   final waitPipe = kernel
@@ -279,8 +300,6 @@ Uint8List _roundTrip(String pipeName, Uint8List payload, int timeoutMs) {
   final createFile = kernel.lookupFunction<_CreateFileNative, _CreateFileDart>(
     'CreateFileW',
   );
-  final writeFile = kernel.lookupFunction<_IoNative, _IoDart>('WriteFile');
-  final readFile = kernel.lookupFunction<_IoNative, _IoDart>('ReadFile');
   final closeHandle = kernel.lookupFunction<_CloseNative, _CloseDart>(
     'CloseHandle',
   );
@@ -299,27 +318,13 @@ Uint8List _roundTrip(String pipeName, Uint8List payload, int timeoutMs) {
     final frame = Uint8List(4 + payload.length);
     ByteData.sublistView(frame).setUint32(0, payload.length, Endian.little);
     frame.setRange(4, frame.length, payload);
-    _writeAll(kernel, writeFile, handle, frame, timeoutMs, getLastError);
-    final header = _readExactly(
-      kernel,
-      readFile,
-      handle,
-      4,
-      timeoutMs,
-      getLastError,
-    );
+    _writeAll(kernel, handle, frame, timeoutMs, getLastError);
+    final header = _readExactly(kernel, handle, 4, timeoutMs, getLastError);
     final length = ByteData.sublistView(header).getUint32(0, Endian.little);
     if (length == 0 || length > maximumFrame) {
-      throw const FormatException('FRAME_SIZE');
+      throw const WorkspaceProtocolException('OVERSIZED_RESPONSE');
     }
-    return _readExactly(
-      kernel,
-      readFile,
-      handle,
-      length,
-      timeoutMs,
-      getLastError,
-    );
+    return _readExactly(kernel, handle, length, timeoutMs, getLastError);
   } finally {
     calloc.free(name);
     if (handle != -1) closeHandle(handle);
@@ -328,7 +333,6 @@ Uint8List _roundTrip(String pipeName, Uint8List payload, int timeoutMs) {
 
 void _writeAll(
   DynamicLibrary kernel,
-  _IoDart writeFile,
   int handle,
   Uint8List bytes,
   int timeoutMs,
@@ -341,15 +345,16 @@ void _writeAll(
     while (offset < bytes.length) {
       final transferred = _overlappedIo(
         kernel,
-        'WriteFile',
-        writeFile,
+        true,
         handle,
         (buffer + offset).cast(),
         bytes.length - offset,
         timeoutMs,
         lastError,
       );
-      if (transferred <= 0) throw const FileSystemException('ZERO_BYTE_WRITE');
+      if (transferred <= 0) {
+        throw const WorkspaceProtocolException('ZERO_BYTE_WRITE');
+      }
       offset += transferred;
     }
   } finally {
@@ -359,7 +364,6 @@ void _writeAll(
 
 Uint8List _readExactly(
   DynamicLibrary kernel,
-  _IoDart readFile,
   int handle,
   int length,
   int timeoutMs,
@@ -371,15 +375,16 @@ Uint8List _readExactly(
     while (offset < length) {
       final transferred = _overlappedIo(
         kernel,
-        'ReadFile',
-        readFile,
+        false,
         handle,
         (buffer + offset).cast(),
         length - offset,
         timeoutMs,
         lastError,
       );
-      if (transferred <= 0) throw const FileSystemException('TRUNCATED_FRAME');
+      if (transferred <= 0) {
+        throw const WorkspaceProtocolException('TRUNCATED_FRAME');
+      }
       offset += transferred;
     }
     return Uint8List.fromList(buffer.asTypedList(length));
@@ -390,15 +395,18 @@ Uint8List _readExactly(
 
 int _overlappedIo(
   DynamicLibrary kernel,
-  String operationName,
-  _IoDart operation,
+  bool write,
   int handle,
   Pointer<Void> buffer,
   int length,
   int timeoutMs,
   _LastErrorDart lastError,
 ) {
-  const waitObject0 = 0, waitTimeout = 258;
+  const waitObject0 = 0;
+  const waitTimeout = 258;
+  const waitFailed = 0xffffffff;
+  const errorIoPending = 997;
+  const errorOperationAborted = 995;
   final createEvent = kernel
       .lookupFunction<_CreateEventNative, _CreateEventDart>('CreateEventW');
   final wait = kernel.lookupFunction<_WaitNative, _WaitDart>(
@@ -407,50 +415,82 @@ int _overlappedIo(
   final cancel = kernel.lookupFunction<_CancelNative, _CancelDart>(
     'CancelIoEx',
   );
-  final result = kernel.lookupFunction<_ResultNative, _ResultDart>(
-    'GetOverlappedResult',
-  );
   final close = kernel.lookupFunction<_CloseNative, _CloseDart>('CloseHandle');
+  final shim = DynamicLibrary.executable();
+  late final _StartIoDart start;
+  late final _FinishIoDart finish;
+  try {
+    start = shim.lookupFunction<_StartIoNative, _StartIoDart>(
+      'idea_q15_start_overlapped_io',
+    );
+    finish = shim.lookupFunction<_FinishIoNative, _FinishIoDart>(
+      'idea_q15_finish_overlapped_io',
+    );
+  } on Object catch (error) {
+    throw WorkspaceProtocolException('NATIVE_SHIM_UNAVAILABLE', cause: error);
+  }
   final overlapped = calloc<_Overlapped>();
   final transferred = calloc<Uint32>();
+  final error = calloc<Uint32>();
   final event = createEvent(nullptr, 1, 0, nullptr.cast());
   if (event == 0) {
     calloc.free(overlapped);
     calloc.free(transferred);
+    calloc.free(error);
     throw WindowsException('CreateEventW', lastError());
   }
   overlapped.ref.event = Pointer<Void>.fromAddress(event);
+  final operationName = write ? 'WriteFile' : 'ReadFile';
   try {
-    final immediate = operation(
+    final immediate = start(
       handle,
+      write ? 1 : 0,
       buffer,
       length,
-      nullptr.cast<Uint32>(),
       overlapped,
+      error,
     );
+    if (immediate == 0 && error.value != errorIoPending) {
+      throw WindowsException(operationName, error.value);
+    }
     if (immediate == 0) {
-      // Dart FFI cannot atomically preserve thread-local GetLastError across a
-      // native-call boundary. Wait on the OVERLAPPED event instead of using a
-      // separately observed error code to decide whether the I/O is pending.
       final waitResult = wait(event, timeoutMs);
       if (waitResult == waitTimeout) {
         cancel(handle, overlapped);
-        wait(event, 1000);
+        final cancelWait = wait(event, 1000);
+        if (cancelWait == waitTimeout) {
+          throw TimeoutException(
+            '$operationName timed out after ${timeoutMs}ms.',
+          );
+        }
+        if (cancelWait != waitObject0) {
+          throw WindowsException(
+            'WaitForSingleObject($operationName)',
+            lastError(),
+          );
+        }
+        if (finish(handle, overlapped, transferred, 0, error) == 0 &&
+            error.value != errorOperationAborted) {
+          throw WindowsException(
+            'GetOverlappedResult($operationName)',
+            error.value,
+          );
+        }
         throw TimeoutException(
           '$operationName timed out after ${timeoutMs}ms.',
         );
       }
-      if (waitResult != waitObject0) {
+      if (waitResult == waitFailed || waitResult != waitObject0) {
         throw WindowsException(
           'WaitForSingleObject($operationName)',
           lastError(),
         );
       }
     }
-    if (result(handle, overlapped, transferred, 0) == 0) {
+    if (finish(handle, overlapped, transferred, 0, error) == 0) {
       throw WindowsException(
         'GetOverlappedResult($operationName)',
-        lastError(),
+        error.value,
       );
     }
     return transferred.value;
@@ -458,6 +498,7 @@ int _overlappedIo(
     close(event);
     calloc.free(overlapped);
     calloc.free(transferred);
+    calloc.free(error);
   }
 }
 
@@ -465,6 +506,28 @@ class WindowsException implements Exception {
   const WindowsException(this.operation, this.code);
   final String operation;
   final int code;
+
+  String get classification => operation == 'WaitNamedPipeW' && code == 0
+      ? 'PIPE_UNAVAILABLE'
+      : switch (code) {
+    2 || 231 || 121 => 'PIPE_UNAVAILABLE',
+    109 => 'PIPE_BROKEN',
+    5 => 'ACCESS_DENIED',
+    995 => 'CANCELLED',
+    258 => 'TIMEOUT',
+    _ => 'NATIVE_FAILURE',
+  };
+
   @override
-  String toString() => '$operation failed with Win32 error $code';
+  String toString() =>
+      '$operation failed with Win32 error $code ($classification)';
+}
+
+class WorkspaceProtocolException implements Exception {
+  const WorkspaceProtocolException(this.code, {this.cause});
+  final String code;
+  final Object? cause;
+
+  @override
+  String toString() => 'Workspace protocol error: $code';
 }

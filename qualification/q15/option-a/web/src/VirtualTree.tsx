@@ -7,19 +7,26 @@ interface Props {
   nodes: Map<number, TreeNode>;
   onRange(start: number, end: number): void;
   label: string;
+  pagingKey?: string;
 }
 
 const rowHeight = 32;
 
-export function VirtualTree({ total, nodes, onRange, label }: Props) {
+export function VirtualTree({ total, nodes, onRange, label, pagingKey = "" }: Props) {
   const [selected, setSelected] = useState(0);
   const [range, setRange] = useState(() => virtualRange(0, 430, rowHeight, total));
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set());
   const viewport = useRef<HTMLDivElement>(null);
   useEffect(() => onRange(range.start, range.end), [onRange, range.end, range.start]);
+  useEffect(() => {
+    setSelected(0);
+    setRange(virtualRange(0, 430, rowHeight, total));
+    setCollapsed(new Set());
+    if (viewport.current) viewport.current.scrollTo({ top: 0, left: 0 });
+  }, [pagingKey, total]);
   const visible = useMemo(() => Array.from({ length: Math.max(0, range.end - range.start) }, (_, i) => range.start + i), [range]);
 
-  return <div>
+  return <div data-q15="product-tree">
     <div className="tree-summary" aria-live="polite">{total.toLocaleString()} nodes</div>
     <div
       ref={viewport}
@@ -55,6 +62,7 @@ export function VirtualTree({ total, nodes, onRange, label }: Props) {
             aria-expanded={node?.hasChildren ? expanded : undefined}
             className={`tree-node ${index === selected ? "selected" : ""}`}
             data-tree-index={index}
+            data-q15={`tree-node-${index}`}
             style={{ transform: `translateY(${index * rowHeight}px)`, paddingInlineStart: 8 + (node?.depth ?? 0) * 12 }}
             onClick={() => setSelected(index)}
           >

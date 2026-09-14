@@ -88,16 +88,19 @@ class _Q15AppState extends State<Q15App> {
   String _state = 'idle';
   final _loadingRows = <int>{};
   final _loadingNodes = <int>{};
+  int _dataGeneration = 0;
+
+  String get _pagingKey => '$_dataGeneration|${_profile.name}|${_query.text}';
 
   String t(String key) => widget.messages.text(_locale, key);
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) =>
-          unawaited(runAutomatedSmokeIfRequested(widget.api, widget.workspace)),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(reportUiReadyIfRequested());
+      unawaited(runAutomatedSmokeIfRequested(widget.api, widget.workspace));
+    });
   }
 
   @override
@@ -126,7 +129,24 @@ class _Q15AppState extends State<Q15App> {
     }
   }
 
+  void _changeProfile(FixtureProfile value) {
+    if (value == _profile) return;
+    _dataGeneration++;
+    setState(() {
+      _profile = value;
+      _rows.clear();
+      _nodes.clear();
+      _detail = null;
+      _selected = -1;
+      _total = 0;
+      _treeTotal = 0;
+      _loadingRows.clear();
+      _loadingNodes.clear();
+    });
+  }
+
   Future<void> _search() async {
+    final generation = ++_dataGeneration;
     setState(() {
       _state = 'loading';
       _notice = '';
@@ -134,6 +154,8 @@ class _Q15AppState extends State<Q15App> {
       _nodes.clear();
       _detail = null;
       _selected = -1;
+      _loadingRows.clear();
+      _loadingNodes.clear();
     });
     try {
       final values = await Future.wait([
@@ -142,6 +164,7 @@ class _Q15AppState extends State<Q15App> {
       ]);
       final page = values[0] as SearchPage;
       final tree = values[1] as TreePage;
+      if (!mounted || generation != _dataGeneration) return;
       setState(() {
         _rows.addEntries(
           page.items.asMap().entries.map(
@@ -159,15 +182,17 @@ class _Q15AppState extends State<Q15App> {
         _state = page.total == 0 ? 'empty' : 'ready';
       });
     } catch (error) {
+      if (generation != _dataGeneration) return;
       _problem(error);
     }
   }
 
   Future<void> _loadRows(int offset) async {
     if (!_loadingRows.add(offset)) return;
+    final generation = _dataGeneration;
     try {
       final page = await widget.api.search(_query.text, _profile, offset);
-      if (mounted) {
+      if (mounted && generation == _dataGeneration) {
         setState(
           () => _rows.addEntries(
             page.items.asMap().entries.map(
@@ -177,17 +202,18 @@ class _Q15AppState extends State<Q15App> {
         );
       }
     } catch (error) {
-      _problem(error);
+      if (generation == _dataGeneration) _problem(error);
     } finally {
-      _loadingRows.remove(offset);
+      if (generation == _dataGeneration) _loadingRows.remove(offset);
     }
   }
 
   Future<void> _loadNodes(int offset) async {
     if (!_loadingNodes.add(offset)) return;
+    final generation = _dataGeneration;
     try {
       final page = await widget.api.tree(_profile, offset);
-      if (mounted) {
+      if (mounted && generation == _dataGeneration) {
         setState(
           () => _nodes.addEntries(
             page.nodes.asMap().entries.map(
@@ -197,9 +223,9 @@ class _Q15AppState extends State<Q15App> {
         );
       }
     } catch (error) {
-      _problem(error);
+      if (generation == _dataGeneration) _problem(error);
     } finally {
-      _loadingNodes.remove(offset);
+      if (generation == _dataGeneration) _loadingNodes.remove(offset);
     }
   }
 
@@ -234,9 +260,8 @@ class _Q15AppState extends State<Q15App> {
       setState(() {
         _operation = operation;
         _reservationId = operation.reservationId;
-        _notice = operation.status == 'Committed'
-            ? t('success')
-            : t('uncertain');
+        _notice =
+            operation.status == 'Committed' ? t('success') : t('uncertain');
       });
     } catch (error) {
       _problem(error);
@@ -285,9 +310,8 @@ class _Q15AppState extends State<Q15App> {
       );
       setState(() {
         _operation = operation;
-        _notice = operation.status == 'Committed'
-            ? t('success')
-            : t('uncertain');
+        _notice =
+            operation.status == 'Committed' ? t('success') : t('uncertain');
       });
     } catch (error) {
       _problem(error, preserved: true);
@@ -450,15 +474,16 @@ class _Q15AppState extends State<Q15App> {
               DropdownButton<FixtureProfile>(
                 key: const Key('profile'),
                 value: _profile,
-                items: FixtureProfile.values
-                    .map(
-                      (value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(value.name),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) => setState(() => _profile = value!),
+                items:
+                    FixtureProfile.values
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(value.name),
+                          ),
+                        )
+                        .toList(),
+                onChanged: (value) => _changeProfile(value!),
               ),
               const SizedBox(width: 12),
               FilledButton(
@@ -482,6 +507,7 @@ class _Q15AppState extends State<Q15App> {
                     nodes: _nodes,
                     onNeedNode: (offset) => unawaited(_loadNodes(offset)),
                     label: t('tree'),
+                    pagingKey: _pagingKey,
                   ),
                 ),
               ),
@@ -559,6 +585,7 @@ class _Q15AppState extends State<Q15App> {
             label: t('grid'),
             editLabel: t('inlineEdit'),
             menuLabel: t('contextMenu'),
+            pagingKey: _pagingKey,
           ),
         ),
       ],

@@ -32,41 +32,62 @@ export default function App() {
   const [reservationId, setReservationId] = useState<string | null>(null);
   const [workspace, setWorkspace] = useState<WorkspaceResult | null>(null);
   const [bridgeReady, setBridgeReady] = useState(false);
+  const [dataGeneration, setDataGeneration] = useState(0);
   const bridge = useMemo(() => new WorkspaceBridge(), []);
   const navigate = useNavigate();
   const location = useLocation();
   const loadedPages = useRef(new Set<string>());
+  const generationRef = useRef(0);
 
   useEffect(() => {
     const ready = () => setBridgeReady(true);
     window.addEventListener("q15-bridge-ready", ready);
-    const marker = window.setTimeout(() => document.documentElement.dataset.q15Ready = "true", 0);
-    return () => { window.removeEventListener("q15-bridge-ready", ready); window.clearTimeout(marker); bridge.dispose(); };
+    const marker = window.requestAnimationFrame(() => {
+      const login = document.querySelector<HTMLButtonElement>('[data-q15="login-submit"]');
+      if (login && !login.disabled) {
+        document.documentElement.dataset.q15UiReady = "true";
+        document.documentElement.dataset.q15Ready = "true";
+      }
+    });
+    return () => { window.removeEventListener("q15-bridge-ready", ready); window.cancelAnimationFrame(marker); bridge.dispose(); };
   }, [bridge]);
   useEffect(() => { localStorage.setItem("q15-locale", locale); document.documentElement.lang = locale; }, [locale]);
 
   const loadRows = useCallback(async (start: number) => {
     if (!session || total === 0) return;
     const offset = Math.floor(start / 200) * 200;
-    const key = `${query}|${profile}|${offset}`;
+    const generation = generationRef.current;
+    const requestQuery = query;
+    const requestProfile = profile;
+    const key = `${generation}|${requestQuery}|${requestProfile}|${offset}`;
     if (loadedPages.current.has(key)) return;
     loadedPages.current.add(key);
     try {
-      const page = await api.search(query, profile, offset, 200);
+      const page = await api.search(requestQuery, requestProfile, offset, 200);
+      if (generation !== generationRef.current) return;
       setRows((current) => { const next = new Map(current); page.items.forEach((item, index) => next.set(page.offset + index, item)); return next; });
-    } catch (error) { loadedPages.current.delete(key); setNotice(problemText(error)); }
+    } catch (error) {
+      loadedPages.current.delete(key);
+      if (generation === generationRef.current) setNotice(problemText(error));
+    }
   }, [profile, query, session, total]);
 
   const loadTree = useCallback(async (start: number) => {
     if (!session || treeTotal === 0) return;
     const offset = Math.floor(start / 500) * 500;
-    const key = `tree|${profile}|${offset}`;
+    const generation = generationRef.current;
+    const requestProfile = profile;
+    const key = `${generation}|tree|${requestProfile}|${offset}`;
     if (loadedPages.current.has(key)) return;
     loadedPages.current.add(key);
     try {
-      const page = await api.tree(profile, offset, 500);
+      const page = await api.tree(requestProfile, offset, 500);
+      if (generation !== generationRef.current) return;
       setTree((current) => { const next = new Map(current); page.nodes.forEach((item, index) => next.set(page.offset + index, item)); return next; });
-    } catch (error) { loadedPages.current.delete(key); setNotice(problemText(error)); }
+    } catch (error) {
+      loadedPages.current.delete(key);
+      if (generation === generationRef.current) setNotice(problemText(error));
+    }
   }, [profile, session, treeTotal]);
 
   async function login(event: FormEvent) {
@@ -79,14 +100,30 @@ export default function App() {
   }
 
   async function search(event?: FormEvent) {
-    event?.preventDefault(); setStatus("loading"); setNotice(""); setRows(new Map()); setTree(new Map()); setDetail(null); setSelected(-1); loadedPages.current.clear();
+    event?.preventDefault();
+    const generation = generationRef.current + 1;
+    generationRef.current = generation;
+    setDataGeneration(generation);
+    setStatus("loading"); setNotice(""); setRows(new Map()); setTree(new Map()); setDetail(null); setSelected(-1); loadedPages.current.clear();
     try {
       const [page, treePage] = await Promise.all([api.search(query, profile, 0, 200), api.tree(profile, 0, 500)]);
+      if (generation !== generationRef.current) return;
       setRows(new Map(page.items.map((item, index) => [page.offset + index, item])));
       setColumns(page.columns); setTotal(page.total);
       setTree(new Map(treePage.nodes.map((item, index) => [treePage.offset + index, item]))); setTreeTotal(treePage.total);
       setStatus(page.total === 0 ? "empty" : "ready");
-    } catch (error) { setTotal(0); setTreeTotal(0); setStatus("error"); setNotice(problemText(error)); }
+    } catch (error) {
+      if (generation !== generationRef.current) return;
+      setTotal(0); setTreeTotal(0); setStatus("error"); setNotice(problemText(error));
+    }
+  }
+
+  function changeProfile(next: ProfileName) {
+    if (next === profile) return;
+    generationRef.current += 1;
+    setDataGeneration(generationRef.current);
+    setProfile(next); setRows(new Map()); setTree(new Map()); setDetail(null); setSelected(-1);
+    setTotal(0); setTreeTotal(0); loadedPages.current.clear();
   }
 
   async function open(index: number) {
@@ -134,9 +171,9 @@ export default function App() {
       <span className="eyebrow">OPTION A · REACT WEB</span>
       <h1 id="login-title">{t(locale, "appTitle")}</h1>
       <p>{t(locale, "signInHint")}</p>
-      <label>{t(locale, "username")}<input autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} /></label>
-      <label>{t(locale, "password")}<input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-      <button type="submit" disabled={status === "loading"}>{t(locale, "login")}</button>
+      <label>{t(locale, "username")}<input data-q15="login-username" autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} /></label>
+      <label>{t(locale, "password")}<input data-q15="login-password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} /></label>
+      <button data-q15="login-submit" type="submit" disabled={status === "loading"}>{t(locale, "login")}</button>
       <LocaleSelect locale={locale} setLocale={setLocale} />
       <p role="status" aria-live="polite">{notice}</p>
     </form>
@@ -149,16 +186,16 @@ export default function App() {
     </header>
     <main id="main">
       <form className="search-bar" onSubmit={search}>
-        <label>{t(locale, "search")}<input value={query} onChange={(event) => setQuery(event.target.value)} /></label>
-        <label>{t(locale, "profile")}<select value={profile} onChange={(event) => setProfile(event.target.value as ProfileName)}>
+        <label>{t(locale, "search")}<input data-q15="search-query" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+        <label>{t(locale, "profile")}<select data-q15="search-profile" value={profile} onChange={(event) => changeProfile(event.target.value as ProfileName)}>
           <option value="small">small</option><option value="medium">medium</option><option value="large">large</option><option value="stress">stress</option>
         </select></label>
-        <button>{t(locale, "searchAction")}</button>
+        <button data-q15="search-submit">{t(locale, "searchAction")}</button>
       </form>
       <nav aria-label="Breadcrumb"><button onClick={() => { navigate("/documents"); setDetail(null); }}>Documents</button><span>/</span><span>{detail?.documentId ?? location.pathname}</span></nav>
       <div className="workspace-layout">
         <aside aria-labelledby="tree-heading"><h2 id="tree-heading">{t(locale, "tree")}</h2>
-          <VirtualTree total={treeTotal} nodes={tree} onRange={(start) => void loadTree(start)} label={t(locale, "tree")} />
+          <VirtualTree total={treeTotal} nodes={tree} onRange={(start) => void loadTree(start)} label={t(locale, "tree")} pagingKey={`${dataGeneration}|${profile}`} />
         </aside>
         <section className="browser" aria-labelledby="browser-heading"><h2 id="browser-heading">{t(locale, "browser")}</h2>
           {status === "loading" && <p role="status">{t(locale, "loading")}…</p>}
@@ -166,11 +203,11 @@ export default function App() {
           {status === "error" && <p role="alert">{t(locale, "error")}: {notice}</p>}
           {total > 0 && <VirtualGrid total={total} columns={columns} rows={rows} selected={selected} onSelected={setSelected}
             onOpen={(index) => void open(index)} onRange={(start) => void loadRows(start)} label={t(locale, "grid")}
-            editLabel={t(locale, "inlineEdit")} menuLabel={t(locale, "contextMenu")} />}
+            editLabel={t(locale, "inlineEdit")} menuLabel={t(locale, "contextMenu")} pagingKey={`${dataGeneration}|${query}|${profile}`} />}
         </section>
         <aside className="detail" aria-labelledby="detail-heading"><h2 id="detail-heading">{t(locale, "detail")}</h2>
           {!detail ? <p>{t(locale, "selectDocument")}</p> : <>
-            <span className={`state ${detail.readOnly ? "muted" : ""}`}>{detail.state} {detail.readOnly && `· ${t(locale, "readOnly")}`}</span>
+            <span data-q15="detail-state" className={`state ${detail.readOnly ? "muted" : ""}`}>{detail.state} {detail.readOnly && `· ${t(locale, "readOnly")}`}</span>
             <h3>{detail.title}</h3>
             <dl><div><dt>Stable ID</dt><dd>{detail.documentId}</dd></div><div><dt>Revision</dt><dd>{detail.revision}</dd></div>
               <div><dt>Version</dt><dd>{detail.version}</dd></div><div><dt>Generation</dt><dd>{detail.generationId}</dd></div>
@@ -180,17 +217,17 @@ export default function App() {
               <option value="unauthorized">unauthorized</option><option value="uncertain">uncertain</option><option value="failed">failed</option>
             </select></label>
             <div className="command-stack">
-              <button onClick={() => void checkout()} disabled={detail.readOnly}>{t(locale, "checkout")}</button>
-              <button onClick={() => void openWorkspace()}>{t(locale, "openWorkspace")}</button>
-              <button onClick={() => void checkin()} disabled={!reservationId}>{t(locale, "startCheckin")}</button>
-              <button onClick={() => void refreshOperation()} disabled={!operation}>{t(locale, "checkinStatus")}</button>
+              <button data-q15="checkout" onClick={() => void checkout()} disabled={detail.readOnly}>{t(locale, "checkout")}</button>
+              <button data-q15="open-workspace" onClick={() => void openWorkspace()}>{t(locale, "openWorkspace")}</button>
+              <button data-q15="checkin" onClick={() => void checkin()} disabled={!reservationId}>{t(locale, "startCheckin")}</button>
+              <button data-q15="checkin-status" onClick={() => void refreshOperation()} disabled={!operation}>{t(locale, "checkinStatus")}</button>
             </div>
-            {operation && <div className="operation" role="status"><strong>{operation.status}</strong><code>{operation.operationId}</code>
+            {operation && <div data-q15="operation" className="operation" role="status"><strong>{operation.status}</strong><code>{operation.operationId}</code>
               <span>{operation.preservedLocalCandidate && t(locale, "preserved")}</span></div>}
           </>}
         </aside>
       </div>
-      <div className="notice" role="status" aria-live="polite">{notice}</div>
+      <div data-q15="notice" className="notice" role="status" aria-live="polite">{notice}</div>
     </main>
   </div>;
 }

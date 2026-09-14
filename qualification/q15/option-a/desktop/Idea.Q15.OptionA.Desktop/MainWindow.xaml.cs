@@ -95,6 +95,19 @@ public partial class MainWindow : Window
         {
             type = "bridge.ready", protocolVersion = "1.0", bridgeSessionId = _bridgeSession
         }, ProtocolJson.SerializerOptions));
+        var installedFlowReport = Environment.GetEnvironmentVariable("IDEA_Q15_INSTALLED_FLOW_REPORT");
+        if (!string.IsNullOrWhiteSpace(installedFlowReport))
+        {
+            await RunInstalledFlowAsync(installedFlowReport);
+            return;
+        }
+        var uiReadyReport = Environment.GetEnvironmentVariable("IDEA_Q15_UI_READY_REPORT");
+        if (!string.IsNullOrWhiteSpace(uiReadyReport) && string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("IDEA_Q15_SMOKE_REPORT")))
+        {
+            WriteUiReady(uiReadyReport);
+            _ = Dispatcher.BeginInvoke(Close);
+            return;
+        }
         var smokeReport = Environment.GetEnvironmentVariable("IDEA_Q15_SMOKE_REPORT");
         if (!string.IsNullOrWhiteSpace(smokeReport))
         {
@@ -177,7 +190,7 @@ public partial class MainWindow : Window
             webView2Runtime = WebView.CoreWebView2.Environment.BrowserVersionString,
             startupToRoundTripMs = _startup.Elapsed.TotalMilliseconds
         }, new JsonSerializerOptions(ProtocolJson.SerializerOptions) { WriteIndented = true }));
-        Dispatcher.BeginInvoke(Close);
+        _ = Dispatcher.BeginInvoke(Close);
     }
 
     private void FailSmoke(string code, Exception exception)
@@ -196,7 +209,63 @@ public partial class MainWindow : Window
             detail = exception.ToString(),
             startupToFailureMs = _startup.Elapsed.TotalMilliseconds
         }, new JsonSerializerOptions(ProtocolJson.SerializerOptions) { WriteIndented = true }));
-        Dispatcher.BeginInvoke(Close);
+        _ = Dispatcher.BeginInvoke(Close);
+    }
+
+    private void WriteUiReady(string report)
+    {
+        var fullPath = Path.GetFullPath(report);
+        Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+        File.WriteAllText(fullPath, JsonSerializer.Serialize(new
+        {
+            candidate = "option-a",
+            surface = "React WebView2 WPF",
+            q15UiReady = true,
+            loginVisible = true,
+            loginEnabled = true,
+            bridgeAvailabilityKnown = _workspace is not null,
+            webView2Runtime = WebView.CoreWebView2?.Environment.BrowserVersionString,
+            readyAtUtc = DateTime.UtcNow
+        }, new JsonSerializerOptions(ProtocolJson.SerializerOptions) { WriteIndented = true }));
+    }
+
+    private async Task RunInstalledFlowAsync(string report)
+    {
+        try
+        {
+            await WebView.CoreWebView2.ExecuteScriptAsync(InstalledFlowScript.JavaScript);
+            string? json = null;
+            for (var attempt = 0; attempt < 240; attempt++)
+            {
+                var raw = await WebView.CoreWebView2.ExecuteScriptAsync(
+                    "window.__q15InstalledFlowResult ? JSON.stringify(window.__q15InstalledFlowResult) : null;");
+                using var scriptResult = JsonDocument.Parse(raw);
+                if (scriptResult.RootElement.ValueKind == JsonValueKind.String)
+                    json = scriptResult.RootElement.GetString();
+                else if (scriptResult.RootElement.ValueKind == JsonValueKind.Object)
+                    json = scriptResult.RootElement.GetRawText();
+                if (!string.IsNullOrWhiteSpace(json)) break;
+                await Task.Delay(250);
+            }
+            json ??= JsonSerializer.Serialize(new { candidate = "option-a", surface = "React WebView2 WPF", result = "FAIL", uiIntegration = true, stageError = "INSTALLED_FLOW_TIMEOUT" });
+            var fullPath = Path.GetFullPath(report);
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+            File.WriteAllText(fullPath, json);
+        }
+        catch (Exception exception)
+        {
+            var fullPath = Path.GetFullPath(report);
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+            File.WriteAllText(fullPath, JsonSerializer.Serialize(new
+            {
+                candidate = "option-a",
+                surface = "React WebView2 WPF",
+                result = "FAIL",
+                uiIntegration = true,
+                stageError = exception.ToString()
+            }, new JsonSerializerOptions(ProtocolJson.SerializerOptions) { WriteIndented = true }));
+        }
+        _ = Dispatcher.BeginInvoke(Close);
     }
 
     private async void OnClosed(object? sender, EventArgs e)

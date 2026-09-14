@@ -13,11 +13,12 @@ interface Props {
   label: string;
   editLabel: string;
   menuLabel: string;
+  pagingKey?: string;
 }
 
 const rowHeight = 36;
 
-export function VirtualGrid({ total, columns, rows, selected, onSelected, onOpen, onRange, label, editLabel, menuLabel }: Props) {
+export function VirtualGrid({ total, columns, rows, selected, onSelected, onOpen, onRange, label, editLabel, menuLabel, pagingKey = "" }: Props) {
   const viewport = useRef<HTMLDivElement>(null);
   const [range, setRange] = useState(() => virtualRange(0, 430, rowHeight, total));
   const [editing, setEditing] = useState<number | null>(null);
@@ -27,7 +28,15 @@ export function VirtualGrid({ total, columns, rows, selected, onSelected, onOpen
   const [multi, setMulti] = useState<Set<number>>(() => new Set());
 
   useEffect(() => { onRange(range.start, range.end); }, [onRange, range.end, range.start]);
-  useEffect(() => { setRange(virtualRange(0, 430, rowHeight, total)); }, [total]);
+  useEffect(() => {
+    setRange(virtualRange(0, 430, rowHeight, total));
+    setEditing(null);
+    setDraft("");
+    setComposing(false);
+    setMenu(null);
+    setMulti(new Set());
+    if (viewport.current) viewport.current.scrollTo({ top: 0, left: 0 });
+  }, [pagingKey, total, columns.length]);
 
   const visible = useMemo(() => Array.from({ length: Math.max(0, range.end - range.start) }, (_, i) => range.start + i), [range]);
   const select = (index: number, extend: boolean) => {
@@ -36,7 +45,7 @@ export function VirtualGrid({ total, columns, rows, selected, onSelected, onOpen
   };
   const ensureVisible = (index: number) => viewport.current?.querySelector<HTMLElement>(`[data-row-index="${index}"]`)?.scrollIntoView({ block: "nearest" });
 
-  return <div className="grid-region">
+  return <div className="grid-region" data-q15="document-grid">
     <div className="grid-summary" aria-live="polite">{total.toLocaleString()} rows · {columns.length} columns · {multi.size} selected</div>
     <div
       ref={viewport}
@@ -74,6 +83,7 @@ export function VirtualGrid({ total, columns, rows, selected, onSelected, onOpen
             aria-rowindex={index + 1}
             aria-selected={multi.has(index)}
             data-row-index={index}
+            data-q15={`grid-row-${index}`}
             key={index}
             style={{ transform: `translateY(${index * rowHeight + rowHeight}px)`, width: columns.length * 148 }}
             onClick={(event) => select(index, event.ctrlKey || event.metaKey || event.shiftKey)}
