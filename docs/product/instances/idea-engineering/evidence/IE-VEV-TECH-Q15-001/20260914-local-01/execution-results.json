@@ -1,0 +1,152 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-001",
+  "runId": "20260914-local-01",
+  "repositoryBaseline": "c97ead832e026972a95f75a6c1933579fd49ac13",
+  "qualificationSourceCommit": "5556f60fc79b539556e492c05e25e9c21c11e8e1",
+  "q15State": "PARTIAL",
+  "winner": "NO WINNER — MORE QUALIFICATION REQUIRED",
+  "recommendationChanged": false,
+  "productScopeChanged": false,
+  "executed": [
+    {
+      "id": "RUN-SOURCE-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15SourceChecks.ps1 -FlutterCommand D:/Work/Tools/flutter-q15-stable/bin/flutter.bat -IncludeReleaseBuilds",
+      "result": "PASS",
+      "results": [
+        { "name": "shared Workspace protocol tests", "result": "PASS", "passed": 18, "total": 18 },
+        { "name": "shared API harness tests", "result": "PASS", "passed": 10, "total": 10 },
+        { "name": "Option A bridge tests", "result": "PASS", "passed": 8, "total": 8 },
+        { "name": "Option A WPF Release build", "result": "PASS" },
+        { "name": "Option A React unit tests", "result": "PASS", "passed": 4, "total": 4 },
+        { "name": "Option A React Release build", "result": "PASS" },
+        { "name": "Flutter static analysis", "result": "PASS", "reportedIssues": 0 },
+        { "name": "Flutter widget tests", "result": "PASS", "passed": 3, "total": 3 },
+        { "name": "Flutter Web JS Release build", "result": "PASS" },
+        { "name": "Flutter Web Wasm Release build", "result": "PASS" },
+        { "name": "Flutter Windows Release build", "result": "PASS" }
+      ]
+    },
+    {
+      "id": "RUN-A-WEB-001",
+      "command": "npm run test:e2e",
+      "surface": "Option A React in Microsoft Edge",
+      "result": "PASS",
+      "passed": 3,
+      "total": 3,
+      "raw": "browser/option-a-edge.json"
+    },
+    {
+      "id": "RUN-B-WEB-JS-001",
+      "command": "npx playwright test option-b-web.spec.ts against the Flutter Web JS Release output",
+      "surface": "Option B Flutter Web JS in Microsoft Edge",
+      "result": "PASS",
+      "passed": 2,
+      "total": 2,
+      "raw": "browser/option-b-edge-js.json"
+    },
+    {
+      "id": "RUN-B-WEB-WASM-001",
+      "command": "npx playwright test option-b-web.spec.ts against the Flutter Web Wasm Release output served by qualification/q15/scripts/serve_flutter_web.py",
+      "surface": "Option B Flutter Web Wasm in Microsoft Edge",
+      "result": "PASS",
+      "passed": 2,
+      "total": 2,
+      "raw": "browser/option-b-edge-wasm.json"
+    },
+    {
+      "id": "RUN-B-WIN-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15WindowsIntegration.ps1 -FlutterCommand D:/Work/Tools/flutter-q15-stable/bin/flutter.bat",
+      "surface": "Option B Flutter Windows",
+      "result": "PASS",
+      "results": [
+        { "name": "direct Dart FFI OpenDocument repetition", "result": "PASS", "passed": 32, "total": 32 },
+        { "name": "critical full flow", "result": "PASS", "passed": 1, "total": 1, "raw": "option-b-full-flow.json" }
+      ],
+      "directDartFfi": true,
+      "cppShimOrPlugin": false
+    },
+    {
+      "id": "RUN-STARTUP-A-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Measure-Q15Startup.ps1 -Candidate option-a -ExecutablePath <Option-A-Release-exe> -OutputDirectory <raw-dir>",
+      "result": "PASS",
+      "sampleCount": 10,
+      "thresholdState": "BLOCKED",
+      "raw": "performance/option-a-startup.json"
+    },
+    {
+      "id": "RUN-STARTUP-B-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Measure-Q15Startup.ps1 -Candidate option-b -ExecutablePath <Option-B-Release-exe> -OutputDirectory <raw-dir>",
+      "result": "PASS",
+      "sampleCount": 10,
+      "thresholdState": "BLOCKED",
+      "raw": "performance/option-b-startup.json"
+    }
+  ],
+  "diagnosticHistory": [
+    {
+      "id": "DIAG-FFI-001",
+      "observation": "The initial Flutter Windows OpenDocument path failed with ReadFile/WriteFile Win32 error 0.",
+      "reproduction": "integration_test/direct_ffi_workspace_test.dart repeated OpenDocument 32 times and was red before the correction.",
+      "supportedHypothesis": "A separate Dart FFI GetLastError call was not atomic with the failing overlapped I/O call; VM work could clobber the thread-local value.",
+      "correction": "Use a null byte-count pointer for overlapped I/O, wait on the manual-reset event, and obtain completion through GetOverlappedResult without using a later GetLastError call to decide pending state.",
+      "regressionResult": "PASS",
+      "fallbackIntroduced": false
+    },
+    {
+      "id": "DIAG-WASM-SERVER-001",
+      "observation": "The first Wasm browser attempt rendered blank because Python SimpleHTTPServer served .mjs as text/plain.",
+      "classification": "qualification-server defect, not a Flutter candidate result",
+      "correction": "Add the committed MIME/COOP/COEP static server and rerun the same two cases.",
+      "regressionResult": "PASS"
+    },
+    {
+      "id": "DIAG-WIN-RUNNER-001",
+      "observation": "One combined Flutter Windows invocation hit a Flutter debug-log reader failure while starting the second application.",
+      "classification": "test-runner invocation failure; no candidate PASS/FAIL assigned",
+      "correction": "Invoke each committed integration test in a separate Flutter test process.",
+      "regressionResult": "PASS"
+    }
+  ],
+  "securityCoverage": {
+    "result": "QUALIFICATION-UNKNOWN",
+    "passedInSharedOrCandidateTests": [
+      "valid same-user request",
+      "stale or expired session",
+      "replay exact request",
+      "reused request id with different payload",
+      "wrong Workspace",
+      "wrong session",
+      "wrong protocol version",
+      "invalid MAC",
+      "malformed frame",
+      "oversized frame",
+      "truncated frame",
+      "timeout",
+      "Workspace restart",
+      "concurrent operations",
+      "unknown operation",
+      "arbitrary command attempt",
+      "arbitrary path attempt",
+      "correlation mismatch",
+      "client-supplied ActorId refusal"
+    ],
+    "blocked": ["different Windows user", "elevation mismatch"],
+    "note": "CurrentUserOnly is not claimed as the complete authentication model."
+  },
+  "blockedOrNotRun": [
+    { "name": "production-like Java/Spring/PostgreSQL backend", "result": "BLOCKED" },
+    { "name": "different Windows user security case", "result": "BLOCKED" },
+    { "name": "elevation mismatch security case", "result": "BLOCKED" },
+    { "name": "assistive technology and independent accessibility review", "result": "BLOCKED" },
+    { "name": "real Vietnamese/Japanese IME composition matrix", "result": "BLOCKED" },
+    { "name": "corporate signing/install/update/interruption/rollback", "result": "BLOCKED" },
+    { "name": "IRONCAD/Office and representative artifact transfer", "result": "BLOCKED" },
+    { "name": "multi-monitor/corporate Windows behavior", "result": "BLOCKED" },
+    { "name": "full Web behavior matrix", "result": "NOT-RUN" },
+    { "name": "cold startup and complete interaction/frame/resource metrics", "result": "NOT-RUN" },
+    { "name": "Flutter Web flutter drive", "result": "BLOCKED", "reason": "No configured WebDriver endpoint; the attempted Flutter integration-test Web device path is unsupported." },
+    { "name": "repository documentation/diagram verifier scripts", "result": "NOT-RUN — execution instruction" },
+    { "name": "GitHub CI/status checks", "result": "NOT-RUN" },
+    { "name": "Product Decision Authority review/acceptance", "result": "NOT-RUN" }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-001",
+  "runId": "20260914-local-01",
+  "countingRule": "nonblank physical lines in the committed qualification source; generated Windows runner reported separately",
+  "optionA": {
+    "languagesAndFrameworks": ["TypeScript", "React", "C#", "WPF", "WebView2", "Win32 named pipe through .NET"],
+    "source": [
+      { "category": "React presentation/runtime", "files": 11, "lines": 629 },
+      { "category": "React tests", "files": 2, "lines": 78 },
+      { "category": "WPF/WebView2/bridge runtime", "files": 6, "lines": 393 },
+      { "category": "bridge tests", "files": 1, "lines": 59 }
+    ],
+    "dependencies": {
+      "packageManager": "npm 11.16 lockfile v3 plus NuGet restore",
+      "directRuntimeNpm": 3,
+      "directDevelopmentNpm": 10,
+      "installedUniqueNpmPaths": 106,
+      "installedProductionNpmPaths": 7
+    },
+    "customBridgeFiles": "six WPF/WebView2/bridge runtime files plus one bridge test file",
+    "maintenanceOwnership": "BLOCKED — no named owners or proficiency evidence"
+  },
+  "optionB": {
+    "languagesAndFrameworks": ["Dart", "Flutter Web", "Flutter Windows", "Dart FFI", "Win32 named pipe"],
+    "source": [
+      { "category": "Dart runtime excluding direct FFI", "files": 17, "lines": 1649 },
+      { "category": "direct Dart FFI", "files": 1, "lines": 450 },
+      { "category": "Dart tests", "files": 4, "lines": 446 },
+      { "category": "generated Windows runner", "files": 9, "lines": 615 }
+    ],
+    "dependencies": {
+      "packageManager": "Dart 3.13.3 pubspec.lock",
+      "directRuntime": 6,
+      "directDevelopment": 3,
+      "resolvedPackages": 43
+    },
+    "customNativePluginFiles": 0,
+    "generatedPluginList": [],
+    "maintenanceOwnership": "BLOCKED — no named owners or proficiency evidence"
+  },
+  "sharedHarness": {
+    "languagesAndFrameworks": ["C#", ".NET 10", "ASP.NET Core"],
+    "source": [
+      { "category": "shared .NET runtime/harness", "files": 10, "lines": 985 },
+      { "category": "shared .NET tests", "files": 2, "lines": 411 }
+    ],
+    "browserHarnessDirectDevelopmentDependencies": 1,
+    "productionStatus": "qualification test double only"
+  },
+  "thirdPartyGridOrTree": {
+    "optionA": false,
+    "optionB": false,
+    "note": "Both candidates use custom virtualization. This prevents package-selection skew but is not production suitability evidence."
+  },
+  "buildDuration": "NOT-RUN",
+  "comparativeEffortResult": "QUALIFICATION-UNKNOWN"
+}

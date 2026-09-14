@@ -1,0 +1,26 @@
+{
+  "candidate": "option-b",
+  "sampleCount": 10,
+  "definition": "process launch to process exit after candidate readiness report; warm/restart samples",
+  "thresholdState": "BLOCKED",
+  "unit": "ms",
+  "minimum": 1180.1614,
+  "maximum": 2185.7328,
+  "mean": 1341.615,
+  "p50NearestRank": 1204.1641,
+  "p95NearestRank": 2185.7328,
+  "p99NearestRank": 2185.7328,
+  "samples": [
+    { "sample": 1, "externalProcessDurationMs": 1180.1614, "internalReadinessMs": 2.764, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 2, "externalProcessDurationMs": 1204.1641, "internalReadinessMs": 4.617, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 3, "externalProcessDurationMs": 2185.7328, "internalReadinessMs": 3.136, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 4, "externalProcessDurationMs": 1563.1448, "internalReadinessMs": 4.2, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 5, "externalProcessDurationMs": 1222.3387, "internalReadinessMs": 2.256, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 6, "externalProcessDurationMs": 1232.5849, "internalReadinessMs": 2.166, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 7, "externalProcessDurationMs": 1193.1688, "internalReadinessMs": 4.119, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 8, "externalProcessDurationMs": 1199.674, "internalReadinessMs": 2.505, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 9, "externalProcessDurationMs": 1192.6654, "internalReadinessMs": 1.934, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 10, "externalProcessDurationMs": 1242.5149, "internalReadinessMs": 7.876, "candidateResult": "PASS", "candidateCode": "WORKSPACE_READY" }
+  ],
+  "comparabilityNote": "External durations use the shared process-lifetime principle. Internal readiness starts after Flutter's first frame and times the pipe path; it is not comparable to Option A's broader internal timer."
+}

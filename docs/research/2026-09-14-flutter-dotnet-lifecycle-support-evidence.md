@@ -33,7 +33,8 @@ This record answers only the lifecycle portion of Q-15:
 
 It does not compare implementation quality, performance, accessibility, IPC correctness, update
 success, staffing, commercial support entitlement or total cost. It does not select React/WPF,
-Flutter or any other Client/UI option. Q-15 implementation and measurement remain `NOT-RUN`.
+Flutter or any other Client/UI option. This research record does not assign a Q-15 result; the
+separate `IE-VEV-TECH-Q15-001` execution record now controls the bounded `Q-15 PARTIAL` state.
 
 Evidence labels used below are:
 
@@ -128,8 +129,8 @@ arrangements actually available to the company.
 | `UNK-LC-001` | `UNKNOWN` | A public fixed-term Flutter `3.47.x` maintenance or end-of-support date | No such date appears in the reviewed first-party Flutter sources. |
 | `UNK-LC-002` | `UNKNOWN` | Contractual enterprise Flutter/Dart support, response time or backport entitlement available to IDEA Engineering | Public project policy is not a company support contract. No vendor quotation or entitlement was supplied. |
 | `UNK-LC-003` | `UNKNOWN` | Lifecycle and security ownership for every Flutter package, plugin, native library and Windows installer/updater dependency | Framework support does not automatically cover independent dependencies. No candidate lockfile or SBOM was tested. |
-| `UNK-LC-004` | `UNKNOWN` | Actual compatibility effort when moving an IDEA Flutter build between stable releases | No Q-15 implementation or upgrade drill was run. |
-| `UNK-LC-005` | `UNKNOWN` | Actual .NET 10 patch and pre-EOS migration effort for the IDEA Workspace or shell | A published horizon does not measure application migration, deployment or rollback. Q-15 remains `NOT-RUN`. |
+| `UNK-LC-004` | `UNKNOWN` | Actual compatibility effort when moving an IDEA Flutter build between stable releases | The bounded Q-15 prototype did not execute an SDK upgrade drill. |
+| `UNK-LC-005` | `UNKNOWN` | Actual .NET 10 patch and pre-EOS migration effort for the IDEA Workspace or shell | A published horizon and the bounded Q-15 prototype do not measure application migration, deployment or rollback. |
 | `UNK-LC-006` | `UNKNOWN` | Support interaction among .NET 10, WPF, WebView2, Windows, third-party NuGet packages and the chosen deployment model | The .NET policy does not replace the separate lifecycle evidence for every adjacent component. |
 | `UNK-LC-007` | `UNKNOWN` | Relative operational cost and total lifecycle risk of the Q-15 control and challenger | No common fixture, staff model, patch drill, upgrade, rollback or incident scenario has been executed. |
 

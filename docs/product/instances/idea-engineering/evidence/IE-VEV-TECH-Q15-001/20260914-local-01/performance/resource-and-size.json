@@ -1,0 +1,74 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-001",
+  "runId": "20260914-local-01",
+  "thresholdState": "BLOCKED",
+  "idleSnapshot": {
+    "sampleCount": 1,
+    "readyIdleSeconds": 10,
+    "optionA": {
+      "processCount": 7,
+      "workingSetBytes": 596488192,
+      "privateBytes": 331460608,
+      "processes": [
+        { "kind": "wpf-root", "workingSetBytes": 190078976, "privateBytes": 134131712 },
+        { "kind": "webview2-child-1", "workingSetBytes": 16863232, "privateBytes": 3088384 },
+        { "kind": "webview2-child-2", "workingSetBytes": 25563136, "privateBytes": 9601024 },
+        { "kind": "webview2-child-3", "workingSetBytes": 134893568, "privateBytes": 43294720 },
+        { "kind": "webview2-child-4", "workingSetBytes": 70021120, "privateBytes": 29208576 },
+        { "kind": "webview2-child-5", "workingSetBytes": 111046656, "privateBytes": 97742848 },
+        { "kind": "webview2-child-6", "workingSetBytes": 48021504, "privateBytes": 14393344 }
+      ]
+    },
+    "optionB": {
+      "processCount": 1,
+      "workingSetBytes": 333647872,
+      "privateBytes": 333619200,
+      "cpuTimeSnapshotSeconds": 1.375
+    },
+    "result": "QUALIFICATION-UNKNOWN",
+    "limitation": "One idle snapshot is not a stable resource comparison; active/peak memory and comparable CPU intervals were not captured."
+  },
+  "releaseOutput": {
+    "optionAWeb": {
+      "files": 4,
+      "bytes": 1735235,
+      "javascriptBytes": 278629,
+      "sourceMapBytes": 1451297,
+      "cssBytes": 4773,
+      "htmlBytes": 536
+    },
+    "optionADesktop": {
+      "files": 24,
+      "bytes": 29511377,
+      "exclusion": "runtime *.exe.WebView2 user-data directory"
+    },
+    "optionBWindows": {
+      "files": 15,
+      "bytes": 28501220
+    },
+    "optionBWebJs": {
+      "files": 41,
+      "bytes": 41865209,
+      "mainDartJsBytes": 2589502
+    },
+    "optionBWebWasm": {
+      "files": 43,
+      "bytes": 44050583,
+      "mainDartWasmBytes": 2154580,
+      "mainDartJsFallbackPresent": true
+    },
+    "result": "QUALIFICATION-UNKNOWN",
+    "limitation": "Directory totals are build-output sizes, not clean-install footprints or browser transfer bytes. Flutter Web output includes multiple renderer and fallback variants."
+  },
+  "notRun": [
+    "cold usable startup",
+    "active memory",
+    "peak memory",
+    "comparable active CPU",
+    "input-to-visible p50/p95/p99",
+    "scroll p50/p95/p99",
+    "edit p50/p95/p99",
+    "long tasks and frame timing",
+    "build duration"
+  ]
+}

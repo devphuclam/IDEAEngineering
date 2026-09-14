@@ -1,0 +1,28 @@
+{
+  "source": "Playwright JSON reporter",
+  "playwrightVersion": "1.63.0",
+  "browserChannel": "msedge",
+  "buildMode": "Flutter Web Wasm Release",
+  "startTime": "2026-09-14T16:33:50.341Z",
+  "durationMs": 7757.604,
+  "stats": { "expected": 2, "skipped": 0, "unexpected": 0, "flaky": 0 },
+  "tests": [
+    {
+      "title": "Flutter Web executes login, large search, detail and locale switch",
+      "status": "passed",
+      "startTime": "2026-09-14T16:33:50.702Z",
+      "durationMs": 3787,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "title": "Flutter Web exposes distinct empty, refused, error and expired states",
+      "status": "passed",
+      "startTime": "2026-09-14T16:33:54.738Z",
+      "durationMs": 2920,
+      "retry": 0,
+      "errors": [],
+      "expectedHttpConsoleStatuses": [403, 503, 401, 401]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-001",
+  "runId": "20260914-local-01",
+  "capturedAt": "2026-09-14T23:41:36.9409845+07:00",
+  "repositoryBaseline": "c97ead832e026972a95f75a6c1933579fd49ac13",
+  "qualificationSourceCommit": "5556f60fc79b539556e492c05e25e9c21c11e8e1",
+  "machine": {
+    "operatingSystem": "Windows 11 Home Single Language",
+    "version": "10.0.26200",
+    "build": "26200",
+    "architecture": "64-bit",
+    "cpu": "Intel(R) Core(TM) i5-13500H",
+    "physicalCores": 12,
+    "logicalProcessors": 16,
+    "physicalMemoryBytes": 16868962304,
+    "corporateImage": false
+  },
+  "network": {
+    "path": "loopback",
+    "productionLike": false
+  },
+  "toolchain": {
+    "dotnetSdk": "10.0.302",
+    "dotnetExecutedRuntime": "10.0.10",
+    "node": "v24.18.0",
+    "npm": "11.16.0",
+    "flutter": "3.47.4",
+    "flutterChannel": "stable",
+    "flutterCommit": "9584c6713b324636289d067944a46fd6b49df14b",
+    "dart": "3.13.3",
+    "edge": "153.0.4234.32",
+    "chrome": "152.0.7977.84",
+    "webView2Runtime": "152.0.4191.66"
+  },
+  "limitations": [
+    "single development machine",
+    "not a controlled company Windows image",
+    "loopback qualification API rather than production-like network",
+    "no production Java/Spring/PostgreSQL Server"
+  ]
+}

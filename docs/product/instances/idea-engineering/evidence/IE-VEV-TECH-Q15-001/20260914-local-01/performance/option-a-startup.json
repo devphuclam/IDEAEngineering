@@ -1,0 +1,26 @@
+{
+  "candidate": "option-a",
+  "sampleCount": 10,
+  "definition": "process launch to process exit after candidate readiness report; warm/restart samples",
+  "thresholdState": "BLOCKED",
+  "unit": "ms",
+  "minimum": 890.379,
+  "maximum": 948.3023,
+  "mean": 907.7648,
+  "p50NearestRank": 899.112,
+  "p95NearestRank": 948.3023,
+  "p99NearestRank": 948.3023,
+  "samples": [
+    { "sample": 1, "externalProcessDurationMs": 929.8156, "internalReadinessMs": 651.2966, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 2, "externalProcessDurationMs": 913.9012, "internalReadinessMs": 645.3858, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 3, "externalProcessDurationMs": 898.0909, "internalReadinessMs": 623.908, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 4, "externalProcessDurationMs": 910.8431, "internalReadinessMs": 626.2315, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 5, "externalProcessDurationMs": 900.2712, "internalReadinessMs": 634.7987, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 6, "externalProcessDurationMs": 892.664, "internalReadinessMs": 632.5364, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 7, "externalProcessDurationMs": 899.112, "internalReadinessMs": 635.6605, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 8, "externalProcessDurationMs": 894.2691, "internalReadinessMs": 626.8055, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 9, "externalProcessDurationMs": 890.379, "internalReadinessMs": 625.7649, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" },
+    { "sample": 10, "externalProcessDurationMs": 948.3023, "internalReadinessMs": 671.1455, "candidateResult": "Accepted", "candidateCode": "WORKSPACE_READY" }
+  ],
+  "comparabilityNote": "External durations use the shared process-lifetime principle. Internal readiness includes WebView load, bridge and pipe and is not comparable to Option B's post-first-frame pipe timer."
+}
