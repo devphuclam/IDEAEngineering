@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.19`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.20`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.19` |
+| Document Version | `0.20` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
 | Requirements Input | `IE-PROD-SREQ-001@0.13`; Feature and Spec decisions remain `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
@@ -23,7 +23,7 @@
 | Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Change History | 0.19: make Submit/Approve authorization and attributable outcome explicit in `ARCH-VIEW-SEQ-003`, identify the delegated administrator who requests a Group Role Assignment in `ARCH-VIEW-ACT-001`, and replace ambiguous Checkout-entitlement wording; no new product requirement or gate decision; [IE-CHG-DOC-REVIEW-001](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). 0.18: restore architecture-first wording for deployment, maintained authentication/session mechanics and candidate technology rows; exact volatile distro/runtime/framework/database/package choices remain in `TECH-001@0.11` and its matrix; no diagram, Module ownership, architecture semantics, requirement or gate change; [IE-CHG-TECH-LINUX-002](registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md). Earlier history remains in the controlled change records. |
+| Change History | 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram with an explicit purpose, audience, exclusions and notation; detailed ownership remains in the existing Module table and behavioural flows remain in their dedicated views; no product requirement, architecture decision, Tech choice or gate state changes; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). 0.19: make Submit/Approve authorization and attributable outcome explicit in `ARCH-VIEW-SEQ-003`, identify the delegated administrator who requests a Group Role Assignment in `ARCH-VIEW-ACT-001`, and replace ambiguous Checkout-entitlement wording; no new product requirement or gate decision; [IE-CHG-DOC-REVIEW-001@0.1](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -130,7 +130,7 @@ Each view has a stable ID so a review comment can identify the exact model rathe
 | `ARCH-VIEW-CTX-001` | C4-style System Context / section 1 | Who uses IDEA, what is external and where is the product boundary? | One Operating Organization; all stakeholders; excludes internal Modules and deployment nodes. | `Draft`; DOC-03 actors; `REQ-GOV-001`, `REQ-AUTH-*`, `REQ-IAM-*` | Context table and paragraph after the view. |
 | `ARCH-VIEW-CON-001` | C4-style Container / section 4.1 | Which executable/data containers exist and what responsibility crosses each interface? | Candidate logical runtime; maintainers/security; excludes physical host count. | `Draft`; `REQ-SEC-*`, `REQ-OPS-*`, `REQ-AUTH-*` | Numbered container description after the view. |
 | `ARCH-VIEW-DEP-001` | C4-style Deployment / section 4.2 | What runs on engineer/admin devices and server zone, and where are trust boundaries? | Initial candidate deployment; operations/security; technology remains unapproved. | `Draft`; `REQ-SEC-*`, `REQ-OPS-*` | Deployment explanation after the view. |
-| `ARCH-VIEW-MOD-001` | C4-style Component / section 5.1 | Which Server Module owns each authoritative state and interface? | IDEA Server logical Modules; maintainers/reviewers; excludes database tables. | `Draft`; `REQ-GOV-*`, `REQ-AUTH-*`, DOC-06 | Module rules following the view. |
+| `ARCH-VIEW-MOD-001` | C4 Component Diagram / section 5.1 | How does a protected product command reach its declared authoritative owners and obtain RBAC decisions? | Principal command-control Modules inside one IDEA Server; maintainers/reviewers; excludes supporting content paths, actors, workflow sequences, deployment and database tables. | `Draft`; `REQ-GOV-*`, `REQ-AUTH-*`, DOC-06 | Module table, `ARCH-VIEW-MOD-002` and rules surrounding the view. |
 | `ARCH-VIEW-MOD-002` | C4 Component-level responsibility view / section 5.3 | Where is the seam around Checkout/Reference/Check-in, and which collaborators may affect an authoritative commit? | Controlled Product Data and its callers/collaborators; architecture/implementation/security reviewers; excludes classes and physical deployment. | `Draft`; `REQ-WS-001…015`, `REQ-OPS-001`; ADR C1-004/C1-005 | Numbered responsibility and seam description after the view. |
 | `ARCH-VIEW-RBAC-001` | UML-style class/domain view / section 5.2 | How do Principal, Group, Role Definition, Permission, Scope and Role Assignment relate? | Authorization domain; security/requirements/data reviewers. | `Draft`; `REQ-AUTH-001…010`; ADR C1-010 | Relationship list following the view. |
 | `ARCH-VIEW-STATE-001` | UML State Machine / section 7 | Which commands change Business Revision workflow state? | One Business Revision; lifecycle users/reviewers. | `Draft`; `REQ-LC-001…009` | State notes and section introduction. |
@@ -190,9 +190,9 @@ A diagram is ready for baseline review only when a reviewer can answer yes to al
 - the long description communicates the same essential information without relying on the image; and
 - the actual rendered artifact was inspected, not merely syntax-checked.
 
-The current diagrams remain `Draft`. The successor corrected-baseline source consistency and internal
-inspection of all 30 rendered views are recorded in
-[IE-VEV-ARCH-CORR-003](registers/VEV-2026-09-12-architecture-consistency-correction-003.md); predecessor and earlier VEV
+The current diagrams remain `Draft`. The current source consistency and focused internal rendition
+inspection are recorded in
+[IE-VEV-ARCH-CORR-005](registers/VEV-2026-09-14-module-authority-view-legibility.md); predecessor VEV
 records remain historical evidence. Qualified architecture/security review remains `NOT-RUN`; render
 success must not be reported as architecture conformance or evidence that the software has been
 implemented.
@@ -357,64 +357,77 @@ terms do not imply one network service per Module.
 
 ### 5.1 Authority and module ownership view
 
-This diagram answers three different questions separately: who the person is, what policy applies,
-and which Module is allowed to change the product state. A policy decision never writes another
-Module's state.
+The table above is the detailed responsibility catalogue. The view below is deliberately narrower:
+it shows the static Modules needed to understand one protected product command. Administrator
+responsibilities belong to `ARCH-VIEW-ACT-001`; Workspace and Artifact responsibility belongs to
+`ARCH-VIEW-MOD-002`; runtime Check-in and Release behaviour belongs to the sequence views.
 
-**`ARCH-VIEW-MOD-001` — Module authority (conceptual).** **Model profile:** C4 Component-level
-   responsibility view; `Draft 0.16`; maintainers, security and architecture reviewers. **Question:**
-which Module owns each authoritative state and who may call it? **Scope:** logical IDEA Server
-Modules. **Excludes:** deployment processes, database tables and UI components. **Trace:**
-`REQ-GOV-*`, `REQ-AUTH-*`, DOC-06. **Legend:** arrows are governed calls or decisions; each Module
-writes only the state named in the ownership table.
+| View field | Definition |
+|---|---|
+| Diagram name | `ARCH-VIEW-MOD-001` — C4 Component Diagram for the protected command path inside IDEA Server |
+| Diagram type / model kind | C4 Component Diagram, rendered with Mermaid flowchart notation |
+| Purpose | Show how one protected product command reaches only its declared authoritative owner Modules, and how each owner obtains an authorization decision without giving Access Policy authority over product state. A named cross-Module operation may involve more than one owner. |
+| Intended audience | Software maintainers, security reviewers and architecture reviewers. |
+| Scope | The coordinator, product-state owners, Access Policy and its two authoritative fact providers inside the `IDEA Server` container. |
+| Excludes | People and administrator roles, UI screens, Workspace and Artifact paths, deployment nodes, workflow timing, database tables and detailed message sequences. |
+| Trace | `REQ-GOV-*`, `REQ-AUTH-*`, DOC-06, the detailed Module table above and `ARCH-VIEW-MOD-002`. |
+| Reading convention | A solid arrow is a permitted logical call in the arrow direction, not a time sequence. Absence of an arrow does not grant access. |
+
+Method basis: [ISO/IEC/IEEE 42010:2022](https://www.iso.org/standard/74393.html) supplies the
+architecture-description concepts used to declare the view, concern and model kind; it does not
+mandate this notation. The [C4 Component Diagram](https://c4model.com/diagrams/component) supplies
+the zoom level: logical components inside one container, their responsibilities and relationships.
+The project calls these logical components **Modules** and does not imply a separately deployed
+service for each box.
+
+**`ARCH-VIEW-MOD-001` — C4 Component Diagram for the protected command path inside IDEA Server.**
 
 ```mermaid
+---
+title: C4 Component Diagram — Protected Command Path inside IDEA Server
+---
 flowchart TB
-    accTitle: IDEA Server Module authority
-    accDescr: Scoped administrators call only their owning Modules. Identity and Accounts establishes actor context and exposes a read-only eligibility query port, Project Governance supplies membership facts to Access Policy, and Access Policy returns immutable authorization decisions. Access Policy never re-enters an IAM mutation command through that port. Artifact Custody owns bytes and locations; Controlled Product Data owns CPD ArtifactReferences only inside Generation manifests, while Product Structure and Format Intelligence retain any exact ArtifactId/digest pins in their own metadata. A narrow use-case coordinator opens a shared relational unit of work for a named operation; it does not own state, outcomes or generic CRUD authority.
+    accTitle: C4 Component Diagram for the protected command path inside IDEA Server
+    accDescr: A use-case coordinator invokes only the product-state owner Modules declared for a protected command. A named cross-Module operation may involve more than one owner. Controlled Product Data, Product Structure and Lifecycle Governance are possible owners. Each called owner requests an authorization decision from Access Policy before a protected write. Access Policy reads account eligibility from Identity and Accounts and Project membership from Project Governance. Access Policy returns a decision but never writes product state. The arrows are permitted logical calls, not a time sequence.
 
-    qlht["Account Administrator<br/>System Management"]
-    projectAdmin["Project Administrator"]
-    configAdmin["Product Configuration Administrator"]
-    roleAdmin["Privileged Role Administrator"]
+    subgraph server["IDEA Server — Container"]
+        direction TB
 
-    iam["Identity and Accounts<br/>Actors, accounts, Login Identities"]
-    project["Project Governance<br/>Projects, Groups, membership"]
-    policy["Access Policy<br/>roles, assignments and evaluation"]
-    coordinator["Application Use-case Transaction Coordinator<br/>declared operation and shared UoW only"]
-    lifecycle["Lifecycle Governance<br/>workflow roles, decisions and release"]
-    product["Controlled Product Data<br/>documents, Generations, Checkout"]
-    custody["Artifact Custody<br/>Artifacts, locations, transfers and candidates"]
-    structure["Product Structure<br/>snapshots and BOM"]
-    info["Information Model<br/>metadata and numbering"]
-    format["Format Intelligence<br/>capability and representations"]
-    audit["Audit Evidence<br/>append-only evidence"]
+        coordinator["Use-case Transaction Coordinator<br/>[Module]<br/>Calls only the owner Interfaces declared<br/>for one named operation"]
 
-    qlht -->|manage accounts and Login Identities| iam
-    projectAdmin -->|manage Project members and Groups| project
-    projectAdmin -->|assign permitted Project roles| policy
-    roleAdmin -->|manage permitted roles and admin assignments| policy
-    configAdmin -->|define workflow and eligibility rules| lifecycle
-    configAdmin -->|define governed profiles| info
-    configAdmin -->|define governed profiles| format
+        cpd["Controlled Product Data<br/>[Module]<br/>Owns Documents, Generations,<br/>Checkout and Check-in"]
+        structure["Product Structure<br/>[Module]<br/>Owns Structure Snapshots and BOM"]
+        lifecycle["Lifecycle Governance<br/>[Module]<br/>Owns Workflow, Review and Release"]
 
-    policy -->|read-only IAM eligibility query port| iam
-    policy -->|resolve Project and direct Group membership| project
-    product -->|request authorization for owned command| policy
-    structure -->|request authorization for owned command| policy
-    lifecycle -->|request authorization for owned command| policy
-    coordinator -->|call declared owner command under one UoW| product
-    coordinator -->|call declared owner command under one UoW| structure
-    coordinator -->|call declared owner command under one UoW| lifecycle
-     coordinator -->|request Audit Evidence append and outbox retention in same UoW| audit
-    product -->|exact ArtifactId and digest only| custody
-    format -->|accept or resolve exact Artifact| custody
-     product -->|append Audit Evidence for owner outcome| audit
-     structure -->|append Audit Evidence for owner outcome| audit
-     lifecycle -->|append Audit Evidence for owner outcome| audit
-     iam -->|append Audit Evidence for account outcome| audit
-     project -->|append Audit Evidence for Project or Group outcome| audit
-     policy -->|append Audit Evidence for policy outcome| audit
+        access["Access Policy<br/>[Module]<br/>Returns an allow or deny decision;<br/>never writes product state"]
+
+        iam["Identity and Accounts<br/>[Module]<br/>Account status and eligibility"]
+        project["Project Governance<br/>[Module]<br/>Project, Group and membership facts"]
+
+        note["Owner rule: every called owner remains responsible for its own state; owner state, outcome and Audit Evidence commit together.<br/>Legend: grey = coordinator · blue = owner · yellow = policy or fact provider · arrow = permitted logical call, not elapsed time."]
+    end
+
+    coordinator -->|calls owner Interface| cpd
+    coordinator -->|calls owner Interface| structure
+    coordinator -->|calls owner Interface| lifecycle
+
+    cpd -->|asks for RBAC decision| access
+    structure -->|asks for RBAC decision| access
+    lifecycle -->|asks for RBAC decision| access
+    access -->|reads account eligibility| iam
+    access -->|reads Project membership| project
+
+    iam ~~~ note
+    project ~~~ note
+
+    classDef owner fill:#dbeafe,stroke:#2563eb,color:#172b4d
+    classDef guard fill:#fff4cc,stroke:#b7791f,color:#172b4d
+    classDef supporting fill:#eef2f6,stroke:#607d8b,color:#172b4d
+    classDef note fill:#ffffff,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3
+    class cpd,structure,lifecycle owner
+    class access,iam,project guard
+    class coordinator supporting
+    class note note
 ```
 
 Module rules:
@@ -2528,7 +2541,7 @@ variation or a genuine security seam already exists; defer unused integrations.
 | Spec prerequisite | Approved exact DOC-04@0.13 requirement baseline and resolved/owned requirement gaps, presented through an up-to-date Spec brief | `NOT-RUN`; DOC-04@0.13 is Draft and current Spec brief is stale |
 | Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
 | PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
-| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The current source/rendition record is [IE-VEV-ARCH-CORR-004](registers/VEV-2026-09-14-post-pull-architecture-view-correction.md); predecessor VEV-003 and earlier records remain historical evidence. A rendered picture does not imply independent architecture acceptance. |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The current source/rendition record is [IE-VEV-ARCH-CORR-005](registers/VEV-2026-09-14-module-authority-view-legibility.md); predecessor VEV records remain historical evidence. A rendered picture does not imply independent architecture acceptance. |
 | Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
 | Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
 | Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |

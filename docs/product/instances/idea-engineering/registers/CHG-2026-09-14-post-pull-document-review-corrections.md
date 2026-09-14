@@ -5,7 +5,7 @@
 | Field | Recorded value |
 |---|---|
 | Stable Supporting Record ID | `IE-CHG-DOC-REVIEW-001` |
-| Supporting class / version / status | `CHG` / `0.1` / `Draft` |
+| Supporting class / version / status | `CHG` / `0.2` / `Draft` |
 | Date | 2026-09-14 |
 | Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
 | Reviewer / acceptance authority | Project user requested the corrections; independent architecture/security review and Product Decision Authority acceptance `NOT-RUN` |
@@ -13,9 +13,9 @@
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; starting `main` commit `43c14ba4375ccf1e56f2dca85fcb1d3793f23a9e` |
 | Source / upstream trace | [DOC-04@0.13](../DOC-04-software-requirements-specification.md), [DOC-03@0.7](../DOC-03-business-requirements.md), [CONTEXT](../../../../../CONTEXT.md), [prior architecture audit](VEV-2026-09-12-architecture-consistency-correction-003.md), [authoring standard](../../../../agents/product-document-authoring-standard.md) |
-| Downstream trace | [DOC-05@0.19](../DOC-05-architecture-description.md), [DOC-07@0.8](../DOC-07-mvp-roadmap-and-delivery-plan.md), six controlled research notes, [current architecture rendition](VEV-2026-09-14-post-pull-architecture-view-correction.md), [catalogue](../README.md) |
+| Downstream trace | [DOC-05@0.20](../DOC-05-architecture-description.md), [DOC-07@0.8](../DOC-07-mvp-roadmap-and-delivery-plan.md), six controlled research notes, [current architecture rendition](VEV-2026-09-14-module-authority-view-legibility.md), [catalogue](../README.md) |
 | Access / retention | `INTERNAL`; retain with predecessor source hashes and successor rendition |
-| Supersession / review trigger | New correction record; no predecessor CHG is overwritten. Revisit if protected-command or RBAC ownership design changes. |
+| Supersession / review trigger | Version 0.2 retains the 0.1 corrections and adds a legibility-only successor rendition for `ARCH-VIEW-MOD-001`. Revisit if protected-command, RBAC ownership or Module boundaries change. |
 | Evidence status | Documentation correction only; product verification, qualified review and gate decisions remain `NOT-RUN` or `BLOCKED` as previously recorded. |
 
 ## 1. Disposition
@@ -38,11 +38,20 @@ Six admitted technology/competitor research notes gain stable IDs, Draft version
 state, evidence dates, source/downstream links, predecessor hashes and explicit control tailoring.
 Their underlying claims and dated source boundaries are unchanged.
 
+After management review exposed overlapping edge labels in `ARCH-VIEW-MOD-001`, DOC-05@0.20
+replaces that dense arrow graph with a scoped C4 Component Diagram. The view now declares its model
+kind, purpose, audience, scope, exclusions and notation before showing the logical Modules inside one
+IDEA Server and only their principal permitted dependencies. Detailed ownership remains in the
+existing Module table; administrator responsibilities and runtime behaviour remain in their dedicated
+activity and sequence views. The ownership rules are unchanged; this correction removes mixed
+concerns rather than creating a new Module, permission, workflow or technology decision.
+
 ## 2. Predecessor source pins
 
 | Source | Before | After / treatment |
 |---|---|---|
 | DOC-05 | `Draft 0.18`; raw SHA-256 `8b30359419387d0b1dc2904df9800ea2f3fa29053b50db9d4a7c9be3ef3e5f44` | `Draft 0.19`; two maintained views and terminology corrected. Exact successor SHA and rendition are in `IE-VEV-ARCH-CORR-004`. |
+| DOC-05 module-view presentation | `Draft 0.19`; rendered working-copy SHA-256 `34c085c6d02b0019a7fdf0a251b1d21aef54e38659fe4552a3e4c3c4b1609843` | `Draft 0.20`; `ARCH-VIEW-MOD-001` only is redrawn as a scoped C4 Component Diagram. Exact successor SHA and rendition are in `IE-VEV-ARCH-CORR-005`. |
 | DOC-06 | `Draft 0.16`; raw SHA-256 `11db41f439cb801fc510ac1f959340d1435df5e25d8096862bb05169c76c9a93` | Unchanged data contracts; exact source included in the successor rendition manifest. |
 | DOC-07 | `Draft 0.7`; raw SHA-256 `85a4023ec808850f180973e467fc0230ef987b0244a30f913ad7fc8ba1a53d6d` | `Draft 0.8`; routing/count/status correction only. |
 | Earlier VEV-003 source pins | DOC-05 `ea071acf…`; DOC-06 `50be6ed1…` | The pinned byte streams cannot be reproduced from the committed starting baseline, and VEV-003 remains historical. A new exact-source record supersedes it for current use without rewriting its asserted result. |

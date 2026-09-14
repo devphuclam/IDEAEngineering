@@ -32,19 +32,31 @@ const html = s => String(s).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>
       const id = ids.at(-1)?.[1];
       if (!id || results.some(r=>r.id===id)) throw Error('Missing or duplicate view ID: '+id);
       if (!match[1].includes('accTitle:') || !match[1].includes('accDescr:')) throw Error('Missing alternative: '+id);
-      const title = match[1].match(/^\s*accTitle:\s*(.+)\r?$/m)?.[1].trim();
-      const description = match[1].match(/^\s*accDescr:\s*(.+)\r?$/m)?.[1].trim();
+      const title = match[1].match(/^\s*(?:%%\s*)?accTitle:\s*(.+)\r?$/m)?.[1].trim();
+      const description = match[1].match(/^\s*(?:%%\s*)?accDescr:\s*(.+)\r?$/m)?.[1].trim();
       if (!title || !description) throw Error('Empty alternative: '+id);
       const rendered = await page.evaluate(async ({code,n}) => (await mermaid.render('diagram'+n,code)).svg,{code:match[1],n:results.length});
-      const svg = await page.evaluate(renderedSvg => {
+      const svg = await page.evaluate(({renderedSvg,title,description}) => {
         document.querySelector('#view').innerHTML=renderedSvg;
         const el=document.querySelector('#view svg');
         el.style.maxWidth='none';
         el.style.width=el.viewBox.baseVal.width+'px';
+        el.setAttribute('role','img');
+        if (!el.querySelector(':scope > title')) {
+          const titleElement=document.createElementNS('http://www.w3.org/2000/svg','title');
+          titleElement.textContent=title;
+          el.insertBefore(titleElement,el.firstChild);
+        }
+        if (!el.querySelector(':scope > desc')) {
+          const descriptionElement=document.createElementNS('http://www.w3.org/2000/svg','desc');
+          descriptionElement.textContent=description;
+          const titleElement=el.querySelector(':scope > title');
+          titleElement.after(descriptionElement);
+        }
         // Mermaid returns HTML-label markup. Serializing the live DOM as XML makes void HTML
         // elements such as <br> valid when the generated SVG is opened as a standalone file.
         return new XMLSerializer().serializeToString(el);
-      },rendered);
+      },{renderedSvg:rendered,title,description});
       fs.writeFileSync(path.join(out,id+'.svg'),svg);
       await page.locator('#view svg').screenshot({path:path.join(out,id+'.png')});
       results.push({id,title,description,status:'PASS — RENDER',svgSha256:sha(svg)});
