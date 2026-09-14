@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <AssemblyName>Idea.Q15.ApiHarness</AssemblyName>
+    <RootNamespace>Idea.Q15.ApiHarness</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\..\fixtures\qualification-fixture.json" Link="fixtures\qualification-fixture.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\fixtures\locales.json" Link="fixtures\locales.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

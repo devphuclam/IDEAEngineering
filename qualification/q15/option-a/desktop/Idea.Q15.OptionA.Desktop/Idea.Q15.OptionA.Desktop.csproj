@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>Idea.Q15.OptionA.Desktop</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
+    <ProjectReference Include="..\Idea.Q15.OptionA.Bridge\Idea.Q15.OptionA.Bridge.csproj" />
+    <ProjectReference Include="..\..\..\shared\dotnet\Idea.Q15.WorkspaceProtocol\Idea.Q15.WorkspaceProtocol.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\web\dist\**\*" Link="web\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

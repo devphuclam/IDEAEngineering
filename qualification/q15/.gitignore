@@ -1,0 +1,27 @@
+# Local run state and generated evidence intermediates.
+.runtime/
+
+# .NET build outputs.
+**/bin/
+**/obj/
+
+# Node / browser build and test outputs.
+**/node_modules/
+**/dist/
+**/test-results/
+**/playwright-report/
+**/*.tsbuildinfo
+option-a/web/playwright.config.js
+option-a/web/playwright.config.d.ts
+option-a/web/vite.config.js
+option-a/web/vite.config.d.ts
+
+# Flutter/Dart generated caches and build products.
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/coverage/
+option-b/flutter/.idea/
+option-b/flutter/*.iml
+option-b/flutter/windows/flutter/ephemeral/

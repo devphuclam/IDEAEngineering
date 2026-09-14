@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Idea.Q15.WorkspaceProtocol</AssemblyName>
+    <RootNamespace>Idea.Q15.WorkspaceProtocol</RootNamespace>
+  </PropertyGroup>
+</Project>

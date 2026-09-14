@@ -1,0 +1,345 @@
+openapi: 3.1.0
+info:
+  title: IDEA Q-15 Qualification API
+  version: 1.0.0-qualification
+  description: >-
+    Synthetic loopback-only API used to compare two Client/UI candidates. This is
+    not the production IDEA Server contract and does not reopen the Java Server decision.
+servers:
+  - url: http://127.0.0.1:5115
+paths:
+  /api/v1/qualification/config:
+    get:
+      operationId: getQualificationConfig
+      responses:
+        '200':
+          description: Frozen qualification fixture identity and profiles.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/QualificationConfig' }
+  /api/v1/qualification/locales:
+    get:
+      operationId: getQualificationLocales
+      responses:
+        '200':
+          description: Candidate-neutral EN, VI and JA text fixture.
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: { type: object, additionalProperties: { type: string } } }
+  /api/v1/qualification/reset:
+    post:
+      operationId: resetQualificationState
+      responses:
+        '200':
+          description: Loopback-only reset of synthetic state; carries no Product authority.
+        '403': { $ref: '#/components/responses/Problem' }
+  /api/v1/session/login:
+    post:
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Session established by the server.
+          headers:
+            Set-Cookie:
+              schema: { type: string }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SessionView' }
+        '401': { $ref: '#/components/responses/Problem' }
+  /api/v1/session:
+    get:
+      operationId: getSession
+      responses:
+        '200':
+          description: Current server-established Actor context.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SessionView' }
+        '401': { $ref: '#/components/responses/Problem' }
+  /api/v1/session/logout:
+    post:
+      operationId: logout
+      responses:
+        '200':
+          description: Synthetic session revoked without changing local candidate data.
+  /api/v1/search:
+    get:
+      operationId: searchDocuments
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string, maxLength: 100 }
+        - name: profile
+          in: query
+          schema: { type: string, enum: [small, medium, large, stress], default: large }
+        - name: offset
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 200, default: 100 }
+      responses:
+        '200':
+          description: Deterministically ordered authorized results.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SearchPage' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /api/v1/tree:
+    get:
+      operationId: getProductTree
+      parameters:
+        - name: profile
+          in: query
+          schema: { type: string, enum: [small, medium, large, stress], default: large }
+        - name: offset
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 500, default: 250 }
+      responses:
+        '200':
+          description: Deterministic, paged hierarchy projection.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TreePage' }
+        '401': { $ref: '#/components/responses/Problem' }
+  /api/v1/documents/{documentId}:
+    get:
+      operationId: getDocument
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      responses:
+        '200':
+          description: Exact document detail and allowed action view.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DocumentDetail' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+  /api/v1/documents/{documentId}/checkout:
+    post:
+      operationId: checkoutDocument
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CheckoutRequest' }
+      responses:
+        '200':
+          description: Reservation created or idempotent prior result returned.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckoutResult' }
+        '202':
+          description: Outcome uncertain; query the same OperationId.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckoutResult' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '409': { $ref: '#/components/responses/Problem' }
+  /api/v1/documents/{documentId}/checkin:
+    post:
+      operationId: checkinDocument
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CheckinRequest' }
+      responses:
+        '200':
+          description: Server-authoritative Check-in committed and Reservation ended.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OperationStatus' }
+        '202':
+          description: Outcome uncertain; query the same OperationId.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OperationStatus' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '409': { $ref: '#/components/responses/Problem' }
+  /api/v1/operations/{operationId}:
+    get:
+      operationId: getOperationStatus
+      parameters:
+        - name: operationId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Authoritative status for the existing operation.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OperationStatus' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+components:
+  parameters:
+    DocumentId:
+      name: documentId
+      in: path
+      required: true
+      schema: { type: string, pattern: '^DOC-Q15-[0-9]{6}$' }
+  responses:
+    Problem:
+      description: Bounded refusal/error with no authoritative client-side inference.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+  schemas:
+    QualificationConfig:
+      type: object
+      required: [fixtureId, version, seed, workspaceId, profiles, scenarioDocuments, textFixtures]
+      properties:
+        fixtureId: { const: IE-Q15-FIXTURE-001 }
+        version: { type: string }
+        seed: { type: integer }
+        workspaceId: { const: WS-Q15-001 }
+        profiles: { type: object, additionalProperties: { $ref: '#/components/schemas/FixtureProfile' } }
+        scenarioDocuments: { type: object, additionalProperties: { type: string } }
+        textFixtures: { type: object, additionalProperties: { type: string } }
+    FixtureProfile:
+      type: object
+      required: [rows, columns, treeNodes, maxDepth]
+      properties:
+        rows: { type: integer, minimum: 1 }
+        columns: { type: integer, minimum: 1 }
+        treeNodes: { type: integer, minimum: 1 }
+        maxDepth: { type: integer, minimum: 1 }
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [username, password]
+      properties:
+        username: { type: string }
+        password: { type: string }
+    SessionView:
+      type: object
+      additionalProperties: false
+      required: [displayName, locale, expiresAtUtc]
+      properties:
+        displayName: { type: string }
+        locale: { type: string, enum: [en, vi, ja] }
+        expiresAtUtc: { type: string, format: date-time }
+    CheckoutRequest:
+      type: object
+      additionalProperties: false
+      required: [operationId, workspaceId, expectedGenerationId]
+      properties:
+        operationId: { type: string, format: uuid }
+        workspaceId: { const: WS-Q15-001 }
+        expectedGenerationId: { type: string }
+        scenario: { type: string, enum: [success, conflict, unauthorized, stale, uncertain] }
+    CheckinRequest:
+      type: object
+      additionalProperties: false
+      required: [operationId, workspaceId, reservationId, expectedGenerationId, declaredDigest]
+      properties:
+        operationId: { type: string, format: uuid }
+        workspaceId: { const: WS-Q15-001 }
+        reservationId: { type: string }
+        expectedGenerationId: { type: string }
+        declaredDigest: { type: string, pattern: '^[0-9a-f]{64}$' }
+        scenario: { type: string, enum: [success, uncertain, failed] }
+    CheckoutResult:
+      type: object
+      required: [operationId, status, documentId, expectedGenerationId]
+      properties:
+        operationId: { type: string, format: uuid }
+        status: { type: string, enum: [Committed, Refused, Pending, NeedsReconciliation] }
+        documentId: { type: string }
+        expectedGenerationId: { type: string }
+        reservationId: { type: [string, 'null'] }
+        reasonCode: { type: [string, 'null'] }
+    OperationStatus:
+      allOf:
+        - $ref: '#/components/schemas/CheckoutResult'
+        - type: object
+          required: [preservedLocalCandidate]
+          properties:
+            preservedLocalCandidate: { type: boolean }
+    SearchPage:
+      type: object
+      required: [total, offset, limit, columns, items]
+      properties:
+        total: { type: integer }
+        offset: { type: integer }
+        limit: { type: integer }
+        columns:
+          type: array
+          items: { type: string }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/DocumentSummary' }
+    TreePage:
+      type: object
+      required: [total, maxDepth, offset, limit, nodes]
+      properties:
+        total: { type: integer }
+        maxDepth: { type: integer }
+        offset: { type: integer }
+        limit: { type: integer }
+        nodes:
+          type: array
+          items: { $ref: '#/components/schemas/TreeNode' }
+    TreeNode:
+      type: object
+      required: [nodeId, parentId, label, depth, hasChildren]
+      properties:
+        nodeId: { type: string }
+        parentId: { type: [string, 'null'] }
+        label: { type: string }
+        depth: { type: integer }
+        hasChildren: { type: boolean }
+    DocumentSummary:
+      type: object
+      required: [documentId, title, revision, version, generationId, state, values]
+      properties:
+        documentId: { type: string }
+        title: { type: string }
+        revision: { type: string }
+        version: { type: integer }
+        generationId: { type: string }
+        state: { type: string }
+        values:
+          type: array
+          items: { type: string }
+    DocumentDetail:
+      allOf:
+        - $ref: '#/components/schemas/DocumentSummary'
+        - type: object
+          required: [documentClass, metadata, allowedActions, readOnly]
+          properties:
+            documentClass: { type: string }
+            metadata: { type: object, additionalProperties: { type: string } }
+            allowedActions:
+              type: array
+              items: { type: string }
+            readOnly: { type: boolean }
+    Problem:
+      type: object
+      required: [type, title, status, code, detail]
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        code: { type: string }
+        detail: { type: string }

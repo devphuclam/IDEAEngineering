@@ -1,0 +1,54 @@
+{
+  "fixtureId": "IE-Q15-FIXTURE-001",
+  "version": "1.0.0",
+  "seed": 15092026,
+  "workspaceId": "WS-Q15-001",
+  "pipeName": "idea-q15-workspace-v1",
+  "profiles": {
+    "small": { "rows": 500, "columns": 20, "treeNodes": 100, "maxDepth": 6 },
+    "medium": { "rows": 10000, "columns": 20, "treeNodes": 1000, "maxDepth": 10 },
+    "large": { "rows": 100000, "columns": 20, "treeNodes": 10000, "maxDepth": 12 },
+    "stress": { "rows": 250000, "columns": 20, "treeNodes": 25000, "maxDepth": 16 }
+  },
+  "users": [
+    {
+      "username": "engineer",
+      "password": "q15-engineer-only",
+      "displayName": "Linh Nguyễn",
+      "locale": "vi",
+      "eligible": true,
+      "canCheckout": true,
+      "sessionMode": "active"
+    },
+    {
+      "username": "reader",
+      "password": "q15-reader-only",
+      "displayName": "Alex Morgan",
+      "locale": "en",
+      "eligible": true,
+      "canCheckout": false,
+      "sessionMode": "active"
+    },
+    {
+      "username": "expired",
+      "password": "q15-expired-only",
+      "displayName": "佐藤 結衣",
+      "locale": "ja",
+      "eligible": false,
+      "canCheckout": false,
+      "sessionMode": "expired"
+    }
+  ],
+  "scenarioDocuments": {
+    "success": "DOC-Q15-000001",
+    "conflict": "DOC-Q15-000002",
+    "readOnly": "DOC-Q15-000003",
+    "stale": "DOC-Q15-000004",
+    "uncertain": "DOC-Q15-000005"
+  },
+  "textFixtures": {
+    "en": "Pump assembly — engineering change with a deliberately long label",
+    "vi": "Cụm bơm — thay đổi kỹ thuật có dấu tiếng Việt đầy đủ",
+    "ja": "ポンプ組立品 — 設計変更・ひらがな・カタカナ・漢字"
+  }
+}

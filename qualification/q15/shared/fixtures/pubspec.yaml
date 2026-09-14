@@ -1,0 +1,10 @@
+name: idea_q15_fixtures
+description: Candidate-neutral fixture assets for the IDEA Q-15 qualification only.
+version: 0.1.0
+publish_to: none
+environment:
+  sdk: ^3.13.0
+flutter:
+  assets:
+    - locales.json
+    - qualification-fixture.json

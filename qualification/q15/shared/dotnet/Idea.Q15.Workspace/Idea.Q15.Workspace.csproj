@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Idea.Q15.Workspace</AssemblyName>
+    <RootNamespace>Idea.Q15.Workspace</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Idea.Q15.WorkspaceProtocol\Idea.Q15.WorkspaceProtocol.csproj" />
+  </ItemGroup>
+</Project>

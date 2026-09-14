@@ -1,0 +1,32 @@
+{
+  "matrixId": "IE-Q15-SECURITY-001",
+  "version": "1.0.0",
+  "acceptanceIntent": {
+    "negativeProtectedOperationsAccepted": 0,
+    "arbitraryCommandProxy": 0,
+    "arbitraryPathProxy": 0,
+    "correlatedResultsPerAcceptedRequest": 1,
+    "failurePreservesLocalWork": true
+  },
+  "cases": [
+    "valid-same-user-request",
+    "different-windows-user",
+    "elevation-mismatch",
+    "stale-session",
+    "replay-exact-request",
+    "reused-request-id-different-payload",
+    "wrong-workspace",
+    "wrong-protocol-version",
+    "invalid-mac",
+    "malformed-frame",
+    "oversized-frame",
+    "truncated-frame",
+    "timeout",
+    "workspace-restart",
+    "ui-restart",
+    "concurrent-operations",
+    "unknown-operation",
+    "arbitrary-command-attempt",
+    "arbitrary-path-attempt"
+  ]
+}

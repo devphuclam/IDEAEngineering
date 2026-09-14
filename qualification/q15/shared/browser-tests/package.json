@@ -1,0 +1,12 @@
+{
+  "name": "idea-q15-shared-browser-tests",
+  "version": "0.1.0-qualification",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  },
+  "scripts": {
+    "test:option-b": "playwright test option-b-web.spec.ts"
+  }
+}

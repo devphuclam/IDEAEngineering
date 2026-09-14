@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://idea.local/qualification/q15/workspace-request.schema.json",
+  "title": "IDEA Q-15 Workspace request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "requestId",
+    "workspaceId",
+    "sessionId",
+    "sequence",
+    "issuedAtUnixMs",
+    "operation",
+    "payload",
+    "mac"
+  ],
+  "properties": {
+    "protocolVersion": { "const": "1.0" },
+    "requestId": { "type": "string", "format": "uuid" },
+    "workspaceId": { "const": "WS-Q15-001" },
+    "sessionId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "issuedAtUnixMs": { "type": "integer", "minimum": 1 },
+    "operation": {
+      "enum": [
+        "GetWorkspaceStatus",
+        "OpenDocument",
+        "OpenFolder",
+        "SelectFile",
+        "LaunchApprovedApplication"
+      ]
+    },
+    "payload": { "type": "object" },
+    "mac": { "type": "string", "minLength": 43, "maxLength": 44 }
+  }
+}
