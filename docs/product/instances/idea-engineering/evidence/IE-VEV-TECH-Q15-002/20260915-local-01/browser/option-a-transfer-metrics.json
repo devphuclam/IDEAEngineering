@@ -1,0 +1,55 @@
+{
+  "candidate": "option-a",
+  "fixture": "large",
+  "resources": [
+    {
+      "name": "http://127.0.0.1:5173/assets/index-CPXl47Wj.js",
+      "durationMs": 17.600000023841858,
+      "transferSize": 88718,
+      "encodedBodySize": 88418,
+      "decodedBodySize": 279887
+    },
+    {
+      "name": "http://127.0.0.1:5173/assets/index-224-6xzf.css",
+      "durationMs": 7.400000035762787,
+      "transferSize": 2001,
+      "encodedBodySize": 1701,
+      "decodedBodySize": 4773
+    },
+    {
+      "name": "http://127.0.0.1:5115/api/v1/session/login",
+      "durationMs": 3.300000011920929,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "http://127.0.0.1:5115/api/v1/search?q=pump&profile=large&offset=0&limit=200",
+      "durationMs": 3.800000011920929,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "http://127.0.0.1:5115/api/v1/tree?profile=large&offset=0&limit=500",
+      "durationMs": 4.5,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "http://127.0.0.1:5115/api/v1/tree?profile=large&offset=0&limit=500",
+      "durationMs": 4,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "http://127.0.0.1:5115/api/v1/search?q=pump&profile=large&offset=0&limit=200",
+      "durationMs": 3.599999964237213,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "candidate": "option-b",
+  "surface": "Flutter Windows",
+  "directDartFfi": true,
+  "cppShimOrPlugin": true,
+  "nativeShim": "q15_io_shim (runner export; direct Dart FFI remains the caller ABI)",
+  "startedAtUtc": "2026-09-14T18:30:31.702900Z",
+  "kind": "api-workspace-smoke",
+  "result": "PASS",
+  "actorDisplayName": "Linh Nguyễn",
+  "rows": 100000,
+  "columns": 20,
+  "documentId": "DOC-Q15-000001",
+  "checkoutStatus": "Committed",
+  "workspaceStatus": "Accepted",
+  "workspaceCode": "DOCUMENT_MATERIALIZED",
+  "checkinStatus": "Committed",
+  "preservesLocalCandidate": true,
+  "elapsedMs": 145.681
+}

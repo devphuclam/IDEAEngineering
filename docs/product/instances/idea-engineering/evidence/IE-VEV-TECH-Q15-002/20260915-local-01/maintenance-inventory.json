@@ -1,0 +1,35 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-002",
+  "runId": "20260915-local-01",
+  "predecessorInventory": "IE-VEV-TECH-Q15-001/20260914-local-01/maintenance-inventory.json",
+  "countingRule": "nonblank physical lines for committed qualification source; generated runner output and test evidence reported separately",
+  "optionA": {
+    "languagesAndFrameworks": ["TypeScript", "React", "C#", "WPF", "WebView2", "Win32 named pipe through .NET"],
+    "phase2Delta": [
+      "one installed-flow WebView2 host script that drives rendered DOM controls only",
+      "generation-keyed React virtual grid/tree reset and stale-result suppression",
+      "production Web Playwright runner with standalone JSON evidence"
+    ],
+    "customBridgeFiles": "existing typed WPF/WebView2 bridge retained; no generic host-object or Workspace bypass added",
+    "maintenanceOwnership": "BLOCKED — no named owners or proficiency evidence"
+  },
+  "optionB": {
+    "languagesAndFrameworks": ["Dart", "Flutter Web", "Flutter Windows", "Dart FFI", "C++/Win32 narrow runner shim", "Win32 named pipe"],
+    "phase2Delta": [
+      "generation-keyed Flutter grid/tree reset and shared horizontal controller",
+      "typed WorkspaceProtocolException/WindowsException failure classification",
+      "reproducible fault server and 10-case FFI fault runner",
+      "common Q15_UI_READY reporter"
+    ],
+    "customNativeShimFiles": 2,
+    "customNativeShimNonblankLines": 61,
+    "nativeShimRole": "captures ReadFile/WriteFile/GetLastError and GetOverlappedResult/GetLastError in one native call; no business logic, path ownership or Workspace authority",
+    "nativeToolchainCost": "C++ compilation is added to the Flutter Windows runner through CMake; direct Dart FFI remains the caller ABI",
+    "maintenanceOwnership": "BLOCKED — no named owners or proficiency evidence"
+  },
+  "sharedHarness": {
+    "phase2Delta": ["controlled Workspace fault server", "separate API/Workspace smoke runner", "production React and Flutter Web runner scripts"],
+    "productionStatus": "qualification test double only"
+  },
+  "comparativeEffortResult": "QUALIFICATION-UNKNOWN"
+}

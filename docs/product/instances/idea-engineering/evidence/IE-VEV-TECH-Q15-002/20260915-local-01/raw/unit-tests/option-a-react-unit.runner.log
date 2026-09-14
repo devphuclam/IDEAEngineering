@@ -1,0 +1,13 @@
+
+> idea-q15-option-a-web@0.1.0-qualification test
+> vitest run --pool=threads --maxWorkers=1 --run
+
+
+ RUN  v5.0.0 D:/Work/Projects/IDEAEngineering/qualification/q15/option-a/web
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  01:35:02
+   Duration  1.11s (environment 92%, transform 5%, import 1%, worker 1%)
+

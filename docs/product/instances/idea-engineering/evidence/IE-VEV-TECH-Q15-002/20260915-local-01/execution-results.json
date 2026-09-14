@@ -1,0 +1,187 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-002",
+  "runId": "20260915-local-01",
+  "repositoryBaseline": "9629455b6dff6fbc4cb75a115bc1a4c93fcff3be",
+  "qualificationSourceCommit": "3ae5f22fe1dc6d81175142fabb5619e1d831fae0",
+  "predecessorEvidence": "IE-VEV-TECH-Q15-001",
+  "q15State": "PARTIAL",
+  "winner": "NO WINNER — MORE QUALIFICATION REQUIRED",
+  "recommendationChanged": false,
+  "productScopeChanged": false,
+  "matrixChanged": false,
+  "tech001Changed": false,
+  "executed": [
+    {
+      "id": "RUN-NET-WORKSPACE-001",
+      "command": "dotnet test qualification/q15/shared/dotnet/Idea.Q15.WorkspaceProtocol.Tests/Idea.Q15.WorkspaceProtocol.Tests.csproj -c Release --no-restore --logger trx",
+      "surface": "shared Workspace protocol",
+      "result": "PASS",
+      "passed": 18,
+      "total": 18,
+      "raw": "raw/net-tests/phase2-workspace-protocol.trx"
+    },
+    {
+      "id": "RUN-NET-API-001",
+      "command": "dotnet test qualification/q15/shared/dotnet/Idea.Q15.ApiHarness.Tests/Idea.Q15.ApiHarness.Tests.csproj -c Release --no-restore --logger trx",
+      "surface": "shared API qualification harness",
+      "result": "PASS",
+      "passed": 10,
+      "total": 10,
+      "raw": "raw/net-tests/phase2-api.trx"
+    },
+    {
+      "id": "RUN-A-BRIDGE-001",
+      "command": "dotnet test qualification/q15/option-a/desktop/Idea.Q15.OptionA.Bridge.Tests/Idea.Q15.OptionA.Bridge.Tests.csproj -c Release --no-restore --logger trx",
+      "surface": "Option A typed WebView2 bridge",
+      "result": "PASS",
+      "passed": 8,
+      "total": 8,
+      "raw": "raw/net-tests/phase2-bridge.trx"
+    },
+    {
+      "id": "RUN-A-UNIT-001",
+      "command": "npm test -- --run",
+      "surface": "Option A React unit tests",
+      "result": "PASS",
+      "passed": 4,
+      "total": 4,
+      "raw": "raw/unit-tests/option-a-react-unit.runner.log"
+    },
+    {
+      "id": "RUN-A-BUILD-001",
+      "command": "npm run build",
+      "surface": "Option A React production build",
+      "result": "PASS"
+    },
+    {
+      "id": "RUN-A-INSTALLED-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15OptionAInstalledIntegration.ps1",
+      "surface": "React UI → WebView2 → WPF → named pipe → Workspace installed flow",
+      "result": "PASS",
+      "passed": 1,
+      "total": 1,
+      "raw": "option-a-installed-ui-integration.json",
+      "boundary": "test drives rendered DOM controls only; no direct API/Workspace call from test process"
+    },
+    {
+      "id": "RUN-A-WEB-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15OptionAWebIntegration.ps1 -SkipBuild",
+      "surface": "Option A React production Web in Edge",
+      "result": "PASS",
+      "passed": 6,
+      "total": 6,
+      "raw": "browser/option-a-react-production.json"
+    },
+    {
+      "id": "RUN-B-ANALYZE-001",
+      "command": "flutter analyze",
+      "surface": "Option B Flutter source",
+      "result": "PASS",
+      "reportedIssues": 0
+    },
+    {
+      "id": "RUN-B-UNIT-001",
+      "command": "flutter test test --reporter expanded",
+      "surface": "Option B Flutter widget/grid/tree tests",
+      "result": "PASS",
+      "passed": 4,
+      "total": 4,
+      "raw": "raw/unit-tests/option-b-flutter-widget.runner.log"
+    },
+    {
+      "id": "RUN-B-WIN-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15WindowsIntegration.ps1 -FlutterCommand D:/Work/Tools/flutter-q15-stable/bin/flutter.bat",
+      "surface": "Option B Flutter Windows",
+      "result": "PASS",
+      "results": [
+        { "name": "direct Dart FFI named-pipe repetition", "result": "PASS", "passed": 32, "total": 32, "raw": "raw/option-b-windows/direct-ffi-ipc.runner.log" },
+        { "name": "critical full UI flow", "result": "PASS", "passed": 1, "total": 1, "raw": "raw/option-b-windows/windows-ui-integration.runner.log" }
+      ],
+      "nativeShim": true
+    },
+    {
+      "id": "RUN-B-SMOKE-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15ApiWorkspaceSmoke.ps1 -ExecutablePath <Option-B-Release-exe>",
+      "surface": "Option B direct API/Workspace smoke (not UI evidence)",
+      "result": "PASS",
+      "kind": "api-workspace-smoke",
+      "raw": "option-b-api-workspace-smoke.json"
+    },
+    {
+      "id": "RUN-B-FAULT-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15FfiFaultIntegration.ps1 -FlutterCommand D:/Work/Tools/flutter-q15-stable/bin/flutter.bat",
+      "surface": "Option B direct FFI controlled failure paths",
+      "result": "PASS",
+      "passed": 10,
+      "total": 10,
+      "raw": "ffi-fault-summary.json"
+    },
+    {
+      "id": "RUN-B-WEB-JS-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15OptionBWebIntegration.ps1 -FlutterCommand D:/Work/Tools/flutter-q15-stable/bin/flutter.bat",
+      "surface": "Option B Flutter Web JS in Edge",
+      "result": "PASS",
+      "passed": 3,
+      "total": 3,
+      "raw": "browser/option-b-flutter-web-js.json"
+    },
+    {
+      "id": "RUN-B-WEB-WASM-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Invoke-Q15OptionBWebIntegration.ps1 -FlutterCommand D:/Work/Tools/flutter-q15-stable/bin/flutter.bat",
+      "surface": "Option B Flutter Web Wasm in Edge",
+      "result": "PASS",
+      "passed": 3,
+      "total": 3,
+      "raw": "browser/option-b-flutter-web-wasm.json"
+    },
+    {
+      "id": "RUN-READY-A-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Measure-Q15UiReady.ps1 -Candidate option-a -Repetitions 20",
+      "surface": "Option A common Q15_UI_READY readiness",
+      "result": "PASS",
+      "sampleCount": 20,
+      "raw": "performance/ui-ready-option-a.json"
+    },
+    {
+      "id": "RUN-READY-B-001",
+      "command": "pwsh -NoProfile -File qualification/q15/scripts/Measure-Q15UiReady.ps1 -Candidate option-b -Repetitions 20",
+      "surface": "Option B common Q15_UI_READY readiness",
+      "result": "PASS",
+      "sampleCount": 20,
+      "raw": "performance/ui-ready-option-b.json"
+    }
+  ],
+  "research": [
+    {
+      "id": "RESEARCH-WIN32-001",
+      "result": "RECORDED",
+      "source": "docs/research/2026-09-15-q15-win32-overlapped-error-semantics.md",
+      "primarySources": [
+        "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfile",
+        "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefile",
+        "https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-getoverlappedresult",
+        "https://learn.microsoft.com/en-us/windows/win32/fileio/cancelioex-func"
+      ]
+    }
+  ],
+  "blockedOrNotRun": [
+    { "name": "repository documentation/diagram verifier scripts", "result": "NOT-RUN — explicit user instruction" },
+    { "name": "GitHub CI/status checks", "result": "NOT-RUN" },
+    { "name": "production Java/Spring/PostgreSQL backend", "result": "BLOCKED" },
+    { "name": "different Windows user and elevation mismatch", "result": "BLOCKED" },
+    { "name": "real Vietnamese/Japanese IME composition and reconversion", "result": "BLOCKED" },
+    { "name": "assistive technology, high contrast and independent accessibility review", "result": "BLOCKED" },
+    { "name": "corporate signing, clean install, update interruption and rollback", "result": "BLOCKED" },
+    { "name": "IRONCAD/Office and representative artifact transfer", "result": "BLOCKED" },
+    { "name": "multi-monitor and corporate Windows image behavior", "result": "BLOCKED" },
+    { "name": "full cold/active/peak interaction and frame metrics", "result": "NOT-RUN" },
+    { "name": "full browser back/forward/multi-tab/clipboard matrix", "result": "NOT-RUN" },
+    { "name": "download/upload/print/export", "result": "NOT-APPLICABLE — outside Q-15 slice; explicit in browser-parity.json" },
+    { "name": "Product Decision Authority review/acceptance", "result": "NOT-RUN" }
+  ],
+  "notes": [
+    "Phase 2 adds a narrow native Win32 shim because Dart FFI did not establish atomic native return plus GetLastError capture for overlapped I/O.",
+    "Option B API/Workspace smoke is retained as a separate provenance class and is not counted as UI integration.",
+    "No matrix, TECH-001, product scope, FTR, REQ, architecture, Spec, Tech or PG state was changed."
+  ]
+}

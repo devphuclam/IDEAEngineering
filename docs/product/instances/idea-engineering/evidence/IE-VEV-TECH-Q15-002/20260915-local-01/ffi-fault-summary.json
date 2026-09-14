@@ -1,0 +1,72 @@
+[
+  {
+    "case": "pipe-unavailable",
+    "expectedClassification": "PIPE_UNAVAILABLE",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\pipe-unavailable-flutter.machine.jsonl",
+    "rawServerOutput": null
+  },
+  {
+    "case": "disconnect-after-connect",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\disconnect-after-connect-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\disconnect-after-connect-server.stdout.log"
+  },
+  {
+    "case": "close-during-read",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\close-during-read-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\close-during-read-server.stdout.log"
+  },
+  {
+    "case": "close-during-write",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\close-during-write-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\close-during-write-server.stdout.log"
+  },
+  {
+    "case": "malformed-response",
+    "expectedClassification": "MALFORMED_RESPONSE",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\malformed-response-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\malformed-response-server.stdout.log"
+  },
+  {
+    "case": "oversized-response",
+    "expectedClassification": "OVERSIZED_RESPONSE",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\oversized-response-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\oversized-response-server.stdout.log"
+  },
+  {
+    "case": "truncated-response",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\truncated-response-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\truncated-response-server.stdout.log"
+  },
+  {
+    "case": "invalid-response-mac",
+    "expectedClassification": "INVALID_RESPONSE_MAC",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\invalid-response-mac-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\invalid-response-mac-server.stdout.log"
+  },
+  {
+    "case": "response-request-id-mismatch",
+    "expectedClassification": "RESPONSE_REQUEST_ID_MISMATCH",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\response-request-id-mismatch-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\response-request-id-mismatch-server.stdout.log"
+  },
+  {
+    "case": "timeout",
+    "expectedClassification": "TIMEOUT",
+    "result": "PASS",
+    "rawRunnerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\timeout-flutter.machine.jsonl",
+    "rawServerOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-ffi-faults\\timeout-server.stdout.log"
+  }
+]

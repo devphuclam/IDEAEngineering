@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:36172) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests-e2e\critical-flow.spec.ts:7:1 › keyboard reaches login, search, large grid and exact detail (643ms)
+  ok 2 tests-e2e\critical-flow.spec.ts:27:1 › locale switching preserves Unicode and server state (483ms)
+  ok 3 tests-e2e\critical-flow.spec.ts:41:1 › empty, refused, error and expired-session states are distinct (504ms)
+  ok 4 tests-e2e\phase2-qualification.spec.ts:19:1 › phase 2 grid keeps header and body horizontally aligned (425ms)
+  ok 5 tests-e2e\phase2-qualification.spec.ts:33:1 › phase 2 browser refresh exposes the session boundary and stale results do not leak (609ms)
+  ok 6 tests-e2e\phase2-qualification.spec.ts:43:1 › phase 2 records browser transfer metrics for the same large fixture (447ms)
+
+  6 passed (4.1s)

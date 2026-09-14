@@ -1,0 +1,9 @@
+  Idea.Q15.WorkspaceProtocol -> D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.WorkspaceProtocol\bin\Release\net10.0\Idea.Q15.WorkspaceProtocol.dll
+  Idea.Q15.Workspace -> D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.Workspace\bin\Release\net10.0\Idea.Q15.Workspace.dll
+  Idea.Q15.WorkspaceProtocol.Tests -> D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.WorkspaceProtocol.Tests\bin\Release\net10.0\Idea.Q15.WorkspaceProtocol.Tests.dll
+Test run for D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.WorkspaceProtocol.Tests\bin\Release\net10.0\Idea.Q15.WorkspaceProtocol.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+WARNING: Overwriting results file: D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.WorkspaceProtocol.Tests\TestResults\phase2-workspace-protocol.trx
+Results File: D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.WorkspaceProtocol.Tests\TestResults\phase2-workspace-protocol.trx
+
+Passed!  - Failed:     0, Passed:    18, Skipped:     0, Total:    18, Duration: 664 ms - Idea.Q15.WorkspaceProtocol.Tests.dll (net10.0)

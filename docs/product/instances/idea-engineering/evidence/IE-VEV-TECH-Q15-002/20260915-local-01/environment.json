@@ -1,0 +1,61 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-002",
+  "runId": "20260915-local-01",
+  "capturedAt": "2026-09-15T01:38:00+07:00",
+  "repositoryBaseline": "9629455b6dff6fbc4cb75a115bc1a4c93fcff3be",
+  "qualificationSourceCommit": "3ae5f22fe1dc6d81175142fabb5619e1d831fae0",
+  "predecessorEvidence": "IE-VEV-TECH-Q15-001",
+  "machine": {
+    "operatingSystem": "Windows 11 Home Single Language",
+    "version": "10.0.26200",
+    "build": "26200",
+    "architecture": "64-bit",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13500H",
+    "physicalCores": 12,
+    "logicalProcessors": 16,
+    "physicalMemoryBytes": 16868962304,
+    "corporateImage": false
+  },
+  "network": {
+    "path": "loopback",
+    "productionLike": false
+  },
+  "toolchain": {
+    "dotnetSdk": "10.0.302",
+    "dotnetExecutedRuntime": "10.0.10",
+    "node": "v24.18.0",
+    "npm": "11.16.0",
+    "flutter": "3.47.4",
+    "flutterChannel": "stable",
+    "flutterCommit": "9584c6713b324636289d067944a46fd6b49df14b",
+    "dart": "3.13.3",
+    "edge": "153.0.4234.32",
+    "webView2Runtime": "152.0.4191.66"
+  },
+  "fixture": {
+    "id": "IE-Q15-FIXTURE-001@1.0.0",
+    "seed": 15092026,
+    "workspaceId": "WS-Q15-001",
+    "largeRows": 100000,
+    "largeColumns": 20,
+    "largeTreeNodes": 10000,
+    "treeDepth": 12,
+    "locales": ["en", "vi", "ja"]
+  },
+  "fairness": {
+    "apiHarness": "same .NET qualification test double",
+    "workspace": "same .NET 10 Workspace and framed HMAC named-pipe contract",
+    "browser": "Microsoft Edge channel",
+    "readiness": "Q15_UI_READY rendered login visible and enabled",
+    "warmUp": "one untimed warm-up before 20 retained restart samples",
+    "runOrder": "candidate-specific executable lanes; no competitive winner inferred"
+  },
+  "limitations": [
+    "single development machine",
+    "not a controlled company Windows image",
+    "loopback qualification API rather than production-like network",
+    "no production Java/Spring/PostgreSQL Server",
+    "no second Windows user or elevation test account",
+    "no approved screen-reader/IME/corporate deployment environment"
+  ]
+}

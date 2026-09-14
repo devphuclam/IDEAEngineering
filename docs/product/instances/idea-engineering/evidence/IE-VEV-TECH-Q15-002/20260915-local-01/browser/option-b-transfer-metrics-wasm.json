@@ -1,0 +1,83 @@
+{
+  "candidate": "option-b",
+  "surface": "Flutter Web",
+  "resources": [
+    {
+      "name": "http://127.0.0.1:5175/flutter_bootstrap.js",
+      "durationMs": 5.325000047683716,
+      "transferSize": 13511,
+      "encodedBodySize": 13211,
+      "decodedBodySize": 13211
+    },
+    {
+      "name": "https://www.gstatic.com/flutter-canvaskit/06a2e2a110089dff50fe635cffd2a61e1b24fbcd/skwasm.wasm",
+      "durationMs": 662.0499999523163,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "https://www.gstatic.com/flutter-canvaskit/06a2e2a110089dff50fe635cffd2a61e1b24fbcd/skwasm.js",
+      "durationMs": 250.8550000190735,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "http://127.0.0.1:5175/main.dart.mjs",
+      "durationMs": 4.039999961853027,
+      "transferSize": 31060,
+      "encodedBodySize": 30760,
+      "decodedBodySize": 30760
+    },
+    {
+      "name": "http://127.0.0.1:5175/favicon.png",
+      "durationMs": 2.384999990463257,
+      "transferSize": 1217,
+      "encodedBodySize": 917,
+      "decodedBodySize": 917
+    },
+    {
+      "name": "http://127.0.0.1:5175/main.dart.wasm",
+      "durationMs": 17.030000030994415,
+      "transferSize": 2157487,
+      "encodedBodySize": 2157187,
+      "decodedBodySize": 2157187
+    },
+    {
+      "name": "http://127.0.0.1:5175/assets/FontManifest.json",
+      "durationMs": 3.3949999809265137,
+      "transferSize": 508,
+      "encodedBodySize": 208,
+      "decodedBodySize": 208
+    },
+    {
+      "name": "http://127.0.0.1:5175/assets/fonts/MaterialIcons-Regular.otf",
+      "durationMs": 3.3199999928474426,
+      "transferSize": 8140,
+      "encodedBodySize": 7840,
+      "decodedBodySize": 7840
+    },
+    {
+      "name": "http://127.0.0.1:5175/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf",
+      "durationMs": 3.2799999713897705,
+      "transferSize": 1772,
+      "encodedBodySize": 1472,
+      "decodedBodySize": 1472
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2",
+      "durationMs": 82.11000001430511,
+      "transferSize": 63764,
+      "encodedBodySize": 63464,
+      "decodedBodySize": 63464
+    },
+    {
+      "name": "http://127.0.0.1:5175/assets/packages/idea_q15_fixtures/locales.json",
+      "durationMs": 6.5799999833106995,
+      "transferSize": 4961,
+      "encodedBodySize": 4661,
+      "decodedBodySize": 4661
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+00:00 +0: loading D:/Work/Projects/IDEAEngineering/qualification/q15/option-b/flutter/integration_test/ffi_fault_integration_test.dart
+Building Windows application...                                    35,5s
+√ Built build\windows\x64\runner\Debug\idea_q15_option_b.exe
+00:00 +0: direct FFI classifies the controlled failure path
+00:00 +1: (tearDownAll)
+00:00 +1: All tests passed!

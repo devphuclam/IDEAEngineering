@@ -1,0 +1,14 @@
+[
+  {
+    "test": "integration_test/direct_ffi_workspace_test.dart",
+    "kind": "direct-ffi-ipc",
+    "result": "PASS",
+    "rawOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-option-b-windows\\direct-ffi-ipc.runner.log"
+  },
+  {
+    "test": "integration_test/critical_surface_test.dart",
+    "kind": "windows-ui-integration",
+    "result": "PASS",
+    "rawOutput": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\.runtime\\phase2-option-b-windows\\windows-ui-integration.runner.log"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-002",
+  "scope": "Phase 2 paging-generation and horizontal-header alignment regression",
+  "fixture": "IE-Q15-FIXTURE-001@1.0.0 large profile (100000 rows × 20 columns; 10000 tree nodes)",
+  "optionA": {
+    "result": "PASS",
+    "browserTests": 6,
+    "browserTestsPassed": 6,
+    "coverage": ["React grid horizontal header/body alignment", "query refresh/session boundary", "virtual-grid/virtual-tree production browser path"],
+    "raw": "browser/option-a-react-production.json"
+  },
+  "optionB": {
+    "result": "PASS",
+    "flutterWidgetTests": 4,
+    "flutterWidgetTestsPassed": 4,
+    "coverage": ["new generation resets requested pages and edit/selection state", "one shared horizontal scroll controller for header and body", "tree generation reset", "Home/End and F2 widget path"],
+    "raw": "raw/unit-tests/option-b-flutter-widget.runner.log"
+  },
+  "implementationControls": [
+    "parent query/profile increments dataset generation",
+    "stale row/tree responses cannot mutate a newer generation",
+    "requested-page cache is reset by pagingKey/total/column-count changes",
+    "Flutter grid header and body share one horizontal viewport/controller",
+    "React loaded-page keys include generation/query/profile/offset"
+  ]
+}

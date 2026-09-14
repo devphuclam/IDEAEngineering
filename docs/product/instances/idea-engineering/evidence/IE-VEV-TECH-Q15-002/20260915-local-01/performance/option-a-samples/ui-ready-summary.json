@@ -1,0 +1,173 @@
+{
+  "candidate": "option-a",
+  "surface": "React WebView2 WPF",
+  "sampleCount": 20,
+  "readinessContract": "Q15_UI_READY = rendered login visible and enabled; bridge availability is reported separately",
+  "thresholdState": "SAMPLED_20_PLUS",
+  "unit": "ms",
+  "minimum": 874.3971,
+  "maximum": 952.5237,
+  "mean": 897.9328,
+  "samples": [
+    {
+      "sample": 1,
+      "externalProcessDurationMs": 908.4125,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 2,
+      "externalProcessDurationMs": 952.5237,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 3,
+      "externalProcessDurationMs": 887.5128,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 4,
+      "externalProcessDurationMs": 912.2253,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 5,
+      "externalProcessDurationMs": 921.9906,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 6,
+      "externalProcessDurationMs": 876.0397,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 7,
+      "externalProcessDurationMs": 882.1152,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 8,
+      "externalProcessDurationMs": 891.1739,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 9,
+      "externalProcessDurationMs": 883.4795,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 10,
+      "externalProcessDurationMs": 922.2323,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 11,
+      "externalProcessDurationMs": 894.6576,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 12,
+      "externalProcessDurationMs": 877.9506,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 13,
+      "externalProcessDurationMs": 885.5865,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 14,
+      "externalProcessDurationMs": 922.4081,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 15,
+      "externalProcessDurationMs": 900.506,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 16,
+      "externalProcessDurationMs": 913.0037,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 17,
+      "externalProcessDurationMs": 874.3971,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 18,
+      "externalProcessDurationMs": 890.0905,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 19,
+      "externalProcessDurationMs": 879.8976,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    },
+    {
+      "sample": 20,
+      "externalProcessDurationMs": 882.4529,
+      "q15UiReady": true,
+      "loginVisible": true,
+      "loginEnabled": true,
+      "bridgeAvailabilityKnown": false
+    }
+  ]
+}

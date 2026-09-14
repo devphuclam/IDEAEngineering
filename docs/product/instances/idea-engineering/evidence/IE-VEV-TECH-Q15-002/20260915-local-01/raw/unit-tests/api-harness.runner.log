@@ -1,0 +1,8 @@
+  Idea.Q15.ApiHarness -> D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness\bin\Release\net10.0\Idea.Q15.ApiHarness.dll
+  Idea.Q15.ApiHarness.Tests -> D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll
+Test run for D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+WARNING: Overwriting results file: D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\TestResults\phase2-api.trx
+Results File: D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\TestResults\phase2-api.trx
+
+Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 351 ms - Idea.Q15.ApiHarness.Tests.dll (net10.0)

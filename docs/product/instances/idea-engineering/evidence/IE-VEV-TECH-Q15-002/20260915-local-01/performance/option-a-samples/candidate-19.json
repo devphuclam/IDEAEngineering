@@ -1,0 +1,10 @@
+{
+  "candidate": "option-a",
+  "surface": "React WebView2 WPF",
+  "q15UiReady": true,
+  "loginVisible": true,
+  "loginEnabled": true,
+  "bridgeAvailabilityKnown": false,
+  "webView2Runtime": "152.0.4191.66",
+  "readyAtUtc": "2026-09-14T18:31:04.3379455Z"
+}

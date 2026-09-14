@@ -1,0 +1,210 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\shared\\browser-tests\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "option-b-web.spec.ts"
+    ],
+    "configFile": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\shared\\browser-tests\\playwright.config.ts",
+    "rootDir": "D:/Work/Projects/IDEAEngineering/qualification/q15/shared/browser-tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Work/Projects/IDEAEngineering/qualification/q15/shared/browser-tests/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Work/Projects/IDEAEngineering/qualification/q15/shared/browser-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/option-b-web.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 8,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "option-b-web.spec.ts",
+      "file": "option-b-web.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Flutter Web executes login, large search, detail and locale switch",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3470,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:32:53.326Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17a43b4a4f3fa4811268-abefd6c3f0339ef2123d",
+          "file": "option-b-web.spec.ts",
+          "line": 25,
+          "column": 1
+        },
+        {
+          "title": "Flutter Web exposes distinct empty, refused, error and expired states",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2007,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "[browser-console] Failed to load resource: the server responded with a status of 403 (Forbidden)\n"
+                    },
+                    {
+                      "text": "[browser-console] Failed to load resource: the server responded with a status of 503 (Service Unavailable)\n"
+                    },
+                    {
+                      "text": "[browser-console] Failed to load resource: the server responded with a status of 401 (Unauthorized)\n"
+                    },
+                    {
+                      "text": "[browser-console] Failed to load resource: the server responded with a status of 401 (Unauthorized)\n"
+                    },
+                    {
+                      "text": "[browser-console] Failed to load resource: the server responded with a status of 401 (Unauthorized)\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:32:57.042Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17a43b4a4f3fa4811268-6ae2664472e45acbbbdd",
+          "file": "option-b-web.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "Flutter Web records transfer metrics for the large-fixture surface",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1273,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:32:59.071Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "flutter-web-transfer-metrics.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJjYW5kaWRhdGUiOiAib3B0aW9uLWIiLAogICJzdXJmYWNlIjogIkZsdXR0ZXIgV2ViIiwKICAicmVzb3VyY2VzIjogWwogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxNzUvZmx1dHRlcl9ib290c3RyYXAuanMiLAogICAgICAiZHVyYXRpb25NcyI6IDUuMzI1MDAwMDQ3NjgzNzE2LAogICAgICAidHJhbnNmZXJTaXplIjogMTM1MTEsCiAgICAgICJlbmNvZGVkQm9keVNpemUiOiAxMzIxMSwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDEzMjExCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC8wNmEyZTJhMTEwMDg5ZGZmNTBmZTYzNWNmZmQyYTYxZTFiMjRmYmNkL3Nrd2FzbS53YXNtIiwKICAgICAgImR1cmF0aW9uTXMiOiA2NjIuMDQ5OTk5OTUyMzE2MywKICAgICAgInRyYW5zZmVyU2l6ZSI6IDAsCiAgICAgICJlbmNvZGVkQm9keVNpemUiOiAwLAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogMAogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiaHR0cHM6Ly93d3cuZ3N0YXRpYy5jb20vZmx1dHRlci1jYW52YXNraXQvMDZhMmUyYTExMDA4OWRmZjUwZmU2MzVjZmZkMmE2MWUxYjI0ZmJjZC9za3dhc20uanMiLAogICAgICAiZHVyYXRpb25NcyI6IDI1MC44NTUwMDAwMTkwNzM1LAogICAgICAidHJhbnNmZXJTaXplIjogMCwKICAgICAgImVuY29kZWRCb2R5U2l6ZSI6IDAsCiAgICAgICJkZWNvZGVkQm9keVNpemUiOiAwCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxNzUvbWFpbi5kYXJ0Lm1qcyIsCiAgICAgICJkdXJhdGlvbk1zIjogNC4wMzk5OTk5NjE4NTMwMjcsCiAgICAgICJ0cmFuc2ZlclNpemUiOiAzMTA2MCwKICAgICAgImVuY29kZWRCb2R5U2l6ZSI6IDMwNzYwLAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogMzA3NjAKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImh0dHA6Ly8xMjcuMC4wLjE6NTE3NS9mYXZpY29uLnBuZyIsCiAgICAgICJkdXJhdGlvbk1zIjogMi4zODQ5OTk5OTA0NjMyNTcsCiAgICAgICJ0cmFuc2ZlclNpemUiOiAxMjE3LAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogOTE3LAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogOTE3CiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxNzUvbWFpbi5kYXJ0Lndhc20iLAogICAgICAiZHVyYXRpb25NcyI6IDE3LjAzMDAwMDAzMDk5NDQxNSwKICAgICAgInRyYW5zZmVyU2l6ZSI6IDIxNTc0ODcsCiAgICAgICJlbmNvZGVkQm9keVNpemUiOiAyMTU3MTg3LAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogMjE1NzE4NwogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiaHR0cDovLzEyNy4wLjAuMTo1MTc1L2Fzc2V0cy9Gb250TWFuaWZlc3QuanNvbiIsCiAgICAgICJkdXJhdGlvbk1zIjogMy4zOTQ5OTk5ODA5MjY1MTM3LAogICAgICAidHJhbnNmZXJTaXplIjogNTA4LAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogMjA4LAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogMjA4CiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxNzUvYXNzZXRzL2ZvbnRzL01hdGVyaWFsSWNvbnMtUmVndWxhci5vdGYiLAogICAgICAiZHVyYXRpb25NcyI6IDMuMzE5OTk5OTkyODQ3NDQyNiwKICAgICAgInRyYW5zZmVyU2l6ZSI6IDgxNDAsCiAgICAgICJlbmNvZGVkQm9keVNpemUiOiA3ODQwLAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogNzg0MAogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiaHR0cDovLzEyNy4wLjAuMTo1MTc1L2Fzc2V0cy9wYWNrYWdlcy9jdXBlcnRpbm9faWNvbnMvYXNzZXRzL0N1cGVydGlub0ljb25zLnR0ZiIsCiAgICAgICJkdXJhdGlvbk1zIjogMy4yNzk5OTk5NzEzODk3NzA1LAogICAgICAidHJhbnNmZXJTaXplIjogMTc3MiwKICAgICAgImVuY29kZWRCb2R5U2l6ZSI6IDE0NzIsCiAgICAgICJkZWNvZGVkQm9keVNpemUiOiAxNDcyCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwczovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvcm9ib3RvL3YzMi9LRk9tQ25xRXU5MkZyMU1lNEdaTEN6WWxLdy53b2ZmMiIsCiAgICAgICJkdXJhdGlvbk1zIjogODIuMTEwMDAwMDE0MzA1MTEsCiAgICAgICJ0cmFuc2ZlclNpemUiOiA2Mzc2NCwKICAgICAgImVuY29kZWRCb2R5U2l6ZSI6IDYzNDY0LAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogNjM0NjQKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImh0dHA6Ly8xMjcuMC4wLjE6NTE3NS9hc3NldHMvcGFja2FnZXMvaWRlYV9xMTVfZml4dHVyZXMvbG9jYWxlcy5qc29uIiwKICAgICAgImR1cmF0aW9uTXMiOiA2LjU3OTk5OTk4MzMxMDY5OTUsCiAgICAgICJ0cmFuc2ZlclNpemUiOiA0OTYxLAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogNDY2MSwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDQ2NjEKICAgIH0KICBdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17a43b4a4f3fa4811268-cc1ef1cd42c093c1be36",
+          "file": "option-b-web.spec.ts",
+          "line": 68,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-14T18:32:52.972Z",
+    "duration": 7736.188,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

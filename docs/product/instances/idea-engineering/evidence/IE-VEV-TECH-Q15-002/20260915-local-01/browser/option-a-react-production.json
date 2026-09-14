@@ -1,0 +1,303 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\option-a\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test"
+    ],
+    "configFile": "D:\\Work\\Projects\\IDEAEngineering\\qualification\\q15\\option-a\\web\\playwright.config.ts",
+    "rootDir": "D:/Work/Projects/IDEAEngineering/qualification/q15/option-a/web/tests-e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Work/Projects/IDEAEngineering/qualification/q15/option-a/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Work/Projects/IDEAEngineering/qualification/q15/option-a/web/tests-e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "critical-flow.spec.ts",
+      "file": "critical-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "keyboard reaches login, search, large grid and exact detail",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 643,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:27:39.509Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e621337e095a26e8c527-f58c260806fcb606b338",
+          "file": "critical-flow.spec.ts",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "title": "locale switching preserves Unicode and server state",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 483,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:27:40.366Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e621337e095a26e8c527-c35e1a3177169037d89f",
+          "file": "critical-flow.spec.ts",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "title": "empty, refused, error and expired-session states are distinct",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 504,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:27:40.858Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e621337e095a26e8c527-eff7ccc4b2eb1d2acbd7",
+          "file": "critical-flow.spec.ts",
+          "line": 41,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "phase2-qualification.spec.ts",
+      "file": "phase2-qualification.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "phase 2 grid keeps header and body horizontally aligned",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 425,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:27:41.391Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "115aa526fda6570dd830-4824fe9fa56c451dcd78",
+          "file": "phase2-qualification.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "phase 2 browser refresh exposes the session boundary and stale results do not leak",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 609,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:27:41.824Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "115aa526fda6570dd830-f886034d313ab16d8d94",
+          "file": "phase2-qualification.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "phase 2 records browser transfer metrics for the same large fixture",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 447,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-14T18:27:42.442Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "option-a-browser-transfer-metrics.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJjYW5kaWRhdGUiOiAib3B0aW9uLWEiLAogICJmaXh0dXJlIjogImxhcmdlIiwKICAicmVzb3VyY2VzIjogWwogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxNzMvYXNzZXRzL2luZGV4LUNQWGw0N1dqLmpzIiwKICAgICAgImR1cmF0aW9uTXMiOiAxNy42MDAwMDAwMjM4NDE4NTgsCiAgICAgICJ0cmFuc2ZlclNpemUiOiA4ODcxOCwKICAgICAgImVuY29kZWRCb2R5U2l6ZSI6IDg4NDE4LAogICAgICAiZGVjb2RlZEJvZHlTaXplIjogMjc5ODg3CiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxNzMvYXNzZXRzL2luZGV4LTIyNC02eHpmLmNzcyIsCiAgICAgICJkdXJhdGlvbk1zIjogNy40MDAwMDAwMzU3NjI3ODcsCiAgICAgICJ0cmFuc2ZlclNpemUiOiAyMDAxLAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogMTcwMSwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDQ3NzMKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImh0dHA6Ly8xMjcuMC4wLjE6NTExNS9hcGkvdjEvc2Vzc2lvbi9sb2dpbiIsCiAgICAgICJkdXJhdGlvbk1zIjogMy4zMDAwMDAwMTE5MjA5MjksCiAgICAgICJ0cmFuc2ZlclNpemUiOiAwLAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogMCwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDAKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImh0dHA6Ly8xMjcuMC4wLjE6NTExNS9hcGkvdjEvc2VhcmNoP3E9cHVtcCZwcm9maWxlPWxhcmdlJm9mZnNldD0wJmxpbWl0PTIwMCIsCiAgICAgICJkdXJhdGlvbk1zIjogMy44MDAwMDAwMTE5MjA5MjksCiAgICAgICJ0cmFuc2ZlclNpemUiOiAwLAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogMCwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDAKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImh0dHA6Ly8xMjcuMC4wLjE6NTExNS9hcGkvdjEvdHJlZT9wcm9maWxlPWxhcmdlJm9mZnNldD0wJmxpbWl0PTUwMCIsCiAgICAgICJkdXJhdGlvbk1zIjogNC41LAogICAgICAidHJhbnNmZXJTaXplIjogMCwKICAgICAgImVuY29kZWRCb2R5U2l6ZSI6IDAsCiAgICAgICJkZWNvZGVkQm9keVNpemUiOiAwCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJodHRwOi8vMTI3LjAuMC4xOjUxMTUvYXBpL3YxL3RyZWU/cHJvZmlsZT1sYXJnZSZvZmZzZXQ9MCZsaW1pdD01MDAiLAogICAgICAiZHVyYXRpb25NcyI6IDQsCiAgICAgICJ0cmFuc2ZlclNpemUiOiAwLAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogMCwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDAKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImh0dHA6Ly8xMjcuMC4wLjE6NTExNS9hcGkvdjEvc2VhcmNoP3E9cHVtcCZwcm9maWxlPWxhcmdlJm9mZnNldD0wJmxpbWl0PTIwMCIsCiAgICAgICJkdXJhdGlvbk1zIjogMy41OTk5OTk5NjQyMzcyMTMsCiAgICAgICJ0cmFuc2ZlclNpemUiOiAwLAogICAgICAiZW5jb2RlZEJvZHlTaXplIjogMCwKICAgICAgImRlY29kZWRCb2R5U2l6ZSI6IDAKICAgIH0KICBdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "115aa526fda6570dd830-f05c587311231ae8c085",
+          "file": "phase2-qualification.spec.ts",
+          "line": 43,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-14T18:27:39.149Z",
+    "duration": 4084.227,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

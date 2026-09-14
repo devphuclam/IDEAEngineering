@@ -1,0 +1,15 @@
+
+Running 3 tests using 1 worker
+
+(node:25732) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 option-b-web.spec.ts:25:1 › Flutter Web executes login, large search, detail and locale switch (3.5s)
+[browser-console] Failed to load resource: the server responded with a status of 403 (Forbidden)
+[browser-console] Failed to load resource: the server responded with a status of 503 (Service Unavailable)
+[browser-console] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[browser-console] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[browser-console] Failed to load resource: the server responded with a status of 401 (Unauthorized)
+  ok 2 option-b-web.spec.ts:48:1 › Flutter Web exposes distinct empty, refused, error and expired states (2.0s)
+  ok 3 option-b-web.spec.ts:68:1 › Flutter Web records transfer metrics for the large-fixture surface (1.3s)
+
+  3 passed (7.7s)

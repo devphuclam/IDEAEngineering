@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c26b3d8f-a511-4f88-90fb-04293fea55cd" name="Phuc Lam@MSI 2026-09-15 01:35:32" runUser="MSI\Phuc Lam" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-15T01:35:32.7476448+07:00" queuing="2026-09-15T01:35:32.7476451+07:00" start="2026-09-15T01:35:31.9287876+07:00" finish="2026-09-15T01:35:32.7521007+07:00" />
+  <TestSettings name="default" id="8e4070c4-398c-47ae-85ae-eda6a246cd9c">
+    <Deployment runDeploymentRoot="Phuc_Lam_MSI_2026-09-15_01_35_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="3242f593-f4a5-447c-a7d6-e33c9b03c678" testId="6bbea8f3-baed-98e5-7fa7-acc12193168b" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesStaleNavigationSession" computerName="MSI" duration="00:00:00.0002389" startTime="2026-09-15T01:35:32.6272087+07:00" endTime="2026-09-15T01:35:32.6272314+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3242f593-f4a5-447c-a7d6-e33c9b03c678" />
+    <UnitTestResult executionId="9186b20d-2363-42f7-8b69-9c8face1875a" testId="2af92eaa-bae0-cbc1-13d2-db1205f47898" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesUnknownOperation" computerName="MSI" duration="00:00:00.0001625" startTime="2026-09-15T01:35:32.6269558+07:00" endTime="2026-09-15T01:35:32.6269776+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9186b20d-2363-42f7-8b69-9c8face1875a" />
+    <UnitTestResult executionId="ab71cc60-7ce9-4f2e-8fd5-5512d2266323" testId="270318c5-434a-0fa7-e0a1-fdfaeeaee0c6" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesMalformedAndOversizedMessages" computerName="MSI" duration="00:00:00.0005166" startTime="2026-09-15T01:35:32.6272797+07:00" endTime="2026-09-15T01:35:32.6273039+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab71cc60-7ce9-4f2e-8fd5-5512d2266323" />
+    <UnitTestResult executionId="a5f0baa4-d705-4d3c-97dc-d9b85ab2e5d3" testId="e23f9e8e-b812-add6-f80c-b3c86f7004f0" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesWrongOrigin(origin: &quot;http://127.0.0.1:5174&quot;, code: &quot;ORIGIN_REFUSED&quot;)" computerName="MSI" duration="00:00:00.0002765" startTime="2026-09-15T01:35:32.6271373+07:00" endTime="2026-09-15T01:35:32.6271616+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5f0baa4-d705-4d3c-97dc-d9b85ab2e5d3" />
+    <UnitTestResult executionId="2571f23b-08db-4ab4-bc94-c77c76f0c271" testId="505f2c35-3f99-09ac-fee9-cc3df78ebd81" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesArbitraryPathAndCommandFields" computerName="MSI" duration="00:00:00.0002718" startTime="2026-09-15T01:35:32.6268513+07:00" endTime="2026-09-15T01:35:32.6268871+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2571f23b-08db-4ab4-bc94-c77c76f0c271" />
+    <UnitTestResult executionId="bf06621f-4385-4f80-b45a-1049ea939a25" testId="d60f7ff9-721b-6d32-e5d8-1cdd41973a86" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.AcceptsExactTypedIntent" computerName="MSI" duration="00:00:00.0005828" startTime="2026-09-15T01:35:32.6263670+07:00" endTime="2026-09-15T01:35:32.6264221+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bf06621f-4385-4f80-b45a-1049ea939a25" />
+    <UnitTestResult executionId="a1f7e016-5e32-4fca-9243-69ff1455a942" testId="c6d43df3-f00e-2a89-accd-a0051b7fdbf5" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesReplay" computerName="MSI" duration="00:00:00.1137230" startTime="2026-09-15T01:35:32.5003635+07:00" endTime="2026-09-15T01:35:32.6169823+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1f7e016-5e32-4fca-9243-69ff1455a942" />
+    <UnitTestResult executionId="706e2ff1-aa74-4b22-8323-d5e8fa43c5c0" testId="e7b109c3-8591-3c7f-02ad-03fe22cd0d60" testName="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesWrongOrigin(origin: &quot;https://evil.example&quot;, code: &quot;ORIGIN_REFUSED&quot;)" computerName="MSI" duration="00:00:00.0001830" startTime="2026-09-15T01:35:32.6270393+07:00" endTime="2026-09-15T01:35:32.6270615+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="706e2ff1-aa74-4b22-8323-d5e8fa43c5c0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesWrongOrigin(origin: &quot;http://127.0.0.1:5174&quot;, code: &quot;ORIGIN_REFUSED&quot;)" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="e23f9e8e-b812-add6-f80c-b3c86f7004f0">
+      <Execution id="a5f0baa4-d705-4d3c-97dc-d9b85ab2e5d3" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesWrongOrigin" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesMalformedAndOversizedMessages" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="270318c5-434a-0fa7-e0a1-fdfaeeaee0c6">
+      <Execution id="ab71cc60-7ce9-4f2e-8fd5-5512d2266323" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesMalformedAndOversizedMessages" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesWrongOrigin(origin: &quot;https://evil.example&quot;, code: &quot;ORIGIN_REFUSED&quot;)" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="e7b109c3-8591-3c7f-02ad-03fe22cd0d60">
+      <Execution id="706e2ff1-aa74-4b22-8323-d5e8fa43c5c0" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesWrongOrigin" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesStaleNavigationSession" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="6bbea8f3-baed-98e5-7fa7-acc12193168b">
+      <Execution id="3242f593-f4a5-447c-a7d6-e33c9b03c678" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesStaleNavigationSession" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesReplay" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="c6d43df3-f00e-2a89-accd-a0051b7fdbf5">
+      <Execution id="a1f7e016-5e32-4fca-9243-69ff1455a942" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesReplay" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesArbitraryPathAndCommandFields" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="505f2c35-3f99-09ac-fee9-cc3df78ebd81">
+      <Execution id="2571f23b-08db-4ab4-bc94-c77c76f0c271" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesArbitraryPathAndCommandFields" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.AcceptsExactTypedIntent" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="d60f7ff9-721b-6d32-e5d8-1cdd41973a86">
+      <Execution id="bf06621f-4385-4f80-b45a-1049ea939a25" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="AcceptsExactTypedIntent" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests.RefusesUnknownOperation" storage="d:\work\projects\ideaengineering\qualification\q15\option-a\desktop\idea.q15.optiona.bridge.tests\bin\release\net10.0\idea.q15.optiona.bridge.tests.dll" id="2af92eaa-bae0-cbc1-13d2-db1205f47898">
+      <Execution id="9186b20d-2363-42f7-8b69-9c8face1875a" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\option-a\desktop\Idea.Q15.OptionA.Bridge.Tests\bin\Release\net10.0\Idea.Q15.OptionA.Bridge.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.OptionA.Bridge.Tests.BridgeGuardTests" name="RefusesUnknownOperation" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6bbea8f3-baed-98e5-7fa7-acc12193168b" executionId="3242f593-f4a5-447c-a7d6-e33c9b03c678" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2af92eaa-bae0-cbc1-13d2-db1205f47898" executionId="9186b20d-2363-42f7-8b69-9c8face1875a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="270318c5-434a-0fa7-e0a1-fdfaeeaee0c6" executionId="ab71cc60-7ce9-4f2e-8fd5-5512d2266323" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e23f9e8e-b812-add6-f80c-b3c86f7004f0" executionId="a5f0baa4-d705-4d3c-97dc-d9b85ab2e5d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="505f2c35-3f99-09ac-fee9-cc3df78ebd81" executionId="2571f23b-08db-4ab4-bc94-c77c76f0c271" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d60f7ff9-721b-6d32-e5d8-1cdd41973a86" executionId="bf06621f-4385-4f80-b45a-1049ea939a25" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6d43df3-f00e-2a89-accd-a0051b7fdbf5" executionId="a1f7e016-5e32-4fca-9243-69ff1455a942" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7b109c3-8591-3c7f-02ad-03fe22cd0d60" executionId="706e2ff1-aa74-4b22-8323-d5e8fa43c5c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="8" executed="8" passed="8" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)&#xD;
+[xUnit.net 00:00:00.08]   Discovering: Idea.Q15.OptionA.Bridge.Tests&#xD;
+[xUnit.net 00:00:00.12]   Discovered:  Idea.Q15.OptionA.Bridge.Tests&#xD;
+[xUnit.net 00:00:00.14]   Starting:    Idea.Q15.OptionA.Bridge.Tests&#xD;
+[xUnit.net 00:00:00.30]   Finished:    Idea.Q15.OptionA.Bridge.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

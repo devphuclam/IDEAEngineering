@@ -1,0 +1,28 @@
+{
+  "recordId": "IE-VEV-TECH-Q15-002",
+  "browser": "Microsoft Edge 153.0.4234.32",
+  "surfaces": {
+    "optionAReactProduction": "browser/option-a-react-production.json",
+    "optionBFlutterWebJs": "browser/option-b-flutter-web-js.json",
+    "optionBFlutterWebWasm": "browser/option-b-flutter-web-wasm.json"
+  },
+  "matrix": [
+    { "scenario": "direct URL", "optionA": "PASS", "optionBJs": "PASS", "optionBWasm": "PASS" },
+    { "scenario": "refresh", "optionA": "PASS — session boundary is exposed", "optionBJs": "NOT-RUN", "optionBWasm": "NOT-RUN" },
+    { "scenario": "back", "optionA": "NOT-RUN", "optionBJs": "NOT-RUN", "optionBWasm": "NOT-RUN" },
+    { "scenario": "forward", "optionA": "NOT-RUN", "optionBJs": "NOT-RUN", "optionBWasm": "NOT-RUN" },
+    { "scenario": "session expiry", "optionA": "PASS — controlled expired-session response", "optionBJs": "PASS — controlled expired-session response", "optionBWasm": "PASS — controlled expired-session response" },
+    { "scenario": "clipboard text", "optionA": "NOT-RUN", "optionBJs": "NOT-RUN", "optionBWasm": "NOT-RUN" },
+    { "scenario": "selection", "optionA": "PASS", "optionBJs": "PASS", "optionBWasm": "PASS" },
+    { "scenario": "deep link", "optionA": "NOT-RUN as cold deep-link restore", "optionBJs": "NOT-RUN", "optionBWasm": "NOT-RUN" },
+    { "scenario": "network failure", "optionA": "NOT-RUN for transport outage; controlled API error PASS", "optionBJs": "NOT-RUN for transport outage; controlled API error PASS", "optionBWasm": "NOT-RUN for transport outage; controlled API error PASS" },
+    { "scenario": "multiple tabs", "optionA": "NOT-RUN", "optionBJs": "NOT-RUN", "optionBWasm": "NOT-RUN" },
+    { "scenario": "download/upload", "optionA": "NOT-APPLICABLE — outside Q-15 slice", "optionBJs": "NOT-APPLICABLE — outside Q-15 slice", "optionBWasm": "NOT-APPLICABLE — outside Q-15 slice" },
+    { "scenario": "print/export", "optionA": "NOT-APPLICABLE — outside Q-15 slice", "optionBJs": "NOT-APPLICABLE — outside Q-15 slice", "optionBWasm": "NOT-APPLICABLE — outside Q-15 slice" }
+  ],
+  "results": {
+    "optionA": "PASS for the six executed production browser tests; full frozen matrix remains incomplete",
+    "optionBJs": "PASS for the three executed Web JS tests; full frozen matrix remains incomplete",
+    "optionBWasm": "PASS for the three executed Web Wasm tests; full frozen matrix remains incomplete"
+  }
+}

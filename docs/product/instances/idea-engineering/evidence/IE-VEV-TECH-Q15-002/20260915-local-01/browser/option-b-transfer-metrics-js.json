@@ -1,0 +1,90 @@
+{
+  "candidate": "option-b",
+  "surface": "Flutter Web",
+  "resources": [
+    {
+      "name": "http://127.0.0.1:5174/flutter_bootstrap.js",
+      "durationMs": 5.820000052452087,
+      "transferSize": 13477,
+      "encodedBodySize": 13177,
+      "decodedBodySize": 13177
+    },
+    {
+      "name": "https://www.gstatic.com/flutter-canvaskit/06a2e2a110089dff50fe635cffd2a61e1b24fbcd/chromium/canvaskit.wasm",
+      "durationMs": 618.0099999904633,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "https://www.gstatic.com/flutter-canvaskit/06a2e2a110089dff50fe635cffd2a61e1b24fbcd/chromium/canvaskit.js",
+      "durationMs": 258.4699999690056,
+      "transferSize": 0,
+      "encodedBodySize": 0,
+      "decodedBodySize": 0
+    },
+    {
+      "name": "http://127.0.0.1:5174/main.dart.js",
+      "durationMs": 10.274999976158142,
+      "transferSize": 2592299,
+      "encodedBodySize": 2591999,
+      "decodedBodySize": 2591999
+    },
+    {
+      "name": "http://127.0.0.1:5174/favicon.png",
+      "durationMs": 5.274999976158142,
+      "transferSize": 1217,
+      "encodedBodySize": 917,
+      "decodedBodySize": 917
+    },
+    {
+      "name": "http://127.0.0.1:5174/assets/FontManifest.json",
+      "durationMs": 5.160000026226044,
+      "transferSize": 508,
+      "encodedBodySize": 208,
+      "decodedBodySize": 208
+    },
+    {
+      "name": "http://127.0.0.1:5174/assets/fonts/MaterialIcons-Regular.otf",
+      "durationMs": 2.9200000166893005,
+      "transferSize": 8140,
+      "encodedBodySize": 7840,
+      "decodedBodySize": 7840
+    },
+    {
+      "name": "http://127.0.0.1:5174/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf",
+      "durationMs": 3.415000021457672,
+      "transferSize": 1772,
+      "encodedBodySize": 1472,
+      "decodedBodySize": 1472
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2",
+      "durationMs": 277.19499999284744,
+      "transferSize": 63764,
+      "encodedBodySize": 63464,
+      "decodedBodySize": 63464
+    },
+    {
+      "name": "http://127.0.0.1:5174/assets/packages/idea_q15_fixtures/locales.json",
+      "durationMs": 5.5950000286102295,
+      "transferSize": 4961,
+      "encodedBodySize": 4661,
+      "decodedBodySize": 4661
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/notosanstc/v36/-nFuOG829Oofr2wohFbTp9ifNAn722rq0MXz76Cy_C8mrWSt1KeqzFVoizG-KdWhyhvKuGOf8EUcrq3YKp7nxxk.119.woff2",
+      "durationMs": 101.89000004529953,
+      "transferSize": 19004,
+      "encodedBodySize": 18704,
+      "decodedBodySize": 18704
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/notosanssc/v37/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG9_FnYkldv7JjxkkgFsFSSOPMOkySAZ73y9ViAt3acb8NexQ2w.109.woff2",
+      "durationMs": 119.25999999046326,
+      "transferSize": 32368,
+      "encodedBodySize": 32068,
+      "decodedBodySize": 32068
+    }
+  ]
+}

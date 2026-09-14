@@ -1,0 +1,6 @@
+00:00 +0: loading D:/Work/Projects/IDEAEngineering/qualification/q15/option-b/flutter/test/widget_test.dart
+00:00 +0: shared critical flow reaches committed check-in
+00:01 +1: runtime locale switches to Japanese
+00:01 +2: 100k grid remains lazy and supports keyboard edit with IME text
+00:01 +3: grid generation resets paging state and shares horizontal scroll
+00:01 +4: All tests passed!

@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0a987130-ecb0-4426-a1fc-bfa595014c5b" name="Phuc Lam@MSI 2026-09-15 01:35:33" runUser="MSI\Phuc Lam" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-15T01:35:33.7651491+07:00" queuing="2026-09-15T01:35:33.7651495+07:00" start="2026-09-15T01:35:32.6141465+07:00" finish="2026-09-15T01:35:33.7961685+07:00" />
+  <TestSettings name="default" id="5b8c19b5-4750-476b-b0b3-f350ef1040d1">
+    <Deployment runDeploymentRoot="Phuc_Lam_MSI_2026-09-15_01_35_33" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="47fbe943-e2f9-4a6e-884b-cc91c3678a61" testId="4e0e13a6-cf6a-3f68-663a-54fae67a74da" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Search_ExposesDeterministicEmptyRefusedAndErrorStates(query: &quot;__error__&quot;, status: ServiceUnavailable, code: &quot;SEARCH_UNAVAILABLE&quot;)" computerName="MSI" duration="00:00:00.0092725" startTime="2026-09-15T01:35:33.6526791+07:00" endTime="2026-09-15T01:35:33.6617663+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47fbe943-e2f9-4a6e-884b-cc91c3678a61" />
+    <UnitTestResult executionId="861d067a-a286-4324-bd0b-960f4fdd1636" testId="28158639-7d20-02ac-b317-69f436aaf176" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.UncertainCheckoutUsesSameOperationUntilServerConfirms" computerName="MSI" duration="00:00:00.0184940" startTime="2026-09-15T01:35:33.6791124+07:00" endTime="2026-09-15T01:35:33.6975499+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="861d067a-a286-4324-bd0b-960f4fdd1636" />
+    <UnitTestResult executionId="940a09c5-e232-4698-a2f8-193c26d2bee5" testId="5abf7b23-fa45-5527-4989-be92afc984e8" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Search_ExposesDeterministicEmptyRefusedAndErrorStates(query: &quot;__empty__&quot;, status: OK, code: null)" computerName="MSI" duration="00:00:00.0070433" startTime="2026-09-15T01:35:33.6638639+07:00" endTime="2026-09-15T01:35:33.6712356+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="940a09c5-e232-4698-a2f8-193c26d2bee5" />
+    <UnitTestResult executionId="ad2304ee-d107-4617-99ec-dedae8e7d123" testId="c6a8f7d1-b37c-cb26-96e7-cbaa33b4b2b3" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.ExpiredIdentity_IsRefused" computerName="MSI" duration="00:00:00.2366186" startTime="2026-09-15T01:35:33.3892292+07:00" endTime="2026-09-15T01:35:33.6343799+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ad2304ee-d107-4617-99ec-dedae8e7d123" />
+    <UnitTestResult executionId="db792fc7-6c00-4403-848d-445d50242805" testId="5697b669-ce8a-cd62-b8ea-de74c9dc93cd" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.CheckoutConflictAndStaleStateAreTypedAndDoNotCommit" computerName="MSI" duration="00:00:00.0038122" startTime="2026-09-15T01:35:33.7055501+07:00" endTime="2026-09-15T01:35:33.7092198+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db792fc7-6c00-4403-848d-445d50242805" />
+    <UnitTestResult executionId="a2ba5133-c985-48d0-9193-74335f053eee" testId="3a9d5d26-8137-bfb7-33d2-b6f904232ea4" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.CheckinSuccessEndsReservationAndReturnsOneAuthoritativeOperation" computerName="MSI" duration="00:00:00.0165500" startTime="2026-09-15T01:35:33.7403091+07:00" endTime="2026-09-15T01:35:33.7403566+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2ba5133-c985-48d0-9193-74335f053eee" />
+    <UnitTestResult executionId="c9d8bff6-9ea0-43d4-8cf7-5445214b3ee3" testId="9cc5bbda-678d-0e83-9c0c-96bacf779a2b" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.ReaderCannotCheckoutEvenWithSpoofedActorId" computerName="MSI" duration="00:00:00.0069688" startTime="2026-09-15T01:35:33.6716629+07:00" endTime="2026-09-15T01:35:33.6787009+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c9d8bff6-9ea0-43d4-8cf7-5445214b3ee3" />
+    <UnitTestResult executionId="db5ddba2-2770-4f75-a5f2-48c2f4cfe3eb" testId="d26e3b0b-43c7-3443-8a7a-d3617c6b3e50" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.LargeSearch_UsesFrozenCountsAndTwentyColumns" computerName="MSI" duration="00:00:00.0070220" startTime="2026-09-15T01:35:33.6977344+07:00" endTime="2026-09-15T01:35:33.7051400+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db5ddba2-2770-4f75-a5f2-48c2f4cfe3eb" />
+    <UnitTestResult executionId="fd5f05e5-159a-4451-a74d-34efb9008986" testId="b3606c45-4a66-2821-7557-22fa4bc4e4e5" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Search_ExposesDeterministicEmptyRefusedAndErrorStates(query: &quot;__refused__&quot;, status: Forbidden, code: &quot;SEARCH_REFUSED&quot;)" computerName="MSI" duration="00:00:00.0017717" startTime="2026-09-15T01:35:33.6620460+07:00" endTime="2026-09-15T01:35:33.6637759+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd5f05e5-159a-4451-a74d-34efb9008986" />
+    <UnitTestResult executionId="df076e1a-169b-4c14-80a9-0f0ed3e58a59" testId="eb7808f9-9aa0-ae06-500a-190234d04891" testName="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Login_EstablishesServerSessionWithoutReturningActorIdOrToken" computerName="MSI" duration="00:00:00.0161340" startTime="2026-09-15T01:35:33.6443782+07:00" endTime="2026-09-15T01:35:33.6519002+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df076e1a-169b-4c14-80a9-0f0ed3e58a59" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.CheckinSuccessEndsReservationAndReturnsOneAuthoritativeOperation" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="3a9d5d26-8137-bfb7-33d2-b6f904232ea4">
+      <Execution id="a2ba5133-c985-48d0-9193-74335f053eee" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="CheckinSuccessEndsReservationAndReturnsOneAuthoritativeOperation" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Login_EstablishesServerSessionWithoutReturningActorIdOrToken" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="eb7808f9-9aa0-ae06-500a-190234d04891">
+      <Execution id="df076e1a-169b-4c14-80a9-0f0ed3e58a59" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="Login_EstablishesServerSessionWithoutReturningActorIdOrToken" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Search_ExposesDeterministicEmptyRefusedAndErrorStates(query: &quot;__error__&quot;, status: ServiceUnavailable, code: &quot;SEARCH_UNAVAILABLE&quot;)" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="4e0e13a6-cf6a-3f68-663a-54fae67a74da">
+      <Execution id="47fbe943-e2f9-4a6e-884b-cc91c3678a61" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="Search_ExposesDeterministicEmptyRefusedAndErrorStates" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.ReaderCannotCheckoutEvenWithSpoofedActorId" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="9cc5bbda-678d-0e83-9c0c-96bacf779a2b">
+      <Execution id="c9d8bff6-9ea0-43d4-8cf7-5445214b3ee3" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="ReaderCannotCheckoutEvenWithSpoofedActorId" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.CheckoutConflictAndStaleStateAreTypedAndDoNotCommit" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="5697b669-ce8a-cd62-b8ea-de74c9dc93cd">
+      <Execution id="db792fc7-6c00-4403-848d-445d50242805" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="CheckoutConflictAndStaleStateAreTypedAndDoNotCommit" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Search_ExposesDeterministicEmptyRefusedAndErrorStates(query: &quot;__refused__&quot;, status: Forbidden, code: &quot;SEARCH_REFUSED&quot;)" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="b3606c45-4a66-2821-7557-22fa4bc4e4e5">
+      <Execution id="fd5f05e5-159a-4451-a74d-34efb9008986" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="Search_ExposesDeterministicEmptyRefusedAndErrorStates" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.Search_ExposesDeterministicEmptyRefusedAndErrorStates(query: &quot;__empty__&quot;, status: OK, code: null)" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="5abf7b23-fa45-5527-4989-be92afc984e8">
+      <Execution id="940a09c5-e232-4698-a2f8-193c26d2bee5" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="Search_ExposesDeterministicEmptyRefusedAndErrorStates" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.ExpiredIdentity_IsRefused" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="c6a8f7d1-b37c-cb26-96e7-cbaa33b4b2b3">
+      <Execution id="ad2304ee-d107-4617-99ec-dedae8e7d123" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="ExpiredIdentity_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.LargeSearch_UsesFrozenCountsAndTwentyColumns" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="d26e3b0b-43c7-3443-8a7a-d3617c6b3e50">
+      <Execution id="db5ddba2-2770-4f75-a5f2-48c2f4cfe3eb" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="LargeSearch_UsesFrozenCountsAndTwentyColumns" />
+    </UnitTest>
+    <UnitTest name="Idea.Q15.ApiHarness.Tests.ApiHarnessTests.UncertainCheckoutUsesSameOperationUntilServerConfirms" storage="d:\work\projects\ideaengineering\qualification\q15\shared\dotnet\idea.q15.apiharness.tests\bin\release\net10.0\idea.q15.apiharness.tests.dll" id="28158639-7d20-02ac-b317-69f436aaf176">
+      <Execution id="861d067a-a286-4324-bd0b-960f4fdd1636" />
+      <TestMethod codeBase="D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness.Tests\bin\Release\net10.0\Idea.Q15.ApiHarness.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Idea.Q15.ApiHarness.Tests.ApiHarnessTests" name="UncertainCheckoutUsesSameOperationUntilServerConfirms" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="4e0e13a6-cf6a-3f68-663a-54fae67a74da" executionId="47fbe943-e2f9-4a6e-884b-cc91c3678a61" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28158639-7d20-02ac-b317-69f436aaf176" executionId="861d067a-a286-4324-bd0b-960f4fdd1636" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5abf7b23-fa45-5527-4989-be92afc984e8" executionId="940a09c5-e232-4698-a2f8-193c26d2bee5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6a8f7d1-b37c-cb26-96e7-cbaa33b4b2b3" executionId="ad2304ee-d107-4617-99ec-dedae8e7d123" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5697b669-ce8a-cd62-b8ea-de74c9dc93cd" executionId="db792fc7-6c00-4403-848d-445d50242805" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3a9d5d26-8137-bfb7-33d2-b6f904232ea4" executionId="a2ba5133-c985-48d0-9193-74335f053eee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cc5bbda-678d-0e83-9c0c-96bacf779a2b" executionId="c9d8bff6-9ea0-43d4-8cf7-5445214b3ee3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d26e3b0b-43c7-3443-8a7a-d3617c6b3e50" executionId="db5ddba2-2770-4f75-a5f2-48c2f4cfe3eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3606c45-4a66-2821-7557-22fa4bc4e4e5" executionId="fd5f05e5-159a-4451-a74d-34efb9008986" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb7808f9-9aa0-ae06-500a-190234d04891" executionId="df076e1a-169b-4c14-80a9-0f0ed3e58a59" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="10" executed="10" passed="10" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)&#xD;
+[xUnit.net 00:00:00.25]   Discovering: Idea.Q15.ApiHarness.Tests&#xD;
+[xUnit.net 00:00:00.29]   Discovered:  Idea.Q15.ApiHarness.Tests&#xD;
+[xUnit.net 00:00:00.31]   Starting:    Idea.Q15.ApiHarness.Tests&#xD;
+info: Microsoft.Hosting.Lifetime[14]&#xD;
+      Now listening on: http://127.0.0.1:5115&#xD;
+info: Microsoft.Hosting.Lifetime[0]&#xD;
+      Application started. Press Ctrl+C to shut down.&#xD;
+info: Microsoft.Hosting.Lifetime[0]&#xD;
+      Hosting environment: Development&#xD;
+info: Microsoft.Hosting.Lifetime[0]&#xD;
+      Content root path: D:\Work\Projects\IDEAEngineering\qualification\q15\shared\dotnet\Idea.Q15.ApiHarness&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 52&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 401.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 401 - application/problem+json 65.6234ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 79&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 8.4558ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 1.5631ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/search?q=__error__&amp;profile=small - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 503.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/search?q=__error__&amp;profile=small - 503 - application/problem+json 3.7898ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.3816ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/search?q=__refused__&amp;profile=small - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 403.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/search?q=__refused__&amp;profile=small - 403 - application/problem+json 0.1673ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.3607ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/search?q=__empty__&amp;profile=small - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SearchPage' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/search?q=__empty__&amp;profile=small - 200 - application/json;+charset=utf-8 2.8292ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.6096ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkout - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 403.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkout - 403 - application/problem+json 2.9245ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.8134ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000005/checkout - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 202.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType6`8' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000005/checkout - 202 - application/json;+charset=utf-8 5.8393ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/operations/21c3f17c-45de-41bf-ba51-11125add6b09 - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/operations/{operationId:guid}'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType6`8' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/operations/{operationId:guid}'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/operations/21c3f17c-45de-41bf-ba51-11125add6b09 - 200 - application/json;+charset=utf-8 1.5184ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/operations/21c3f17c-45de-41bf-ba51-11125add6b09 - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/operations/{operationId:guid}'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType6`8' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/operations/{operationId:guid}'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/operations/21c3f17c-45de-41bf-ba51-11125add6b09 - 200 - application/json;+charset=utf-8 0.3190ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.3836ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/search?q=pump&amp;profile=large&amp;offset=0&amp;limit=100 - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SearchPage' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/search'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/search?q=pump&amp;profile=large&amp;offset=0&amp;limit=100 - 200 - application/json;+charset=utf-8 2.0865ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.6936ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000002/checkout - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 409.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000002/checkout - 409 - application/problem+json 0.2562ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000004/checkout - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 409.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000004/checkout - 409 - application/problem+json 0.1943ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/session/login - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'SessionView' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/session/login'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/session/login - 200 - application/json;+charset=utf-8 0.5770ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkout - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType6`8' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkout'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkout - 200 - application/json;+charset=utf-8 0.4366ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkin - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkin'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType6`8' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkin'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkin - 200 - application/json;+charset=utf-8 4.1612ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/api/v1/operations/3adf67c1-25a7-4779-b28e-fdbff62d50d7 - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET /api/v1/operations/{operationId:guid}'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType6`8' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET /api/v1/operations/{operationId:guid}'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/api/v1/operations/3adf67c1-25a7-4779-b28e-fdbff62d50d7 - 200 - application/json;+charset=utf-8 0.2911ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkin - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkin'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 409.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type '&lt;&gt;f__AnonymousType5`5' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST /api/v1/documents/{documentId}/checkin'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/api/v1/documents/DOC-Q15-000001/checkin - 409 - application/problem+json 0.1858ms&#xD;
+info: Microsoft.Hosting.Lifetime[0]&#xD;
+      Application is shutting down...&#xD;
+[xUnit.net 00:00:00.68]   Finished:    Idea.Q15.ApiHarness.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
