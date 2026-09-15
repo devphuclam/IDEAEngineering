@@ -1,0 +1,7 @@
+MSBuild version 18.6.3+84d3e95b4 for .NET Framework
+
+  q15_io_shim.cpp
+  q15_io_shim_tests.cpp
+  Generating Code...
+     Creating library C:/Users/TD-999/Research/Projects/IDEA/IDEAEngineering/.worktrees/q15-phase3-completion/qualification/q15/.runtime/task1-native/Release/q15_io_shim_tests.lib and object C:/Users/TD-999/Research/Projects/IDEA/IDEAEngineering/.worktrees/q15-phase3-completion/qualification/q15/.runtime/task1-native/Release/q15_io_shim_tests.exp
+  q15_io_shim_tests.vcxproj -> C:\Users\TD-999\Research\Projects\IDEA\IDEAEngineering\.worktrees\q15-phase3-completion\qualification\q15\.runtime\task1-native\Release\q15_io_shim_tests.exe

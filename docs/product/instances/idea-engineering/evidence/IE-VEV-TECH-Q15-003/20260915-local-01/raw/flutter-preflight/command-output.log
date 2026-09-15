@@ -1,0 +1,5 @@
+Exception: C:\Users\TD-999\Research\Projects\IDEA\IDEAEngineering\.worktrees\q15-phase3-completion\qualification\q15\scripts\Invoke-Q15FfiFaultIntegration.ps1:143
+Line |
+ 143 |          throw $results[0].reason
+     |          ~~~~~~~~~~~~~~~~~~~~~~~~
+     | Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.
