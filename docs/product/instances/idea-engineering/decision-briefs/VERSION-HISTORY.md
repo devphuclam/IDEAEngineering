@@ -1,6 +1,6 @@
 # Phiên bản và nguồn của Feature / Spec / Tech
 
-Ngày cập nhật: 14-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
+Ngày cập nhật: 15-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
 
 Đây là sổ tra cứu phiên bản, nguồn và xác nhận review nội bộ. Không phải báo cáo kiểm thử,
 quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu mới.
@@ -11,12 +11,12 @@ quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu m�
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Draft; 14 mã FTR; nguồn hiện hành đã đồng bộ; toàn bộ bản mới chỉ `PARTIAL`, quyết định của sếp `NOT-RUN` |
 | [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Draft; 74 yêu cầu và bảy điểm Spec còn mở; nguồn hiện hành đã đồng bộ; toàn bản chưa review đầy đủ và quyết định của sếp `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.13 | Draft; Linux-first Java/Temurin/Spring Server giữ nguyên; React/WPF/WebView2 là provisional Q-15 control và Flutter là direct-FFI-first challenger; Product Decision Authority review/approval và mọi qualification vẫn `NOT-RUN` |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.14 | Draft; Engineering đã chọn Linux-first Java/Temurin/Spring/PostgreSQL Server và Option A React/WPF/WebView2 + `.NET Workspace` làm Core v0 baseline; Flutter là evaluated alternative sau tám reopen trigger; Q-15 `PARTIAL / NO WINNER`; Product Decision Authority review/approval `NOT-RUN` |
 
 Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.16 có
 17 mục tiêu cùng các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6,
 DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05 ở Draft 0.20,
-DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.10, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026,
+DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.11, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026,
 56 task và 756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không tự chuyển sang toàn bộ nội dung mới.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
@@ -508,3 +508,18 @@ Server đang được khuyến nghị sau bản kế nhiệm này.
 | Roadmap metadata | `DOC-07@0.9 → @0.10`; chỉ route research/matrix/Tech correction; lịch, 56 task, 756 giờ, requirement và gate không đổi |
 | Verification | Repository/diagram validators tiếp tục `NOT-RUN` theo direct user execution override; không có GitHub status-check evidence và không suy diễn PASS |
 | Product impact | **No Product Scope Change**; không đổi FTR, REQ, Feature, Spec, DOC-01…06/08 semantics, architecture, Server stack, DDM capability semantics, ADR hay PG state |
+
+## 26. Chọn Core v0 Technology Stack Engineering Baseline — 15/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-TECH-BASELINE-001](../registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md) — decision boundary, predecessor hashes, Client reopen triggers và non-impact |
+| Chuẩn tài liệu | [IE-STD-TECH-STACK-001@0.1](../../../../agents/technology-stack-documentation-standard.md) — reusable repository process standard; product normativity `INFORMATIVE`; không tuyên bố conformity |
+| Ma trận quyết định | `IE-KNW-TECH-DEC-001@0.5 → @0.6`; Engineering Technology Selection `COMPLETE`; Core v0 Engineering Baseline `SELECTED` |
+| Tech | `TECH-001@0.13 → @0.14`; trình bày stack, rationale, alternatives, risks, qualification và tám `TRIGGER-CLIENT-*` cho sếp phản biện |
+| Client | Option A React/WPF/WebView2 + `.NET Workspace` là `SELECT — CORE V0 ENGINEERING BASELINE`; Flutter là `EVALUATED ALTERNATIVE — NOT SELECTED FOR CORE V0` |
+| Q-15 | Giữ nguyên bằng chứng Phase 1–3 và kết luận `PARTIAL / NO WINNER`; không nói Flutter thất bại hoặc React thắng thí nghiệm |
+| Technology views | [IE-ARC-TECH-VIEW-001@0.1](../technology/IDEA-core-v0-technology-architecture-views.md) có `TECH-D01…D08`; [IE-VEV-TECH-VIEW-001](../registers/VEV-2026-09-15-technology-architecture-view-set.md) ghi 8/8 render/open `PASS`; architecture approval và implementation `NOT-RUN` |
+| Roadmap metadata | `DOC-07@0.10 → @0.11`; chỉ cập nhật route/trạng thái Tech; lịch, 56 task, 756 giờ, requirements và gate không đổi |
+| Approval và gate | Product Decision Authority review/approval `NOT-RUN`; Q-01…Q-14 `NOT-RUN`; PG3/PG4 `NOT-RUN` |
+| Product impact | **No Product Scope Change**; không đổi Feature, Spec, FTR, REQ, DOC-01…06/08, architecture authority hoặc accepted ADR |

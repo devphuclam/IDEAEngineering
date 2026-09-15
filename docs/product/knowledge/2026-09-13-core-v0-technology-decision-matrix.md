@@ -5,9 +5,9 @@
 | Stable knowledge ID | `IE-KNW-TECH-DEC-001` |
 | Document class | `IE-KNW` controlled engineering decision artifact |
 | Title | IDEA Engineering Core v0 Technology Decision Matrix |
-| Version | `0.5` |
+| Version | `0.6` |
 | Status | `Draft` |
-| Artifact role | `INFORMATIVE ENGINEERING RECOMMENDATION`; decision input for `TECH-001`, not a Core Product Document |
+| Artifact role | `INFORMATIVE ENGINEERING SELECTION`; decision input for `TECH-001`, not a Core Product Document |
 | Product normativity | `INFORMATIVE` — this artifact creates no product requirement and does not approve a product, architecture or technology |
 | Repository process authority | `NOT-APPLICABLE` |
 | Repository instruction state | `NOT-APPLICABLE` |
@@ -15,22 +15,22 @@
 | Author | Principal Product Author; accountable attribution before `Proposed` is `BLOCKED` |
 | Reviewer | Product Decision Authority; review `NOT-RUN` |
 | Acceptance authority | Product Decision Authority; acceptance `NOT-RUN` |
-| Evidence / decision date | `2026-09-14` (Asia/Saigon) |
-| Applicable product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.10 (routing-only refresh), DOC-08@0.12, GOV@0.3, VVP@0.16, accepted ADRs |
-| Source / upstream trace | [`IE-RES-TECH-20260913-001`](../../research/2026-09-13-technology-selection-evidence-synthesis.md); [`IE-RES-TECH-LINUX-20260913-001`](../../research/2026-09-13-linux-first-server-platform-support-check.md); corrected Client/UI comparison [`IE-RES-TECH-CLIENT-20260914-001@0.3`](../../research/2026-09-14-flutter-client-ui-stack-evidence.md); dated Java/.NET and deployment notes; first-party sources cited in sections 2B and 6; project-user Tech context records; [`CONTEXT.md`](../../../CONTEXT.md); [`DOC-04`](../instances/idea-engineering/DOC-04-software-requirements-specification.md); [`DOC-05`](../instances/idea-engineering/DOC-05-architecture-description.md); [`DOC-06`](../instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md); [`DOC-08`](../instances/idea-engineering/DOC-08-ui-ux-and-interaction-specification.md); accepted ADRs; [`IE-STD-AUTH-001@0.2`](../../agents/product-document-authoring-standard.md); [`standards register`](../../governance/standards-register.md) |
-| Downstream trace | [`TECH-001@0.13`](../instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md); DOC-07@0.10 routing; instance catalogue; version history; [`IE-CHG-TECH-CLIENT-002`](../instances/idea-engineering/registers/CHG-2026-09-14-client-ui-stack-review-correction.md); future qualification records |
-| Change record | [`IE-CHG-TECH-CLIENT-002@0.1`](../instances/idea-engineering/registers/CHG-2026-09-14-client-ui-stack-review-correction.md); predecessor `IE-KNW-TECH-DEC-001@0.4`, SHA-256 `47755FD1FBE42847E8613780F120E3A35787C80FBED206D1EBFC73F83D49B714` |
-| Supersedes / Superseded by | Supersedes `IE-KNW-TECH-DEC-001@0.4`; superseded by `NOT-APPLICABLE` |
+| Evidence / decision date | `2026-09-15` (Asia/Bangkok) |
+| Applicable product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.11 (routing-only successor), DOC-08@0.12, GOV@0.3, VVP@0.16, accepted ADRs |
+| Source / upstream trace | [`IE-RES-TECH-20260913-001`](../../research/2026-09-13-technology-selection-evidence-synthesis.md); [`IE-RES-TECH-LINUX-20260913-001`](../../research/2026-09-13-linux-first-server-platform-support-check.md); Client/UI comparison [`IE-RES-TECH-CLIENT-20260914-001@0.3`](../../research/2026-09-14-flutter-client-ui-stack-evidence.md); Q-15 [`Phase 1`](../instances/idea-engineering/registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [`Phase 2`](../instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md) and [`Phase 3`](../instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md); [`IE-STD-TECH-STACK-001@0.1`](../../agents/technology-stack-documentation-standard.md); [`CONTEXT.md`](../../../CONTEXT.md); DOC-04/05/06/08; accepted ADRs; [`IE-STD-AUTH-001@0.2`](../../agents/product-document-authoring-standard.md); [`standards register`](../../governance/standards-register.md) |
+| Downstream trace | [`TECH-001@0.14`](../instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md); DOC-07@0.11 routing; [`IE-ARC-TECH-VIEW-001@0.1`](../instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md); instance catalogue; version history; [`IE-CHG-TECH-BASELINE-001`](../instances/idea-engineering/registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); future qualification records |
+| Change record | [`IE-CHG-TECH-BASELINE-001@0.1`](../instances/idea-engineering/registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); predecessor `IE-KNW-TECH-DEC-001@0.5`, SHA-256 `8A75589B592DC31DA4E3C473A9C41A50909A16997981B4B61C491A38FF2AD7F1` |
+| Supersedes / Superseded by | Supersedes `IE-KNW-TECH-DEC-001@0.5`; superseded by `NOT-APPLICABLE` |
 | Review trigger | Product Decision Authority changes the stack; a selected component fails qualification; a support/licensing change; a material DOC-04/05/06/08 or ADR change; or a new company platform constraint |
 | Retention disposition | Retain as controlled engineering decision provenance; supersede only through an explicit change record |
-| Decision state | Engineering Recommendation: `COMPLETE`; Product Decision Authority Approval: `NOT-RUN`; Q-01…Q-15 and PG3/PG4: `NOT-RUN` |
-| Evidence status | `INFORMATIVE RESEARCH INPUT + ENGINEERING RECOMMENDATION`; qualification evidence is `NOT-RUN` |
+| Decision state | Engineering Technology Selection: `COMPLETE`; Core v0 Engineering Baseline: `SELECTED`; Product Decision Authority Approval: `NOT-RUN`; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
+| Evidence status | `INFORMATIVE RESEARCH INPUT + ENGINEERING SELECTION`; Q-15 has bounded partial evidence; remaining qualification is `NOT-RUN` or explicitly `BLOCKED` in its VEV records |
 | Product-scope effect | **No Product Scope Change.** No FTR, REQ, DOC-01…DOC-08 meaning, DDM capability semantics, ADR decision or gate state is changed. |
 
 ## 1. Purpose, authority and decision rule
 
 This matrix consumes the controlled technology evidence and the current IDEA product/architecture
-baseline to make one coherent Core v0 engineering recommendation. It is a decision view, not a new
+baseline to make one coherent Core v0 Engineering selection. It is a decision view, not a new
 requirements or architecture authority. `DOC-04` remains the normative SRS and `DOC-05` remains the
 normative architecture description. `TECH-001` is the Vietnamese management-facing view of this
 matrix.
@@ -43,14 +43,14 @@ Primary/official evidence + Linux-first Tech context + Client/UI challenge
 IE-RES-TECH-20260913-001 (informative synthesis)
 IE-RES-TECH-CLIENT-20260914-001 (fresh Client/UI comparison)
         ↓
-IE-KNW-TECH-DEC-001 (engineering recommendation)
+IE-KNW-TECH-DEC-001 (Engineering selection)
         ↓
 TECH-001 (management decision view)
         ↓
 Product Decision Authority approval (NOT-RUN)
 ```
 
-The recommendation optimizes for correctness, maintainability, a Linux-first headless Server,
+The selected Engineering baseline optimizes for correctness, maintainability, a Linux-first headless Server,
 Windows engineering integration, transaction integrity, recovery, security, modular boundaries and
 a small operating team. It does not optimize for theoretical maximum scale. Approximately 50–100
 intended users is context, not a concurrency or capacity guarantee. Multi-GB Artifacts remain outside
@@ -68,7 +68,9 @@ Each matrix disposition uses the controlled vocabulary below:
 
 | Disposition | Meaning in this artifact |
 |---|---|
-| `SELECT` | Engineering recommends this Core v0 baseline, subject to named qualification where shown. |
+| `SELECT — CORE V0 ENGINEERING BASELINE` | Engineering has selected this technology for Core v0 implementation planning, subject to named qualification. It is not Product Decision Authority approval. |
+| `EVALUATED ALTERNATIVE — NOT SELECTED FOR CORE V0` | The alternative received bounded evaluation but is not in the Core v0 baseline. It may return only through a named reopen trigger and successor decision. |
+| `SELECT` | Selected part of the Core v0 Engineering baseline where the longer label would be repetitive; the same approval boundary applies. |
 | `ALTERNATIVE` | Credible runner-up; not the Core v0 baseline. It may replace the selection only after the stated trigger and review. |
 | `DEFER` | Preserve as a future option; no Core v0 adoption is justified by current evidence. |
 | `CONDITIONAL` | Not in the Core dependency graph; evaluate and adopt only after its stated concrete trigger and a recorded change decision. |
@@ -107,12 +109,12 @@ does not mean the Product Decision Authority has approved it.
 | Authorization | `SELECT` | IDEA Access Policy module | Product authority evaluates server-established ActorContext, IAM eligibility, Project/Group membership, Role Assignments, Role Definition versions and scope hierarchy; owner business gates and commit-time revalidation follow. Framework roles/claims are not the product RBAC model. |
 | API | `SELECT` | Versioned HTTPS JSON REST with OpenAPI 3.1 contract | Server remains authoritative. Stable Resource/Operation IDs, explicit expected-state fields and idempotency keys are required at the contract level; no direct database access from clients. Tooling compatibility remains Q-01/Q-14 `NOT-RUN`. |
 | Integration publication | `SELECT` | Transactional outbox in PostgreSQL + bounded Spring dispatcher + plain owner-specific Adapter | Audit evidence/outbox and authoritative owner outcome commit in the declared relational UoW. Consumers are idempotent and tolerate duplicate/reordered delivery. Spring Integration and a broker remain conditional/deferred until a concrete approved contract or measured trigger exists. |
-| Web frontend | `SELECT — PROVISIONAL QUALIFICATION CONTROL` | React 19.3 client-side application | React remains the Web member of the Option A control; patch is pinned in lockfile. Web is a CSR workbench served by IDEA Server; no SSR/RSC requirement is introduced. Accessibility, localization, data-heavy interaction and security-surface tests remain Q-15 `NOT-RUN`. |
+| Web frontend | `SELECT — CORE V0 ENGINEERING BASELINE` | React 19.3 client-side application | One React business interface serves browser and installed Windows use through WebView2. Web is a CSR workbench served by IDEA Server; no SSR/RSC requirement is introduced. Q-15 remains `PARTIAL / NO WINNER`, so the selection is not presented as an experimental win. |
 | Web language/compiler | `SELECT` | TypeScript 7.0 CLI/type-checking baseline | TypeScript 7 is the source compiler line, with exact patch pinned at qualification. A TypeScript 6 compatibility lane is `QUALIFICATION REQUIRED` only for plugins/tools that consume the not-yet-stable programmatic compiler API; it is not a second production compiler. |
 | Web build tool | `SELECT` | Vite 8.3 line | Static, reproducible build; Node build runtime is Node.js 22 LTS with the Vite minimum (`22.12+`) and a current supported patch. Use `npm ci` and committed `package-lock.json`; no server-side Node runtime is required in production. |
 | Web routing | `SELECT` | React Router 7 data APIs in declarative/data mode | Route loaders/actions and error boundaries stay client-side; API remains independently authoritative. SSR, RSC and a full-stack Node framework are `DEFER` unless a later product decision creates a concrete need. Exact router/plugin compatibility is Q-01/Q-13 `NOT-RUN`. |
 | Search | `SELECT` | Rebuildable relational Discovery Projection in PostgreSQL 18 | Exact ID/business-number lookup, title/metadata predicates, deterministic sort, paging and permission predicates use owner-controlled indexes/projections. ICU/`pg_trgm`/text-search choices and Japanese tokenization are Q-03 `NOT-RUN`; no promise of Japanese behavior yet. |
-| Desktop shell | `SELECT — PROVISIONAL QUALIFICATION CONTROL` | Installed WPF `net10.0-windows` shell hosting the React workbench through WebView2 | Preserves the current Web/Desktop/Web-rendered Desktop surface as the Option A control while keeping native responsibilities narrow by design. No lower-risk or lower-seam result is claimed; Q-10/Q-11/Q-15 remain `NOT-RUN`. |
+| Desktop shell | `SELECT — CORE V0 ENGINEERING BASELINE` | Installed WPF `net10.0-windows` shell hosting the React workbench through WebView2 | Preserves the required Web/Desktop/Web-rendered Desktop surface without duplicating business UI in XAML. WPF remains a narrow host only. Q-10/Q-11 are `NOT-RUN`; Q-15 is `PARTIAL / NO WINNER`. |
 | Embedded renderer | `SELECT` | WebView2 Evergreen | Prefer centrally serviced security updates on company-managed Windows PCs. Fixed Version is the fallback only if offline/IT policy forbids Evergreen; it transfers renderer patch ownership to IDEA and is Q-10/Q-11 `NOT-RUN`. |
 | Workspace runtime | `SELECT` | Separate per-user `.NET 10` executable | Owns local materialization/custody, hashing, resumable transfer, journal, external CAD/Office launch and recovery state; it never owns Product Definition state. It is not a machine-wide privileged service. |
 | Workspace IPC | `SELECT` | Current-user-restricted named pipes with authenticated, versioned, scope-bound messages | OS ACLs plus application authentication, replay/size/version checks and safe reconnect. No generic filesystem/shell/host-object command. Cross-user/cross-Workspace evidence is Q-08 `NOT-RUN`. |
@@ -159,15 +161,15 @@ would reopen it.
 | Authorization | Select IDEA Access Policy; accepted architecture/data contracts + `IDEA-INFERENCE` | Product policy engine remains custom and must not be replaced by framework roles | Q-01/Q-06/Q-11 authorization/refusal evidence | A later approved policy authority changes the ownership contract |
 | API | Select versioned HTTPS JSON REST/OpenAPI 3.1; `INDUSTRY-SPECIFICATION` + architecture fit | HTTP versioning and large-transfer controls require explicit design | Q-01/Q-04 contract, streaming and TLS tests | Named integration needs a materially different protocol with approved contract |
 | Integration publication | Select transactional outbox + bounded Spring dispatcher + plain owner-specific Adapters; architecture inference | In-process delivery has finite throughput and retry ownership | Q-05 and consumer contract tests | A concrete approved EIP-heavy contract triggers Spring Integration evaluation; measured delivery volume/isolation or company platform may require a broker |
-| Web frontend | Select React 19.3 CSR as the Option A provisional control; `OFFICIAL-PRODUCT-FACT` + DOC-08 fit + fresh Client/UI comparison | SPA owns client state/cache complexity and has no SSR fallback; no lower-risk result is claimed | Q-01/Q-10/Q-15 accessibility, data-heavy interaction, security and bundle tests | React fails a mandatory client gate, or Flutter passes the same slice with materially lower accepted lifecycle risk |
+| Web frontend | Select React 19.3 CSR as the Core v0 Engineering baseline; `OFFICIAL-PRODUCT-FACT` + DOC-08 fit + Client/UI evidence and broader product-topology assessment | SPA owns client state/cache complexity and has no SSR fallback; no Q-15 winner or universal lower-risk claim is made | Q-01/Q-10 and the residual Option A risks recorded under Q-15 | Reopen only on `TRIGGER-CLIENT-01…08` |
 | Web compiler | Select TypeScript 7 CLI; official release fact | TS7 programmatic API compatibility is not yet universal | Plugin/compiler API inventory and Q-13 | Critical maintained plugin cannot support TS7 and TS6 lane cannot isolate it |
 | Web build tool | Select Vite 8.3 + Node 22 LTS build; official release/compatibility facts | Vite has no .NET-like LTS and plugin churn is an owner burden | Q-13 reproducible build, lockfile/SBOM and patch drill | Build/release policy or plugin compatibility cannot be maintained |
 | Web routing | Select React Router 7 data APIs; `IDEA-INFERENCE` bounded by independent Server authority | Router/data-loader conventions become a client-side dependency | Q-01/Q-13 route/error/accessibility tests | Routing complexity materially exceeds the client-only model or product requires SSR |
 | Search | Select rebuildable PostgreSQL Discovery Projection; architecture + synthesis search evidence | Relational text/Japanese behavior may not meet future ranking/linguistic needs | Q-03 corpus, plans, p95/p99 and rebuild | Explicit latency/recall/index/rebuild trigger or independent workload is measured |
-| Desktop shell | Select WPF net10 + WebView2 as the Option A provisional control; DOC-08 surface + Windows guidance + fresh six-candidate comparison + `IDEA-INFERENCE` | Older Windows-only shell and privileged Web/native boundary need patch discipline; WPF exists only as the narrow installed shell, not a second business UI; seam/risk result `NOT-RUN` | Q-10/Q-11/Q-15 install, accessibility, navigation/message, data-heavy UI, IME and rollback | WPF/WebView2 fails a mandatory gate, Flutter passes Q-15 with lower accepted total risk, or an approved product decision removes the installed surface |
+| Desktop shell | Select WPF net10 + WebView2 as the Option A Core v0 Engineering baseline; DOC-08 surface + Windows guidance + six-candidate comparison + broader Engineering assessment | Windows-only shell and privileged Web/native boundary need patch discipline; WPF remains narrow and contains no duplicated business UI in XAML | Q-10/Q-11 plus residual Option A accessibility, security, installation and rollback risks in Q-15 follow-up | Reopen only on `TRIGGER-CLIENT-01…08` |
 | Embedded renderer | Select WebView2 Evergreen; official Microsoft guidance | IT/offline policy may force IDEA-owned Fixed runtime patching | Q-10/Q-11 runtime presence, origin and host-object tests | Evergreen is prohibited or unavailable on the supported fleet |
 | Workspace runtime | Select separate per-user .NET 10; official Windows primitive evidence + DOC-05 contract | Windows-specific runtime reduces cross-platform portability | Q-04/Q-08/Q-09 transfer, IPC and CAD/Office evidence | Workspace requirements expand to a platform where .NET path is materially untenable |
-| Workspace IPC | Select current-user named pipes with app authentication; .NET platform fact + security inference | Same-user hostile clients and replay remain application responsibilities; Flutter exercises a direct Dart FFI → Win32 named-pipe client first, with a narrow shim/plugin only on a measured blocker | Q-08/Q-11/Q-15 cross-user, scope, replay, reconnect, native-handle/cancellation and alternate-client tests | Named-pipe threat/packaging constraints cannot meet the security contract, or a challenger proves a safer supported protocol |
+| Workspace IPC | Select current-user named pipes with app authentication; .NET platform fact + security inference | Same-user hostile clients and replay remain application responsibilities; the retained Flutter path used direct Dart FFI plus a narrow native shim where evidence required it | Q-08/Q-11 and selected Option A follow-up cover cross-user, scope, replay, reconnect and cancellation; alternate clients resume only after a reopen trigger | Named-pipe threat/packaging constraints cannot meet the security contract, or a reopened alternative proves a safer supported protocol |
 | Artifact store | Select private filesystem-backed adapter; DOC-05/06 + recovery guidance | One storage volume creates capacity/failure-domain and migration work | Q-04/Q-07 custody, digest, orphan and restore tests | Multiple nodes, storage policy or measured volume need justifies object storage |
 | Format Worker | Select isolated Windows worker + exact Adapter; PLM worker practice + DOC-05/06 | CAD/Office license/version matrix and worker operations are costly | Q-09 exact app/license/output/provenance tests | A named licensed converter/platform supplies a safer verified path |
 | Server OS | Select Ubuntu 26.04 LTS as platform direction; official Canonical/Adoptium/PGDG/Ubuntu-package facts + user context + `IDEA-INFERENCE` | Exact operational build and support ownership are still unproved | Q-14 hardening, patch, backup/restore, monitoring and policy build; 24.04 compatibility path | A selected dependency loses support, IT governance requires another OS, or Linux qualification fails |
@@ -197,7 +199,7 @@ Therefore Ubuntu 26.04 is no longer described as having unknown base Java/Postgr
 It is `SELECT — platform direction`; the complete operational build remains `QUALIFICATION REQUIRED`
 and Q-14 remains `NOT-RUN`.
 
-## 3. Server runtime decision — Java is the Core v0 recommendation
+## 3. Server runtime decision — Java is the Core v0 Engineering selection
 
 ### 3.1 Final disposition
 
@@ -402,9 +404,9 @@ runtime decision.
 
 The current Spec contains Web, Desktop and Web-rendered Desktop obligations. A browser-only
 workbench plus agent cannot silently be called equivalent; removing that surface would require a
-follow-up Product Decision. Therefore the provisional Q-15 control is an installed WPF + WebView2
-shell, with the React workbench rendered in the shell and native code restricted to approved intent
-commands.
+follow-up Product Decision. Engineering therefore selects an installed WPF + WebView2 shell for the
+Core v0 baseline, with the React workbench rendered in the shell and native code restricted to
+approved intent commands.
 
 WPF is carried into qualification over WinUI 3 because the current documented proposal assumes:
 
@@ -415,9 +417,10 @@ WPF is carried into qualification over WinUI 3 because the current documented pr
 - the internal engineering context values durable file/CAD/Office integration and recoverable
   rollout over adopting the newest native UI guidance alone.
 
-These are selection priors for a provisional control, not evidence that WPF has fewer seams or lower
-total risk. WinUI 3 is not declared inferior and remains an `ALTERNATIVE` if Q-10 demonstrates a
-material accessibility, packaging or support advantage that outweighs its servicing clock.
+These are reasons for the broader Core v0 Engineering selection, not evidence that WPF has fewer
+seams or lower total risk in every context. WinUI 3 is not declared inferior and remains an
+`ALTERNATIVE` if Q-10 demonstrates a material accessibility, packaging or support advantage that
+outweighs its servicing clock.
 
 WebView2 Evergreen is selected when company policy permits centrally patched runtimes. Fixed Version
 is an `ALTERNATIVE` only for an offline/policy requirement; IDEA would then own renderer patching,
@@ -439,13 +442,14 @@ receives a generic file-system/shell object. Q-08 and Q-11 remain execution gate
 The fresh first-party facts, limitations and source links for this comparison are controlled in
 [`IE-RES-TECH-CLIENT-20260914-001@0.3`](../../research/2026-09-14-flutter-client-ui-stack-evidence.md).
 The table below applies those facts to the current IDEA product and architecture boundary. No row is
-a runtime benchmark or Product Decision Authority approval. `SELECT` for Option A means provisional
-qualification control, not a proven lower-risk architecture or Q-15 winner.
+a universal framework ranking or Product Decision Authority approval. The broader Engineering
+selection and the bounded Q-15 experiment answer different questions: Option A is selected for Core
+v0, while Q-15 remains `PARTIAL / NO WINNER`.
 
 | Option | Client architecture | Disposition | Decision reason |
 |---|---|---|---|
-| A | React Web + WPF/WebView2 Desktop + separate `.NET Workspace` | `SELECT — PROVISIONAL QUALIFICATION CONTROL`; `QUALIFICATION REQUIRED` | Planned starting/reference implementation for Q-15; no reference result exists yet. Its React → WebView2 → WPF → named-pipe chain is not presumed to have fewer seams or lower risk. Q-10/Q-11/Q-15 remain `NOT-RUN`. |
-| B | Flutter Web + Flutter Windows + separate `.NET Workspace` | `ALTERNATIVE`; `QUALIFICATION REQUIRED` | Serious challenger with one Dart presentation model and supported Web/Windows targets. It has not demonstrated IDEA's grid/tree, Web/Windows accessibility, EN/VI/JA IME, external-process Workspace IPC, native workflow, signed rollback or support envelope. |
+| A | React Web + WPF/WebView2 Desktop + separate `.NET Workspace` | `SELECT — CORE V0 ENGINEERING BASELINE`; `QUALIFICATION REQUIRED` | Preserves the approved Web and installed Windows shape, reuses one React business UI, aligns the narrow Windows host with the `.NET Workspace`, and starts from the more mature project evidence path. Its React → WebView2 → WPF → named-pipe chain is not presumed universally simpler or lower-risk. Q-10/Q-11 remain `NOT-RUN`; Q-15 remains `PARTIAL / NO WINNER`. |
+| B | Flutter Web + Flutter Windows + Dart + narrow Win32 C++ shim + separate `.NET Workspace` | `EVALUATED ALTERNATIVE — NOT SELECTED FOR CORE V0` | One Dart presentation model and supported Web/Windows targets remain credible. Current product topology does not require mobile or other desktop platforms, while mandatory Web/Windows, accessibility, IME, Release and corporate deployment evidence remains incomplete. This is not a failed technology; it returns through `TRIGGER-CLIENT-01…08`. |
 | C | React Browser + separate `.NET Workspace` | `CONDITIONAL`; `FOLLOW-UP PRODUCT DECISION REQUIRED` | Potentially the smallest shell topology, but removing Desktop/Web-rendered Desktop is a product-surface decision. Browser-to-agent discovery, authentication, origin and rollout also remain unqualified. |
 | D | React + Electron + separate `.NET Workspace` | `REJECT FOR CORE V0` | React reuse is real, but bundled Chromium/Node/Electron adds a fast patch train and privileged IPC surface without an evidenced benefit over WebView2 for the current Windows scope. |
 | E | React + Tauri + separate `.NET Workspace` | `ALTERNATIVE`; `QUALIFICATION REQUIRED` | Reuses React and provides capability-scoped Rust/WebView commands, but adds Rust/Tauri while `.NET Workspace` remains. IPC, updater-key custody, accessibility and lifecycle evidence are incomplete. |
@@ -482,18 +486,42 @@ WPF and WebView2 from the installed presentation, but it replaces rather than re
 and bridge responsibilities; Flutter Web must also replace the React/DOM Web client if one shared
 Dart presentation model is the objective.
 
-The controlled recommendation is:
+The controlled Client decision is:
 
-> **KEEP CURRENT BASELINE, BUT FLUTTER REMAINS QUALIFICATION CHALLENGER.**
+> **OPTION A — SELECTED CORE V0 ENGINEERING BASELINE. OPTION B — EVALUATED ALTERNATIVE, NOT SELECTED FOR CORE V0.**
 
-In that sentence, “keep” means keep Option A as the provisional qualification control. It does not
-mean Option A has demonstrated fewer seams, lower implementation cost or lower lifecycle risk.
+This selection rests on five factors outside a single A/B experiment:
 
-Flutter is reopened for selection when at least one material trigger occurs: first-class Android/iOS
-or macOS/Linux clients enter the approved roadmap; WPF/WebView2 fails Q-10/Q-11; company policy makes
-the current shell/runtime untenable; or Flutter passes Q-15's identical vertical slice with every
-mandatory correctness/security/accessibility/custody gate and lower management-accepted total
-lifecycle risk. Popularity and “one codebase” alone are not triggers.
+1. **Product topology:** Core v0 requires a first-class browser workbench and a Windows engineering
+   client; it does not currently require mobile or macOS/Linux desktop clients.
+2. **Reuse without a second business UI:** React supplies the business interface for both browser and
+   WebView2. WPF is constrained to window, lifecycle, status and approved native intents; business UI
+   must not be duplicated in XAML.
+3. **Windows integration fit:** the narrow shell and separate per-user Workspace share the supported
+   `.NET 10` runtime family and a versioned, authenticated named-pipe contract.
+4. **Evidence maturity:** the repository currently contains broader Web and installed Option A
+   evidence. Missing Flutter prerequisites are an evidence limitation, not proof that Flutter failed.
+5. **Core v0 opportunity cost:** replacing both the Web presentation path and installed presentation
+   path before a product trigger would spend the single-developer capacity on additional unknowns
+   without adding an approved Core v0 capability.
+
+Q-15 remains `PARTIAL / NO WINNER`: it did not establish a competitive winner, and its retained
+results cannot be rewritten as one. Future Q-15 work now qualifies the selected Option A residual
+risks. Option B returns to active selection only through a successor decision when at least one
+trigger below is met.
+
+| Trigger ID | Exact reopen condition |
+|---|---|
+| `TRIGGER-CLIENT-01` | A first-class mobile client enters the approved product roadmap. |
+| `TRIGGER-CLIENT-02` | A first-class macOS or Linux desktop client enters the approved product roadmap. |
+| `TRIGGER-CLIENT-03` | A mandatory WPF/WebView2 security condition cannot be mitigated within the accepted architecture. |
+| `TRIGGER-CLIENT-04` | Option A fails an approved mandatory performance threshold. |
+| `TRIGGER-CLIENT-05` | Option A fails an approved mandatory accessibility threshold. |
+| `TRIGGER-CLIENT-06` | The Web client ceases to be a first-class product surface through an approved Product decision. |
+| `TRIGGER-CLIENT-07` | Measured WPF/WebView2 bridge implementation or maintenance burden exceeds an approved threshold. |
+| `TRIGGER-CLIENT-08` | Future qualification shows a material, accepted total-cost or total-risk advantage for Flutter. |
+
+Popularity or “one codebase” alone is not a reopen trigger.
 
 ## 7. Search, Artifact custody and Format Worker
 
@@ -625,8 +653,8 @@ name export, retention, access and on-call ownership in Q-12/Q-13.
 | SQL Server 2025 | `ALTERNATIVE` | Credible and possibly better where company DBA/licensing/support already exists; no such advantage is evidenced here. Reconsider after edition/license/restore/FTS/platform qualification. |
 | Ubuntu Server 24.04 LTS | `ALTERNATIVE` compatibility path | Retained if an exact required component/backup/monitoring/security package or company policy cannot support 26.04 during Q-14; its standard security maintenance ends May 2029. |
 | Windows Server 2025 | `ALTERNATIVE / CONTINGENCY` | Use only if IT governance mandates Windows, a selected Server component/integration requires it, Q-14 Linux qualification fails, or a measured staffed security/operations advantage is material. Existing Windows infrastructure alone has zero selection weight. |
-| Flutter Web + Flutter Windows + `.NET Workspace` | `ALTERNATIVE` / `QUALIFICATION REQUIRED` challenger | One Dart presentation model and supported Web/Windows targets are credible. Q-15 must qualify IDEA's grid/tree, browser behavior, accessibility, EN/VI/JA IME, native integration, external-process IPC, install/update/rollback and team ownership before it can replace A. Reopen on the explicit section 6.4 triggers. |
-| WinUI 3 / Windows App SDK | `ALTERNATIVE` | Microsoft’s new-app guidance is respected. WPF remains the provisional control because it is already the documented candidate; neither shell has a proven lower-risk result before Q-10/Q-15. |
+| Flutter Web + Flutter Windows + Dart + narrow Win32 C++ shim + `.NET Workspace` | `EVALUATED ALTERNATIVE — NOT SELECTED FOR CORE V0` | One Dart presentation model and supported Web/Windows targets remain credible. Q-15 is `PARTIAL / NO WINNER`; Flutter was not proven inferior. Reopen only through `TRIGGER-CLIENT-01…08` and a recorded successor decision. |
+| WinUI 3 / Windows App SDK | `ALTERNATIVE` | Microsoft’s new-app guidance is respected. WPF is selected for the current narrow-host baseline; neither shell is claimed universally lower-risk. Reconsider if Q-10 demonstrates a material accessibility, packaging or support advantage. |
 | Browser + signed Workspace agent only | `CONDITIONAL` / `FOLLOW-UP PRODUCT DECISION REQUIRED` | Could reduce embedded native surface, but cannot silently remove the current Web-rendered Desktop obligation; browser-to-agent security/LNA/installer tests are unrun. |
 | Tauri 2 + Rust | `ALTERNATIVE` / `QUALIFICATION REQUIRED` challenger | React reuse and scoped capabilities are credible, but Rust has no evidenced multi-year Tauri LTS contract and adds toolchain/updater/IPC ownership. Reconsider only after G1–G10/Q-08/Q-10/Q-11/Q-15 pass. |
 | Electron | `REJECT FOR CORE V0` | Bundled Chromium/Node and rapid major cadence add renderer and patch ownership not justified by the current Windows scope; no claim that Electron is generally unsuitable. |
@@ -676,17 +704,17 @@ Japanese/Vietnamese IME, multi-window/DPI, signed rollback or multi-year servici
 Q-15 closes those exact gaps, switching would exchange known candidate seams for more unmeasured
 ones; “one codebase” does not remove the `.NET Workspace` ecosystem.
 
-### Strongest case FOR current React + WPF/WebView2
+### Strongest case FOR selected React + WPF/WebView2
 
 The current shape aligns directly with the two present environments: React uses browser-native DOM
 elements for the Web workbench, the same business UI can run in WebView2, and a deliberately small
 WPF/.NET shell can use the same Windows/runtime family as the Workspace protocol client. WebView2
 Evergreen delegates Chromium servicing to the managed runtime when company policy permits, while
 `.NET` supplies a documented current-user named-pipe primitive. This makes Option A a concrete,
-documented control for preserving Web, Desktop and Web-rendered Desktop without duplicating a full
+documented baseline for preserving Web, Desktop and Web-rendered Desktop without duplicating a full
 native business UI; it does not prove that the implemented chain is shorter or lower-risk.
 
-### Strongest case AGAINST current React + WPF/WebView2
+### Strongest case AGAINST selected React + WPF/WebView2
 
 The architecture still owns two presentation/runtime boundaries and two release paths. WebView2 is
 a privileged Web/native boundary whose origin, navigation and message allowlist must remain correct;
@@ -714,7 +742,7 @@ unjustified complexity rather than a default to defend.
 
 ## 11. PG3 readiness / pre-decision
 
-This section prepares PG3; it does not pass PG3. “Resolved by Engineering Recommendation” means the
+This section prepares PG3; it does not pass PG3. “Resolved by Engineering Selection” means the
 matrix has made a coherent choice, not that the Product Decision Authority has accepted it.
 
 | Material Tech question | Status | Evidence still needed / owner |
@@ -722,25 +750,25 @@ matrix has made a coherent choice, not that the Product Decision Authority has a
 | One Server runtime and framework | `RESOLVED BY ENGINEERING RECOMMENDATION` | Java 25/Temurin 25 + Spring Boot 4.1.x/Modulith selected; PDA review and Q-01/Q-13 remain open. |
 | One database and persistence/migration authority | `RESOLVED BY ENGINEERING RECOMMENDATION` | PostgreSQL 18 + Spring JDBC/pgJDBC + sole Flyway/SQL migration authority selected; Q-02/Q-07/Q-14 must qualify it. |
 | Identity/account versus product authorization boundary | `RESOLVED BY ENGINEERING RECOMMENDATION` | Spring Security ordinary server-side sessions + custom Actor/Account/Login Identity + IDEA Access Policy selected; Spring Session JDBC is conditional; Q-06/Q-08/Q-11 remain `NOT-RUN`. |
-| Web CSR and installed Desktop surface | `PROVISIONAL ENGINEERING CONTROL` | React CSR + WPF/WebView2 preserves current Spec surface as the Q-15 control; Flutter remains the explicit challenger; seam/risk result `NOT-RUN`; any surface removal/change requires a follow-up Product Decision. |
-| Workspace runtime and IPC | `RESOLVED BY ENGINEERING RECOMMENDATION` | .NET per-user process + current-user named pipe selected; Q-08/Q-11/Q-15 remain `NOT-RUN`. |
+| Web CSR and installed Desktop surface | `RESOLVED BY ENGINEERING SELECTION` | React CSR + WPF/WebView2 is the Core v0 Engineering baseline. Q-15 remains `PARTIAL / NO WINNER`; Flutter is an evaluated alternative behind `TRIGGER-CLIENT-01…08`. Any surface removal/change still requires a follow-up Product Decision. |
+| Workspace runtime and IPC | `RESOLVED BY ENGINEERING SELECTION` | .NET per-user process + current-user named pipe selected; Q-08/Q-11 remain `NOT-RUN`; Q-15 is `PARTIAL`. |
 | Ubuntu 26.04 platform versus operational build | `SELECT — platform direction` / `QUALIFICATION REQUIRED` | Official Temurin 25, Boot Java 25/systemd and PGDG 18/`resolute` paths are established. Q-14 still builds/installs/hardens/patches/restores the exact IDEA stack; 24.04 is a compatibility alternative, Windows a contingency. |
 | Production edition, license, certificates, signing and support ownership | `BLOCKED` | Company must name the OS/DB edition, certificate/key custodian, backup target, support/on-call owner and permitted install/update policy. No repository evidence yet. |
 | Transaction, concurrency, outbox and module-boundary behavior | `QUALIFICATION REQUIRED` | Q-01, Q-02, Q-05 and architecture tests; Product/Tech/Data owners. |
 | Multi-GB transfer, Artifact custody and recovery | `QUALIFICATION REQUIRED` | Q-04 and Q-07 with representative files and failure injection; Workspace/Operations owners. |
 | Japanese/Unicode search contract | `QUALIFICATION REQUIRED` | Q-03 approved corpus and thresholds; Data/Product owner. |
 | CAD/Office/IRONCAD representation path | `QUALIFICATION REQUIRED` | Q-09 exact application/version/license/worker fixture; Format/Product owner. |
-| Client UI, installation, native boundary and rollback | `QUALIFICATION REQUIRED` | Q-10/Q-11/Q-15 compare the provisional React/WPF/WebView2 control with Flutter on the same clean company images, threat cases, data/locale fixtures and dirty Workspace; Product/UX/IT/Security/Release owners. |
+| Client UI, installation, native boundary and rollback | `QUALIFICATION REQUIRED` | Q-10/Q-11 and Q-15 follow-up qualify residual risks of selected Option A on clean company images, threat cases, data/locale fixtures and a Workspace with preserved local work. Flutter comparison resumes only after a reopen trigger; Product/UX/IT/Security/Release owners. |
 | Operations, observability and maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 telemetry runbook, SBOM, patch and support rotation; Operations/Engineering owners. |
-| Product Decision Authority review/acceptance of TECH-001@0.13 | `NOT-RUN` | Boss reviews the exact brief and source pins; no approval is implied by this artifact. |
+| Product Decision Authority review/acceptance of TECH-001@0.14 | `NOT-RUN` | Boss reviews the exact brief and source pins; no approval is implied by this artifact. |
 | PG3 gate disposition | `NOT-RUN` | GOV/DOC-07/VVP gate owner records the decision after applicable review; this matrix never writes `PASS`. |
 
 ### 11.1 Minimum evidence before a Tech approval request
 
 The following is the minimum decision packet, not a claim that it exists:
 
-1. PDA review of `TECH-001@0.13` and this matrix, including the .NET/SQL Server alternatives, the
-   six Client/UI candidates and explicit switch triggers.
+1. PDA review of `TECH-001@0.14` and this matrix, including the .NET/SQL Server alternatives, the
+   six Client/UI candidates, the Option A Engineering selection and explicit reopen triggers.
 2. Company disposition for Ubuntu 26.04 versus 24.04/Windows Server, production PostgreSQL edition,
    certificates/keys, backup target, signing and named support owners.
 3. Q-01/Q-02/Q-05 evidence for one authoritative transaction slice, module boundaries, commit-time
@@ -748,16 +776,17 @@ The following is the minimum decision packet, not a claim that it exists:
 4. Q-06/Q-08/Q-11 security evidence for server-established Actor, cookies/session revocation, WebView2
    navigation/message controls and cross-user Workspace refusal.
 5. Q-14 exact platform/package/driver/restore compatibility evidence.
-6. Q-15 same-slice Client comparison or an explicit PDA decision to retain the recommendation with
-   that qualification deferred; neither path may be recorded as a PASS by documentation alone.
+6. The retained Q-15 `PARTIAL / NO WINNER` evidence, plus a disposition for the selected Option A
+   residual risks. Documentation alone cannot turn the bounded experiment or future work into `PASS`.
 
 Q-03/Q-04/Q-07/Q-09/Q-10/Q-12/Q-13/Q-15 remain implementation/operational qualification work unless a
 gate owner explicitly makes one a PG3 entry condition. They cannot be relabeled `PASS` here.
 
-## 12. Qualification backlog (all rows remain NOT-RUN)
+## 12. Qualification backlog
 
-The backlog is preserved from the research synthesis and mapped to the selected baseline. A
-comparative branch marked `DEFERRED` means it was not executed; it is not a failed test.
+The backlog is preserved from the research synthesis and mapped to the selected baseline. Q-01…Q-14
+remain `NOT-RUN`; Q-15 is `PARTIAL / NO WINNER`. A comparative branch marked `DEFERRED` means it was
+not executed; it is not a failed test.
 
 | ID / question | Selected stack / comparison | Preconditions | Exact test and retained evidence | Gate relevance / owner | Status |
 |---|---|---|---|---|---|
@@ -768,20 +797,22 @@ comparative branch marked `DEFERRED` means it was not executed; it is not a fail
 | `Q-05` Outbox/idempotency | PostgreSQL outbox + bounded Spring dispatcher + plain owner-specific Adapter; Spring Integration and broker branches `CONDITIONAL`/`DEFERRED` | Same DB and event contract | Crash before/after commit and during delivery; duplicates/reordering/same-key-different-input; retain transaction log, Event IDs, dedupe and replay report | Integration; one authoritative outcome | `NOT-RUN` |
 | `Q-06` Account/session revocation | Spring Security ordinary server-side session/cookie path; Spring Session JDBC `CONDITIONAL`; .NET branch `DEFERRED` | Cookie/session policy, one-instance session registry and two sessions | Fixation, CSRF, concurrent sessions, logout, suspend/revoke, next-request refusal, commit-time eligibility race, restart invalidation, expiry, reauth and Workspace binding; retain security traces/session evidence and denial proof | Security; revoked session cannot command or commit an owner operation | `NOT-RUN` |
 | `Q-07` Backup/restore | PostgreSQL PITR + Artifact/config/key coordinated backup | Off-primary target and key custody | Restore DB, Artifact, config/policy/crypto material; replay outbox and simulate severe failure; retain transcript, measured RTO/RPO and integrity report | Operations; preliminary RTO/RPO only if measured/approved | `NOT-RUN` |
-| `Q-08` Windows Workspace IPC | `.NET` named-pipe baseline remains `SELECT`; Flutter alternate IPC client is exercised under Q-15 using direct Dart FFI first; Tauri/Rust/JavaFX remain `DEFERRED` unless separately selected | Two Windows users, two Workspaces, elevated/non-elevated processes | Cross-user/cross-Workspace, replayed, oversized and wrong-version messages; reconnect; retain ACL/config/protocol traces and refusal evidence | Security/Workspace | `NOT-RUN` |
-| `Q-09` Office/IRONCAD open/save | WPF/WebView2 + .NET Workspace + separate Windows worker; Flutter native bridge compared in Q-15 | Exact company app/OS/bitness/license fixture | Materialize verified file, launch by association, edit/save/close, detect stale/in-use/error without add-in; retain app matrix, custody journal and state mapping | Workspace/Product/Format | `NOT-RUN` |
-| `Q-10` Client install/update/rollback | Option A is the provisional control and Flutter is the active Q-15 challenger; WinUI/browser/Tauri remain optional pre-screen branches, not executed unless explicitly selected | Clean company images, signer and offline policy | Per-user/admin install, missing/blocked runtime, online/offline update, dirty Workspace, forced failure, rollback/version skew; retain logs, signatures, SBOM/license inventory and local-work preservation | IT/Release | `NOT-RUN` |
-| `Q-11` Web/native attack surface | WebView2 + WPF + named-pipe chain is the provisional control; Flutter Web/Windows direct-FFI path is compared in Q-15; other bridges run only if selected | Threat model and test origins | Navigation/redirect/iframe/popup/forged messages, LNA/CSRF/DNS rebinding/hostile origin/custom protocol replay; retain security report and policy settings | Security; no generic filesystem/shell/host object | `NOT-RUN` |
+| `Q-08` Windows Workspace IPC | Selected `.NET` named-pipe baseline | Two Windows users, two Workspaces, elevated/non-elevated processes | Cross-user/cross-Workspace, replayed, oversized and wrong-version messages; reconnect; retain ACL/config/protocol traces and refusal evidence. Alternate clients run only after a recorded reopen/selection. | Security/Workspace | `NOT-RUN` |
+| `Q-09` Office/IRONCAD open/save | Selected WPF/WebView2 + .NET Workspace + separate Windows worker | Exact company app/OS/bitness/license fixture | Materialize verified file, launch by association, edit/save/close, detect stale/in-use/error without add-in; retain app matrix, custody journal and state mapping | Workspace/Product/Format | `NOT-RUN` |
+| `Q-10` Client install/update/rollback | Selected Option A; WinUI/browser/Tauri/Flutter branches run only after a recorded reopen/selection | Clean company images, signer and offline policy | Per-user/admin install, missing/blocked runtime, online/offline update, Workspace with preserved local work, forced failure, rollback/version skew; retain logs, signatures, SBOM/license inventory and preservation evidence | IT/Release | `NOT-RUN` |
+| `Q-11` Web/native attack surface | Selected WebView2 + WPF + authenticated named-pipe chain | Threat model and test origins | Navigation/redirect/iframe/popup/forged messages, LNA/CSRF/DNS rebinding/hostile origin/custom protocol replay; retain security report and policy settings | Security; no generic filesystem/shell/host object | `NOT-RUN` |
 | `Q-12` Observability/incident diagnosis | Actuator/Micrometer/OpenTelemetry + logs/metrics/traces + JFR/`jcmd` | Common schema and redaction policy | Inject transfer failure, deadlock, auth denial, outbox lag and worker crash; diagnose from telemetry/JVM capture; retain dashboards, trace correlation, runbook and time-to-diagnose | Operations | `NOT-RUN` |
 | `Q-13` Team/toolchain maintainability | Java Server + .NET Windows client versus equivalent unified-.NET Server/client candidate | Named maintainers/support owners and a management-approved materiality threshold | Build/patch/debug the same slice, rotate incidents, update JDK/Boot/Modulith/Maven/transitives and .NET/NuGet/client dependencies, reproduce both builds and compare onboarding; retain steps, two-ecosystem SBOMs, lifecycle/patch inventory, staffing time, support entitlement/cost and defects. Switch only if the heterogeneous burden breaches the approved threshold and the equivalent .NET candidate meets all mandatory behavior with lower total risk | Engineering/management | `NOT-RUN` |
 | `Q-14` DB/platform compatibility | Exact `CORE BASELINE`: Temurin 25 + Boot Web/Modulith/Security ordinary sessions/JDBC/Flyway + bounded task/outbox + Actuator/Micrometer/OpenTelemetry/JFR + PostgreSQL 18 + Ubuntu 26.04 executable-JAR/systemd; conditional dependencies excluded unless separately triggered; 24.04/.NET/Windows branches `DEFERRED` | Official base support established; exact signed bundle, repositories, backup target and monitoring fixture | Build/install/harden/patch/restore the exact core graph; prove package provenance, driver/Flyway compatibility, certificates, systemd, monitoring and PostgreSQL/Artifact recovery; retain resolved graph, SBOM, lifecycle matrix and restore logs. Recheck vendor support rather than retesting whether published 26.04 paths exist | Platform/IT; no unsupported production combination | `NOT-RUN` |
-| `Q-15` Client/UI architecture vertical slice | A: provisional React/WPF/WebView2 + `.NET Workspace` control; B: Flutter Web/Windows challenger + the same `.NET Workspace`, with direct Dart FFI named-pipe client first and a separately recorded shim/plugin fallback only on blocker. C/E/F remain optional pre-screen branches; D is not a Core v0 branch | Same Server/API, Workspace executable/protocol, representative data/locale files, managed Windows/browser images, signer, instrumentation and frozen acceptance envelope | Execute Login → Search → Document Browser → Document Detail → Checkout → Open/Workspace interaction → Check-in status. Exercise large grid/tree, keyboard, EN/VI/JA IME, accessibility, Web/Windows, native dialog/process launch, authenticated IPC, memory/startup/render responsiveness, installer/update/rollback and threat cases; retain source, dependencies/SBOM, traces, recordings and measurements | Product/UX/Accessibility/Security/Workspace/IT/Release; every mandatory gate must pass before switching | `NOT-RUN` |
+| `Q-15` Client/UI architecture vertical slice | Historical A/B evidence: A React/WPF/WebView2 + `.NET Workspace`; B Flutter Web/Windows + the same `.NET Workspace` using the retained direct-FFI/narrow-shim evidence path. Core v0 now selects A independently of an experimental winner. | Retained Phase 1–3 fixtures/evidence; future selected-stack run uses representative data/locale files, managed Windows/browser images, signer and instrumentation | Retained evidence proves only its recorded subscopes. Follow-up exercises selected A through Login → Search → Document Browser → Detail → Checkout → Open/Workspace → Check-in, large grid/tree, keyboard, EN/VI/JA IME, accessibility, native integration, authenticated IPC, startup/resources, install/update/rollback and threat cases. A/B comparison resumes only after `TRIGGER-CLIENT-01…08`. | Product/UX/Accessibility/Security/Workspace/IT/Release | `PARTIAL / NO WINNER` |
 
-### 12.1 Q-15 proposed measurable acceptance envelope
+### 12.1 Retained Q-15 comparison envelope and selected-baseline follow-up
 
-These are **proposed experiment thresholds**, not Product requirements or accepted release criteria.
-The named owners must approve the fixture and thresholds before execution; afterward they may not be
-moved to favor a candidate.
+These are the retained **proposed experiment thresholds**, not Product requirements or accepted
+release criteria. They preserve the historical A/B comparison contract. Before a new execution, the
+named owners must approve the fixture and thresholds; afterward they may not be moved to favor a
+candidate. Without a reopen trigger, new work applies them to selected Option A residual risk rather
+than rerunning Flutter merely to manufacture a winner.
 
 | Measure | Proposed threshold for the controlled comparison |
 |---|---|
@@ -796,11 +827,11 @@ moved to favor a candidate.
 | IPC and hostile-client refusal | Exercise Option A's full WebView2/WPF/named-pipe chain and Option B's direct Dart FFI/Win32 path. Zero accepted unauthorized command across at least 100 fixed attempts in each category: different user, wrong Workspace, stale session, replay, oversized frame, wrong protocol version and malformed input. Every refusal is correlated to non-secret evidence; if B needs a shim/plugin, record the blocker and repeat the full matrix for that additional boundary. |
 | Crash and custody recovery | Across at least 50 forced terminations distributed over transfer/open/check-in checkpoints: zero corrupted authoritative Generation or silently discarded local candidate; every incomplete operation reaches an explicit recoverable terminal state. |
 | Install/update/rollback | Ten signed install→update→forced-failure→rollback cycles on clean and dirty-Workspace images with zero loss of local work/journal, deterministic version compatibility and a complete audit/log trail. |
-| Selection rule | B may replace A only after every mandatory threshold passes and its measured maintainability/lifecycle/security trade-off is accepted by the named reviewers and PDA. A test failure records evidence for that build/fixture, not a universal claim about the framework. |
+| Historical replacement rule | B may replace A only after a named reopen trigger, every applicable mandatory threshold passes, and its measured maintainability/lifecycle/security trade-off is accepted through a successor Engineering decision and PDA review. A test failure records evidence for that build/fixture, not a universal claim about the framework. |
 
 ## 13. Trace, change and non-impact statement
 
-This matrix traces the recommendation to the evidence synthesis and the current controlled sources;
+This matrix traces the Engineering selection to the evidence synthesis and the current controlled sources;
 it does not promote research into a product requirement. The following boundaries are unchanged:
 
 - no FTR or REQ was added, removed or reworded;
@@ -812,7 +843,9 @@ it does not promote research into a product requirement. The following boundarie
 - server-established ActorContext, Access Policy/owner-outcome separation, shared relational UoW,
   `Store → Server → Workspace`, provider-neutral Artifact custody, Representation acceptance and
   Restricted Recovery Mode remain the existing architecture contracts;
-- all qualification rows and product procedures remain `NOT-RUN`.
+- Q-01…Q-14 and product procedures remain `NOT-RUN`; Q-15 remains `PARTIAL / NO WINNER` with
+  sub-results and blockers preserved in its Phase 1–3 VEV records.
 
-The recommendation can be challenged or replaced through a successor matrix and change record. Until
-the Product Decision Authority acts, it is an engineering recommendation only.
+The Engineering selection can be challenged or replaced through a successor matrix and change
+record. Until the Product Decision Authority acts, it remains an informative Engineering baseline,
+not an approved Product technology decision.

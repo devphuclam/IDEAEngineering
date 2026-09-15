@@ -16,7 +16,7 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.20`; DOC-06 at `Draft 0.16`; DOC-07 at `Draft 0.10`; DOC-08 at `Draft 0.12`; GOV at `Draft 0.3`; VVP at `Draft 0.16`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.13`; DOC-05 at `Draft 0.20`; DOC-06 at `Draft 0.16`; DOC-07 at `Draft 0.11`; DOC-08 at `Draft 0.12`; GOV at `Draft 0.3`; VVP at `Draft 0.16`; CHG records at their catalogue versions |
 | First approved version | `Approved 1.0` only after the applicable controlled decision |
 
 ## Architecture diagram package
@@ -36,6 +36,13 @@ committed starting baseline and are not substituted for current source evidence.
 [view-review SVG repair note](evidence/IE-VEV-ARCH-VIEW-001/README.md) distinguishes seven
 mechanically XML-repaired legacy files from their original historical render manifest. Rendering
 does not establish runtime behavior or independently qualified architecture/HCD acceptance.
+
+The separate [Core v0 technology view set](technology/IDEA-core-v0-technology-architecture-views.md)
+contains eight focused views (`TECH-D01…D08`) for the selected Engineering stack, runtime/protocol,
+deployment, dependencies, delivery pipeline and controlled reopen decisions. Its
+[verification record](registers/VEV-2026-09-15-technology-architecture-view-set.md) records 8/8 render
+and standalone-open checks. These are Draft decision views, not a replacement for DOC-05 or proof
+that the system has been implemented.
 
 ## December 2026 roadmap package
 
@@ -80,7 +87,7 @@ They are decision views, not parallel requirement or architecture sources.
 |---|---|---|---|
 | [`FEATURE-001`](decision-briefs/FEATURE-001-feature-definition-and-scope.md) | Feature scope and priority | DOC-01, DOC-02, DOC-03, DOC-04, DOC-07 and governed reference coverage | `Draft 0.12`; 14 feature IDs retained; **stale** because it does not pin DOC-01@0.6, DOC-03@0.7 or DOC-04@0.13; boss decision `NOT-RUN` |
 | [`SPEC-001`](decision-briefs/SPEC-001-product-specification.md) | Required behavior and acceptance | DOC-04, requirement-bearing DOC-06/08 content, VVP | `Draft 0.14`; **stale** after DOC-04@0.13, DOC-06@0.16, DOC-08@0.12 and VVP@0.16 added the accepted RBAC/workspace/scale and transaction/ownership realization and checks; boss decision `NOT-RUN` |
-| [`TECH-001`](decision-briefs/TECH-001-technology-and-architecture-proposal.md) | Architecture and technology selection | DOC-02, DOC-04/05/06/08, accepted ADRs, confirmed context, [`IE-KNW-TECH-DEC-001`](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) and official technology sources | `Draft 0.13`; current source pins; Linux-first Java Server unchanged; React/WPF/WebView2 is the provisional Q-15 control and Flutter the direct-FFI-first challenger; boss decision `NOT-RUN`; qualification and PG3 remain open |
+| [`TECH-001`](decision-briefs/TECH-001-technology-and-architecture-proposal.md) | Architecture and technology selection | DOC-02, DOC-04/05/06/08, accepted ADRs, confirmed context, [`IE-KNW-TECH-DEC-001`](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md), technology views and official sources | `Draft 0.14`; Engineering selected the Linux-first Java/Spring/PostgreSQL Server and Option A React/WPF/WebView2 + `.NET Workspace` baseline; Flutter is an evaluated alternative behind eight reopen triggers; Q-15 remains `PARTIAL / NO WINNER`; boss decision and PG3 remain `NOT-RUN` |
 
 A brief becomes `Stale` when a pinned source changes. A boss decision must identify the exact brief
 and source baseline; the author then records its consequences in the affected Core Product
@@ -107,9 +114,9 @@ objectives, not a tested SLA or rollout acceptance.
 The project user previously accepted Feature 0.3 and Spec 0.4 in internal review:
 [RVW-FEATURE-SPEC-20260903-001](decision-briefs/VERSION-HISTORY.md#5-ghi-nhận-review-nội-bộ-ngày-03-09-2026).
 That result remains attached to those exact versions. It does not automatically apply to Feature
-0.12, Spec 0.14 or Tech 0.13. The Version-model point was separately confirmed on 04-09-2026. The
-successor briefs still require Product Decision Authority review; Tech 0.13 now records an engineering
-recommendation but not an approval.
+0.12, Spec 0.14 or Tech 0.14. The Version-model point was separately confirmed on 04-09-2026. The
+successor briefs still require Product Decision Authority review; Tech 0.14 records a complete
+Engineering selection but not an approval.
 
 The [version history](decision-briefs/VERSION-HISTORY.md) records current identities, prior source
 snapshots and review inputs. The 09-09 source hashes and predecessor set remain in
@@ -121,10 +128,12 @@ successor and DOC-05 candidate-row/DOC-07 routing change are in
 focused rationale/dependency correction is in
 [IE-CHG-TECH-LINUX-002](registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md); earlier
 archives, including [the pre-Tech-context set](history/2026-09-03-before-tech-context.zip), remain retained.
-The six-candidate Client/UI re-evaluation and Flutter qualification challenger are recorded in
+The historical six-candidate Client/UI re-evaluation and Flutter qualification challenger are recorded in
 [IE-CHG-TECH-CLIENT-001](registers/CHG-2026-09-14-client-ui-stack-re-evaluation.md); the provisional
 control, Q-08/Q-10 and FFI-first correction is in
 [IE-CHG-TECH-CLIENT-002](registers/CHG-2026-09-14-client-ui-stack-review-correction.md).
+The current Engineering baseline, exact Q-15 boundary and eight Client reopen triggers are in
+[IE-CHG-TECH-BASELINE-001](registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md).
 No retained historical brief was overwritten. Earlier Spec 0.3 acceptance remains withdrawn.
 
 `SPEC-OPEN-01` is recorded as resolved: Versions within each Revision are numbered `1, 2, 3…`,
@@ -192,7 +201,7 @@ Authorized forms/API can change policy without owner-module code edits. JSON is 
 import/export transport and creates only a candidate; validation, preview and separate authorized
 activation are required before authority changes. The earlier ASP.NET Core Identity proposal is
 superseded for the current Server recommendation by Spring Security ordinary server-side sessions in
-`TECH-001@0.13`; Spring Session JDBC is conditional rather than a default dependency;
+`TECH-001@0.14`; Spring Session JDBC is conditional rather than a default dependency;
 PostgreSQL remains recommended. Neither is approved by the boss. AC-01…05 remain `NOT-RUN`. See
 [IE-CHG-AUTH-DATA-001](registers/CHG-2026-09-07-authorization-data-boundary.md) for the accepted
 direction, predecessor archive and exact source impact. The later
@@ -254,8 +263,8 @@ versions only; it did not change product behavior, the roadmap schedule or any r
 | Retained source | Reconciled state |
 |---|---|
 | FEATURE-001@0.12 and SPEC-001@0.14 | Current Core/VVP pins are recorded. Full review and boss decisions remain `NOT-RUN`. |
-| TECH-001@0.8 | Historical source-reconciliation baseline; superseded by `TECH-001@0.9`, Linux-first `@0.10`, rationale-refined `@0.11`, Client/UI challenger `@0.12`, then current reviewer-corrected recommendation `@0.13`. |
-| DOC-07@0.5 | Historical source-reconciliation baseline; superseded by `DOC-07@0.6`, routing-only `@0.7`, source-routing correction `@0.8`, Client/UI routing `@0.9`, then current correction routing `@0.10`; schedule, 56 tasks and 756 hours remain unchanged. |
+| TECH-001@0.8 | Historical source-reconciliation baseline; superseded by `TECH-001@0.9`, Linux-first `@0.10`, rationale-refined `@0.11`, Client/UI challenger `@0.12`, reviewer-corrected `@0.13`, then current Engineering selection `@0.14`. |
+| DOC-07@0.5 | Historical source-reconciliation baseline; superseded by `DOC-07@0.6`, routing-only `@0.7`, source-routing correction `@0.8`, Client/UI routing `@0.9`, correction routing `@0.10`, then current Engineering-baseline routing `@0.11`; schedule, 56 tasks and 756 hours remain unchanged. |
 | Existing Word/Human copies | Retain the submitted/editorial versions; they were not overwritten or silently regenerated. |
 
 On 10-09-2026, the controlled sources were re-baselined for requirement and architecture quality.
@@ -296,7 +305,7 @@ already works. See
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.13`; sole normative SRS; 87 requirements including `REQ-AUTH-001…010`, `REQ-WS-014/015` and `REQ-OPS-006`; seven open Spec points remain |
 | `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.20`; Module authority is now a scoped C4 Component Diagram with explicit purpose and notation; Review/Release and delegated-assignment semantics, Linux-first Server boundary and Tech recommendation remain unchanged |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.16`; CPD Generation-manifest `ArtifactReference`, owner-specific BOM/Format pins, Artifact Custody, coordinator UoW, owner outcome/Audit atomicity, Representation acceptance, Reference condition, Release Structure Pin and Restricted Recovery contracts aligned |
-| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.10`; routes matrix@0.5, TECH-001@0.13 and corrected Q-15 control/Flutter FFI-first challenger; conditional December schedule, 56-task appendix, 756 hours, requirements and gate state unchanged |
+| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.11`; routes matrix@0.6, TECH-001@0.14 and the technology view set; Q-15 remains `PARTIAL / NO WINNER`; conditional December schedule, 56-task appendix, 756 hours, requirements and gate state unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.12`; BOM export candidate/private versus retained/Current status is explicit after Product Structure owner-UoW acceptance; administration split, two-axis modified Reference, server-mediated transfer, decision/outcome and Release-Pin interactions retained; current admin prototype marked stale |
 
 ## Supporting instance catalogue
@@ -332,8 +341,11 @@ already works. See
 | `VEV` | `IE-VEV-TECH-Q15-001` | [Q-15 Client/UI Architecture Vertical Slice Qualification](registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md) | `Draft 0.1`; two runnable candidates and bounded evidence recorded at source `5556f60`; Q-15 `PARTIAL`, direct Dart FFI harness lane `PASS`, overall winner `NO WINNER`, recommendation and Product Scope unchanged |
 | `VEV` | `IE-VEV-TECH-Q15-002` | [Q-15 Client/UI Architecture Vertical Slice Qualification — Phase 2](registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md) | `Draft 0.1`; successor evidence at source `3ae5f22`; Option A installed flow and production Web `PASS`, Option B Windows/FFI fault/Web JS/Wasm lanes `PASS` within bounded harness; native shim cost recorded; Q-15 remains `PARTIAL`, `NO WINNER`, recommendation and Product Scope unchanged |
 | `VEV` | `IE-VEV-TECH-Q15-003` | [Q-15 Client/UI Architecture Vertical Slice Qualification — Phase 3](registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md) | `Draft 0.1`; native immediate/pending/cancellation hardening and 100-cycle reconnect evidence at source `47fa6d0`; Flutter Windows/Web and Release comparison remain `BLOCKED`; Q-15 remains `PARTIAL`, `NO WINNER`, recommendation, Matrix/TECH-001 and Product Scope unchanged |
+| `VEV` | `IE-VEV-TECH-VIEW-001` | [Core v0 Technology Architecture View Set](registers/VEV-2026-09-15-technology-architecture-view-set.md) | `Draft 0.1`; eight focused technology views rendered to SVG/PNG and opened standalone 8/8 `PASS`; architecture approval and implementation remain `NOT-RUN` |
 | `CHG` | `IE-CHG-DOC-REVIEW-001` | [Post-pull Document and Diagram Review Corrections](registers/CHG-2026-09-14-post-pull-document-review-corrections.md) | `Draft 0.2`; retains the 0.1 review corrections and adds the legibility-only `ARCH-VIEW-MOD-001` C4 Component rendition; no product decision or gate change |
-| `KNW` | `IE-KNW-TECH-DEC-001` | [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) | `Draft 0.5`; Linux-first Java Server unchanged; React/WPF/WebView2 is the provisional Q-15 control and Flutter the direct-FFI-first challenger; its as-authored Q-01…Q-15 state is `NOT-RUN`, while later `IE-VEV-TECH-Q15-001` records Q-15 `PARTIAL`; informative only |
+| `STD` | `IE-STD-TECH-STACK-001` | [Technology Stack Documentation Standard](../../../agents/technology-stack-documentation-standard.md) | `Draft 0.1`; repository instruction state `Effective`; reusable process standard, product normativity `INFORMATIVE`, conformity not claimed |
+| `KNW` | `IE-KNW-TECH-DEC-001` | [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) | `Draft 0.6`; Engineering selected the Linux-first Java/Spring/PostgreSQL Server and Option A Client baseline; Flutter is an evaluated alternative behind eight triggers; Q-01…Q-14 `NOT-RUN`, Q-15 `PARTIAL / NO WINNER`; informative only |
+| `CHG` | `IE-CHG-TECH-BASELINE-001` | [Core v0 Technology Stack Engineering Baseline](registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md) | `Draft 0.1`; records matrix@0.6, TECH@0.14, DOC-07@0.11 routing and technology views; PDA approval and PG3/PG4 remain `NOT-RUN` |
 | `CHG` | `IE-CHG-TECH-DEC-001` | [Core v0 Technology Recommendation Change Record](registers/CHG-2026-09-13-technology-decision-recommendation.md) | `Draft 0.1`; records TECH-001@0.8 → 0.9 and the new matrix; no product scope, requirement, architecture semantic or gate change |
 | `CHG` | `IE-CHG-TECH-LINUX-001` | [Linux-first Server Runtime Re-evaluation](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md) | `Draft 0.1`; records Tech context, predecessor hashes, matrix `0.1 → 0.2`, TECH `0.9 → 0.10`, DOC-05 candidate rows and DOC-07 routing; no Product Scope or gate change |
 | `CHG` | `IE-CHG-TECH-LINUX-002` | [Linux Server Technology Rationale Refinement](registers/CHG-2026-09-13-linux-server-technology-rationale-refinement.md) | `Draft 0.1`; records matrix `0.2 → 0.3`, TECH `0.10 → 0.11`, DOC-05 architecture-first wording and explicit dependency/session corrections; no Product Scope, architecture semantic or gate change |
@@ -341,9 +353,10 @@ already works. See
 | `CHG` | `IE-CHG-TECH-CLIENT-002` | [Client/UI Stack Review Correction](registers/CHG-2026-09-14-client-ui-stack-review-correction.md) | `Draft 0.1`; records research@0.3, matrix@0.5, TECH@0.13 and DOC-07@0.10 routing; corrects provisional control, Q-08/Q-10, Flutter FFI-first IPC and verifier provenance; no Product Scope, Server, architecture semantic or gate change |
 
 The [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md)
-is the current informative engineering recommendation and is presented to management through
-[`TECH-001@0.13`](decision-briefs/TECH-001-technology-and-architecture-proposal.md). It does not
-approve a stack or change the normative architecture. The focused
+is the current informative Engineering selection and is presented to management through
+[`TECH-001@0.14`](decision-briefs/TECH-001-technology-and-architecture-proposal.md). It selects the
+Core v0 planning baseline but does not constitute Product Decision Authority approval or change the
+normative architecture. The focused
 [Linux-first first-party support check](../../../research/2026-09-13-linux-first-server-platform-support-check.md),
 fresh [Client/UI Flutter challenger research](../../../research/2026-09-14-flutter-client-ui-stack-evidence.md),
 earlier [technology research note](../../../research/2026-09-03-idea-tech-stack-primary-sources.md),
@@ -355,7 +368,7 @@ compatibility test, security proof, license approval or an IDEA product decision
 
 ## Authoring and decision sequence
 
-1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.10, DOC-08@0.12 and VVP@0.16; keep unresolved inputs explicit.
+1. Review DOC-01@0.6, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.11, DOC-08@0.12 and VVP@0.16; keep unresolved inputs explicit.
 2. Resolve the exact Permission/Role/delegation seed under `SPEC-OPEN-03`, then refresh the three concise decision briefs against those exact sources and record
    Feature → Spec → Tech decisions against the versions actually presented to the boss.
 3. Obtain the required company deployment, security, operational and specialist dispositions;

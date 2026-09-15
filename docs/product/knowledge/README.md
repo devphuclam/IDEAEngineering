@@ -10,7 +10,8 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 | What was directly observed in the identified icVault environment? | [icVault observed behavior](icvault-observed-behavior.md) |
 | What has DDM publicly claimed or demonstrated? | [DDM vendor-public baseline](ddm-vendor-public-baseline.md) |
 | What DDM capabilities map to IDEA coverage and gap decisions? | [DDM capability inventory and IDEA gap matrix](2026-09-12-ddm-capability-inventory-and-idea-gap-matrix.md) |
-| What technology stack is recommended for IDEA Engineering Core v0? | [Core v0 Technology Decision Matrix](2026-09-13-core-v0-technology-decision-matrix.md) — informative engineering recommendation; Product Decision Authority approval remains `NOT-RUN` |
+| What technology stack has Engineering selected for IDEA Engineering Core v0? | [Core v0 Technology Decision Matrix](2026-09-13-core-v0-technology-decision-matrix.md) — informative Engineering selection; Product Decision Authority approval remains `NOT-RUN` |
+| How must a technology decision set be documented? | [IDEA Technology Stack Documentation Standard](../../agents/technology-stack-documentation-standard.md) — reusable repository process standard; no Product or ISO-conformity claim |
 | Does DDM have a separate administration and permission UI? | [DDM administration and permission UI evidence](2026-09-09-ddm-administration-permissions-ui-evidence.md) |
 | Which Microsoft authorization patterns are useful for IDEA DDM? | [Microsoft authorization patterns for IDEA DDM](2026-09-09-microsoft-authorization-patterns-for-idea-ddm.md) |
 | Does DDM demonstrate releasing one subassembly before the whole product? | [DDM staged-release evidence finding](2026-09-07-ddm-staged-release-evidence.md) |
@@ -41,14 +42,14 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 
 ## Coverage snapshot
 
-As of 2026-09-14, the admitted baseline covers:
+As of 2026-09-15, the admitted baseline covers:
 
 | Area | Controlled coverage |
 |---|---|
 | icVault | 9 topology claims, 8 identity/version claims, all 22 Checkout/Reference/Check-in scenarios, structure/workflow/metadata, storage/security/recovery, unknowns, and prohibited overclaims |
 | DDM public evidence | 16 first-party propositions, 10 target-unknown groups, 8 public-source contradiction classes, and explicit tutorial limits |
 | DDM capability inventory | `IE-KNW-DDM-007@0.3`: 100 DDM-native capability rows across families A–S, with orthogonal Evidence Authority/Mode/Temporal axes, IDEA `COVERED/PARTIAL/ABSENT/UNKNOWN`, separate product disposition, gap criticality, priority, gate effect and open-point impact |
-| Technology decision | `IE-KNW-TECH-DEC-001@0.5`: Linux-first Java/Temurin/Spring Server recommendation unchanged; React/WPF/WebView2 is the provisional Q-15 qualification control and Flutter Web/Windows the direct-Dart-FFI-first challenger; Core/Conditional/Deferred dependencies remain explicit; Q-01…Q-15 `NOT-RUN`, no Tech or gate approval |
+| Technology decision | `IE-KNW-TECH-DEC-001@0.6`: Linux-first Java/Temurin/Spring/PostgreSQL Server and React/WPF/WebView2 + per-user `.NET Workspace` are the selected Core v0 Engineering baseline; Flutter is an evaluated alternative behind `TRIGGER-CLIENT-01…08`; Core/Conditional/Deferred dependencies remain explicit; Q-01…Q-14 `NOT-RUN`, Q-15 `PARTIAL / NO WINNER`, no Product Decision Authority or gate approval |
 | DDM future target audit | 24 ranked questions with entry, legal/safety, evidence-output, stop, and exit gates |
 | Aras comparison | Official lifecycle/version and workflow/approval patterns admitted with explicit application and evidence limits |
 | IDEA translation | 22 accepted design lessons, 44 core invariants, 13 baseline quality scenarios, 7 accepted product ADRs, and 1 proposed product ADR |

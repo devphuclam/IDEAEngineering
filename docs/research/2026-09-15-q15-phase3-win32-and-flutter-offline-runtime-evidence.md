@@ -11,7 +11,7 @@
 | Applicable baseline | IDEA Engineering Q-15 Phase 3 research context at local repository commit `8bc0f955247a5c635498dbd76dce9527a2070b13`; no remote-baseline assertion |
 | Evidence date / source access | `2026-09-15` (Asia/Saigon) |
 | Classification / retention | `INTERNAL`; retain with the Q-15 technology evidence chain |
-| Source / upstream trace | [`IE-STD-AUTH-001@0.2`](../agents/product-document-authoring-standard.md), [Q-15 Phase 2 evidence](../product/instances/idea-engineering/registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [prior Win32 semantics research](2026-09-15-q15-win32-overlapped-error-semantics.md), and the dated first-party sources registered below |
+| Source / upstream trace | [`IE-STD-AUTH-001@0.2`](../agents/product-document-authoring-standard.md), [Q-15 Phase 2 evidence](../product/instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md), [prior Win32 semantics research](2026-09-15-q15-win32-overlapped-error-semantics.md), and the dated first-party sources registered below |
 | Downstream trace | Future Q-15 Phase 3 implementation and successor verification/evidence record; no downstream decision or approval is created here |
 | Change record / predecessor | Initial record; predecessor `NOT-APPLICABLE`; adds a fresh first-party Phase 3 research snapshot without superseding the Phase 2 evidence or prior Win32 research; Product Scope impact `NONE` |
 | Supersedes / Superseded by | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
