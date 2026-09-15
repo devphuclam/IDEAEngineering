@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:idea_q15_option_b/workspace/workspace_client.dart';
+import 'package:idea_q15_option_b/workspace/workspace_client_windows.dart'
+    show readNativeIoDiagnostics;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -24,5 +26,20 @@ void main() {
       );
       expect(result.preservesLocalCandidate, isTrue);
     }
+
+    final diagnostics = readNativeIoDiagnostics();
+    expect(diagnostics.activeOperations, 0);
+    expect(
+      diagnostics.immediateReadSuccess + diagnostics.pendingRead,
+      greaterThan(0),
+    );
+    expect(
+      diagnostics.immediateWriteSuccess + diagnostics.pendingWrite,
+      greaterThan(0),
+    );
+    expect(
+      diagnostics.detachedCleanupStarted,
+      diagnostics.detachedCleanupCompleted,
+    );
   });
 }

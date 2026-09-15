@@ -192,12 +192,11 @@ String _uuid() {
   final bytes = List<int>.generate(16, (_) => Random.secure().nextInt(256));
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
   bytes[8] = (bytes[8] & 0x3f) | 0x80;
-  String part(int start, int length) =>
-      bytes
-          .skip(start)
-          .take(length)
-          .map((value) => value.toRadixString(16).padLeft(2, '0'))
-          .join();
+  String part(int start, int length) => bytes
+      .skip(start)
+      .take(length)
+      .map((value) => value.toRadixString(16).padLeft(2, '0'))
+      .join();
   return '${part(0, 4)}-${part(4, 2)}-${part(6, 2)}-${part(8, 2)}-${part(10, 6)}';
 }
 
@@ -214,129 +213,277 @@ class _NativeConfig {
   final String encodedSecret;
 }
 
-final class _Overlapped extends Struct {
-  @UintPtr()
-  external int internal;
-  @UintPtr()
-  external int internalHigh;
+final class _ConnectResult extends Struct {
+  @Int32()
+  external int state;
+
   @Uint32()
-  external int offset;
-  @Uint32()
-  external int offsetHigh;
-  external Pointer<Void> event;
+  external int errorCode;
+
+  @IntPtr()
+  external int pipeHandle;
 }
 
-typedef _WaitNamedPipeNative = Int32 Function(Pointer<Utf16>, Uint32);
-typedef _WaitNamedPipeDart = int Function(Pointer<Utf16>, int);
-typedef _CreateFileNative =
-    IntPtr Function(
-      Pointer<Utf16>,
-      Uint32,
-      Uint32,
-      Pointer<Void>,
-      Uint32,
-      Uint32,
-      IntPtr,
+final class _IoStartResult extends Struct {
+  @Int32()
+  external int state;
+
+  @Uint32()
+  external int errorCode;
+
+  @UintPtr()
+  external int operation;
+
+  @Uint32()
+  external int bytesTransferred;
+
+  @Uint32()
+  external int reserved;
+}
+
+final class _IoCompletionResult extends Struct {
+  @Int32()
+  external int state;
+
+  @Uint32()
+  external int errorCode;
+
+  @Uint32()
+  external int bytesTransferred;
+
+  @Uint32()
+  external int reserved;
+}
+
+final class _CancelResult extends Struct {
+  @Int32()
+  external int state;
+
+  @Uint32()
+  external int errorCode;
+}
+
+final class _IoDiagnostics extends Struct {
+  @Uint64()
+  external int activeOperations;
+
+  @Uint64()
+  external int immediateReadSuccess;
+
+  @Uint64()
+  external int immediateWriteSuccess;
+
+  @Uint64()
+  external int immediateFailures;
+
+  @Uint64()
+  external int pendingRead;
+
+  @Uint64()
+  external int pendingWrite;
+
+  @Uint64()
+  external int terminalSuccess;
+
+  @Uint64()
+  external int terminalFailure;
+
+  @Uint64()
+  external int terminalOperationAborted;
+
+  @Uint64()
+  external int detachedCleanupStarted;
+
+  @Uint64()
+  external int detachedCleanupCompleted;
+}
+
+typedef _OpenPipeNative = Void Function(
+  Pointer<Utf16>,
+  Uint32,
+  Pointer<_ConnectResult>,
+);
+typedef _OpenPipeDart = void Function(
+  Pointer<Utf16>,
+  int,
+  Pointer<_ConnectResult>,
+);
+typedef _ClosePipeNative = Int32 Function(IntPtr);
+typedef _ClosePipeDart = int Function(int);
+typedef _StartIoNative = Void Function(
+  IntPtr,
+  Int32,
+  Pointer<Void>,
+  Uint32,
+  Pointer<_IoStartResult>,
+);
+typedef _StartIoDart = void Function(
+  int,
+  int,
+  Pointer<Void>,
+  int,
+  Pointer<_IoStartResult>,
+);
+typedef _WaitIoNative = Void Function(
+  UintPtr,
+  Uint32,
+  Pointer<Void>,
+  Uint32,
+  Pointer<_IoCompletionResult>,
+);
+typedef _WaitIoDart = void Function(
+  int,
+  int,
+  Pointer<Void>,
+  int,
+  Pointer<_IoCompletionResult>,
+);
+typedef _CancelIoNative = Void Function(UintPtr, Pointer<_CancelResult>);
+typedef _CancelIoDart = void Function(int, Pointer<_CancelResult>);
+typedef _ReleaseIoNative = Int32 Function(UintPtr);
+typedef _ReleaseIoDart = int Function(int);
+typedef _DetachIoNative = Int32 Function(UintPtr, Pointer<_IoCompletionResult>);
+typedef _DetachIoDart = int Function(int, Pointer<_IoCompletionResult>);
+typedef _GetDiagnosticsNative = Void Function(Pointer<_IoDiagnostics>);
+typedef _GetDiagnosticsDart = void Function(Pointer<_IoDiagnostics>);
+
+class _NativeBindings {
+  _NativeBindings._(DynamicLibrary library)
+    : openPipe = library.lookupFunction<_OpenPipeNative, _OpenPipeDart>(
+        'idea_q15_open_named_pipe',
+      ),
+      closePipe = library.lookupFunction<_ClosePipeNative, _ClosePipeDart>(
+        'idea_q15_close_named_pipe',
+      ),
+      startIo = library.lookupFunction<_StartIoNative, _StartIoDart>(
+        'idea_q15_start_overlapped_io',
+      ),
+      waitIo = library.lookupFunction<_WaitIoNative, _WaitIoDart>(
+        'idea_q15_wait_overlapped_io',
+      ),
+      cancelIo = library.lookupFunction<_CancelIoNative, _CancelIoDart>(
+        'idea_q15_cancel_overlapped_io',
+      ),
+      releaseIo = library.lookupFunction<_ReleaseIoNative, _ReleaseIoDart>(
+        'idea_q15_release_overlapped_io',
+      ),
+      detachIo = library.lookupFunction<_DetachIoNative, _DetachIoDart>(
+        'idea_q15_detach_overlapped_cleanup',
+      ),
+      getDiagnostics = library
+          .lookupFunction<_GetDiagnosticsNative, _GetDiagnosticsDart>(
+            'idea_q15_get_io_diagnostics',
+          );
+
+  factory _NativeBindings.load() {
+    try {
+      return _NativeBindings._(DynamicLibrary.executable());
+    } on Object catch (error) {
+      throw WorkspaceProtocolException('NATIVE_SHIM_UNAVAILABLE', cause: error);
+    }
+  }
+
+  final _OpenPipeDart openPipe;
+  final _ClosePipeDart closePipe;
+  final _StartIoDart startIo;
+  final _WaitIoDart waitIo;
+  final _CancelIoDart cancelIo;
+  final _ReleaseIoDart releaseIo;
+  final _DetachIoDart detachIo;
+  final _GetDiagnosticsDart getDiagnostics;
+}
+
+class NativeIoDiagnostics {
+  const NativeIoDiagnostics({
+    required this.activeOperations,
+    required this.immediateReadSuccess,
+    required this.immediateWriteSuccess,
+    required this.immediateFailures,
+    required this.pendingRead,
+    required this.pendingWrite,
+    required this.terminalSuccess,
+    required this.terminalFailure,
+    required this.terminalOperationAborted,
+    required this.detachedCleanupStarted,
+    required this.detachedCleanupCompleted,
+  });
+
+  final int activeOperations;
+  final int immediateReadSuccess;
+  final int immediateWriteSuccess;
+  final int immediateFailures;
+  final int pendingRead;
+  final int pendingWrite;
+  final int terminalSuccess;
+  final int terminalFailure;
+  final int terminalOperationAborted;
+  final int detachedCleanupStarted;
+  final int detachedCleanupCompleted;
+}
+
+NativeIoDiagnostics readNativeIoDiagnostics() {
+  if (!Platform.isWindows) {
+    throw UnsupportedError('Q-15 native I/O diagnostics require Windows.');
+  }
+  final result = calloc<_IoDiagnostics>();
+  try {
+    _NativeBindings.load().getDiagnostics(result);
+    return NativeIoDiagnostics(
+      activeOperations: result.ref.activeOperations,
+      immediateReadSuccess: result.ref.immediateReadSuccess,
+      immediateWriteSuccess: result.ref.immediateWriteSuccess,
+      immediateFailures: result.ref.immediateFailures,
+      pendingRead: result.ref.pendingRead,
+      pendingWrite: result.ref.pendingWrite,
+      terminalSuccess: result.ref.terminalSuccess,
+      terminalFailure: result.ref.terminalFailure,
+      terminalOperationAborted: result.ref.terminalOperationAborted,
+      detachedCleanupStarted: result.ref.detachedCleanupStarted,
+      detachedCleanupCompleted: result.ref.detachedCleanupCompleted,
     );
-typedef _CreateFileDart =
-    int Function(Pointer<Utf16>, int, int, Pointer<Void>, int, int, int);
-typedef _StartIoNative =
-    Int32 Function(
-      IntPtr,
-      Int32,
-      Pointer<Void>,
-      Uint32,
-      Pointer<_Overlapped>,
-      Pointer<Uint32>,
-    );
-typedef _StartIoDart =
-    int Function(
-      int,
-      int,
-      Pointer<Void>,
-      int,
-      Pointer<_Overlapped>,
-      Pointer<Uint32>,
-    );
-typedef _CreateEventNative =
-    IntPtr Function(Pointer<Void>, Int32, Int32, Pointer<Utf16>);
-typedef _CreateEventDart =
-    int Function(Pointer<Void>, int, int, Pointer<Utf16>);
-typedef _WaitNative = Uint32 Function(IntPtr, Uint32);
-typedef _WaitDart = int Function(int, int);
-typedef _CancelNative = Int32 Function(IntPtr, Pointer<_Overlapped>);
-typedef _CancelDart = int Function(int, Pointer<_Overlapped>);
-typedef _FinishIoNative =
-    Int32 Function(
-      IntPtr,
-      Pointer<_Overlapped>,
-      Pointer<Uint32>,
-      Int32,
-      Pointer<Uint32>,
-    );
-typedef _FinishIoDart =
-    int Function(
-      int,
-      Pointer<_Overlapped>,
-      Pointer<Uint32>,
-      int,
-      Pointer<Uint32>,
-    );
-typedef _CloseNative = Int32 Function(IntPtr);
-typedef _CloseDart = int Function(int);
-typedef _LastErrorNative = Uint32 Function();
-typedef _LastErrorDart = int Function();
+  } finally {
+    calloc.free(result);
+  }
+}
 
 Uint8List _roundTrip(String pipeName, Uint8List payload, int timeoutMs) {
   const maximumFrame = 65536;
   if (payload.isEmpty || payload.length > maximumFrame) {
     throw const WorkspaceProtocolException('FRAME_SIZE');
   }
-  final kernel = DynamicLibrary.open('kernel32.dll');
-  final waitPipe = kernel
-      .lookupFunction<_WaitNamedPipeNative, _WaitNamedPipeDart>(
-        'WaitNamedPipeW',
-      );
-  final createFile = kernel.lookupFunction<_CreateFileNative, _CreateFileDart>(
-    'CreateFileW',
-  );
-  final closeHandle = kernel.lookupFunction<_CloseNative, _CloseDart>(
-    'CloseHandle',
-  );
-  final getLastError = kernel.lookupFunction<_LastErrorNative, _LastErrorDart>(
-    'GetLastError',
-  );
+  final bindings = _NativeBindings.load();
   final fullName = r'\\.\pipe\' + pipeName;
   final name = fullName.toNativeUtf16();
+  final connect = calloc<_ConnectResult>();
   var handle = -1;
   try {
-    if (waitPipe(name, timeoutMs) == 0) {
-      throw WindowsException('WaitNamedPipeW', getLastError());
+    bindings.openPipe(name, timeoutMs, connect);
+    if (connect.ref.state != _connectSuccess) {
+      throw WindowsException('OpenNamedPipe', connect.ref.errorCode);
     }
-    handle = createFile(name, 0xc0000000, 0, nullptr, 3, 0x40000000, 0);
-    if (handle == -1) throw WindowsException('CreateFileW', getLastError());
+    handle = connect.ref.pipeHandle;
     final frame = Uint8List(4 + payload.length);
     ByteData.sublistView(frame).setUint32(0, payload.length, Endian.little);
     frame.setRange(4, frame.length, payload);
-    _writeAll(kernel, handle, frame, timeoutMs, getLastError);
-    final header = _readExactly(kernel, handle, 4, timeoutMs, getLastError);
+    _writeAll(bindings, handle, frame, timeoutMs);
+    final header = _readExactly(bindings, handle, 4, timeoutMs);
     final length = ByteData.sublistView(header).getUint32(0, Endian.little);
     if (length == 0 || length > maximumFrame) {
       throw const WorkspaceProtocolException('OVERSIZED_RESPONSE');
     }
-    return _readExactly(kernel, handle, length, timeoutMs, getLastError);
+    return _readExactly(bindings, handle, length, timeoutMs);
   } finally {
     calloc.free(name);
-    if (handle != -1) closeHandle(handle);
+    calloc.free(connect);
+    if (handle != -1) bindings.closePipe(handle);
   }
 }
 
 void _writeAll(
-  DynamicLibrary kernel,
+  _NativeBindings bindings,
   int handle,
   Uint8List bytes,
   int timeoutMs,
-  _LastErrorDart lastError,
 ) {
   final buffer = calloc<Uint8>(bytes.length);
   buffer.asTypedList(bytes.length).setAll(0, bytes);
@@ -344,13 +491,12 @@ void _writeAll(
     var offset = 0;
     while (offset < bytes.length) {
       final transferred = _overlappedIo(
-        kernel,
+        bindings,
         true,
         handle,
         (buffer + offset).cast(),
         bytes.length - offset,
         timeoutMs,
-        lastError,
       );
       if (transferred <= 0) {
         throw const WorkspaceProtocolException('ZERO_BYTE_WRITE');
@@ -363,24 +509,22 @@ void _writeAll(
 }
 
 Uint8List _readExactly(
-  DynamicLibrary kernel,
+  _NativeBindings bindings,
   int handle,
   int length,
   int timeoutMs,
-  _LastErrorDart lastError,
 ) {
   final buffer = calloc<Uint8>(length);
   try {
     var offset = 0;
     while (offset < length) {
       final transferred = _overlappedIo(
-        kernel,
+        bindings,
         false,
         handle,
         (buffer + offset).cast(),
         length - offset,
         timeoutMs,
-        lastError,
       );
       if (transferred <= 0) {
         throw const WorkspaceProtocolException('TRUNCATED_FRAME');
@@ -394,113 +538,98 @@ Uint8List _readExactly(
 }
 
 int _overlappedIo(
-  DynamicLibrary kernel,
+  _NativeBindings bindings,
   bool write,
   int handle,
   Pointer<Void> buffer,
   int length,
   int timeoutMs,
-  _LastErrorDart lastError,
 ) {
-  const waitObject0 = 0;
-  const waitTimeout = 258;
-  const waitFailed = 0xffffffff;
-  const errorIoPending = 997;
-  const errorOperationAborted = 995;
-  final createEvent = kernel
-      .lookupFunction<_CreateEventNative, _CreateEventDart>('CreateEventW');
-  final wait = kernel.lookupFunction<_WaitNative, _WaitDart>(
-    'WaitForSingleObject',
-  );
-  final cancel = kernel.lookupFunction<_CancelNative, _CancelDart>(
-    'CancelIoEx',
-  );
-  final close = kernel.lookupFunction<_CloseNative, _CloseDart>('CloseHandle');
-  final shim = DynamicLibrary.executable();
-  late final _StartIoDart start;
-  late final _FinishIoDart finish;
-  try {
-    start = shim.lookupFunction<_StartIoNative, _StartIoDart>(
-      'idea_q15_start_overlapped_io',
-    );
-    finish = shim.lookupFunction<_FinishIoNative, _FinishIoDart>(
-      'idea_q15_finish_overlapped_io',
-    );
-  } on Object catch (error) {
-    throw WorkspaceProtocolException('NATIVE_SHIM_UNAVAILABLE', cause: error);
-  }
-  final overlapped = calloc<_Overlapped>();
-  final transferred = calloc<Uint32>();
-  final error = calloc<Uint32>();
-  final event = createEvent(nullptr, 1, 0, nullptr.cast());
-  if (event == 0) {
-    calloc.free(overlapped);
-    calloc.free(transferred);
-    calloc.free(error);
-    throw WindowsException('CreateEventW', lastError());
-  }
-  overlapped.ref.event = Pointer<Void>.fromAddress(event);
+  final start = calloc<_IoStartResult>();
+  final completion = calloc<_IoCompletionResult>();
+  final cancel = calloc<_CancelResult>();
   final operationName = write ? 'WriteFile' : 'ReadFile';
+  var ownsOperation = false;
+  var operation = 0;
   try {
-    final immediate = start(
-      handle,
-      write ? 1 : 0,
-      buffer,
-      length,
-      overlapped,
-      error,
+    bindings.startIo(handle, write ? 1 : 0, buffer, length, start);
+    if (start.ref.state == _ioImmediateSuccess) {
+      return start.ref.bytesTransferred;
+    }
+    if (start.ref.state == _ioImmediateFailure) {
+      throw WindowsException(operationName, start.ref.errorCode);
+    }
+    if (start.ref.state != _ioPending || start.ref.operation == 0) {
+      throw const WorkspaceProtocolException('NATIVE_IO_START_STATE');
+    }
+    operation = start.ref.operation;
+    ownsOperation = true;
+
+    bindings.waitIo(operation, timeoutMs, buffer, length, completion);
+    if (completion.ref.state == _ioTerminalSuccess) {
+      final transferred = completion.ref.bytesTransferred;
+      _releaseTerminal(bindings, operation);
+      ownsOperation = false;
+      return transferred;
+    }
+    if (completion.ref.state == _ioTerminalFailure) {
+      final errorCode = completion.ref.errorCode;
+      _releaseTerminal(bindings, operation);
+      ownsOperation = false;
+      throw WindowsException(operationName, errorCode);
+    }
+
+    final timedOut = completion.ref.state == _ioWaitTimeout;
+    bindings.cancelIo(operation, cancel);
+    bindings.waitIo(operation, _cancelGraceMs, buffer, length, completion);
+    if (completion.ref.state == _ioTerminalSuccess ||
+        completion.ref.state == _ioTerminalFailure) {
+      _releaseTerminal(bindings, operation);
+      ownsOperation = false;
+    } else if (bindings.detachIo(operation, completion) == 1) {
+      // Native now owns every resource until GetOverlappedResult is terminal.
+      ownsOperation = false;
+    } else {
+      // Detach allocation failure is rare; blocking this worker isolate is the
+      // only safe fallback because caller memory must never outlive native I/O.
+      bindings.waitIo(operation, _infinite, buffer, length, completion);
+      _releaseTerminal(bindings, operation);
+      ownsOperation = false;
+    }
+    if (timedOut) {
+      throw TimeoutException('$operationName timed out after ${timeoutMs}ms.');
+    }
+    throw WindowsException(
+      'WaitForSingleObject($operationName)',
+      completion.ref.errorCode,
     );
-    if (immediate == 0 && error.value != errorIoPending) {
-      throw WindowsException(operationName, error.value);
-    }
-    if (immediate == 0) {
-      final waitResult = wait(event, timeoutMs);
-      if (waitResult == waitTimeout) {
-        cancel(handle, overlapped);
-        final cancelWait = wait(event, 1000);
-        if (cancelWait == waitTimeout) {
-          throw TimeoutException(
-            '$operationName timed out after ${timeoutMs}ms.',
-          );
-        }
-        if (cancelWait != waitObject0) {
-          throw WindowsException(
-            'WaitForSingleObject($operationName)',
-            lastError(),
-          );
-        }
-        if (finish(handle, overlapped, transferred, 0, error) == 0 &&
-            error.value != errorOperationAborted) {
-          throw WindowsException(
-            'GetOverlappedResult($operationName)',
-            error.value,
-          );
-        }
-        throw TimeoutException(
-          '$operationName timed out after ${timeoutMs}ms.',
-        );
-      }
-      if (waitResult == waitFailed || waitResult != waitObject0) {
-        throw WindowsException(
-          'WaitForSingleObject($operationName)',
-          lastError(),
-        );
-      }
-    }
-    if (finish(handle, overlapped, transferred, 0, error) == 0) {
-      throw WindowsException(
-        'GetOverlappedResult($operationName)',
-        error.value,
-      );
-    }
-    return transferred.value;
   } finally {
-    close(event);
-    calloc.free(overlapped);
-    calloc.free(transferred);
-    calloc.free(error);
+    if (ownsOperation) {
+      bindings.cancelIo(operation, cancel);
+      bindings.waitIo(operation, _infinite, buffer, length, completion);
+      _releaseTerminal(bindings, operation);
+    }
+    calloc.free(start);
+    calloc.free(completion);
+    calloc.free(cancel);
   }
 }
+
+void _releaseTerminal(_NativeBindings bindings, int operation) {
+  if (bindings.releaseIo(operation) != 1) {
+    throw const WorkspaceProtocolException('NATIVE_IO_RELEASE_STATE');
+  }
+}
+
+const _connectSuccess = 1;
+const _ioImmediateSuccess = 1;
+const _ioPending = 2;
+const _ioImmediateFailure = 3;
+const _ioTerminalSuccess = 1;
+const _ioTerminalFailure = 2;
+const _ioWaitTimeout = 3;
+const _cancelGraceMs = 250;
+const _infinite = 0xffffffff;
 
 class WindowsException implements Exception {
   const WindowsException(this.operation, this.code);
@@ -510,13 +639,13 @@ class WindowsException implements Exception {
   String get classification => operation == 'WaitNamedPipeW' && code == 0
       ? 'PIPE_UNAVAILABLE'
       : switch (code) {
-    2 || 231 || 121 => 'PIPE_UNAVAILABLE',
-    109 => 'PIPE_BROKEN',
-    5 => 'ACCESS_DENIED',
-    995 => 'CANCELLED',
-    258 => 'TIMEOUT',
-    _ => 'NATIVE_FAILURE',
-  };
+          2 || 231 || 121 => 'PIPE_UNAVAILABLE',
+          109 => 'PIPE_BROKEN',
+          5 => 'ACCESS_DENIED',
+          995 => 'CANCELLED',
+          258 => 'TIMEOUT',
+          _ => 'NATIVE_FAILURE',
+        };
 
   @override
   String toString() =>

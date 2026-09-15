@@ -17,6 +17,16 @@ add_executable(${BINARY_NAME} WIN32
   "runner.exe.manifest"
 )
 
+# Native regression executable for the qualification-only named-pipe ABI.
+# It is deliberately separate from the Flutter application and owns no
+# Product behavior.
+add_executable(q15_io_shim_tests
+  "q15_io_shim_tests.cpp"
+  "q15_io_shim.cpp"
+)
+apply_standard_settings(q15_io_shim_tests)
+target_compile_definitions(q15_io_shim_tests PRIVATE "NOMINMAX")
+
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})

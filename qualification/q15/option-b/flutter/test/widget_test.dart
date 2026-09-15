@@ -1,3 +1,5 @@
+import 'dart:ui' show Tristate;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -176,6 +178,92 @@ void main() {
       expect(reset.controller!.offset, 0);
       expect(find.byKey(const Key('grid-header-cell-0')), findsOneWidget);
       expect(find.byKey(const Key('grid-cell-0-0')), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'grid keyboard contract moves selection, viewport, multi-select and focus',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 700);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      var selected = -1;
+      var opened = -1;
+      final requested = <int>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              height: 500,
+              child: PagedDocumentGrid(
+                total: 100000,
+                columns: List.generate(20, (index) => 'field${index + 1}'),
+                rows: {0: fixtureRow(0)},
+                selected: selected,
+                onNeedRow: requested.add,
+                onSelect: (value) => selected = value,
+                onOpen: (value) => opened = value,
+                label: 'Controlled document results',
+                editLabel: 'Edit title',
+                menuLabel: 'Document actions',
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text(fixtureRow(0).title));
+      await tester.pump(const Duration(milliseconds: 400));
+      final gridFocus = tester.widget<Focus>(
+        find.byKey(const Key('grid-focus')),
+      );
+      expect(gridFocus.focusNode!.hasFocus, isTrue);
+
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.pageDown);
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.pageDown);
+      await tester.pump();
+      expect(selected, greaterThan(1));
+      expect(
+        tester
+            .widget<ListView>(find.byKey(const Key('grid-vertical-scroll')))
+            .controller!
+            .offset,
+        greaterThan(0),
+      );
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.end);
+      await tester.pump();
+      expect(selected, 99999);
+      expect(requested, contains(99800));
+      expect(find.byKey(const Key('grid-row-99999')), findsOneWidget);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.home);
+      await tester.pump();
+      expect(selected, 0);
+      expect(find.byKey(const Key('grid-row-0')), findsOneWidget);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pump();
+      final gridSemantics = tester.getSemantics(
+        find.byKey(const Key('grid-semantics')),
+      );
+      expect(gridSemantics.value, '1 selected');
+      final rowSemantics = tester.getSemantics(
+        find.byKey(const Key('grid-row-0')),
+      );
+      expect(rowSemantics.flagsCollection.isSelected, Tristate.isTrue);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      expect(opened, 0);
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.sendKeyEvent(LogicalKeyboardKey.f10);
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.pumpAndSettle();
+      expect(find.text('Document actions'), findsOneWidget);
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+      expect(gridFocus.focusNode!.hasFocus, isTrue);
     },
   );
 }

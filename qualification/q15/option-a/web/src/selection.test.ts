@@ -8,6 +8,9 @@ describe("shared interaction semantics", () => {
     expect(nextSelection(99_999, "ArrowDown", 100_000)).toBe(99_999);
     expect(nextSelection(0, "ArrowUp", 100_000)).toBe(0);
     expect(nextSelection(25, "End", 100_000)).toBe(99_999);
+    expect(nextSelection(10, "PageDown", 100_000, 12)).toBe(22);
+    expect(nextSelection(10, "PageUp", 100_000, 12)).toBe(0);
+    expect(nextSelection(99_995, "PageDown", 100_000, 12)).toBe(99_999);
   });
 
   it("virtualizes rather than rendering the complete large fixture", () => {
