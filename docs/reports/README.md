@@ -12,6 +12,7 @@ Spec Kit feature specification.
 | File | Disposition | Permitted use |
 |---|---|---|
 | [IDEA_DDM_review.docx](IDEA_DDM_review.docx) | Current user-edited management copy | Present the current Feature/Spec and UI walkthrough. Preserve the user's manual wording and layout; do not regenerate or overwrite it without an explicit request. |
+| [Core v0 Technology Stack recommendation](IDEA-Engineering-Core-v0-technology-stack-recommendation.md) | `For Management Review` supporting report | Explain the Engineering-selected Core v0 stack, architecture, decision basis and credible alternatives. The report does not replace TECH-001 or record Product Decision Authority approval. |
 | [PDM Software Validation resolution note](PDM-Software-Validation-260815-2-resolution-note.md) | Current context-resolution note | Record how the differences in the supplied validation PDF were resolved and distinguish them from later Spec inputs or verification work. It is not a product requirement authority. |
 
 The two obsolete Controlled Document Workspace reports were removed from the active directory on
