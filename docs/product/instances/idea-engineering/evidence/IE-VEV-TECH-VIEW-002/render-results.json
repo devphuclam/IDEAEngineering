@@ -1,0 +1,68 @@
+{
+  "evidenceId": "IE-VEV-TECH-VIEW-002",
+  "renderedAt": "2026-09-15T03:58:13.562Z",
+  "browser": "152.0.7977.83",
+  "mermaid": "11.12.0",
+  "source": {
+    "path": "docs/product/instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md",
+    "sha256": "16b834b1f5d7c7c75d9a22e336c54c0c71496de69f7ed72b3a9a279d7a34a923"
+  },
+  "results": [
+    {
+      "id": "TECH-D01",
+      "title": "IDEA Core v0 selected technology stack overview",
+      "description": "Browser and a Windows engineering PC use one React business interface. The Windows desktop hosts it through WebView2 in a narrow WPF shell and calls a separate per-user dotnet Workspace through an authenticated named pipe. Both clients call a Java Spring Server on Ubuntu through HTTPS JSON. The Server uses PostgreSQL and a private Artifact Store and may dispatch controlled work to a separate Windows Format Worker.",
+      "status": "PASS — RENDER",
+      "svgSha256": "c7cd84d78a4f56a798b301945af93fa107a801c8d86ddc60ecf4fdb75e5d7526"
+    },
+    {
+      "id": "TECH-D02",
+      "title": "C4 style container and technology boundaries for IDEA Core v0",
+      "description": "An engineer uses either a browser or the IDEA Desktop. The Desktop contains a narrow WPF and WebView2 host for the React interface. A separate Workspace process manages local engineering files and tools. All protected product calls go to one IDEA Server. The Server owns product coordination and uses PostgreSQL, a private Artifact Store and a separate Format Worker through labelled contracts.",
+      "status": "PASS — RENDER",
+      "svgSha256": "2ac205c6b7f9f5c6897fa9f22f8e8327c199bd5da63101c2c95b211dd684a26f"
+    },
+    {
+      "id": "TECH-D03",
+      "title": "Technology to responsibility layer mapping",
+      "description": "The presentation layer uses React and TypeScript, a narrow Windows shell uses WPF and WebView2, and local integration belongs to the dotnet Workspace. Spring Boot hosts API and application coordination while Spring Modulith checks module structure. Spring Security authenticates, IDEA Access Policy authorizes, Spring JDBC and PostgreSQL persist relational state, Flyway controls schema change, Artifact Custody controls bytes, and systemd Nginx and telemetry support operations.",
+      "status": "PASS — RENDER",
+      "svgSha256": "2453bb0baefc4dd04b7d3ec7e8bd65d3f26590d75ada72920b8f93ad5703df9e"
+    },
+    {
+      "id": "TECH-D04",
+      "title": "IDEA Core v0 runtimes protocols and trust boundaries",
+      "description": "Browser React and embedded React call the Spring Server with versioned HTTPS JSON REST. Embedded React sends allowlisted structured messages to WPF. WPF calls the per-user Workspace using an authenticated and versioned Named Pipe. Workspace calls the Server through HTTPS. Server uses JDBC to PostgreSQL, a private Adapter to the Artifact Store and a versioned integration contract to the Windows Format Worker.",
+      "status": "PASS — RENDER",
+      "svgSha256": "32f1a245ed8192d52e12ecbac727c6b1a6c6f87afea8bc342870cb45ef3d7b35"
+    },
+    {
+      "id": "TECH-D05",
+      "title": "Initial Core v0 deployment with explicit non high availability boundary",
+      "description": "Engineer Windows computers run a browser, WPF WebView2 Desktop, per-user Workspace and external engineering tools. Other company devices may use the browser. One Ubuntu Server virtual machine runs Nginx, Temurin and Spring Boot, PostgreSQL and the private Artifact volume. A separate Windows host may run the Format Worker. A separate failure-domain backup target receives coordinated database artifact configuration policy and key backups. The single server virtual machine is explicitly not high availability.",
+      "status": "PASS — RENDER",
+      "svgSha256": "7b33eefb185af7358c69906faa4b27cd1b980c30a96ca2f5260724a67d6be9df"
+    },
+    {
+      "id": "TECH-D06",
+      "title": "Selected direct technology dependency directions",
+      "description": "React and TypeScript depend on the versioned REST contract rather than domain modules. The WPF shell depends on WebView2 and a Workspace client contract. Workspace depends on the named-pipe protocol and the Server API contract. The Spring application hosts IDEA domain modules, which use Spring Modulith boundary checks and owner interfaces. Persistence uses Spring JDBC JdbcClient then pgJDBC then PostgreSQL. Flyway is the separate schema migration authority. Domain modules do not depend on React WPF WebView2 or Workspace technology.",
+      "status": "PASS — RENDER",
+      "svgSha256": "91295bbca85ed800e4b27bb44ba7205613399c012a37516e805397d724f10cfb"
+    },
+    {
+      "id": "TECH-D07",
+      "title": "Selected design for Core v0 build packaging and deployment pipeline",
+      "description": "Controlled source feeds Maven Wrapper for the Server JAR, npm and Vite for React assets, and dotnet for WPF and Workspace binaries. The separate Format Worker boundary and the exact CAD Office Format Adapter profile contract are selected. Concrete profile values plus the Worker build runtime and toolchain remain qualification-dependent and not run. Outputs pass through release controls before separate Linux Server Windows Client and conditionally deployed Windows Worker targets. The diagram does not select a Worker implementation toolchain.",
+      "status": "PASS — RENDER",
+      "svgSha256": "957f4110da204e9f4765628ac7b035fbf4faa5a19a419dd3ddc532aa1739f0ee"
+    },
+    {
+      "id": "TECH-D08",
+      "title": "Core v0 technology decisions and controlled reopen paths",
+      "description": "Engineering selects React WPF WebView2 and dotnet Workspace for the Core v0 client and Java Spring for the Server. A Client or Server trigger opens a successor decision. That decision may retain the current baseline or select the corresponding qualified alternative; the trigger does not predetermine the result. Q15 remains partial with no winner and Product Decision Authority approval remains not run.",
+      "status": "PASS — RENDER",
+      "svgSha256": "091e312a20a4f47e3b75bdff72a8cde45ec718d751e35186471dc7f7a89aa6a2"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 | Stable Document ID | `IE-ARC-TECH-VIEW-001` |
 | Document class | `ARC` / Technology Architecture View Set |
 | Title | IDEA Engineering Core v0 Technology Architecture View Set |
-| Version / status | `0.1` / `Draft` |
+| Version / status | `0.2` / `Draft` |
 | Artifact role | Focused views of the Engineering-selected Core v0 technology baseline; companion to the decision matrix and TECH-001, not a replacement for DOC-05 |
 | Product normativity | `INFORMATIVE` — visualizes the selected implementation direction and creates no FTR/REQ/product behavior |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
@@ -13,12 +13,13 @@
 | Reviewer / acceptance authority | Architecture/technology review `NOT-RUN`; Product Decision Authority review and acceptance `NOT-RUN` |
 | Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-05@0.20; `IE-KNW-TECH-DEC-001@0.6`; `TECH-001@0.14` |
 | Source / upstream trace | [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); [DOC-05](../DOC-05-architecture-description.md); [`IE-KNW-TECH-DEC-001@0.6`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`TECH-001@0.14`](../decision-briefs/TECH-001-technology-and-architecture-proposal.md); accepted ADRs |
-| Downstream trace | [`IE-VEV-TECH-VIEW-001`](../registers/VEV-2026-09-15-technology-architecture-view-set.md); rendered [SVG/PNG view package](../evidence/IE-VEV-TECH-VIEW-001/index.html); future implementation and release records |
-| Change record | [`IE-CHG-TECH-BASELINE-001`](../registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); initial view set |
-| Supersedes / superseded by | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Downstream trace | [`IE-VEV-TECH-VIEW-002`](../registers/VEV-2026-09-15-technology-architecture-view-correction.md); rendered [SVG/PNG view package](../evidence/IE-VEV-TECH-VIEW-002/index.html); future implementation and release records |
+| Change record | [`IE-CHG-TECH-VIEW-CORR-001`](../registers/CHG-2026-09-15-technology-architecture-view-correction.md); corrects TECH-D07/D08 semantics without changing the selected stack |
+| Predecessor | `IE-ARC-TECH-VIEW-001@0.1`; renderer-recorded source SHA-256 `48B0F3E7D3197A14AFD97C4E35F620DBAC80F210F768C2F8B4E87AA63F5D6C6D` |
+| Supersedes / superseded by | Supersedes `IE-ARC-TECH-VIEW-001@0.1` / `NOT-APPLICABLE` |
 | Review trigger | Technology baseline, deployment topology, protocol, trust boundary, build/release path or client reopen disposition changes |
 | Access / retention | `INTERNAL`; retain with the technology baseline and successor history |
-| Evidence status | Mermaid sources authored; rendering and standalone-SVG opening are recorded separately by `IE-VEV-TECH-VIEW-001`; a rendered image is not architecture approval |
+| Evidence status | Mermaid sources authored; rendering and standalone-SVG opening are recorded separately by `IE-VEV-TECH-VIEW-002`; a rendered image is not architecture approval |
 
 ## Reading rule and notation
 
@@ -386,27 +387,32 @@ Flyway separately controls schema migration. No dependency cycle is intended.
 ```mermaid
 flowchart TB
     accTitle: Selected design for Core v0 build packaging and deployment pipeline
-    accDescr: Controlled source feeds Maven Wrapper for the Server JAR, npm and Vite for React assets, and dotnet for WPF Workspace and Worker binaries. Outputs pass through versioning dependency inventory SBOM checksums signing and release review before a release bundle is assembled. The bundle deploys separately to Linux Server Windows Client and Windows Worker targets. Every stage is selected design with implementation not run.
+    accDescr: Controlled source feeds Maven Wrapper for the Server JAR, npm and Vite for React assets, and dotnet for WPF and Workspace binaries. The separate Format Worker boundary and the exact CAD Office Format Adapter profile contract are selected. Concrete profile values plus the Worker build runtime and toolchain remain qualification-dependent and not run. Outputs pass through release controls before separate Linux Server Windows Client and conditionally deployed Windows Worker targets. The diagram does not select a Worker implementation toolchain.
 
     Source[(Controlled source<br/>SELECTED DESIGN)]
     Maven[Maven Wrapper + Boot BOM]
     Npm[npm ci + Vite 8.3<br/>Node 22 LTS build line]
     Dotnet[dotnet build/publish<br/>.NET 10]
+    WorkerToolchain[Format Worker build/runtime/toolchain<br/><b>QUALIFICATION-DEPENDENT / NOT-RUN</b>]
 
     Jar[Server executable JAR]
     Web[React static assets]
-    Windows[WPF + Workspace<br/>and Worker binaries]
+    Windows[WPF + Workspace binaries]
+    WorkerPackage[Format Worker package<br/><b>EXACT TOOLCHAIN NOT SELECTED</b>]
 
     Controls[Release controls<br/>version + dependency inventory + SBOM<br/>checksums + signing + review<br/><b>IMPLEMENTATION NOT-RUN</b>]
     Package[Signed/versioned release bundles<br/><b>IMPLEMENTATION NOT-RUN</b>]
 
     Linux[Linux Server target<br/>systemd + host Temurin + Nginx]
     Client[Windows Client target<br/>WPF + WebView2 + Workspace]
-    Worker[Windows Worker target<br/>licensed format profile]
+    Worker[Windows Format Worker target<br/><b>BOUNDARY + EXACT PROFILE CONTRACT SELECTED</b><br/>concrete CAD/Office/Format Adapter profile values: <b>QUALIFICATION NOT-RUN</b><br/>deploy/use only when CAD/Office/license processing requires it]
 
     Source --> Maven --> Jar --> Controls
     Source --> Npm --> Web --> Controls
     Source --> Dotnet --> Windows --> Controls
+    Source -. qualify and select .-> WorkerToolchain
+    WorkerToolchain -. selected build path .-> WorkerPackage
+    WorkerPackage -. after qualification .-> Controls
     Controls --> Package
     Package -. deploy and verify .-> Linux
     Package -. deploy and verify .-> Client
@@ -414,15 +420,18 @@ flowchart TB
 
     classDef design fill:#e8f1fb,stroke:#172b4d,stroke-width:2px,color:#111;
     classDef notrun fill:#fff,stroke:#111,stroke-width:2px,stroke-dasharray:6 3,color:#111;
-    class Source,Maven,Npm,Dotnet,Jar,Web,Windows design;
-    class Controls,Package,Linux,Client,Worker notrun;
+    class Source,Maven,Npm,Dotnet,Jar,Web,Windows,Worker design;
+    class WorkerToolchain,WorkerPackage,Controls,Package,Linux,Client notrun;
 ```
 
-**Text alternative.** Controlled source has three selected build lanes: Maven Wrapper creates the
-Server JAR, npm/Vite creates React assets and dotnet creates WPF/Workspace/Worker binaries. Planned
-release controls add versioning, dependency inventory, SBOM, checksums, signing and review before
-separate Linux Server, Windows Client and Windows Worker bundles are deployed. These controls and
-deployments are `IMPLEMENTATION NOT-RUN`, not a claim that CI exists.
+**Text alternative.** Maven Wrapper creates the Server JAR, npm/Vite creates React assets, and
+`dotnet build/publish` creates only the WPF and Workspace binaries. The separate Format Worker
+boundary and the contract requiring an exact CAD/Office/Format Adapter profile are `SELECT`.
+Concrete profile values and the Worker build/runtime/toolchain remain qualification-dependent and
+`NOT-RUN`. A Worker package enters the release controls only after its toolchain is separately
+selected. The Worker is deployed or used only when the exact CAD/Office/license processing profile
+requires it. Release controls and all depicted deployments remain `IMPLEMENTATION NOT-RUN`; this is
+not a claim that CI exists.
 
 ## TECH-D08 — Technology Decision & Reopen Map
 
@@ -439,57 +448,52 @@ deployments are `IMPLEMENTATION NOT-RUN`, not a claim that CI exists.
 ```mermaid
 flowchart TB
     accTitle: Core v0 technology decisions and controlled reopen paths
-    accDescr: Engineering selects React WPF WebView2 and dotnet Workspace for the Core v0 client. Flutter is an evaluated alternative not selected for Core v0 and can return only through one of eight named triggers. Tauri remains an alternative with deferred qualification, browser-only with Workspace requires a product decision, and Electron is rejected for Core v0. Engineering selects Java and Spring for Server while dotnet and ASP.NET Core remain an alternative with named reopen triggers. Q15 remains partial with no winner and Product Decision Authority approval remains not run.
+    accDescr: Engineering selects React WPF WebView2 and dotnet Workspace for the Core v0 client and Java Spring for the Server. A Client or Server trigger opens a successor decision. That decision may retain the current baseline or select the corresponding qualified alternative; the trigger does not predetermine the result. Q15 remains partial with no winner and Product Decision Authority approval remains not run.
 
-    Q15[Q-15 experiment<br/><b>PARTIAL / NO WINNER</b>]
-    Eng[Broader Engineering evaluation<br/>scope + architecture + evidence + operations + opportunity cost]
-    Q15 --> Eng
+    Q15[Q-15 experiment<br/><b>PARTIAL / NO WINNER</b><br/>does not decide the baseline]
 
     subgraph Client[Client decision]
+      direction TB
       A[[React + WPF + WebView2<br/>+ .NET Workspace<br/><b>SELECT — CORE V0 ENGINEERING BASELINE</b>]]
       B[Flutter Web + Windows + Dart<br/>+ narrow C++ shim + .NET Workspace<br/><b>EVALUATED ALTERNATIVE — NOT SELECTED CORE V0</b>]
-      T[Tauri + React + Workspace<br/><b>ALTERNATIVE / DEFER QUALIFICATION</b>]
-      C[Browser-only + Workspace<br/><b>CONDITIONAL — PRODUCT DECISION REQUIRED</b>]
-      E((Electron<br/><b>REJECT FOR CORE V0</b>))
-      Triggers[TRIGGER-CLIENT-01…08<br/>approved scope, mandatory failure<br/>or material accepted advantage]
-      B -. reopen only on .-> Triggers
-      Triggers -. successor decision .-> A
+      ClientTrigger[TRIGGER-CLIENT-01…08 observed<br/>approved scope, mandatory failure<br/>or material accepted advantage]
+      ClientDecision{Successor Client Decision}
+      ClientTrigger --> ClientDecision
+      ClientDecision -. retain current baseline .-> A
+      ClientDecision -. select qualified alternative .-> B
     end
 
     subgraph Server[Server decision]
+      direction TB
       J[[Java 25 + Spring Boot/Modulith<br/><b>SELECT</b>]]
       N[.NET 10 + ASP.NET Core<br/><b>ALTERNATIVE</b>]
-      ST[Reopen: mandatory Java qualification gap,<br/>unsustainable two-runtime burden,<br/>or safer supported company .NET platform]
-      N -. reconsider on .-> ST
-      ST -. successor decision .-> J
+      ServerTrigger[TRIGGER-SERVER-01…03 observed<br/>mandatory qualification failure,<br/>accepted ownership burden,<br/>or safer qualified alternative]
+      ServerDecision{Successor Server Decision}
+      ServerTrigger --> ServerDecision
+      ServerDecision -. retain current baseline .-> J
+      ServerDecision -. select qualified alternative .-> N
     end
 
-    Eng --> A
-    Eng --> B
-    Eng --> T
-    Eng --> C
-    Eng --> E
-    Eng --> J
-    Eng --> N
     PDA[Product Decision Authority<br/><b>NOT-RUN</b>]
     A -. submitted for review .-> PDA
     J -. submitted for review .-> PDA
 
     classDef selected fill:#e8f1fb,stroke:#111,stroke-width:3px,color:#111;
     classDef alternative fill:#fff,stroke:#111,stroke-width:2px,stroke-dasharray:6 3,color:#111;
-    classDef rejected fill:#fff,stroke:#111,stroke-width:3px,color:#111;
     classDef state fill:#fffaf0,stroke:#5f6368,stroke-width:1.5px,color:#111;
     class A,J selected;
-    class B,T,C,N alternative;
-    class E rejected;
-    class Q15,Eng,Triggers,ST,PDA state;
+    class B,N alternative;
+    class Q15,ClientTrigger,ClientDecision,ServerTrigger,ServerDecision,PDA state;
 ```
 
 **Text alternative.** Q-15 contributes `PARTIAL / NO WINNER` evidence to a broader Engineering
 decision. Engineering selects React + WPF/WebView2 + .NET Workspace for Core v0. Flutter remains an
-evaluated alternative and returns only through TRIGGER-CLIENT-01…08. Tauri remains an alternative,
-browser-only requires a Product decision and Electron is rejected only for Core v0. Java/Spring is
-the selected Server direction; .NET/ASP.NET Core remains reopenable. PDA approval is `NOT-RUN`.
+evaluated alternative. When a Client trigger occurs, a Successor Client Decision may either retain
+the current React baseline or select a qualified Flutter alternative. The same rule applies to the
+Server: a Server trigger leads to a Successor Server Decision that may retain Java/Spring or select
+qualified .NET/ASP.NET Core. No trigger predetermines its outcome. Tauri remains an alternative,
+browser-only requires a Product decision and Electron is rejected only for Core v0. PDA approval is
+`NOT-RUN`.
 
 ## Client reopen trigger register
 
@@ -505,10 +509,24 @@ the selected Server direction; .NET/ASP.NET Core remains reopenable. PDA approva
 | `TRIGGER-CLIENT-08` | A future controlled qualification demonstrates a material total-cost/risk advantage for Flutter. | Create a successor decision using the same mandatory behavior/security/custody gates and obtain the applicable approvals. |
 
 The eight triggers keep Flutter viable without making its unresolved Phase 3 environment work a
-Core v0 blocker. A trigger opens a review; it does not automatically switch the baseline.
+Core v0 blocker. For every trigger, Engineering prepares the evidence and recommendation; the
+Product Decision Authority owns the successor decision. A trigger opens a review; it does not
+automatically switch the baseline.
+
+## Server reopen trigger register
+
+| Trigger | Observable condition | Required evidence and decision owner |
+|---|---|---|
+| `TRIGGER-SERVER-01` | The selected Java/Spring configuration fails an approved mandatory qualification. | Retain the failed objective, exact configuration and comparable alternative result. Engineering recommends; Product Decision Authority decides. |
+| `TRIGGER-SERVER-02` | Measured two-runtime ownership burden exceeds a management-accepted threshold. | Retain staffing, build, patch, support, incident and lifecycle evidence against the accepted threshold. Engineering recommends; Product Decision Authority decides. |
+| `TRIGGER-SERVER-03` | A company-supported .NET candidate is demonstrated to be safer while meeting every approved mandatory behavior. | Retain a like-for-like security, behavior, operations and total-risk comparison. Engineering recommends; Product Decision Authority decides. |
+
+Each Server trigger opens the successor decision shown in TECH-D08. It does not select .NET or
+force retention of Java in advance.
 
 ## View-set version history
 
 | Version | Date | Status | Change |
 |---|---|---|---|
+| `0.2` | 2026-09-15 | Draft | Correct TECH-D07 so `.NET` applies only to WPF/Workspace and the selected Worker boundary retains an unselected toolchain; correct TECH-D08 so Client and Server triggers lead to an unbiased successor decision; baseline, Q-15, Product Scope, PDA and PG states unchanged |
 | `0.1` | 2026-09-15 | Draft | Initial TECH-D01…D08 set for the Engineering-selected Core v0 baseline; Q-15 remains `PARTIAL / NO WINNER`, PDA and PG states unchanged |
