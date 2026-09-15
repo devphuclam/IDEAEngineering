@@ -1,0 +1,69 @@
+{
+  "evidenceId": "IE-VEV-TECH-Q15-003",
+  "sourceCommit": "47fa6d0a029954b9de2daf579c28335a5cf68a32",
+  "executableSha256": "2a7ce3d3b93007f786be4e7a945641b55777727290ef01927d11ea2c5ac1ea85",
+  "raw": "raw/native/native-run-exact-source.log",
+  "result": "PASS",
+  "cycles": 100,
+  "timeoutObserved": 100,
+  "reconnectPass": 100,
+  "terminalOutcomes": [
+    {
+      "outcome": "CANCELLED",
+      "count": 100
+    }
+  ],
+  "qualificationUnknown": 0,
+  "activeOperationsFinal": 0,
+  "detachedCleanupStartedFinal": 52,
+  "detachedCleanupCompletedFinal": 52,
+  "finalMarker": "Q15_NATIVE_IO_PASS immediate_read=1 immediate_write=101 pending_read=104 pending_write=1 aborted=104 detached=52 discarded_success=1 active=0",
+  "semantics": {
+    "immediateSuccess": "PASS — native immediate read/write regression",
+    "pending": "PASS — native pending read/write regression",
+    "immediateFailure": "PASS — native peer-close regression",
+    "cancellationLifetime": "PASS — native ownership retained through terminal completion",
+    "exactLastErrorCapture": "PASS — narrow native ABI code/test scope",
+    "flutterEndToEnd": "BLOCKED — Flutter executable and local package configuration unavailable"
+  },
+  "resourceObservation": {
+    "status": "PASS — diagnostic observation only",
+    "snapshotsAvailable": 100,
+    "nonZeroHandleDelta": 0,
+    "nonZeroThreadDelta": 0,
+    "privateBytesDeltaMin": 0.0,
+    "privateBytesDeltaMax": 0.0,
+    "workingSetDeltaMin": 0.0,
+    "workingSetDeltaMax": 20480.0,
+    "interpretation": "No monotonic or unbounded growth was observed in this bounded run; this is not proof that no leak exists."
+  },
+  "shim": {
+    "present": true,
+    "cppPhysicalLines": 379,
+    "headerPhysicalLines": 116,
+    "totalPhysicalLines": 495,
+    "cppBytes": 13286,
+    "headerBytes": 3491,
+    "sourceSha256": {
+      "cpp": "c9532f7dc593dc7b2249d18fa04501732fd5089009335634a68ac88413e75d85",
+      "header": "ab63009dcca59d54f8807c62d6b14edae09b7ccfdeaabf32d8f38b19bbac7163"
+    },
+    "responsibilities": [
+      "typed named-pipe connection",
+      "overlapped read/write start classification",
+      "bounded wait/completion observation",
+      "cancellation request and terminal cleanup",
+      "same-call Win32 error capture",
+      "native transport diagnostics"
+    ],
+    "excluded": [
+      "business logic",
+      "Workspace policy",
+      "document semantics",
+      "arbitrary filesystem paths",
+      "process or shell execution",
+      "generic Win32 proxy"
+    ]
+  },
+  "limitation": "All Flutter/Dart FFI execution remains BLOCKED in this environment."
+}

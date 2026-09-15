@@ -1,0 +1,37 @@
+{
+  "capturedAt": "2026-09-15T09:10:14.5462986+07:00",
+  "timezone": "SE Asia Standard Time",
+  "machine": "IDEAPC1107",
+  "os": {
+    "caption": "Microsoft Windows 11 Pro",
+    "version": "10.0.26200",
+    "build": "26200",
+    "architecture": "64-bit"
+  },
+  "cpu": {
+    "name": "Intel(R) Xeon(R) W-2133 CPU @ 3.60GHz",
+    "logicalProcessors": 12
+  },
+  "totalPhysicalMemoryBytes": 34027270144,
+  "repository": {
+    "baseline": "0d8d0f7d918691ab13b388ad09f5a1c94e858b55",
+    "implementation": "47fa6d0a029954b9de2daf579c28335a5cf68a32",
+    "branch": "codex/q15-phase3-completion"
+  },
+  "toolchain": {
+    "dotnet": "10.0.300",
+    "node": "v24.16.0",
+    "npm": "12.0.2",
+    "flutterAvailable": false,
+    "cmakePath": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
+    "cmakeVersion": "cmake version 4.2.3-msvc3",
+    "msbuildPath": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe",
+    "visualStudio": "18 Community",
+    "flutterPackageConfigPresent": false,
+    "optionANodeModulesPresent": false,
+    "browserNodeModulesPresent": false
+  },
+  "fixture": "Q-15 retained Phase 2 100000 x 20 generated fixture",
+  "classification": "INTERNAL",
+  "caveat": "Node 24 is a local diagnostic only; it is not qualification evidence for the selected Node 22 line."
+}

@@ -1,0 +1,30 @@
+{
+  "evidenceId": "IE-VEV-TECH-Q15-003",
+  "method": "Evidence-bounded qualitative comparison; no numeric score",
+  "web": {
+    "advantage": "OPTION A",
+    "reason": "The retained React production-Web run is broader and did not expose a required public UI-runtime origin. Flutter self-hosting and the required JS/Wasm blocklist run remain BLOCKED."
+  },
+  "windowsNative": {
+    "advantage": "OPTION A",
+    "reason": "Option A retains an installed full-flow result. Option B's native ABI is materially safer after Phase 3, but its hardened Dart-to-shim path and comparable Release build could not be executed here."
+  },
+  "crossPlatformReuse": {
+    "advantage": "OPTION B",
+    "reason": "The same Dart/Flutter UI source targets Web and Windows in the qualification slice. This advantage excludes the Windows-only C++ shim and self-hosted Web runtime assets."
+  },
+  "maintenance": {
+    "advantage": "INCONCLUSIVE",
+    "reason": "Option A maintains React/TypeScript, WebView2, WPF and C# seams. Option B maintains Dart/Flutter plus a 495-line physical C++/header shim and CMake, and would also own renderer/font assets. Comparable staffing and long-run patch evidence are absent."
+  },
+  "correctnessSecurity": {
+    "advantage": "INCONCLUSIVE",
+    "reason": "Option A has retained bridge/full-flow evidence; Option B now has stronger native ownership and cancellation evidence. Different-user/elevation, corporate deployment and the complete hardened Flutter path remain unresolved."
+  },
+  "engineeringResult": {
+    "technicalWinner": "NO WINNER",
+    "confidence": "MEDIUM",
+    "recommendationChanged": false,
+    "reason": "Mandatory Option B Flutter Windows, controlled-origin Web and Release-to-Release comparison evidence is unavailable. The native hardening result removes a correctness defect but does not complete the candidate comparison."
+  }
+}

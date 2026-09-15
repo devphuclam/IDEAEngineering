@@ -1,0 +1,90 @@
+[
+  {
+    "case": "pipe-unavailable",
+    "expectedClassification": "PIPE_UNAVAILABLE",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "disconnect-after-connect",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "close-during-read",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "close-during-write",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "malformed-response",
+    "expectedClassification": "MALFORMED_RESPONSE",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "oversized-response",
+    "expectedClassification": "OVERSIZED_RESPONSE",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "truncated-response",
+    "expectedClassification": "PIPE_BROKEN",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "invalid-response-mac",
+    "expectedClassification": "INVALID_RESPONSE_MAC",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "response-request-id-mismatch",
+    "expectedClassification": "RESPONSE_REQUEST_ID_MISMATCH",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "timeout",
+    "expectedClassification": "TIMEOUT",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  },
+  {
+    "case": "repeated-cycles",
+    "expectedClassification": "RECORDED_RACE_AND_RECONNECT",
+    "result": "BLOCKED",
+    "reason": "Missing prerequisite: Flutter executable, local Flutter package configuration. No installation attempted.",
+    "rawRunnerOutput": null,
+    "rawServerOutput": null
+  }
+]

@@ -1,0 +1,93 @@
+{
+  "evidenceId": "IE-VEV-TECH-Q15-003",
+  "runId": "20260915-local-01",
+  "baselineSha": "0d8d0f7d918691ab13b388ad09f5a1c94e858b55",
+  "implementationSha": "47fa6d0a029954b9de2daf579c28335a5cf68a32",
+  "predecessor": "IE-VEV-TECH-Q15-002/20260915-local-01",
+  "phase3Status": "PARTIAL",
+  "technicalWinner": "NO WINNER",
+  "confidence": "MEDIUM",
+  "recommendationChanged": false,
+  "productDecisionAuthority": "NOT-RUN",
+  "results": [
+    {
+      "area": "Native Win32 immediate, pending and failure semantics",
+      "result": "PASS",
+      "scope": "Standalone narrow C++ named-pipe ABI",
+      "raw": "raw/native/native-run-exact-source.log"
+    },
+    {
+      "area": "Native cancellation lifetime and detached cleanup",
+      "result": "PASS",
+      "scope": "100 timeout/cancel/reconnect cycles; terminal ownership observed before release",
+      "raw": "raw/native/native-run-exact-source.log"
+    },
+    {
+      "area": "Native resource-growth observation",
+      "result": "PASS",
+      "scope": "Diagnostic bounded run only; not proof that no leak exists",
+      "summary": "native-results.json",
+      "raw": "raw/native/native-run-exact-source.log"
+    },
+    {
+      "area": "Flutter Windows FFI destructive suite",
+      "result": "BLOCKED",
+      "reason": "Flutter executable and local Flutter package configuration are unavailable; no installation was attempted.",
+      "raw": "raw/flutter-preflight/command-output.log",
+      "summary": "raw/flutter-preflight/run/fault-summary.json"
+    },
+    {
+      "area": "Home/End and frozen keyboard contract",
+      "result": "BLOCKED",
+      "scope": "Corrected React and Flutter test/source checkpoint exists at 0d8d0f7, but a new immutable Phase 3 execution was not possible.",
+      "reason": "Flutter is unavailable; React/Playwright local dependency directories are absent and package installation is outside this run."
+    },
+    {
+      "area": "Flutter Web controlled-origin renderer and fonts",
+      "result": "BLOCKED",
+      "reason": "No Flutter toolchain/output and no approved redistributable EN/VI/JA font input are available. No unverified bootstrap or font binary was committed."
+    },
+    {
+      "area": "Flutter Web JS/Wasm public-origin blocklist",
+      "result": "BLOCKED",
+      "reason": "Controlled-origin Release outputs could not be built. Phase 2 remains the latest executed Web evidence and records public gstatic/fonts requests."
+    },
+    {
+      "area": "Release-to-Release installed A/B flow and counterbalanced resources",
+      "result": "BLOCKED",
+      "reason": "A comparable Option B Flutter Windows Release artifact cannot be built without Flutter; Phase 2 A-Release/B-Debug observations are not competitive evidence."
+    },
+    {
+      "area": "Browser parity refresh/back/forward/clipboard/deep-link/outage/multiple-tabs",
+      "result": "NOT-RUN",
+      "reason": "No current production outputs with installed Playwright dependencies are available. The bounded Phase 2 subset remains historical evidence."
+    },
+    {
+      "area": "Real VI/JA IME",
+      "result": "BLOCKED",
+      "reason": "No controlled real OS composition run was performed; Unicode string injection is not treated as IME evidence."
+    },
+    {
+      "area": "Narrator/high contrast accessibility",
+      "result": "BLOCKED",
+      "reason": "Semantics/ARIA source is not a screen-reader or high-contrast result; no controlled assistive-technology run was performed."
+    },
+    {
+      "area": "Different Windows user and elevation mismatch",
+      "result": "BLOCKED",
+      "reason": "No authorized second-user/elevation environment was available."
+    },
+    {
+      "area": "Repository documentation and diagram verifiers",
+      "result": "NOT-RUN",
+      "reason": "Excluded by the direct task instruction."
+    }
+  ],
+  "unchanged": {
+    "matrix": true,
+    "tech001": true,
+    "productScope": true,
+    "pg3": true,
+    "pg4": true
+  }
+}
