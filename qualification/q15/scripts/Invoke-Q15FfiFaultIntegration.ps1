@@ -14,11 +14,17 @@ $repositoryRoot = (Resolve-Path "$q15Root/../..").Path
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = Join-Path $q15Root '.runtime/ffi-faults'
 }
-New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
-$OutputDirectory = (Resolve-Path -LiteralPath $OutputDirectory).Path
-if (Test-Path -LiteralPath (Join-Path $OutputDirectory 'fault-summary.json')) {
-    throw 'Use a fresh OutputDirectory to preserve previous fault evidence.'
+if (Test-Path -LiteralPath $OutputDirectory) {
+    if (-not (Test-Path -LiteralPath $OutputDirectory -PathType Container)) {
+        throw 'OutputDirectory must be a directory.'
+    }
+    if ($null -ne (Get-ChildItem -LiteralPath $OutputDirectory -Force | Select-Object -First 1)) {
+        throw 'Use a new or empty OutputDirectory to preserve previous fault evidence.'
+    }
+} else {
+    New-Item -ItemType Directory -Path $OutputDirectory | Out-Null
 }
+$OutputDirectory = (Resolve-Path -LiteralPath $OutputDirectory).Path
 
 $secretBytes = [byte[]]::new(32)
 [Security.Cryptography.RandomNumberGenerator]::Fill($secretBytes)
@@ -71,9 +77,64 @@ foreach ($case in $cases) {
 
 try {
     $missing = [Collections.Generic.List[string]]::new()
-    if (-not (Get-Command $FlutterCommand -ErrorAction SilentlyContinue)) { $missing.Add('Flutter executable') }
+    $flutterCommandInfo = Get-Command $FlutterCommand -ErrorAction SilentlyContinue
+    if ($null -eq $flutterCommandInfo) {
+        $missing.Add('Flutter executable')
+    } else {
+        $flutterExecutable = $flutterCommandInfo.Source
+        if ([string]::IsNullOrWhiteSpace($flutterExecutable)) { $flutterExecutable = $flutterCommandInfo.Path }
+        if ([string]::IsNullOrWhiteSpace($flutterExecutable)) {
+            $missing.Add('resolvable Flutter SDK path')
+        } else {
+            $flutterSdkRoot = Split-Path -Parent (Split-Path -Parent $flutterExecutable)
+            if (-not (Test-Path -LiteralPath (Join-Path $flutterSdkRoot 'bin/cache/dart-sdk/bin/dart.exe') -PathType Leaf)) {
+                $missing.Add('cached Flutter Dart SDK')
+            }
+            $engineRoot = Join-Path $flutterSdkRoot 'bin/cache/artifacts/engine'
+            $windowsEngine = if (Test-Path -LiteralPath $engineRoot -PathType Container) {
+                Get-ChildItem -LiteralPath $engineRoot -Recurse -File -Filter 'flutter_windows.dll' -ErrorAction SilentlyContinue |
+                    Where-Object FullName -Match '[\\/]windows-x64([\\/]|-)' |
+                    Select-Object -First 1
+            }
+            if ($null -eq $windowsEngine) { $missing.Add('cached Flutter Windows engine artifacts') }
+        }
+    }
     if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) { $missing.Add('dotnet executable') }
     if (-not (Test-Path -LiteralPath $FaultServerDll -PathType Leaf)) { $missing.Add('prebuilt Release fault-server assembly') }
+
+    $packageConfig = Join-Path $flutterRoot '.dart_tool/package_config.json'
+    if (-not (Test-Path -LiteralPath $packageConfig -PathType Leaf)) {
+        $missing.Add('local Flutter package configuration')
+    } else {
+        try {
+            $packageDocument = Get-Content -LiteralPath $packageConfig -Raw | ConvertFrom-Json
+            foreach ($packageName in @('crypto', 'ffi', 'http', 'idea_q15_fixtures', 'integration_test')) {
+                $package = $packageDocument.packages | Where-Object name -EQ $packageName | Select-Object -First 1
+                if ($null -eq $package) {
+                    $missing.Add("cached package '$packageName'")
+                    continue
+                }
+                $rootUri = [Uri]::new([Uri]::new($packageConfig), [string]$package.rootUri)
+                if (-not $rootUri.IsFile -or -not (Test-Path -LiteralPath $rootUri.LocalPath -PathType Container)) {
+                    $missing.Add("cached package '$packageName'")
+                }
+            }
+        } catch {
+            $missing.Add('readable local Flutter package configuration')
+        }
+    }
+
+    $vsWhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
+    if (-not (Test-Path -LiteralPath $vsWhere -PathType Leaf)) {
+        $missing.Add('Visual Studio C++ toolchain locator')
+    } else {
+        $visualStudio = & $vsWhere -latest -products '*' `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 Microsoft.VisualStudio.Component.VC.CMake.Project `
+            -property installationPath
+        if ([string]::IsNullOrWhiteSpace(($visualStudio | Select-Object -First 1))) {
+            $missing.Add('Visual Studio C++ and CMake workload')
+        }
+    }
     if ($missing.Count -gt 0) {
         foreach ($result in $results) {
             $result.result = 'BLOCKED'
