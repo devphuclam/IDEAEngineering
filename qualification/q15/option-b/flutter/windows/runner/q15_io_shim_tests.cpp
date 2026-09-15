@@ -1,6 +1,8 @@
 #include "q15_io_shim.h"
 
 #include <windows.h>
+#include <psapi.h>
+#include <tlhelp32.h>
 
 #include <atomic>
 #include <chrono>
@@ -260,6 +262,205 @@ void TestDetachedCleanupRetainsResources() {
           "detached cleanup did not reach terminal completion");
 }
 
+void TestDetachedSuccessfulReadIsNotBufferFailure() {
+  auto pair = Connect();
+  uint8_t buffer[4]{};
+  IdeaQ15IoDiagnostics before{};
+  idea_q15_get_io_diagnostics(&before);
+  IdeaQ15IoStartResult start{};
+  idea_q15_start_overlapped_io(pair.client, 0, buffer, sizeof(buffer), &start);
+  Require(start.state == IDEA_Q15_IO_PENDING, "late read did not start pending");
+  const uint8_t bytes[] = {1, 2, 3, 4};
+  DWORD written = 0;
+  Require(WriteFile(pair.server, bytes, sizeof(bytes), &written, nullptr),
+          "late server write failed");
+  // Completion won before the caller requested cancellation. The native
+  // cleanup owner has no caller buffer, but the I/O itself succeeded.
+  IdeaQ15CancelResult cancel{};
+  idea_q15_cancel_overlapped_io(start.operation, &cancel);
+  IdeaQ15IoCompletionResult detached{};
+  Require(idea_q15_detach_overlapped_cleanup(start.operation, &detached) == 1,
+          "successful late read did not transfer ownership");
+  IdeaQ15IoDiagnostics after{};
+  for (int attempt = 0; attempt < 200; ++attempt) {
+    idea_q15_get_io_diagnostics(&after);
+    if (after.detached_cleanup_completed > before.detached_cleanup_completed) break;
+    std::this_thread::sleep_for(5ms);
+  }
+  Require(after.detached_cleanup_completed == before.detached_cleanup_completed + 1,
+          "successful late read cleanup did not complete");
+  Require(after.terminal_failure == before.terminal_failure,
+          "successful detached read was misclassified as buffer failure");
+  Require(after.terminal_success == before.terminal_success + 1,
+          "successful detached read lost native success outcome");
+  Require(after.detached_read_discarded_success ==
+              before.detached_read_discarded_success + 1,
+          "successful detached read did not record discarded payload");
+}
+
+struct ResourceSnapshot {
+  DWORD handles = 0;
+  SIZE_T private_bytes = 0;
+  SIZE_T working_set = 0;
+  DWORD threads = 0;
+  bool available = false;
+};
+
+ResourceSnapshot Resources() {
+  ResourceSnapshot result{};
+  PROCESS_MEMORY_COUNTERS_EX memory{};
+  memory.cb = sizeof(memory);
+  const bool handles_ok = GetProcessHandleCount(GetCurrentProcess(), &result.handles) != 0;
+  const bool memory_ok = GetProcessMemoryInfo(
+      GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&memory),
+      sizeof(memory)) != 0;
+  result.private_bytes = memory.PrivateUsage;
+  result.working_set = memory.WorkingSetSize;
+  const HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+  if (snapshot == INVALID_HANDLE_VALUE) return result;
+  THREADENTRY32 entry{};
+  entry.dwSize = sizeof(entry);
+  const bool threads_ok = Thread32First(snapshot, &entry) != 0;
+  if (threads_ok) {
+    do {
+      if (entry.th32OwnerProcessID == GetCurrentProcessId()) ++result.threads;
+    } while (Thread32Next(snapshot, &entry));
+  }
+  CloseHandle(snapshot);
+  result.available = handles_ok && memory_ok && threads_ok;
+  return result;
+}
+
+void PrintResources(const ResourceSnapshot& value) {
+  std::cout << "{\"status\":\"" << (value.available ? "PASS" : "BLOCKED")
+            << "\",\"handles\":" << value.handles
+            << ",\"privateBytes\":" << value.private_bytes
+            << ",\"workingSet\":" << value.working_set
+            << ",\"threads\":" << value.threads << "}";
+}
+
+void PrintDiagnostics(const IdeaQ15IoDiagnostics& value) {
+  std::cout << "{\"activeOperations\":" << value.active_operations
+            << ",\"immediateReadSuccess\":" << value.immediate_read_success
+            << ",\"immediateWriteSuccess\":" << value.immediate_write_success
+            << ",\"immediateFailures\":" << value.immediate_failures
+            << ",\"pendingRead\":" << value.pending_read
+            << ",\"pendingWrite\":" << value.pending_write
+            << ",\"terminalSuccess\":" << value.terminal_success
+            << ",\"terminalFailure\":" << value.terminal_failure
+            << ",\"terminalOperationAborted\":" << value.terminal_operation_aborted
+            << ",\"detachedCleanupStarted\":" << value.detached_cleanup_started
+            << ",\"detachedCleanupCompleted\":" << value.detached_cleanup_completed
+            << ",\"detachedReadDiscardedSuccess\":" << value.detached_read_discarded_success
+            << "}";
+}
+
+IdeaQ15IoDiagnostics DiagnosticDelta(const IdeaQ15IoDiagnostics& before,
+                                     const IdeaQ15IoDiagnostics& after) {
+  return {
+    after.active_operations - before.active_operations,
+    after.immediate_read_success - before.immediate_read_success,
+    after.immediate_write_success - before.immediate_write_success,
+    after.immediate_failures - before.immediate_failures,
+    after.pending_read - before.pending_read,
+    after.pending_write - before.pending_write,
+    after.terminal_success - before.terminal_success,
+    after.terminal_failure - before.terminal_failure,
+    after.terminal_operation_aborted - before.terminal_operation_aborted,
+    after.detached_cleanup_started - before.detached_cleanup_started,
+    after.detached_cleanup_completed - before.detached_cleanup_completed,
+    after.detached_read_discarded_success - before.detached_read_discarded_success,
+  };
+}
+
+void TestRepeatedTimeoutCancelReconnect() {
+  for (int cycle = 1; cycle <= 100; ++cycle) {
+    const auto resources_before = Resources();
+    IdeaQ15IoDiagnostics before{};
+    idea_q15_get_io_diagnostics(&before);
+    IdeaQ15CancelResult cancel{};
+    IdeaQ15IoCompletionResult completion{};
+    const bool detach = cycle % 2 == 0;
+    DWORD writer_error = ERROR_SUCCESS;
+    {
+      auto pair = Connect();
+      uint8_t buffer[4]{};
+      IdeaQ15IoStartResult start{};
+      idea_q15_start_overlapped_io(pair.client, 0, buffer, sizeof(buffer), &start);
+      Require(start.state == IDEA_Q15_IO_PENDING, "cycle read was not pending");
+      idea_q15_wait_overlapped_io(start.operation, 1, buffer, sizeof(buffer), &completion);
+      Require(completion.state == IDEA_Q15_IO_WAIT_TIMEOUT, "cycle did not time out");
+      std::thread writer([&pair, &writer_error, cycle]() {
+        if (cycle % 3 == 0) std::this_thread::sleep_for(1ms);
+        const uint8_t bytes[] = {1, 2, 3, 4};
+        DWORD written = 0;
+        const BOOL ok = WriteFile(pair.server, bytes, sizeof(bytes), &written, nullptr);
+        writer_error = ok ? ERROR_SUCCESS : GetLastError();
+      });
+      // Deliberately vary scheduling. Never require either race winner.
+      if (cycle % 3 == 1) std::this_thread::yield();
+      idea_q15_cancel_overlapped_io(start.operation, &cancel);
+      if (detach) {
+        const auto transferred = idea_q15_detach_overlapped_cleanup(start.operation, &completion);
+        writer.join();
+        Require(transferred == 1, "cycle ownership transfer failed");
+      } else {
+        idea_q15_wait_overlapped_io(start.operation, 2000, buffer, sizeof(buffer), &completion);
+        writer.join();
+        Require(idea_q15_release_overlapped_io(start.operation) == 1,
+                "cycle terminal operation could not be released");
+      }
+    }
+    IdeaQ15IoDiagnostics after{};
+    for (int attempt = 0; attempt < 400; ++attempt) {
+      idea_q15_get_io_diagnostics(&after);
+      if (after.active_operations == 0 &&
+          after.detached_cleanup_started == after.detached_cleanup_completed) break;
+      std::this_thread::sleep_for(5ms);
+    }
+    const auto success = after.terminal_success - before.terminal_success;
+    const auto failure = after.terminal_failure - before.terminal_failure;
+    const auto aborted = after.terminal_operation_aborted - before.terminal_operation_aborted;
+    // A fresh pipe session must still transfer exact bytes after cancellation.
+    TestImmediateWrite();
+    idea_q15_get_io_diagnostics(&after);
+    const auto resources_after = Resources();
+    std::cout << "Q15_NATIVE_CYCLE {\"cycle\":" << cycle
+              << ",\"waitOutcome\":\"TIMEOUT\",\"cancelState\":" << cancel.state
+              << ",\"cancelError\":" << cancel.error_code
+              << ",\"detached\":" << (detach ? "true" : "false")
+              << ",\"writerError\":" << writer_error
+              << ",\"terminalOutcome\":\""
+              << (success == 1 ? "SUCCESS" : aborted == 1 ? "CANCELLED" : "QUALIFICATION-UNKNOWN")
+              << "\",\"reconnect\":\"PASS\",\"nativeBefore\":";
+    PrintDiagnostics(before);
+    std::cout << ",\"nativeAfter\":";
+    PrintDiagnostics(after);
+    std::cout << ",\"nativeDelta\":";
+    PrintDiagnostics(DiagnosticDelta(before, after));
+    std::cout << ",\"resourcesBefore\":";
+    PrintResources(resources_before);
+    std::cout << ",\"resourcesAfter\":";
+    PrintResources(resources_after);
+    std::cout << ",\"resourceDelta\":{\"handles\":"
+              << static_cast<int64_t>(resources_after.handles) - resources_before.handles
+              << ",\"privateBytes\":"
+              << static_cast<int64_t>(resources_after.private_bytes) -
+                     static_cast<int64_t>(resources_before.private_bytes)
+              << ",\"workingSet\":"
+              << static_cast<int64_t>(resources_after.working_set) -
+                     static_cast<int64_t>(resources_before.working_set)
+              << ",\"threads\":"
+              << static_cast<int64_t>(resources_after.threads) - resources_before.threads
+              << "}}" << std::endl;
+    Require(after.active_operations == 0 &&
+                after.detached_cleanup_started == after.detached_cleanup_completed,
+            "cycle cleanup remained nonterminal after observation budget");
+    Require(success + failure == 1 && failure == aborted,
+            "cycle produced an unexpected native terminal outcome");
+  }
+}
+
 }  // namespace
 
 int main() {
@@ -273,6 +474,8 @@ int main() {
     TestImmediatePeerCloseFailures();
     TestCancelRaceHasTerminalOutcome();
     TestDetachedCleanupRetainsResources();
+    TestDetachedSuccessfulReadIsNotBufferFailure();
+    TestRepeatedTimeoutCancelReconnect();
     IdeaQ15IoDiagnostics diagnostics{};
     idea_q15_get_io_diagnostics(&diagnostics);
     Require(diagnostics.active_operations == 0,
@@ -284,6 +487,8 @@ int main() {
               << " pending_write=" << diagnostics.pending_write
               << " aborted=" << diagnostics.terminal_operation_aborted
               << " detached=" << diagnostics.detached_cleanup_completed
+              << " discarded_success=" << diagnostics.detached_read_discarded_success
+              << " active=" << diagnostics.active_operations
               << std::endl;
     return 0;
   } catch (const std::exception& error) {

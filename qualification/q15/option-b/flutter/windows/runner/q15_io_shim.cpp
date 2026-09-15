@@ -23,6 +23,7 @@ struct Diagnostics {
   std::atomic<uint64_t> terminal_operation_aborted{0};
   std::atomic<uint64_t> detached_cleanup_started{0};
   std::atomic<uint64_t> detached_cleanup_completed{0};
+  std::atomic<uint64_t> detached_read_discarded_success{0};
 };
 
 Diagnostics diagnostics;
@@ -80,7 +81,8 @@ void ObserveTerminal(NativeOperation* operation,
                      void* caller_buffer,
                      uint32_t caller_capacity,
                      IdeaQ15IoCompletionResult* result,
-                     BOOL wait) {
+                     BOOL wait,
+                     bool discard_read = false) {
   if (operation->terminal_observed) {
     *result = operation->terminal;
     return;
@@ -96,14 +98,18 @@ void ObserveTerminal(NativeOperation* operation,
     return;
   }
 
-  if (ok && !operation->write && transferred > 0) {
-    if (caller_buffer == nullptr || caller_capacity < transferred) {
+  if (ok && !operation->write) {
+    if (discard_read) {
+      ++diagnostics.detached_read_discarded_success;
+    } else if (transferred > 0 &&
+               (caller_buffer == nullptr || caller_capacity < transferred)) {
       RecordTerminal(operation, IDEA_Q15_IO_TERMINAL_FAILURE,
                      ERROR_INSUFFICIENT_BUFFER, transferred);
       *result = operation->terminal;
       return;
+    } else if (transferred > 0) {
+      std::memcpy(caller_buffer, operation->buffer.data(), transferred);
     }
-    std::memcpy(caller_buffer, operation->buffer.data(), transferred);
   }
 
   RecordTerminal(operation,
@@ -318,7 +324,7 @@ extern "C" __declspec(dllexport) int32_t idea_q15_detach_overlapped_cleanup(
   try {
     std::thread([operation]() {
       IdeaQ15IoCompletionResult ignored{};
-      ObserveTerminal(operation, nullptr, 0, &ignored, TRUE);
+      ObserveTerminal(operation, nullptr, 0, &ignored, TRUE, true);
       DeleteOperation(operation);
       ++diagnostics.detached_cleanup_completed;
     }).detach();
@@ -352,6 +358,8 @@ extern "C" __declspec(dllexport) void idea_q15_get_io_diagnostics(
       diagnostics.detached_cleanup_started.load();
   result->detached_cleanup_completed =
       diagnostics.detached_cleanup_completed.load();
+  result->detached_read_discarded_success =
+      diagnostics.detached_read_discarded_success.load();
 }
 
 extern "C" __declspec(dllexport) int32_t idea_q15_reset_io_diagnostics() {
@@ -366,5 +374,6 @@ extern "C" __declspec(dllexport) int32_t idea_q15_reset_io_diagnostics() {
   ResetCounter(diagnostics.terminal_operation_aborted);
   ResetCounter(diagnostics.detached_cleanup_started);
   ResetCounter(diagnostics.detached_cleanup_completed);
+  ResetCounter(diagnostics.detached_read_discarded_success);
   return 1;
 }

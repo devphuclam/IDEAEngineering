@@ -296,6 +296,9 @@ final class _IoDiagnostics extends Struct {
 
   @Uint64()
   external int detachedCleanupCompleted;
+
+  @Uint64()
+  external int detachedReadDiscardedSuccess;
 }
 
 typedef _OpenPipeNative = Void Function(
@@ -406,6 +409,7 @@ class NativeIoDiagnostics {
     required this.terminalOperationAborted,
     required this.detachedCleanupStarted,
     required this.detachedCleanupCompleted,
+    required this.detachedReadDiscardedSuccess,
   });
 
   final int activeOperations;
@@ -419,6 +423,22 @@ class NativeIoDiagnostics {
   final int terminalOperationAborted;
   final int detachedCleanupStarted;
   final int detachedCleanupCompleted;
+  final int detachedReadDiscardedSuccess;
+
+  Map<String, int> toJson() => {
+    'activeOperations': activeOperations,
+    'immediateReadSuccess': immediateReadSuccess,
+    'immediateWriteSuccess': immediateWriteSuccess,
+    'immediateFailures': immediateFailures,
+    'pendingRead': pendingRead,
+    'pendingWrite': pendingWrite,
+    'terminalSuccess': terminalSuccess,
+    'terminalFailure': terminalFailure,
+    'terminalOperationAborted': terminalOperationAborted,
+    'detachedCleanupStarted': detachedCleanupStarted,
+    'detachedCleanupCompleted': detachedCleanupCompleted,
+    'detachedReadDiscardedSuccess': detachedReadDiscardedSuccess,
+  };
 }
 
 NativeIoDiagnostics readNativeIoDiagnostics() {
@@ -440,6 +460,7 @@ NativeIoDiagnostics readNativeIoDiagnostics() {
       terminalOperationAborted: result.ref.terminalOperationAborted,
       detachedCleanupStarted: result.ref.detachedCleanupStarted,
       detachedCleanupCompleted: result.ref.detachedCleanupCompleted,
+      detachedReadDiscardedSuccess: result.ref.detachedReadDiscardedSuccess,
     );
   } finally {
     calloc.free(result);

@@ -67,6 +67,8 @@ struct IdeaQ15IoDiagnostics {
   uint64_t terminal_operation_aborted;
   uint64_t detached_cleanup_started;
   uint64_t detached_cleanup_completed;
+  // Native read succeeded after ownership transfer; payload was not delivered.
+  uint64_t detached_read_discarded_success;
 };
 
 extern "C" __declspec(dllexport) void idea_q15_open_named_pipe(

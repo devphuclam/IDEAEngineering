@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.14)
 project(runner LANGUAGES CXX)
 
+# Build the native ABI checks using an existing Windows C++ toolchain even
+# when Flutter is unavailable. No Flutter/generated files or downloads needed.
+option(Q15_NATIVE_ONLY "Build only the Q-15 native pipe regression executable" OFF)
+if(Q15_NATIVE_ONLY)
+  add_executable(q15_io_shim_tests "q15_io_shim_tests.cpp" "q15_io_shim.cpp")
+  target_compile_features(q15_io_shim_tests PRIVATE cxx_std_17)
+  target_compile_definitions(q15_io_shim_tests PRIVATE "NOMINMAX")
+  if(MSVC)
+    target_compile_options(q15_io_shim_tests PRIVATE /W4 /WX /EHsc)
+  endif()
+  return()
+endif()
+
 # Define the application target. To change its name, change BINARY_NAME in the
 # top-level CMakeLists.txt, not the value here, or `flutter run` will no longer
 # work.
