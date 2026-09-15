@@ -40,6 +40,12 @@ requirement/architecture/data/verification writing rules and explicit `UNKNOWN`/
 Product Decision Authority review or acceptance; it does not make the guide a Core Product
 Document, create product scope or change gate decisions.
 
+Before creating or revising a technology decision matrix, `TECH-*` brief or technology
+architecture view set, also read the
+[technology stack documentation standard](docs/agents/technology-stack-documentation-standard.md).
+It keeps evidence, Engineering selection, qualification and Product Decision Authority approval
+as separate controlled states.
+
 ### Management-facing Word documents
 
 Before creating, editing or comparing Word documents for management, read
