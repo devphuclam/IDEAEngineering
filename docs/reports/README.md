@@ -12,7 +12,9 @@ Spec Kit feature specification.
 | File | Disposition | Permitted use |
 |---|---|---|
 | [IDEA_DDM_review.docx](IDEA_DDM_review.docx) | Current user-edited management copy | Present the current Feature/Spec and UI walkthrough. Preserve the user's manual wording and layout; do not regenerate or overwrite it without an explicit request. |
-| [Core v0 Technology Stack recommendation](IDEA-Engineering-Core-v0-technology-stack-recommendation.md) | `For Management Review` supporting report | Explain the Engineering-selected Core v0 stack, architecture, decision basis and credible alternatives. The report does not replace TECH-001 or record Product Decision Authority approval. |
+| [IDEA-DDM_Techstack.docx](IDEA-DDM_Techstack.docx) | Current user-editable Technology Stack presentation | Present the Technology Stack recommendation to management. It remains a supporting copy and does not record Product Decision Authority approval. Do not regenerate or overwrite it without an explicit request. |
+| [Technology Stack recommendation v2 source](IDEA-Engineering-Core-v0-technology-stack-recommendation-v2.md) | Current supporting source | Retain the reviewed wording, glossary and standards trace used by the current Word presentation. TECH-001 remains the controlled technology decision brief. |
+| [Technology Stack recommendation v1 source](IDEA-Engineering-Core-v0-technology-stack-recommendation.md) and [Word rendition](IDEA-Engineering-Core-v0-technology-stack-recommendation.docx) | Superseded presentation pair | Retained as predecessors from commit `f2174da`; do not use for the next management review because they predate the current navigation and glossary treatment. |
 | [PDM Software Validation resolution note](PDM-Software-Validation-260815-2-resolution-note.md) | Current context-resolution note | Record how the differences in the supplied validation PDF were resolved and distinguish them from later Spec inputs or verification work. It is not a product requirement authority. |
 
 The two obsolete Controlled Document Workspace reports were removed from the active directory on

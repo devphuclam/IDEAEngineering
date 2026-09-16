@@ -21,6 +21,8 @@ __pycache__/
 .tmp-validation/
 
 # Local render, capture, and one-off verification artifacts
+.tmp/
+.tmp-artifact/
 tmp/
 ~$*
 ~WRL*.tmp

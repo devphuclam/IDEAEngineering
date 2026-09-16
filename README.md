@@ -30,6 +30,28 @@ Use the product-document catalogue and its linked version history for current ap
 points. A written draft, an accepted prototype or a finished documentation task does not establish
 a product-gate PASS, production readiness or ISO conformity.
 
+## Repository map and file ownership
+
+| Path | Purpose | Maintenance rule |
+|---|---|---|
+| `docs/product/instances/idea-engineering/` | Current IDEA product documents, decision briefs, registers and controlled evidence | Preserve document IDs, version history, authority and evidence links. Do not reorganize these files as ordinary working notes. |
+| `docs/product/definition/` | Reusable document-class templates | A template is not an IDEA product requirement or an approved product document. |
+| `docs/research/` and `docs/product/knowledge/` | Research and classified reference-product findings | Keep evidence, interpretation and IDEA decisions separate. |
+| `docs/reports/` | Management-facing and supporting communication copies | Use its index to identify the current copy. A report does not replace its owning product document. |
+| `prototypes/` | Interactive HTML design evidence | Keep prototype behavior separate from production implementation claims. |
+| `qualification/` | Bounded executable qualification harnesses and retained results | Preserve the recorded scope and result; a partial experiment is not a product-wide PASS. |
+| `scripts/` | Reusable repository checks and rendering utilities | Scripts must use repository-relative paths and must not depend silently on a personal working folder. |
+| `.tmp/`, `.tmp-artifact/`, `tmp/` | Local renders, inspection output and one-off working files | Ignored by Git. Move only reusable source or controlled evidence into a stable directory. |
+
+Run the repository hygiene check before committing a cleanup or generated document change:
+
+```powershell
+.\scripts\check-repository-hygiene.ps1
+```
+
+The check only enforces file-placement hygiene. It does not verify product behavior, document
+approval, standards conformity or qualification results.
+
 ## Continue from the roadmap
 
 Start with [DOC-07 and its task appendix](docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md#32-december-2026-schedule-and-task-appendix).
