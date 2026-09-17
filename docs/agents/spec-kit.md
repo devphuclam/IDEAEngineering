@@ -1,6 +1,6 @@
 # Spec Kit and Matt Pocock Workflow
 
-This repository includes GitHub Spec Kit `0.16.5` with its Codex skills integration. The
+This repository includes GitHub Spec Kit `1.0.7` with its Codex skills integration. The
 integration is project-local: `.specify/` contains the Spec Kit project infrastructure and
 `.agents/skills/speckit-*` contains the Codex skills. The global `specify` CLI is only needed to
 upgrade or reinitialize the integration; day-to-day feature work uses the checked-in skills.
@@ -10,7 +10,7 @@ upgrade or reinitialize the integration; day-to-day feature work uses the checke
 Spec Kit owns the ordered feature-artifact lifecycle:
 
 ```text
-constitution -> specify -> clarify -> plan -> checklist/analyze -> tasks -> implement -> converge
+constitution -> specify -> clarify -> plan -> checklist -> tasks -> analyze -> implement -> converge
 ```
 
 Matt Pocock skills own the engineering judgment around that lifecycle:
@@ -38,9 +38,11 @@ For a new feature, use this sequence:
    changes. Do not run it for every feature.
 4. Run `$speckit-specify` to create `specs/<feature>/spec.md` from the user value and behavior.
 5. Run `$speckit-clarify` when the specification contains material ambiguity.
-6. Run `$speckit-plan` to choose the implementation approach, then `$speckit-checklist` and
-   `$speckit-analyze` as quality gates for production work.
-7. Run `$speckit-tasks` to produce the dependency-ordered `tasks.md`.
+6. Run `$speckit-plan` to choose the implementation approach, then `$speckit-checklist` to prepare
+   a reviewer-owned requirements-quality checklist.
+7. Run `$speckit-tasks` to produce the dependency-ordered `tasks.md`, then `$speckit-analyze` to
+   inspect spec/plan/tasks read-only. Save its report or remediate findings only in a separate,
+   explicitly approved step. Artifact-quality checks do not grant product-gate approval.
 8. Run `$speckit-implement` when `tasks.md` is the execution source. During implementation, use
    `$tdd` at pre-agreed seams and `$code-review` before integration.
 9. Run `$speckit-converge` after implementation to assess remaining work and append follow-up
@@ -73,8 +75,8 @@ $speckit-specify Add the first local Agent Workspace CLI vertical slice.
 $speckit-clarify Focus on claim expiry, handoff, and recovery behavior.
 $speckit-plan Use the approved repository stack and adapter boundaries; preserve Core Workspace independence.
 $speckit-checklist
-$speckit-analyze
 $speckit-tasks
+$speckit-analyze
 $speckit-implement
 $speckit-converge
 ```

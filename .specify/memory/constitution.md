@@ -1,14 +1,15 @@
 <!--
 Sync Impact Report:
-- Version change: 3.2.0 -> 3.3.0
+- Version change: 3.3.0 -> 3.4.0
 - Modified principles:
   - I. DDM Baseline, Aras-Informed Improvement, and Clean-Room Product Definition
 - Added guidance:
-  - IDEA Engineering is an internal company product, not a commercial multi-customer offering
-  - Business value means internal operational, control, quality, risk, and evidenced-efficiency value
-  - Sales, revenue, customer acquisition, buyer-persona, and market-fit requirements are out of scope
+  - IDEA Engineering remains internal-first for the current multi-year delivery horizon
+  - Current work preserves a lawful future commercial path without creating commercial scope
+  - Third-party software, content, assets, data, models, fonts, and SDKs require controlled license intake
+  - External pilots, offers, customer data, installations, or sales require a separate Commercial Readiness Gate
 - Removed guidance:
-  - Any assumption that the product is intended for external commercial adoption
+  - The prior rule that a future commercial direction required another constitutional amendment
 - Follow-up TODOs: none
 -->
 
@@ -46,13 +47,30 @@ undocumented protocols, visual assets, proprietary documentation, trademarks, or
 implementation material. "Copy DDM" means clean-room behavioral parity, not implementation,
 pixel, branding, or internal-schema identity.
 
-IDEA Engineering MUST be defined and governed as an internal product for the company's own
-engineering work. The reference-product strategy MUST serve evidenced internal needs and MUST NOT
-be used to invent commercial goals. In Core Product Documents, business value means internal
-operational control, engineering-data integrity, release risk reduction, quality, maintainability,
-and measured efficiency. Sales, revenue, customer acquisition, commercial buyer personas, market
-share, and market fit are outside the current product boundary unless a later constitutional
-amendment explicitly changes that boundary.
+IDEA Engineering MUST be governed as an internal-first product for the company's own engineering
+work during the current multi-year delivery horizon. The reference-product strategy MUST serve
+evidenced internal needs and MUST NOT be used to invent present commercial capabilities or release
+claims. In current Core Product Documents, business value means internal operational control,
+engineering-data integrity, release risk reduction, quality, maintainability, and measured
+efficiency. Sales, revenue, customer acquisition, commercial buyer personas, pricing, market share,
+and market fit remain outside the current product boundary.
+
+The project MUST preserve a lawful path to a possible future commercial product without treating
+that direction as current Product Scope. Architecture, dependencies, data custody, configuration,
+deployment, export, migration, retirement, security, privacy, and ownership decisions MUST avoid
+unnecessary restrictions that would make a future commercial assessment impossible or knowingly
+unlawful. Work that exists only for external customers, licensing enforcement, billing, public
+SaaS, multi-customer operation, sales, or commercial support MUST remain deferred until a separate
+approved increment and Commercial Readiness Gate authorize it.
+
+Every external project, package, source fragment, asset, document, dataset, model, font, SDK,
+runtime, converter, and generated artifact MUST be classified and reviewed under the repository's
+external-source intake procedure before it is copied, adapted, vendored, linked, redistributed, or
+used to produce a release. Public availability MUST NOT be interpreted as reuse permission. Exact
+source identity, version or commit, governing license or agreement, transitive obligations,
+attribution, patent and trademark limits, intended use, and distribution model MUST be recorded.
+Missing or incompatible rights MUST result in `REFERENCE-ONLY`, `BLOCKED-LEGAL`, or `REJECTED`, not
+an implementation assumption.
 
 MVP increments MAY deliver a controlled subset, but every omitted evidenced DDM capability MUST be
 visible as `DEFER` or `EXCLUDE`; absence from the current increment MUST NOT silently erase the
@@ -60,9 +78,10 @@ long-term parity target. `UNKNOWN` and `BLOCKED` MUST remain visible and MUST NO
 assumption. Complete DDM parity MUST NOT be claimed without an identified target version, edition,
 configuration, lawful evidence scope, and objective coverage results.
 
-Rationale: the stakeholder objective is an internal DDM-like product improved with the strongest
-evidenced Aras patterns, while clean-room provenance, traceability, explicit divergence controls,
-and an internal-value boundary keep the result lawful, relevant, testable, and maintainable.
+Rationale: the current objective is an internal DDM-like product improved with the strongest
+evidenced Aras patterns. Clean-room provenance, license intake, traceability, explicit divergence
+controls, and an internal-first boundary keep the current result lawful and relevant while avoiding
+avoidable barriers to a separately governed commercial assessment in later years.
 
 ### II. Controlled Documentation Before Implementation (NON-NEGOTIABLE)
 
@@ -148,10 +167,15 @@ boundaries, recoverable failure behavior, and honest treatment of environmental 
 
 ## Additional Constraints
 
-- IDEA Engineering is an internal company product. DOC-01 through DOC-08 MUST express company
-  stakeholders, internal operating contexts, internal governance, operational outcomes, and
-  evidenced engineering value. They MUST NOT introduce commercial customer segmentation, external
-  buyer journeys, pricing, revenue, market-share, or market-fit objectives.
+- IDEA Engineering is internal-first. DOC-01 through DOC-08 MUST express company stakeholders,
+  internal operating contexts, internal governance, operational outcomes, and evidenced engineering
+  value for the current baseline. They MUST NOT introduce commercial customer segmentation,
+  external buyer journeys, pricing, revenue, market-share, or market-fit objectives unless a later
+  controlled product decision explicitly brings those subjects into scope.
+- Future commercial direction is governed separately from current product delivery. No external
+  pilot, offer, customer-data receipt, customer installation, public hosted service, or sale may be
+  claimed or started until the Commercial Readiness Gate records applicable legal, security,
+  privacy, licensing, support, deployment, contractual, operational, and release dispositions.
 - DDM behavioral parity is the default long-term product target. The controlled coverage register
   MUST identify each reference capability or behavior, DDM evidence and limitation, applicable Aras
   comparison and evidenced advantage, IDEA disposition, owning requirement or decision, delivery
@@ -185,9 +209,13 @@ boundaries, recoverable failure behavior, and honest treatment of environmental 
 - Markdown under version control is the authoritative editable source unless an approved information
   item explicitly defines another controlled format. DOCX and PDF renditions MUST identify the exact
   source baseline from which they were produced.
-- Raw proprietary evidence, licensed material without redistribution rights, credentials,
+- Raw proprietary evidence, material without the rights needed for its recorded use, credentials,
   company-sensitive or production data not approved for repository use, copied competitor
   implementation, and unsupported conformity claims MUST NOT enter the product repository.
+- External-source intake MUST precede importing or adapting third-party software, source, assets,
+  data, models, fonts, SDKs, runtimes, converters, or generated material. Release preparation MUST
+  reconcile the exact shipped dependency and asset inventory with recorded licenses, notices,
+  source-delivery obligations, and company approvals.
 - Technology, deployment, identity-provider, database, storage, framework, and integration choices
   MUST remain open until controlled requirements and architecture decisions justify them.
 
@@ -247,4 +275,4 @@ published, amended, withdrawn, superseded, contractually required, or made appli
 change in system boundary or deployment. A new edition MUST enter through controlled impact and
 tailoring review; it MUST NOT silently replace the approved baseline.
 
-**Version**: 3.3.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-08-27
+**Version**: 3.4.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-09-17

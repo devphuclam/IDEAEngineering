@@ -729,6 +729,14 @@ _Avoid_: PASS, FAIL, BLOCKED, workflow state of a product object
 An attributable disposition of one exact controlled baseline, recording gate, input document IDs and versions, immutable Git evidence, reviewer and approver roles, outcome, rationale, actions, and date. A merge, conversation, or verbal acknowledgement is not itself approval.
 _Avoid_: Document Status, Git merge, chat agreement without controlled record
 
+**Gate Execution State**:
+The progress of a product-gate assessment: `NOT-RUN`, `IN-PROGRESS`, or `COMPLETE`; `COMPLETE` means an attributable disposition was recorded, not that the baseline passed. It is separate from the Gate Outcome and from individual verification results.
+_Avoid_: NOT-RUN as a Gate Outcome, completed assessment treated as approval
+
+**Gate Outcome**:
+The disposition of a completed product-gate assessment: `PASS`, `PASS-WITH-ACTIONS`, `FAIL`, or `BLOCKED`; before a decision exists the outcome is `NOT-APPLICABLE`. A conditional pass retains its recorded actions and limits rather than waiving missing mandatory prerequisites.
+_Avoid_: Gate Execution State, Document Status, NOT-RUN, percentage complete
+
 ## Repository and delivery tooling (inherited during PG0)
 
 The following terms describe the inherited Core Workspace and Agent Workspace tooling that is

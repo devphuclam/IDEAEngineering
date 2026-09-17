@@ -5,12 +5,12 @@ không phải lệnh bắt đầu code hay bằng chứng đã triển khai.
 
 | Thông tin kiểm soát | Nội dung |
 |---|---|
-| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.13](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
-| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Draft 0.5 |
+| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.14](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
+| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Draft 0.6 |
 | Kế hoạch áp dụng | `IE-PLAN-DEC2026-002@0.1` — Draft |
 | Người chuẩn bị / review | Principal Product Author chuẩn bị; người dùng dự án review |
 | Phân loại | `INTERNAL` |
-| Thay đổi và nguồn | [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md) |
+| Thay đổi và nguồn | [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md); hiệu chỉnh thuật ngữ [IE-CHG-PH0-CORR-001](../registers/CHG-2026-09-17-ph0-readiness-correction.md) |
 | Bản trước | Kế hoạch 56 task/756 giờ tại Git commit `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2`; không dùng để điều hành thực hiện |
 
 Phụ lục này thuộc DOC-07, không phải DOC thứ chín, SRS mới hoặc bộ Feature mới. DOC-07 giữ
@@ -71,13 +71,27 @@ phase nhưng không phải một công việc hay quyền bỏ qua gate.
 
 | Mã | Công việc | Giờ | Cần trước | Đầu ra và cách biết đã xong |
 |---|---|---:|---|---|
-| P01 | Ghim baseline đã được duyệt | 8 | Commit `aabf02ff…` và hồ sơ duyệt | Có manifest nêu đúng Feature, Spec, Tech đã duyệt và phần Vault phát sinh sau duyệt; không gộp hai baseline thành một. |
+| P01 | Ghim baseline đã được duyệt | 8 | Commit `f269a044…` và hồ sơ duyệt `IE-CHG-PDA-APPROVAL-001` | Có manifest nêu đúng Feature, Spec, Tech đã duyệt và phần Vault phát sinh sau duyệt; `aabf02ff…` chỉ là lịch sử kế hoạch, không thay hồ sơ duyệt. |
 | P02 | Chốt phạm vi Technical Pilot | 8 | P01 | Có một canonical scenario từ đăng nhập đến lấy lại Release Package, danh sách phần bắt buộc và phần chuyển sang increment sau. |
 | P03 | Phân loại quyết định còn mở | 8 | P01, P02 | Mỗi quyết định về Gateway, Vault, môi trường, dữ liệu thử, quyền và người review có owner, hạn xử lý và ảnh hưởng nếu chưa có. |
 | P04 | Chuẩn bị môi trường và cấu trúc delivery | 12 | P03 | Ghi máy phát triển/server được phép, quy trình build/test, quản lý secret/configuration, database migration và cách tạo increment; không cài công cụ chưa được phép. |
 | P05 | Chuẩn bị dữ liệu và test strategy | 8 | P02 | Có bộ tài liệu tổng hợp hợp lệ, file lớn đại diện, hai identity thử, hai vị trí Vault thử và ma trận đường chính/đường lỗi. |
 | P06 | Lập kế hoạch migration, rollback, backup và security review | 12 | P03–P05 | Có phương án quay lại schema/app, giữ Workspace cục bộ, khôi phục metadata–Artifact đồng bộ và phạm vi review bảo mật cần người phù hợp. |
-| P07 | Review readiness và ghi kết quả PG4 | 8 | P01–P06 | Có checklist, blocker, residual risk, kế hoạch increment PH1 và kết luận `PASS`, `BLOCKED` hoặc `NOT-RUN`; ngày tới hạn không tự biến thành `PASS`. |
+| P07 | Review readiness và ghi kết quả PG4 | 8 | P01–P06 | Có checklist, blocker, residual risk và phạm vi PH1. Ghi riêng trạng thái đánh giá và kết quả PG4 theo quy tắc ngay dưới bảng; ngày tới hạn không tự biến thành được duyệt. |
+
+PG4 ghi riêng hai thông tin:
+
+- **Trạng thái đánh giá (Gate Execution State)**: `NOT-RUN` — chưa đánh giá; `IN-PROGRESS` —
+  đang đánh giá; `COMPLETE` — đã ghi quyết định. Khi chưa có quyết định, kết quả là `NOT-APPLICABLE`.
+- **Kết quả đánh giá (Gate Outcome)**: `PASS`, `PASS-WITH-ACTIONS`, `FAIL` hoặc `BLOCKED`.
+  `COMPLETE` không có nghĩa là đạt; `NOT-RUN` không phải kết quả duyệt.
+
+Chỉ `PASS` hoặc `PASS-WITH-ACTIONS` hợp lệ mới cho phép thực hiện đúng increment PH1 được ghi,
+với yêu cầu PG2 và kiến trúc/thiết kế PG3 đã được duyệt. Với `PASS-WITH-ACTIONS`, từng việc còn lại
+phải có người chịu trách nhiệm, baseline ảnh hưởng, hạn/điều kiện xử lý, thời điểm hết hiệu lực và
+đường báo cáo nếu chưa xử lý. Những việc đó không được làm mất tính hợp lệ của yêu cầu, kiến trúc,
+xử lý rủi ro, thiết kế kiểm tra hoặc khả năng rollback; không dùng duyệt có điều kiện để bỏ qua
+đầu vào bắt buộc còn thiếu. `FAIL`, `BLOCKED` hoặc chưa đánh giá đều không cho phép bắt đầu code.
 
 ### 4.2 PH1 — Khung hệ thống chạy được, 72 giờ
 
@@ -197,3 +211,10 @@ Review tiến độ hằng tuần chỉ cần trả lời: đã xong gì, bằng
 - [VVP](../registers/VVP-core-v0-verification-validation-plan.md)
 - [Vault architecture change](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md)
 - [Roadmap rebaseline change](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md)
+
+## 10. Lịch sử hiệu chỉnh
+
+| Phiên bản | Ngày | Nội dung | Hồ sơ |
+|---|---|---|---|
+| 0.5 | 17/09/2026 | Baseline 35 work package, 512 giờ và 88 giờ dự phòng; bản trước được giữ trong Git. | `IE-CHG-ROADMAP-TP-001` |
+| 0.6 | 17/09/2026 | Sửa nguồn duyệt P01; tách trạng thái và kết quả PG4, thống nhất điều kiện cho phép PH1 theo Constitution; cập nhật liên kết DOC-07@0.14. Giữ nguyên giờ, ngày, scope và dependency. | [IE-CHG-PH0-CORR-001](../registers/CHG-2026-09-17-ph0-readiness-correction.md) |

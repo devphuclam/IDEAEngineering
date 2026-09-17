@@ -75,6 +75,14 @@ authorities. The Kanban register follows the company board states and does not t
 into tasks. This update does not authorize coding or change any Feature/Spec/Tech decision or
 product-gate state.
 
+The PH0 Spec Kit package is
+[004 — Technical Pilot Implementation Readiness](../../../../specs/004-technical-pilot-readiness/spec.md),
+with its [plan](../../../../specs/004-technical-pilot-readiness/plan.md) and
+[tasks](../../../../specs/004-technical-pilot-readiness/tasks.md). Appendix A is now `Draft 0.6`:
+[IE-CHG-PH0-CORR-001](registers/CHG-2026-09-17-ph0-readiness-correction.md) corrects source-authority
+wording and separates gate execution state from the four constitutional outcomes. Schedule, scope
+and hours are unchanged; PG4 execution remains `NOT-RUN`, not a passed gate.
+
 ## Internal-first and future commercial direction
 
 IDEA Engineering remains an internal company product for the next several years. No commercial
@@ -411,6 +419,7 @@ its topology, thresholds, runtime/provider qualification and exact PDA approval 
 | `CHG` | `IE-CHG-PDA-APPROVAL-001` | [Feature Spec and Tech Product Decision Authority Approval](registers/CHG-2026-09-17-product-decision-authority-approval.md) | `Draft 0.1` record; Feature, Spec and Tech decisions `APPROVED` on 17-09-2026 against commit `f269a04` and the exact management-review hashes; verification, Q-15, PG3 and PG4 states unchanged |
 | `CHG` | `IE-CHG-VAULT-XFER-001` | [Multi-location Vault Transfer Architecture](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) | `Draft 0.1`; internal direction selected after management feedback; separates control/data planes, introduces scoped Gateway transfer and multiple Artifact locations; exact successor PDA approval, thresholds, topology and qualification `NOT-RUN` |
 | `CHG` | `IE-CHG-COMMERCIAL-DIR-001` | [Internal-First and Future Commercial Direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) | `Draft 0.1`; records internal-only operation for the next several years and a separately gated long-term commercial direction; no current Feature/Spec/Tech, task, Tech Stack or gate-state change |
+| `CHG` | `IE-CHG-PH0-CORR-001` | [PH0 Readiness Consistency Correction](registers/CHG-2026-09-17-ph0-readiness-correction.md) | `Draft 0.1`; author correction of PH0 gate vocabulary, authorization limits, read-only analysis, PowerShell quoting and exact planning-change trace; Appendix A@0.6 keeps the schedule unchanged; no product-gate decision |
 | `VEV` | `IE-VEV-VAULT-XFER-001` | [Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-17-vault-transfer-diagram-review.md) | `Draft 0.1`; current 40 controlled + 3 management views, including two new storage sequences; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
 
 The [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md)
