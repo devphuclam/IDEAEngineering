@@ -1,6 +1,8 @@
 # IDEA Engineering Product-Definition Instance Set
 
-This directory contains the controlled working instances for the internal IDEA Engineering product.
+This directory contains the controlled working instances for the internal-first IDEA Engineering
+product. Internal use remains the only current operating purpose; a separately governed commercial
+offering is a several-years-away direction, not a current capability or release claim.
 The instruction-only class templates remain under [`docs/product/definition`](../../definition/README.md)
 and are not edited as product content.
 
@@ -10,13 +12,13 @@ and are not edited as product content.
 |---|---|
 | Baseline ID | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Purpose | Analysis and design through `PG4`; no production implementation authorization |
-| Product boundary | Internal IDEA Engineering `C1` product |
+| Product boundary | Internal-first IDEA Engineering `C1` product; future commercial direction is deferred behind a separate readiness gate |
 | Principal author | `Principal Product Author` — assistant prepares the documents; accountable attribution must be recorded before `Proposed` |
 | Internal document reviewer | Project user; this assignment does not establish required independent/specialist qualification |
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.6`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.14`; DOC-05 at `Draft 0.21`; DOC-06 at `Draft 0.17`; DOC-07 at `Draft 0.12`; DOC-08 at `Draft 0.13`; GOV at `Draft 0.3`; VVP at `Draft 0.17`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.14`; DOC-05 at `Draft 0.21`; DOC-06 at `Draft 0.17`; DOC-07 at `Draft 0.14`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.17`; CHG records at their catalogue versions |
 | Product decision status | Feature, Spec and Tech `APPROVED` by the Product Decision Authority on 17-09-2026 against the exact management-review predecessor baseline recorded in [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The later multi-location Vault/control–data-plane successor Draft is internally selected but its exact PDA approval is `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
@@ -56,20 +58,41 @@ has been implemented.
 
 ## December 2026 roadmap package
 
-[DOC-07 section 3.2](DOC-07-mvp-roadmap-and-delivery-plan.md#32-december-2026-schedule-and-task-appendix)
-retains the conditional 7 September–31 December 2026 plan: **56 tasks / 676 work hours +
-80 contingency hours = 756 hours**, with 11 proposed Saturdays and external prerequisites still
-to confirm. This schedule predates the multi-location Vault/Gateway successor and is **stale for
-execution**. Successor task and hour re-estimation remains `NOT-RUN`; the retained figures are not
-an updated delivery commitment.
+[DOC-07 section 3.2](DOC-07-mvp-roadmap-and-delivery-plan.md#32-technical-pilot-schedule-and-task-appendix)
+defines the current 18 September–31 December 2026 Technical Pilot plan: **35 work packages /
+512 planned work hours + 88 controlled reserve hours = 600 weekday hours**. Saturdays are not
+baseline capacity. The 31 December milestone is a bounded production-shaped thread, not full Core
+v0, production readiness or company rollout. Execution and `PG4` remain `NOT-RUN`.
 
 - [Appendix A — task details, outputs, hours and dependencies](planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
-- [Interactive Gantt — unchanged captured schedule view](planning/idea-roadmap-december-2026.html)
-- [Change record — retained predecessor, source hashes and review limitations](registers/CHG-2026-09-05-roadmap-task-integration.md)
+- [HTML Gantt — phase, work-package, reserve, dependency and milestone view](planning/idea-roadmap-december-2026.html)
+- [Kanban CARIO@0.3 — 53 delivery cards, 7 zero-effort decision/milestone cards and cross-cutting internal-first safeguards](planning/idea-technical-pilot-kanban-cario.md)
+- [Change record — Technical Pilot rebaseline](registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md)
 
 The appendix belongs to DOC-07, not a ninth Core Product Document or a competing Spec Kit execution
-plan. The Gantt is a rendition of the same schedule, not a separate planning authority. This update
-does not authorize coding or change any Feature/Spec/Tech decision or product-gate state.
+plan. The Gantt and Kanban CARIO register are renditions of the same schedule, not separate planning
+authorities. The Kanban register follows the company board states and does not turn controlled reserve
+into tasks. This update does not authorize coding or change any Feature/Spec/Tech decision or
+product-gate state.
+
+## Internal-first and future commercial direction
+
+IDEA Engineering remains an internal company product for the next several years. No commercial
+feature, customer onboarding, billing, SaaS operation, license enforcement or external deployment
+has been added to Core v0 or to the December 2026 plan.
+
+The project user selected a long-term direction that keeps a lawful future commercial path open.
+[IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md)
+records that decision and its non-effects.
+[IE-GOV-COMMERCIAL-001](registers/GOV-future-commercial-readiness.md) separates:
+
+- safeguards applied proportionally during internal development;
+- work intentionally deferred until a real external trigger exists; and
+- the future Commercial Readiness Gate that must pass before an external pilot, offer,
+  installation, customer-data receipt or sale.
+
+The future direction does not inherit the current Feature/Spec/Tech approval, does not prove
+commercial readiness and does not change the current Tech Stack, Q-15, PG3 or PG4.
 
 FEATURE-001@0.12 refers to DOC-07@0.5 and the requirement source that was current when that brief
 was written. It remains a stale working brief after the source re-baseline. The final management
@@ -285,7 +308,7 @@ versions only; it did not change product behavior, the roadmap schedule or any r
 |---|---|
 | FEATURE-001@0.12 and SPEC-001@0.14 | Historical 09-09 reconciliation state: current Core/VVP pins were recorded and the management decision was then `NOT-RUN`. The current Product Decision Authority approval is recorded separately in `IE-CHG-PDA-APPROVAL-001`; `SPEC-001@0.14` is not the current normative 87-requirement SRS. |
 | TECH-001@0.8 | Historical source-reconciliation baseline; superseded by `TECH-001@0.9`, Linux-first `@0.10`, rationale-refined `@0.11`, Client/UI challenger `@0.12`, reviewer-corrected `@0.13`, approved Engineering selection `@0.14`, then multi-location Vault successor Draft `@0.15`. |
-| DOC-07@0.5 | Historical source-reconciliation baseline; superseded through current `DOC-07@0.12`. The old 56-task/756-hour appendix and Gantt predate the Gateway/Vault successor and are marked stale for execution; successor re-estimation is `NOT-RUN`. |
+| DOC-07@0.5 | Historical source-reconciliation baseline; superseded through current `DOC-07@0.14`. The old 56-task/756-hour schedule remains recoverable in Git history; it is replaced for execution planning by the 35-work-package Technical Pilot baseline. Version 0.14 does not change that schedule. |
 | Existing Word/Human copies | Retain the submitted/editorial versions; they were not overwritten or silently regenerated. |
 
 On 10-09-2026, the controlled sources were re-baselined for requirement and architecture quality.
@@ -330,13 +353,13 @@ its topology, thresholds, runtime/provider qualification and exact PDA approval 
 
 | Class | Stable Document ID | Instance | Current state |
 |---|---|---|---|
-| `DOC-01` | `IE-PROD-VISION-001` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | `Draft 0.6`; scope unchanged; administration responsibilities separated |
+| `DOC-01` | `IE-PROD-VISION-001` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | `Draft 0.7`; internal-first purpose retained and several-years-away commercial trajectory recorded without adding current commercial scope |
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
 | `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.14`; sole normative SRS; 90 requirements including `REQ-WS-016`, `REQ-OPS-007/008`, `QRS-013/014`; exact successor PDA approval and verification `NOT-RUN` |
 | `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.21`; separates authoritative control from scoped direct Artifact data transfer and models multiple Vault locations, Transfer Grant/Receipt and policy-governed replication; exact topology/qualification `NOT-RUN` |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.17`; adds Vault Endpoint, Transfer Grant/Receipt, Replication Task and versioned Storage/Durability Policy while keeping logical Artifact identity separate from physical locations |
-| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.12`; marks the predecessor 56-task/756-hour Appendix and Gantt stale for execution because Gateway/Vault work is absent; successor re-estimation `NOT-RUN`; Q-15 unchanged |
+| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.14`; current six-phase/six-milestone Technical Pilot plan is unchanged at 512 work hours plus 88 controlled reserve hours; deferred commercial direction adds no task; execution and `PG4` `NOT-RUN`; Q-15 unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.13`; separates selecting location, transferring, verifying, policy-required protection and final Check-in; transfer/replication completion alone is not success and storage secrets remain hidden |
 
 ## Supporting instance catalogue
@@ -344,6 +367,7 @@ its topology, thresholds, runtime/provider qualification and exact PDA approval 
 | Class | Stable Record ID | Instance | Current state |
 |---|---|---|---|
 | `GOV` | `IE-GOV-COVERAGE-001` | [Material and Behavioral Coverage Register](registers/GOV-material-and-behavioral-coverage.md) | `Draft 0.3`; 16/16 public-baseline areas have explicit dispositions, not implementation coverage; target-runtime evidence remains `BLOCKED` |
+| `GOV` | `IE-GOV-COMMERCIAL-001` | [Future Commercial Readiness Register](registers/GOV-future-commercial-readiness.md) | `Draft 0.1`; internal-first safeguards, deferred commercial work, external triggers, authority separation, legal watchlist and 12-item future gate; readiness `NOT-RUN` |
 | `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.17`; 17 objectives plus PA-01…04, RBAC-01…10, WS-01…08 and ST-01…07; direct-transfer, grant/receipt, failover, replication/repair and replica-versus-backup procedures remain `NOT-RUN` |
 | `VEV` | `IE-VEV-ARCH-VIEW-001` | [Architecture View Source and Temporary Rendition Review](registers/VEV-2026-09-10-architecture-view-review.md) | `Draft 0.1`; 23/23 Mermaid views parsed/rendered and internally inspected; qualified architecture/HCD review and controlled-rendition acceptance `BLOCKED` |
 | `VEV` | `IE-VEV-ARCH-CORR-001` | [Architecture Consistency Correction Audit](registers/VEV-2026-09-12-architecture-consistency-correction.md) | `Draft 0.1`; predecessor historical source/rendition audit for 30 maintained views; retained unchanged |
@@ -386,6 +410,7 @@ its topology, thresholds, runtime/provider qualification and exact PDA approval 
 | `CHG` | `IE-CHG-TECH-CLIENT-002` | [Client/UI Stack Review Correction](registers/CHG-2026-09-14-client-ui-stack-review-correction.md) | `Draft 0.1`; records research@0.3, matrix@0.5, TECH@0.13 and DOC-07@0.10 routing; corrects provisional control, Q-08/Q-10, Flutter FFI-first IPC and verifier provenance; no Product Scope, Server, architecture semantic or gate change |
 | `CHG` | `IE-CHG-PDA-APPROVAL-001` | [Feature Spec and Tech Product Decision Authority Approval](registers/CHG-2026-09-17-product-decision-authority-approval.md) | `Draft 0.1` record; Feature, Spec and Tech decisions `APPROVED` on 17-09-2026 against commit `f269a04` and the exact management-review hashes; verification, Q-15, PG3 and PG4 states unchanged |
 | `CHG` | `IE-CHG-VAULT-XFER-001` | [Multi-location Vault Transfer Architecture](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) | `Draft 0.1`; internal direction selected after management feedback; separates control/data planes, introduces scoped Gateway transfer and multiple Artifact locations; exact successor PDA approval, thresholds, topology and qualification `NOT-RUN` |
+| `CHG` | `IE-CHG-COMMERCIAL-DIR-001` | [Internal-First and Future Commercial Direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) | `Draft 0.1`; records internal-only operation for the next several years and a separately gated long-term commercial direction; no current Feature/Spec/Tech, task, Tech Stack or gate-state change |
 | `VEV` | `IE-VEV-VAULT-XFER-001` | [Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-17-vault-transfer-diagram-review.md) | `Draft 0.1`; current 40 controlled + 3 management views, including two new storage sequences; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
 
 The [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md)

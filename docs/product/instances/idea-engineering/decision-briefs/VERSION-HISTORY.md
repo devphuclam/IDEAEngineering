@@ -28,7 +28,7 @@ kiểm soát từ đúng baseline trên.
 Sau khi baseline trên được duyệt, phản hồi quản lý ngày 17-09-2026 yêu cầu Vault hỗ trợ nhiều nơi
 lưu và không buộc toàn bộ byte file lớn đi xuyên qua tiến trình Server. Successor Draft tách control
 plane khỏi data plane, dùng scoped Artifact Gateway và cho phép một Artifact có nhiều location đã
-xác minh. Các nguồn hiện hành là DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.12,
+xác minh. Các nguồn hiện hành là DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.14,
 DOC-08@0.13, VVP@0.17, TECH-001@0.15 và technology view set@0.3.
 
 Successor này giữ nguyên 14 Feature groups, Tech Stack selection, Q-15, Product Scope, PG3 và PG4.
@@ -47,11 +47,13 @@ như ghi trong từng nguồn. Xem [`IE-CHG-VAULT-XFER-001`](../registers/CHG-20
 Feature 0.12 giữ nguyên 14 mã FTR. SPEC-001@0.14 vẫn là bản tóm tắt cũ gồm 74 yêu cầu; normative
 DOC-04@0.13 được duyệt có 87 dòng yêu cầu. Successor DOC-04@0.14 có 90 dòng yêu cầu sau khi thêm
 scoped direct Gateway transfer và multi-location custody/replication. VVP 0.17 có 17 mục tiêu cùng
-các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6, DOC-02 ở Draft 0.2,
+các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.7, DOC-02 ở Draft 0.2,
 DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.14, DOC-05 ở Draft 0.21, DOC-06 ở Draft 0.17, DOC-07 ở Draft
-0.12, DOC-08 ở Draft 0.13 và GOV ở Draft 0.3. Lịch 56 task/756 giờ cũ được giữ làm lịch sử nhưng
-đã đánh dấu stale for execution; successor re-estimation `NOT-RUN`. Approval của predecessor không
-tự chuyển sang toàn bộ nội dung successor.
+0.14, DOC-08 ở Draft 0.13, coverage GOV ở Draft 0.3 và future-commercial GOV ở Draft 0.1. Lịch
+56 task/756 giờ cũ được giữ trong Git history;
+kế hoạch hiện hành là 35 work package, 512 giờ công việc và 88 giờ dự phòng trong quỹ 600 giờ ngày
+thường. Mốc 31/12 là Technical Pilot, không phải full Core v0. Approval của predecessor không tự
+chuyển sang toàn bộ nội dung successor.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
 được đồng bộ trong lần 09/09/2026; việc đồng bộ nguồn không phải quyết định duyệt tính năng. Các
@@ -557,3 +559,31 @@ Server đang được khuyến nghị sau bản kế nhiệm này.
 | Roadmap metadata | `DOC-07@0.10 → @0.11`; chỉ cập nhật route/trạng thái Tech; lịch, 56 task, 756 giờ, requirements và gate không đổi |
 | Approval và gate | Product Decision Authority review/approval `NOT-RUN`; Q-01…Q-14 `NOT-RUN`; PG3/PG4 `NOT-RUN` |
 | Product impact | **No Product Scope Change**; không đổi Feature, Spec, FTR, REQ, DOC-01…06/08, architecture authority hoặc accepted ADR |
+
+## 27. Lập lại roadmap Technical Pilot — 17/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md) |
+| Roadmap | `DOC-07@0.12 → @0.13`; mốc 31/12 được định nghĩa là Technical Pilot, không phải full Core v0 hoặc rollout |
+| Kế hoạch | `IE-PLAN-DEC2026-002@0.1`; 35 work package, 512 giờ công việc và 88 giờ dự phòng trong 600 giờ ngày thường |
+| Phase và milestone | PH0–PH5 là sáu khoảng thực hiện; MS0–MS5 là sáu điểm review/decision không có thời lượng; D0 là checkpoint quyết định Vault successor trước MS0 |
+| Kanban CARIO | `IE-PLAN-DEC2026-002-KANBAN@0.2`; 53 card thực hiện/512 giờ và 7 card quyết định-mốc/0 giờ, theo trạng thái board công ty; card được viết theo ba ý “mục đích – cần làm – xong khi”; 88 giờ dự phòng không được biến thành task |
+| Lịch cũ | `IE-PLAN-DEC2026-001@0.1` với 56 task/756 giờ được giữ ở Git commit `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2`, không còn là execution baseline |
+| Capacity | Một coder; không tính thứ Bảy vào baseline; bắt buộc reforecast sau MS0 và MS3 |
+| Approval và gate | Project user duyệt hướng roadmap; Product Decision Authority vẫn chỉ quyết định Feature/Spec/Tech; exact Vault successor approval và PG4 `NOT-RUN` |
+| Product impact | **No Product Scope Change**; không đổi 14 Feature groups, 90 successor REQ rows, Tech Stack, Q-15, Product Decision Authority predecessor approval, PG3 hoặc PG4 |
+
+## 28. Ghi nhận hướng nội bộ trước, thương mại sau — 17/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-COMMERCIAL-DIR-001](../registers/CHG-2026-09-17-internal-first-commercial-direction.md) |
+| Mục đích hiện tại | IDEA Engineering tiếp tục chỉ phục vụ nội bộ trong vài năm tới; không có mục tiêu bán hàng, SaaS, thu phí hoặc khách hàng ngoài công ty trong Core v0 và Technical Pilot 2026 |
+| Hướng dài hạn | Giữ khả năng phát triển thành sản phẩm thương mại qua một quyết định và gate riêng; không coi kết quả nội bộ là bằng chứng sẵn sàng thương mại |
+| Vision / roadmap | `DOC-01@0.6 → @0.7`; `DOC-07@0.13 → @0.14`; chỉ làm rõ trajectory và claim boundary, không đổi lịch, effort, task hay milestone |
+| Sổ kiểm soát | [IE-GOV-COMMERCIAL-001](../registers/GOV-future-commercial-readiness.md) tách safeguards dùng ngay, việc để sau, trigger bên ngoài, thẩm quyền và Commercial Readiness Gate |
+| Kanban | `IE-PLAN-DEC2026-002-KANBAN@0.2 → @0.3`; thêm nguyên tắc dùng khi card liên quan, không thêm card, giờ, dependency, ngày hoặc milestone |
+| Pháp lý | Tạo watchlist theo nguồn pháp luật chính thức; Legal Review Authority vẫn `BLOCKED`, mọi kết luận áp dụng/compliance `NOT-RUN` |
+| Authority | Product Decision Authority vẫn chỉ quyết định Feature/Spec/Tech; boss được đề xuất làm Commercial Decision Authority, nhưng việc chấp nhận vai trò bổ sung chưa được ghi nhận chính thức |
+| Product impact | Không đổi 14 Feature groups, 90 successor REQ rows, Tech Stack, Q-15, PDA approval hiện có, PG3, PG4 hoặc phạm vi Technical Pilot |

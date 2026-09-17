@@ -1,2006 +1,273 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>idea-roadmap-december-2026.html</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <title>IDEA Engineering — Baseline Technical Pilot 2026</title>
+  <style>
+    :root {
+      --navy: #122b4d;
+      --blue: #276cae;
+      --blue-soft: #eaf2fa;
+      --green: #24735a;
+      --amber: #a66500;
+      --amber-soft: #fff2d6;
+      --red: #a93a3a;
+      --ink: #17263b;
+      --muted: #5d6e82;
+      --line: #c9d4e1;
+      --paper: #fff;
+      --canvas: #f3f6fa;
+      --week: 6.6666667%;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font-family: "Segoe UI", Arial, sans-serif; line-height: 1.45; }
+    main { max-width: 1600px; margin: 0 auto; padding: 24px; }
+    header, section { margin-bottom: 18px; background: var(--paper); border: 1px solid var(--line); }
+    header { padding: 24px 28px; border-top: 5px solid var(--blue); }
+    h1 { margin: 0 0 8px; color: var(--navy); font-size: 32px; }
+    h2 { margin: 0; color: var(--navy); font-size: 21px; }
+    h3 { margin: 0; color: var(--navy); font-size: 16px; }
+    p { margin: 8px 0 0; }
+    .eyebrow { margin: 0 0 6px; color: var(--blue); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .lede { max-width: 1080px; color: var(--muted); }
+    .rule { margin-top: 16px; padding: 11px 14px; background: var(--blue-soft); border-left: 4px solid var(--blue); }
+    .facts { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 14px; font-size: 13px; }
+    .facts strong { color: var(--navy); }
+    .section-head { padding: 16px 20px 11px; border-bottom: 1px solid var(--line); }
+    .section-body { padding: 16px 20px 22px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; color: var(--muted); font-size: 13px; }
+    .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 6px; vertical-align: 0; }
+    .legend .work::before { background: var(--blue); }
+    .legend .reserve::before { background: repeating-linear-gradient(135deg, #eab85b 0 4px, #fff1d1 4px 8px); border: 1px solid #ca8c22; }
+    .legend .milestone::before { width: 10px; height: 10px; background: var(--navy); transform: rotate(45deg); }
+    .legend .decision::before { background: var(--amber); }
+    .scroll { overflow-x: auto; padding-bottom: 6px; }
+    .executive { min-width: 1260px; }
+    .axis, .phase-line, .decision-line { display: grid; grid-template-columns: 260px 1fr; }
+    .axis-label, .row-label { padding: 7px 10px; border: 1px solid var(--line); border-right: 0; background: #f8fafc; }
+    .row-label strong { display: block; color: var(--navy); }
+    .row-label small { display: block; color: var(--muted); }
+    .weeks { display: grid; grid-template-columns: repeat(15, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .weeks div { min-height: 42px; padding: 6px 3px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: center; color: var(--muted); font-size: 10px; }
+    .weeks strong { display: block; color: var(--ink); font-size: 11px; }
+    .track { position: relative; min-height: 47px; border: 1px solid var(--line); background: repeating-linear-gradient(90deg, #fff 0, #fff calc(var(--week) - 1px), #d9e1ea calc(var(--week) - 1px), #d9e1ea var(--week)); }
+    .decision-line .track { min-height: 56px; }
+    .phase-bar { position: absolute; top: 9px; height: 28px; display: flex; overflow: hidden; border-radius: 3px; box-shadow: 0 1px 2px rgb(18 43 77 / 18%); }
+    .phase-bar .planned { display: flex; align-items: center; padding-left: 8px; overflow: hidden; color: #fff; background: var(--blue); white-space: nowrap; font-size: 12px; font-weight: 700; }
+    .phase-bar .buffer { background: repeating-linear-gradient(135deg, #e8b655 0 5px, #fff0ce 5px 10px); border-left: 1px solid #ab761b; }
+    .point { position: absolute; z-index: 4; top: 10px; width: 14px; height: 14px; background: var(--navy); transform: translateX(-50%) rotate(45deg); }
+    .point.end { transform: translateX(-100%) rotate(45deg); }
+    .point-label { position: absolute; z-index: 5; top: 26px; transform: translateX(-50%); color: var(--navy); font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .point-label.end { transform: translateX(-100%); }
+    .decision-point { position: absolute; top: 11px; width: 13px; height: 13px; background: var(--amber); transform: translateX(-50%); }
+    .decision-label { position: absolute; top: 28px; transform: translateX(-50%); color: var(--amber); font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .critical { margin-top: 12px; padding: 10px 12px; border-left: 4px solid var(--red); background: #fff0f0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 9px 10px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: var(--navy); color: #fff; font-size: 12px; }
+    tbody tr:nth-child(even) { background: #f9fbfd; }
+    code { color: var(--navy); }
+    .status { white-space: nowrap; font-weight: 700; }
+    .gantt { min-width: 1520px; }
+    .gantt-grid { display: grid; grid-template-columns: 70px 350px 56px 145px 1fr; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .gantt-grid > div { min-height: 33px; padding: 6px 8px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .gantt-grid .gh { min-height: 44px; background: var(--navy); color: #fff; font-size: 12px; font-weight: 700; }
+    .gantt-grid .phase-title { grid-column: 1 / 6; min-height: 36px; background: var(--blue-soft); color: var(--navy); font-weight: 700; }
+    .gantt-grid .timeline-head { padding: 0; }
+    .mini-weeks { display: grid; grid-template-columns: repeat(15, 1fr); height: 43px; }
+    .mini-weeks span { padding-top: 6px; border-right: 1px solid rgb(255 255 255 / 22%); text-align: center; font-size: 10px; }
+    .mini-weeks span:last-child { border-right: 0; }
+    .slot { position: relative; padding: 0 !important; background: repeating-linear-gradient(90deg, #fff 0, #fff calc(var(--week) - 1px), #e0e6ee calc(var(--week) - 1px), #e0e6ee var(--week)); }
+    .task-bar { position: absolute; top: 9px; height: 14px; left: calc(var(--s) * 100% / 150); width: max(7px, calc(var(--d) * 100% / 150)); background: var(--blue); }
+    .task-bar.reserve { background: repeating-linear-gradient(135deg, #dcaa4d 0 4px, #fff0ce 4px 8px); }
+    .reserve-row { color: var(--amber); font-weight: 700; }
+    .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .notes ul { margin: 6px 0 0; padding-left: 20px; }
+    footer { padding: 2px 2px 22px; color: var(--muted); font-size: 12px; }
+    @media (max-width: 850px) { main { padding: 10px; } h1 { font-size: 25px; } .notes { grid-template-columns: 1fr; } }
+    @media print { body { background: #fff; } main { max-width: none; padding: 0; } header, section { break-inside: avoid; } .scroll { overflow: visible; } }
+  </style>
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="idea-roadmap-december-2026.html" data-srcdoc="&lt;!doctype html&gt;
-&lt;html lang=&quot;en-US&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'&quot;&gt;
-&lt;title&gt;idea-roadmap-december-2026.html&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;script&gt;(() =&gt; {
-  const root = document.documentElement;
-  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
-  const apply = Reflect.apply;
-  const isArray = Array.isArray;
-  const parentWindow = globalThis.parent;
-  /**
-   * @param {object} prototype
-   * @param {string} property
-   */
-  const getPrototypeGetter = (prototype, property) =&gt; {
-    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
-    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
-    if (getter == null) {
-      throw new Error(`Missing ${property} getter`);
-    }
-    return getter;
-  };
-  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
-  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
-  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
-  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
-  const addHostMessageListener = MessagePort.prototype.addEventListener;
-  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
-  const postHostMessage = MessagePort.prototype.postMessage;
-  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
-  const startHostPort = MessagePort.prototype.start;
-  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
-  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
-  /** @type {MessagePort | null} */
-  let hostPort = null;
-  const postToHost = (type, payload) =&gt; {
-    if (hostPort != null) {
-      apply(postHostMessage, hostPort, [{ type, ...payload }]);
-    }
-  };
-  const openExternal = ({ href }) =&gt; {
-    if (globalThis.navigator.userActivation?.isActive === true) {
-      postToHost(&quot;open-external&quot;, { href });
-    }
-  };
-  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
-    if (globalThis.navigator.userActivation?.isActive === true) {
-      postToHost(&quot;follow-up&quot;, { context, prompt, title });
-    }
-    return Promise.resolve();
-  };
-  const syncTheme = () =&gt; {
-    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
-    root.dataset.theme = theme;
-    globalThis.openai = {
-      ...globalThis.openai,
-      openExternal,
-      sendFollowUpMessage,
-      theme,
-      visualizationStyleVariables: {},
-      visualizationTheme: theme,
-    };
-    globalThis.dispatchEvent(
-      new CustomEvent(&quot;openai:set_globals&quot;, {
-        detail: { globals: globalThis.openai },
-      }),
-    );
-  };
-  const sendHeight = () =&gt; {
-    postToHost(&quot;height&quot;, {
-      height: Math.ceil(
-        Math.max(
-          document.body.scrollHeight,
-          document.body.getBoundingClientRect().height,
-        ),
-      ),
-    });
-  };
-
-  globalThis.addEventListener(
-    &quot;message&quot;,
-    (event) =&gt; {
-      const data = apply(getMessageData, event, []);
-      const ports = apply(getMessagePorts, event, []);
-      const source = apply(getMessageSource, event, []);
-      if (
-        source !== parentWindow ||
-        typeof data !== &quot;object&quot; ||
-        data?.type !== &quot;codex-visualization-initialize&quot; ||
-        !isArray(ports) ||
-        ports.length !== 1
-      ) {
-        return;
-      }
-      apply(stopMessagePropagation, event, []);
-      const nextHostPort = ports[0];
-      try {
-        apply(addHostMessageListener, nextHostPort, [
-          &quot;message&quot;,
-          (event) =&gt; {
-            const data = apply(getMessageData, event, []);
-            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
-              sendHeight();
-            }
-          },
-        ]);
-        apply(startHostPort, nextHostPort, []);
-      } catch {
-        return;
-      }
-      hostPort = nextHostPort;
-      sendHeight();
-    },
-    { capture: true },
-  );
-  document.currentScript?.remove();
-  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
-  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
-    if (event.defaultPrevented) {
-      return;
-    }
-    let element = null;
-    if (event.target instanceof globalThis.Element) {
-      element = event.target;
-    } else if (event.target instanceof globalThis.Node) {
-      element = event.target.parentElement;
-    }
-    const link = element?.closest(&quot;a[href]&quot;);
-    const href = link?.getAttribute(&quot;href&quot;);
-    if (href == null) {
-      return;
-    }
-    if (href.startsWith(&quot;#&quot;)) {
-      let id;
-      try {
-        id = decodeURIComponent(href.slice(1));
-      } catch {
-        return;
-      }
-      const target = id.length === 0 ? root : document.getElementById(id);
-      if (
-        target == null ||
-        globalThis.navigator.userActivation?.isActive !== true
-      ) {
-        return;
-      }
-      event.preventDefault();
-      postToHost(&quot;scroll-to&quot;, {
-        top: target.getBoundingClientRect().top + globalThis.scrollY,
-      });
-      return;
-    }
-    event.preventDefault();
-    openExternal({ href });
-  });
-  new ResizeObserver(sendHeight).observe(document.body);
-  syncTheme();
-})();
-&lt;/script&gt;
-&lt;style&gt;:root {
-  color-scheme: light dark;
-  background-color: var(
-    --background,
-    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
-  ) !important;
-
-  /* Agent-facing contract; keep in sync with SKILL.md. */
-  --background: var(
-    --color-background-primary,
-    light-dark(rgb(255 255 255), rgb(24 24 24))
-  );
-  --foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
-  --card-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --popover: var(
-    --color-background-secondary,
-    light-dark(rgb(255 255 255), rgb(45 45 45))
-  );
-  --popover-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --primary: var(
-    --color-text-info,
-    light-dark(rgb(51 156 255), rgb(131 195 255))
-  );
-  --primary-foreground: var(
-    --color-text-inverse,
-    light-dark(rgb(255 255 255), rgb(13 13 13))
-  );
-  --secondary: var(
-    --color-background-secondary,
-    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
-  );
-  --secondary-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --muted-foreground: var(
-    --color-text-secondary,
-    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
-  );
-  --accent: var(
-    --color-background-info,
-    light-dark(rgb(229 242 255), rgb(13 39 63))
-  );
-  --accent-foreground: var(
-    --color-text-info,
-    light-dark(rgb(51 156 255), rgb(131 195 255))
-  );
-  --destructive: var(
-    --color-text-warning,
-    light-dark(rgb(226 85 7), rgb(255 133 73))
-  );
-  --border: var(
-    --color-border-secondary,
-    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
-  );
-  --input: var(
-    --color-border-primary,
-    light-dark(
-      rgb(26 28 31 / 11.8%),
-      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
-    )
-  );
-  --ring: var(
-    --color-ring-primary,
-    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
-  );
-  --font-size-base: var(--font-text-md-size, 14px);
-  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
-  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
-  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
-  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
-  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
-  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
-  --viz-series-1: var(--primary);
-  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
-  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
-  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
-  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
-  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
-
-  /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
-    monospace;
-  --font-size-normal: max(11px, var(--font-size-base));
-  --font-size-tooltip: calc(var(--font-size-base) - 1px);
-  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
-  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
-  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
-  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
-  --font-weight-medium: 500;
-  --icon-size: 16px;
-  --line-height-normal: calc(var(--font-size-normal) * 1.5);
-  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
-  --line-height-small: calc(var(--font-size-small) + 4px);
-  --corner-shape: round;
-  --radius: var(--border-radius-lg, 10px);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
-  --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
-  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E&quot;);
-
-  /* Legacy aliases; not part of the current agent contract. */
-  --viz-bg: transparent;
-  --viz-panel: var(--card);
-  --viz-border: var(--border);
-  --viz-text: var(--foreground);
-  --viz-muted: var(--muted-foreground);
-  --viz-accent: var(--primary);
-  --viz-accent-text: var(--primary-foreground);
-  --viz-accent-bg: var(--accent);
-  --viz-font-size: var(--font-size-base);
-  --viz-warning: var(--destructive);
-}
-
-:root[data-theme=&quot;light&quot;] {
-  color-scheme: light;
-}
-
-:root[data-theme=&quot;dark&quot;] {
-  color-scheme: dark;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html &gt; body {
-  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
-  --color-background-primary: var(
-    --background,
-    light-dark(rgb(255 255 255), rgb(24 24 24))
-  );
-  --color-text-primary: var(
-    --foreground,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --color-border-secondary: var(
-    --border,
-    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
-  );
-
-  margin: 0;
-  padding: var(--visualize-paint-gutter, 0px);
-  color: var(--foreground);
-  background: transparent !important;
-  font-family: var(--font-sans) !important;
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
-}
-
-a {
-  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
-  cursor: pointer;
-  font-weight: var(--font-weight-medium, 500);
-  text-decoration: none;
-  text-underline-offset: 2px;
-}
-
-a:is(:hover, :focus-visible) {
-  text-decoration-line: underline;
-  text-decoration-style: dashed;
-  text-decoration-thickness: 0.5px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-block: 0;
-}
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h3,
-h4,
-h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
-}
-
-b,
-strong,
-th {
-  font-weight: var(--font-weight-medium);
-}
-
-code:not(pre code) {
-  display: inline;
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
-  background: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.92em;
-  overflow-wrap: anywhere;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  word-break: break-word;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--foreground);
-  font: inherit;
-  text-align: start;
-}
-
-.table :is(th, td) {
-  padding-block: 10px;
-  padding-inline: 0 24px;
-  overflow-wrap: anywhere;
-  border-bottom: 1px solid var(--border);
-  text-align: start;
-  vertical-align: top;
-}
-
-.table-responsive &gt; .table :is(th, td) {
-  overflow-wrap: break-word;
-}
-
-.table :is(th, td):last-child {
-  padding-inline-end: 0;
-}
-
-.table :is(caption, thead th) {
-  font-weight: 600;
-}
-
-.table thead th {
-  padding-block: 8px;
-  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
-}
-
-.table tbody tr:last-child :is(th, td) {
-  border-bottom: 0;
-}
-
-.table.table-sm :is(th, td) {
-  padding-block: 6px;
-}
-
-.table.table-sm :is(th, td):not(:last-child) {
-  padding-inline-end: 16px;
-}
-
-.table :is(.text-end, [align=&quot;right&quot;]) {
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
-
-.table :is(.text-center, [align=&quot;center&quot;]) {
-  text-align: center;
-}
-
-.table .text-nowrap {
-  white-space: nowrap;
-}
-
-#widget {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  padding: 0;
-  background: transparent !important;
-}
-
-.card {
-  min-width: 0;
-  padding: 12px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  border-radius: var(--radius-2xl);
-  corner-shape: var(--corner-shape);
-  color: var(--card-foreground);
-  background: var(--card);
-}
-
-#widget &gt; :not(.card, .progress) {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.tooltip {
-  position: fixed;
-  z-index: 50;
-  top: 0;
-  left: 0;
-  width: max-content;
-  max-width: min(
-    20rem,
-    var(--tooltip-available-width, calc(100vw - 10px)),
-    calc(100vw - 10px)
-  );
-  max-height: min(
-    var(--tooltip-available-height, calc(100vh - 10px)),
-    calc(100vh - 10px)
-  );
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  corner-shape: var(--corner-shape);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
-  overflow-wrap: break-word;
-  white-space: normal;
-  pointer-events: none;
-  user-select: none;
-}
-
-.viz-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
-  gap: 10px;
-}
-
-.viz-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.viz-stat-value {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-.viz-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-hr {
-  width: 100%;
-  height: 1px;
-  margin-block: 6px;
-  border: 0;
-  background: var(--border);
-}
-
-.nav {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 4px;
-}
-
-.progress {
-  display: flex;
-  height: 8px;
-  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
-  overflow: hidden;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--muted);
-}
-
-.progress-bar:only-child {
-  border-radius: var(--radius-full);
-}
-
-.progress-bar {
-  height: 100%;
-  flex-shrink: 0;
-  border: 0;
-  background: var(--viz-series-1);
-}
-
-.viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
-}
-
-small,
-.text-small,
-.viz-badge {
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-small);
-}
-
-.text-muted {
-  color: var(--muted-foreground);
-}
-
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.viz-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-.viz-controls &gt; .form-label {
-  display: grid;
-  min-width: min(100%, 260px);
-  flex: 1 1 280px;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 2px 12px;
-  margin-bottom: 0;
-}
-
-.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
-  grid-column: 1 / -1;
-}
-
-.btn,
-.nav-link,
-.form-check-input,
-.form-control,
-.form-range,
-.form-select {
-  font: inherit;
-}
-
-.btn,
-.nav-link {
-  appearance: button;
-  display: inline-flex;
-  inline-size: fit-content;
-  max-inline-size: 100%;
-  min-height: 28px;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin: 0;
-  padding: 0 8px;
-  -webkit-app-region: no-drag;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: var(--corner-shape);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: var(--cursor-interaction, pointer);
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-.btn:is(.btn-block, .viz-tile) {
-  inline-size: 100%;
-}
-
-.btn.viz-tile {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  white-space: normal;
-}
-
-a.btn {
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn:not(:disabled):hover,
-.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.btn-primary {
-  border-color: transparent;
-  color: var(--primary-foreground);
-  background: var(--foreground);
-  background-clip: padding-box;
-}
-
-.btn-primary .text-muted {
-  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
-}
-
-.btn-primary:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
-}
-
-.btn-ghost {
-  border-color: transparent;
-  color: var(--muted-foreground);
-  background: transparent;
-}
-
-.btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.nav-pills .nav-link {
-  min-width: 0;
-  border-color: transparent;
-  color: var(--muted-foreground);
-  background: transparent;
-}
-
-.nav-justified .nav-link {
-  flex: 1 1 0;
-  overflow-wrap: anywhere;
-  white-space: normal;
-}
-
-.nav-pills .nav-link.active {
-  color: var(--foreground);
-  background: var(--muted);
-}
-
-.btn:disabled,
-.nav-link:disabled,
-.nav-link[aria-disabled=&quot;true&quot;] {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-[data-lucide] {
-  stroke-width: 1.6;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--foreground);
-}
-
-.form-control {
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  padding: 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: var(--corner-shape);
-  color: var(--foreground);
-  background: var(--secondary);
-}
-
-.form-control::placeholder {
-  color: var(--muted-foreground);
-}
-
-.form-control[type=&quot;file&quot;] {
-  padding: 0;
-  overflow: hidden;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
-  padding: 0 8px;
-  border: 0;
-  border-right: 1px solid var(--input);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: inherit;
-  font: inherit;
-}
-
-.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-control-color[type=&quot;color&quot;] {
-  width: 40px;
-  height: 28px;
-  padding: 3px;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--radius-lg) - 4px);
-  corner-shape: var(--corner-shape);
-}
-
-textarea.form-control {
-  height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
-  resize: vertical;
-}
-
-.form-control:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-control:disabled,
-.form-select:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.form-select {
-  appearance: none;
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  margin: 0;
-  padding: 0 32px 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: var(--corner-shape);
-  color: var(--foreground);
-  background-color: var(--secondary);
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
-  background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
-  background-repeat: no-repeat;
-  background-size: 4px 4px;
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-check {
-  display: flex;
-  min-height: 20px;
-  align-items: center;
-  gap: 6px;
-}
-
-.form-check-input {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
-  margin: 0;
-  border: 1px solid var(--input);
-  color: var(--primary-foreground);
-  background-color: transparent;
-  cursor: var(--cursor-interaction, default);
-  transition:
-    background-color 150ms,
-    border-color 150ms,
-    box-shadow 150ms;
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
-  background-color: var(--secondary);
-  box-shadow: var(--shadow-sm);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input:not(:disabled):not(:checked):hover {
-  background-color: var(--card);
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-foreground);
-  content: &quot;&quot;;
-  mask: var(--checkmark-image) center / 12px 12px no-repeat;
-}
-
-.form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
-  border-radius: var(--radius-full);
-}
-
-.form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
-}
-
-.form-check:not(.form-switch) .form-check-input:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-}
-
-.form-switch .form-check-input:disabled,
-.form-switch .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.form-check-label {
-  color: var(--foreground);
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-switch .form-check-input {
-  position: relative;
-  width: 32px;
-  height: 20px;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--muted);
-  box-shadow: none;
-  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.form-switch .form-check-input::before {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-  box-shadow: var(--shadow-sm);
-  content: &quot;&quot;;
-  transform: translate(2px, -50%);
-  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.form-switch .form-check-input:checked {
-  background: var(--primary);
-}
-
-.form-switch .form-check-input:checked::before {
-  transform: translate(14px, -50%);
-}
-
-.form-switch .form-check-input:focus-visible {
-  box-shadow: 0 0 0 2px var(--ring);
-}
-
-.form-range {
-  appearance: none;
-  display: block;
-  width: 100%;
-  height: 28px;
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  border: 0;
-  accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
-}
-
-.form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
-}
-
-.form-range::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 4px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
-
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
-}
-
-.form-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
-
-.form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.btn:not(.btn-primary, .viz-tile):is(
-  [aria-pressed=&quot;true&quot;],
-  [aria-selected=&quot;true&quot;],
-  .is-selected
-) {
-  border-color: var(--primary);
-  color: var(--primary-foreground);
-  background: var(--primary);
-}
-
-.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
-  border-color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
-}
-
-.btn:focus-visible,
-.nav-link:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-@media (pointer: coarse) {
-  .btn,
-  .nav-link,
-  .form-control,
-  .form-select {
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  /* Keep small-screen WebKit from zooming when a text field receives focus. */
-  .form-control,
-  .form-select {
-    font-size: max(16px, var(--font-size-normal));
-  }
-
-  .form-control[type=&quot;file&quot;]::file-selector-button {
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  .form-control-color[type=&quot;color&quot;] {
-    width: 44px;
-    height: 44px;
-  }
-
-  .form-control:is(
-    [type=&quot;date&quot;],
-    [type=&quot;datetime-local&quot;],
-    [type=&quot;month&quot;],
-    [type=&quot;time&quot;],
-    [type=&quot;week&quot;]
-  ) {
-    min-width: 0;
-    max-width: 100%;
-    padding-block: 8px;
-  }
-
-  .form-check {
-    min-height: 44px;
-    padding-inline: 15px;
-  }
-
-  .form-check-input {
-    position: relative;
-  }
-
-  .form-check-input::after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 44px;
-    height: 44px;
-    content: &quot;&quot;;
-    transform: translate(-50%, -50%);
-  }
-
-  .form-check-label {
-    display: inline-flex;
-    min-width: 44px;
-    min-height: 44px;
-    align-items: center;
-  }
-
-  .form-range {
-    height: 44px;
-    touch-action: pan-y;
-  }
-
-  .form-range::-webkit-slider-runnable-track {
-    height: 44px;
-  }
-
-  .form-range::-moz-range-track {
-    height: 44px;
-  }
-
-  .form-range::-webkit-slider-thumb {
-    margin-top: 12px;
-  }
-}
-
-svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-#widget &gt; svg {
-  width: 100%;
-}
-
-/* Model-authored chart rules can otherwise stretch icons after these styles load. */
-svg.lucide {
-  display: block;
-  width: var(--icon-size) !important;
-  height: var(--icon-size) !important;
-  flex: none;
-  margin: 0 !important;
-  stroke-width: 1.6;
-}
-
-.text-warning,
-.text-destructive {
-  color: var(--destructive);
-}
-
-html&gt;body{padding:0}&lt;/style&gt;
-&lt;script&gt;
-(() =&gt; {
-  const root = document.documentElement;
-  const initialGlobals =
-    globalThis.__codexVisualizationInitialGlobals ?? globalThis.openai;
-  delete globalThis.__codexVisualizationInitialGlobals;
-  let appliedProperties = [];
-
-  const applyHostStyleVariables = (styleVariables) =&gt; {
-    if (styleVariables == null || typeof styleVariables !== &quot;object&quot;) {
-      return;
-    }
-    for (const property of appliedProperties) {
-      root.style.removeProperty(property);
-    }
-    appliedProperties = [];
-    for (const [property, value] of Object.entries(styleVariables)) {
-      if (property.startsWith(&quot;--&quot;) &amp;&amp; typeof value === &quot;string&quot;) {
-        root.style.setProperty(property, value);
-        appliedProperties.push(property);
-      }
-    }
-  };
-
-  const syncHostStyles = (globals) =&gt; {
-    applyHostStyleVariables(globals?.visualizationStyleVariables);
-    const sandboxDocument = globalThis.frameElement?.ownerDocument;
-    if (sandboxDocument != null &amp;&amp; globals?.visualizationTheme != null) {
-      let colorSchemeMeta = sandboxDocument.querySelector(
-        'meta[name=&quot;color-scheme&quot;]',
-      );
-      if (colorSchemeMeta == null) {
-        colorSchemeMeta = sandboxDocument.createElement(&quot;meta&quot;);
-        colorSchemeMeta.name = &quot;color-scheme&quot;;
-        sandboxDocument.head.appendChild(colorSchemeMeta);
-      }
-      colorSchemeMeta.content = globals.visualizationTheme;
-      sandboxDocument.documentElement.style.colorScheme =
-        globals.visualizationTheme;
-      // Paint the host surface behind transparent saved visualization documents.
-      sandboxDocument.documentElement.style.backgroundColor =
-        root.style.getPropertyValue(&quot;--background&quot;);
-    }
-  };
-
-  syncHostStyles(initialGlobals);
-  globalThis.addEventListener(&quot;openai:set_globals&quot;, (event) =&gt; {
-    syncHostStyles(event.detail?.globals);
-  });
-})();
-&lt;/script&gt;
-
-
-&lt;div id=&quot;idea-roadmap-2026&quot; lang=&quot;vi&quot;&gt;
-  &lt;h2&gt;Roadmap IDEA Engineering đến 31/12/2026&lt;/h2&gt;
-  &lt;div class=&quot;text-small text-muted&quot;&gt;Phương án dự kiến · Một người phát triển · Giữ phạm vi Core v0 MVP · Chưa phải lịch cam kết&lt;/div&gt;
-  &lt;figure class=&quot;roadmap-figure&quot; aria-label=&quot;Biểu đồ Gantt công việc từ tháng 9 đến tháng 12 năm 2026&quot;&gt;
-    &lt;div id=&quot;idea-gantt&quot; class=&quot;roadmap-chart&quot;&gt;&lt;/div&gt;
-    &lt;figcaption class=&quot;viz-row text-small&quot;&gt;
-      &lt;span&gt;&lt;span class=&quot;roadmap-swatch roadmap-design&quot;&gt;&lt;/span&gt;Thiết kế / kế hoạch&lt;/span&gt;
-      &lt;span&gt;&lt;span class=&quot;roadmap-swatch roadmap-build&quot;&gt;&lt;/span&gt;Xây dựng + kiểm thử từng luồng&lt;/span&gt;
-      &lt;span&gt;&lt;span class=&quot;roadmap-swatch roadmap-check&quot;&gt;&lt;/span&gt;Kiểm chứng / dùng thử&lt;/span&gt;
-      &lt;span&gt;&lt;span class=&quot;roadmap-swatch roadmap-reserve&quot;&gt;&lt;/span&gt;Dự phòng&lt;/span&gt;
-      &lt;span&gt;◆ Mốc review dự kiến&lt;/span&gt;
-    &lt;/figcaption&gt;
-  &lt;/figure&gt;
-  &lt;div id=&quot;idea-selected&quot; class=&quot;card&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;
-    &lt;div id=&quot;idea-selected-title&quot;&gt;&lt;/div&gt;
-    &lt;dl id=&quot;idea-selected-details&quot; class=&quot;roadmap-details text-small&quot;&gt;&lt;/dl&gt;
-  &lt;/div&gt;
-  &lt;figure class=&quot;roadmap-figure&quot; aria-label=&quot;Phân bổ giờ công theo tuần và những tuần dự kiến làm thứ Bảy&quot;&gt;
-    &lt;h3&gt;Giờ công theo tuần&lt;/h3&gt;
-    &lt;div id=&quot;idea-capacity&quot; class=&quot;roadmap-chart&quot;&gt;&lt;/div&gt;
-    &lt;figcaption class=&quot;text-small&quot;&gt;
-      &lt;span id=&quot;idea-capacity-total&quot; class=&quot;tabular-nums&quot;&gt;&lt;/span&gt;
-      &lt;div class=&quot;viz-row roadmap-key&quot;&gt;
-        &lt;span&gt;&lt;span class=&quot;roadmap-swatch roadmap-build&quot;&gt;&lt;/span&gt;Công việc&lt;/span&gt;
-        &lt;span&gt;&lt;span class=&quot;roadmap-swatch roadmap-reserve&quot;&gt;&lt;/span&gt;Dự phòng đã tính&lt;/span&gt;
-        &lt;span&gt;+T7: thêm 8 giờ thứ Bảy&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;div id=&quot;idea-saturdays&quot; class=&quot;text-muted&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;text-muted&quot;&gt;Lịch nghỉ công ty, thời gian chờ IT và người review: chưa xác nhận. Các mốc chuyển bước phụ thuộc kết quả review.&lt;/div&gt;
-    &lt;/figcaption&gt;
-  &lt;/figure&gt;
-  &lt;noscript&gt;Khung dự kiến 07/09–31/12/2026: 676 giờ công việc và 80 giờ dự phòng. Cần thêm 11 thứ Bảy, tương ứng 88 giờ, ngoài lịch 5 ngày mỗi tuần. Chưa xác nhận ngày nghỉ và điều kiện review.&lt;/noscript&gt;
-&lt;/div&gt;
-&lt;style&gt;
-  #idea-roadmap-2026 { color: var(--foreground); width: 100%; }
-  #idea-roadmap-2026 .roadmap-figure { margin: 16px 0; }
-  #idea-roadmap-2026 .roadmap-chart { width: 100%; min-width: 0; }
-  #idea-roadmap-2026 .roadmap-svg { display: block; width: 100%; overflow: visible; }
-  #idea-roadmap-2026 .roadmap-svg text { fill: var(--foreground); font-size: 12px; font-weight: 400; }
-  #idea-roadmap-2026 .roadmap-svg .secondary { fill: var(--muted-foreground); }
-  #idea-roadmap-2026 .roadmap-svg .lane-name { font-weight: 500; }
-  #idea-roadmap-2026 .roadmap-swatch { display: inline-block; width: 12px; height: 8px; margin-right: 5px; }
-  #idea-roadmap-2026 .roadmap-design { background: var(--viz-series-1); }
-  #idea-roadmap-2026 .roadmap-build { background: var(--viz-series-2); }
-  #idea-roadmap-2026 .roadmap-check { background: var(--viz-series-3); }
-  #idea-roadmap-2026 .roadmap-reserve { background: repeating-linear-gradient(135deg, var(--viz-series-4) 0 2px, transparent 2px 5px); }
-  #idea-roadmap-2026 .roadmap-details { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 4px 12px; margin: 8px 0 0; }
-  #idea-roadmap-2026 .roadmap-details dt { color: var(--muted-foreground); }
-  #idea-roadmap-2026 .roadmap-details dd { margin: 0; overflow-wrap: anywhere; }
-  #idea-roadmap-2026 .roadmap-key { margin-top: 8px; }
-  #idea-roadmap-2026 #idea-saturdays { margin-top: 8px; }
-  @media (max-width: 430px) {
-    #idea-roadmap-2026 .roadmap-details { grid-template-columns: 1fr; gap: 2px; }
-    #idea-roadmap-2026 .roadmap-details dd { margin-bottom: 6px; }
-  }
-&lt;/style&gt;
-&lt;script&gt;
-(() =&gt; {
-  const root = document.getElementById('idea-roadmap-2026');
-  const DAY = 86400000;
-  const begin = Date.UTC(2026, 8, 7);
-  const finish = Date.UTC(2027, 0, 1);
-  const parse = value =&gt; Date.parse(value + 'T00:00:00Z');
-  const iso = value =&gt; new Date(value).toISOString().slice(0, 10);
-  const shortDate = value =&gt; {
-    const d = new Date(typeof value === 'string' ? parse(value) : value);
-    return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-  };
-  const saturdays = ['2026-09-12','2026-09-19','2026-09-26','2026-10-03','2026-10-10','2026-10-17','2026-10-24','2026-11-07','2026-11-14','2026-11-21','2026-11-28'];
-  const tasks = [
-    {id:'A', number:'01', name:'Thiết kế &amp; kế hoạch', phase:'design', hours:48, after:'Tài liệu và các quyết định hiện có',
-      output:'Thiết kế đã review; kế hoạch từng đợt, điều kiện nghiệm thu và các điểm còn mở có người xử lý.',
-      gate:'Mục tiêu 18/09: đủ phê duyệt yêu cầu, thiết kế và điều kiện bắt đầu của đợt đầu. Không tự coi đến ngày là được code.',
-      trace:'DOC-01…08 · Feature / Spec / Tech · PG2 → PG3 → PG4'},
-    {id:'B', number:'02', name:'Tài khoản &amp; quyền', phase:'build', hours:80, after:'01 + điều kiện bắt đầu được thông qua',
-      output:'Server và môi trường phát triển; cấp/khóa/khôi phục tài khoản, quyền theo vai trò và Audit.',
-      gate:'Đăng nhập và thu hồi phiên đúng; tài khoản quản trị không tự có quyền tài liệu. Rà lại dự báo tiến độ ngày 30/09.',
-      trace:'FTR-011 · REQ-IAM / GOV / AUD / SEC'},
-    {id:'C', number:'03', name:'Quản lý tài liệu', phase:'build', hours:80, after:'02',
-      output:'Đăng ký mới/tiếp nhận file, lịch sử Revision/Version, thông tin và cách đánh số có cấu hình; tìm kiếm theo quyền.',
-      gate:'Mục tiêu 12/10: demo quản lý tài liệu với file được kiểm soát, mở lại đúng bản; không lộ kết quả ngoài quyền.',
-      trace:'FTR-001 / 002 / 012 / 014 · kiểm thử cùng UI và nghiệp vụ'},
-    {id:'D', number:'04', name:'Checkout / Check-in', phase:'build', hours:120, after:'03',
-      output:'Windows Workspace; Checkout/Reference → mở Office/CAD → sửa → Check-in; thành công bỏ giữ item.',
-      gate:'Mục tiêu 29/10: thử hai người, bản cũ, mất mạng và retry; không ghi nhận dở, không mất bản làm việc.',
-      trace:'FTR-003…006 · VVP-002 / 003 / 004'},
-    {id:'E', number:'05', name:'Xét duyệt &amp; phát hành', phase:'build', hours:100, after:'04 + dự phòng luồng file',
-      output:'Cấu trúc sản phẩm; quy trình và quyền có cấu hình; xét duyệt, phát hành, tạo Revision và lấy lại đúng hồ sơ.',
-      gate:'Quyết định gắn đúng bản; thử đường bị từ chối; bộ hồ sơ phát hành tái tạo đúng file và cấu trúc.',
-      trace:'FTR-007…010 · REQ-LC / STR / GOV'},
-    {id:'F', number:'06', name:'IRONCAD', phase:'build', hours:88, after:'Khảo sát 24h sau thiết kế ban đầu; triển khai 64h sau 05',
-      output:'24h kiểm chứng sớm công cụ, phiên bản/license và file .ics; 64h triển khai hồ sơ hỗ trợ định dạng đã chốt.',
-      gate:'Mục tiêu 26/11: có kết quả trên mẫu đại diện; lỗi xử lý không hỏng file gốc. Lưu/mở file không thay thế tích hợp sâu.',
-      trace:'FTR-013 · REQ-FMT · VVP-008 / 011'},
-    {id:'G', number:'07', name:'UI &amp; ba ngôn ngữ', phase:'build', hours:40, after:'05 + 06',
-      output:'Hoàn thiện UI dùng chung Web/Desktop; Việt–Anh–Nhật, Unicode/IME, bàn phím và focus.',
-      gate:'Cùng thao tác cho cùng kết quả trên các bề mặt; nhãn và dữ liệu nhập không bị cắt hoặc đổi sai. UI đã xây dần ở 02…06.',
-      trace:'FTR-014 · REQ-UX / LOC · VVP-009 / 010'},
-    {id:'H', number:'08', name:'Kiểm chứng hệ thống', phase:'check', hours:80, after:'02…07',
-      output:'Kiểm chứng liên thông, bảo mật và tải; sao lưu/khôi phục; đóng gói, cập nhật và hướng dẫn vận hành.',
-      gate:'Mục tiêu 18/12: đủ bằng chứng và review để vào đợt dùng thử có kiểm soát; lỗi nghiêm trọng còn mở thì không chuyển bước.',
-      trace:'VVP-001…015 theo phạm vi · ngưỡng tải và môi trường cần được chốt'},
-    {id:'I', number:'09', name:'Dùng thử nội bộ', phase:'check', hours:40, after:'08 + đủ người tham gia/review và được phép dùng bộ dữ liệu',
-      output:'Người dùng chạy dự án mẫu, ghi nhận vấn đề; sửa và kiểm tra lại; tổng hợp kết quả và hạn chế còn lại.',
-      gate:'Mục tiêu 31/12 sau dự phòng: đủ điều kiện nghiệm thu MVP. Không đồng nghĩa cho phép triển khai toàn công ty.',
-      trace:'Canonical Demo → dự án đại diện → kết quả nghiệm thu; người anh hỗ trợ nghiệp vụ, không tính là coder thứ hai'},
-    {id:'R', number:'10', name:'Dự phòng', phase:'reserve', hours:80, after:'Phân bổ tại các điểm chuyển bước',
-      output:'16h chốt điều kiện bắt đầu + 16h luồng file + 16h tích hợp CAD + 32h cuối đợt.',
-      gate:'Dùng khi có phát sinh hoặc nghỉ/chờ làm giảm quỹ giờ; vượt quỹ thì dự báo lại. Không bỏ kiểm thử hay tự cắt phạm vi.',
-      trace:'80h đã nằm trong tổng 756h; không cộng lần thứ hai vào lịch'}
-  ];
-  const sequence = [
-    ['A',28,'Rà thiết kế'], ['F',24,'Kiểm chứng khả thi sớm'], ['A',20,'Kế hoạch triển khai'],
-    ['R',16,'Điều kiện bắt đầu'], ['B',80,'Tài khoản, quyền, Audit'], ['C',80,'Quản lý tài liệu'],
-    ['D',120,'Workspace và Check-in'], ['R',16,'Dự phòng luồng file'], ['E',100,'Cấu trúc và phát hành'],
-    ['F',64,'Tích hợp sâu'], ['R',16,'Dự phòng tích hợp'], ['G',40,'UI và ngôn ngữ'],
-    ['H',80,'Kiểm chứng tổng thể'], ['I',40,'Dùng thử và sửa lỗi'], ['R',32,'Dự phòng cuối đợt']
-  ];
-  const days = [];
-  for (let time = begin; time &lt; finish; time += DAY) {
-    const dow = new Date(time).getUTCDay();
-    const date = iso(time);
-    if ((dow &gt;= 1 &amp;&amp; dow &lt;= 5) || saturdays.includes(date)) days.push({time, date, extra:dow === 6});
-  }
-  const slots = [];
-  let cursor = 0;
-  const segments = sequence.map(([id,hours,label]) =&gt; {
-    const startDay = Math.floor(cursor / 8);
-    const startHour = cursor % 8;
-    const beginHour = cursor;
-    for(let i = 0; i &lt; hours; i++) {
-      const absolute = cursor + i;
-      const day = days[Math.floor(absolute / 8)];
-      if (!day) throw new Error('Lịch vượt quỹ giờ đến 31/12');
-      slots.push({id, date:day.date, extra:day.extra, hour:absolute % 8});
-    }
-    cursor += hours;
-    const endDay = Math.floor((cursor - 1) / 8);
-    const endHour = ((cursor - 1) % 8) + 1;
-    return {id,hours,label,beginHour,endHourIndex:cursor,
-      start:days[startDay].time + startHour / 8 * DAY,
-      end:days[endDay].time + endHour / 8 * DAY,
-      startDate:days[startDay].date,endDate:days[endDay].date};
-  });
-  const workHours = tasks.filter(t =&gt; t.id !== 'R').reduce((sum,t) =&gt; sum + t.hours,0);
-  const weeks = Array.from({length:17},(_,i) =&gt; {
-    const start = begin + i * 7 * DAY;
-    const stop = Math.min(start + 7 * DAY,finish);
-    const workDays = days.filter(d =&gt; d.time &gt;= start &amp;&amp; d.time &lt; stop);
-    const placed = slots.filter(s =&gt; parse(s.date) &gt;= start &amp;&amp; parse(s.date) &lt; stop);
-    return {number:i+1,start,stop,capacity:workDays.length*8,
-      work:placed.filter(s =&gt; s.id !== 'R').length,reserve:placed.filter(s =&gt; s.id === 'R').length,
-      saturday:workDays.find(d =&gt; d.extra)?.date || null};
-  });
-  root.roadmapModel = {tasks,segments,slots,weeks,saturdays,workHours,reserveHours:80,totalHours:cursor,capacityHours:days.length*8};
-  root.dataset.workHours = String(workHours);
-  root.dataset.totalHours = String(cursor);
-  root.dataset.capacityHours = String(days.length*8);
-  const hoursByTask = Object.fromEntries(tasks.map(t =&gt; [t.id,slots.filter(s =&gt; s.id === t.id).length]));
-  if (cursor !== 756 || workHours !== 676 || days.length*8 !== 760 || tasks.some(t =&gt; hoursByTask[t.id] !== t.hours)) {
-    throw new Error('Tổng giờ công không khớp ước lượng đã trình');
-  }
-  const NS = 'http://www.w3.org/2000/svg';
-  const el = (tag,attrs={},value) =&gt; {
-    const node = document.createElementNS(NS,tag);
-    Object.entries(attrs).forEach(([key,val]) =&gt; node.setAttribute(key,String(val)));
-    if(value !== undefined) node.textContent = value;
-    return node;
-  };
-  const addText = (parent,x,y,value,attrs={}) =&gt; parent.appendChild(el('text',{x,y,...attrs},value));
-  const colors = {design:'var(--viz-series-1)',build:'var(--viz-series-2)',check:'var(--viz-series-3)',reserve:'var(--viz-series-4)'};
-  let selected = 'A';
-  const ganttHost = root.querySelector('#idea-gantt');
-  const capacityHost = root.querySelector('#idea-capacity');
-  const frame = (svg,x,y,w,h) =&gt; svg.appendChild(el('rect',{'data-chart-frame':'',x,y,width:w,height:h,fill:'none',stroke:'var(--border)','stroke-width':1}));
-  function showTask(id) {
-    selected = id;
-    const task = tasks.find(t =&gt; t.id === id);
-    const pieces = segments.filter(s =&gt; s.id === id);
-    const dates = pieces.map(s =&gt; `${shortDate(s.startDate)}–${shortDate(s.endDate)} (${s.hours}h)`).join(' · ');
-    root.querySelector('#idea-selected-title').textContent = `${task.number} · ${task.name} · ${task.hours} giờ`;
-    const content = root.querySelector('#idea-selected-details');
-    content.replaceChildren();
-    [['Lịch dự kiến',dates],['Sau bước',task.after],['Đầu ra',task.output],['Điều kiện',task.gate],['Đối chiếu',task.trace]].forEach(([key,value]) =&gt; {
-      const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=key;dd.textContent=value;content.append(dt,dd);
-    });
-    ganttHost.querySelectorAll('button[data-task]').forEach(b =&gt; b.setAttribute('aria-pressed',String(b.dataset.task === id)));
-    root.dataset.selectedTask = id;
-  }
-  function patterns(svg,suffix) {
-    const defs=el('defs');
-    const pattern=el('pattern',{id:`idea-reserve-${suffix}`,width:6,height:6,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'});
-    pattern.append(el('rect',{width:6,height:6,fill:'var(--viz-series-4)',opacity:.14}),el('line',{x1:0,y1:0,x2:0,y2:6,stroke:'var(--viz-series-4)','stroke-width':2}));
-    defs.append(pattern);
-    const marker=el('marker',{id:`idea-arrow-${suffix}`,viewBox:'0 0 6 6',refX:5,refY:3,markerWidth:5,markerHeight:5,orient:'auto'});
-    marker.append(el('path',{d:'M0 0 L6 3 L0 6',fill:'none',stroke:'var(--muted-foreground)','stroke-width':1}));defs.append(marker);svg.append(defs);
-  }
-  function drawGantt() {
-    const width=Math.max(288,Math.floor(ganttHost.getBoundingClientRect().width));
-    const narrow=width&lt;560;
-    const left=narrow?12:Math.min(240,Math.round(width*.34));
-    const right=12, top=50, rowHeight=narrow?80:48, plotWidth=width-left-right;
-    const bottom=top+tasks.length*rowHeight, height=bottom+28;
-    const scale=time=&gt;left+(time-begin)/(finish-begin)*plotWidth;
-    const svg=el('svg',{class:'roadmap-svg',viewBox:`0 0 ${width} ${height}`,height,role:'group','aria-labelledby':'idea-gantt-title idea-gantt-desc'});
-    svg.append(el('title',{id:'idea-gantt-title'},'Gantt IDEA Engineering tháng 9 đến tháng 12 năm 2026'),el('desc',{id:'idea-gantt-desc'},'Mười hàng công việc dự kiến. 676 giờ công việc, 80 giờ dự phòng; không có giờ công chồng nhau. Nhấn số đầu hàng hoặc thanh công việc để xem đầu ra và điều kiện chuyển bước. IRONCAD có 24 giờ kiểm chứng sớm và 64 giờ triển khai sau.'));
-    patterns(svg,'gantt');
-    frame(svg,left,top,plotWidth,bottom-top);
-    addText(svg,left,13,'Lịch năm 2026',{'class':'axis-title','data-axis':'x'});
-    if(!narrow) addText(svg,0,32,'Công việc · ngày · giờ',{'class':'axis-title','data-axis':'y'});
-    const months=[begin,Date.UTC(2026,9,1),Date.UTC(2026,10,1),Date.UTC(2026,11,1),finish];
-    months.slice(0,-1).forEach((time,i)=&gt;{
-      const start=scale(time),stop=scale(months[i+1]);
-      if(i&gt;0 &amp;&amp; !narrow) svg.append(el('line',{x1:start,y1:top,x2:start,y2:bottom,stroke:'var(--border)','stroke-width':1}));
-      addText(svg,(start+stop)/2,33,`Tháng ${i+9}`,{'text-anchor':'middle'});
-    });
-    if(!narrow) {
-      for(let t=begin+7*DAY;t&lt;finish;t+=7*DAY) svg.append(el('line',{x1:scale(t),x2:scale(t),y1:top,y2:bottom,stroke:'var(--border)',opacity:.38}));
-    }
-    const checkpoint=scale(Date.UTC(2026,8,30)+.5*DAY);
-    if(!narrow) svg.append(el('line',{x1:checkpoint,x2:checkpoint,y1:top,y2:bottom,stroke:'var(--muted-foreground)','stroke-dasharray':'3 4',opacity:.65}));
-    const centers = tasks.map((_,i)=&gt;top+i*rowHeight+(narrow?58:23));
-    if(!narrow) {
-      const links=[['B','C'],['C','D'],['D','E'],['E','F'],['F','G'],['G','H'],['H','I']];
-      links.forEach(([from,to])=&gt;{
-        const source=segments.filter(s=&gt;s.id===from).at(-1),target=segments.filter(s=&gt;s.id===to).at(-1);
-        const x1=scale(source.end),x2=scale(target.start),y1=centers[tasks.findIndex(t=&gt;t.id===from)],y2=centers[tasks.findIndex(t=&gt;t.id===to)];
-        const bend=Math.max(x1+4,x2-4);
-        svg.append(el('path',{d:`M${x1},${y1} H${bend} V${y2} H${x2}`,fill:'none',stroke:'var(--muted-foreground)','stroke-width':1,opacity:.55,'marker-end':'url(#idea-arrow-gantt)'}));
-      });
-    }
-    tasks.forEach((task,i)=&gt;{
-      const rowTop=top+i*rowHeight,cy=centers[i],pieces=segments.filter(s=&gt;s.id===task.id);
-      svg.append(el('line',{x1:narrow?12:0,y1:rowTop+rowHeight,x2:width-right,y2:rowTop+rowHeight,stroke:'var(--border)',opacity:.5}));
-      const foreign=el('foreignObject',{x:0,y:rowTop+2,width:46,height:44});
-      const button=document.createElement('button');button.type='button';button.className='btn btn-ghost';button.textContent=task.number;button.dataset.task=task.id;
-      button.setAttribute('aria-label',`Xem ${task.name}, ${task.hours} giờ`);button.setAttribute('aria-controls','idea-selected');button.setAttribute('aria-pressed',String(task.id===selected));button.addEventListener('click',()=&gt;showTask(task.id));foreign.append(button);svg.append(foreign);
-      addText(svg,50,rowTop+18,task.name,{class:'lane-name'});
-      const totalRange=`${shortDate(pieces[0].startDate)}–${shortDate(pieces.at(-1).endDate)} · ${task.hours}h`;
-      addText(svg,50,rowTop+34,totalRange,{class:'secondary'});
-      pieces.forEach(piece=&gt;{
-        const x=scale(piece.start),xEnd=scale(piece.end),w=Math.max(2,xEnd-x);
-        const tooltip=`${task.name} — ${piece.label}: ${shortDate(piece.startDate)}–${shortDate(piece.endDate)}, ${piece.hours} giờ. Dự kiến.`;
-        const hitSize=matchMedia('(pointer: coarse)').matches?44:32;
-        const hitLeft=Math.max(left,Math.min(x-3,width-right-hitSize));
-        const hitRight=Math.min(width-right,Math.max(xEnd+3,hitLeft+hitSize));
-        const hit=el('rect',{x:hitLeft,y:cy-22,width:hitRight-hitLeft,height:44,fill:'transparent','data-chart-hit':'','data-tooltip':tooltip,cursor:'pointer'});
-        hit.addEventListener('click',()=&gt;showTask(task.id));svg.append(hit);
-        const bar=el('rect',{x,y:cy-8,width:w,height:16,rx:2,fill:task.phase==='reserve'?'url(#idea-reserve-gantt)':colors[task.phase],opacity:task.phase==='design'?.65:.83,'data-tooltip':tooltip,cursor:'pointer','data-segment':piece.label});
-        bar.addEventListener('click',()=&gt;showTask(task.id));svg.append(bar);
-      });
-      const reviewDates={A:'2026-09-18',C:'2026-10-12',D:'2026-10-29',F:'2026-11-26',H:'2026-12-18',I:'2026-12-31'};
-      if(reviewDates[task.id]){
-        const x=scale(parse(reviewDates[task.id])+.5*DAY);
-        const diamond=el('path',{d:`M${x},${cy-5} l5,5 l-5,5 l-5,-5 Z`,fill:'var(--foreground)','data-tooltip':`${shortDate(reviewDates[task.id])}: ${task.gate}`,cursor:'pointer'});diamond.addEventListener('click',()=&gt;showTask(task.id));svg.append(diamond);
-      }
-    });
-    addText(svg,left,bottom+20,'07/09',{'text-anchor':'start',class:'secondary'});
-    if(!narrow) addText(svg,Math.max(left+60,checkpoint),bottom+20,'30/09: rà lại dự báo',{'text-anchor':'middle',class:'secondary'});
-    addText(svg,width-right,bottom+20,'31/12: mục tiêu MVP',{'text-anchor':'end'});
-    ganttHost.replaceChildren(svg);
-  }
-  function drawCapacity() {
-    const width=Math.max(288,Math.floor(capacityHost.getBoundingClientRect().width));
-    const narrow=width&lt;560,left=42,right=8,top=28,bottom=137,height=181;
-    const plotWidth=width-left-right,cell=plotWidth/weeks.length;
-    const x=i=&gt;left+(i+.5)*cell, y=h=&gt;bottom-h/56*(bottom-top);
-    const svg=el('svg',{class:'roadmap-svg',viewBox:`0 0 ${width} ${height}`,height,role:'img','aria-labelledby':'idea-cap-title idea-cap-desc'});
-    svg.append(el('title',{id:'idea-cap-title'},'Phân bổ giờ công theo tuần'),el('desc',{id:'idea-cap-desc'},'Tuần có dấu cộng T7 dự kiến thêm 8 giờ thứ Bảy. Đường 40 giờ thể hiện lịch 5 ngày. Vùng gạch là giờ dự phòng, đã nằm trong tổng 756 giờ. '+weeks.map(w=&gt;`Tuần ${w.number}: ${w.work} giờ công việc, ${w.reserve} giờ dự phòng, quỹ ${w.capacity} giờ.`).join(' ')));
-    patterns(svg,'capacity');frame(svg,left,top,plotWidth,bottom-top);
-    [0,24,40,48].forEach(value=&gt;{
-      const pos=y(value);svg.append(el('line',{x1:left,x2:width-right,y1:pos,y2:pos,stroke:value===40?'var(--muted-foreground)':'var(--border)','stroke-dasharray':value===40?'3 3':'none',opacity:.75}));
-      addText(svg,left-6,pos+4,String(value),{'text-anchor':'end'});
-    });
-    addText(svg,0,13,'Giờ/tuần',{'class':'axis-title','data-axis':'y'});
-    addText(svg,width-right,177,'Tuần bắt đầu từ 07/09',{'text-anchor':'end','class':'axis-title','data-axis':'x'});
-    weeks.forEach((week,i)=&gt;{
-      const barWidth=Math.max(6,cell*.62),baseY=y(week.work),totalY=y(week.work+week.reserve);
-      const tip=`Tuần ${week.number}, ${shortDate(week.start)}–${shortDate(week.stop-DAY)}: ${week.work}h công việc + ${week.reserve}h dự phòng / ${week.capacity}h. ${week.saturday ? 'Thứ Bảy '+shortDate(week.saturday)+': thêm 8h.' : 'Không làm thêm thứ Bảy.'}`;
-      svg.append(el('rect',{x:x(i)-barWidth/2,y:baseY,width:barWidth,height:bottom-baseY,fill:'var(--viz-series-2)',opacity:.83}));
-      if(week.reserve) svg.append(el('rect',{x:x(i)-barWidth/2,y:totalY,width:barWidth,height:baseY-totalY,fill:'url(#idea-reserve-capacity)'}));
-      const hit=el('rect',{x:left+i*cell,y:top,width:cell,height:bottom-top,fill:'transparent','data-chart-hit':'','data-tooltip':tip});svg.append(hit);
-      if(week.saturday) addText(svg,x(i),20,narrow?'+':'+T7',{'text-anchor':'middle'});
-      if(!narrow || [0,5,10,16].includes(i)) addText(svg,x(i),bottom+17,String(week.number),{'text-anchor':'middle'});
-    });
-    capacityHost.replaceChildren(svg);
-    root.querySelector('#idea-capacity-total').textContent=`676h công việc + 80h dự phòng = 756h / 760h quỹ dự kiến · Còn 4h ngoài dự phòng`;
-    root.querySelector('#idea-saturdays').textContent='11 thứ Bảy đề xuất: '+saturdays.map(shortDate).join(', ')+'.';
-  }
-  let pending=0;
-  const redraw=()=&gt;{cancelAnimationFrame(pending);pending=requestAnimationFrame(()=&gt;{drawGantt();drawCapacity();});};
-  new ResizeObserver(redraw).observe(root);
-  showTask('A');drawGantt();drawCapacity();
-})();
-&lt;/script&gt;
-
-
-&lt;style id=&quot;codex-visualization-document-scrollbar&quot;&gt;html,body{scrollbar-width:none!important}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none!important}&lt;/style&gt;
-
-&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  if (window.FloatingUIDOM == null) {
-    return;
-  }
-  const { autoUpdate, computePosition, flip, offset, shift, size } =
-    window.FloatingUIDOM;
-  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
-  const tooltipId = `codex-visualization-tooltip-${
-    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
-  }`;
-  const tooltipGap = 5;
-  const hoverDelay = 700;
-  const skipDelay = 300;
-  let activeTrigger = null;
-  let pendingTrigger = null;
-  let tooltip = null;
-  let openTimeout = null;
-  let autoUpdateCleanup = null;
-  let positionRequest = 0;
-  let skipDelayUntil = 0;
-  let lastPointerWasTouch = false;
-  let pinnedByTouch = false;
-
-  const getTrigger = (target) =&gt;
-    target?.nodeType === Node.ELEMENT_NODE
-      ? target.closest(&quot;[data-tooltip]&quot;)
-      : null;
-  const containsTarget = (trigger, target) =&gt;
-    target?.nodeType != null &amp;&amp; trigger.contains(target);
-  const getContent = (trigger) =&gt;
-    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
-  const getPlacement = (trigger) =&gt; {
-    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
-    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
-  };
-  const getTooltip = () =&gt; {
-    if (tooltip == null) {
-      tooltip = document.createElement(&quot;div&quot;);
-      tooltip.id = tooltipId;
-      tooltip.className = &quot;tooltip&quot;;
-      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
-    }
-    return tooltip;
-  };
-  const setDescribedBy = (trigger, described) =&gt; {
-    const ids = new Set(
-      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-    if (described) {
-      ids.add(tooltipId);
-    } else {
-      ids.delete(tooltipId);
-    }
-    if (ids.size === 0) {
-      trigger.removeAttribute(&quot;aria-describedby&quot;);
-    } else {
-      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
-    }
-  };
-  const clearOpenTimeout = () =&gt; {
-    if (openTimeout != null) {
-      window.clearTimeout(openTimeout);
-      openTimeout = null;
-    }
-    pendingTrigger = null;
-  };
-  const closeTooltip = (activateSkipDelay = true) =&gt; {
-    clearOpenTimeout();
-    pinnedByTouch = false;
-    positionRequest += 1;
-    autoUpdateCleanup?.();
-    autoUpdateCleanup = null;
-    if (activeTrigger == null) {
-      return;
-    }
-    setDescribedBy(activeTrigger, false);
-    activeTrigger = null;
-    tooltip?.remove();
-    if (activateSkipDelay) {
-      skipDelayUntil = Date.now() + skipDelay;
-    }
-  };
-  const updatePosition = (trigger, floating) =&gt; {
-    const request = ++positionRequest;
-    void computePosition(trigger, floating, {
-      middleware: [
-        offset(tooltipGap),
-        flip({ padding: tooltipGap }),
-        shift({ padding: tooltipGap }),
-        size({
-          padding: tooltipGap,
-          apply({ availableHeight, availableWidth, elements }) {
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-width&quot;,
-              `${Math.max(0, availableWidth)}px`,
-            );
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-height&quot;,
-              `${Math.max(0, availableHeight)}px`,
-            );
-          },
-        }),
-      ],
-      placement: getPlacement(trigger),
-      strategy: &quot;fixed&quot;,
-    })
-      .then(({ x, y }) =&gt; {
-        if (activeTrigger !== trigger || request !== positionRequest) {
-          return;
-        }
-        const scale = window.devicePixelRatio || 1;
-        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
-        floating.style.visibility = &quot;visible&quot;;
-      })
-      .catch(() =&gt; {
-        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
-          closeTooltip(false);
-        }
-      });
-  };
-  const openTooltip = (trigger) =&gt; {
-    const content = getContent(trigger);
-    if (!trigger.isConnected || content.length === 0) {
-      return;
-    }
-    clearOpenTimeout();
-    if (activeTrigger === trigger) {
-      return;
-    }
-    closeTooltip();
-    const floating = getTooltip();
-    floating.textContent = content;
-    floating.style.visibility = &quot;hidden&quot;;
-    floating.style.transform = &quot;translate(0, 0)&quot;;
-    document.body.appendChild(floating);
-    activeTrigger = trigger;
-    setDescribedBy(trigger, true);
-    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
-      updatePosition(trigger, floating);
-    });
-  };
-  const requestOpen = (trigger, immediate = false) =&gt; {
-    if (
-      getContent(trigger).length === 0 ||
-      activeTrigger === trigger ||
-      pendingTrigger === trigger
-    ) {
-      return;
-    }
-    clearOpenTimeout();
-    pendingTrigger = trigger;
-    const delay =
-      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
-        ? 0
-        : hoverDelay;
-    if (delay === 0) {
-      openTooltip(trigger);
-      return;
-    }
-    openTimeout = window.setTimeout(() =&gt; {
-      openTimeout = null;
-      pendingTrigger = null;
-      openTooltip(trigger);
-    }, delay);
-  };
-  const handlePointerOpen = (event) =&gt; {
-    if (event.pointerType === &quot;touch&quot;) {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    requestOpen(trigger);
-  };
-  const handlePointer = (event) =&gt; {
-    lastPointerWasTouch =
-      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
-  };
-  const handleTouchClick = (event) =&gt; {
-    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
-    lastPointerWasTouch = false;
-    if (!isTouch || event.detail === 0) {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (
-      trigger == null ||
-      !trigger.isConnected ||
-      getContent(trigger).length === 0 ||
-      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
-    ) {
-      if (pinnedByTouch) {
-        closeTooltip();
-      }
-      return;
-    }
-    openTooltip(trigger);
-    pinnedByTouch = activeTrigger === trigger;
-    window.setTimeout(() =&gt; {
-      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
-        closeTooltip(false);
-      }
-    }, 0);
-  };
-  const handleLeave = (event) =&gt; {
-    if (pinnedByTouch) {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const handleFocusIn = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger?.matches(&quot;:focus-visible&quot;)) {
-      requestOpen(trigger, true);
-    }
-  };
-  const handleKeyDown = (event) =&gt; {
-    if (event.key === &quot;Escape&quot;) {
-      closeTooltip();
-    }
-  };
-  const handleContextMenu = (event) =&gt; {
-    lastPointerWasTouch = false;
-    const trigger = getTrigger(event.target);
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const destroy = () =&gt; {
-    closeTooltip(false);
-    lastPointerWasTouch = false;
-    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
-    document.removeEventListener(&quot;pointerdown&quot;, handlePointer);
-    document.removeEventListener(&quot;pointercancel&quot;, handlePointer);
-    document.removeEventListener(&quot;click&quot;, handleTouchClick);
-    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
-    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
-    document.removeEventListener(&quot;focusout&quot;, handleLeave);
-    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
-    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
-    tooltip = null;
-  };
-
-  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
-  document.addEventListener(&quot;pointerdown&quot;, handlePointer);
-  document.addEventListener(&quot;pointercancel&quot;, handlePointer);
-  document.addEventListener(&quot;click&quot;, handleTouchClick);
-  document.addEventListener(&quot;pointerout&quot;, handleLeave);
-  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
-  document.addEventListener(&quot;focusout&quot;, handleLeave);
-  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
-  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
-  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
-})();
-&lt;/script&gt;
-&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
-(() =&gt; {
-  const selector = '.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]';
-  const disabled = ':disabled,[aria-disabled=&quot;true&quot;]';
-  const selectTab = (selected) =&gt; {
-    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
-    for (const tab of selected.closest('[role=&quot;tablist&quot;]').querySelectorAll('[role=&quot;tab&quot;]')) {
-      const active = tab === selected;
-      tab.classList.toggle(&quot;active&quot;, active);
-      tab.setAttribute(&quot;aria-selected&quot;, String(active));
-      const id = tab.getAttribute(&quot;aria-controls&quot;);
-      const panel = id &amp;&amp; document.getElementById(id);
-      if (panel != null) {
-        panel.hidden = id !== panelId;
-        if (!panel.hidden &amp;&amp; selected.id) {
-          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
-        }
-      }
-    }
-  };
-  const interact = (event) =&gt; {
-    const tab = event.target?.closest?.(selector);
-    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
-      return;
-    }
-    if (event.type === &quot;click&quot;) {
-      selectTab(tab);
-      return;
-    }
-    const tabs = Array.from(
-      tab.closest('[role=&quot;tablist&quot;]').querySelectorAll('[role=&quot;tab&quot;]'),
-    ).filter((candidate) =&gt; !candidate.matches(disabled));
-    const current = tabs.indexOf(tab);
-    let next;
-    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
-      next = (current + 1) % tabs.length;
-    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
-      next = (current + tabs.length - 1) % tabs.length;
-    } else if (event.key === &quot;Home&quot;) {
-      next = 0;
-    } else if (event.key === &quot;End&quot;) {
-      next = tabs.length - 1;
-    } else {
-      return;
-    }
-    event.preventDefault();
-    tabs[next].focus();
-    selectTab(tabs[next]);
-  };
-
-  for (const list of document.querySelectorAll('.nav[role=&quot;tablist&quot;]')) {
-    const selected =
-      list.querySelector('[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]') ??
-      list.querySelector('[role=&quot;tab&quot;].active') ??
-      list.querySelector('[role=&quot;tab&quot;]');
-    if (selected != null) {
-      selectTab(selected);
-    }
-  }
-  document.addEventListener(&quot;click&quot;, interact);
-  document.addEventListener(&quot;keydown&quot;, interact);
-  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
-    document.removeEventListener(&quot;click&quot;, interact);
-    document.removeEventListener(&quot;keydown&quot;, interact);
-  }, { once: true });
-})();
-&lt;/script&gt;
-&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  const initialize = () =&gt; {
-    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
-  };
-  if (globalThis.lucide != null) {
-    initialize();
-    return;
-  }
-  document
-    .getElementById(&quot;codex-visualization-lucide&quot;)
-    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
-})();
-&lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-"></iframe>
-<script>(() => {
-  const frame = document.getElementById("codex-visualization");
-  if (!(frame instanceof HTMLIFrameElement)) {
-    return;
-  }
-  let viewportHeight = globalThis.innerHeight;
-
-  const channel = new MessageChannel();
-  channel.port1.addEventListener("message", (event) => {
-    const data = event.data;
-    if (typeof data !== "object" || data == null) {
-      return;
-    }
-    if (data.type === "height") {
-      const height = data.height;
-      if (
-        typeof height === "number" &&
-        Number.isFinite(height) &&
-        height >= 0 &&
-        height <= 10_000
-      ) {
-        frame.style.height = Math.ceil(height) + "px";
-      }
-      return;
-    }
-    if (data.type === "scroll-to") {
-      const top = data.top;
-      if (
-        typeof top === "number" &&
-        Number.isFinite(top) &&
-        top >= 0 &&
-        globalThis.navigator.userActivation?.isActive === true
-      ) {
-        globalThis.scrollTo({
-          top: Math.ceil(
-            globalThis.scrollY + frame.getBoundingClientRect().top + top,
-          ),
-        });
-      }
-      return;
-    }
-    if (data.type === "open-external") {
-      const rawHref = data.href;
-      if (typeof rawHref !== "string") {
-        return;
-      }
-      let href;
-      try {
-        const url = new URL(rawHref, document.baseURI);
-        if (url.protocol !== "https:") {
-          return;
-        }
-        href = url.href;
-      } catch {
-        return;
-      }
-      if (globalThis.navigator.userActivation?.isActive === true) {
-        const anchor = document.createElement("a");
-        anchor.href = href;
-        anchor.rel = "noopener noreferrer";
-        anchor.target = "_blank";
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
-      }
-      return;
-    }
-    if (data.type === "follow-up") {
-      const prompt = data.prompt;
-      if (
-        typeof prompt !== "string" ||
-        globalThis.navigator.userActivation?.isActive !== true
-      ) {
-        return;
-      }
-      const title = data.title;
-      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
-    }
-  });
-  channel.port1.start();
-  const srcdoc = frame.dataset.srcdoc;
-  if (srcdoc == null) {
-    return;
-  }
-  globalThis.addEventListener("resize", () => {
-    const height = Number.parseFloat(frame.style.height);
-    if (!Number.isFinite(height) || height <= viewportHeight) {
-      frame.style.removeProperty("height");
-    }
-    viewportHeight = globalThis.innerHeight;
-    channel.port1.postMessage({ type: "measure" });
-  });
-  frame.addEventListener(
-    "load",
-    () => {
-      frame.contentWindow?.postMessage(
-        { type: "codex-visualization-initialize" },
-        "*",
-        [channel.port2],
-      );
-    },
-    { once: true },
-  );
-  frame.srcdoc = srcdoc;
-  delete frame.dataset.srcdoc;
-})();
-</script>
+<main>
+  <header>
+    <p class="eyebrow">IE-PLAN-DEC2026-002 · Draft 0.1</p>
+    <h1>Baseline Technical Pilot — 18/09 đến 31/12/2026</h1>
+    <p class="lede">Một coder, 75 ngày làm việc. Gantt này phân biệt rõ phase có thời lượng với milestone là điểm review không có thời lượng.</p>
+    <div class="rule"><strong>Quy tắc điều hành:</strong> phase kế tiếp chỉ bắt đầu khi milestone trước đạt. Nếu milestone không đạt, cập nhật forecast; không kéo thanh công việc sang phải rồi coi như kế hoạch vẫn đạt.</div>
+    <div class="facts"><span><strong>512 giờ</strong> công việc</span><span><strong>88 giờ</strong> dự phòng</span><span><strong>35</strong> work package</span><span><strong>600 giờ</strong> tổng quỹ</span><span>PG4 và thực thi: <strong>NOT-RUN</strong></span></div>
+  </header>
+
+  <section>
+    <div class="section-head"><h2>1. Phase, milestone và dependency</h2></div>
+    <div class="section-body">
+      <div class="legend"><span class="work">Công việc đã ước lượng</span><span class="reserve">Dự phòng có kiểm soát</span><span class="milestone">Milestone</span><span class="decision">Decision checkpoint</span></div>
+      <div class="scroll">
+        <div class="executive">
+          <div class="axis">
+            <div class="axis-label"><strong>75 ngày làm việc</strong><br><small>Nhóm theo 5 ngày, không phải tuần lịch đầy đủ</small></div>
+            <div class="weeks">
+              <div><strong>W1</strong>18–24/09</div><div><strong>W2</strong>25/09–01/10</div><div><strong>W3</strong>02–08/10</div><div><strong>W4</strong>09–15/10</div><div><strong>W5</strong>16–22/10</div>
+              <div><strong>W6</strong>23–29/10</div><div><strong>W7</strong>30/10–05/11</div><div><strong>W8</strong>06–12/11</div><div><strong>W9</strong>13–19/11</div><div><strong>W10</strong>20–26/11</div>
+              <div><strong>W11</strong>27/11–03/12</div><div><strong>W12</strong>04–10/12</div><div><strong>W13</strong>11–17/12</div><div><strong>W14</strong>18–24/12</div><div><strong>W15</strong>25–31/12</div>
+            </div>
+          </div>
+          <div class="decision-line">
+            <div class="row-label"><strong>D0 — Vault successor</strong><small>PDA disposition, chậm nhất 25/09</small></div>
+            <div class="track"><span class="decision-point" style="left:8%"></span><span class="decision-label" style="left:8%">D0 · 25/09</span></div>
+          </div>
+          <div class="phase-line">
+            <div class="row-label"><strong>PH0 — Readiness</strong><small>P01–P07 · 64 h + 24 h dự phòng</small></div>
+            <div class="track">
+              <div class="phase-bar" style="left:0%;width:14.667%"><span class="planned" style="width:72.727%">PH0</span><span class="buffer" style="width:27.273%"></span></div>
+              <span class="point" style="left:14.667%"></span><span class="point-label" style="left:14.667%">MS0 · PG4</span>
+            </div>
+          </div>
+          <div class="phase-line">
+            <div class="row-label"><strong>PH1 — Foundation</strong><small>F01–F05 · 72 h + 8 h dự phòng</small></div>
+            <div class="track">
+              <div class="phase-bar" style="left:14.667%;width:13.333%"><span class="planned" style="width:90%">PH1</span><span class="buffer" style="width:10%"></span></div>
+              <span class="point" style="left:28%"></span><span class="point-label" style="left:28%">MS1</span>
+            </div>
+          </div>
+          <div class="phase-line">
+            <div class="row-label"><strong>PH2 — Controlled documents</strong><small>C01–C05 · 96 h + 24 h dự phòng</small></div>
+            <div class="track">
+              <div class="phase-bar" style="left:28%;width:20%"><span class="planned" style="width:80%">PH2</span><span class="buffer" style="width:20%"></span></div>
+              <span class="point" style="left:48%"></span><span class="point-label" style="left:48%">MS2</span>
+            </div>
+          </div>
+          <div class="phase-line">
+            <div class="row-label"><strong>PH3 — Workspace/Vault</strong><small>W01–W07 · 144 h + 16 h dự phòng</small></div>
+            <div class="track">
+              <div class="phase-bar" style="left:48%;width:26.667%"><span class="planned" style="width:90%">PH3</span><span class="buffer" style="width:10%"></span></div>
+              <span class="point" style="left:74.667%"></span><span class="point-label" style="left:74.667%">MS3</span>
+            </div>
+          </div>
+          <div class="phase-line">
+            <div class="row-label"><strong>PH4 — Review/Release</strong><small>L01–L05 · 72 h + 8 h dự phòng</small></div>
+            <div class="track">
+              <div class="phase-bar" style="left:74.667%;width:13.333%"><span class="planned" style="width:90%">PH4</span><span class="buffer" style="width:10%"></span></div>
+              <span class="point" style="left:88%"></span><span class="point-label" style="left:88%">MS4</span>
+            </div>
+          </div>
+          <div class="phase-line">
+            <div class="row-label"><strong>PH5 — Hardening/Pilot</strong><small>Q01–Q06 · 64 h + 8 h dự phòng</small></div>
+            <div class="track">
+              <div class="phase-bar" style="left:88%;width:12%"><span class="planned" style="width:88.889%">PH5</span><span class="buffer" style="width:11.111%"></span></div>
+              <span class="point end" style="left:100%"></span><span class="point-label end" style="left:100%">MS5 · 31/12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="critical"><strong>Đường găng:</strong> D0 → MS0 → PH1 → MS1 → PH2 → MS2 → PH3 → MS3 → PH4 → MS4 → PH5 → MS5. Vì chỉ có một coder, toàn bộ sáu phase nằm trên đường găng.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>2. Milestone register</h2></div>
+    <div class="section-body">
+      <table>
+        <thead><tr><th>ID / ngày</th><th>Phải xem được hoặc quyết định</th><th>Nếu chưa đạt</th></tr></thead>
+        <tbody>
+          <tr><td class="status">D0 · 25/09</td><td>PDA disposition cho Vault successor, hoặc ghi rõ giữ ngoài first increment.</td><td>MS0 không được coi successor là baseline đã duyệt.</td></tr>
+          <tr><td class="status">MS0 · 02/10</td><td>PG4: baseline, increment, test, migration/recovery, môi trường và authority đã rõ.</td><td>Không bắt đầu PH1; ghi BLOCKED hoặc NOT-RUN.</td></tr>
+          <tr><td class="status">MS1 · 16/10</td><td>Web/Desktop/Server/PostgreSQL/Gateway chạy smoke path; migration và Audit seam hoạt động.</td><td>PH2 chờ; reforecast từ delivery rate thực tế.</td></tr>
+          <tr><td class="status">MS2 · 06/11</td><td>Tạo/tiếp nhận, tìm và mở đúng Revision/Version/Generation; quyền đọc đúng.</td><td>PH3 chờ lỗi identity/history/authorization được xử lý.</td></tr>
+          <tr><td class="status">MS3 · 04/12</td><td>Checkout/Reference/Check-in, NoChange, stale, retry, direct transfer và hai location đã xác minh.</td><td>PH4 chờ; bắt buộc reforecast PH4–PH5.</td></tr>
+          <tr><td class="status">MS4 · 18/12</td><td>Review/Approve/Reject/Release đúng scope; lấy lại đúng historical Release Package.</td><td>Chỉ harden phần đã đạt; không gọi là end-to-end pilot candidate.</td></tr>
+          <tr><td class="status">MS5 · 31/12</td><td>Regression, authorization, transfer và restore trên canonical scenario; ghi lỗi/giới hạn.</td><td>Báo cáo kết quả thực tế; không tự nhận full Core v0 hoặc production ready.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>3. Gantt chi tiết theo work package</h2></div>
+    <div class="section-body">
+      <p style="margin-top:0;color:var(--muted)">Ngày bắt đầu/kết thúc ở mức nửa ngày để tổng effort khớp 512 giờ. Dòng “Reserve” là quỹ chưa giao scope, không phải task.</p>
+      <div class="scroll">
+        <div class="gantt">
+          <div class="gantt-grid">
+            <div class="gh">ID</div><div class="gh">Work package</div><div class="gh">Giờ</div><div class="gh">Baseline slot</div>
+            <div class="gh timeline-head"><div class="mini-weeks"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span><span>W13</span><span>W14</span><span>W15</span></div></div>
+
+            <div class="phase-title">PH0 — Implementation readiness · MS0/PG4 ngày 02/10</div>
+            <div>P01</div><div>Ghim baseline đã được duyệt</div><div>8</div><div>18/09</div><div class="slot"><span class="task-bar" style="--s:0;--d:2" aria-label="P01, 18/09, 8 giờ"></span></div>
+            <div>P02</div><div>Chốt phạm vi Technical Pilot</div><div>8</div><div>21/09</div><div class="slot"><span class="task-bar" style="--s:2;--d:2" aria-label="P02, 21/09, 8 giờ"></span></div>
+            <div>P03</div><div>Phân loại quyết định còn mở</div><div>8</div><div>22/09</div><div class="slot"><span class="task-bar" style="--s:4;--d:2" aria-label="P03, 22/09, 8 giờ"></span></div>
+            <div>P04</div><div>Chuẩn bị môi trường và cấu trúc delivery</div><div>12</div><div>23/09 AM–24/09 AM</div><div class="slot"><span class="task-bar" style="--s:6;--d:3" aria-label="P04, 23 đến 24 tháng 9, 12 giờ"></span></div>
+            <div>P05</div><div>Chuẩn bị dữ liệu và test strategy</div><div>8</div><div>24/09 PM–25/09 AM</div><div class="slot"><span class="task-bar" style="--s:9;--d:2" aria-label="P05, 24 đến 25 tháng 9, 8 giờ"></span></div>
+            <div>P06</div><div>Migration, rollback, backup và security review plan</div><div>12</div><div>25/09 PM–28/09 PM</div><div class="slot"><span class="task-bar" style="--s:11;--d:3" aria-label="P06, 25 đến 28 tháng 9, 12 giờ"></span></div>
+            <div>P07</div><div>Review readiness và ghi kết quả PG4</div><div>8</div><div>29/09</div><div class="slot"><span class="task-bar" style="--s:14;--d:2" aria-label="P07, 29 tháng 9, 8 giờ"></span></div>
+            <div class="reserve-row">RES0</div><div class="reserve-row">Dự phòng PH0</div><div>24</div><div>30/09–02/10</div><div class="slot"><span class="task-bar reserve" style="--s:16;--d:6" aria-label="Dự phòng PH0, 24 giờ"></span></div>
+
+            <div class="phase-title">PH1 — Running foundation · MS1 ngày 16/10</div>
+            <div>F01</div><div>Khung source, build và kiểm tra tự động</div><div>16</div><div>05/10–06/10</div><div class="slot"><span class="task-bar" style="--s:22;--d:4"></span></div>
+            <div>F02</div><div>PostgreSQL và migration</div><div>12</div><div>07/10–08/10 AM</div><div class="slot"><span class="task-bar" style="--s:26;--d:3"></span></div>
+            <div>F03</div><div>Bootstrap admin, tài khoản và session</div><div>16</div><div>08/10 PM–12/10 AM</div><div class="slot"><span class="task-bar" style="--s:29;--d:4"></span></div>
+            <div>F04</div><div>Transaction và Audit seam</div><div>12</div><div>12/10 PM–13/10 PM</div><div class="slot"><span class="task-bar" style="--s:33;--d:3"></span></div>
+            <div>F05</div><div>Smoke path control plane/data plane</div><div>16</div><div>14/10–15/10</div><div class="slot"><span class="task-bar" style="--s:36;--d:4"></span></div>
+            <div class="reserve-row">RES1</div><div class="reserve-row">Dự phòng PH1</div><div>8</div><div>16/10</div><div class="slot"><span class="task-bar reserve" style="--s:40;--d:2"></span></div>
+
+            <div class="phase-title">PH2 — Controlled-document core · MS2 ngày 06/11</div>
+            <div>C01</div><div>Loại tài liệu, metadata và đánh số</div><div>16</div><div>19/10–20/10</div><div class="slot"><span class="task-bar" style="--s:42;--d:4"></span></div>
+            <div>C02</div><div>Store Existing và Logical Document</div><div>20</div><div>21/10–23/10 AM</div><div class="slot"><span class="task-bar" style="--s:46;--d:5"></span></div>
+            <div>C03</div><div>New và Revision/Version/Generation</div><div>20</div><div>23/10 PM–27/10 PM</div><div class="slot"><span class="task-bar" style="--s:51;--d:5"></span></div>
+            <div>C04</div><div>Tìm kiếm và đọc theo quyền</div><div>20</div><div>28/10–30/10 AM</div><div class="slot"><span class="task-bar" style="--s:56;--d:5"></span></div>
+            <div>C05</div><div>Hoàn thiện vertical slice tài liệu</div><div>20</div><div>30/10 PM–03/11 PM</div><div class="slot"><span class="task-bar" style="--s:61;--d:5"></span></div>
+            <div class="reserve-row">RES2</div><div class="reserve-row">Dự phòng PH2</div><div>24</div><div>04/11–06/11</div><div class="slot"><span class="task-bar reserve" style="--s:66;--d:6"></span></div>
+
+            <div class="phase-title">PH3 — Workspace và multi-location Vault · MS3 ngày 04/12</div>
+            <div>W01</div><div>Workspace Windows và manifest cục bộ</div><div>20</div><div>09/11–11/11 AM</div><div class="slot"><span class="task-bar" style="--s:72;--d:5"></span></div>
+            <div>W02</div><div>Checkout và Reference theo phạm vi</div><div>20</div><div>11/11 PM–13/11 PM</div><div class="slot"><span class="task-bar" style="--s:77;--d:5"></span></div>
+            <div>W03</div><div>Transfer Grant và truyền file tiếp tục được</div><div>24</div><div>16/11–18/11</div><div class="slot"><span class="task-bar" style="--s:82;--d:6"></span></div>
+            <div>W04</div><div>Check-in nguyên tử và No Change</div><div>24</div><div>19/11–23/11</div><div class="slot"><span class="task-bar" style="--s:88;--d:6"></span></div>
+            <div>W05</div><div>Stale, mất mạng và retry cùng OperationId</div><div>24</div><div>24/11–26/11</div><div class="slot"><span class="task-bar" style="--s:94;--d:6"></span></div>
+            <div>W06</div><div>Hai vị trí Vault và exact-read failover</div><div>20</div><div>27/11–01/12 AM</div><div class="slot"><span class="task-bar" style="--s:100;--d:5"></span></div>
+            <div>W07</div><div>Demo hai identity và kiểm tra ranh giới</div><div>12</div><div>01/12 PM–02/12 PM</div><div class="slot"><span class="task-bar" style="--s:105;--d:3"></span></div>
+            <div class="reserve-row">RES3</div><div class="reserve-row">Dự phòng PH3</div><div>16</div><div>03/12–04/12</div><div class="slot"><span class="task-bar reserve" style="--s:108;--d:4"></span></div>
+
+            <div class="phase-title">PH4 — Review và Release · MS4 ngày 18/12</div>
+            <div>L01</div><div>Structure Snapshot và dependency bắt buộc</div><div>16</div><div>07/12–08/12</div><div class="slot"><span class="task-bar" style="--s:112;--d:4"></span></div>
+            <div>L02</div><div>Submit, Review, Approve/Reject</div><div>16</div><div>09/12–10/12</div><div class="slot"><span class="task-bar" style="--s:116;--d:4"></span></div>
+            <div>L03</div><div>Release đúng phạm vi</div><div>20</div><div>11/12–15/12 AM</div><div class="slot"><span class="task-bar" style="--s:120;--d:5"></span></div>
+            <div>L04</div><div>Release Package và Revision sau Release</div><div>12</div><div>15/12 PM–16/12 PM</div><div class="slot"><span class="task-bar" style="--s:125;--d:3"></span></div>
+            <div>L05</div><div>Demo luồng phát hành và negative paths</div><div>8</div><div>17/12</div><div class="slot"><span class="task-bar" style="--s:128;--d:2"></span></div>
+            <div class="reserve-row">RES4</div><div class="reserve-row">Dự phòng PH4</div><div>8</div><div>18/12</div><div class="slot"><span class="task-bar reserve" style="--s:130;--d:2"></span></div>
+
+            <div class="phase-title">PH5 — Hardening và Technical Pilot · MS5 ngày 31/12</div>
+            <div>Q01</div><div>Regression Release Spine</div><div>12</div><div>21/12–22/12 AM</div><div class="slot"><span class="task-bar" style="--s:132;--d:3"></span></div>
+            <div>Q02</div><div>Authorization và security boundary</div><div>8</div><div>22/12 PM–23/12 AM</div><div class="slot"><span class="task-bar" style="--s:135;--d:2"></span></div>
+            <div>Q03</div><div>Đo transfer đại diện</div><div>8</div><div>23/12 PM–24/12 AM</div><div class="slot"><span class="task-bar" style="--s:137;--d:2"></span></div>
+            <div>Q04</div><div>Backup và restore trên môi trường sạch</div><div>12</div><div>24/12 PM–25/12 PM</div><div class="slot"><span class="task-bar" style="--s:139;--d:3"></span></div>
+            <div>Q05</div><div>Đóng gói và hướng dẫn vận hành</div><div>8</div><div>28/12</div><div class="slot"><span class="task-bar" style="--s:142;--d:2"></span></div>
+            <div>Q06</div><div>Technical Pilot, sửa lỗi chặn và báo cáo</div><div>16</div><div>29/12–30/12</div><div class="slot"><span class="task-bar" style="--s:144;--d:4"></span></div>
+            <div class="reserve-row">RES5</div><div class="reserve-row">Dự phòng PH5</div><div>8</div><div>31/12</div><div class="slot"><span class="task-bar reserve" style="--s:148;--d:2"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>4. Điều kiện sử dụng baseline</h2></div>
+    <div class="section-body notes">
+      <div>
+        <h3>Được dùng để làm gì</h3>
+        <ul><li>Theo dõi 35 work package và sáu phase.</li><li>Nhận biết dependency, milestone và reserve.</li><li>Reforecast sau MS0, MS3 hoặc khi một phase lệch trên 20%.</li></ul>
+      </div>
+      <div>
+        <h3>Không được suy diễn</h3>
+        <ul><li>Ngày 31/12 không phải full Core v0 hay production acceptance.</li><li>Reserve không phải scope để tự lấy thêm.</li><li>Lịch chưa trừ ngày nghỉ, công việc đột xuất hoặc thời gian chờ authority.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>Nguồn kiểm soát: IE-PROD-ROADMAP-001@0.13 · Appendix A@0.5 · IE-CHG-ROADMAP-TP-001@0.1. Gantt là rendition; DOC-07 và Appendix A là nguồn nội dung có thẩm quyền.</footer>
+</main>
 </body>
 </html>

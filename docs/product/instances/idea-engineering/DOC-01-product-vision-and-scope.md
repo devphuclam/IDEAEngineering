@@ -1,8 +1,8 @@
 # IDEA Engineering Product Vision and Scope
 
-> **Instance state**: controlled `Draft 0.6`. This document defines the internal product purpose,
-> scope boundary and success intent for Core v0. It does not approve detailed requirements,
-> architecture, technology or implementation.
+> **Instance state**: controlled `Draft 0.7`. This document defines the internal-first product
+> purpose, current scope boundary and long-term trajectory. It does not approve detailed
+> requirements, architecture, technology, implementation or commercial release.
 
 ## Control envelope
 
@@ -13,16 +13,16 @@
 | Title | IDEA Engineering Product Vision and Scope |
 | Owner | `Principal Product Author`; named person attribution is `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.6` |
+| Document Version | `0.7` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity not yet recorded |
 | Reviewers | Project user performs internal document review; formal attribution and any required independent/specialist qualification remain to be recorded |
 | Approvers | `Product Decision Authority` for Feature; identity, decision and date are `UNKNOWN` |
-| Source Links | [Product-knowledge index](../../knowledge/README.md), [accepted design lessons](../../knowledge/idea-design-lessons.md), [product architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [project domain language](../../../../CONTEXT.md) |
-| Downstream Links | [DOC-02](DOC-02-feasibility-and-options-assessment.md), [DOC-03](DOC-03-business-requirements.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [FEATURE-001](decision-briefs/FEATURE-001-feature-definition-and-scope.md), [coverage register](registers/GOV-material-and-behavioral-coverage.md) |
+| Source Links | [Product-knowledge index](../../knowledge/README.md), [accepted design lessons](../../knowledge/idea-design-lessons.md), [product architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [project domain language](../../../../CONTEXT.md), [internal-first commercial direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) |
+| Downstream Links | [DOC-02](DOC-02-feasibility-and-options-assessment.md), [DOC-03](DOC-03-business-requirements.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [FEATURE-001](decision-briefs/FEATURE-001-feature-definition-and-scope.md), [coverage register](registers/GOV-material-and-behavioral-coverage.md), [future commercial readiness register](registers/GOV-future-commercial-readiness.md) |
 | Evidence / Claim Status | Accepted scope decisions plus `Reference-Backed Product Hypothesis`; internal operational validation remains `BLOCKED` |
-| Change History | 0.6: distinguish Account, Project, Role and Product Configuration administration under one principal–role–scope model without changing Feature scope; [IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md). 0.5: reconcile the downstream Feature reference. Earlier history remains in controlled change records. |
+| Change History | 0.7: record the internal-first product purpose and a several-years-away commercial trajectory without adding a current commercial Feature, requirement, task or release commitment; [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md). 0.6 separated administration responsibilities. Earlier history remains in controlled change records. |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational period is `UNKNOWN`, owned by Product Decision Authority and reviewed before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -36,8 +36,10 @@ release and reproduce engineering documents and product structures. The initial 
 that ordinary file locations and application-local histories do not, by themselves, provide a stable
 product identity, a trustworthy released baseline or sufficient evidence of who approved what.
 
-This is an internal engineering-control initiative. It has no current sales, pricing, external-buyer,
-market-share or customer-acquisition objective.
+This is an internal engineering-control initiative for the next several years. It has no current
+sales, pricing, external-buyer, market-share or customer-acquisition objective. The long-term
+direction permits a separately approved commercial successor, so current work avoids unnecessary
+company-specific or license-related dead ends without building commercial operations now.
 
 ### 1.1 Problem hypothesis and evidence class
 
@@ -125,7 +127,7 @@ implemented or verified.
 | Additional deep CAD profiles | `DEFER` | One deep profile first proves the adapter boundary and evidence method. | Principal Product Author; revisit after the IRONCAD profile result |
 | Bulk legacy migration | `DEFER` | Core v0 proves Store Existing and reconciliation on a bounded dataset, not enterprise migration. | Data/Migration authority; revisit when source systems and volumes are known |
 | Code running inside design applications | `EXCLUDE` | External tools remain outside the IDEA trust and execution boundary. | Architecture owner; reopen only through an approved architecture change |
-| Commercial product objectives | `NOT APPLICABLE` | The current product is for internal company use. | Product Decision Authority; only a formal scope change can activate |
+| Commercial operation and sales capability | `DEFER` | Internal operation is the only current purpose. A future commercial offering is a long-term direction, not a Core v0 requirement. | Commercial Decision Authority and Product Decision Authority; reopen only through the Commercial Readiness Gate and an approved successor |
 
 Every reference capability in the fixed inventory receives a visible coverage disposition even when
 it is not in Core v0. Deferral therefore narrows the first increment; it does not silently erase the
@@ -144,6 +146,24 @@ DOC-01 supplies scope to DOC-03. DOC-03 supplies business needs to DOC-04. DOC-0
 describe approved design consequences later. DOC-07 sequences the work and three boss-facing briefs
 request decisions without becoming a second source of product truth.
 
+### 3.4 Internal-first commercial trajectory
+
+The first operating horizon remains one company-controlled internal product. Commercialization has
+no target date and is expected to be several years away. It does not add customer onboarding,
+billing, subscription, online activation, public SaaS or commercial support to Core v0.
+
+During the internal years, the product applies only safeguards that are costly to retrofit: clean-room
+development, third-party provenance, company-neutral configuration, explicit Organization and
+Project ownership, portable data, controlled migrations, no hidden telemetry and evidence-bound
+claims. The complete split between current safeguards, deferred work and the future gate is owned by
+[`IE-GOV-COMMERCIAL-001`](registers/GOV-future-commercial-readiness.md).
+
+This Draft does not authorize an external pilot, offer, installation, customer-data receipt or sale.
+Those activities require the Commercial Readiness Gate, named legal, commercial and
+security/operations authorities, and acceptance of the exact offering and evidence. This is a
+governance constraint, not a claim that the current architecture already supports multiple customers
+or jurisdictions.
+
 ## 4. Product direction and success measures
 
 ### 4.1 Product direction
@@ -151,7 +171,9 @@ request decisions without becoming a second source of product truth.
 The direction is to establish a dependable PDM foundation first and extend it toward PLM through
 controlled increments. New formats, policies and later lifecycle modules must be addable without
 changing the meaning of existing released records or rewriting the core identity model. Breadth is
-secondary to proving one complete, safe engineering release with its important failure paths.
+secondary to proving one complete, safe engineering release with its important failure paths. The
+product is built for internal use first while preserving a governed route to a future commercial
+offering; commercial readiness is evaluated later and is not inferred from internal success.
 
 ### 4.2 Success measures
 
@@ -176,12 +198,15 @@ operational commitment or rollout claim.
 |---|---|---|---|
 | Decision | `VSN-DEC-001` | The boss decides Feature, then Spec, then Tech; DOC-01…08 remain internal detailed authority. | Accepted planning rule; decision briefs must pin exact source versions |
 | Decision | `VSN-DEC-002` | Core v0 proves a vertical Release Spine rather than many shallow features. | Accepted scope direction; subject to Feature decision |
+| Decision | `VSN-DEC-003` | IDEA remains internal for the next several years but avoids preventable barriers to a separately approved future commercial offering. | Accepted drafting direction; current Feature/Spec/Tech and roadmap scope unchanged |
 | Assumption | `VSN-ASM-001` | The initial product context is one internal organization on Windows with externally installed Office/CAD tools. | Validate during Spec/Tech; material change enters through CHG |
 | Risk | `VSN-RSK-001` | Reference behavior may be mistaken for validated internal need. | Keep `Reference-Backed Product Hypothesis`; representative need validation remains `BLOCKED` |
 | Risk | `VSN-RSK-002` | One-person preparation may be mistaken for independent approval or user acceptance. | Keep self-review, specialist review and representative acceptance as separate statuses |
 | Risk | `VSN-RSK-003` | Broad format or PLM promises could exceed evidence and delay the safe core. | Generic baseline plus one deep profile; all omitted areas remain in coverage register |
+| Risk | `VSN-RSK-004` | Reference-product material, third-party code/assets or unsupported claims could prevent lawful distribution later. | Clean-room provenance, dependency/license inventory and evidence-bound claims; Legal Review required before external use |
 | Gap | `VSN-GAP-001` | Named internal pilot, representative users and Internal Adoption Authority are absent. | Owner Product Decision Authority; nominate before internal need validation/pilot acceptance |
 | Gap | `VSN-GAP-002` | Organizational retention period and validated operational thresholds remain open; the preliminary RTO/RPO objectives are not measured results. | Owners Product Decision Authority/Operations; resolve before Approved/PG4 as applicable |
+| Gap | `VSN-GAP-003` | Commercial, Legal and external Security/Operations authorities have not accepted a future offering, and no commercial gate has run. | Track in `IE-GOV-COMMERCIAL-001`; remains `BLOCKED` until the external trigger is approached |
 
 ## 6. Trace and review readiness
 
@@ -199,7 +224,7 @@ operational commitment or rollout claim.
 | Engineering-data integrity and control | Stable identity, exact baseline and invalid-operation evidence within an approved test scope | `NOT-RUN`; reference-backed hypothesis only |
 | Release-risk reduction and quality | Internal risk baseline plus Release Spine negative-path results | Baseline `BLOCKED` pending representative project |
 | Maintainability and evidenced efficiency | Approved scope, measured current state, metric and owner | `UNKNOWN`; establish during Spec/pilot planning |
-| Commercial objectives | Pricing, revenue, acquisition, market share, market fit or external buyer objective | `NOT APPLICABLE` |
+| Commercial objectives | Pricing, revenue, acquisition, market share, market fit or external buyer objective | `DEFERRED`; no current target, requirement or claim. Future direction is tracked separately. |
 
 ## Typed trace, supporting records and rendition controls
 
@@ -207,7 +232,7 @@ operational commitment or rollout claim.
 |---|---|---|
 | `SOURCE-NEED` / `SOURCE-DECISION` | Product knowledge, accepted design lessons and stakeholder scope decisions | Linked; internal representative need evidence `BLOCKED` |
 | `DOWNSTREAM` | DOC-02, DOC-03, DOC-07, FEATURE-001 and coverage record | Current Draft sources linked; `FEATURE-001@0.12` contains the clarified Version model and later accepted scope clarifications; boss decision `NOT-RUN` |
-| `CHANGE` | CHG/Work Item, impact analysis and successor baseline | [IE-CHG-TECH-001](registers/CHG-2026-09-03-tech-context-and-proposal.md) records the prior context update; [IE-CHG-VERSION-001](registers/CHG-2026-09-04-version-model-clarification.md) records this alignment |
+| `CHANGE` | CHG/Work Item, impact analysis and successor baseline | [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md) records the internal-first long-term direction without changing current Feature/Spec/Tech or delivery scope; earlier changes remain linked in their records |
 | `VERIFICATION` | Future VVP procedures and VEV results against exact configurations | `NOT-RUN` |
 | `RELEASE` | Future REL manifest and DOC-07 increment consuming this version | `NOT APPLICABLE` to this draft |
 | `RENDITION` | Source-pinned DOCX/PDF identity and status | No rendition generated |

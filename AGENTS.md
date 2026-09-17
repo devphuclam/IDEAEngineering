@@ -14,6 +14,13 @@ Follow [`docs/agents/collaboration.md`](docs/agents/collaboration.md) for provid
 
 Lần sau tôi mà có nói là push lên main thì push lên luôn.
 
+### External sources and licenses
+
+Before cloning or pulling an external project for adaptation, adding a submodule or dependency,
+copying or modifying third-party code/content/assets, or vendoring a repository, follow
+[`docs/agents/external-source-intake.md`](docs/agents/external-source-intake.md). Pin the exact source
+and license before import; a public repository without a usable license remains reference-only.
+
 ### Triage labels
 
 Use the default Matt Pocock triage labels. See `docs/agents/triage-labels.md`.

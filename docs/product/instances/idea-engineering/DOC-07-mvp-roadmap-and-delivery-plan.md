@@ -1,6 +1,6 @@
 # IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap
 
-> **Instance state**: controlled `Draft 0.12`. This roadmap plans work and decision presentations. It
+> **Instance state**: controlled `Draft 0.14`. This roadmap plans work and decision presentations. It
 > does not create or approve Feature, Spec or Tech content by schedule assertion, and it does not
 > authorize production implementation or release.
 
@@ -13,18 +13,18 @@
 | Title | IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap |
 | Owner | `Principal Product Author`; named person attribution `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.12` |
+| Document Version | `0.14` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity to be recorded before `Proposed` |
 | Reviewers | Project user performs internal document review; independent/specialist review remains separately unassigned |
-| Approvers | Product Decision Authority approved the exact Feature/Spec/Tech predecessor baseline on 17-09-2026; decision on the multi-location Vault successor and re-estimated plan is `NOT-RUN` |
+| Approvers | Product Decision Authority approved the exact Feature/Spec/Tech predecessor baseline on 17-09-2026; decision on the multi-location Vault successor is `NOT-RUN`. The project user selected the Technical Pilot roadmap direction on 17-09-2026; that planning selection is not a fourth Product Decision Authority axis. |
 | Source Links | [Product templates](../../definition/README.md), [domain language](../../../../CONTEXT.md), [architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [design lessons](../../knowledge/idea-design-lessons.md) |
 | Downstream Links | [Task appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt view](planning/idea-roadmap-december-2026.html), three decision briefs, supporting records and later implementation increments |
 | Evidence / Claim Status | `IDEA DECISION` for accepted planning rules; execution and gate evidence remains `NOT-RUN` |
-| Change History | 0.12: move multi-location Vault custody and immutable-byte replication into successor Draft scope; retain offline command replay and active/active application operation as deferred; mark the 56-task/756-hour Appendix and Gantt as requiring controlled re-estimation because they predate Gateway/grant/receipt/replication work; no new duration is invented; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.11 routed the Engineering technology baseline; earlier history remains in linked change records. |
-| Change Record | [IE-CHG-VAULT-XFER-001@0.1](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor `DOC-07@0.11` retained in Git history |
-| Supersedes / Superseded by | Supersedes `DOC-07@0.11`; superseded by `NOT-APPLICABLE` |
+| Change History | 0.14: record the internal-first, future-commercial direction and route it to a separate readiness gate without changing the 2026 schedule, effort, tasks, milestones or current Feature/Spec/Tech scope; [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md). 0.13 established the current Technical Pilot plan; earlier history remains in linked change records. |
+| Change Record | [IE-CHG-COMMERCIAL-DIR-001@0.1](registers/CHG-2026-09-17-internal-first-commercial-direction.md); [IE-CHG-ROADMAP-TP-001@0.1](registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md); [IE-CHG-VAULT-XFER-001@0.1](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor `DOC-07@0.12` retained at Git commit `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2` |
+| Supersedes / Superseded by | Supersedes `DOC-07@0.13`; superseded by `NOT-APPLICABLE` |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational retention period is `UNKNOWN`, owner `Product Decision Authority`, review trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -37,10 +37,10 @@ exit evidence. The roadmap index is navigation only.
 
 | Increment Record ID | Source Roadmap Baseline | Status | Version | Owner | First / later gate | Requirement and design trace | Exit evidence |
 |---|---|---|---|---|---|---|---|
-| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
-| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
-| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
-| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
+| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.14` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
+| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.14` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
+| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.14` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
+| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.14` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
 
 <!-- AUTHOR CONTENT START -->
 
@@ -48,11 +48,11 @@ exit evidence. The roadmap index is navigation only.
 
 | Field | Recorded value |
 |---|---|
-| Roadmap objective | Reuse the existing Feature, Spec and Tech material, complete affected design/readiness decisions, and plan the Core v0 Release Spine through conditional MVP acceptance by 31 December 2026. No production implementation starts before its applicable gates. |
+| Roadmap objective | Reuse the approved Feature, Spec and Tech predecessor baseline, disposition the multi-location Vault successor, pass implementation readiness, and demonstrate one production-shaped Technical Pilot by 31 December 2026. The date does not represent full Core v0, company rollout or production acceptance. |
 | Source product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; fixed reference-product public baseline dated 2026-08-26; target-runtime semantics remain explicitly unverified. |
 | Planning assumptions | Assistant acts as Principal Product Author, the project user reviews documents, and the boss decides Feature, Spec and Tech. The user initially administers native accounts and may operate the server; dedicated DevOps, independent/specialist competence and long-term support are not assumed. |
-| Constraints | Internal-company product; clean-room behavioral design; eight Core Product Documents remain detailed authority; three Vietnamese decision briefs are the boss-facing views; English Markdown remains editable authority; no production implementation before applicable gates. |
-| Planning horizon | 7 September–31 December 2026; conditional single-coder forecast in section 3.2. Production slices remain unauthorized until their applicable requirements, design and `PG4` readiness pass. |
+| Constraints | Internal-first company product; clean-room behavioral design; future commercial operation is several years away and not part of Core v0 or the 2026 Technical Pilot; eight Core Product Documents remain detailed authority; three Vietnamese decision briefs are the boss-facing views; English Markdown remains editable authority; no production implementation before applicable gates. |
+| Planning horizon | 18 September–31 December 2026; weekday-only single-coder baseline in section 3.2. Saturdays are not planned capacity. Production slices remain unauthorized until their applicable requirements, design and `PG4` readiness pass. |
 
 ## 2. Decision presentation plan
 
@@ -82,150 +82,129 @@ Do not infer a new approval from a version update.
 | `IE-INC-TECH-001` | Select architecture and technology against approved requirements | Approved Spec decision; DOC-02/04/05/06/08; ADR/RSK | Spec stability; official lifecycle/support evidence; deployment constraints | Principal Product Author; boss decides Tech | `PG3` | `Draft` |
 | `IE-INC-READY-001` | Establish a bounded, testable and recoverable implementation increment | Approved Feature, Spec and Tech; DOC-07; VVP/RSK/CMP/CHG | Named implementation scope; test, migration, rollback and review readiness | Principal Product Author | `PG4` | `Draft` |
 
-### 3.1 Candidate implementation vertical slices after PG4
+### 3.1 Candidate implementation sequence after PG4
 
-These slices are planning candidates only. They do not authorize code.
+The sequence builds one end-to-end thread before broadening the product. It does not remove any
+approved Feature or Spec obligation; it limits what must be complete for the 31 December Technical
+Pilot. Each implementation phase receives its own Spec Kit plan and task set before code starts.
 
-1. **Accounts and controlled identity** — Controlled first-admin setup, native accounts/session
-   eligibility, account/product permission separation and Audit, then Logical Document, metadata,
-   numbering, Artifact and immutable Generation foundations. The first document flow cannot bypass
-   account/owner authorization; this is one bounded foundation slice, not a separate identity product.
-2. **Safe workspace publish** — Store Existing first, then New on the same model; Checkout,
-   Reference, Check-in, stale conflict, recovery and local-work preservation.
-3. **Engineering release** — Structure Snapshot, review, independent Approval, Release Record,
-   Controlled Release Package and exact reproduction.
-4. **Format depth** — Generic controlled-file baseline plus the first deep IRONCAD capability profile,
-   without executing IDEA code inside the design tool.
-5. **Internal pilot and UX hardening** — Canonical demo first; representative internal evidence only
-   when a pilot project and eligible participants are assigned.
+1. **Implementation readiness** — Pin the approved predecessor, disposition the Vault successor,
+   select the first bounded increment, prepare the canonical dataset and record the `PG4` result.
+2. **Running foundation** — Start Web, Desktop Workspace, Server, PostgreSQL and one Artifact Gateway;
+   establish native account/session eligibility, migration, health and attributable Audit seams.
+3. **Controlled-document core** — Store Existing/New, Logical Document identity, Revision, Version,
+   immutable Generation, metadata, numbering and authorized find/browse.
+4. **Safe Workspace and distributed custody** — Checkout, Reference, Check-in, stale handling,
+   idempotent retry, resumable direct byte transfer, two verified locations and exact-read failover.
+5. **Engineering Review and Release** — Structure Snapshot, Review, Approval/Reject, Release Record,
+   exact Controlled Release Package and retrieval of the historical baseline.
+6. **Technical Pilot hardening** — End-to-end regression, authorization/security checks, representative
+   transfer measurements, backup/restore, packaging, operating guidance and bounded demonstration.
 
+Deep processing for all target CAD/Office formats, a graphical workflow designer, company-login
+integration, hundreds-of-terabytes scale proof and multi-site active/active operation are not exit
+conditions for the 31 December Technical Pilot. They remain in the product scope or controlled
+future increments; the roadmap does not convert them into rejected requirements.
 
-### 3.2 December 2026 schedule and task appendix
+### 3.2 Technical Pilot schedule and task appendix
 
-**Schedule baseline: `IE-PLAN-DEC2026-001@0.1`, Draft, prepared 5 September 2026.**
-The target is a bounded Core v0 MVP acceptance by **31 December 2026**, not company-wide rollout,
-complete reference-product parity or standards conformity.
+**Schedule baseline: `IE-PLAN-DEC2026-002@0.1`, Draft, prepared 17 September 2026.**
+The target is a bounded **Technical Pilot on 31 December 2026**, not full Core v0 acceptance,
+company-wide rollout, production authorization or complete reference-product parity.
 
 The package has one planning authority:
 
-- **This DOC-07** owns the summary, schedule assumptions, dependencies, responsibility and gates.
-- **[Appendix A — 56 tasks](planning/DOC-07-appendix-A-task-breakdown-december-2026.md)** is a subordinate
-  part of this DOC-07, with task IDs, planned dates/hours, prerequisites, outputs, completion criteria,
-  and Feature/requirement/VVP links. Its Vietnamese text is the retained task description, not an
-  independent requirement specification or a ninth Core Product Document.
-- **[Interactive Gantt](planning/idea-roadmap-december-2026.html)** is the unchanged captured visual
-  view of the same schedule. Its source hash, sandbox and CSP preservation are recorded in the
-  [change record](registers/CHG-2026-09-05-roadmap-task-integration.md). Future schedule changes must
-  reconcile this view with the appendix; a prior Gantt is not a second calendar to maintain separately.
+- **This DOC-07** owns the phase and milestone sequence, capacity, dependencies, gate rules and scope boundary.
+- **[Appendix A — 35 work packages](planning/DOC-07-appendix-A-task-breakdown-december-2026.md)**
+  owns the planning IDs, hours, dependencies, outputs and completion checks. It is subordinate to
+  DOC-07 and does not create product requirements.
+- **[HTML Gantt](planning/idea-roadmap-december-2026.html)** is the visual rendition of the same
+  baseline. It must agree with DOC-07 and Appendix A; it is not an independent schedule.
+- The predecessor 56-task/756-hour schedule remains recoverable at Git commit
+  `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2`. It is not an active execution plan.
 
-All 56 task records start as **not executed under this plan**. Existing documents and the reviewed
-prototype are reused as inputs; inclusion of a preparation task does not erase that prior work.
-Task IDs below are planning identifiers, not claims that implementation increments or 56 tracker
-issues already exist. Spec Kit still owns the later production increment's spec, plan and execution
-tasks; feature `003-controlled-documentation` is not repurposed as Core implementation.
-
-The 56-task / 756-hour Appendix and frozen Gantt predate `REQ-WS-016`, `REQ-OPS-007/008` and
-ADR-0013. They remain historical planning inputs but are **STALE FOR EXECUTION** against this 0.12
-successor until controlled tasks and estimates cover the Artifact Gateway Interface, grant/receipt
-security, multi-location selection, replication/repair, failover, durability-policy configuration and
-their verification. This document does not invent replacement hours before that impact analysis.
+Task IDs in Appendix A are roadmap work-package identities, not tracker issues and not evidence that
+work has started. Before each implementation phase starts, its bounded increment must receive
+the applicable Spec Kit specification, plan, checklist and executable tasks. The existing
+`003-controlled-documentation` feature is not repurposed as product implementation.
 
 #### Capacity and estimation basis
 
 | Item | Planned hours / condition |
 |---|---|
-| Work in groups A–I | **676 hours** across **56 tasks**, each 4–16 hours |
-| Contingency R01–R04 | **80 hours**, already included in the total |
-| Total allocated | **756 hours** |
-| Available weekday capacity | 84 weekdays × 8 hours = **672 hours**, before unconfirmed holidays, leave or other assignments |
-| Proposed additional capacity | 11 Saturdays × 8 hours = **88 hours** |
-| Total conditional capacity | **760 hours**; 4 hours unallocated in addition to the 80-hour contingency |
-| Five-day-only scenario | 672 available hours versus 756 planned: **84 hours short** |
-| Estimation confidence | Initial allocation within the prior Gantt budget, not a measured delivery rate or fixed commitment |
+| Planning window | 18 September–31 December 2026 |
+| Weekday capacity | 75 weekdays × 8 hours = **600 hours**, before holidays, leave and other assignments |
+| Planned phase work | **512 hours** across **35 work packages** |
+| Controlled reserve | **88 hours**, retained inside the weekday capacity |
+| Total allocation | **600 hours** |
+| Saturday capacity | **0 hours in the baseline**; a Saturday requires an explicit reforecast and is not assumed to protect the date |
+| Estimation confidence | Roadmap allocation; actual delivery rate remains unmeasured until `MS1` and must be used for reforecast |
 
-Proposed Saturdays in 2026: **12, 19, 26 September; 3, 10, 17, 24 October; 7, 14, 21, 28 November**.
-The user must confirm the actual working calendar. Holidays, leave and unrelated work have not
-been deducted. Waiting for decisions, IT access, licenses or reviewers can move the end date even
-if active effort remains within budget; contingency hours do not guarantee external availability.
+The project user remains the only assumed coder. Assistant work does not add a second full-time
+engineer. The collaborating colleague may support business explanation and pilot observation when
+assigned; coding or specialist review capacity is not assumed. Task hours include focused coding,
+tests, documentation and review preparation. Waiting for Product Decision Authority, IT, licenses,
+environments or qualified reviewers is elapsed-time risk and cannot be hidden in effort reserve.
 
-The project user is the only coder. Assistant support does not add a second coder's capacity.
-The collaborating colleague may help with business explanation and pilot work when assigned; no
-coding or independent-specialist capacity is assumed for that person. Each task's hours include
-its focused implementation, test, documentation and review/demo preparation effort. UI and tests
-are built with B–F; G completes shared UI/localization and H verifies integration and operations.
-Do not add the same test hours a second time.
+#### Phase allocation and reserve summary
 
-#### Work-package summary
+The plan distinguishes a **phase** from a **milestone**. A phase consumes elapsed time and effort;
+a milestone is a zero-duration review or decision point at the end of that phase. The earlier draft
+incorrectly used one label for both concepts.
 
-| Group | Output | Tasks | Hours | Main dependency / proof |
-|---|---|---:|---:|---|
-| A | Reconciled inputs, reviewed design and implementation readiness | A01–A07 (7) | 48 | Reuse current briefs; F01–F03 informs A05; A07/gates before B01 |
-| B | Native accounts, access policy, Audit and working administration UI | B01–B06 (6) | 80 | A07; account administration does not grant document approval; revoke old sessions |
-| C | Store Existing/New, controlled identity/history, metadata/numbering and basic authorized find/browse | C01–C06 (6) | 80 | B; initial Check-in already enforces entitlement and exact scope; no ungoverned upload path |
-| D | Windows Workspace, Checkout/Reference, atomic Check-in and conflict recovery | D01–D08 (8) | 120 | C; success and No Change end Checkout; failure preserves local work and valid entitlement |
-| E | Exact structure, versioned workflow, Approval/Release, export and new Revision | E01–E07 (7) | 100 | D and relevant R02 findings resolved; exact historic release remains reproducible |
-| F | Early IRONCAD qualification followed by the approved deep format profile | F01–F07 (7) | 88 | 24 hours early after A04; 64 hours implementation after E; early spike alone is not deep support |
-| G | Shared UI refinement and English/Vietnamese/Japanese behavior | G01–G04 (4) | 40 | E/F and relevant R03 findings resolved; UI already built progressively |
-| H | Integrated verification, security/load checks, restore, installation and operations | H01–H07 (7) | 80 | B–G; approved environment/workload, IT and competent reviews |
-| I | Representative pilot, fixes, retest and acceptance package | I01–I04 (4) | 40 | H07 passes; authorized dataset, eligible participants and acceptance authority |
-| R | Contingency at readiness, file-flow, CAD and final acceptance boundaries | R01–R04 (4 reserves, not extra implementation tasks) | 80 | Track actual use and affected retest; no automatic gate clearance |
+| Phase | Planned work | Reserve | Capacity | Main demonstrable outcome |
+|---|---:|---:|---:|---|
+| PH0 — Implementation readiness | 64 | 24 | 88 | Successor disposition, bounded increment package and recorded `PG4` result |
+| PH1 — Running foundation | 72 | 8 | 80 | Web/Desktop/Server/PostgreSQL/Gateway path with native login and Audit seam |
+| PH2 — Controlled-document core | 96 | 24 | 120 | Store/Create, identity, Revision/Version/Generation and authorized retrieval |
+| PH3 — Workspace and multi-location Vault | 144 | 16 | 160 | Safe Checkout/Reference/Check-in and direct resumable transfer to verified locations |
+| PH4 — Review and Release | 72 | 8 | 80 | Exact Review/Approval/Release and reproducible released package |
+| PH5 — Hardening and Technical Pilot | 64 | 8 | 72 | Regression, security, transfer, restore and pilot evidence |
+| **Total** | **512** | **88** | **600** | One bounded production-shaped thread; not full Core v0 |
 
-The appendix maps all **14 Feature groups** and **74 currently identified requirements** to planned
-work, plus the **15 VVP objectives**. This is a coverage map, not evidence of implementation or full
-verification. A02 must finish the basic find/browse detail; any newly admitted requirements require
-trace and estimate updates. The scope and deferrals in section 8 are unchanged.
+Reserve is not unnamed feature capacity. It is used only for a recorded estimate variance, defect,
+retest or approved dependency impact. Unused reserve stays unused. A phase may start only after its
+predecessor milestone passes; spare hours do not waive a gate.
 
-#### Resource sequence
+#### Phase sequence
 
-Dates are in 2026. A half-day is four allocated working hours, not a promised appointment.
-The sequence uses one coder without double-booked effort. Actual start also depends on the gates
-and inputs, not just the prior row ending.
+| Phase | Work-package range | Planned start | Planned finish | Baseline capacity | Starts after |
+|---|---|---|---|---:|---|
+| PH0 — Implementation readiness | P01–P07 | 18 September | 2 October | 88 h | Roadmap direction selected |
+| PH1 — Running foundation | F01–F05 | 5 October | 16 October | 80 h | `MS0` passes |
+| PH2 — Controlled-document core | C01–C05 | 19 October | 6 November | 120 h | `MS1` passes |
+| PH3 — Workspace and multi-location Vault | W01–W07 | 9 November | 4 December | 160 h | `MS2` passes |
+| PH4 — Review and Release | L01–L05 | 7 December | 18 December | 80 h | `MS3` passes |
+| PH5 — Hardening and Technical Pilot | Q01–Q06 | 21 December | 31 December | 72 h | `MS4` passes |
 
-| Sequence | Task range / reserve | Hours | Planned start | Planned finish |
-|---|---|---:|---|---|
-| Initial design review | A01–A04 | 28 | 7 September | 10 September, first half |
-| Early IRONCAD qualification | F01–F03 | 24 | 10 September, second half | 14 September, first half |
-| Design reconciliation and first-increment readiness | A05–A07 | 20 | 14 September, second half | 16 September |
-| Readiness contingency | R01 | 16 | 17 September | 18 September |
-| Accounts, policy and Audit | B01–B06 | 80 | 19 September | 30 September |
-| Controlled documents | C01–C06 | 80 | 1 October | 12 October |
-| Workspace and Check-in | D01–D08 | 120 | 13 October | 29 October |
-| File-flow contingency | R02 | 16 | 30 October | 2 November |
-| Structure and engineering release | E01–E07 | 100 | 3 November | 17 November, first half |
-| Deep IRONCAD implementation | F04–F07 | 64 | 17 November, second half | 26 November, first half |
-| CAD contingency | R03 | 16 | 26 November, second half | 28 November, first half |
-| Shared UI and locales | G01–G04 | 40 | 28 November, second half | 4 December, first half |
-| System and operational verification | H01–H07 | 80 | 4 December, second half | 18 December, first half |
-| Representative pilot and fixes | I01–I04 | 40 | 18 December, second half | 25 December, first half |
-| Final contingency and affected retest | R04 | 32 | 25 December, second half | 31 December, first half |
+#### Milestone and decision register
 
-If a reserve is unnecessary, later work may move forward only after its prerequisites pass; retain
-the unused budget rather than inventing work to consume it. If a block exceeds its allocation,
-record the actual effort and impact, use a named reserve or reforecast. Never silently remove a
-feature, reduce the deep format commitment or omit verification to fit the date.
+| ID / target date | Type | Decision or required evidence | Consequence when not passed |
+|---|---|---|---|
+| `D0` / no later than 25 September | Product decision checkpoint | Product Decision Authority records the exact disposition of the multi-location Vault Spec/Tech successor, or explicitly keeps it outside the first increment. | `MS0` cannot claim an approved implementation baseline containing that successor. |
+| `MS0` / 2 October | `PG4` implementation-readiness gate | Exact approved baseline and delta are identified; first increment scope, tests, migration/recovery, environment and open authorities are recorded. | PH1 does not start; result remains `BLOCKED` or `NOT-RUN`. |
+| `MS1` / 16 October | Foundation demonstration and reforecast | Authorized user reaches Web and Desktop paths; Server, PostgreSQL and one Gateway report health; migration and attributable Audit seams run in the permitted environment. | PH2 waits; remaining plan is re-estimated from observed delivery rate. |
+| `MS2` / 6 November | Controlled-document vertical-slice review | A user stores or creates a document, obtains stable identity and an immutable Generation, then finds and opens the authorized exact version; unauthorized retrieval is rejected. | PH3 waits until identity/history and authorization defects are resolved. |
+| `MS3` / 4 December | Workspace/Vault safety review and reforecast | Two test identities demonstrate Checkout, Reference and Check-in, including `NoChange`, stale, interruption and same-operation retry; file bytes bypass the business Server and one Artifact has two verified locations. | PH4 waits; remaining dates are reforecast. |
+| `MS4` / 18 December | Release Spine demonstration | One exact Generation and structure scope moves through Review and Approval/Reject to Release; an incomplete or changed scope is rejected; the historical release package is reproduced after later work continues. | PH5 may harden completed slices but cannot claim an end-to-end pilot candidate. |
+| `MS5` / 31 December | Technical Pilot review | The canonical scenario passes bounded regression, authorization, transfer and restore checks; known limitations and defects are recorded. | Report the actual partial result; do not claim full Core v0, production readiness or rollout. |
 
-#### Review milestones and responsibilities
+Every milestone requires a working demonstration, relevant automated tests, requirement/design
+trace, migration/rollback treatment, updated operating notes and no unresolved defect that can lose
+an Artifact, publish the wrong Generation, bypass authority or release the wrong scope.
 
-| Target date | Demonstrable output / decision | Responsibility and condition |
-|---|---|---|
-| 18 September | A and the early F probe support the first implementation-ready increment | User reviews; Product Decision Authority/IT/specialists supply their required decisions. A date is not PG4 evidence. |
-| 30 September | B06 account/policy/Audit demo; reforecast using actual first-slice effort | User implements/reviews; Principal Product Author prepares comparison and remaining forecast. |
-| 12 October | C06 document intake/history/metadata/search demo | User reviews the approved dataset and authorized find/browse results; not the complete multi-file Workspace. |
-| 29 October | D08 two-identity/two-Workspace demonstration including stale, expiry, network loss and retry | User performs bounded functional tests; one person operating two identities is not representative-user or independent review evidence. |
-| 26 November | E/F release proof and evidenced deep IRONCAD profile | Exact sample/tool/version and reviewed profile required; storing/opening files alone is insufficient. |
-| 18 December | H07 verification and recovery evidence sufficient to enter a controlled pilot | Required qualified review and company permissions; unresolved severe failures block transition. |
-| 31 December | I04 plus any required R04 work support a bounded MVP acceptance | Eligible pilot participants and acceptance authority; no implied company-wide rollout. |
+#### Execution and reforecast rhythm
 
-A01 reconciles the actual submitted Human/editorial copies and recorded decisions against the source
-set. Do not repeat settled product decisions or infer a requirement discrepancy from a changed
-filename, style or version label alone. A04 requests the environment, license/install conditions,
-reviewer availability and representative pilot participants early; H/I do not first discover these needs.
-
-Mandatory reforecast points are **F03** (tool/profile feasibility and effort) and **B06 on 30 September**
-(actual delivery rate). At each completed group, track status, actual/remaining hours, affected task
-dependencies and evidence. Escalate missing specialist or company authority to the user instead of
-substituting self-review. The boss still decides exactly **Feature, Spec and Tech**; this roadmap does
-not add a fourth product decision axis.
+- Plan the current week on the first working day; keep at most one primary implementation task in
+  progress for the single coder.
+- Record actual hours, remaining estimate, blocker and evidence link when a work package closes.
+- Demonstrate an executable slice and reforecast at the milestone closing each phase.
+- Mandatory whole-roadmap reforecasts occur after `MS0` (`PG4` and external prerequisites) and after `MS3`
+  (measured Workspace/Vault effort). A variance above 20% in any phase also triggers reforecast.
+- Red status means a gate, authority, environment or critical correctness condition is blocked;
+  moving dates or using reserve cannot turn it green without resolving the cause.
+- The boss continues to decide exactly **Feature, Spec and Tech**. Internal planning approval and
+  milestone review do not add a fourth product-decision axis.
 
 ## 4. MVP Release Spine
 
@@ -312,7 +291,8 @@ disposition. Deferral does not erase the long-term target.
 | Internal engineering outcome | Measure control, integrity, release-risk, quality, maintainability or evidenced efficiency | Reference-backed hypothesis; internal validation `BLOCKED` |
 | Technical evidence | Pin dataset, environment, identities, scope, result and limitation | `NOT-RUN` |
 | Representative adoption | Requires named pilot group, project, users and Internal Adoption Authority | `BLOCKED` |
-| Commercial objective | Pricing, revenue, acquisition, market share, market fit and external buyers | `NOT APPLICABLE` |
+| Commercial objective | Pricing, revenue, acquisition, market share, market fit and external buyers | `DEFERRED`; no current target or delivery task. Apply the safeguards in `IE-GOV-COMMERCIAL-001` when related work is touched. |
+| Future commercial authorization | External pilot, offer, installation, external-data processing or sale | Separate Commercial Readiness Gate; several years away; all gate evidence `NOT-RUN` and required Legal/Security authorities `BLOCKED` until assigned |
 
 ## 10. Pilot and rollout claim boundary
 
@@ -332,10 +312,10 @@ disposition. Deferral does not erase the long-term target.
 | `SOURCE-DECISION` | Accepted constitution, product ADRs and stakeholder decisions establishing internal scope, Release Spine and three boss decision axes | Linked at repository baseline; exact decision ledger to be instantiated before `Proposed` |
 | `SOURCE-EVIDENCE` | Product knowledge, reference-coverage records and prototype evidence | Knowledge sources and `IE-GOV-COVERAGE-001@0.3` exist; exact target-runtime evidence remains `BLOCKED` |
 | `DOWNSTREAM` | DOC-01…DOC-08, three decision briefs and later increments | Eight Core Drafts, three brief Drafts and initial GOV/VVP records instantiated |
-| `CHANGE` | [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md), retained predecessor change records and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | Draft 0.12 changes storage/transfer scope and marks the predecessor task estimate stale; exact successor approval and re-estimation are `NOT-RUN`. |
+| `CHANGE` | [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md), [IE-CHG-ROADMAP-TP-001](registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md), [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md), retained predecessor change records and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | Draft 0.14 preserves the Technical Pilot plan and records the deferred commercial trajectory; execution, `PG4`, exact Vault-successor approval and the Commercial Readiness Gate remain `NOT-RUN`. |
 | `VERIFICATION` | VVP/VEV gate and Release Spine evidence | `NOT-RUN` |
 | `RELEASE` | REL manifest for a future implementation/release | `NOT APPLICABLE` to this draft |
-| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md) and [Gantt](planning/idea-roadmap-december-2026.html); source pins in the change records | Both are retained predecessor planning views and are `STALE FOR EXECUTION` against Draft 0.12 pending re-estimation. No DOC-07 Word/PDF is rewritten. |
+| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt](planning/idea-roadmap-december-2026.html) and [Kanban CARIO register](planning/idea-technical-pilot-kanban-cario.md); source pins in the change records | All are current Draft renditions of `IE-PLAN-DEC2026-002@0.1`. The Kanban register contains 53 delivery cards and 7 zero-effort decision/milestone cards and follows the company board states; implementation evidence remains `NOT-RUN`. No DOC-07 Word/PDF is rewritten. |
 
 <!-- AUTHOR CONTENT END -->
 

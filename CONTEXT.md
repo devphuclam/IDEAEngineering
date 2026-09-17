@@ -5,12 +5,32 @@ IDEA Engineering is the canonical C1 product context for controlled engineering 
 ## Product and platform scope
 
 **IDEA Engineering**:
-The independently implemented internal company product that owns controlled engineering data and its PDM-to-PLM lifecycle inside C1, uses the DDM Reference Baseline as its default long-term behavioral target, and admits reviewed Aras-informed improvements. It is built for the company's own engineering work and is not currently a commercial multi-customer offering.
-_Avoid_: IDEA Platform, DDM implementation clone, icVault clone, commercial SaaS offering, ungoverned departmental script
+The independently implemented company product that owns controlled engineering data and its PDM-to-PLM lifecycle inside C1, uses the DDM Reference Baseline as its default long-term behavioral target, and admits reviewed Aras-informed improvements. Its current and several-years-ahead operating purpose is internal engineering work. A later commercial offering is a separately governed direction, not a current multi-customer capability or release claim.
+_Avoid_: IDEA Platform, DDM implementation clone, icVault clone, current commercial SaaS offering, commercially ready by implication, ungoverned departmental script
 
 **Internal Operational Value**:
-The evidenced benefit IDEA Engineering provides to the company through controlled Product Definition, reduced wrong-baseline and release risk, protected engineering work, attributable decisions, recoverability, maintainability, and measured workflow efficiency. Sales, revenue, market share, customer acquisition, and market fit are not current product outcomes.
+The evidenced benefit IDEA Engineering provides to the company through controlled Product Definition, reduced wrong-baseline and release risk, protected engineering work, attributable decisions, recoverability, maintainability, and measured workflow efficiency. Sales, revenue, market share, customer acquisition, and market fit are not current product outcomes; a long-term commercial direction does not convert them into present success measures.
 _Avoid_: unmeasured savings claim, commercial business case, competitor feature count
+
+**Internal-First Commercial Direction**:
+The accepted trajectory in which IDEA Engineering is designed, delivered and validated for internal company use for the next several years while avoiding preventable barriers to a later separately approved commercial offering. It requires proportional safeguards such as clean-room provenance, third-party license tracking, portable data and company-neutral configuration, but it does not add billing, SaaS, licensing enforcement, external support or a sales date to Core v0.
+_Avoid_: commercially ready, current customer requirement, hidden second roadmap, automatic market expansion
+
+**Commercial Readiness Gate**:
+The future evidence-and-authority checkpoint that must pass before IDEA is offered, installed or used for an external organization or processes its data. It requires an exact offering, named Commercial, Legal and Security/Operations authorities, IP and third-party-rights evidence, applicable data/privacy treatment, security and operational proof, support terms, customer exit and release evidence. Internal technical success cannot pass this gate by implication.
+_Avoid_: Product Gate 4, internal pilot, marketing checklist, developer self-approval, legal compliance claim without counsel
+
+**Commercial Readiness Coordinator**:
+The role that maintains the future-readiness register, gathers evidence and routes unresolved items. It may be held initially by the project user but cannot approve its own legal, security or commercial conclusions.
+_Avoid_: Commercial Decision Authority, Legal Review Authority, product owner by implication
+
+**Commercial Decision Authority**:
+The company role accountable for deciding whether an exact IDEA offering may enter an external pilot, be offered or be sold. It is separate from the Product Decision Authority's Feature/Spec/Tech decisions even if the company later assigns both roles to the same person.
+_Avoid_: salesperson by default, Product Decision Authority by implication, undocumented permission to sell
+
+**Legal Review Authority**:
+The company-appointed qualified role or counsel that determines applicable law and accepts the legal package for an exact offering and market. Engineering research and a legal watchlist support this review but do not substitute for it.
+_Avoid_: Principal Product Author, web research treated as legal advice, compliance by self-declaration
 
 **DDM Reference Baseline**:
 The controlled, version- and evidence-scoped set of externally observable DDM capabilities, workflows, and user-visible semantics that forms IDEA Engineering's default long-term behavioral target. It excludes DDM source, internal schema, undocumented protocol, branding, and other implementation material.
@@ -25,8 +45,8 @@ The reviewed outcome for one reference behavior: `ADOPT` preserves the evidenced
 _Avoid_: implementation status, evidence class, silent divergence
 
 **Operating Organization**:
-The company governance boundary that owns and operates IDEA Engineering for internal use, including its applicable users, access policy, controlled product data, configuration, retention obligations, and audit evidence. The current product scope has one Operating Organization; a later separately governed internal scope requires an explicit product decision and does not turn the product into a commercial tenant service.
-_Avoid_: customer account, Microsoft Entra tenant, deployment instance, commercial tenant
+The governance boundary that owns and operates one IDEA product-data estate, including its applicable users, access policy, controlled product data, configuration, retention obligations, and audit evidence. The current product scope has one company Operating Organization. A later internal separation or commercial customer boundary requires an explicit successor decision and does not arise merely by adding a Project or deployment instance.
+_Avoid_: customer account today, Microsoft Entra tenant, deployment instance, commercial tenant by implication
 
 **Actor**:
 The stable accountable identity to which IDEA attributes a command, decision or Audit event within an Operating Organization. It remains distinguishable from the login name or authentication method used at the time, and an automated actor cannot substitute for a required eligible human approver.
@@ -209,11 +229,11 @@ The requirement that the Operating Organization's identities, policy, controlled
 _Avoid_: multi-tenant SaaS requirement, environment label alone, access control alone
 
 **Company-Controlled Deployment**:
-The pilot operating constraint that IDEA Engineering can run in an on-premises or private-cloud environment controlled by the company, without a mandatory public-cloud dependency. It does not by itself select a vendor, identity provider, physical topology, or tenancy model.
-_Avoid_: public-SaaS requirement, desktop-only product, selected deployment architecture
+The current operating constraint that IDEA Engineering can run in an on-premises or private-cloud environment controlled by the company, without a mandatory public-cloud dependency. The same deployment style is the preferred first candidate for a future commercial assessment, but no customer topology, license mechanism, vendor, identity provider or tenancy model is selected by this term.
+_Avoid_: public-SaaS requirement, desktop-only product, selected customer deployment architecture, commercial readiness
 
 **Minimum Viable Product (MVP)**:
-The first minimum end-to-end IDEA Engineering product baseline verified against its approved requirements using the Canonical Demo Dataset. Its mandatory proof follows the MVP Release Spine and includes the Generic Controlled-File Baseline plus one evidenced deep CAD Format Capability Profile. The MVP label and synthetic-data results establish only the evidenced functional scope; internal user acceptance, productivity improvement, and operational readiness remain `UNKNOWN` until representative measurements exist, while commercial market viability is `NOT APPLICABLE`.
+The first minimum end-to-end IDEA Engineering product baseline verified against its approved requirements using the Canonical Demo Dataset. Its mandatory proof follows the MVP Release Spine and includes the Generic Controlled-File Baseline plus one evidenced deep CAD Format Capability Profile. The MVP label and synthetic-data results establish only the evidenced functional scope; internal user acceptance, productivity improvement, and operational readiness remain `UNKNOWN` until representative measurements exist, while commercial market viability is outside this MVP and remains `NOT-RUN` under the separate future gate.
 _Avoid_: prototype, production-ready release, internal-adoption evidence, full PLM scope
 
 **Core v0**:
@@ -233,7 +253,7 @@ A controlled, sanitized copy of a small real internal engineering project that r
 _Avoid_: synthetic dataset, live production cutover, arbitrary showcase files, company-wide acceptance evidence
 
 **MVP Evidence Claim**:
-The bounded statement supported by MVP and Pilot-Ready verification: IDEA preserves controlled Product Definition, prevents stale or unauthorized publication, retains rejected local work, records attributable review and release history, reproduces an exact Released Baseline, and restores the tested baseline consistently. Time savings, internal adoption, operational readiness, return on internal investment, and complete reference-product parity require separate measured evidence; commercial market fit is outside product scope.
+The bounded statement supported by MVP and Pilot-Ready verification: IDEA preserves controlled Product Definition, prevents stale or unauthorized publication, retains rejected local work, records attributable review and release history, reproduces an exact Released Baseline, and restores the tested baseline consistently. Time savings, internal adoption, operational readiness, return on internal investment, complete reference-product parity and commercial viability require separate evidence; commercial viability is outside the MVP and cannot be inferred from internal verification.
 _Avoid_: unmeasured productivity promise, parity claim from feature presence, company-wide rollout claim
 
 **MVP Success Metric Set**:
