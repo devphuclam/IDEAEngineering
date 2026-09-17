@@ -3,19 +3,19 @@
 | Thông tin | Nội dung |
 |---|---|
 | Mã tài liệu / Stable ID | `TECH-001` |
-| Phiên bản / ngày soạn | `0.14` / `15-09-2026` |
+| Phiên bản / ngày soạn | `0.15` / `17-09-2026` |
 | Trạng thái | `Draft` — Engineering Technology Selection đã hoàn tất; Product Decision Authority review/approval `NOT-RUN` |
 | Vai trò | Brief tiếng Việt để sếp xem xét trục Tech; không phải Core Product Document và không tự phê duyệt stack |
 | Người soạn / review | Principal Product Author — trợ lý soạn; review nội bộ đầy đủ `NOT-RUN` |
 | Người quyết định | Sếp — `Product Decision Authority` |
 | Product Normativity | `INFORMATIVE` — không tạo FTR/REQ và không đổi hành vi sản phẩm |
 | Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.6`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); Q-15 [`Phase 1`](../registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [`Phase 2`](../registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md), [`Phase 3`](../registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md); các nguồn chính thức được ghim trong matrix |
-| Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.11 (chỉ cập nhật định tuyến), DOC-08@0.12, GOV@0.3, VVP@0.16 và các ADR đã Accepted |
-| Sơ đồ kỹ thuật | [`IE-ARC-TECH-VIEW-001@0.1`](../technology/IDEA-core-v0-technology-architecture-views.md) gồm `TECH-D01…D08`; kiểm chứng render [`IE-VEV-TECH-VIEW-001@0.1`](../registers/VEV-2026-09-15-technology-architecture-view-set.md) |
-| Change Record | [`IE-CHG-TECH-BASELINE-001@0.1`](../registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); predecessor `TECH-001@0.13`, SHA-256 `A0452BA6EE51AC4C785CF5F637E243A3463A89EB9B47C8F263DCA24EFF503782` |
-| Supersedes / Superseded by | Supersedes `TECH-001@0.13`; superseded by `NOT-APPLICABLE` |
+| Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.12, DOC-08@0.13, GOV@0.3, VVP@0.17 và các ADR đã Accepted/Proposed theo trạng thái ghi trong từng ADR |
+| Sơ đồ kỹ thuật | [`IE-ARC-TECH-VIEW-001@0.3`](../technology/IDEA-core-v0-technology-architecture-views.md) gồm `TECH-D01…D08`; render/review cho bản 0.3 `NOT-RUN`, bản render 0.2 chỉ là bằng chứng lịch sử |
+| Change Record | [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); [`IE-CHG-TECH-BASELINE-001@0.1`](../registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md) vẫn sở hữu quyết định Tech Stack |
+| Supersedes / Superseded by | Supersedes `TECH-001@0.14`; superseded by `NOT-APPLICABLE` |
 | Giới hạn | Chỉ ghi nhận lựa chọn ở cấp Engineering để trình sếp. Chưa viết production code, chưa cài đặt/triển khai, chưa mua license/hạ tầng và không tuyên bố PG3/PG4 `PASS`. |
-| Trạng thái quyết định | Engineering Technology Selection: `COMPLETE`; Core v0 Engineering Baseline: `SELECTED`; Product Decision Authority Approval: `NOT-RUN`; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
+| Trạng thái quyết định | Engineering Technology Selection: `COMPLETE`; exact predecessor Tech baseline 0.14: PDA `APPROVED`; exact 0.15 Vault successor: PDA `NOT-RUN`; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
 
 ## 1. Kết luận để sếp phản biện
 
@@ -30,9 +30,9 @@ Bounded Spring tasks + transactional outbox dispatcher; Actuator/Micrometer/OTel
 React 19.3 + TypeScript 7 + Vite 8.3 / Node 22 LTS build
 WPF net10.0-windows + WebView2 Evergreen
 Workspace .NET 10 riêng theo từng Windows user, IPC named pipe có xác thực
-Private server-managed filesystem Artifact Store
+Multi-location Artifact Gateway/Vault boundary; initial filesystem-backed Vault Adapter remains the Core v0 implementation direction; exact Gateway runtime/toolchain/provider `NOT-RUN`
 Separate Windows Format Worker khi CAD/Office/license yêu cầu
-Signed/versioned executable-JAR bundle + systemd trên một VM/company-managed, không HA
+Signed/versioned executable-JAR bundle + systemd trên một Server VM/company-managed; Artifact bytes ở nhiều Vault location; Server vẫn không HA
 Actuator/Micrometer/OpenTelemetry/JFR + PostgreSQL PITR/WAL và backup độc lập
 ```
 
@@ -80,14 +80,14 @@ nhanh hơn, scale hơn hoặc “enterprise-grade” hơn.
 | Embedded renderer | `SELECT` | WebView2 Evergreen | Ưu tiên runtime được IT cập nhật tập trung; Fixed chỉ là fallback khi policy/offline bắt buộc. |
 | Workspace runtime | `SELECT` | Separate per-user `.NET 10` process | Local materialization/custody, hash, journal, resume, external CAD/Office launch và recovery; không sở hữu Product Definition. |
 | Workspace IPC | `SELECT` | Current-user named pipes + authenticated/versioned/scope-bound messages | ACL không đủ một mình; có replay/size/version checks, cross-user refusal và reconnect an toàn. |
-| Artifact store | `SELECT` | Private server-managed filesystem-backed adapter | Digest-addressed immutable bytes, provider-neutral IDs, Server-mediated access; không expose SMB. |
+| Artifact custody / Vault | `SELECT — ARCHITECTURE BOUNDARY`; exact Gateway runtime/toolchain/provider `NOT-RUN` | Multi-location Artifact Gateway/Vault + provider-neutral Adapter; initial Vault Adapter direction remains filesystem-backed | Server authorizes, selects location and commits product state. Workspace transfers large bytes directly through a selected Gateway using a short-lived scoped grant. Gateway verifies bytes and returns a Transfer Receipt but cannot publish a Generation. Raw SMB/path and permanent Vault credential are not exposed. Exact host count, durability threshold and failure domains remain open. |
 | Format Worker | `SELECT` | Separate Windows worker + exact Format Adapter profile | Worker tạo candidate; owner Module mới verify/accept Representation theo Generation nguồn. Manual upload vẫn có. |
 | Server OS | `SELECT — platform direction` | Ubuntu Server 26.04 LTS | Canonical lifecycle, Temurin 25 và PGDG PostgreSQL 18 package paths đã có official source; Q-14 vẫn phải qualify exact operational build. |
 | Deployment packaging | `SELECT` | Signed/versioned executable-JAR bundle + systemd, Temurin host-managed; config/secrets ngoài bundle | Ít lớp hơn custom `.deb`; preflight Flyway, signature/SBOM, health check, patch và rollback phải thử. |
 | Reverse proxy/TLS | `SELECT` | Company-approved Nginx baseline + managed certificate | TLS/origin/header policy thuộc deployment; Nginx không thay Access Policy. |
 | Background jobs | `SELECT` | Bounded Spring task execution/scheduling; Format Worker tách riêng | Outbox/maintenance có Operation ID, persisted state, bounded retry/lease và idempotency. Spring Batch chỉ `CONDITIONAL` khi có workload restartable/chunked thực tế. |
 | Observability | `SELECT` | Spring Actuator/Micrometer + OpenTelemetry/OTLP + structured JSON logs + JFR/`jcmd` | Audit Evidence tách khỏi log; backend/export/retention để company chọn và phải qualify. |
-| Backup/recovery | `SELECT` có điều kiện | PostgreSQL base backup + WAL/PITR + coordinated Artifact/config/policy/key backup ở failure domain khác | RTO ≤4 giờ làm việc và RPO ≤1 giờ chỉ là mục tiêu sơ bộ; chưa có đo đạt. Một VM không phải HA. |
+| Backup/recovery | `SELECT` có điều kiện | PostgreSQL base backup + WAL/PITR + coordinated Artifact/config/policy/key backup ở failure domain khác | Vault replication supports online custody but is not backup. RTO ≤4 giờ làm việc và RPO ≤1 giờ chỉ là mục tiêu sơ bộ; chưa có đo đạt. Nhiều Vault không làm Server thành HA. |
 
 ### 2.1 Phân loại dependency
 
@@ -165,7 +165,7 @@ restore support thực tế. Không chọn nó chỉ vì DDM dùng SQL Server; c
 open source. Q-02/Q-03/Q-07/Q-14 là căn cứ chuyển đổi.
 
 Không dùng database để lưu byte Artifact. DB giữ metadata, authorization, workflow, structure,
-Audit, projection, configuration và outbox; Artifact Store giữ bytes/digest/location.
+Audit, projection, configuration và outbox; các Vault giữ byte, còn DB giữ location/digest/policy.
 
 ### 4.2 Cách truy cập dữ liệu
 
@@ -295,8 +295,10 @@ không mâu thuẫn: **baseline đã chọn**, nhưng **Q-15 vẫn `PARTIAL / NO
 
 Workspace `.NET 10` chạy per-user, không phải machine-wide service và không sở hữu Product Definition.
 Nó giữ local file, hash, transfer journal, resumable transfer, phát hiện local change, mở Office/CAD
-và recovery state. Core v0 dùng `Store → Server → Workspace`; không cấp credential để client đi thẳng
-vào Artifact Store.
+và recovery state. Lệnh nghiệp vụ vẫn đi qua Server. Với file lớn, Server cấp `Transfer Grant` ngắn hạn
+cho đúng Operation, Artifact, Gateway, phạm vi byte, kích thước/digest và thời hạn; Workspace truyền
+byte trực tiếp với Gateway đã chọn. Client không nhận credential lâu dài hoặc đường dẫn thô của Vault.
+Gateway trả `Transfer Receipt` để Server kiểm tra lại; truyền xong chưa đồng nghĩa Check-in thành công.
 
 Named pipe `CurrentUserOnly` chỉ là lớp OS đầu tiên. Message phải có authentication, protocol version,
 session/Workspace scope, size limit, replay refusal và reconnect an toàn. Không expose generic
@@ -318,7 +320,7 @@ nhất một điều kiện sau:
 | `TRIGGER-CLIENT-07` | Số đo cho thấy chi phí làm hoặc bảo trì bridge WPF/WebView2 vượt ngưỡng đã duyệt. |
 | `TRIGGER-CLIENT-08` | Qualification sau này cho thấy Flutter có lợi thế material về tổng chi phí hoặc tổng rủi ro và lợi thế đó được chấp nhận. |
 
-## 8. Search, Artifact Store và Format Worker
+## 8. Search, Artifact Gateway/Vault và Format Worker
 
 ### Search
 
@@ -327,12 +329,20 @@ sort/page/permission predicates là baseline; ICU/`pg_trgm`/full-text và Japane
 được đo trên corpus được duyệt (Q-03). Elasticsearch/OpenSearch/Lucene chỉ được xem lại khi relational
 projection không đạt latency/recall/rebuild/index-size hoặc cần workload search scale độc lập.
 
-### Artifact Store
+### Artifact Gateway và Vault
 
-Dùng private filesystem-backed adapter trên volume do Server quản lý, content-addressed và immutable
-ở mức application contract. Artifact Custody sở hữu byte/location/candidate/transfer; Module sở hữu
-metadata/reference/provenance. Write byte thành công không tự là Generation/Representation/BOM accepted.
-SMB/direct path bị loại khỏi Core v0.
+Core v0 tách **control plane** khỏi **data plane**. Server giữ authentication, authorization, scope,
+expected Generation, Reservation, chuẩn bị/hoàn tất Operation và commit trạng thái có thẩm quyền trong
+PostgreSQL. Artifact Custody chọn một Gateway/Vault phù hợp theo policy, health, locality và capacity.
+Workspace dùng grant ngắn hạn để truyền byte trực tiếp với Gateway; Server không proxy toàn bộ payload.
+
+Một Artifact logic có thể có nhiều `Artifact Location` đã xác minh. Vault-to-Vault replication/repair
+không bắt người dùng tải lại và không tạo Artifact identity mới. Replica giúp đáp ứng chính sách lưu
+trữ trực tuyến nhưng **không phải backup**. Bản backup độc lập vẫn cần cho recovery. Initial Vault
+Adapter direction vẫn là filesystem-backed; exact Gateway runtime/toolchain/provider, số vị trí tối
+thiểu, failure domain, replication lag và ngưỡng chặn Check-in/Release đều `NOT-RUN`/`BLOCKED` cho đến
+khi có quyết định và qualification riêng. Raw SMB/direct Vault path bị loại; scoped Gateway transfer
+được phép. Write byte hoặc replication thành công không tự là Generation/Representation/BOM accepted.
 
 ### Format Worker
 
@@ -346,14 +356,21 @@ cùng provenance là fallback. Không tuyên bố universal converter hay IRONCA
 ### 9.1 Topology đề xuất
 
 ```text
-Company-managed Ubuntu Server 26.04 LTS VM (single, non-HA candidate)
+Company-managed Ubuntu Server 26.04 LTS VM (single control-plane candidate, non-HA)
 ├── Nginx / managed TLS
 ├── IDEA Server Temurin 25 / Spring Boot 4.1.x modular monolith
 │   ├── owner Modules + narrow Interfaces
 │   ├── bounded outbox/jobs + per-system Adapters
 │   └── Actuator/Micrometer/OpenTelemetry + structured diagnostics
-├── PostgreSQL 18
-└── protected private Artifact volume
+└── PostgreSQL 18
+
+Artifact data plane (multi-location capability; exact topology NOT-RUN)
+├── Artifact Gateway A ↔ Vault location A
+└── Artifact Gateway B ↔ Vault location B
+    └── policy-governed Vault-to-Vault replication/repair
+
+Workspace ↔ selected Artifact Gateway
+└── scoped resumable byte transfer; Server is not the payload proxy
 
 Independent backup target
 └── DB base/WAL + Artifact + config/policy + required cryptographic material
@@ -373,7 +390,9 @@ bundle kèm phương án forward repair/restore schema. Custom `.deb` không là
 authority ban đầu; chỉ chọn nếu IT bắt buộc hoặc Q-14 chứng minh provenance/rollback tốt hơn.
 Self-contained `jlink` image cũng `DEFER` vì chuyển trách nhiệm patch JDK vào từng bundle. Container
 có thể dùng trong development, nhưng production Docker/Kubernetes không bắt buộc. Một VM không phải
-HA; Q-07 phải restore DB + bytes + config/policy + keys ở failure domain độc lập.
+HA. Nhiều Vault location không thay thế HA của Server/PostgreSQL. Q-07 phải restore DB + bytes +
+config/policy + keys ở failure domain độc lập; Q-04/Q-07 còn phải xác minh grant/receipt, location
+failover, replication/repair và việc replica không bị ghi nhận nhầm là backup.
 
 Server OS **`SELECT — platform direction`** là Ubuntu 26.04 LTS: Canonical bảo trì security tiêu
 chuẩn tới 05/2031; Temurin 25 và PGDG PostgreSQL 18 có feed `resolute`, Nginx có package Ubuntu.
@@ -412,18 +431,18 @@ bản SVG để xem đầy đủ ở độ phân giải cao.
 
 | View | Loại / mục đích | Bản xem đầy đủ |
 |---|---|---|
-| `TECH-D01` | Technology Stack Overview — nhìn toàn bộ stack và luồng chính | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D01.svg) |
-| `TECH-D02` | C4-style Container / Technology Boundary — thấy ứng dụng, data store và contract giữa chúng | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D02.svg) |
-| `TECH-D03` | Technology Layer Mapping — biết công nghệ nào làm trách nhiệm nào | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D03.svg) |
-| `TECH-D04` | Runtime & Protocol — thấy process, protocol và trust boundary | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D04.svg) |
-| `TECH-D05` | Deployment — thấy máy/node, backup boundary và xác nhận Core v0 chưa HA | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D05.svg) |
-| `TECH-D06` | Technology Dependency — thấy chiều phụ thuộc trực tiếp, không liệt kê package bắc cầu | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D06.svg) |
-| `TECH-D07` | Build / Packaging / Deployment Pipeline — thiết kế delivery đã chọn, implementation `NOT-RUN` | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D07.svg) |
-| `TECH-D08` | Technology Decision & Reopen Map — thấy selection, alternative và trigger mở lại | [SVG](../evidence/IE-VEV-TECH-VIEW-001/TECH-D08.svg) |
+| `TECH-D01` | Technology Stack Overview — nhìn toàn bộ stack và luồng chính | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d01--technology-stack-overview) |
+| `TECH-D02` | C4-style Container / Technology Boundary — thấy ứng dụng, data store và contract giữa chúng | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d02--c4-container--technology-boundary-view) |
+| `TECH-D03` | Technology Layer Mapping — biết công nghệ nào làm trách nhiệm nào | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d03--technology-layer-mapping) |
+| `TECH-D04` | Runtime & Protocol — thấy process, protocol và trust boundary | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d04--runtime--protocol-view) |
+| `TECH-D05` | Deployment — thấy Server, nhiều Vault location, backup boundary và giới hạn HA | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d05--deployment-view) |
+| `TECH-D06` | Technology Dependency — thấy chiều phụ thuộc trực tiếp, không liệt kê package bắc cầu | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d06--technology-dependency-view) |
+| `TECH-D07` | Build / Packaging / Deployment Pipeline — thiết kế delivery đã chọn, implementation `NOT-RUN` | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d07--build--packaging--deployment-pipeline) |
+| `TECH-D08` | Technology Decision & Reopen Map — thấy selection, alternative và trigger mở lại | [Nguồn hiện hành](../technology/IDEA-core-v0-technology-architecture-views.md#tech-d08--technology-decision--reopen-map) |
 
 Nguồn Mermaid và metadata đầy đủ nằm trong
-[`IE-ARC-TECH-VIEW-001@0.1`](../technology/IDEA-core-v0-technology-architecture-views.md). Kết quả
-render/open 8/8 là kiểm tra artifact, không phải architecture approval.
+[`IE-ARC-TECH-VIEW-001@0.3`](../technology/IDEA-core-v0-technology-architecture-views.md). Render/open
+cho bản 0.3 là `NOT-RUN`; kết quả 8/8 của bản cũ không được dùng để xác nhận bản này.
 
 ## 10. Alternatives not selected
 
@@ -456,7 +475,7 @@ Không candidate nào được chấm numeric score hoặc giả định đã be
 | S3/MinIO/object storage | `DEFER` | Provider-neutral adapter giữ đường nâng cấp; chưa cần service storage thứ hai. |
 | SSR/RSC/Next.js | `DEFER` | Không có SEO/server-rendering need; thêm Node production runtime. |
 | Microservices/Kubernetes/service mesh/HA cluster | `REJECT FOR CORE V0` | Không có measured independent-scale need hoặc platform team; không biến một VM thành HA. |
-| SMB/direct Artifact path, universal CAD converter, CAD add-in | `REJECT FOR CORE V0` | Vi phạm custody boundary hoặc chưa có app/license/format evidence. |
+| Raw SMB/direct Vault path, universal CAD converter, CAD add-in | `REJECT FOR CORE V0` | Raw path/credential vi phạm custody boundary; scoped direct Workspace–Gateway transfer là đường được thiết kế. Converter/add-in chưa có app/license/format evidence. |
 | OAuth/OIDC server mới | `DEFER` | Native IDEA account trước; company OIDC là integration evolution. |
 
 ## 11. Architecture Review Challenge
@@ -527,12 +546,12 @@ sử sẽ không còn hợp lý.
 | Ubuntu 26.04 platform / full operational build | `SELECT — platform direction` / `QUALIFICATION REQUIRED` | Official Temurin/Boot/PGDG base path đã có; Q-14 vẫn phải xác nhận exact bundle/driver/migration/backup/monitoring/hardening và company policy. |
 | License, certificate, signing, support/on-call | `BLOCKED` | Cần người/đơn vị công ty xác nhận; repository chưa có evidence. |
 | Transaction/concurrency/outbox/module boundary | `QUALIFICATION REQUIRED` | Q-01/Q-02/Q-05 và architecture tests, toàn bộ `NOT-RUN`. |
-| Transfer/storage/recovery | `QUALIFICATION REQUIRED` | Q-04/Q-07, không dùng demo nhỏ làm bằng chứng. |
+| Transfer/storage/recovery | `QUALIFICATION REQUIRED` | Q-04/Q-07 phải kiểm tra scoped direct Gateway transfer, Transfer Receipt, location failover, replication/repair và backup độc lập; không dùng demo nhỏ làm bằng chứng. |
 | Unicode/Japanese search | `QUALIFICATION REQUIRED` | Q-03 với corpus và threshold được duyệt. |
 | CAD/Office/IRONCAD | `QUALIFICATION REQUIRED` | Q-09 exact app/version/license/worker. |
 | Client UI/install/update/native attack | `QUALIFICATION REQUIRED` | Q-10/Q-11 và Q-15 follow-up kiểm tra residual risk của Option A trên cùng clean image, data/locale fixture, threat cases và Workspace có local work cần bảo toàn. Chỉ chạy lại Flutter sau reopen trigger. |
 | Observability/maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 runbook/SBOM/support rotation. |
-| Sếp duyệt TECH-001@0.14 | `NOT-RUN` | Brief này trình baseline Engineering để sếp phản biện và quyết định; chưa có approval. |
+| Sếp duyệt TECH-001@0.15 | `NOT-RUN` | Brief này trình successor Draft có kiến trúc Vault mới để sếp phản biện và quyết định; chưa suy diễn approval cho exact version này. |
 | PG3 | `NOT-RUN` | Gate owner phải đánh giá theo GOV/DOC-07/VVP; không có PASS trong tài liệu này. |
 
 Minimum evidence trước khi sếp có thể quyết định Tech: xem đúng matrix/brief/source pins; xác nhận
@@ -550,10 +569,10 @@ Q-01…Q-14 giữ `NOT-RUN`. Q-15 đã có bằng chứng từng phần nhưng c
 | `Q-01` | Java/Boot/Modulith/JDBC/Flyway Server vertical slice: Check-out/Reference/Check-in/Release, module verification, immutable Generation, owner outcome/Audit/outbox atomic và idempotent retry | `NOT-RUN` |
 | `Q-02` | PostgreSQL transaction, optimistic/pessimistic lock, deadlock/timeout/retry và không lost update | `NOT-RUN` |
 | `Q-03` | PostgreSQL projection với Vietnamese/Japanese, normalization/width/case, permission filter, p95/p99 và rebuild | `NOT-RUN` |
-| `Q-04` | Temurin/Boot Server ↔ .NET Workspace: Store→Server→Workspace multi-GB stream, digest, interruption/resume, journal và duplicate OperationId | `NOT-RUN` |
+| `Q-04` | Temurin/Boot Server control plane + .NET Workspace ↔ Artifact Gateway data plane: scoped grant, multi-GB stream, digest, interruption/resume, location reselection, authenticated receipt, journal và duplicate OperationId | `NOT-RUN` |
 | `Q-05` | Plain owner-specific Adapter + bounded Spring outbox dispatcher: crash/duplicate/reorder/replay và consumer idempotency; Spring Integration `CONDITIONAL` | `NOT-RUN` |
 | `Q-06` | Spring Security ordinary session: fixation, CSRF, one-instance revoke/suspend, next-request refusal, commit race, restart invalidation, expiry/reauth và Workspace binding; Spring Session JDBC `CONDITIONAL` | `NOT-RUN` |
-| `Q-07` | Restore DB + Artifact + config/policy/key về mốc dùng được, đo RTO/RPO | `NOT-RUN` |
+| `Q-07` | Restore DB + Artifact locations + config/policy/key về mốc dùng được; kiểm tra replication/repair tách khỏi backup và đo RTO/RPO | `NOT-RUN` |
 | `Q-08` | `.NET` Named Pipe baseline: cross-user/cross-Workspace refusal, replay, size/version, reconnect và cancellation; alternate client chỉ chạy sau reopen/selection | `NOT-RUN` |
 | `Q-09` | Selected WPF/WebView2 + `.NET Workspace` + Format Worker: exact Office/IRONCAD open/save, stale/in-use/error và Representation provenance | `NOT-RUN` |
 | `Q-10` | Selected Option A: install/runtime, online/offline update, rollback khi Workspace có local work, signing/SBOM trên clean company image | `NOT-RUN` |
@@ -568,14 +587,17 @@ phải Core v0 baseline.
 
 ## 14. Product impact và governance
 
-`TECH-001@0.14` trình bày baseline đã chọn ở cấp Engineering để sếp phản biện:
+`TECH-001@0.15` trình bày baseline đã chọn ở cấp Engineering để sếp phản biện:
 
-- **No Product Scope Change.** Không đổi FTR, REQ, Feature, Spec, DOC-01…DOC-08 hay DDM capability
-  semantics.
-- Không đổi architecture semantics: Artifact Custody, Transaction Coordinator, server-established
-  ActorContext, Access Policy/owner outcome, shared relational UoW, Reservation `Active → Ended /
-  Expired / Recovered`, `Store → Server → Workspace`, Representation acceptance và Restricted Recovery
-  Mode vẫn theo DOC-05/DOC-06.
+- **No Product Scope Change.** Không thêm Feature group hoặc capability family. Successor bổ sung ba
+  `REQ-*` và hai `QRS-*` để kiểm soát cách hiện thực nhu cầu Vault nhiều vị trí/file lớn đã được nêu;
+  DOC-04/05/06/07/08 và VVP được tăng phiên bản có kiểm soát.
+- Không đổi Tech Stack selection, Q-15 hoặc Product Scope. Successor làm rõ architecture semantics:
+  Artifact Custody chọn location/cấp grant/xác minh receipt; Workspace truyền byte trực tiếp với
+  Artifact Gateway; Server vẫn sở hữu authorization và commit; một Artifact có thể có nhiều location;
+  replication không phải backup. Transaction Coordinator, server-established ActorContext, Access
+  Policy/owner outcome, shared relational UoW, Reservation `Active → Ended / Expired / Recovered`,
+  Representation acceptance và Restricted Recovery Mode vẫn theo DOC-05/DOC-06.
 - Không tạo God Module mới, không thêm microservices/Kubernetes/broker/search service/CAD add-in.
 - Không có review/acceptance hay gate result mới: Product Decision Authority `NOT-RUN`, PG3 `NOT-RUN`,
   PG4 `NOT-RUN`; Q-01…Q-14 `NOT-RUN`, Q-15 `PARTIAL / NO WINNER`.

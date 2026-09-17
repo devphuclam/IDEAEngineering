@@ -1,6 +1,6 @@
 # IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap
 
-> **Instance state**: controlled `Draft 0.11`. This roadmap plans work and decision presentations. It
+> **Instance state**: controlled `Draft 0.12`. This roadmap plans work and decision presentations. It
 > does not create or approve Feature, Spec or Tech content by schedule assertion, and it does not
 > authorize production implementation or release.
 
@@ -13,18 +13,18 @@
 | Title | IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap |
 | Owner | `Principal Product Author`; named person attribution `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.11` |
+| Document Version | `0.12` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity to be recorded before `Proposed` |
 | Reviewers | Project user performs internal document review; independent/specialist review remains separately unassigned |
-| Approvers | `Product Decision Authority` decides Feature, Spec and Tech; named identity and decision dates are not yet recorded |
+| Approvers | Product Decision Authority approved the exact Feature/Spec/Tech predecessor baseline on 17-09-2026; decision on the multi-location Vault successor and re-estimated plan is `NOT-RUN` |
 | Source Links | [Product templates](../../definition/README.md), [domain language](../../../../CONTEXT.md), [architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [design lessons](../../knowledge/idea-design-lessons.md) |
 | Downstream Links | [Task appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt view](planning/idea-roadmap-december-2026.html), three decision briefs, supporting records and later implementation increments |
 | Evidence / Claim Status | `IDEA DECISION` for accepted planning rules; execution and gate evidence remains `NOT-RUN` |
-| Change History | 0.11: route `IE-KNW-TECH-DEC-001@0.6`, TECH-001@0.14, the selected Core v0 Engineering baseline and technology-view set; Q-15 remains `PARTIAL / NO WINNER`; schedule, 56 tasks, 756 hours, requirements and all approval/gate states remain unchanged; [IE-CHG-TECH-BASELINE-001](registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md). 0.10 and earlier history remain in the linked change records. |
-| Change Record | [IE-CHG-TECH-BASELINE-001@0.1](registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); predecessor `DOC-07@0.10`, SHA-256 `98555DB85939B677010A61273A73F0D22DAB43F12080CD43ED60ECEAEEACB804` |
-| Supersedes / Superseded by | Supersedes `DOC-07@0.10`; superseded by `NOT-APPLICABLE` |
+| Change History | 0.12: move multi-location Vault custody and immutable-byte replication into successor Draft scope; retain offline command replay and active/active application operation as deferred; mark the 56-task/756-hour Appendix and Gantt as requiring controlled re-estimation because they predate Gateway/grant/receipt/replication work; no new duration is invented; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.11 routed the Engineering technology baseline; earlier history remains in linked change records. |
+| Change Record | [IE-CHG-VAULT-XFER-001@0.1](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor `DOC-07@0.11` retained in Git history |
+| Supersedes / Superseded by | Supersedes `DOC-07@0.11`; superseded by `NOT-APPLICABLE` |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational retention period is `UNKNOWN`, owner `Product Decision Authority`, review trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -37,10 +37,10 @@ exit evidence. The roadmap index is navigation only.
 
 | Increment Record ID | Source Roadmap Baseline | Status | Version | Owner | First / later gate | Requirement and design trace | Exit evidence |
 |---|---|---|---|---|---|---|---|
-| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.11` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
-| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.11` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
-| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.11` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
-| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.11` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
+| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
+| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
+| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
+| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.12` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
 
 <!-- AUTHOR CONTENT START -->
 
@@ -61,18 +61,16 @@ set. Each brief pins its exact source versions and presents one decision axis on
 
 | Presentation | Purpose | Required preparation | Demonstration / evidence | Requested boss decision | Readiness |
 |---|---|---|---|---|---|
-| `FEATURE-001` | Confirm Core v0 capability scope, priority and exclusions | DOC-01/02/03 drafts, closed material inventory, coverage dispositions, updated DOC-07 | Interactive prototype as draft design evidence; feature map and deferred-scope list | Approve, require changes, defer or reject the Feature baseline | `Draft 0.12`: 14 FTR; source pins are stale against current Core drafts; full review and boss decision remain `NOT-RUN` |
-| `SPEC-001` | Confirm observable behavior, rules, failure handling and acceptance | Approved Feature baseline; DOC-04 plus requirement-bearing DOC-06/08 content; VVP trace | Release Spine scenarios including stale, unauthorized, wrong-workspace and recovery paths | Approve, require changes, defer or reject the Spec baseline | `Draft 0.14`: stale against DOC-04@0.13 with 87 requirements; seven points remain open; full review and Feature decision remain prerequisites |
-| `TECH-001` | Confirm architecture and technology choices | Approved Spec baseline; DOC-02/04/05/06/08 design; technology ADRs and risk analysis | Eight technology views, deployable hosts, data flow, alternatives, residual risks and bounded qualification evidence | Approve, require changes, defer or reject the Tech baseline | `Draft 0.14`: Engineering selected the Linux-first Java Server and Option A React/WPF/WebView2 + `.NET Workspace` baseline. Q-15 remains `PARTIAL / NO WINNER`; PDA review, Spec decision, IT constraints and remaining qualification remain open. |
+| `FEATURE-001` | Confirm Core v0 capability scope, priority and exclusions | DOC-01/02/03 drafts, closed material inventory, coverage dispositions, updated DOC-07 | Interactive prototype as draft design evidence; feature map and deferred-scope list | Approve, require changes, defer or reject the Feature baseline | Exact 14-group predecessor Feature baseline `APPROVED` on 17-09-2026; no successor Feature change is introduced here |
+| `SPEC-001` | Confirm observable behavior, rules, failure handling and acceptance | Approved Feature baseline; DOC-04 plus requirement-bearing DOC-06/08 content; VVP trace | Release Spine scenarios including stale, unauthorized, wrong-workspace and recovery paths | Approve, require changes, defer or reject the Spec baseline | DOC-04@0.13 predecessor `APPROVED`; DOC-04@0.14 Vault-transfer successor has 90 requirements and exact PDA review is `NOT-RUN` |
+| `TECH-001` | Confirm architecture and technology choices | Approved Spec baseline; DOC-02/04/05/06/08 design; technology ADRs and risk analysis | Eight technology views, deployable hosts, data flow, alternatives, residual risks and bounded qualification evidence | Approve, require changes, defer or reject the Tech baseline | TECH-001@0.14 Tech Stack `APPROVED`; 0.15 keeps it and adds the Vault successor, whose exact PDA review is `NOT-RUN`. Q-15 remains `PARTIAL / NO WINNER`; qualifications remain open. |
 
 The briefs may be rendered as DOCX or PDF for the meeting. A rendition never replaces its pinned
 Markdown source. A changed source makes the earlier rendition `Stale`.
 
-The states above distinguish the current Core drafts from decision briefs that still pin earlier
-sources. This routing correction is not a fresh review or approval: prior exact-version review
-evidence remains attached to the versions on which it was recorded. Spec behavior and schedule
-content are unchanged; the separate `IE-KNW-TECH-DEC-001@0.6`/`TECH-001@0.14` Engineering selection is
-not a Product Decision Authority approval.
+The states above distinguish the exact predecessor baseline approved on 17-09-2026 from the later
+Vault successor Draft. Approval evidence remains attached to the versions on which it was recorded;
+it does not silently approve DOC-04@0.14, TECH-001@0.15 or this re-planning delta.
 Do not infer a new approval from a version update.
 
 ## 3. Bounded analysis and design increments
@@ -125,6 +123,12 @@ prototype are reused as inputs; inclusion of a preparation task does not erase t
 Task IDs below are planning identifiers, not claims that implementation increments or 56 tracker
 issues already exist. Spec Kit still owns the later production increment's spec, plan and execution
 tasks; feature `003-controlled-documentation` is not repurposed as Core implementation.
+
+The 56-task / 756-hour Appendix and frozen Gantt predate `REQ-WS-016`, `REQ-OPS-007/008` and
+ADR-0013. They remain historical planning inputs but are **STALE FOR EXECUTION** against this 0.12
+successor until controlled tasks and estimates cover the Artifact Gateway Interface, grant/receipt
+security, multi-location selection, replication/repair, failover, durability-policy configuration and
+their verification. This document does not invent replacement hours before that impact analysis.
 
 #### Capacity and estimation basis
 
@@ -251,11 +255,11 @@ not add a fourth product decision axis.
 
 | Concern | Required evidence | Baseline pin | Owner | Status |
 |---|---|---|---|---|
-| Decision acceptance | Separate boss disposition for Feature, Spec and Tech | Exact decision brief plus source manifest | Product Decision Authority | `NOT-RUN` |
-| Requirement acceptance | Scenario, acceptance criterion and verification method for every approved obligation | `IE-PROD-SREQ-001@0.10` and `IE-VVP-CORE-001@0.11` | Principal Product Author | Draft authored; review/approval `NOT-RUN` |
+| Decision acceptance | Separate boss disposition for Feature, Spec and Tech | Exact decision brief plus source manifest | Product Decision Authority | Predecessor baseline `APPROVED`; Vault successor exact disposition `NOT-RUN` |
+| Requirement acceptance | Scenario, acceptance criterion and verification method for every approved or proposed obligation | `IE-PROD-SREQ-001@0.14` and `IE-VVP-CORE-001@0.17` | Principal Product Author | Successor Draft authored; review/approval and procedures `NOT-RUN` |
 | Migration / reconciliation | Store Existing duplicate handling, staging cleanup, digest validation and reconciliation | `IE-PROD-DATA-001@0.10` / future approved Spec baseline | Principal Product Author | Draft authored; execution `NOT-RUN` |
 | Rollback / recovery | Stale conflict, preserved local work, Reservation Recovery, failed publish and restore procedures | DOC-04/05/06 and VVP Draft baselines | Principal Product Author | Draft authored; procedures not executed |
-| Operational handoff | Deploy/update/rollback, account administration, monitored coordinated backup/restore and primary/backup operator assignment | TECH-001@0.14 Engineering baseline, DOC-05@0.20, DOC-06@0.16, future OPS baseline | User may operate initially; system management/technical support approve install/deploy; long-term owner and backup unassigned | `BLOCKED` for rollout |
+| Operational handoff | Deploy/update/rollback, account administration, monitored coordinated backup/restore and primary/backup operator assignment | TECH-001@0.15, DOC-05@0.21, DOC-06@0.17, future OPS baseline | User may operate initially; system management/technical support approve install/deploy; long-term owner and backup unassigned | `BLOCKED` for rollout |
 
 ## 7. MVP Success Metric Set
 
@@ -282,7 +286,8 @@ are known as context only; concurrent load, latency, availability, growth and ca
 | Workflow designer implementation | `DEFER` | Configurable workflow semantics belong in Spec; full designer is not needed before core release proof | After seeded release workflow is verified | Future DOC-04/05/08 and coverage record |
 | ERP/MRP exchange and supported external API | `DEFER` | No approved integration consumer or contract exists | Concrete internal integration requirement | Future DOC-06/change record |
 | Company-account login and external providers | `DEFER` | Native IDEA accounts first; company protocol, linking/recovery and IT approval unknown | Approved integration need and identity/security contract | REQ-IAM-006; DOC-05/06; TECH-CTX-003 |
-| Multisite replication and offline command replay | `DEFER` | Consistency, recovery and operational requirements are not established | Approved multisite need and topology | Future DOC-04/05/06 |
+| Multi-location Vault custody and immutable-byte replication | `IN SCOPE — SUCCESSOR DRAFT` | Management need is recorded; ADR-0013 and DOC-04@0.14 define the direction, while exact topology, counts, lag and failure-domain targets remain open | Product Decision Authority approves the exact successor Spec/Tech inputs and tasks are re-estimated | DOC-04/05/06; VVP-017; `IE-CHG-VAULT-XFER-001` |
+| Multi-site active/active application operation and offline command replay | `DEFER` | Cross-site command consistency, disconnected authority and application failover requirements are not established | Separately approved need and consistency/topology contract | Future DOC-04/05/06 |
 | Automated purge and broad operations tooling | `DEFER` | Retention and recovery policy are incomplete | Approved retention/operations requirements | Future RSK/OPS/REL |
 | Full ECR/ECO capability | `DEFER` | Core v0 uses a lightweight change record and exact release evidence | Approved PLM change-management increment | Future DOC-01/03/04/07 |
 | Additional deep CAD profiles | `DEFER` | First profile proves the adapter seam; breadth follows evidence | Successful IRONCAD profile and prioritized tool request | DOC-02 capability assessment |
@@ -294,7 +299,7 @@ disposition. Deferral does not erase the long-term target.
 
 | Work | Owner / needed input | Exit before next commitment |
 |---|---|---|
-| Refresh and review current decision briefs | Project user; assistant prepares | Feature 0.12 and Spec 0.14 remain stale against current Core source pins; TECH-001@0.14 contains the selected Engineering baseline but still needs Product Decision Authority review. Q-15 remains `PARTIAL / NO WINNER`; record no inherited `PASS`. |
+| Prepare the successor decision delta | Project user; assistant prepares | Preserve the approved predecessor. Present only the multi-location Vault/control–data-plane changes in DOC-04@0.14 and TECH-001@0.15; obtain an exact successor disposition. Q-15 remains `PARTIAL / NO WINNER`; record no inherited `PASS`. |
 | Resolve remaining specification gaps | Principal Product Author; user and Product Decision Authority | SPEC-OPEN-02…08 resolved or explicitly dispositioned at the relevant decision; context confirmation is only partial closure of 05/06 |
 | Gather IT and format constraints | User with system management/technical support | OS/browser/CAD and license inventory, approved host/install/update/security boundary |
 | Prepare workload and recovery evaluation | User/assigned Operations authority | Representative file/corpus/concurrency profile, backup location/custody, incident clock and primary/backup operator |
@@ -327,10 +332,10 @@ disposition. Deferral does not erase the long-term target.
 | `SOURCE-DECISION` | Accepted constitution, product ADRs and stakeholder decisions establishing internal scope, Release Spine and three boss decision axes | Linked at repository baseline; exact decision ledger to be instantiated before `Proposed` |
 | `SOURCE-EVIDENCE` | Product knowledge, reference-coverage records and prototype evidence | Knowledge sources and `IE-GOV-COVERAGE-001@0.3` exist; exact target-runtime evidence remains `BLOCKED` |
 | `DOWNSTREAM` | DOC-01…DOC-08, three decision briefs and later increments | Eight Core Drafts, three brief Drafts and initial GOV/VVP records instantiated |
-| `CHANGE` | [IE-CHG-TECH-BASELINE-001](registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md), [IE-CHG-TECH-CLIENT-002](registers/CHG-2026-09-14-client-ui-stack-review-correction.md), [IE-CHG-TECH-CLIENT-001](registers/CHG-2026-09-14-client-ui-stack-re-evaluation.md), [IE-CHG-DOC-REVIEW-001](registers/CHG-2026-09-14-post-pull-document-review-corrections.md), [IE-CHG-ROADMAP-001](registers/CHG-2026-09-05-roadmap-task-integration.md), [IE-CHG-SOURCE-RECON-001](registers/CHG-2026-09-09-cross-document-reconciliation.md), [IE-CHG-TECH-LINUX-001](registers/CHG-2026-09-13-linux-first-server-runtime-re-evaluation.md) and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | Draft 0.11 routes the Engineering stack selection without changing schedule, approval or gate. Earlier records remain historical. |
+| `CHANGE` | [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md), retained predecessor change records and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | Draft 0.12 changes storage/transfer scope and marks the predecessor task estimate stale; exact successor approval and re-estimation are `NOT-RUN`. |
 | `VERIFICATION` | VVP/VEV gate and Release Spine evidence | `NOT-RUN` |
 | `RELEASE` | REL manifest for a future implementation/release | `NOT APPLICABLE` to this draft |
-| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md) and [Gantt](planning/idea-roadmap-december-2026.html); source pins in the change records | Appendix remains applicable to Draft 0.11 because the schedule is unchanged; Gantt remains the frozen schedule 0.1 view copied unchanged. No DOC-07 Word/PDF created; existing submitted Word originals are not rewritten. |
+| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md) and [Gantt](planning/idea-roadmap-december-2026.html); source pins in the change records | Both are retained predecessor planning views and are `STALE FOR EXECUTION` against Draft 0.12 pending re-estimation. No DOC-07 Word/PDF is rewritten. |
 
 <!-- AUTHOR CONTENT END -->
 

@@ -1,8 +1,0 @@
-{
-  "checkedAt": "2026-09-11T09:41:05.350Z",
-  "browser": "152.0.7977.83",
-  "check": "Open each standalone SVG through the browser file URL and reject XML parser errors",
-  "count": 30,
-  "failures": [],
-  "status": "PASS"
-}

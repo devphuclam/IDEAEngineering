@@ -11,9 +11,9 @@
 | Kết quả mở SVG độc lập | 30/30 PASS; không còn lỗi XML parser khi mở trực tiếp bằng trình duyệt |
 | Giới hạn | Kiểm tra source và hình render; không phải kiểm chứng phần mềm hay duyệt kiến trúc độc lập |
 
-[Mở bộ sơ đồ](../evidence/IE-VEV-ARCH-VIEW-002/index.html) ·
-[Kết quả và hash](../evidence/IE-VEV-ARCH-VIEW-002/render-results.json) ·
-[Kết quả mở SVG độc lập](../evidence/IE-VEV-ARCH-VIEW-002/svg-open-results.json).
+[Mở bộ sơ đồ](../evidence/README.md#archived-render-packages) ·
+[Kết quả và hash](../evidence/README.md#archived-render-packages) ·
+[Kết quả mở SVG độc lập](../evidence/README.md#archived-render-packages).
 
 Mỗi view có ID, mục đích, phạm vi, nguồn yêu cầu, chú giải và diễn giải bên cạnh trong DOC-05.
 Script `scripts/render-architecture.cjs` kiểm tra ID duy nhất, mô tả accessibility và render toàn bộ

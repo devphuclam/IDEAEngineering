@@ -10,7 +10,8 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 | What was directly observed in the identified icVault environment? | [icVault observed behavior](icvault-observed-behavior.md) |
 | What has DDM publicly claimed or demonstrated? | [DDM vendor-public baseline](ddm-vendor-public-baseline.md) |
 | What DDM capabilities map to IDEA coverage and gap decisions? | [DDM capability inventory and IDEA gap matrix](2026-09-12-ddm-capability-inventory-and-idea-gap-matrix.md) |
-| What technology stack has Engineering selected for IDEA Engineering Core v0? | [Core v0 Technology Decision Matrix](2026-09-13-core-v0-technology-decision-matrix.md) — informative Engineering selection; Product Decision Authority approval remains `NOT-RUN` |
+| What technology stack has Engineering selected for IDEA Engineering Core v0? | [Core v0 Technology Decision Matrix](2026-09-13-core-v0-technology-decision-matrix.md) — informative Engineering selection; the exact predecessor Tech baseline was approved on 17-09-2026, while the later multi-location Vault successor Draft requires its own exact disposition |
+| What evidence supports direct large-file transfer and multiple Vault locations? | [Vault transfer and multi-location provenance](../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md) — official product facts and IDEA inference are kept separate |
 | How must a technology decision set be documented? | [IDEA Technology Stack Documentation Standard](../../agents/technology-stack-documentation-standard.md) — reusable repository process standard; no Product or ISO-conformity claim |
 | Does DDM have a separate administration and permission UI? | [DDM administration and permission UI evidence](2026-09-09-ddm-administration-permissions-ui-evidence.md) |
 | Which Microsoft authorization patterns are useful for IDEA DDM? | [Microsoft authorization patterns for IDEA DDM](2026-09-09-microsoft-authorization-patterns-for-idea-ddm.md) |
@@ -42,17 +43,17 @@ This directory contains product-facing knowledge admitted from controlled icVaul
 
 ## Coverage snapshot
 
-As of 2026-09-15, the admitted baseline covers:
+As of 2026-09-17, the admitted baseline covers:
 
 | Area | Controlled coverage |
 |---|---|
 | icVault | 9 topology claims, 8 identity/version claims, all 22 Checkout/Reference/Check-in scenarios, structure/workflow/metadata, storage/security/recovery, unknowns, and prohibited overclaims |
 | DDM public evidence | 16 first-party propositions, 10 target-unknown groups, 8 public-source contradiction classes, and explicit tutorial limits |
 | DDM capability inventory | `IE-KNW-DDM-007@0.3`: 100 DDM-native capability rows across families A–S, with orthogonal Evidence Authority/Mode/Temporal axes, IDEA `COVERED/PARTIAL/ABSENT/UNKNOWN`, separate product disposition, gap criticality, priority, gate effect and open-point impact |
-| Technology decision | `IE-KNW-TECH-DEC-001@0.6`: Linux-first Java/Temurin/Spring/PostgreSQL Server and React/WPF/WebView2 + per-user `.NET Workspace` are the selected Core v0 Engineering baseline; Flutter is an evaluated alternative behind `TRIGGER-CLIENT-01…08`; Core/Conditional/Deferred dependencies remain explicit; Q-01…Q-14 `NOT-RUN`, Q-15 `PARTIAL / NO WINNER`, no Product Decision Authority or gate approval |
+| Technology decision | `IE-KNW-TECH-DEC-001@0.6`: Linux-first Java/Temurin/Spring/PostgreSQL Server and React/WPF/WebView2 + per-user `.NET Workspace` are the selected Core v0 Engineering baseline; the exact predecessor Tech baseline was `APPROVED` on 17-09-2026; Flutter remains an evaluated alternative, Q-01…Q-14 remain `NOT-RUN`, Q-15 remains `PARTIAL / NO WINNER`, and no product gate becomes PASS |
 | DDM future target audit | 24 ranked questions with entry, legal/safety, evidence-output, stop, and exit gates |
 | Aras comparison | Official lifecycle/version and workflow/approval patterns admitted with explicit application and evidence limits |
-| IDEA translation | 22 accepted design lessons, 44 core invariants, 13 baseline quality scenarios, 7 accepted product ADRs, and 1 proposed product ADR |
+| IDEA translation | 22 accepted design lessons, 59 core invariants, 17 baseline quality scenarios, 7 accepted product ADRs and 5 proposed product ADRs; successor Vault-transfer qualification remains `NOT-RUN` |
 
 “Complete” here means that the product-relevant conclusions admitted from the fixed source artifacts
 are represented and bounded. It does not mean full DDM behavioral coverage has been demonstrated or

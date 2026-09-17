@@ -14,7 +14,7 @@
 | Exact rendered working-copy source | DOC-05 SHA-256 `34c085c6d02b0019a7fdf0a251b1d21aef54e38659fe4552a3e4c3c4b1609843`; DOC-06 SHA-256 `11db41f439cb801fc510ac1f959340d1435df5e25d8096862bb05169c76c9a93` |
 | Portable committed-source pin | DOC-05 LF-normalized SHA-256 `25a8c6fb5ba780b5163389c42b7ae4e95d8b41ba91aed13834e7f69f43cb827e`, Git blob `7356d8d533509af2978d0ea3d1ecefc7a08c6f16`; DOC-06 LF-normalized SHA-256 `6a86fbe5ada75b743f29619a5ce3107df8a271e239a8015cd9681eddf21c258d`, Git blob `482f866d39d94c60a1d9478b91ca7b8347f19157` |
 | Source / upstream trace | [IE-CHG-DOC-REVIEW-001](CHG-2026-09-14-post-pull-document-review-corrections.md), [DOC-04](../DOC-04-software-requirements-specification.md), [previous VEV-003](VEV-2026-09-12-architecture-consistency-correction-003.md) |
-| Downstream trace | [current gallery](../evidence/IE-VEV-ARCH-CORR-004/index.html), [render manifest](../evidence/IE-VEV-ARCH-CORR-004/render-results.json), [instance catalogue](../README.md), future management renditions |
+| Downstream trace | [current gallery](../evidence/README.md#archived-render-packages), [render manifest](../evidence/README.md#archived-render-packages), [instance catalogue](../README.md), future management renditions |
 | Access / retention | `INTERNAL`; retain with exact Markdown sources, generated SVG/PNG, manifest and the predecessor audit |
 | Supersession / review trigger | Supersedes VEV-003 **for the current source/rendition baseline only**; predecessor assertions remain historical. Rerender under a new ID after any maintained view-source change. |
 | Evidence status | Focused rendering and XML parsing recorded below; standalone browser-open sweep and full repository verifier `NOT-RUN`; qualified review and controlled-rendition acceptance `BLOCKED` |
@@ -44,15 +44,15 @@ repository verifier or an IDEA runtime test.
 
 | View | Source correction | Rendition |
 |---|---|---|
-| [ARCH-VIEW-SEQ-003](../evidence/IE-VEV-ARCH-CORR-004/ARCH-VIEW-SEQ-003.svg) | Submit and Approve/Reject each establish ActorContext, evaluate current authorization, revalidate at commit and retain Lifecycle-owned outcome plus Audit evidence. Release still validates the separately confirmed exact scope. | Rendered and XML-parseable; high-resolution SVG link required for review because 12 participants and refusal branches do not fit legibly in a narrow Word column. |
-| [ARCH-VIEW-ACT-001](../evidence/IE-VEV-ARCH-CORR-004/ARCH-VIEW-ACT-001.svg) | A Project Administrator confirms an existing Group assignment or explicitly requests one under delegated Role/Principal/Scope limits. Access Policy validates and records/refuses it; it does not initiate the assignment. | Rendered and XML-parseable; full-size view required because the authority lanes are tall. |
+| [ARCH-VIEW-SEQ-003](../evidence/README.md#archived-render-packages) | Submit and Approve/Reject each establish ActorContext, evaluate current authorization, revalidate at commit and retain Lifecycle-owned outcome plus Audit evidence. Release still validates the separately confirmed exact scope. | Rendered and XML-parseable; high-resolution SVG link required for review because 12 participants and refusal branches do not fit legibly in a narrow Word column. |
+| [ARCH-VIEW-ACT-001](../evidence/README.md#archived-render-packages) | A Project Administrator confirms an existing Group assignment or explicitly requests one under delegated Role/Principal/Scope limits. Access Policy validates and records/refuses it; it does not initiate the assignment. | Rendered and XML-parseable; full-size view required because the authority lanes are tall. |
 
 The remaining 28 maintained views were regenerated from the same source baseline; no claim of a
 fresh independent semantic inspection is made for those views. The prior VEV-003 manifest's DOC-05
 and DOC-06 source hashes do not reproduce from the committed starting baseline. That record is
 retained rather than silently rewritten, but this new exact-source manifest is the one to use for
 current navigation and discussion. The seven XML-repaired files in the older VEV-VIEW-001 folder
-have a separate [repair note](../evidence/IE-VEV-ARCH-VIEW-001/README.md); they are not current
+have a separate [repair note](../evidence/README.md#archived-render-packages); they are not current
 architecture views.
 
 ## 3. Remaining acceptance work

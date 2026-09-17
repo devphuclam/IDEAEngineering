@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.20`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.21`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,17 +13,17 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.20` |
+| Document Version | `0.21` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
-| Requirements Input | `IE-PROD-SREQ-001@0.13`; Feature and Spec decisions remain `NOT-RUN` |
+| Requirements Input | `IE-PROD-SREQ-001@0.14`; exact successor Feature/Spec decision remains `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity not yet recorded |
 | Reviewers | Project user performs internal document review; architecture review `NOT-RUN`; required independent/specialist reviewer unassigned |
-| Approvers | Product Decision Authority for Tech; identity, decision and date are `UNKNOWN` |
-| Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md) |
+| Approvers | Product Decision Authority approved the exact predecessor Tech baseline on 17-09-2026; approval of this 0.21 successor architecture is `NOT-RUN` |
+| Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [Vault-transfer provenance](../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Change History | 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram with an explicit purpose, audience, exclusions and notation; detailed ownership remains in the existing Module table and behavioural flows remain in their dedicated views; no product requirement, architecture decision, Tech choice or gate state changes; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). 0.19: make Submit/Approve authorization and attributable outcome explicit in `ARCH-VIEW-SEQ-003`, identify the delegated administrator who requests a Group Role Assignment in `ARCH-VIEW-ACT-001`, and replace ambiguous Checkout-entitlement wording; no new product requirement or gate decision; [IE-CHG-DOC-REVIEW-001@0.1](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
+| Change History | 0.21: separate Artifact control/data planes; add Artifact Gateway and multi-location Vault custody to container, deployment, Check-in, materialization, transfer, storage-evolution and trust views; exact Gateway runtime, provider and durability thresholds remain unselected and `NOT-RUN`; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -131,7 +131,7 @@ Each view has a stable ID so a review comment can identify the exact model rathe
 | `ARCH-VIEW-CON-001` | C4-style Container / section 4.1 | Which executable/data containers exist and what responsibility crosses each interface? | Candidate logical runtime; maintainers/security; excludes physical host count. | `Draft`; `REQ-SEC-*`, `REQ-OPS-*`, `REQ-AUTH-*` | Numbered container description after the view. |
 | `ARCH-VIEW-DEP-001` | C4-style Deployment / section 4.2 | What runs on engineer/admin devices and server zone, and where are trust boundaries? | Initial candidate deployment; operations/security; technology remains unapproved. | `Draft`; `REQ-SEC-*`, `REQ-OPS-*` | Deployment explanation after the view. |
 | `ARCH-VIEW-MOD-001` | C4 Component Diagram / section 5.1 | How does a protected product command reach its declared authoritative owners and obtain RBAC decisions? | Principal command-control Modules inside one IDEA Server; maintainers/reviewers; excludes supporting content paths, actors, workflow sequences, deployment and database tables. | `Draft`; `REQ-GOV-*`, `REQ-AUTH-*`, DOC-06 | Module table, `ARCH-VIEW-MOD-002` and rules surrounding the view. |
-| `ARCH-VIEW-MOD-002` | C4 Component-level responsibility view / section 5.3 | Where is the seam around Checkout/Reference/Check-in, and which collaborators may affect an authoritative commit? | Controlled Product Data and its callers/collaborators; architecture/implementation/security reviewers; excludes classes and physical deployment. | `Draft`; `REQ-WS-001…015`, `REQ-OPS-001`; ADR C1-004/C1-005 | Numbered responsibility and seam description after the view. |
+| `ARCH-VIEW-MOD-002` | C4 Component-level responsibility view / section 5.3 | Where is the seam around Checkout/Reference/Check-in, and which collaborators may affect an authoritative commit? | Controlled Product Data and its callers/collaborators; architecture/implementation/security reviewers; excludes classes and physical deployment. | `Draft`; `REQ-WS-001…016`, `REQ-OPS-001/007/008`; ADR C1-004/C1-005/C1-011 | Numbered responsibility and seam description after the view. |
 | `ARCH-VIEW-RBAC-001` | UML-style class/domain view / section 5.2 | How do Principal, Group, Role Definition, Permission, Scope and Role Assignment relate? | Authorization domain; security/requirements/data reviewers. | `Draft`; `REQ-AUTH-001…010`; ADR C1-010 | Relationship list following the view. |
 | `ARCH-VIEW-STATE-001` | UML State Machine / section 7 | Which commands change Business Revision workflow state? | One Business Revision; lifecycle users/reviewers. | `Draft`; `REQ-LC-001…009` | State notes and section introduction. |
 | `ARCH-VIEW-STATE-002` | UML State Machine / section 7 | How does one Reservation end without being silently reactivated or transferred? | One server Reservation record; engineer/support/maintainer; excludes local file state and Workflow. | `Draft`; `REQ-WS-002/007…010/013`; ADR C1-005 | Numbered status rules after the view. |
@@ -151,12 +151,14 @@ Each view has a stable ID so a review comment can identify the exact model rathe
 | `ARCH-VIEW-SEQ-009` | UML Sequence / section 7.8 | How are an exact BOM view, a pinned export and an import candidate kept distinct? | One Structure Snapshot and BOM View Profile; structure/data/implementation reviewers. | `Draft`; `REQ-STR-004…006`, `IF-STRUCTURE-BOM`, `IF-AUTHORIZATION-DECISION`, `IF-IAM-ELIGIBILITY-QUERY`, BM-01…06 | Seven-step description and coordinator/UoW outcome rules beside the view. |
 | `ARCH-VIEW-SEQ-010` | UML Sequence / section 7.9 | How is a CAD/Office Representation produced or uploaded and tied to one exact source Generation? | One source Artifact and one Format Capability Profile; format/security/release reviewers. | `Draft`; `REQ-FMT-001…005`, `REQ-SEC-004`, `IF-FORMAT-JOB`, `IF-AUTHORIZATION-DECISION` | Generation, custody/metadata acceptance and failure rules following the view. |
 | `ARCH-VIEW-SEQ-011` | UML Sequence / section 9.3 | How is a coordinated recovery set restored and proved exact before service reopens? | One approved recovery point across database, Artifact, configuration and key custody; operations/data/security reviewers. | `Draft`; `REQ-OPS-003/004`, `REQ-IAM-004`, `QRS-006` | Recovery invariants and reopening conditions after the view. |
-| `ARCH-VIEW-SEC-001` | Trust-boundary data-flow view / section 10 | Which protected data crosses each trust zone, where is it authorized, and what may never cross? | Initial logical deployment trust zones; security/architecture/operations reviewers; excludes final ports and selected infrastructure. | `Draft`; `REQ-SEC-001…004`, `REQ-AUTH-008`, `REQ-AUD-*` | Threat/control table and trust-zone explanation beside the view. |
-| `ARCH-VIEW-EVO-001` | C4-style component/evolution view / section 9.2 | How can Artifact storage grow or change provider without changing product identity? | Artifact-storage seam and migration; architecture/operations/data owners; excludes selected vendor/topology. | `Draft`; `REQ-OPS-003…006`, `QRS-012` | Storage-boundary explanation after the view. |
+| `ARCH-VIEW-SEQ-012` | UML Sequence / section 9.2.1 | How can an interrupted read continue from another verified Vault without changing the requested file? | One exact Artifact read; engineer, operations and security reviewers; excludes upload staging migration. | `Draft`; `REQ-WS-016`, `REQ-OPS-007/008`, ST-06 | Failover and refusal rules after the view. |
+| `ARCH-VIEW-SEQ-013` | UML Sequence / section 9.2.2 | When does a replica become eligible and satisfy the applicable durability policy? | One immutable Artifact and replication task; operations/data reviewers; excludes backup and Check-in commit. | `Draft`; `REQ-OPS-007/008`, `QRS-014`, ST-07 | Replica eligibility and policy rules after the view. |
+| `ARCH-VIEW-SEC-001` | Trust-boundary data-flow view / section 10 | Which protected data crosses each trust zone, where is it authorized, and what may never cross? | Initial logical deployment trust zones; security/architecture/operations reviewers; excludes final ports and selected infrastructure. | `Draft`; `REQ-SEC-001…004`, `REQ-WS-016`, `REQ-OPS-007/008`, `REQ-AUTH-008`, `REQ-AUD-*` | Threat/control table and trust-zone explanation beside the view. |
+| `ARCH-VIEW-EVO-001` | C4-style component/evolution view / section 9.2 | How can several Vaults serve, replicate and change provider without changing product identity? | Artifact Gateway/Vault seam, location policy, replication and migration; architecture/operations/data owners; excludes selected vendor/topology/threshold. | `Draft`; `REQ-OPS-003…008`, `QRS-012/014`; ADR C1-011 | Storage-boundary explanation after the view. |
 | `DATA-VIEW-CORE-001` | UML-style ER/domain view / DOC-06 section 1.1 | What identities reproduce an exact Release? | Controlled-data domain; data/quality owners. | `Draft`; `REQ-ID-*`, `REQ-STR-*`, `REQ-LC-006…009` | Structured explanation in DOC-06. |
 | `DATA-VIEW-AUTH-001` | UML-style RBAC data view / DOC-06 section 1.2 | What records persist account and RBAC authority without duplicating ownership? | Authorization data; data/security owners. | `Draft`; `REQ-AUTH-*`, `REQ-IAM-*` | Structured explanation in DOC-06. |
-| `DATA-VIEW-ART-001` | UML-style ER/domain view / DOC-06 section 1.3 | How do resumable transfer and replaceable storage preserve immutable Artifact identity? | Artifact transfer/custody data; data/operations/security owners; excludes provider schema. | `Draft`; `REQ-WS-012/015`, `REQ-OPS-001/003/004/006` | Structured explanation in DOC-06. |
-| `DATA-VIEW-WS-001` | UML Class/domain view / DOC-06 section 1.4 | Which local and server records prove Workspace mode, publish entitlement, expected head and one atomic Check-in result? | Workspace and publication data; data/architecture/verification owners; excludes table/ORM mapping and Artifact-location detail. | `Draft`; `REQ-WS-001…015`, `REQ-ID-002…004`; ADR C1-004/C1-005 | Structured relationship and authority explanation in DOC-06. |
+| `DATA-VIEW-ART-001` | UML-style ER/domain view / DOC-06 section 1.3 | How do scoped direct transfer and multiple Vault locations preserve one immutable Artifact identity? | Artifact transfer/custody data; data/operations/security owners; excludes provider schema. | `Draft`; `REQ-WS-012/015/016`, `REQ-OPS-001/003/004/006…008`, `QRS-013/014` | Structured explanation in DOC-06. |
+| `DATA-VIEW-WS-001` | UML Class/domain view / DOC-06 section 1.4 | Which local and server records prove Workspace mode, publish entitlement, expected head and one atomic Check-in result? | Workspace and publication data; data/architecture/verification owners; excludes table/ORM mapping and Artifact-location detail. | `Draft`; `REQ-WS-001…016`, `REQ-ID-002…004`; ADR C1-004/C1-005/C1-011 | Structured relationship and authority explanation in DOC-06. |
 
 ### 3.2 Diagram authoring and review policy
 
@@ -192,7 +194,7 @@ A diagram is ready for baseline review only when a reviewer can answer yes to al
 
 The current diagrams remain `Draft`. The current source consistency and focused internal rendition
 inspection are recorded in
-[IE-VEV-ARCH-CORR-005](registers/VEV-2026-09-14-module-authority-view-legibility.md); predecessor VEV
+[IE-VEV-VAULT-XFER-001](registers/VEV-2026-09-17-vault-transfer-diagram-review.md); predecessor VEV
 records remain historical evidence. Qualified architecture/security review remains `NOT-RUN`; render
 success must not be reported as architecture conformance or evidence that the software has been
 implemented.
@@ -212,9 +214,10 @@ sole carrier of meaning.
 | IDEA Web | Search/browse/view; review/approval; governed administration; policy-appropriate preview/download. | Write stores directly, trust client-side role visibility or duplicate identity, Check-in, authorization, approval or Release rules. | `REQ-LC-*`, `REQ-AUTH-*`, `REQ-UX-*`, `REQ-LOC-*` |
 | IDEA Desktop | Capture explicit Checkout/Open/Check-in/Cancel/Recover intent; confirm scope; show conflict/recovery; launch files by OS association. | Run in an external application; publish on Save; keep permanent store credentials. | `REQ-WS-*`, `REQ-FMT-001/004`, `REQ-UX-*` |
 | Workspace process | Per-user materialization, full scan/hash, cache, Workspace Manifest, resumable transfer and durable local recovery state. | Become product authority, approve/release, infer user intent or auto-merge binary changes. | `REQ-WS-001/003/004/006/009…013`, `REQ-SEC-003` |
+| Artifact Transfer Gateway | Validate one short-lived exact Transfer Grant, stream verified ranges/chunks to or from one selected Vault and return an authenticated Transfer Receipt. | Decide Actor/RBAC, business scope or Check-in success; expose a permanent provider credential/path; accept an unscoped transfer. | `REQ-WS-015/016`, `REQ-SEC-001/002`, `REQ-OPS-001/007/008` |
 | Format Processing Runtime | Execute one bounded immutable-input analysis/preview/conversion job through a versioned Adapter. The Adapter may invoke a qualified export interface of an installed CAD application or an approved standalone converter; manual uploads enter through the same Representation acceptance boundary. | Mutate source content or product state; reuse broad credentials; claim undeclared capability; assume a universal CAD renderer; attach output to a floating/latest source. | `REQ-FMT-002…005`, `REQ-SEC-004` |
 | Relational store | Persist identity, metadata, heads, policies, structure, workflow, release, Audit and operation state transactionally. | Store user-editable working files or become an interface consumed by clients. | DOC-06; `REQ-OPS-003/004` |
-| Private Artifact store | Retain immutable content by digest and serve only through scoped authorized transfer. | Expose permanent credentials/public access or decide which content is authoritative. | `REQ-ID-003`, `REQ-SEC-001/002`, `REQ-OPS-001/003/004` |
+| Vault location | Retain private candidate and immutable Artifact bytes by digest, expose them only through its Artifact Gateway Adapter and participate in verified replication/repair. | Expose permanent credentials/public access; become a document identity; decide which content is published; substitute for coordinated backup. | `REQ-ID-003`, `REQ-SEC-001/002`, `REQ-OPS-001/003/004/007/008` |
 
 ### 4.1 Candidate container view
 
@@ -232,7 +235,7 @@ calls/data flows; Office/CAD is external.
 ```mermaid
 flowchart LR
     accTitle: IDEA Engineering candidate container view
-    accDescr: Engineers use the Web workbench or Desktop. Administrators use the Administration Web application. All protected requests go to one IDEA Server, which owns authorization and product coordination and accesses the relational and private Artifact stores. The Workspace process alone manages local working files. Format processing is isolated from the main Server.
+    accDescr: Engineers use the Web workbench or Desktop. Administrators use the Administration Web application. Protected product commands go to the IDEA Server control plane. Artifact Custody selects a Gateway and Vault and returns a short-lived grant, so large bytes move directly between Workspace and Gateway while the Server retains authorization, operation status and publication authority. One Artifact may have several Vault locations. Format processing is isolated from the main Server.
 
     engineer["Engineer / reviewer"]
     administrator["Authorized administrator"]
@@ -241,10 +244,12 @@ flowchart LR
     desktop["IDEA Desktop<br/>Windows application"]
     workspace["Workspace process<br/>local file custody"]
     tools["Office / CAD<br/>external tools"]
-    server["IDEA Server<br/>authorization and product Modules"]
+    server["IDEA Server<br/>control plane and product Modules"]
     format["Format-processing runtime<br/>isolated jobs"]
     db[("Relational store<br/>authoritative metadata")]
-    artifacts[("Private Artifact store<br/>immutable bytes")]
+    gateway["Artifact Transfer Gateway<br/>scoped data-plane Adapter"]
+    vaultA[("Vault A<br/>private bytes")]
+    vaultB[("Vault B<br/>verified replica")]
 
     engineer -->|use| workbench
     engineer -->|use| desktop
@@ -254,20 +259,25 @@ flowchart LR
     desktop -->|HTTPS intent and status| server
     desktop -->|local authenticated IPC| workspace
     workspace <-->|ordinary managed files| tools
-    workspace -->|scoped transfer| server
+    workspace -->|prepare, finalize and status| server
     server -->|transactional records| db
-    server -->|immutable content| artifacts
+    server -->|short-lived Transfer Grant and selected endpoint| workspace
+    workspace <-->|resumable verified bytes| gateway
+    gateway <-->|candidate / immutable bytes| vaultA
+    gateway -->|authenticated Transfer Receipt| server
+    vaultA -.->|verified replication / repair| vaultB
     server -->|bounded job| format
-    format -->|read source / return derivative| artifacts
+    format -->|source/output transfer through scoped custody| gateway
 ```
 
 Long description and conclusion:
 
 1. Workbench Web, Administration Web and Desktop are presentation/interaction containers; none is authority.
 2. Desktop delegates per-user local file materialization and scanning to the Workspace process; Office/CAD reads and saves ordinary files there.
-3. Every protected product or administration command reaches the IDEA Server, which resolves account eligibility, RBAC and owner-Module business gates.
-4. The relational store and Artifact store are private implementation containers, never client integration interfaces.
-5. Format processing receives one bounded job and cannot mutate source or authoritative product state.
+3. Every protected product or administration command reaches the IDEA Server, which resolves account eligibility, RBAC and owner-Module business gates. The Server does not need to proxy each complete file payload.
+4. Artifact Custody selects the eligible Gateway/Vault and issues an exact short-lived Transfer Grant. The Workspace uses that data-plane endpoint only for the granted operation; a Transfer Receipt is evidence, not publication authority.
+5. Vault locations are private implementation containers. Several verified locations may hold the same logical Artifact without changing any Generation or Release identity.
+6. Format processing receives one bounded job and cannot mutate source or authoritative product state.
 
 ### 4.2 Candidate deployment view
 
@@ -285,7 +295,7 @@ zone are labelled with transport; cylinders are private stores.
 ```mermaid
 flowchart LR
     accTitle: Candidate deployment and trust zones
-    accDescr: Engineer Windows PCs run browser, Desktop, Web-rendered Workbench, per-user Workspace process and external Office or CAD tools. Reviewer and administrator devices use separate Web entry points. All cross-device calls use HTTPS to a company-managed server zone containing the server, database, private Artifact store and isolated format runtime.
+    accDescr: Engineer Windows PCs run browser, Desktop, Web-rendered Workbench, per-user Workspace process and external Office or CAD tools. Reviewer and administrator devices use separate Web entry points. Product commands use HTTPS to a company-managed Server control plane. Large bytes move under a scoped grant directly between Workspace and one selected Artifact Gateway/Vault. Several Vault locations may exist independently of the single initial Server host.
 
     subgraph pc["Engineer Windows PC"]
         browser["Browser"]
@@ -309,18 +319,31 @@ flowchart LR
     subgraph serverZone["Company-managed server zone"]
         server["IDEA Server<br/>modular monolith"]
         db[("Relational database")]
-        artifacts[("Private Artifact store")]
         format["Isolated format-processing runtime"]
 
         server --> db
-        server --> artifacts
         server --> format
-        format --> artifacts
+    end
+
+    subgraph vaultZoneA["Vault location A"]
+        gatewayA["Artifact Gateway A"]
+        vaultA[("Private Vault A")]
+        gatewayA <--> vaultA
+    end
+
+    subgraph vaultZoneB["Vault location B"]
+        gatewayB["Artifact Gateway B"]
+        vaultB[("Private Vault B")]
+        gatewayB <--> vaultB
     end
 
     browser -->|HTTPS| server
     webview -->|HTTPS| server
-    workspace -->|HTTPS and scoped transfer| server
+    workspace -->|HTTPS control, status and finalization| server
+    server -->|selected endpoint and short-lived grant| workspace
+    workspace <-->|resumable verified bytes| gatewayA
+    gatewayA -->|authenticated receipt| server
+    vaultA -.->|verified replication / repair| vaultB
     reviewWeb -->|HTTPS| server
     adminWeb -->|HTTPS| server
 ```
@@ -572,11 +595,11 @@ This view focuses on the seam that implementation code and tests shall use. It d
 turn every internal responsibility into a network service or public interface.
 
 **`ARCH-VIEW-MOD-002` — Controlled Workspace publication responsibilities.** **Model profile:** C4
-   Component-level responsibility view; `Draft 0.16`; audience is architecture, implementation,
+   Component-level responsibility view; `Draft 0.17`; audience is architecture, implementation,
 security and verification reviewers. **Question:** which responsibility owns local custody,
 Reservation rules, candidate transfer, publication and uncertain-result recovery? **Scope:** one
 Checkout/Reference/Check-in path inside one Operating Organization. **Excludes:** UI layout,
-database tables, deployment nodes and a selected storage technology. **Trace:** `REQ-WS-001…015`,
+database tables, deployment nodes and a selected storage technology. **Trace:** `REQ-WS-001…016`,
 `REQ-OPS-001/002`, `IF-PRODUCT-COMMAND`, `IF-ARTIFACT-TRANSFER`, `IF-WORKSPACE-IPC`, ADR C1-004 and
 C1-005. **Legend:** a solid arrow is a permitted call or information flow; cylinders are private
 persistent stores; the coordinator is a narrow application component, while named Modules retain
@@ -585,7 +608,7 @@ their own state and rules.
 ```mermaid
 flowchart TB
     accTitle: Controlled Workspace publication responsibilities
-    accDescr: The Desktop and Workspace process call named Checkout, Reference and Check-in use cases. A narrow coordinator starts a shared relational unit of work only for the declared operation; it calls owner Modules but has no generic CRUD or outcome authority. Artifact Custody owns private bytes and locations, while Controlled Product Data owns Generation-manifest ArtifactReferences, Reservations and publication; Product Structure and Format Intelligence own any Representation metadata and exact ArtifactId/digest pins in their own boundaries. Owner state, owner outcome, Audit Evidence and outbox commit together.
+    accDescr: The Desktop and Workspace process call named Checkout, Reference and Check-in use cases. A narrow coordinator starts a shared relational unit of work only for the declared operation; it calls owner Modules but has no generic CRUD or outcome authority. Artifact Custody selects a Vault endpoint and issues a short-lived Transfer Grant. Bytes move directly between Workspace and Artifact Gateway, which returns a Transfer Receipt but cannot publish. Controlled Product Data owns Generation-manifest ArtifactReferences, Reservations and publication. Owner state, owner outcome, Audit Evidence and outbox commit together.
 
     subgraph client["Client custody"]
         direction TB
@@ -614,11 +637,20 @@ flowchart TB
 
     subgraph artifact["Artifact Custody Module"]
         direction TB
-        custody["Artifact Custody Interface<br/>verify/deduplicate candidate; resolve exact Artifact"]
-        transfer["Transfer and private storage Adapter<br/>resumable candidate custody"]
-        staging[("Private candidate / Artifact storage")]
-        custody -->|server-scoped transfer| transfer
-        transfer -->|verified candidate bytes| staging
+        custody["Artifact Custody Interface<br/>select location; issue grant; verify receipt"]
+        location["Location and durability policy<br/>health, locality, capacity, minimum copies"]
+        receipt["Transfer receipt validation<br/>exact OperationId, size and digest"]
+        custody --> location
+        receipt --> custody
+    end
+
+    subgraph dataPlane["Artifact data plane"]
+        direction TB
+        gateway["Artifact Gateway Adapter<br/>validate grant; resume and verify chunks"]
+        vaultA[("Vault A<br/>private candidate / immutable Artifact")]
+        vaultB[("Vault B<br/>verified location")]
+        gateway <--> vaultA
+        vaultA -.->|verified replication / repair| vaultB
     end
 
     subgraph owners["Authoritative supporting owners"]
@@ -630,11 +662,14 @@ flowchart TB
     end
 
     desktop -->|HTTPS intent and confirmation| command
-    workspace -->|HTTPS manifest, digest and chunks| command
+    workspace -->|HTTPS manifest, digest and transfer intent| command
     desktop -->|HTTPS status query| status
     coordinator -->|call declared Checkout or Check-in owner command| publisher
     publisher -->|request immutable decision for server-established ActorContext| policy
     publisher -->|request or resume scoped Artifact custody| custody
+    custody -->|short-lived exact Transfer Grant| workspace
+    workspace <-->|resumable verified chunks; no business authority| gateway
+    gateway -->|authenticated Transfer Receipt| receipt
     custody -->|verified ArtifactId/digest only; never publish| publisher
     publisher -->|validate exact structure when applicable| structure
     coordinator -->|open only this declared operation| database
@@ -654,9 +689,10 @@ Long description and conclusion:
    decision from a server-established `ActorContext`, then applies the current-head, owner,
    Workspace, lease, lifecycle and exact-scope business gates itself. The coordinator never acts as
    an authorization owner.
-4. Artifact Custody makes candidate bytes durable and digest-verified, allocates or reuses only an
-   `ArtifactId` and returns it to the caller. It owns no Generation, Working Head, Reservation or
-   Release decision; candidates remain private and are not a Generation.
+4. Artifact Custody selects an eligible Gateway/Vault, issues an exact short-lived Transfer Grant,
+   validates the returned receipt and allocates or reuses only an `ArtifactId`. The Gateway owns no
+   Generation, Working Head, Reservation or Release decision; candidates remain private and are not
+   a Generation. The business Server need not proxy the complete byte payload.
 5. The coordinator opens a shared relational unit of work only for the declared operation. Each
    owner writes its own state through its Interface; the same commit retains the owner command
    outcome, Audit Evidence and transactional outbox with changed Generations, Working Heads, any
@@ -665,10 +701,10 @@ Long description and conclusion:
 6. A client that loses the response asks the status interface about the same `OperationId`. It never
    infers completion from upload progress and never creates a replacement operation with changed
    inputs.
-7. The Artifact Custody Adapter is a real Seam because filesystem and later object/multi-volume
-   Implementations may replace one another. Neither it nor the use-case coordinator is a general
-   product service: custody hides only byte/location complexity, and coordination hides only one
-   declared business operation.
+7. The Artifact Custody Interface plus Gateway/Vault Adapters form a real Seam because filesystem,
+   object and multi-location Implementations may replace one another. Neither the Adapter nor the
+   use-case coordinator is a general product service: custody hides only byte/location complexity,
+   and coordination hides only one declared business operation.
 
 ## 6. Semantic interface catalogue
 
@@ -679,8 +715,8 @@ candidate Tech details; a later implementation must preserve the behavior and er
 |---|---|---|---|---|
 | `IF-PRODUCT-QUERY` | Owner Module / Web, Desktop | Server-established `ActorContext`, stable identity and requested view → authorized exact state/projection. | No client-supplied `ActorId` is trusted; no floating resolution where an exact pin is required; stale projection is identified; missing/unauthorized fails without data leakage. | Authenticated; owner-authorized; correlation/Audit where material. |
 | `IF-PRODUCT-COMMAND` | Owner Module / Web, Desktop | Session proof at the server boundary, then server-established `ActorContext`, target, expected state, `OperationId` and payload → one accepted/refused owner outcome. | Optimistic preconditions and idempotency are explicit; the owner requests authorization and enforces final business gates; no partial authoritative outcome. | Client `ActorId` or policy snapshot is never authority; decision evidence pins policy/version inputs. |
-| `IF-ARTIFACT-CUSTODY` | Artifact Custody / owner Modules | Candidate or exact Artifact identity/digest plus server-issued operation scope → verified `ArtifactId`/digest, private-custody or read result. | Verification may deduplicate and allocate/reuse an Artifact identity but cannot publish a Generation or mutate owner business state. | Provider/path credentials remain server-only; every material custody result is correlated and auditable. |
-| `IF-ARTIFACT-TRANSFER` | Artifact Custody / Workspace or authorized viewer | Exact Artifact/digest and server-issued operation scope → resumable bytes plus verification result. | Short-lived scoped grant; wrong object, expiry, replay or digest mismatch fails closed. | No permanent store credential in client; server mediates transfer and correlates/audits it. |
+| `IF-ARTIFACT-CUSTODY` | Artifact Custody / owner Modules | Candidate or exact Artifact identity/digest plus operation scope → selected eligible `VaultEndpointId`, short-lived Transfer Grant, validated Transfer Receipt and verified `ArtifactId`/digest/private-custody result. | Custody may deduplicate, select locations and allocate/reuse Artifact identity, but cannot publish a Generation or mutate owner business state. Location and durability policy is versioned; exact thresholds remain open. | Provider/path credentials stay inside Gateway/Vault Adapters; every grant, receipt and material custody result is correlated and auditable. |
+| `IF-ARTIFACT-TRANSFER` | Artifact Custody Gateway Adapter / Workspace or authorized viewer | Exact Transfer Grant bound to direction, OperationId, candidate/Artifact, expected size/digest, ranges and expiry ↔ resumable chunks; authenticated Transfer Receipt on completion/progress. | Wrong endpoint, object, direction, range, expiry, replay, size or digest fails closed. Receipt proves custody work only; it cannot publish, end a Reservation or authorize another object. | No database/permanent Vault credential or unrestricted provider path in Client; bytes use the selected Gateway data plane while business control/finalization remains at the Server. |
 | `IF-WORKSPACE-IPC` | Workspace process / Desktop | Per-user authenticated commands, progress, manifest and local-state evidence. | Another user/session cannot command/read; reconnect does not invent server success. | Protected local transport; no secrets in diagnostic output. |
 | `IF-FORMAT-JOB` | Format Intelligence / isolated Adapter | Immutable source Generation/Artifact digest, Capability Profile and limits → typed candidate/result plus verified output digest. An application-assisted Adapter may invoke only the declared export interface/version. | Idempotent; returned source pin/digest must match the request; Artifact Custody only verifies and stores bytes, while Format Intelligence owns acceptance of Representation metadata, including its own exact source/output ArtifactId/digest pins. Those pins are not CPD Generation-manifest `ArtifactReference` records. Source advance changes the derivative to `Needs update`; failure preserves source and authoritative state. Manual upload uses the same acceptance boundary. | One-job least privilege; application/Adapter/tool provenance and output digest retained; accepted metadata, OwnerCommandOutcome, Audit Evidence and outbox commit in the Format owner unit of work; Release blocks or warns only under its versioned policy. |
 | `IF-COMMITTED-EVENT` | Owner Module / projections and notifications | Committed event with identity, version, actor, correlation and source pins. | Published from transactional outbox only; replay repairs consumers; consumer failure cannot reverse/fabricate owner state. | Classification propagated; consumer access scoped. |
@@ -891,10 +927,10 @@ flowchart TB
 ### 7.1 Checkout and materialization
 
 **`ARCH-VIEW-SEQ-001` — Confirmed Checkout/Reference materialization.** **Model profile:** UML
-Sequence; `Draft 0.14`; engineer, implementation and verification reviewers. **Question:** when are
+Sequence; `Draft 0.15`; engineer, implementation and verification reviewers. **Question:** when are
 Reservations created, and how do exact files enter the Workspace? **Scope:** one confirmed root plus
 selected related documents in one Managed Workspace. **Excludes:** later Check-in and semantic
-content merge. **Trace:** `REQ-WS-001…006/013/015`,
+content merge. **Trace:** `REQ-WS-001…006/013/015/016`, `REQ-OPS-007`,
 `IF-PRODUCT-COMMAND`, `IF-ARTIFACT-TRANSFER`, `WS-01`. **Legend:** `alt` branches are mutually
 exclusive outcomes; dashed returns contain results and no command; every file transfer is for an
 exact Artifact/digest.
@@ -910,7 +946,7 @@ exact Artifact/digest.
 ```mermaid
 sequenceDiagram
     accTitle: Confirmed Checkout and Reference materialization
-    accDescr: The engineer first sees and confirms an exact document scope. The server evaluates permission and current state for every row. One conflict refuses the requested Reservation set. If valid, the server creates Reservations only for Checkout rows, returns exact Artifact pins for both modes, and mediates each Store-to-Workspace byte stream so the Workspace verifies each digest before updating its manifest or opening the root file.
+    accDescr: The engineer first sees and confirms an exact document scope. The Server evaluates permission and current state for every row. One conflict refuses the requested Reservation set. If valid, the Server creates Reservations only for Checkout rows. Artifact Custody selects a healthy verified location and returns a short-lived read grant. Exact bytes then flow directly from the selected Vault through its Gateway to the Workspace, which verifies the digest before updating its manifest or opening the root file.
 
     actor Engineer
     participant Desktop as IDEA Desktop
@@ -918,7 +954,9 @@ sequenceDiagram
     participant Server as IDEA Server
     participant Policy as Access Policy
     participant Product as Controlled Product Data
-    participant Store as Private Artifact store
+    participant Custody as Artifact Custody
+    participant Gateway as Selected Artifact Gateway
+    participant Vault as Selected Vault
     participant Tool as Office or CAD
 
     Engineer->>Desktop: Select root and request work
@@ -938,13 +976,15 @@ sequenceDiagram
     else complete scope is valid
         Product->>Product: Create Reservation set for Checkout rows only
         Product-->>Server: ReservationIds plus exact Artifact pins
+        Server->>Custody: Prepare exact read transfers for confirmed pins
+        Custody-->>Server: Selected healthy locations and short-lived read grants
         Server-->>Desktop: Confirm modes, pins and scoped transfer identities
         Desktop->>Workspace: Materialize confirmed entries
         loop each exact Artifact
-            Workspace->>Server: Read pinned Artifact by scoped transfer
-            Server->>Store: Read immutable bytes by digest
-            Store-->>Server: Immutable byte range
-            Server-->>Workspace: Stream scoped bytes
+            Workspace->>Gateway: Read/resume exact ranges with Transfer Grant
+            Gateway->>Vault: Read immutable bytes by opaque provider key
+            Vault-->>Gateway: Immutable byte ranges
+            Gateway-->>Workspace: Stream scoped bytes and authenticated receipt
             Workspace->>Workspace: Verify full digest and persist manifest entry
         end
         alt every required root file is verified
@@ -952,13 +992,14 @@ sequenceDiagram
             Desktop->>Tool: Open ordinary managed file
         else transfer interrupted or digest fails
             Workspace-->>Desktop: Incomplete and verified progress preserved
-            Note over Desktop,Server: Resume or cancel explicitly and do not report Checkout complete
+            Note over Desktop,Gateway: Resume or cancel explicitly and do not report materialization complete
         end
     end
 ```
 
 The Reservation-set creation is atomic for the confirmed Checkout rows; Reference rows never receive
-one. File transfer occurs afterward and may resume independently. Therefore materialization failure
+one. File transfer occurs afterward through the selected Gateway and may resume independently. The
+IDEA Server authorizes and tracks the operation but does not proxy the complete payload. Therefore materialization failure
 does not invent a successful local file, end the already granted Reservations or change a
 Generation. The user can resume, cancel under policy or let the lease expire; each path remains
 visible and attributable.
@@ -1088,11 +1129,11 @@ operation until authoritative evidence resolves it.
 | `Needs reconciliation` | Commit evidence is found, or non-commit plus safe resumability is proved. | `Committed`, `Transferring` or `Failed` | Resolution follows authoritative evidence; it never guesses from client progress. |
 
 **`ARCH-VIEW-SEQ-002` — Atomic Check-in publication.** **Model profile:** UML Sequence; `Draft
-0.14`; engineer, implementation, operations and verification reviewers. **Question:** where is the
+0.21`; engineer, implementation, operations and verification reviewers. **Question:** where is the
 last safe refusal point, and what exactly becomes authoritative together? **Scope:** one confirmed
 multi-document Check-in scope and one immutable `OperationId` input. **Excludes:** response-loss
 recovery, which is isolated in
-`ARCH-VIEW-SEQ-007`. **Trace:** `REQ-WS-006…013/015`, `REQ-OPS-001`, `IF-PRODUCT-COMMAND`,
+`ARCH-VIEW-SEQ-007`. **Trace:** `REQ-WS-006…013/015/016`, `REQ-OPS-001/007/008`, `IF-PRODUCT-COMMAND`,
 `IF-ARTIFACT-TRANSFER`, ADR C1-004/C1-005, `WS-02/03/07`. **Legend:** private staging is outside
 the authoritative database transaction; the `alt` paths are mutually exclusive results for the
 same operation.
@@ -1100,12 +1141,16 @@ same operation.
 1. Workspace process scans/hashes the complete candidate scope and classifies unchanged, changed,
    missing, Out of date and modified-without-Checkout entries using the approved UI terms.
 2. Desktop requires confirmation of exact scope and explains that a successful or No Change result ends Checkout for that scope. Core v0 offers no retain-after-Check-in option.
-3. Content is staged privately through Artifact Custody. The Server establishes `ActorContext` from
-   session proof and the named Check-in coordinator validates digest, metadata, relations, policy,
-   owner, Workspace, Reservation and expected Generation.
+3. The Server establishes `ActorContext` from session proof and the named Check-in coordinator
+   validates metadata, relations, policy, owner, Workspace, Reservation and expected Generation.
+   Artifact Custody then selects an eligible Gateway/Vault and issues an exact short-lived upload
+   grant; changed bytes travel directly from Workspace to that Gateway.
 4. Any invalid entry refuses the entire confirmed operation. Local work is preserved; the response
    shows expected/current Generation and valid refresh/reapply, Save As, retry or governed recovery.
-5. Verify and durably materialize immutable candidate bytes in private storage **before** publication. A failed or uncertain file write cannot reach `Ready to commit`. No filesystem/object-store write is assumed to participate in a database transaction.
+5. Gateway verifies the resumable chunks, size and digest and returns an authenticated receipt.
+   Artifact Custody validates that receipt and the applicable minimum-location policy **before**
+   publication. A failed or uncertain write/replication cannot reach `Ready to commit`. No
+   filesystem/object-store write is assumed to participate in a database transaction.
 6. One shared relational database transaction revalidates account/session eligibility, owner policy,
    Reservation, expected heads and scope. Its named coordinator calls owner Modules only through
    their Interfaces; the owners record Artifact manifest references, required Structure Snapshots,
@@ -1118,70 +1163,69 @@ same operation.
 ```mermaid
 sequenceDiagram
     accTitle: Atomic Check-in publication
-    accDescr: The engineer confirms an exact scope after a complete local scan. The Server establishes ActorContext from session proof, then a named Check-in coordinator calls the Controlled Product Data owner. That owner asks Access Policy for authorization and applies its own business gates. Changed bytes are staged and digest-verified by Artifact Custody. At commit time, a shared relational unit of work revalidates authorization and business state, records each owner outcome, Audit Evidence and outbox atomically, publishes every changed Generation and ends confirmed Reservations as Ended. Any refusal or pre-commit failure publishes none and preserves local work.
+    accDescr: The engineer confirms the exact scope after a local scan. Server-owned Identity, Access Policy and Controlled Product Data perform preflight. Changed bytes go directly from the Desktop Workspace client through a selected Gateway to private Vault staging. Artifact Custody validates authenticated receipts and any required replica evidence. Finalize uses the same OperationId and scope. Current authorization, heads, Reservations and durability are revalidated before one relational owner transaction commits changed Generations, Audit, outcomes and confirmed Reservations Ended. No Change creates no Generation but still ends the confirmed hold. Refusal or known pre-commit failure preserves local work and the prior product baseline. Internal owner calls are detailed in the companion Module and authorization views.
 
     actor Engineer
-    participant Desktop as IDEA Desktop
-    participant Workspace as Workspace process
+    participant Client as Desktop / Workspace client
     participant Server as IDEA Server
-    participant IAM as Identity and Accounts
-    participant Policy as Access Policy
-    participant Coordinator as Check-in use-case coordinator
-    participant Product as Controlled Product Data
-    participant Custody as Artifact Custody
-    participant Store as Private Artifact store
-    participant Audit as Audit Evidence
-    participant DB as Relational store and unit of work
+    participant Gateway as Selected Artifact Gateway
+    participant Vault as Selected Vault
+    participant Replica as Policy-selected replica Vault
+    participant DB as Relational store
 
-    Engineer->>Desktop: Request Check-in
-    Desktop->>Workspace: Scan complete confirmed scope
-    Workspace-->>Desktop: Changed, unchanged, missing or out-of-date rows
-    Engineer->>Desktop: Confirm exact scope
-    Desktop->>Server: Prepare(session proof, OperationId, exact scope, input fingerprint)
-    Server->>IAM: Establish current ActorContext from session proof
-    IAM-->>Server: Server-established ActorContext or bounded denial
-    Server->>Coordinator: Start declared Check-in with ActorContext
-    Coordinator->>Product: Preflight declared Check-in with ActorContext
-    Product->>Policy: Authorize(ActorContext, Permission, ResourceId, Scope, expected state)
-    Policy-->>Product: Immutable AuthorizationDecision or bounded refusal
-    Product->>Product: Check heads, holder, Workspace, lease and lifecycle
+    Engineer->>Client: Scan and confirm exact Check-in scope
+    Client->>Server: Prepare(session proof, OperationId, scope, input fingerprint)
+    Server->>Server: IAM, Access Policy and CPD validate the complete request
     alt any entry is stale, unauthorized or invalid
-        Product-->>Coordinator: Refuse with affected row and safe facts
-        Coordinator->>DB: BEGIN shared UoW for this declared operation
-        Coordinator->>Product: Invoke owner refusal path under the declared UoW
-        Product->>DB: Write refused Controlled Product Data OwnerCommandOutcome only
-        Product->>Audit: Append refusal evidence in same UoW
-        Audit->>DB: Write append-only Audit Evidence only
-        Product->>DB: Retain transactional outbox and COMMIT
-        Server-->>Desktop: Conflict and allowed recovery actions
-        Note over Workspace: Local candidate remains intact
-    else declared scope passes preflight
-        Coordinator->>Product: Register Prepared OperationId and immutable input fingerprint
-        Product->>DB: Write Check-in Operation owner state
-        loop each changed Artifact
-            Workspace->>Server: Upload or resume verified chunks
-            Server->>Custody: Accept scoped chunk/range
-            Custody->>Store: Persist private candidate bytes
+        Server->>DB: Record owner refusal outcome and Audit only
+        Server-->>Client: Refuse complete scope with affected rows
+        Note over Client,Server: Preserve local work and prior heads<br/>End no Reservation on refusal
+    else complete scope passes preflight
+        Server->>DB: CPD records Prepared OperationId and exact input fingerprint
+        opt changed Artifact bytes are required
+            Server->>Server: Artifact Custody selects eligible Gateway/Vault and policy
+            Server-->>Client: Short-lived exact upload grants
+            loop each changed Artifact
+                Client->>Gateway: Upload/resume missing chunks directly with grant
+                Gateway->>Vault: Persist private chunks and verify full size/digest
+                Gateway-->>Server: Authenticated Transfer Receipt, not Check-in success
+            end
+            opt durability policy requires another verified location
+                Server->>Vault: Artifact Custody authorizes exact replication task
+                Vault->>Replica: Copy immutable bytes directly
+                Replica-->>Server: Authenticated verified replica evidence
+            end
         end
-        Custody->>Store: Verify complete size and full digest
-        Store-->>Custody: Candidate set durable and exact
-        Custody-->>Product: Verified ArtifactId/digest set, no Generation published
-        Coordinator->>DB: BEGIN shared UoW
-        Coordinator->>Product: Commit same declared operation under UoW
-        Product->>Policy: Commit-time revalidate ActorContext and policy/membership inputs
-        Policy-->>Product: Current immutable AuthorizationDecision
-        Product->>Product: Lock/revalidate business state under UoW
-        Product->>DB: Write owned Generations, heads, Change Set and Reservations Ended
-        Policy->>DB: Retain decision evidence under same UoW
-        Product->>Audit: Append evidence under same UoW
-        Audit->>DB: Write append-only Audit Evidence only
-        Product->>Product: Record final OwnerCommandOutcome
-        Product->>DB: Retain transactional outbox and COMMIT
-        DB-->>Coordinator: One complete committed result
-        Coordinator-->>Server: Generations, No Change rows and dispositions
-        Server-->>Desktop: Terminal Committed result for OperationId
+        Client->>Server: Finalize same OperationId, scope and input fingerprint
+        Server->>Server: Revalidate current session, receipts and durability policy
+        alt session and custody evidence are eligible
+            Server->>DB: BEGIN shared relational unit of work
+            Server->>Server: CPD locks heads/Reservations and applies current Access Policy
+            alt every commit-time authorization and business gate passes
+                Server->>DB: CPD writes changed Generations/heads, Change Set and confirmed Reservations Ended
+                Server->>DB: Owners retain decisions, Audit, outcomes and outbox in the same UoW
+                Server->>DB: COMMIT complete owner outcome
+                DB-->>Server: Complete committed result for OperationId
+                Server-->>Client: Check-in success with changed and No Change row dispositions
+                Note over Client,Server: No Change creates no Generation<br/>Successful Check-in still ends the confirmed hold
+            else authorization, head, Reservation or business gate changed
+                Server->>DB: ROLLBACK publication UoW
+                Server->>DB: Record owner refusal outcome and Audit separately
+                Server-->>Client: No publication and no hold ended, preserve local work
+            end
+        else session, transfer evidence or durability is unresolved
+            Server-->>Client: Not committed, preserve work and resolve same OperationId
+        end
     end
 ```
+
+This sequence uses a Server-container abstraction: IAM, Access Policy, Controlled Product Data
+(`CPD`), Artifact Custody, Audit Evidence and the declared use-case coordinator remain their
+existing owner Modules inside the Server. They are not collapsed into one domain owner or deployed
+as new services. `ARCH-VIEW-MOD-002`, `ARCH-VIEW-SEQ-004` and the interface catalogue retain the
+internal owner/UoW contract. The figure deliberately omits that nested call detail so the byte path,
+finalization gates and all-or-none outcome remain readable. A lost commit response is resolved by
+`ARCH-VIEW-SEQ-007`, not by declaring failure or submitting a new OperationId.
 
 Private Artifact writes are intentionally not presented as part of the relational ACID transaction.
 The invariant is logical all-or-none visibility: verified candidates may exist privately before
@@ -2021,14 +2065,15 @@ validate and register a Representation; `alt` paths are mutually exclusive termi
 ```mermaid
 sequenceDiagram
     accTitle: Qualified neutral Representation production
-    accDescr: Format Intelligence resolves one exact source Generation, Artifact digest and versioned capability profile. For an automatic path it grants a bounded immutable-input job to an isolated format adapter, which may invoke a qualified application export or standalone converter. For a manual path it receives an uploaded candidate. Artifact Custody verifies and stores immutable output bytes and returns the exact Artifact identity and digest, but byte custody does not make a Representation authoritative. Format Intelligence alone validates and accepts Representation metadata, source pins and producer provenance in its owner unit of work, recording the Owner Command Outcome, Audit Evidence and applicable outbox atomically. If metadata acceptance fails after byte storage, the candidate remains private and unreferenced for governed reconciliation; the source is unchanged. When the source later advances, the old committed Representation remains reproducible but is marked Needs update for the newer head.
+    accDescr: Format Intelligence resolves an exact source Generation and capability profile. Artifact Custody authorizes input and output transfers. The isolated worker reads source bytes directly through a Gateway and reports a candidate manifest, not the output payload, to Format Intelligence. Automatic and manual output bytes also go directly to the selected Gateway under a scoped upload grant. Gateway receipts establish verified private custody only. Format Intelligence accepts Representation metadata in its relational owner transaction; failure leaves the candidate private and the source unchanged.
 
     actor User
     participant UI as Workbench
     participant Product as Controlled Product Data
     participant Format as Format Intelligence
     participant Worker as Isolated Format Adapter
-    participant Artifacts as Artifact custody
+    participant Artifacts as Artifact Custody
+    participant Gateway as Selected Artifact Gateway
     participant Lifecycle as Lifecycle Governance
     participant Audit as Audit Evidence
     participant UoW as Shared relational unit of work
@@ -2037,22 +2082,31 @@ sequenceDiagram
     User->>UI: Request PDF or neutral Representation
     UI->>Format: Request output for exact Generation and profile
     Format->>Product: Resolve immutable source Artifact and digest
-    Product-->>Format: Exact source identity and scoped read grant
+    Product-->>Format: Exact source Generation, Artifact identity and digest
     Format->>Format: Validate declared capability and resource limits
 
     alt qualified automatic or application-assisted path
-        Format->>Worker: Run bounded job with immutable input and profile
-        Worker->>Artifacts: Read only the granted source Artifact
-        Artifacts-->>Worker: Exact bytes and digest
-        Worker-->>Format: Candidate output, tool versions and typed result
+        Format->>Artifacts: Prepare exact input read for bounded job
+        Artifacts-->>Format: Selected Gateway and short-lived read grant
+        Format->>Worker: Run bounded job with source pin, grant and profile
+        Worker->>Gateway: Read exact source under grant
+        Gateway-->>Worker: Stream exact source bytes
+        Worker-->>Format: Candidate manifest, digest, size, tool versions and typed result
+        Format->>Artifacts: Prepare exact candidate output upload
+        Artifacts-->>Worker: Short-lived upload grant and selected endpoint
+        Worker->>Gateway: Stream candidate output directly
     else approved manual path
-        UI->>Format: Upload candidate output with declared source
+        UI->>Format: Candidate manifest and declared source/provenance
+        Format->>Artifacts: Prepare exact manual candidate upload
+        Artifacts-->>UI: Short-lived upload grant and selected endpoint
+        UI->>Gateway: Stream manual output directly
     end
 
-    Format->>Format: Verify output digest, type, source pins and producer provenance
+    Gateway->>Gateway: Persist private bytes in selected Vault and verify size/digest
+    Gateway-->>Artifacts: Authenticated Transfer Receipt or bounded failure
+    Artifacts-->>Format: Verified private candidate identity/digest or bounded failure
+    Format->>Format: Validate receipt-backed digest, type, source pins and producer provenance
     alt valid candidate matches requested source
-        Format->>Artifacts: Store immutable Representation output by digest
-        Artifacts-->>Format: Artifact identity and verified digest
         Note over Format,Artifacts: Artifact bytes remain external immutable custody. Only verified identity and digest cross the relational seam.
         Format->>UoW: BEGIN Format owner operation
         Format->>Format: Revalidate exact source Generation/Artifact, profile and business conditions
@@ -2074,7 +2128,7 @@ sequenceDiagram
             Format->>UoW: COMMIT refusal evidence only
             Format-->>UI: Not accepted — private unreferenced candidate remains for reconciliation
         end
-    else timeout, malformed, mismatched or undeclared capability
+    else worker/transfer timeout, malformed, mismatched or undeclared capability
         Format->>Audit: Append typed failure and bounded worker evidence
         Format-->>UI: Failed without changing source or product state
     end
@@ -2138,48 +2192,61 @@ Physical durability, concurrent content-addressed writes and crash behavior of t
 must be qualified on the actual filesystem/storage stack.
 
 **`ARCH-VIEW-SEQ-006` — Resumable large-Artifact transfer.** **Model profile:** UML Sequence;
-`Draft 0.12`; implementation, operations and security reviewers. **Question:** how can one multi-GB
+`Draft 0.13`; implementation, operations and security reviewers. **Question:** how can one multi-GB
 Artifact resume without whole-file memory or premature publication? **Scope:** one transfer within
-one Check-in Operation. **Excludes:** final multi-document commit. **Trace:** `REQ-WS-012/015`,
-`REQ-OPS-001`, `QRS-011`, `WS-08`. **Legend:** the loop sends only missing ranges; `alt` isolates
+one Check-in Operation. **Excludes:** final multi-document commit. **Trace:** `REQ-WS-012/015/016`,
+`REQ-OPS-001/007`, `QRS-011/013`, `WS-08`. **Legend:** the loop sends only missing ranges; `alt` isolates
 interruption handling. This view covers transfer into private staging only. Publication remains the
 separate sequence in section 7.2.
 
 ```mermaid
 sequenceDiagram
     accTitle: Resumable large Artifact transfer
-    accDescr: The Workspace begins or resumes one transfer bound to an OperationId, digest and size. The server reports accepted ranges so only missing chunks are sent. Private staging verifies each chunk and the full digest; completion makes a private candidate ready but never publishes a Generation.
+    accDescr: The Workspace asks the IDEA Server control plane to begin or resume one transfer bound to an OperationId, digest and size. Artifact Custody selects an eligible Gateway and Vault and returns a short-lived scoped grant. Workspace then sends only missing chunks directly to the Gateway. The Gateway and Vault verify each chunk and the full digest and return an authenticated receipt. Completion makes a private candidate ready but never publishes a Generation.
 
     participant Workspace as Workspace process
     participant Server as IDEA Server
-    participant Staging as Private staging
+    participant Custody as Artifact Custody
+    participant Gateway as Selected Artifact Gateway
+    participant Vault as Selected Vault
 
-    Workspace->>Server: Begin or resume(OperationId, Artifact digest, size)
-    Server-->>Workspace: TransferId and accepted byte ranges
-    loop Missing chunks only
-        Workspace->>Server: Upload byte range plus chunk checksum
-        Server->>Staging: Persist verified chunk privately
-        Server-->>Workspace: Acknowledge accepted range
+    Workspace->>Server: Prepare/resume(OperationId, direction, digest, size)
+    Server->>Custody: Authorize exact candidate transfer
+    Custody->>Custody: Select eligible Gateway/Vault
+    Custody-->>Workspace: TransferId, accepted ranges, endpoint and short-lived grant
+    loop Until all exact ranges are accepted, send missing chunks only
+        Workspace->>Gateway: Upload byte range plus checksum and grant
+        Gateway->>Vault: Persist verified chunk privately
+        alt range acknowledged
+            Gateway-->>Workspace: Acknowledge accepted range
+        else connection interrupted or acknowledgement uncertain
+            Workspace->>Server: Resolve/resume same TransferId and OperationId
+            Server->>Custody: Revalidate operation, grant and location
+            Custody-->>Workspace: Reconciled accepted ranges and renewed/replacement grant
+            Note over Workspace,Vault: On location change, count only ranges verified at the replacement location
+        end
     end
-    alt connection interrupted
-        Workspace->>Server: Resume same TransferId and OperationId
-        Server-->>Workspace: Return durable accepted ranges
-    end
-    Workspace->>Server: Complete transfer
-    Server->>Staging: Assemble or stream-read and verify full digest
-    Server-->>Workspace: Private candidate ready, or bounded failure
+    Workspace->>Gateway: Complete transfer under exact grant
+    Gateway->>Vault: Assemble or stream-read and verify full digest
+    Gateway-->>Custody: Authenticated Transfer Receipt
+    Custody-->>Server: Private candidate verified, or bounded failure
+    Server-->>Workspace: Transfer status, no Check-in success inferred
 ```
 
 The transfer contract is range/chunk based, digest verified and idempotent. It does not require the
-complete Artifact in client or server memory. A corrupt chunk is rejected; an uncertain response is
+complete Artifact in Client, Server or Gateway memory, and the business Server does not proxy the
+complete payload. A corrupt chunk is rejected; an uncertain response is
 resolved by asking which ranges and terminal result the same operation already owns. A private
 candidate is not a Generation and remains invisible to authoritative reads until the Check-in commit.
 
 ### 9.2 Initial deployment candidate
 
-Evaluate one company-controlled server/VM for the monolith, relational database and private Artifact volume,
-with separate process identities, least-privilege filesystem access and no database/public-file
-access from clients. This is a proposed evaluation topology, not demonstrated sizing or availability.
+Evaluate one company-controlled server/VM for the modular monolith and relational database, with
+separate process identities and no database access from clients. Deploy one or more Artifact
+Gateway/Vault nodes as independent byte-custody locations; a Gateway may initially be colocated with
+its filesystem Vault, while a later object-storage Adapter may use the same Interface. This is a
+proposed evaluation topology, not demonstrated sizing, availability or a technology selection for
+the Gateway/Vault boundary.
 
 The architecture direction is a Linux-first headless Server boundary, independently deployable from
 the Windows Desktop/Workspace boundary. The exact Linux distribution, Server runtime/framework,
@@ -2189,43 +2256,150 @@ decision matrix; their qualification remains `NOT-RUN`. Existing Windows machine
 selection weight. The isolated format runtime may require a separate Windows worker host and license;
 that does not require moving product authority into the worker or changing the whole Server OS.
 
-A single server is a single outage domain. No failover/zero-downtime claim is made. Reject or revise
+A single business Server remains a control-plane outage domain. Multiple Vaults remove its
+large-payload throughput role and can preserve verified byte locations, but they do not make the
+application highly available. No failover/zero-downtime claim is made. Reject or revise
 this topology if the approved outage/recovery objective cannot be met or the company requires more
 availability. A separate physical/administrative backup failure domain is required for the proposed
 severe-server-loss drill; a second folder, RAID or same-host snapshot alone is not that evidence.
 
-**`ARCH-VIEW-EVO-001` — Artifact-storage evolution boundary.** **Model profile:** C4-style
-   Component/evolution view; `Draft 0.16`; architecture, data and operations reviewers. **Question:**
-how can storage capacity/provider change without changing product identity? **Scope:** Artifact
-storage Seam and controlled migration. **Excludes:** selected vendor, topology and capacity claim.
-**Trace:** `REQ-OPS-003…006`, `QRS-012`, `VVP-017`, ST-01…04. **Legend:** solid arrows are current
-required calls; dashed arrows are optional future Adapters; the cylinder is authoritative relational
-location metadata. The diagram selects no vendor and makes no claim that Core v0 initially stores
-hundreds of TB.
+**`ARCH-VIEW-EVO-001` — Multi-location Artifact custody and evolution.** **Model profile:** C4-style
+Component/evolution view; `Draft 0.17`; architecture, data and operations reviewers. **Question:**
+how can several Vaults serve, replicate and later change provider without changing product identity?
+**Scope:** Artifact Custody Interface, Gateway/Vault Adapters, location policy and controlled
+replication/migration. **Excludes:** selected vendor/runtime, exact topology, durability count and
+capacity claim. **Trace:** `REQ-OPS-003…008`, `QRS-012/014`, `VVP-017`, ST-01…07. **Legend:** solid
+arrows are required control/data flows; dashed arrows are verified replication/migration; cylinders
+hold authoritative metadata or private bytes. The diagram selects no provider and makes no capacity
+or high-availability claim.
 
 ```mermaid
 flowchart LR
-    accTitle: Artifact storage evolution boundary
-    accDescr: Artifact Custody identifies Artifacts by stable identity and digest and calls one storage interface. Controlled Product Data retains CPD ArtifactReferences only in Generation manifests; Product Structure and Format Intelligence keep any exact ArtifactId/digest pins inside their own Representation metadata. A filesystem adapter is the current candidate; later object or multi-volume adapters can replace it. Migration copies and verifies bytes before changing custody location records, without changing Generations or Releases.
+    accTitle: Multi-location Artifact custody and evolution
+    accDescr: Controlled Product Data pins only logical Artifact identity and digest. Artifact Custody owns location selection, short-lived grants, receipt validation and a versioned durability policy. Clients transfer bytes through a selected Gateway. The same logical Artifact may have verified locations in several filesystem or object-storage Vaults. Replication, repair, migration and failover change location records only; they never rewrite a Generation or Release.
 
-    Product[Controlled Product Data] -->|Generation-manifest ArtifactReference: exact Artifact ID and digest| Custody[Artifact Custody Module]
-    Custody -->|Artifact ID, digest, operation| Port[Artifact Storage Port]
-    Port -->|current candidate| FS[Filesystem Adapter]
-    Port -.->|future option| OBJ[Object Storage Adapter]
-    Port -.->|future option| MULTI[Multi-volume or tiering Adapter]
-    Product -->|authoritative Generation manifests only| DB[(Relational database)]
-    Custody -->|Artifact, location and migration records| DB
-    MIG[Migration and Reconciliation] -->|copy, verify digest, switch location| Port
-    MIG -->|record custody progress and outcome| Custody
+    Product[Controlled Product Data] -->|exact Artifact ID and digest| Custody[Artifact Custody Module]
+    Product -->|Generation manifests| DB[(Relational database)]
+    Custody -->|Artifact, locations, policy, receipts and tasks| DB
+    Custody -->|select endpoint and issue grant| Client[Workspace / authorized reader]
+
+    subgraph A[Vault location A]
+      GatewayA[Artifact Gateway A]
+      FSA[(Filesystem Vault Adapter)]
+      GatewayA <--> FSA
+    end
+
+    subgraph B[Vault location B]
+      GatewayB[Artifact Gateway B]
+      FSB[(Filesystem or object Vault Adapter)]
+      GatewayB <--> FSB
+    end
+
+    Client <-->|scoped resumable bytes| GatewayA
+    GatewayA -->|authenticated receipt| Custody
+    FSA -.->|verified replication / repair| FSB
+    RECON[Replication, migration and reconciliation] -->|policy task and evidence| Custody
+    Custody -->|grant/repair instruction| GatewayB
 ```
 
 Text alternative: Controlled Product Data owns `ArtifactReference` values in its Generation
-manifests but does not own Artifact custody. Artifact Custody knows stable Artifact identities and
-digests, not physical paths visible to callers, and calls one Artifact Storage Port. Core v0 may use
-a filesystem adapter; later object-storage or multi-volume adapters can be introduced behind the
-same port. Migration copies privately, verifies every digest, records custody progress and changes
-the authoritative location only after reconciliation, so Generation manifests and Release Records do
-not change.
+manifests but does not own Artifact custody. Artifact Custody knows the stable Artifact identity and
+digest, several replaceable physical locations, their health and the applicable durability policy.
+It selects a Gateway/Vault and issues a short-lived grant; the Client transfers bytes through that
+Gateway, not through the business Server. Replication, repair and migration copy privately and verify
+the digest before a location becomes eligible. Changing or losing a location cannot change the
+Artifact, Generation or Release identity. Several replicas do not replace a coordinated backup.
+
+### 9.2.1 Exact read failover
+
+**`ARCH-VIEW-SEQ-012` — Exact Artifact read failover between Vault locations.**
+**Model profile:** UML Sequence; `Draft 0.21`; engineer, operations and security reviewers.
+**Question:** can a failed location be replaced without serving a different file?
+**Scope:** one read transfer pinned to an ArtifactId, digest and size. **Excludes:** moving partial
+upload staging, final Check-in and automatic CAD/Office merge. **Trace:** `REQ-WS-016`,
+`REQ-OPS-007/008`, `IF-ARTIFACT-TRANSFER`, ST-06. **Legend:** dashed returns are results; `alt`
+separates an eligible verified replica from a safe refusal. Location labels describe roles, not a
+fixed physical topology.
+
+```mermaid
+sequenceDiagram
+    accTitle: Exact Artifact read failover between Vault locations
+    accDescr: The reader preserves verified local ranges after a read from location A fails. It asks the Server control plane to resume the same exact Artifact read. Artifact Custody revalidates current access and selects location B only if it holds the same verified Artifact identity, digest and size. The reader receives a replacement short-lived grant and downloads missing ranges directly from Gateway B. It verifies the full digest before accepting the local file. No eligible copy means a bounded refusal, not a different Version or a complete file.
+
+    participant W as Workspace / authorized reader
+    participant S as IDEA Server
+    participant C as Artifact Custody
+    participant A as Gateway / Vault A
+    participant B as Gateway / Vault B
+
+    W->>A: Read exact Artifact ranges under current grant
+    A--xW: Connection/location failure
+    W->>W: Preserve verified partial ranges and keep file incomplete
+    W->>S: Resume same read with ArtifactId, digest, size and verified ranges
+    S->>S: Revalidate current session, access and exact read pin
+    S->>C: Select eligible verified location for the same Artifact
+    alt location B is eligible and holds the exact verified Artifact
+        C-->>S: Replacement endpoint and scoped short-lived read grant
+        S-->>W: Same file pin and replacement transfer grant
+        W->>B: Read missing ranges directly under replacement grant
+        B-->>W: Exact immutable byte ranges
+        W->>W: Verify complete size and full digest before local acceptance
+    else access refused or no eligible verified location
+        S-->>W: Bounded refusal, preserve verified local progress
+        Note over W,C: Do not substitute a newer Version or report completion
+    end
+```
+
+Text alternative: the requested Artifact pin remains unchanged. Custody replaces only the serving
+location and grant. Local verified ranges may be reused only for that exact pin; completion still
+requires a full digest check. This read rule does not imply that partial upload chunks already exist
+on another Vault. An upload relocation requires explicit reconciliation of candidate ranges; it
+cannot reuse location A's acknowledgements as proof of bytes stored at location B.
+
+### 9.2.2 Verified replica creation and policy evaluation
+
+**`ARCH-VIEW-SEQ-013` — Verified replica creation and eligibility.**
+**Model profile:** UML Sequence; `Draft 0.21`; operations, data and security reviewers.
+**Question:** when may a new physical copy be selected or count toward durability?
+**Scope:** one immutable Artifact, one replication task and an exact Storage/Durability Policy
+version. **Excludes:** backup, location-count selection and the final relational Check-in commit.
+**Trace:** `REQ-OPS-007/008`, `QRS-014`, ST-07. **Legend:** `alt` separates verified eligibility from
+private/ineligible failure; source and target are independent byte-custody roles.
+
+```mermaid
+sequenceDiagram
+    accTitle: Verified replica creation and eligibility
+    accDescr: Artifact Custody schedules an idempotent replication task for an exact Artifact and policy version. Authorized source and target Gateway/Vault nodes copy immutable bytes directly without Client reupload or Server payload transit. The target remains private and ineligible until size and full digest verification pass. Custody validates correlated evidence and marks the physical location eligible, then evaluates the applicable durability policy. Failure keeps the target ineligible and leaves product identity unchanged. A verified replica is not a backup or a Check-in result.
+
+    participant C as Artifact Custody
+    participant A as Source Gateway / Vault
+    participant B as Target Gateway / Vault
+    participant D as Custody metadata
+
+    C->>D: Record TaskId, ArtifactId, digest, size and exact policy version
+    C->>A: Authorize scoped source/target replication task
+    C->>B: Authorize private target staging for the same task
+    A->>B: Copy/resume immutable byte ranges directly
+    B->>B: Verify accepted ranges, size and full digest
+    alt exact complete copy and authenticated evidence are valid
+        B-->>C: Correlated verified-location evidence
+        C->>C: Validate task, target, digest and policy inputs
+        C->>D: Mark location eligible for this Artifact
+        C->>C: Evaluate durability policy over eligible locations
+        Note over C,D: No new Generation, eligibility alone is not Check-in success
+    else transfer, digest or evidence validation fails
+        B-->>C: Typed failure and verified progress only
+        C->>D: Keep target ineligible and retain retry/repair task state
+        Note over C,B: Preserve valid source<br/>Incomplete target does not count as a replica
+    end
+```
+
+Text alternative: replication moves bytes between authorized storage nodes, not through the Client
+or the business Server. Custody records one additional physical location for the same logical
+Artifact only after complete verification. A failed target cannot satisfy the minimum-location
+policy. If the applicable Check-in policy requires that replica, finalization waits or refuses;
+otherwise the governed task may continue in the background. Exact copy counts and failure-domain
+rules remain open. Independent coordinated backup is still required.
 
 ### 9.3 Recovery design and measurement
 
@@ -2344,7 +2518,7 @@ external CAD/Office editors, Server/IAM, authoritative data stores, isolated for
 separate backup/recovery custody. A shared screen or ordinary file does not merge those authorities.
 
 **`ARCH-VIEW-SEC-001` — Protected data flow across trust zones.** **Model profile:** trust-boundary
-  data-flow view; `Draft 0.16`; security, architecture and operations reviewers. **Question:** which
+  data-flow view; `Draft 0.17`; security, architecture and operations reviewers. **Question:** which
 protected data crosses each trust zone, where is authority checked, and which credentials or powers
 must never cross? **Scope:** the initial logical deployment and its backup/format-processing zones.
 **Excludes:** final host count, ports, firewall rules, selected backup product and a completed threat
@@ -2355,7 +2529,7 @@ backup/recovery flows; each subgraph is a separate trust zone, not an ownership 
 ```mermaid
 flowchart TB
     accTitle: Protected data flow across trust zones
-    accDescr: Web-rendered content crosses a narrow bridge into the native Desktop host, which crosses authenticated manifest-scoped IPC into a per-user Workspace process, then ordinary managed files reach CAD or Office without IDEA authority. The required trust chain is WebView → Desktop → Workspace → CAD/Office, while Artifact bytes follow Store → Server → Workspace. Clients send session proof, never a trusted ActorId. Server/IAM establishes ActorContext before Access Policy and owner business gates revalidate. Artifact Custody owns private bytes and locations. Backup recovery stays restricted until exact data, independently evidenced security reconciliation and explicit reopening succeed.
+    accDescr: Web-rendered content crosses a narrow bridge into the native Desktop host, which crosses authenticated manifest-scoped IPC into a per-user Workspace process, then ordinary managed files reach CAD or Office without IDEA authority. Product commands and status follow Workspace → Server, while Artifact bytes follow Workspace ↔ selected Artifact Gateway ↔ Vault under an exact short-lived grant. Clients send session proof, never a trusted ActorId or permanent Vault credential. Server/IAM establishes ActorContext before Access Policy and owner gates revalidate. Upload or receipt success alone cannot publish. Backup recovery stays separate from Vault replicas.
 
     subgraph ClientPath[Client-to-editor trust path]
         direction LR
@@ -2398,9 +2572,14 @@ flowchart TB
         Owners -->|append evidence in shared UoW| Audit
     end
 
-    subgraph DataZone[Authoritative data trust zone]
+    subgraph DataZone[Authoritative relational-data trust zone]
         DB[(Relational store)]
-        Artifact[(Private immutable Artifact store)]
+    end
+
+    subgraph VaultZone[Artifact data-plane trust zone]
+        Gateway[Selected Artifact Gateway]
+        Vault[(Private Vault location)]
+        Gateway <--> Vault
     end
 
     subgraph WorkerZone[Isolated format-job trust zone]
@@ -2414,22 +2593,25 @@ flowchart TB
 
     WebView -->|HTTPS session proof, queries and commands| Entry
     Desktop -->|HTTPS session, commands and status| Entry
-    Workspace -->|scoped short-lived transfer and OperationId| Entry
-    Entry -->|exact Artifact bytes after authorization| Workspace
+    Workspace -->|session proof, prepare, finalize and status| Entry
+    Entry -->|selected endpoint and exact short-lived Transfer Grant| Workspace
+    Workspace <-->|resumable verified Artifact bytes| Gateway
+    Gateway -->|authenticated Transfer Receipt| Custody
     Owners -->|transactional records through owned persistence| DB
-    Custody -->|Artifact bytes, locations and server-only access| Artifact
+    Custody -->|location policy, grant scope and receipt validation| Gateway
     Format -->|immutable input grant and resource limits| Worker
     Worker -->|untrusted candidate output and provenance| Format
     Format -->|validated immutable output by digest| Custody
     DB -.->|pinned database recovery point| Backup
-    Artifact -.->|required immutable content and manifests| Backup
+    Vault -.->|required immutable content plus coordinated recovery manifest| Backup
     Keys -.->|required protected recovery material| Backup
 ```
 
 The data-flow arrows describe required interactions, not their execution order; account eligibility,
 RBAC and business validation follow `ARCH-VIEW-SEQ-004` before any authoritative commit. The
 WebView-to-Desktop bridge is not a generic desktop API, and the Desktop-to-Workspace bridge is not a
-filesystem or shell proxy. Runtime store credentials remain in Server custody. Backup custody includes
+filesystem or shell proxy. Runtime Vault/provider credentials remain inside the Gateway/Vault Adapter;
+the Client receives only an exact expiring grant. Backup custody includes
 configuration and policy versions as specified by `ARCH-VIEW-SEQ-011`.
 
 | Trust Seam | Main threat categories | Required architectural control |
@@ -2437,8 +2619,9 @@ configuration and policy versions as specified by `ARCH-VIEW-SEQ-011`.
 | WebView → Desktop | malicious origin/frame, navigation confusion, generic host-object escalation | approved origin/frame on every message; versioned allowlisted intent/schema; no arbitrary host object, filesystem or shell capability; navigation/session invalidates bridge authority |
 | Desktop → Workspace process | another user/process impersonates the client, path traversal, generic shell abuse | authenticated per-user/session IPC; exact Workspace Manifest Scope; no generic filesystem/shell Interface; restart/reconnect does not invent server success |
 | Workspace → CAD/Office | credential leakage, a design application becoming a product authority, arbitrary command injection | only ordinary managed files cross; CAD/Office receives no IDEA session, database/store credential or generic command bridge; saved bytes remain subject to later server validation |
-| Web/Desktop/Workspace → Server | impersonation, replay, request tampering, cross-site request, privilege escalation | HTTPS; maintained session handling; anti-CSRF for browser state change; schema validation; session proof establishes ActorContext server-side; current account, RBAC and owner-business-gate revalidation before commit |
-| Server → relational/Artifact stores | direct-store bypass, credential disclosure, metadata/content mismatch | server-only least-privilege credentials; one owner Module per authoritative state; Artifact Custody owns byte/location records; immutable digest verification; no client database or permanent store credential |
+| Web/Desktop/Workspace → Server control plane | impersonation, replay, request tampering, cross-site request, privilege escalation | HTTPS; maintained session handling; anti-CSRF for browser state change; schema validation; session proof establishes ActorContext server-side; current account, RBAC and owner-business-gate revalidation before commit |
+| Workspace ↔ Artifact Gateway/Vault data plane | stolen/altered grant, wrong endpoint/object/range, replay, oversized/corrupt content, forged receipt, credential/path disclosure | exact short-lived direction/object/operation/range/size/digest-bound grant; Gateway validation; resumable chunk and full-digest verification; authenticated receipt; no database/permanent Vault credential or unrestricted provider path; receipt cannot publish |
+| Server → relational store and Artifact Custody metadata | direct-store bypass, credential disclosure, metadata/content mismatch | least-privilege persistence; one owner Module per authoritative state; Artifact Custody owns identity/location/policy/receipt records; immutable digest reconciliation; no Client database access |
 | Server → isolated format worker | malformed input, resource exhaustion, worker compromise, forged output | immutable bounded input; one-job authority; time/RAM/CPU/output limits; no product-write credential; typed result treated as untrusted until owner validation |
 | Runtime data → recovery zone | incomplete backup set, unauthorized recovery, missing keys, revival of revoked sessions | separate custody; one Recovery-set manifest; protected key handling; exact restore/digest reconciliation; invalidate sessions and keep Restricted Recovery Mode until independent security-change evidence and an explicit reopen decision exist |
 | Modules → Audit Evidence | action repudiation, history mutation, credential or content leakage | stable Actor/correlation/source pins; append-only product Interface; Audit Evidence and outbox are retained atomically with the owner command outcome; ordinary administration cannot edit or delete evidence |
@@ -2461,7 +2644,7 @@ deployment design after the technology and company environment are selected.
 | Role administration and delegation | Access Policy owns supported Permissions, immutable Role Definition versions and Role Assignments. Activating a Custom Role successor never retargets existing assignments; each intended assignment replacement is previewed, authorized and audited. Every assignment command checks which roles, principal classes and descendant Scopes the administrator may manage; self-broadening and last-Super-recovery removal are refused. | Direct/group assignment, custom-role successor and explicit assignment replacement, expired assignment, unsupported condition, cross-scope delegation, self-escalation, Super-role and Audit tests |
 | Eligibility and authorization | Client session proof is accepted only by Server/IAM, which establishes `ActorContext`; no client `ActorId` is trusted. Access Policy itself resolves current IAM eligibility, Project/Group membership, direct/Group assignments, Role Definition versions, Scope, time and supported conditions, then returns an immutable decision. The authoritative resource owner records the separate business outcome and revalidates both authorization inputs and owner state before commit. | Spoofed ActorId/policy snapshot, old cookie/token, removed membership/assignment, concurrent suspension, expired assignment, Check-in/Release and transfer tests; fail closed if eligibility cannot be established |
 | Policy and workflow administration/import | Only Server endpoints accept form or serialized candidates. Schema/reference/semantic/base-version checks and preview precede authorized activation. Workflow roles reference RBAC eligibility but cannot change Group membership or Role Assignments; identity claims, client files and direct database paths are not product authority. | AC-01…05, WF-01…06 and REQ-AUTH-001…010; invalid/stale/self-authorizing import, missing Group/role, direct-store denial, version pin and Audit evidence |
-| File transfer | Artifact Custody provides Server-mediated scoped short-lived transfer initially: `Store → Server → Workspace`, never a direct store stream or permanent store credential/public URI. Account/policy revalidation occurs at each protected request and before resume; long streams have defined cancellation/revalidation checkpoints. | Old-grant, wrong-object, expiry, replay, revoked-session, direct-store-stream denial and interrupted-transfer tests |
+| File transfer | The Server control plane authorizes and selects one eligible Gateway/Vault, then issues an exact short-lived Transfer Grant. Bytes follow `Workspace ↔ Artifact Gateway ↔ Vault`; the Gateway returns a correlated receipt, while only the Server may finalize Check-in. Account/policy revalidation occurs at prepare, resume and commit checkpoints. | Old/altered grant, wrong endpoint/direction/object/range, expiry, replay, revoked session, forged receipt, raw-provider denial, interruption/resume and “upload is not Check-in” tests |
 | Local process | Authenticated per-user/session IPC, controlled startup and recovery manifests; no privileged machine-wide agent required. OS same-user isolation is not proof against every malicious same-user process. | Cross-user/session denial, spoofed connection, restart/update/logout and preserved-local-work evidence |
 | Web/native bridge | `WebView → Desktop → Workspace` is two distinct bridges: approved origins/frames and allowlisted versioned messages at WebView/Desktop; authenticated per-user/session IPC and exact manifest scope at Desktop/Workspace. Validate every navigation/message. No generic host object, arbitrary filesystem or shell access. External/untrusted content never shares a privileged bridge. | Malformed messages, iframe/origin navigation, path traversal, stale session, cross-user IPC, CAD/Office credential denial and focus/scale tests |
 | Worker | Immutable input and bounded output; one-job least privilege and time/RAM/CPU/output quotas. Worker result is untrusted input to its owner. | Malformed/oversized/fault cases; original digest and product state unchanged |
@@ -2488,9 +2671,9 @@ claim is invented.
 | TECH-WEB-001 — Web UI | React + TypeScript SPA, Vite build, served with Server | React framework in SPA/static mode if routing/data/error handling is simpler and maintainable; SSR only for evidenced need | React normally recommends a framework. Vite alone is not routing/data/security design; no automatic extra Node production host is assumed |
 | TECH-DESKTOP-001 — Windows UI | WPF/.NET 10 shell + WebView2 rendered regions; shared React UI where appropriate | WinUI 3/Windows App SDK after focus/scaling/toolchain/support comparison; WinForms only if complex workspace fit is demonstrated | Microsoft recommends WinUI 3 for new native apps. WPF is an IDEA-specific runtime/tooling trade-off, with a separate WebView2 update/bridge obligation |
 | TECH-IDENTITY-001 — accounts and directory | Maintained authentication/session framework inside the monolith, with IDEA-owned stable Actor, Account and Login Identity records; exact framework/session persistence is owned by current TECH/matrix; Project Governance owns Project/Group membership | Future company login or maintained OIDC provider only when protocol/requirements/ownership are established | Framework roles/authorities are not product RBAC. No public signup; delegated administration, membership/assignment races, recovery and revocation still require design and qualification |
-| TECH-FILES-001 — Artifacts | Private immutable content-addressed filesystem Adapter, server-only access | Private object-storage Adapter if shared/multi-node capacity or existing managed operations justify another dependency | Must qualify durable writes, digest, atomic naming, concurrent deduplication, capacity and coordinated backup; not a user SMB share or physical WORM guarantee |
+| TECH-FILES-001 — Artifacts | Multi-location Artifact Custody Interface with one or more private Gateway/Vault Adapters; a filesystem-backed Adapter remains an implementation candidate | Object-storage or additional filesystem Vault Adapters when capacity, locality, operations or failure-domain needs justify them | Gateway runtime/provider and exact topology are not selected here. Must qualify scoped grants/receipts, durable writes, digest, concurrent deduplication, replication/repair, capacity and coordinated backup; not a user SMB share, HA claim or physical WORM guarantee |
 | TECH-HOST-001 — server OS | Linux-first Server host boundary; exact distribution/release is owned by current TECH/matrix and operational qualification remains `NOT-RUN` | Another supported host only for a concrete IT/component/qualification/operations trigger | Windows estate does not determine Server OS; the separate Windows Format Worker does not move Server product authority or force a Windows Server host |
-| TECH-OPS-001 — topology | Single server/VM candidate; separate backup failure domain; limited outbox/worker concurrency | Separate DB/file/worker hosts or stronger availability if measured needs/recovery results require it | One server remains an outage point; not a demonstrated 50–100-concurrent-user configuration |
+| TECH-OPS-001 — topology | One Server/DB control-plane candidate plus multi-location Gateway/Vault capability and a separate backup failure domain | Additional Server/DB instances or stronger application availability only if measured needs/recovery results require them | Multiple Vaults remove the Server from the payload path but do not make Server/PostgreSQL HA; host count, capacity and a 50–100-concurrent-user result remain unqualified |
 | TECH-FORMAT-001 — format runtime | Isolated external runner, exact versioned profiles; IRONCAD first deep profile | Add tools/profiles only after entitlement and conformance evidence | OS/license/resources can require a Windows worker independent of the main server; never an in-CAD add-in |
 
 Current exact selections, alternatives, primary-source links and licensing/support detail are owned by
@@ -2538,10 +2721,10 @@ variation or a genuine security seam already exists; defer unused integrations.
 | Gate / verification item | Required evidence | Result |
 |---|---|---|
 | Feature prerequisite | Product Decision Authority decision on an updated Feature brief that pins DOC-03@0.7 | `NOT-RUN`; current Feature brief is stale after source changes |
-| Spec prerequisite | Approved exact DOC-04@0.13 requirement baseline and resolved/owned requirement gaps, presented through an up-to-date Spec brief | `NOT-RUN`; DOC-04@0.13 is Draft and current Spec brief is stale |
+| Spec prerequisite | Approved predecessor DOC-04@0.13 baseline plus an explicit successor decision for DOC-04@0.14 Vault-transfer additions and owned open gaps | Predecessor `APPROVED`; exact 0.14 successor and refreshed management brief `NOT-RUN` |
 | Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
 | PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
-| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 30 views: 26 in DOC-05 and four in DOC-06. The current source/rendition record is [IE-VEV-ARCH-CORR-005](registers/VEV-2026-09-14-module-authority-view-legibility.md); predecessor VEV records remain historical evidence. A rendered picture does not imply independent architecture acceptance. |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 32 views: 28 in DOC-05 and four in DOC-06. Current source/rendition evidence and the new read-failover/replication sequences are recorded in [IE-VEV-VAULT-XFER-001](registers/VEV-2026-09-17-vault-transfer-diagram-review.md). Predecessor evidence remains historical. A rendered picture does not imply independent architecture acceptance. |
 | Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
 | Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
 | Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |

@@ -5,7 +5,7 @@
 | Document class | `DOC-05` |
 | Document ID | `IE-ARC-C1-001` |
 | Instance type | Living product baseline |
-| Version | `0.3` |
+| Version | `0.4` |
 | Document status | Proposed |
 | Prior authority | Accepted architecture baseline effective 2026-08-27 |
 | PG3 disposition | `BLOCKED` — independent reviewer unassigned |
@@ -16,6 +16,7 @@
 | Repository architecture | `IE-ARC-BOOT-001` |
 | Standards source | `IE-GOV-STD-001` |
 | Conformity claim | None |
+| Change | 0.4: separate Artifact control/data planes, add multi-location Vault custody and keep exact topology, durability thresholds and Gateway technology unselected; `IE-CHG-VAULT-XFER-001` |
 
 ## 1. Purpose and authority
 
@@ -39,6 +40,8 @@ Research findings are inputs through the [clean-room transfer register](../gover
 - publish complete Product Definition atomically across metadata, binary artifacts, and structure;
 - isolate file-format intelligence and untrusted processing;
 - retain traceable history, approval evidence, and recoverability;
+- move large Artifact bytes through a scoped resumable data plane without making the business Server
+  a payload proxy, and retain one logical Artifact across several verified Vault locations;
 - prepare stable C1 identities/contracts without implementing Platform D prematurely;
 - design deep modules whose interfaces are also their test surfaces.
 
@@ -119,11 +122,13 @@ Every later quality requirement records: ID, scope, stakeholder/concern, quality
 | `Q-RL-001` Atomic Check-in | No visible Generation lacks verified artifacts/manifest; retry by OperationId is idempotent; multi-document publish is all-or-nothing; abandoned staging is reconciled | Fault injection at every publish step produces no partial Change Set |
 | `Q-RL-002` Stale-write protection | Every publish carries expected Generation; non-owner and stale requests fail; Reservation is per Document; local work is preserved; binary is not auto-merged | Concurrency suite rejects every stale/non-owner publish |
 | `Q-RL-003` Resumable large-Artifact transfer | Upload and materialization stream verified chunks, resume an interrupted operation without restarting accepted chunks, and do not require the complete Artifact in process memory | Interrupt and resume an approved multi-GB fixture at every transfer boundary; verify final digest, bounded memory and one logical result |
+| `Q-RL-004` Control/data-plane separation | The IDEA Server authorizes, selects and finalizes an Artifact operation, while large bytes flow directly between the Client and a selected Artifact Gateway under a short-lived scoped grant | Concurrent multi-GB transfers show no full-payload proxy through the business Server; wrong, expired, replayed or altered grants fail closed; a Transfer Receipt alone publishes nothing |
 | `Q-CP-001` Multi-format compatibility | Every accepted format supports generic control; deeper extraction is explicit and evidenced; no IDEA code runs inside design tools | Versioned Capability Profile and conformance suite per enabled format |
-| `Q-SE-001` No infrastructure credential in clients | Desktop/Workspace hold no database or permanent object-storage credential; all domain access crosses authenticated C1 interface | Package/config scan and direct-infrastructure denial tests |
+| `Q-SE-001` No permanent infrastructure credential in clients | Desktop/Workspace hold no database or permanent Vault/provider credential; domain control crosses authenticated C1 Interfaces and byte access uses only an exact short-lived Transfer Grant | Package/config scan plus raw-provider and over-scoped-grant denial tests |
 | `Q-MA-001` Module ownership | Module writes only owned state; projections are not authority; implementation replacement preserves interface | Dependency/schema ownership and module-interface tests |
 | `Q-MA-002` Authorization extensibility | Built-in and versioned Custom Role Definitions are assigned to Actor or Group Principals at explicit Organization, Project or resource Scope; later company-specific roles do not require changes to controlled-state owner modules | Replace one Custom Role Definition version and Role Assignment, then verify unchanged owner-module behavior and exact historical decision pins through the Access Policy contract |
 | `Q-MA-003` Storage evolution | Logical Document, Generation and Artifact identities remain independent of filesystem, object-store provider, volume and physical path while the Artifact store can grow or migrate behind one controlled interface | Reconcile a representative dataset across two storage-adapter implementations and prove identical manifests, digests, access decisions and retained release reproduction |
+| `Q-MA-004` Multi-location Artifact custody | One logical Artifact may have several verified physical locations; selection, replication, repair, failover and retirement do not change Artifact, Generation or Release identity | Lose one test location, select another eligible verified location and reconcile replication/retirement with zero identity or digest change |
 | `Q-EV-001` C1 autonomy | C1-local Check-in, workflow, search, and release work with D absent; other C/D cannot access C1 internal schema | Standalone conformance and architecture dependency tests |
 | `Q-IC-001` Actionable conflict UX | Conflict identifies document, permitted owner information, expected/current Generation, local-work safety, and valid next actions | Every conflict class satisfies the response contract |
 | `Q-IC-002` Locale parity and input | English, Vietnamese, and Japanese expose the same functions across Desktop and Web; Unicode user content is preserved; Japanese IME, normalization, width, search, font fallback, and line breaking are usable | Cross-locale task suite plus reviewed resource catalogues and Japanese input/search scenarios |
@@ -192,6 +197,8 @@ This view does not choose transport, process count, host count, or scaling topol
 | IDEA Web | Search/browse/view, review/approval, governed administration, policy-appropriate download/preview | Implement authoritative version/reservation/release rules; access domain stores directly |
 | IDEA Desktop | Explicit Checkout/Open/Check-in/Cancel/Recover intent, scope confirmation, conflict/recovery UX, launch via OS association | Run inside design applications; publish automatically on Save; hold infrastructure credentials |
 | IDEA Workspace Service | User-session materialization, full scan/hash, cache, safe queue, resumable transfer, manifest, progress/recovery state | Check in/approve/release/merge autonomously; become product authority |
+| Artifact Transfer Gateway | Validate a short-lived Transfer Grant; stream verified ranges/chunks to or from one eligible Vault; return a correlated Transfer Receipt | Establish Actor/RBAC authority; choose business scope; create a Generation; expose a permanent provider credential or raw path |
+| Vault location | Hold private candidate and immutable Artifact bytes under the Artifact Custody Adapter; serve only grant-scoped Gateway operations; participate in replication/repair | Interpret document identity, Revision, lifecycle, Permission or publication success |
 | Format Processing Runtime | Isolated format jobs, external-tool limits, result/provenance capture | Decide product state; mutate originals; access domain database directly |
 
 Workspace Service is a product term. Its initial deployment meaning is a user-session background process, not automatically a privileged Windows service.
@@ -205,6 +212,7 @@ Workspace Service is a product term. Its initial deployment meaning is a user-se
 | Lifecycle Governance | Request transition; record decision; query allowed actions | versioned workflow and approval policy, configurable stages/quorum/actor separation, release gates, Revision Policy | WorkflowDefinitionVersion, WorkflowInstance, ApprovalPolicyVersion, ApprovalDecision, ReleaseRecord |
 | Information Model | Validate metadata; allocate number; query schema | schema evolution, classification, validation, numbering policy | MetadataSchemaVersion, Classification, NumberingPolicy |
 | Format Intelligence | Request analysis/representation; accept result; query capability | capability negotiation, adapter/tool provenance, extraction, warnings, derivative alignment | FormatCapability, AnalysisRequest/Result, Representation |
+| Artifact Custody | Prepare scoped transfer; select eligible location; verify receipt/digest; resolve exact Artifact; reconcile/replicate/retire locations | provider-neutral Artifact identity, private candidate custody, Gateway/Vault Adapter selection, location health, replication and durability-policy evaluation | Artifact, ArtifactLocation, VaultEndpoint, TransferGrant, TransferReceipt, ArtifactTransfer, ReplicationTask, StorageDurabilityPolicyVersion |
 | Project Governance | Create/resolve Project; manage Project Membership, direct Project Groups and Group Membership | Project isolation, membership effective period, stable Group identity and no Group nesting | Project, ProjectMembership, BusinessGroup, GroupMembership |
 | Access Policy | Authorize; explain decision; manage Role Definitions and Role Assignments | Security Principal + Role Definition + Authorization Scope; immutable active-role versions; supported assignment conditions/time; constrained delegation; additive grants; separate business gates | Permission, RoleDefinition/Version, AuthorizationScope reference, RoleAssignment, AuthorizationDecisionEvidence |
 | Discovery | Search; saved query; rebuild projection | indexing, ranking, filtering, pagination, projection recovery | Rebuildable search projection and saved query |
@@ -244,6 +252,10 @@ Rules:
 | `ReservationId` | Publish-reservation identity |
 | `OperationId` | Client-generated idempotency identity for Check-in |
 | `ChangeSetId` | Successful atomic multi-document publish identity |
+| `ArtifactLocationId` | Replaceable physical custody record for one immutable Artifact at one Vault endpoint |
+| `TransferGrantId` | Short-lived exact authorization for one direction, operation, candidate/Artifact, size/digest, ranges and expiry |
+| `TransferReceiptId` | Authenticated evidence from an Artifact Gateway about accepted and verified transfer work; never publication authority |
+| `VaultEndpointId` | Governed logical identity for one eligible Artifact Gateway/Vault location; never a document path or provider credential |
 | `WorkflowDefinitionVersion` | Exact rule version explaining transition history |
 | `ActorId` | Stable human/service actor reference |
 
@@ -304,13 +316,31 @@ Rules:
 53. A locally modified Reference never grants publish entitlement. It may become a working copy only after a new Checkout succeeds against the same current Generation; otherwise the user must preserve, copy, discard or manually reapply the local work without automatic binary merge.
 54. Artifact transfers use resumable verified chunks under one stable operation identity; accepted chunks and a completed operation are safe to retry, and the complete Artifact is not required to fit in application memory.
 55. Permission codes are owned by the product. Parent-scope Role Assignments are evaluated for descendants at request time and are not copied into independently mutable per-document ACLs.
+56. The IDEA Server owns the control plane for Artifact operations but is not required to proxy the
+    complete byte payload. Every direct data-plane transfer requires one exact, short-lived Transfer
+    Grant and produces only custody evidence, never a Generation or business outcome.
+57. A Transfer Receipt is revalidated by Artifact Custody and the authoritative resource owner.
+    Check-in succeeds only after the complete confirmed scope and all owner gates commit; upload
+    completion alone ends no Reservation and publishes nothing.
+58. One logical Artifact may have several verified Artifact Locations. Replication, repair, location
+    selection, failover and retirement cannot change its ArtifactId/digest or any retained
+    Generation Manifest and Release Record.
+59. A storage/durability policy is versioned and determines the minimum eligible verified locations
+    for the applicable operation. The exact Core v0 counts and failure-domain rules remain open until
+    approved; a replica never substitutes for coordinated backup and restore.
 
 Semantic no-change comparison includes Artifact digest, normalized versioned metadata, and semantic Structure Snapshot digest in the same Revision. Operation/actor/upload timestamps, cache, preview, and search fields are excluded unless policy explicitly promotes a derived value into Product Definition.
 
 ## 13. Storage model
 
 - relational persistence holds identities, relationships, policies, state machines, constraints, concurrency tokens, and outbox/evidence references;
-- private Artifact storage behind a controlled adapter holds immutable original Artifacts and derivatives;
+- private Artifact storage behind Artifact Gateway/Vault Adapters holds candidate and immutable
+  Artifact bytes; one logical Artifact may resolve to several verified physical locations;
+- relational persistence retains authoritative operation, grant/receipt correlation, Artifact
+  identity, location, replication and policy metadata, but not the Artifact byte payload;
+- a Client obtains only a short-lived scoped Transfer Grant and sends/receives bytes through the
+  selected Artifact Gateway; it never chooses an arbitrary provider path or holds a permanent Vault
+  credential;
 - search is a rebuildable index;
 - audit is append-only in the logical model with controlled retention/access;
 - uploads enter an expiring staging namespace;
@@ -522,7 +552,7 @@ D is introduced only when C2 and concrete cross-C scenarios exist. D may route, 
 - The initial MVP Success Metric Set requires exact Released Baseline reproduction, zero accepted stale or unauthorized publish/Release outcomes in the tested scope, preservation of every rejected local work item, complete required audit and exact-pin evidence, and a successful consistent restore drill. Efficiency and adoption metrics are measured separately.
 - MVP evidence may claim controlled-state correctness, conflict safety, traceability, exact-baseline reproducibility, controlled release, and tested restore only. Productivity, internal adoption, operational readiness, return on internal investment, and complete reference-product parity remain outside the evidence boundary until separately measured; commercial market-fit claims are not applicable.
 - Format scope is the Generic Controlled-File Baseline for explicitly enabled formats plus one deep CAD Format Capability Profile selected through DOC-02 and verified for an exact adapter/tool version. The extension seam must permit later format profiles without changing Controlled Product Data ownership or invariants.
-- Full ECR/ECO/DCO, external supplier/customer portals, ERP/MRP write-back, bidirectional enterprise integration, full legacy migration, mobile clients, mandatory public SaaS, multi-site replication, deep support for every design application, C2, Interoperability Fabric D, and unevidenced AI or autonomous behavior are outside the MVP.
+- Full ECR/ECO/DCO, external supplier/customer portals, ERP/MRP write-back, bidirectional enterprise integration, full legacy migration, mobile clients, mandatory public SaaS, multi-site active/active application operation, offline command replay, deep support for every design application, C2, Interoperability Fabric D, and unevidenced AI or autonomous behavior are outside the MVP. Multi-location Vault custody and controlled replication of immutable Artifact bytes are inside the successor Draft architecture; exact topology and durability thresholds remain open.
 
 ### MVP import and export boundary
 
@@ -579,6 +609,7 @@ Verification outcomes are `PASS`, `FAIL`, `BLOCKED`, or `NOT-RUN`. Missing prere
 | Immutable Generations and atomic Check-in Change Sets | [ADR-0005](../adr/0005-use-immutable-generations-and-atomic-change-sets.md) |
 | Reservation per Document/Workspace plus optimistic concurrency | [ADR-0006](../adr/0006-bind-reservations-to-document-and-workspace.md) |
 | Generic vaulting plus external Format Intelligence | [ADR-0007](../adr/0007-use-generic-vaulting-and-external-format-intelligence.md) |
+| Separate Artifact control/data planes and multi-location custody | [ADR-0013](../adr/0013-separate-artifact-control-and-data-planes.md) |
 | Reference-behavior baseline plus proactive external quality benchmarking | ADR-0009 |
 
 ## 24. Delivery sequence

@@ -1,23 +1,57 @@
 # Phiên bản và nguồn của Feature / Spec / Tech
 
-Ngày cập nhật: 15-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
+Ngày cập nhật: 17-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
 
-Đây là sổ tra cứu phiên bản, nguồn và xác nhận review nội bộ. Không phải báo cáo kiểm thử,
-quyết định Feature/Spec/Tech của sếp hoặc một nguồn yêu cầu mới.
+Đây là sổ tra cứu phiên bản, nguồn, review nội bộ và quyết định Feature/Spec/Tech. Không phải báo
+cáo kiểm thử hoặc một nguồn yêu cầu mới.
+
+## 0. Quyết định của Product Decision Authority ngày 17-09-2026
+
+Người dùng dự án xác nhận sếp, với vai trò `Product Decision Authority`, đã duyệt toàn bộ nội dung
+Feature, Spec và Tech được trình trong gói Management Review ngày 16-09-2026. Quyết định được ghim
+vào commit `f269a0445737a7efd7f406ee51517149a8967afa` và các SHA-256 cụ thể tại
+[`IE-CHG-PDA-APPROVAL-001`](../registers/CHG-2026-09-17-product-decision-authority-approval.md).
+
+| Trục quyết định | Baseline được duyệt | Kết quả |
+|---|---|---|
+| Feature | FEATURE-001@0.12 đọc cùng nguồn hiện hành trong gói review; 14 nhóm Feature | `APPROVED` |
+| Spec | DOC-04@0.13, 87 dòng yêu cầu có mã; DOC-06@0.16, DOC-08@0.12 và VVP@0.16 là nguồn hỗ trợ | `APPROVED` |
+| Tech | TECH-001@0.14, IE-KNW-TECH-DEC-001@0.6 và IE-ARC-TECH-VIEW-001@0.2 | `APPROVED` |
+
+Gói trình bày thể hiện trạng thái `NOT-RUN` trước khi sếp ra quyết định và được giữ nguyên như bằng
+chứng lịch sử. Quyết định này không đổi kết quả kiểm thử, Q-15 (`PARTIAL / NO WINNER`), qualification
+của Format Worker, PG3 hoặc PG4. Các bản `Approved 1.0` dành cho quản lý vẫn phải được xuất bản có
+kiểm soát từ đúng baseline trên.
+
+### Successor Draft sau quyết định
+
+Sau khi baseline trên được duyệt, phản hồi quản lý ngày 17-09-2026 yêu cầu Vault hỗ trợ nhiều nơi
+lưu và không buộc toàn bộ byte file lớn đi xuyên qua tiến trình Server. Successor Draft tách control
+plane khỏi data plane, dùng scoped Artifact Gateway và cho phép một Artifact có nhiều location đã
+xác minh. Các nguồn hiện hành là DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.12,
+DOC-08@0.13, VVP@0.17, TECH-001@0.15 và technology view set@0.3.
+
+Successor này giữ nguyên 14 Feature groups, Tech Stack selection, Q-15, Product Scope, PG3 và PG4.
+Nó không tự kế thừa PDA approval của exact predecessor. Exact successor approval, Gateway runtime/
+toolchain/provider, topology, durability thresholds và runtime evidence đều `NOT-RUN` hoặc `BLOCKED`
+như ghi trong từng nguồn. Xem [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md).
 
 ## 1. Bản làm việc hiện tại
 
 | Tài liệu | Phiên bản hiện tại | Trạng thái |
 |---|---|---|
-| [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Draft; 14 mã FTR; nguồn hiện hành đã đồng bộ; toàn bộ bản mới chỉ `PARTIAL`, quyết định của sếp `NOT-RUN` |
-| [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Draft; 74 yêu cầu và bảy điểm Spec còn mở; nguồn hiện hành đã đồng bộ; toàn bản chưa review đầy đủ và quyết định của sếp `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.14 | Draft; Engineering đã chọn Linux-first Java/Temurin/Spring/PostgreSQL Server và Option A React/WPF/WebView2 + `.NET Workspace` làm Core v0 baseline; Flutter là evaluated alternative sau tám reopen trigger; Q-15 `PARTIAL / NO WINNER`; Product Decision Authority review/approval `NOT-RUN` |
+| [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Working brief vẫn `Draft` và source-pin stale; quyết định 14 nhóm Feature `APPROVED` theo baseline 17-09; bản `Approved 1.0` chưa xuất bản |
+| [Spec](SPEC-001-product-specification.md) | SPEC-001@0.14 | Working brief 74 yêu cầu đã stale; quyết định Spec `APPROVED` đối với DOC-04@0.13 có 87 dòng yêu cầu; bảy điểm mở vẫn được quản lý riêng; bản `Approved 1.0` chưa xuất bản |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.15 | Successor working brief giữ nguyên Tech Stack được duyệt ở 0.14 nhưng thêm multi-location Vault/control–data-plane architecture; exact 0.15 PDA approval `NOT-RUN`; Flutter/Q-15 không đổi |
 
-Feature 0.12 giữ nguyên 14 mã FTR. Spec 0.14 giữ 74 yêu cầu và bảy điểm còn mở. VVP 0.16 có
-17 mục tiêu cùng các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6,
-DOC-02 ở Draft 0.2, DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.13, DOC-05 ở Draft 0.20,
-DOC-06 ở Draft 0.16, DOC-07 ở Draft 0.11, DOC-08 ở Draft 0.12 và GOV ở Draft 0.3. Lịch tháng 12/2026,
-56 task và 756 giờ không đổi. Lời duyệt các bản cũ tại mục 5 không tự chuyển sang toàn bộ nội dung mới.
+Feature 0.12 giữ nguyên 14 mã FTR. SPEC-001@0.14 vẫn là bản tóm tắt cũ gồm 74 yêu cầu; normative
+DOC-04@0.13 được duyệt có 87 dòng yêu cầu. Successor DOC-04@0.14 có 90 dòng yêu cầu sau khi thêm
+scoped direct Gateway transfer và multi-location custody/replication. VVP 0.17 có 17 mục tiêu cùng
+các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.6, DOC-02 ở Draft 0.2,
+DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.14, DOC-05 ở Draft 0.21, DOC-06 ở Draft 0.17, DOC-07 ở Draft
+0.12, DOC-08 ở Draft 0.13 và GOV ở Draft 0.3. Lịch 56 task/756 giờ cũ được giữ làm lịch sử nhưng
+đã đánh dấu stale for execution; successor re-estimation `NOT-RUN`. Approval của predecessor không
+tự chuyển sang toàn bộ nội dung successor.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
 được đồng bộ trong lần 09/09/2026; việc đồng bộ nguồn không phải quyết định duyệt tính năng. Các

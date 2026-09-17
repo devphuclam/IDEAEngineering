@@ -13,7 +13,7 @@
 | Applicable baseline | IDEA Engineering source commit `3a5b83f5ff64dc4b8335826d04732b029425b0ed`; `IE-ARC-TECH-VIEW-001@0.1` |
 | Exact diagram source | [`IDEA-core-v0-technology-architecture-views.md`](../technology/IDEA-core-v0-technology-architecture-views.md), SHA-256 `48B0F3E7D3197A14AFD97C4E35F620DBAC80F210F768C2F8B4E87AA63F5D6C6D` |
 | Source / upstream trace | [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md), [`IE-KNW-TECH-DEC-001@0.6`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md), [`TECH-001@0.14`](../decision-briefs/TECH-001-technology-and-architecture-proposal.md) |
-| Downstream trace | [Rendered evidence package](../evidence/IE-VEV-TECH-VIEW-001/), architecture review and future management rendition |
+| Downstream trace | [Rendered evidence package](../evidence/README.md#archived-render-packages), architecture review and future management rendition |
 | Classification / retention | `INTERNAL`; retain source, SVG/PNG renditions, render metadata and this record together |
 | Review trigger | Diagram source, selected baseline, renderer or browser changes; a rendering defect is reported; or architecture review requests a correction |
 | Evidence status | `PASS` for the bounded render/open/readability checks below; implementation and architecture approval remain `NOT-RUN` |
@@ -39,9 +39,9 @@ views. It does not verify that the depicted system has been implemented or opera
 
 | Check | Result | Retained evidence |
 |---|---|---|
-| Mermaid render | `PASS` — 8/8 | Mermaid `11.12.0`; Chromium `152.0.7977.83`; [`render-results.json`](../evidence/IE-VEV-TECH-VIEW-001/render-results.json) |
-| Standalone SVG browser-open check | `PASS` — 8/8; no XML parser error | [`svg-open-results.json`](../evidence/IE-VEV-TECH-VIEW-001/svg-open-results.json) |
-| PNG rendition creation | `PASS` — 8/8 | [`evidence package`](../evidence/IE-VEV-TECH-VIEW-001/) |
+| Mermaid render | `PASS` — 8/8 | Mermaid `11.12.0`; Chromium `152.0.7977.83`; [`render-results.json`](../evidence/README.md#archived-render-packages) |
+| Standalone SVG browser-open check | `PASS` — 8/8; no XML parser error | [`svg-open-results.json`](../evidence/README.md#archived-render-packages) |
+| PNG rendition creation | `PASS` — 8/8 | [`evidence package`](../evidence/README.md#archived-render-packages) |
 | Accessible title and description fields | `PASS` — 8/8 | Enforced by [`render-technology-architecture.cjs`](../../../../../scripts/render-technology-architecture.cjs) and recorded in render metadata |
 | Focused visual review | `PASS` within current Draft scope | Each view was opened at original resolution. Runtime and deployment labels were shortened to remove title/connector collisions before the final render. No remaining clipped label, XML error or unreadable overlap was observed. |
 | Architecture correctness approval | `NOT-RUN` | Requires qualified human architecture review; this mechanical/visual verification is not approval. |

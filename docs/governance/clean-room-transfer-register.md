@@ -75,6 +75,7 @@ If a source file's hash changes, the new version is a new controlled input. Prod
 | `docs/adr/0002-*.md` through `docs/adr/0007-*.md` | Accepted hard-to-reverse decisions | `RS-ADR-001` through `RS-ADR-006` |
 | `docs/product/knowledge/2026-08-27-ddm-acquisition-and-audit-decision.md` | Current acquisition/runtime-audit recommendation | New first-party public-source research |
 | `docs/research/2026-09-10-aras-runtime-workspace-experiment.md` | Sanitized target-runtime/static findings for lock, Generation, File, custom Check-in and connector limits | Direct authorized target observations; exact fixture, target build, Method/source hashes and evidence limits recorded in the note |
+| `docs/research/2026-09-17-vault-transfer-and-multi-location-provenance.md` | Official-source facts and bounded IDEA inference for scoped direct file transfer, multiple Vault locations and replication | Dated first-party Aras/AWS/Azure/Google source register in the note; successor requirements/architecture cite the note but retain independent IDEA rationale and `NOT-RUN` qualification |
 
 Direct public-source research authored inside the product repository is controlled by its dated first-party source register and downloadable-document hashes rather than by an external research-artifact hash. The fixed-hash rule in Section 3 applies when conclusions are transferred from the external research repository.
 

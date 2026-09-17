@@ -16,6 +16,7 @@
 - [ADR-0010 — Separate operational configuration, governed policy, and solution-package paths](0010-separate-configuration-governance-paths.md)
 - [ADR-0011 — Give each Logical Document one governing Project](0011-one-governing-project-per-logical-document.md)
 - [ADR-0012 — Use principal-role-scope RBAC for product and administration authority](0012-use-principal-role-scope-rbac.md)
+- [ADR-0013 — Separate Artifact control and data planes and support multi-location custody](0013-separate-artifact-control-and-data-planes.md)
 
 ## Inherited template decision
 

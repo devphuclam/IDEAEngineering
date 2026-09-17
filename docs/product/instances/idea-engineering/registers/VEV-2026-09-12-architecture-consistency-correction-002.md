@@ -16,9 +16,9 @@
 | VVP / gate disposition | Focused author source/rendition checks are recorded below; `VVP-016` qualified review and controlled-rendition acceptance remain `BLOCKED`. PG4 is not assessed or passed by this record. |
 | Access / retention | `INTERNAL`; retain with the exact Markdown, generated rendition, CHG and predecessor VEV evidence. |
 
-[Mở gallery 30 view](../evidence/IE-VEV-ARCH-CORR-002/index.html) ·
-[Kết quả render và source hash](../evidence/IE-VEV-ARCH-CORR-002/render-results.json) ·
-[Kết quả mở SVG độc lập](../evidence/IE-VEV-ARCH-CORR-002/svg-open-results.json).
+[Mở gallery 30 view](../evidence/README.md#archived-render-packages) ·
+[Kết quả render và source hash](../evidence/README.md#archived-render-packages) ·
+[Kết quả mở SVG độc lập](../evidence/README.md#archived-render-packages).
 
 ## 1. Method and bounded result
 

@@ -1,9 +1,0 @@
-{
-  "evidenceId": "IE-VEV-TECH-VIEW-001",
-  "checkedAt": "2026-09-15T02:54:15.863Z",
-  "browser": "152.0.7977.83",
-  "check": "Open each standalone SVG through the browser file URL and reject XML parser errors",
-  "count": 8,
-  "failures": [],
-  "status": "PASS"
-}
