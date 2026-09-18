@@ -52,7 +52,7 @@ cross-checked against D0–D5, and missing prerequisites are explicitly retained
 | D0–D5 decision identity | `PASS` for register structure | Exactly one detailed row for each of D0, D1, D2, D3, D4 and D5 |
 | Required PH0 preparation records | `PASS` for presence | Scenario, trace, environment, test-data, recovery/security, contracts and checklist are present |
 | Placeholder scan | `PASS` | No uncontrolled template placeholders outside the intentionally excluded files |
-| Template-marker scan | `PASS` | No `[FEATURE NAME]`, `[DATE]`, `[Brief Title]` or `What happens when` markers |
+| Template-marker scan | `PASS` | No uncontrolled template markers |
 | Whitespace validation | `PASS` | `git diff --check -- specs/004-technical-pilot-readiness` returned no error |
 | Scenario trace rows | `PASS` for presence | 21 trace rows cover the canonical paths and P03–P07 outputs; every evidence status remains `NOT-RUN` |
 
