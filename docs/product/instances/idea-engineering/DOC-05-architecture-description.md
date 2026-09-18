@@ -194,7 +194,7 @@ A diagram is ready for baseline review only when a reviewer can answer yes to al
 
 The current diagrams remain `Draft`. The current source consistency and focused internal rendition
 inspection are recorded in
-[IE-VEV-VAULT-XFER-001](registers/VEV-2026-09-17-vault-transfer-diagram-review.md); predecessor VEV
+[IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md); predecessor VEV
 records remain historical evidence. Qualified architecture/security review remains `NOT-RUN`; render
 success must not be reported as architecture conformance or evidence that the software has been
 implemented.
@@ -2724,7 +2724,7 @@ variation or a genuine security seam already exists; defer unused integrations.
 | Spec prerequisite | Approved predecessor DOC-04@0.13 baseline plus an explicit successor decision for DOC-04@0.14 Vault-transfer additions and owned open gaps | Predecessor `APPROVED`; exact 0.14 successor and refreshed management brief `NOT-RUN` |
 | Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
 | PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
-| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 32 views: 28 in DOC-05 and four in DOC-06. Current source/rendition evidence and the new read-failover/replication sequences are recorded in [IE-VEV-VAULT-XFER-001](registers/VEV-2026-09-17-vault-transfer-diagram-review.md). Predecessor evidence remains historical. A rendered picture does not imply independent architecture acceptance. |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 32 views: 28 in DOC-05 and four in DOC-06. Current source/rendition evidence and the new read-failover/replication sequences are recorded in [IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md). Predecessor evidence remains historical. A rendered picture does not imply independent architecture acceptance. |
 | Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
 | Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
 | Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |

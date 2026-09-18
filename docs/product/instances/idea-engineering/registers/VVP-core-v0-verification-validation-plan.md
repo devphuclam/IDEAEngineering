@@ -440,7 +440,7 @@ evidence stale; it does not rewrite the old result.
 | Claim | Minimum evidence | Current status |
 |---|---|---|
 | Canonical Demo Dataset verification | `VVP-001`…`VVP-013`, `VVP-015`, `VVP-017` and applicable PA/RBAC/WS/ST procedures on one exact synthetic dataset/build baseline | `NOT-RUN`; dataset/build absent |
-| Architecture-view quality | `VVP-016` against exact DOC-05@0.21/DOC-06@0.17 successor sources and generated SVG/PNG | Source/render/open and focused author visual/semantic checks are recorded in [IE-VEV-VAULT-XFER-001](VEV-2026-09-17-vault-transfer-diagram-review.md); qualified review and controlled-rendition acceptance remain `BLOCKED`; runtime procedures remain `NOT-RUN` |
+| Architecture-view quality | `VVP-016` against exact DOC-05@0.21/DOC-06@0.17 successor sources and generated SVG/PNG | Source/render/open and focused author visual/semantic checks are recorded in [IE-VEV-VAULT-XFER-002](VEV-2026-09-18-vault-transfer-diagram-review.md); qualified review and controlled-rendition acceptance remain `BLOCKED`; runtime procedures remain `NOT-RUN` |
 | Technical Pilot Verification | Approved non-production environment and exact executed evidence | `NOT-RUN` |
 | Single-Actor Functional Acceptance | Separate Test Personas and declared limitation | `NOT-RUN` |
 | Internal Operational Need Validation | Representative internal roles/workflow and attributable evidence | `BLOCKED` |

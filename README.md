@@ -13,7 +13,7 @@ implemented. Existing repository tools are inherited development infrastructure,
 |---|---|---|
 | The eight DOCs written for IDEA | [Product-document catalogue](docs/product/instances/idea-engineering/README.md) | Product-specific content, exact versions and review status |
 | Feature, Spec and Tech for management | [Decision briefs](docs/product/instances/idea-engineering/README.md#two-layer-reading-model) | Three decision views of the detailed DOCs; not separate requirement authorities |
-| Current architecture diagrams | [Vault successor gallery](docs/product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/index.html) | Full-size views from the current sources; superseded render packages are consolidated in the [evidence archive](docs/product/instances/idea-engineering/evidence/README.md#archived-render-packages) |
+| Current architecture diagrams | [Vault successor gallery](docs/product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/index.html) | Full-size views from the latest pinned sources; predecessor render packages are retained as controlled evidence |
 | Roadmap and work to do next | [DOC-07](docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md#32-december-2026-schedule-and-task-appendix) | Planning authority and execution status; the retained December task appendix/Gantt need successor re-estimation |
 | Templates for authoring a DOC or supporting record | [Class-template index](docs/product/definition/README.md) | Reusable structure and authoring rules, not the IDEA product content |
 | UI design and simulated interactions | [Prototype guide](prototypes/README.md) | Current review prototype, retained comparison versions and limits of the HTML simulation |

@@ -7,9 +7,18 @@ const { pathToFileURL } = require('node:url');
 const { chromium } = require(process.env.IDEA_PLAYWRIGHT_PATH || 'playwright');
 const sharp = require(process.env.IDEA_SHARP_PATH || 'sharp');
 const root = path.resolve(__dirname, '..');
-const evidenceId = 'IE-VEV-VAULT-XFER-001';
+const evidenceId = process.env.IDEA_VAULT_EVIDENCE_ID;
+if (!evidenceId) {
+  throw new Error('Set IDEA_VAULT_EVIDENCE_ID to a new evidence record; do not overwrite historical evidence.');
+}
+if (!/^IE-VEV-[A-Z0-9-]+$/.test(evidenceId)) {
+  throw new Error(`Invalid IDEA_VAULT_EVIDENCE_ID: ${evidenceId}`);
+}
 const base = 'docs/product/instances/idea-engineering';
 const output = path.join(root, base, 'evidence', evidenceId);
+if (fs.existsSync(output) && fs.readdirSync(output).length > 0) {
+  throw new Error(`Evidence directory already exists: ${evidenceId}; choose a new successor ID.`);
+}
 const inputs = [
   `${base}/DOC-05-architecture-description.md`,
   `${base}/DOC-06-data-integration-and-migration-specification.md`,

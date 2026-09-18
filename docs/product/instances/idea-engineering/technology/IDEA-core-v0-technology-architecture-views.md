@@ -13,13 +13,13 @@
 | Reviewer / acceptance authority | Architecture/technology review `NOT-RUN`; Product Decision Authority review and acceptance `NOT-RUN` |
 | Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-05@0.21; `IE-KNW-TECH-DEC-001@0.6`; `TECH-001@0.15` |
 | Source / upstream trace | [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); [DOC-05](../DOC-05-architecture-description.md); [`IE-KNW-TECH-DEC-001@0.6`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`TECH-001@0.15`](../decision-briefs/TECH-001-technology-and-architecture-proposal.md); [ADR-0013](../../../../adr/0013-separate-artifact-control-and-data-planes.md) |
-| Downstream trace | Successor source/rendition and focused author review: [`IE-VEV-VAULT-XFER-001`](../registers/VEV-2026-09-17-vault-transfer-diagram-review.md) and [current SVG/PNG gallery](../evidence/IE-VEV-VAULT-XFER-001/index.html); predecessor [`IE-VEV-TECH-VIEW-002`](../registers/VEV-2026-09-15-technology-architecture-view-correction.md) remains historical evidence for version 0.2 |
+| Downstream trace | Successor source/rendition and focused author review: [`IE-VEV-VAULT-XFER-002`](../registers/VEV-2026-09-18-vault-transfer-diagram-review.md) and [current SVG/PNG gallery](../evidence/IE-VEV-VAULT-XFER-002/index.html); predecessor [`IE-VEV-VAULT-XFER-001`](../registers/VEV-2026-09-17-vault-transfer-diagram-review.md) and [`IE-VEV-TECH-VIEW-002`](../registers/VEV-2026-09-15-technology-architecture-view-correction.md) remain historical evidence |
 | Change record | [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor correction [`IE-CHG-TECH-VIEW-CORR-001`](../registers/CHG-2026-09-15-technology-architecture-view-correction.md) |
 | Predecessor | `IE-ARC-TECH-VIEW-001@0.2`; exact successor source/diagram/SVG/PNG hashes are recorded in the current render manifest |
 | Supersedes / superseded by | Supersedes `IE-ARC-TECH-VIEW-001@0.2` / `NOT-APPLICABLE` |
 | Review trigger | Technology baseline, deployment topology, protocol, trust boundary, build/release path or client reopen disposition changes |
 | Access / retention | `INTERNAL`; retain with the technology baseline and successor history |
-| Evidence status | Mermaid source, successor rendering, standalone-SVG inspection and focused author visual review are recorded in `IE-VEV-VAULT-XFER-001`; independent architecture review, runtime qualification and exact successor PDA approval remain `NOT-RUN` |
+| Evidence status | Mermaid source, latest successor rendering, standalone-SVG inspection and focused author visual review are recorded in `IE-VEV-VAULT-XFER-002`; independent architecture review, runtime qualification and exact successor PDA approval remain `NOT-RUN` |
 
 ## Reading rule and notation
 
@@ -597,6 +597,6 @@ force retention of Java in advance.
 
 | Version | Date | Status | Change |
 |---|---|---|---|
-| `0.3` | 2026-09-17 | Draft | Add control-plane/data-plane separation and multi-location Vault capability to TECH-D01…D06; correct control/receipt directions and worker byte paths; retain initial filesystem Adapter direction. Current render/open and focused author review are recorded in `IE-VEV-VAULT-XFER-001`. Gateway runtime/provider, independent review and runtime qualification remain `NOT-RUN`; Technology Stack, Q-15, Product Scope, PDA and PG states are unchanged. |
+| `0.3` | 2026-09-17 | Draft | Add control-plane/data-plane separation and multi-location Vault capability to TECH-D01…D06; correct control/receipt directions and worker byte paths; retain initial filesystem Adapter direction. Current render/open and focused author review are recorded in `IE-VEV-VAULT-XFER-002`. Gateway runtime/provider, independent review and runtime qualification remain `NOT-RUN`; Technology Stack, Q-15, Product Scope, PDA and PG states are unchanged. |
 | `0.2` | 2026-09-15 | Draft | Correct TECH-D07 so `.NET` applies only to WPF/Workspace and the selected Worker boundary retains an unselected toolchain; correct TECH-D08 so Client and Server triggers lead to an unbiased successor decision; baseline, Q-15, Product Scope, PDA and PG states unchanged |
 | `0.1` | 2026-09-15 | Draft | Initial TECH-D01…D08 set for the Engineering-selected Core v0 baseline; Q-15 remains `PARTIAL / NO WINNER`, PDA and PG states unchanged |

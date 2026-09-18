@@ -8,7 +8,7 @@ SRS hay tài liệu kiến trúc gốc. Trước khi sửa Word, đọc [hướn
 
 | Cần làm gì | Mở file nào | Lưu ý |
 |---|---|---|
-| Xem sơ đồ kiến trúc hiện hành ở kích thước đầy đủ | [Bộ sơ đồ Vault mới](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/index.html) | Nguồn hiện hành có 40 controlled views và 3 hình tiếng Việt để cập nhật Word. Bản render không phải kết quả kiểm thử phần mềm. |
+| Xem sơ đồ kiến trúc hiện hành ở kích thước đầy đủ | [Bộ sơ đồ Vault mới](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/index.html) | Nguồn hiện hành có 40 controlled views và 3 hình tiếng Việt để cập nhật Word. Bản render không phải kết quả kiểm thử phần mềm. |
 | Cập nhật Word trên SharePoint theo yêu cầu Vault nhiều nơi | [Hướng dẫn cập nhật Word ngày 17-09](IDEA-DDM-multi-location-vault-sharepoint-word-update-guide-2026-09-17.md) | Có đoạn văn để copy, bảng, thuật ngữ và liên kết tới hình mới. Không tự ghi đè Word người dùng đã sửa. |
 | Xem đúng slide đã trình duyệt | [Presentation FINAL ngày 16-09](IDEA-Engineering-Core-v0-Feature-Spec-Tech-Management-Review-2026-09-16-FINAL.pptx) | Giữ nguyên bản đã review; chưa chứa thay đổi Vault ngày 17-09. Quyết định của sếp được ghi riêng trong [approval record](../product/instances/idea-engineering/registers/CHG-2026-09-17-product-decision-authority-approval.md). |
 | Tra nguồn của slide đã trình | [Presentation source map](IDEA-Engineering-Core-v0-Feature-Spec-Tech-Management-Review-source-map.md) và [inventory 38 views ngày 16-09](IDEA-Engineering-Core-v0-controlled-diagram-inventory-2026-09-16.md) | Snapshot của buổi review đó, không phải danh mục sơ đồ hiện hành. Giữ nguyên các số liệu và trạng thái ghi trước buổi duyệt. |

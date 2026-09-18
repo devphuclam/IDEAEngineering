@@ -233,22 +233,22 @@ flowchart TB
 
 ## 11. Thứ tự sửa bản Word trên SharePoint
 
-[Mở bộ hình hiện hành](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/index.html).
+[Mở bộ hình hiện hành](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/index.html).
 Chỉ dùng hình trong bộ này cho nội dung Vault mới.
 
 | Hình dùng trong Word | PNG để chèn | SVG để mở đầy đủ |
 |---|---|---|
-| `MGMT-VLT-001` — Luồng điều khiển và truyền file | [PNG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/MGMT-VLT-001.png) | [SVG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/MGMT-VLT-001.svg) |
-| `MGMT-VLT-002` — Check-in qua Gateway | [PNG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/MGMT-VLT-002.png) | [SVG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/MGMT-VLT-002.svg) |
-| `MGMT-VLT-003` — Một Artifact, nhiều vị trí lưu | [PNG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/MGMT-VLT-003.png) | [SVG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/MGMT-VLT-003.svg) |
+| `MGMT-VLT-001` — Luồng điều khiển và truyền file | [PNG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/MGMT-VLT-001.png) | [SVG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/MGMT-VLT-001.svg) |
+| `MGMT-VLT-002` — Check-in qua Gateway | [PNG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/MGMT-VLT-002.png) | [SVG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/MGMT-VLT-002.svg) |
+| `MGMT-VLT-003` — Một Artifact, nhiều vị trí lưu | [PNG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/MGMT-VLT-003.png) | [SVG](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/MGMT-VLT-003.svg) |
 
 Các hình chi tiết nên dẫn link từ caption hoặc phần giải thích liên quan:
 
-- [Truyền tiếp file lớn — ARCH-VIEW-SEQ-006](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/ARCH-VIEW-SEQ-006.svg).
-- [Đổi Vault khi tải gián đoạn — ARCH-VIEW-SEQ-012](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/ARCH-VIEW-SEQ-012.svg).
-- [Xác minh replica — ARCH-VIEW-SEQ-013](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/ARCH-VIEW-SEQ-013.svg).
-- [Check-in và các nhánh từ chối — ARCH-VIEW-SEQ-002](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/ARCH-VIEW-SEQ-002.svg).
-- [Tạo PDF/Representation qua Gateway — ARCH-VIEW-SEQ-010](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-001/ARCH-VIEW-SEQ-010.svg).
+- [Truyền tiếp file lớn — ARCH-VIEW-SEQ-006](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/ARCH-VIEW-SEQ-006.svg).
+- [Đổi Vault khi tải gián đoạn — ARCH-VIEW-SEQ-012](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/ARCH-VIEW-SEQ-012.svg).
+- [Xác minh replica — ARCH-VIEW-SEQ-013](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/ARCH-VIEW-SEQ-013.svg).
+- [Check-in và các nhánh từ chối — ARCH-VIEW-SEQ-002](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/ARCH-VIEW-SEQ-002.svg).
+- [Tạo PDF/Representation qua Gateway — ARCH-VIEW-SEQ-010](../product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/ARCH-VIEW-SEQ-010.svg).
 
 Các link trên mở file local để anh kiểm tra. Khi đưa lên SharePoint, tải SVG/PNG mới vào thư mục
 `so-do`, lấy link chia sẻ của từng SVG rồi thay link trong Word bằng link SharePoint đó. Anh giữ

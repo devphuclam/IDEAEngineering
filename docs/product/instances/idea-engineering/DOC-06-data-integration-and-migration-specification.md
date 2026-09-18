@@ -593,7 +593,7 @@ limits remain open under `SPEC-OPEN-04/05`.
 |---|---|---|
 | `SOURCE-NEED` / `SOURCE-DECISION` | DOC-03 needs/rules, DOC-04 obligations and approved Feature/Spec decision | Draft sources linked; Feature/Spec decisions `NOT-RUN` |
 | `DOWNSTREAM` | DOC-05 interfaces, DOC-07 increment, DOC-08 interactions, VVP and later implementation contracts | DOC-05@0.21 and DOC-08@0.13 Drafts authored against this successor at source level; review `NOT-RUN` |
-| `CHANGE` | CHG with data, interface, security, migration, recovery and release impact | [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) records the direct-transfer/multi-location successor; prior CHG records remain traceable |
+| `CHANGE` | CHG with data, interface, security, migration, recovery and release impact | [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) records the direct-transfer/multi-location successor; current source/rendition evidence is [IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md); prior CHG records remain traceable |
 | `VERIFICATION` | Mapping/reconciliation, Workspace/Reference/transfer/storage, item/folder/copy, BOM, handoff, workflow, format, RBAC/delegation, authorization/import and restore procedures/results | Candidate `IE-VVP-CORE-001@0.17`; direct-transfer, failover, replication and runtime product execution `NOT-RUN`; prior rendition VEV records remain historical evidence |
 | `RELEASE` | Future REL baseline and data-boundary authorization | `NOT APPLICABLE` to this Draft |
 | `RENDITION` | Source-pinned DOCX/PDF identity/status | No rendition generated |

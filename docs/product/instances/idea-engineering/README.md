@@ -26,10 +26,10 @@ and are not edited as product content.
 
 DOC-05@0.21 and DOC-06@0.17 contain the maintained architecture and data views, including the new
 control-plane/data-plane and multi-location Vault semantics. The
-[current Vault successor gallery](evidence/IE-VEV-VAULT-XFER-001/index.html) contains 40 maintained
+[current Vault successor gallery](evidence/IE-VEV-VAULT-XFER-002/index.html) contains 40 maintained
 controlled views and three Vietnamese Word figures, including new exact-read-failover and verified
 replica sequences. Its source/render/open and focused author review are recorded in
-[IE-VEV-VAULT-XFER-001](registers/VEV-2026-09-17-vault-transfer-diagram-review.md).
+[IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md).
 The [predecessor architecture gallery](evidence/IE-VEV-ARCH-CORR-005/index.html) provides historical SVG and PNG
 renditions from the source hashes recorded by
 [IE-VEV-ARCH-CORR-005](registers/VEV-2026-09-14-module-authority-view-legibility.md).
@@ -420,7 +420,7 @@ its topology, thresholds, runtime/provider qualification and exact PDA approval 
 | `CHG` | `IE-CHG-VAULT-XFER-001` | [Multi-location Vault Transfer Architecture](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) | `Draft 0.1`; internal direction selected after management feedback; separates control/data planes, introduces scoped Gateway transfer and multiple Artifact locations; exact successor PDA approval, thresholds, topology and qualification `NOT-RUN` |
 | `CHG` | `IE-CHG-COMMERCIAL-DIR-001` | [Internal-First and Future Commercial Direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) | `Draft 0.1`; records internal-only operation for the next several years and a separately gated long-term commercial direction; no current Feature/Spec/Tech, task, Tech Stack or gate-state change |
 | `CHG` | `IE-CHG-PH0-CORR-001` | [PH0 Readiness Consistency Correction](registers/CHG-2026-09-17-ph0-readiness-correction.md) | `Draft 0.1`; author correction of PH0 gate vocabulary, authorization limits, read-only analysis, PowerShell quoting and exact planning-change trace; Appendix A@0.6 keeps the schedule unchanged; no product-gate decision |
-| `VEV` | `IE-VEV-VAULT-XFER-001` | [Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-17-vault-transfer-diagram-review.md) | `Draft 0.1`; current 40 controlled + 3 management views, including two new storage sequences; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
+| `VEV` | `IE-VEV-VAULT-XFER-002` | [Latest Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-18-vault-transfer-diagram-review.md) | `Draft 0.1`; latest pinned source and 40 controlled + 3 management views; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
 
 The [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md)
 is the informative Engineering selection presented to management through

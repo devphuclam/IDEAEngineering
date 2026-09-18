@@ -14,7 +14,7 @@
 | Source / upstream trace | Management need recorded by the project user: the business Backend may remain on one host, Vault storage must support multiple locations, and large concurrent transfers must not be forced through that Backend; [provenance note](../../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md); [ADR-0013](../../../../adr/0013-separate-artifact-control-and-data-planes.md) |
 | Downstream trace | DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.12, DOC-08@0.13, VVP@0.17, product lifecycle architecture@0.4, technology view set@0.3 and TECH-001@0.15 |
 | Decision evidence | The project user reported on 2026-09-18 that the user and Product Decision Authority approved the recommended Multi-location Artifact Custody direction; no separately signed approval artifact was supplied to the repository |
-| Evidence status | Architecture synthesis and source/rendition checks recorded in [IE-VEV-VAULT-XFER-001](VEV-2026-09-17-vault-transfer-diagram-review.md); implementation, benchmark, failover, replication, security and restore runtime evidence are `NOT-RUN` |
+| Evidence status | Architecture synthesis and latest source/rendition checks recorded in [IE-VEV-VAULT-XFER-002](VEV-2026-09-18-vault-transfer-diagram-review.md); implementation, benchmark, failover, replication, security and restore runtime evidence are `NOT-RUN` |
 | Access / retention | `INTERNAL`; retain with predecessor and successor controlled sources |
 
 ## 1. Reason for change
@@ -118,7 +118,7 @@ candidate metadata and custody evidence only. `ARCH-VIEW-SEQ-002` uses a readabl
 abstraction, explicitly shows finalize refusals and retains internal owner contracts in companion
 views. No owner boundary or requirement is changed by this simplification.
 
-The [current gallery](../evidence/IE-VEV-VAULT-XFER-001/index.html) contains the maintained
+The [current gallery](../evidence/IE-VEV-VAULT-XFER-002/index.html) contains the maintained
 architecture/data/technology set plus three Vietnamese management simplifications. The
 [Word-update guide](../../../../reports/IDEA-DDM-multi-location-vault-sharepoint-word-update-guide-2026-09-17.md)
 identifies the images and paste-ready wording; the submitted Word is not modified by this work.
