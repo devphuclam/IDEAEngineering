@@ -1,7 +1,7 @@
 # PH0 Trace Matrix
 
 **Increment**: `IE-INC-READY-001`
-**Version / status**: `0.1` / Draft
+**Version / status**: `0.2` / Draft; T009 author trace prepared, verification `NOT-RUN`
 **Purpose**: Một mặt phẳng trace để nối work package, yêu cầu readiness và nguồn sản phẩm đã
 được duyệt. Tài liệu này không tạo `REQ-*` mới và không thay DOC-04.
 
@@ -18,20 +18,35 @@
 | Evidence status | `NOT-RUN`, `PASS`, `FAIL`, `BLOCKED` hoặc `NOT-APPLICABLE` |
 | Notes / gap | Khoảng trống, giới hạn hoặc lý do chưa trace được |
 
-## 2. Khung trace ban đầu
+## 2. Trace đã gắn cho canonical scenario (T009)
 
-Các dòng này chỉ xác nhận phạm vi cần trace. Việc gắn từng `REQ-*`, DOC và VVP cụ thể thuộc T009;
-`NOT-YET-TRACED` không phải một kết quả đạt.
+Các nguồn sản phẩm trong bảng dưới đây là các phiên bản của predecessor được pin trong
+`f269a044...`; chúng không biến Draft successor thành Approved. Mỗi dòng là một trace claim cần
+được reviewer kiểm tra. `NOT-RUN` là trạng thái verification của PH0, không phải thiếu ID.
 
-| Work package | Local FR / SC | Approved product REQ | Architecture source | VVP source | PH0 output | Evidence status | Notes / gap |
-|---|---|---|---|---|---|---|---|
-| `P01` | `FR-001…003`, `SC-001` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `baseline-manifest.md` | `NOT-RUN` | Cần phân biệt source identity và approval evidence |
-| `P02` | `FR-004…006`, `SC-002…003,005` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `canonical-scenario.md` (T007–T010) | `NOT-RUN` | Scenario chưa được lập |
-| `P03` | `FR-007…008,013`, `SC-004,006` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `readiness-register.md` | `NOT-RUN` | Cần owner và closure evidence |
-| `P04` | `FR-009`, `SC-004,007` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `environment-profile.md` (T017) | `NOT-RUN` | Chưa có environment profile |
-| `P05` | `FR-010`, `SC-005…007` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `test-data-and-verification.md` (T018–T019) | `NOT-RUN` | Chưa có fixture được phép |
-| `P06` | `FR-011…013`, `SC-005…007` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `recovery-and-security-plan.md` (T020) | `NOT-RUN` | Chưa có review competence |
-| `P07` | `FR-014…017`, `SC-008…009` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `NOT-YET-TRACED` | `pg4-review-package.md`, `pg4-gate-record.md` | `NOT-RUN` | Chưa có gate authority decision |
+| Step / path | Work package | Local FR / SC | Approved product REQ | Architecture source | VVP source | PH0 output | Evidence status | Notes / gap |
+|---|---|---|---|---|---|---|---|---|
+| Native sign-in and ActorContext | `P02` | `FR-004`, `SC-002` | `REQ-IAM-001…007`, `REQ-AUTH-006…009` | `DOC-05@0.20 §7.4, §7.6`; `IF-ACCOUNT-SESSION`, `IF-AUTHORIZATION-DECISION` | `VVP-015`, `RBAC-01…10` | `canonical-scenario.md` | `NOT-RUN` | Exact identity allocation remains D2/P04. |
+| Logical Document and exact Generation | `P02` | `FR-004`, `SC-002` | `REQ-ID-001…009`, `REQ-WS-001…004` | `DOC-05@0.20 §1, §7.1`; `ARCH-VIEW-SEQ-001` | `VVP-001`, `IF-01…06` | `canonical-scenario.md` | `NOT-RUN` | Source pin is predecessor; successor delta is not inherited. |
+| Explicit Checkout/Reference scope | `P02` | `FR-004`, `SC-002` | `REQ-WS-001…003` | `DOC-05@0.20 §7.1`; `ARCH-VIEW-SEQ-001` | `VVP-002`, `WS-01` | `canonical-scenario.md` | `NOT-RUN` | No hidden cascade. |
+| Materialize and digest-check Workspace | `P02` | `FR-004`, `SC-002` | `REQ-WS-003/004` | `DOC-05@0.20 §7.1`; `IF-ARTIFACT-TRANSFER` | `VVP-002` | `canonical-scenario.md` | `NOT-RUN` | Local path/OS association require P04. |
+| Scan and confirm Check-in scope | `P02` | `FR-004`, `SC-002/003` | `REQ-WS-005/006` | `DOC-05@0.20 §5.3, §7.1` | `VVP-002`, `WS-02` | `canonical-scenario.md` | `NOT-RUN` | Policy for unreserved dependencies must remain exact. |
+| Private resumable byte transfer | `P02` | `FR-004`, `SC-005` | `REQ-WS-012/015`, `REQ-OPS-001` | `DOC-05@0.20 §9.1`; `ARCH-VIEW-SEQ-006` | `VVP-003`, `WS-08` | `canonical-scenario.md` | `NOT-RUN` | Direct multi-location `REQ-WS-016` is a later successor/D1 qualification, not an approved predecessor trace. |
+| Changed atomic Check-in | `P02` | `FR-004`, `SC-002/005` | `REQ-WS-007/009/013` | `DOC-05@0.20 §7.2`; `ARCH-VIEW-STATE-004` | `VVP-003`, `WS-02/03` | `canonical-scenario.md` | `NOT-RUN` | Logical all-or-none, not a claim about physical transfer transaction. |
+| NoChange Check-in | `P02` | `FR-004`, `SC-002` | `REQ-WS-008`, `REQ-WS-012/013` | `DOC-05@0.20 §7.2` | `VVP-003`, `QRS-001/002` | `canonical-scenario.md` | `NOT-RUN` | No new Generation or Version. |
+| Review exact Generation | `P02` | `FR-004`, `SC-002` | `REQ-LC-001/002` | `DOC-05@0.20 §7.3`; `ARCH-VIEW-SEQ-003` | `VVP-006`, `WF-01…03` | `canonical-scenario.md` | `NOT-RUN` | Workflow source remains Draft product input. |
+| Independent decision evidence | `P02` | `FR-004`, `SC-002` | `REQ-LC-003/004/005` | `DOC-05@0.20 §7.3` | `VVP-006`, `WF-04…06` | `canonical-scenario.md` | `NOT-RUN` | Two identities are not two humans. |
+| Exact Release and package | `P02` | `FR-004`, `SC-002` | `REQ-LC-006/007/008`, `REQ-STR-001…005` | `DOC-05@0.20 §7.3`; `ARCH-VIEW-SEQ-003` | `VVP-006`, `SR-01…06` | `canonical-scenario.md` | `NOT-RUN` | Release scope is confirmed; no silent cascade. |
+| Historical package retrieval | `P02` | `FR-004`, `SC-002` | `REQ-LC-008/009`, `REQ-STR-001/002` | `DOC-05@0.20 §7.3` | `VVP-006`, `SR-06` | `canonical-scenario.md` | `NOT-RUN` | Exact digest/provenance must be compared. |
+| Audit and owner outcome separation | `P02` | `FR-005`, `SC-002` | `REQ-AUD-*`, `REQ-AUTH-006…008`, `REQ-GOV-002` | `DOC-05@0.20 §5.1, §7.6`; `IF-AUTHORIZATION-DECISION` | `VVP-007`, `DH-01…04` | `canonical-scenario.md` | `NOT-RUN` | Audit source set is broad; reviewer must confirm exact rows. |
+| RBAC denial | `P02` | `FR-004`, `SC-003` | `REQ-AUTH-001…010`, `REQ-GOV-002` | `DOC-05@0.20 §5.2, §7.6` | `VVP-007`, `RBAC-01…10` | `canonical-scenario.md` | `NOT-RUN` | Business gates remain separate from RBAC eligibility. |
+| Stale / non-owner / wrong Workspace | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-010/011/013/014` | `DOC-05@0.20 §7.2, §7.2.1`; `ARCH-VIEW-SEQ-007` | `VVP-004`, `WS-03/04/05/06/07` | `canonical-scenario.md` | `NOT-RUN` | No auto-merge or overwrite. |
+| Interrupted transfer / lost response | `P02` | `FR-004`, `SC-005` | `REQ-WS-007/012/013/015`, `REQ-OPS-001/002` | `DOC-05@0.20 §7.2.1, §9.1`; `ARCH-VIEW-SEQ-006/007` | `VVP-003/004`, `WS-03/07/08` | `canonical-scenario.md` | `NOT-RUN` | Same OperationId and identical inputs only; direct Gateway successor remains D1. |
+| P03 open decisions and dependency owners | `P03` | `FR-007/008/013`, `SC-004/006` | `REQ-WS-015`, `REQ-OPS-003…008`, `REQ-FMT-001…005`, `REQ-SEC-001…004` | `DOC-05@0.20 §9.1–§9.3, §10`; `ADR C1-011` | `VVP-003`, `VVP-011` | `readiness-register.md` | `NOT-RUN` | Exact thresholds/provider/toolchain remain open, not guessed; successor `REQ-WS-016` remains D0/D1. |
+| Environment profile | `P04` | `FR-009`, `SC-004/007` | `REQ-SEC-001…004`, `REQ-OPS-001…008` | `DOC-05@0.20 §4, §9, §10` | `VVP-011`, `VVP-015` | `environment-profile.md` | `NOT-RUN` | No setup command or runtime qualification executed. |
+| Synthetic data and verification matrix | `P05` | `FR-010`, `SC-005…007` | `REQ-ID-001…009`, `REQ-WS-001…015`, `REQ-LC-001…009`, `REQ-STR-001…006` | `DOC-05@0.20 §7, §9.1–§9.2`; `DOC-06@0.16 §1` | `VVP-001…007`, `VVP-011` | `test-data-and-verification.md` | `NOT-RUN` | Fixture hash, size and Vault failure domain remain open; successor transfer extension is D1. |
+| Recovery and security plan | `P06` | `FR-011…013`, `SC-005…007` | `REQ-WS-010…015`, `REQ-AUTH-001…010`, `REQ-SEC-001…004`, `REQ-AUD-001/002` | `DOC-05@0.20 §7.2.1, §9, §10`; `DOC-06@0.16 §1.3–§1.4` | `VVP-003/004/007/011/015` | `recovery-and-security-plan.md` | `NOT-RUN` | Specialist review and restore evidence are missing; `REQ-WS-016` is not in approved predecessor. |
+| PG4 package/gate | `P07` | `FR-014…017`, `SC-008/009` | `NOT-APPLICABLE` until P01–P06 results exist | `contracts/pg4-gate-record.md` | `quickstart.md §8` | Future `pg4-review-package.md` and `pg4-gate-record.md` | `NOT-RUN` | No gate authority decision; production remains unauthorized. |
 
 ## 3. Quy tắc hoàn thiện
 
@@ -47,3 +62,4 @@ Các dòng này chỉ xác nhận phạm vi cần trace. Việc gắn từng `RE
 | Version | Date | Change | Evidence |
 |---|---|---|---|
 | 0.1 | 2026-09-17 | Tạo khung trace cho P01–P07; chưa khẳng định product trace hay verification result. | T002 |
+| 0.2 | 2026-09-18 | Gắn các bước canonical scenario, negative paths và P03–P07 output vào REQ/architecture/VVP IDs; mọi verification vẫn `NOT-RUN`. | T009; `canonical-scenario.md` |

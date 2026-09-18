@@ -11,12 +11,16 @@ Stack và không phê duyệt successor baseline.
 3. [baseline-manifest.md](baseline-manifest.md) — predecessor đã duyệt và successor Draft.
 4. [readiness-register.md](readiness-register.md) — sổ công việc, dependency và kết quả.
 5. [trace-matrix.md](trace-matrix.md) — đường trace từ PH0 tới nguồn Feature/Spec/Tech.
-6. [research.md](research.md) và [data-model.md](data-model.md) — quyết định thiết kế hồ sơ.
-7. [quickstart.md](quickstart.md) — cách reviewer chạy các kiểm tra tài liệu.
-8. [contracts/](contracts/) — quy tắc cho manifest, decision/evidence và PG4.
-9. [checklists/requirements.md](checklists/requirements.md) — checklist chất lượng spec đã tạo.
-10. [checklists/readiness.md](checklists/readiness.md) — checklist do reviewer giữ quyền đánh dấu.
-11. [analysis-findings.md](analysis-findings.md) — kết quả phân tích chéo và remediation đã được duyệt.
+6. [canonical-scenario.md](canonical-scenario.md) — scenario bắt buộc, đường bình thường và đường lỗi.
+7. [environment-profile.md](environment-profile.md) — môi trường được phép và các giới hạn setup.
+8. [test-data-and-verification.md](test-data-and-verification.md) — fixture synthetic và ma trận kiểm tra.
+9. [recovery-and-security-plan.md](recovery-and-security-plan.md) — recovery, backup và security review.
+10. [research.md](research.md) và [data-model.md](data-model.md) — quyết định thiết kế hồ sơ.
+11. [quickstart.md](quickstart.md) — cách reviewer chạy các kiểm tra tài liệu.
+12. [contracts/](contracts/) — quy tắc cho manifest, decision/evidence và PG4.
+13. [checklists/requirements.md](checklists/requirements.md) — checklist chất lượng spec đã tạo.
+14. [checklists/readiness.md](checklists/readiness.md) — checklist do reviewer giữ quyền đánh dấu.
+15. [analysis-findings.md](analysis-findings.md) — kết quả phân tích chéo và remediation đã được duyệt.
 
 ## Trạng thái hiện tại
 
