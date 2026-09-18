@@ -26,7 +26,7 @@
 | Owner / executor | Principal Product Author; tên người chịu trách nhiệm cụ thể `BLOCKED` trước khi review |
 | Reviewer | Project reviewer; disposition `NOT-RUN` vì chưa có bản ghi review có thể truy nguyên |
 | Historical P01 review input | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; this is the immutable input for T006 and is not the current PH0 package baseline |
-| Current PH0 package baseline | Branch `main` at `00b2d1ba053bd1e0c12529aa2cd7040f2a93905a`; includes the PH0 scenario, environment, data and recovery preparation added after the historical T028–T030 analysis |
+| Current PH0 package baseline | Source set analyzed at `ad49bbf67a291f542b6464532185f7d701a9f298`; includes the PH0 scenario, environment, data and recovery preparation plus the author-side T021 reconciliation |
 | Approved product predecessor | `f269a0445737a7efd7f406ee51517149a8967afa`; the approved predecessor source remains separate from this PH0 planning package |
 | Draft successor source set | The successor inputs and their exact hashes are listed in [baseline-manifest.md](baseline-manifest.md), Section 2; they are not approved by inclusion |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
@@ -128,9 +128,9 @@ Chúng không thay thế review hoặc runtime evidence.
 | Review task | Prepared source identity | Reviewer state | Required action |
 |---|---|---|---|
 | T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134`; `trace-matrix.md` SHA-256 `DF62D919A965D81205631291B2ED1465C4A41D511B9E8D809399617ECF75F7E1` | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
-| T016 — decision review | Mục 5, `D0`–`D5`, current package baseline `00b2d1b...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger |
+| T016 — decision review | Mục 5, `D0`–`D5`, analyzed package baseline `ad49bbf...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger |
 | T022 — P04/P05/P06 result review | `environment-profile.md` SHA-256 `D0EFD96FA8D857398E199FCC72F4961C9F2149D00DBA803E3C75D149E0779A07`; `test-data-and-verification.md` SHA-256 `5EF6F8D9F31FA62FEFE5E4C8BFDB39058E50309F71542ED460AD54756E39E07`; `recovery-and-security-plan.md` SHA-256 `F9950E46CB39C49EC8D3E584D79B330450799927ED0394EBAE9A4C2D0B87CBA8` | `NOT-RUN` | Reviewer records separate P04, P05 and P06 outcomes; missing prerequisites stay `BLOCKED`/`NOT-RUN` |
-| T031 — checklist review | [readiness checklist](checklists/readiness.md), all unchecked items; current package baseline `00b2d1b...` | `NOT-RUN` | Project reviewer evaluates unchecked items; checklist approval is quality evidence only and cannot authorize PG4 |
+| T031 — checklist review | [readiness checklist](checklists/readiness.md), all unchecked items; analyzed package baseline `ad49bbf...` | `NOT-RUN` | Project reviewer evaluates unchecked items; checklist approval is quality evidence only and cannot authorize PG4 |
 
 ## 10. Change log
 
