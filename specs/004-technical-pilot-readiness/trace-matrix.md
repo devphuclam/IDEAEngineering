@@ -1,7 +1,7 @@
 # PH0 Trace Matrix
 
 **Increment**: `IE-INC-READY-001`
-**Version / status**: `0.2` / Draft; T009 author trace prepared, verification `NOT-RUN`
+**Version / status**: `0.3` / Draft; T009 author trace prepared, verification `NOT-RUN`
 **Purpose**: Một mặt phẳng trace để nối work package, yêu cầu readiness và nguồn sản phẩm đã
 được duyệt. Tài liệu này không tạo `REQ-*` mới và không thay DOC-04.
 
@@ -38,7 +38,7 @@ Các nguồn sản phẩm trong bảng dưới đây là các phiên bản của
 | Independent decision evidence | `P02` | `FR-004`, `SC-002` | `REQ-LC-003/004/005` | `DOC-05@0.20 §7.3` | `VVP-006`, `WF-04…06` | `canonical-scenario.md` | `NOT-RUN` | Two identities are not two humans. |
 | Exact Release and package | `P02` | `FR-004`, `SC-002` | `REQ-LC-006/007/008`, `REQ-STR-001…005` | `DOC-05@0.20 §7.3`; `ARCH-VIEW-SEQ-003` | `VVP-006`, `SR-01…06` | `canonical-scenario.md` | `NOT-RUN` | Release scope is confirmed; no silent cascade. |
 | Historical package retrieval | `P02` | `FR-004`, `SC-002` | `REQ-LC-008/009`, `REQ-STR-001/002` | `DOC-05@0.20 §7.3` | `VVP-006`, `SR-06` | `canonical-scenario.md` | `NOT-RUN` | Exact digest/provenance must be compared. |
-| Audit and owner outcome separation | `P02` | `FR-005`, `SC-002` | `REQ-AUD-*`, `REQ-AUTH-006…008`, `REQ-GOV-002` | `DOC-05@0.20 §5.1, §7.6`; `IF-AUTHORIZATION-DECISION` | `VVP-007`, `DH-01…04` | `canonical-scenario.md` | `NOT-RUN` | Audit source set is broad; reviewer must confirm exact rows. |
+| Audit and owner outcome separation | `P02` | `FR-005`, `SC-002` | `REQ-AUD-001/002`, `REQ-AUTH-006…008`, `REQ-GOV-002` | `DOC-05@0.20 §5.1, §7.6`; `IF-AUTHORIZATION-DECISION` | `VVP-007`, `DH-01…04` | `canonical-scenario.md` | `NOT-RUN` | `REQ-AUD-001` covers attributable outcome evidence; `REQ-AUD-002` covers append-only and ordinary-administration mutation protection. |
 | RBAC denial | `P02` | `FR-004`, `SC-003` | `REQ-AUTH-001…010`, `REQ-GOV-002` | `DOC-05@0.20 §5.2, §7.6` | `VVP-007`, `RBAC-01…10` | `canonical-scenario.md` | `NOT-RUN` | Business gates remain separate from RBAC eligibility. |
 | Stale / non-owner / wrong Workspace | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-010/011/013/014` | `DOC-05@0.20 §7.2, §7.2.1`; `ARCH-VIEW-SEQ-007` | `VVP-004`, `WS-03/04/05/06/07` | `canonical-scenario.md` | `NOT-RUN` | No auto-merge or overwrite. |
 | Interrupted transfer / lost response | `P02` | `FR-004`, `SC-005` | `REQ-WS-007/012/013/015`, `REQ-OPS-001/002` | `DOC-05@0.20 §7.2.1, §9.1`; `ARCH-VIEW-SEQ-006/007` | `VVP-003/004`, `WS-03/07/08` | `canonical-scenario.md` | `NOT-RUN` | Same OperationId and identical inputs only; direct Gateway successor remains D1. |
@@ -63,3 +63,4 @@ Các nguồn sản phẩm trong bảng dưới đây là các phiên bản của
 |---|---|---|---|
 | 0.1 | 2026-09-17 | Tạo khung trace cho P01–P07; chưa khẳng định product trace hay verification result. | T002 |
 | 0.2 | 2026-09-18 | Gắn các bước canonical scenario, negative paths và P03–P07 output vào REQ/architecture/VVP IDs; mọi verification vẫn `NOT-RUN`. | T009; `canonical-scenario.md` |
+| 0.3 | 2026-09-18 | Làm rõ trace Audit của P02 bằng `REQ-AUD-001/002` thay cho wildcard `REQ-AUD-*`; không thay đổi hành vi, scope hoặc verification result. | DOC-04 `REQ-AUD-001/002`; review-assistant correction |

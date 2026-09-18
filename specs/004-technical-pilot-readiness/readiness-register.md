@@ -1,7 +1,7 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `0.9` / Draft; author preparation through T021 recorded, readiness results remain `NOT-RUN`
+**Version / status**: `1.0` / Draft; author preparation through T021 recorded, readiness results remain `NOT-RUN`
 **Prepared**: 2026-09-17
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
@@ -127,10 +127,22 @@ Chúng không thay thế review hoặc runtime evidence.
 
 | Review task | Prepared source identity | Reviewer state | Required action |
 |---|---|---|---|
-| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134`; `trace-matrix.md` SHA-256 `DF62D919A965D81205631291B2ED1465C4A41D511B9E8D809399617ECF75F7E1` | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
+| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134`; `trace-matrix.md` SHA-256 `408B61494A10D9CB53FF763F3D38DD77FE15791347CEFD3780597DF0161D3B00` | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
 | T016 — decision review | Mục 5, `D0`–`D5`, analyzed package baseline `ad49bbf...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger |
 | T022 — P04/P05/P06 result review | `environment-profile.md` SHA-256 `D0EFD96FA8D857398E199FCC72F4961C9F2149D00DBA803E3C75D149E0779A07`; `test-data-and-verification.md` SHA-256 `5EF6F8D9F31FA62FEFE5E4C8BFDB39058E50309F71542ED460AD54756E39E07C`; `recovery-and-security-plan.md` SHA-256 `F9950E46CB39C49EC8D3E584D79B330450799927ED0394EBAE9A4C2D0B87CBA8` | `NOT-RUN` | Reviewer records separate P04, P05 and P06 outcomes; missing prerequisites stay `BLOCKED`/`NOT-RUN` |
 | T031 — checklist review | [readiness checklist](checklists/readiness.md), all unchecked items; analyzed package baseline `ad49bbf...` | `NOT-RUN` | Project reviewer evaluates unchecked items; checklist approval is quality evidence only and cannot authorize PG4 |
+
+### Review-assistant re-evaluation notes (not controlled results)
+
+- **T006:** No applicable PH0 governance rule or baseline-manifest contract requires signed minutes,
+  wet/digital signature or a separately signed approval artifact. `IE-CHG-PDA-APPROVAL-001`
+  contains the decision date, authority, reporter, exact approved commit, source versions, hashes
+  and three recorded dispositions. The absent signed artifact is retained as an evidence limitation,
+  not an automatic blocker. Recommended Project Reviewer disposition: `PASS`, subject to accepting
+  the recorded decision evidence. T006 remains `NOT-RUN` until the Project Reviewer records it.
+- **P02-R13:** The P02 Audit trace now uses exact `REQ-AUD-001/002`; the previous wildcard ambiguity
+  is resolved. Recommended reviewer disposition: `PASS`, subject to the walkthrough and trace review.
+  T011 remains `NOT-RUN` until the Project Reviewer records it.
 
 ## 10. PH0 Human Action Board
 
@@ -251,3 +263,4 @@ từ hồ sơ tác giả sang PH1.
 | 0.7 | 2026-09-18 | Thêm một bảng Human Action Board, checklist T011, evidence map T022/T031, authority boundary và critical path tới PG4; không đóng reviewer/authority task và không đổi gate state. | T006, T011, T016, T022–T027, T031–T032 |
 | 0.8 | 2026-09-18 | Sửa lại SHA-256 của `test-data-and-verification.md` trong handoff để khớp với file thực tế; không thay đổi nội dung fixture hoặc readiness result. | T022 hash reconciliation |
 | 0.9 | 2026-09-18 | Đổi nhãn `Current PH0 package baseline` thành `Analyzed PH0 content baseline` để không nhầm commit nội dung đã phân tích với repository HEAD; không đổi hash, scope, decision hoặc gate state. | Terminology correction; review-assistant run |
+| 1.0 | 2026-09-18 | Ghi nhận re-evaluation T006/P02-R13 và cập nhật hash `trace-matrix.md` sau khi thay wildcard Audit bằng `REQ-AUD-001/002`; reviewer/result/gate states vẫn `NOT-RUN`/`OPEN`. | DOC-04 `REQ-AUD-001/002`; T006/T011 review-assistant correction |
