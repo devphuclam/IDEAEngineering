@@ -477,7 +477,7 @@ to be fully qualified before the F01–F05 gate, classify it as:
 
 Do not amend the contract or silently move evidence between milestones in this author-prepared run.
 
-### 10.4 Authority boundary for the current project user
+### 10.6 Authority boundary for the current project user
 
 Repository evidence chưa gán người dùng hiện tại vào một authority cụ thể. Người dùng có thể
 thực hiện công việc **Principal Product Author** và có thể là người điều phối hồ sơ, nhưng không
