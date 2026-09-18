@@ -74,6 +74,10 @@ specs/004-technical-pilot-readiness/
 ├── baseline-manifest.md
 ├── data-model.md
 ├── quickstart.md
+├── README.md
+├── readiness-register.md
+├── trace-matrix.md
+├── analysis-findings.md
 ├── checklists/
 │   ├── requirements.md
 │   └── readiness.md
@@ -126,6 +130,10 @@ without reopening product decisions:
 |---|---|---|
 | [baseline-manifest.md](baseline-manifest.md) | Pin the approved predecessor, current successor Draft and planning sources without conflation. | `P01` |
 | [data-model.md](data-model.md) | Define the readiness records, identities, validation rules and state transitions. | `P01`–`P07` |
+| [README.md](README.md) | Provide the navigable reading order, current execution status and non-inference rules. | `P01`–`P07` |
+| [readiness-register.md](readiness-register.md) | Track work-package state, open dependencies, results and evidence links. | `P01`–`P07` |
+| [trace-matrix.md](trace-matrix.md) | Connect PH0 requirements to approved product, architecture and verification sources. | `P01`–`P07` |
+| [analysis-findings.md](analysis-findings.md) | Retain the read-only cross-artifact analysis, remediation decisions and reviewed source hashes. | `T028`–`T030` |
 | [contracts/baseline-manifest-contract.md](contracts/baseline-manifest-contract.md) | Define fields and consistency rules for exact source pins. | `P01` |
 | [contracts/decision-and-evidence-register.md](contracts/decision-and-evidence-register.md) | Define how open decisions, checks and blockers are owned and closed. | `P03`–`P06` |
 | [contracts/pg4-gate-record.md](contracts/pg4-gate-record.md) | Define the attributable gate result and authorization boundary. | `P07` |
@@ -153,8 +161,9 @@ The Phase 1 artifacts keep baseline authority, open decisions, evidence and gate
 separate records. They do not add product behavior, technology selection, source code, external
 dependency, commercial scope or an inferred approval. All pre-planning constitution checks remain
 `PASS` as author document-alignment checks after the correction; this does not certify a product
-gate. PH0 task execution and `PG4` execution state are still `NOT-RUN`; `PG4` outcome is
-`NOT-APPLICABLE` until an attributable decision exists.
+gate. At the current author checkpoint, T001–T005 are complete, P01 is `IN-PROGRESS`, P02–P07
+remain `NOT-RUN`, and `PG4` execution state is `NOT-RUN` with outcome `NOT-APPLICABLE` until an
+attributable decision exists.
 
 ## Complexity Tracking
 

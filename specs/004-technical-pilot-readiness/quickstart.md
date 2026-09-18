@@ -110,7 +110,9 @@ the placeholder scan and must be interpreted deliberately.
 1. Freeze the exact readiness manifest and Git commit.
 2. Review every `P01`–`P07` criterion and evidence result.
 3. List open blockers and residual risks with owners.
-4. Name the exact PH1 successor increment and its boundaries.
+4. Name the exact PH1 successor increment and its boundaries. Here PH1 means the first code-bearing
+   successor after PH0; record its stable increment ID and feature directory rather than treating
+   the label as an approval.
 5. Complete [pg4-gate-record.md](contracts/pg4-gate-record.md).
 6. Record execution state separately from outcome. Before a disposition, outcome is
    `NOT-APPLICABLE`; a completed assessment records `PASS`, `PASS-WITH-ACTIONS`, `FAIL` or `BLOCKED`.

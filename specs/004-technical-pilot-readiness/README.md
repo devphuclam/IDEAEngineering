@@ -16,6 +16,7 @@ Stack và không phê duyệt successor baseline.
 8. [contracts/](contracts/) — quy tắc cho manifest, decision/evidence và PG4.
 9. [checklists/requirements.md](checklists/requirements.md) — checklist chất lượng spec đã tạo.
 10. [checklists/readiness.md](checklists/readiness.md) — checklist do reviewer giữ quyền đánh dấu.
+11. [analysis-findings.md](analysis-findings.md) — kết quả phân tích chéo và remediation đã được duyệt.
 
 ## Trạng thái hiện tại
 
@@ -41,4 +42,5 @@ Stack và không phê duyệt successor baseline.
 
 - [DOC-07 Appendix A](../../docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
 - [PH0 correction record](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md)
+- [PH0 analysis remediation](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-18-ph0-analysis-remediation.md)
 - [Product instance catalogue](../../docs/product/instances/idea-engineering/README.md)

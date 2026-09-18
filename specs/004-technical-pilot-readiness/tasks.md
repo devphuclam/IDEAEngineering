@@ -13,18 +13,20 @@ decision; they do not create production application code.
 
 - **[P]**: May proceed in parallel after its stated prerequisites because it writes a different file.
 - **[US#]**: Maps to the user story in [spec.md](spec.md).
+- **[SETUP]**: Cross-cutting setup work that establishes PH0 records before a user story result.
+- **[HANDOFF]**: Cross-artifact review or handoff work after the story outputs exist.
 - Every task names its output path and its PH0 work-package trace.
 
 ## Phase 1: Setup (Shared Readiness Records)
 
 **Purpose**: Establish one evidence ledger and one trace index before any PH0 result is claimed.
 
-- [x] T001 Create `specs/004-technical-pilot-readiness/readiness-register.md` from `contracts/decision-and-evidence-register.md`, with control envelope, P01–P07 rows initialized to `NOT-RUN`, result ownership and evidence-link columns.
-- [x] T002 [P] Create `specs/004-technical-pilot-readiness/trace-matrix.md` with columns for work package, local `FR-*`, approved product `REQ-*`, architecture source, VVP source, output and evidence status; do not populate an unverified product trace as `PASS`.
-- [x] T003 Add links to the manifest, registers, contracts, checklist and quickstart in `specs/004-technical-pilot-readiness/README.md`, stating that DOC-04 remains the product-requirement authority.
+- [x] T001 [SETUP] Create `specs/004-technical-pilot-readiness/readiness-register.md` from `contracts/decision-and-evidence-register.md`, with control envelope, P01–P07 rows initialized to `NOT-RUN`, result ownership and evidence-link columns (FR-014).
+- [x] T002 [P] [SETUP] Create `specs/004-technical-pilot-readiness/trace-matrix.md` with columns for work package, local `FR-*`, approved product `REQ-*`, architecture source, VVP source, output and evidence status; do not populate an unverified product trace as `PASS` (FR-005, FR-014).
+- [x] T003 [SETUP] Add links to the manifest, registers, contracts, checklist and quickstart in `specs/004-technical-pilot-readiness/README.md`, stating that DOC-04 remains the product-requirement authority (FR-014).
 
-**Checkpoint**: The increment has one navigable ledger and trace surface; all execution remains
-`NOT-RUN`.
+**Checkpoint**: The increment has one navigable ledger and trace surface; T001–T003 are complete,
+but readiness results remain `NOT-RUN` until their review or execution evidence is recorded.
 
 ---
 
@@ -36,7 +38,7 @@ separate baselines.
 **Independent Test**: A reviewer can reproduce every primary source pin and explain the authority of
 `f269a044...`, the historical use of `aabf02ff...` and the `NOT-RUN` successor disposition.
 
-- [x] T004 [US1] Recompute current-source SHA-256 values and reconcile every entry and discrepancy in `specs/004-technical-pilot-readiness/baseline-manifest.md` against `IE-CHG-PDA-APPROVAL-001` and the current Git baseline (`P01`, FR-001–FR-003).
+- [x] T004 [US1] Recompute current-source SHA-256 values and reconcile every entry and discrepancy in `specs/004-technical-pilot-readiness/baseline-manifest.md` against `IE-CHG-PDA-APPROVAL-001` and the current Git baseline (`P01`, FR-001, FR-002, FR-003).
 - [x] T005 [US1] Reconcile the P01/P07 wording correction and Appendix A@0.5 → 0.6 history in `docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md` against `docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md`; verify `f269a044...` is the approved product baseline, `aabf02ff...` remains plan history, and hours, scope and dependencies are unchanged (`BL-DISC-003`).
 - [ ] T006 [US1] Record the reviewer, date, exact manifest hash, discrepancy dispositions and P01 result in `specs/004-technical-pilot-readiness/readiness-register.md`; a missing review remains `NOT-RUN` and a source conflict remains `BLOCKED` (FR-014, SC-001).
 
@@ -107,9 +109,9 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 
 - [ ] T023 [US5] Recompute all PH0 source hashes, freeze the reviewed manifest/commit and update `specs/004-technical-pilot-readiness/baseline-manifest.md` plus `readiness-register.md` before the gate review (`P07`, FR-015).
 - [ ] T024 [US5] Execute the documentary checks in `specs/004-technical-pilot-readiness/quickstart.md` and record actual `PASS`, `FAIL`, `BLOCKED` or `NOT-RUN` results with command/evidence links in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014–FR-015).
-- [ ] T025 [US5] Prepare `specs/004-technical-pilot-readiness/pg4-review-package.md` summarizing P01–P07 results, open blockers, residual risks, exact proposed PH1 scope and all prohibited inferences without duplicating source authority (FR-015, FR-017).
-- [ ] T026 [US5] Have the applicable gate authority complete `specs/004-technical-pilot-readiness/pg4-gate-record.md` according to `contracts/pg4-gate-record.md`; separate execution state from the four permitted outcomes, retain complete conditional-action fields, approved PG2/PG3 evidence and the exact authorization boundary; an undecided gate has outcome `NOT-APPLICABLE` (FR-015–FR-017).
-- [ ] T027 [US5] If and only if T026 records an attributable `PASS` or valid `PASS-WITH-ACTIONS`, with approved PG2/PG3 baselines and authorization conditions met, create the next Spec Kit feature directory for the exact PH1 increment and link it from `specs/004-technical-pilot-readiness/pg4-gate-record.md`; otherwise record that production implementation remains unauthorized (FR-016).
+- [ ] T025 [US5] Prepare `specs/004-technical-pilot-readiness/pg4-review-package.md` summarizing P01–P07 results, open blockers, residual risks, exact proposed PH1 scope and all prohibited inferences without duplicating source authority (FR-015, FR-017, SC-008).
+- [ ] T026 [US5] Have the applicable gate authority complete `specs/004-technical-pilot-readiness/pg4-gate-record.md` according to `contracts/pg4-gate-record.md`; separate execution state from the four permitted outcomes, retain complete conditional-action fields, approved PG2/PG3 evidence and the exact authorization boundary; an undecided gate has outcome `NOT-APPLICABLE` (FR-015–FR-017, SC-008).
+- [ ] T027 [US5] If and only if T026 records an attributable `PASS` or valid `PASS-WITH-ACTIONS`, with approved PG2/PG3 baselines and authorization conditions met, create the next Spec Kit feature directory for the exact PH1 increment and link it from `specs/004-technical-pilot-readiness/pg4-gate-record.md`; otherwise record that production implementation remains unauthorized (FR-016, SC-009).
 
 **Checkpoint**: PH0 ends with an attributable result. No task in this file implements product code.
 
@@ -119,11 +121,11 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 
 **Purpose**: Ensure the PH0 package remains a coherent, reproducible set after execution.
 
-- [ ] T028 Run `$speckit-analyze` over `specs/004-technical-pilot-readiness/spec.md`, `plan.md` and `tasks.md`; emit its report to the review conversation only, with no file writes or remediation inside the read-only analysis.
-- [ ] T029 Outside `$speckit-analyze`, save the emitted report and its reviewed source hashes in `specs/004-technical-pilot-readiness/analysis-findings.md`, obtain explicit approval for remediation, resolve accepted findings in their owning files and record rejected/deferred findings with rationale; changed source hashes require re-analysis and gate-impact review before any prior authorization is reused.
-- [ ] T030 Re-run `git diff --check`, placeholder scans, relative-link checks and source-hash reconciliation from `specs/004-technical-pilot-readiness/quickstart.md`; append only actual outcomes to `readiness-register.md`.
-- [ ] T031 Have the project reviewer evaluate all unchecked items in `specs/004-technical-pilot-readiness/checklists/readiness.md`; checklist approval is requirements-quality evidence only and cannot replace P01–P07 execution or the `PG4` decision.
-- [ ] T032 Update `specs/004-technical-pilot-readiness/README.md` with final status, exact gate record, remaining blockers and the authorized next action, preserving `NOT-RUN` where no evidence exists.
+- [x] T028 [HANDOFF] Run `$speckit-analyze` over `specs/004-technical-pilot-readiness/spec.md`, `plan.md` and `tasks.md`; emit its report to the review conversation only, with no file writes or remediation inside the read-only analysis (FR-014, FR-015).
+- [x] T029 [HANDOFF] Outside `$speckit-analyze`, save the emitted report and its reviewed source hashes in `specs/004-technical-pilot-readiness/analysis-findings.md`, obtain explicit approval for remediation, resolve accepted findings in their owning files and record rejected/deferred findings with rationale; changed source hashes require re-analysis and gate-impact review before any prior authorization is reused (FR-014, FR-015).
+- [x] T030 [HANDOFF] Re-run `git diff --check`, placeholder scans, relative-link checks and source-hash reconciliation from `specs/004-technical-pilot-readiness/quickstart.md`; append only actual outcomes to `readiness-register.md` (FR-014, FR-015).
+- [ ] T031 [HANDOFF] Have the project reviewer evaluate all unchecked items in `specs/004-technical-pilot-readiness/checklists/readiness.md`; checklist approval is requirements-quality evidence only and cannot replace P01–P07 execution or the `PG4` decision (FR-014).
+- [ ] T032 [HANDOFF] Update `specs/004-technical-pilot-readiness/README.md` with final status, exact gate record, remaining blockers and the authorized next action, preserving `NOT-RUN` where no evidence exists (FR-015–FR-016, SC-008–SC-009).
 
 ---
 

@@ -40,6 +40,11 @@ supersession_or_reopen_trigger
 No production implementation is authorized before a disposition exists. Individual readiness-check
 results are separate from both fields above.
 
+`PH1` is the label for the first code-bearing successor after PH0. It is not an authorization by
+itself. When a successor is proposed or authorized, the record must include its stable increment ID,
+feature directory, bounded scope and authorization limits; no feature directory is created before
+the authorization rule in T027 is satisfied.
+
 ## Outcome semantics
 
 - `PASS`: all mandatory entry criteria have attributable evidence and the named successor increment

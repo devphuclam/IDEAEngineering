@@ -36,6 +36,11 @@ Each action identifies its owner, affected baseline, due condition/date, expiry 
 Approved PG2 requirements and PG3 architecture/design remain prerequisites; neither form of PG4
 pass waives them or permits a missing mandatory input to be treated as satisfied.
 
+In this increment, `PH1` means the first code-bearing successor increment proposed after PH0 and
+authorized, if at all, by the `PG4` record. `PH1` is a planning label, not a pre-approved scope.
+The gate record must name its stable increment ID, feature directory, bounded scope and
+authorization limits before any PH1 work can begin.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Work from one unambiguous baseline (Priority: P1)
