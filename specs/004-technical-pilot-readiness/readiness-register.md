@@ -25,7 +25,10 @@
 | Stable record ID | `IE-INC-READY-001-REG-001` |
 | Owner / executor | Principal Product Author; tên người chịu trách nhiệm cụ thể `BLOCKED` trước khi review |
 | Reviewer | Project reviewer; disposition `NOT-RUN` vì chưa có bản ghi review có thể truy nguyên |
-| Applicable baseline | PH0 source set trên branch `main` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; predecessor approval và successor Draft được tách trong [baseline-manifest.md](baseline-manifest.md) |
+| Historical P01 review input | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; this is the immutable input for T006 and is not the current PH0 package baseline |
+| Current PH0 package baseline | Branch `main` at `00b2d1ba053bd1e0c12529aa2cd7040f2a93905a`; includes the PH0 scenario, environment, data and recovery preparation added after the historical T028–T030 analysis |
+| Approved product predecessor | `f269a0445737a7efd7f406ee51517149a8967afa`; the approved predecessor source remains separate from this PH0 planning package |
+| Draft successor source set | The successor inputs and their exact hashes are listed in [baseline-manifest.md](baseline-manifest.md), Section 2; they are not approved by inclusion |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
 | Evidence rule | Không ghi `PASS` nếu chưa có bằng chứng chạy trên đúng baseline |
 | Retention | `INTERNAL`; giữ cùng increment PH0 |
@@ -48,21 +51,10 @@ khởi tạo `NOT-RUN`.
 
 ## 4. Open-decision and dependency index
 
-Các dòng dưới đây là nhóm cần đưa vào sổ chi tiết ở P03. Chưa có dòng nào được đóng chỉ bằng
-khuyến nghị của Engineering.
-
-| Decision / dependency | Nội dung cần xác định | Owner | Closure evidence | Affected work | Gate effect | State |
-|---|---|---|---|---|---|---|
-| `D0` | Disposition chính xác cho Vault successor nhiều location | Product Decision Authority | Quyết định có ID, baseline và ngày | P01–P07 | `BLOCKS_PG4` | `OPEN` |
-| `D1` | Artifact Gateway và Format Worker: runtime/toolchain, license và qualification | Engineering + QLHT/authority phù hợp | Profile được duyệt và evidence qualification | P03–P06 | `BLOCKS_PG4` hoặc `DEFERRED_SCOPE` | `OPEN` |
-| `D2` | Hai identity và hai Vault location có được cấp trong môi trường thử không | QLHT / Operations | Xác nhận cấp phát và failure-domain description | P04–P06 | `BLOCKS_PG4` | `OPEN` |
-| `D3` | Người review chuyên môn cho security, recovery và storage | Project authority | Tên vai trò/người review và phạm vi | P06–P07 | `BLOCKS_PG4` | `OPEN` |
-| `D4` | Fixture multi-GB, provenance và thời hạn lưu | Principal Product Author + data custodian | Dataset profile và digest | P05–P06 | `BLOCKS_PG4` hoặc `DEFERRED_SCOPE` | `OPEN` |
-| `D5` | Dependency hoặc asset bên ngoài có được phép dùng không | Principal Product Author + legal/company owner | External-source intake record | P03–P06 | `BLOCKS_PG4` | `OPEN` |
-
-P03 phải ghi đủ câu hỏi, lựa chọn, khuyến nghị, due condition, reopen trigger và impact cụ thể
-theo [decision-and-evidence-register.md](contracts/decision-and-evidence-register.md). Mục dưới
-đây là hồ sơ tác giả chuẩn bị; không phải authority disposition.
+Đây chỉ là mục điều hướng, không phải bản ghi quyết định thứ hai. P03 phải ghi đủ câu hỏi,
+lựa chọn, khuyến nghị, due condition, reopen trigger và impact cụ thể theo
+[decision-and-evidence-register.md](contracts/decision-and-evidence-register.md). Các bản ghi
+`D0`–`D5` duy nhất nằm ở Mục 5; chúng là hồ sơ tác giả chuẩn bị, chưa phải authority disposition.
 
 ## 5. Decision records prepared for P03
 
@@ -90,7 +82,30 @@ and the evidence in a later controlled change/review record.
 | P06 recovery/security | `P06-RECOVERY-*`, `P06-SECURITY-*` | Procedure and reviewer-competence review | `NOT-RUN` | `NOT-RUN` |
 | P07 gate | `P07-GATE-*` | Attributable authority decision | `NOT-RUN` | `NOT-RUN` |
 
-## 7. T006 review evidence and human action
+## 7. T021 author-side cross-check
+
+T021 đã hoàn tất ở cấp tác giả: các hồ sơ P04–P06 được đối chiếu với D0–D5 và mọi điều kiện
+chưa có bằng chứng đều được giữ ở `BLOCKED`, `UNKNOWN` hoặc `NOT-RUN`. Việc này không đóng
+decision, không tạo reviewer evidence và không chuyển readiness result sang `PASS`.
+
+| Prerequisite | Source | Current evidence state | Decision / gate effect |
+|---|---|---|---|
+| Host allocation and network path | [environment-profile.md](environment-profile.md), Sections 1–2 | Server host, network path and exact allocation `BLOCKED` / `NOT-RUN` | D2 remains `OPEN`; P04/P05/P06 remain `NOT-RUN`; PG4 blocked if this is required for the selected pilot |
+| OS, runtime and tool versions | [environment-profile.md](environment-profile.md), Section 2 | Baseline is a planning profile; installed versions and qualification evidence `NOT-RUN` | D1 remains `OPEN`; no runtime/toolchain is implied for the Format Worker |
+| License and external-source intake | [environment-profile.md](environment-profile.md), Section 2; D5 | Exact license/usage evidence `BLOCKED` until intake and company/legal review | D5 remains `OPEN`; no external asset may be included by assumption |
+| Test identities | [test-data-and-verification.md](test-data-and-verification.md), Section 2; D2 | Synthetic identity profiles are defined; allocation and access evidence `BLOCKED` / `NOT-RUN` | D2 remains `OPEN`; two profiles do not imply two independent humans |
+| Vault locations and failure domain | [test-data-and-verification.md](test-data-and-verification.md), Section 3; D0/D2 | `VAULT-LOC-A/B` are logical candidates; exact topology, isolation and failover `UNKNOWN` / `BLOCKED` | D0 and D2 remain `OPEN`; no multi-location guarantee is claimed |
+| Dataset, provenance and retention | [test-data-and-verification.md](test-data-and-verification.md), Sections 1 and 5; D4 | Synthetic fixtures are specified; generation, digest, retention and disposal evidence `NOT-RUN` | D4 remains `OPEN`; P05 remains `NOT-RUN` |
+| Secret/configuration ownership | [environment-profile.md](environment-profile.md), Section 3 | Owner and approved handling path still require confirmation; `NOT-RUN` | P04 remains `NOT-RUN`; no secrets are requested or stored in this package |
+| Specialist reviewer competence and independence | [recovery-and-security-plan.md](recovery-and-security-plan.md), Section 4; D3 | Reviewer names, scope and competence evidence `BLOCKED` | D3 remains `OPEN`; P06 remains `NOT-RUN` |
+| Backup, restore and rollback | [recovery-and-security-plan.md](recovery-and-security-plan.md), Sections 2.4–2.5 | Procedure is prepared; execution and restore evidence `NOT-RUN` | P06 remains `NOT-RUN`; no recoverability claim is made |
+| Security review and abuse cases | [recovery-and-security-plan.md](recovery-and-security-plan.md), Section 3 | Threat/control plan is prepared; specialist review and runtime evidence `NOT-RUN` | P06 remains `NOT-RUN`; D3 remains `OPEN` |
+| Artifact Gateway / Format Worker qualification | [environment-profile.md](environment-profile.md), Section 2; D1 | Worker boundary is selected for Core v0; exact runtime/toolchain/license qualification `NOT-RUN` | D1 remains `OPEN`; no deployment choice is implied |
+
+**T021 disposition:** `COMPLETE` as an author-side reconciliation only. P04, P05 and P06
+readiness results remain `NOT-RUN`; D0–D5 remain `OPEN`; no prerequisite is presented as closed.
+
+## 8. T006 review evidence and human action
 
 | Field | Recorded value |
 |---|---|
@@ -105,7 +120,19 @@ and the evidence in a later controlled change/review record.
 | Required human action | Project reviewer must inspect the manifest, approval record, Appendix A@0.6 and the three discrepancy dispositions, then record reviewer identity, date, exact manifest hash and `PASS`, `FAIL` or `BLOCKED` with evidence. |
 | Gate effect | Until that action is recorded, P01 remains `IN-PROGRESS`, its readiness result remains `NOT-RUN`, and `PG4` cannot be decided. |
 
-## 8. Change log
+## 9. Review handoff preparation
+
+Các mục dưới đây đã được chuẩn bị để reviewer dùng khi thực hiện T011, T016, T022 và T031.
+Chúng không thay thế review hoặc runtime evidence.
+
+| Review task | Prepared source identity | Reviewer state | Required action |
+|---|---|---|---|
+| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134`; `trace-matrix.md` SHA-256 `DF62D919A965D81205631291B2ED1465C4A41D511B9E8D809399617ECF75F7E1` | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
+| T016 — decision review | Mục 5, `D0`–`D5`, current package baseline `00b2d1b...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger |
+| T022 — P04/P05/P06 result review | `environment-profile.md` SHA-256 `D0EFD96FA8D857398E199FCC72F4961C9F2149D00DBA803E3C75D149E0779A07`; `test-data-and-verification.md` SHA-256 `5EF6F8D9F31FA62FEFE5E4C8BFDB39058E50309F71542ED460AD54756E39E07`; `recovery-and-security-plan.md` SHA-256 `F9950E46CB39C49EC8D3E584D79B330450799927ED0394EBAE9A4C2D0B87CBA8` | `NOT-RUN` | Reviewer records separate P04, P05 and P06 outcomes; missing prerequisites stay `BLOCKED`/`NOT-RUN` |
+| T031 — checklist review | [readiness checklist](checklists/readiness.md), all unchecked items; current package baseline `00b2d1b...` | `NOT-RUN` | Project reviewer evaluates unchecked items; checklist approval is quality evidence only and cannot authorize PG4 |
+
+## 10. Change log
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
@@ -114,3 +141,4 @@ and the evidence in a later controlled change/review record.
 | 0.3 | 2026-09-18 | Hoàn tất phân tích chéo và remediation A1–A6; các readiness result P01–P07 không thay đổi. | T028–T030; [analysis-findings.md](analysis-findings.md) |
 | 0.4 | 2026-09-18 | Chuẩn bị hồ sơ T006 với manifest hash, disposition của BL-DISC-001…003 và hành động reviewer; không tự ghi nhận review hoặc PASS. | `P01-BASELINE-001`; T006 vẫn mở |
 | 0.5 | 2026-09-18 | Chuẩn bị canonical scenario, trace cụ thể, P03 decision records và hồ sơ P04–P06; không chuyển readiness result khỏi `NOT-RUN`. | T007–T010, T012–T015, T017–T020 |
+| 0.6 | 2026-09-18 | Tách baseline lịch sử T006 khỏi baseline gói PH0 hiện tại; bỏ bảng D0–D5 trùng; ghi T021 cross-check và chuẩn bị các handoff review nhưng giữ nguyên `NOT-RUN`/`OPEN`. | T021; IE-ANALYSIS-PH0-002 |
