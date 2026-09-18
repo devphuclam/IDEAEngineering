@@ -1,7 +1,7 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `0.5` / Draft; author preparation through T020 recorded, readiness results remain `NOT-RUN`
+**Version / status**: `0.8` / Draft; author preparation through T021 recorded, readiness results remain `NOT-RUN`
 **Prepared**: 2026-09-17
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
@@ -129,10 +129,116 @@ Chúng không thay thế review hoặc runtime evidence.
 |---|---|---|---|
 | T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134`; `trace-matrix.md` SHA-256 `DF62D919A965D81205631291B2ED1465C4A41D511B9E8D809399617ECF75F7E1` | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
 | T016 — decision review | Mục 5, `D0`–`D5`, analyzed package baseline `ad49bbf...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger |
-| T022 — P04/P05/P06 result review | `environment-profile.md` SHA-256 `D0EFD96FA8D857398E199FCC72F4961C9F2149D00DBA803E3C75D149E0779A07`; `test-data-and-verification.md` SHA-256 `5EF6F8D9F31FA62FEFE5E4C8BFDB39058E50309F71542ED460AD54756E39E07`; `recovery-and-security-plan.md` SHA-256 `F9950E46CB39C49EC8D3E584D79B330450799927ED0394EBAE9A4C2D0B87CBA8` | `NOT-RUN` | Reviewer records separate P04, P05 and P06 outcomes; missing prerequisites stay `BLOCKED`/`NOT-RUN` |
+| T022 — P04/P05/P06 result review | `environment-profile.md` SHA-256 `D0EFD96FA8D857398E199FCC72F4961C9F2149D00DBA803E3C75D149E0779A07`; `test-data-and-verification.md` SHA-256 `5EF6F8D9F31FA62FEFE5E4C8BFDB39058E50309F71542ED460AD54756E39E07C`; `recovery-and-security-plan.md` SHA-256 `F9950E46CB39C49EC8D3E584D79B330450799927ED0394EBAE9A4C2D0B87CBA8` | `NOT-RUN` | Reviewer records separate P04, P05 and P06 outcomes; missing prerequisites stay `BLOCKED`/`NOT-RUN` |
 | T031 — checklist review | [readiness checklist](checklists/readiness.md), all unchecked items; analyzed package baseline `ad49bbf...` | `NOT-RUN` | Project reviewer evaluates unchecked items; checklist approval is quality evidence only and cannot authorize PG4 |
 
-## 10. Change log
+## 10. PH0 Human Action Board
+
+Đây là bảng điều hướng bàn giao, không phải nguồn thẩm quyền mới. Bản ghi chính vẫn là
+[baseline-manifest.md](baseline-manifest.md), Mục 5 của sổ này, các contract và checklist được
+liên kết. Phân loại dùng trong bảng:
+
+- **A — Agent-executable now**: có thể kiểm tra hoặc chuẩn bị bằng bằng chứng repository hiện có.
+- **B — Agent-preparable, human-decidable**: có thể chuẩn bị hồ sơ; người có thẩm quyền phải review hoặc quyết định.
+- **C — Blocked by external/company evidence**: cần môi trường, người, dữ liệu, license hoặc xác nhận công ty.
+- **D — Gate-authority only**: chỉ authority được chỉ định mới được ghi kết quả.
+
+| Action ID | Task / package | Phân loại | Vai trò hoặc authority bắt buộc | Việc phải làm và bằng chứng cần xem | Trạng thái hiện tại | Ảnh hưởng / kết quả sau khi hoàn tất |
+|---|---|---|---|---|---|---|
+| `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline-manifest.md](baseline-manifest.md), approval record, Appendix A@0.6, manifest hash và BL-DISC-001…003; ghi reviewer, ngày, hash và `PASS`/`FAIL`/`BLOCKED`. | `NOT-RUN`; chưa có reviewer record | Mở P01; P01 chỉ hoàn tất khi có disposition truy nguyên; cho phép bắt đầu review P02, không tự đóng D0. |
+| `HA-002` | T011 / P02 | B | Project Reviewer; reviewer độc lập nếu governance áp dụng | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `NOT-RUN`; chờ P01 | Đóng hoặc chặn P02; không tạo requirement mới. |
+| `HA-003` | T016 / P03 — D0 | D | Product Decision Authority | Quyết định Vault successor nhiều location: duyệt đúng successor, sửa, hoặc defer; phải có decision ID, baseline, ngày và evidence. | `OPEN` / `NOT-RUN` | D0 được `RESOLVED` hoặc `DEFERRED`; ảnh hưởng P01–P07 và PG4. |
+| `HA-004` | T016 / P03 — D1 | C/D | Engineering + QLHT/Operations + authority phù hợp | Xác nhận Artifact Gateway, Format Worker boundary, runtime/toolchain, license và qualification; xem [environment-profile.md](environment-profile.md) §2. | `OPEN`; runtime/toolchain `UNKNOWN`/`NOT-RUN` | D1 chỉ đóng khi profile và qualification có evidence; nếu thiếu thì giữ `BLOCKED`/`DEFERRED_SCOPE`. |
+| `HA-005` | T016 / P03 — D2 | C | QLHT / Operations | Cấp hoặc từ chối hai identity, host/network path và logical Vault locations; ghi endpoint ID, ownership và failure-domain evidence. | `OPEN`; allocation `BLOCKED`/`NOT-RUN` | Cho phép P04/P05/P06 chạy đúng môi trường hoặc ghi blocker; không suy diễn hai location là hai failure domain. |
+| `HA-006` | T016 / P03 — D3 | C/D | Project authority; Security/Quality authority cho phạm vi chuyên môn | Chỉ định reviewer security, recovery/storage và verification; ghi competence, independence và scope. | `OPEN`; reviewer competence `BLOCKED` | Mở đường cho P06/T031 hoặc giữ `BLOCKED`; không dùng hai identity do một người điều khiển làm independent review. |
+| `HA-007` | T016 / P03 — D4 | C | Principal Product Author + data custodian | Chốt synthetic multi-GB fixture, generator/version, digest, provenance, retention/disposal; xem [test-data-and-verification.md](test-data-and-verification.md). | `OPEN`; fixture provisioning `NOT-RUN` | Mở P05 hoặc ghi `DEFERRED_SCOPE`; không đưa file thật/unlicensed payload vào pilot. |
+| `HA-008` | T016 / P03 — D5 | C/D | Principal Product Author + legal/company owner | Hoàn thành [external-source-intake.md](../../docs/agents/external-source-intake.md) cho từng source/version/license/commercial-use state trước khi import. | `OPEN`; intake `BLOCKED` nếu có external inclusion | D5 được đóng hoặc source giữ `REFERENCE-ONLY`/`BLOCKED-LEGAL`; không tự kết luận quyền thương mại. |
+| `HA-009` | T022 / P04 | C/B | QLHT/Operations và reviewer được chỉ định | Review environment, permitted host, versions, secret/config owner, company approval, license, build/test entry points và migration controls. | `NOT-RUN`; thiếu host/license/owner evidence | Ghi riêng P04 `PASS`/`FAIL`/`BLOCKED`/`NOT-RUN`; không làm thay đổi Tech baseline. |
+| `HA-010` | T022 / P05 | C/B | Verification reviewer + data custodian + QLHT/Operations khi cần | Review fixture, identities, Artifact generation/digest, Vault locations, provenance, retention/disposal và failure/retry matrix. | `NOT-RUN`; fixture/location chưa provision | Ghi riêng P05 result; không gọi hai identity là hai người độc lập. |
+| `HA-011` | T022 / P06 | C/B | Security reviewer + recovery/storage reviewer + verification reviewer | Review rollback, Workspace preservation, metadata/Artifact reconciliation, backup/restore, identity/session/key handling, trust boundaries, abuse cases và competence. | `NOT-RUN`; specialist review/restore chưa chạy | Ghi riêng P06 result; missing competence giữ `BLOCKED`. |
+| `HA-012` | T023 / P07 preparation | B | Principal Product Author; reviewer/authority sau đó | Lập inventory hash cho exact reviewed source set và freeze manifest chỉ sau khi P01–P06 có result hợp lệ. | Chưa đủ điều kiện; không được freeze sớm | Chuẩn bị được inventory; chưa hoàn tất T023, không đổi baseline lịch sử. |
+| `HA-013` | T024 / P07 preparation | B | Principal Product Author, sau đó reviewer | Chạy documentary checks trên manifest đã freeze và ghi command, baseline, result, evidence; hiện chỉ có thể chuẩn bị command set. | `NOT-RUN`; exact reviewed baseline chưa tồn tại | T024 chỉ hoàn tất khi result gắn với baseline review, không dùng check hiện tại để tự mở PG4. |
+| `HA-014` | T025 / P07 preparation | B | Principal Product Author; gate reviewer | Chuẩn bị cấu trúc future gate package: P01–P07 result index, blockers, residual risks/owners, exact PH1 boundary và prohibited inferences. | Chưa được lập thành package vì P01–P06 chưa có result | Có thể tạo scaffold không thẩm quyền; không đánh dấu T025 complete. |
+| `HA-015` | T031 / handoff | B | Project Reviewer | Đánh giá toàn bộ CHK001–CHK033; chỉ đánh `[x]` khi reviewer chấp nhận tiêu chí chất lượng; ghi finding bên cạnh item hoặc change record. | `NOT-RUN`; toàn bộ marker còn unchecked | Checklist trở thành requirements-quality evidence; không thay P01–P07 hoặc PG4. |
+| `HA-016` | T026 / P07 | D | PG4 Gate Authority | Xem manifest, P01–P06 evidence, PG2/PG3 baselines, blockers, risks và proposed successor; ghi execution state, outcome, authority, date và rationale theo contract. | `NOT-RUN`; outcome `NOT-APPLICABLE` | Có thể ghi một trong bốn outcome hợp lệ; trước đó không có PH1 authorization. |
+| `HA-017` | T027 / PH1 transition | D | PG4 Gate Authority + Principal Product Author thực hiện sau authorization | Chỉ tạo PH1 directory nếu T026 có attributable `PASS` hoặc valid `PASS-WITH-ACTIONS`, PG2/PG3 đã duyệt và điều kiện còn hiệu lực. | Bị chặn bởi T026 | Nếu đủ điều kiện mới được tạo increment code-bearing; nếu không, production vẫn unauthorized. |
+| `HA-018` | T032 / final handoff | B | Principal Product Author sau khi có T026 | Cập nhật README bằng final status, exact gate record, remaining blockers và authorized next action; giữ nguyên `NOT-RUN` nơi chưa có evidence. | Chưa đến thời điểm cập nhật | Hoàn tất handoff sau gate; không dùng README để thay gate record. |
+
+### 10.1 T011 reviewer checklist
+
+Reviewer phải ghi kết quả cho từng mục, không chỉ ghi một nhận xét chung:
+
+| Check | Nội dung cần xác nhận | Nguồn |
+|---|---|---|
+| `P02-R01` | Normal path: login → Logical Document/Generation → Checkout/Reference → Workspace digest → changed Check-in → Review → Approval → Release → historical retrieval → Audit | `canonical-scenario.md` §4; `trace-matrix.md` §2 |
+| `P02-R02` | No-change Check-in kết thúc quyền giữ sửa đúng phạm vi, không tạo Generation/Version mới | `canonical-scenario.md` §5 |
+| `P02-R03` | RBAC denial và business gate bị từ chối đúng lý do | `canonical-scenario.md` §6; trace rows RBAC |
+| `P02-R04` | Stale Generation không overwrite và vẫn giữ local work | `canonical-scenario.md` §6 |
+| `P02-R05` | Wrong Workspace hoặc non-owner bị từ chối | `canonical-scenario.md` §6 |
+| `P02-R06` | Modified Reference không bị ghi vào tài liệu gốc | `canonical-scenario.md` §6 |
+| `P02-R07` | Interrupted transfer giữ candidate và có đường recovery | `canonical-scenario.md` §6; `recovery-and-security-plan.md` §2.1 |
+| `P02-R08` | Lost response chỉ retry cùng OperationId và input hợp lệ | `canonical-scenario.md` §6; `test-data-and-verification.md` §4 |
+| `P02-R09` | Review bị invalidated khi exact Generation hoặc scope thay đổi | `canonical-scenario.md` §6 |
+| `P02-R10` | Invalid Release scope bị chặn, không silent cascade | `canonical-scenario.md` §6–§7 |
+| `P02-R11` | Historical Controlled Release Package truy xuất đúng digest/baseline | `canonical-scenario.md` §4; `trace-matrix.md` §2 |
+| `P02-R12` | Mandatory/deferred/prohibited scope được phân biệt | `canonical-scenario.md` §7 |
+| `P02-R13` | Mỗi step/path có trace hợp lý tới REQ, architecture và VVP; unresolved trace giữ `NOT-RUN` | `trace-matrix.md` §2–§3 |
+
+### 10.2 P04–P06 evidence handoff
+
+| Package | Reviewer phải xem | Kết quả được phép ghi |
+|---|---|---|
+| `P04` Environment | Host/network, allowed OS/runtime/tool versions, secret/config owner, company approval, license, build/test entry points, migration controls, prohibited actions | `PASS`, `FAIL`, `BLOCKED` hoặc `NOT-RUN`; profile không tự chứng minh host đã cấp |
+| `P05` Data/verification | Synthetic fixture, identity separation, Artifact size/digest, logical Vault locations versus failure domains, provenance, retention/disposal, normal/denied/stale/interrupted/retry matrix | `PASS`, `FAIL`, `BLOCKED` hoặc `NOT-RUN`; two identities không đồng nghĩa two humans |
+| `P06` Recovery/security | Rollback, local Workspace preservation, metadata/Artifact reconciliation, coordinated backup/restore, session/key handling, trust boundaries, abuse cases, reviewer competence | `PASS`, `FAIL`, `BLOCKED` hoặc `NOT-RUN`; backup plan không phải restore evidence |
+
+### 10.3 T031 checklist evidence map
+
+| Checklist range | Evidence đang có | Reviewer action |
+|---|---|---|
+| CHK001–CHK005 | `baseline-manifest.md`, T006 package, D0 | Xác nhận identity/authority và ghi từng item; không suy ra approval từ hash |
+| CHK006–CHK010 | `canonical-scenario.md`, `trace-matrix.md`, PH0 spec/plan | Kiểm tra scenario, trace và boundary PH0/PH1/Core v0 |
+| CHK011–CHK015 | Readiness register §5, decision contract, D0–D5 | Xác nhận owner, due condition, closure evidence, gate effect và reopen trigger |
+| CHK016–CHK021 | `environment-profile.md`, `test-data-and-verification.md`, `recovery-and-security-plan.md` | Xác nhận đủ môi trường, dữ liệu, recovery/security và reviewer competence |
+| CHK022–CHK024 | D5, external-source intake, Constitution internal-first/commercial boundary | Xác nhận license/provenance và không suy diễn commercial readiness |
+| CHK025–CHK033 | Contracts, quickstart, PG4 contract, tasks and this register | Xác nhận measurement, outcome semantics và exact successor authorization |
+
+### 10.4 Authority boundary for the current project user
+
+Repository evidence chưa gán người dùng hiện tại vào một authority cụ thể. Người dùng có thể
+thực hiện công việc **Principal Product Author** và có thể là người điều phối hồ sơ, nhưng không
+được tự suy ra quyền làm Project Reviewer, Product Decision Authority, QLHT/Operations, Security
+reviewer, Recovery/Storage reviewer, Verification reviewer, data custodian, legal/company owner
+hoặc PG4 Gate Authority. Việc một người có thể giữ nhiều vai trò chỉ có hiệu lực khi authority
+và chính sách công ty cho phép; independence không được suy diễn từ việc có hai tài khoản.
+
+## 11. Critical path to PG4
+
+Đường phụ thuộc hiện tại, theo task và gate contract, là:
+
+`T006 / P01 reviewer disposition`
+→ `T011 / P02 scenario review`
+→ `T016 / P03 authority dispositions D0–D5`
+→ `T022 / P04, P05, P06 evidence results`
+→ `T023 / freeze exact reviewed manifest`
+→ `T024 / execute documentary checks on that manifest`
+→ `T025 / assemble PG4 review package`
+→ `T031 / reviewer checklist review`
+→ `T026 / PG4 Gate Authority decision`
+→ `T027 / PH1 only if valid PASS or PASS-WITH-ACTIONS`
+→ `T032 / final handoff status`.
+
+Các nhánh có thể chạy song song sau khi prerequisite tương ứng được mở:
+
+- Sau P01/P02 và khi owner đã được chỉ định: D1–D5 có thể được authority/QLHT/data/legal xử lý song song.
+- Trong T022: P04 environment, P05 data và P06 recovery/security có thể review song song, nhưng P05/P06 vẫn phụ thuộc evidence D2–D4.
+- T031 có thể chuẩn bị checklist song song với T022, nhưng review cuối vẫn phải nhìn cùng baseline và không thay result P01–P06.
+- T023–T025 chỉ là chuẩn bị; không nhảy qua T006/T011/T016/T022.
+
+`PG4` hiện không thể bắt đầu hợp lệ vì P01–P06 chưa có result attributable. Không có đường tắt
+từ hồ sơ tác giả sang PH1.
+
+## 12. Change log
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
@@ -142,3 +248,5 @@ Chúng không thay thế review hoặc runtime evidence.
 | 0.4 | 2026-09-18 | Chuẩn bị hồ sơ T006 với manifest hash, disposition của BL-DISC-001…003 và hành động reviewer; không tự ghi nhận review hoặc PASS. | `P01-BASELINE-001`; T006 vẫn mở |
 | 0.5 | 2026-09-18 | Chuẩn bị canonical scenario, trace cụ thể, P03 decision records và hồ sơ P04–P06; không chuyển readiness result khỏi `NOT-RUN`. | T007–T010, T012–T015, T017–T020 |
 | 0.6 | 2026-09-18 | Tách baseline lịch sử T006 khỏi baseline gói PH0 hiện tại; bỏ bảng D0–D5 trùng; ghi T021 cross-check và chuẩn bị các handoff review nhưng giữ nguyên `NOT-RUN`/`OPEN`. | T021; [IE-ANALYSIS-PH0-002](analysis-findings-002.md) |
+| 0.7 | 2026-09-18 | Thêm một bảng Human Action Board, checklist T011, evidence map T022/T031, authority boundary và critical path tới PG4; không đóng reviewer/authority task và không đổi gate state. | T006, T011, T016, T022–T027, T031–T032 |
+| 0.8 | 2026-09-18 | Sửa lại SHA-256 của `test-data-and-verification.md` trong handoff để khớp với file thực tế; không thay đổi nội dung fixture hoặc readiness result. | T022 hash reconciliation |
