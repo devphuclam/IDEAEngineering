@@ -20,7 +20,8 @@ Stack và không phê duyệt successor baseline.
 12. [contracts/](contracts/) — quy tắc cho manifest, decision/evidence và PG4.
 13. [checklists/requirements.md](checklists/requirements.md) — checklist chất lượng spec đã tạo.
 14. [checklists/readiness.md](checklists/readiness.md) — checklist do reviewer giữ quyền đánh dấu.
-15. [analysis-findings.md](analysis-findings.md) — kết quả phân tích chéo và remediation đã được duyệt.
+15. [analysis-findings.md](analysis-findings.md) — bản phân tích lịch sử và remediation đã được duyệt.
+16. [analysis-findings-002.md](analysis-findings-002.md) — bản phân tích mới sau khi bổ sung hồ sơ PH0 và hoàn tất T021 cấp tác giả.
 
 ## Trạng thái hiện tại
 

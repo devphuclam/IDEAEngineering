@@ -78,6 +78,7 @@ specs/004-technical-pilot-readiness/
 ├── readiness-register.md
 ├── trace-matrix.md
 ├── analysis-findings.md
+├── analysis-findings-002.md
 ├── checklists/
 │   ├── requirements.md
 │   └── readiness.md
@@ -134,6 +135,7 @@ without reopening product decisions:
 | [readiness-register.md](readiness-register.md) | Track work-package state, open dependencies, results and evidence links. | `P01`–`P07` |
 | [trace-matrix.md](trace-matrix.md) | Connect PH0 requirements to approved product, architecture and verification sources. | `P01`–`P07` |
 | [analysis-findings.md](analysis-findings.md) | Retain the read-only cross-artifact analysis, remediation decisions and reviewed source hashes. | `T028`–`T030` |
+| [analysis-findings-002.md](analysis-findings-002.md) | Retain the fresh analysis after PH0 scenario/P04–P06 preparation and the baseline-semantics remediation. | `T028`–`T030`, T021 |
 | [contracts/baseline-manifest-contract.md](contracts/baseline-manifest-contract.md) | Define fields and consistency rules for exact source pins. | `P01` |
 | [contracts/decision-and-evidence-register.md](contracts/decision-and-evidence-register.md) | Define how open decisions, checks and blockers are owned and closed. | `P03`–`P06` |
 | [contracts/pg4-gate-record.md](contracts/pg4-gate-record.md) | Define the attributable gate result and authorization boundary. | `P07` |
