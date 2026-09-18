@@ -1,10 +1,10 @@
 # PH0 Test Data and Verification Plan
 
-**Increment**: `IE-INC-READY-001`  
-**Record ID**: `IE-PH0-P05-DATA-001`  
-**Version / status**: `0.1` / Draft; P05 execution `NOT-RUN`  
-**Owner**: Principal Product Author  
-**Reviewer**: Verification, data and project reviewers; not assigned in an attributable record  
+**Increment**: `IE-INC-READY-001`
+**Record ID**: `IE-PH0-P05-DATA-001`
+**Version / status**: `0.1` / Draft; P05 execution `NOT-RUN`
+**Owner**: Principal Product Author
+**Reviewer**: Verification, data and project reviewers; not assigned in an attributable record
 **Data boundary**: Synthetic data only. This document defines fixtures and expected evidence; it
 does not claim that a product build or transfer has run.
 

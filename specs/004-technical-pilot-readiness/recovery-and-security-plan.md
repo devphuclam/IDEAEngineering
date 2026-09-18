@@ -1,10 +1,10 @@
 # PH0 Recovery and Security Plan
 
-**Increment**: `IE-INC-READY-001`  
-**Record ID**: `IE-PH0-P06-RECOVERY-001`  
-**Version / status**: `0.1` / Draft; P06 execution `NOT-RUN`  
-**Owner**: Principal Product Author  
-**Reviewer**: Security, Operations, data and project reviewers; not assigned in an attributable record  
+**Increment**: `IE-INC-READY-001`
+**Record ID**: `IE-PH0-P06-RECOVERY-001`
+**Version / status**: `0.1` / Draft; P06 execution `NOT-RUN`
+**Owner**: Principal Product Author
+**Reviewer**: Security, Operations, data and project reviewers; not assigned in an attributable record
 **Boundary**: Planning and review material only. No service, database, Vault or backup operation is
 executed by PH0.
 

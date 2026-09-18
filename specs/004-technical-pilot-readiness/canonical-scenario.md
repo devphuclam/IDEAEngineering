@@ -1,10 +1,10 @@
 # PH0 Canonical Technical Pilot Scenario
 
-**Increment**: `IE-INC-READY-001`  
-**Record ID**: `IE-PH0-P02-SCENARIO-001`  
-**Version / status**: `0.1` / Draft; P02 execution `NOT-RUN`  
-**Owner**: Principal Product Author  
-**Reviewer**: Project reviewer; not assigned in an attributable record  
+**Increment**: `IE-INC-READY-001`
+**Record ID**: `IE-PH0-P02-SCENARIO-001`
+**Version / status**: `0.1` / Draft; P02 execution `NOT-RUN`
+**Owner**: Principal Product Author
+**Reviewer**: Project reviewer; not assigned in an attributable record
 **Applicable baseline**: Approved predecessor pinned by [baseline-manifest.md](baseline-manifest.md):
 `f269a0445737a7efd7f406ee51517149a8967afa`, `DOC-04@0.13`, `DOC-05@0.20`, `DOC-06@0.16`,
 `VVP@0.16`. The later Vault successor remains a separate Draft input and is not silently treated as

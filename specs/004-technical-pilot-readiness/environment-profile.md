@@ -1,10 +1,10 @@
 # PH0 Environment Profile
 
-**Increment**: `IE-INC-READY-001`  
-**Record ID**: `IE-PH0-P04-ENV-001`  
-**Version / status**: `0.1` / Draft; P04 execution `NOT-RUN`  
-**Owner**: Principal Product Author  
-**Reviewer**: QLHT/Operations and project reviewer; not assigned in an attributable record  
+**Increment**: `IE-INC-READY-001`
+**Record ID**: `IE-PH0-P04-ENV-001`
+**Version / status**: `0.1` / Draft; P04 execution `NOT-RUN`
+**Owner**: Principal Product Author
+**Reviewer**: QLHT/Operations and project reviewer; not assigned in an attributable record
 **Boundary**: This profile defines the permitted pilot environment. It does not install software,
 select an unapproved runtime, start production services or authorize implementation.
 
