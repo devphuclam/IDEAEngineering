@@ -5,14 +5,15 @@
 | Field | Recorded value |
 |---|---|
 | Stable Supporting Record ID | `IE-CHG-VAULT-XFER-001` |
-| Supporting class / version / status | `CHG` / `0.1` / `Draft` |
+| Supporting class / version / status | `CHG` / `0.2` / `Draft` |
 | Date | 2026-09-17 |
 | Owner / author | Principal Product Author; named person attribution `BLOCKED` before `Proposed` |
-| Reviewer / acceptance authority | Project user selected the design direction for internal drafting on 2026-09-17; Product Decision Authority approval of the exact successor baseline is `NOT-RUN` |
+| Reviewer / acceptance authority | Project user and Product Decision Authority confirmed the Multi-location Artifact Custody decisions recorded in section 3.1 on 2026-09-18; approval of the exact successor product baseline remains a separate source-pin decision |
 | Product normativity | `INFORMATIVE`; the successor controlled documents own the proposed obligations and views |
 | Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; predecessor DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.11, DOC-08@0.12 and VVP@0.16 |
 | Source / upstream trace | Management need recorded by the project user: the business Backend may remain on one host, Vault storage must support multiple locations, and large concurrent transfers must not be forced through that Backend; [provenance note](../../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md); [ADR-0013](../../../../adr/0013-separate-artifact-control-and-data-planes.md) |
 | Downstream trace | DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.12, DOC-08@0.13, VVP@0.17, product lifecycle architecture@0.4, technology view set@0.3 and TECH-001@0.15 |
+| Decision evidence | The project user reported on 2026-09-18 that the user and Product Decision Authority approved the recommended Multi-location Artifact Custody direction; no separately signed approval artifact was supplied to the repository |
 | Evidence status | Architecture synthesis and source/rendition checks recorded in [IE-VEV-VAULT-XFER-001](VEV-2026-09-17-vault-transfer-diagram-review.md); implementation, benchmark, failover, replication, security and restore runtime evidence are `NOT-RUN` |
 | Access / retention | `INTERNAL`; retain with predecessor and successor controlled sources |
 
@@ -73,11 +74,33 @@ flowchart LR
 | Verification | Add negative grant tests, direct-path concurrency/load evidence, location failover, replication/repair and exact digest reconciliation. All are `NOT-RUN`. |
 | Technology | No storage vendor, Gateway runtime, protocol library, location count or deployment product selected. Existing Tech Stack and Q-15 are unchanged. |
 
+## 3.1 Confirmed Multi-location Artifact Custody decisions
+
+The project user and Product Decision Authority confirmed the following design decisions for the
+Multi-location Artifact Custody direction. These decisions define the extensibility boundary; they
+do not claim that multiple Vaults, replication, failover or recovery have already been implemented
+or qualified.
+
+| Decision | Confirmed rule |
+|---|---|
+| Purpose | Prepare for large Artifacts, concurrent transfers, future capacity growth, recovery and additional locations without making the business Server the payload bottleneck. |
+| Core v0 deployment boundary | Core v0 may run with one operational Vault location. The custody contract must support one-to-many locations so a later location can be added without changing product identity. |
+| Artifact identity | One logical `ArtifactId` may have multiple `ArtifactLocation` records. Rehome, replication, repair and failover do not create a new Artifact, Generation, Version, Revision or Release Record. |
+| Location selection | Artifact Custody selects an eligible Gateway/Vault by policy. A Client may see a logical location/status but cannot choose a raw physical path or hold a permanent Vault credential. |
+| Check-in baseline | Core v0 requires at least one digest-verified location before a new Artifact can become eligible for final Check-in. A later policy may require more locations. |
+| Release policy | Release may apply a stricter versioned durability policy in a later decision. Exact counts, failure domains and lag targets remain open. |
+| Failure behavior | Reads may fail over only to a location holding the same verified Artifact identity, size and digest. If the applicable policy cannot be met, Check-in/Release refuses safely and preserves local work; any exception is governed and audited. |
+| Replication and Repair | Future background or governed operations may copy/repair bytes between locations without Client re-upload. A verified replica is not a Backup and cannot publish a Generation or decide Check-in. |
+| Administration | QLHT manages account/infrastructure concerns; Product Configuration Administration manages storage/durability policy; ordinary CAD users do not configure Vaults or bypass policy. |
+| Provider boundary | Core v0 may start with a filesystem-backed Adapter, but the Artifact Custody interface remains provider-neutral so object storage or another location type can be added later. |
+| User-visible status and Audit | UI shows transfer, verification, recovery and refusal status in user language without exposing secrets/raw paths. Server-side append-only Audit records the Actor, `OperationId`, Artifact/location identity, digest/result and reason; it does not store file bytes or credentials. |
+
 ## 4. Open decisions
 
-- Minimum verified location count required before Check-in can finalize.
-- Whether Release requires a stricter durability policy than ordinary Check-in.
-- Required failure-domain separation, replication lag, capacity headroom and location selection rules.
+- The Core v0 baseline is one verified location; the future minimum location count for each
+  Document Class/Project and any stricter Release policy remain open.
+- Required failure-domain separation, replication lag, capacity headroom and detailed location
+  selection rules remain open.
 - Gateway runtime/toolchain, exact implementation of the initial filesystem-backed Adapter and
   company network topology. Object storage remains a later alternative, not a new selection here.
 - Measurable throughput, concurrency, availability, RPO/RTO and recovery targets.
@@ -99,3 +122,10 @@ The [current gallery](../evidence/IE-VEV-VAULT-XFER-001/index.html) contains the
 architecture/data/technology set plus three Vietnamese management simplifications. The
 [Word-update guide](../../../../reports/IDEA-DDM-multi-location-vault-sharepoint-word-update-guide-2026-09-17.md)
 identifies the images and paste-ready wording; the submitted Word is not modified by this work.
+
+## 6. Version history
+
+| Version | Date | Status | Change |
+|---|---|---|---|
+| `0.2` | 2026-09-18 | `Draft` | Records the project user's and Product Decision Authority's confirmation of the Multi-location Artifact Custody direction, including the one-location Core v0 boundary, identity preservation, policy-selected location, governed failure handling, Audit visibility and provider-neutral Adapter boundary. Exact topology, thresholds and runtime qualification remain open. |
+| `0.1` | 2026-09-17 | `Draft` | Initial change record for separating Artifact control and data planes and preparing multi-location Vault custody. |
