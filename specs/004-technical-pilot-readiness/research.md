@@ -40,14 +40,17 @@ history dependency, but that commit cannot replace the recorded approval commit.
 
 ## Decision 3 — Keep the Vault successor as a separate decision
 
-**Decision**: The successor set led by DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-08@0.13,
-VVP@0.17, architecture@0.4, technology views@0.3 and TECH-001@0.15 remains a Draft delta with exact
-Product Decision Authority disposition `NOT-RUN`.
+**Decision**: The current successor set (DOC-04@0.15, DOC-05@0.22, DOC-06@0.18, DOC-08@0.13,
+VVP@0.18, architecture@0.4, technology views@0.3 and TECH-001@0.15) is not a whole approved
+successor baseline. `IE-CHG-PDA-APPROVAL-002` approves only the Approval Policy self-approval
+correction at its pinned decision baseline. `IE-CHG-VAULT-XFER-001` records confirmed
+Multi-location Artifact Custody direction and a one-endpoint Core v0 boundary; exact source-level
+successor disposition remains `NOT-RUN`.
 
-**Rationale**: The project user selected the architecture direction for drafting. The change record,
-ADR and successor documents all state that this did not approve the exact successor Spec/Tech
-baseline. D0 must either approve/require change/defer/reject the successor or keep it outside the
-first authorized implementation increment.
+**Rationale**: The current manifest records the exact successor source identities and keeps the
+approved predecessor separate. The limited policy approval and the confirmed Vault direction are
+useful evidence, but neither silently approves unrelated successor content. D0 must record the
+formal PH1-scope treatment or an exact-successor decision before the first authorized increment.
 
 **Alternatives considered**:
 

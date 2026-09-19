@@ -1,8 +1,8 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `1.1` / Draft; author preparation through T021 recorded, readiness results remain `NOT-RUN`
-**Prepared**: 2026-09-17
+**Version / status**: `1.2` / Draft; author preparation through T021 recorded, readiness results remain `NOT-RUN`
+**Prepared**: 2026-09-19
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
 **Product boundary**: Không thay thế DOC-04, DOC-05 hoặc các quyết định Feature/Spec/Tech.
@@ -25,12 +25,13 @@
 | Stable record ID | `IE-INC-READY-001-REG-001` |
 | Owner / executor | Principal Product Author; tên người chịu trách nhiệm cụ thể `BLOCKED` trước khi review |
 | Reviewer | Project reviewer; disposition `NOT-RUN` vì chưa có bản ghi review có thể truy nguyên |
-| Historical P01 review input | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; this is the immutable input for T006 and is not the current PH0 package baseline |
+| Historical P01 review input | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; retained as historical traceability and not the current T006 review input |
 | Analyzed PH0 content baseline | Source set analyzed at `ad49bbf67a291f542b6464532185f7d701a9f298`; includes the PH0 scenario, environment, data and recovery preparation plus the author-side T021 reconciliation |
+| Current PH0 source reconciliation | Current successor source set and authority states reconciled at `109c766e369793b0caa2c4cc3a576df528eddb92`; exact hashes are in [baseline-manifest.md](baseline-manifest.md), Section 2 |
 | Approved predecessor authority | `IE-CHG-PDA-APPROVAL-001` pins the approved predecessor to `f269a0445737a7efd7f406ee51517149a8967afa` |
 | Approved predecessor axes | `FEATURE-001@0.12` — `APPROVED`; normative `DOC-04@0.13` — `APPROVED`; `TECH-001@0.14` — `APPROVED` |
-| Draft successor delta | `DOC-04@0.14`, `DOC-05@0.21`, `DOC-06@0.17`, `TECH-001@0.15` and the multi-location Vault successor are later Draft inputs listed with hashes in [baseline-manifest.md](baseline-manifest.md), Section 2 |
-| Successor authority state | Approved predecessor exists; exact successor delta disposition `NOT-RUN`. Successor content is not approved by inclusion. |
+| Current successor delta | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-07@0.14`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the current multi-location Vault source set are listed with exact hashes in [baseline-manifest.md](baseline-manifest.md), Section 2 |
+| Successor authority state | Mixed: `IE-CHG-PDA-APPROVAL-002` approves only the Approval Policy self-approval correction; `IE-CHG-VAULT-XFER-001` confirms the architecture-preserved Multi-location Artifact Custody direction; remaining exact successor approval is `NOT-RUN`. |
 | Proposed PG4 successor | `IE-INC-PH1-FOUNDATION-CUSTODY-001` — PH1 F01–F05, “Khung hệ thống chạy được”, 72h; proposal only, no feature directory exists |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
 | Evidence rule | Không ghi `PASS` nếu chưa có bằng chứng chạy trên đúng baseline |
@@ -81,7 +82,7 @@ Review/Release or production rollout. The proposed ID
 
 | ID | Question / current state | Engineering recommendation and options/trade-offs | Accountable owner / authority | Due condition / closure evidence | Affected work / gate effect | Reopen trigger |
 |---|---|---|---|---|---|---|
-| `D0` | Successor Vault-transfer disposition: `OPEN`; approved predecessor exists; exact successor delta disposition `NOT-RUN`. | Option A: approve exact multi-location successor. Option B: require revision. Option C: keep successor outside PH1 as `DEFERRED_SCOPE` (recommended for F01–F05). | Product Decision Authority | Before P07/PG4; decision ID, date, exact source hashes and authority rationale. | D0 review `BLOCKS_PG4`; Option C affects only PH1 scope and preserves later requirements. | Reopen before W06/multi-location custody or any durability/failover claim. |
+| `D0` | Successor Vault-transfer disposition: `OPEN` for the exact successor baseline; the architecture direction and the one-endpoint PH1 boundary are confirmed, while exact successor approval remains `NOT-RUN`. | Option A: approve exact multi-location successor. Option B: require revision. Option C: keep successor outside PH1 as `DEFERRED_SCOPE` (consistent with the confirmed PH1 boundary and recommended for F01–F05). | Product Decision Authority | Before P07/PG4; record the formal PH1-scope or exact-successor choice with decision ID, date, exact source hashes and authority rationale. | D0 still `BLOCKS_PG4` until an attributable disposition exists; the confirmed direction preserves later multi-location requirements and does not authorize operations not in PH1. | Reopen before W06/multi-location custody or any durability/failover claim. |
 | `D1` | Gateway and Format Worker qualification: `OPEN`; split into PH1 Gateway path and later Format Worker path. | D1-A: qualify the minimum single-endpoint Gateway path for F05. D1-B: keep Format Worker boundary selected for Core v0 but defer its runtime/toolchain/format qualification for PH1 (recommended). | Engineering + QLHT/Operations + applicable authority | Before P04/P05/P07 for D1-A: allowed adapter/runtime/license and one endpoint. D1-B reopens at first format-processing work package. | D1-A `BLOCKS_PG4` if missing; D1-B is `DEFERRED_SCOPE` only by authority choice. | Format conversion, preview, extraction, representation generation or licensed CAD/Office processing enters scope. |
 | `D2` | PH1 environment and identity allocation: `OPEN`. | Required now: one Windows workstation, one Server host, one PostgreSQL, one Gateway/Vault endpoint, one direct Client→Gateway path and two native IDEA accounts. Defer second location/failure-domain evidence. | QLHT / Operations | Before P04/P05; attributable host, network, account and endpoint allocation evidence. Do not claim allocation from a plan. | Minimum allocation `BLOCKS_PG4` if absent; second location is later scope. | Host, network, identity or storage topology changes; reopen before multi-location work. |
 | `D3` | PH1 review competence and timing: `OPEN`. | Require suitable security and verification review for account/session, authorization, Grant, Receipt, custody and Audit. Defer recovery/storage-specialist scope only if authority permits and PH1 makes no backup/failover/production-recovery claim. | Project authority / applicable Quality or Security authority | Before the applicable PG4/P06 review; record reviewer, scope, competence basis and timing. No extra signature or independence rule is invented. | Candidate security/verification review `BLOCKS_PG4` if required evidence is missing; later recovery review may be `DEFERRED_SCOPE`. | Backup, restore, failover, production recovery or assurance-level changes. |
@@ -106,8 +107,8 @@ authority fills the choice, date and rationale. The proposed successor under rev
 | Recommended option | **C —** giữ successor ngoài PH1 dưới `DEFERRED_SCOPE`; F01–F05 dùng một Gateway/Vault endpoint có kiểm soát. |
 | Alternative options | A — phê duyệt đúng successor; B — yêu cầu sửa trước khi phê duyệt. |
 | Required authority | Product Decision Authority |
-| Decision baseline | Approved predecessor at `f269a044...`; successor delta hashes in `baseline-manifest.md` §2; exact successor delta disposition `NOT-RUN`. |
-| Effect on PH1 | Không cần hai location, replication, failover, repair hoặc durability claim. D0 vẫn phải được authority trả lời trước PG4. |
+| Decision baseline | Approved predecessor at `f269a044...`; current successor hashes in `baseline-manifest.md` §2; [`IE-CHG-VAULT-XFER-001`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) §3.1 confirms the future-preserving custody direction, but the exact successor disposition remains `NOT-RUN`. |
+| Effect on PH1 | PH1 needs one controlled Gateway/Vault endpoint only; it does not claim two locations, replication, failover, repair or durability. The authority must still record the PH1-scope or exact-successor disposition before PG4. |
 | Reopen trigger | Trước W06/multi-location custody hoặc bất kỳ claim nào về failover/durability. |
 | Human choice | `A / B / C: __________` |
 | Date | `________________` |
@@ -228,7 +229,7 @@ decision, không tạo reviewer evidence và không chuyển readiness result sa
 | OS, runtime and tool versions | [environment-profile.md](environment-profile.md), Section 2 | Baseline is a planning profile; installed versions and qualification evidence `NOT-RUN` | D1 remains `OPEN`; no runtime/toolchain is implied for the Format Worker |
 | License and external-source intake | [environment-profile.md](environment-profile.md), Section 2; D5 | Exact license/usage evidence `BLOCKED` until intake and company/legal review | D5 remains `OPEN`; no external asset may be included by assumption |
 | Test identities | [test-data-and-verification.md](test-data-and-verification.md), Section 2; D2 | Synthetic identity profiles are defined; allocation and access evidence `BLOCKED` / `NOT-RUN` | D2 remains `OPEN`; two profiles do not imply two independent humans |
-| Vault locations and failure domain | [test-data-and-verification.md](test-data-and-verification.md), Section 3; D0/D2 | `VAULT-LOC-A/B` are logical candidates; exact topology, isolation and failover `UNKNOWN` / `BLOCKED` | D0 and D2 remain `OPEN`; no multi-location guarantee is claimed |
+| Vault locations and failure domain | [test-data-and-verification.md](test-data-and-verification.md), Section 3; D0/D2; [`IE-CHG-VAULT-XFER-001`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) §3.1 | Future one-to-many custody direction is confirmed; exact topology, isolation, operational second location and failover remain `UNKNOWN` / `BLOCKED` | D0 remains `OPEN` for formal successor/PH1 disposition and D2 remains `OPEN` for actual allocation; no operational multi-location guarantee is claimed |
 | Dataset, provenance and retention | [test-data-and-verification.md](test-data-and-verification.md), Sections 1 and 5; D4 | Synthetic fixtures are specified; generation, digest, retention and disposal evidence `NOT-RUN` | D4 remains `OPEN`; P05 remains `NOT-RUN` |
 | Secret/configuration ownership | [environment-profile.md](environment-profile.md), Section 3 | Owner and approved handling path still require confirmation; `NOT-RUN` | P04 remains `NOT-RUN`; no secrets are requested or stored in this package |
 | Specialist reviewer competence and independence | [recovery-and-security-plan.md](recovery-and-security-plan.md), Section 4; D3 | Reviewer names, scope and competence evidence `BLOCKED` | D3 remains `OPEN`; P06 remains `NOT-RUN` |
@@ -237,18 +238,21 @@ decision, không tạo reviewer evidence và không chuyển readiness result sa
 | Artifact Gateway / Format Worker qualification | [environment-profile.md](environment-profile.md), Section 2; D1 | Worker boundary is selected for Core v0; exact runtime/toolchain/license qualification `NOT-RUN` | D1 remains `OPEN`; no deployment choice is implied |
 
 **T021 disposition:** `COMPLETE` as an author-side reconciliation only. P04, P05 and P06
-readiness results remain `NOT-RUN`; D0–D5 remain `OPEN`; no prerequisite is presented as closed.
+readiness results remain `NOT-RUN`; D0 remains `OPEN` for its formal exact-successor/PH1 scope
+disposition (with its architecture direction confirmed), and D1–D5 remain `OPEN`; no prerequisite
+is presented as closed.
 
 ## 8. T006 review evidence and human action
 
 | Field | Recorded value |
 |---|---|
 | Check ID | `P01-BASELINE-001` |
-| Exact input baseline | `IE-INC-READY-001-BL-001`; current repository commit `a2cb58961c9f264152ff7395c9158b78f3cfe224` |
-| Exact manifest hash | `SHA-256 21F6E196E7786924BF5B9A20C377F9B3BA5E9D6C7AAC7FAC8020EB1001E09B93` |
+| Author package state | `READY-FOR-REVIEW` — source identity and authority-state reconciliation complete; Project Reviewer result remains `NOT-RUN` |
+| Exact input baseline | `IE-INC-READY-001-BL-001`; reconciled current source commit `109c766e369793b0caa2c4cc3a576df528eddb92` (historical P01 review input remains `a2cb58961c9f264152ff7395c9158b78f3cfe224`) |
+| Exact manifest hash | `SHA-256 4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D` |
 | Reviewer / date | Project reviewer / `NOT-RUN` — no attributable review record exists in the repository |
 | `BL-DISC-001` disposition | Author reconciliation: later attributable approval record governs the exact predecessor; historical status prose is retained. Reviewer confirmation: `NOT-RUN`. |
-| `BL-DISC-002` disposition | Approved predecessor exists; successor sources remain separate Draft inputs; exact successor delta disposition `NOT-RUN` and tracked as `D0`. |
+| `BL-DISC-002` disposition | Approved predecessor exists; limited PDA policy approval and confirmed Vault direction are recorded separately; remaining successor sources stay separate inputs; exact successor/PH1 disposition remains `NOT-RUN` and tracked as `D0`. |
 | `BL-DISC-003` disposition | Appendix A@0.6 contains the author correction under `IE-CHG-PH0-CORR-001`; reviewer confirmation that the planning discrepancy is acceptable remains `NOT-RUN`. |
 | Result | `NOT-RUN` — this is not P01 acceptance and does not approve any successor. |
 | Required human action | Project reviewer must inspect the manifest, approval record, Appendix A@0.6 and the three discrepancy dispositions, then record reviewer identity, date, exact manifest hash and `PASS`, `FAIL` or `BLOCKED` with evidence. |
@@ -262,10 +266,10 @@ not a recorded review result.
 | Field | Prepared value / reviewer entry |
 |---|---|
 | Review ID | `P01-BASELINE-001` |
-| Exact baseline | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224` |
-| Manifest hash | `SHA-256 21F6E196E7786924BF5B9A20C377F9B3BA5E9D6C7AAC7FAC8020EB1001E09B93` |
+| Exact baseline | `IE-INC-READY-001-BL-001` at reconciled source commit `109c766e369793b0caa2c4cc3a576df528eddb92` |
+| Manifest hash | `SHA-256 4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D` |
 | `BL-DISC-001` disposition | Author reconciliation: later attributable approval record governs the exact predecessor; historical wording remains. Reviewer confirmation: `________________` |
-| `BL-DISC-002` disposition | Approved predecessor exists; exact successor delta disposition `NOT-RUN`. Reviewer confirmation: `________________` |
+| `BL-DISC-002` disposition | Approved predecessor exists; limited policy approval and confirmed Vault direction are bounded separately; exact successor/PH1 disposition remains `NOT-RUN`. Reviewer confirmation: `________________` |
 | `BL-DISC-003` disposition | Appendix A@0.6 correction under `IE-CHG-PH0-CORR-001`; reviewer confirmation: `________________` |
 | Known evidence limitation | No separate signed minutes or digital-signature artifact exists; PH0 governance does not require one. Reviewer decides whether the existing attributable approval record is sufficient. |
 | Reviewer identity | `________________` |
@@ -284,7 +288,7 @@ Chúng không thay thế review hoặc runtime evidence.
 | Review task | Prepared source identity | Reviewer state | Required action |
 |---|---|---|---|
 | T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134`; `trace-matrix.md` SHA-256 `408B61494A10D9CB53FF763F3D38DD77FE15791347CEFD3780597DF0161D3B00` | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
-| T016 — decision review | Mục 5, `D0`–`D5`, analyzed package baseline `ad49bbf...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger |
+| T016 — decision review | Mục 5, `D0`–`D5`, current source reconciliation `109c766e369793b0caa2c4cc3a576df528eddb92` plus analyzed package baseline `ad49bbf...` | `NOT-RUN` | Authority records one disposition per decision with ID, date, baseline, evidence and reopen trigger; D0 must distinguish confirmed direction from exact successor approval |
 | T022 — P04/P05/P06 result review | `environment-profile.md` SHA-256 `D0EFD96FA8D857398E199FCC72F4961C9F2149D00DBA803E3C75D149E0779A07`; `test-data-and-verification.md` SHA-256 `5EF6F8D9F31FA62FEFE5E4C8BFDB39058E50309F71542ED460AD54756E39E07C`; `recovery-and-security-plan.md` SHA-256 `F9950E46CB39C49EC8D3E584D79B330450799927ED0394EBAE9A4C2D0B87CBA8` | `NOT-RUN` | Reviewer records separate P04, P05 and P06 outcomes; missing prerequisites stay `BLOCKED`/`NOT-RUN` |
 | T031 — checklist review | [readiness checklist](checklists/readiness.md), all unchecked items; analyzed package baseline `ad49bbf...` | `NOT-RUN` | Project reviewer evaluates unchecked items; checklist approval is quality evidence only and cannot authorize PG4 |
 
@@ -344,7 +348,7 @@ liên kết. Phân loại dùng trong bảng:
 |---|---|---|---|---|---|---|
 | `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline-manifest.md](baseline-manifest.md), approval record, Appendix A@0.6, manifest hash và BL-DISC-001…003; ghi reviewer, ngày, hash và `PASS`/`FAIL`/`BLOCKED`. | `NOT-RUN`; chưa có reviewer record | Mở P01; P01 chỉ hoàn tất khi có disposition truy nguyên; cho phép bắt đầu review P02, không tự đóng D0. |
 | `HA-002` | T011 / P02 | B | Project Reviewer; chỉ thêm vai trò khác nếu governance/authority chỉ định | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `NOT-RUN`; chờ P01 | Đóng hoặc chặn P02; không tạo requirement mới. |
-| `HA-003` | T016 / P03 — D0 | D | Product Decision Authority | Chọn D0 Option A/B/C trong Mục 5.1; PH1 F01–F05 khuyến nghị Option C, nhưng không tự ghi disposition. | `OPEN` / `NOT-RUN` | Authority ghi `RESOLVED` hoặc `DEFERRED_SCOPE` với baseline, ngày và rationale. |
+| `HA-003` | T016 / P03 — D0 | D | Product Decision Authority | Chọn D0 Option A/B/C trong Mục 5.1; hướng kiến trúc và ranh giới một endpoint cho PH1 đã được xác nhận, nhưng không tự ghi disposition thay authority. | `OPEN` / `direction confirmed for PH1; exact disposition NOT-RUN` | Authority ghi `RESOLVED` hoặc `DEFERRED_SCOPE` với baseline, ngày và rationale; không cần mở lại hướng kiến trúc trừ khi chọn khác. |
 | `HA-004` | T016 / P03 — D1 | C/D | Engineering + QLHT/Operations + authority phù hợp | Ghi riêng D1-A Gateway path cần cho F05 và D1-B Format Worker deferred; xác nhận adapter/runtime/license/endpoint chỉ cho D1-A. | `OPEN`; runtime/toolchain `UNKNOWN`/`NOT-RUN` | D1-A thiếu evidence thì chặn F05; D1-B chỉ mở khi có format-processing work. |
 | `HA-005` | T016 / P03 — D2 | C | QLHT / Operations | Xác nhận một workstation Windows, một Server, một PostgreSQL, một Gateway/Vault endpoint, direct network path và hai native accounts; không yêu cầu hai location cho PH1. | `OPEN`; allocation `BLOCKED`/`NOT-RUN` | Cho phép P04/P05/P06 chạy đúng môi trường hoặc ghi blocker; không suy diễn allocation từ kế hoạch. |
 | `HA-006` | T016 / P03 — D3 | C/D | Project authority; Security/Quality authority cho phạm vi chuyên môn | Chỉ định security và verification review cho PH1; recovery/storage review chỉ defer khi authority cho phép và không có claim backup/failover/production recovery. | `OPEN`; reviewer competence `BLOCKED` | Mở đường cho P06/T031 hoặc giữ `BLOCKED`; không tự thêm yêu cầu chữ ký/independence ngoài governance. |
@@ -551,3 +555,4 @@ từ hồ sơ tác giả sang PH1.
 | 0.9 | 2026-09-18 | Đổi nhãn `Current PH0 package baseline` thành `Analyzed PH0 content baseline` để không nhầm commit nội dung đã phân tích với repository HEAD; không đổi hash, scope, decision hoặc gate state. | Terminology correction; review-assistant run |
 | 1.0 | 2026-09-18 | Ghi nhận re-evaluation T006/P02-R13 và cập nhật hash `trace-matrix.md` sau khi thay wildcard Audit bằng `REQ-AUD-001/002`; reviewer/result/gate states vẫn `NOT-RUN`/`OPEN`. | DOC-04 `REQ-AUD-001/002`; T006/T011 review-assistant correction |
 | 1.1 | 2026-09-18 | Khóa đề xuất PH1 theo F01–F05/72h; tách rõ approved predecessor và Draft successor delta; thêm biểu mẫu T006/T011, decision-capture D0–D5, ma trận bằng chứng PH1 và map từng CHK001–CHK033. Không ghi thay người review/authority và không đổi gate state. | PH1 authority-package preparation; states remain `NOT-RUN`/`OPEN` |
+| 1.2 | 2026-09-19 | Reconcile current successor source versions/hashes and mixed authority evidence; record the confirmed Vault direction as PH1-scoped architecture evidence without closing exact successor approval; make T006 package `READY-FOR-REVIEW` while keeping reviewer result `NOT-RUN`. | `IE-CHG-PDA-APPROVAL-002`; `IE-CHG-VAULT-XFER-001`; current `baseline-manifest.md` |
