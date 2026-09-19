@@ -77,6 +77,12 @@ specs/004-technical-pilot-readiness/
 ├── README.md
 ├── readiness-register.md
 ├── trace-matrix.md
+├── canonical-scenario.md
+├── environment-profile.md
+├── test-data-and-verification.md
+├── recovery-and-security-plan.md
+├── pg4-review-package.md          # created by T025 before the gate review
+├── pg4-gate-record.md             # completed by T026 when the gate is decided
 ├── analysis-findings.md
 ├── analysis-findings-002.md
 ├── checklists/
@@ -86,6 +92,7 @@ specs/004-technical-pilot-readiness/
 │   ├── README.md
 │   ├── baseline-manifest-contract.md
 │   ├── decision-and-evidence-register.md
+│   ├── pg4-review-package.md
 │   └── pg4-gate-record.md
 └── tasks.md
 ```
@@ -106,10 +113,11 @@ glossary, process-guide and Appendix A wording corrections are recorded in
 [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md).
 It changes no hours, milestone, product obligation or gate disposition.
 
-**Structure Decision**: PH0 is a deep documentation module with three narrow public contracts:
-baseline identity, readiness decisions/evidence and the `PG4` result. Product requirements and
-architecture remain in their existing owners. No production `src/` or `tests/` directory is created
-because doing so would cross the gate this increment is meant to prepare.
+**Structure Decision**: PH0 is a deep documentation module with three authority contracts—baseline
+identity, readiness decisions/evidence and the `PG4` result—plus one review-package format contract.
+Product requirements and architecture remain in their existing owners. No production `src/` or
+`tests/` directory is created because doing so would cross the gate this increment is meant to
+prepare.
 
 ## Phase 0: Research and Decision Resolution
 
@@ -134,10 +142,17 @@ without reopening product decisions:
 | [README.md](README.md) | Provide the navigable reading order, current execution status and non-inference rules. | `P01`–`P07` |
 | [readiness-register.md](readiness-register.md) | Track work-package state, open dependencies, results and evidence links. | `P01`–`P07` |
 | [trace-matrix.md](trace-matrix.md) | Connect PH0 requirements to approved product, architecture and verification sources. | `P01`–`P07` |
+| [canonical-scenario.md](canonical-scenario.md) | Define the bounded Technical Pilot sequence, failure paths and prohibited inferences. | `P02` |
+| [environment-profile.md](environment-profile.md) | Define permitted hosts, tools, configuration ownership and setup constraints. | `P04` |
+| [test-data-and-verification.md](test-data-and-verification.md) | Define synthetic fixtures, identity separation, locations and the verification matrix. | `P05` |
+| [recovery-and-security-plan.md](recovery-and-security-plan.md) | Define rollback, recovery, trust boundaries, abuse cases and reviewer gaps. | `P06` |
+| [pg4-review-package.md](pg4-review-package.md) | Assemble the reviewable P01–P07 summary and proposed PH1 boundary before the gate decision. | `T025` / `P07` |
+| [pg4-gate-record.md](pg4-gate-record.md) | Record the attributable gate execution state, outcome and exact authorization boundary. | `T026` / `P07` |
 | [analysis-findings.md](analysis-findings.md) | Retain the read-only cross-artifact analysis, remediation decisions and reviewed source hashes. | `T028`–`T030` |
 | [analysis-findings-002.md](analysis-findings-002.md) | Retain the fresh analysis after PH0 scenario/P04–P06 preparation and the baseline-semantics remediation. | `T028`–`T030`, T021 |
 | [contracts/baseline-manifest-contract.md](contracts/baseline-manifest-contract.md) | Define fields and consistency rules for exact source pins. | `P01` |
 | [contracts/decision-and-evidence-register.md](contracts/decision-and-evidence-register.md) | Define how open decisions, checks and blockers are owned and closed. | `P03`–`P06` |
+| [contracts/pg4-review-package.md](contracts/pg4-review-package.md) | Define the minimum structure and evidence rules for the pre-decision PG4 review package. | `T025` / `P07` |
 | [contracts/pg4-gate-record.md](contracts/pg4-gate-record.md) | Define the attributable gate result and authorization boundary. | `P07` |
 | [quickstart.md](quickstart.md) | Give the author/reviewer one repeatable PH0 review walkthrough. | `P01`–`P07` |
 
