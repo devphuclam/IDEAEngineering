@@ -1,0 +1,18 @@
+{
+  "contractVersion": "0.1.0",
+  "registerId": "IE-PMC-EXECUTION-REGISTER-001",
+  "registerRevision": 1,
+  "status": "DRAFT",
+  "projectId": "IDEA-ENGINEERING",
+  "baselineId": "FIXTURE-BASELINE-001",
+  "statusDate": "2026-09-19",
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "defaults": { "priority": "NORMAL", "dependencyType": "FINISH_TO_START", "wipLimit": 1 },
+  "records": [
+    { "entity": { "kind": "DeliveryCard", "id": "T01" }, "recordingState": "NOT_RECORDED", "priority": "NORMAL", "forecastPlannedOrder": 1, "disposition": "ACTIVE", "evidence": [], "blockers": [], "events": [], "successorRefs": [] },
+    { "entity": { "kind": "DeliveryCard", "id": "T01" }, "recordingState": "NOT_RECORDED", "priority": "NORMAL", "forecastPlannedOrder": 2, "disposition": "ACTIVE", "evidence": [], "blockers": [], "events": [], "successorRefs": [] }
+  ],
+  "changeHistory": [
+    { "revision": 1, "recordedAt": "2026-09-19T08:00:00+07:00", "recordedBy": "FIXTURE", "reason": "Duplicate identity fixture.", "sourceEvidence": null }
+  ]
+}

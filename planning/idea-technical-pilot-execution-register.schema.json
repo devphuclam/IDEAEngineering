@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:idea-engineering:planning:execution-register:0.1.0",
+  "title": "IDEA Engineering Technical Pilot Execution Register",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "registerId",
+    "registerRevision",
+    "status",
+    "projectId",
+    "baselineId",
+    "statusDate",
+    "timeZone",
+    "defaults",
+    "records",
+    "changeHistory"
+  ],
+  "properties": {
+    "contractVersion": {
+      "const": "0.1.0"
+    },
+    "registerId": {
+      "const": "IE-PMC-EXECUTION-REGISTER-001"
+    },
+    "registerRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": ["DRAFT", "CURRENT", "SUPERSEDED"]
+    },
+    "projectId": {
+      "const": "IDEA-ENGINEERING"
+    },
+    "baselineId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "statusDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "timeZone": {
+      "const": "Asia/Ho_Chi_Minh"
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["priority", "dependencyType", "wipLimit"],
+      "properties": {
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "dependencyType": {
+          "$ref": "#/$defs/dependencyType"
+        },
+        "wipLimit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/executionRecord"
+      }
+    },
+    "changeHistory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/changeEvent"
+      }
+    }
+  },
+  "$defs": {
+    "entityReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "const": "DeliveryCard"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$"
+        }
+      }
+    },
+    "priority": {
+      "enum": ["URGENT", "HIGH", "NORMAL", "LOW"]
+    },
+    "executionState": {
+      "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "SUSPENDED", "CANCELLED"]
+    },
+    "resultState": {
+      "enum": ["NOT_RUN", "PASS", "FAIL", "BLOCKED", "NOT_APPLICABLE"]
+    },
+    "dependencyType": {
+      "enum": ["FINISH_TO_START", "START_TO_START", "FINISH_TO_FINISH", "START_TO_FINISH"]
+    },
+    "disposition": {
+      "enum": ["ACTIVE", "CANCELLED", "SUPERSEDED", "SPLIT", "MERGED"]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceId", "type", "description", "result", "recordedAt", "recordedBy"],
+      "properties": {
+        "evidenceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": ["SOURCE_RECORD", "COMMIT", "PULL_REQUEST", "TEST_RESULT", "REVIEW_RECORD", "ARTIFACT", "EXTERNAL_RECORD"]
+        },
+        "repoPath": {
+          "type": ["string", "null"]
+        },
+        "commit": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-fA-F]{7,40}$"
+        },
+        "sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "externalUri": {
+          "type": ["string", "null"],
+          "format": "uri"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "$ref": "#/$defs/resultState"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordedBy": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockerId", "category", "description", "owner", "openedAt", "affectedMilestones", "state"],
+      "properties": {
+        "blockerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "enum": ["DECISION", "ACCESS", "ENVIRONMENT", "DEPENDENCY", "DATA", "LICENSE", "REVIEW", "OTHER"]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "openedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "targetResolutionAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "closedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "affectedMilestones": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "state": {
+          "enum": ["OPEN", "RESOLVED"]
+        }
+      }
+    },
+    "workEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eventId", "effectiveAt", "recordedAt", "recordedBy", "kind", "reason"],
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effectiveAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordedBy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": ["STATE_CHANGE", "EFFORT_UPDATE", "FORECAST_UPDATE", "PRIORITY_UPDATE", "ORDER_UPDATE", "BLOCKER_UPDATE", "EVIDENCE_UPDATE", "CORRECTION"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "executionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity", "recordingState", "priority", "forecastPlannedOrder", "disposition", "evidence", "blockers", "events", "successorRefs"],
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/entityReference"
+        },
+        "recordingState": {
+          "enum": ["NOT_RECORDED", "RECORDED"]
+        },
+        "executionState": {
+          "oneOf": [
+            { "$ref": "#/$defs/executionState" },
+            { "type": "null" }
+          ]
+        },
+        "resultState": {
+          "oneOf": [
+            { "$ref": "#/$defs/resultState" },
+            { "type": "null" }
+          ]
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "forecastPlannedOrder": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "actualStart": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "actualFinish": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "actualEffortHours": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "multipleOf": 0.5
+        },
+        "remainingEffortHours": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "multipleOf": 0.5
+        },
+        "forecastFinish": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "lastUpdatedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "remainingReviewedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "recordedBy": {
+          "type": ["string", "null"]
+        },
+        "disposition": {
+          "$ref": "#/$defs/disposition"
+        },
+        "unplannedWorkType": {
+          "oneOf": [
+            { "enum": ["DEFECT", "REWORK", "DISCOVERED_WORK", "RISK_RESPONSE", "NEW_SCOPE"] },
+            { "type": "null" }
+          ]
+        },
+        "reserveUsedHours": {
+          "type": "number",
+          "minimum": 0,
+          "multipleOf": 0.5
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/blocker"
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workEvent"
+          }
+        },
+        "successorRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/entityReference"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "recordingState": { "const": "RECORDED" }
+            }
+          },
+          "then": {
+            "required": ["executionState", "resultState", "lastUpdatedAt", "recordedBy"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "executionState": { "const": "COMPLETED" }
+            },
+            "required": ["executionState"]
+          },
+          "then": {
+            "required": ["actualFinish", "actualEffortHours", "remainingEffortHours"],
+            "properties": {
+              "remainingEffortHours": { "const": 0 },
+              "evidence": { "minItems": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "changeEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "recordedAt", "recordedBy", "reason"],
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordedBy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceEvidence": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ scripts do not authorize installing tools or modifying a product baseline.
 | Task | Script | Scope and output |
 |---|---|---|
 | Check file-placement hygiene | [check-repository-hygiene.ps1](check-repository-hygiene.ps1) | Checks the Git index for tracked temporary directories, application lock files and Python caches. It does not inspect ignored files or verify product behavior. |
+| Validate Project Management Compiler input | [validate-project-management-source.ps1](validate-project-management-source.ps1) | Validates the manifest, authority paths, planning totals, Execution Register, calendar, dependencies and optional contract fixtures. It does not approve a Baseline or change product-gate state. |
 | Validate the DDM capability matrix | [validate-ddm-capability-matrix.ps1](validate-ddm-capability-matrix.ps1) | Focused structure/control check for the knowledge matrix, not proof of DDM parity. |
 | Render a Vault review package | [render-vault-transfer-review.cjs](render-vault-transfer-review.cjs) | Set `IDEA_VAULT_EVIDENCE_ID` to a new `IE-VEV-*` record. The script reads DOC-05, DOC-06, the technology view set and the Word update guide; writes SVG/PNG, manifests and gallery into that record. Requires Playwright, Sharp, Chrome and access to the pinned Mermaid CDN. |
 | Render architecture/data views into a new evidence record | [render-architecture.cjs](render-architecture.cjs) | Requires `IDEA_ARCH_EVIDENCE_ID`; reads maintained Markdown rather than a historical Git checkout. |
@@ -37,3 +38,13 @@ For a file-placement check:
 ```powershell
 .\scripts\check-repository-hygiene.ps1
 ```
+
+For a complete Project Management Compiler source check, including fixtures:
+
+```powershell
+pwsh -NoProfile -File .\scripts\validate-project-management-source.ps1 -RunFixtures
+```
+
+The validator returns `0` for `PASS` and `PASS_WITH_WARNINGS`, `1` for invalid source data, `2` for
+an environment/read failure and `3` for an unsupported contract. A dirty working tree is reported
+as `UNCOMMITTED_PREVIEW`; it is not an official handoff snapshot.

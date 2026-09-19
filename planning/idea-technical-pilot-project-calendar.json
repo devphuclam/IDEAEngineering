@@ -1,0 +1,32 @@
+{
+  "contractVersion": "0.1.0",
+  "calendarSetId": "IE-CALENDAR-TP-001",
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "hoursPerWorkingDay": 8,
+  "baselineCalendar": {
+    "calendarId": "IE-CALENDAR-TP-BASELINE-001",
+    "status": "APPROVED_BASELINE_REFERENCE",
+    "regularWorkingDays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+    "monthlyWorkingDayRules": [],
+    "exceptions": [],
+    "sourcePath": "docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md"
+  },
+  "forecastCalendar": {
+    "calendarId": "IE-CALENDAR-TP-FORECAST-001",
+    "status": "SELECTED_FOR_FORECAST",
+    "effectiveFrom": "2026-09-19",
+    "regularWorkingDays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+    "monthlyWorkingDayRules": [
+      {
+        "dayOfWeek": "SATURDAY",
+        "occurrences": [2, 4],
+        "hours": 8
+      }
+    ],
+    "exceptions": [],
+    "selectedBy": "LEAD",
+    "selectionBasis": "Project user confirmed the actual recurring work calendar on 2026-09-19."
+  },
+  "baselineChangeState": "REBASELINE_REQUIRED",
+  "differenceTreatment": "Use forecastCalendar for calculated forecasts; do not rewrite the approved baseline until rebaseline authority is recorded."
+}

@@ -1,0 +1,100 @@
+{
+  "contractVersion": "0.1.0",
+  "registerId": "IE-PMC-EXECUTION-REGISTER-001",
+  "registerRevision": 4,
+  "status": "DRAFT",
+  "projectId": "IDEA-ENGINEERING",
+  "baselineId": "FIXTURE-BASELINE-001",
+  "statusDate": "2026-09-19",
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "defaults": { "priority": "NORMAL", "dependencyType": "FINISH_TO_START", "wipLimit": 1 },
+  "records": [
+    {
+      "entity": { "kind": "DeliveryCard", "id": "P01" },
+      "recordingState": "RECORDED",
+      "executionState": "COMPLETED",
+      "resultState": "NOT_APPLICABLE",
+      "priority": "HIGH",
+      "forecastPlannedOrder": 1,
+      "actualStart": "2026-09-18T08:00:00+07:00",
+      "actualFinish": "2026-09-18T17:00:00+07:00",
+      "actualEffortHours": 8,
+      "remainingEffortHours": 0,
+      "lastUpdatedAt": "2026-09-18T17:00:00+07:00",
+      "remainingReviewedAt": "2026-09-18T17:00:00+07:00",
+      "recordedBy": "FIXTURE",
+      "disposition": "ACTIVE",
+      "reserveUsedHours": 0,
+      "evidence": [
+        { "evidenceId": "FX-EV-001", "type": "SOURCE_RECORD", "repoPath": "planning/project-management-compiler-source-contract.md", "commit": null, "sha256": null, "externalUri": null, "description": "Synthetic completion evidence.", "result": "PASS", "recordedAt": "2026-09-18T17:00:00+07:00", "recordedBy": "FIXTURE" }
+      ],
+      "blockers": [],
+      "events": [],
+      "successorRefs": []
+    },
+    {
+      "entity": { "kind": "DeliveryCard", "id": "P02" },
+      "recordingState": "RECORDED",
+      "executionState": "IN_PROGRESS",
+      "resultState": "NOT_APPLICABLE",
+      "priority": "NORMAL",
+      "forecastPlannedOrder": 2,
+      "actualStart": "2026-09-19T08:00:00+07:00",
+      "actualEffortHours": 4,
+      "remainingEffortHours": 4,
+      "lastUpdatedAt": "2026-09-19T12:00:00+07:00",
+      "remainingReviewedAt": "2026-09-19T12:00:00+07:00",
+      "recordedBy": "FIXTURE",
+      "disposition": "ACTIVE",
+      "reserveUsedHours": 0,
+      "evidence": [],
+      "blockers": [],
+      "events": [],
+      "successorRefs": []
+    },
+    { "entity": { "kind": "DeliveryCard", "id": "P03" }, "recordingState": "NOT_RECORDED", "priority": "NORMAL", "forecastPlannedOrder": 3, "disposition": "ACTIVE", "evidence": [], "blockers": [], "events": [], "successorRefs": [] },
+    {
+      "entity": { "kind": "DeliveryCard", "id": "P04" },
+      "recordingState": "RECORDED",
+      "executionState": "CANCELLED",
+      "resultState": "NOT_APPLICABLE",
+      "priority": "LOW",
+      "forecastPlannedOrder": 4,
+      "lastUpdatedAt": "2026-09-19T10:00:00+07:00",
+      "recordedBy": "FIXTURE",
+      "disposition": "SUPERSEDED",
+      "evidence": [],
+      "blockers": [],
+      "events": [],
+      "successorRefs": [{ "kind": "DeliveryCard", "id": "P05" }]
+    },
+    {
+      "entity": { "kind": "DeliveryCard", "id": "P05" },
+      "recordingState": "RECORDED",
+      "executionState": "SUSPENDED",
+      "resultState": "NOT_APPLICABLE",
+      "priority": "URGENT",
+      "forecastPlannedOrder": 5,
+      "actualEffortHours": 2,
+      "remainingEffortHours": 6,
+      "lastUpdatedAt": "2026-09-19T15:00:00+07:00",
+      "remainingReviewedAt": "2026-09-19T15:00:00+07:00",
+      "recordedBy": "FIXTURE",
+      "disposition": "ACTIVE",
+      "reserveUsedHours": 0,
+      "evidence": [],
+      "blockers": [
+        { "blockerId": "FX-BLK-001", "category": "ACCESS", "description": "Synthetic environment access blocker.", "owner": "QLHT", "openedAt": "2026-09-19T15:00:00+07:00", "targetResolutionAt": null, "closedAt": null, "affectedMilestones": ["G-MS0"], "state": "OPEN" }
+      ],
+      "events": [],
+      "successorRefs": []
+    },
+    { "entity": { "kind": "DeliveryCard", "id": "P06" }, "recordingState": "NOT_RECORDED", "priority": "NORMAL", "forecastPlannedOrder": 6, "disposition": "ACTIVE", "evidence": [], "blockers": [], "events": [], "successorRefs": [] }
+  ],
+  "changeHistory": [
+    { "revision": 1, "recordedAt": "2026-09-18T08:00:00+07:00", "recordedBy": "FIXTURE", "reason": "Initialize realistic fixture.", "sourceEvidence": null },
+    { "revision": 2, "recordedAt": "2026-09-18T17:00:00+07:00", "recordedBy": "FIXTURE", "reason": "Complete P01.", "sourceEvidence": null },
+    { "revision": 3, "recordedAt": "2026-09-19T12:00:00+07:00", "recordedBy": "FIXTURE", "reason": "Start P02.", "sourceEvidence": null },
+    { "revision": 4, "recordedAt": "2026-09-19T15:00:00+07:00", "recordedBy": "FIXTURE", "reason": "Record replacement and blocker examples.", "sourceEvidence": null }
+  ]
+}

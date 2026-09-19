@@ -1,0 +1,55 @@
+{
+  "contractVersion": "0.1.0",
+  "catalogId": "IE-PMC-FIXTURES-001",
+  "fixtures": [
+    {
+      "fixtureId": "VALID-MINIMAL-001",
+      "category": "VALID",
+      "path": "planning/project-management-compiler-fixtures/valid/minimal.json",
+      "expectedResult": "PASS",
+      "expectedDiagnostics": []
+    },
+    {
+      "fixtureId": "VALID-WARNING-STALE-001",
+      "category": "VALID",
+      "path": "planning/project-management-compiler-fixtures/valid/warning-stale.json",
+      "expectedResult": "PASS_WITH_WARNINGS",
+      "expectedDiagnostics": ["EXEC-STALE-001"]
+    },
+    {
+      "fixtureId": "INVALID-DUPLICATE-ID-001",
+      "category": "INVALID",
+      "path": "planning/project-management-compiler-fixtures/invalid/duplicate-id.json",
+      "expectedResult": "FAIL",
+      "expectedDiagnostics": ["PMC-IDENTITY-001"]
+    },
+    {
+      "fixtureId": "INVALID-NEGATIVE-EFFORT-001",
+      "category": "INVALID",
+      "path": "planning/project-management-compiler-fixtures/invalid/negative-effort.json",
+      "expectedResult": "FAIL",
+      "expectedDiagnostics": ["PMC-EFFORT-001", "PMC-SCHEMA-001"]
+    },
+    {
+      "fixtureId": "INVALID-UNSUPPORTED-CONTRACT-001",
+      "category": "INVALID",
+      "path": "planning/project-management-compiler-fixtures/invalid/unsupported-contract.json",
+      "expectedResult": "FAIL",
+      "expectedDiagnostics": ["PMC-CONTRACT-002", "PMC-SCHEMA-001"]
+    },
+    {
+      "fixtureId": "INVALID-COMPLETED-WITHOUT-EVIDENCE-001",
+      "category": "INVALID",
+      "path": "planning/project-management-compiler-fixtures/invalid/completed-without-evidence.json",
+      "expectedResult": "FAIL",
+      "expectedDiagnostics": ["PMC-COMPLETE-001", "PMC-SCHEMA-001"]
+    },
+    {
+      "fixtureId": "REALISTIC-TECHNICAL-PILOT-001",
+      "category": "REALISTIC",
+      "path": "planning/project-management-compiler-fixtures/realistic/technical-pilot.json",
+      "expectedResult": "PASS",
+      "expectedDiagnostics": []
+    }
+  ]
+}

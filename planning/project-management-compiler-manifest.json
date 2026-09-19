@@ -1,0 +1,83 @@
+{
+  "contractVersion": "0.1.0",
+  "manifestId": "IE-PMC-MANIFEST-001",
+  "projectId": "IDEA-ENGINEERING",
+  "projectName": "IDEA Engineering",
+  "status": "CURRENT",
+  "snapshotPolicy": {
+    "officialMode": "GIT_COMMIT",
+    "workingTreeMode": "UNCOMMITTED_PREVIEW",
+    "commitResolution": "IMPORT_CONTEXT",
+    "atomicImportRequired": true,
+    "retainLastValidSnapshotOnFailure": true
+  },
+  "activeBaseline": {
+    "baselineId": "IE-PLAN-DEC2026-002@0.1",
+    "referencePath": "planning/idea-technical-pilot-baseline-reference.json"
+  },
+  "execution": {
+    "registerPath": "planning/idea-technical-pilot-execution-register.json",
+    "schemaPath": "planning/idea-technical-pilot-execution-register.schema.json",
+    "expectedRegisterRevision": 1
+  },
+  "calendarPath": "planning/idea-technical-pilot-project-calendar.json",
+  "diagnosticCataloguePath": "planning/project-management-compiler-diagnostics.md",
+  "sourceContractPath": "planning/project-management-compiler-source-contract.md",
+  "fixtureCataloguePath": "planning/project-management-compiler-fixtures/fixture-catalog.json",
+  "sources": [
+    {
+      "role": "ROADMAP_AUTHORITY",
+      "path": "docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md"
+    },
+    {
+      "role": "WORK_PACKAGE_AUTHORITY",
+      "path": "docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md"
+    },
+    {
+      "role": "DELIVERY_CARD_AUTHORITY",
+      "path": "docs/product/instances/idea-engineering/planning/idea-technical-pilot-kanban-cario.md"
+    },
+    {
+      "role": "EXECUTION_AUTHORITY",
+      "path": "planning/idea-technical-pilot-execution-register.json"
+    },
+    {
+      "role": "RENDITION_CROSS_CHECK",
+      "path": "docs/product/instances/idea-engineering/planning/idea-roadmap-december-2026.html"
+    },
+    {
+      "role": "READINESS_EVIDENCE",
+      "path": "specs/004-technical-pilot-readiness/readiness-register.md"
+    },
+    {
+      "role": "NAVIGATION_ONLY",
+      "path": "docs/product/instances/idea-engineering/README.md"
+    }
+  ],
+  "expectedSourceTotals": {
+    "phases": 6,
+    "workPackages": 35,
+    "deliveryCards": 53,
+    "gatesAndMilestones": 7,
+    "plannedWorkHours": 512,
+    "controlledReserveHours": 88,
+    "totalBaselineCapacityHours": 600
+  },
+  "authority": {
+    "executionRecorder": "LEAD",
+    "normalProgressMergeAuthority": "LEAD",
+    "productDecisionAuthority": "PDA",
+    "productDecisionAxes": ["FEATURE", "SPEC", "TECH"]
+  },
+  "sourceReadiness": {
+    "gateState": "PASS",
+    "validationResult": "PASS_WITH_WARNINGS",
+    "commitBinding": "IMPORT_CONTEXT",
+    "acceptedAt": "2026-09-19T17:29:55+07:00",
+    "acceptedBy": "LEAD",
+    "acceptanceBasis": "Project user requested commit, push to main and handoff to Project Management Compiler; the forecast-calendar warning retains its documented treatment.",
+    "openWarnings": [
+      "PMC-CALENDAR-001"
+    ]
+  }
+}

@@ -68,6 +68,7 @@ v0, production readiness or company rollout. Execution and `PG4` remain `NOT-RUN
 - [HTML Gantt — phase, work-package, reserve, dependency and milestone view](planning/idea-roadmap-december-2026.html)
 - [Kanban CARIO@0.3 — 53 delivery cards, 7 zero-effort decision/milestone cards and cross-cutting internal-first safeguards](planning/idea-technical-pilot-kanban-cario.md)
 - [Change record — Technical Pilot rebaseline](registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md)
+- [Project Management Compiler source entry point](../../../../planning/README.md) — actual-progress register and machine contract; it reads this roadmap package and does not replace its planning authority
 
 The appendix belongs to DOC-07, not a ninth Core Product Document or a competing Spec Kit execution
 plan. The Gantt and Kanban CARIO register are renditions of the same schedule, not separate planning

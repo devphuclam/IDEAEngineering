@@ -14,7 +14,8 @@ implemented. Existing repository tools are inherited development infrastructure,
 | The eight DOCs written for IDEA | [Product-document catalogue](docs/product/instances/idea-engineering/README.md) | Product-specific content, exact versions and review status |
 | Feature, Spec and Tech for management | [Decision briefs](docs/product/instances/idea-engineering/README.md#two-layer-reading-model) | Three decision views of the detailed DOCs; not separate requirement authorities |
 | Current architecture diagrams | [Vault successor gallery](docs/product/instances/idea-engineering/evidence/IE-VEV-VAULT-XFER-002/index.html) | Full-size views from the latest pinned sources; predecessor render packages are retained as controlled evidence |
-| Roadmap and work to do next | [DOC-07](docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md#32-december-2026-schedule-and-task-appendix) | Planning authority and execution status; the retained December task appendix/Gantt need successor re-estimation |
+| Roadmap and work to do next | [DOC-07](docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md#32-technical-pilot-schedule-and-task-appendix) | Current 35-work-package Technical Pilot Baseline, dependencies and gates; actual progress is kept in the machine-readable source package |
+| Machine-readable progress source | [Project-management source package](planning/README.md) | Single Compiler entry point, Execution Register, calendar, diagnostics, fixtures and validation rules; does not replace DOC-07 |
 | Templates for authoring a DOC or supporting record | [Class-template index](docs/product/definition/README.md) | Reusable structure and authoring rules, not the IDEA product content |
 | UI design and simulated interactions | [Prototype guide](prototypes/README.md) | Current review prototype, retained comparison versions and limits of the HTML simulation |
 | Product terminology and architecture decisions | [CONTEXT.md](CONTEXT.md), [ADR index](docs/adr/README.md), [lifecycle architecture](docs/architecture/idea-product-lifecycle-architecture.md) | Shared vocabulary and documented design decisions |
@@ -40,6 +41,7 @@ a product-gate PASS, production readiness or ISO conformity.
 | `docs/research/` and `docs/product/knowledge/` | Research and classified reference-product findings | Keep evidence, interpretation and IDEA decisions separate. |
 | `docs/reports/` | Management-facing and supporting communication copies | Use its index to identify the current copy. A report does not replace its owning product document. |
 | `prototypes/` | Interactive HTML design evidence | Keep prototype behavior separate from production implementation claims. |
+| `planning/` | Project Management Compiler source contract and actual-progress layer | Enter through `planning/project-management-compiler-manifest.json`; do not duplicate the roadmap or infer missing actuals. |
 | `qualification/` | Bounded executable qualification harnesses and retained results | Preserve the recorded scope and result; a partial experiment is not a product-wide PASS. |
 | `scripts/` | Repository checks, rendering utilities and retained presentation generators | Consult the [script guide](scripts/README.md) before running a generator; preserved review generators may pin a historical baseline and local runtime. |
 | `.tmp/`, `.tmp-artifact/`, `tmp/` | Local renders, inspection output and one-off working files | Ignored by Git. Move only reusable source or controlled evidence into a stable directory. |
@@ -55,11 +57,13 @@ approval, standards conformity or qualification results.
 
 ## Continue from the roadmap
 
-Start with [DOC-07](docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md#32-december-2026-schedule-and-task-appendix)
-and the [product-document catalogue](docs/product/instances/idea-engineering/README.md).
-The management approval applies to its exact reviewed baseline, while the later multi-location
-Vault design has its own change and verification records. The retained 56-task appendix and Gantt
-are stale for execution after that successor; re-estimation remains `NOT-RUN`.
+Start with [DOC-07](docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md#32-technical-pilot-schedule-and-task-appendix),
+the [product-document catalogue](docs/product/instances/idea-engineering/README.md) and the
+[project-management source package](planning/README.md). The current Technical Pilot Baseline is
+35 Work Packages, 53 executable Delivery Cards, seven zero-effort gates/milestones, 512 planned
+work hours and 88 controlled reserve hours. The older 56-task/756-hour schedule is historical and
+must not be used for current execution. The multi-location Vault successor retains its own change
+and verification records; `PG4` remains `NOT-RUN`.
 
 Prepare the next bounded product increment through the [Spec Kit workflow](docs/agents/spec-kit.md).
 Complete its review and planning checks and the applicable readiness gates before production code.
