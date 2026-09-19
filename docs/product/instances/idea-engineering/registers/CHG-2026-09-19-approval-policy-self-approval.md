@@ -9,7 +9,7 @@
 | Date | 19-09-2026 |
 | Owner / internal reviewer | Principal Product Author prepares; project user reviews |
 | Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; successor to the approved 17-09-2026 Feature/Spec/Tech predecessor |
-| Evidence class | Microsoft official product behavior plus user-confirmed IDEA direction; not runtime evidence |
+| Evidence class | Microsoft official product behavior plus user-confirmed IDEA direction and Product Decision Authority approval; not runtime evidence |
 | Access / retention | `INTERNAL`; retain with lifecycle requirements, architecture, VVP and successor decision records |
 
 ## 1. Decision context
@@ -105,6 +105,8 @@ All procedures and results remain `NOT-RUN` until an approved environment and qu
 
 ## 7. Decision status
 
-This record is a controlled successor proposal based on the user's explicit direction. Product
-Decision Authority review of the successor is `NOT-RUN`. No implementation authorization or product
-gate result is created by this record.
+This record is a controlled successor decision approved by the Product Decision Authority on
+19-09-2026, as recorded in
+[`IE-CHG-PDA-APPROVAL-002`](CHG-2026-09-19-pda-approval-approval-policy.md). The approval covers
+this policy correction only. It does not create implementation authorization, runtime evidence or a
+product-gate result for the remaining successor content.

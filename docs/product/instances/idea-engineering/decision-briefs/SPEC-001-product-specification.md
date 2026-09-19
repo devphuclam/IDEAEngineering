@@ -4,7 +4,7 @@
 |---|---|
 | Mã tài liệu | SPEC-001 |
 | Phiên bản / ngày soạn | 0.15 / 19-09-2026 |
-| Trạng thái | Draft — successor làm rõ Approval Policy theo hướng Microsoft-style; quyết định PDA cho successor `NOT-RUN` |
+| Trạng thái | Draft — phần sửa Approval Policy theo hướng Microsoft-style đã được PDA duyệt ngày 19-09-2026; các phần successor khác vẫn `NOT-RUN` |
 | Mục đích | Xác định sản phẩm phải hoạt động thế nào và kiểm tra theo điều kiện nào |
 | Phạm vi | 14 nhóm tính năng trong FEATURE-001@0.12; hành vi chuẩn được đối chiếu với DOC-04@0.15 (90 yêu cầu có mã) |
 | Người soạn / review | Principal Product Author / người dùng dự án; đã xác nhận hướng phát hành theo cụm, tạo PDF từ CAD, cấu hình workflow, ranh giới phân quyền, danh tính item/folder, BOM là dữ liệu cấu trúc, phạm vi đầu ra phòng ban và policy tự duyệt theo hướng Microsoft-style; bản 0.15 chưa được review toàn bộ |

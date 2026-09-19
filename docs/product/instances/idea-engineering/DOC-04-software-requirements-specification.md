@@ -14,11 +14,11 @@
 | Owner | `Principal Product Author`; named person attribution is `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
 | Document Version | `0.15` |
-| Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; the 14-group Feature and predecessor Spec baseline are `APPROVED` under `IE-CHG-PDA-APPROVAL-001`; this 0.15 successor adds the policy-controlled self-approval clarification and retains the Vault-transfer successor, with exact successor decision `NOT-RUN` |
+| Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; the 14-group Feature and predecessor Spec baseline are `APPROVED` under `IE-CHG-PDA-APPROVAL-001`; the policy-controlled self-approval correction in this 0.15 successor is `APPROVED` under `IE-CHG-PDA-APPROVAL-002`, while the remaining successor decision is `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity not recorded |
 | Reviewers | Project user performs internal document review; required independent requirements, security, HCD and operations qualification remains `BLOCKED` until assigned |
-| Approvers | Product Decision Authority approved the exact predecessor Spec baseline on 17-09-2026; approval of this 0.15 successor is `NOT-RUN` |
+| Approvers | Product Decision Authority approved the self-approval policy correction in this 0.15 successor on 19-09-2026 under [IE-CHG-PDA-APPROVAL-002](registers/CHG-2026-09-19-pda-approval-approval-policy.md); approval of the remaining successor content is `NOT-RUN` |
 | Source Links | [DOC-01](DOC-01-product-vision-and-scope.md), [DOC-03](DOC-03-business-requirements.md), [FEATURE-001](decision-briefs/FEATURE-001-feature-definition-and-scope.md), [domain language](../../../../CONTEXT.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [Vault-transfer provenance](../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md) |
 | Downstream Links | [DOC-05](DOC-05-architecture-description.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [SPEC-001](decision-briefs/SPEC-001-product-specification.md) |
 | Evidence / Claim Status | Requirements are `Draft`; verification results are `NOT-RUN`; predecessor Feature/Spec approval is retained, but this successor does not inherit it automatically |

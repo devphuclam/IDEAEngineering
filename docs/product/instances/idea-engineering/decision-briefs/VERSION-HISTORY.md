@@ -44,16 +44,19 @@ vượt policy khác yêu cầu người độc lập và không cấp `Release`
 Definition Version và Approval Policy Version; kết quả tự duyệt được ghi riêng trong Audit.
 
 Các nguồn successor mới là DOC-04@0.15, DOC-05@0.22, DOC-06@0.18, VVP@0.18 và SPEC-001@0.15.
-Thay đổi này giữ nguyên 14 Feature groups, Tech Stack, Q-15, Product Scope, PG3 và PG4. PDA review
-cho successor và toàn bộ procedure vẫn `NOT-RUN`; xem
+Thay đổi này giữ nguyên 14 Feature groups, Tech Stack, Q-15, Product Scope, PG3 và PG4. PDA đã duyệt
+riêng policy correction này ngày 19-09-2026; các phần successor khác và toàn bộ procedure vẫn
+`NOT-RUN`; xem
 [`IE-CHG-APPROVAL-POLICY-001`](../registers/CHG-2026-09-19-approval-policy-self-approval.md).
+Bằng chứng quyết định được ghi tại
+[`IE-CHG-PDA-APPROVAL-002`](../registers/CHG-2026-09-19-pda-approval-approval-policy.md).
 
 ## 1. Bản làm việc hiện tại
 
 | Tài liệu | Phiên bản hiện tại | Trạng thái |
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Working brief vẫn `Draft` và source-pin stale; quyết định 14 nhóm Feature `APPROVED` theo baseline 17-09; bản `Approved 1.0` chưa xuất bản |
-| [Spec](SPEC-001-product-specification.md) | SPEC-001@0.15 | Successor brief tách RBAC khỏi Approval Policy; quyết định Spec `APPROVED` vẫn chỉ áp dụng DOC-04@0.13 predecessor; successor PDA review `NOT-RUN` |
+| [Spec](SPEC-001-product-specification.md) | SPEC-001@0.15 | Successor brief tách RBAC khỏi Approval Policy; policy correction `APPROVED` theo `IE-CHG-PDA-APPROVAL-002`; các phần successor khác vẫn `NOT-RUN` |
 | [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.15 | Successor working brief giữ nguyên Tech Stack được duyệt ở 0.14 nhưng thêm multi-location Vault/control–data-plane architecture; exact 0.15 PDA approval `NOT-RUN`; Flutter/Q-15 không đổi |
 
 Feature 0.12 giữ nguyên 14 mã FTR. Normative DOC-04@0.13 được duyệt có 87 dòng yêu cầu. Successor

@@ -19,7 +19,7 @@ and are not edited as product content.
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
 | Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.15`; DOC-05 at `Draft 0.22`; DOC-06 at `Draft 0.18`; DOC-07 at `Draft 0.14`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.18`; CHG records at their catalogue versions |
-| Product decision status | Feature, Spec and Tech `APPROVED` by the Product Decision Authority on 17-09-2026 against the exact management-review predecessor baseline recorded in [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The later multi-location Vault/control–data-plane and Approval Policy self-approval successors are internally selected drafts; exact PDA approval remains `NOT-RUN`. |
+| Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy self-approval correction is additionally `APPROVED` on 19-09-2026 under [`IE-CHG-PDA-APPROVAL-002`](registers/CHG-2026-09-19-pda-approval-approval-policy.md); remaining successor content and runtime evidence remain `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
 ## Architecture diagram package
@@ -355,7 +355,9 @@ scoped Artifact Gateway. One logical Artifact may have several verified Vault lo
 policy-governed replication/repair separate from backup. DOC-04@0.15 now has 90 requirement IDs;
 DOC-05@0.22, DOC-06@0.18, DOC-08@0.13 and VVP@0.18 carry the matching contracts and planned checks.
 This successor does not inherit the PDA approval of the exact predecessor baseline automatically;
-its topology, thresholds, runtime/provider qualification and exact PDA approval remain `NOT-RUN`.
+the Approval Policy self-approval correction is separately approved under `IE-CHG-PDA-APPROVAL-002`,
+while its topology, thresholds, runtime/provider qualification and remaining successor content remain
+`NOT-RUN`.
 
 ## Core instance catalogue
 
@@ -418,7 +420,8 @@ its topology, thresholds, runtime/provider qualification and exact PDA approval 
 | `CHG` | `IE-CHG-TECH-CLIENT-002` | [Client/UI Stack Review Correction](registers/CHG-2026-09-14-client-ui-stack-review-correction.md) | `Draft 0.1`; records research@0.3, matrix@0.5, TECH@0.13 and DOC-07@0.10 routing; corrects provisional control, Q-08/Q-10, Flutter FFI-first IPC and verifier provenance; no Product Scope, Server, architecture semantic or gate change |
 | `CHG` | `IE-CHG-PDA-APPROVAL-001` | [Feature Spec and Tech Product Decision Authority Approval](registers/CHG-2026-09-17-product-decision-authority-approval.md) | `Draft 0.1` record; Feature, Spec and Tech decisions `APPROVED` on 17-09-2026 against commit `f269a04` and the exact management-review hashes; verification, Q-15, PG3 and PG4 states unchanged |
 | `CHG` | `IE-CHG-VAULT-XFER-001` | [Multi-location Vault Transfer Architecture](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) | `Draft 0.1`; internal direction selected after management feedback; separates control/data planes, introduces scoped Gateway transfer and multiple Artifact locations; exact successor PDA approval, thresholds, topology and qualification `NOT-RUN` |
-| `CHG` | `IE-CHG-APPROVAL-POLICY-001` | [Approval Policy Self-Approval](registers/CHG-2026-09-19-approval-policy-self-approval.md) | `Draft 0.1`; records Microsoft-style separation of RBAC eligibility and versioned Approval Policy, default-deny self-approval, explicit opt-in and separate Release; successor PDA approval and verification `NOT-RUN` |
+| `CHG` | `IE-CHG-APPROVAL-POLICY-001` | [Approval Policy Self-Approval](registers/CHG-2026-09-19-approval-policy-self-approval.md) | `Draft 0.1`; records Microsoft-style separation of RBAC eligibility and versioned Approval Policy, default-deny self-approval, explicit opt-in and separate Release; policy correction PDA-approved, verification `NOT-RUN` |
+| `CHG` | `IE-CHG-PDA-APPROVAL-002` | [PDA Approval — Approval Policy Self-Approval](registers/CHG-2026-09-19-pda-approval-approval-policy.md) | `Draft 0.1` record; Product Decision Authority approved the policy correction on 19-09-2026 at baseline `e063df9`; remaining successor content, implementation and verification unchanged |
 | `CHG` | `IE-CHG-COMMERCIAL-DIR-001` | [Internal-First and Future Commercial Direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) | `Draft 0.1`; records internal-only operation for the next several years and a separately gated long-term commercial direction; no current Feature/Spec/Tech, task, Tech Stack or gate-state change |
 | `CHG` | `IE-CHG-PH0-CORR-001` | [PH0 Readiness Consistency Correction](registers/CHG-2026-09-17-ph0-readiness-correction.md) | `Draft 0.1`; author correction of PH0 gate vocabulary, authorization limits, read-only analysis, PowerShell quoting and exact planning-change trace; Appendix A@0.6 keeps the schedule unchanged; no product-gate decision |
 | `VEV` | `IE-VEV-VAULT-XFER-002` | [Latest Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-18-vault-transfer-diagram-review.md) | `Draft 0.1`; latest pinned source and 40 controlled + 3 management views; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |

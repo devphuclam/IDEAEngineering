@@ -17,7 +17,7 @@
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; `IE-SPEC-CORE-V0-001@0.15` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors / Reviewers | Principal Product Author (assistant prepares) / project user (internal document review); required data, security, migration and format specialists are not assigned |
-| Approvers | Product Decision Authority approved the exact predecessor Spec/Tech baseline on 17-09-2026; approval of this 0.18 successor data/integration update is `NOT-RUN` |
+| Approvers | Product Decision Authority approved the self-approval policy data correction reflected in this 0.18 successor on 19-09-2026 under [IE-CHG-PDA-APPROVAL-002](registers/CHG-2026-09-19-pda-approval-approval-policy.md); approval of the remaining successor data/integration content is `NOT-RUN` |
 | Source Links | [DOC-03](DOC-03-business-requirements.md), [DOC-04](DOC-04-software-requirements-specification.md), [domain language](../../../../CONTEXT.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [Vault-transfer provenance](../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md) |
 | Downstream Links | [DOC-05](DOC-05-architecture-description.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), future CHG/VEV/REL |
 | Evidence / Claim Status | Data contracts are `Draft`; migration, format and recovery evidence are `NOT-RUN` |
