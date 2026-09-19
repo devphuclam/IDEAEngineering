@@ -1,6 +1,7 @@
 # Feature Specification: Technical Pilot Implementation Readiness
 
-**Feature Branch**: `codex/technical-pilot-speckit`
+**Feature Branch at creation**: `codex/technical-pilot-speckit`
+**Current baseline branch**: `main`
 
 **Created**: 2026-09-17
 
@@ -21,8 +22,10 @@ Vault successor, or authorize production implementation. Product behavior remain
 controlled Feature, Spec and Tech sources. The approved predecessor is pinned by
 `IE-CHG-PDA-APPROVAL-001` to Git commit `f269a0445737a7efd7f406ee51517149a8967afa`.
 
-The later Vault successor is a separate Draft delta. Its exact Product Decision Authority
-disposition and `PG4` remain `NOT-RUN` until attributable evidence records otherwise.
+The later Vault successor is a separate Draft delta. Limited authority records may cover a specific
+correction or architectural direction, but approval of the complete successor source set and its
+exact Product Decision Authority disposition remain `NOT-RUN` until attributable evidence records
+otherwise.
 
 For `PG4`, record **Gate Execution State** separately from **Gate Outcome**. Execution state is
 `NOT-RUN`, `IN-PROGRESS` or `COMPLETE`. Until an attributable disposition exists, outcome is
@@ -62,8 +65,9 @@ and the approval state of each successor without consulting chat history.
    is reviewed, **Then** it identifies the exact approved commit, document versions and recorded
    hashes without treating later Draft versions as approved.
 2. **Given** the multi-location Vault successor, **When** the manifest is reviewed, **Then** the
-   successor sources, change record and current `NOT-RUN` Product Decision Authority disposition
-   are shown separately from the approved predecessor.
+   successor sources, change record and current `NOT-RUN` disposition for the complete successor
+   source set are shown separately from the approved predecessor. Any limited approval or confirmed
+   direction is linked separately and is not treated as approval of the remaining successor sources.
 3. **Given** a source whose status text predates the approval record, **When** the sources are
    reconciled, **Then** the later attributable approval record governs the exact pinned baseline
    and the discrepancy is recorded rather than silently rewritten.

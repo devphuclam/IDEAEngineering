@@ -1,6 +1,6 @@
 # Implementation Plan: Technical Pilot Implementation Readiness
 
-**Branch**: `codex/technical-pilot-speckit` | **Date**: 2026-09-17 | **Spec**: [spec.md](spec.md)
+**Branch at creation**: `codex/technical-pilot-speckit` | **Current baseline branch**: `main` | **Date**: 2026-09-17 | **Spec**: [spec.md](spec.md)
 
 **Input**: Feature specification from `specs/004-technical-pilot-readiness/spec.md`
 
@@ -146,10 +146,11 @@ without reopening product decisions:
 | [environment-profile.md](environment-profile.md) | Define permitted hosts, tools, configuration ownership and setup constraints. | `P04` |
 | [test-data-and-verification.md](test-data-and-verification.md) | Define synthetic fixtures, identity separation, locations and the verification matrix. | `P05` |
 | [recovery-and-security-plan.md](recovery-and-security-plan.md) | Define rollback, recovery, trust boundaries, abuse cases and reviewer gaps. | `P06` |
-| [pg4-review-package.md](pg4-review-package.md) | Assemble the reviewable P01–P07 summary and proposed PH1 boundary before the gate decision. | `T025` / `P07` |
-| [pg4-gate-record.md](pg4-gate-record.md) | Record the attributable gate execution state, outcome and exact authorization boundary. | `T026` / `P07` |
+| `pg4-review-package.md` (created by T025; see [contract](contracts/pg4-review-package.md)) | Assemble the reviewable P01–P07 summary and proposed PH1 boundary before the gate decision. | `T025` / `P07` |
+| `pg4-gate-record.md` (created by T026; see [contract](contracts/pg4-gate-record.md)) | Record the attributable gate execution state, outcome and exact authorization boundary. | `T026` / `P07` |
 | [analysis-findings.md](analysis-findings.md) | Retain the read-only cross-artifact analysis, remediation decisions and reviewed source hashes. | `T028`–`T030` |
 | [analysis-findings-002.md](analysis-findings-002.md) | Retain the fresh analysis after PH0 scenario/P04–P06 preparation and the baseline-semantics remediation. | `T028`–`T030`, T021 |
+| [analysis-findings-003.md](analysis-findings-003.md) | Retain the current read-only analysis after successor-authority wording, navigation and baseline-metadata remediation. | `T028`–`T030` |
 | [contracts/baseline-manifest-contract.md](contracts/baseline-manifest-contract.md) | Define fields and consistency rules for exact source pins. | `P01` |
 | [contracts/decision-and-evidence-register.md](contracts/decision-and-evidence-register.md) | Define how open decisions, checks and blockers are owned and closed. | `P03`–`P06` |
 | [contracts/pg4-review-package.md](contracts/pg4-review-package.md) | Define the minimum structure and evidence rules for the pre-decision PG4 review package. | `T025` / `P07` |

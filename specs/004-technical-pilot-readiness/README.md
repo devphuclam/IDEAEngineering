@@ -22,6 +22,7 @@ Stack và không phê duyệt successor baseline.
 14. [checklists/readiness.md](checklists/readiness.md) — checklist do reviewer giữ quyền đánh dấu.
 15. [analysis-findings.md](analysis-findings.md) — bản phân tích lịch sử và remediation đã được duyệt.
 16. [analysis-findings-002.md](analysis-findings-002.md) — bản phân tích mới sau khi bổ sung hồ sơ PH0 và hoàn tất T021 cấp tác giả.
+17. [analysis-findings-003.md](analysis-findings-003.md) — bản phân tích hiện tại sau khi xử lý các finding về link, authority wording và baseline metadata.
 
 ## Trạng thái hiện tại
 
