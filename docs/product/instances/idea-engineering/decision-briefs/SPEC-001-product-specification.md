@@ -3,11 +3,11 @@
 | Thông tin | Nội dung |
 |---|---|
 | Mã tài liệu | SPEC-001 |
-| Phiên bản / ngày soạn | 0.14 / 09-09-2026 |
-| Trạng thái | Draft — đã đồng bộ nguồn hiện hành; 74 yêu cầu và bảy điểm còn mở không đổi; chưa có quyết định Spec của sếp |
+| Phiên bản / ngày soạn | 0.15 / 19-09-2026 |
+| Trạng thái | Draft — successor làm rõ Approval Policy theo hướng Microsoft-style; quyết định PDA cho successor `NOT-RUN` |
 | Mục đích | Xác định sản phẩm phải hoạt động thế nào và kiểm tra theo điều kiện nào |
-| Phạm vi | 14 nhóm tính năng trong FEATURE-001@0.12; 74 yêu cầu có mã trong DOC-04@0.10 |
-| Người soạn / review | Principal Product Author / người dùng dự án; đã xác nhận hướng phát hành theo cụm, tạo PDF từ CAD, cấu hình workflow, ranh giới phân quyền, danh tính item/folder, BOM là dữ liệu cấu trúc và phạm vi đầu ra phòng ban ngày 07-09-2026; bản 0.14 chưa được review toàn bộ |
+| Phạm vi | 14 nhóm tính năng trong FEATURE-001@0.12; hành vi chuẩn được đối chiếu với DOC-04@0.15 (90 yêu cầu có mã) |
+| Người soạn / review | Principal Product Author / người dùng dự án; đã xác nhận hướng phát hành theo cụm, tạo PDF từ CAD, cấu hình workflow, ranh giới phân quyền, danh tính item/folder, BOM là dữ liệu cấu trúc, phạm vi đầu ra phòng ban và policy tự duyệt theo hướng Microsoft-style; bản 0.15 chưa được review toàn bộ |
 | Người quyết định | Sếp — Product Decision Authority |
 | Kết quả kiểm thử sản phẩm | Chưa thực hiện — NOT-RUN |
 
@@ -35,15 +35,19 @@ quy định cách xuất, nhập và kiểm tra tại mục 8.6. Ba yêu cầu R
 số lên 74. Bản 0.13 làm rõ đầu ra phòng ban dùng các cơ chế tài liệu/cấu trúc/bằng chứng hiện có;
 giờ, chi phí, mua hàng, gia công, tiến độ và hoàn thành chỉ là thông tin tham khảo nếu chưa có Feature
 và hợp đồng tích hợp được duyệt riêng. Tổng số vẫn là 74 mã REQ. Bản 0.13 chưa được review toàn bộ và
-sếp chưa quyết định Spec. Mã REQ nối từng yêu cầu với thiết kế và kết quả kiểm thử sau này.
+sếp chưa quyết định Spec. Bản 0.15 tách quyền đủ điều kiện khỏi quy tắc Approval Policy: `Approve`
+chỉ cho biết ai đủ điều kiện; `AllowSelfApproval` là cấu hình phiên bản, mặc định tắt, không cấp
+quyền và không vượt policy khác yêu cầu người duyệt độc lập. `Release` vẫn là quyền riêng. Nội dung
+này được ghi tại [IE-CHG-APPROVAL-POLICY-001](../registers/CHG-2026-09-19-approval-policy-self-approval.md).
+Mã REQ nối từng yêu cầu với thiết kế và kết quả kiểm thử sau này.
 
 - Cột **Yêu cầu** nêu hành vi sản phẩm phải đáp ứng.
 - Cột **Kiểm tra thế nào là đạt?** nêu kết quả cần quan sát; không phải kết quả đã chạy.
 - Mặc định các yêu cầu có mức **bắt buộc trong Core v0**, trạng thái Draft. Hai ngoại lệ về mức ưu
   tiên là REQ-UX-006 và REQ-OPS-005 được ghi ngay tại dòng tương ứng.
 - Ví dụ giúp giải thích quy tắc, không thay thế quy tắc hoặc bổ sung phạm vi ngoài Feature.
-- Những điểm chưa đủ rõ nằm ở mục 10. SPEC-OPEN-01 đã giải quyết; còn bảy điểm mở. Có 74 mã yêu cầu
-  không đồng nghĩa là Spec đã đầy đủ để duyệt:
+- Những điểm chưa đủ rõ nằm ở mục 10. SPEC-OPEN-01 đã giải quyết; còn bảy điểm mở trong bản brief
+  lịch sử. Con số 74 thuộc bản tóm tắt cũ và không đồng nghĩa là successor Spec đã đầy đủ để duyệt:
   một số chi tiết từ tài liệu dữ liệu/giao diện vẫn cần hoàn thiện và liên kết trước khi chốt.
 
 Ngoài phạm vi: tích hợp ERP/MRP tổng quát; chấm công; tính chi phí; mua hàng; điều hành gia công/sản
@@ -58,7 +62,7 @@ thể được giữ làm thông tin tham khảo trong hồ sơ kỹ thuật. Xe
 
 | Vai trò | Việc được thực hiện khi có quyền | Điều không được mặc nhiên suy ra |
 |---|---|---|
-| Người soạn / kỹ sư | Đăng ký tài liệu, Checkout, sửa, Check-in và gửi xét duyệt. | Là chủ tài liệu không có nghĩa là được tự duyệt Revision mình đã sửa. |
+| Người soạn / kỹ sư | Đăng ký tài liệu, Checkout, sửa, Check-in và gửi xét duyệt. | Mặc định không tự duyệt; chỉ được tự duyệt nếu Approval Policy Version cho phép và vẫn phải có quyền `Approve`. |
 | Người xét duyệt / phê duyệt | Xem đúng bản được gửi; phê duyệt hoặc trả lại theo chính sách. | Một tài khoản bất kỳ không được thay cho người phê duyệt còn thiếu. |
 | Người có quyền phát hành | Xác nhận phạm vi và phát hành khi đủ điều kiện. | Không được bỏ qua kiểm tra chỉ vì nút Release đang hiển thị. |
 | Người quản trị nghiệp vụ | Quản lý nhóm, quyền, biểu mẫu, đánh số và định nghĩa quy trình. | Quyền quản trị thông thường không cho sửa lịch sử hoặc tự bỏ qua điều kiện độc lập. |
@@ -268,7 +272,7 @@ Tính năng liên quan: FTR-002, FTR-008, FTR-009, FTR-010, FTR-011. Cách kiể
 |---|---|---|
 | REQ-LC-001 | Hệ thống phải lưu được nhiều định nghĩa workflow có phiên bản, gán một phiên bản mặc định theo loại tài liệu và ghim đúng định nghĩa/chính sách khi bắt đầu một lần chạy. Đổi hoặc kích hoạt phiên bản mới không được diễn giải lại quy trình đang chạy hay lịch sử cũ. | Tạo hai workflow, gán mặc định khác nhau cho hai loại tài liệu rồi kích hoạt phiên bản mới; mỗi lần chạy chọn đúng cấu hình và hồ sơ cũ vẫn áp dụng phiên bản đã ghim, trừ chuyển đổi được duyệt riêng. |
 | REQ-LC-002 | Gửi xét duyệt phải xác định đúng Generation và toàn bộ phạm vi; thay đổi nội dung không được thừa hưởng việc duyệt đang chờ của bản trước. | Thực hiện rút xét duyệt hoặc trả lại về In Work theo chính sách, sửa và gửi lại; lần duyệt mới gắn đúng bản mới, không dùng quyết định của bản cũ. |
-| REQ-LC-003 | Chính sách ban đầu phải có một người phê duyệt đủ điều kiện và độc lập với người soạn/sửa Revision; người soạn/sửa không tự phê duyệt hoặc phát hành Revision đó. Số người cần quyết định, vai trò/nhóm và quy tắc kết luận phải thuộc phiên bản chính sách, không đóng cứng trong code. | Người soạn/sửa bị từ chối ở cả Approve và Release. Người phê duyệt độc lập được Release nếu có quyền tương ứng. Kích hoạt chính sách hợp lệ khác không cần sửa code và không đổi lần chạy cũ. |
+| REQ-LC-003 | Chính sách mặc định phải có một người phê duyệt đủ điều kiện và độc lập với người soạn/sửa Revision. Một Approval Policy Version về sau có thể bật `AllowSelfApproval`, nhưng tùy chọn này không cấp `Approve`, không vượt policy khác yêu cầu người độc lập và không cấp `Release`. Số người cần quyết định, vai trò/nhóm, điều kiện tự duyệt và quy tắc kết luận phải thuộc phiên bản chính sách, không đóng cứng trong code. | Chính sách mặc định từ chối tự duyệt; policy đã bật rõ ràng chỉ cho phép khi RBAC và business gate đạt; policy xung đột vẫn yêu cầu người khác; lượt đang chạy giữ policy đã ghim; tự duyệt không kéo theo Release. |
 | REQ-LC-004 | Quyết định xét duyệt phải lưu người thực hiện, thời điểm, đúng phạm vi/bản, chính sách và lý do theo loại quyết định; trả lại bắt buộc có lý do. | Trả lại mà không có lý do bị từ chối; quyết định hợp lệ truy được đầy đủ thông tin và bản được quyết định. |
 | REQ-LC-005 | Khi chưa xác định được người tham gia bắt buộc đủ điều kiện, hoặc workflow thiếu bước chuyển/cấu hình bắt buộc, hệ thống phải chặn khởi tạo, gửi duyệt, phê duyệt hoặc phát hành tại đúng bước và chỉ rõ vai trò hay quy tắc còn thiếu. | Không có người phê duyệt đủ điều kiện hoặc cấu hình bước chuyển không hợp lệ: không tự gán người, bỏ qua bước hay tự nới chính sách để đi tiếp. |
 | REQ-LC-006 | Trước Release, người dùng phải xem và xác nhận đúng phạm vi; lúc hoàn tất hệ thống phải kiểm tra lại mọi Generation, cấu trúc, phê duyệt, quyền và ngoại lệ liên quan. | Thay đổi một điều kiện sau lúc xem trước nhưng trước khi hoàn tất; cả phạm vi bị từ chối nếu không còn hợp lệ. |
@@ -515,7 +519,7 @@ Reject hoặc Withdraw chỉ trở về In Work khi bước chuyển và ngườ
 | WF-01 | Cấu hình hai workflow hợp lệ và gán mặc định khác nhau cho hai loại tài liệu. | Tài liệu mới của mỗi loại bắt đầu đúng workflow mặc định; không cần sửa code để thay đổi phép gán. | REQ-LC-001; REQ-GOV-002/005 |
 | WF-02 | Bắt đầu một lần xét duyệt, sau đó kích hoạt phiên bản workflow hoặc chính sách mới. | Lần đang chạy và lịch sử cũ giữ đúng phiên bản đã ghim; lượt bắt đầu sau dùng phiên bản mới. | REQ-LC-001; REQ-GOV-005 |
 | WF-03 | Chạy quy trình mặc định qua Submit, Approve và Release; chạy riêng Reject và Withdraw. | Chỉ các bước chuyển được khai báo mới được thực hiện; Reject/Withdraw hợp lệ trở về In Work và quyết định gắn đúng Generation/phạm vi. | REQ-LC-002/004/006/007 |
-| WF-04 | Người soạn thử tự Approve và Release; sau đó người phê duyệt độc lập thực hiện. | Đường tự duyệt bị từ chối; người độc lập đủ quyền đi tiếp theo đúng chính sách mặc định. | REQ-LC-003; REQ-GOV-002 |
+| WF-04 | Chạy ba biến thể: policy mặc định với người soạn thử tự Approve/Release; policy mới bật `AllowSelfApproval`; và hai policy cùng áp dụng trong đó một policy yêu cầu người độc lập. | Mặc định tự duyệt bị từ chối; policy opt-in chỉ cho tự Approve khi đủ RBAC/business gate; policy xung đột vẫn yêu cầu người khác; tự Approve không tự cấp Release. | REQ-LC-003; REQ-GOV-002 |
 | WF-05 | Bỏ trống vai trò bắt buộc hoặc tạo cấu hình thiếu bước chuyển, điều kiện hay quyết định cần thiết. | Hệ thống không kích hoạt hoặc không cho đi tiếp tại đúng bước; nêu rõ phần cấu hình/vai trò còn thiếu và không tự nới chính sách. | REQ-LC-005; REQ-GOV-005 |
 | WF-06 | Cấu hình số người cần duyệt, lý do/bằng chứng bắt buộc và thông báo; thử cả kết quả thành công và lỗi gửi thông báo. | Quyết định chỉ hoàn tất khi đủ điều kiện. Lỗi thông báo không làm đổi kết quả nghiệp vụ đã commit; sự kiện có thể được gửi lại từ kết quả chính thức. | REQ-LC-003/004; REQ-OPS-002 |
 
@@ -691,7 +695,7 @@ việc ghi rõ trách nhiệm và mốc xử lý không có nghĩa là các đi�
 
 | Nội dung kiểm soát | Trạng thái |
 |---|---|
-| Review nội bộ SPEC-001@0.14 | PARTIAL — kế thừa nội dung bản 0.13 nhưng không tự kế thừa kết quả review toàn bản; SPEC-OPEN-01, hướng phát hành theo cụm, tạo PDF từ CAD, cấu hình workflow, ranh giới Identity/Access Policy/JSON, quy tắc item/folder/Rename/Create Copy, BOM so với Excel/PDF và phạm vi đầu ra phòng ban đã được xác nhận riêng; toàn bộ bản 0.14 chưa được review trọn vẹn |
+| Review nội bộ SPEC-001@0.15 | PARTIAL — kế thừa nội dung bản 0.13 nhưng không tự kế thừa kết quả review toàn bản; các quyết định trước đây và policy tự duyệt theo hướng Microsoft-style đã được xác nhận riêng; toàn bộ bản 0.15 chưa được review trọn vẹn |
 | Review bản trước | [RVW-FEATURE-SPEC-20260903-001](VERSION-HISTORY.md#5-ghi-nhận-review-nội-bộ-ngày-03-09-2026) giữ cho Feature 0.3 / Spec 0.4; không tự áp dụng cho bản mới |
 | Lần đồng ý với SPEC-001@0.3 | Đã được anh rút lại; không còn hiệu lực |
 | Quyết định Feature của sếp | Chưa có; là điều kiện trước quyết định Spec |
@@ -775,7 +779,8 @@ mẫu bắt buộc cho mọi sản phẩm.
 | 0.11 | Quy định folder/vị trí độc lập với đường dẫn vật lý, Move/Rename giữ danh tính và Create Copy tạo danh tính mới; thêm REQ-ID-007…009 và IF-01…06, tổng 71 mã REQ. |
 | 0.12 | Phân biệt BOM được quản lý với file Excel/PDF/CSV; quy định BOM View Profile, BOM Representation, BOM Import Candidate và parts list độc lập; thêm REQ-STR-004…006 và BM-01…06, tổng 74 mã REQ. |
 | 0.13 | Làm rõ đầu ra phòng ban dùng các cơ chế tài liệu/cấu trúc/bằng chứng hiện có; dữ liệu giờ, chi phí, mua hàng, gia công, tiến độ và hoàn thành chỉ là thông tin tham khảo nếu chưa có Feature/hợp đồng tích hợp được duyệt riêng; thêm DH-01…04, giữ 74 mã REQ. |
-| 0.14 — hiện tại | Đồng bộ phiên bản Feature, DOC-03/04/06/08 và VVP; không đổi 74 yêu cầu, không đóng bảy điểm còn mở và không tạo quyết định Spec. |
+| 0.14 | Đồng bộ phiên bản Feature, DOC-03/04/06/08 và VVP; không đổi 74 yêu cầu, không đóng bảy điểm còn mở và không tạo quyết định Spec. |
+| 0.15 — hiện tại | Ghi nhận successor tách RBAC khỏi Approval Policy; `AllowSelfApproval` mặc định tắt, chỉ bật theo policy version, không vượt policy độc lập và không cấp Release; PDA review của successor `NOT-RUN`. |
 
 Các nguồn trước thay đổi Tech được giữ trong archive của
 [CHG Tech](../registers/CHG-2026-09-03-tech-context-and-proposal.md). Quyết định Version được ghi tại
