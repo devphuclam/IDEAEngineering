@@ -1,7 +1,7 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `1.2` / Draft; author preparation through T021 recorded, readiness results remain `NOT-RUN`
+**Version / status**: `1.3` / Draft; current P01 review input selected, readiness results remain `NOT-RUN`
 **Prepared**: 2026-09-19
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
@@ -28,6 +28,9 @@
 | Historical P01 review input | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; retained as historical traceability and not the current T006 review input |
 | Analyzed PH0 content baseline | Source set analyzed at `ad49bbf67a291f542b6464532185f7d701a9f298`; includes the PH0 scenario, environment, data and recovery preparation plus the author-side T021 reconciliation |
 | Current PH0 source reconciliation | Current successor source set and authority states reconciled at `109c766e369793b0caa2c4cc3a576df528eddb92`; exact hashes are in [baseline-manifest.md](baseline-manifest.md), Section 2 |
+| Selected P01/T006 review input | Current `IE-INC-READY-001-BL-001` manifest, SHA-256 `4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D`; selected by the Project Reviewer on 2026-09-19. This selects the review input only; P01 remains `IN-PROGRESS`/`NOT-RUN`. |
+| Declared project roles | Current project user: `Project Reviewer` for P01/P02/P03 and `PG4 Gate Authority` for PH1 readiness. These role declarations do not create a review result or gate outcome. |
+| PDA approval reporting rule | When the project user reports that the Product Decision Authority approved something, confirm the exact scope, baseline/hash and date with the user before recording it as PDA evidence. |
 | Approved predecessor authority | `IE-CHG-PDA-APPROVAL-001` pins the approved predecessor to `f269a0445737a7efd7f406ee51517149a8967afa` |
 | Approved predecessor axes | `FEATURE-001@0.12` — `APPROVED`; normative `DOC-04@0.13` — `APPROVED`; `TECH-001@0.14` — `APPROVED` |
 | Current successor delta | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-07@0.14`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the current multi-location Vault source set are listed with exact hashes in [baseline-manifest.md](baseline-manifest.md), Section 2 |
@@ -483,12 +486,23 @@ Do not amend the contract or silently move evidence between milestones in this a
 
 ### 10.6 Authority boundary for the current project user
 
-Repository evidence chưa gán người dùng hiện tại vào một authority cụ thể. Người dùng có thể
-thực hiện công việc **Principal Product Author** và có thể là người điều phối hồ sơ, nhưng không
-được tự suy ra quyền làm Project Reviewer, Product Decision Authority, QLHT/Operations, Security
-reviewer, Recovery/Storage reviewer, Verification reviewer, data custodian, legal/company owner
-hoặc PG4 Gate Authority. Việc một người có thể giữ nhiều vai trò chỉ có hiệu lực khi authority
-và chính sách công ty cho phép; independence không được suy diễn từ việc có hai tài khoản.
+Theo xác nhận của người dùng hiện tại, người dùng giữ hai vai trò trong increment này:
+
+- **Project Reviewer** cho P01/P02/P03 và checklist reviewer-owned;
+- **PG4 Gate Authority** cho quyết định readiness của PH1.
+
+Các vai trò này là thông tin trách nhiệm đã được người dùng khai báo; kết quả review và gate vẫn
+phải có ngày, baseline, evidence và disposition riêng. Người dùng không tự được suy ra là
+Product Decision Authority, QLHT/Operations, Security reviewer, Recovery/Storage reviewer,
+Verification reviewer, data custodian hoặc legal/company owner nếu chưa có authority tương ứng.
+
+Product Decision Authority vẫn là sếp của người dùng. Khi người dùng báo “sếp đã duyệt”, người
+ghi hồ sơ phải nhắc lại phạm vi, baseline/hash và ngày để người dùng xác nhận trước khi ghi nhận
+đó là PDA approval evidence. Đây là quy tắc ghi nhận authority, không phải suy diễn approval từ
+chat history.
+
+Việc một người có thể giữ nhiều vai trò không tự tạo independence; phạm vi và competence phải
+được ghi trong evidence của P04–P06 khi cần.
 
 ## 11. Critical path to PG4
 
@@ -556,3 +570,4 @@ từ hồ sơ tác giả sang PH1.
 | 1.0 | 2026-09-18 | Ghi nhận re-evaluation T006/P02-R13 và cập nhật hash `trace-matrix.md` sau khi thay wildcard Audit bằng `REQ-AUD-001/002`; reviewer/result/gate states vẫn `NOT-RUN`/`OPEN`. | DOC-04 `REQ-AUD-001/002`; T006/T011 review-assistant correction |
 | 1.1 | 2026-09-18 | Khóa đề xuất PH1 theo F01–F05/72h; tách rõ approved predecessor và Draft successor delta; thêm biểu mẫu T006/T011, decision-capture D0–D5, ma trận bằng chứng PH1 và map từng CHK001–CHK033. Không ghi thay người review/authority và không đổi gate state. | PH1 authority-package preparation; states remain `NOT-RUN`/`OPEN` |
 | 1.2 | 2026-09-19 | Reconcile current successor source versions/hashes and mixed authority evidence; record the confirmed Vault direction as PH1-scoped architecture evidence without closing exact successor approval; make T006 package `READY-FOR-REVIEW` while keeping reviewer result `NOT-RUN`. | `IE-CHG-PDA-APPROVAL-002`; `IE-CHG-VAULT-XFER-001`; current `baseline-manifest.md` |
+| 1.3 | 2026-09-19 | Chọn current manifest/hash làm input T006; ghi vai trò Project Reviewer và PG4 Gate Authority của người dùng hiện tại; quy định phải xác nhận lại phạm vi/baseline trước khi ghi nhận PDA approval. Không đổi readiness result, D0–D5 hoặc PG4 state. | User decision Q14 and grilling round 3; P01 remains `IN-PROGRESS`/`NOT-RUN` |

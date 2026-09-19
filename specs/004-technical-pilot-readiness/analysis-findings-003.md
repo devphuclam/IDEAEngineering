@@ -2,7 +2,7 @@
 
 **Record ID**: `IE-ANALYSIS-PH0-003`
 
-**Version / status**: `1.1` / Draft; link-count evidence corrected, reviewer-owned checks remain open
+**Version / status**: `1.2` / Draft; current P01 review input and declared project roles recorded, reviewer-owned checks remain open
 
 **Date**: 2026-09-19
 
@@ -12,10 +12,10 @@ approve Feature/Spec/Tech, change Q-15, or issue a `PG4` result.
 **Scope**: `spec.md`, `plan.md`, `tasks.md`, PH0 navigation, baseline/authority wording and
 repository-local link integrity.
 
-**Method**: Read-only `$speckit-analyze` checks followed by the explicitly authorized remediation
-from the user instruction `Xử lý đi bạn`.
+**Method**: Read-only `$speckit-analyze` checks followed by explicitly authorized remediation and
+the user's current-baseline role confirmation.
 
-**Repository base**: `804942c8ff0c2cc1e318816225d4e359767cfcb2` (`main`) before this remediation.
+**Repository base**: `1e59bdc` (`main`) before this controlled register update.
 The hashes below pin the remediated source bytes; the two future PG4 output files remain uncreated
 until T025/T026.
 
@@ -28,7 +28,7 @@ until T025/T026.
 | `specs/004-technical-pilot-readiness/tasks.md` | `D0C4F44D6D7C237A276089FF731F842FA492061124313223127F57C6B80BDEA1` |
 | `specs/004-technical-pilot-readiness/README.md` | `3CE92A3907799C4FFDF07E9E9512C04949500E9C4B042F77BC803FE22AAEBBE9` |
 | `specs/004-technical-pilot-readiness/baseline-manifest.md` | `4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D` |
-| `specs/004-technical-pilot-readiness/readiness-register.md` | `6532C50AC139BF1F440C097B939E6EC7D2DD4ED04E225E323241D9530C8251FD` |
+| `specs/004-technical-pilot-readiness/readiness-register.md` | `1D84B328A127E91DD5A575436E379B232D753A805968F88371D85BC8216CC392` |
 | `specs/004-technical-pilot-readiness/research.md` | `A8F1E602063DCC2C101CBBA6B9AEDA09EA739B431230AF1CA6B154B36DC9962B` |
 | `.specify/memory/constitution.md` | `D24721C79D50EB556E43A0E49E412C565355008A43C7B7A6E55253E039C4CBDC` |
 
@@ -47,6 +47,7 @@ until T025/T026.
 |---|---|---|
 | Local requirement/task coverage | `PASS` for structural coverage | 17/17 FR and 9/9 SC have task references; 32 task IDs are unique. |
 | Relative links in PH0 package | `PASS` | 144 links checked; no broken links. The two future PG4 outputs now resolve through their existing contracts. |
+| P01 review-input and role declaration consistency | `PASS` for record consistency | Current manifest/hash is named as the T006 input; declared Project Reviewer and PG4 Gate Authority roles do not change readiness results. |
 | Placeholder scan | `PASS` | No uncontrolled template markers in the PH0 package. |
 | Whitespace validation | `PASS` | `git diff --check -- specs/004-technical-pilot-readiness` returns no error. |
 | Constitution alignment | `PASS` for author document alignment | No constitutional-critical issue; this is not a PG2, PG3, PG4, runtime, security or Product Decision Authority result. |
