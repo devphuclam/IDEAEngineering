@@ -2,7 +2,7 @@
 
 **Record ID**: `IE-ANALYSIS-PH0-003`
 
-**Version / status**: `1.0` / Draft; current analysis and author remediation complete, reviewer-owned checks remain open
+**Version / status**: `1.1` / Draft; link-count evidence corrected, reviewer-owned checks remain open
 
 **Date**: 2026-09-19
 
@@ -46,7 +46,7 @@ until T025/T026.
 | Check | Result | Evidence |
 |---|---|---|
 | Local requirement/task coverage | `PASS` for structural coverage | 17/17 FR and 9/9 SC have task references; 32 task IDs are unique. |
-| Relative links in PH0 package | `PASS` | 142 links checked; no broken links. The two future PG4 outputs now resolve through their existing contracts. |
+| Relative links in PH0 package | `PASS` | 144 links checked; no broken links. The two future PG4 outputs now resolve through their existing contracts. |
 | Placeholder scan | `PASS` | No uncontrolled template markers in the PH0 package. |
 | Whitespace validation | `PASS` | `git diff --check -- specs/004-technical-pilot-readiness` returns no error. |
 | Constitution alignment | `PASS` for author document alignment | No constitutional-critical issue; this is not a PG2, PG3, PG4, runtime, security or Product Decision Authority result. |
