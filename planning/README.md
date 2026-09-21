@@ -40,6 +40,11 @@ manifest points to those owning files. The HTML Gantt is a visual cross-check on
 Use the Execution Register for actual progress. Do not rewrite the approved Baseline to make a
 dashboard look current.
 
+For a guided local entry point, use the [IDEA Engineering Progress Tracker](../tools/progress-tracker/README.md).
+It reads the same Execution Register, checks the one-card WIP limit and direct predecessors, and
+writes a controlled register revision plus the matching manifest revision. The browser view is a
+local preview; it does not make an uncommitted working tree an official Compiler snapshot.
+
 1. Find the Delivery Card by the stable pair `entity.kind + entity.id`.
 2. Record only facts supported by a person or controlled evidence. If history is unknown, retain
    `NOT_RECORDED`; do not guess `NOT_STARTED`.
@@ -74,9 +79,10 @@ Exit codes are:
 | `3` | The contract version is unsupported |
 
 `PASS_WITH_WARNINGS` is usable only when every warning has an understood owner and treatment.
-The current package deliberately warns that the forecast calendar includes the second and fourth
-Saturday while the approved DOC-07 Baseline remains weekday-only. That difference requires a
-rebaseline decision before it may alter the Baseline.
+The current package deliberately warns that the forecast calendar includes the first, third and
+fifth Saturday while the approved DOC-07 Baseline remains weekday-only. The second and fourth
+Saturdays are days off. That difference requires an explicit rebaseline decision before it may alter
+the Baseline or add planned work.
 
 ## Official handoff
 

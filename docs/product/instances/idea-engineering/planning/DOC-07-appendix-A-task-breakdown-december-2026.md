@@ -1,16 +1,16 @@
 # IDEA Engineering — Phụ lục A: Kế hoạch Technical Pilot đến 31/12/2026
 
-Ngày lập lại kế hoạch: 17/09/2026. Đây là bản phân rã để review, lập increment và theo dõi;
+Ngày cập nhật forecast: 21/09/2026. Đây là bản phân rã để review, lập increment và theo dõi;
 không phải lệnh bắt đầu code hay bằng chứng đã triển khai.
 
 | Thông tin kiểm soát | Nội dung |
 |---|---|
-| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.14](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
-| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Draft 0.6 |
+| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.15](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
+| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Draft 0.7 |
 | Kế hoạch áp dụng | `IE-PLAN-DEC2026-002@0.1` — Draft |
 | Người chuẩn bị / review | Principal Product Author chuẩn bị; người dùng dự án review |
 | Phân loại | `INTERNAL` |
-| Thay đổi và nguồn | [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md); hiệu chỉnh thuật ngữ [IE-CHG-PH0-CORR-001](../registers/CHG-2026-09-17-ph0-readiness-correction.md) |
+| Thay đổi và nguồn | [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md); hiệu chỉnh thuật ngữ [IE-CHG-PH0-CORR-001](../registers/CHG-2026-09-17-ph0-readiness-correction.md); hiệu chỉnh forecast calendar [IE-CHG-CALENDAR-TP-001](../registers/CHG-2026-09-21-forecast-calendar-correction.md) |
 | Bản trước | Kế hoạch 56 task/756 giờ tại Git commit `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2`; không dùng để điều hành thực hiện |
 
 Phụ lục này thuộc DOC-07, không phải DOC thứ chín, SRS mới hoặc bộ Feature mới. DOC-07 giữ
@@ -24,7 +24,10 @@ nội bộ; nó không thay đổi effort, dependency hoặc thẩm quyền củ
 - Có **35 work package**, tổng cộng **512 giờ công việc** và **88 giờ dự phòng có kiểm soát**.
 - Mốc 31/12 là **Technical Pilot**: một luồng xuyên suốt chạy được và có bằng chứng kiểm tra. Đây
   không phải toàn bộ Core v0, production acceptance hoặc triển khai cho cả công ty.
-- Kế hoạch dùng 75 ngày làm việc trong tuần, mỗi ngày 8 giờ. Thứ Bảy không được tính sẵn.
+- Baseline so sánh dùng 75 ngày trong tuần, mỗi ngày 8 giờ. Forecast thực tế dùng thứ Hai–thứ Sáu
+  và thứ Bảy tuần 1, 3, 5 của tháng; thứ Bảy tuần 2 và 4 được nghỉ. Trong toàn bộ horizon có 83
+  ngày forecast / 664 giờ trước khi trừ ngày lễ, nghỉ phép và việc khác. 64 giờ tăng thêm là headroom,
+  không tự biến thành scope mới.
 - Người dùng dự án là coder chính duy nhất. Trợ lý không được tính thành người phát triển thứ hai.
 - Mỗi work package gồm triển khai, kiểm tra tập trung, cập nhật tài liệu và chuẩn bị review. Test
   không được dồn hết tới PH5.
@@ -46,7 +49,9 @@ nội bộ; nó không thay đổi effort, dependency hoặc thẩm quyền củ
 | PH5 — Ổn định và Technical Pilot | 21/12–31/12 | 64 | 8 | 72 |
 | **Tổng** | **18/09–31/12** | **512** | **88** | **600** |
 
-Quỹ này chưa trừ ngày lễ, nghỉ phép hoặc công việc khác. Chờ sếp, IT, license, máy chủ hoặc
+Quỹ 600 giờ trong bảng là **baseline allocation** của kế hoạch. Forecast hiện tại có 83 ngày làm
+việc / 664 giờ vì bao gồm thứ Bảy tuần 1, 3 và 5; thứ Bảy tuần 2 và 4 được nghỉ. 64 giờ chênh lệch
+là headroom, không tự tăng work package, scope hoặc cam kết giao hàng. Quỹ này chưa trừ ngày lễ, nghỉ phép hoặc công việc khác. Chờ sếp, IT, license, máy chủ hoặc
 reviewer là rủi ro lịch, không phải giờ triển khai. Khi dùng dự phòng phải ghi nguyên nhân, số giờ,
 task bị ảnh hưởng và phần cần test lại.
 
@@ -203,7 +208,7 @@ Review tiến độ hằng tuần chỉ cần trả lời: đã xong gì, bằng
 
 ## 9. Tài liệu làm căn cứ
 
-- [DOC-07@0.14](../DOC-07-mvp-roadmap-and-delivery-plan.md) — 0.14 giữ nguyên schedule này và chỉ bổ sung hướng thương mại dài hạn ngoài phạm vi Technical Pilot
+- [DOC-07@0.15](../DOC-07-mvp-roadmap-and-delivery-plan.md) — 0.15 giữ nguyên baseline allocation và schedule; cập nhật lịch forecast có thứ Bảy tuần 1, 3, 5 làm việc, tuần 2, 4 nghỉ
 - [DOC-04 — Software Requirements Specification](../DOC-04-software-requirements-specification.md)
 - [DOC-05 — Architecture Description](../DOC-05-architecture-description.md)
 - [DOC-06 — Data, Integration and Migration Specification](../DOC-06-data-integration-and-migration-specification.md)
@@ -218,3 +223,4 @@ Review tiến độ hằng tuần chỉ cần trả lời: đã xong gì, bằng
 |---|---|---|---|
 | 0.5 | 17/09/2026 | Baseline 35 work package, 512 giờ và 88 giờ dự phòng; bản trước được giữ trong Git. | `IE-CHG-ROADMAP-TP-001` |
 | 0.6 | 17/09/2026 | Sửa nguồn duyệt P01; tách trạng thái và kết quả PG4, thống nhất điều kiện cho phép PH1 theo Constitution; cập nhật liên kết DOC-07@0.14. Giữ nguyên giờ, ngày, scope và dependency. | [IE-CHG-PH0-CORR-001](../registers/CHG-2026-09-17-ph0-readiness-correction.md) |
+| 0.7 | 21/09/2026 | Cập nhật lịch forecast: làm thứ Bảy tuần 1, 3, 5; nghỉ tuần 2, 4; giữ nguyên baseline allocation 512 giờ + 88 giờ dự phòng và bổ sung trace 83 ngày / 664 giờ forecast. | [IE-CHG-CALENDAR-TP-001](../registers/CHG-2026-09-21-forecast-calendar-correction.md) |

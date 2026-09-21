@@ -14,18 +14,18 @@
   "forecastCalendar": {
     "calendarId": "IE-CALENDAR-TP-FORECAST-001",
     "status": "SELECTED_FOR_FORECAST",
-    "effectiveFrom": "2026-09-19",
+    "effectiveFrom": "2026-09-21",
     "regularWorkingDays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
     "monthlyWorkingDayRules": [
       {
         "dayOfWeek": "SATURDAY",
-        "occurrences": [2, 4],
+        "occurrences": [1, 3, 5],
         "hours": 8
       }
     ],
     "exceptions": [],
     "selectedBy": "LEAD",
-    "selectionBasis": "Project user confirmed the actual recurring work calendar on 2026-09-19."
+    "selectionBasis": "Project user confirmed that Saturdays in the first, third and fifth week of a month are working days; the second and fourth Saturdays are days off. Confirmed on 2026-09-21."
   },
   "baselineChangeState": "REBASELINE_REQUIRED",
   "differenceTreatment": "Use forecastCalendar for calculated forecasts; do not rewrite the approved baseline until rebaseline authority is recorded."

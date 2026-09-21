@@ -11,7 +11,7 @@
 | Consumer | Project Management Compiler. |
 | Applicable baseline | `IE-PLAN-DEC2026-002@0.1`; exact repository commit is supplied by the import context. |
 | Classification / retention | `INTERNAL`; retain every released contract and accepted register revision required to reproduce an imported snapshot. |
-| Source / upstream trace | DOC-07, Appendix A, Kanban CARIO, the PH0 readiness package and decisions Q1-Q39 confirmed on 2026-09-19. |
+| Source / upstream trace | DOC-07, Appendix A, Kanban CARIO, the PH0 readiness package, decisions Q1-Q39 confirmed on 2026-09-19, and the forecast-calendar clarification recorded on 2026-09-21. |
 | Downstream trace | `project-management-compiler-manifest.json`, Execution Register schema, validator and fixtures in this directory. |
 | Evidence status | Source Readiness `PASS`; validation `PASS_WITH_WARNINGS` with the controlled forecast-calendar warning; exact source commit is bound by import context. |
 
@@ -128,9 +128,10 @@ consumption. They are baseline configuration, not user-selected dashboard colour
 ## 7. Calendar, capacity and scheduling
 
 The controlled December 2026 baseline remains Monday-Friday because that is what DOC-07 currently
-approves. The project user subsequently selected Monday-Friday plus the second and fourth Saturday
-of each month as the current forecast calendar. The calendar file keeps both facts visible. Until a
-rebaseline is approved, the difference produces `PMC-CALENDAR-001`; it does not rewrite DOC-07.
+approves. The project user selected Monday-Friday plus the first, third and fifth Saturday of each
+month as the current forecast calendar; the second and fourth Saturdays are days off. The calendar
+file keeps both facts visible. Until a rebaseline is approved, the difference produces
+`PMC-CALENDAR-001`; it does not rewrite DOC-07 or add work automatically.
 
 The active forecast uses `Asia/Ho_Chi_Minh`, eight hours per working day, calendar exceptions,
 remaining effort, dependencies, committed capacity and WIP limit one for the primary developer.

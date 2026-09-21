@@ -1,6 +1,6 @@
 # IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap
 
-> **Instance state**: controlled `Draft 0.14`. This roadmap plans work and decision presentations. It
+> **Instance state**: controlled `Draft 0.15`. This roadmap plans work and decision presentations. It
 > does not create or approve Feature, Spec or Tech content by schedule assertion, and it does not
 > authorize production implementation or release.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap |
 | Owner | `Principal Product Author`; named person attribution `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.14` |
+| Document Version | `0.15` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity to be recorded before `Proposed` |
@@ -22,9 +22,9 @@
 | Source Links | [Product templates](../../definition/README.md), [domain language](../../../../CONTEXT.md), [architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [design lessons](../../knowledge/idea-design-lessons.md) |
 | Downstream Links | [Task appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt view](planning/idea-roadmap-december-2026.html), three decision briefs, supporting records and later implementation increments |
 | Evidence / Claim Status | `IDEA DECISION` for accepted planning rules; execution and gate evidence remains `NOT-RUN` |
-| Change History | 0.14: record the internal-first, future-commercial direction and route it to a separate readiness gate without changing the 2026 schedule, effort, tasks, milestones or current Feature/Spec/Tech scope; [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md). 0.13 established the current Technical Pilot plan; earlier history remains in linked change records. |
+| Change History | 0.15: correct the selected forecast calendar to include first/third/fifth Saturdays and keep second/fourth Saturdays off; retain the 600-hour approved comparison baseline and 512/88 plan allocation; [IE-CHG-CALENDAR-TP-001](registers/CHG-2026-09-21-forecast-calendar-correction.md). 0.14 recorded the internal-first, future-commercial direction; earlier history remains in linked change records. |
 | Change Record | [IE-CHG-COMMERCIAL-DIR-001@0.1](registers/CHG-2026-09-17-internal-first-commercial-direction.md); [IE-CHG-ROADMAP-TP-001@0.1](registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md); [IE-CHG-VAULT-XFER-001@0.1](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor `DOC-07@0.12` retained at Git commit `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2` |
-| Supersedes / Superseded by | Supersedes `DOC-07@0.13`; superseded by `NOT-APPLICABLE` |
+| Supersedes / Superseded by | Supersedes `DOC-07@0.14`; superseded by `NOT-APPLICABLE` |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational retention period is `UNKNOWN`, owner `Product Decision Authority`, review trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -52,7 +52,7 @@ exit evidence. The roadmap index is navigation only.
 | Source product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; fixed reference-product public baseline dated 2026-08-26; target-runtime semantics remain explicitly unverified. |
 | Planning assumptions | Assistant acts as Principal Product Author, the project user reviews documents, and the boss decides Feature, Spec and Tech. The user initially administers native accounts and may operate the server; dedicated DevOps, independent/specialist competence and long-term support are not assumed. |
 | Constraints | Internal-first company product; clean-room behavioral design; future commercial operation is several years away and not part of Core v0 or the 2026 Technical Pilot; eight Core Product Documents remain detailed authority; three Vietnamese decision briefs are the boss-facing views; English Markdown remains editable authority; no production implementation before applicable gates. |
-| Planning horizon | 18 September–31 December 2026; weekday-only single-coder baseline in section 3.2. Saturdays are not planned capacity. Production slices remain unauthorized until their applicable requirements, design and `PG4` readiness pass. |
+| Planning horizon | 18 September–31 December 2026; the approved comparison baseline remains weekday-only, while the current forecast uses Monday–Friday plus the first, third and fifth Saturday of each month (the second and fourth Saturdays are days off). Production slices remain unauthorized until their applicable requirements, design and `PG4` readiness pass. |
 
 ## 2. Decision presentation plan
 
@@ -133,11 +133,12 @@ the applicable Spec Kit specification, plan, checklist and executable tasks. The
 | Item | Planned hours / condition |
 |---|---|
 | Planning window | 18 September–31 December 2026 |
-| Weekday capacity | 75 weekdays × 8 hours = **600 hours**, before holidays, leave and other assignments |
+| Approved baseline capacity | 75 weekdays × 8 hours = **600 hours**, before holidays, leave and other assignments |
 | Planned phase work | **512 hours** across **35 work packages** |
 | Controlled reserve | **88 hours**, retained inside the weekday capacity |
-| Total allocation | **600 hours** |
-| Saturday capacity | **0 hours in the baseline**; a Saturday requires an explicit reforecast and is not assumed to protect the date |
+| Total baseline allocation | **600 hours** |
+| Current forecast availability | **83 working days × 8 hours = 664 hours** in the horizon; this includes eight working Saturdays (weeks 1, 3 and 5 where present) and excludes the second and fourth Saturdays |
+| Forecast headroom | **64 hours** are available beyond the 600-hour baseline allocation; they are not automatically new scope or planned work |
 | Estimation confidence | Roadmap allocation; actual delivery rate remains unmeasured until `MS1` and must be used for reforecast |
 
 The project user remains the only assumed coder. Assistant work does not add a second full-time
@@ -145,6 +146,12 @@ engineer. The collaborating colleague may support business explanation and pilot
 assigned; coding or specialist review capacity is not assumed. Task hours include focused coding,
 tests, documentation and review preparation. Waiting for Product Decision Authority, IT, licenses,
 environments or qualified reviewers is elapsed-time risk and cannot be hidden in effort reserve.
+
+The forecast calendar reflects the project user's actual availability: Monday–Friday plus the first,
+third and fifth Saturday of each month; the second and fourth Saturdays are days off. The approved
+weekday-only baseline remains visible for variance reporting until a controlled rebaseline is
+accepted. The extra forecast availability may absorb recorded variance but does not expand scope or
+change the 512-hour planned work without a separate planning decision.
 
 #### Phase allocation and reserve summary
 

@@ -18,7 +18,7 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.15`; DOC-05 at `Draft 0.22`; DOC-06 at `Draft 0.18`; DOC-07 at `Draft 0.14`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.18`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.15`; DOC-05 at `Draft 0.22`; DOC-06 at `Draft 0.18`; DOC-07 at `Draft 0.15`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.18`; CHG records at their catalogue versions |
 | Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy self-approval correction is additionally `APPROVED` on 19-09-2026 under [`IE-CHG-PDA-APPROVAL-002`](registers/CHG-2026-09-19-pda-approval-approval-policy.md); remaining successor content and runtime evidence remain `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
@@ -60,8 +60,9 @@ has been implemented.
 
 [DOC-07 section 3.2](DOC-07-mvp-roadmap-and-delivery-plan.md#32-technical-pilot-schedule-and-task-appendix)
 defines the current 18 September–31 December 2026 Technical Pilot plan: **35 work packages /
-512 planned work hours + 88 controlled reserve hours = 600 weekday hours**. Saturdays are not
-baseline capacity. The 31 December milestone is a bounded production-shaped thread, not full Core
+512 planned work hours + 88 controlled reserve hours = 600 baseline hours**. The current forecast
+calendar adds working Saturdays in weeks 1, 3 and 5 of each month (weeks 2 and 4 are days off),
+giving 83 forecast days / 664 hours before holidays and other assignments. The 31 December milestone is a bounded production-shaped thread, not full Core
 v0, production readiness or company rollout. Execution and `PG4` remain `NOT-RUN`.
 
 - [Appendix A — task details, outputs, hours and dependencies](planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
@@ -317,7 +318,7 @@ versions only; it did not change product behavior, the roadmap schedule or any r
 |---|---|
 | FEATURE-001@0.12 and SPEC-001@0.14 | Historical 09-09 reconciliation state: current Core/VVP pins were recorded and the management decision was then `NOT-RUN`. The current Product Decision Authority approval is recorded separately in `IE-CHG-PDA-APPROVAL-001`; `SPEC-001@0.14` is not the current normative 87-requirement SRS. |
 | TECH-001@0.8 | Historical source-reconciliation baseline; superseded by `TECH-001@0.9`, Linux-first `@0.10`, rationale-refined `@0.11`, Client/UI challenger `@0.12`, reviewer-corrected `@0.13`, approved Engineering selection `@0.14`, then multi-location Vault successor Draft `@0.15`. |
-| DOC-07@0.5 | Historical source-reconciliation baseline; superseded through current `DOC-07@0.14`. The old 56-task/756-hour schedule remains recoverable in Git history; it is replaced for execution planning by the 35-work-package Technical Pilot baseline. Version 0.14 does not change that schedule. |
+| DOC-07@0.5 | Historical source-reconciliation baseline; superseded through current `DOC-07@0.15`. The old 56-task/756-hour schedule remains recoverable in Git history; it is replaced for execution planning by the 35-work-package Technical Pilot baseline. Version 0.14 did not change that schedule; version 0.15 corrects the forecast calendar without changing the baseline allocation. |
 | Existing Word/Human copies | Retain the submitted/editorial versions; they were not overwritten or silently regenerated. |
 
 On 10-09-2026, the controlled sources were re-baselined for requirement and architecture quality.
@@ -370,7 +371,7 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.15`; sole normative SRS; 90 requirements including policy-controlled self-approval, `REQ-WS-016`, `REQ-OPS-007/008`, `QRS-013/014`; exact successor PDA approval and verification `NOT-RUN` |
 | `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.22`; separates authoritative control from scoped direct Artifact data transfer, models multiple Vault locations and records policy-controlled self-approval separately from RBAC; exact topology/qualification `NOT-RUN` |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.18`; adds Vault Endpoint, Transfer Grant/Receipt, Replication Task and versioned Storage/Durability Policy while retaining the pinned Approval Policy Version and self-approval outcome |
-| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.14`; current six-phase/six-milestone Technical Pilot plan is unchanged at 512 work hours plus 88 controlled reserve hours; deferred commercial direction adds no task; execution and `PG4` `NOT-RUN`; Q-15 unchanged |
+| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.15`; current six-phase/six-milestone Technical Pilot plan is unchanged at 512 work hours plus 88 controlled reserve hours; forecast includes first/third/fifth Saturdays and keeps second/fourth Saturdays off; deferred commercial direction adds no task; execution and `PG4` `NOT-RUN`; Q-15 unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.13`; separates selecting location, transferring, verifying, policy-required protection and final Check-in; transfer/replication completion alone is not success and storage secrets remain hidden |
 
 ## Supporting instance catalogue

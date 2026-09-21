@@ -31,8 +31,8 @@
       "diagnosticCode": "PMC-CALENDAR-001",
       "field": "calendar",
       "baselineValue": "Monday-Friday; Saturdays excluded",
-      "forecastValue": "Monday-Friday plus the second and fourth Saturday of each month",
-      "treatment": "Keep baseline unchanged and use the selected forecast calendar until a controlled rebaseline is approved."
+      "forecastValue": "Monday-Friday plus the first, third and fifth Saturday of each month; the second and fourth Saturdays are days off",
+      "treatment": "Keep the approved baseline reference unchanged. Use the corrected forecast calendar for availability and forecast calculations; do not add work or change scope automatically."
     }
   ]
 }
