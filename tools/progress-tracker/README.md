@@ -9,10 +9,12 @@ Project Management Compiler.
 
 Nhấp đúp vào:
 
-`run-idea-progress-tracker.cmd`
+`IDEA-Progress-Tracker.cmd` ở thư mục gốc của dự án.
 
 Script mở một local server ở `http://localhost:8097/` và mở trình duyệt. Không cần cài package hay
-database. Đóng cửa sổ PowerShell để dừng.
+database. Nếu tracker đã chạy, lần nhấp tiếp theo chỉ mở lại đúng trang đang chạy. Nếu cổng `8097`
+bị một chương trình khác sử dụng, tracker tự thử các cổng tiếp theo đến `8107` và hiển thị địa chỉ
+đã chọn. Đóng cửa sổ PowerShell của phiên đang phục vụ để dừng.
 
 ## Cách dùng
 

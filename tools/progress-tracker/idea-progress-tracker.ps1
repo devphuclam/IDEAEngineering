@@ -511,7 +511,12 @@ function Handle-Request($context) {
         return
     }
     if ($context.Request.HttpMethod -eq 'GET' -and $path -eq '/api/health') {
-        Send-Json $context 200 ([pscustomobject]@{ ok = $true; generatedAt = Get-NowIso })
+        Send-Json $context 200 ([pscustomobject]@{
+            ok = $true
+            service = 'IDEA_PROGRESS_TRACKER'
+            port = $Port
+            generatedAt = Get-NowIso
+        })
         return
     }
     if ($context.Request.HttpMethod -eq 'POST' -and $path -eq '/api/update') {
@@ -527,9 +532,49 @@ function Handle-Request($context) {
     Send-Json $context 404 ([pscustomobject]@{ error = 'Không tìm thấy đường dẫn.' })
 }
 
-$listener = [System.Net.HttpListener]::new()
-$listener.Prefixes.Add("http://localhost:$Port/")
-$listener.Start()
+function Test-ExistingTracker([int]$CandidatePort) {
+    try {
+        $health = Invoke-RestMethod -Uri "http://localhost:$CandidatePort/api/health" -TimeoutSec 1
+        if ($health.ok -ne $true) { return $false }
+        if ([string]$health.service -eq 'IDEA_PROGRESS_TRACKER') { return $true }
+
+        # Compatibility with tracker processes started before the service marker was added.
+        $state = Invoke-RestMethod -Uri "http://localhost:$CandidatePort/api/state" -TimeoutSec 1
+        return (-not [string]::IsNullOrWhiteSpace([string]$state.baselineId) -and $null -ne $state.cards)
+    }
+    catch { return $false }
+}
+
+$listener = $null
+$selectedPort = $null
+$lastListenError = $null
+foreach ($candidatePort in $Port..($Port + 10)) {
+    $candidateUrl = "http://localhost:$candidatePort/"
+    if (Test-ExistingTracker $candidatePort) {
+        Write-Host "IDEA Engineering Progress Tracker đã chạy tại $candidateUrl"
+        if (-not $NoBrowser) { Start-Process $candidateUrl }
+        exit 0
+    }
+
+    $candidateListener = [System.Net.HttpListener]::new()
+    $candidateListener.Prefixes.Add($candidateUrl)
+    try {
+        $candidateListener.Start()
+        $listener = $candidateListener
+        $selectedPort = $candidatePort
+        break
+    }
+    catch {
+        $lastListenError = $_.Exception.Message
+        $candidateListener.Close()
+    }
+}
+
+if ($null -eq $listener) {
+    throw "Không mở được tracker trên các cổng $Port–$($Port + 10). Lỗi cuối: $lastListenError"
+}
+
+$Port = $selectedPort
 Write-Host "IDEA Engineering Progress Tracker đang chạy tại http://localhost:$Port/"
 Write-Host "Nguồn: $registerPath"
 Write-Host 'Đóng cửa sổ PowerShell để dừng. Bản nháp chỉ được push khi người dùng bấm Ghi nhận & công bố.'
