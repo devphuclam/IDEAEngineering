@@ -1,14 +1,14 @@
 {
   "contractVersion": "0.1.0",
   "referenceId": "IE-PMC-BASELINE-REF-001",
-  "baselineId": "IE-PLAN-DEC2026-002@0.1",
+  "baselineId": "IE-PLAN-DEC2026-003@0.1",
   "status": "CURRENT",
   "renditionOnly": true,
   "authorityNote": "This file is a machine-readable cross-check. DOC-07, Appendix A and Kanban CARIO retain field-level planning authority.",
   "planningHorizon": {
-    "start": "2026-09-18",
+    "start": "2026-09-23",
     "finish": "2026-12-31",
-    "milestone": "Technical Pilot"
+    "milestone": "Core v0 internal-use review"
   },
   "totals": {
     "phases": 6,
@@ -17,22 +17,15 @@
     "gatesAndMilestones": 7,
     "plannedWorkHours": 512,
     "controlledReserveHours": 88,
-    "totalBaselineCapacityHours": 600
+    "operationalBufferHours": 32,
+    "totalBaselineCapacityHours": 632
   },
-  "baselineCalendarId": "IE-CALENDAR-TP-BASELINE-001",
+  "baselineCalendarId": "IE-CALENDAR-CV0-BASELINE-001",
   "sourcePaths": {
     "roadmap": "docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md",
     "workPackages": "docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md",
     "deliveryCards": "docs/product/instances/idea-engineering/planning/idea-technical-pilot-kanban-cario.md",
     "ganttCrossCheck": "docs/product/instances/idea-engineering/planning/idea-roadmap-december-2026.html"
   },
-  "knownDeltas": [
-    {
-      "diagnosticCode": "PMC-CALENDAR-001",
-      "field": "calendar",
-      "baselineValue": "Monday-Friday; Saturdays excluded",
-      "forecastValue": "Monday-Friday plus the first, third and fifth Saturday of each month; the second and fourth Saturdays are days off",
-      "treatment": "Keep the approved baseline reference unchanged. Use the corrected forecast calendar for availability and forecast calculations; do not add work or change scope automatically."
-    }
-  ]
+  "knownDeltas": []
 }

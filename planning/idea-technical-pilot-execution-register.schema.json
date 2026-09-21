@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:idea-engineering:planning:execution-register:0.1.0",
-  "title": "IDEA Engineering Technical Pilot Execution Register",
+  "title": "IDEA Engineering Core v0 Execution Register",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -263,13 +263,11 @@
         },
         "actualEffortHours": {
           "type": ["number", "null"],
-          "minimum": 0,
-          "multipleOf": 0.5
+          "minimum": 0
         },
         "remainingEffortHours": {
           "type": ["number", "null"],
-          "minimum": 0,
-          "multipleOf": 0.5
+          "minimum": 0
         },
         "forecastFinish": {
           "type": ["string", "null"],

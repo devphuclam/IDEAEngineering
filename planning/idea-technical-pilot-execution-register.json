@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 1,
-  "status": "DRAFT",
+  "registerRevision": 2,
+  "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
-  "baselineId": "IE-PLAN-DEC2026-002@0.1",
-  "statusDate": "2026-09-19",
+  "baselineId": "IE-PLAN-DEC2026-003@0.1",
+  "statusDate": "2026-09-21",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -112,6 +112,13 @@
     { "entity": { "kind": "DeliveryCard", "id": "Q06-B" }, "recordingState": "NOT_RECORDED", "priority": "NORMAL", "forecastPlannedOrder": 53, "disposition": "ACTIVE", "evidence": [], "blockers": [], "events": [], "successorRefs": [] }
   ],
   "changeHistory": [
+    {
+      "revision": 2,
+      "recordedAt": "2026-09-21T17:25:30+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Bind the execution register to the selected Core v0 roadmap baseline. Preserve all attributable execution observations; do not infer actual or remaining effort.",
+      "sourceEvidence": "docs/product/instances/idea-engineering/registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md"
+    },
     {
       "revision": 1,
       "recordedAt": "2026-09-19T00:00:00+07:00",

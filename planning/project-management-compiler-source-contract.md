@@ -9,11 +9,11 @@
 | Planning authority | Existing DOC-07 sources remain authoritative as declared in the manifest; this contract does not become a second plan. |
 | Owner / recorder | Project user (`LEAD`) owns execution facts; Principal Product Author prepares controlled changes. |
 | Consumer | Project Management Compiler. |
-| Applicable baseline | `IE-PLAN-DEC2026-002@0.1`; exact repository commit is supplied by the import context. |
+| Applicable baseline | `IE-PLAN-DEC2026-003@0.1`; exact repository commit is supplied by the import context. |
 | Classification / retention | `INTERNAL`; retain every released contract and accepted register revision required to reproduce an imported snapshot. |
-| Source / upstream trace | DOC-07, Appendix A, Kanban CARIO, the PH0 readiness package, decisions Q1-Q39 confirmed on 2026-09-19, and the forecast-calendar clarification recorded on 2026-09-21. |
+| Source / upstream trace | DOC-07, Appendix A, Kanban CARIO, the PH0 readiness package and [IE-CHG-ROADMAP-CV0-001](../docs/product/instances/idea-engineering/registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md). |
 | Downstream trace | `project-management-compiler-manifest.json`, Execution Register schema, validator and fixtures in this directory. |
-| Evidence status | Source Readiness `PASS`; validation `PASS_WITH_WARNINGS` with the controlled forecast-calendar warning; exact source commit is bound by import context. |
+| Evidence status | Source Readiness `PASS`; validation target `PASS`; exact source commit is bound by import context. |
 
 ## 1. Boundary
 
@@ -44,6 +44,7 @@ that leave the repository.
 | `WORK_PACKAGE_AUTHORITY` | Appendix A owns 35 work packages, planned effort and package dependencies. |
 | `DELIVERY_CARD_AUTHORITY` | Kanban CARIO owns 53 executable Delivery Cards, seven zero-effort gates/milestones, dates, card dependencies and responsibility assignments. |
 | `EXECUTION_AUTHORITY` | The Execution Register owns recorded actual state, actual effort, remaining effort, forecast overrides, blockers and evidence for Delivery Cards. |
+| `WORK_SESSION_AUDIT` | The work journal owns individual Start/Stop session entries and effort-correction history; cumulative actual and remaining effort remain owned by the Execution Register. |
 | `RENDITION_CROSS_CHECK` | The HTML Gantt is a visual cross-check only. |
 | `READINESS_EVIDENCE` | The PH0 readiness package supplies gate and human-review evidence; it is not Delivery Card actuals. |
 | `NAVIGATION_ONLY` | The instance catalogue helps a human navigate and owns no planning field. |
@@ -103,10 +104,17 @@ Normal delivery work may have `NOT_APPLICABLE`; verification work may be complet
 result. `COMPLETED` requires the observable output, actual finish, zero remaining effort, required
 review and evidence. Overdue, stale and at-risk are derived alerts, not execution states.
 
-Actual effort and remaining effort are independent values. Remaining effort is not calculated as
-baseline minus actual. An evidence item records type, repository path or controlled external URI,
-commit/digest where applicable, description, result, recorder and time. Local absolute paths and
-temporary files are prohibited.
+`actualStart` and `actualFinish` are calendar events; their elapsed interval is not actual effort.
+Actual effort is accumulated from closed work sessions. Pausing the timer keeps a Card
+`IN_PROGRESS`; `SUSPENDED` is reserved for work that is genuinely blocked. A session longer than
+eight hours or crossing a local date requires human confirmation before it is counted.
+
+Actual effort and remaining effort are independent values. Closing a work session may propose a
+reduced remaining estimate, but the recorder may correct that estimate when new work or rework is
+discovered. Every manual correction retains the prior value, successor value, reason, recorder and
+time. `COMPLETED` forces remaining effort to zero. An evidence item records type, repository path
+or controlled external URI, commit/digest where applicable, description, result, recorder and
+time. Local absolute paths and temporary files are prohibited.
 
 ## 6. Baseline, forecast and progress
 
@@ -127,11 +135,10 @@ consumption. They are baseline configuration, not user-selected dashboard colour
 
 ## 7. Calendar, capacity and scheduling
 
-The controlled December 2026 baseline remains Monday-Friday because that is what DOC-07 currently
-approves. The project user selected Monday-Friday plus the first, third and fifth Saturday of each
-month as the current forecast calendar; the second and fourth Saturdays are days off. The calendar
-file keeps both facts visible. Until a rebaseline is approved, the difference produces
-`PMC-CALENDAR-001`; it does not rewrite DOC-07 or add work automatically.
+The selected Core v0 baseline uses Monday-Friday plus the first, third and fifth Saturday of each
+month; the second and fourth Saturdays are days off. From 23 September through 31 December 2026,
+that gives 79 working days / 632 hours. Of this, 512 hours are task work, 88 hours are technical
+reserve and 32 hours are operational buffer. Calendar exceptions do not rewrite scope automatically.
 
 The active forecast uses `Asia/Ho_Chi_Minh`, eight hours per working day, calendar exceptions,
 remaining effort, dependencies, committed capacity and WIP limit one for the primary developer.
@@ -151,10 +158,16 @@ a dependency, gate or review and does not automatically interrupt active work.
 
 ## 8. Recording cadence and unplanned work
 
-Actual effort is recorded at the end of a working day; important state, blocker and forecast events
-are recorded when they occur. Remaining effort is reviewed at least weekly. The weekly status date
-is the last working day in the selected forecast calendar. An in-progress Card without an update
-for more than two working days is stale; a seven-day-old remaining estimate requires review.
+The local Progress Tracker records each Start/Stop pair to the repository-owned work journal and
+updates cumulative actual effort when the session closes. Start, Stop, Resume, Suspend and Complete
+are separate actions. Important state, blocker and forecast events are recorded when they occur.
+Remaining effort is reviewed at least weekly. The weekly status date is the last working day in the
+selected forecast calendar. An in-progress Card without an update for more than two working days is
+stale; a seven-day-old remaining estimate requires review.
+
+The work journal supports audit and correction of time entry; Project Management Compiler consumes
+the cumulative actual and remaining values in the Execution Register. The journal must not be used
+to replace the Register as execution authority.
 
 Unplanned work is classified as `DEFECT`, `REWORK`, `DISCOVERED_WORK`, `RISK_RESPONSE` or
 `NEW_SCOPE`. Work with its own output, dependency, assignee, verification or scope impact receives

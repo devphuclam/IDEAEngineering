@@ -8,8 +8,10 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $registerPath = Join-Path $repoRoot 'planning\idea-technical-pilot-execution-register.json'
 $manifestPath = Join-Path $repoRoot 'planning\project-management-compiler-manifest.json'
+$journalPath = Join-Path $repoRoot 'planning\idea-progress-work-journal.json'
 $kanbanPath = Join-Path $repoRoot 'docs\product\instances\idea-engineering\planning\idea-technical-pilot-kanban-cario.md'
 $readinessPath = Join-Path $repoRoot 'specs\004-technical-pilot-readiness\readiness-register.md'
+$validatorPath = Join-Path $repoRoot 'scripts\validate-project-management-source.ps1'
 $indexPath = Join-Path $PSScriptRoot 'index.html'
 
 function Get-NowIso {
@@ -35,6 +37,84 @@ function Write-JsonFileAtomic([string]$path, $value) {
     $tempPath = "$path.$([guid]::NewGuid().ToString('N')).tmp"
     [System.IO.File]::WriteAllText($tempPath, $json, [System.Text.UTF8Encoding]::new($false))
     Move-Item -LiteralPath $tempPath -Destination $path -Force
+}
+
+function Get-WorkJournal {
+    if (-not (Test-Path -LiteralPath $journalPath -PathType Leaf)) {
+        return [pscustomobject]@{
+            journalVersion = '0.1.0'
+            journalId = 'IE-PROGRESS-WORK-JOURNAL-001'
+            timeZone = 'Asia/Ho_Chi_Minh'
+            sessions = @()
+            corrections = @()
+        }
+    }
+    $journal = Get-JsonFile $journalPath
+    Ensure-ArrayProperty $journal 'sessions'
+    Ensure-ArrayProperty $journal 'corrections'
+    return $journal
+}
+
+function Get-ActiveSession($journal, [string]$id) {
+    return @($journal.sessions | Where-Object { $_.deliveryCardId -eq $id -and $_.state -eq 'RUNNING' })[0]
+}
+
+function Open-WorkSession($journal, [string]$id, [string]$now) {
+    if ($null -ne (Get-ActiveSession $journal $id)) { throw "$id đã có bộ đếm giờ đang chạy." }
+    $journal.sessions += [pscustomobject]@{
+        sessionId = "SESSION-$([guid]::NewGuid().ToString('N'))"
+        deliveryCardId = $id
+        startedAt = $now
+        stoppedAt = $null
+        durationMinutes = $null
+        state = 'RUNNING'
+        recordedBy = 'LEAD'
+    }
+}
+
+function Close-WorkSession($journal, $record, $definition, [string]$now, [bool]$confirmLongSession) {
+    $session = Get-ActiveSession $journal ([string]$record.entity.id)
+    if ($null -eq $session) { return 0 }
+
+    $started = [DateTimeOffset]::Parse([string]$session.startedAt)
+    $stopped = [DateTimeOffset]::Parse($now)
+    $minutes = [int][math]::Round(($stopped - $started).TotalMinutes, 0, [MidpointRounding]::AwayFromZero)
+    if ($minutes -lt 1) { $minutes = 1 }
+    $offset = [TimeSpan]::FromHours(7)
+    $crossesDay = $started.ToOffset($offset).Date -ne $stopped.ToOffset($offset).Date
+    if (($minutes -gt 480 -or $crossesDay) -and -not $confirmLongSession) {
+        throw "Phiên đang chạy kéo dài $minutes phút hoặc đi qua ngày mới. Hãy xác nhận thời gian này trước khi ghi nhận."
+    }
+
+    $session.stoppedAt = $now
+    $session.durationMinutes = $minutes
+    $session.state = 'CLOSED'
+
+    $actualBefore = if ($null -eq $record.actualEffortHours) { 0.0 } else { [double]$record.actualEffortHours }
+    $remainingBefore = if ($null -eq $record.remainingEffortHours) { [double]$definition.plannedHours } else { [double]$record.remainingEffortHours }
+    $hours = $minutes / 60.0
+    $record.actualEffortHours = [math]::Round($actualBefore + $hours, 4)
+    $record.remainingEffortHours = [math]::Round([math]::Max(0, $remainingBefore - $hours), 4)
+    return $minutes
+}
+
+function Add-EffortCorrection($journal, $record, $actual, $remaining, [string]$reason, [string]$now) {
+    $previousActual = $record.actualEffortHours
+    $previousRemaining = $record.remainingEffortHours
+    if ([string]::IsNullOrWhiteSpace($reason)) { throw 'Sửa giờ đã làm hoặc giờ còn lại phải ghi lý do.' }
+    $journal.corrections += [pscustomobject]@{
+        correctionId = "CORRECTION-$([guid]::NewGuid().ToString('N'))"
+        deliveryCardId = [string]$record.entity.id
+        previousActualEffortHours = $previousActual
+        newActualEffortHours = $actual
+        previousRemainingEffortHours = $previousRemaining
+        newRemainingEffortHours = $remaining
+        reason = $reason.Trim()
+        recordedAt = $now
+        recordedBy = 'LEAD'
+    }
+    $record.actualEffortHours = $actual
+    $record.remainingEffortHours = $remaining
 }
 
 function Get-CardDefinitions {
@@ -81,6 +161,7 @@ function Get-Record([object]$register, [string]$id) {
 function Get-StatePayload {
     $register = Get-JsonFile $registerPath
     $manifest = Get-JsonFile $manifestPath
+    $journal = Get-WorkJournal
     $definitions = @(Get-CardDefinitions)
     $records = @()
     foreach ($definition in $definitions) {
@@ -108,6 +189,9 @@ function Get-StatePayload {
             evidence = if ($null -ne $record) { Convert-ToObjectArray $record.evidence } else { [object[]]@() }
             blockers = if ($null -ne $record) { Convert-ToObjectArray $record.blockers } else { [object[]]@() }
             events = if ($null -ne $record) { Convert-ToObjectArray $record.events } else { [object[]]@() }
+            activeSession = if ($null -ne $record) { Get-ActiveSession $journal $definition.id } else { $null }
+            workSessions = @($journal.sessions | Where-Object { $_.deliveryCardId -eq $definition.id })
+            effortCorrections = @($journal.corrections | Where-Object { $_.deliveryCardId -eq $definition.id })
         }
     }
 
@@ -128,7 +212,8 @@ function Get-StatePayload {
         expectedRegisterRevision = [int]$manifest.execution.expectedRegisterRevision
         plannedWorkHours = [double]$manifest.expectedSourceTotals.plannedWorkHours
         controlledReserveHours = [double]$manifest.expectedSourceTotals.controlledReserveHours
-        warning = 'Local preview: sau khi ghi nhận cần commit lên IDEAEngineering để Compiler nhập snapshot chính thức.'
+        operationalBufferHours = [double]$manifest.expectedSourceTotals.operationalBufferHours
+        warning = 'Bản nháp cục bộ chỉ trở thành snapshot chính thức sau khi bấm Ghi nhận & công bố thành công.'
         summary = [pscustomobject]@{
             total = $records.Count
             recorded = @($records | Where-Object { $_.recordingState -eq 'RECORDED' }).Count
@@ -171,8 +256,8 @@ function Assert-NumberOrNull($value, [string]$name) {
     if ($null -eq $value -or [string]::IsNullOrWhiteSpace([string]$value)) { return $null }
     $number = 0.0
     if (-not [double]::TryParse([string]$value, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$number)) { throw "$name phải là số." }
-    if ($number -lt 0 -or ([math]::Abs(($number * 2) - [math]::Round($number * 2))) -gt 0.00001) { throw "$name phải là số >= 0 theo bước 0.5 giờ." }
-    return $number
+    if ($number -lt 0) { throw "$name phải là số >= 0." }
+    return [math]::Round($number, 4)
 }
 
 function Add-WorkEvent($record, [string]$kind, [string]$reason, [string]$now) {
@@ -210,6 +295,7 @@ function Add-Evidence($record, $request, [string]$now) {
 function Update-Record($request) {
     $register = Get-JsonFile $registerPath
     $manifest = Get-JsonFile $manifestPath
+    $journal = Get-WorkJournal
     $id = [string]$request.id
     if ([string]::IsNullOrWhiteSpace($id)) { throw 'Thiếu mã card.' }
     $record = Get-Record $register $id
@@ -226,10 +312,10 @@ function Update-Record($request) {
     $action = [string]$request.action
     $now = Get-NowIso
     $reason = [string]$request.reason
-    if ([string]::IsNullOrWhiteSpace($reason)) { $reason = "Cập nhật $id từ công cụ ghi nhận tiến độ cục bộ." }
+    $confirmLongSession = [bool]$request.confirmLongSession
 
     $otherActive = @($register.records | Where-Object { $_.entity.id -ne $id -and $_.executionState -eq 'IN_PROGRESS' })
-    if (($action -in @('start', 'resume') -or ($action -eq 'save' -and $request.executionState -eq 'IN_PROGRESS')) -and $otherActive.Count -gt 0) {
+    if ($action -in @('start', 'resume') -and $otherActive.Count -gt 0) {
         throw "Chỉ được có một card ở trạng thái Đang thực hiện. Card đang mở: $($otherActive[0].entity.id)."
     }
     if ($action -in @('start', 'resume')) {
@@ -240,18 +326,49 @@ function Update-Record($request) {
         if ($blockedBy.Count -gt 0) { throw "Chưa thể bắt đầu $id. Cần hoàn thành trước: $($blockedBy -join ', ')." }
     }
 
-    $newState = if ($request.executionState) { [string]$request.executionState } else { [string]$record.executionState }
+    $newState = if ($null -ne $record.executionState) { [string]$record.executionState } else { 'NOT_STARTED' }
     if ($action -eq 'start' -or $action -eq 'resume') { $newState = 'IN_PROGRESS' }
-    if ($action -eq 'pause') { $newState = 'SUSPENDED' }
+    if ($action -eq 'suspend' -or $action -eq 'pause') { $newState = 'SUSPENDED' }
+    if ($action -eq 'stop') { $newState = 'IN_PROGRESS' }
     if ($action -eq 'complete') { $newState = 'COMPLETED' }
     if ($action -eq 'cancel') { $newState = 'CANCELLED' }
-    if ($null -eq $newState -or $newState -eq '') { $newState = 'NOT_STARTED' }
 
-    $actual = Assert-NumberOrNull $request.actualEffortHours 'Giờ đã làm'
-    $remaining = Assert-NumberOrNull $request.remainingEffortHours 'Giờ còn lại'
+    $activeSession = Get-ActiveSession $journal $id
+    $closedMinutes = 0
+    if ($action -in @('start', 'resume')) {
+        if ($newState -eq 'COMPLETED' -or $newState -eq 'CANCELLED') { throw 'Không thể chạy bộ đếm cho card đã đóng.' }
+        if ($null -eq $record.actualEffortHours) { $record.actualEffortHours = 0.0 }
+        if ($null -eq $record.remainingEffortHours) { $record.remainingEffortHours = [double]$definition.plannedHours }
+        Open-WorkSession $journal $id $now
+    }
+    elseif ($action -in @('stop', 'suspend', 'pause', 'complete')) {
+        if ($action -eq 'stop' -and $null -eq $activeSession) { throw 'Card này không có bộ đếm giờ đang chạy.' }
+        $closedMinutes = Close-WorkSession $journal $record $definition $now $confirmLongSession
+    }
+
+    if ($action -eq 'save') {
+        $actual = Assert-NumberOrNull $request.actualEffortHours 'Giờ đã làm'
+        $remaining = Assert-NumberOrNull $request.remainingEffortHours 'Giờ còn lại'
+        if ($null -eq $actual) { $actual = $record.actualEffortHours }
+        if ($null -eq $remaining) { $remaining = $record.remainingEffortHours }
+        $actualChanged = [string]$actual -ne [string]$record.actualEffortHours
+        $remainingChanged = [string]$remaining -ne [string]$record.remainingEffortHours
+        if ($actualChanged -and $null -ne $activeSession) { throw 'Hãy dừng bộ đếm giờ trước khi sửa tổng giờ đã làm.' }
+        if ($actualChanged -or $remainingChanged) {
+            Add-EffortCorrection $journal $record $actual $remaining $reason $now
+        }
+        elseif ([string]::IsNullOrWhiteSpace($reason)) {
+            $reason = "Đã xem lại giờ còn lại của $id; không thay đổi số liệu."
+        }
+    }
+
     if ($action -eq 'complete') {
-        if ($null -eq $actual) { throw 'Khi hoàn thành phải nhập Giờ đã làm.' }
-        $remaining = 0.0
+        if ($null -eq $record.actualEffortHours) {
+            $manualActual = Assert-NumberOrNull $request.actualEffortHours 'Giờ đã làm'
+            if ($null -eq $manualActual) { throw 'Chưa có giờ làm thực tế. Hãy ghi nhận hoặc hiệu chỉnh trước khi hoàn thành.' }
+            Add-EffortCorrection $journal $record $manualActual 0.0 $reason $now
+        }
+        $record.remainingEffortHours = 0.0
         if ($id -eq 'P01') {
             $readinessText = Get-Content -LiteralPath $readinessPath -Raw -Encoding UTF8
             if ($readinessText -match 'Reviewer / date[^\r\n]*NOT-RUN|\| Result \| `NOT-RUN`') {
@@ -260,7 +377,19 @@ function Update-Record($request) {
         }
         Add-Evidence $record $request $now
     }
-    if ($action -eq 'pause' -and [string]::IsNullOrWhiteSpace([string]$request.blockerDescription)) { throw 'Tạm dừng phải ghi lý do đang bị chặn.' }
+    if ($action -in @('suspend', 'pause') -and [string]::IsNullOrWhiteSpace([string]$request.blockerDescription)) { throw 'Tạm ngưng công việc phải ghi lý do đang bị chặn.' }
+
+    if ([string]::IsNullOrWhiteSpace($reason)) {
+        $reason = switch ($action) {
+            'start' { "Bắt đầu làm $id và mở bộ đếm giờ." }
+            'resume' { "Tiếp tục làm $id và mở phiên làm việc mới." }
+            'stop' { "Dừng bộ đếm giờ của $id; card vẫn đang thực hiện." }
+            'suspend' { "Tạm ngưng $id do có blocker." }
+            'pause' { "Tạm ngưng $id do có blocker." }
+            'complete' { "Hoàn thành $id và đóng giờ còn lại về 0." }
+            default { "Cập nhật $id từ công cụ ghi nhận tiến độ cục bộ." }
+        }
+    }
 
     $record.recordingState = 'RECORDED'
     $record.executionState = $newState
@@ -268,14 +397,12 @@ function Update-Record($request) {
     if ($request.actualStart) { $record.actualStart = [string]$request.actualStart }
     elseif ($newState -eq 'IN_PROGRESS' -and $null -eq $record.actualStart) { $record.actualStart = $now }
     if ($action -eq 'complete') { $record.actualFinish = $now }
-    $record.actualEffortHours = $actual
-    $record.remainingEffortHours = $remaining
     $record.lastUpdatedAt = $now
-    if ($null -ne $remaining) { $record.remainingReviewedAt = $now }
+    if ($null -ne $record.remainingEffortHours) { $record.remainingReviewedAt = $now }
     $record.recordedBy = 'LEAD'
     $record.disposition = 'ACTIVE'
 
-    if ($action -eq 'pause') {
+    if ($action -in @('suspend', 'pause')) {
         if ($null -eq $record.blockers) { $record.blockers = @() }
         $record.blockers += [pscustomobject]@{
             blockerId = "$id-BLOCKER-$($record.blockers.Count + 1)"
@@ -298,11 +425,13 @@ function Update-Record($request) {
 
     $eventKind = switch ($action) {
         'complete' { 'STATE_CHANGE' }
+        'suspend' { 'BLOCKER_UPDATE' }
         'pause' { 'BLOCKER_UPDATE' }
         'start' { 'STATE_CHANGE' }
         'resume' { 'STATE_CHANGE' }
         default { 'EFFORT_UPDATE' }
     }
+    if ($closedMinutes -gt 0) { $reason = "$reason Ghi nhận $closedMinutes phút làm việc thực tế." }
     Add-WorkEvent $record $eventKind $reason $now
     $nextRevision = [int]$register.registerRevision + 1
     $register.registerRevision = $nextRevision
@@ -317,7 +446,58 @@ function Update-Record($request) {
     $manifest.execution.expectedRegisterRevision = $nextRevision
     Write-JsonFileAtomic $registerPath $register
     Write-JsonFileAtomic $manifestPath $manifest
+    Write-JsonFileAtomic $journalPath $journal
     return Get-StatePayload
+}
+
+function Publish-Progress {
+    $branch = (& git -C $repoRoot branch --show-current 2>&1 | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0) { throw 'Không đọc được nhánh Git hiện tại.' }
+    if ($branch -ne 'main') { throw "Chỉ công bố từ nhánh main. Nhánh hiện tại: $branch." }
+
+    $allowed = @(
+        'planning/idea-technical-pilot-execution-register.json',
+        'planning/project-management-compiler-manifest.json',
+        'planning/idea-progress-work-journal.json'
+    )
+    $statusLines = @(& git -C $repoRoot status --porcelain --untracked-files=all 2>&1)
+    if ($LASTEXITCODE -ne 0) { throw 'Không đọc được trạng thái Git.' }
+    $changedPaths = @($statusLines | ForEach-Object {
+        $line = [string]$_
+        if ($line.Length -lt 4) { return }
+        $path = $line.Substring(3).Trim().Replace('\', '/')
+        if ($path -match ' -> ') { $path = ($path -split ' -> ')[-1] }
+        $path.Trim('"')
+    } | Where-Object { $_ })
+    $unrelated = @($changedPaths | Where-Object { $allowed -notcontains $_ })
+    if ($unrelated.Count -gt 0) {
+        throw "Không thể công bố vì working tree còn thay đổi ngoài phạm vi tiến độ: $($unrelated -join ', ')."
+    }
+    if ($changedPaths.Count -eq 0) { throw 'Không có thay đổi tiến độ mới để công bố.' }
+
+    $previewOutput = @(& pwsh -NoProfile -File $validatorPath -RunFixtures 2>&1)
+    if ($LASTEXITCODE -ne 0) { throw "Validator không đạt. Chưa commit hoặc push.`n$($previewOutput -join [Environment]::NewLine)" }
+
+    & git -C $repoRoot add -- $allowed 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'Không stage được các file tiến độ.' }
+    $register = Get-JsonFile $registerPath
+    $message = "chore(progress): publish register revision $($register.registerRevision)"
+    $commitOutput = @(& git -C $repoRoot commit -m $message 2>&1)
+    if ($LASTEXITCODE -ne 0) { throw "Không tạo được commit tiến độ.`n$($commitOutput -join [Environment]::NewLine)" }
+    $commit = (& git -C $repoRoot rev-parse HEAD 2>&1 | Out-String).Trim()
+
+    $cleanOutput = @(& pwsh -NoProfile -File $validatorPath -RunFixtures 2>&1)
+    if ($LASTEXITCODE -ne 0) { throw "Commit đã tạo nhưng kiểm tra snapshot sạch không đạt; chưa push.`n$($cleanOutput -join [Environment]::NewLine)" }
+    $pushOutput = @(& git -C $repoRoot push origin main 2>&1)
+    if ($LASTEXITCODE -ne 0) { throw "Commit $commit đã tạo nhưng push thất bại.`n$($pushOutput -join [Environment]::NewLine)" }
+
+    $payload = Get-StatePayload
+    $payload | Add-Member -NotePropertyName publication -NotePropertyValue ([pscustomobject]@{
+        commit = $commit
+        branch = 'main'
+        pushed = $true
+    })
+    return $payload
 }
 
 function Handle-Request($context) {
@@ -339,6 +519,11 @@ function Handle-Request($context) {
         catch { Send-Json $context 400 ([pscustomobject]@{ error = $_.Exception.Message }) }
         return
     }
+    if ($context.Request.HttpMethod -eq 'POST' -and $path -eq '/api/publish') {
+        try { Send-Json $context 200 (Publish-Progress) }
+        catch { Send-Json $context 400 ([pscustomobject]@{ error = $_.Exception.Message }) }
+        return
+    }
     Send-Json $context 404 ([pscustomobject]@{ error = 'Không tìm thấy đường dẫn.' })
 }
 
@@ -347,7 +532,7 @@ $listener.Prefixes.Add("http://localhost:$Port/")
 $listener.Start()
 Write-Host "IDEA Engineering Progress Tracker đang chạy tại http://localhost:$Port/"
 Write-Host "Nguồn: $registerPath"
-Write-Host 'Đóng cửa sổ PowerShell để dừng. Đây là công cụ local; sau khi cập nhật hãy commit register và manifest.'
+Write-Host 'Đóng cửa sổ PowerShell để dừng. Bản nháp chỉ được push khi người dùng bấm Ghi nhận & công bố.'
 if (-not $NoBrowser) { Start-Process "http://localhost:$Port/" }
 
 try {

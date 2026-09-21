@@ -14,6 +14,7 @@ $RequiredSourceRoles = @(
     'WORK_PACKAGE_AUTHORITY',
     'DELIVERY_CARD_AUTHORITY',
     'EXECUTION_AUTHORITY',
+    'WORK_SESSION_AUDIT',
     'RENDITION_CROSS_CHECK',
     'READINESS_EVIDENCE',
     'NAVIGATION_ONLY'
@@ -163,7 +164,7 @@ function Test-BaselineReference {
     }
 
     $totals = Get-PropertyValue $Reference 'totals' $null
-    foreach ($field in @('phases', 'workPackages', 'deliveryCards', 'gatesAndMilestones', 'plannedWorkHours', 'controlledReserveHours', 'totalBaselineCapacityHours')) {
+    foreach ($field in @('phases', 'workPackages', 'deliveryCards', 'gatesAndMilestones', 'plannedWorkHours', 'controlledReserveHours', 'operationalBufferHours', 'totalBaselineCapacityHours')) {
         $actual = Get-PropertyValue $totals $field $null
         $expected = Get-PropertyValue $Manifest.expectedSourceTotals $field $null
         if ($null -eq $actual -or $null -eq $expected -or [int]$actual -ne [int]$expected) {
@@ -171,9 +172,9 @@ function Test-BaselineReference {
         }
     }
     if ($null -ne $totals) {
-        $calculatedCapacity = [int]$totals.plannedWorkHours + [int]$totals.controlledReserveHours
+        $calculatedCapacity = [int]$totals.plannedWorkHours + [int]$totals.controlledReserveHours + [int]$totals.operationalBufferHours
         if ($calculatedCapacity -ne [int]$totals.totalBaselineCapacityHours) {
-            Add-Diagnostic $Diagnostics 'PMC-SOURCE-001' 'ERROR' 'Baseline capacity does not equal planned work plus controlled reserve.' 'Correct the controlled planning totals.' $SourcePath 'totals.totalBaselineCapacityHours'
+            Add-Diagnostic $Diagnostics 'PMC-SOURCE-001' 'ERROR' 'Baseline capacity does not equal planned work plus technical reserve plus operational buffer.' 'Correct the controlled planning totals.' $SourcePath 'totals.totalBaselineCapacityHours'
         }
     }
 }
@@ -322,11 +323,15 @@ function Test-ExecutionRegister {
             Add-Diagnostic $Diagnostics 'PMC-STATE-001' 'ERROR' 'NOT_RECORDED must not contain inferred execution/result state.' 'Remove inferred state or supply attributable evidence and mark RECORDED.' $SourcePath 'recordingState' $kind $id
         }
 
-        foreach ($field in @('actualEffortHours', 'remainingEffortHours', 'reserveUsedHours')) {
+        foreach ($field in @('actualEffortHours', 'remainingEffortHours')) {
             $value = Get-PropertyValue $record $field $null
-            if ($null -ne $value -and ((-not ($value -is [ValueType])) -or [double]$value -lt 0 -or (([double]$value * 2) % 1 -ne 0))) {
-                Add-Diagnostic $Diagnostics 'PMC-EFFORT-001' 'ERROR' "$field for $id must be a non-negative 0.5-hour increment." 'Correct the value and retain correction history.' $SourcePath $field $kind $id
+            if ($null -ne $value -and ((-not ($value -is [ValueType])) -or [double]$value -lt 0)) {
+                Add-Diagnostic $Diagnostics 'PMC-EFFORT-001' 'ERROR' "$field for $id must be a non-negative number of hours." 'Correct the value and retain correction history.' $SourcePath $field $kind $id
             }
+        }
+        $reserveUsed = Get-PropertyValue $record 'reserveUsedHours' $null
+        if ($null -ne $reserveUsed -and ((-not ($reserveUsed -is [ValueType])) -or [double]$reserveUsed -lt 0 -or (([double]$reserveUsed * 2) % 1 -ne 0))) {
+            Add-Diagnostic $Diagnostics 'PMC-EFFORT-001' 'ERROR' "reserveUsedHours for $id must be a non-negative 0.5-hour increment." 'Correct the value and retain correction history.' $SourcePath 'reserveUsedHours' $kind $id
         }
 
         if ([string]$executionState -eq 'COMPLETED') {

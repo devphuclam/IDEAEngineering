@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; object-src 'none'">
-  <title>IDEA Engineering — Baseline Technical Pilot 2026</title>
+  <title>IDEA Engineering — Baseline Core v0 2026</title>
   <style>
     :root {
       --navy: #122b4d;
@@ -50,7 +50,7 @@
     .axis-label, .row-label { padding: 7px 10px; border: 1px solid var(--line); border-right: 0; background: #f8fafc; }
     .row-label strong { display: block; color: var(--navy); }
     .row-label small { display: block; color: var(--muted); }
-    .weeks { display: grid; grid-template-columns: repeat(15, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .weeks { display: grid; grid-template-columns: repeat(16, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
     .weeks div { min-height: 42px; padding: 6px 3px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: center; color: var(--muted); font-size: 10px; }
     .weeks strong { display: block; color: var(--ink); font-size: 11px; }
     .track { position: relative; min-height: 47px; border: 1px solid var(--line); background: repeating-linear-gradient(90deg, #fff 0, #fff calc(var(--week) - 1px), #d9e1ea calc(var(--week) - 1px), #d9e1ea var(--week)); }
@@ -77,11 +77,11 @@
     .gantt-grid .gh { min-height: 44px; background: var(--navy); color: #fff; font-size: 12px; font-weight: 700; }
     .gantt-grid .phase-title { grid-column: 1 / 6; min-height: 36px; background: var(--blue-soft); color: var(--navy); font-weight: 700; }
     .gantt-grid .timeline-head { padding: 0; }
-    .mini-weeks { display: grid; grid-template-columns: repeat(15, 1fr); height: 43px; }
+    .mini-weeks { display: grid; grid-template-columns: repeat(16, 1fr); height: 43px; }
     .mini-weeks span { padding-top: 6px; border-right: 1px solid rgb(255 255 255 / 22%); text-align: center; font-size: 10px; }
     .mini-weeks span:last-child { border-right: 0; }
     .slot { position: relative; padding: 0 !important; background: repeating-linear-gradient(90deg, #fff 0, #fff calc(var(--week) - 1px), #e0e6ee calc(var(--week) - 1px), #e0e6ee var(--week)); }
-    .task-bar { position: absolute; top: 9px; height: 14px; left: calc(var(--s) * 100% / 150); width: max(7px, calc(var(--d) * 100% / 150)); background: var(--blue); }
+    .task-bar { position: absolute; top: 9px; height: 14px; left: calc(var(--s) * 100% / 158); width: max(7px, calc(var(--d) * 100% / 158)); background: var(--blue); }
     .task-bar.reserve { background: repeating-linear-gradient(135deg, #dcaa4d 0 4px, #fff0ce 4px 8px); }
     .reserve-row { color: var(--amber); font-weight: 700; }
     .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -94,11 +94,11 @@
 <body>
 <main>
   <header>
-    <p class="eyebrow">IE-PLAN-DEC2026-002 · Draft 0.1</p>
-    <h1>Baseline Technical Pilot — 18/09 đến 31/12/2026</h1>
-    <p class="lede">Một coder, 75 ngày làm việc. Gantt này phân biệt rõ phase có thời lượng với milestone là điểm review không có thời lượng.</p>
+    <p class="eyebrow">IE-PLAN-DEC2026-003 · Current 0.1</p>
+    <h1>Baseline Core v0 — 23/09 đến 31/12/2026</h1>
+    <p class="lede">Một coder, 79 ngày làm việc. Gantt này phân biệt rõ phase có thời lượng với milestone là điểm review không có thời lượng.</p>
     <div class="rule"><strong>Quy tắc điều hành:</strong> phase kế tiếp chỉ bắt đầu khi milestone trước đạt. Nếu milestone không đạt, cập nhật forecast; không kéo thanh công việc sang phải rồi coi như kế hoạch vẫn đạt.</div>
-    <div class="facts"><span><strong>512 giờ</strong> công việc</span><span><strong>88 giờ</strong> dự phòng</span><span><strong>35</strong> work package</span><span><strong>600 giờ</strong> tổng quỹ</span><span>PG4 và thực thi: <strong>NOT-RUN</strong></span></div>
+    <div class="facts"><span><strong>512 giờ</strong> công việc</span><span><strong>88 giờ</strong> dự phòng kỹ thuật</span><span><strong>32 giờ</strong> đệm vận hành</span><span><strong>35</strong> work package</span><span><strong>632 giờ</strong> tổng quỹ</span><span>PG4 và thực thi: <strong>NOT-RUN</strong></span></div>
   </header>
 
   <section>
@@ -108,56 +108,57 @@
       <div class="scroll">
         <div class="executive">
           <div class="axis">
-            <div class="axis-label"><strong>75 ngày làm việc</strong><br><small>Nhóm theo 5 ngày, không phải tuần lịch đầy đủ</small></div>
+            <div class="axis-label"><strong>79 ngày làm việc</strong><br><small>Thứ Hai–Sáu + thứ Bảy tuần 1, 3, 5</small></div>
             <div class="weeks">
-              <div><strong>W1</strong>18–24/09</div><div><strong>W2</strong>25/09–01/10</div><div><strong>W3</strong>02–08/10</div><div><strong>W4</strong>09–15/10</div><div><strong>W5</strong>16–22/10</div>
-              <div><strong>W6</strong>23–29/10</div><div><strong>W7</strong>30/10–05/11</div><div><strong>W8</strong>06–12/11</div><div><strong>W9</strong>13–19/11</div><div><strong>W10</strong>20–26/11</div>
-              <div><strong>W11</strong>27/11–03/12</div><div><strong>W12</strong>04–10/12</div><div><strong>W13</strong>11–17/12</div><div><strong>W14</strong>18–24/12</div><div><strong>W15</strong>25–31/12</div>
+              <div><strong>W1</strong>23–29/09</div><div><strong>W2</strong>30/09–05/10</div><div><strong>W3</strong>06–12/10</div><div><strong>W4</strong>13–17/10</div>
+              <div><strong>W5</strong>19–23/10</div><div><strong>W6</strong>26–30/10</div><div><strong>W7</strong>31/10–05/11</div><div><strong>W8</strong>06–11/11</div>
+              <div><strong>W9</strong>12–18/11</div><div><strong>W10</strong>19–24/11</div><div><strong>W11</strong>25/11–01/12</div><div><strong>W12</strong>02–07/12</div>
+              <div><strong>W13</strong>08–14/12</div><div><strong>W14</strong>15–19/12</div><div><strong>W15</strong>21–25/12</div><div><strong>W16</strong>28–31/12</div>
             </div>
           </div>
           <div class="decision-line">
-            <div class="row-label"><strong>D0 — Vault successor</strong><small>PDA disposition, chậm nhất 25/09</small></div>
-            <div class="track"><span class="decision-point" style="left:8%"></span><span class="decision-label" style="left:8%">D0 · 25/09</span></div>
+            <div class="row-label"><strong>D0 — Ghi nhận baseline</strong><small>Feature, Spec, Tech và phạm vi Vault</small></div>
+            <div class="track"><span class="decision-point" style="left:0%"></span><span class="decision-label" style="left:0%">D0 · 23/09</span></div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH0 — Readiness</strong><small>P01–P07 · 64 h + 24 h dự phòng</small></div>
+            <div class="row-label"><strong>PH0 — Readiness</strong><small>P01–P07 · 32 h + 8 h đệm</small></div>
             <div class="track">
-              <div class="phase-bar" style="left:0%;width:14.667%"><span class="planned" style="width:72.727%">PH0</span><span class="buffer" style="width:27.273%"></span></div>
-              <span class="point" style="left:14.667%"></span><span class="point-label" style="left:14.667%">MS0 · PG4</span>
+              <div class="phase-bar" style="left:0%;width:6.329%"><span class="planned" style="width:80%">PH0</span><span class="buffer" style="width:20%"></span></div>
+              <span class="point" style="left:6.329%"></span><span class="point-label" style="left:6.329%">MS0 · PG4</span>
             </div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH1 — Foundation</strong><small>F01–F05 · 72 h + 8 h dự phòng</small></div>
+            <div class="row-label"><strong>PH1 — Foundation</strong><small>F01–F05 · 72 h + 16 h dự phòng/đệm</small></div>
             <div class="track">
-              <div class="phase-bar" style="left:14.667%;width:13.333%"><span class="planned" style="width:90%">PH1</span><span class="buffer" style="width:10%"></span></div>
-              <span class="point" style="left:28%"></span><span class="point-label" style="left:28%">MS1</span>
+              <div class="phase-bar" style="left:6.329%;width:13.924%"><span class="planned" style="width:81.818%">PH1</span><span class="buffer" style="width:18.182%"></span></div>
+              <span class="point" style="left:20.253%"></span><span class="point-label" style="left:20.253%">MS1</span>
             </div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH2 — Controlled documents</strong><small>C01–C05 · 96 h + 24 h dự phòng</small></div>
+            <div class="row-label"><strong>PH2 — Controlled documents</strong><small>C01–C05 · 96 h + 16 h dự phòng</small></div>
             <div class="track">
-              <div class="phase-bar" style="left:28%;width:20%"><span class="planned" style="width:80%">PH2</span><span class="buffer" style="width:20%"></span></div>
-              <span class="point" style="left:48%"></span><span class="point-label" style="left:48%">MS2</span>
+              <div class="phase-bar" style="left:20.253%;width:17.722%"><span class="planned" style="width:85.714%">PH2</span><span class="buffer" style="width:14.286%"></span></div>
+              <span class="point" style="left:37.975%"></span><span class="point-label" style="left:37.975%">MS2</span>
             </div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH3 — Workspace/Vault</strong><small>W01–W07 · 144 h + 16 h dự phòng</small></div>
+            <div class="row-label"><strong>PH3 — Workspace/Check-in</strong><small>W01–W07 · 136 h + 40 h dự phòng/đệm</small></div>
             <div class="track">
-              <div class="phase-bar" style="left:48%;width:26.667%"><span class="planned" style="width:90%">PH3</span><span class="buffer" style="width:10%"></span></div>
-              <span class="point" style="left:74.667%"></span><span class="point-label" style="left:74.667%">MS3</span>
+              <div class="phase-bar" style="left:37.975%;width:27.848%"><span class="planned" style="width:77.273%">PH3</span><span class="buffer" style="width:22.727%"></span></div>
+              <span class="point" style="left:65.823%"></span><span class="point-label" style="left:65.823%">MS3</span>
             </div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH4 — Review/Release</strong><small>L01–L05 · 72 h + 8 h dự phòng</small></div>
+            <div class="row-label"><strong>PH4 — Review/Release</strong><small>L01–L05 · 88 h + 16 h dự phòng</small></div>
             <div class="track">
-              <div class="phase-bar" style="left:74.667%;width:13.333%"><span class="planned" style="width:90%">PH4</span><span class="buffer" style="width:10%"></span></div>
-              <span class="point" style="left:88%"></span><span class="point-label" style="left:88%">MS4</span>
+              <div class="phase-bar" style="left:65.823%;width:16.456%"><span class="planned" style="width:84.615%">PH4</span><span class="buffer" style="width:15.385%"></span></div>
+              <span class="point" style="left:82.279%"></span><span class="point-label" style="left:82.279%">MS4</span>
             </div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH5 — Hardening/Pilot</strong><small>Q01–Q06 · 64 h + 8 h dự phòng</small></div>
+            <div class="row-label"><strong>PH5 — Ổn định/áp dụng nội bộ</strong><small>Q01–Q06 · 88 h + 24 h dự phòng/đệm</small></div>
             <div class="track">
-              <div class="phase-bar" style="left:88%;width:12%"><span class="planned" style="width:88.889%">PH5</span><span class="buffer" style="width:11.111%"></span></div>
+              <div class="phase-bar" style="left:82.279%;width:17.721%"><span class="planned" style="width:78.571%">PH5</span><span class="buffer" style="width:21.429%"></span></div>
               <span class="point end" style="left:100%"></span><span class="point-label end" style="left:100%">MS5 · 31/12</span>
             </div>
           </div>
@@ -173,13 +174,13 @@
       <table>
         <thead><tr><th>ID / ngày</th><th>Phải xem được hoặc quyết định</th><th>Nếu chưa đạt</th></tr></thead>
         <tbody>
-          <tr><td class="status">D0 · 25/09</td><td>PDA disposition cho Vault successor, hoặc ghi rõ giữ ngoài first increment.</td><td>MS0 không được coi successor là baseline đã duyệt.</td></tr>
-          <tr><td class="status">MS0 · 02/10</td><td>PG4: baseline, increment, test, migration/recovery, môi trường và authority đã rõ.</td><td>Không bắt đầu PH1; ghi BLOCKED hoặc NOT-RUN.</td></tr>
-          <tr><td class="status">MS1 · 16/10</td><td>Web/Desktop/Server/PostgreSQL/Gateway chạy smoke path; migration và Audit seam hoạt động.</td><td>PH2 chờ; reforecast từ delivery rate thực tế.</td></tr>
-          <tr><td class="status">MS2 · 06/11</td><td>Tạo/tiếp nhận, tìm và mở đúng Revision/Version/Generation; quyền đọc đúng.</td><td>PH3 chờ lỗi identity/history/authorization được xử lý.</td></tr>
-          <tr><td class="status">MS3 · 04/12</td><td>Checkout/Reference/Check-in, NoChange, stale, retry, direct transfer và hai location đã xác minh.</td><td>PH4 chờ; bắt buộc reforecast PH4–PH5.</td></tr>
-          <tr><td class="status">MS4 · 18/12</td><td>Review/Approve/Reject/Release đúng scope; lấy lại đúng historical Release Package.</td><td>Chỉ harden phần đã đạt; không gọi là end-to-end pilot candidate.</td></tr>
-          <tr><td class="status">MS5 · 31/12</td><td>Regression, authorization, transfer và restore trên canonical scenario; ghi lỗi/giới hạn.</td><td>Báo cáo kết quả thực tế; không tự nhận full Core v0 hoặc production ready.</td></tr>
+          <tr><td class="status">D0 · 23/09</td><td>Ghim Feature, Spec, Tech đã duyệt; một Vault trong Core v0 và ranh giới mở rộng multi-vault.</td><td>MS0 chưa có một baseline triển khai duy nhất.</td></tr>
+          <tr><td class="status">MS0 · 29/09</td><td>PG4: baseline, increment, test, migration/recovery, môi trường và authority đã rõ.</td><td>Không bắt đầu PH1; ghi BLOCKED hoặc NOT-RUN.</td></tr>
+          <tr><td class="status">MS1 · 13/10</td><td>Web/Desktop/Server/PostgreSQL/Gateway chạy smoke path; migration và Audit seam hoạt động.</td><td>PH2 chờ; reforecast từ delivery rate thực tế.</td></tr>
+          <tr><td class="status">MS2 · 30/10</td><td>Tạo/tiếp nhận, tìm và mở đúng Revision/Version/Generation; quyền đọc đúng.</td><td>PH3 chờ lỗi identity/history/authorization được xử lý.</td></tr>
+          <tr><td class="status">MS3 · 26/11</td><td>Checkout/Reference/Check-in, No Change, stale, retry và truyền trực tiếp với một Vault cấu hình được.</td><td>PH4 chờ; bắt buộc reforecast PH4–PH5.</td></tr>
+          <tr><td class="status">MS4 · 14/12</td><td>Review/Approve/Reject/Release đúng scope; lấy lại đúng historical Release Package.</td><td>Chỉ harden phần đã đạt; không gọi là Core v0 candidate hoàn chỉnh.</td></tr>
+          <tr><td class="status">MS5 · 31/12</td><td>Regression, authorization, transfer, restore và cài trên 2–5 máy Windows; ghi lỗi/giới hạn.</td><td>Báo cáo kết quả thực tế; không tự nhận rollout toàn công ty hoặc bản thương mại.</td></tr>
         </tbody>
       </table>
     </div>
@@ -193,60 +194,60 @@
         <div class="gantt">
           <div class="gantt-grid">
             <div class="gh">ID</div><div class="gh">Work package</div><div class="gh">Giờ</div><div class="gh">Baseline slot</div>
-            <div class="gh timeline-head"><div class="mini-weeks"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span><span>W13</span><span>W14</span><span>W15</span></div></div>
+            <div class="gh timeline-head"><div class="mini-weeks"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span><span>W13</span><span>W14</span><span>W15</span><span>W16</span></div></div>
 
-            <div class="phase-title">PH0 — Implementation readiness · MS0/PG4 ngày 02/10</div>
-            <div>P01</div><div>Ghim baseline đã được duyệt</div><div>8</div><div>18/09</div><div class="slot"><span class="task-bar" style="--s:0;--d:2" aria-label="P01, 18/09, 8 giờ"></span></div>
-            <div>P02</div><div>Chốt phạm vi Technical Pilot</div><div>8</div><div>21/09</div><div class="slot"><span class="task-bar" style="--s:2;--d:2" aria-label="P02, 21/09, 8 giờ"></span></div>
-            <div>P03</div><div>Phân loại quyết định còn mở</div><div>8</div><div>22/09</div><div class="slot"><span class="task-bar" style="--s:4;--d:2" aria-label="P03, 22/09, 8 giờ"></span></div>
-            <div>P04</div><div>Chuẩn bị môi trường và cấu trúc delivery</div><div>12</div><div>23/09 AM–24/09 AM</div><div class="slot"><span class="task-bar" style="--s:6;--d:3" aria-label="P04, 23 đến 24 tháng 9, 12 giờ"></span></div>
-            <div>P05</div><div>Chuẩn bị dữ liệu và test strategy</div><div>8</div><div>24/09 PM–25/09 AM</div><div class="slot"><span class="task-bar" style="--s:9;--d:2" aria-label="P05, 24 đến 25 tháng 9, 8 giờ"></span></div>
-            <div>P06</div><div>Migration, rollback, backup và security review plan</div><div>12</div><div>25/09 PM–28/09 PM</div><div class="slot"><span class="task-bar" style="--s:11;--d:3" aria-label="P06, 25 đến 28 tháng 9, 12 giờ"></span></div>
-            <div>P07</div><div>Review readiness và ghi kết quả PG4</div><div>8</div><div>29/09</div><div class="slot"><span class="task-bar" style="--s:14;--d:2" aria-label="P07, 29 tháng 9, 8 giờ"></span></div>
-            <div class="reserve-row">RES0</div><div class="reserve-row">Dự phòng PH0</div><div>24</div><div>30/09–02/10</div><div class="slot"><span class="task-bar reserve" style="--s:16;--d:6" aria-label="Dự phòng PH0, 24 giờ"></span></div>
+            <div class="phase-title">PH0 — Implementation readiness · MS0/PG4 ngày 29/09</div>
+            <div>P01</div><div>Ghim baseline đã được duyệt</div><div>4</div><div>23/09 AM</div><div class="slot"><span class="task-bar" style="--s:0;--d:1"></span></div>
+            <div>P02</div><div>Chốt phạm vi Core v0</div><div>4</div><div>23/09 PM</div><div class="slot"><span class="task-bar" style="--s:1;--d:1"></span></div>
+            <div>P03</div><div>Phân loại quyết định còn mở</div><div>4</div><div>24/09 AM</div><div class="slot"><span class="task-bar" style="--s:2;--d:1"></span></div>
+            <div>P04</div><div>Chuẩn bị môi trường và cấu trúc delivery</div><div>4</div><div>24/09 PM</div><div class="slot"><span class="task-bar" style="--s:3;--d:1"></span></div>
+            <div>P05</div><div>Chuẩn bị dữ liệu và test strategy</div><div>4</div><div>25/09 AM</div><div class="slot"><span class="task-bar" style="--s:4;--d:1"></span></div>
+            <div>P06</div><div>Migration, rollback, backup và security review plan</div><div>8</div><div>25/09 PM–28/09 AM</div><div class="slot"><span class="task-bar" style="--s:5;--d:2"></span></div>
+            <div>P07</div><div>Review readiness và ghi kết quả PG4</div><div>4</div><div>28/09 PM</div><div class="slot"><span class="task-bar" style="--s:7;--d:1"></span></div>
+            <div class="reserve-row">RES0</div><div class="reserve-row">Đệm vận hành PH0</div><div>8</div><div>29/09</div><div class="slot"><span class="task-bar reserve" style="--s:8;--d:2"></span></div>
 
-            <div class="phase-title">PH1 — Running foundation · MS1 ngày 16/10</div>
-            <div>F01</div><div>Khung source, build và kiểm tra tự động</div><div>16</div><div>05/10–06/10</div><div class="slot"><span class="task-bar" style="--s:22;--d:4"></span></div>
-            <div>F02</div><div>PostgreSQL và migration</div><div>12</div><div>07/10–08/10 AM</div><div class="slot"><span class="task-bar" style="--s:26;--d:3"></span></div>
-            <div>F03</div><div>Bootstrap admin, tài khoản và session</div><div>16</div><div>08/10 PM–12/10 AM</div><div class="slot"><span class="task-bar" style="--s:29;--d:4"></span></div>
-            <div>F04</div><div>Transaction và Audit seam</div><div>12</div><div>12/10 PM–13/10 PM</div><div class="slot"><span class="task-bar" style="--s:33;--d:3"></span></div>
-            <div>F05</div><div>Smoke path control plane/data plane</div><div>16</div><div>14/10–15/10</div><div class="slot"><span class="task-bar" style="--s:36;--d:4"></span></div>
-            <div class="reserve-row">RES1</div><div class="reserve-row">Dự phòng PH1</div><div>8</div><div>16/10</div><div class="slot"><span class="task-bar reserve" style="--s:40;--d:2"></span></div>
+            <div class="phase-title">PH1 — Running foundation · MS1 ngày 13/10</div>
+            <div>F01</div><div>Khung source, build và kiểm tra tự động</div><div>16</div><div>30/09–01/10</div><div class="slot"><span class="task-bar" style="--s:10;--d:4"></span></div>
+            <div>F02</div><div>PostgreSQL và migration</div><div>12</div><div>02/10–03/10 AM</div><div class="slot"><span class="task-bar" style="--s:14;--d:3"></span></div>
+            <div>F03</div><div>Bootstrap admin, tài khoản và session</div><div>16</div><div>03/10 PM–06/10 AM</div><div class="slot"><span class="task-bar" style="--s:17;--d:4"></span></div>
+            <div>F04</div><div>Transaction và Audit seam</div><div>12</div><div>06/10 PM–07/10</div><div class="slot"><span class="task-bar" style="--s:21;--d:3"></span></div>
+            <div>F05</div><div>Smoke path control plane/data plane</div><div>16</div><div>08/10–09/10</div><div class="slot"><span class="task-bar" style="--s:24;--d:4"></span></div>
+            <div class="reserve-row">RES1</div><div class="reserve-row">Dự phòng/đệm PH1</div><div>16</div><div>12/10–13/10</div><div class="slot"><span class="task-bar reserve" style="--s:28;--d:4"></span></div>
 
-            <div class="phase-title">PH2 — Controlled-document core · MS2 ngày 06/11</div>
-            <div>C01</div><div>Loại tài liệu, metadata và đánh số</div><div>16</div><div>19/10–20/10</div><div class="slot"><span class="task-bar" style="--s:42;--d:4"></span></div>
-            <div>C02</div><div>Store Existing và Logical Document</div><div>20</div><div>21/10–23/10 AM</div><div class="slot"><span class="task-bar" style="--s:46;--d:5"></span></div>
-            <div>C03</div><div>New và Revision/Version/Generation</div><div>20</div><div>23/10 PM–27/10 PM</div><div class="slot"><span class="task-bar" style="--s:51;--d:5"></span></div>
-            <div>C04</div><div>Tìm kiếm và đọc theo quyền</div><div>20</div><div>28/10–30/10 AM</div><div class="slot"><span class="task-bar" style="--s:56;--d:5"></span></div>
-            <div>C05</div><div>Hoàn thiện vertical slice tài liệu</div><div>20</div><div>30/10 PM–03/11 PM</div><div class="slot"><span class="task-bar" style="--s:61;--d:5"></span></div>
-            <div class="reserve-row">RES2</div><div class="reserve-row">Dự phòng PH2</div><div>24</div><div>04/11–06/11</div><div class="slot"><span class="task-bar reserve" style="--s:66;--d:6"></span></div>
+            <div class="phase-title">PH2 — Controlled-document core · MS2 ngày 30/10</div>
+            <div>C01</div><div>Loại tài liệu, metadata và đánh số</div><div>16</div><div>14/10–15/10</div><div class="slot"><span class="task-bar" style="--s:32;--d:4"></span></div>
+            <div>C02</div><div>Store Existing và Logical Document</div><div>20</div><div>16/10–19/10 AM</div><div class="slot"><span class="task-bar" style="--s:36;--d:5"></span></div>
+            <div>C03</div><div>New và Revision/Version/Generation</div><div>20</div><div>19/10 PM–21/10</div><div class="slot"><span class="task-bar" style="--s:41;--d:5"></span></div>
+            <div>C04</div><div>Tìm kiếm và đọc theo quyền</div><div>20</div><div>22/10–26/10 AM</div><div class="slot"><span class="task-bar" style="--s:46;--d:5"></span></div>
+            <div>C05</div><div>Hoàn thiện vertical slice tài liệu</div><div>20</div><div>26/10 PM–28/10</div><div class="slot"><span class="task-bar" style="--s:51;--d:5"></span></div>
+            <div class="reserve-row">RES2</div><div class="reserve-row">Dự phòng PH2</div><div>16</div><div>29/10–30/10</div><div class="slot"><span class="task-bar reserve" style="--s:56;--d:4"></span></div>
 
-            <div class="phase-title">PH3 — Workspace và multi-location Vault · MS3 ngày 04/12</div>
-            <div>W01</div><div>Workspace Windows và manifest cục bộ</div><div>20</div><div>09/11–11/11 AM</div><div class="slot"><span class="task-bar" style="--s:72;--d:5"></span></div>
-            <div>W02</div><div>Checkout và Reference theo phạm vi</div><div>20</div><div>11/11 PM–13/11 PM</div><div class="slot"><span class="task-bar" style="--s:77;--d:5"></span></div>
-            <div>W03</div><div>Transfer Grant và truyền file tiếp tục được</div><div>24</div><div>16/11–18/11</div><div class="slot"><span class="task-bar" style="--s:82;--d:6"></span></div>
-            <div>W04</div><div>Check-in nguyên tử và No Change</div><div>24</div><div>19/11–23/11</div><div class="slot"><span class="task-bar" style="--s:88;--d:6"></span></div>
-            <div>W05</div><div>Stale, mất mạng và retry cùng OperationId</div><div>24</div><div>24/11–26/11</div><div class="slot"><span class="task-bar" style="--s:94;--d:6"></span></div>
-            <div>W06</div><div>Hai vị trí Vault và exact-read failover</div><div>20</div><div>27/11–01/12 AM</div><div class="slot"><span class="task-bar" style="--s:100;--d:5"></span></div>
-            <div>W07</div><div>Demo hai identity và kiểm tra ranh giới</div><div>12</div><div>01/12 PM–02/12 PM</div><div class="slot"><span class="task-bar" style="--s:105;--d:3"></span></div>
-            <div class="reserve-row">RES3</div><div class="reserve-row">Dự phòng PH3</div><div>16</div><div>03/12–04/12</div><div class="slot"><span class="task-bar reserve" style="--s:108;--d:4"></span></div>
+            <div class="phase-title">PH3 — Workspace và Checkout/Check-in · MS3 ngày 26/11</div>
+            <div>W01</div><div>Workspace Windows và manifest cục bộ</div><div>20</div><div>31/10–03/11 AM</div><div class="slot"><span class="task-bar" style="--s:60;--d:5"></span></div>
+            <div>W02</div><div>Checkout và Reference theo phạm vi</div><div>20</div><div>03/11 PM–05/11</div><div class="slot"><span class="task-bar" style="--s:65;--d:5"></span></div>
+            <div>W03</div><div>Transfer Grant và truyền file tiếp tục được</div><div>24</div><div>06/11–09/11</div><div class="slot"><span class="task-bar" style="--s:70;--d:6"></span></div>
+            <div>W04</div><div>Check-in nguyên tử và No Change</div><div>24</div><div>10/11–12/11</div><div class="slot"><span class="task-bar" style="--s:76;--d:6"></span></div>
+            <div>W05</div><div>Stale, mất mạng và retry cùng OperationId</div><div>24</div><div>13/11–17/11</div><div class="slot"><span class="task-bar" style="--s:82;--d:6"></span></div>
+            <div>W06</div><div>Một Vault cấu hình được và ranh giới mở rộng</div><div>20</div><div>18/11–20/11 AM</div><div class="slot"><span class="task-bar" style="--s:88;--d:5"></span></div>
+            <div>W07</div><div>Demo hai identity với một Vault</div><div>4</div><div>20/11 PM</div><div class="slot"><span class="task-bar" style="--s:93;--d:1"></span></div>
+            <div class="reserve-row">RES3</div><div class="reserve-row">Dự phòng/đệm PH3</div><div>40</div><div>21/11–26/11</div><div class="slot"><span class="task-bar reserve" style="--s:94;--d:10"></span></div>
 
-            <div class="phase-title">PH4 — Review và Release · MS4 ngày 18/12</div>
-            <div>L01</div><div>Structure Snapshot và dependency bắt buộc</div><div>16</div><div>07/12–08/12</div><div class="slot"><span class="task-bar" style="--s:112;--d:4"></span></div>
-            <div>L02</div><div>Submit, Review, Approve/Reject</div><div>16</div><div>09/12–10/12</div><div class="slot"><span class="task-bar" style="--s:116;--d:4"></span></div>
-            <div>L03</div><div>Release đúng phạm vi</div><div>20</div><div>11/12–15/12 AM</div><div class="slot"><span class="task-bar" style="--s:120;--d:5"></span></div>
-            <div>L04</div><div>Release Package và Revision sau Release</div><div>12</div><div>15/12 PM–16/12 PM</div><div class="slot"><span class="task-bar" style="--s:125;--d:3"></span></div>
-            <div>L05</div><div>Demo luồng phát hành và negative paths</div><div>8</div><div>17/12</div><div class="slot"><span class="task-bar" style="--s:128;--d:2"></span></div>
-            <div class="reserve-row">RES4</div><div class="reserve-row">Dự phòng PH4</div><div>8</div><div>18/12</div><div class="slot"><span class="task-bar reserve" style="--s:130;--d:2"></span></div>
+            <div class="phase-title">PH4 — Review và Release · MS4 ngày 14/12</div>
+            <div>L01</div><div>Structure Snapshot và dependency bắt buộc</div><div>16</div><div>27/11–30/11</div><div class="slot"><span class="task-bar" style="--s:104;--d:4"></span></div>
+            <div>L02</div><div>Submit, Review, Approve/Reject</div><div>16</div><div>01/12–02/12</div><div class="slot"><span class="task-bar" style="--s:108;--d:4"></span></div>
+            <div>L03</div><div>Release đúng phạm vi</div><div>24</div><div>03/12–05/12</div><div class="slot"><span class="task-bar" style="--s:112;--d:6"></span></div>
+            <div>L04</div><div>Release Package và Revision sau Release</div><div>16</div><div>07/12–08/12</div><div class="slot"><span class="task-bar" style="--s:118;--d:4"></span></div>
+            <div>L05</div><div>Demo luồng phát hành và negative paths</div><div>16</div><div>09/12–10/12</div><div class="slot"><span class="task-bar" style="--s:122;--d:4"></span></div>
+            <div class="reserve-row">RES4</div><div class="reserve-row">Dự phòng PH4</div><div>16</div><div>11/12–14/12</div><div class="slot"><span class="task-bar reserve" style="--s:126;--d:4"></span></div>
 
-            <div class="phase-title">PH5 — Hardening và Technical Pilot · MS5 ngày 31/12</div>
-            <div>Q01</div><div>Regression Release Spine</div><div>12</div><div>21/12–22/12 AM</div><div class="slot"><span class="task-bar" style="--s:132;--d:3"></span></div>
-            <div>Q02</div><div>Authorization và security boundary</div><div>8</div><div>22/12 PM–23/12 AM</div><div class="slot"><span class="task-bar" style="--s:135;--d:2"></span></div>
-            <div>Q03</div><div>Đo transfer đại diện</div><div>8</div><div>23/12 PM–24/12 AM</div><div class="slot"><span class="task-bar" style="--s:137;--d:2"></span></div>
-            <div>Q04</div><div>Backup và restore trên môi trường sạch</div><div>12</div><div>24/12 PM–25/12 PM</div><div class="slot"><span class="task-bar" style="--s:139;--d:3"></span></div>
-            <div>Q05</div><div>Đóng gói và hướng dẫn vận hành</div><div>8</div><div>28/12</div><div class="slot"><span class="task-bar" style="--s:142;--d:2"></span></div>
-            <div>Q06</div><div>Technical Pilot, sửa lỗi chặn và báo cáo</div><div>16</div><div>29/12–30/12</div><div class="slot"><span class="task-bar" style="--s:144;--d:4"></span></div>
-            <div class="reserve-row">RES5</div><div class="reserve-row">Dự phòng PH5</div><div>8</div><div>31/12</div><div class="slot"><span class="task-bar reserve" style="--s:148;--d:2"></span></div>
+            <div class="phase-title">PH5 — Ổn định và áp dụng nội bộ · MS5 ngày 31/12</div>
+            <div>Q01</div><div>Regression Release Spine</div><div>16</div><div>15/12–16/12</div><div class="slot"><span class="task-bar" style="--s:130;--d:4"></span></div>
+            <div>Q02</div><div>Authorization và security boundary</div><div>12</div><div>17/12–18/12 AM</div><div class="slot"><span class="task-bar" style="--s:134;--d:3"></span></div>
+            <div>Q03</div><div>Đo transfer đại diện</div><div>12</div><div>18/12 PM–19/12</div><div class="slot"><span class="task-bar" style="--s:137;--d:3"></span></div>
+            <div>Q04</div><div>Backup và restore trên môi trường sạch</div><div>16</div><div>21/12–22/12</div><div class="slot"><span class="task-bar" style="--s:140;--d:4"></span></div>
+            <div>Q05</div><div>Đóng gói và hướng dẫn vận hành</div><div>12</div><div>23/12–24/12 AM</div><div class="slot"><span class="task-bar" style="--s:144;--d:3"></span></div>
+            <div>Q06</div><div>Cài nhiều máy, sửa lỗi chặn và ghi kết quả</div><div>20</div><div>24/12 PM–28/12</div><div class="slot"><span class="task-bar" style="--s:147;--d:5"></span></div>
+            <div class="reserve-row">RES5</div><div class="reserve-row">Dự phòng/đệm PH5</div><div>24</div><div>29/12–31/12</div><div class="slot"><span class="task-bar reserve" style="--s:152;--d:6"></span></div>
           </div>
         </div>
       </div>
@@ -262,7 +263,7 @@
       </div>
       <div>
         <h3>Không được suy diễn</h3>
-        <ul><li>Ngày 31/12 không phải full Core v0 hay production acceptance.</li><li>Reserve không phải scope để tự lấy thêm.</li><li>Lịch chưa trừ ngày nghỉ, công việc đột xuất hoặc thời gian chờ authority.</li></ul>
+        <ul><li>Ngày 31/12 là Core v0 có giới hạn, không phải rollout toàn công ty hay bản thương mại.</li><li>Dự phòng và đệm không phải scope để tự lấy thêm.</li><li>Lịch chưa trừ ngày lễ, nghỉ phép, công việc đột xuất hoặc thời gian chờ authority.</li></ul>
       </div>
     </div>
   </section>

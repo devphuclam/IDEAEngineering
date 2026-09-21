@@ -26,9 +26,10 @@ guess between files with similar content.
 | [Source contract](project-management-compiler-source-contract.md) | Defines identity, authority, state, baseline, forecast, diagnostics and handoff rules. | The machine contract itself changes. |
 | [Manifest](project-management-compiler-manifest.json) | Declares the contract version, source roles, expected totals and the exact register revision. | A declared source or accepted register revision changes. |
 | [Execution Register](idea-technical-pilot-execution-register.json) | Records attributable actual state, effort, remaining work, forecast overrides, blockers and evidence for Delivery Cards. | Real execution information is learned or corrected. |
+| [Work-session journal](idea-progress-work-journal.json) | Preserves Start/Stop sessions and before/after values for manual effort corrections used by the local Progress Tracker. | A timer session closes or an effort estimate is corrected. |
 | [Execution Register schema](idea-technical-pilot-execution-register.schema.json) | Defines the serialized shape of the Execution Register. | A reviewed contract change requires a new compatible schema. |
 | [Baseline reference](idea-technical-pilot-baseline-reference.json) | Machine cross-check of the approved DOC-07 planning totals and horizon. It is not a second plan. | A controlled rebaseline is accepted. |
-| [Project calendar](idea-technical-pilot-project-calendar.json) | Keeps the approved Baseline calendar separate from the calendar used for the current forecast. | Availability or an approved Baseline calendar changes. |
+| [Project calendar](idea-technical-pilot-project-calendar.json) | Records the selected Core v0 working calendar and dated forecast exceptions. | Availability or the selected Baseline calendar changes. |
 | [Diagnostic catalogue](project-management-compiler-diagnostics.md) | Gives stable codes and treatments for invalid, incomplete or stale source data. | Validator behavior changes. |
 | [Fixture catalogue](project-management-compiler-fixtures/fixture-catalog.json) | Lists valid, invalid and realistic contract-test inputs and their expected outcomes. | Contract or validator behavior changes. |
 
@@ -50,12 +51,14 @@ local preview; it does not make an uncommitted working tree an official Compiler
    `NOT_RECORDED`; do not guess `NOT_STARTED`.
 3. Keep execution state separate from result state. For example, verification can be `COMPLETED`
    with result `FAIL`.
-4. Record actual effort at the end of a working day, important events when they occur, and review
-   remaining effort at least weekly.
+4. Record actual effort from closed work sessions. `actualStart`–`actualFinish` is elapsed calendar
+   time and must not be substituted for actual effort. Review remaining effort at least weekly.
 5. Add blockers separately from dependencies. A planned predecessor is not an unexpected blocker.
 6. Increment `registerRevision` once for the accepted register mutation and update
    `manifest.execution.expectedRegisterRevision` in the same commit.
-7. Run the validator before treating the change as a usable snapshot.
+7. Run the validator before treating the change as a usable snapshot. The Progress Tracker button
+   **Ghi nhận & công bố** performs validation, a scoped commit and push to `main`; it refuses to run
+   when unrelated working-tree changes are present.
 
 Changes to scope, Delivery Card identity, planned effort or Baseline dates belong in their owning
 planning source and follow planning change control. They must not be smuggled into the Execution
@@ -78,11 +81,10 @@ Exit codes are:
 | `2` | The validator could not read or execute in the current environment |
 | `3` | The contract version is unsupported |
 
-`PASS_WITH_WARNINGS` is usable only when every warning has an understood owner and treatment.
-The current package deliberately warns that the forecast calendar includes the first, third and
-fifth Saturday while the approved DOC-07 Baseline remains weekday-only. The second and fourth
-Saturdays are days off. That difference requires an explicit rebaseline decision before it may alter
-the Baseline or add planned work.
+`PASS_WITH_WARNINGS` is usable only when every warning has an understood owner and treatment. The
+current Core v0 baseline and forecast calendar are aligned: Monday–Friday plus Saturdays in weeks
+1, 3 and 5; Saturdays in weeks 2 and 4 are days off. Dated leave, holidays or other assignments are
+recorded as forecast exceptions and never add scope automatically.
 
 ## Official handoff
 

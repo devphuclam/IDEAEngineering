@@ -1,20 +1,26 @@
 {
   "contractVersion": "0.1.0",
-  "calendarSetId": "IE-CALENDAR-TP-001",
+  "calendarSetId": "IE-CALENDAR-CV0-001",
   "timeZone": "Asia/Ho_Chi_Minh",
   "hoursPerWorkingDay": 8,
   "baselineCalendar": {
-    "calendarId": "IE-CALENDAR-TP-BASELINE-001",
-    "status": "APPROVED_BASELINE_REFERENCE",
+    "calendarId": "IE-CALENDAR-CV0-BASELINE-001",
+    "status": "SELECTED_BASELINE",
     "regularWorkingDays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-    "monthlyWorkingDayRules": [],
+    "monthlyWorkingDayRules": [
+      {
+        "dayOfWeek": "SATURDAY",
+        "occurrences": [1, 3, 5],
+        "hours": 8
+      }
+    ],
     "exceptions": [],
     "sourcePath": "docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md"
   },
   "forecastCalendar": {
-    "calendarId": "IE-CALENDAR-TP-FORECAST-001",
+    "calendarId": "IE-CALENDAR-CV0-FORECAST-001",
     "status": "SELECTED_FOR_FORECAST",
-    "effectiveFrom": "2026-09-21",
+    "effectiveFrom": "2026-09-23",
     "regularWorkingDays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
     "monthlyWorkingDayRules": [
       {
@@ -27,6 +33,6 @@
     "selectedBy": "LEAD",
     "selectionBasis": "Project user confirmed that Saturdays in the first, third and fifth week of a month are working days; the second and fourth Saturdays are days off. Confirmed on 2026-09-21."
   },
-  "baselineChangeState": "REBASELINE_REQUIRED",
-  "differenceTreatment": "Use forecastCalendar for calculated forecasts; do not rewrite the approved baseline until rebaseline authority is recorded."
+  "baselineChangeState": "ALIGNED",
+  "differenceTreatment": "Baseline and forecast use the selected Core v0 working calendar. Record holidays, leave and other assignments as dated forecast exceptions; do not change scope automatically."
 }

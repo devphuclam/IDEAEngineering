@@ -59,8 +59,8 @@ has been implemented.
 ## December 2026 roadmap package
 
 [DOC-07 section 3.2](DOC-07-mvp-roadmap-and-delivery-plan.md#32-technical-pilot-schedule-and-task-appendix)
-defines the current 18 September–31 December 2026 Technical Pilot plan: **35 work packages /
-512 planned work hours + 88 controlled reserve hours = 600 baseline hours**. The current forecast
+defines the current 23 September–31 December 2026 Core v0 plan: **35 work packages /
+512 planned work hours + 88 technical-reserve hours + 32 operational-buffer hours = 632 baseline hours**. The selected calendar
 calendar adds working Saturdays in weeks 1, 3 and 5 of each month (weeks 2 and 4 are days off),
 giving 83 forecast days / 664 hours before holidays and other assignments. The 31 December milestone is a bounded production-shaped thread, not full Core
 v0, production readiness or company rollout. Execution and `PG4` remain `NOT-RUN`.
@@ -318,7 +318,7 @@ versions only; it did not change product behavior, the roadmap schedule or any r
 |---|---|
 | FEATURE-001@0.12 and SPEC-001@0.14 | Historical 09-09 reconciliation state: current Core/VVP pins were recorded and the management decision was then `NOT-RUN`. The current Product Decision Authority approval is recorded separately in `IE-CHG-PDA-APPROVAL-001`; `SPEC-001@0.14` is not the current normative 87-requirement SRS. |
 | TECH-001@0.8 | Historical source-reconciliation baseline; superseded by `TECH-001@0.9`, Linux-first `@0.10`, rationale-refined `@0.11`, Client/UI challenger `@0.12`, reviewer-corrected `@0.13`, approved Engineering selection `@0.14`, then multi-location Vault successor Draft `@0.15`. |
-| DOC-07@0.5 | Historical source-reconciliation baseline; superseded through current `DOC-07@0.15`. The old 56-task/756-hour schedule remains recoverable in Git history; it is replaced for execution planning by the 35-work-package Technical Pilot baseline. Version 0.14 did not change that schedule; version 0.15 corrects the forecast calendar without changing the baseline allocation. |
+| DOC-07@0.5 | Historical source-reconciliation baseline; superseded through current `DOC-07@0.16`. The old 56-task/756-hour schedule remains recoverable in Git history; it is replaced for execution planning by the 35-work-package Core v0 baseline selected on 21-09-2026. |
 | Existing Word/Human copies | Retain the submitted/editorial versions; they were not overwritten or silently regenerated. |
 
 On 10-09-2026, the controlled sources were re-baselined for requirement and architecture quality.
@@ -371,7 +371,7 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.15`; sole normative SRS; 90 requirements including policy-controlled self-approval, `REQ-WS-016`, `REQ-OPS-007/008`, `QRS-013/014`; exact successor PDA approval and verification `NOT-RUN` |
 | `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.22`; separates authoritative control from scoped direct Artifact data transfer, models multiple Vault locations and records policy-controlled self-approval separately from RBAC; exact topology/qualification `NOT-RUN` |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.18`; adds Vault Endpoint, Transfer Grant/Receipt, Replication Task and versioned Storage/Durability Policy while retaining the pinned Approval Policy Version and self-approval outcome |
-| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.15`; current six-phase/six-milestone Technical Pilot plan is unchanged at 512 work hours plus 88 controlled reserve hours; forecast includes first/third/fifth Saturdays and keeps second/fourth Saturdays off; deferred commercial direction adds no task; execution and `PG4` `NOT-RUN`; Q-15 unchanged |
+| `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.16`; selected six-phase Core v0 plan uses 512 task hours, 88 technical-reserve hours and 32 operational-buffer hours from 23-09 through 31-12; one Vault is in Core v0 and the future multi-vault seam is retained; execution and `PG4` remain evidence-driven; Q-15 unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.13`; separates selecting location, transferring, verifying, policy-required protection and final Check-in; transfer/replication completion alone is not success and storage secrets remain hidden |
 
 ## Supporting instance catalogue
@@ -425,6 +425,7 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 | `CHG` | `IE-CHG-APPROVAL-POLICY-001` | [Approval Policy Self-Approval](registers/CHG-2026-09-19-approval-policy-self-approval.md) | `Draft 0.1`; records Microsoft-style separation of RBAC eligibility and versioned Approval Policy, default-deny self-approval, explicit opt-in and separate Release; policy correction PDA-approved, verification `NOT-RUN` |
 | `CHG` | `IE-CHG-PDA-APPROVAL-002` | [PDA Approval — Approval Policy Self-Approval](registers/CHG-2026-09-19-pda-approval-approval-policy.md) | `Draft 0.1` record; Product Decision Authority approved the policy correction on 19-09-2026 at baseline `e063df9`; remaining successor content, implementation and verification unchanged |
 | `CHG` | `IE-CHG-COMMERCIAL-DIR-001` | [Internal-First and Future Commercial Direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) | `Draft 0.1`; records internal-only operation for the next several years and a separately gated long-term commercial direction; no current Feature/Spec/Tech, task, Tech Stack or gate-state change |
+| `CHG` | `IE-CHG-ROADMAP-CV0-001` | [Core v0 Roadmap Rebaseline](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) | `Draft 0.1`; selects the 23-09–31-12 Core v0 execution baseline, 512 task hours + 88 technical-reserve hours + 32 operational-buffer hours, one Vault in Core v0 and a future multi-vault seam; no Feature/Spec/Tech, Q-15, PG3 or PG4 change |
 | `CHG` | `IE-CHG-PH0-CORR-001` | [PH0 Readiness Consistency Correction](registers/CHG-2026-09-17-ph0-readiness-correction.md) | `Draft 0.1`; author correction of PH0 gate vocabulary, authorization limits, read-only analysis, PowerShell quoting and exact planning-change trace; Appendix A@0.6 keeps the schedule unchanged; no product-gate decision |
 | `VEV` | `IE-VEV-VAULT-XFER-002` | [Latest Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-18-vault-transfer-diagram-review.md) | `Draft 0.1`; latest pinned source and 40 controlled + 3 management views; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
 

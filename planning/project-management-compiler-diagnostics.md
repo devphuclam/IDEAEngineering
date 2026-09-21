@@ -24,7 +24,7 @@ Each diagnostic contains `code`, `severity`, `entityKind`, `entityId`, `sourcePa
 | `PMC-IDENTITY-002` | ERROR | A baseline Delivery Card is absent from the Execution Register. | Add an explicit `NOT_RECORDED` record or controlled disposition. |
 | `PMC-IDENTITY-003` | ERROR | Register contains an unknown Delivery Card. | Add the Card through planning change control or remove the invalid record. |
 | `PMC-STATE-001` | ERROR | Execution or result state is invalid/inconsistent. | Use the controlled vocabulary and completion rules. |
-| `PMC-EFFORT-001` | ERROR | Actual, remaining or reserve effort is negative, not numeric or not a 0.5-hour increment. | Correct the record and retain correction history. |
+| `PMC-EFFORT-001` | ERROR | Actual or remaining effort is negative/non-numeric, or reserve usage is not a non-negative 0.5-hour increment. | Correct the record and retain correction history. |
 | `PMC-COMPLETE-001` | ERROR | A completed Card lacks finish, zero remaining effort or evidence. | Supply completion evidence or revert the state. |
 | `PMC-EVIDENCE-001` | ERROR | Required evidence is missing, local-only or outside the repository. | Add controlled evidence or a permitted external URI. |
 | `PMC-DEPENDENCY-001` | ERROR | A dependency refers to an unknown entity. | Correct the predecessor reference. |
@@ -34,7 +34,7 @@ Each diagnostic contains `code`, `severity`, `entityKind`, `entityId`, `sourcePa
 | `EXEC-STALE-001` | WARNING | An in-progress Card has no update for more than two working days. | Record actual, remaining or an attributable no-change review. |
 | `EXEC-REMAINING-001` | WARNING | Remaining effort has not been reviewed within seven days. | Review and record the current remaining effort. |
 | `EXEC-UNRECORDED-001` | INFO | No attributable actual execution fact exists for the Card. | Record evidence when execution genuinely begins; do not infer history. |
-| `PMC-SOURCE-001` | ERROR | Source totals do not equal 35 Work Packages, 53 Delivery Cards, seven gates/milestones, 512 work hours and 88 reserve hours. | Reconcile the owning planning source before import. |
+| `PMC-SOURCE-001` | ERROR | Source totals do not equal 35 Work Packages, 53 Delivery Cards, seven gates/milestones, 512 work hours, 88 technical-reserve hours and 32 operational-buffer hours. | Reconcile the owning planning source before import. |
 | `PMC-FIXTURE-001` | ERROR | A fixture result or diagnostic differs from its expected oracle. | Fix the validator/contract or review the fixture successor. |
 
 Waivers may apply only to explicitly waivable warnings. Schema, identity, authority, path,
