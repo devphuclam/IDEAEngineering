@@ -44,13 +44,17 @@ that leave the repository.
 | `WORK_PACKAGE_AUTHORITY` | Appendix A owns 35 work packages, planned effort and package dependencies. |
 | `DELIVERY_CARD_AUTHORITY` | Kanban CARIO owns 53 executable Delivery Cards, seven zero-effort gates/milestones, dates, card dependencies and responsibility assignments. |
 | `EXECUTION_AUTHORITY` | The Execution Register owns recorded actual state, actual effort, remaining effort, forecast overrides, blockers and evidence for Delivery Cards. |
-| `WORK_SESSION_AUDIT` | The work journal owns individual Start/Stop session entries and effort-correction history; cumulative actual and remaining effort remain owned by the Execution Register. |
 | `RENDITION_CROSS_CHECK` | The HTML Gantt is a visual cross-check only. |
 | `READINESS_EVIDENCE` | The PH0 readiness package supplies gate and human-review evidence; it is not Delivery Card actuals. |
 | `NAVIGATION_ONLY` | The instance catalogue helps a human navigate and owns no planning field. |
 
 If two sources claim the same field, the role table above decides ownership. A conflict is a
 diagnostic; import must not choose whichever value was read last.
+
+The repository-owned Work Journal preserves individual Start/Stop sessions and correction history
+for the local Progress Tracker. It is not a Project Management Compiler manifest input. The
+Compiler consumes only the cumulative actual and remaining values published by the
+`EXECUTION_AUTHORITY` register.
 
 ## 3. Contract and snapshot identity
 

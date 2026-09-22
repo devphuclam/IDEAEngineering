@@ -42,10 +42,6 @@
       "path": "planning/idea-technical-pilot-execution-register.json"
     },
     {
-      "role": "WORK_SESSION_AUDIT",
-      "path": "planning/idea-progress-work-journal.json"
-    },
-    {
       "role": "RENDITION_CROSS_CHECK",
       "path": "docs/product/instances/idea-engineering/planning/idea-roadmap-december-2026.html"
     },
