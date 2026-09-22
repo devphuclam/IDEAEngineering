@@ -49,8 +49,11 @@ PLN01 → PLN02 → PLN03
 
 - `P04` and `P05` may start after `PLN03`; WIP limit 1 still permits only one primary active card.
 - `P06` requires `P04` and `P05`.
-- `P07` requires `PLN01`–`PLN03` and `P04`–`P06`.
+- `P07` requires `PLN01`, `PLN02`, `PLN03`, `P04`, `P05` and `P06`.
 - PH1 remains blocked until the recorded `PG4` outcome permits it.
+
+The authoritative work-package table writes every predecessor ID explicitly. Range shorthand is
+used only in explanatory prose; it is not used as a machine-facing dependency value.
 
 ## 4. Actual-effort treatment
 

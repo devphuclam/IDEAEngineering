@@ -77,13 +77,13 @@ phase nhưng không phải một công việc hay quyền bỏ qua gate.
 
 | Mã | Công việc | Giờ | Cần trước | Đầu ra và cách biết đã xong |
 |---|---|---:|---|---|
-| PLN01 | Xây dựng và chốt WBS Core v0 | 4 | Kế hoạch 31/12 và phạm vi Core v0 đã được người dùng dự án xác nhận | Có 35 work package và 53 Delivery Card với giờ, đầu ra, điều kiện hoàn thành và dependency; tổng công việc bằng 512 giờ. |
+| PLN01 | Xây dựng và chốt WBS Core v0 | 4 | — | Có 35 work package và 53 Delivery Card với giờ, đầu ra, điều kiện hoàn thành và dependency; tổng công việc bằng 512 giờ. |
 | PLN02 | Lập Gantt, lịch làm việc và milestone | 4 | PLN01 | Có lịch từ 23/09 đến 31/12/2026 theo lịch làm việc đã chốt; work package, reserve, buffer và MS0–MS5 khớp cùng một baseline. |
 | PLN03 | Thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ | 4 | PLN02 | Có card dễ đọc, CARIO, Execution Register, Work Journal và tracker để ghi actual, remaining, blocker và evidence; Project Management Compiler đọc được nguồn này. |
 | P04 | Chuẩn bị môi trường và cấu trúc delivery | 4 | PLN03 | Ghi máy phát triển/server được phép, quy trình build/test, quản lý secret/configuration, database migration và cách tạo increment; không cài công cụ chưa được phép. |
 | P05 | Chuẩn bị dữ liệu và test strategy | 4 | PLN03 | Có bộ tài liệu mẫu, file lớn đại diện, hai identity thử, một Vault và ma trận đường chính/đường lỗi. |
 | P06 | Lập kế hoạch migration, rollback, backup và security review | 8 | P04, P05 | Có phương án quay lại schema/app, giữ Workspace cục bộ, khôi phục metadata–Artifact đồng bộ và phạm vi review bảo mật cần người phù hợp. |
-| P07 | Review readiness và ghi kết quả PG4 | 4 | PLN01–PLN03, P04–P06 | Có checklist, blocker, residual risk và phạm vi PH1. Ghi riêng trạng thái đánh giá và kết quả PG4; ngày tới hạn không tự biến thành được duyệt. |
+| P07 | Review readiness và ghi kết quả PG4 | 4 | PLN01, PLN02, PLN03, P04, P05, P06 | Có checklist, blocker, residual risk và phạm vi PH1. Ghi riêng trạng thái đánh giá và kết quả PG4; ngày tới hạn không tự biến thành được duyệt. |
 
 PG4 ghi riêng hai thông tin:
 
@@ -103,11 +103,11 @@ xử lý rủi ro, thiết kế kiểm tra hoặc khả năng rollback; không d
 
 | Mã | Công việc | Giờ | Cần trước | Đầu ra và cách biết đã xong |
 |---|---|---:|---|---|
-| F01 | Tạo khung source, build và kiểm tra tự động | 16 | P07 đạt `PG4` | Web, Desktop, Server và test projects build bằng lệnh đã ghi; kiểm tra cơ bản chạy lặp lại; configuration không chứa secret thật. |
+| F01 | Tạo khung source, build và kiểm tra tự động | 16 | P07 | Web, Desktop, Server và test projects build bằng lệnh đã ghi; kiểm tra cơ bản chạy lặp lại; configuration không chứa secret thật. PH1 chỉ được bắt đầu khi kết quả PG4 do P07 ghi cho phép. |
 | F02 | Khởi tạo PostgreSQL và migration | 12 | F01 | Database mới dựng được từ migration; rollback thử được trong phạm vi cho phép; health check phân biệt app với database. |
 | F03 | Tạo bootstrap admin, tài khoản và session | 16 | F01, F02 | Superuser chỉ được tạo theo bootstrap kiểm soát; đăng nhập/đăng xuất/khóa phiên hoạt động; không có đăng ký công khai. |
 | F04 | Dựng transaction và Audit seam | 12 | F02, F03 | Một lệnh mẫu ghi kết quả nghiệp vụ và Audit có cùng correlation; Audit không tự quyết định nghiệp vụ và không sửa qua UI thường. |
-| F05 | Chạy smoke path control plane/data plane | 16 | F01–F04 | Client xin lệnh từ Server, nhận quyền truyền ngắn hạn, gửi một Artifact qua Gateway và Server ghi metadata sau khi xác minh receipt; byte không đi xuyên business Server. |
+| F05 | Chạy smoke path control plane/data plane | 16 | F01, F02, F03, F04 | Client xin lệnh từ Server, nhận quyền truyền ngắn hạn, gửi một Artifact qua Gateway và Server ghi metadata sau khi xác minh receipt; byte không đi xuyên business Server. |
 
 ### 4.3 PH2 — Quản lý tài liệu lõi, 96 giờ
 
@@ -117,7 +117,7 @@ xử lý rủi ro, thiết kế kiểm tra hoặc khả năng rollback; không d
 | C02 | Store Existing và tạo Logical Document | 20 | C01 | Người có quyền đăng ký file sẵn có, xem cảnh báo trùng và quyết định tạo/liên kết/hủy; hệ thống không tự gộp identity. |
 | C03 | New và lịch sử Revision/Version/Generation | 20 | C02 | New dùng cùng mô hình; Revision A, Version 1 và immutable Generation được tạo đúng; Generation cũ không bị thay đổi. |
 | C04 | Tìm kiếm và đọc theo quyền | 20 | C03, F03 | Tìm theo mã/tên/loại/trạng thái; kết quả, tổng số và chi tiết không làm lộ tài liệu ngoài quyền. |
-| C05 | Hoàn thiện vertical slice tài liệu | 20 | C01–C04 | Từ Web hoặc Desktop, người dùng tạo/tiếp nhận, tìm, mở đúng Generation và xem lịch sử; API trái quyền bị từ chối và có test lặp lại. |
+| C05 | Hoàn thiện vertical slice tài liệu | 20 | C01, C02, C03, C04 | Từ Web hoặc Desktop, người dùng tạo/tiếp nhận, tìm, mở đúng Generation và xem lịch sử; API trái quyền bị từ chối và có test lặp lại. |
 
 ### 4.4 PH3 — Workspace và Checkout/Check-in, 136 giờ
 
@@ -128,8 +128,8 @@ xử lý rủi ro, thiết kế kiểm tra hoặc khả năng rollback; không d
 | W03 | Transfer Grant và truyền file tiếp tục được | 24 | W02, F05 | Grant ngắn hạn ghim actor, operation, artifact, chiều và endpoint; upload/download chia phần, tiếp tục được và xác minh digest. |
 | W04 | Check-in nguyên tử và No Change | 24 | W03, C03 | Check-in xác nhận phạm vi, kiểm tra lại quyền/bản nền/file/cấu trúc và ghi toàn bộ hoặc không ghi; Changed và No Change đều kết thúc Checkout đúng phạm vi. |
 | W05 | Stale, mất mạng và retry cùng OperationId | 24 | W04 | Bản làm việc cũ bị từ chối rõ ràng, file cục bộ được giữ; mất phản hồi được tra lại/gửi lại bằng cùng OperationId, không tạo Generation trùng. |
-| W06 | Một Vault cấu hình được và ranh giới mở rộng | 20 | W03–W05 | Core v0 đọc/ghi qua một Vault không viết cứng một máy; định danh Vault/location và adapter cho phép bổ sung nơi lưu sau này mà không sửa document identity. Replication, failover và chọn Vault vẫn `NOT-RUN`. |
-| W07 | Demo hai identity và kiểm tra ranh giới | 4 | W01–W06 | Hai identity/hai Workspace chạy Checkout, Reference, Check-in, stale và retry với một Vault; Server không chuyển byte file; Audit nối được intent, transfer và commit. |
+| W06 | Một Vault cấu hình được và ranh giới mở rộng | 20 | W03, W04, W05 | Core v0 đọc/ghi qua một Vault không viết cứng một máy; định danh Vault/location và adapter cho phép bổ sung nơi lưu sau này mà không sửa document identity. Replication, failover và chọn Vault vẫn `NOT-RUN`. |
+| W07 | Demo hai identity và kiểm tra ranh giới | 4 | W01, W02, W03, W04, W05, W06 | Hai identity/hai Workspace chạy Checkout, Reference, Check-in, stale và retry với một Vault; Server không chuyển byte file; Audit nối được intent, transfer và commit. |
 
 ### 4.5 PH4 — Review và Release, 88 giờ
 
@@ -139,7 +139,7 @@ xử lý rủi ro, thiết kế kiểm tra hoặc khả năng rollback; không d
 | L02 | Submit, Review, Approve/Reject | 16 | L01 | Review Round ghim Generation và policy; người không đủ role/scope bị từ chối; sửa nội dung sau submit không thừa hưởng quyết định cũ. |
 | L03 | Release đúng phạm vi | 24 | L02 | Người dùng xem và xác nhận phạm vi; hệ thống kiểm tra lại bản, structure, approval, quyền và durability policy; một lỗi làm toàn bộ Release không commit. |
 | L04 | Release Package và Revision sau Release | 16 | L03 | Gói chứa manifest, file, metadata, structure và digest; lấy lại đúng gói cũ sau khi có bản mới; Revision tiếp theo không sửa lịch sử cũ. |
-| L05 | Demo luồng phát hành và negative paths | 16 | L01–L04 | Cụm bơm được Release trong khi tủ điện vẫn In Work; thiếu dependency, self-approval hoặc scope đổi giữa chừng đều bị chặn có bằng chứng. |
+| L05 | Demo luồng phát hành và negative paths | 16 | L01, L02, L03, L04 | Cụm bơm được Release trong khi tủ điện vẫn In Work; thiếu dependency, self-approval hoặc scope đổi giữa chừng đều bị chặn có bằng chứng. |
 
 ### 4.6 PH5 — Ổn định và áp dụng nội bộ, 88 giờ
 
@@ -147,10 +147,10 @@ xử lý rủi ro, thiết kế kiểm tra hoặc khả năng rollback; không d
 |---|---|---:|---|---|
 | Q01 | Chạy regression Release Spine | 16 | L05 | Kịch bản chuẩn chạy từ tài khoản đến phục hồi Release Package; test tự động và lỗi đã biết được ghim vào đúng build. |
 | Q02 | Kiểm tra authorization và security boundary | 12 | Q01 | Gọi API/tải file trái quyền, session bị thu hồi, grant hết hạn/sai endpoint và vượt scope đều bị từ chối; client không chứa secret dài hạn. |
-| Q03 | Đo transfer đại diện | 12 | Q01; dữ liệu P05 | Ghi file size, concurrency, đường truyền, tốc độ, retry và tài nguyên; kết quả là evidence của môi trường thử, không suy rộng thành SLA. |
+| Q03 | Đo transfer đại diện | 12 | Q01, P05 | Ghi file size, concurrency, đường truyền, tốc độ, retry và tài nguyên; kết quả là evidence của môi trường thử, không suy rộng thành SLA. |
 | Q04 | Backup và restore trên môi trường sạch | 16 | Q01 | Khôi phục cùng mốc PostgreSQL, Artifact locations, configuration và key material cần thiết; đối chiếu identity/digest; ghi RPO/RTO đo được. |
-| Q05 | Đóng gói và hướng dẫn vận hành | 12 | Q02–Q04 | Có cách cài/cập nhật/rollback được phép, cấu hình môi trường, cảnh báo, account operations và đường xử lý sự cố cho người vận hành ban đầu. |
-| Q06 | Cài trên nhiều máy, sửa lỗi chặn và ghi kết quả áp dụng nội bộ | 20 | Q01–Q05 | Diễn tập trước, cài trên 2–5 máy Windows, chạy kịch bản có người quan sát, sửa/retest lỗi chặn và ghi phần đạt/chưa đạt; không tự tuyên bố rollout toàn công ty hoặc bản thương mại. |
+| Q05 | Đóng gói và hướng dẫn vận hành | 12 | Q02, Q03, Q04 | Có cách cài/cập nhật/rollback được phép, cấu hình môi trường, cảnh báo, account operations và đường xử lý sự cố cho người vận hành ban đầu. |
+| Q06 | Cài trên nhiều máy, sửa lỗi chặn và ghi kết quả áp dụng nội bộ | 20 | Q01, Q02, Q03, Q04, Q05 | Diễn tập trước, cài trên 2–5 máy Windows, chạy kịch bản có người quan sát, sửa/retest lỗi chặn và ghi phần đạt/chưa đạt; không tự tuyên bố rollout toàn công ty hoặc bản thương mại. |
 
 ## 5. Definition of Done áp dụng cho mọi work package
 
