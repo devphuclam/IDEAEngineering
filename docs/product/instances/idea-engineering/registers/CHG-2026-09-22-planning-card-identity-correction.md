@@ -31,9 +31,11 @@ completed plan preparation from pending implementation-readiness work.
 | `DeliveryCard:P02` | `DeliveryCard:PLN02` | Build the Gantt, working calendar and milestones | 4 | `COMPLETED / PASS` |
 | `DeliveryCard:P03` | `DeliveryCard:PLN03` | Set up Kanban CARIO and progress recording | 4 | `COMPLETED / PASS` |
 
-The predecessor identities remain as `SUPERSEDED` records in the current Execution Register and
-remain recoverable through its revision history. They must not be reused for different future
-Delivery Cards. `WorkPackage:P01`–`WorkPackage:P03` in
+The predecessor identities and their `SUPERSEDED` mapping remain recoverable through this
+controlled record, the Execution Register revision history and Git history. The current Execution
+Register contains only the 53 current-baseline Delivery Cards so the consumer cannot count or
+reject predecessor rows as current work. The predecessor IDs must not be reused for different
+future Delivery Cards. `WorkPackage:P01`–`WorkPackage:P03` in
 `specs/004-technical-pilot-readiness` are not renamed or superseded because identity is the pair
 `kind + id`.
 

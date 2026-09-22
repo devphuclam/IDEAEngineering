@@ -1,7 +1,7 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 4,
+  "registerRevision": 5,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
@@ -856,125 +856,6 @@
       "blockers": [],
       "events": [],
       "successorRefs": []
-    },
-    {
-      "entity": {
-        "kind": "DeliveryCard",
-        "id": "P01"
-      },
-      "recordingState": "RECORDED",
-      "executionState": "COMPLETED",
-      "resultState": "PASS",
-      "priority": "NORMAL",
-      "forecastPlannedOrder": 1,
-      "actualStart": null,
-      "actualFinish": "2026-09-22T09:03:14.7704624+07:00",
-      "actualEffortHours": 4.0,
-      "remainingEffortHours": 0.0,
-      "forecastFinish": null,
-      "lastUpdatedAt": "2026-09-22T09:31:08+07:00",
-      "remainingReviewedAt": "2026-09-22T09:03:14.7704624+07:00",
-      "recordedBy": "LEAD",
-      "disposition": "SUPERSEDED",
-      "unplannedWorkType": null,
-      "reserveUsedHours": 0,
-      "evidence": [
-        {
-          "evidenceId": "P01-SOURCE-STATE-001",
-          "type": "SOURCE_RECORD",
-          "repoPath": "specs/004-technical-pilot-readiness/readiness-register.md",
-          "commit": null,
-          "sha256": null,
-          "externalUri": null,
-          "description": "The PH0 readiness register originally supplied the distinct technical-readiness P01 observation.",
-          "result": "NOT_APPLICABLE",
-          "recordedAt": "2026-09-19T00:00:00+07:00",
-          "recordedBy": "LEAD"
-        },
-        {
-          "evidenceId": "P01-EVIDENCE-2",
-          "type": "REVIEW_RECORD",
-          "repoPath": "specs/004-technical-pilot-readiness/readiness-register.md",
-          "commit": null,
-          "sha256": null,
-          "externalUri": null,
-          "description": "P01/T006 COMPLETE and PASS on 2026-09-22 for IE-INC-READY-001-BL-001@0.2, SHA-256 B16C01EA3C37A81625D1580BB488723D8F1394AFD4C5F71AB05A47E25322BF0C.",
-          "result": "PASS",
-          "recordedAt": "2026-09-22T09:03:14.7704624+07:00",
-          "recordedBy": "LEAD"
-        }
-      ],
-      "blockers": [],
-      "events": [
-        {
-          "eventId": "P01-EVENT-001",
-          "effectiveAt": "2026-09-19T00:00:00+07:00",
-          "recordedAt": "2026-09-19T00:00:00+07:00",
-          "recordedBy": "LEAD",
-          "kind": "STATE_CHANGE",
-          "reason": "Initialize from the attributable PH0 readiness task-state record; no actual or remaining effort is inferred."
-        },
-        {
-          "eventId": "P01-EVENT-2",
-          "effectiveAt": "2026-09-22T09:03:14.7704624+07:00",
-          "recordedAt": "2026-09-22T09:03:14.7704624+07:00",
-          "recordedBy": "LEAD",
-          "kind": "STATE_CHANGE",
-          "reason": "Retrospective four-hour estimate was recorded before the management-planning identity correction; no historical actualStart was fabricated."
-        },
-        {
-          "eventId": "P01-EVENT-3",
-          "effectiveAt": "2026-09-22T09:31:08+07:00",
-          "recordedAt": "2026-09-22T09:31:08+07:00",
-          "recordedBy": "LEAD",
-          "kind": "CORRECTION",
-          "reason": "Superseded as a management Delivery Card by PLN01. Retained for audit only and excluded from current-baseline progress."
-        }
-      ],
-      "successorRefs": [
-        {
-          "kind": "DeliveryCard",
-          "id": "PLN01"
-        }
-      ]
-    },
-    {
-      "entity": {
-        "kind": "DeliveryCard",
-        "id": "P02"
-      },
-      "recordingState": "NOT_RECORDED",
-      "priority": "NORMAL",
-      "forecastPlannedOrder": 2,
-      "disposition": "SUPERSEDED",
-      "evidence": [],
-      "blockers": [],
-      "events": [],
-      "successorRefs": [
-        {
-          "kind": "DeliveryCard",
-          "id": "PLN02"
-        }
-      ]
-    },
-    {
-      "entity": {
-        "kind": "DeliveryCard",
-        "id": "P03"
-      },
-      "recordingState": "NOT_RECORDED",
-      "priority": "NORMAL",
-      "forecastPlannedOrder": 3,
-      "disposition": "SUPERSEDED",
-      "evidence": [],
-      "blockers": [],
-      "events": [],
-      "successorRefs": [
-        {
-          "kind": "DeliveryCard",
-          "id": "PLN03"
-        }
-      ]
     }
   ],
   "changeHistory": [
@@ -1004,6 +885,13 @@
       "recordedAt": "2026-09-22T09:31:08+07:00",
       "recordedBy": "LEAD",
       "reason": "Replace the first three management-planning Delivery Card identities with PLN01-PLN03 and record 12 retrospective hours. P01-P03 remain distinct Spec Kit WorkPackage identities; no product implementation progress is inferred.",
+      "sourceEvidence": "docs/product/instances/idea-engineering/registers/CHG-2026-09-22-planning-card-identity-correction.md"
+    },
+    {
+      "revision": 5,
+      "recordedAt": "2026-09-22T10:03:05.0772659+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Keep the current Execution Register scoped to the 53 current-baseline Delivery Cards. The P01-P03 to PLN01-PLN03 replacement remains attributable through revision 4, the controlled change record and Git history.",
       "sourceEvidence": "docs/product/instances/idea-engineering/registers/CHG-2026-09-22-planning-card-identity-correction.md"
     }
   ]

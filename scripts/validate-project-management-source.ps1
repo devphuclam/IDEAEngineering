@@ -612,13 +612,7 @@ try {
             foreach ($record in @($register.records)) {
                 $registerId = [string]$record.entity.id
                 if ($cardIds -notcontains $registerId) {
-                    $recordDisposition = [string]$record.disposition
-                    $successorIds = @($record.successorRefs | ForEach-Object { [string]$_.id })
-                    $requiresSuccessor = $recordDisposition -in @('SUPERSEDED', 'SPLIT', 'MERGED')
-                    $invalidSuccessor = @($successorIds | Where-Object { $cardIds -notcontains $_ }).Count -gt 0
-                    if ($recordDisposition -eq 'ACTIVE' -or $recordDisposition -notin @('CANCELLED', 'SUPERSEDED', 'SPLIT', 'MERGED') -or ($requiresSuccessor -and $successorIds.Count -eq 0) -or $invalidSuccessor) {
-                        Add-Diagnostic $diagnostics 'PMC-IDENTITY-003' 'ERROR' "Execution Register contains uncontrolled predecessor or unknown Delivery Card $registerId." 'Record a non-active disposition and valid current successor reference, or add the identity through planning change control.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $registerId
-                    }
+                    Add-Diagnostic $diagnostics 'PMC-IDENTITY-003' 'ERROR' "Execution Register contains non-current or unknown Delivery Card $registerId." 'Keep predecessor mappings in a controlled change record and Git history; the current Execution Register contains current-baseline Delivery Cards only.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $registerId
                 }
             }
         }

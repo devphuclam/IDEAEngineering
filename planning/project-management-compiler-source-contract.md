@@ -83,14 +83,16 @@ The Execution Register contains Delivery Card records only. Work packages, phase
 are aggregates or zero-effort control points. Spec Kit task IDs are trace links, not another unit of
 project effort.
 
-An accepted entity is never hard-deleted. Cancellation, replacement, split and merge keep the old
-identity and record successor relations. If an identity in the prior accepted snapshot disappears
-without a controlled disposition, import fails.
+An accepted identity is never silently reused. Cancellation, replacement, split and merge retain
+their mapping in a controlled change record and immutable Git history. The current Execution
+Register contains only current-baseline Delivery Cards because it is an execution snapshot, not an
+all-baseline identity ledger. If an identity disappears without controlled change evidence, import
+fails.
 
 `IE-PLAN-DEC2026-003@0.2` replaces the predecessor management Delivery Cards `P01`–`P03` with
 `PLN01`–`PLN03`. The exact mapping and disposition are retained in `IE-CHG-PLAN-ID-001`, the
-Execution Register's non-active predecessor records and its revision history. Current progress
-counts only the 53 `ACTIVE` identities in the Delivery Card authority. This replacement does not
+Execution Register revision history and Git history. Current progress counts only the 53 `ACTIVE`
+identities in the Delivery Card authority. This replacement does not
 rename the distinct Spec Kit work packages `WorkPackage:P01`–`WorkPackage:P03`.
 
 ## 5. Execution facts

@@ -18,7 +18,7 @@
   "execution": {
     "registerPath": "planning/idea-technical-pilot-execution-register.json",
     "schemaPath": "planning/idea-technical-pilot-execution-register.schema.json",
-    "expectedRegisterRevision": 4
+    "expectedRegisterRevision": 5
   },
   "calendarPath": "planning/idea-technical-pilot-project-calendar.json",
   "diagnosticCataloguePath": "planning/project-management-compiler-diagnostics.md",
@@ -78,7 +78,7 @@
     "gateState": "PASS",
     "validationResult": "PASS",
     "commitBinding": "IMPORT_CONTEXT",
-    "acceptedAt": "2026-09-22T09:31:08+07:00",
+    "acceptedAt": "2026-09-22T10:03:05.0772659+07:00",
     "acceptedBy": "LEAD",
     "acceptanceBasis": "Project user retained the 23 September to 31 December Core v0 roadmap and approved the controlled planning correction: PLN01-PLN03 replace three already-completed management-planning cards, carry 12 retrospective hours, and leave 512 task hours, reserves, scope, gates, one-Vault Core v0 and the future multi-vault seam unchanged.",
     "openWarnings": []
