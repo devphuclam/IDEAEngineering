@@ -142,9 +142,9 @@ remaining planned work is **500 hours**.
 | Planning window | 23 September–31 December 2026 |
 | Working calendar | **79 working days × 8 hours = 632 hours**; Monday–Friday plus Saturdays in weeks 1, 3 and 5; Saturdays in weeks 2 and 4 are days off |
 | Planned phase work | **512 hours** across **35 work packages** |
-| Technical reserve | **88 hours** for recorded in-scope uncertainty, defects and retest |
+| Controlled reserve | **88 hours** for recorded in-scope uncertainty, defects and retest |
 | Operational buffer | **32 hours** for review, environment transition and controlled interruption |
-| Total baseline allocation | **632 hours** |
+| Total allocation | **632 hours** |
 | Estimation confidence | Roadmap allocation; actual delivery rate remains unmeasured until `MS1` and must be used for reforecast |
 
 The project user remains the only assumed coder. Assistant work does not add a second full-time
