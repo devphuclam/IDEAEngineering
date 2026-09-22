@@ -182,7 +182,7 @@ predecessor milestone passes; spare hours do not waive a gate.
 
 | Phase | Work-package range | Planned start | Planned finish | Baseline capacity | Starts after |
 |---|---|---|---|---:|---|
-| PH0 — Planning and implementation readiness | PLN01–PLN03, P04–P07 | 21 September actual planning; 23 September official implementation window | 29 September | 40 h | Roadmap direction selected; `PLN01`–`PLN03` complete |
+| PH0 — Planning and implementation readiness | PLN01–PLN03, P04–P07 | 23 September | 29 September | 40 h | Roadmap direction selected; `PLN01`–`PLN03` completed early on 21 September |
 | PH1 — Running foundation | F01–F05 | 30 September | 13 October | 88 h | `MS0` passes |
 | PH2 — Controlled-document core | C01–C05 | 14 October | 30 October | 112 h | `MS1` passes |
 | PH3 — Workspace and Checkout/Check-in | W01–W07 | 31 October | 26 November | 176 h | `MS2` passes |
