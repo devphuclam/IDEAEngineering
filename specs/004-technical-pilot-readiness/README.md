@@ -29,7 +29,7 @@ Stack và không phê duyệt successor baseline.
 | Nội dung | Trạng thái |
 |---|---|
 | PH0 source package | `Draft` |
-| P01–P07 execution | P01 `IN-PROGRESS`; P02–P07 `NOT-RUN` |
+| P01–P07 execution | P01 `COMPLETE` / `PASS`; P02–P07 `NOT-RUN` |
 | PG4 Gate Execution State | `NOT-RUN` |
 | PG4 Gate Outcome | `NOT-APPLICABLE` until an attributable decision |
 | Production implementation | Unauthorized |

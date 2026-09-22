@@ -30,6 +30,23 @@ bị một chương trình khác sử dụng, tracker tự thử các cổng ti�
 6. Khi đầu ra và điều kiện hoàn thành đã được kiểm tra, nhập bằng chứng rồi bấm **Hoàn thành card**.
    Công cụ đóng phiên đang chạy, ghi mốc hoàn thành và đặt giờ còn lại về `0`.
 
+## Ghi nhận qua cuộc trò chuyện với agent
+
+Người dùng có thể yêu cầu agent thực hiện cùng các thao tác bằng câu lệnh rõ ràng:
+
+- `Bắt đầu P04` — mở P04 và bắt đầu một phiên tính giờ.
+- `Dừng` — đóng phiên của card đang hoạt động nhưng giữ card ở `Đang thực hiện`.
+- `Tiếp tục` — mở phiên mới cho card đang hoạt động.
+- `Hoàn thành P04` — kiểm tra điều kiện hoàn thành và bằng chứng rồi đóng card.
+
+Sau khi một card đã hoạt động, có thể bỏ Card ID trong lệnh dừng, tiếp tục hoặc hoàn thành. Câu nói
+chung như `làm tiếp đi` không phải lệnh tính giờ vì không xác định chắc chắn card hoặc thời điểm bắt
+đầu. Agent phải dùng cùng Progress Tracker/Execution Register, không được tạo một sổ giờ riêng.
+
+Nếu công việc cũ không có phiên timer, chỉ ghi ước lượng hồi tố khi người dùng xác nhận con số. Bản
+ghi phải nêu rõ đó là ước lượng, giữ giá trị cũ/mới và lý do trong Work Journal; không được dùng giờ
+kế hoạch làm giờ thực tế nếu chưa có xác nhận đó.
+
 Mỗi lần ghi nhận sẽ tăng `registerRevision` và cập nhật
 `manifest.execution.expectedRegisterRevision` trong cùng thao tác. Giờ thực tế là tổng thời gian
 các phiên đã đóng, không phải khoảng thời gian lịch từ lúc bắt đầu đến lúc hoàn thành. Giờ còn lại

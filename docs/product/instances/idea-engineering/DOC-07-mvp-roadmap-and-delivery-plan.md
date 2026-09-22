@@ -1,6 +1,6 @@
 # IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap
 
-> **Instance state**: controlled `Draft 0.16`. This roadmap plans work and decision presentations. It
+> **Instance state**: controlled `Draft 0.17`. This roadmap plans work and decision presentations. It
 > does not create or approve Feature, Spec or Tech content by schedule assertion, and it does not
 > authorize production implementation or release.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Analysis, Design and Core v0 Delivery Roadmap |
 | Owner | `Principal Product Author`; named person attribution `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.16` |
+| Document Version | `0.17` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity to be recorded before `Proposed` |
@@ -22,9 +22,9 @@
 | Source Links | [Product templates](../../definition/README.md), [domain language](../../../../CONTEXT.md), [architecture baseline](../../../architecture/idea-product-lifecycle-architecture.md), [design lessons](../../knowledge/idea-design-lessons.md) |
 | Downstream Links | [Task appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt view](planning/idea-roadmap-december-2026.html), three decision briefs, supporting records and later implementation increments |
 | Evidence / Claim Status | `IDEA DECISION` for accepted planning rules; execution and gate evidence remains `NOT-RUN` |
-| Change History | 0.16: select the 23-09–31-12 Core v0 execution baseline: 512 task hours, 88 technical-reserve hours and 32 operational-buffer hours; one Vault in Core v0 with an explicit future multi-vault seam; [IE-CHG-ROADMAP-CV0-001](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md). Earlier history remains in linked change records. |
-| Change Record | [IE-CHG-ROADMAP-CV0-001@0.1](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md); [IE-CHG-COMMERCIAL-DIR-001@0.1](registers/CHG-2026-09-17-internal-first-commercial-direction.md); predecessor planning records retained in Git |
-| Supersedes / Superseded by | Supersedes `DOC-07@0.15`; superseded by `NOT-APPLICABLE` |
+| Change History | 0.17: replace three already-completed management-planning work items with `PLN01`–`PLN03`, record 12 retrospective hours and preserve all scope, capacity and milestone totals; [IE-CHG-PLAN-ID-001](registers/CHG-2026-09-22-planning-card-identity-correction.md). 0.16 selected the 23-09–31-12 Core v0 execution baseline. Earlier history remains in linked change records. |
+| Change Record | [IE-CHG-PLAN-ID-001@0.1](registers/CHG-2026-09-22-planning-card-identity-correction.md); [IE-CHG-ROADMAP-CV0-001@0.1](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md); [IE-CHG-COMMERCIAL-DIR-001@0.1](registers/CHG-2026-09-17-internal-first-commercial-direction.md) |
+| Supersedes / Superseded by | Supersedes `DOC-07@0.16`; superseded by `NOT-APPLICABLE` |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational retention period is `UNKNOWN`, owner `Product Decision Authority`, review trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -37,10 +37,10 @@ exit evidence. The roadmap index is navigation only.
 
 | Increment Record ID | Source Roadmap Baseline | Status | Version | Owner | First / later gate | Requirement and design trace | Exit evidence |
 |---|---|---|---|---|---|---|---|
-| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.16` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
-| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.16` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
-| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.16` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
-| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.16` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
+| `IE-INC-FEATURE-001` | `IE-PROD-ROADMAP-001@0.17` | `Draft` | `0.1` | Principal Product Author | `PG1` / `PG2` on material scope change | DOC-01/02/03, coverage records, `FEATURE-001` | Feature decision, source pins and open-action disposition |
+| `IE-INC-SPEC-001` | `IE-PROD-ROADMAP-001@0.17` | `Draft` | `0.1` | Principal Product Author | `PG2` / `PG3` on requirement change | DOC-03/04/06/08, `SPEC-001` | Spec decision, trace and V&V readiness |
+| `IE-INC-TECH-001` | `IE-PROD-ROADMAP-001@0.17` | `Draft` | `0.1` | Principal Product Author | `PG3` / `PG4` on technology change | DOC-02/04/05/06/08, ADRs, `TECH-001` | Tech decision, architecture review and risk disposition |
+| `IE-INC-READY-001` | `IE-PROD-ROADMAP-001@0.17` | `Draft` | `0.1` | Principal Product Author | `PG4` | Approved Feature/Spec/Tech baselines and supporting records | Bounded implementation plan, tests, migration/recovery and gate result |
 
 <!-- AUTHOR CONTENT START -->
 
@@ -109,7 +109,7 @@ future increments; the roadmap does not convert them into rejected requirements.
 
 ### 3.2 Core v0 schedule and task appendix
 
-**Schedule baseline: `IE-PLAN-DEC2026-003@0.1`, Current, selected 21 September 2026.**
+**Schedule baseline: `IE-PLAN-DEC2026-003@0.2`, Current, corrected 22 September 2026.**
 The target is a bounded, installable **Core v0 on 31 December 2026**, not company-wide rollout,
 commercial release or complete reference-product parity.
 
@@ -128,6 +128,12 @@ Task IDs in Appendix A are roadmap work-package identities, not tracker issues a
 work has started. Before each implementation phase starts, its bounded increment must receive
 the applicable Spec Kit specification, plan, checklist and executable tasks. The existing
 `003-controlled-documentation` feature is not repurposed as product implementation.
+
+`PLN01`–`PLN03` are the only completed work packages in this schedule snapshot. They record the
+WBS, Gantt/milestones and Kanban/progress mechanism prepared before the official implementation
+window. Their 12 completed baseline hours equal **2.3% of the 512-hour delivery plan**. This is
+planning progress, not a claim that 2.3% of the product code has been implemented. The current
+remaining planned work is **500 hours**.
 
 #### Capacity and estimation basis
 
@@ -160,7 +166,7 @@ incorrectly used one label for both concepts.
 
 | Phase | Planned work | Technical reserve | Operational buffer | Capacity | Main demonstrable outcome |
 |---|---:|---:|---:|---:|---|
-| PH0 — Implementation readiness | 32 | 0 | 8 | 40 | Bounded increment package and recorded `PG4` result |
+| PH0 — Planning and implementation readiness | 32 | 0 | 8 | 40 | Controlled WBS/Gantt/Kanban plus bounded increment package and recorded `PG4` result |
 | PH1 — Running foundation | 72 | 8 | 8 | 88 | Web/Desktop/Server/PostgreSQL/Gateway path with native login and Audit seam |
 | PH2 — Controlled-document core | 96 | 16 | 0 | 112 | Store/Create, identity, Revision/Version/Generation and authorized retrieval |
 | PH3 — Workspace and Checkout/Check-in | 136 | 32 | 8 | 176 | Safe Checkout/Reference/Check-in and direct resumable transfer to one configured Vault |
@@ -176,7 +182,7 @@ predecessor milestone passes; spare hours do not waive a gate.
 
 | Phase | Work-package range | Planned start | Planned finish | Baseline capacity | Starts after |
 |---|---|---|---|---:|---|
-| PH0 — Implementation readiness | P01–P07 | 23 September | 29 September | 40 h | Roadmap direction selected |
+| PH0 — Planning and implementation readiness | PLN01–PLN03, P04–P07 | 21 September actual planning; 23 September official implementation window | 29 September | 40 h | Roadmap direction selected; `PLN01`–`PLN03` complete |
 | PH1 — Running foundation | F01–F05 | 30 September | 13 October | 88 h | `MS0` passes |
 | PH2 — Controlled-document core | C01–C05 | 14 October | 30 October | 112 h | `MS1` passes |
 | PH3 — Workspace and Checkout/Check-in | W01–W07 | 31 October | 26 November | 176 h | `MS2` passes |
@@ -318,10 +324,10 @@ disposition. Deferral does not erase the long-term target.
 | `SOURCE-DECISION` | Accepted constitution, product ADRs and stakeholder decisions establishing internal scope, Release Spine and three boss decision axes | Linked at repository baseline; exact decision ledger to be instantiated before `Proposed` |
 | `SOURCE-EVIDENCE` | Product knowledge, reference-coverage records and prototype evidence | Knowledge sources and `IE-GOV-COVERAGE-001@0.3` exist; exact target-runtime evidence remains `BLOCKED` |
 | `DOWNSTREAM` | DOC-01…DOC-08, three decision briefs and later increments | Eight Core Drafts, three brief Drafts and initial GOV/VVP records instantiated |
-| `CHANGE` | [IE-CHG-ROADMAP-CV0-001](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md), [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md), retained predecessor change records and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | Draft 0.16 selects the Core v0 execution plan and one-Vault delivery scope while preserving the future multi-vault seam; execution, `PG4` and Commercial Readiness Gate evidence remain `NOT-RUN`. |
+| `CHANGE` | [IE-CHG-PLAN-ID-001](registers/CHG-2026-09-22-planning-card-identity-correction.md), [IE-CHG-ROADMAP-CV0-001](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md), [IE-CHG-COMMERCIAL-DIR-001](registers/CHG-2026-09-17-internal-first-commercial-direction.md), retained predecessor change records and [Work Item](https://github.com/devphuclam/IDEAEngineering/issues/1) | Draft 0.17 corrects the first three planning identities and records their 12 completed hours. Core v0 scope, one-Vault delivery boundary, future multi-vault seam, 512-hour plan, `PG4` and Product Decision Authority decisions are unchanged. |
 | `VERIFICATION` | VVP/VEV gate and Release Spine evidence | `NOT-RUN` |
 | `RELEASE` | REL manifest for a future implementation/release | `NOT APPLICABLE` to this draft |
-| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt](planning/idea-roadmap-december-2026.html) and [Kanban CARIO register](planning/idea-technical-pilot-kanban-cario.md); source pins in the change records | All are current renditions of `IE-PLAN-DEC2026-003@0.1`. The Kanban register contains 53 delivery cards and 7 zero-effort decision/milestone cards and follows the company board states; implementation evidence remains evidence-driven. No DOC-07 Word/PDF is rewritten. |
+| `RENDITION` | [Appendix A](planning/DOC-07-appendix-A-task-breakdown-december-2026.md), [Gantt](planning/idea-roadmap-december-2026.html) and [Kanban CARIO register](planning/idea-technical-pilot-kanban-cario.md); source pins in the change records | All are current renditions of `IE-PLAN-DEC2026-003@0.2`. The Kanban register contains 53 delivery cards and 7 zero-effort decision/milestone cards and follows the company board states; implementation evidence remains evidence-driven. No DOC-07 Word/PDF is rewritten. |
 
 <!-- AUTHOR CONTENT END -->
 

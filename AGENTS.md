@@ -36,6 +36,16 @@ the [IDEA instance catalogue](docs/product/instances/idea-engineering/README.md)
 authored instances, decision briefs, templates and their current versions. Follow its DOC-07
 links for task order and planning dependencies.
 
+### Actual progress recording
+
+Use [`tools/progress-tracker/README.md`](tools/progress-tracker/README.md) and the repository-owned
+Execution Register/Work Journal for Delivery Card progress. In conversation, only an explicit
+`Bắt đầu <Card ID>`, `Dừng`, `Tiếp tục` or `Hoàn thành <Card ID>` instruction authorizes the
+corresponding tracker action; after one card is active, the Card ID may be omitted for stop/resume/
+complete. Do not infer a timer action from generic wording such as `làm tiếp đi`. Do not substitute
+planned hours for actual effort. A retrospective estimate may be recorded only when the user
+explicitly confirms the estimate and the correction remains attributable in the Work Journal.
+
 ### Product and research authoring standard
 
 Before authoring a controlled product document, `IE-KNW-*` knowledge artifact, research record,

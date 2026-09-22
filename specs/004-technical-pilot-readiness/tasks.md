@@ -39,8 +39,8 @@ separate baselines.
 `f269a044...`, the historical use of `aabf02ff...` and the `NOT-RUN` successor disposition.
 
 - [x] T004 [US1] Recompute current-source SHA-256 values and reconcile every entry and discrepancy in `specs/004-technical-pilot-readiness/baseline-manifest.md` against `IE-CHG-PDA-APPROVAL-001` and the current Git baseline (`P01`, FR-001, FR-002, FR-003).
-- [x] T005 [US1] Reconcile the P01/P07 wording correction and Appendix A@0.5 → 0.6 history in `docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md` against `docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md`; verify `f269a044...` is the approved product baseline, `aabf02ff...` remains plan history, and hours, scope and dependencies are unchanged (`BL-DISC-003`).
-- [ ] T006 [US1] Record the reviewer, date, exact manifest hash, discrepancy dispositions and P01 result in `specs/004-technical-pilot-readiness/readiness-register.md`; a missing review remains `NOT-RUN` and a source conflict remains `BLOCKED` (FR-014, SC-001).
+- [x] T005 [US1] Reconcile the P01/P07 wording correction and Appendix A@0.5 → 0.6 history against `IE-CHG-PH0-CORR-001`, then reconcile the current Appendix A@0.8 execution successor against `IE-CHG-ROADMAP-CV0-001`; verify `f269a044...` remains the approved product baseline, `aabf02ff...` remains plan history, and `IE-PLAN-DEC2026-003@0.1` is the current execution plan without changing Feature, Spec or Tech (`BL-DISC-003`).
+- [x] T006 [US1] Record the reviewer, date, exact manifest hash, discrepancy dispositions and P01 result in `specs/004-technical-pilot-readiness/readiness-register.md`; a missing review remains `NOT-RUN` and a source conflict remains `BLOCKED` (FR-014, SC-001). Evidence: Project Reviewer `PASS` on 2026-09-22 for `IE-INC-READY-001-BL-001@0.2`, reviewed content SHA-256 `B16C01EA3C37A81625D1580BB488723D8F1394AFD4C5F71AB05A47E25322BF0C`.
 
 **Checkpoint**: P01 has attributable evidence or an explicit blocker. No successor approval is inferred.
 
@@ -133,16 +133,16 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 
 | Roadmap package | Tasks | Planned work |
 |---|---|---:|
-| `P01` | T004–T006 | 8 h |
-| `P02` | T007–T011 | 8 h |
-| `P03` | T012–T016 | 8 h |
-| `P04` | T017, T021–T022 (environment portion) | 12 h |
-| `P05` | T018–T019, T021–T022 (dataset portion) | 8 h |
-| `P06` | T020–T022 (recovery/security portion) | 12 h |
-| `P07` | T023–T027 | 8 h |
+| `P01` | T004–T006 | 4 h |
+| `P02` | T007–T011 | 4 h |
+| `P03` | T012–T016 | 4 h |
+| `P04` | T017, T021–T022 (environment portion) | 4 h |
+| `P05` | T018–T019, T021–T022 (dataset portion) | 4 h |
+| `P06` | T020–T022 (recovery/security portion) | 8 h |
+| `P07` | T023–T027 | 4 h |
 | Cross-artifact quality | T001–T003, T028–T032 | Included across work packages; no extra roadmap effort |
 
-The table preserves the DOC-07 allocation of 64 work hours. The 24-hour reserve is controlled
+The table preserves the current DOC-07 allocation of 32 work hours. The 8-hour operational buffer is controlled
 schedule capacity, not a task or permission to skip an authority, review or correctness condition.
 
 ## Dependencies & Execution Order

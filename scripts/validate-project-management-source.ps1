@@ -289,12 +289,13 @@ function Test-ExecutionRegister {
             $ids[$identity] = $true
         }
 
+        $disposition = [string](Get-PropertyValue $record 'disposition' '')
         $order = Get-PropertyValue $record 'forecastPlannedOrder' $null
         if ($null -eq $order -or [int]$order -lt 1) {
             Add-Diagnostic $Diagnostics 'PMC-STATE-001' 'ERROR' "Delivery Card $id has invalid forecastPlannedOrder." 'Use a positive deterministic order.' $SourcePath 'forecastPlannedOrder' $kind $id
-        } elseif ($orders.ContainsKey([string]$order)) {
+        } elseif ($disposition -eq 'ACTIVE' -and $orders.ContainsKey([string]$order)) {
             Add-Diagnostic $Diagnostics 'PMC-STATE-001' 'ERROR' "forecastPlannedOrder $order is duplicated." 'Assign a unique order within the register.' $SourcePath 'forecastPlannedOrder' $kind $id
-        } else {
+        } elseif ($disposition -eq 'ACTIVE') {
             $orders[[string]$order] = $id
         }
 
@@ -410,7 +411,7 @@ function Get-WorkPackageRows {
     param([string]$Path)
     $rows = @{}
     foreach ($line in Get-Content -LiteralPath $Path -Encoding UTF8) {
-        if ($line -match '^\| (?<id>[PFCWLQ]\d{2}) \| [^|]+ \| (?<hours>\d+) \|') {
+        if ($line -match '^\| (?<id>(?:PLN\d{2}|[PFCWLQ]\d{2})) \| [^|]+ \| (?<hours>\d+) \|') {
             if (-not $rows.ContainsKey($Matches.id)) { $rows[$Matches.id] = [int]$Matches.hours }
         }
     }
@@ -598,14 +599,27 @@ try {
 
         if ($null -ne $registerPath) {
             $registerIds = @($register.records | ForEach-Object { [string]$_.entity.id })
+            $cardIds = @($cards | ForEach-Object { [string]$_.id })
             foreach ($card in $cards) {
                 if ($registerIds -notcontains $card.id) {
                     Add-Diagnostic $diagnostics 'PMC-IDENTITY-002' 'ERROR' "Baseline Delivery Card $($card.id) is absent from the Execution Register." 'Add an explicit NOT_RECORDED record or controlled disposition.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $card.id
+                    continue
+                }
+                $activeMatches = @($register.records | Where-Object { [string]$_.entity.id -eq [string]$card.id -and [string]$_.disposition -eq 'ACTIVE' })
+                if ($activeMatches.Count -ne 1) {
+                    Add-Diagnostic $diagnostics 'PMC-IDENTITY-002' 'ERROR' "Baseline Delivery Card $($card.id) requires exactly one ACTIVE Execution Register record; found $($activeMatches.Count)." 'Correct the active record or its controlled disposition.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $card.id
                 }
             }
-            foreach ($registerId in $registerIds) {
-                if (@($cards.id) -notcontains $registerId) {
-                    Add-Diagnostic $diagnostics 'PMC-IDENTITY-003' 'ERROR' "Execution Register contains unknown Delivery Card $registerId." 'Add it through planning change control or remove the invalid record.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $registerId
+            foreach ($record in @($register.records)) {
+                $registerId = [string]$record.entity.id
+                if ($cardIds -notcontains $registerId) {
+                    $recordDisposition = [string]$record.disposition
+                    $successorIds = @($record.successorRefs | ForEach-Object { [string]$_.id })
+                    $requiresSuccessor = $recordDisposition -in @('SUPERSEDED', 'SPLIT', 'MERGED')
+                    $invalidSuccessor = @($successorIds | Where-Object { $cardIds -notcontains $_ }).Count -gt 0
+                    if ($recordDisposition -eq 'ACTIVE' -or $recordDisposition -notin @('CANCELLED', 'SUPERSEDED', 'SPLIT', 'MERGED') -or ($requiresSuccessor -and $successorIds.Count -eq 0) -or $invalidSuccessor) {
+                        Add-Diagnostic $diagnostics 'PMC-IDENTITY-003' 'ERROR' "Execution Register contains uncontrolled predecessor or unknown Delivery Card $registerId." 'Record a non-active disposition and valid current successor reference, or add the identity through planning change control.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $registerId
+                    }
                 }
             }
         }

@@ -36,6 +36,15 @@ guess between files with similar content.
 The roadmap, Work Packages and Delivery Cards remain in DOC-07 and its controlled appendices. The
 manifest points to those owning files. The HTML Gantt is a visual cross-check only.
 
+## Current execution snapshot
+
+- Baseline: `IE-PLAN-DEC2026-003@0.2`.
+- Completed planning cards: `PLN01`, `PLN02`, `PLN03`.
+- Current actual: 12 hours; current remaining planned work: 500 hours.
+- Delivery ratio: 2.3% of the 512-hour plan. This is planning progress, not software-code progress.
+- Next dependency-ready cards: `P04` and `P05`; WIP limit 1 means only one may be active.
+- Product implementation and `PG4` remain `NOT-RUN` until separately evidenced.
+
 ## Recording actual progress
 
 Use the Execution Register for actual progress. Do not rewrite the approved Baseline to make a

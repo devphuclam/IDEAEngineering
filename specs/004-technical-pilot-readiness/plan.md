@@ -39,8 +39,9 @@ tools or external-source imports; approved predecessor and successor Draft must 
 missing evidence is `BLOCKED` or `NOT-RUN`; internal-first scope with a separate future Commercial
 Readiness Gate
 
-**Scale/Scope**: Seven PH0 work packages (`P01`–`P07`), 64 planned hours plus 24 hours controlled
-reserve, one exact next increment, one canonical Technical Pilot scenario and one `PG4` decision
+**Scale/Scope**: Seven PH0 work packages (`P01`–`P07`), 32 planned hours plus 8 hours operational
+buffer under `IE-PLAN-DEC2026-003@0.1`, one exact next increment, one canonical Technical Pilot
+scenario and one `PG4` decision
 
 ## Constitution Check
 

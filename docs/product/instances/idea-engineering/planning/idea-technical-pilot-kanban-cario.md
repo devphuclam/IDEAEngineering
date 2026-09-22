@@ -3,16 +3,16 @@
 | Thông tin kiểm soát | Nội dung |
 |---|---|
 | Stable ID | `IE-PLAN-DEC2026-002-KANBAN` |
-| Phiên bản / trạng thái | `0.4` / `Current planning baseline` |
+| Phiên bản / trạng thái | `0.5` / `Current planning baseline` |
 | Loại tài liệu | Danh sách công việc để nhập và theo dõi trên Kanban nội bộ |
-| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.16](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
-| Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.1` |
+| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.17](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
+| Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.2` |
 | Nguồn phân rã | [Phụ lục A](DOC-07-appendix-A-task-breakdown-december-2026.md) và [Gantt](idea-roadmap-december-2026.html) |
 | Người chuẩn bị / review | Principal Product Author chuẩn bị; người dùng dự án review |
 | Product normativity | `INFORMATIVE`; không tạo Feature, Spec hoặc Tech mới |
 | Phân loại | `INTERNAL` |
-| Bằng chứng thực hiện | `NOT-RUN` |
-| Thay đổi | [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md); predecessor [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md) |
+| Bằng chứng thực hiện | `PLN01`–`PLN03` hoàn thành theo ghi nhận hồi tố được người dùng dự án xác nhận; thực thi sản phẩm và `PG4` vẫn `NOT-RUN` |
+| Thay đổi | [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md); predecessor [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
 
 Đây là danh sách nhập liệu cho **Kanban CARIO của công ty**, không phải một kế hoạch độc lập. Người
 nhận việc có thể đọc trực tiếp từ mục 2. Mỗi card nói rõ mục đích, việc cần làm và điều kiện hoàn
@@ -25,7 +25,7 @@ hoạch gốc, không sửa riêng card để che sai lệch.
 
 | Trạng thái trên board | Cách dùng |
 |---|---|
-| `Chưa bắt đầu` | Card chưa được nhận hoặc công việc cần làm trước chưa hoàn thành. Toàn bộ card khởi tạo ở trạng thái này. |
+| `Chưa bắt đầu` | Card chưa được nhận hoặc công việc cần làm trước chưa hoàn thành. Card mới khởi tạo ở trạng thái này; `PLN01`–`PLN03` là ba ngoại lệ đã hoàn thành trước ngày bắt đầu triển khai chính thức. |
 | `Đang thực hiện` | Chỉ card đang được làm thật. Với một người viết code, tối đa **một** card thực hiện ở trạng thái này. |
 | `Hoàn thành` | Đầu ra và điều kiện hoàn thành trong card đã được kiểm tra; có link commit/test/evidence khi áp dụng. |
 | `Tạm ngưng` | Không thể tiếp tục vì đang chờ quyết định, quyền, môi trường hoặc công việc khác. Phải ghi lý do, người xử lý và mốc bị ảnh hưởng. |
@@ -92,7 +92,7 @@ Quy tắc nguồn lực hiện tại:
 | Trường | Giá trị/cách ghi |
 |---|---|
 | Tên task | Dùng nguyên tên trong bảng, gồm `[Giai đoạn][Mã card]` để tìm kiếm được. |
-| Trạng thái ban đầu | `Chưa bắt đầu`. Card đầu tiên có thể nhận là `P01`. |
+| Trạng thái ban đầu | `Chưa bắt đầu`. `PLN01`–`PLN03` đã hoàn thành; card triển khai tiếp theo có thể nhận là `P04` hoặc `P05` khi đúng điều kiện phụ thuộc. |
 | Ưu tiên | Dùng giá trị đang được cấu hình trên board công ty; chỉ card đã đủ điều kiện bắt đầu hoặc mốc sắp đến mới được nâng ưu tiên. |
 | Thời gian | Tất cả ngày trong bảng thuộc năm 2026. Dùng ngày bắt đầu–hạn trong bảng; AM/PM là nửa ngày kế hoạch, không phải cam kết làm ngoài giờ. |
 | Nội dung | Chép mục “Xong khi”; bổ sung link source/commit/test/evidence khi thực hiện. |
@@ -145,23 +145,23 @@ thay đổi 53 card, 512 giờ công việc, 88 giờ dự phòng kỹ thuật, 
 
 ## 2. Danh sách 53 card thực hiện
 
-### 2.1 PH0 — Sẵn sàng triển khai, 32 giờ
+### 2.1 PH0 — Lập kế hoạch và sẵn sàng triển khai, 32 giờ
 
 | Card | Tên task nhập Kanban | Giờ | Thời gian | Cần trước | Nội dung ghi trên card |
 |---|---|---:|---|---|---|
-| `P01` | `[PH0][P01] Xác nhận bộ tài liệu được phép dùng để bắt đầu` | 4 | 23/09 AM | — | **Mục đích:** cả nhóm dùng đúng tài liệu. **Cần làm:** liệt kê đúng phiên bản Feature, Spec và Tech đã được duyệt; ghi rõ Core v0 dùng một Vault nhưng giữ ranh giới để mở rộng nhiều Vault. **Xong khi:** có một baseline duy nhất để triển khai. |
-| `P02` | `[PH0][P02] Chốt phạm vi Core v0 cuối năm` | 4 | 23/09 PM | P01 | **Mục đích:** tránh hiểu nhầm Core v0 là toàn bộ sản phẩm. **Cần làm:** mô tả luồng từ đăng nhập đến lấy lại bộ hồ sơ đã phát hành; ghi rõ phần làm trong đợt này và phần để sau. **Xong khi:** mọi người dùng cùng một phạm vi Core v0. |
-| `P03` | `[PH0][P03] Liệt kê những việc còn phải xin ý kiến hoặc chờ điều kiện` | 4 | 24/09 AM | P01, P02 | **Mục đích:** không để việc đang chờ bị lẫn vào việc code. **Cần làm:** ghi từng vấn đề còn mở về kho file, môi trường, dữ liệu thử, quyền và người review; chỉ rõ ai xử lý và cần xong khi nào. **Xong khi:** mỗi vấn đề đều có người theo dõi và ảnh hưởng tới lịch. |
-| `P04` | `[PH0][P04] Chuẩn bị môi trường và cách build, test hệ thống` | 4 | 24/09 PM | P03 | **Mục đích:** người phát triển có thể dựng hệ thống theo một cách lặp lại được. **Cần làm:** ghi máy được phép dùng, lệnh build/test, cách lưu cấu hình và mật khẩu, cách cập nhật hoặc quay lại cấu trúc database. **Xong khi:** có hướng dẫn đủ để dựng lại môi trường mà không cài công cụ trái quy định. |
-| `P05` | `[PH0][P05] Chuẩn bị dữ liệu và tài khoản dùng để thử` | 4 | 25/09 AM | P02 | **Mục đích:** các lần thử dùng cùng một bộ dữ liệu. **Cần làm:** chuẩn bị tài liệu mẫu, file lớn đại diện, hai tài khoản thử, một Vault và danh sách tình huống đúng/sai. **Xong khi:** bộ dữ liệu được đặt tên, quản lý và dùng lại được. |
-| `P06` | `[PH0][P06] Chuẩn bị cách quay lui, sao lưu và kiểm tra bảo mật` | 8 | 25/09 PM–28/09 AM | P03, P04, P05 | **Mục đích:** thử nghiệm không làm mất dữ liệu hoặc file đang sửa. **Cần làm:** ghi cách quay lại phiên bản trước, giữ Workspace, khôi phục đồng bộ database với file và phần cần người có chuyên môn bảo mật xem. **Xong khi:** có phương án xử lý rõ cho từng trường hợp thất bại chính. |
-| `P07` | `[PH0][P07] Kiểm tra đã đủ điều kiện bắt đầu code chưa` | 4 | 28/09 PM | P01, P02, P03, P04, P05, P06 | **Mục đích:** chỉ bắt đầu khi những điều kiện quan trọng đã rõ. **Cần làm:** kiểm tra tài liệu, phạm vi, môi trường, dữ liệu thử, cách kiểm tra và rủi ro còn lại. **Xong khi:** PG4 được ghi `PASS`, `PASS-WITH-ACTIONS`, `BLOCKED` hoặc `NOT-RUN`, kèm lý do. |
+| `PLN01` | `[PH0][PLN01] Xây dựng và chốt WBS Core v0` | 4 | Hoàn thành 21/09; kế hoạch gốc 23/09 AM | — | **Mục đích:** biến mục tiêu Core v0 thành danh sách công việc có thể giao và theo dõi. **Cần làm:** phân rã công việc thành 35 work package và 53 Delivery Card; ghi giờ, đầu ra, điều kiện hoàn thành và quan hệ phụ thuộc. **Xong khi:** WBS có một bản hiện hành, tổng 512 giờ và không lẫn các việc đã duyệt với việc còn phải làm. |
+| `PLN02` | `[PH0][PLN02] Lập Gantt, lịch làm việc và milestone` | 4 | Hoàn thành 21/09; kế hoạch gốc 23/09 AM | PLN01 | **Mục đích:** cho biết công việc diễn ra khi nào và mốc nào chặn giai đoạn tiếp theo. **Cần làm:** xếp WBS theo lịch làm việc Việt Nam, giờ cam kết, quỹ dự phòng và các mốc MS0–MS5. **Xong khi:** Gantt kết thúc ngày 31/12/2026, khớp 512 giờ công việc và 632 giờ tổng quỹ. |
+| `PLN03` | `[PH0][PLN03] Thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ` | 4 | Hoàn thành 21/09; kế hoạch gốc 23/09 PM–24/09 AM | PLN02 | **Mục đích:** biến kế hoạch thành các card dễ đọc và có dữ liệu thực tế để Project Management Compiler hiển thị. **Cần làm:** chuẩn bị card, CARIO, trạng thái, tracker, Execution Register và Work Journal. **Xong khi:** có thể chọn card, ghi bắt đầu/dừng/hoàn thành và đọc được actual, remaining, blocker, evidence. |
+| `P04` | `[PH0][P04] Chuẩn bị môi trường và cách build, test hệ thống` | 4 | 24/09 PM | PLN03 | **Mục đích:** người phát triển có thể dựng hệ thống theo một cách lặp lại được. **Cần làm:** ghi máy được phép dùng, lệnh build/test, cách lưu cấu hình và mật khẩu, cách cập nhật hoặc quay lại cấu trúc database. **Xong khi:** có hướng dẫn đủ để dựng lại môi trường mà không cài công cụ trái quy định. |
+| `P05` | `[PH0][P05] Chuẩn bị dữ liệu và tài khoản dùng để thử` | 4 | 25/09 AM | PLN03 | **Mục đích:** các lần thử dùng cùng một bộ dữ liệu. **Cần làm:** chuẩn bị tài liệu mẫu, file lớn đại diện, hai tài khoản thử, một Vault và danh sách tình huống đúng/sai. **Xong khi:** bộ dữ liệu được đặt tên, quản lý và dùng lại được. |
+| `P06` | `[PH0][P06] Chuẩn bị cách quay lui, sao lưu và kiểm tra bảo mật` | 8 | 25/09 PM–28/09 AM | P04, P05 | **Mục đích:** thử nghiệm không làm mất dữ liệu hoặc file đang sửa. **Cần làm:** ghi cách quay lại phiên bản trước, giữ Workspace, khôi phục đồng bộ database với file và phần cần người có chuyên môn bảo mật xem. **Xong khi:** có phương án xử lý rõ cho từng trường hợp thất bại chính. |
+| `P07` | `[PH0][P07] Kiểm tra đã đủ điều kiện bắt đầu code chưa` | 4 | 28/09 PM | PLN01, PLN02, PLN03, P04, P05, P06 | **Mục đích:** chỉ bắt đầu khi những điều kiện quan trọng đã rõ. **Cần làm:** kiểm tra tài liệu, phạm vi, môi trường, dữ liệu thử, cách kiểm tra và rủi ro còn lại. **Xong khi:** PG4 được ghi `PASS`, `PASS-WITH-ACTIONS`, `BLOCKED` hoặc `NOT-RUN`, kèm lý do. |
 
 | Card | A | R+ | R | C | I | O |
 |---|---|---|---|---|---|---|
-| P01 | LEAD | — | — | PDA | DEV2 | PROC |
-| P02 | LEAD | — | — | PDA, PROC | DEV2 | — |
-| P03 | LEAD | — | — | PDA, QLHT, HTKT | DEV2 | PROC |
+| PLN01 | LEAD | — | — | PROC | PDA, DEV2 | — |
+| PLN02 | LEAD | — | — | PROC | PDA, DEV2 | — |
+| PLN03 | LEAD | — | — | PROC | PDA, DEV2 | — |
 | P04 | LEAD | — | — | QLHT, HTKT | DEV2 | PROC |
 | P05 | LEAD | — | — | PROC, HTKT | DEV2 | — |
 | P06 | LEAD | — | — | QLHT, HTKT, SPEC | DEV2 | PROC |
@@ -359,12 +359,14 @@ Card chỉ chuyển sang `Hoàn thành` khi đáp ứng các điểm áp dụng 
 ## 6. Thứ tự nhập ban đầu
 
 1. Tạo board/danh sách cho `IDEA DDM — Core v0 2026` theo quy ước nội bộ.
-2. Nhập 60 card với trạng thái `Chưa bắt đầu`.
+2. Nhập 60 card; đặt `PLN01`–`PLN03` là `Hoàn thành` theo Execution Register, các card còn lại là `Chưa bắt đầu`.
 3. Gán `A = LEAD` cho 53 card thực hiện; giữ `R+` và `R` trống cho đến khi có người thật.
 4. Nhập ngày, công việc cần trước và CARIO; không tạo card dự phòng.
-5. Đặt `P01` là card đầu tiên được nhận. Các card khác chỉ chuyển `Đang thực hiện` khi đã hoàn
-   thành những việc được ghi trong cột `Cần trước`.
+5. Sau ba card lập kế hoạch đã hoàn thành, `P04` và `P05` là hai card đủ quan hệ phụ thuộc để nhận;
+   vì WIP limit bằng 1, chỉ chọn một card làm trước. Các card khác chỉ chuyển `Đang thực hiện` khi
+   đã hoàn thành những việc được ghi trong cột `Cần trước`.
 6. Sau mỗi mốc, cập nhật ngày dự kiến của các card chưa bắt đầu thay vì sửa lịch sử card đã xong.
 
-Việc nhập card vào hệ thống công ty và gán tài khoản thật vẫn `NOT-RUN`; tài liệu này chỉ chuẩn bị
-dữ liệu và quy tắc để nhập đúng.
+Việc nhập card vào hệ thống CARIO của công ty và gán tài khoản thật vẫn `NOT-RUN`. Ba card lập kế
+hoạch đã được ghi nhận trong nguồn dữ liệu dự án; trạng thái đó không được hiểu là đã triển khai
+phần mềm.

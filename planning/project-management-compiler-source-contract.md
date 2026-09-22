@@ -9,7 +9,7 @@
 | Planning authority | Existing DOC-07 sources remain authoritative as declared in the manifest; this contract does not become a second plan. |
 | Owner / recorder | Project user (`LEAD`) owns execution facts; Principal Product Author prepares controlled changes. |
 | Consumer | Project Management Compiler. |
-| Applicable baseline | `IE-PLAN-DEC2026-003@0.1`; exact repository commit is supplied by the import context. |
+| Applicable baseline | `IE-PLAN-DEC2026-003@0.2`; exact repository commit is supplied by the import context. |
 | Classification / retention | `INTERNAL`; retain every released contract and accepted register revision required to reproduce an imported snapshot. |
 | Source / upstream trace | DOC-07, Appendix A, Kanban CARIO, the PH0 readiness package and [IE-CHG-ROADMAP-CV0-001](../docs/product/instances/idea-engineering/registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md). |
 | Downstream trace | `project-management-compiler-manifest.json`, Execution Register schema, validator and fixtures in this directory. |
@@ -83,6 +83,12 @@ An accepted entity is never hard-deleted. Cancellation, replacement, split and m
 identity and record successor relations. If an identity in the prior accepted snapshot disappears
 without a controlled disposition, import fails.
 
+`IE-PLAN-DEC2026-003@0.2` replaces the predecessor management Delivery Cards `P01`–`P03` with
+`PLN01`–`PLN03`. The exact mapping and disposition are retained in `IE-CHG-PLAN-ID-001`, the
+Execution Register's non-active predecessor records and its revision history. Current progress
+counts only the 53 `ACTIVE` identities in the Delivery Card authority. This replacement does not
+rename the distinct Spec Kit work packages `WorkPackage:P01`–`WorkPackage:P03`.
+
 ## 5. Execution facts
 
 `recordingState` distinguishes `NOT_RECORDED` from a recorded execution state. Missing historical
@@ -132,6 +138,11 @@ The consumer displays three separate views:
 
 Default risk thresholds are five working days of remaining schedule margin and 80 percent reserve
 consumption. They are baseline configuration, not user-selected dashboard colours.
+
+At baseline `IE-PLAN-DEC2026-003@0.2`, `PLN01`–`PLN03` contribute 12 completed baseline hours.
+The resulting 2.3 percent is planning-delivery progress and must not be labelled software-code
+completion. Only identities present in the current Delivery Card authority contribute to the
+current-baseline total; predecessor snapshots remain audit history and are not added again.
 
 ## 7. Calendar, capacity and scheduling
 

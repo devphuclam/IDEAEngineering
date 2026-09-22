@@ -1,7 +1,7 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `1.3` / Draft; current P01 review input selected, readiness results remain `NOT-RUN`
+**Version / status**: `1.5` / Draft; P01 baseline review `PASS`, P02–P07 remain `NOT-RUN`
 **Prepared**: 2026-09-19
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
@@ -24,16 +24,17 @@
 |---|---|
 | Stable record ID | `IE-INC-READY-001-REG-001` |
 | Owner / executor | Principal Product Author; tên người chịu trách nhiệm cụ thể `BLOCKED` trước khi review |
-| Reviewer | Project reviewer; disposition `NOT-RUN` vì chưa có bản ghi review có thể truy nguyên |
+| Reviewer | Project user acting as Project Reviewer; T006/P01 disposition `PASS` on 2026-09-22 for the exact reviewed manifest hash recorded below |
 | Historical P01 review input | `IE-INC-READY-001-BL-001` at `a2cb58961c9f264152ff7395c9158b78f3cfe224`; retained as historical traceability and not the current T006 review input |
 | Analyzed PH0 content baseline | Source set analyzed at `ad49bbf67a291f542b6464532185f7d701a9f298`; includes the PH0 scenario, environment, data and recovery preparation plus the author-side T021 reconciliation |
 | Current PH0 source reconciliation | Current successor source set and authority states reconciled at `109c766e369793b0caa2c4cc3a576df528eddb92`; exact hashes are in [baseline-manifest.md](baseline-manifest.md), Section 2 |
-| Selected P01/T006 review input | Current `IE-INC-READY-001-BL-001` manifest, SHA-256 `4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D`; selected by the Project Reviewer on 2026-09-19. This selects the review input only; P01 remains `IN-PROGRESS`/`NOT-RUN`. |
+| Current execution-planning reconciliation | `IE-PLAN-DEC2026-003@0.1`, DOC-07@0.16, Appendix A@0.8 and Kanban@0.4 reconciled on 2026-09-22; this planning successor changes no Feature, Spec or Tech decision. |
+| Reviewed P01/T006 input | `IE-INC-READY-001-BL-001@0.2`, reviewed content SHA-256 `B16C01EA3C37A81625D1580BB488723D8F1394AFD4C5F71AB05A47E25322BF0C`; Project Reviewer result `PASS` on 2026-09-22. |
 | Declared project roles | Current project user: `Project Reviewer` for P01/P02/P03 and `PG4 Gate Authority` for PH1 readiness. These role declarations do not create a review result or gate outcome. |
 | PDA approval reporting rule | When the project user reports that the Product Decision Authority approved something, confirm the exact scope, baseline/hash and date with the user before recording it as PDA evidence. |
 | Approved predecessor authority | `IE-CHG-PDA-APPROVAL-001` pins the approved predecessor to `f269a0445737a7efd7f406ee51517149a8967afa` |
 | Approved predecessor axes | `FEATURE-001@0.12` — `APPROVED`; normative `DOC-04@0.13` — `APPROVED`; `TECH-001@0.14` — `APPROVED` |
-| Current successor delta | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-07@0.14`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the current multi-location Vault source set are listed with exact hashes in [baseline-manifest.md](baseline-manifest.md), Section 2 |
+| Current successor delta | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the current multi-location Vault source set are listed with exact hashes in [baseline-manifest.md](baseline-manifest.md), Section 2; current planning successor DOC-07@0.16 is pinned separately in Section 3.2 |
 | Successor authority state | Mixed: `IE-CHG-PDA-APPROVAL-002` approves only the Approval Policy self-approval correction; `IE-CHG-VAULT-XFER-001` confirms the architecture-preserved Multi-location Artifact Custody direction; remaining exact successor approval is `NOT-RUN`. |
 | Proposed PG4 successor | `IE-INC-PH1-FOUNDATION-CUSTODY-001` — PH1 F01–F05, “Khung hệ thống chạy được”, 72h; proposal only, no feature directory exists |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
@@ -44,8 +45,8 @@
 
 | Work package | Mục tiêu ngắn | Task IDs | Owner | Due condition | Gate effect | Task state | Result | Evidence link | Blocker / deviation |
 |---|---|---|---|---|---|---|---|---|---|
-| `P01` | Ghim baseline đã duyệt và phân biệt successor | T004–T006 | Principal Product Author / project reviewer | Trước P02 | `BLOCKS_PG4` nếu chưa xác định được baseline | `IN-PROGRESS` | `NOT-RUN` | [baseline-manifest.md](baseline-manifest.md); `P01-BASELINE-001` (chưa thực thi) | T004–T005 hoàn tất ở cấp tác giả; T006 cần project reviewer ghi nhận disposition |
-| `P02` | Chốt một canonical Technical Pilot scenario | T007–T011 | Principal Product Author / project reviewer | Sau P01 | `BLOCKS_PG4` | `NOT-RUN` | `NOT-RUN` | [canonical-scenario.md](canonical-scenario.md); [trace-matrix.md](trace-matrix.md) | Hồ sơ scenario đã chuẩn bị; P01 review và P02 walkthrough chưa chạy |
+| `P01` | Ghim baseline đã duyệt và phân biệt successor | T004–T006 | Principal Product Author / project reviewer | Trước P02 | `BLOCKS_PG4` nếu chưa xác định được baseline | `COMPLETE` | `PASS` | [baseline-manifest.md](baseline-manifest.md); `P01-BASELINE-001`, reviewed content SHA-256 `B16C01EA...22BF0C` | T006 completed by the Project Reviewer on 2026-09-22; this result identifies sources only and does not approve a successor or PG4 |
+| `P02` | Chốt một canonical Technical Pilot scenario | T007–T011 | Principal Product Author / project reviewer | Sau P01 | `BLOCKS_PG4` | `NOT-RUN` | `NOT-RUN` | [canonical-scenario.md](canonical-scenario.md); [trace-matrix.md](trace-matrix.md) | Hồ sơ scenario đã chuẩn bị; P02 walkthrough chưa chạy |
 | `P03` | Ghi mọi quyết định và dependency còn mở | T012–T016 | Principal Product Author và authority tương ứng | Sau P01–P02 | `BLOCKS_PG4` hoặc `DEFERRED_SCOPE` theo từng dòng | `NOT-RUN` | `NOT-RUN` | Mục 5 dưới đây | Các decision record đã chuẩn bị; chưa có authority disposition |
 | `P04` | Mô tả môi trường delivery được phép | T017, T021–T022 | Principal Product Author / QLHT khi cần | Trước P07 | `BLOCKS_PG4` nếu thiếu điều kiện bắt buộc | `NOT-RUN` | `NOT-RUN` | [environment-profile.md](environment-profile.md) | Profile đã chuẩn bị; host/license/secret review chưa chạy |
 | `P05` | Chuẩn bị fixture và ma trận verification | T018–T019, T021–T022 | Principal Product Author / reviewer phù hợp | Trước P07 | `BLOCKS_PG4` nếu thiếu dữ liệu hoặc location cần thiết | `NOT-RUN` | `NOT-RUN` | [test-data-and-verification.md](test-data-and-verification.md) | Matrix đã chuẩn bị; fixture/hash/location chưa được provision |
@@ -250,16 +251,17 @@ is presented as closed.
 | Field | Recorded value |
 |---|---|
 | Check ID | `P01-BASELINE-001` |
-| Author package state | `READY-FOR-REVIEW` — source identity and authority-state reconciliation complete; Project Reviewer result remains `NOT-RUN` |
-| Exact input baseline | `IE-INC-READY-001-BL-001`; reconciled current source commit `109c766e369793b0caa2c4cc3a576df528eddb92` (historical P01 review input remains `a2cb58961c9f264152ff7395c9158b78f3cfe224`) |
-| Exact manifest hash | `SHA-256 4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D` |
-| Reviewer / date | Project reviewer / `NOT-RUN` — no attributable review record exists in the repository |
-| `BL-DISC-001` disposition | Author reconciliation: later attributable approval record governs the exact predecessor; historical status prose is retained. Reviewer confirmation: `NOT-RUN`. |
+| Author package state | `REVIEWED` — source identity and authority-state reconciliation complete; Project Reviewer result recorded below |
+| Exact input baseline | `IE-INC-READY-001-BL-001@0.2`; product-successor source reconciliation at `109c766e369793b0caa2c4cc3a576df528eddb92` plus current execution plan `IE-PLAN-DEC2026-003@0.1` (historical P01 review input remains `a2cb58961c9f264152ff7395c9158b78f3cfe224`) |
+| Exact manifest hash | `SHA-256 B16C01EA3C37A81625D1580BB488723D8F1394AFD4C5F71AB05A47E25322BF0C` |
+| Reviewer / date | Project user acting as Project Reviewer / 2026-09-22 |
+| `BL-DISC-001` disposition | `ACCEPTED` — the later attributable approval record governs the exact predecessor; historical status prose is retained. |
 | `BL-DISC-002` disposition | Approved predecessor exists; limited PDA policy approval and confirmed Vault direction are recorded separately; remaining successor sources stay separate inputs; exact successor/PH1 disposition remains `NOT-RUN` and tracked as `D0`. |
-| `BL-DISC-003` disposition | Appendix A@0.6 contains the author correction under `IE-CHG-PH0-CORR-001`; reviewer confirmation that the planning discrepancy is acceptable remains `NOT-RUN`. |
-| Result | `NOT-RUN` — this is not P01 acceptance and does not approve any successor. |
-| Required human action | Project reviewer must inspect the manifest, approval record, Appendix A@0.6 and the three discrepancy dispositions, then record reviewer identity, date, exact manifest hash and `PASS`, `FAIL` or `BLOCKED` with evidence. |
-| Gate effect | Until that action is recorded, P01 remains `IN-PROGRESS`, its readiness result remains `NOT-RUN`, and `PG4` cannot be decided. |
+| `BL-DISC-002` reviewer disposition | `ACCEPTED` — approved predecessor, limited policy approval, confirmed Vault direction and remaining successor states remain separate; D0 is not resolved by this review. |
+| `BL-DISC-003` disposition | `ACCEPTED` — Appendix A@0.6 retains the historical correction; Appendix A@0.8 and `IE-PLAN-DEC2026-003@0.1` are the current execution successor under `IE-CHG-ROADMAP-CV0-001`. |
+| Result | `PASS` — source identity and authority-state separation are reproducible. This does not approve a product successor, resolve D0, decide PG4 or authorize PH1. |
+| Required human action | `COMPLETE` — the Project Reviewer inspected the prepared summary and explicitly recorded `PASS`. |
+| Gate effect | P01 is `COMPLETE`/`PASS` and T011/P02 review may begin. P02–P07 and PG4 remain `NOT-RUN`. |
 
 ### 8.1 T006 compact human decision block
 
@@ -269,16 +271,16 @@ not a recorded review result.
 | Field | Prepared value / reviewer entry |
 |---|---|
 | Review ID | `P01-BASELINE-001` |
-| Exact baseline | `IE-INC-READY-001-BL-001` at reconciled source commit `109c766e369793b0caa2c4cc3a576df528eddb92` |
-| Manifest hash | `SHA-256 4FD12E935D4C10DAE56D609335E7873DDE62D569F91764BBE613754CCBECB39D` |
-| `BL-DISC-001` disposition | Author reconciliation: later attributable approval record governs the exact predecessor; historical wording remains. Reviewer confirmation: `________________` |
-| `BL-DISC-002` disposition | Approved predecessor exists; limited policy approval and confirmed Vault direction are bounded separately; exact successor/PH1 disposition remains `NOT-RUN`. Reviewer confirmation: `________________` |
-| `BL-DISC-003` disposition | Appendix A@0.6 correction under `IE-CHG-PH0-CORR-001`; reviewer confirmation: `________________` |
+| Exact baseline | `IE-INC-READY-001-BL-001@0.2`: product-successor source reconciliation at `109c766e369793b0caa2c4cc3a576df528eddb92` plus execution plan `IE-PLAN-DEC2026-003@0.1` |
+| Manifest hash | `SHA-256 B16C01EA3C37A81625D1580BB488723D8F1394AFD4C5F71AB05A47E25322BF0C` |
+| `BL-DISC-001` disposition | `ACCEPTED` — later attributable approval record governs the exact predecessor; historical wording remains |
+| `BL-DISC-002` disposition | `ACCEPTED` — approved predecessor and successor authority states remain separate; exact successor/PH1 disposition remains outside T006 |
+| `BL-DISC-003` disposition | `ACCEPTED` — historical Appendix A@0.6 correction and current Appendix A@0.8 execution successor are correctly separated |
 | Known evidence limitation | No separate signed minutes or digital-signature artifact exists; PH0 governance does not require one. Reviewer decides whether the existing attributable approval record is sufficient. |
-| Reviewer identity | `________________` |
-| Review date | `________________` |
-| Allowed result | `PASS` / `FAIL` / `BLOCKED` |
-| Rationale | `________________________________________________________________` |
+| Reviewer identity | Project user acting as `Project Reviewer` |
+| Review date | `2026-09-22` |
+| Result | `PASS` |
+| Rationale | The approved predecessor, later deltas and current execution plan are separately identifiable and reproducible. The absence of a separately signed minute is retained as an evidence limitation, not a blocker. |
 
 Do not add a signature requirement. A reviewer result does not approve the successor delta or
 authorize PH1; it only records T006/P01 evidence.
@@ -301,8 +303,8 @@ Chúng không thay thế review hoặc runtime evidence.
   wet/digital signature or a separately signed approval artifact. `IE-CHG-PDA-APPROVAL-001`
   contains the decision date, authority, reporter, exact approved commit, source versions, hashes
   and three recorded dispositions. The absent signed artifact is retained as an evidence limitation,
-  not an automatic blocker. Recommended Project Reviewer disposition: `PASS`, subject to accepting
-  the recorded decision evidence. T006 remains `NOT-RUN` until the Project Reviewer records it.
+  not an automatic blocker. The Project Reviewer accepted the recorded decision evidence and
+  recorded `PASS` on 2026-09-22; T006/P01 is complete for the reviewed manifest hash in Section 8.
 - **P02-R13:** The P02 Audit trace now uses exact `REQ-AUD-001/002`; the previous wildcard ambiguity
   is resolved. Recommended reviewer disposition: `PASS`, subject to the walkthrough and trace review.
   T011 remains `NOT-RUN` until the Project Reviewer records it.
@@ -349,8 +351,8 @@ liên kết. Phân loại dùng trong bảng:
 
 | Action ID | Task / package | Phân loại | Vai trò hoặc authority bắt buộc | Việc phải làm và bằng chứng cần xem | Trạng thái hiện tại | Ảnh hưởng / kết quả sau khi hoàn tất |
 |---|---|---|---|---|---|---|
-| `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline-manifest.md](baseline-manifest.md), approval record, Appendix A@0.6, manifest hash và BL-DISC-001…003; ghi reviewer, ngày, hash và `PASS`/`FAIL`/`BLOCKED`. | `NOT-RUN`; chưa có reviewer record | Mở P01; P01 chỉ hoàn tất khi có disposition truy nguyên; cho phép bắt đầu review P02, không tự đóng D0. |
-| `HA-002` | T011 / P02 | B | Project Reviewer; chỉ thêm vai trò khác nếu governance/authority chỉ định | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `NOT-RUN`; chờ P01 | Đóng hoặc chặn P02; không tạo requirement mới. |
+| `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline-manifest.md](baseline-manifest.md), approval record, current Appendix A@0.8, manifest hash và BL-DISC-001…003; ghi reviewer, ngày, hash và `PASS`/`FAIL`/`BLOCKED`. | `COMPLETE` / `PASS`; Project Reviewer, 2026-09-22, reviewed content SHA-256 `B16C01EA...22BF0C` | P01 complete; P02 review may begin; D0 and PG4 remain open. |
+| `HA-002` | T011 / P02 | B | Project Reviewer; chỉ thêm vai trò khác nếu governance/authority chỉ định | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `READY-FOR-REVIEW`; P01 đã `PASS`, walkthrough P02 chưa chạy | Đóng hoặc chặn P02; không tạo requirement mới. |
 | `HA-003` | T016 / P03 — D0 | D | Product Decision Authority | Chọn D0 Option A/B/C trong Mục 5.1; hướng kiến trúc và ranh giới một endpoint cho PH1 đã được xác nhận, nhưng không tự ghi disposition thay authority. | `OPEN` / `direction confirmed for PH1; exact disposition NOT-RUN` | Authority ghi `RESOLVED` hoặc `DEFERRED_SCOPE` với baseline, ngày và rationale; không cần mở lại hướng kiến trúc trừ khi chọn khác. |
 | `HA-004` | T016 / P03 — D1 | C/D | Engineering + QLHT/Operations + authority phù hợp | Ghi riêng D1-A Gateway path cần cho F05 và D1-B Format Worker deferred; xác nhận adapter/runtime/license/endpoint chỉ cho D1-A. | `OPEN`; runtime/toolchain `UNKNOWN`/`NOT-RUN` | D1-A thiếu evidence thì chặn F05; D1-B chỉ mở khi có format-processing work. |
 | `HA-005` | T016 / P03 — D2 | C | QLHT / Operations | Xác nhận một workstation Windows, một Server, một PostgreSQL, một Gateway/Vault endpoint, direct network path và hai native accounts; không yêu cầu hai location cho PH1. | `OPEN`; allocation `BLOCKED`/`NOT-RUN` | Cho phép P04/P05/P06 chạy đúng môi trường hoặc ghi blocker; không suy diễn allocation từ kế hoạch. |
@@ -532,7 +534,7 @@ từ hồ sơ tác giả sang PH1.
 
 ### 11.1 Remaining sequential human path
 
-1. Project Reviewer completes T006 using §8.1.
+1. T006/P01 is complete with `PASS` for the manifest hash recorded in §8.1.
 2. Project Reviewer completes T011 using §9.1.
 3. Authorities complete T016 using the six forms in §5.1; D0–D5 remain `OPEN` until then.
 4. QLHT/Operations, data custodian, Security and Verification reviewers provide the PH1 minimum
@@ -571,3 +573,5 @@ từ hồ sơ tác giả sang PH1.
 | 1.1 | 2026-09-18 | Khóa đề xuất PH1 theo F01–F05/72h; tách rõ approved predecessor và Draft successor delta; thêm biểu mẫu T006/T011, decision-capture D0–D5, ma trận bằng chứng PH1 và map từng CHK001–CHK033. Không ghi thay người review/authority và không đổi gate state. | PH1 authority-package preparation; states remain `NOT-RUN`/`OPEN` |
 | 1.2 | 2026-09-19 | Reconcile current successor source versions/hashes and mixed authority evidence; record the confirmed Vault direction as PH1-scoped architecture evidence without closing exact successor approval; make T006 package `READY-FOR-REVIEW` while keeping reviewer result `NOT-RUN`. | `IE-CHG-PDA-APPROVAL-002`; `IE-CHG-VAULT-XFER-001`; current `baseline-manifest.md` |
 | 1.3 | 2026-09-19 | Chọn current manifest/hash làm input T006; ghi vai trò Project Reviewer và PG4 Gate Authority của người dùng hiện tại; quy định phải xác nhận lại phạm vi/baseline trước khi ghi nhận PDA approval. Không đổi readiness result, D0–D5 hoặc PG4 state. | User decision Q14 and grilling round 3; P01 remains `IN-PROGRESS`/`NOT-RUN` |
+| 1.4 | 2026-09-22 | Reconcile the current Core v0 execution-planning successor, refresh the candidate T006 manifest hash and retain the approved product predecessor separately. No reviewer result, D0–D5 disposition or PG4 decision is inferred. | `IE-CHG-ROADMAP-CV0-001`; T006 review preparation |
+| 1.5 | 2026-09-22 | Record the Project Reviewer's explicit `PASS` for T006/P01 against the exact reviewed manifest hash; accept BL-DISC-001…003 and open T011/P02 without approving a successor, D0, PG4 or PH1. | User response `PASS`; `P01-BASELINE-001` |

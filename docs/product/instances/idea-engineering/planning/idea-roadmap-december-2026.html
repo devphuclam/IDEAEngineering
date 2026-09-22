@@ -41,6 +41,7 @@
     .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; color: var(--muted); font-size: 13px; }
     .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 6px; vertical-align: 0; }
     .legend .work::before { background: var(--blue); }
+    .legend .done::before { background: var(--green); }
     .legend .reserve::before { background: repeating-linear-gradient(135deg, #eab85b 0 4px, #fff1d1 4px 8px); border: 1px solid #ca8c22; }
     .legend .milestone::before { width: 10px; height: 10px; background: var(--navy); transform: rotate(45deg); }
     .legend .decision::before { background: var(--amber); }
@@ -82,6 +83,7 @@
     .mini-weeks span:last-child { border-right: 0; }
     .slot { position: relative; padding: 0 !important; background: repeating-linear-gradient(90deg, #fff 0, #fff calc(var(--week) - 1px), #e0e6ee calc(var(--week) - 1px), #e0e6ee var(--week)); }
     .task-bar { position: absolute; top: 9px; height: 14px; left: calc(var(--s) * 100% / 158); width: max(7px, calc(var(--d) * 100% / 158)); background: var(--blue); }
+    .task-bar.done { background: var(--green); }
     .task-bar.reserve { background: repeating-linear-gradient(135deg, #dcaa4d 0 4px, #fff0ce 4px 8px); }
     .reserve-row { color: var(--amber); font-weight: 700; }
     .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -94,17 +96,17 @@
 <body>
 <main>
   <header>
-    <p class="eyebrow">IE-PLAN-DEC2026-003 · Current 0.1</p>
+    <p class="eyebrow">IE-PLAN-DEC2026-003 · Current 0.2</p>
     <h1>Baseline Core v0 — 23/09 đến 31/12/2026</h1>
     <p class="lede">Một coder, 79 ngày làm việc. Gantt này phân biệt rõ phase có thời lượng với milestone là điểm review không có thời lượng.</p>
     <div class="rule"><strong>Quy tắc điều hành:</strong> phase kế tiếp chỉ bắt đầu khi milestone trước đạt. Nếu milestone không đạt, cập nhật forecast; không kéo thanh công việc sang phải rồi coi như kế hoạch vẫn đạt.</div>
-    <div class="facts"><span><strong>512 giờ</strong> công việc</span><span><strong>88 giờ</strong> dự phòng kỹ thuật</span><span><strong>32 giờ</strong> đệm vận hành</span><span><strong>35</strong> work package</span><span><strong>632 giờ</strong> tổng quỹ</span><span>PG4 và thực thi: <strong>NOT-RUN</strong></span></div>
+    <div class="facts"><span><strong>512 giờ</strong> công việc</span><span><strong>12 giờ</strong> lập kế hoạch đã hoàn thành</span><span><strong>500 giờ</strong> công việc còn lại</span><span><strong>2,3%</strong> tiến độ kế hoạch</span><span><strong>88 giờ</strong> dự phòng kỹ thuật</span><span><strong>32 giờ</strong> đệm vận hành</span><span><strong>35</strong> work package</span><span><strong>632 giờ</strong> tổng quỹ</span><span>PG4 và triển khai sản phẩm: <strong>NOT-RUN</strong></span></div>
   </header>
 
   <section>
     <div class="section-head"><h2>1. Phase, milestone và dependency</h2></div>
     <div class="section-body">
-      <div class="legend"><span class="work">Công việc đã ước lượng</span><span class="reserve">Dự phòng có kiểm soát</span><span class="milestone">Milestone</span><span class="decision">Decision checkpoint</span></div>
+      <div class="legend"><span class="work">Công việc đã ước lượng</span><span class="done">Đã hoàn thành</span><span class="reserve">Dự phòng có kiểm soát</span><span class="milestone">Milestone</span><span class="decision">Decision checkpoint</span></div>
       <div class="scroll">
         <div class="executive">
           <div class="axis">
@@ -121,7 +123,7 @@
             <div class="track"><span class="decision-point" style="left:0%"></span><span class="decision-label" style="left:0%">D0 · 23/09</span></div>
           </div>
           <div class="phase-line">
-            <div class="row-label"><strong>PH0 — Readiness</strong><small>P01–P07 · 32 h + 8 h đệm</small></div>
+            <div class="row-label"><strong>PH0 — Planning + readiness</strong><small>PLN01–PLN03 đã xong; P04–P07 còn lại · 32 h + 8 h đệm</small></div>
             <div class="track">
               <div class="phase-bar" style="left:0%;width:6.329%"><span class="planned" style="width:80%">PH0</span><span class="buffer" style="width:20%"></span></div>
               <span class="point" style="left:6.329%"></span><span class="point-label" style="left:6.329%">MS0 · PG4</span>
@@ -196,10 +198,10 @@
             <div class="gh">ID</div><div class="gh">Work package</div><div class="gh">Giờ</div><div class="gh">Baseline slot</div>
             <div class="gh timeline-head"><div class="mini-weeks"><span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span><span>W13</span><span>W14</span><span>W15</span><span>W16</span></div></div>
 
-            <div class="phase-title">PH0 — Implementation readiness · MS0/PG4 ngày 29/09</div>
-            <div>P01</div><div>Ghim baseline đã được duyệt</div><div>4</div><div>23/09 AM</div><div class="slot"><span class="task-bar" style="--s:0;--d:1"></span></div>
-            <div>P02</div><div>Chốt phạm vi Core v0</div><div>4</div><div>23/09 PM</div><div class="slot"><span class="task-bar" style="--s:1;--d:1"></span></div>
-            <div>P03</div><div>Phân loại quyết định còn mở</div><div>4</div><div>24/09 AM</div><div class="slot"><span class="task-bar" style="--s:2;--d:1"></span></div>
+            <div class="phase-title">PH0 — Lập kế hoạch và sẵn sàng triển khai · MS0/PG4 ngày 29/09</div>
+            <div>PLN01</div><div>Xây dựng và chốt WBS Core v0 — đã hoàn thành</div><div>4</div><div>Kế hoạch 23/09 AM; thực tế 21/09</div><div class="slot"><span class="task-bar done" style="--s:0;--d:1"></span></div>
+            <div>PLN02</div><div>Lập Gantt, lịch làm việc và milestone — đã hoàn thành</div><div>4</div><div>Kế hoạch 23/09 PM; thực tế 21/09</div><div class="slot"><span class="task-bar done" style="--s:1;--d:1"></span></div>
+            <div>PLN03</div><div>Thiết lập Kanban CARIO và ghi nhận tiến độ — đã hoàn thành</div><div>4</div><div>Kế hoạch 24/09 AM; thực tế 21/09</div><div class="slot"><span class="task-bar done" style="--s:2;--d:1"></span></div>
             <div>P04</div><div>Chuẩn bị môi trường và cấu trúc delivery</div><div>4</div><div>24/09 PM</div><div class="slot"><span class="task-bar" style="--s:3;--d:1"></span></div>
             <div>P05</div><div>Chuẩn bị dữ liệu và test strategy</div><div>4</div><div>25/09 AM</div><div class="slot"><span class="task-bar" style="--s:4;--d:1"></span></div>
             <div>P06</div><div>Migration, rollback, backup và security review plan</div><div>8</div><div>25/09 PM–28/09 AM</div><div class="slot"><span class="task-bar" style="--s:5;--d:2"></span></div>
@@ -268,7 +270,7 @@
     </div>
   </section>
 
-  <footer>Nguồn kiểm soát: IE-PROD-ROADMAP-001@0.13 · Appendix A@0.5 · IE-CHG-ROADMAP-TP-001@0.1. Gantt là rendition; DOC-07 và Appendix A là nguồn nội dung có thẩm quyền.</footer>
+  <footer>Nguồn kiểm soát: IE-PROD-ROADMAP-001@0.17 · Appendix A@0.9 · IE-PLAN-DEC2026-003@0.2 · IE-CHG-PLAN-ID-001@0.1. Gantt là rendition; DOC-07 và Appendix A là nguồn nội dung có thẩm quyền.</footer>
 </main>
 </body>
 </html>

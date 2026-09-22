@@ -10,7 +10,6 @@ $registerPath = Join-Path $repoRoot 'planning\idea-technical-pilot-execution-reg
 $manifestPath = Join-Path $repoRoot 'planning\project-management-compiler-manifest.json'
 $journalPath = Join-Path $repoRoot 'planning\idea-progress-work-journal.json'
 $kanbanPath = Join-Path $repoRoot 'docs\product\instances\idea-engineering\planning\idea-technical-pilot-kanban-cario.md'
-$readinessPath = Join-Path $repoRoot 'specs\004-technical-pilot-readiness\readiness-register.md'
 $validatorPath = Join-Path $repoRoot 'scripts\validate-project-management-source.ps1'
 $indexPath = Join-Path $PSScriptRoot 'index.html'
 
@@ -147,7 +146,7 @@ function Get-CardDefinitions {
                 plannedHours = [double]$hoursValue
                 plannedDates = $datesValue.Trim()
                 predecessors = $predecessors
-                definitionOfDone = ($contentValue.Trim() -replace '\s+', ' ')
+                definitionOfDone = (($contentValue.Trim() -replace '\s+', ' ') -replace '\*\*', '')
             }
         }
     }
@@ -222,6 +221,7 @@ function Get-StatePayload {
             completed = @($records | Where-Object { $_.executionState -eq 'COMPLETED' }).Count
             suspended = @($records | Where-Object { $_.executionState -eq 'SUSPENDED' }).Count
             completedPlannedHours = [double]$completedHours
+            baselineRemainingHours = [math]::Max(0, [double]$manifest.expectedSourceTotals.plannedWorkHours - [double]$completedHours)
             deliveryRatio = if ([double]$manifest.expectedSourceTotals.plannedWorkHours -gt 0) { [math]::Round(($completedHours / [double]$manifest.expectedSourceTotals.plannedWorkHours) * 100, 1) } else { 0 }
             actualKnownCount = $actualKnown.Count
             actualEffortHours = [double]$actualSum
@@ -369,12 +369,6 @@ function Update-Record($request) {
             Add-EffortCorrection $journal $record $manualActual 0.0 $reason $now
         }
         $record.remainingEffortHours = 0.0
-        if ($id -eq 'P01') {
-            $readinessText = Get-Content -LiteralPath $readinessPath -Raw -Encoding UTF8
-            if ($readinessText -match 'Reviewer / date[^\r\n]*NOT-RUN|\| Result \| `NOT-RUN`') {
-                throw 'P01 còn chờ T006: Project Reviewer phải ghi disposition vào readiness register trước khi đóng card.'
-            }
-        }
         Add-Evidence $record $request $now
     }
     if ($action -in @('suspend', 'pause') -and [string]::IsNullOrWhiteSpace([string]$request.blockerDescription)) { throw 'Tạm ngưng công việc phải ghi lý do đang bị chặn.' }

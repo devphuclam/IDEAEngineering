@@ -1,7 +1,7 @@
 {
   "contractVersion": "0.1.0",
   "referenceId": "IE-PMC-BASELINE-REF-001",
-  "baselineId": "IE-PLAN-DEC2026-003@0.1",
+  "baselineId": "IE-PLAN-DEC2026-003@0.2",
   "status": "CURRENT",
   "renditionOnly": true,
   "authorityNote": "This file is a machine-readable cross-check. DOC-07, Appendix A and Kanban CARIO retain field-level planning authority.",
@@ -27,5 +27,11 @@
     "deliveryCards": "docs/product/instances/idea-engineering/planning/idea-technical-pilot-kanban-cario.md",
     "ganttCrossCheck": "docs/product/instances/idea-engineering/planning/idea-roadmap-december-2026.html"
   },
-  "knownDeltas": []
+  "knownDeltas": [
+    {
+      "predecessorBaselineId": "IE-PLAN-DEC2026-003@0.1",
+      "changeRecordPath": "docs/product/instances/idea-engineering/registers/CHG-2026-09-22-planning-card-identity-correction.md",
+      "summary": "Replace the first three already-completed management-planning work items with PLN01-PLN03 and record 12 retrospective hours without changing scope, capacity, milestones or the 31 December target."
+    }
+  ]
 }

@@ -1,8 +1,8 @@
 # P01 Baseline Manifest
 
-**Manifest ID**: `IE-INC-READY-001-BL-001`
-**Prepared**: 2026-09-19
-**Status**: Draft; author reconciliation complete through 2026-09-19, project review `NOT-RUN`
+**Manifest ID / version**: `IE-INC-READY-001-BL-001@0.2`
+**Prepared**: 2026-09-19; planning-source reconciliation refreshed 2026-09-22
+**Status**: Draft; author reconciliation complete through 2026-09-22, project review `NOT-RUN`
 **Contract**: [baseline-manifest-contract.md](contracts/baseline-manifest-contract.md)
 
 ## 1. Approved predecessor
@@ -89,22 +89,41 @@ Its SHA-256 on 2026-09-17 is `C512592FACFBF3A83F9964FB41B3BAD0B8831225856B276309
 This is an author-correction pin, not a frozen gate-review commit or a passed P01 review. T004/T023
 must reconcile and freeze the actual reviewed source set before any gate decision.
 
+### 3.2 Current execution-planning baseline
+
+The 21-09-2026 roadmap rebaseline supersedes Appendix A@0.6 for execution planning without changing
+the approved Feature, Spec or Tech axes. The selected execution baseline is
+`IE-PLAN-DEC2026-003@0.1`, controlled by
+[`IE-CHG-ROADMAP-CV0-001`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md).
+
+| Source | Current identity | Repository commit | SHA-256 | Use |
+|---|---|---|---|---|
+| DOC-07 | `IE-PROD-ROADMAP-001@0.16` | `50d780daa14106c5e8c35d2c5ce98041c938f12f` | `89BFCF5FA6B37A9CDF7B3A25547BA01F8303694B70FB55B20113213AA7035645` | Owns the current roadmap and milestone boundary |
+| DOC-07 Appendix A | `IE-PROD-ROADMAP-001-APP-A@0.8` | `50d780daa14106c5e8c35d2c5ce98041c938f12f` | `8F4F79D679E683233D59BF7AE9662C204ADE9614E8B7740615914DE02E91E090` | Owns 35 work packages, 512 task hours, 88 technical-reserve hours and 32 operational-buffer hours |
+| Kanban CARIO | `IE-PLAN-DEC2026-002-KANBAN@0.4` | `50d780daa14106c5e8c35d2c5ce98041c938f12f` | `75B3CCC4B759FAF2129B8E8598A2B9910342DEAAEE4DE2E8CBAF7DA840C46D81` | Decomposes the work packages into 53 delivery cards and seven zero-hour decision/milestone cards |
+| Compiler baseline reference | `IE-PMC-BASELINE-REF-001` for `IE-PLAN-DEC2026-003@0.1` | `50d780daa14106c5e8c35d2c5ce98041c938f12f` | `6F169BC7B2EE16754CE21D18756BEA3B5A44884F9584E61830AD8A214DD8933F` | Machine-readable cross-check only; field-level authority remains in DOC-07, Appendix A and Kanban |
+
+This planning successor starts on 23-09-2026, targets 31-12-2026, uses one configured Vault in
+Core v0 and preserves the Artifact Custody/Gateway seam for later multi-vault work. Multi-vault
+runtime behavior remains outside the Core v0 exit condition. The rebaseline does not change the
+Feature, Spec or Tech approval pinned in Section 1.
+
 ## 4. Recorded discrepancies
 
 | ID | Observation | Resolution for PH0 |
 |---|---|---|
 | `BL-DISC-001` | `FEATURE-001@0.12` still contains pre-meeting wording that says the boss had not decided, while the exact file hash is the one approved later. | The later attributable approval record governs the decision; do not rewrite the approved historical source merely to modernize status prose. |
 | `BL-DISC-002` | The current repository contains newer successor sources after the approved commit, and two limited evidence streams now exist: `IE-CHG-PDA-APPROVAL-002` approves only the Approval Policy correction, while `IE-CHG-VAULT-XFER-001` confirms the multi-location custody direction without pinning whole-successor approval. | Section 2 records the exact current source set and mixed authority state. Do not inherit predecessor approval; do not treat either limited evidence stream as approval of the whole successor. T016/D0 still needs an attributable PH1-scope or exact-successor disposition. |
-| `BL-DISC-003` | Input Appendix A@0.5 names the old roadmap commit as a P01 prerequisite. | Author-corrected in Appendix A@0.6 under `IE-CHG-PH0-CORR-001`: `f269a044...` is the product approval pin and `aabf02ff...` is retained plan history. P01 reviewer confirmation remains `NOT-RUN`. |
+| `BL-DISC-003` | Input Appendix A@0.5 names the old roadmap commit as a P01 prerequisite. | Author-corrected in Appendix A@0.6 under `IE-CHG-PH0-CORR-001`; the current execution successor is Appendix A@0.8 under `IE-CHG-ROADMAP-CV0-001`. `f269a044...` remains the product approval pin, `aabf02ff...` remains plan history, and `IE-PLAN-DEC2026-003@0.1` is the current execution plan. P01 reviewer confirmation remains `NOT-RUN`. |
 
 ## 5. P01 exit state
 
-The baseline and current successor source set are now identifiable from one manifest. The Vault
-direction is confirmed for the PH1 boundary (one operational endpoint with a future one-to-many
-custody contract), but exact successor approval is still separate. P01 is not declared complete
-until the project reviewer confirms this manifest and `BL-DISC-003` is either corrected in the
-planning source or explicitly accepted as a documented discrepancy. D0 remains open for its formal
-T016/PG4 disposition; PG4 remains `NOT-RUN`.
+The approved product baseline, later product-source deltas and current execution-planning baseline
+are now identifiable from one manifest. The Vault direction is confirmed for the PH1 boundary (one
+operational endpoint with a future one-to-many custody contract), but exact successor approval is
+still separate. P01 is not declared complete until the project reviewer confirms this manifest and
+the three discrepancy dispositions. D0 remains open for its formal T016/PG4 disposition; PG4
+remains `NOT-RUN`.
 
 ## 6. Author reconciliation record
 
@@ -115,3 +134,12 @@ T016/PG4 disposition; PG4 remains `NOT-RUN`.
 | Result | `PASS` — current source identities and mixed authority states are recorded; the historical snapshot is explicitly labelled; Appendix A@0.6 and the 35 work-package rows are retained |
 | Scope of result | Source identity, authority-state and schedule reconciliation only; this is not P01 reviewer acceptance, Product Decision Authority approval of the whole successor or PG4 evidence |
 | Evidence | Author-side reconciliation in this record; P01 reviewer confirmation, exact successor disposition and PG4 remain `NOT-RUN` |
+
+### 6.1 Planning-source refresh
+
+| Field | Result |
+|---|---|
+| Reconciled by / date | Principal Product Author / 2026-09-22 |
+| Method | Compare the selected Core v0 roadmap change, DOC-07@0.16, Appendix A@0.8, Kanban@0.4 and the Compiler baseline reference; recompute their SHA-256 values; verify that the change record declares no Feature, Spec, Tech, Product Scope, Q-15, PDA, PG3 or PG4 change |
+| Result | `PASS` — the current execution plan is identified separately from the approved product baseline and historical planning snapshots |
+| Scope of result | Planning-source identity and non-impact only; this does not record the Project Reviewer result, resolve D0 or authorize PH1 |

@@ -1,16 +1,16 @@
 # IDEA Engineering — Phụ lục A: Kế hoạch Core v0 đến 31/12/2026
 
-Ngày cập nhật forecast: 21/09/2026. Đây là bản phân rã để review, lập increment và theo dõi;
+Ngày cập nhật forecast: 22/09/2026. Đây là bản phân rã để review, lập increment và theo dõi;
 không phải lệnh bắt đầu code hay bằng chứng đã triển khai.
 
 | Thông tin kiểm soát | Nội dung |
 |---|---|
-| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.16](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
-| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Current planning baseline 0.8 |
-| Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.1` — Current |
+| Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.17](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
+| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Current planning baseline 0.9 |
+| Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.2` — Current |
 | Người chuẩn bị / review | Principal Product Author chuẩn bị; người dùng dự án review |
 | Phân loại | `INTERNAL` |
-| Thay đổi và nguồn | [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md); predecessor [IE-CHG-ROADMAP-TP-001](../registers/CHG-2026-09-17-technical-pilot-roadmap-rebaseline.md) |
+| Thay đổi và nguồn | [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md); predecessor [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
 | Bản trước | Kế hoạch 56 task/756 giờ tại Git commit `aabf02ffdef4ca901a84d39af5a467d39fd2c0d2`; không dùng để điều hành thực hiện |
 
 Phụ lục này thuộc DOC-07, không phải DOC thứ chín, SRS mới hoặc bộ Feature mới. DOC-07 giữ
@@ -35,13 +35,15 @@ nội bộ; nó không thay đổi effort, dependency hoặc thẩm quyền củ
   thực thi. Không dùng feature `003-controlled-documentation` làm feature sản phẩm.
 - Không thay đổi 14 nhóm Feature, yêu cầu Spec hoặc Tech Stack để ép vừa lịch. Những phần chưa nằm
   trong Core v0 vẫn thuộc sản phẩm hoặc increment sau.
-- Mọi work package khởi tạo ở trạng thái `NOT-RUN`.
+- `PLN01`–`PLN03` đã hoàn thành trước ngày bắt đầu triển khai chính thức và được ghi nhận hồi tố;
+  các work package còn lại khởi tạo ở trạng thái `NOT-RUN`. Ba việc lập kế hoạch không phải bằng
+  chứng rằng phần mềm đã được triển khai.
 
 ## 2. Quỹ thời gian
 
 | Phase | Khoảng ngày | Giờ công việc | Dự phòng kỹ thuật | Đệm vận hành | Tổng quỹ |
 |---|---|---:|---:|---:|---:|
-| PH0 — Sẵn sàng triển khai | 23/09–29/09 | 32 | 0 | 8 | 40 |
+| PH0 — Lập kế hoạch và sẵn sàng triển khai | 21/09 thực tế; baseline 23/09–29/09 | 32 | 0 | 8 | 40 |
 | PH1 — Khung hệ thống chạy được | 30/09–13/10 | 72 | 8 | 8 | 88 |
 | PH2 — Quản lý tài liệu lõi | 14/10–30/10 | 96 | 16 | 0 | 112 |
 | PH3 — Workspace và Checkout/Check-in | 31/10–26/11 | 136 | 32 | 8 | 176 |
@@ -71,17 +73,17 @@ phase nhưng không phải một công việc hay quyền bỏ qua gate.
 
 ## 4. Work package theo thứ tự thực hiện
 
-### 4.1 PH0 — Sẵn sàng triển khai, 32 giờ
+### 4.1 PH0 — Lập kế hoạch và sẵn sàng triển khai, 32 giờ
 
 | Mã | Công việc | Giờ | Cần trước | Đầu ra và cách biết đã xong |
 |---|---|---:|---|---|
-| P01 | Ghim baseline đã được duyệt | 4 | Hồ sơ duyệt `IE-CHG-PDA-APPROVAL-001` và xác nhận của người dùng dự án | Có manifest nêu đúng Feature, Spec và Tech được phép dùng; Core v0 dùng một Vault và giữ ranh giới mở rộng multi-vault. |
-| P02 | Chốt phạm vi Core v0 cuối năm | 4 | P01 | Có một kịch bản chuẩn từ đăng nhập đến lấy lại Release Package, danh sách phần bắt buộc và phần chuyển sang increment sau. |
-| P03 | Phân loại quyết định còn mở | 4 | P01, P02 | Mỗi vấn đề còn mở về Gateway, Vault, môi trường, dữ liệu thử, quyền và người review có owner, hạn xử lý và ảnh hưởng nếu chưa có. |
-| P04 | Chuẩn bị môi trường và cấu trúc delivery | 4 | P03 | Ghi máy phát triển/server được phép, quy trình build/test, quản lý secret/configuration, database migration và cách tạo increment; không cài công cụ chưa được phép. |
-| P05 | Chuẩn bị dữ liệu và test strategy | 4 | P02 | Có bộ tài liệu mẫu, file lớn đại diện, hai identity thử, một Vault và ma trận đường chính/đường lỗi. |
-| P06 | Lập kế hoạch migration, rollback, backup và security review | 8 | P03–P05 | Có phương án quay lại schema/app, giữ Workspace cục bộ, khôi phục metadata–Artifact đồng bộ và phạm vi review bảo mật cần người phù hợp. |
-| P07 | Review readiness và ghi kết quả PG4 | 4 | P01–P06 | Có checklist, blocker, residual risk và phạm vi PH1. Ghi riêng trạng thái đánh giá và kết quả PG4; ngày tới hạn không tự biến thành được duyệt. |
+| PLN01 | Xây dựng và chốt WBS Core v0 | 4 | Kế hoạch 31/12 và phạm vi Core v0 đã được người dùng dự án xác nhận | Có 35 work package và 53 Delivery Card với giờ, đầu ra, điều kiện hoàn thành và dependency; tổng công việc bằng 512 giờ. |
+| PLN02 | Lập Gantt, lịch làm việc và milestone | 4 | PLN01 | Có lịch từ 23/09 đến 31/12/2026 theo lịch làm việc đã chốt; work package, reserve, buffer và MS0–MS5 khớp cùng một baseline. |
+| PLN03 | Thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ | 4 | PLN02 | Có card dễ đọc, CARIO, Execution Register, Work Journal và tracker để ghi actual, remaining, blocker và evidence; Project Management Compiler đọc được nguồn này. |
+| P04 | Chuẩn bị môi trường và cấu trúc delivery | 4 | PLN03 | Ghi máy phát triển/server được phép, quy trình build/test, quản lý secret/configuration, database migration và cách tạo increment; không cài công cụ chưa được phép. |
+| P05 | Chuẩn bị dữ liệu và test strategy | 4 | PLN03 | Có bộ tài liệu mẫu, file lớn đại diện, hai identity thử, một Vault và ma trận đường chính/đường lỗi. |
+| P06 | Lập kế hoạch migration, rollback, backup và security review | 8 | P04, P05 | Có phương án quay lại schema/app, giữ Workspace cục bộ, khôi phục metadata–Artifact đồng bộ và phạm vi review bảo mật cần người phù hợp. |
+| P07 | Review readiness và ghi kết quả PG4 | 4 | PLN01–PLN03, P04–P06 | Có checklist, blocker, residual risk và phạm vi PH1. Ghi riêng trạng thái đánh giá và kết quả PG4; ngày tới hạn không tự biến thành được duyệt. |
 
 PG4 ghi riêng hai thông tin:
 
@@ -213,7 +215,7 @@ khoảng cách giữa ngày bắt đầu và ngày hoàn thành.
 
 ## 9. Tài liệu làm căn cứ
 
-- [DOC-07@0.16](../DOC-07-mvp-roadmap-and-delivery-plan.md) — baseline Core v0 23/09–31/12 với 512 giờ task, 88 giờ dự phòng kỹ thuật và 32 giờ đệm vận hành
+- [DOC-07@0.17](../DOC-07-mvp-roadmap-and-delivery-plan.md) — baseline Core v0 23/09–31/12 với 512 giờ task, 88 giờ dự phòng kỹ thuật và 32 giờ đệm vận hành
 - [DOC-04 — Software Requirements Specification](../DOC-04-software-requirements-specification.md)
 - [DOC-05 — Architecture Description](../DOC-05-architecture-description.md)
 - [DOC-06 — Data, Integration and Migration Specification](../DOC-06-data-integration-and-migration-specification.md)
@@ -231,3 +233,4 @@ khoảng cách giữa ngày bắt đầu và ngày hoàn thành.
 | 0.6 | 17/09/2026 | Sửa nguồn duyệt P01; tách trạng thái và kết quả PG4, thống nhất điều kiện cho phép PH1 theo Constitution; cập nhật liên kết DOC-07@0.14. Giữ nguyên giờ, ngày, scope và dependency. | [IE-CHG-PH0-CORR-001](../registers/CHG-2026-09-17-ph0-readiness-correction.md) |
 | 0.7 | 21/09/2026 | Cập nhật lịch forecast: làm thứ Bảy tuần 1, 3, 5; nghỉ tuần 2, 4; giữ nguyên baseline allocation 512 giờ + 88 giờ dự phòng và bổ sung trace 83 ngày / 664 giờ forecast. | [IE-CHG-CALENDAR-TP-001](../registers/CHG-2026-09-21-forecast-calendar-correction.md) |
 | 0.8 | 21/09/2026 | Chọn kế hoạch Core v0 23/09–31/12: 512 giờ task, 88 giờ dự phòng kỹ thuật, 32 giờ đệm vận hành; một Vault trong v0, ranh giới multi-vault để mở rộng sau; cập nhật milestone và cách ghi actual qua work session. | [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
+| 0.9 | 22/09/2026 | Thay ba work package quản lý đã hoàn thành bằng `PLN01`–`PLN03`; giữ 32 giờ PH0, 512 giờ công việc, mốc 31/12 và toàn bộ Feature/Spec/Tech. Ghi nhận 12 giờ thực tế là tiến độ lập kế hoạch, không phải tiến độ code. | [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md) |
