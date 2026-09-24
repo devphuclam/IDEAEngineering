@@ -12,7 +12,7 @@ Stack và không phê duyệt successor baseline.
 4. [readiness-register.md](readiness-register.md) — sổ công việc, dependency và kết quả.
 5. [trace-matrix.md](trace-matrix.md) — đường trace từ PH0 tới nguồn Feature/Spec/Tech.
 6. [canonical-scenario.md](canonical-scenario.md) — scenario bắt buộc, đường bình thường và đường lỗi.
-7. [environment-profile.md](environment-profile.md) — môi trường được phép và các giới hạn setup.
+7. [environment-profile.md](environment-profile.md) — Ubuntu development host, Windows client boundary and setup limits; [server runbook](../../deploy/development/README.md) lists the P04 checks.
 8. [test-data-and-verification.md](test-data-and-verification.md) — fixture synthetic và ma trận kiểm tra.
 9. [recovery-and-security-plan.md](recovery-and-security-plan.md) — recovery, backup và security review.
 10. [research.md](research.md) và [data-model.md](data-model.md) — quyết định thiết kế hồ sơ.
@@ -22,14 +22,15 @@ Stack và không phê duyệt successor baseline.
 14. [checklists/readiness.md](checklists/readiness.md) — checklist do reviewer giữ quyền đánh dấu.
 15. [analysis-findings.md](analysis-findings.md) — bản phân tích lịch sử và remediation đã được duyệt.
 16. [analysis-findings-002.md](analysis-findings-002.md) — bản phân tích mới sau khi bổ sung hồ sơ PH0 và hoàn tất T021 cấp tác giả.
-17. [analysis-findings-003.md](analysis-findings-003.md) — bản phân tích hiện tại sau khi xử lý các finding về link, authority wording và baseline metadata.
+17. [analysis-findings-003.md](analysis-findings-003.md) — bản phân tích lịch sử sau khi xử lý các finding về link, authority wording và baseline metadata.
+18. [analysis-findings-004.md](analysis-findings-004.md) — snapshot phân tích ngày 2026-09-23, trước khi ghi kết quả review P04 hiện tại.
 
 ## Trạng thái hiện tại
 
 | Nội dung | Trạng thái |
 |---|---|
 | PH0 source package | `Draft` |
-| P01–P07 execution | P01 `COMPLETE` / `PASS`; P02–P07 `NOT-RUN` |
+| P01–P07 execution | P01 and P04 `COMPLETE` / `PASS` (P04 is limited to the one-developer internal environment); P02, P03 and P05–P07 `NOT-RUN` |
 | PG4 Gate Execution State | `NOT-RUN` |
 | PG4 Gate Outcome | `NOT-APPLICABLE` until an attributable decision |
 | Production implementation | Unauthorized |

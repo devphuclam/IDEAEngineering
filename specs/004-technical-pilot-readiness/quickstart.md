@@ -84,7 +84,7 @@ Use this matrix when the corresponding records are produced:
 
 | Area | Minimum review question |
 |---|---|
-| Environment | Are machines, allowed tool versions, configuration/secret owners and prohibited actions explicit? |
+| Environment | Is the allocated Ubuntu development host identified, with Windows client scope, allowed tools, access route, configuration/secret owners and prohibited actions explicit? |
 | Build/test | Are repeatable entry points named without downloading or installing unapproved dependencies? |
 | Migration | Is forward migration versioned and is rollback/recovery behavior stated? |
 | Dataset | Are fixture provenance, identities, Artifact digest/size and initial states recorded? |
@@ -126,6 +126,12 @@ mandatory prerequisite cannot be bypassed through a conditional pass.
 
 ## 9. Current execution status
 
-This guide and its supporting design artifacts are authored. P01 reviewer confirmation, P02–P06
-execution and P07/`PG4` are `NOT-RUN` until their task evidence is produced.
+This guide and its supporting design artifacts are authored. P01 is `COMPLETE / PASS` for the exact
+reviewed input recorded in the readiness register. The P04 development-environment result is
+`PASS` based on the reviewed Ubuntu host, native dependencies, database roles, one Vault directory
+and documented delivery procedure. The progress card remains `IN-PROGRESS` until explicitly closed.
+Application build, Flyway migration, client-to-application endpoints and Vault Adapter I/O remain
+`NOT-RUN`; the earlier Docker Compose syntax check belongs only to the retired local candidate. P02, P03,
+P05, P06 and P07/`PG4` execution remain `NOT-RUN` until their
+own task evidence is produced; later controlled deltas must be frozen by T023 before PG4.
 For `PG4`, this is execution state; its outcome is `NOT-APPLICABLE`, not an assessment result.

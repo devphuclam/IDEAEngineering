@@ -1,6 +1,6 @@
 # Phiên bản và nguồn của Feature / Spec / Tech
 
-Ngày cập nhật: 19-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
+Ngày cập nhật: 23-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
 
 Đây là sổ tra cứu phiên bản, nguồn, review nội bộ và quyết định Feature/Spec/Tech. Không phải báo
 cáo kiểm thử hoặc một nguồn yêu cầu mới.
@@ -28,13 +28,17 @@ kiểm soát từ đúng baseline trên.
 Sau khi baseline trên được duyệt, phản hồi quản lý ngày 17-09-2026 yêu cầu Vault hỗ trợ nhiều nơi
 lưu và không buộc toàn bộ byte file lớn đi xuyên qua tiến trình Server. Successor Draft tách control
 plane khỏi data plane, dùng scoped Artifact Gateway và cho phép một Artifact có nhiều location đã
-xác minh. Các nguồn hiện hành là DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.14,
-DOC-08@0.13, VVP@0.17, TECH-001@0.15 và technology view set@0.3.
+xác minh. Bộ nguồn Vault successor ban đầu là DOC-04@0.14, DOC-05@0.21, DOC-06@0.17,
+DOC-07@0.14, DOC-08@0.13, VVP@0.17, TECH-001@0.16 và technology view set@0.5. Đây là mốc lịch sử,
+không phải danh sách phiên bản hiện hành.
 
-Successor này giữ nguyên 14 Feature groups, Tech Stack selection, Q-15, Product Scope, PG3 và PG4.
-Nó không tự kế thừa PDA approval của exact predecessor. Exact successor approval, Gateway runtime/
-toolchain/provider, topology, durability thresholds và runtime evidence đều `NOT-RUN` hoặc `BLOCKED`
-như ghi trong từng nguồn. Xem [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md).
+Successor này giữ nguyên 14 Feature groups, Q-15, Product Scope, PG3 và PG4. Node.js 24 LTS được PDA
+duyệt riêng cho Web build ngày 23-09-2026 theo
+[`IE-CHG-TECH-NODE24-001`](../registers/CHG-2026-09-23-node24-web-build-baseline.md); exact Web build
+vẫn `NOT-RUN`. Các phần successor khác không tự kế thừa PDA approval của exact predecessor. Exact
+Gateway runtime/toolchain/provider, topology, durability thresholds và runtime evidence đều
+`NOT-RUN` hoặc `BLOCKED` như ghi trong từng nguồn. Xem
+[`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md).
 
 ### Successor Draft — Approval Policy self-approval
 
@@ -51,24 +55,30 @@ riêng policy correction này ngày 19-09-2026; các phần successor khác và 
 Bằng chứng quyết định được ghi tại
 [`IE-CHG-PDA-APPROVAL-002`](../registers/CHG-2026-09-19-pda-approval-approval-policy.md).
 
+Bộ nguồn successor hiện hành tại ngày cập nhật sổ này là DOC-04@0.15, DOC-05@0.22,
+DOC-06@0.18, DOC-07@0.17, DOC-08@0.13, VVP@0.18, TECH-001@0.16 và technology view set@0.5.
+Mỗi nguồn vẫn giữ trạng thái kiểm soát, qualification và approval riêng; việc có tên trong danh
+sách hiện hành không tự tạo kết quả kiểm thử hoặc quyết định duyệt mới.
+
 ## 1. Bản làm việc hiện tại
 
 | Tài liệu | Phiên bản hiện tại | Trạng thái |
 |---|---|---|
 | [Feature](FEATURE-001-feature-definition-and-scope.md) | FEATURE-001@0.12 | Working brief vẫn `Draft` và source-pin stale; quyết định 14 nhóm Feature `APPROVED` theo baseline 17-09; bản `Approved 1.0` chưa xuất bản |
 | [Spec](SPEC-001-product-specification.md) | SPEC-001@0.15 | Successor brief tách RBAC khỏi Approval Policy; policy correction `APPROVED` theo `IE-CHG-PDA-APPROVAL-002`; các phần successor khác vẫn `NOT-RUN` |
-| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.15 | Successor working brief giữ nguyên Tech Stack được duyệt ở 0.14 nhưng thêm multi-location Vault/control–data-plane architecture; exact 0.15 PDA approval `NOT-RUN`; Flutter/Q-15 không đổi |
+| [Tech](TECH-001-technology-and-architecture-proposal.md) | TECH-001@0.16 | Current successor brief dùng Node.js 24 LTS cho Web build theo quyết định PDA ngày 23-09-2026; exact Web build vẫn `NOT-RUN`; các successor khác giữ authority state riêng; Flutter/Q-15 không đổi |
 
 Feature 0.12 giữ nguyên 14 mã FTR. Normative DOC-04@0.13 được duyệt có 87 dòng yêu cầu. Successor
 DOC-04@0.15 có 90 dòng yêu cầu sau khi thêm scoped direct Gateway transfer, multi-location
 custody/replication và policy-controlled self-approval clarification. VVP 0.18 có 17 mục tiêu cùng
 các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.7, DOC-02 ở Draft 0.2,
 DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.15, DOC-05 ở Draft 0.22, DOC-06 ở Draft 0.18, DOC-07 ở Draft
-0.14, DOC-08 ở Draft 0.13, coverage GOV ở Draft 0.3 và future-commercial GOV ở Draft 0.1. Lịch
-56 task/756 giờ cũ được giữ trong Git history;
-kế hoạch hiện hành là 35 work package, 512 giờ công việc và 88 giờ dự phòng trong quỹ 600 giờ ngày
-thường. Mốc 31/12 là Technical Pilot, không phải full Core v0. Approval của predecessor không tự
-chuyển sang toàn bộ nội dung successor.
+0.17, DOC-08 ở Draft 0.13, coverage GOV ở Draft 0.3 và future-commercial GOV ở Draft 0.1. Lịch
+56 task/756 giờ cũ được giữ trong Git history. Kế hoạch hiện hành là
+`IE-PLAN-DEC2026-003@0.2`: 35 work package, 53 Delivery Card, 512 giờ công việc, 88 giờ dự phòng kỹ
+thuật và 32 giờ đệm vận hành. Mốc 31/12 là đợt review Core v0 dùng nội bộ, không phải rollout rộng
+hoặc phát hành thương mại. Approval của predecessor không tự chuyển sang toàn bộ nội dung
+successor.
 
 **Lưu ý nguồn ngày 05/09/2026:** Feature 0.5 từng ghim DOC-07@0.3. Chuỗi tham chiếu hiện hành đã
 được đồng bộ trong lần 09/09/2026; việc đồng bộ nguồn không phải quyết định duyệt tính năng. Các
@@ -602,3 +612,24 @@ Server đang được khuyến nghị sau bản kế nhiệm này.
 | Pháp lý | Tạo watchlist theo nguồn pháp luật chính thức; Legal Review Authority vẫn `BLOCKED`, mọi kết luận áp dụng/compliance `NOT-RUN` |
 | Authority | Product Decision Authority vẫn chỉ quyết định Feature/Spec/Tech; boss được đề xuất làm Commercial Decision Authority, nhưng việc chấp nhận vai trò bổ sung chưa được ghi nhận chính thức |
 | Product impact | Không đổi 14 Feature groups, 90 successor REQ rows, Tech Stack, Q-15, PDA approval hiện có, PG3, PG4 hoặc phạm vi Technical Pilot |
+
+## 29. Chọn Node.js 24 LTS cho Web build — 23/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-TECH-NODE24-001](../registers/CHG-2026-09-23-node24-web-build-baseline.md) |
+| Quyết định | Product Decision Authority duyệt Node.js 24 LTS làm major line dùng để build Web; Node.js không trở thành runtime của IDEA Server. |
+| Ma trận và Tech brief | `IE-KNW-TECH-DEC-001@0.6 → @0.7`; `TECH-001@0.15 → @0.16`. |
+| Technology views | `IE-ARC-TECH-VIEW-001@0.3 → @0.4`; [IE-VEV-TECH-VIEW-003](../registers/VEV-2026-09-23-node24-technology-view-refresh.md) ghi source/render/open và focused author review. |
+| Qualification | Exact package graph, lockfile, Web build, test và release vẫn `NOT-RUN`. Retained Q-15 harness/evidence không bị sửa thành bằng chứng Node.js 24. |
+| Product impact | Không đổi Feature, Spec, Product Scope, Q-15 (`PARTIAL / NO WINNER`), Format Worker toolchain, PG3 hoặc PG4. |
+
+## 30. Làm rõ một Vault trong Core v0 — 23/09/2026
+
+| Nội dung | Ghi nhận |
+|---|---|
+| Bản ghi thay đổi | [IE-CHG-PH0-CORR-002](../registers/CHG-2026-09-23-post-analysis-consistency-correction.md) |
+| Technology views | `IE-ARC-TECH-VIEW-001@0.4 → @0.5`; TECH-D01/D02/D04/D05 thể hiện một Vault đang dùng trong Core v0 và một seam `DEFER` cho multi-vault tương lai. |
+| Bằng chứng | [IE-VEV-TECH-VIEW-004](../registers/VEV-2026-09-23-one-vault-core-v0-technology-view-correction.md) giữ SVG/PNG, render manifest, standalone-open result và focused author review. |
+| P01 | Chuẩn hóa reviewed planning baseline thành `IE-PLAN-DEC2026-003@0.2`, Appendix A@0.9 và Kanban@0.5 tại commit `303b7225...`; P01 `PASS` chỉ áp dụng cho exact input đó. |
+| Product impact | Không đổi Feature, Spec, Tech selection, Product Scope, Q-15, PDA approval, PG3 hoặc PG4. Multi-vault runtime vẫn ngoài Core v0. |

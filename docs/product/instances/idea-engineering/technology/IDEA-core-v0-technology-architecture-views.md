@@ -5,21 +5,21 @@
 | Stable Document ID | `IE-ARC-TECH-VIEW-001` |
 | Document class | `ARC` / Technology Architecture View Set |
 | Title | IDEA Engineering Core v0 Technology Architecture View Set |
-| Version / status | `0.3` / `Draft` |
+| Version / status | `0.5` / `Draft` |
 | Artifact role | Focused views of the Engineering-selected Core v0 technology baseline; companion to the decision matrix and TECH-001, not a replacement for DOC-05 |
 | Product normativity | `INFORMATIVE` — visualizes the selected implementation direction and creates no FTR/REQ/product behavior |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Principal Product Author; named attribution `BLOCKED` before `Proposed` |
-| Reviewer / acceptance authority | Architecture/technology review `NOT-RUN`; Product Decision Authority review and acceptance `NOT-RUN` |
-| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-05@0.21; `IE-KNW-TECH-DEC-001@0.6`; `TECH-001@0.15` |
-| Source / upstream trace | [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); [DOC-05](../DOC-05-architecture-description.md); [`IE-KNW-TECH-DEC-001@0.6`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`TECH-001@0.15`](../decision-briefs/TECH-001-technology-and-architecture-proposal.md); [ADR-0013](../../../../adr/0013-separate-artifact-control-and-data-planes.md) |
-| Downstream trace | Successor source/rendition and focused author review: [`IE-VEV-VAULT-XFER-002`](../registers/VEV-2026-09-18-vault-transfer-diagram-review.md) and [current SVG/PNG gallery](../evidence/IE-VEV-VAULT-XFER-002/index.html); predecessor [`IE-VEV-VAULT-XFER-001`](../registers/VEV-2026-09-17-vault-transfer-diagram-review.md) and [`IE-VEV-TECH-VIEW-002`](../registers/VEV-2026-09-15-technology-architecture-view-correction.md) remain historical evidence |
-| Change record | [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor correction [`IE-CHG-TECH-VIEW-CORR-001`](../registers/CHG-2026-09-15-technology-architecture-view-correction.md) |
-| Predecessor | `IE-ARC-TECH-VIEW-001@0.2`; exact successor source/diagram/SVG/PNG hashes are recorded in the current render manifest |
-| Supersedes / superseded by | Supersedes `IE-ARC-TECH-VIEW-001@0.2` / `NOT-APPLICABLE` |
+| Reviewer / acceptance authority | Independent architecture/technology review `NOT-RUN`; Product Decision Authority approved the exact predecessor Tech baseline and Node.js 24 Web-build delta; remaining successor authority states follow their records |
+| Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-05@0.22; `IE-KNW-TECH-DEC-001@0.7`; `TECH-001@0.16`; `IE-PLAN-DEC2026-003@0.2` |
+| Source / upstream trace | [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); [DOC-05](../DOC-05-architecture-description.md); [`IE-KNW-TECH-DEC-001@0.7`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`TECH-001@0.16`](../decision-briefs/TECH-001-technology-and-architecture-proposal.md); [ADR-0013](../../../../adr/0013-separate-artifact-control-and-data-planes.md) |
+| Downstream trace | Current Core v0 one-Vault correction rendition and focused author review: [`IE-VEV-TECH-VIEW-004`](../registers/VEV-2026-09-23-one-vault-core-v0-technology-view-correction.md) and [current technology SVG/PNG gallery](../evidence/IE-VEV-TECH-VIEW-004/index.html); Node.js 24 predecessor rendition [`IE-VEV-TECH-VIEW-003`](../registers/VEV-2026-09-23-node24-technology-view-refresh.md), Vault successor gallery [`IE-VEV-VAULT-XFER-002`](../registers/VEV-2026-09-18-vault-transfer-diagram-review.md) and earlier packages remain historical evidence |
+| Change record | [`IE-CHG-PH0-CORR-002`](../registers/CHG-2026-09-23-post-analysis-consistency-correction.md); [`IE-CHG-TECH-NODE24-001`](../registers/CHG-2026-09-23-node24-web-build-baseline.md); [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor correction [`IE-CHG-TECH-VIEW-CORR-001`](../registers/CHG-2026-09-15-technology-architecture-view-correction.md) |
+| Predecessor | `IE-ARC-TECH-VIEW-001@0.4`; successor source/diagram/SVG/PNG hashes are recorded in the current rendition evidence |
+| Supersedes / superseded by | Supersedes `IE-ARC-TECH-VIEW-001@0.4` / `NOT-APPLICABLE` |
 | Review trigger | Technology baseline, deployment topology, protocol, trust boundary, build/release path or client reopen disposition changes |
 | Access / retention | `INTERNAL`; retain with the technology baseline and successor history |
-| Evidence status | Mermaid source, latest successor rendering, standalone-SVG inspection and focused author visual review are recorded in `IE-VEV-VAULT-XFER-002`; independent architecture review, runtime qualification and exact successor PDA approval remain `NOT-RUN` |
+| Evidence status | Mermaid source, Core v0 one-Vault correction rendering, standalone-SVG inspection and focused author visual review are recorded in `IE-VEV-TECH-VIEW-004`; independent architecture review and runtime qualification remain `NOT-RUN`; PDA authority is mixed and follows the linked decision records |
 
 ## Reading rule and notation
 
@@ -44,14 +44,14 @@ uses the C4 meaning (an application or data store), not Docker.
 | Purpose | Show the selected Web, installed Windows, Server, storage and Windows-format technology families in one readable overview. |
 | Stakeholders / concerns | Product Decision Authority, Engineering, IT; scope fit, principal runtimes, technology ownership and deployment shape. |
 | Viewpoint / notation | Technology stack overview; Mermaid flowchart with grouped runtime boundaries. |
-| Source | Matrix@0.6 sections 2/6–8; TECH-001@0.15; DOC-05@0.21 container/deployment views. |
+| Source | Matrix@0.7 sections 2/6–8; TECH-001@0.16; DOC-05@0.22 container/deployment views. |
 | Current status / authority | `Draft`; Engineering baseline selected; exact technology disposition is owned by Matrix/TECH, architecture semantics by DOC-05. |
-| Qualification boundary | Does not prove compatibility, security, capacity, HA, deployability or Product Decision Authority approval. Q-01…Q-14 remain `NOT-RUN`; Q-15 remains `PARTIAL / NO WINNER`. |
+| Qualification boundary | Does not prove compatibility, security, capacity, HA or deployability and does not create Product Decision Authority approval. Existing approvals remain owned by their decision records. Q-01…Q-14 remain `NOT-RUN`; Q-15 remains `PARTIAL / NO WINNER`. |
 
 ```mermaid
 flowchart TB
     accTitle: IDEA Core v0 selected technology stack overview
-    accDescr: Browser and a Windows engineering PC use one React business interface. The Windows desktop hosts it through WebView2 in a narrow WPF shell and calls a separate per-user dotnet Workspace through an authenticated named pipe. Clients send protected control commands to the Java Spring Server. For large file bytes, the Workspace uses a short-lived scoped grant to transfer directly through a selected Artifact Gateway to one of multiple Vault locations. Gateway runtime and storage provider are not selected by this view.
+    accDescr: Browser and a Windows engineering PC use one React business interface. The Windows desktop hosts it through WebView2 in a narrow WPF shell and calls a separate per-user dotnet Workspace through an authenticated named pipe. Clients send protected control commands to the Java Spring Server. For Core v0 large file bytes, the Workspace uses a short-lived scoped grant to transfer directly through one configured Artifact Gateway and Vault location. A future multi-vault seam is shown as deferred and is not part of Core v0 runtime delivery. Gateway runtime and storage provider are not selected by this view.
 
     subgraph Clients[Client surfaces]
       direction LR
@@ -77,15 +77,18 @@ flowchart TB
       App -->|Spring JDBC / pgJDBC| DB
     end
 
-    subgraph ArtifactDataPlane[Artifact data plane — exact runtime/provider NOT-RUN]
+    subgraph ArtifactDataPlane[Core v0 Artifact data plane — one configured Vault]
       direction LR
       GatewayA[Artifact Gateway A<br/>scoped transfer + digest check]
       VaultA[(Vault location A<br/>immutable Artifact bytes)]
-      GatewayB[Artifact Gateway B<br/>scoped transfer + digest check]
-      VaultB[(Vault location B<br/>immutable Artifact bytes)]
       GatewayA <--> VaultA
-      GatewayB <--> VaultB
-      VaultA -. policy-governed replication .-> VaultB
+    end
+
+    subgraph FutureVault[Future multi-vault seam — DEFER / not delivered in Core v0]
+      direction LR
+      GatewayB[Future Artifact Gateway B]
+      VaultB[(Future Vault location B)]
+      GatewayB -. future provider Adapter .- VaultB
     end
 
     Worker[Windows Format Worker<br/>IRONCAD / Office profile]
@@ -93,27 +96,28 @@ flowchart TB
     React -->|HTTPS / JSON REST| Nginx
     WS -->|HTTPS / API| Nginx
     WS <--> |scoped resumable bytes| GatewayA
-    WS <--> |safe location reselection| GatewayB
     App -->|grant / status / receipt control| GatewayA
-    App -->|grant / status / receipt control| GatewayB
+    App -. future controlled location selection .-> GatewayB
+    VaultA -. future policy-governed replication .-> VaultB
     App -.->|versioned controlled contract| Worker
 
     classDef selected fill:#e8f1fb,stroke:#172b4d,stroke-width:2px,color:#111;
     classDef data fill:#fff,stroke:#172b4d,stroke-width:2px,color:#111;
     classDef external fill:#fffaf0,stroke:#5f6368,stroke-width:1.5px,stroke-dasharray:5 3,color:#111;
     class Browser,React,WV,WPF,Pipe,WS,Nginx,App selected;
-    class DB,VaultA,VaultB data;
-    class Tools,Worker,GatewayA,GatewayB external;
+    class DB,VaultA data;
+    class Tools,Worker,GatewayA,GatewayB,VaultB external;
 ```
 
 **Text alternative.** The same React/TypeScript business UI serves Browser and Desktop. Desktop adds
 WebView2, a narrow WPF .NET 10 shell and an authenticated/versioned Named Pipe to a separate per-user
 .NET 10 Workspace. Browser, embedded React and Workspace call the Ubuntu-hosted Java/Spring Server
 through HTTPS for authentication, authorization, operation preparation and authoritative commit. The
-Workspace sends or receives large file bytes directly through the selected Artifact Gateway under a
-short-lived scoped grant. Gateways connect to multiple Vault locations; policy-governed replication
-does not create a new Artifact identity and is not backup. The Server uses PostgreSQL and a versioned
-contract for an isolated Windows Format Worker. Exact Gateway runtime/provider is `NOT-RUN`.
+Workspace sends or receives large file bytes directly through one configured Artifact Gateway and
+Vault location under a short-lived scoped grant. The dashed second location is the preserved
+multi-vault seam for a later increment; it is not deployed in Core v0. Future replication does not
+create a new Artifact identity and is not backup. The Server uses PostgreSQL and a versioned contract
+for an isolated Windows Format Worker. Exact Gateway runtime/provider is `NOT-RUN`.
 
 ## TECH-D02 — C4 Container / Technology Boundary View
 
@@ -123,14 +127,14 @@ contract for an isolated Windows Format Worker. Exact Gateway runtime/provider i
 | Purpose | Identify the independently running applications/data stores and the technology/protocol crossing each boundary. |
 | Stakeholders / concerns | Architecture, implementation, security and operations reviewers; executable ownership, trust and integration seams. |
 | Viewpoint / notation | C4-style Container view rendered with Mermaid flowchart notation; a C4 Container is not a Docker container. |
-| Source | DOC-05@0.21 `ARCH-VIEW-CON-001`; Matrix@0.6; TECH-001@0.15. |
+| Source | DOC-05@0.22 `ARCH-VIEW-CON-001`; Matrix@0.7; TECH-001@0.16; DOC-07@0.17. |
 | Current status / authority | `Draft`; DOC-05 owns container responsibilities; Matrix/TECH own exact selected technologies. |
 | Qualification boundary | Does not establish process count under load, ports, host count, network rules, capacity or HA. |
 
 ```mermaid
 flowchart TB
     accTitle: C4 style container and technology boundaries for IDEA Core v0
-    accDescr: An engineer uses either a browser or the IDEA Desktop. A separate Workspace process manages local engineering files and tools. Protected business commands go to the IDEA Server. The Server authorizes the operation and selects a transfer location. Large file bytes then flow directly between Workspace and an Artifact Gateway, which stores or reads immutable bytes from one of multiple Vault locations. The Gateway returns transfer evidence but cannot publish a Generation.
+    accDescr: An engineer uses either a browser or the IDEA Desktop. A separate Workspace process manages local engineering files and tools. Protected business commands go to the IDEA Server. The Server authorizes the operation and selects the configured Core v0 location. Large file bytes then flow directly between Workspace and one Artifact Gateway and Vault. A deferred second location shows the future multi-vault seam. The Gateway returns transfer evidence but cannot publish a Generation.
 
     Engineer([Engineer])
     Browser[Container: Browser Workbench<br/>React + TypeScript]
@@ -140,7 +144,7 @@ flowchart TB
     Database[(Container: PostgreSQL 18<br/>authoritative relational data)]
     Gateway[Container: Artifact Gateway<br/>runtime/toolchain NOT-RUN]
     VaultA[(Container: Vault location A<br/>private immutable bytes)]
-    VaultB[(Container: Vault location B<br/>private immutable bytes)]
+    VaultB[(Future Vault location B<br/>DEFER — not deployed in Core v0)]
     Worker[Container: Format Worker<br/>Windows-native processing]
     Apps[External systems<br/>IRONCAD / Office]
 
@@ -155,8 +159,8 @@ flowchart TB
     Server <-->|transfer control/status<br/>authenticated receipts| Gateway
     Workspace <--> |scoped resumable bytes<br/>payload bypasses Server| Gateway
     Gateway <--> |provider Adapter| VaultA
-    Gateway <--> |provider Adapter| VaultB
-    VaultA -.->|policy-governed replication/repair| VaultB
+    Gateway -.-> |future provider Adapter| VaultB
+    VaultA -.->|future replication/repair| VaultB
     Server <--> |versioned controlled Adapter/API| Worker
     Worker <-->|scoped source/output bytes| Gateway
     Worker -->|licensed format operation| Apps
@@ -172,11 +176,13 @@ flowchart TB
 ```
 
 **Text alternative.** The running containers are Browser Workbench, IDEA Desktop, IDEA Workspace,
-IDEA Server, PostgreSQL, Artifact Gateway, multiple Vault locations and Format Worker. IRONCAD/Office
-are external. Business control uses HTTPS JSON; the Desktop-to-Workspace seam uses an authenticated/
+IDEA Server, PostgreSQL, one configured Artifact Gateway/Vault and Format Worker. IRONCAD/Office are
+external. Business control uses HTTPS JSON; the Desktop-to-Workspace seam uses an authenticated/
 versioned Named Pipe. Large payload bytes bypass the Server process and use a scoped resumable
-Workspace–Gateway transfer. The Server alone authorizes and commits product state; a Gateway receipt
-is evidence for revalidation, not Check-in success. Exact Gateway runtime/provider remains `NOT-RUN`.
+Workspace–Gateway transfer. Vault B is a deferred boundary showing that the same contract can later
+address another location; it is not a Core v0 runtime component. The Server alone authorizes and
+commits product state; a Gateway receipt is evidence for revalidation, not Check-in success. Exact
+Gateway runtime/provider remains `NOT-RUN`.
 
 ## TECH-D03 — Technology Layer Mapping
 
@@ -186,7 +192,7 @@ is evidence for revalidation, not Check-in success. Exact Gateway runtime/provid
 | Purpose | Map each selected technology to its bounded responsibility and show where IDEA domain authority remains. |
 | Stakeholders / concerns | Developers and architecture reviewers; framework role, domain ownership and prevention of accidental authority leakage. |
 | Viewpoint / notation | Responsibility/layer mapping; Mermaid flowchart. |
-| Source | Matrix@0.6 selected-stack records; DOC-05 Module ownership; accepted ADRs C1-003…006. |
+| Source | Matrix@0.7 selected-stack records; DOC-05 Module ownership; accepted ADRs C1-003…006. |
 | Current status / authority | `Draft`; Matrix/TECH own selection, DOC-05 owns business authority and Module boundaries. |
 | Qualification boundary | Does not prescribe classes/packages or prove that module checks and runtime controls are implemented. |
 
@@ -242,7 +248,7 @@ are operational mechanisms. This mapping selects the boundary, not a Gateway run
 | Purpose | Make every selected process-to-process protocol and principal trust boundary explicit. |
 | Stakeholders / concerns | Security, implementation and integration reviewers; authentication, versioning, protocol ownership and refusal boundaries. |
 | Viewpoint / notation | Runtime communication/data-flow view; Mermaid flowchart with trust-zone grouping. |
-| Source | DOC-05@0.21 security/container views; Matrix@0.6 sections 5–8; TECH-001@0.15. |
+| Source | DOC-05@0.22 security/container views; Matrix@0.7 sections 5–8; TECH-001@0.16; DOC-07@0.17. |
 | Current status / authority | `Draft`; protocol families selected by Engineering; detailed contracts and security controls remain owned by DOC-04/05/06. |
 | Qualification boundary | Does not assert TLS, origin, Named Pipe authentication, JDBC, worker or large-file tests have passed. |
 
@@ -263,14 +269,14 @@ flowchart TB
       Spring[Spring Server process]
       PG[(PostgreSQL process)]
     end
-    subgraph ArtifactZone[Artifact data-plane trust zone]
+    subgraph ArtifactZone[Core v0 Artifact data-plane trust zone]
       AG[Artifact Gateway<br/>exact runtime NOT-RUN]
       VA[(Vault location A)]
-      VB[(Vault location B)]
       AG <--> |provider Adapter| VA
-      AG <--> |provider Adapter| VB
-      VA -. policy replication .-> VB
     end
+    VB[(Future Vault location B<br/>DEFER — later increment)]
+    AG -. future provider Adapter .-> VB
+    VA -. future policy replication .-> VB
     subgraph WorkerZone[Worker isolation zone]
       FW[Windows Format Worker]
     end
@@ -288,9 +294,11 @@ flowchart TB
 
     classDef selected fill:#e8f1fb,stroke:#172b4d,stroke-width:2px,color:#111;
     classDef data fill:#fff,stroke:#172b4d,stroke-width:2px,color:#111;
+    classDef notrun fill:#fff,stroke:#111,stroke-width:2px,stroke-dasharray:6 3,color:#111;
     class BReact,EReact,WPF,WS,Spring,FW selected;
-    class PG,VA,VB data;
+    class PG,VA data;
     class AG selected;
+    class VB notrun;
 ```
 
 **Text alternative.** React-to-Server and Workspace-to-Server calls use versioned HTTPS JSON REST.
@@ -309,14 +317,14 @@ versioned contract. Exact Gateway runtime/provider remains `NOT-RUN`.
 | Purpose | Place selected deployables on initial machines and show failure-domain and backup boundaries. |
 | Stakeholders / concerns | IT, operations, security and release reviewers; installation, supervision, recovery and availability claims. |
 | Viewpoint / notation | C4-style Deployment view rendered with Mermaid flowchart notation. |
-| Source | DOC-05@0.21 deployment/recovery views; Matrix@0.6 section 8; TECH-001@0.15. |
-| Current status / authority | `Draft`; one Server control plane plus multi-location Vault capability is the selected architecture direction; exact Gateway/Vault hosts, runtime/provider and policy thresholds remain subject to company/PDA review and qualification. |
-| Qualification boundary | **Core v0 Server baseline is not HA.** Multiple Vault locations improve byte custody/availability but do not make Server/PostgreSQL highly available. Host count/sizing, network policy, required replica count, failure domains, production entitlement, restore result and operating approval remain unqualified. |
+| Source | DOC-05@0.22 deployment/recovery views; Matrix@0.7 section 8; TECH-001@0.16; DOC-07@0.17. |
+| Current status / authority | `Draft`; Core v0 deploys one Server control plane and one configured Gateway/Vault location. The Artifact Custody/Gateway seam preserves a later multi-vault extension; the second location, replication and failover behavior are `DEFER` for Core v0. Exact Gateway/Vault hosts, runtime/provider and policy thresholds remain subject to company/PDA review and qualification. |
+| Qualification boundary | **Core v0 Server baseline is not HA.** One configured Vault is delivered in Core v0. The future second location does not create a current availability claim. Host count/sizing, network policy, failure domains, production entitlement, restore result and operating approval remain unqualified. |
 
 ```mermaid
 flowchart TB
-    accTitle: Initial Core v0 deployment with one control-plane Server and multiple Vault locations
-    accDescr: Engineer Windows computers run a browser, WPF WebView2 Desktop, per-user Workspace and external engineering tools. One Ubuntu Server virtual machine runs Nginx, Temurin, Spring Boot and PostgreSQL. Large file bytes bypass this Server and move through a selected Artifact Gateway to one of multiple Vault locations. Vault-to-Vault replication is policy governed. A separate backup target protects database, Artifact, configuration, policy and key recovery sets. Multiple Vaults do not make the Server highly available.
+    accTitle: Initial Core v0 deployment with one configured Vault and a future multi-vault seam
+    accDescr: Engineer Windows computers run a browser, WPF WebView2 Desktop, per-user Workspace and external engineering tools. One Ubuntu Server virtual machine runs Nginx, Temurin, Spring Boot and PostgreSQL. Large file bytes bypass this Server and move through one configured Artifact Gateway to Vault location A. A dashed future location shows the extension seam only; it is not deployed in Core v0. A separate backup target protects database, Artifact, configuration, policy and key recovery sets. The single Server is not highly available.
 
     subgraph EngineerPC[Engineer Windows PC]
       Browser[Browser]
@@ -343,10 +351,10 @@ flowchart TB
       GatewayA <--> VaultA
     end
 
-    subgraph VaultSiteB[Vault location B — illustrative]
-      GatewayB[Artifact Gateway B<br/>runtime/provider NOT-RUN]
-      VaultB[(Immutable Artifact bytes)]
-      GatewayB <--> VaultB
+    subgraph VaultSiteB[Future multi-vault increment — DEFER]
+      GatewayB[Future Artifact Gateway B]
+      VaultB[(Future Vault location B)]
+      GatewayB -. future provider Adapter .- VaultB
     end
 
     subgraph FormatHost[Windows Format Worker host]
@@ -361,32 +369,30 @@ flowchart TB
     CompanyBrowser -->|HTTPS| Proxy
     Workspace -->|HTTPS| Proxy
     Server <-->|transfer control/status and receipts| GatewayA
-    Server <-->|transfer control/status and receipts| GatewayB
     Workspace <--> |scoped direct bytes| GatewayA
-    Workspace <--> |scoped direct bytes after location reselection| GatewayB
-    VaultA -. policy-governed replication/repair .-> VaultB
+    Server -. future transfer control contract .-> GatewayB
+    VaultA -. future replication/repair .-> VaultB
     Server <--> |controlled contract| Worker
     Worker <-->|scoped source/output bytes| GatewayA
     DB -. base backup + WAL/PITR .-> Backup
     VaultA -. independent Artifact backup .-> Backup
-    VaultB -. independent Artifact backup .-> Backup
     Server -. config / policy / key set .-> Backup
 
     classDef selected fill:#e8f1fb,stroke:#172b4d,stroke-width:2px,color:#111;
     classDef external fill:#fffaf0,stroke:#5f6368,stroke-width:1.5px,stroke-dasharray:5 3,color:#111;
     classDef warning fill:#fff,stroke:#111,stroke-width:3px,color:#111;
     class Browser,Desktop,Workspace,Proxy,Server,DB selected;
-    class CompanyBrowser,Worker,Licensed,GatewayA,GatewayB,VaultA,VaultB external;
+    class CompanyBrowser,Worker,Licensed,GatewayA,VaultA,GatewayB,VaultB external;
     class NoHA,Backup warning;
 ```
 
 **Text alternative.** Windows engineer PCs run Browser/Desktop/Workspace and external tools. One
 Ubuntu VM runs Nginx, Spring Boot/Temurin and PostgreSQL. Workspace transfers large bytes directly
-through a selected Gateway to a Vault location under a Server-issued grant. A second Vault location
-illustrates policy-governed replication and safe location reselection; it is not a fixed count or an
-HA claim. An optional separate Windows host runs licensed format processing. Coordinated database,
-Artifact, configuration/policy and key material goes to an independent backup target. Replica and
-backup remain different controls; the single Server VM is not HA.
+through one configured Gateway to Vault location A under a Server-issued grant. The dashed Gateway B
+and Vault B show only the later extension seam; Core v0 does not deploy, replicate to or fail over to
+that location. An optional separate Windows host runs licensed format processing. Coordinated
+database, Artifact, configuration/policy and key material goes to an independent backup target. A
+future replica and backup remain different controls; the single Server VM is not HA.
 
 ## TECH-D06 — Technology Dependency View
 
@@ -396,7 +402,7 @@ backup remain different controls; the single Server VM is not HA.
 | Purpose | Show permitted direct technology dependency direction without listing transitive packages or creating cycles. |
 | Stakeholders / concerns | Developers, maintainers and supply-chain reviewers; coupling, replaceable seams and dependency authority. |
 | Viewpoint / notation | Technology dependency view; Mermaid flowchart. |
-| Source | Matrix@0.6 dependency classes; DOC-05 deep-Module rules; ADR C1-003. |
+| Source | Matrix@0.7 dependency classes; DOC-05 deep-Module rules; ADR C1-003. |
 | Current status / authority | `Draft`; selected dependency direction, not package-level implementation evidence. |
 | Qualification boundary | Does not prove resolved dependency versions, license/SBOM completeness or Modulith boundary tests. |
 
@@ -449,7 +455,7 @@ migration. No dependency cycle is intended.
 | Purpose | Show the selected build outputs and required release controls before deployment to each runtime family. |
 | Stakeholders / concerns | Engineering, release, security and operations; reproducibility, provenance, signing, SBOM, package ownership and rollback. |
 | Viewpoint / notation | Build/release pipeline design; Mermaid flowchart. |
-| Source | Matrix@0.6 build/deployment decisions; TECH-001@0.15; standards register supply-chain guidance. |
+| Source | Matrix@0.7 build/deployment decisions; TECH-001@0.16; standards register supply-chain guidance. |
 | Current status / authority | `SELECTED DESIGN / IMPLEMENTATION NOT-RUN`; Engineering baseline selected, no CI/release-pipeline PASS. |
 | Qualification boundary | The diagram is a design. It does not claim CI, signing, SBOM generation, package publication, migration or rollback is implemented. |
 
@@ -460,7 +466,7 @@ flowchart TB
 
     Source[(Controlled source<br/>SELECTED DESIGN)]
     Maven[Maven Wrapper + Boot BOM]
-    Npm[npm ci + Vite 8.3<br/>Node 22 LTS build line]
+    Npm[npm ci + Vite 8.3<br/>Node.js 24 LTS build line]
     Dotnet[dotnet build/publish<br/>.NET 10]
     WorkerToolchain[Format Worker build/runtime/toolchain<br/><b>QUALIFICATION-DEPENDENT / NOT-RUN</b>]
 
@@ -510,14 +516,14 @@ not a claim that CI exists.
 | Purpose | Show current Client and Server dispositions and the controlled route for reconsidering a non-selected candidate. |
 | Stakeholders / concerns | Product Decision Authority, Engineering and architecture reviewers; decision finality, viable alternatives and change triggers. |
 | Viewpoint / notation | Decision and evolution map; Mermaid flowchart. Status is written in every node and reinforced with solid/dashed borders. |
-| Source | Matrix@0.6 sections 3/6 and reopen register; TECH-001@0.15; `IE-CHG-TECH-BASELINE-001`. |
-| Current status / authority | `Draft`; Engineering decision `COMPLETE`, Core v0 baseline `SELECTED`, Product Decision Authority `NOT-RUN`. |
+| Source | Matrix@0.7 sections 3/6 and reopen register; TECH-001@0.16; `IE-CHG-TECH-BASELINE-001`. |
+| Current status / authority | `Draft`; Engineering decision `COMPLETE`, Core v0 baseline `SELECTED`; exact predecessor and Node.js 24 delta are PDA-approved, while remaining successor states follow their records. |
 | Qualification boundary | Q-15 remains `PARTIAL / NO WINNER`; this map does not turn any candidate into a Q-15 winner or any Engineering disposition into approval. |
 
 ```mermaid
 flowchart TB
     accTitle: Core v0 technology decisions and controlled reopen paths
-    accDescr: Engineering selects React WPF WebView2 and dotnet Workspace for the Core v0 client and Java Spring for the Server. A Client or Server trigger opens a successor decision. That decision may retain the current baseline or select the corresponding qualified alternative; the trigger does not predetermine the result. Q15 remains partial with no winner and Product Decision Authority approval remains not run.
+    accDescr: Engineering selects React WPF WebView2 and dotnet Workspace for the Core v0 client and Java Spring for the Server. The exact predecessor baseline and Node.js 24 Web build delta are Product Decision Authority approved; other successor states follow separate records. A Client or Server trigger opens a successor decision and does not predetermine its result. Q15 remains partial with no winner.
 
     Q15[Q-15 experiment<br/><b>PARTIAL / NO WINNER</b><br/>does not decide the baseline]
 
@@ -543,9 +549,9 @@ flowchart TB
       ServerDecision -. select qualified alternative .-> N
     end
 
-    PDA[Product Decision Authority<br/><b>NOT-RUN</b>]
-    A -. submitted for review .-> PDA
-    J -. submitted for review .-> PDA
+    PDA[Product Decision Authority<br/><b>PREDECESSOR + NODE.JS 24 DELTA APPROVED</b><br/>other successor states governed separately]
+    A -. approved in exact predecessor .-> PDA
+    J -. approved in exact predecessor .-> PDA
 
     classDef selected fill:#e8f1fb,stroke:#111,stroke-width:3px,color:#111;
     classDef alternative fill:#fff,stroke:#111,stroke-width:2px,stroke-dasharray:6 3,color:#111;
@@ -597,6 +603,8 @@ force retention of Java in advance.
 
 | Version | Date | Status | Change |
 |---|---|---|---|
+| `0.5` | 2026-09-23 | Draft | Correct TECH-D01/D02/D04/D05 so Core v0 deploys one configured Vault while retaining a visibly deferred multi-vault seam. No Feature, Spec, Tech selection, Product Scope, Q-15, PDA or gate state changes. |
+| `0.4` | 2026-09-23 | Draft | Record the PDA-approved Node.js 24 LTS Web-build baseline and refresh TECH-D07; no topology, protocol, Product Scope, Q-15 or gate change. Successor render evidence is recorded separately. |
 | `0.3` | 2026-09-17 | Draft | Add control-plane/data-plane separation and multi-location Vault capability to TECH-D01…D06; correct control/receipt directions and worker byte paths; retain initial filesystem Adapter direction. Current render/open and focused author review are recorded in `IE-VEV-VAULT-XFER-002`. Gateway runtime/provider, independent review and runtime qualification remain `NOT-RUN`; Technology Stack, Q-15, Product Scope, PDA and PG states are unchanged. |
 | `0.2` | 2026-09-15 | Draft | Correct TECH-D07 so `.NET` applies only to WPF/Workspace and the selected Worker boundary retains an unselected toolchain; correct TECH-D08 so Client and Server triggers lead to an unbiased successor decision; baseline, Q-15, Product Scope, PDA and PG states unchanged |
 | `0.1` | 2026-09-15 | Draft | Initial TECH-D01…D08 set for the Engineering-selected Core v0 baseline; Q-15 remains `PARTIAL / NO WINNER`, PDA and PG states unchanged |

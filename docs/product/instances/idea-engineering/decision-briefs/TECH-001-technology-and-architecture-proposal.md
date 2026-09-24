@@ -3,19 +3,19 @@
 | Thông tin | Nội dung |
 |---|---|
 | Mã tài liệu / Stable ID | `TECH-001` |
-| Phiên bản / ngày soạn | `0.15` / `17-09-2026` |
-| Trạng thái | `Draft` — Engineering Technology Selection đã hoàn tất; Product Decision Authority review/approval `NOT-RUN` |
+| Phiên bản / ngày soạn | `0.16` / `23-09-2026` |
+| Trạng thái | `Draft` — Engineering Technology Selection đã hoàn tất; Node.js 24 LTS Web-build successor được Product Decision Authority duyệt; các successor khác giữ trạng thái riêng |
 | Vai trò | Brief tiếng Việt để sếp xem xét trục Tech; không phải Core Product Document và không tự phê duyệt stack |
 | Người soạn / review | Principal Product Author — trợ lý soạn; review nội bộ đầy đủ `NOT-RUN` |
 | Người quyết định | Sếp — `Product Decision Authority` |
 | Product Normativity | `INFORMATIVE` — không tạo FTR/REQ và không đổi hành vi sản phẩm |
-| Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.6`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); Q-15 [`Phase 1`](../registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [`Phase 2`](../registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md), [`Phase 3`](../registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md); các nguồn chính thức được ghim trong matrix |
+| Cơ sở chi tiết | [`IE-KNW-TECH-DEC-001@0.7`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); Q-15 [`Phase 1`](../registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [`Phase 2`](../registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md), [`Phase 3`](../registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md); các nguồn chính thức được ghim trong matrix |
 | Baseline sản phẩm | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.14, DOC-05@0.21, DOC-06@0.17, DOC-07@0.12, DOC-08@0.13, GOV@0.3, VVP@0.17 và các ADR đã Accepted/Proposed theo trạng thái ghi trong từng ADR |
-| Sơ đồ kỹ thuật | [`IE-ARC-TECH-VIEW-001@0.3`](../technology/IDEA-core-v0-technology-architecture-views.md) gồm `TECH-D01…D08`; render/review cho bản 0.3 `NOT-RUN`, bản render 0.2 chỉ là bằng chứng lịch sử |
-| Change Record | [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); [`IE-CHG-TECH-BASELINE-001@0.1`](../registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md) vẫn sở hữu quyết định Tech Stack |
-| Supersedes / Superseded by | Supersedes `TECH-001@0.14`; superseded by `NOT-APPLICABLE` |
+| Sơ đồ kỹ thuật | [`IE-ARC-TECH-VIEW-001@0.5`](../technology/IDEA-core-v0-technology-architecture-views.md) gồm `TECH-D01…D08`; Core v0 hiển thị một Vault đang dùng và giữ đường mở rộng multi-vault; successor render/review được ghi riêng, bằng chứng cũ giữ lịch sử |
+| Change Record | [`IE-CHG-PH0-CORR-002`](../registers/CHG-2026-09-23-post-analysis-consistency-correction.md); [`IE-CHG-TECH-NODE24-001`](../registers/CHG-2026-09-23-node24-web-build-baseline.md); [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); [`IE-CHG-TECH-BASELINE-001@0.1`](../registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md) |
+| Supersedes / Superseded by | Supersedes `TECH-001@0.15`; superseded by `NOT-APPLICABLE` |
 | Giới hạn | Chỉ ghi nhận lựa chọn ở cấp Engineering để trình sếp. Chưa viết production code, chưa cài đặt/triển khai, chưa mua license/hạ tầng và không tuyên bố PG3/PG4 `PASS`. |
-| Trạng thái quyết định | Engineering Technology Selection: `COMPLETE`; exact predecessor Tech baseline 0.14: PDA `APPROVED`; exact 0.15 Vault successor: PDA `NOT-RUN`; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
+| Trạng thái quyết định | Engineering Technology Selection: `COMPLETE`; Node.js 24 LTS successor: PDA `APPROVED` ngày 23-09-2026; exact predecessor Tech baseline 0.14: PDA `APPROVED`; exact Vault successor: PDA state giữ theo record riêng; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
 
 ## 1. Kết luận để sếp phản biện
 
@@ -27,12 +27,12 @@ Java 25 LTS / Eclipse Temurin 25 / Spring Boot 4.1.x + Spring Modulith 2.1.x
 PostgreSQL 18 + Spring JDBC/JdbcClient/pgJDBC + Flyway versioned SQL
 Maven Wrapper + Boot BOM; Spring Security với ordinary server-side sessions
 Bounded Spring tasks + transactional outbox dispatcher; Actuator/Micrometer/OTel/JFR
-React 19.3 + TypeScript 7 + Vite 8.3 / Node 22 LTS build
+React 19.3 + TypeScript 7 + Vite 8.3 / Node.js 24 LTS build
 WPF net10.0-windows + WebView2 Evergreen
 Workspace .NET 10 riêng theo từng Windows user, IPC named pipe có xác thực
 Multi-location Artifact Gateway/Vault boundary; initial filesystem-backed Vault Adapter remains the Core v0 implementation direction; exact Gateway runtime/toolchain/provider `NOT-RUN`
 Separate Windows Format Worker khi CAD/Office/license yêu cầu
-Signed/versioned executable-JAR bundle + systemd trên một Server VM/company-managed; Artifact bytes ở nhiều Vault location; Server vẫn không HA
+Signed/versioned executable-JAR bundle + systemd trên một Server VM/company-managed; Core v0 dùng một Vault và giữ seam để bổ sung nhiều Vault sau; Server vẫn không HA
 Actuator/Micrometer/OpenTelemetry/JFR + PostgreSQL PITR/WAL và backup độc lập
 ```
 
@@ -73,7 +73,7 @@ nhanh hơn, scale hơn hoặc “enterprise-grade” hơn.
 | Integration publication | `SELECT` | PostgreSQL transactional outbox + bounded Spring dispatcher + plain owner-specific Adapter | Outcome/Audit/outbox atomic trong relational UoW; consumer idempotent. Spring Integration chỉ `CONDITIONAL` khi có contract cụ thể; broker chưa bắt buộc. |
 | Web frontend | `SELECT — CORE V0 ENGINEERING BASELINE` | React 19.3 CSR | Một business UI dùng cho browser và trong WebView2; static build được Server phục vụ; không thêm SSR/RSC. Q-15 vẫn `PARTIAL / NO WINNER`. |
 | Web compiler | `SELECT` | TypeScript 7.0 | CLI/type-checking line được chọn; TS6 chỉ là compatibility lane cho plugin dùng compiler API chưa ổn định. |
-| Web build | `SELECT` | Vite 8.3 + Node.js 22 LTS build line | `Node >=22.12` cho Vite 8; `npm ci` + `package-lock.json` và SBOM. Node không chạy như production Server. |
+| Web build | `SELECT` | Vite 8.3 + Node.js 24 LTS build line | Dùng Node.js 24 LTS đã được duyệt; máy hiện quan sát `v24.16.0`. `npm ci` + `package-lock.json` và SBOM; Node không chạy như production Server. Exact patch/build vẫn phải được kiểm tra. |
 | Web routing | `SELECT` | React Router 7 data APIs | Loaders/actions/error boundaries ở client; API/authorization vẫn do Server quyết định. |
 | Search | `SELECT` | Rebuildable PostgreSQL Discovery Projection | ID/title/filter/sort/page/permission predicates; Japanese tokenization và FTS semantics chưa được chứng minh. |
 | Desktop shell | `SELECT — CORE V0 ENGINEERING BASELINE` | WPF `net10.0-windows` + embedded React | Giữ bề mặt Web/Desktop/Web-rendered Desktop; native code chỉ nhận các intent command được phép và không viết lại business UI bằng XAML. Q-10/Q-11 `NOT-RUN`; Q-15 `PARTIAL / NO WINNER`. |
@@ -228,7 +228,8 @@ Scope của IDEA. `AuthorizationDecision` cũng không phải `OwnerCommandOutco
 
 ## 6. Web
 
-Chọn React 19.3, TypeScript 7.0, Vite 8.3 và Node.js 22 LTS build line (Vite 8 cần Node 22.12+).
+Chọn React 19.3, TypeScript 7.0, Vite 8.3 và Node.js 24 LTS build line. Máy phát triển hiện
+quan sát `v24.16.0`; exact package graph và build vẫn phải được kiểm tra bằng lockfile.
 Package phải ghim trong lockfile/SBOM và dùng `npm ci`; patch current được cập nhật theo policy,
 không ghi cứng “latest” vào Product Spec.
 
@@ -419,7 +420,7 @@ Policy là chọn **family** rồi qualify patch hiện hành:
 | Maven/pgJDBC/Flyway | Maven Wrapper và Boot BOM ghim graph; exact driver/migration patch + license/SBOM phải build/test |
 | PostgreSQL | Major 18, minor supported hiện hành tại qualification; support table recheck |
 | React/TypeScript/Vite | React 19.3, TS7, Vite 8.3; exact packages/lockfile/SBOM |
-| Node | Node 22 LTS build line, tối thiểu 22.12 cho Vite 8 |
+| Node | Node.js 24 LTS build line; máy phát triển hiện quan sát `v24.16.0`, exact patch/build qualification `NOT-RUN` |
 | Windows .NET/WPF/WebView2 | `.NET 10` per-user Workspace, `net10.0-windows` shell; Evergreen theo IT; Fixed có lịch patch riêng nếu buộc dùng |
 | Ubuntu | 26.04 `SELECT — platform direction`, 24.04 compatibility alternative; Q-14 chứng minh operational build |
 | Bundles/dependencies | Signed/versioned app bundle + systemd + host-managed JDK, monthly security review và quarterly planned update đề xuất; chưa phải SLA đã duyệt |
@@ -551,7 +552,8 @@ sử sẽ không còn hợp lý.
 | CAD/Office/IRONCAD | `QUALIFICATION REQUIRED` | Q-09 exact app/version/license/worker. |
 | Client UI/install/update/native attack | `QUALIFICATION REQUIRED` | Q-10/Q-11 và Q-15 follow-up kiểm tra residual risk của Option A trên cùng clean image, data/locale fixture, threat cases và Workspace có local work cần bảo toàn. Chỉ chạy lại Flutter sau reopen trigger. |
 | Observability/maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 runbook/SBOM/support rotation. |
-| Sếp duyệt TECH-001@0.15 | `NOT-RUN` | Brief này trình successor Draft có kiến trúc Vault mới để sếp phản biện và quyết định; chưa suy diễn approval cho exact version này. |
+| Sếp duyệt Node.js 24 LTS cho Web build | `APPROVED` | Người dùng xác nhận ngày 23-09-2026 rằng người dùng và Product Decision Authority đã duyệt Node.js 24 LTS làm baseline Web build. Quyết định này không làm Q-01…Q-15 hoặc PG3/PG4 thành `PASS`. |
+| Sếp duyệt toàn bộ TECH-001@0.16 | `PARTIAL / MIXED` | Node.js 24 LTS successor đã được duyệt; các successor khác trong brief giữ nguyên trạng thái authority của change record tương ứng, không được suy diễn từ quyết định Node. |
 | PG3 | `NOT-RUN` | Gate owner phải đánh giá theo GOV/DOC-07/VVP; không có PASS trong tài liệu này. |
 
 Minimum evidence trước khi sếp có thể quyết định Tech: xem đúng matrix/brief/source pins; xác nhận
@@ -587,7 +589,7 @@ phải Core v0 baseline.
 
 ## 14. Product impact và governance
 
-`TECH-001@0.15` trình bày baseline đã chọn ở cấp Engineering để sếp phản biện:
+`TECH-001@0.16` trình bày baseline đã chọn ở cấp Engineering và ghi nhận quyết định Node.js 24 LTS:
 
 - **No Product Scope Change.** Không thêm Feature group hoặc capability family. Successor bổ sung ba
   `REQ-*` và hai `QRS-*` để kiểm soát cách hiện thực nhu cầu Vault nhiều vị trí/file lớn đã được nêu;
@@ -599,8 +601,8 @@ phải Core v0 baseline.
   Policy/owner outcome, shared relational UoW, Reservation `Active → Ended / Expired / Recovered`,
   Representation acceptance và Restricted Recovery Mode vẫn theo DOC-05/DOC-06.
 - Không tạo God Module mới, không thêm microservices/Kubernetes/broker/search service/CAD add-in.
-- Không có review/acceptance hay gate result mới: Product Decision Authority `NOT-RUN`, PG3 `NOT-RUN`,
-  PG4 `NOT-RUN`; Q-01…Q-14 `NOT-RUN`, Q-15 `PARTIAL / NO WINNER`.
+- Product Decision Authority đã duyệt riêng Node.js 24 LTS cho Web build. Quyết định này không đổi
+  PG3/PG4, Q-01…Q-14 hoặc Q-15; các successor khác giữ trạng thái authority riêng.
 
 Decision brief này phải được review lại nếu source baseline, company platform/support, license,
 qualification result hoặc Product Decision Authority thay đổi.

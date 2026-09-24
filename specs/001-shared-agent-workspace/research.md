@@ -13,11 +13,10 @@ type stripping, `node:test` as the built-in test runner, `tsc --noEmit` as the t
 **Rationale**:
 
 - Node 24 is the current Active LTS (LTS since 2025-10-28, maintenance from 2026-10-20, EOL
-  2028-04-30). Node 22 is Maintenance LTS (EOL 2027-04-30) and is not a greenfield choice;
-  Node 26 is Current but does not become LTS until 2026-10-28. A new optional package in 2026
-  targets Node 24. (endoflife.date/nodejs; pkgpulse.com Node 22 vs 24, 2026-06)
-- Type stripping is enabled by default since Node 22.18 and is documented as stable in the
-  maintained v24 line: `node file.ts` executes TypeScript directly with no build step. Supported
+  2028-04-30). Node 26 is Current but does not become LTS until 2026-10-28. A new optional package in 2026
+  targets Node 24. (endoflife.date/nodejs; pkgpulse.com comparative Node lifecycle note, 2026-06)
+- Type stripping is documented as stable in the maintained v24 line: `node file.ts` executes
+  TypeScript directly with no build step. Supported
   syntax is the "erasable" subset (interfaces, type annotations, `import type`); enums,
   namespaces, and parameter properties require full transpilation and are avoided.
   (nodejs.org release notes; stevekinney.com type-stripping guide)
@@ -27,7 +26,6 @@ type stripping, `node:test` as the built-in test runner, `tsc --noEmit` as the t
 
 **Alternatives considered**:
 
-- Node 22 LTS: still supported but in maintenance; shorter support window.
 - Node 26: not LTS until October 2026; avoided for a template baseline.
 - tsx/ts-node build step: unnecessary when type stripping is stable; adds dependencies.
 - Vitest/Jest: richer DX, but `node:test` covers mocking/spies/coverage without a dependency.

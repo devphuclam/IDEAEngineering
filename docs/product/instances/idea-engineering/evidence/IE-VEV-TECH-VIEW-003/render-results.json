@@ -1,0 +1,68 @@
+{
+  "evidenceId": "IE-VEV-TECH-VIEW-003",
+  "renderedAt": "2026-09-23T03:11:59.636Z",
+  "browser": "154.0.8037.57",
+  "mermaid": "11.12.0",
+  "source": {
+    "path": "docs/product/instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md",
+    "sha256": "e2f63222ba343479a7a4493a6e0f33c52a34f648b25a9a50645b1223562c938e"
+  },
+  "results": [
+    {
+      "id": "TECH-D01",
+      "title": "IDEA Core v0 selected technology stack overview",
+      "description": "Browser and a Windows engineering PC use one React business interface. The Windows desktop hosts it through WebView2 in a narrow WPF shell and calls a separate per-user dotnet Workspace through an authenticated named pipe. Clients send protected control commands to the Java Spring Server. For large file bytes, the Workspace uses a short-lived scoped grant to transfer directly through a selected Artifact Gateway to one of multiple Vault locations. Gateway runtime and storage provider are not selected by this view.",
+      "status": "PASS — RENDER",
+      "svgSha256": "71a2c56389f11640eeb61927a4dac49edd8f8db37aa459940f60c1153dfd3b16"
+    },
+    {
+      "id": "TECH-D02",
+      "title": "C4 style container and technology boundaries for IDEA Core v0",
+      "description": "An engineer uses either a browser or the IDEA Desktop. A separate Workspace process manages local engineering files and tools. Protected business commands go to the IDEA Server. The Server authorizes the operation and selects a transfer location. Large file bytes then flow directly between Workspace and an Artifact Gateway, which stores or reads immutable bytes from one of multiple Vault locations. The Gateway returns transfer evidence but cannot publish a Generation.",
+      "status": "PASS — RENDER",
+      "svgSha256": "c143b5754863460a868b5cda4088fcb3772d6f4529369fba6bc3a2bce0f14732"
+    },
+    {
+      "id": "TECH-D03",
+      "title": "Technology to responsibility layer mapping",
+      "description": "The presentation layer uses React and TypeScript, a narrow Windows shell uses WPF and WebView2, and local integration belongs to the dotnet Workspace. Spring Boot hosts API and application coordination while Spring Modulith checks module structure. Spring Security authenticates, IDEA Access Policy authorizes, Spring JDBC and PostgreSQL persist relational state, Flyway controls schema change, Artifact Custody selects Vault locations and verifies transfer evidence, while an Artifact Gateway handles scoped bytes without owning product publication.",
+      "status": "PASS — RENDER",
+      "svgSha256": "ed1b114045d2b5fa249d5463f960b9601962b31b0d03b5664365d65815e42210"
+    },
+    {
+      "id": "TECH-D04",
+      "title": "IDEA Core v0 runtimes protocols and trust boundaries",
+      "description": "Browser React and embedded React call the Spring Server with versioned HTTPS JSON REST. Embedded React sends allowlisted structured messages to WPF. WPF calls the per-user Workspace using an authenticated and versioned Named Pipe. Workspace calls the Server for authorization, operation preparation and commit. A scoped Transfer Grant then permits direct resumable bytes between Workspace and the selected Artifact Gateway. The Gateway accesses a selected Vault and returns a signed or authenticated Transfer Receipt; it cannot publish a Generation.",
+      "status": "PASS — RENDER",
+      "svgSha256": "cbd89385591cc9aa580ad1fe41d6e768af034748485b53e3c798c08528f4ab7e"
+    },
+    {
+      "id": "TECH-D05",
+      "title": "Initial Core v0 deployment with one control-plane Server and multiple Vault locations",
+      "description": "Engineer Windows computers run a browser, WPF WebView2 Desktop, per-user Workspace and external engineering tools. One Ubuntu Server virtual machine runs Nginx, Temurin, Spring Boot and PostgreSQL. Large file bytes bypass this Server and move through a selected Artifact Gateway to one of multiple Vault locations. Vault-to-Vault replication is policy governed. A separate backup target protects database, Artifact, configuration, policy and key recovery sets. Multiple Vaults do not make the Server highly available.",
+      "status": "PASS — RENDER",
+      "svgSha256": "0f096fd40be5982ddacd60a8cf59e2910aba0ec02836c6cbcd431ff59d0f34b3"
+    },
+    {
+      "id": "TECH-D06",
+      "title": "Selected direct technology dependency directions",
+      "description": "React and TypeScript depend on the versioned REST contract rather than domain modules. The WPF shell depends on WebView2 and a Workspace client contract. Workspace depends on the named-pipe protocol and the Server API contract. The Spring application hosts IDEA domain modules, which use Spring Modulith boundary checks and owner interfaces. Persistence uses Spring JDBC JdbcClient then pgJDBC then PostgreSQL. Flyway is the separate schema migration authority. Domain modules do not depend on React WPF WebView2 or Workspace technology.",
+      "status": "PASS — RENDER",
+      "svgSha256": "cc15a968695734efa8becf2046e1c3c55a797bff748c27e8d8a99cc7d81e1dbe"
+    },
+    {
+      "id": "TECH-D07",
+      "title": "Selected design for Core v0 build packaging and deployment pipeline",
+      "description": "Controlled source feeds Maven Wrapper for the Server JAR, npm and Vite for React assets, and dotnet for WPF and Workspace binaries. The separate Format Worker boundary and the exact CAD Office Format Adapter profile contract are selected. Concrete profile values plus the Worker build runtime and toolchain remain qualification-dependent and not run. Outputs pass through release controls before separate Linux Server Windows Client and conditionally deployed Windows Worker targets. The diagram does not select a Worker implementation toolchain.",
+      "status": "PASS — RENDER",
+      "svgSha256": "530186bebefa4ab1b23ea864900f6e0d474268e02a1a4cb6b83d0f52e0ffbf54"
+    },
+    {
+      "id": "TECH-D08",
+      "title": "Core v0 technology decisions and controlled reopen paths",
+      "description": "Engineering selects React WPF WebView2 and dotnet Workspace for the Core v0 client and Java Spring for the Server. The exact predecessor baseline and Node.js 24 Web build delta are Product Decision Authority approved; other successor states follow separate records. A Client or Server trigger opens a successor decision and does not predetermine its result. Q15 remains partial with no winner.",
+      "status": "PASS — RENDER",
+      "svgSha256": "d935101a835bf798742e01b51c0e9751a58daa77ce82cf1f22afa64519019f8f"
+    }
+  ]
+}

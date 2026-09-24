@@ -1,52 +1,71 @@
 {
-  "journalVersion": "0.1.0",
-  "journalId": "IE-PROGRESS-WORK-JOURNAL-001",
-  "timeZone": "Asia/Ho_Chi_Minh",
-  "sessions": [],
-  "corrections": [
-    {
-      "correctionId": "CORRECTION-b964dfb6e2a346328acf83c68dfeb86e",
-      "deliveryCardId": "P01",
-      "previousActualEffortHours": null,
-      "newActualEffortHours": 4.0,
-      "previousRemainingEffortHours": null,
-      "newRemainingEffortHours": 0.0,
-      "reason": "Ước lượng hồi tố 4,0 giờ cho toàn bộ P01 (T004-T006), được Project Reviewer xác nhận theo khuyến nghị ngày 2026-09-22; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
-      "recordedAt": "2026-09-22T09:03:14.7704624+07:00",
-      "recordedBy": "LEAD"
-    },
-    {
-      "correctionId": "CORRECTION-pln01-20260922",
-      "deliveryCardId": "PLN01",
-      "previousActualEffortHours": null,
-      "newActualEffortHours": 4.0,
-      "previousRemainingEffortHours": null,
-      "newRemainingEffortHours": 0.0,
-      "reason": "Chuyển ghi nhận 4 giờ khỏi Delivery Card P01 cũ sang đúng công việc lập WBS PLN01. P01 cũ được giữ trong lịch sử Git và hồ sơ thay đổi; không cộng trùng vào actual hiện hành.",
-      "recordedAt": "2026-09-22T09:31:08+07:00",
-      "recordedBy": "LEAD"
-    },
-    {
-      "correctionId": "CORRECTION-pln02-20260922",
-      "deliveryCardId": "PLN02",
-      "previousActualEffortHours": null,
-      "newActualEffortHours": 4.0,
-      "previousRemainingEffortHours": null,
-      "newRemainingEffortHours": 0.0,
-      "reason": "Ước lượng hồi tố 4 giờ cho việc lập Gantt, lịch làm việc và milestone, được người dùng dự án xác nhận; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
-      "recordedAt": "2026-09-22T09:31:08+07:00",
-      "recordedBy": "LEAD"
-    },
-    {
-      "correctionId": "CORRECTION-pln03-20260922",
-      "deliveryCardId": "PLN03",
-      "previousActualEffortHours": null,
-      "newActualEffortHours": 4.0,
-      "previousRemainingEffortHours": null,
-      "newRemainingEffortHours": 0.0,
-      "reason": "Ước lượng hồi tố 4 giờ cho việc thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ, được người dùng dự án xác nhận; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
-      "recordedAt": "2026-09-22T09:31:08+07:00",
-      "recordedBy": "LEAD"
-    }
-  ]
+    "journalVersion":  "0.1.0",
+    "journalId":  "IE-PROGRESS-WORK-JOURNAL-001",
+    "timeZone":  "Asia/Ho_Chi_Minh",
+    "sessions":  [
+                     {
+                         "sessionId":  "SESSION-b581189eaffe4e1aa869af439b570c81",
+                         "deliveryCardId":  "P04",
+                         "startedAt":  "2026-09-23T08:50:30.5546082+07:00",
+                         "stoppedAt":  "2026-09-23T12:01:15.7015395+07:00",
+                         "durationMinutes":  191,
+                         "state":  "CLOSED",
+                         "recordedBy":  "LEAD"
+                     },
+                     {
+                         "sessionId":  "SESSION-ca3a9454e2e3433d8c83140f301efd93",
+                         "deliveryCardId":  "P04",
+                         "startedAt":  "2026-09-23T13:16:17.4562375+07:00",
+                         "stoppedAt":  "2026-09-23T14:27:51.1704010+07:00",
+                         "durationMinutes":  72,
+                         "state":  "CLOSED",
+                         "recordedBy":  "LEAD"
+                     }
+                 ],
+    "corrections":  [
+                        {
+                            "correctionId":  "CORRECTION-b964dfb6e2a346328acf83c68dfeb86e",
+                            "deliveryCardId":  "P01",
+                            "previousActualEffortHours":  null,
+                            "newActualEffortHours":  4.0,
+                            "previousRemainingEffortHours":  null,
+                            "newRemainingEffortHours":  0.0,
+                            "reason":  "Ước lượng hồi tố 4,0 giờ cho toàn bộ P01 (T004-T006), được Project Reviewer xác nhận theo khuyến nghị ngày 2026-09-22; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
+                            "recordedAt":  "2026-09-22T09:03:14.7704624+07:00",
+                            "recordedBy":  "LEAD"
+                        },
+                        {
+                            "correctionId":  "CORRECTION-pln01-20260922",
+                            "deliveryCardId":  "PLN01",
+                            "previousActualEffortHours":  null,
+                            "newActualEffortHours":  4.0,
+                            "previousRemainingEffortHours":  null,
+                            "newRemainingEffortHours":  0.0,
+                            "reason":  "Chuyển ghi nhận 4 giờ khỏi Delivery Card P01 cũ sang đúng công việc lập WBS PLN01. P01 cũ được giữ trong lịch sử Git và hồ sơ thay đổi; không cộng trùng vào actual hiện hành.",
+                            "recordedAt":  "2026-09-22T09:31:08+07:00",
+                            "recordedBy":  "LEAD"
+                        },
+                        {
+                            "correctionId":  "CORRECTION-pln02-20260922",
+                            "deliveryCardId":  "PLN02",
+                            "previousActualEffortHours":  null,
+                            "newActualEffortHours":  4.0,
+                            "previousRemainingEffortHours":  null,
+                            "newRemainingEffortHours":  0.0,
+                            "reason":  "Ước lượng hồi tố 4 giờ cho việc lập Gantt, lịch làm việc và milestone, được người dùng dự án xác nhận; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
+                            "recordedAt":  "2026-09-22T09:31:08+07:00",
+                            "recordedBy":  "LEAD"
+                        },
+                        {
+                            "correctionId":  "CORRECTION-pln03-20260922",
+                            "deliveryCardId":  "PLN03",
+                            "previousActualEffortHours":  null,
+                            "newActualEffortHours":  4.0,
+                            "previousRemainingEffortHours":  null,
+                            "newRemainingEffortHours":  0.0,
+                            "reason":  "Ước lượng hồi tố 4 giờ cho việc thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ, được người dùng dự án xác nhận; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
+                            "recordedAt":  "2026-09-22T09:31:08+07:00",
+                            "recordedBy":  "LEAD"
+                        }
+                    ]
 }

@@ -5,7 +5,7 @@
 | Stable knowledge ID | `IE-KNW-TECH-DEC-001` |
 | Document class | `IE-KNW` controlled engineering decision artifact |
 | Title | IDEA Engineering Core v0 Technology Decision Matrix |
-| Version | `0.6` |
+| Version | `0.7` |
 | Status | `Draft` |
 | Artifact role | `INFORMATIVE ENGINEERING SELECTION`; decision input for `TECH-001`, not a Core Product Document |
 | Product normativity | `INFORMATIVE` — this artifact creates no product requirement and does not approve a product, architecture or technology |
@@ -13,17 +13,17 @@
 | Repository instruction state | `NOT-APPLICABLE` |
 | Owner | Product Decision Authority; named owner `UNKNOWN` |
 | Author | Principal Product Author; accountable attribution before `Proposed` is `BLOCKED` |
-| Reviewer | Product Decision Authority; review `NOT-RUN` |
-| Acceptance authority | Product Decision Authority; acceptance `NOT-RUN` |
-| Evidence / decision date | `2026-09-15` (Asia/Bangkok) |
+| Reviewer | Product Decision Authority; exact predecessor Tech baseline and Node.js 24 Web-build delta reviewed; remaining successor review states follow their records |
+| Acceptance authority | Product Decision Authority; exact predecessor Tech baseline and Node.js 24 Web-build delta `APPROVED`; whole current successor acceptance is mixed, not inferred |
+| Evidence / decision date | `2026-09-23` (Asia/Bangkok) |
 | Applicable product baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-01@0.6, DOC-02@0.2, DOC-03@0.7, DOC-04@0.13, DOC-05@0.20, DOC-06@0.16, DOC-07@0.11 (routing-only successor), DOC-08@0.12, GOV@0.3, VVP@0.16, accepted ADRs |
-| Source / upstream trace | [`IE-RES-TECH-20260913-001`](../../research/2026-09-13-technology-selection-evidence-synthesis.md); [`IE-RES-TECH-LINUX-20260913-001`](../../research/2026-09-13-linux-first-server-platform-support-check.md); Client/UI comparison [`IE-RES-TECH-CLIENT-20260914-001@0.3`](../../research/2026-09-14-flutter-client-ui-stack-evidence.md); Q-15 [`Phase 1`](../instances/idea-engineering/registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [`Phase 2`](../instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md) and [`Phase 3`](../instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md); [`IE-STD-TECH-STACK-001@0.1`](../../agents/technology-stack-documentation-standard.md); [`CONTEXT.md`](../../../CONTEXT.md); DOC-04/05/06/08; accepted ADRs; [`IE-STD-AUTH-001@0.2`](../../agents/product-document-authoring-standard.md); [`standards register`](../../governance/standards-register.md) |
-| Downstream trace | [`TECH-001@0.14`](../instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md); DOC-07@0.11 routing; [`IE-ARC-TECH-VIEW-001@0.1`](../instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md); instance catalogue; version history; [`IE-CHG-TECH-BASELINE-001`](../instances/idea-engineering/registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); future qualification records |
-| Change record | [`IE-CHG-TECH-BASELINE-001@0.1`](../instances/idea-engineering/registers/CHG-2026-09-15-core-v0-technology-stack-baseline.md); predecessor `IE-KNW-TECH-DEC-001@0.5`, SHA-256 `8A75589B592DC31DA4E3C473A9C41A50909A16997981B4B61C491A38FF2AD7F1` |
-| Supersedes / Superseded by | Supersedes `IE-KNW-TECH-DEC-001@0.5`; superseded by `NOT-APPLICABLE` |
+| Source / upstream trace | [`IE-RES-TECH-20260913-001`](../../research/2026-09-13-technology-selection-evidence-synthesis.md); [`IE-RES-NODE24-20260923-001`](../../research/2026-09-23-node24-web-build-baseline.md); [`IE-RES-TECH-LINUX-20260913-001`](../../research/2026-09-13-linux-first-server-platform-support-check.md); Client/UI comparison [`IE-RES-TECH-CLIENT-20260914-001@0.3`](../../research/2026-09-14-flutter-client-ui-stack-evidence.md); Q-15 [`Phase 1`](../instances/idea-engineering/registers/VEV-2026-09-14-q15-client-ui-architecture-qualification.md), [`Phase 2`](../instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase2.md) and [`Phase 3`](../instances/idea-engineering/registers/VEV-2026-09-15-q15-client-ui-architecture-qualification-phase3.md); [`IE-STD-TECH-STACK-001@0.1`](../../agents/technology-stack-documentation-standard.md); [`CONTEXT.md`](../../../CONTEXT.md); DOC-04/05/06/08; accepted ADRs; [`IE-STD-AUTH-001@0.2`](../../agents/product-document-authoring-standard.md); [`standards register`](../../governance/standards-register.md) |
+| Downstream trace | [`TECH-001@0.16`](../instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md); [`IE-ARC-TECH-VIEW-001@0.5`](../instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md); instance catalogue; version history; [`IE-CHG-TECH-NODE24-001`](../instances/idea-engineering/registers/CHG-2026-09-23-node24-web-build-baseline.md); [`IE-CHG-PH0-CORR-002`](../instances/idea-engineering/registers/CHG-2026-09-23-post-analysis-consistency-correction.md); future qualification records |
+| Change record | [`IE-CHG-TECH-NODE24-001`](../instances/idea-engineering/registers/CHG-2026-09-23-node24-web-build-baseline.md); predecessor `IE-KNW-TECH-DEC-001@0.6` |
+| Supersedes / Superseded by | Supersedes `IE-KNW-TECH-DEC-001@0.6`; superseded by `NOT-APPLICABLE` |
 | Review trigger | Product Decision Authority changes the stack; a selected component fails qualification; a support/licensing change; a material DOC-04/05/06/08 or ADR change; or a new company platform constraint |
 | Retention disposition | Retain as controlled engineering decision provenance; supersede only through an explicit change record |
-| Decision state | Engineering Technology Selection: `COMPLETE`; Core v0 Engineering Baseline: `SELECTED`; Product Decision Authority Approval: `NOT-RUN`; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
+| Decision state | Engineering Technology Selection: `COMPLETE`; Core v0 Engineering Baseline: `SELECTED`; Node.js 24 LTS successor: Product Decision Authority `APPROVED` on 2026-09-23; remaining authority states follow their records; Q-01…Q-14: `NOT-RUN`; Q-15: `PARTIAL / NO WINNER`; PG3/PG4: `NOT-RUN` |
 | Evidence status | `INFORMATIVE RESEARCH INPUT + ENGINEERING SELECTION`; Q-15 has bounded partial evidence; remaining qualification is `NOT-RUN` or explicitly `BLOCKED` in its VEV records |
 | Product-scope effect | **No Product Scope Change.** No FTR, REQ, DOC-01…DOC-08 meaning, DDM capability semantics, ADR decision or gate state is changed. |
 
@@ -47,7 +47,8 @@ IE-KNW-TECH-DEC-001 (Engineering selection)
         ↓
 TECH-001 (management decision view)
         ↓
-Product Decision Authority approval (NOT-RUN)
+Product Decision Authority approval
+(Node.js 24 Web-build baseline APPROVED; other successor states follow their records)
 ```
 
 The selected Engineering baseline optimizes for correctness, maintainability, a Linux-first headless Server,
@@ -111,7 +112,7 @@ does not mean the Product Decision Authority has approved it.
 | Integration publication | `SELECT` | Transactional outbox in PostgreSQL + bounded Spring dispatcher + plain owner-specific Adapter | Audit evidence/outbox and authoritative owner outcome commit in the declared relational UoW. Consumers are idempotent and tolerate duplicate/reordered delivery. Spring Integration and a broker remain conditional/deferred until a concrete approved contract or measured trigger exists. |
 | Web frontend | `SELECT — CORE V0 ENGINEERING BASELINE` | React 19.3 client-side application | One React business interface serves browser and installed Windows use through WebView2. Web is a CSR workbench served by IDEA Server; no SSR/RSC requirement is introduced. Q-15 remains `PARTIAL / NO WINNER`, so the selection is not presented as an experimental win. |
 | Web language/compiler | `SELECT` | TypeScript 7.0 CLI/type-checking baseline | TypeScript 7 is the source compiler line, with exact patch pinned at qualification. A TypeScript 6 compatibility lane is `QUALIFICATION REQUIRED` only for plugins/tools that consume the not-yet-stable programmatic compiler API; it is not a second production compiler. |
-| Web build tool | `SELECT` | Vite 8.3 line | Static, reproducible build; Node build runtime is Node.js 22 LTS with the Vite minimum (`22.12+`) and a current supported patch. Use `npm ci` and committed `package-lock.json`; no server-side Node runtime is required in production. |
+| Web build tool | `SELECT` | Vite 8.3 + Node.js 24 LTS line | Static, reproducible build using the approved Node.js 24 LTS family. The workstation currently reports `v24.16.0`; exact patch/build qualification remains `NOT-RUN`. Use `npm ci` and committed `package-lock.json`; no server-side Node runtime is required in production. |
 | Web routing | `SELECT` | React Router 7 data APIs in declarative/data mode | Route loaders/actions and error boundaries stay client-side; API remains independently authoritative. SSR, RSC and a full-stack Node framework are `DEFER` unless a later product decision creates a concrete need. Exact router/plugin compatibility is Q-01/Q-13 `NOT-RUN`. |
 | Search | `SELECT` | Rebuildable relational Discovery Projection in PostgreSQL 18 | Exact ID/business-number lookup, title/metadata predicates, deterministic sort, paging and permission predicates use owner-controlled indexes/projections. ICU/`pg_trgm`/text-search choices and Japanese tokenization are Q-03 `NOT-RUN`; no promise of Japanese behavior yet. |
 | Desktop shell | `SELECT — CORE V0 ENGINEERING BASELINE` | Installed WPF `net10.0-windows` shell hosting the React workbench through WebView2 | Preserves the required Web/Desktop/Web-rendered Desktop surface without duplicating business UI in XAML. WPF remains a narrow host only. Q-10/Q-11 are `NOT-RUN`; Q-15 is `PARTIAL / NO WINNER`. |
@@ -163,7 +164,7 @@ would reopen it.
 | Integration publication | Select transactional outbox + bounded Spring dispatcher + plain owner-specific Adapters; architecture inference | In-process delivery has finite throughput and retry ownership | Q-05 and consumer contract tests | A concrete approved EIP-heavy contract triggers Spring Integration evaluation; measured delivery volume/isolation or company platform may require a broker |
 | Web frontend | Select React 19.3 CSR as the Core v0 Engineering baseline; `OFFICIAL-PRODUCT-FACT` + DOC-08 fit + Client/UI evidence and broader product-topology assessment | SPA owns client state/cache complexity and has no SSR fallback; no Q-15 winner or universal lower-risk claim is made | Q-01/Q-10 and the residual Option A risks recorded under Q-15 | Reopen only on `TRIGGER-CLIENT-01…08` |
 | Web compiler | Select TypeScript 7 CLI; official release fact | TS7 programmatic API compatibility is not yet universal | Plugin/compiler API inventory and Q-13 | Critical maintained plugin cannot support TS7 and TS6 lane cannot isolate it |
-| Web build tool | Select Vite 8.3 + Node 22 LTS build; official release/compatibility facts | Vite has no .NET-like LTS and plugin churn is an owner burden | Q-13 reproducible build, lockfile/SBOM and patch drill | Build/release policy or plugin compatibility cannot be maintained |
+| Web build tool | Select Vite 8.3 + Node.js 24 LTS build; official release/lifecycle facts and PDA decision | Vite has no .NET-like LTS and plugin churn is an owner burden | Q-13 reproducible build, lockfile/SBOM and patch drill | Build/release policy or plugin compatibility cannot be maintained |
 | Web routing | Select React Router 7 data APIs; `IDEA-INFERENCE` bounded by independent Server authority | Router/data-loader conventions become a client-side dependency | Q-01/Q-13 route/error/accessibility tests | Routing complexity materially exceeds the client-only model or product requires SSR |
 | Search | Select rebuildable PostgreSQL Discovery Projection; architecture + synthesis search evidence | Relational text/Japanese behavior may not meet future ranking/linguistic needs | Q-03 corpus, plans, p95/p99 and rebuild | Explicit latency/recall/index/rebuild trigger or independent workload is measured |
 | Desktop shell | Select WPF net10 + WebView2 as the Option A Core v0 Engineering baseline; DOC-08 surface + Windows guidance + six-candidate comparison + broader Engineering assessment | Windows-only shell and privileged Web/native boundary need patch discipline; WPF remains narrow and contains no duplicated business UI in XAML | Q-10/Q-11 plus residual Option A accessibility, security, installation and rollback risks in Q-15 follow-up | Reopen only on `TRIGGER-CLIENT-01…08` |
@@ -388,8 +389,9 @@ support justifies one.
 
 ### 6.1 Web
 
-React 19.3 + TypeScript 7.0 + Vite 8.3 is the selected client baseline. Node.js 22 LTS (minimum
-22.12 for the Vite 8 line) is a build-time dependency, not a production Server runtime. Exact patch
+React 19.3 + TypeScript 7.0 + Vite 8.3 is the selected client baseline. Node.js 24 LTS is a
+build-time dependency, not a production Server runtime. The workstation currently reports
+`v24.16.0`; exact patch
 versions are pinned by lockfile and SBOM at qualification. `npm ci` is the reproducible install
 contract; dependency upgrades are reviewed rather than silently taking “latest”.
 
@@ -639,7 +641,7 @@ name export, retention, access and on-call ownership in Q-12/Q-13.
 | PostgreSQL | Major 18 | Use the current supported minor at qualification and keep a tested upgrade/restore path; no patch is a product requirement. |
 | React | 19.3 major line | Pin exact package versions/lockfile and review React security advisories. |
 | TypeScript | 7.0 compiler line | Use TS6 only for explicitly identified compiler-API tooling compatibility; remove the lane when dependencies support TS7. |
-| Node.js | 22 LTS build line | Minimum 22.12 for Vite 8; build agents use a supported patch and reproducible lockfile. |
+| Node.js | 24 LTS build line | Use a supported Node.js 24 patch; the current workstation observation is `v24.16.0`. Build agents use an explicitly recorded patch and reproducible lockfile. |
 | Vite | 8.3 line | Pin patch and review plugin compatibility. |
 | Windows client .NET / WPF / WebView2 | .NET 10 per-user Workspace and WPF shell; WebView2 Evergreen | Separate from Server runtime. Evergreen patching is company-managed where permitted; Fixed Version requires an IDEA-owned patch calendar. |
 | Ubuntu | 26.04 LTS `SELECT — platform direction`; 24.04 LTS compatibility alternative | Official Java/PostgreSQL package paths are established; Q-14 proves the exact operational build and OS patch ownership. |
@@ -760,15 +762,16 @@ matrix has made a coherent choice, not that the Product Decision Authority has a
 | CAD/Office/IRONCAD representation path | `QUALIFICATION REQUIRED` | Q-09 exact application/version/license/worker fixture; Format/Product owner. |
 | Client UI, installation, native boundary and rollback | `QUALIFICATION REQUIRED` | Q-10/Q-11 and Q-15 follow-up qualify residual risks of selected Option A on clean company images, threat cases, data/locale fixtures and a Workspace with preserved local work. Flutter comparison resumes only after a reopen trigger; Product/UX/IT/Security/Release owners. |
 | Operations, observability and maintainability | `QUALIFICATION REQUIRED` | Q-12/Q-13 telemetry runbook, SBOM, patch and support rotation; Operations/Engineering owners. |
-| Product Decision Authority review/acceptance of TECH-001@0.14 | `NOT-RUN` | Boss reviews the exact brief and source pins; no approval is implied by this artifact. |
+| Product Decision Authority review/acceptance | `PARTIAL / MIXED` | Exact `TECH-001@0.14` predecessor is `APPROVED`; Node.js 24 Web-build delta is `APPROVED` under `IE-CHG-TECH-NODE24-001`; remaining current-successor states follow their own records. |
 | PG3 gate disposition | `NOT-RUN` | GOV/DOC-07/VVP gate owner records the decision after applicable review; this matrix never writes `PASS`. |
 
-### 11.1 Minimum evidence before a Tech approval request
+### 11.1 Minimum evidence before a future whole-successor Tech approval request
 
 The following is the minimum decision packet, not a claim that it exists:
 
-1. PDA review of `TECH-001@0.14` and this matrix, including the .NET/SQL Server alternatives, the
-   six Client/UI candidates, the Option A Engineering selection and explicit reopen triggers.
+1. Reconcile the already approved `TECH-001@0.14` predecessor and Node.js 24 delta with the exact
+   future successor source pins, including the .NET/SQL Server alternatives, the six Client/UI
+   candidates, the Option A Engineering selection and explicit reopen triggers.
 2. Company disposition for Ubuntu 26.04 versus 24.04/Windows Server, production PostgreSQL edition,
    certificates/keys, backup target, signing and named support owners.
 3. Q-01/Q-02/Q-05 evidence for one authoritative transaction slice, module boundaries, commit-time

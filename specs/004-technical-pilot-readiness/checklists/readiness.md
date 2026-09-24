@@ -56,7 +56,7 @@ the PH0 work, a product behavior or `PG4` was executed.
 
 ## Environment, Data and Recovery Coverage
 
-- [ ] CHK016 Are the required contents of the delivery-environment record complete, including tool
+- [x] CHK016 Are the required contents of the delivery-environment record complete, including tool
   versions, license state, configuration/secret ownership and prohibited actions? [Completeness, FR-009]
 - [ ] CHK017 Are the representative dataset requirements precise about provenance, synthetic or
   sanitized classification, identity separation, Artifact size/digest and initial state? [Completeness, FR-010]
@@ -96,8 +96,8 @@ the PH0 work, a product behavior or `PG4` was executed.
 ## Notes
 
 - The original CHK026/CHK027 still review unconditional `PASS`. CHK030 is retained as historical
-  wording and superseded by CHK033 for the complete authorization rule. All review markers remain
-  reviewer-owned and unchecked after this correction.
+  wording and superseded by CHK033 for the complete authorization rule. CHK016 was reviewed for
+  the P04 delivery-environment record only; all other checklist items remain unreviewed.
 - Leave all items unchecked until the project reviewer performs the requirements-quality review.
 - Record findings beside the affected item or in a linked change record.
 - `$speckit-implement` may read this checklist as a gate but must not mark review-owned boxes.

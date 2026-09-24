@@ -2,6 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { pathToFileURL } = require('node:url');
 const { chromium } = require(process.env.IDEA_PLAYWRIGHT_PATH || 'playwright');
 
 const root = path.resolve(__dirname, '..');
@@ -95,6 +96,31 @@ const html = value => String(value).replace(/[&<>\"]/g, character => ({
     throw new Error(`Expected ${expected.join(', ')}, rendered ${actual.join(', ')}`);
   }
 
+  const openFailures = [];
+  for (const result of results) {
+    await page.goto(pathToFileURL(path.join(out, `${result.id}.svg`)).href);
+    const check = await page.evaluate(() => ({
+      root: document.documentElement.nodeName,
+      parserErrors: document.querySelectorAll('parsererror').length,
+      text: document.documentElement.textContent.slice(0, 500),
+    }));
+    if (check.root.toLowerCase() !== 'svg'
+      || check.parserErrors
+      || /this page contains the following errors/i.test(check.text)) {
+      openFailures.push({ id: result.id, ...check });
+    }
+  }
+  fs.writeFileSync(path.join(out, 'svg-open-results.json'), JSON.stringify({
+    evidenceId,
+    checkedAt: new Date().toISOString(),
+    count: results.length,
+    failures: openFailures,
+    status: openFailures.length ? 'FAIL' : 'PASS',
+  }, null, 2));
+  if (openFailures.length) {
+    throw new Error(`Standalone SVG failures: ${JSON.stringify(openFailures)}`);
+  }
+
   const navigation = results.map(result =>
     `<a href="#${result.id}"><code>${result.id}</code><br>${html(result.title)}</a>`,
   ).join('');
@@ -117,7 +143,7 @@ const html = value => String(value).replace(/[&<>\"]/g, character => ({
     results,
   }, null, 2));
 
-  console.log(JSON.stringify({ evidenceId, count: results.length, output: out }));
+  console.log(JSON.stringify({ evidenceId, count: results.length, standaloneSvg: 'PASS', output: out }));
   await browser.close();
 })().catch(error => {
   console.error(error);

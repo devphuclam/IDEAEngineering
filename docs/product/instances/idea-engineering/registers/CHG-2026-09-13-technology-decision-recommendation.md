@@ -54,7 +54,7 @@ an IDEA requirement.
    supported alternative where company operations/licensing evidence is materially stronger.
 3. EF Core 10/Npgsql is the default persistence path; module-owned raw Npgsql is a measured escape
    hatch. EF migration bundles are the sole schema authority.
-4. React 19.3 + TypeScript 7 + Vite 8.3/Node 22 LTS is a client-only Web baseline. WPF + WebView2
+4. React 19.3 + TypeScript 7 + Vite 8.3/Node.js 24 LTS is the current client-only Web baseline. WPF + WebView2
    Evergreen and a separate .NET 10 per-user Workspace preserve the current Desktop/Web-rendered
    Desktop surface and Windows file boundary.
 5. Search begins with a rebuildable PostgreSQL Discovery Projection. Artifact bytes remain in a

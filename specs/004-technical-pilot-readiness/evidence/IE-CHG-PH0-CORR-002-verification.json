@@ -1,0 +1,73 @@
+{
+  "evidenceId": "IE-CHG-PH0-CORR-002-VER-001",
+  "changeRecordId": "IE-CHG-PH0-CORR-002",
+  "executedAt": "2026-09-23T11:07:21.9282863+07:00",
+  "operatorRole": "Principal Product Author",
+  "reviewerState": "NOT-RUN",
+  "environment": {
+    "repositoryHead": "8c3e1af75082b0de4a1bfcdfa13598003744e884",
+    "mode": "UNCOMMITTED_PREVIEW",
+    "timeZone": "Asia/Ho_Chi_Minh"
+  },
+  "checks": [
+    {
+      "id": "CORR-VER-001",
+      "objective": "Verify a NOT_RECORDED card can start without pre-existing optional effort properties",
+      "command": "pwsh -NoProfile -File .\\tools\\progress-tracker\\tests\\start-not-recorded-card.ps1",
+      "expected": "HTTP 200; P04 fixture becomes RECORDED and IN_PROGRESS with actualEffortHours 0, remainingEffortHours 4 and one active session",
+      "actual": "PASS: starting P04 initializes optional execution fields and opens a work session.",
+      "result": "PASS",
+      "evidenceBoundary": "Temporary fixture only; live P04 state is not modified"
+    },
+    {
+      "id": "CORR-VER-002",
+      "objective": "Verify duplicate tracker launch reuses the active local tracker",
+      "command": "pwsh -NoProfile -File .\\tools\\progress-tracker\\tests\\duplicate-launch-smoke.ps1",
+      "expected": "Second launch reuses the selected tracker port",
+      "actual": "PASS: duplicate launch reused the tracker endpoint",
+      "result": "PASS",
+      "evidenceBoundary": "Local smoke test only"
+    },
+    {
+      "id": "CORR-VER-003",
+      "objective": "Validate the Project Management Compiler source contract and fixtures",
+      "command": "pwsh -NoProfile -File .\\scripts\\validate-project-management-source.ps1 -RunFixtures",
+      "expected": "Zero errors; an uncommitted preview may produce PMC-SNAPSHOT-001",
+      "actual": "PASS_WITH_WARNINGS: 0 errors, 1 warning PMC-SNAPSHOT-001",
+      "result": "PASS_WITH_WARNINGS",
+      "evidenceBoundary": "Preview is not an official committed handoff snapshot"
+    },
+    {
+      "id": "CORR-VER-004",
+      "objective": "Reject tracked transient directories, lock files and runtime caches",
+      "command": "pwsh -NoProfile -File .\\scripts\\check-repository-hygiene.ps1",
+      "expected": "No prohibited tracked transient material",
+      "actual": "Repository hygiene check: PASS",
+      "result": "PASS",
+      "evidenceBoundary": "Checks repository hygiene rules implemented by the named script"
+    },
+    {
+      "id": "CORR-VER-005",
+      "objective": "Reject whitespace errors in the working-tree diff",
+      "command": "git diff --check",
+      "expected": "Exit code 0 and no whitespace-error diagnostics",
+      "actual": "Exit code 0; line-ending conversion notices are not whitespace errors",
+      "result": "PASS",
+      "evidenceBoundary": "Working-tree diff only"
+    }
+  ],
+  "linkedEvidence": [
+    {
+      "id": "P01-BASELINE-001",
+      "path": "specs/004-technical-pilot-readiness/evidence/P01-BASELINE-001-reviewed-manifest.json",
+      "sha256": "28F33DE52C0B4C69888EBAE3F28006C1620F90EEFDF8C4ED696016A15D1F3594"
+    },
+    {
+      "id": "IE-VEV-TECH-VIEW-004",
+      "path": "docs/product/instances/idea-engineering/evidence/IE-VEV-TECH-VIEW-004/render-results.json",
+      "sourceSha256": "C2CD8A579AE80731D0152296290F5532C4C7836C1198A74BC4F46B90ADB4D29E"
+    }
+  ],
+  "overallResult": "PASS_WITH_WARNINGS",
+  "warning": "The Project Management Compiler validator was run against an uncommitted preview. Re-run after commit before official handoff."
+}

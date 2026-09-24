@@ -315,7 +315,7 @@ product requirements and do not extend the approved `REQ-*` ledger.
 ## Dependencies
 
 - Current `CONTEXT.md`, accepted ADRs, controlled Feature/Spec/Tech sources and VVP.
-- `DOC-07@0.14`, Appendix A and the current Technical Pilot Kanban as planning authorities.
+- `DOC-07@0.17`, Appendix A@0.9, Kanban@0.5 and `IE-PLAN-DEC2026-003@0.2` as the current planning authorities; the exact P01-reviewed predecessor remains pinned separately.
 - An attributable Product Decision Authority decision on the exact multi-location Vault successor.
 - Company-approved development/server access and any required QLHT/technical-support action.
 - Authorized test identities, synthetic fixtures and two distinct candidate Vault locations if

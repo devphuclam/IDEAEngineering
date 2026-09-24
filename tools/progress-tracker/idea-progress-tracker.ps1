@@ -27,7 +27,14 @@ function Convert-ToObjectArray($value) {
     return ,([object[]]@($value))
 }
 
+function Ensure-ObjectProperty($object, [string]$name, $defaultValue) {
+    if ($null -eq $object.PSObject.Properties[$name]) {
+        $object | Add-Member -MemberType NoteProperty -Name $name -Value $defaultValue
+    }
+}
+
 function Ensure-ArrayProperty($object, [string]$name) {
+    Ensure-ObjectProperty $object $name @()
     $object.$name = Convert-ToObjectArray $object.$name
 }
 
@@ -306,6 +313,22 @@ function Update-Record($request) {
     Ensure-ArrayProperty $record 'blockers'
     Ensure-ArrayProperty $record 'events'
     Ensure-ArrayProperty $record 'successorRefs'
+    foreach ($propertyName in @(
+        'executionState',
+        'resultState',
+        'actualStart',
+        'actualFinish',
+        'actualEffortHours',
+        'remainingEffortHours',
+        'forecastFinish',
+        'lastUpdatedAt',
+        'remainingReviewedAt',
+        'recordedBy',
+        'unplannedWorkType'
+    )) {
+        Ensure-ObjectProperty $record $propertyName $null
+    }
+    Ensure-ObjectProperty $record 'reserveUsedHours' 0
     $definition = @(Get-CardDefinitions | Where-Object { $_.id -eq $id })[0]
     if ($null -eq $definition) { throw "Không tìm thấy thông tin kế hoạch của $id." }
 

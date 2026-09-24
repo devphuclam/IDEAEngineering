@@ -10,6 +10,26 @@ build/
 *.log
 .env*
 
+# IDEA Core v0 local configuration and runtime data
+*.env.local
+config/*.local
+var/
+
+# Java and .NET outputs
+target/
+*.class
+*.jar
+bin/
+obj/
+*.user
+*.suo
+
+# Local IDE and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
 # Python test outputs
 __pycache__/
 *.py[cod]

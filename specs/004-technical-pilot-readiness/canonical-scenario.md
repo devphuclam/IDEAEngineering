@@ -41,8 +41,10 @@ is sufficient for eligibility and concurrency checks; it does not claim two inde
 
 ## 3. Preconditions and fixed fixture
 
-1. The reviewer resolves the exact approved predecessor commit and records the manifest from
-   [baseline-manifest.md](baseline-manifest.md). P01 review is still `NOT-RUN`.
+1. The reviewer resolves the exact approved predecessor commit and manifest from
+   [baseline-manifest.md](baseline-manifest.md). P01 is `COMPLETE / PASS` for the exact reviewed
+   input recorded there; the later planning and technology deltas remain separate inputs for the
+   future T023 freeze and do not imply PG4 approval.
 2. The fixture contains one Logical Document in Project `P-100`, one current Working Head and an
    exact Artifact digest. A related document is present so the user must choose its scope rather
    than receiving an implicit tree-wide Checkout.

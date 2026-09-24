@@ -26,8 +26,10 @@ created by PH0
 **Testing**: Structural scans, source/hash reconciliation, link and placeholder checks, requirement
 trace review, scenario walkthrough and human `PG4` review
 
-**Target Platform**: Current Windows engineering workstation and the repository's provider-neutral
-Git workflow; downstream server/client platforms remain governed by the approved Tech baseline
+**Target Platform**: PH0 document authoring on the current Windows machine; P04's selected
+development target is the new Ubuntu Server 26 for Java Server, Web, native PostgreSQL and one
+Vault. Windows remains the Desktop/Workspace/CAD client platform. The exact Ubuntu build is
+subject to host and dependency qualification under the approved Tech baseline.
 
 **Project Type**: Delivery-readiness and gate package for a future Web/Desktop/Server product
 
@@ -40,7 +42,7 @@ missing evidence is `BLOCKED` or `NOT-RUN`; internal-first scope with a separate
 Readiness Gate
 
 **Scale/Scope**: Seven PH0 work packages (`P01`–`P07`), 32 planned hours plus 8 hours operational
-buffer under `IE-PLAN-DEC2026-003@0.1`, one exact next increment, one canonical Technical Pilot
+buffer under `IE-PLAN-DEC2026-003@0.2`, one exact next increment, one canonical Technical Pilot
 scenario and one `PG4` decision
 
 ## Constitution Check
@@ -86,6 +88,8 @@ specs/004-technical-pilot-readiness/
 ├── pg4-gate-record.md             # completed by T026 when the gate is decided
 ├── analysis-findings.md
 ├── analysis-findings-002.md
+├── analysis-findings-003.md
+├── analysis-findings-004.md
 ├── checklists/
 │   ├── requirements.md
 │   └── readiness.md
@@ -126,7 +130,9 @@ The completed research is recorded in [research.md](research.md). It resolves pl
 without reopening product decisions:
 
 1. Use `IE-CHG-PDA-APPROVAL-001` and commit `f269a044...` as the approved predecessor authority.
-2. Treat the multi-location Vault set as a successor Draft until its exact disposition is recorded.
+2. Preserve the confirmed future multi-location custody direction and the selected one-Vault Core
+   v0 boundary, while keeping the exact successor-source disposition open in `D0` until the
+   applicable authority records it.
 3. Use `004-technical-pilot-readiness` only for `P01`–`P07`; give every code-bearing phase its own
    post-`PG4` Spec Kit increment.
 4. Treat environment, corpus, reviewer and topology values as managed readiness decisions with gate
@@ -152,6 +158,7 @@ without reopening product decisions:
 | [analysis-findings.md](analysis-findings.md) | Retain the read-only cross-artifact analysis, remediation decisions and reviewed source hashes. | `T028`–`T030` |
 | [analysis-findings-002.md](analysis-findings-002.md) | Retain the fresh analysis after PH0 scenario/P04–P06 preparation and the baseline-semantics remediation. | `T028`–`T030`, T021 |
 | [analysis-findings-003.md](analysis-findings-003.md) | Retain the current read-only analysis after successor-authority wording, navigation and baseline-metadata remediation. | `T028`–`T030` |
+| [analysis-findings-004.md](analysis-findings-004.md) | Retain the current analysis after P01 completion, Node.js 24, one-Vault Core v0 and control-envelope consistency corrections. | `T028`–`T030` |
 | [contracts/baseline-manifest-contract.md](contracts/baseline-manifest-contract.md) | Define fields and consistency rules for exact source pins. | `P01` |
 | [contracts/decision-and-evidence-register.md](contracts/decision-and-evidence-register.md) | Define how open decisions, checks and blockers are owned and closed. | `P03`–`P06` |
 | [contracts/pg4-review-package.md](contracts/pg4-review-package.md) | Define the minimum structure and evidence rules for the pre-decision PG4 review package. | `T025` / `P07` |
@@ -180,9 +187,11 @@ The Phase 1 artifacts keep baseline authority, open decisions, evidence and gate
 separate records. They do not add product behavior, technology selection, source code, external
 dependency, commercial scope or an inferred approval. All pre-planning constitution checks remain
 `PASS` as author document-alignment checks after the correction; this does not certify a product
-gate. At the current author checkpoint, T001–T005 are complete, P01 is `IN-PROGRESS`, P02–P07
-remain `NOT-RUN`, and `PG4` execution state is `NOT-RUN` with outcome `NOT-APPLICABLE` until an
-attributable decision exists.
+gate. At the current checkpoint, T001–T010, T012–T015, T017–T021 and T028–T030 are complete at
+their stated author/evidence-preparation level. P01 alone is `COMPLETE / PASS` for its exact reviewed
+baseline. P04's one-developer environment result is `PASS`; its progress card remains `IN-PROGRESS`
+until the tracker is explicitly closed. P02, P03 and P05–P07 remain `NOT-RUN`. `PG4` execution state is `NOT-RUN` with outcome
+`NOT-APPLICABLE` until an attributable decision exists.
 
 ## Complexity Tracking
 
