@@ -30,7 +30,7 @@ Stack và không phê duyệt successor baseline.
 | Nội dung | Trạng thái |
 |---|---|
 | PH0 source package | `Draft` |
-| P01–P07 execution | P01 and P04 `COMPLETE` / `PASS` (P04 is limited to the one-developer internal environment); P02, P03 and P05–P07 `NOT-RUN` |
+| P01–P07 execution | P01, P04 and P05 `COMPLETE` / `PASS` within their documented scopes; P02, P03, P06 and P07 `NOT-RUN`. P05 covers synthetic fixture preparation only; its application checks and D4 PH1 gate disposition remain open. |
 | PG4 Gate Execution State | `NOT-RUN` |
 | PG4 Gate Outcome | `NOT-APPLICABLE` until an attributable decision |
 | Production implementation | Unauthorized |

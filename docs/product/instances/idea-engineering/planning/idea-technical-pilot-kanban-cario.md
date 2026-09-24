@@ -3,7 +3,7 @@
 | Thông tin kiểm soát | Nội dung |
 |---|---|
 | Stable ID | `IE-PLAN-DEC2026-002-KANBAN` |
-| Phiên bản / trạng thái | `0.5` / `Current planning baseline` |
+| Phiên bản / trạng thái | `0.6` / `Current planning baseline` |
 | Loại tài liệu | Danh sách công việc để nhập và theo dõi trên Kanban nội bộ |
 | Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.17](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
 | Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.2` |
@@ -12,7 +12,7 @@
 | Product normativity | `INFORMATIVE`; không tạo Feature, Spec hoặc Tech mới |
 | Phân loại | `INTERNAL` |
 | Bằng chứng thực hiện | `PLN01`–`PLN03` hoàn thành theo ghi nhận hồi tố được người dùng dự án xác nhận; thực thi sản phẩm và `PG4` vẫn `NOT-RUN` |
-| Thay đổi | [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md); predecessor [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
+| Thay đổi | P05 profile clarified 2026-09-24 in [`IE-PH0-P05-DATA-001@0.2`](../../../../../specs/004-technical-pilot-readiness/test-data-and-verification.md); hours, dates, dependencies and total workload unchanged. Planning history: [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md); predecessor [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
 
 Đây là danh sách nhập liệu cho **Kanban CARIO của công ty**, không phải một kế hoạch độc lập. Người
 nhận việc có thể đọc trực tiếp từ mục 2. Mỗi card nói rõ mục đích, việc cần làm và điều kiện hoàn
@@ -153,7 +153,7 @@ thay đổi 53 card, 512 giờ công việc, 88 giờ dự phòng kỹ thuật, 
 | `PLN02` | `[PH0][PLN02] Lập Gantt, lịch làm việc và milestone` | 4 | 23/09 PM | PLN01 | **Mục đích:** cho biết công việc diễn ra khi nào và mốc nào chặn giai đoạn tiếp theo. **Cần làm:** xếp WBS theo lịch làm việc Việt Nam, giờ cam kết, quỹ dự phòng và các mốc MS0–MS5. **Xong khi:** Gantt kết thúc ngày 31/12/2026, khớp 512 giờ công việc và 632 giờ tổng quỹ. |
 | `PLN03` | `[PH0][PLN03] Thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ` | 4 | 23/09 PM–24/09 AM | PLN02 | **Mục đích:** biến kế hoạch thành các card dễ đọc và có dữ liệu thực tế để Project Management Compiler hiển thị. **Cần làm:** chuẩn bị card, CARIO, trạng thái, tracker, Execution Register và Work Journal. **Xong khi:** có thể chọn card, ghi bắt đầu/dừng/hoàn thành và đọc được actual, remaining, blocker, evidence. |
 | `P04` | `[PH0][P04] Chuẩn bị môi trường và cách build, test hệ thống` | 4 | 24/09 PM | PLN03 | **Mục đích:** người phát triển có thể dựng hệ thống theo một cách lặp lại được. **Cần làm:** ghi máy được phép dùng, lệnh build/test, cách lưu cấu hình và mật khẩu, cách cập nhật hoặc quay lại cấu trúc database. **Xong khi:** có hướng dẫn đủ để dựng lại môi trường mà không cài công cụ trái quy định. |
-| `P05` | `[PH0][P05] Chuẩn bị dữ liệu và tài khoản dùng để thử` | 4 | 25/09 AM | PLN03 | **Mục đích:** các lần thử dùng cùng một bộ dữ liệu. **Cần làm:** chuẩn bị tài liệu mẫu, file lớn đại diện, hai tài khoản thử, một Vault và danh sách tình huống đúng/sai. **Xong khi:** bộ dữ liệu được đặt tên, quản lý và dùng lại được. |
+| `P05` | `[PH0][P05] Chuẩn bị dữ liệu và hồ sơ thử` | 4 | 25/09 AM | PLN03 | **Mục đích:** các lần thử dùng cùng dữ liệu tổng hợp. **Cần làm:** tạo file 1 KiB và 64 MiB có thể sinh lại, lưu manifest/SHA-256; lập hai Test Persona; dùng Vault dev hiện có và ma trận tình huống. File đặt tại `/srv/idea/artifacts/p05-fixtures`, tách khỏi thư mục Vault. **Xong khi:** file và manifest trên server khớp digest dự kiến, người giữ dữ liệu/hạn xóa được ghi rõ. Tài khoản IDEA thật và kiểm tra ứng dụng làm ở PH1; đo nhiều GB ở Q03. |
 | `P06` | `[PH0][P06] Chuẩn bị cách quay lui, sao lưu và kiểm tra bảo mật` | 8 | 25/09 PM–28/09 AM | P04, P05 | **Mục đích:** thử nghiệm không làm mất dữ liệu hoặc file đang sửa. **Cần làm:** ghi cách quay lại phiên bản trước, giữ Workspace, khôi phục đồng bộ database với file và phần cần người có chuyên môn bảo mật xem. **Xong khi:** có phương án xử lý rõ cho từng trường hợp thất bại chính. |
 | `P07` | `[PH0][P07] Kiểm tra đã đủ điều kiện bắt đầu code chưa` | 4 | 28/09 PM | PLN01, PLN02, PLN03, P04, P05, P06 | **Mục đích:** chỉ bắt đầu khi những điều kiện quan trọng đã rõ. **Cần làm:** kiểm tra tài liệu, phạm vi, môi trường, dữ liệu thử, cách kiểm tra và rủi ro còn lại. **Xong khi:** PG4 được ghi `PASS`, `PASS-WITH-ACTIONS`, `BLOCKED` hoặc `NOT-RUN`, kèm lý do. |
 

@@ -6,7 +6,7 @@ không phải lệnh bắt đầu code hay bằng chứng đã triển khai.
 | Thông tin kiểm soát | Nội dung |
 |---|---|
 | Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.17](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
-| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Current planning baseline 0.9 |
+| Mã phụ lục / trạng thái | `IE-PROD-ROADMAP-001-APP-A` — Current planning baseline 0.10 |
 | Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.2` — Current |
 | Người chuẩn bị / review | Principal Product Author chuẩn bị; người dùng dự án review |
 | Phân loại | `INTERNAL` |
@@ -81,7 +81,7 @@ phase nhưng không phải một công việc hay quyền bỏ qua gate.
 | PLN02 | Lập Gantt, lịch làm việc và milestone | 4 | PLN01 | Có lịch từ 23/09 đến 31/12/2026 theo lịch làm việc đã chốt; work package, reserve, buffer và MS0–MS5 khớp cùng một baseline. |
 | PLN03 | Thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ | 4 | PLN02 | Có card dễ đọc, CARIO, Execution Register, Work Journal và tracker để ghi actual, remaining, blocker và evidence; Project Management Compiler đọc được nguồn này. |
 | P04 | Chuẩn bị môi trường và cấu trúc delivery | 4 | PLN03 | Ghi máy phát triển/server được phép, quy trình build/test, quản lý secret/configuration, database migration và cách tạo increment; không cài công cụ chưa được phép. |
-| P05 | Chuẩn bị dữ liệu và test strategy | 4 | PLN03 | Có bộ tài liệu mẫu, file lớn đại diện, hai identity thử, một Vault và ma trận đường chính/đường lỗi. |
+| P05 | Chuẩn bị dữ liệu và hồ sơ thử | 4 | PLN03 | Có hai file tổng hợp 1 KiB/64 MiB tái tạo được, manifest/SHA-256, hai Test Persona, một Vault dev và ma trận đường chính/đường lỗi. File mẫu tách khỏi Vault; tài khoản IDEA thật dùng ở PH1, đo nhiều GB ở Q03. |
 | P06 | Lập kế hoạch migration, rollback, backup và security review | 8 | P04, P05 | Có phương án quay lại schema/app, giữ Workspace cục bộ, khôi phục metadata–Artifact đồng bộ và phạm vi review bảo mật cần người phù hợp. |
 | P07 | Review readiness và ghi kết quả PG4 | 4 | PLN01, PLN02, PLN03, P04, P05, P06 | Có checklist, blocker, residual risk và phạm vi PH1. Ghi riêng trạng thái đánh giá và kết quả PG4; ngày tới hạn không tự biến thành được duyệt. |
 
@@ -234,3 +234,4 @@ khoảng cách giữa ngày bắt đầu và ngày hoàn thành.
 | 0.7 | 21/09/2026 | Cập nhật lịch forecast: làm thứ Bảy tuần 1, 3, 5; nghỉ tuần 2, 4; giữ nguyên baseline allocation 512 giờ + 88 giờ dự phòng và bổ sung trace 83 ngày / 664 giờ forecast. | [IE-CHG-CALENDAR-TP-001](../registers/CHG-2026-09-21-forecast-calendar-correction.md) |
 | 0.8 | 21/09/2026 | Chọn kế hoạch Core v0 23/09–31/12: 512 giờ task, 88 giờ dự phòng kỹ thuật, 32 giờ đệm vận hành; một Vault trong v0, ranh giới multi-vault để mở rộng sau; cập nhật milestone và cách ghi actual qua work session. | [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
 | 0.9 | 22/09/2026 | Thay ba work package quản lý đã hoàn thành bằng `PLN01`–`PLN03`; giữ 32 giờ PH0, 512 giờ công việc, mốc 31/12 và toàn bộ Feature/Spec/Tech. Ghi nhận 12 giờ thực tế là tiến độ lập kế hoạch, không phải tiến độ code. | [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md) |
+| 0.10 | 24/09/2026 | Làm rõ đầu ra P05: file tổng hợp 1 KiB/64 MiB và hai Test Persona; tài khoản IDEA thật thuộc PH1, đo multi-GB thuộc Q03. Giữ nguyên giờ, lịch, dependency, scope Core v0 và baseline Feature/Spec/Tech. | Project Reviewer-selected profile recorded in [`IE-PH0-P05-DATA-001@0.2`](../../../../../specs/004-technical-pilot-readiness/test-data-and-verification.md); server provisioning `NOT-RUN` |

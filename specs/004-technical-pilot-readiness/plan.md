@@ -188,9 +188,9 @@ separate records. They do not add product behavior, technology selection, source
 dependency, commercial scope or an inferred approval. All pre-planning constitution checks remain
 `PASS` as author document-alignment checks after the correction; this does not certify a product
 gate. At the current checkpoint, T001–T010, T012–T015, T017–T021 and T028–T030 are complete at
-their stated author/evidence-preparation level. P01 alone is `COMPLETE / PASS` for its exact reviewed
-baseline. P04's one-developer environment result is `PASS`; its progress card remains `IN-PROGRESS`
-until the tracker is explicitly closed. P02, P03 and P05–P07 remain `NOT-RUN`. `PG4` execution state is `NOT-RUN` with outcome
+their stated author/evidence-preparation level. P01, P04 and P05 are `COMPLETE / PASS` within their
+reviewed scopes. P05 covers synthetic fixture preparation on the development server; application
+checks remain `NOT-RUN`. P02, P03, P06 and P07 remain `NOT-RUN`. `PG4` execution state is `NOT-RUN` with outcome
 `NOT-APPLICABLE` until an attributable decision exists.
 
 ## Complexity Tracking

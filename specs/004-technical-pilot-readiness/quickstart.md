@@ -129,9 +129,11 @@ mandatory prerequisite cannot be bypassed through a conditional pass.
 This guide and its supporting design artifacts are authored. P01 is `COMPLETE / PASS` for the exact
 reviewed input recorded in the readiness register. The P04 development-environment result is
 `PASS` based on the reviewed Ubuntu host, native dependencies, database roles, one Vault directory
-and documented delivery procedure. The progress card remains `IN-PROGRESS` until explicitly closed.
+and documented delivery procedure. P05 preparation is `COMPLETE / PASS` based on the reviewed
+synthetic files, manifest, digests and two Test Persona profiles.
 Application build, Flyway migration, client-to-application endpoints and Vault Adapter I/O remain
-`NOT-RUN`; the earlier Docker Compose syntax check belongs only to the retired local candidate. P02, P03,
-P05, P06 and P07/`PG4` execution remain `NOT-RUN` until their
+`NOT-RUN`; the earlier Docker Compose syntax check belongs only to the retired local candidate. P02,
+P03, P06 and P07/`PG4` execution remain `NOT-RUN` until their
 own task evidence is produced; later controlled deltas must be frozen by T023 before PG4.
+P05's application checks and D4 PH1 gate disposition remain `NOT-RUN`.
 For `PG4`, this is execution state; its outcome is `NOT-APPLICABLE`, not an assessment result.

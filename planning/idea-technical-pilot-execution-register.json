@@ -1,7 +1,7 @@
 {
     "contractVersion":  "0.1.0",
     "registerId":  "IE-PMC-EXECUTION-REGISTER-001",
-    "registerRevision":  10,
+    "registerRevision":  12,
     "status":  "CURRENT",
     "projectId":  "IDEA-ENGINEERING",
     "baselineId":  "IE-PLAN-DEC2026-003@0.2",
@@ -258,22 +258,60 @@
                                        "kind":  "DeliveryCard",
                                        "id":  "P05"
                                    },
-                        "recordingState":  "NOT_RECORDED",
+                        "recordingState":  "RECORDED",
                         "priority":  "NORMAL",
                         "forecastPlannedOrder":  5,
                         "disposition":  "ACTIVE",
                         "evidence":  [
-
+                                         {
+                                             "evidenceId":  "P05-EVIDENCE-1",
+                                             "type":  "ARTIFACT",
+                                             "repoPath":  "specs/004-technical-pilot-readiness/evidence/P05-SERVER-FIXTURES-20260924.md",
+                                             "commit":  null,
+                                             "sha256":  null,
+                                             "externalUri":  null,
+                                             "description":  "Project Reviewer accepted P05 preparation: server files 1 KiB and 64 MiB, manifest, permissions, SHA-256, synthetic provenance, two Test Persona profiles and retention date; application tests remain NOT-RUN.",
+                                             "result":  "PASS",
+                                             "recordedAt":  "2026-09-24T11:13:52.4640806+07:00",
+                                             "recordedBy":  "LEAD"
+                                         }
                                      ],
                         "blockers":  [
 
                                      ],
                         "events":  [
-
+                                       {
+                                           "eventId":  "P05-EVENT-1",
+                                           "effectiveAt":  "2026-09-24T10:24:00.5075946+07:00",
+                                           "recordedAt":  "2026-09-24T10:24:00.5075946+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "STATE_CHANGE",
+                                           "reason":  "Bắt đầu làm P05 và mở bộ đếm giờ."
+                                       },
+                                       {
+                                           "eventId":  "P05-EVENT-2",
+                                           "effectiveAt":  "2026-09-24T11:13:52.4640806+07:00",
+                                           "recordedAt":  "2026-09-24T11:13:52.4640806+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "STATE_CHANGE",
+                                           "reason":  "Project Reviewer instructed Hoàn thành P05 after reviewing observed server evidence. Ghi nhận 50 phút làm việc thực tế."
+                                       }
                                    ],
                         "successorRefs":  [
 
-                                          ]
+                                          ],
+                        "executionState":  "COMPLETED",
+                        "resultState":  "PASS",
+                        "actualStart":  "2026-09-24T10:24:00.5075946+07:00",
+                        "actualFinish":  "2026-09-24T11:13:52.4640806+07:00",
+                        "actualEffortHours":  0.8333,
+                        "remainingEffortHours":  0,
+                        "forecastFinish":  null,
+                        "lastUpdatedAt":  "2026-09-24T11:13:52.4640806+07:00",
+                        "remainingReviewedAt":  "2026-09-24T11:13:52.4640806+07:00",
+                        "recordedBy":  "LEAD",
+                        "unplannedWorkType":  null,
+                        "reserveUsedHours":  0
                     },
                     {
                         "entity":  {
@@ -1402,6 +1440,20 @@
                               "recordedBy":  "LEAD",
                               "reason":  "Completed P04 after the Project Reviewer requested a server review and authorized PASS if the environment met P04 scope. Result applies only to the one-developer internal development environment.",
                               "sourceEvidence":  "Local progress tracker: P04"
+                          },
+                          {
+                              "revision":  11,
+                              "recordedAt":  "2026-09-24T10:24:00.5075946+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Bắt đầu làm P05 và mở bộ đếm giờ.",
+                              "sourceEvidence":  "Local progress tracker: P05"
+                          },
+                          {
+                              "revision":  12,
+                              "recordedAt":  "2026-09-24T11:13:52.4640806+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Project Reviewer instructed Hoàn thành P05 after reviewing observed server evidence. Ghi nhận 50 phút làm việc thực tế.",
+                              "sourceEvidence":  "Local progress tracker: P05"
                           }
                       ]
 }

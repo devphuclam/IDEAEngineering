@@ -70,7 +70,7 @@ v0, production readiness or company rollout. Execution and `PG4` remain `NOT-RUN
 
 - [Appendix A — task details, outputs, hours and dependencies](planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
 - [HTML Gantt — phase, work-package, reserve, dependency and milestone view](planning/idea-roadmap-december-2026.html)
-- [Kanban CARIO@0.5 — 53 delivery cards, 7 zero-effort decision/milestone cards and cross-cutting internal-first safeguards](planning/idea-technical-pilot-kanban-cario.md)
+- [Kanban CARIO@0.6 — 53 delivery cards, 7 zero-effort decision/milestone cards and cross-cutting internal-first safeguards](planning/idea-technical-pilot-kanban-cario.md)
 - [Change record — Core v0 roadmap rebaseline](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md)
 - [Change record — planning card identity correction](registers/CHG-2026-09-22-planning-card-identity-correction.md)
 - [Project Management Compiler source entry point](../../../../planning/README.md) — actual-progress register and machine contract; it reads this roadmap package and does not replace its planning authority
@@ -87,7 +87,7 @@ with its [plan](../../../../specs/004-technical-pilot-readiness/plan.md) and
 [tasks](../../../../specs/004-technical-pilot-readiness/tasks.md). Appendix A@0.6 records the
 historical PH0 wording correction under
 [IE-CHG-PH0-CORR-001](registers/CHG-2026-09-17-ph0-readiness-correction.md); the current execution
-successor is Appendix A@0.9 under
+successor is Appendix A@0.10 under
 [IE-CHG-PLAN-ID-001](registers/CHG-2026-09-22-planning-card-identity-correction.md). `PLN01`–`PLN03`
 record 12 completed planning hours; product implementation and PG4 execution remain `NOT-RUN`.
 

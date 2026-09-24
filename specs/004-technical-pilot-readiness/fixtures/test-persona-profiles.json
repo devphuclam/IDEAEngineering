@@ -1,0 +1,31 @@
+{
+  "recordId": "IE-PH0-P05-PERSONAS-001",
+  "datasetId": "IE-DATA-CANONICAL-001",
+  "version": "0.1",
+  "status": "PREPARED; native account provisioning NOT-RUN",
+  "classification": "INTERNAL / SYNTHETIC",
+  "operator": "Project Reviewer",
+  "reviewer": "Project Reviewer",
+  "independentHumanReview": false,
+  "profiles": [
+    {
+      "id": "IDENTITY-A",
+      "workspaceId": "WORKSPACE-A",
+      "purpose": "Exercise the eligible editor path, including Checkout, Reference, changed Check-in and no-change Check-in.",
+      "nativeAccount": "NOT-CREATED; provision in PH1 after the account and Gateway baseline is available.",
+      "roleAssignment": "TO-BE-ALLOCATED from the approved RBAC baseline before PH1 execution."
+    },
+    {
+      "id": "IDENTITY-B",
+      "workspaceId": "WORKSPACE-B",
+      "purpose": "Exercise second-identity, wrong-owner, wrong-Workspace, stale and denied paths; use for review-flow checks only where the PH1 baseline permits.",
+      "nativeAccount": "NOT-CREATED; provision in PH1 after the account and Gateway baseline is available.",
+      "roleAssignment": "TO-BE-ALLOCATED from the approved RBAC baseline before PH1 execution."
+    }
+  ],
+  "limitations": [
+    "The two profiles are separate test identities, not two human reviewers.",
+    "This file contains no password, token, session key, or production account data.",
+    "Exact project membership, Group membership, Role Definition Version, Authorization Scope and Permissions are not invented here."
+  ]
+}
