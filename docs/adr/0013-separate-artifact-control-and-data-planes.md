@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 date: 2026-09-17
 decision-id: IE-ADR-C1-011
 ---
@@ -52,8 +52,10 @@ inputs and cannot be reported as qualified until evidence exists.
 - Exact performance, concurrency, location-count, replication-lag, RPO/RTO and availability values
   remain `BLOCKED` or `NOT-RUN` until the applicable authority approves the profile and verification
   evidence exists.
-- This ADR records the internally selected design direction and remains Proposed until the Product
-  Decision Authority reviews the exact successor Spec and architecture baseline.
+- The Product Decision Authority accepted this design on 2026-09-25 as reported in
+  [IE-CHG-PDA-APPROVAL-004](../product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md).
+  Its one-endpoint F05 implementation and later multi-location work remain separate from
+  approval of the design.
 
 ## Evidence and provenance boundary
 

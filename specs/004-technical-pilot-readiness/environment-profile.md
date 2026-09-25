@@ -2,7 +2,7 @@
 
 **Increment**: `IE-INC-READY-001`
 **Record ID**: `IE-PH0-P04-ENV-001`
-**Version / status**: `1.4` / Draft; P04 execution `IN-PROGRESS`, readiness result `PASS`
+**Version / status**: `1.5` / Draft; P04 execution `IN-PROGRESS`, readiness result `PASS`
 **Owner**: Principal Product Author
 **Reviewer**: Project Reviewer for the development layout and allocated development host;
 future accepted deployment operations require a separately named owner
@@ -34,7 +34,7 @@ select an unapproved runtime, start production services or authorize implementat
 
 | Item | Observed value | P04 interpretation |
 |---|---|---|
-| Host and access | `ideaddmserver`; authenticated SSH as `phuclam` at DHCP address `192.168.137.250` on 2026-09-23 and `192.168.137.248` on 2026-09-24 | Access works from the Windows workstation; the address changed overnight and is not a permanent service endpoint or accepted-deployment route. |
+| Host and access | `ideaddmserver`; authenticated SSH as `phuclam`; static development address `192.168.137.33/24` observed on 2026-09-25 after the user-applied Netplan change | The address is now stable for this development host. It is still not an accepted-deployment route; application endpoint and client-service checks remain `NOT-RUN`. Earlier DHCP observations remain historical evidence. |
 | Operating system / architecture | Ubuntu 26.04.1 LTS / `x86_64` | Matches the selected Ubuntu Server 26.04 LTS direction. |
 | CPU / memory / clock | 6 CPUs; 14 GiB RAM; 4 GiB swap; `Asia/Ho_Chi_Minh`; NTP synchronized | Development capacity observed, not a performance or availability qualification. |
 | System filesystem | 98 GiB total, 86 GiB available at `/` | Keep Vault payloads off the OS filesystem. |
@@ -51,7 +51,7 @@ The table records the current Engineering baseline without turning a candidate i
 | Windows shell / Workspace | WPF + WebView2; `.NET` build/publish applies specifically to WPF + Workspace. | Windows image, WebView2 servicing and native bridge review remain `NOT-RUN`. |
 | IDEA Server | Java 25 / Temurin 25 / Spring Server is built and run natively on the Ubuntu development host from a versioned source commit. | Official Linux Temurin 25.0.4.1+1 archive checksum and installed `java`/`javac` versions verified. IDEA Server source/build/service start remain `NOT-RUN`. The previously pinned Windows Temurin ZIP is historical research. |
 | PostgreSQL | One native PostgreSQL 18 development instance on Ubuntu with separate application and migration roles. | Ubuntu 18.6 server/client packages installed; `18/main` online, `pg_isready` accepts loopback connections. Project Reviewer ran bootstrap SQL, assigned separate passwords interactively and verified both TCP logins: app schema `CREATE=f`, migrator `CREATE=t`. Flyway migration and application connection remain `NOT-RUN`. The Docker image pin is historical. |
-| Artifact Gateway / Vault Adapter | The future Gateway boundary is preserved. Core v0 begins with one filesystem-backed Vault location identified independently from documents and folders. | PH1 Gateway runtime/toolchain remains D1-A `OPEN`. The local filesystem path is not multi-location evidence and does not authorize direct client access to stored bytes. |
+| Artifact Gateway / Vault Adapter | The future Gateway boundary is preserved. Core v0 begins with one filesystem-backed Vault location identified independently from documents and folders. | D1-A plan is recorded for PH1; exact Gateway runtime/toolchain, Adapter and endpoint remain `NOT-RUN`. The local filesystem path is not multi-location evidence and does not authorize direct client access to stored bytes. |
 | Format Worker | Separate Windows boundary selected for CAD/Office/Format Adapter profiles. | Exact worker runtime/toolchain, licensed application availability and format qualification are `NOT-RUN`; the worker itself is not labelled conditional. |
 | Database migration | Flyway versioned SQL owned by the Server delivery boundary after an approved implementation increment. Applied migrations are immutable; later changes use a new migration. | PostgreSQL 18.6 and the development database/roles are installed; no Flyway application-schema migration has run in PH0. Destructive/incompatible change recovery requires the coordinated backup/restore procedure from P06 rather than an invented automatic down-migration. |
 
@@ -175,10 +175,11 @@ installation is now evidenced; database and limited roles were created by Projec
 bootstrap output. The Reviewer also verified separate role logins and schema privileges. Actual
 Vault Adapter I/O, client application endpoints and application build entry points remain
 `NOT-RUN` because the product source projects are not part of this PH0 setup. They are not claimed
-as tested by this P04 result. The current host address is DHCP-assigned; single-developer access
-works through SSH, and the address must be rediscovered after a network change. A stable DNS/reserved
-address is required before shared use. Later accepted-deployment ownership and evidence remain
-separate. See [P04 reviewer result](evidence/P04-ENV-REVIEW-20260924.md).
+as tested by this P04 result. The current development host now uses the user-applied static address
+`192.168.137.33` for the hotspot-backed single-developer setup; this is not an accepted-deployment
+route. A stable DNS/reserved address and shared-network review are still required before shared use.
+Later accepted-deployment ownership and evidence remain separate. See [P04 reviewer result](evidence/P04-ENV-REVIEW-20260924.md)
+and [P07 static-IP observation](evidence/P07-UBUNTU-HOST-STATIC-IP-20260925.md).
 
 ## Change log
 
@@ -198,3 +199,4 @@ separate. See [P04 reviewer result](evidence/P04-ENV-REVIEW-20260924.md).
 | 1.2 | 2026-09-24 | Record DHCP address change and Reviewer-run distinct app/migrator login and schema-privilege tests without exposing passwords. Keep future application integration and Vault Adapter I/O `NOT-RUN`. | [P04 runtime evidence](evidence/P04-UBUNTU-RUNTIMES-20260923.md); authenticated SSH and Reviewer-supplied non-secret output. |
 | 1.3 | 2026-09-24 | Correct the host-summary and migration rows to reflect the already-recorded PostgreSQL installation and separate role-login results; Flyway and product integration remain `NOT-RUN`. | Editorial consistency check against [P04 runtime evidence](evidence/P04-UBUNTU-RUNTIMES-20260923.md). |
 | 1.4 | 2026-09-24 | Record the Project Reviewer-authorized `PASS` for the one-developer P04 environment scope; preserve DHCP, unbuilt applications and untested Vault Adapter I/O as explicit limits. | [P04 reviewer result](evidence/P04-ENV-REVIEW-20260924.md). |
+| 1.5 | 2026-09-25 | Record the user-applied static development address `192.168.137.33` and read-only host recheck; keep application endpoints, Adapter I/O, multi-Vault and accepted deployment separate. | [P07 static-IP observation](evidence/P07-UBUNTU-HOST-STATIC-IP-20260925.md). |

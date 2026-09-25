@@ -9,14 +9,20 @@
 - [ADR-0006 — Bind Reservations to Document and Workspace](0006-bind-reservations-to-document-and-workspace.md)
 - [ADR-0007 — Use generic vaulting and external Format Intelligence](0007-use-generic-vaulting-and-external-format-intelligence.md)
 - [ADR-0008 — Treat core product documents as controlled information-item classes](0008-treat-core-product-documents-as-controlled-classes.md)
-
-### Proposed product decisions
-
-- [ADR-0009 — Use DDM as the behavioral baseline and Aras as the quality benchmark](0009-use-ddm-baseline-and-aras-quality-benchmark.md)
 - [ADR-0010 — Separate operational configuration, governed policy, and solution-package paths](0010-separate-configuration-governance-paths.md)
 - [ADR-0011 — Give each Logical Document one governing Project](0011-one-governing-project-per-logical-document.md)
 - [ADR-0012 — Use principal-role-scope RBAC for product and administration authority](0012-use-principal-role-scope-rbac.md)
 - [ADR-0013 — Separate Artifact control and data planes and support multi-location custody](0013-separate-artifact-control-and-data-planes.md)
+
+ADR-0010–0013 were accepted through the Product Decision Authority decision reported on
+2026-09-25. ADR-0009 was also reported within that review, but retains `proposed` until its
+outdated graphical-workflow claim is reconciled against the approved Feature/Spec boundary.
+The exact Proposed source hashes are retained in
+[IE-CHG-PDA-APPROVAL-004](../product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md).
+
+### Proposed product decision pending consistency correction
+
+- [ADR-0009 — Use DDM as the behavioral baseline and Aras as the quality benchmark](0009-use-ddm-baseline-and-aras-quality-benchmark.md)
 
 ## Inherited template decision
 

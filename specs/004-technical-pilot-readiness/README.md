@@ -30,7 +30,7 @@ Stack và không phê duyệt successor baseline.
 | Nội dung | Trạng thái |
 |---|---|
 | PH0 source package | `Draft` |
-| P01–P07 execution | P01, P02, P04, P05 and P06 `COMPLETE / PASS` within their documented scopes. [P02/T011](evidence/P02-T011-GUIDED-REVIEW-20260925.md) covers the documentary scenario review, not application behavior. P06 covers PH0 documentary recovery/security readiness; runtime checks remain `NOT-RUN`. P03 and P07 have no work-package result. P05 covers synthetic fixture preparation only; its application checks and D4 PH1 gate disposition remain open. |
+| P01–P07 execution | P01–P06 `COMPLETE / PASS` within their documented scopes; P03/T016 is documentary decision capture and does not qualify runtime. [P02/T011](evidence/P02-T011-GUIDED-REVIEW-20260925.md) covers the documentary scenario review, not application behavior. P06 covers PH0 documentary recovery/security readiness; runtime checks remain `NOT-RUN`. P07 has no gate result. P05 covers synthetic fixture preparation only; its application checks remain open. |
 | D3 review scope | Boss-approved PH1 scope and the user's direct Security/Verification assignment were reported and confirmed on 2026-09-24. The guided P06 review records the reviewer’s introductory competence basis, examined material, findings and documentary `PASS`; specialist runtime/operations review remains deferred under the no-claim condition. |
 | PG4 Gate Execution State | `NOT-RUN` |
 | PG4 Gate Outcome | `NOT-APPLICABLE` until an attributable decision |

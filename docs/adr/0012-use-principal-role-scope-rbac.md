@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 date: 2026-09-10
 decision-id: IE-ADR-C1-010
 ---
@@ -40,4 +40,5 @@ identity, a prior decision or a granted RBAC result cannot bypass that final own
 - Role Assignment conditions use a controlled supported attribute catalogue; arbitrary administrator-authored scripts are not accepted.
 - General explicit deny, nested Groups, just-in-time privileged activation and multi-person approval of privileged assignments require later requirements and precedence rules before implementation.
 - This pattern is supported by the official-source analysis in [IE-RES-RBAC-ARC-001](../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md); Microsoft product-specific role names, resource hierarchies and permissions are not imported as IDEA domain objects.
-- This ADR remains Proposed until the Product Decision Authority decides the corresponding Spec and architecture baseline.
+- The Product Decision Authority accepted this decision on 2026-09-25 as reported in
+  [IE-CHG-PDA-APPROVAL-004](../product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md).

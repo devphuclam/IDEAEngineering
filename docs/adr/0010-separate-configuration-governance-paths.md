@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 date: 2026-08-27
 decision-id: IE-ADR-C1-008
 ---
@@ -33,4 +33,5 @@ Provisioning identifies at least one named Bootstrap Custodian who may activate 
 - Detailed break-glass interaction, authentication, custodian, expiry, and after-action procedures are deferred to operational design; the non-bypass, attribution, expiry, recovery, and reconciliation principles are binding now.
 - Organization-configuration export/import and product-default upgrade/merge mechanics are deferred beyond MVP. Until implemented, no import or product update may silently activate configuration or mutate an organization's active policy.
 - This proposal is informed by [configuration-governance research](../research/2026-08-27-aras-configuration-governance.md), but the decision and resulting product documents use IDEA terminology and independently verifiable requirements.
-- This ADR remains Proposed until the Product Decision Authority reviews the configuration boundary and its seeded defaults.
+- The Product Decision Authority accepted this decision on 2026-09-25 as reported in
+  [IE-CHG-PDA-APPROVAL-004](../product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md).

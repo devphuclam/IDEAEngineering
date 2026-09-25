@@ -77,7 +77,7 @@ closure evidence, affected work and gate effect without consulting chat history.
 - [x] T013 [US3] Add environment, company-approval, test-identity, Vault-location, dataset, license and reviewer dependencies to `specs/004-technical-pilot-readiness/readiness-register.md` using the exact owner/due/closure/gate fields in `contracts/decision-and-evidence-register.md` (FR-007). Evidence: D1–D5 in readiness register §5.
 - [x] T014 [US3] Review every candidate external dependency or adapted source against `docs/agents/external-source-intake.md` and record exact source/version/license/commercial-use state or `REFERENCE-ONLY`/`BLOCKED` in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-013, SC-006). Evidence: D5 and environment-profile §2; no candidate is included or marked approved.
 - [x] T015 [US3] Reconcile duplicate, contradictory or unowned rows in `specs/004-technical-pilot-readiness/readiness-register.md`; route behavior changes back to Feature/Spec/Tech authority and retain implementation values in PH0 (FR-007, Research §4). Evidence: one D0–D5 row per unresolved decision; no behavior change introduced.
-- [ ] T016 [US3] Record the P03 review result and the exact set of `BLOCKS_PG4`, `BLOCKS_LATER_MILESTONE`, `DEFERRED_SCOPE` and `NONE` items in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014, SC-004).
+- [x] T016 [US3] Record the P03 review result and the exact set of `BLOCKS_PG4`, `BLOCKS_LATER_MILESTONE`, `DEFERRED_SCOPE` and `NONE` items in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014, SC-004). Evidence: [P03-T016 decision record](evidence/P03-T016-DECISIONS-20260925.md); documentary result `COMPLETE / PASS`, with runtime qualification kept separate.
 
 **Checkpoint**: No material prerequisite is hidden in prose or assigned to an unnamed “team”.
 
@@ -150,7 +150,7 @@ Spec Kit WorkPackages. `DeliveryCard:P01`–`P03` were superseded by completed p
 (T012–T016) remain valid internal Spec Kit identities and evidence groupings. Their earlier
 authoring effort has no separate current Delivery Card or verified actual-effort entry. The
 T011/T016 reviewer actions are shown as P07 substeps in the current Kanban rendition;
-T011 now has a documentary `PASS`, while T016 remains open. This does not change their WorkPackage
+T011 and T016 now have documentary `PASS` results. This does not change their WorkPackage
 identity or imply a P07/PG4 result.
 T001–T003 and T028–T032 are cross-artifact quality/handoff tasks included in the applicable
 current cards, not additive hours. The eight-hour PH0 operational buffer is controlled schedule

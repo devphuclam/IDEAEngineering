@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 date: 2026-09-10
 decision-id: IE-ADR-C1-009
 ---
@@ -17,4 +17,5 @@ This avoids conflicting Project memberships, roles, policies and lifecycle autho
 - Permission to work in the consuming Project does not imply access to, or modification authority over, the source document.
 - Create Copy allocates a new Logical Document identity and records source provenance.
 - Transfer of governing ownership and Shared Library administration require separately specified governed operations before implementation.
-- This ADR remains Proposed until the Product Decision Authority reviews the Project-ownership model.
+- The Product Decision Authority accepted this decision on 2026-09-25 as reported in
+  [IE-CHG-PDA-APPROVAL-004](../product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md).
