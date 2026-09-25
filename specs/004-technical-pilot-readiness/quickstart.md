@@ -142,6 +142,7 @@ P06 is `COMPLETE / PASS` in the tracker for PH0 documentary readiness; runtime r
 checks remain `NOT-RUN`. P02/T011 is `COMPLETE / PASS` for the
 [documentary scenario review](evidence/P02-T011-GUIDED-REVIEW-20260925.md) only. P03/T016 is
 `COMPLETE / PASS` for documentary decision capture; its application/runtime conditions remain
-separate. P07/`PG4` results remain `NOT-RUN`; later controlled deltas must be frozen by T023 before PG4.
+separate. T023–T025 are prepared on the frozen manifest; [the PG4 review package](pg4-review-package.md)
+is ready for review. P07/`PG4` results remain `NOT-RUN`; T031 and T026 are still required.
 P05's application checks and D4 PH1 gate disposition remain `NOT-RUN`.
 For `PG4`, this is execution state; its outcome is `NOT-APPLICABLE`, not an assessment result.
