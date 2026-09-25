@@ -1,0 +1,24 @@
+{
+  "evidenceId": "IE-VEV-WS-SCOPE-001",
+  "id": "ARCH-VIEW-ACT-004",
+  "title": "Check-in scope decision for unreserved local changes",
+  "description": "After a full Workspace scan, unresolved dependency scope blocks Check-in without deleting local work or ending a still-valid Reservation. If scope is known, an unreserved change in a selected root or required dependency blocks the proposed Check-in under the Draft default. Other unreserved local changes are shown as excluded and require confirmation of the revised exact scope. Only an eligible confirmed scope proceeds to the separate atomic publication sequence, which revalidates server state at commit time.",
+  "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+  "sourceCommitAtRender": "d9948c5672b07eceef545d380a48aa9b055ab626",
+  "sourceState": "WORKING_COPY — commit does not by itself pin these edits",
+  "sourceSha256": "561adf492fec909a88d92574327f9b263f246832a1c67c0a1d43916412cc143b",
+  "diagramSha256": "bca5cd47882e37a88385ac924db5c172a1f58bb3a12e3662b96fe54d44cf1858",
+  "svgSha256": "d3162e4a33c81cd4878e4b3f5d04ba51b2b7c5e9efa043c574058e81e1a67252",
+  "pngSha256": "93a298a503954838802c7c1c09934e308a341e324725458509fc9c01dadbd414",
+  "renderedAt": "2026-09-25T03:31:33.812Z",
+  "renderer": {
+    "mermaid": "11.12.0",
+    "chrome": "154.0.8037.57"
+  },
+  "dimensions": {
+    "width": 1024,
+    "height": 2038
+  },
+  "standaloneSvg": "PASS",
+  "reviewBoundary": "Rendering and SVG opening only; semantic and visual review are separate"
+}

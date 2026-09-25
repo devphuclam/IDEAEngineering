@@ -29,6 +29,24 @@
                          "durationMinutes":  50,
                          "state":  "CLOSED",
                          "recordedBy":  "LEAD"
+                     },
+                     {
+                         "sessionId":  "SESSION-e27f7845584a4305a2a0cede970628a2",
+                         "deliveryCardId":  "P06",
+                         "startedAt":  "2026-09-24T13:21:22.5127714+07:00",
+                         "stoppedAt":  "2026-09-24T13:50:48.6311414+07:00",
+                         "durationMinutes":  29,
+                         "state":  "CLOSED",
+                         "recordedBy":  "LEAD"
+                     },
+                     {
+                         "sessionId":  "SESSION-7fa98342330941d7974efe3e812d7985",
+                         "deliveryCardId":  "P06",
+                         "startedAt":  "2026-09-24T13:59:42.6768589+07:00",
+                         "stoppedAt":  "2026-09-24T15:36:48.5708986+07:00",
+                         "durationMinutes":  97,
+                         "state":  "CLOSED",
+                         "recordedBy":  "LEAD"
                      }
                  ],
     "corrections":  [
@@ -74,6 +92,17 @@
                             "newRemainingEffortHours":  0.0,
                             "reason":  "Ước lượng hồi tố 4 giờ cho việc thiết lập Kanban CARIO và cơ chế ghi nhận tiến độ, được người dùng dự án xác nhận; không có phiên timer lịch sử và không dựng mốc bắt đầu giả.",
                             "recordedAt":  "2026-09-22T09:31:08+07:00",
+                            "recordedBy":  "LEAD"
+                        },
+                        {
+                            "correctionId":  "CORRECTION-9441b2907e7a4cc1a05778ec82e3e041",
+                            "deliveryCardId":  "P06",
+                            "previousActualEffortHours":  0.4833,
+                            "newActualEffortHours":  0,
+                            "previousRemainingEffortHours":  8,
+                            "newRemainingEffortHours":  8,
+                            "reason":  "Hiệu chỉnh ghi nhận thời gian: phiên 29 phút (13:21–13:50 ngày 24/09/2026) đã gắn vào P06 nhưng thực tế là trao đổi hướng dẫn nhập và làm rõ thẻ P05 trên CARIO/Tracker, không thực hiện đầu ra P06. Giữ nguyên phiên gốc trong Work Journal để truy vết; loại 0,4833 giờ khỏi actual của P06, không chuyển sang card khác.",
+                            "recordedAt":  "2026-09-24T13:55:45.1034837+07:00",
                             "recordedBy":  "LEAD"
                         }
                     ]

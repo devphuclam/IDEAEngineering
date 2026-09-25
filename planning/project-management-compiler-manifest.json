@@ -18,7 +18,7 @@
     "execution":  {
                       "registerPath":  "planning/idea-technical-pilot-execution-register.json",
                       "schemaPath":  "planning/idea-technical-pilot-execution-register.schema.json",
-                      "expectedRegisterRevision":  12
+                      "expectedRegisterRevision":  18
                   },
     "calendarPath":  "planning/idea-technical-pilot-project-calendar.json",
     "diagnosticCataloguePath":  "planning/project-management-compiler-diagnostics.md",

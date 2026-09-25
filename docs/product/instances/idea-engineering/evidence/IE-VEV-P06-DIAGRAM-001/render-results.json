@@ -1,0 +1,38 @@
+{
+  "evidenceId": "IE-VEV-P06-DIAGRAM-001",
+  "source": "docs/product/instances/idea-engineering/DOC-05-architecture-description.md",
+  "sourceCommitAtRender": "d9948c5672b07eceef545d380a48aa9b055ab626",
+  "sourceState": "WORKING_COPY — commit does not by itself pin these edits",
+  "sourceSha256": "a1d708943073838d6717e36b72ab255f3269c529190127c4975f150f19628c8f",
+  "renderedAt": "2026-09-24T09:34:05.939Z",
+  "renderer": {
+    "mermaid": "11.12.0",
+    "chrome": "154.0.8037.57"
+  },
+  "views": [
+    {
+      "id": "ARCH-VIEW-SEQ-011",
+      "title": "Coordinated exact backup and recovery",
+      "description": "A backup coordinator selects one recovery point and records a recovery-set manifest that joins the database point, every required immutable Artifact, active configuration and policy versions, and required protected key material. During recovery, an operator restores these parts into an isolated replacement, invalidates restored sessions and enters Restricted Recovery Mode. Post-recovery security changes are reconciled only from independent operational evidence, never by automatic replay. Absent or ambiguous evidence keeps the service restricted. Only exact data, completed security reconciliation and an explicit named reopen decision can reopen service.",
+      "diagramSha256": "9f854f8ea12cf0bb916158a37800ca626181e1644287ab61637673d5276b92eb",
+      "svgSha256": "f4a17781c75859ce330d8c8aae9ce4cd06c87b17478db6b70be52341371bf333",
+      "pngSha256": "0b6c5fbb8b4fea6332cc6eac056e5f3383a16781226aa294811979d89ae25012",
+      "width": 2250,
+      "height": 1732,
+      "result": "RENDERED — semantic and visual review separate"
+    },
+    {
+      "id": "ARCH-VIEW-ACT-003",
+      "title": "Failed-change recovery route and return-to-service decision",
+      "description": "A failed release or migration is contained in Restricted Recovery Mode while evidence is preserved. The responsible change or recovery authority selects exactly one evidence-proven and approved route: compatible forward repair or complete coordinated recovery in an isolated replacement. If neither route qualifies, service remains restricted. Both routes require exact data checks, independently evidenced security-change reconciliation where applicable, and a separate named authority decision before service returns.",
+      "diagramSha256": "8394b831f1284eb05c9df8a2b8f2c14a579add3a9fb8bbb66f58e7a60e626c38",
+      "svgSha256": "813927fe6b52edcb3ee7062e2f81ff0ca6d2d618621a56201c0aa16c81044992",
+      "pngSha256": "8fb7a1805ff62eb8405459992435c975c6d37bd3d092076403d0aff47616e4f8",
+      "width": 910,
+      "height": 2379,
+      "result": "RENDERED — semantic and visual review separate"
+    }
+  ],
+  "standaloneSvg": "PASS",
+  "standaloneFailures": []
+}

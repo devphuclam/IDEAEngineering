@@ -105,7 +105,11 @@ git diff --check -- specs/004-technical-pilot-readiness
 Expected: no template placeholders and no whitespace errors. A zero-match `rg` exit is expected for
 the placeholder scan and must be interpreted deliberately.
 
-## 8. Hold P07 / PG4 review
+## 8. P07 review work and PG4 decision
+
+DeliveryCard P07 may start after its management-card predecessors to record the remaining
+T011/T016 review effort. Its start is not a PG4 decision. T026 follows the review dispositions
+and preparation below; P07 can close only after the separate gate record contains a decision.
 
 1. Freeze the exact readiness manifest and Git commit.
 2. Review every `P01`–`P07` criterion and evidence result.
@@ -113,7 +117,8 @@ the placeholder scan and must be interpreted deliberately.
 4. Name the exact PH1 successor increment and its boundaries. Here PH1 means the first code-bearing
    successor after PH0; record its stable increment ID and feature directory rather than treating
    the label as an approval.
-5. Complete [pg4-gate-record.md](contracts/pg4-gate-record.md).
+5. Complete the actual `pg4-gate-record.md` using the
+   [PG4 contract](contracts/pg4-gate-record.md), including its Tracker-readable decision summary.
 6. Record execution state separately from outcome. Before a disposition, outcome is
    `NOT-APPLICABLE`; a completed assessment records `PASS`, `PASS-WITH-ACTIONS`, `FAIL` or `BLOCKED`.
 7. For a conditional pass, check action owner, affected baseline, due condition/date, expiry,
@@ -132,8 +137,9 @@ reviewed input recorded in the readiness register. The P04 development-environme
 and documented delivery procedure. P05 preparation is `COMPLETE / PASS` based on the reviewed
 synthetic files, manifest, digests and two Test Persona profiles.
 Application build, Flyway migration, client-to-application endpoints and Vault Adapter I/O remain
-`NOT-RUN`; the earlier Docker Compose syntax check belongs only to the retired local candidate. P02,
-P03, P06 and P07/`PG4` execution remain `NOT-RUN` until their
-own task evidence is produced; later controlled deltas must be frozen by T023 before PG4.
+`NOT-RUN`; the earlier Docker Compose syntax check belongs only to the retired local candidate.
+P06 is `COMPLETE / PASS` in the tracker for PH0 documentary readiness; runtime recovery/security
+checks remain `NOT-RUN`. P02, P03 and P07/`PG4` execution remain `NOT-RUN`
+until their own task evidence is produced; later controlled deltas must be frozen by T023 before PG4.
 P05's application checks and D4 PH1 gate disposition remain `NOT-RUN`.
 For `PG4`, this is execution state; its outcome is `NOT-APPLICABLE`, not an assessment result.

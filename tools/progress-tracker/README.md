@@ -19,6 +19,9 @@ bị một chương trình khác sử dụng, tracker tự thử các cổng ti�
 ## Cách dùng
 
 1. Chọn một card ở bảng bên trái.
+   Card P07 hiển thị sáu bước con review đọc từ danh sách Kanban và checklist Spec Kit. Có thể
+   tìm `P02`, `P03`, `T011` hoặc `T016` để thấy chúng dưới P07; đây không phải card riêng.
+   Dấu checklist đã đánh dấu không tự chuyển kết quả review hoặc PG4 thành `PASS`.
 2. Bấm **Bắt đầu làm** khi thật sự bắt tay vào card. Công cụ kiểm tra giới hạn một card đang làm và
    dependency trực tiếp, ghi mốc bắt đầu rồi mở bộ đếm giờ.
 3. Bấm **Dừng tính giờ** khi nghỉ, họp, hết ngày hoặc chuyển sang việc khác. Card vẫn ở trạng thái
@@ -29,6 +32,20 @@ bị một chương trình khác sử dụng, tracker tự thử các cổng ti�
    lý do và được giữ trong nhật ký; dữ liệu cũ không bị xóa khỏi dấu vết kiểm tra.
 6. Khi đầu ra và điều kiện hoàn thành đã được kiểm tra, nhập bằng chứng rồi bấm **Hoàn thành card**.
    Công cụ đóng phiên đang chạy, ghi mốc hoàn thành và đặt giờ còn lại về `0`.
+
+### P07 và điều kiện bắt đầu PH1
+
+P07 có thể bắt đầu để ghi giờ review T011/T016 và chuẩn bị hồ sơ PG4. Không được đóng P07 khi
+chưa có quyết định PG4 `COMPLETE` với một trong bốn kết quả `PASS`, `PASS-WITH-ACTIONS`, `FAIL`
+hoặc `BLOCKED`. `FAIL`/`BLOCKED` vẫn là quyết định đã ghi nhưng **không** mở PH1.
+
+F01-A và các card làm sản phẩm bị chặn cho đến khi hồ sơ
+`specs/004-technical-pilot-readiness/pg4-gate-record.md` cho phép đúng successor PH1 theo
+[PG4 contract](../../specs/004-technical-pilot-readiness/contracts/pg4-gate-record.md).
+Tracker đọc khối `pg4-authorization` trong hồ sơ đó, kiểm tra T011/T016 đã ghi và chặn lại
+nếu quyết định bị mở lại hoặc việc duyệt có điều kiện đã hết hạn. Giao diện chỉ hiển thị lý do;
+server mới là chỗ từ chối thao tác. Validator cũng từ chối công bố snapshot có card PH1 đang
+thực hiện mà không có quyền PG4. Các kiểm tra máy không thay thế review của Gate Authority.
 
 ## Ghi nhận qua cuộc trò chuyện với agent
 

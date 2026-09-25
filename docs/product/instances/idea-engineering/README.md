@@ -18,17 +18,27 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.15`; DOC-05 at `Draft 0.22`; DOC-06 at `Draft 0.18`; DOC-07 at `Draft 0.17`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.18`; CHG records at their catalogue versions |
-| Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy correction is `APPROVED` on 19-09-2026 and Node.js 24 LTS is `APPROVED` for Web build on 23-09-2026 under [`IE-CHG-TECH-NODE24-001`](registers/CHG-2026-09-23-node24-web-build-baseline.md). Exact Web build and remaining successor runtime evidence remain `NOT-RUN`. |
+| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.15`; DOC-05 at `Draft 0.25`; DOC-06 at `Draft 0.18`; DOC-07 at `Draft 0.17`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.19`; CHG records at their catalogue versions |
+| Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy correction is `APPROVED` on 19-09-2026, Node.js 24 LTS is `APPROVED` for Web build on 23-09-2026, and the three Check-in scope-policy branches are `APPROVED` on 25-09-2026 under [`IE-CHG-PDA-APPROVAL-003`](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). Exact Web build and remaining successor runtime evidence remain `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
 ## Architecture diagram package
 
-DOC-05@0.21 and DOC-06@0.17 contain the maintained architecture and data views, including the new
-control-plane/data-plane and multi-location Vault semantics. The
-[current Vault successor gallery](evidence/IE-VEV-VAULT-XFER-002/index.html) contains 40 maintained
-controlled views and three Vietnamese Word figures, including new exact-read-failover and verified
-replica sequences. Its source/render/open and focused author review are recorded in
+DOC-05@0.25 and DOC-06@0.18 contain the maintained architecture and data views. The
+[current Check-in scope gallery](evidence/IE-VEV-WS-SCOPE-002/index.html) renders
+`ARCH-VIEW-ACT-004` for unknown dependency scope, an unreserved changed required dependency
+and an unrelated local change. Its source/render and author QA are recorded in
+[IE-VEV-WS-SCOPE-002](registers/VEV-2026-09-25-checkin-scope-approved-policy-view-review.md).
+The three scope branches are approved under
+[IE-CHG-PDA-APPROVAL-003](registers/CHG-2026-09-25-pda-approval-checkin-scope.md); the view and
+software tests remain separate Draft/`NOT-RUN` work. The
+[focused P06 recovery gallery](evidence/IE-VEV-P06-DIAGRAM-001/index.html) renders the corrected
+`ARCH-VIEW-SEQ-011` and new `ARCH-VIEW-ACT-003`; its source/render/open and focused author review
+are recorded in
+[IE-VEV-P06-DIAGRAM-001](registers/VEV-2026-09-24-p06-recovery-diagram-review.md).
+The [Vault successor gallery](evidence/IE-VEV-VAULT-XFER-002/index.html) remains the historical
+full-gallery rendition of its pinned DOC-05@0.21/DOC-06@0.17 baseline, including the control/data
+plane and multi-location Vault views. Its provenance is recorded in
 [IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md).
 The [predecessor architecture gallery](evidence/IE-VEV-ARCH-CORR-005/index.html) provides historical SVG and PNG
 renditions from the source hashes recorded by
@@ -64,13 +74,14 @@ has been implemented.
 [DOC-07 section 3.2](DOC-07-mvp-roadmap-and-delivery-plan.md#32-technical-pilot-schedule-and-task-appendix)
 defines the current 23 September–31 December 2026 Core v0 plan: **35 work packages /
 512 planned work hours + 88 technical-reserve hours + 32 operational-buffer hours = 632 baseline hours**. The selected calendar
-calendar adds working Saturdays in weeks 1, 3 and 5 of each month (weeks 2 and 4 are days off),
+adds working Saturdays in weeks 1, 3 and 5 of each month (weeks 2 and 4 are days off),
 giving 79 baseline working days / 632 hours before separately recorded holidays and other assignments. The 31 December milestone is a bounded production-shaped thread, not full Core
-v0, production readiness or company rollout. Execution and `PG4` remain `NOT-RUN`.
+v0, production readiness or company rollout. PH0 has recorded results through P06 in the
+working Execution Register; product implementation and `PG4` remain `NOT-RUN`.
 
 - [Appendix A — task details, outputs, hours and dependencies](planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
 - [HTML Gantt — phase, work-package, reserve, dependency and milestone view](planning/idea-roadmap-december-2026.html)
-- [Kanban CARIO@0.6 — 53 delivery cards, 7 zero-effort decision/milestone cards and cross-cutting internal-first safeguards](planning/idea-technical-pilot-kanban-cario.md)
+- [Kanban CARIO@0.8 — 53 delivery cards, 7 zero-effort decision/milestone cards and P07 review substeps](planning/idea-technical-pilot-kanban-cario.md)
 - [Change record — Core v0 roadmap rebaseline](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md)
 - [Change record — planning card identity correction](registers/CHG-2026-09-22-planning-card-identity-correction.md)
 - [Project Management Compiler source entry point](../../../../planning/README.md) — actual-progress register and machine contract; it reads this roadmap package and does not replace its planning authority
@@ -361,9 +372,10 @@ On 17-09-2026, management feedback selected a successor architecture direction i
 control remains on the Server while large Artifact bytes move directly between Workspace and a
 scoped Artifact Gateway. One logical Artifact may have several verified Vault locations, with
 policy-governed replication/repair separate from backup. DOC-04@0.15 now has 90 requirement IDs;
-DOC-05@0.22, DOC-06@0.18, DOC-08@0.13 and VVP@0.18 carry the matching contracts and planned checks.
+DOC-05@0.25, DOC-06@0.18, DOC-08@0.13 and VVP@0.19 carry the matching contracts and planned checks.
 This successor does not inherit the PDA approval of the exact predecessor baseline automatically;
-the Approval Policy self-approval correction is separately approved under `IE-CHG-PDA-APPROVAL-002`,
+the Approval Policy self-approval correction and Check-in scope policy are separately approved under
+`IE-CHG-PDA-APPROVAL-002/003`,
 while its topology, thresholds, runtime/provider qualification and remaining successor content remain
 `NOT-RUN`.
 
@@ -375,7 +387,7 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
 | `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
 | `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.15`; sole normative SRS; 90 requirements including policy-controlled self-approval, `REQ-WS-016`, `REQ-OPS-007/008`, `QRS-013/014`; exact successor PDA approval and verification `NOT-RUN` |
-| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.22`; separates authoritative control from scoped direct Artifact data transfer, models multiple Vault locations and records policy-controlled self-approval separately from RBAC; exact topology/qualification `NOT-RUN` |
+| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.25`; three-branch Check-in scope policy approved under `IE-CHG-PDA-APPROVAL-003`; the architecture view itself remains Draft. The @0.23 recovery and prior Artifact/Vault/Approval Policy views remain. |
 | `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.18`; adds Vault Endpoint, Transfer Grant/Receipt, Replication Task and versioned Storage/Durability Policy while retaining the pinned Approval Policy Version and self-approval outcome |
 | `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.17`; selected six-phase Core v0 plan uses 512 task hours, 88 technical-reserve hours and 32 operational-buffer hours from 23-09 through 31-12; `PLN01`–`PLN03` record 12 completed planning hours without implying product code; one Vault is in Core v0 and the future multi-vault seam is retained; `PG4` remains evidence-driven; Q-15 unchanged |
 | `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.13`; separates selecting location, transferring, verifying, policy-required protection and final Check-in; transfer/replication completion alone is not success and storage secrets remain hidden |
@@ -386,7 +398,7 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 |---|---|---|---|
 | `GOV` | `IE-GOV-COVERAGE-001` | [Material and Behavioral Coverage Register](registers/GOV-material-and-behavioral-coverage.md) | `Draft 0.3`; 16/16 public-baseline areas have explicit dispositions, not implementation coverage; target-runtime evidence remains `BLOCKED` |
 | `GOV` | `IE-GOV-COMMERCIAL-001` | [Future Commercial Readiness Register](registers/GOV-future-commercial-readiness.md) | `Draft 0.1`; internal-first safeguards, deferred commercial work, external triggers, authority separation, legal watchlist and 12-item future gate; readiness `NOT-RUN` |
-| `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.17`; 17 objectives plus PA-01…04, RBAC-01…10, WS-01…08 and ST-01…07; direct-transfer, grant/receipt, failover, replication/repair and replica-versus-backup procedures remain `NOT-RUN` |
+| `VVP` | `IE-VVP-CORE-001` | [Core v0 Verification and Validation Plan](registers/VVP-core-v0-verification-validation-plan.md) | `Draft 0.19`; 17 objectives plus PA-01…04, RBAC-01…10, WS-01…11 and ST-01…07; the Check-in scope and other product procedures remain `NOT-RUN` |
 | `VEV` | `IE-VEV-ARCH-VIEW-001` | [Architecture View Source and Temporary Rendition Review](registers/VEV-2026-09-10-architecture-view-review.md) | `Draft 0.1`; 23/23 Mermaid views parsed/rendered and internally inspected; qualified architecture/HCD review and controlled-rendition acceptance `BLOCKED` |
 | `VEV` | `IE-VEV-ARCH-CORR-001` | [Architecture Consistency Correction Audit](registers/VEV-2026-09-12-architecture-consistency-correction.md) | `Draft 0.1`; predecessor historical source/rendition audit for 30 maintained views; retained unchanged |
 | `VEV` | `IE-VEV-ARCH-CORR-002` | [Architecture Consistency Correction Audit — Predecessor](registers/VEV-2026-09-12-architecture-consistency-correction-002.md) | `Draft 0.1`; predecessor focused source/rendition audit for the DOC-05@0.15/DOC-06@0.15 baseline; retained unchanged |
@@ -434,11 +446,17 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 | `CHG` | `IE-CHG-VAULT-XFER-001` | [Multi-location Vault Transfer Architecture](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md) | `Draft 0.1`; internal direction selected after management feedback; separates control/data planes, introduces scoped Gateway transfer and multiple Artifact locations; exact successor PDA approval, thresholds, topology and qualification `NOT-RUN` |
 | `CHG` | `IE-CHG-APPROVAL-POLICY-001` | [Approval Policy Self-Approval](registers/CHG-2026-09-19-approval-policy-self-approval.md) | `Draft 0.1`; records Microsoft-style separation of RBAC eligibility and versioned Approval Policy, default-deny self-approval, explicit opt-in and separate Release; policy correction PDA-approved, verification `NOT-RUN` |
 | `CHG` | `IE-CHG-PDA-APPROVAL-002` | [PDA Approval — Approval Policy Self-Approval](registers/CHG-2026-09-19-pda-approval-approval-policy.md) | `Draft 0.1` record; Product Decision Authority approved the policy correction on 19-09-2026 at baseline `e063df9`; remaining successor content, implementation and verification unchanged |
+| `CHG` | `IE-CHG-PDA-APPROVAL-003` | [PDA Approval — Check-in Scope](registers/CHG-2026-09-25-pda-approval-checkin-scope.md) | `Draft 0.1` record; Product Decision Authority approved all three Check-in scope branches on 25-09-2026; architecture review and runtime verification unchanged |
 | `CHG` | `IE-CHG-COMMERCIAL-DIR-001` | [Internal-First and Future Commercial Direction](registers/CHG-2026-09-17-internal-first-commercial-direction.md) | `Draft 0.1`; records internal-only operation for the next several years and a separately gated long-term commercial direction; no current Feature/Spec/Tech, task, Tech Stack or gate-state change |
 | `CHG` | `IE-CHG-ROADMAP-CV0-001` | [Core v0 Roadmap Rebaseline](registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) | `Draft 0.1`; selects the 23-09–31-12 Core v0 execution baseline, 512 task hours + 88 technical-reserve hours + 32 operational-buffer hours, one Vault in Core v0 and a future multi-vault seam; no Feature/Spec/Tech, Q-15, PG3 or PG4 change |
 | `CHG` | `IE-CHG-PLAN-ID-001` | [Core v0 Planning Card Identity Correction](registers/CHG-2026-09-22-planning-card-identity-correction.md) | `Current 0.1`; replaces the first three completed management-planning cards with `PLN01`–`PLN03`, records 12 retrospective planning hours and preserves 512 hours, scope, milestones, Product Decision Authority decisions and PG3/PG4 states |
 | `CHG` | `IE-CHG-PH0-CORR-001` | [PH0 Readiness Consistency Correction](registers/CHG-2026-09-17-ph0-readiness-correction.md) | `Draft 0.1`; author correction of PH0 gate vocabulary, authorization limits, read-only analysis, PowerShell quoting and exact planning-change trace; Appendix A@0.6 keeps the schedule unchanged; no product-gate decision |
-| `VEV` | `IE-VEV-VAULT-XFER-002` | [Latest Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-18-vault-transfer-diagram-review.md) | `Draft 0.1`; latest pinned source and 40 controlled + 3 management views; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
+| `CHG` | `IE-CHG-P06-DIAGRAM-001` | [P06 Recovery Diagram Clarification](registers/CHG-2026-09-24-p06-recovery-diagram-clarification.md) | `Draft 0.1`; DOC-05@0.23 changes two recovery-view presentations only; no product/technology/gate decision |
+| `CHG` | `IE-CHG-WS-SCOPE-001` | [Check-in Scope Decision Clarification](registers/CHG-2026-09-25-checkin-scope-decision-clarification.md) | `Draft 0.2` pre-approval design record with later approval cross-reference; policy disposition is `IE-CHG-PDA-APPROVAL-003` |
+| `VEV` | `IE-VEV-VAULT-XFER-002` | [Latest Multi-location Vault Source, Rendition and Diagram Review](registers/VEV-2026-09-18-vault-transfer-diagram-review.md) | `Draft 0.1`; pinned predecessor source and 40 controlled + 3 management views; exact hashes, render/open checks and focused author QA; independent review and runtime qualification remain `NOT-RUN` |
+| `VEV` | `IE-VEV-P06-DIAGRAM-001` | [P06 Recovery View Source and Rendition Review](registers/VEV-2026-09-24-p06-recovery-diagram-review.md) | `Draft 0.1`; focused two-view rendition and author QA; independent review and runtime recovery checks `NOT-RUN` |
+| `VEV` | `IE-VEV-WS-SCOPE-001` | [Check-in Scope View Source and Rendition Review](registers/VEV-2026-09-25-checkin-scope-view-review.md) | `Draft 0.2` pre-approval rendition record; the original diagram source and hashes remain pinned |
+| `VEV` | `IE-VEV-WS-SCOPE-002` | [Approved-Policy Check-in Scope View Review](registers/VEV-2026-09-25-checkin-scope-approved-policy-view-review.md) | `Draft 0.1`; DOC-05@0.25 rendition and focused author QA; policy approved, architecture acceptance and runtime tests `NOT-RUN` |
 
 The [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md)
 is the informative Engineering selection presented to management through

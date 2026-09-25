@@ -1,0 +1,18 @@
+flowchart TB
+    accTitle: Check-in scope decision for unreserved local changes
+    accDescr: After a full Workspace scan, unresolved dependency scope blocks Check-in without deleting local work or ending a still-valid Reservation. If scope is known, an unreserved change in a selected root or required dependency blocks the proposed Check-in. Other unreserved local changes are shown as excluded and require confirmation of the revised exact scope. This three-branch scope policy was approved on 25 September 2026; the architecture view and runtime remain unverified. Only an eligible confirmed scope proceeds to the separate atomic publication sequence, which revalidates server state at commit time.
+
+    scan["Scan Workspace and resolve<br/>required dependencies"]
+    scan --> known{"Required-dependency<br/>scope known?"}
+    known -->|No| unresolved["Block Check-in; show unresolved file<br/>and preserve local work"]
+    known -->|Yes| required{"Unreserved change in selected root<br/>or required dependency?"}
+    required -->|Yes| block["Block full Check-in<br/>and preserve local work"]
+    required -->|No| other{"Other unreserved<br/>local changes?"}
+    other -->|Yes| exclude["Show Modified without Checkout<br/>and exclude affected files"]
+    exclude --> reconfirm{"Reduced exact scope<br/>confirmed?"}
+    reconfirm -->|No| hold["No operation;<br/>preserve local work"]
+    reconfirm -->|Yes| validate["Validate selected rows<br/>against current server state"]
+    other -->|No| confirm["Confirm original<br/>exact scope"]
+    confirm --> validate
+    validate -->|Fail| refuse["Refuse full scope;<br/>preserve local work"]
+    validate -->|Pass| next["ARCH-VIEW-SEQ-002:<br/>transfer and commit-time checks"]

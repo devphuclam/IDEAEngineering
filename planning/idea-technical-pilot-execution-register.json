@@ -1,7 +1,7 @@
 {
     "contractVersion":  "0.1.0",
     "registerId":  "IE-PMC-EXECUTION-REGISTER-001",
-    "registerRevision":  12,
+    "registerRevision":  18,
     "status":  "CURRENT",
     "projectId":  "IDEA-ENGINEERING",
     "baselineId":  "IE-PLAN-DEC2026-003@0.2",
@@ -318,22 +318,92 @@
                                        "kind":  "DeliveryCard",
                                        "id":  "P06"
                                    },
-                        "recordingState":  "NOT_RECORDED",
+                        "recordingState":  "RECORDED",
                         "priority":  "NORMAL",
                         "forecastPlannedOrder":  6,
                         "disposition":  "ACTIVE",
                         "evidence":  [
-
+                                         {
+                                             "evidenceId":  "P06-EVIDENCE-1",
+                                             "type":  "REVIEW_RECORD",
+                                             "repoPath":  "specs/004-technical-pilot-readiness/evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md",
+                                             "commit":  null,
+                                             "sha256":  null,
+                                             "externalUri":  null,
+                                             "description":  "Project Reviewer completed the guided documentary review and accepted the P06 recovery/security plan. Scope: PH0 documentary readiness. Runtime security, rollback and restore checks remain NOT-RUN. See final disposition and the three guided review notes.",
+                                             "result":  "PASS",
+                                             "recordedAt":  "2026-09-24T16:58:53.8769216+07:00",
+                                             "recordedBy":  "LEAD"
+                                         }
                                      ],
                         "blockers":  [
 
                                      ],
                         "events":  [
-
+                                       {
+                                           "eventId":  "P06-EVENT-1",
+                                           "effectiveAt":  "2026-09-24T13:21:22.5127714+07:00",
+                                           "recordedAt":  "2026-09-24T13:21:22.5127714+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "STATE_CHANGE",
+                                           "reason":  "Project Reviewer Ä‘á»“ng Ã½ báº¯t Ä‘áº§u P06; má»Ÿ phiÃªn tÃ­nh giá» trÆ°á»›c khi cÃ¹ng review káº¿ hoáº¡ch P06."
+                                       },
+                                       {
+                                           "eventId":  "P06-EVENT-2",
+                                           "effectiveAt":  "2026-09-24T13:50:48.6311414+07:00",
+                                           "recordedAt":  "2026-09-24T13:50:48.6311414+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "EFFORT_UPDATE",
+                                           "reason":  "Dừng bộ đếm giờ của P06; card vẫn đang thực hiện. Ghi nhận 29 phút làm việc thực tế."
+                                       },
+                                       {
+                                           "eventId":  "P06-EVENT-3",
+                                           "effectiveAt":  "2026-09-24T13:55:45.1034837+07:00",
+                                           "recordedAt":  "2026-09-24T13:55:45.1034837+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "EFFORT_UPDATE",
+                                           "reason":  "Hiệu chỉnh ghi nhận thời gian: phiên 29 phút (13:21–13:50 ngày 24/09/2026) đã gắn vào P06 nhưng thực tế là trao đổi hướng dẫn nhập và làm rõ thẻ P05 trên CARIO/Tracker, không thực hiện đầu ra P06. Giữ nguyên phiên gốc trong Work Journal để truy vết; loại 0,4833 giờ khỏi actual của P06, không chuyển sang card khác."
+                                       },
+                                       {
+                                           "eventId":  "P06-EVENT-4",
+                                           "effectiveAt":  "2026-09-24T13:59:42.6768589+07:00",
+                                           "recordedAt":  "2026-09-24T13:59:42.6768589+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "STATE_CHANGE",
+                                           "reason":  "Project Reviewer explicitly instructed Tiếp tục; mở phiên mới để rà soát điều kiện và hoàn thiện đầu ra P06."
+                                       },
+                                       {
+                                           "eventId":  "P06-EVENT-5",
+                                           "effectiveAt":  "2026-09-24T15:36:48.5708986+07:00",
+                                           "recordedAt":  "2026-09-24T15:36:48.5708986+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "EFFORT_UPDATE",
+                                           "reason":  "Dừng bộ đếm giờ của P06; card vẫn đang thực hiện. Ghi nhận 97 phút làm việc thực tế."
+                                       },
+                                       {
+                                           "eventId":  "P06-EVENT-6",
+                                           "effectiveAt":  "2026-09-24T16:58:53.8769216+07:00",
+                                           "recordedAt":  "2026-09-24T16:58:53.8769216+07:00",
+                                           "recordedBy":  "LEAD",
+                                           "kind":  "STATE_CHANGE",
+                                           "reason":  "Project Reviewer explicitly instructed Hoàn thành P06; record the accepted documentary review as PASS and close the card. Runtime checks remain NOT-RUN."
+                                       }
                                    ],
                         "successorRefs":  [
 
-                                          ]
+                                          ],
+                        "executionState":  "COMPLETED",
+                        "resultState":  "PASS",
+                        "actualStart":  "2026-09-24T13:21:22.5127714+07:00",
+                        "actualFinish":  "2026-09-24T16:58:53.8769216+07:00",
+                        "actualEffortHours":  1.6167,
+                        "remainingEffortHours":  0,
+                        "forecastFinish":  null,
+                        "lastUpdatedAt":  "2026-09-24T16:58:53.8769216+07:00",
+                        "remainingReviewedAt":  "2026-09-24T16:58:53.8769216+07:00",
+                        "recordedBy":  "LEAD",
+                        "unplannedWorkType":  null,
+                        "reserveUsedHours":  0
                     },
                     {
                         "entity":  {
@@ -1454,6 +1524,48 @@
                               "recordedBy":  "LEAD",
                               "reason":  "Project Reviewer instructed Hoàn thành P05 after reviewing observed server evidence. Ghi nhận 50 phút làm việc thực tế.",
                               "sourceEvidence":  "Local progress tracker: P05"
+                          },
+                          {
+                              "revision":  13,
+                              "recordedAt":  "2026-09-24T13:21:22.5127714+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Project Reviewer Ä‘á»“ng Ã½ báº¯t Ä‘áº§u P06; má»Ÿ phiÃªn tÃ­nh giá» trÆ°á»›c khi cÃ¹ng review káº¿ hoáº¡ch P06.",
+                              "sourceEvidence":  "Local progress tracker: P06"
+                          },
+                          {
+                              "revision":  14,
+                              "recordedAt":  "2026-09-24T13:50:48.6311414+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Dừng bộ đếm giờ của P06; card vẫn đang thực hiện. Ghi nhận 29 phút làm việc thực tế.",
+                              "sourceEvidence":  "Local progress tracker: P06"
+                          },
+                          {
+                              "revision":  15,
+                              "recordedAt":  "2026-09-24T13:55:45.1034837+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Hiệu chỉnh ghi nhận thời gian: phiên 29 phút (13:21–13:50 ngày 24/09/2026) đã gắn vào P06 nhưng thực tế là trao đổi hướng dẫn nhập và làm rõ thẻ P05 trên CARIO/Tracker, không thực hiện đầu ra P06. Giữ nguyên phiên gốc trong Work Journal để truy vết; loại 0,4833 giờ khỏi actual của P06, không chuyển sang card khác.",
+                              "sourceEvidence":  "Local progress tracker: P06"
+                          },
+                          {
+                              "revision":  16,
+                              "recordedAt":  "2026-09-24T13:59:42.6768589+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Project Reviewer explicitly instructed Tiếp tục; mở phiên mới để rà soát điều kiện và hoàn thiện đầu ra P06.",
+                              "sourceEvidence":  "Local progress tracker: P06"
+                          },
+                          {
+                              "revision":  17,
+                              "recordedAt":  "2026-09-24T15:36:48.5708986+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Dừng bộ đếm giờ của P06; card vẫn đang thực hiện. Ghi nhận 97 phút làm việc thực tế.",
+                              "sourceEvidence":  "Local progress tracker: P06"
+                          },
+                          {
+                              "revision":  18,
+                              "recordedAt":  "2026-09-24T16:58:53.8769216+07:00",
+                              "recordedBy":  "LEAD",
+                              "reason":  "Project Reviewer explicitly instructed Hoàn thành P06; record the accepted documentary review as PASS and close the card. Runtime checks remain NOT-RUN.",
+                              "sourceEvidence":  "Local progress tracker: P06"
                           }
                       ]
 }

@@ -6,7 +6,9 @@
 [data-model.md](data-model.md), [contracts/](contracts/), reviewer-owned
 [readiness checklist](checklists/readiness.md)
 
-**Scope**: Execute PH0 (`P01`–`P07`) only. These tasks produce readiness evidence and a `PG4`
+**Scope**: Execute PH0 Spec Kit WorkPackages `P01`–`P07` only. `WorkPackage:P01`–`P03` are
+not the superseded `DeliveryCard:P01`–`P03`; the current management cards are `PLN01`–`PLN03`,
+then `P04`–`P07`. These tasks produce readiness evidence and a `PG4`
 decision; they do not create production application code.
 
 ## Format: `[ID] [P?] [Story] Description`
@@ -91,9 +93,9 @@ failure matrix and recovery/review procedures, while every unavailable prerequis
 - [x] T017 [P] [US4] Create `specs/004-technical-pilot-readiness/environment-profile.md` with permitted developer/server classes, tool/version and license state, configuration/secret owners, repeatable future build/test entry points, migration controls and prohibited workstation actions (`P04`, FR-009). Evidence: [environment-profile.md](environment-profile.md); P04 environment result is recorded as `PASS` in [the readiness register](readiness-register.md).
 - [x] T018 [P] [US4] Create `specs/004-technical-pilot-readiness/test-data-and-verification.md` with authorized synthetic fixtures, two identity profiles, document states, representative resumable-transfer Artifact generation/digest rules, candidate Vault locations and retention/disposal (`P05`, FR-010). Evidence: [test-data-and-verification.md](test-data-and-verification.md); server fixture provisioning and Project Reviewer P05 preparation result are recorded in [P05 evidence](evidence/P05-SERVER-FIXTURES-20260924.md). Application verification remains `NOT-RUN`.
 - [x] T019 [US4] Add the normal, denied, stale, interruption, retry and recovery matrix plus exact expected evidence to `specs/004-technical-pilot-readiness/test-data-and-verification.md`; distinguish two identities from two independent humans and logical locations from failure domains (FR-010, SC-005). Evidence: verification matrix in test-data-and-verification.md; no runtime result claimed.
-- [x] T020 [P] [US4] Create `specs/004-technical-pilot-readiness/recovery-and-security-plan.md` covering application/schema rollback, local Workspace preservation, metadata/Artifact reconciliation, coordinated backup/restore, session/key handling, trust boundaries, abuse cases and review competence (`P06`, FR-011–FR-012). Evidence: [recovery-and-security-plan.md](recovery-and-security-plan.md); P06 remains `NOT-RUN`.
+- [x] T020 [P] [US4] Create `specs/004-technical-pilot-readiness/recovery-and-security-plan.md` covering application/schema rollback, local Workspace preservation, metadata/Artifact reconciliation, coordinated backup/restore, session/key handling, trust boundaries, abuse cases and review competence (`P06`, FR-011–FR-012). Evidence: [recovery-and-security-plan.md](recovery-and-security-plan.md); the later guided review result is `PASS`, while runtime checks remain `NOT-RUN`.
 - [x] T021 [US4] Cross-check `environment-profile.md`, `test-data-and-verification.md` and `recovery-and-security-plan.md` against the open-decision rows; record missing host, license, data, location or reviewer evidence as `BLOCKED`/`NOT-RUN` in `specs/004-technical-pilot-readiness/readiness-register.md` (SC-004, SC-007). Evidence: [T021 author-side cross-check](readiness-register.md#7-t021-author-side-cross-check); no readiness result or decision was closed.
-- [ ] T022 [US4] Record separate P04, P05 and P06 results, exact artifact hashes, reviewers and evidence links in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014).
+- [x] T022 [US4] Record separate P04, P05 and P06 results, exact artifact hashes, reviewers and evidence links in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014). Evidence: [readiness register T022 review](readiness-register.md#9-review-handoff-preparation); P06 reviewer disposition and Execution Register revision 18.
 
 **Checkpoint**: The next increment is either operationally reviewable or honestly blocked; no setup
 command has been used to bypass company approval.
@@ -109,8 +111,8 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 
 - [ ] T023 [US5] Recompute all PH0 source hashes, freeze the reviewed manifest/commit and update `specs/004-technical-pilot-readiness/baseline-manifest.md` plus `readiness-register.md` before the gate review (`P07`, FR-015).
 - [ ] T024 [US5] Execute the documentary checks in `specs/004-technical-pilot-readiness/quickstart.md` and record actual `PASS`, `FAIL`, `BLOCKED` or `NOT-RUN` results with command/evidence links in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014–FR-015).
-- [ ] T025 [US5] Prepare `specs/004-technical-pilot-readiness/pg4-review-package.md` using [contracts/pg4-review-package.md](contracts/pg4-review-package.md), summarizing P01–P07 results, open blockers, residual risks, exact proposed PH1 scope and all prohibited inferences without duplicating source authority (FR-015, FR-017, SC-008).
-- [ ] T026 [US5] Have the applicable gate authority complete `specs/004-technical-pilot-readiness/pg4-gate-record.md` according to `contracts/pg4-gate-record.md`; separate execution state from the four permitted outcomes, retain complete conditional-action fields, approved PG2/PG3 evidence and the exact authorization boundary; an undecided gate has outcome `NOT-APPLICABLE` (FR-015–FR-017, SC-008).
+- [ ] T025 [US5] Prepare `specs/004-technical-pilot-readiness/pg4-review-package.md` using [contracts/pg4-review-package.md](contracts/pg4-review-package.md), summarizing P01–P06 results and P07 review preparation, open blockers, residual risks, exact proposed PH1 scope and all prohibited inferences without duplicating source authority (FR-015, FR-017, SC-008).
+- [ ] T026 [US5] After T011/T016 review and T023–T025 preparation, have the applicable gate authority complete `specs/004-technical-pilot-readiness/pg4-gate-record.md` according to `contracts/pg4-gate-record.md`, including its Tracker-readable summary; separate execution state from the four permitted outcomes, retain complete conditional-action fields, approved PG2/PG3 evidence and the exact authorization boundary; an undecided gate has outcome `NOT-APPLICABLE` (FR-015–FR-017, SC-008).
 - [ ] T027 [US5] If and only if T026 records an attributable `PASS` or valid `PASS-WITH-ACTIONS`, with approved PG2/PG3 baselines and authorization conditions met, create the next Spec Kit feature directory for the exact PH1 increment and link it from `specs/004-technical-pilot-readiness/pg4-gate-record.md`; otherwise record that production implementation remains unauthorized (FR-016, SC-009).
 
 **Checkpoint**: PH0 ends with an attributable result. No task in this file implements product code.
@@ -131,19 +133,27 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 
 ## Effort and Roadmap Trace
 
-| Roadmap package | Tasks | Planned work |
-|---|---|---:|
-| `P01` | T004–T006 | 4 h |
-| `P02` | T007–T011 | 4 h |
-| `P03` | T012–T016 | 4 h |
-| `P04` | T017, T021–T022 (environment portion) | 4 h |
-| `P05` | T018–T019, T021–T022 (dataset portion) | 4 h |
-| `P06` | T020–T022 (recovery/security portion) | 8 h |
-| `P07` | T023–T027 | 4 h |
-| Cross-artifact quality | T001–T003, T028–T032 | Included across work packages; no extra roadmap effort |
+The current DOC-07 PH0 allocation belongs to **Delivery Cards**, not to the identically named
+Spec Kit WorkPackages. `DeliveryCard:P01`–`P03` were superseded by completed planning cards
+`PLN01`–`PLN03`; do not count the older Spec Kit `P01`–`P03` rows as another 12 hours.
 
-The table preserves the current DOC-07 allocation of 32 work hours. The 8-hour operational buffer is controlled
-schedule capacity, not a task or permission to skip an authority, review or correctness condition.
+| Current Delivery Card | Related tasks in this package | Baseline hours | Accounting boundary |
+|---|---|---:|---|
+| `PLN01`–`PLN03` | No one-to-one mapping to Spec Kit `P01`–`P03` | 12 h | Completed management WBS, Gantt and Kanban setup; actual effort is recorded in the Execution Register. |
+| `P04` | T017, T021–T022 (environment portion) | 4 h | Current environment preparation card. |
+| `P05` | T018–T019, T021–T022 (dataset portion) | 4 h | Current fixture preparation card. |
+| `P06` | T020–T022 (recovery/security portion) | 8 h | Current documentary recovery/security card. |
+| `P07` | T011, T016, T023–T027, T031–T032 (remaining review, gate and handoff portions) | 4 h | Only effort actually recorded after starting P07 is charged to it; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
+| **PH0 total** |  | **32 h** | Planned baseline unchanged. |
+
+`WorkPackage:P01` (T004–T006), `WorkPackage:P02` (T007–T011), and `WorkPackage:P03`
+(T012–T016) remain valid internal Spec Kit identities and evidence groupings. Their earlier
+authoring effort has no separate current Delivery Card or verified actual-effort entry. The
+remaining T011/T016 reviewer actions are shown as P07 substeps in the current Kanban rendition;
+this does not change their WorkPackage identity or silently declare either review `PASS`.
+T001–T003 and T028–T032 are cross-artifact quality/handoff tasks included in the applicable
+current cards, not additive hours. The eight-hour PH0 operational buffer is controlled schedule
+capacity, not a task or permission to skip authority, review or correctness conditions.
 
 ## Dependencies & Execution Order
 
@@ -154,7 +164,10 @@ schedule capacity, not a task or permission to skip an authority, review or corr
 - US2 and US3 may prepare distinct source records in parallel after US1, but one primary developer
   is planned, so the operating sequence remains US1 → US2 → US3.
 - US4 depends on the scenario and open-decision register from US2/US3.
-- US5/P07 depends on all P01–P06 results.
+- DeliveryCard P07 may start after its current management-card predecessors to record T011/T016
+  review effort and prepare PG4. The T026 gate decision depends on T011/T016 dispositions,
+  P01–P06 results and T023–T025 preparation; P07 closes only after a recorded gate outcome.
+  This separates the card's start condition from the gate's decision condition.
 - Cross-artifact analysis runs after the complete draft package and before final handoff.
 
 ### User Story Dependencies

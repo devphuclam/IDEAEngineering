@@ -10,8 +10,10 @@ $registerPath = Join-Path $repoRoot 'planning\idea-technical-pilot-execution-reg
 $manifestPath = Join-Path $repoRoot 'planning\project-management-compiler-manifest.json'
 $journalPath = Join-Path $repoRoot 'planning\idea-progress-work-journal.json'
 $kanbanPath = Join-Path $repoRoot 'docs\product\instances\idea-engineering\planning\idea-technical-pilot-kanban-cario.md'
+$specTasksPath = Join-Path $repoRoot 'specs\004-technical-pilot-readiness\tasks.md'
 $validatorPath = Join-Path $repoRoot 'scripts\validate-project-management-source.ps1'
 $indexPath = Join-Path $PSScriptRoot 'index.html'
+. (Join-Path $repoRoot 'scripts\pg4-authorization.ps1')
 
 function Get-NowIso {
     return [DateTimeOffset]::Now.ToOffset([TimeSpan]::FromHours(7)).ToString('o')
@@ -123,6 +125,46 @@ function Add-EffortCorrection($journal, $record, $actual, $remaining, [string]$r
     $record.remainingEffortHours = $remaining
 }
 
+function Get-P07Substeps {
+    $taskStates = @{}
+    if (Test-Path -LiteralPath $specTasksPath -PathType Leaf) {
+        foreach ($line in (Get-Content -LiteralPath $specTasksPath -Encoding UTF8)) {
+            if ($line -match '^- \[(?<checked>[xX ])\] (?<id>T\d{3})\b') {
+                $taskStates[[string]$Matches.id] = ($Matches.checked -ne ' ')
+            }
+        }
+    }
+
+    $steps = @()
+    foreach ($line in (Get-Content -LiteralPath $kanbanPath -Encoding UTF8)) {
+        if ($line -match '^\|\s*`(?<id>P07\.\d+)`\s*\|\s*(?<title>[^|]+)\|\s*(?<refs>[^|]+)\|\s*$') {
+            $stepId = [string]$Matches.id
+            $stepTitle = [string]$Matches.title
+            $refs = [string]$Matches.refs
+            $taskIds = @([regex]::Matches($refs, 'T\d{3}') | ForEach-Object { $_.Value })
+            $knownCount = @($taskIds | Where-Object { $taskStates.ContainsKey($_) }).Count
+            $checkedCount = @($taskIds | Where-Object { $taskStates.ContainsKey($_) -and $taskStates[$_] }).Count
+            $checklistState = if ($taskIds.Count -eq 0 -or $knownCount -ne $taskIds.Count) {
+                'SOURCE_MISSING'
+            }
+            elseif ($checkedCount -eq $taskIds.Count) {
+                'ALL_CHECKED'
+            }
+            else {
+                'OPEN'
+            }
+            $steps += [pscustomobject]@{
+                id = $stepId
+                title = $stepTitle.Trim()
+                taskIds = $taskIds
+                checkedCount = $checkedCount
+                checklistState = $checklistState
+            }
+        }
+    }
+    return $steps
+}
+
 function Get-CardDefinitions {
     $phase = ''
     $cards = @()
@@ -154,9 +196,12 @@ function Get-CardDefinitions {
                 plannedDates = $datesValue.Trim()
                 predecessors = $predecessors
                 definitionOfDone = (($contentValue.Trim() -replace '\s+', ' ') -replace '\*\*', '')
+                substeps = @()
             }
         }
     }
+    $p07 = @($cards | Where-Object { $_.id -eq 'P07' })[0]
+    if ($null -ne $p07) { $p07.substeps = @(Get-P07Substeps) }
     return $cards
 }
 
@@ -180,6 +225,7 @@ function Get-StatePayload {
             plannedDates = $definition.plannedDates
             predecessors = @($definition.predecessors)
             definitionOfDone = $definition.definitionOfDone
+            substeps = @($definition.substeps)
             recordingState = if ($null -ne $record) { [string]$record.recordingState } else { 'NOT_RECORDED' }
             executionState = if ($null -ne $record -and $null -ne $record.executionState) { [string]$record.executionState } else { $null }
             resultState = if ($null -ne $record -and $null -ne $record.resultState) { [string]$record.resultState } else { $null }
@@ -211,6 +257,7 @@ function Get-StatePayload {
 
     return [pscustomobject]@{
         generatedAt = Get-NowIso
+        pg4 = Get-Pg4Authorization -RepositoryRoot $repoRoot
         repoRoot = $repoRoot
         registerRevision = [int]$register.registerRevision
         registerStatus = [string]$register.status
@@ -336,6 +383,19 @@ function Update-Record($request) {
     $now = Get-NowIso
     $reason = [string]$request.reason
     $confirmLongSession = [bool]$request.confirmLongSession
+
+    if ($action -eq 'complete' -and $id -eq 'P07') {
+        $gate = Get-Pg4Authorization -RepositoryRoot $repoRoot
+        if (-not $gate.decisionRecorded) {
+            throw "Chưa thể hoàn thành P07: $($gate.reason) Có thể tiếp tục ghi giờ và chuẩn bị review."
+        }
+    }
+    if ($action -in @('start', 'resume', 'complete') -and $definition.phase -match '^PH[1-5]\b') {
+        $gate = Get-Pg4Authorization -RepositoryRoot $repoRoot
+        if (-not $gate.authorizesPh1) {
+            throw "Chưa thể thực hiện ${id}: $($gate.reason) P07 hoàn thành không thay cho PG4 PASS."
+        }
+    }
 
     $otherActive = @($register.records | Where-Object { $_.entity.id -ne $id -and $_.executionState -eq 'IN_PROGRESS' })
     if ($action -in @('start', 'resume') -and $otherActive.Count -gt 0) {

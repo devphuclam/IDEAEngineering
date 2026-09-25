@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.22`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.25`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,17 +13,18 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.22` |
+| Document Version | `0.25` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
 | Requirements Input | `IE-PROD-SREQ-001@0.15`; exact successor Feature/Spec decision remains `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity not yet recorded |
 | Reviewers | Project user performs internal document review; architecture review `NOT-RUN`; required independent/specialist reviewer unassigned |
-| Approvers | Product Decision Authority approved the self-approval policy correction reflected in this 0.22 successor on 19-09-2026 under [IE-CHG-PDA-APPROVAL-002](registers/CHG-2026-09-19-pda-approval-approval-policy.md); architecture approval for the remaining successor content is `NOT-RUN` |
+| Approvers | Product Decision Authority approved the self-approval policy correction on 19-09-2026 under [IE-CHG-PDA-APPROVAL-002](registers/CHG-2026-09-19-pda-approval-approval-policy.md) and the three Check-in scope-policy branches on 25-09-2026 under [IE-CHG-PDA-APPROVAL-003](registers/CHG-2026-09-25-pda-approval-checkin-scope.md); architecture approval for the remaining successor content is `NOT-RUN` |
 | Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [Vault-transfer provenance](../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Change History | 0.22: separate RBAC eligibility from Approval Policy self-approval, keep the seeded independent rule, and make policy conflict, Release separation and audit semantics explicit; [IE-CHG-APPROVAL-POLICY-001](registers/CHG-2026-09-19-approval-policy-self-approval.md). 0.21: separate Artifact control/data planes; add Artifact Gateway and multi-location Vault custody to container, deployment, Check-in, materialization, transfer, storage-evolution and trust views; exact Gateway runtime, provider and durability thresholds remain unselected and `NOT-RUN`; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
+| Latest Change (0.25) | Align `ARCH-VIEW-ACT-004` and its text with the Product Decision Authority-approved three-branch Check-in scope policy; preserve the Draft status of the architecture view and `REQ-WS-006` unchanged. See [IE-CHG-PDA-APPROVAL-003](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). |
+| Change History | 0.24: add a focused Check-in scope-decision activity distinguishing unknown dependency scope, required unreserved changes and unrelated unreserved changes; record the reviewer-selected candidate handling without changing `REQ-WS-006` or implying Product Decision Authority approval; [IE-CHG-WS-SCOPE-001](registers/CHG-2026-09-25-checkin-scope-decision-clarification.md). 0.23: correct the reopen result in `ARCH-VIEW-SEQ-011` and add `ARCH-VIEW-ACT-003` to show guarded forward-repair, coordinated-recovery and remain-restricted choices without changing recovery obligations; [IE-CHG-P06-DIAGRAM-001](registers/CHG-2026-09-24-p06-recovery-diagram-clarification.md). 0.22: separate RBAC eligibility from Approval Policy self-approval, keep the seeded independent rule, and make policy conflict, Release separation and audit semantics explicit; [IE-CHG-APPROVAL-POLICY-001](registers/CHG-2026-09-19-approval-policy-self-approval.md). 0.21: separate Artifact control/data planes; add Artifact Gateway and multi-location Vault custody to container, deployment, Check-in, materialization, transfer, storage-evolution and trust views; exact Gateway runtime, provider and durability thresholds remain unselected and `NOT-RUN`; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -138,6 +139,7 @@ Each view has a stable ID so a review comment can identify the exact model rathe
 | `ARCH-VIEW-STATE-003` | UML State Machine / section 7 | How are Reference integrity and current-head freshness combined into safe user choices? | One local Workspace Entry materialized as Reference; engineer/support; excludes server document lifecycle. | `Draft`; `REQ-WS-003/010/011/014` | State explanation and action table after the view. |
 | `ARCH-VIEW-STATE-004` | UML State Machine / section 7.2 | Which Check-in Operation states are resumable, authoritative, terminal or held for reconciliation? | One OperationId; maintainer/operations/verification; excludes per-chunk state. | `Draft`; `REQ-WS-007…013/015`, `REQ-OPS-001/002` | State definitions and invariants after the view. |
 | `ARCH-VIEW-SEQ-001` | UML Sequence / section 7.1 | In what order is exact Checkout/Reference scope materialized safely? | One work-scope command; engineer/maintainer. | `Draft`; `REQ-WS-001…006/013` | Numbered steps before the view. |
+| `ARCH-VIEW-ACT-004` | UML-style Activity / section 7.2 | When does a locally changed item without Reservation block Check-in, and when may it be excluded with scope reconfirmation? | One proposed Check-in scope; engineer, product-policy and verification reviewers; excludes transfer, commit, policy-exception design and Release. | `Draft view`; scope policy `APPROVED` under `IE-CHG-PDA-APPROVAL-003`; `REQ-WS-005/006/007/010/013`, `VVP-002/003` | Decision table and long description after the view. |
 | `ARCH-VIEW-SEQ-002` | UML Sequence / section 7.2 | How does Check-in commit atomically or preserve local stale work? | One OperationId; engineer/maintainer/operations. | `Draft`; `REQ-WS-007…013`, `REQ-OPS-001` | Numbered steps before the view. |
 | `ARCH-VIEW-SEQ-003` | UML Sequence / section 7.3 | How are review decisions and an exact Release committed? | One Review Round and Release scope; reviewer/releaser. | `Draft`; `REQ-LC-001…009`, `REQ-STR-003` | Numbered steps before the view. |
 | `ARCH-VIEW-ACT-001` | UML-style activity/swimlane / section 7.5 | Who creates Linh's account and grants Design Engineer access in P-100? | Account and Project administration; administrators/support. | `Draft`; `REQ-AUTH-009/010`, `REQ-IAM-002/005` | Numbered responsibility explanation after the view. |
@@ -151,6 +153,7 @@ Each view has a stable ID so a review comment can identify the exact model rathe
 | `ARCH-VIEW-SEQ-009` | UML Sequence / section 7.8 | How are an exact BOM view, a pinned export and an import candidate kept distinct? | One Structure Snapshot and BOM View Profile; structure/data/implementation reviewers. | `Draft`; `REQ-STR-004…006`, `IF-STRUCTURE-BOM`, `IF-AUTHORIZATION-DECISION`, `IF-IAM-ELIGIBILITY-QUERY`, BM-01…06 | Seven-step description and coordinator/UoW outcome rules beside the view. |
 | `ARCH-VIEW-SEQ-010` | UML Sequence / section 7.9 | How is a CAD/Office Representation produced or uploaded and tied to one exact source Generation? | One source Artifact and one Format Capability Profile; format/security/release reviewers. | `Draft`; `REQ-FMT-001…005`, `REQ-SEC-004`, `IF-FORMAT-JOB`, `IF-AUTHORIZATION-DECISION` | Generation, custody/metadata acceptance and failure rules following the view. |
 | `ARCH-VIEW-SEQ-011` | UML Sequence / section 9.3 | How is a coordinated recovery set restored and proved exact before service reopens? | One approved recovery point across database, Artifact, configuration and key custody; operations/data/security reviewers. | `Draft`; `REQ-OPS-003/004`, `REQ-IAM-004`, `QRS-006` | Recovery invariants and reopening conditions after the view. |
+| `ARCH-VIEW-ACT-003` | UML-style Activity / section 9.4 | After a failed release or migration, when is forward repair, a proven coordinated recovery, or continued restriction justified? | One failed change and one controlled return-to-service decision; operations/data/security reviewers; excludes backup-product choice and the detailed restore exchange in `ARCH-VIEW-SEQ-011`. | `Draft`; `REQ-OPS-003/004`, `REQ-IAM-004`, `QRS-006`, `VVP-013/014` | Branch-by-branch decision rules after the view. |
 | `ARCH-VIEW-SEQ-012` | UML Sequence / section 9.2.1 | How can an interrupted read continue from another verified Vault without changing the requested file? | One exact Artifact read; engineer, operations and security reviewers; excludes upload staging migration. | `Draft`; `REQ-WS-016`, `REQ-OPS-007/008`, ST-06 | Failover and refusal rules after the view. |
 | `ARCH-VIEW-SEQ-013` | UML Sequence / section 9.2.2 | When does a replica become eligible and satisfy the applicable durability policy? | One immutable Artifact and replication task; operations/data reviewers; excludes backup and Check-in commit. | `Draft`; `REQ-OPS-007/008`, `QRS-014`, ST-07 | Replica eligibility and policy rules after the view. |
 | `ARCH-VIEW-SEC-001` | Trust-boundary data-flow view / section 10 | Which protected data crosses each trust zone, where is it authorized, and what may never cross? | Initial logical deployment trust zones; security/architecture/operations reviewers; excludes final ports and selected infrastructure. | `Draft`; `REQ-SEC-001…004`, `REQ-WS-016`, `REQ-OPS-007/008`, `REQ-AUTH-008`, `REQ-AUD-*` | Threat/control table and trust-zone explanation beside the view. |
@@ -192,10 +195,14 @@ A diagram is ready for baseline review only when a reviewer can answer yes to al
 - the long description communicates the same essential information without relying on the image; and
 - the actual rendered artifact was inspected, not merely syntax-checked.
 
-The current diagrams remain `Draft`. The current source consistency and focused internal rendition
-inspection are recorded in
-[IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md); predecessor VEV
-records remain historical evidence. Qualified architecture/security review remains `NOT-RUN`; render
+The current diagrams remain `Draft`. Focused source/rendition inspection of the Check-in scope
+decision is recorded in
+[IE-VEV-WS-SCOPE-002](registers/VEV-2026-09-25-checkin-scope-approved-policy-view-review.md);
+the pre-approval rendition remains `IE-VEV-WS-SCOPE-001`. The P06 recovery
+correction is recorded in
+[IE-VEV-P06-DIAGRAM-001](registers/VEV-2026-09-24-p06-recovery-diagram-review.md);
+[IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md) remains the
+predecessor full-gallery evidence. Qualified architecture/security review remains `NOT-RUN`; render
 success must not be reported as architecture conformance or evidence that the software has been
 implemented.
 
@@ -1128,6 +1135,79 @@ operation until authoritative evidence resolves it.
 | `Committing` | Immediate outcome cannot be proved. | `Needs reconciliation` | Neither success nor failure may be reported yet. |
 | `Needs reconciliation` | Commit evidence is found, or non-commit plus safe resumability is proved. | `Committed`, `Transferring` or `Failed` | Resolution follows authoritative evidence; it never guesses from client progress. |
 
+**`ARCH-VIEW-ACT-004` — Check-in scope decision for changed files without Reservation.**
+**Model profile:** UML-style Activity expressed in Mermaid flowchart notation; `Draft 0.25` view
+of the scope policy approved under `IE-CHG-PDA-APPROVAL-003`;
+engineer, product-policy and verification reviewers. **Question:** when does an unreserved local
+change block the complete proposed Check-in, and when can it be left out after explicit scope
+reconfirmation? **Scope:** one proposed Check-in set, its selected root documents and an attempted
+required-dependency resolution after a full Workspace scan. **Excludes:** byte transfer, transaction
+mechanics, Release eligibility and any future exception-policy design; those belong to
+`ARCH-VIEW-SEQ-002` and the governed Release flow. **Trace:** `REQ-WS-005/006/007/010/013`,
+`VVP-002/003`, `ARCH-VIEW-SEQ-001/002`, architecture input §14. **Legend:** rectangles are actions
+or outcomes, diamonds are exclusive guard decisions, and labelled solid arrows show the chosen
+result. A redrawn scope is not Check-in success; only `ARCH-VIEW-SEQ-002` may lead to publication.
+Colors and node positions carry no additional meaning.
+
+```mermaid
+flowchart TB
+    accTitle: Check-in scope decision for unreserved local changes
+    accDescr: After a full Workspace scan, unresolved dependency scope blocks Check-in without deleting local work or ending a still-valid Reservation. If scope is known, an unreserved change in a selected root or required dependency blocks the proposed Check-in. Other unreserved local changes are shown as excluded and require confirmation of the revised exact scope. This three-branch scope policy was approved on 25 September 2026; the architecture view and runtime remain unverified. Only an eligible confirmed scope proceeds to the separate atomic publication sequence, which revalidates server state at commit time.
+
+    scan["Scan Workspace and resolve<br/>required dependencies"]
+    scan --> known{"Required-dependency<br/>scope known?"}
+    known -->|No| unresolved["Block Check-in; show unresolved file<br/>and preserve local work"]
+    known -->|Yes| required{"Unreserved change in selected root<br/>or required dependency?"}
+    required -->|Yes| block["Block full Check-in<br/>and preserve local work"]
+    required -->|No| other{"Other unreserved<br/>local changes?"}
+    other -->|Yes| exclude["Show Modified without Checkout<br/>and exclude affected files"]
+    exclude --> reconfirm{"Reduced exact scope<br/>confirmed?"}
+    reconfirm -->|No| hold["No operation;<br/>preserve local work"]
+    reconfirm -->|Yes| validate["Validate selected rows<br/>against current server state"]
+    other -->|No| confirm["Confirm original<br/>exact scope"]
+    confirm --> validate
+    validate -->|Fail| refuse["Refuse full scope;<br/>preserve local work"]
+    validate -->|Pass| next["ARCH-VIEW-SEQ-002:<br/>transfer and commit-time checks"]
+```
+
+The scope guard runs first. If the dependency resolver cannot determine whether a file is required
+by a selected root, Check-in stops before an exclusion is offered. The client identifies the
+unresolved file and reason; local bytes and still-valid Reservations remain intact. A new scan is
+needed after the dependency question is resolved. An unknown dependency is never treated as an
+unrelated file.
+
+Once the required-dependency scope is known, the next guard examines **every** changed file without
+an `Active` Reservation before it offers a reduced scope. A selected root or dependency required
+for that selected root is not reclassified as “unrelated” merely to let publication continue. If
+any such required item is changed without Reservation, the approved scope policy refuses the complete
+proposed Check-in; no Generation or Change
+Set is published and the failed attempt does not end a still-valid Reservation. The user retains
+the local bytes and can obtain an eligible Checkout, repair the candidate, or choose a different
+governed scope in a new confirmation. A Release with an unresolved required dependency still fails
+closed under its separate Release rules.
+
+An unreserved changed file outside the selected roots and their required dependency closure is
+reported as **Modified without Checkout** and excluded from the proposed publish set. The client
+shows the excluded file and requires the engineer to confirm the *revised exact scope*. Declining
+confirmation performs no Check-in. Confirming it only permits preflight; the server still checks
+authorization, expected heads, Reservations and scope, and `ARCH-VIEW-SEQ-002` repeats authoritative
+checks at commit time. Nothing in this view grants publish authority to a Reference or silently
+publishes excluded bytes.
+
+| Scanned condition | Approved scope-policy disposition | Confirmation / publication boundary |
+|---|---|---|
+| Cannot determine whether a file is required by a selected root | Block the proposed Check-in; identify the unresolved file and reason. | No exclusion or publish; preserve local work and still-valid Reservations. Re-scan after resolution. |
+| Selected root or required dependency changed without `Active` Reservation | Block the complete proposed Check-in and identify each affected item. | No publish; preserve local work and still-valid Reservations. |
+| Other changed file without `Active` Reservation | Mark **Modified without Checkout** and exclude it from the proposed publish set. | Show exclusion and obtain confirmation of the reduced exact scope before any operation. |
+| Remaining confirmed scope has stale, unauthorized or otherwise ineligible row | Refuse the whole confirmed scope. | No partial Change Set; `ARCH-VIEW-SEQ-002` remains the publication authority. |
+| Remaining confirmed scope passes preflight | Continue using one immutable `OperationId`. | Transfer and commit-time revalidation in `ARCH-VIEW-SEQ-002`; preflight is not success. |
+
+The Product Decision Authority approved these three scope branches on 25-09-2026 under
+[`IE-CHG-PDA-APPROVAL-003`](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). They select
+the policy allowed by `REQ-WS-006`; they do not create another requirement or approve the whole
+architecture. No unreserved item can be published to its original Logical Document. The view's
+independent architecture review and all Check-in runtime tests remain `NOT-RUN`.
+
 **`ARCH-VIEW-SEQ-002` — Atomic Check-in publication.** **Model profile:** UML Sequence; `Draft
 0.21`; engineer, implementation, operations and verification reviewers. **Question:** where is the
 last safe refusal point, and what exactly becomes authoritative together? **Scope:** one confirmed
@@ -1139,7 +1219,9 @@ the authoritative database transaction; the `alt` paths are mutually exclusive r
 same operation.
 
 1. Workspace process scans/hashes the complete candidate scope and classifies unchanged, changed,
-   missing, Out of date and modified-without-Checkout entries using the approved UI terms.
+   missing, Out of date and modified-without-Checkout entries using the approved UI terms. The
+   proposed disposition of unreserved changed files is detailed in `ARCH-VIEW-ACT-004`; this
+   sequence begins only after one eligible exact scope is confirmed.
 2. Desktop requires confirmation of exact scope and explains that a successful or No Change result ends Checkout for that scope. Core v0 offers no retain-after-Check-in option.
 3. The Server establishes `ActorContext` from session proof and the named Check-in coordinator
    validates metadata, relations, policy, owner, Workspace, Reservation and expected Generation.
@@ -2482,7 +2564,7 @@ sequenceDiagram
     alt every required identity/digest/check is exact and security reconciliation is proved
         Authority->>Target: Explicitly authorize service reopen
         Target->>Audit: Append successful drill evidence
-        Target-->>Operator: Eligible for explicit service-reopen decision
+        Target-->>Operator: Reopen authorized - follow controlled return-to-service runbook
     else any required item/check or security evidence is unresolved
         Target->>Audit: Append restricted-recovery evidence and exact gaps
         Target-->>Operator: Keep isolated/restricted, block reopening
@@ -2507,6 +2589,55 @@ Test on a representative non-production environment before promotion. Database/a
 migrations record the pre-change backup and reconciliation criteria; replacing old binaries is not
 automatically a safe schema downgrade. Choose forward repair or a proven full recovery path and
 record its data-loss/compatibility consequences.
+
+**`ARCH-VIEW-ACT-003` — Failed-change recovery route and return-to-service decision.**
+**Model profile:** UML-style Activity rendered as a flowchart; `Draft 0.23`; operations, data,
+security and verification reviewers. **Question:** after a release or schema change fails, what
+evidence permits forward repair or a coordinated recovery, and what happens if neither route is
+proved? **Scope:** one failed change and one controlled return-to-service decision. **Excludes:**
+backup-product selection, deployment automation and the detailed restore exchanges already in
+`ARCH-VIEW-SEQ-011`. **Trace:** `REQ-OPS-003/004`, `REQ-IAM-004`, `QRS-006`, `VVP-013/014`;
+PH0 P06 recovery plan §2.5. **Legend:** rectangles are activities/outcomes, diamonds are guarded
+decisions, and labelled solid arrows show the exclusive route or result. Red-outline outcomes
+mean service remains restricted; color is not required to understand their labels. `ARCH-VIEW-SEQ-011`
+expands only the coordinated-recovery branch.
+
+```mermaid
+flowchart TB
+    accTitle: Failed-change recovery route and return-to-service decision
+    accDescr: A failed release or migration is contained in Restricted Recovery Mode while evidence is preserved. The responsible change or recovery authority selects exactly one evidence-proven and approved route: compatible forward repair or complete coordinated recovery in an isolated replacement. If neither route qualifies, service remains restricted. Both routes require exact data checks, independently evidenced security-change reconciliation where applicable, and a separate named authority decision before service returns.
+
+    Failure[Release, migration or health check fails] --> Contain[Stop authoritative writes; preserve evidence and local Workspace; restrict service]
+    Contain --> Assess[Record bundle, schema, recovery-set and compatibility evidence; assess data-loss consequence]
+    Assess --> Route{Which single route is proven and approved?}
+    Route -->|Compatible forward repair| Forward[Apply approved forward repair]
+    Route -->|Complete coordinated recovery| Recover[Restore isolated replacement; invalidate restored sessions; follow SEQ-011]
+    Route -->|Neither proven| HoldRoute[Remain restricted; preserve evidence and escalate]
+    Forward --> Verify[Check exact Generation, Structure, Release and Artifact state; reconcile security changes]
+    Recover --> Verify
+    Verify --> Exact{All required checks and independent evidence complete?}
+    Exact -->|No or uncertain| HoldChecks[Remain restricted; record exact gaps]
+    Exact -->|Yes| Authority{Named security/operations authority authorizes reopen?}
+    Authority -->|No| HoldAuthority[Remain restricted; await authorization]
+    Authority -->|Yes| Reopen[Return to service under controlled runbook; append Audit evidence]
+
+    classDef stopped fill:#fff4f4,stroke:#b42318,color:#5f1610
+    class HoldRoute,HoldChecks,HoldAuthority stopped
+```
+
+Reading order is top to bottom. Failure does not select a route automatically: the operator first
+contains authoritative writes, preserves local work and records exact change and recovery evidence.
+The responsible change/recovery authority selects exactly one route and records its compatibility
+and possible data-loss consequences. Forward repair requires demonstrated compatibility and
+approval; full recovery requires one approved, complete coordinated set. If both qualify, the
+authority still records which single route was selected and why. `ARCH-VIEW-SEQ-011` describes the
+recovery branch's isolated restore and reconciliation. Unproved or ambiguous evidence selects
+neither route and keeps service restricted. After either route, exact retained
+Generation, Structure Snapshot, Release Record and Artifact digests must be checked; post-recovery
+account, membership, role and policy changes may be reconciled only from independent evidence.
+Restored sessions are invalid. A named security/operations authority separately decides whether to
+reopen. Replacing old binaries alone is never proof of a safe schema downgrade. This is a candidate
+decision model, not evidence that rollback or recovery has been rehearsed.
 
 Monitor request failures/latency, database health/locks, disk free space and growth, digest failures,
 transfer interruption, abandoned operations, worker limits, outbox lag, backup lag and latest
@@ -2727,7 +2858,7 @@ variation or a genuine security seam already exists; defer unused integrations.
 | Spec prerequisite | Approved predecessor DOC-04@0.13 baseline plus an explicit successor decision for DOC-04@0.14 Vault-transfer additions and owned open gaps | Predecessor `APPROVED`; exact 0.14 successor and refreshed management brief `NOT-RUN` |
 | Requirement consistency | Architecture traces every response to DOC-04 and does not weaken negative paths | Trace authored; review `NOT-RUN` |
 | PG3 architecture review | Context, views, Hosts, Modules, Interfaces, quality responses, data, deployment, security, risks and ADR status | Draft authored; review `NOT-RUN` |
-| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 32 views: 28 in DOC-05 and four in DOC-06. Current source/rendition evidence and the new read-failover/replication sequences are recorded in [IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md). Predecessor evidence remains historical. A rendered picture does not imply independent architecture acceptance. |
+| Architecture-view quality | Every maintained view has catalogue metadata, legend, coherent Scope/abstraction, labelled relationships, trace and equivalent text; source is validated and actual rendition inspected | The set contains 34 views: 30 in DOC-05 and four in DOC-06. The current Check-in scope rendition is [IE-VEV-WS-SCOPE-002](registers/VEV-2026-09-25-checkin-scope-approved-policy-view-review.md); [IE-VEV-WS-SCOPE-001](registers/VEV-2026-09-25-checkin-scope-view-review.md) retains the pre-approval Draft rendition. The two affected P06 views retain [IE-VEV-P06-DIAGRAM-001](registers/VEV-2026-09-24-p06-recovery-diagram-review.md). The previous full-gallery source/rendition evidence remains [IE-VEV-VAULT-XFER-002](registers/VEV-2026-09-18-vault-transfer-diagram-review.md). A rendered picture does not imply independent architecture acceptance. |
 | Technology comparison | At least one realistic alternative plus lifecycle, licensing, skills, deployment and operations facts | Independent decisions compared; context confirmed, actual company deployment/license/skills and qualification gaps remain |
 | Technical spikes | Transaction/fault injection, accounts/revocation, Desktop bridge, Workspace transfer/recovery, exact format profile and timed restore feasibility | Planned through VVP; execution `NOT-RUN` |
 | Increment readiness | DOC-07 pins bounded scope, tests, migration/recovery and rollback after approved Feature/Spec/Tech | `BLOCKED` until decisions pass |

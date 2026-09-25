@@ -22,6 +22,7 @@ $AllowedExecutionStates = @('NOT_STARTED', 'IN_PROGRESS', 'COMPLETED', 'SUSPENDE
 $AllowedResultStates = @('NOT_RUN', 'PASS', 'FAIL', 'BLOCKED', 'NOT_APPLICABLE')
 $AllowedPriorities = @('URGENT', 'HIGH', 'NORMAL', 'LOW')
 $script:UnsupportedProductionContract = $false
+. (Join-Path $PSScriptRoot 'pg4-authorization.ps1')
 
 function New-DiagnosticList {
     # Prevent PowerShell from enumerating an empty List into `$null` on return.
@@ -599,6 +600,7 @@ try {
         if ($null -ne $registerPath) {
             $registerIds = @($register.records | ForEach-Object { [string]$_.entity.id })
             $cardIds = @($cards | ForEach-Object { [string]$_.id })
+            $pg4 = Get-Pg4Authorization -RepositoryRoot $RepositoryRoot
             foreach ($card in $cards) {
                 if ($registerIds -notcontains $card.id) {
                     Add-Diagnostic $diagnostics 'PMC-IDENTITY-002' 'ERROR' "Baseline Delivery Card $($card.id) is absent from the Execution Register." 'Add an explicit NOT_RECORDED record or controlled disposition.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $card.id
@@ -607,6 +609,14 @@ try {
                 $activeMatches = @($register.records | Where-Object { [string]$_.entity.id -eq [string]$card.id -and [string]$_.disposition -eq 'ACTIVE' })
                 if ($activeMatches.Count -ne 1) {
                     Add-Diagnostic $diagnostics 'PMC-IDENTITY-002' 'ERROR' "Baseline Delivery Card $($card.id) requires exactly one ACTIVE Execution Register record; found $($activeMatches.Count)." 'Correct the active record or its controlled disposition.' ([string]$manifest.execution.registerPath) 'records' 'DeliveryCard' $card.id
+                    continue
+                }
+                $executionState = [string](Get-PropertyValue $activeMatches[0] 'executionState' '')
+                if ($card.id -eq 'P07' -and $executionState -eq 'COMPLETED' -and -not $pg4.decisionRecorded) {
+                    Add-Diagnostic $diagnostics 'PMC-PG4-001' 'ERROR' "P07 is complete without a recorded PG4 decision: $($pg4.reason)" 'Record the attributable PG4 outcome or keep P07 open.' ([string]$manifest.execution.registerPath) 'executionState' 'DeliveryCard' $card.id
+                }
+                if ($card.phase -match '^PH[1-5]$' -and $executionState -in @('IN_PROGRESS', 'SUSPENDED', 'COMPLETED') -and -not $pg4.authorizesPh1) {
+                    Add-Diagnostic $diagnostics 'PMC-PG4-002' 'ERROR' "$($card.id) has started without valid PG4 authorization: $($pg4.reason)" 'Do not publish code-bearing progress until the exact PH1 successor is authorized.' ([string]$manifest.execution.registerPath) 'executionState' 'DeliveryCard' $card.id
                 }
             }
             foreach ($record in @($register.records)) {

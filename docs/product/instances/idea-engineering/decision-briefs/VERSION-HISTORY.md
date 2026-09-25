@@ -1,6 +1,6 @@
 # Phiên bản và nguồn của Feature / Spec / Tech
 
-Ngày cập nhật: 23-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
+Ngày cập nhật: 25-09-2026. Bộ tài liệu: IDEA-C1-ANALYSIS-DESIGN-001.
 
 Đây là sổ tra cứu phiên bản, nguồn, review nội bộ và quyết định Feature/Spec/Tech. Không phải báo
 cáo kiểm thử hoặc một nguồn yêu cầu mới.
@@ -47,7 +47,8 @@ Theo hướng đã chốt, successor tách quyền đủ điều kiện RBAC kh�
 vượt policy khác yêu cầu người độc lập và không cấp `Release`. Review Round ghim đúng Workflow
 Definition Version và Approval Policy Version; kết quả tự duyệt được ghi riêng trong Audit.
 
-Các nguồn successor mới là DOC-04@0.15, DOC-05@0.22, DOC-06@0.18, VVP@0.18 và SPEC-001@0.15.
+Ở lần hiệu chỉnh Approval Policy, các nguồn successor là DOC-04@0.15, DOC-05@0.22,
+DOC-06@0.18, VVP@0.18 và SPEC-001@0.15.
 Thay đổi này giữ nguyên 14 Feature groups, Tech Stack, Q-15, Product Scope, PG3 và PG4. PDA đã duyệt
 riêng policy correction này ngày 19-09-2026; các phần successor khác và toàn bộ procedure vẫn
 `NOT-RUN`; xem
@@ -55,10 +56,23 @@ riêng policy correction này ngày 19-09-2026; các phần successor khác và 
 Bằng chứng quyết định được ghi tại
 [`IE-CHG-PDA-APPROVAL-002`](../registers/CHG-2026-09-19-pda-approval-approval-policy.md).
 
-Bộ nguồn successor hiện hành tại ngày cập nhật sổ này là DOC-04@0.15, DOC-05@0.22,
-DOC-06@0.18, DOC-07@0.17, DOC-08@0.13, VVP@0.18, TECH-001@0.16 và technology view set@0.5.
+Bộ nguồn successor hiện hành tại ngày cập nhật sổ này là DOC-04@0.15, DOC-05@0.25,
+DOC-06@0.18, DOC-07@0.17, DOC-08@0.13, VVP@0.19, TECH-001@0.16 và technology view set@0.5.
 Mỗi nguồn vẫn giữ trạng thái kiểm soát, qualification và approval riêng; việc có tên trong danh
 sách hiện hành không tự tạo kết quả kiểm thử hoặc quyết định duyệt mới.
+DOC-05@0.23 chỉ làm rõ sơ đồ quay lui/phục hồi theo
+[`IE-CHG-P06-DIAGRAM-001`](../registers/CHG-2026-09-24-p06-recovery-diagram-clarification.md);
+P06 review, diễn tập phục hồi và PDA approval cho exact successor này vẫn `NOT-RUN`.
+
+### Quy tắc phạm vi Check-in được duyệt ngày 25-09-2026
+
+Sếp duyệt đủ ba nhánh của `ARCH-VIEW-ACT-004`: không xác định được file phụ thuộc thì chặn
+Check-in; file bắt buộc đã sửa nhưng chưa Checkout thì chặn toàn bộ lượt Check-in; file đã sửa
+nhưng được xác định là không bắt buộc thì loại khỏi phạm vi gửi và yêu cầu xác nhận lại phạm vi.
+Quyết định ghim vào DOC-05@0.24 và hình trước duyệt trong
+[`IE-CHG-PDA-APPROVAL-003`](../registers/CHG-2026-09-25-pda-approval-checkin-scope.md).
+DOC-05@0.25 cập nhật nhãn theo quyết định; VVP@0.19 thêm WS-09…11 để thử. Chưa có kết quả chạy
+phần mềm hay duyệt toàn bộ kiến trúc.
 
 ## 1. Bản làm việc hiện tại
 
@@ -70,9 +84,9 @@ sách hiện hành không tự tạo kết quả kiểm thử hoặc quyết đ�
 
 Feature 0.12 giữ nguyên 14 mã FTR. Normative DOC-04@0.13 được duyệt có 87 dòng yêu cầu. Successor
 DOC-04@0.15 có 90 dòng yêu cầu sau khi thêm scoped direct Gateway transfer, multi-location
-custody/replication và policy-controlled self-approval clarification. VVP 0.18 có 17 mục tiêu cùng
+custody/replication và policy-controlled self-approval clarification. VVP 0.19 có 17 mục tiêu cùng
 các bộ PA/RBAC/WS/ST; mọi kết quả sản phẩm vẫn `NOT-RUN`. DOC-01 ở Draft 0.7, DOC-02 ở Draft 0.2,
-DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.15, DOC-05 ở Draft 0.22, DOC-06 ở Draft 0.18, DOC-07 ở Draft
+DOC-03 ở Draft 0.7, DOC-04 ở Draft 0.15, DOC-05 ở Draft 0.25, DOC-06 ở Draft 0.18, DOC-07 ở Draft
 0.17, DOC-08 ở Draft 0.13, coverage GOV ở Draft 0.3 và future-commercial GOV ở Draft 0.1. Lịch
 56 task/756 giờ cũ được giữ trong Git history. Kế hoạch hiện hành là
 `IE-PLAN-DEC2026-003@0.2`: 35 work package, 53 Delivery Card, 512 giờ công việc, 88 giờ dự phòng kỹ

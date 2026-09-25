@@ -3,7 +3,7 @@
 | Thông tin kiểm soát | Nội dung |
 |---|---|
 | Stable ID | `IE-PLAN-DEC2026-002-KANBAN` |
-| Phiên bản / trạng thái | `0.6` / `Current planning baseline` |
+| Phiên bản / trạng thái | `0.8` / `Current planning baseline` |
 | Loại tài liệu | Danh sách công việc để nhập và theo dõi trên Kanban nội bộ |
 | Tài liệu chủ quản | [DOC-07 — IE-PROD-ROADMAP-001@0.17](../DOC-07-mvp-roadmap-and-delivery-plan.md) |
 | Kế hoạch áp dụng | `IE-PLAN-DEC2026-003@0.2` |
@@ -11,8 +11,8 @@
 | Người chuẩn bị / review | Principal Product Author chuẩn bị; người dùng dự án review |
 | Product normativity | `INFORMATIVE`; không tạo Feature, Spec hoặc Tech mới |
 | Phân loại | `INTERNAL` |
-| Bằng chứng thực hiện | `PLN01`–`PLN03` hoàn thành theo ghi nhận hồi tố được người dùng dự án xác nhận; thực thi sản phẩm và `PG4` vẫn `NOT-RUN` |
-| Thay đổi | P05 profile clarified 2026-09-24 in [`IE-PH0-P05-DATA-001@0.2`](../../../../../specs/004-technical-pilot-readiness/test-data-and-verification.md); hours, dates, dependencies and total workload unchanged. Planning history: [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md); predecessor [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
+| Bằng chứng thực hiện | `PLN01`–`PLN03`, P04–P06 hoàn thành theo Execution Register bản làm việc; P07 và `PG4` chưa có kết quả; thực thi sản phẩm vẫn `NOT-RUN` |
+| Thay đổi | 0.8: làm rõ P07 được dùng để ghi giờ review nhưng chỉ đóng sau quyết định PG4; PH1 cần PG4 `PASS` hoặc `PASS-WITH-ACTIONS` hợp lệ. Không đổi số card, giờ, ngày hay kết quả PG4. 0.7: liệt kê các bước review còn thiếu dưới P07. 0.6: P05 profile clarified 2026-09-24 in [`IE-PH0-P05-DATA-001@0.2`](../../../../../specs/004-technical-pilot-readiness/test-data-and-verification.md). Planning history: [IE-CHG-PLAN-ID-001](../registers/CHG-2026-09-22-planning-card-identity-correction.md); predecessor [IE-CHG-ROADMAP-CV0-001](../registers/CHG-2026-09-21-core-v0-roadmap-rebaseline.md) |
 
 Đây là danh sách nhập liệu cho **Kanban CARIO của công ty**, không phải một kế hoạch độc lập. Người
 nhận việc có thể đọc trực tiếp từ mục 2. Mỗi card nói rõ mục đích, việc cần làm và điều kiện hoàn
@@ -155,7 +155,31 @@ thay đổi 53 card, 512 giờ công việc, 88 giờ dự phòng kỹ thuật, 
 | `P04` | `[PH0][P04] Chuẩn bị môi trường và cách build, test hệ thống` | 4 | 24/09 PM | PLN03 | **Mục đích:** người phát triển có thể dựng hệ thống theo một cách lặp lại được. **Cần làm:** ghi máy được phép dùng, lệnh build/test, cách lưu cấu hình và mật khẩu, cách cập nhật hoặc quay lại cấu trúc database. **Xong khi:** có hướng dẫn đủ để dựng lại môi trường mà không cài công cụ trái quy định. |
 | `P05` | `[PH0][P05] Chuẩn bị dữ liệu và hồ sơ thử` | 4 | 25/09 AM | PLN03 | **Mục đích:** các lần thử dùng cùng dữ liệu tổng hợp. **Cần làm:** tạo file 1 KiB và 64 MiB có thể sinh lại, lưu manifest/SHA-256; lập hai Test Persona; dùng Vault dev hiện có và ma trận tình huống. File đặt tại `/srv/idea/artifacts/p05-fixtures`, tách khỏi thư mục Vault. **Xong khi:** file và manifest trên server khớp digest dự kiến, người giữ dữ liệu/hạn xóa được ghi rõ. Tài khoản IDEA thật và kiểm tra ứng dụng làm ở PH1; đo nhiều GB ở Q03. |
 | `P06` | `[PH0][P06] Chuẩn bị cách quay lui, sao lưu và kiểm tra bảo mật` | 8 | 25/09 PM–28/09 AM | P04, P05 | **Mục đích:** thử nghiệm không làm mất dữ liệu hoặc file đang sửa. **Cần làm:** ghi cách quay lại phiên bản trước, giữ Workspace, khôi phục đồng bộ database với file và phần cần người có chuyên môn bảo mật xem. **Xong khi:** có phương án xử lý rõ cho từng trường hợp thất bại chính. |
-| `P07` | `[PH0][P07] Kiểm tra đã đủ điều kiện bắt đầu code chưa` | 4 | 28/09 PM | PLN01, PLN02, PLN03, P04, P05, P06 | **Mục đích:** chỉ bắt đầu khi những điều kiện quan trọng đã rõ. **Cần làm:** kiểm tra tài liệu, phạm vi, môi trường, dữ liệu thử, cách kiểm tra và rủi ro còn lại. **Xong khi:** PG4 được ghi `PASS`, `PASS-WITH-ACTIONS`, `BLOCKED` hoặc `NOT-RUN`, kèm lý do. |
+| `P07` | `[PH0][P07] Kiểm tra đã đủ điều kiện bắt đầu code chưa` | 4 | 28/09 PM | PLN01, PLN02, PLN03, P04, P05, P06 | **Mục đích:** chỉ bắt đầu khi những điều kiện quan trọng đã rõ. **Cần làm:** review T011/T016, kiểm tra tài liệu, phạm vi, môi trường, dữ liệu thử, cách kiểm tra và rủi ro còn lại. **Xong khi:** PG4 có quyết định `PASS`, `PASS-WITH-ACTIONS`, `FAIL` hoặc `BLOCKED` kèm lý do; chỉ hai kết quả đầu, khi hợp lệ, mới mở PH1. |
+
+#### Bước con của P07
+
+Đây là các bước kiểm tra của **một** Delivery Card P07, không phải card mới. `P02` và `P03`
+trong cột nguồn là WorkPackage nội bộ của [Spec Kit PH0](../../../../../specs/004-technical-pilot-readiness/tasks.md),
+không phải hai card P02/P03 cũ trong Tracking. Dấu hoàn thành của task Spec Kit chỉ cho biết
+bước đã được ghi; kết quả review và quyết định PG4 vẫn phải xem trong readiness register/gate record.
+
+| Bước con | Việc cần làm | Task Spec Kit |
+|---|---|---|
+| `P07.1` | Review kịch bản luồng và bảng truy vết; ghi kết quả, hash hoặc lý do bị chặn của WorkPackage P02. | `T011` |
+| `P07.2` | Review danh sách quyết định còn mở và ảnh hưởng đến PG4; ghi kết quả WorkPackage P03. | `T016` |
+| `P07.3` | Người review kiểm tra các mục chất lượng còn trống trong checklist readiness. | `T031` |
+| `P07.4` | Chốt đúng phiên bản nguồn rồi chạy các kiểm tra tài liệu; lưu kết quả thực tế. | `T023`, `T024` |
+| `P07.5` | Lập gói review PG4 với blocker, rủi ro còn lại và đúng phạm vi PH1. | `T025` |
+| `P07.6` | Ghi quyết định PG4 và bàn giao đúng phạm vi được phép; nếu chưa đạt thì ghi rõ không được bắt đầu code. | `T026`, `T027`, `T032` |
+
+P07 vẫn có **4 giờ kế hoạch**, không phải trần giờ thực tế. Từ khi P07 được bắt đầu, giờ làm
+các bước trên được ghi vào P07; công việc đã làm trước đó không được tự gán giờ hồi tố. Khi
+ước lượng còn lại cho thấy tổng có thể vượt 4 giờ, ghi lý do và cập nhật forecast trong Tracker;
+không tự cộng giờ dự phòng hoặc đổi baseline 512 giờ.
+P07 được bắt đầu sau các card tiền nhiệm để làm review và chuẩn bị; điều kiện T011/T016 là
+điều kiện **trước quyết định PG4**, không phải điều kiện trước lúc bấm bắt đầu P07. Hoàn thành
+P07 không tự cho phép PH1: F01-A chỉ mở khi PG4 có quyền hiệu lực cho đúng successor.
 
 | Card | A | R+ | R | C | I | O |
 |---|---|---|---|---|---|---|
@@ -307,7 +331,7 @@ cụ thể, không phải công việc ẩn để cộng thêm giờ.
 | Card | Tên task nhập Kanban | Hạn | Cần trước | Nội dung ghi trên card |
 |---|---|---|---|---|
 | `G-D0` | `[QUYẾT ĐỊNH][D0] Ghi nhận baseline Feature, Spec và Tech đã duyệt` | 23/09 | — | **Cần ghi nhận:** đúng baseline đã được Product Decision Authority duyệt; Core v0 dùng một Vault, còn khả năng nhiều Vault được giữ bằng ranh giới kiến trúc để làm sau. **Xong khi:** nguồn triển khai không còn lẫn với bản cũ. |
-| `G-MS0` | `[MỐC][MS0] Kiểm tra và quyết định có bắt đầu PH1 không` | 29/09 | P07, G-D0 | **Cần xem:** phạm vi, tài liệu, môi trường, dữ liệu thử, cách kiểm tra và các việc đang cản trở. **Xong khi:** ghi `PASS`, `PASS-WITH-ACTIONS`, `BLOCKED` hoặc `NOT-RUN`; chỉ hai kết quả đầu cho phép bắt đầu đúng phạm vi PH1. |
+| `G-MS0` | `[MỐC][MS0] Kiểm tra và quyết định có bắt đầu PH1 không` | 29/09 | P07, G-D0 | **Cần xem:** phạm vi, tài liệu, môi trường, dữ liệu thử, cách kiểm tra và các việc đang cản trở. **Xong khi:** ghi `PASS`, `PASS-WITH-ACTIONS`, `FAIL` hoặc `BLOCKED`; chỉ hai kết quả đầu, khi hợp lệ, cho phép bắt đầu đúng phạm vi PH1. |
 | `G-MS1` | `[MỐC][MS1] Xem bộ khung hệ thống chạy và cập nhật lại lịch` | 13/10 | F05-B | **Cần xem:** đăng nhập, Web, Desktop, Server, PostgreSQL và một lần truyền file qua Gateway. **Xong khi:** demo chạy được, phần chưa đạt được ghi rõ và lịch PH2–PH5 được tính lại theo tốc độ thực tế. |
 | `G-MS2` | `[MỐC][MS2] Xem luồng tạo, tìm và mở tài liệu` | 30/10 | C05-B | **Cần xem:** tạo hoặc tiếp nhận tài liệu, cấp định danh, lưu Generation, tìm và mở đúng bản theo quyền. **Xong khi:** luồng chính chạy được và truy cập trái quyền bị từ chối. |
 | `G-MS3` | `[MỐC][MS3] Xem Checkout, Reference, Check-in và ranh giới Vault` | 26/11 | W07 | **Cần xem:** hai người dùng thử giữ sửa, tham khảo, gửi thay đổi và xử lý bản cũ/mất phản hồi với một Vault; cấu hình và định danh lưu trữ không khóa thiết kế vào một máy duy nhất. **Xong khi:** luồng an toàn được chứng minh và đường mở rộng nhiều Vault vẫn rõ. |
@@ -359,14 +383,14 @@ Card chỉ chuyển sang `Hoàn thành` khi đáp ứng các điểm áp dụng 
 ## 6. Thứ tự nhập ban đầu
 
 1. Tạo board/danh sách cho `IDEA DDM — Core v0 2026` theo quy ước nội bộ.
-2. Nhập 60 card; đặt `PLN01`–`PLN03` là `Hoàn thành` theo Execution Register, các card còn lại là `Chưa bắt đầu`.
+2. Nhập 60 card; lấy trạng thái từng card từ Execution Register hiện hành. Không đưa P04–P06
+   đã hoàn thành về `Chưa bắt đầu` chỉ vì hướng dẫn nhập ban đầu được viết trước khi review xong.
 3. Gán `A = LEAD` cho 53 card thực hiện; giữ `R+` và `R` trống cho đến khi có người thật.
 4. Nhập ngày, công việc cần trước và CARIO; không tạo card dự phòng.
-5. Sau ba card lập kế hoạch đã hoàn thành, `P04` và `P05` là hai card đủ quan hệ phụ thuộc để nhận;
-   vì WIP limit bằng 1, chỉ chọn một card làm trước. Các card khác chỉ chuyển `Đang thực hiện` khi
-   đã hoàn thành những việc được ghi trong cột `Cần trước`.
+5. Chỉ chuyển card sang `Đang thực hiện` khi các việc ở cột `Cần trước` đã hoàn thành. Riêng
+   card làm sản phẩm từ PH1 còn phải có quyết định PG4 hợp lệ; P07 `Hoàn thành` không thay thế nó.
 6. Sau mỗi mốc, cập nhật ngày dự kiến của các card chưa bắt đầu thay vì sửa lịch sử card đã xong.
 
-Việc nhập card vào hệ thống CARIO của công ty và gán tài khoản thật vẫn `NOT-RUN`. Ba card lập kế
-hoạch đã được ghi nhận trong nguồn dữ liệu dự án; trạng thái đó không được hiểu là đã triển khai
+Việc nhập card vào hệ thống CARIO của công ty và gán tài khoản thật vẫn `NOT-RUN`. Trạng thái
+thực hiện đã ghi trong Execution Register không được hiểu là đã triển khai
 phần mềm.

@@ -1,0 +1,9 @@
+{
+  "evidenceId": "IE-VEV-P06-DIAGRAM-001",
+  "checkedAt": "2026-09-24T09:34:12.946Z",
+  "browser": "154.0.8037.57",
+  "check": "Open each standalone SVG through the browser file URL and reject XML parser errors",
+  "count": 2,
+  "failures": [],
+  "status": "PASS"
+}

@@ -21,13 +21,49 @@ residual_risks_and_owners
 rationale
 proposed_successor_increment
 authorized_successor_increment
+authorized_first_delivery_card
 authorization_limits
+authorization_state: INACTIVE | ACTIVE | REOPENED
 conditional_actions: action_id, description, owner, affected_baseline,
                      due_condition_or_date, expiry, escalation_path,
                      non_invalidating_rationale, evidence_link
 evidence_links
 supersession_or_reopen_trigger
 ```
+
+## Tracker-readable decision summary
+
+When T026 creates the actual `pg4-gate-record.md`, include exactly one fenced
+`pg4-authorization` JSON block. It is a machine-readable summary of the same attributable
+decision, not a second approval. The Tracker checks this block before closing P07 or recording
+code-bearing work; the full record and its evidence remain authoritative for the merits of the
+decision. A missing, malformed or incomplete block fails closed.
+
+Use these keys: `gate_id`, `increment_id`, `reviewed_manifest_id_and_hash`,
+`reviewed_git_commit`, `execution_state`, `outcome`, `decision_date`, `decision_authority`,
+`rationale`,
+`approved_pg2_requirements_baseline_and_evidence`,
+`approved_pg3_architecture_design_baseline_and_evidence`, `authorized_successor_increment`,
+`authorized_first_delivery_card`, `authorization_limits`, `authorization_state`, and
+`conditional_actions`.
+`reviewed_git_commit` is the full 40-character commit and the manifest reference contains its
+64-character SHA-256. Dates use `YYYY-MM-DD`. The current PH0 increment is
+`IE-INC-READY-001`; the planned PH1 successor is `IE-INC-PH1-FOUNDATION-CUSTODY-001`, starting
+with Delivery Card `F01-A`. A different successor requires a controlled planning change before
+the Tracker can open it. `PASS` and `PASS-WITH-ACTIONS` require recorded T011 and T016 review
+tasks as well as PG2/PG3 baseline evidence; a checked task marker alone is not proof of approval.
+
+For `FAIL` or `BLOCKED`, set both authorization fields to `NOT-APPLICABLE` and
+`authorization_state` to `INACTIVE`; P07 may still close
+because a decision was recorded, but no code-bearing card may begin. For `PASS`, use an empty
+`conditional_actions` array. For an effective pass, set `authorization_state` to `ACTIVE`;
+set it to `REOPENED` when a condition is breached or a superseding decision is required.
+For `PASS-WITH-ACTIONS`, each action must carry `action_id`,
+`description`, `owner`, `affected_baseline`, `due_condition_or_date`, `expiry`,
+`escalation_path`, `non_invalidating_rationale` and `evidence_link`. The Tracker rejects an
+expired action; `expiry` is an exact `YYYY-MM-DD` date. These structural checks cannot establish that the authority's judgment or a
+non-date condition remains valid; the gate owner must reopen the decision if a condition is
+breached.
 
 ## Execution-state semantics
 

@@ -14,7 +14,7 @@ Stack và không phê duyệt successor baseline.
 6. [canonical-scenario.md](canonical-scenario.md) — scenario bắt buộc, đường bình thường và đường lỗi.
 7. [environment-profile.md](environment-profile.md) — Ubuntu development host, Windows client boundary and setup limits; [server runbook](../../deploy/development/README.md) lists the P04 checks.
 8. [test-data-and-verification.md](test-data-and-verification.md) — fixture synthetic và ma trận kiểm tra.
-9. [recovery-and-security-plan.md](recovery-and-security-plan.md) — recovery, backup và security review.
+9. [recovery-and-security-plan.md](recovery-and-security-plan.md) — recovery, backup và security review; [D3 scope record](evidence/D3-REVIEW-SCOPE-20260924.md) ghi phạm vi và người được giao review; [P06 final disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md) ghi kết quả `PASS` và giới hạn bằng chứng.
 10. [research.md](research.md) và [data-model.md](data-model.md) — quyết định thiết kế hồ sơ.
 11. [quickstart.md](quickstart.md) — cách reviewer chạy các kiểm tra tài liệu.
 12. [contracts/](contracts/) — quy tắc cho manifest, decision/evidence và PG4.
@@ -30,7 +30,8 @@ Stack và không phê duyệt successor baseline.
 | Nội dung | Trạng thái |
 |---|---|
 | PH0 source package | `Draft` |
-| P01–P07 execution | P01, P04 and P05 `COMPLETE` / `PASS` within their documented scopes; P02, P03, P06 and P07 `NOT-RUN`. P05 covers synthetic fixture preparation only; its application checks and D4 PH1 gate disposition remain open. |
+| P01–P07 execution | P01, P04, P05 and P06 `COMPLETE / PASS` within their documented scopes. P06 is `PASS` for its PH0 documentary readiness scope; runtime recovery/security checks remain `NOT-RUN`. P02, P03 and P07 remain `NOT-RUN`. P05 covers synthetic fixture preparation only; its application checks and D4 PH1 gate disposition remain open. |
+| D3 review scope | Boss-approved PH1 scope and the user's direct Security/Verification assignment were reported and confirmed on 2026-09-24. The guided P06 review records the reviewer’s introductory competence basis, examined material, findings and documentary `PASS`; specialist runtime/operations review remains deferred under the no-claim condition. |
 | PG4 Gate Execution State | `NOT-RUN` |
 | PG4 Gate Outcome | `NOT-APPLICABLE` until an attributable decision |
 | Production implementation | Unauthorized |

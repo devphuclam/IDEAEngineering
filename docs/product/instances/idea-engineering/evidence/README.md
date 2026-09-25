@@ -9,8 +9,11 @@ product has been implemented or that a runtime behavior has passed.
 | Package | Why it remains expanded |
 |---|---|
 | [`IE-VEV-TECH-VIEW-004`](IE-VEV-TECH-VIEW-004/index.html) | Current TECH-D01…D08 rendition; Core v0 shows one configured Vault and a non-runtime future multi-vault extension seam. |
+| [`IE-VEV-P06-DIAGRAM-001`](IE-VEV-P06-DIAGRAM-001/index.html) | Focused successor for the two DOC-05@0.23 recovery views; it does not duplicate the full gallery. |
+| [`IE-VEV-WS-SCOPE-002`](IE-VEV-WS-SCOPE-002/index.html) | Current DOC-05@0.25 Check-in scope view; the three-branch policy is approved, while the architecture view and runtime tests remain unaccepted/unrun. |
+| [`IE-VEV-WS-SCOPE-001`](IE-VEV-WS-SCOPE-001/index.html) | Pre-approval DOC-05@0.24 rendition retained with its exact source/hash record. |
 | [`IE-VEV-TECH-VIEW-003`](IE-VEV-TECH-VIEW-003/index.html) | Predecessor Node.js 24 rendition retained for traceability. |
-| [`IE-VEV-VAULT-XFER-002`](IE-VEV-VAULT-XFER-002/index.html) | Latest pinned multi-location Vault successor views and three Vietnamese management figures. |
+| [`IE-VEV-VAULT-XFER-002`](IE-VEV-VAULT-XFER-002/index.html) | Pinned predecessor full-gallery multi-location Vault views and three Vietnamese management figures; the two P06 recovery views have a focused successor above. |
 | [`IE-VEV-VAULT-XFER-001`](IE-VEV-VAULT-XFER-001/index.html) | Predecessor Vault successor rendition retained for traceability. |
 | [`IE-VEV-ARCH-CORR-005`](IE-VEV-ARCH-CORR-005/index.html) | Exact architecture-rendition predecessor used by the 16-09 management-review baseline. |
 | [`IE-VEV-TECH-VIEW-002`](IE-VEV-TECH-VIEW-002/index.html) | Predecessor technology rendition retained for traceability. |
