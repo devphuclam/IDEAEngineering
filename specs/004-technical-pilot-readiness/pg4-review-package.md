@@ -77,8 +77,9 @@ Hashes prove reproducibility; they do not replace human approval.
 2. [Readiness register](readiness-register.md) — P01–P07 status, D0–D5 and action board.
 3. [P03/T016 decision evidence](evidence/P03-T016-DECISIONS-20260925.md).
 4. [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md).
-5. [P04](evidence/P04-ENV-REVIEW-20260924.md), [P05](evidence/P05-SERVER-FIXTURES-20260924.md), [P06](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md), and [P02](evidence/P02-T011-GUIDED-REVIEW-20260925.md) evidence.
-6. [PG4 gate contract](contracts/pg4-gate-record.md) — decision route and Tracker-readable record rules.
+5. [T031 checklist preview](evidence/P07-T031-CHECKLIST-PREVIEW-20260925.md) — reviewer response surface; it does not mark checklist items.
+6. [P04](evidence/P04-ENV-REVIEW-20260924.md), [P05](evidence/P05-SERVER-FIXTURES-20260924.md), [P06](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md), and [P02](evidence/P02-T011-GUIDED-REVIEW-20260925.md) evidence.
+7. [PG4 gate contract](contracts/pg4-gate-record.md) — decision route and Tracker-readable record rules.
 
 ## 8. Prohibited inferences
 
