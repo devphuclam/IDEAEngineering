@@ -16,9 +16,11 @@ function Assert-Gate([bool]$ExpectedDecision, [bool]$ExpectedAuthorization, [str
     }
 }
 
-function Write-Gate($Value) {
+function Write-Gate($Value, [switch]$CrLf) {
     $json = $Value | ConvertTo-Json -Depth 20
-    [System.IO.File]::WriteAllText($gatePath, "# PG4 test fixture`n`n" + '```pg4-authorization' + "`n$json`n" + '```' + "`n")
+    $content = "# PG4 test fixture`n`n" + '```pg4-authorization' + "`n$json`n" + '```' + "`n"
+    if ($CrLf) { $content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n") }
+    [System.IO.File]::WriteAllText($gatePath, $content)
 }
 
 try {
@@ -55,6 +57,8 @@ try {
 
     [System.IO.File]::WriteAllText($tasksPath, "- [x] T011 reviewed`n- [x] T016 reviewed`n")
     Assert-Gate $true $true 'PASS with reviewed prerequisites'
+    Write-Gate $gate -CrLf
+    Assert-Gate $true $true 'PASS with CRLF gate record'
 
     $gate.outcome = 'PASS-WITH-ACTIONS'
     Write-Gate $gate

@@ -21,7 +21,7 @@ function Get-Pg4Authorization {
     }
 
     $content = Get-Content -LiteralPath $path -Raw -Encoding UTF8
-    $blocks = [regex]::Matches($content, '(?ms)^```pg4-authorization[ \t]*\r?\n(?<json>.*?)\r?\n```[ \t]*$')
+    $blocks = [regex]::Matches($content, '(?ms)^```pg4-authorization[ \t]*\r?\n(?<json>.*?)\r?\n```[ \t]*\r?$')
     if ($blocks.Count -ne 1) {
         return & $denied 'Hồ sơ PG4 phải có đúng một khối pg4-authorization.'
     }
