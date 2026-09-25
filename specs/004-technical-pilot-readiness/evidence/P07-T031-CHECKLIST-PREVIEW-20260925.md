@@ -9,7 +9,10 @@
 
 Mỗi dòng dưới đây trả lời: tiêu chí đang hỏi gì, hồ sơ nào chứng minh và có giới hạn nào không.
 `PROPOSED PASS` chỉ là đề xuất để reviewer đọc; chỉ reviewer mới chuyển `[ ]` thành `[x]` trong
-`checklists/readiness.md`. Một mục `PASS` không có nghĩa sản phẩm đã chạy và không tự tạo PG4.
+`checklists/readiness.md`. CHK016 đã được reviewer đánh dấu trước đó. CHK030 dùng câu cũ chỉ nói
+`PG4 PASS`; CHK033 đã thay thế bằng quy tắc đầy đủ gồm cả `PASS-WITH-ACTIONS`. Đề nghị ghi
+CHK030 là `SUPERSEDED`, không đánh dấu `[x]`. Một mục `PASS` không có nghĩa sản phẩm đã chạy và
+không tự tạo PG4.
 
 | Items | Nội dung đối chiếu | Evidence / giới hạn | Đề xuất |
 |---|---|---|---|
@@ -18,13 +21,14 @@ Mỗi dòng dưới đây trả lời: tiêu chí đang hỏi gì, hồ sơ nào
 | CHK011–CHK015 | Mỗi decision có owner, due condition, closure evidence, gate effect và reopen trigger; recommendation khác authority; `BLOCKED`/`NOT-RUN`/defer không bị coi là success | [readiness register](../readiness-register.md) §5; [P03/T016](P03-T016-DECISIONS-20260925.md) | `PROPOSED PASS` |
 | CHK016–CHK021 | Environment, fixture/provenance/identity/digest, logical location vs failure domain, failure matrix, coordinated recovery và reviewer competence đều có yêu cầu rõ | [environment profile](../environment-profile.md); [test data](../test-data-and-verification.md); [recovery/security plan](../recovery-and-security-plan.md); P04/P05/P06 evidence | `PROPOSED PASS`; CHK016 đã reviewer-marked |
 | CHK022–CHK024 | Intake bao phủ software/source/content/model/dataset/font/asset/service; source/version/license trước import; internal-first tách khỏi Commercial Readiness Gate | [external-source-intake](../../../docs/agents/external-source-intake.md); readiness register D5; [native runtime intake](../../../docs/research/2026-09-23-p04-ubuntu-native-runtime-intake.md) | `PROPOSED PASS` |
-| CHK025–CHK030 | Mỗi P01–P07 có owner/source/result/evidence; PG4 chỉ authorize successor cụ thể; missing evidence/authority chặn; prohibited inferences đủ; không tự thêm performance threshold; không code trước PG4 PASS | [readiness register](../readiness-register.md); [PG4 package](../pg4-review-package.md); [PG4 contract](../contracts/pg4-gate-record.md) | `PROPOSED PASS` |
+| CHK025–CHK029 | Mỗi P01–P07 có owner/source/result/evidence; PG4 chỉ authorize successor cụ thể; missing evidence/authority chặn; prohibited inferences đủ; không tự thêm performance threshold | [readiness register](../readiness-register.md); [PG4 package](../pg4-review-package.md); [PG4 contract](../contracts/pg4-gate-record.md) | `PROPOSED PASS` |
+| CHK030 | Câu lịch sử chỉ nêu `PG4 PASS`, thiếu nhánh `PASS-WITH-ACTIONS` hợp lệ | [CHK033](../checklists/readiness.md) và [PG4 contract](../contracts/pg4-gate-record.md) ghi quy tắc đang áp dụng | `SUPERSEDED` — không đánh dấu `[x]` |
 | CHK031–CHK033 | Gate Execution State, Gate Outcome và check result tách nhau; conditional action đủ owner/baseline/due/expiry/escalation/rationale; authorization chỉ mở exact successor với PG2/PG3 + attributable PASS/PASS-WITH-ACTIONS | [PG4 contract](../contracts/pg4-gate-record.md); [quickstart](../quickstart.md); [PG4 package](../pg4-review-package.md) | `PROPOSED PASS` |
 
 ## Reviewer response surface
 
 Anh có thể trả lời theo một trong hai cách:
 
-1. `Xác nhận T031 theo đề xuất` — tôi sẽ đánh dấu CHK001–CHK033 sau khi ghi lại xác nhận này.
+1. `Xác nhận T031 theo bản đã sửa` — tôi sẽ đánh dấu 31 mục đang chờ mà anh chấp nhận; giữ
+   CHK016 đã đánh dấu và ghi CHK030 là `SUPERSEDED` không đánh dấu.
 2. Nêu nhóm hoặc mã CHK cần sửa — tôi sẽ sửa hồ sơ, không đánh dấu mục đó cho đến khi anh xác nhận lại.
-
