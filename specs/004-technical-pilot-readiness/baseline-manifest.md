@@ -68,6 +68,38 @@ These hashes identify the working-copy source prepared for the controlled succes
 commit pin is `NOT-YET-RECORDED`; no uncommitted source is represented as if it had a Git commit ID.
 Q-15 remains `PARTIAL / NO WINNER`; Product Scope, PG3 and PG4 are unchanged.
 
+### 2.4 T023 frozen PH1 gate-review input
+
+For T023, the PH1 gate-review input is frozen to commit
+`a9924f467585354cda8017b0f578954a8af0dfd7`. The commit is the exact
+repository object from which the following source hashes are recomputed; this table does not turn
+Draft product documents into Approved documents. The authority record for the reported 2026-09-25
+PG2/PG3 decision is [`IE-CHG-PDA-APPROVAL-004`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md).
+PG3 use is bounded to PH1 F01–F05 while ADR-0009 remains `Proposed`.
+
+| Axis | Stable document ID | Version | Repository path | Git commit | SHA-256 | Authority / disposition |
+|---|---|---:|---|---|---|---|
+| Feature | `FEATURE-001` | 0.12 | `docs/product/instances/idea-engineering/decision-briefs/FEATURE-001-feature-definition-and-scope.md` | `a9924f4...` | `7EA54E945F8DD110BE73485EBD697FDDAB58DFC34912C8055FA1691DD71A461B` | Approved predecessor axis; 14 Feature groups retained |
+| Business requirements | `IE-PROD-BREQ-001` | 0.7 | `docs/product/instances/idea-engineering/DOC-03-business-requirements.md` | `a9924f4...` | `047602DF7DDD571A3445D0ED8BE4AEB47E6BD68262D8E6412039782637D4E0FC` | Current source; PG2 report applies to current set |
+| Spec | `IE-PROD-SREQ-001` | 0.15 | `docs/product/instances/idea-engineering/DOC-04-software-requirements-specification.md` | `a9924f4...` | `11120D2A7D57ABE5A2B1582DAD088635382998EA0A7B03EB1A94F44A9EB4310B` | Current source; PG2 report applies to current set |
+| Architecture | `IE-PROD-ARCH-001` | 0.26 | `docs/product/instances/idea-engineering/DOC-05-architecture-description.md` | `a9924f4...` | `8AD78E1B861BCE9A356E85096D8044588DAFA4E17C0CFAD2E16EAF61A1089323` | Current source; PG3 use bounded to PH1 because ADR-0009 remains Proposed |
+| Data / integration | `IE-PROD-DATA-001` | 0.18 | `docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md` | `a9924f4...` | `CEB2768CABE5F5AF477CCE0452B474B549EC052A4C48171F491882002C7580DE` | Current source; PG2/PG3 report applies to current set |
+| Roadmap | `IE-PROD-ROADMAP-001` | 0.17 | `docs/product/instances/idea-engineering/DOC-07-mvp-roadmap-and-delivery-plan.md` | `a9924f4...` | `A17DE9699C039DC4265D55FA1E025C55111F39E816FE4D166F95480163578288` | Planning source; no implementation authorization |
+| UI/UX | `IE-PROD-UX-001` | 0.13 | `docs/product/instances/idea-engineering/DOC-08-ui-ux-and-interaction-specification.md` | `a9924f4...` | `C60778FD2051067F98892CA15F353D654FBBD2EBA885287BBE35C05122CB1FB9` | Current source; PG2/PG3 report applies to current set |
+| Verification | `IE-VVP-CORE-001` | 0.19 | `docs/product/instances/idea-engineering/registers/VVP-core-v0-verification-validation-plan.md` | `a9924f4...` | `9FB09538D3A885CFE00FA8EFCD321F16691DBACA7B0BFCDC08FE2FB663F0C856` | Procedure source; execution remains NOT-RUN |
+| Product architecture | `IE-ARC-C1-001` | 0.4 | `docs/architecture/idea-product-lifecycle-architecture.md` | `a9924f4...` | `433B12D70C199608C4E482F7C796665FCB2AA823368F95179919BA5FD88CD1AB` | PG3 use bounded to PH1; ADR-0009 exception retained |
+| Technology views | `IE-ARC-TECH-VIEW-001` | 0.5 | `docs/product/instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md` | `a9924f4...` | `06B231DDC949AB2F129543969F4773FCB43E989FA76B7CA3608CAA0E1CCD760D` | Engineering-selected view set; Q-15 unchanged |
+| Tech brief | `TECH-001` | 0.16 | `docs/product/instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md` | `a9924f4...` | `FC110935B7F43AAB2832BB5D8B7FC550FBD73D19C3F79CC4CFDF7502964CF942` | Tech selection unchanged; exact runtime qualification separate |
+| Product spec brief | `SPEC-001` | 0.15 | `docs/product/instances/idea-engineering/decision-briefs/SPEC-001-product-specification.md` | `a9924f4...` | `48D1AEDB12AFA0740D9FBE8220D009F6507DBE04169634500F20BB6B214902E3` | Supporting brief; normative requirements remain DOC-04 |
+| Roadmap Appendix A | `IE-PROD-ROADMAP-001-APP-A` | 0.10 | `docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md` | `a9924f4...` | `0F1037858CA2CC18A8F8E78CE337BA7FDB086AD514F1F991037F9C6A1F82B6C6` | Current planning breakdown |
+| Kanban CARIO | `IE-PLAN-DEC2026-002-KANBAN` | 0.8 | `docs/product/instances/idea-engineering/planning/idea-technical-pilot-kanban-cario.md` | `a9924f4...` | `8AEBD9DBB3371EEFA2AE9B34513F460E44D089D4A49DA404A87992C9AE656163` | Current management tracking source |
+| P03 decision record | `P03-T016-DECISIONS-20260925` | 0.1 | `specs/004-technical-pilot-readiness/evidence/P03-T016-DECISIONS-20260925.md` | `a9924f4...` | `46C4D756B7DE605167D0D3A9E87A82721817C994BAA2C0DECE535B772E464C` | Documentary `PASS`; does not authorize PG4 |
+| PG2/PG3 authority record | `IE-CHG-PDA-APPROVAL-004` | 0.1 | `docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md` | `a9924f4...` | `039DD4951CDF9E05A7C0CD605E98B0073C149A204458B335905217C8F396B0AD` | Reported boss approval, dated 2026-09-25; PH1 scope and ADR-0009 exception explicit |
+
+ADR status included in this freeze: ADR-0010–0013 are `accepted` under the authority record above;
+ADR-0009 remains `proposed` because its graphical-workflow wording conflicts with the approved
+Core v0 scope. This is a gate-input classification, not a new product requirement.
+
 ### 2.2 Core v0 one-Vault view correction — 2026-09-23
 
 The current technology view set keeps the selected multi-vault extension boundary but depicts only
@@ -178,9 +210,9 @@ erase the recorded P01 result.
 The approved product baseline, later product-source deltas, P01-reviewed planning baseline and current
 planning successor are identifiable from one manifest. The Project Reviewer recorded P01
 `COMPLETE / PASS` on 22-09-2026 for the exact Git source in Section 3.2 and accepted the three
-discrepancy dispositions. The Vault direction remains one operational endpoint for Core v0 with a
-future one-to-many custody seam. Exact successor approval remains separate, D0 remains open for its
-formal T016/PG4 disposition, and PG4 remains `NOT-RUN`.
+discrepancy dispositions. That was the P01-time state; the later T016 record in Section 2.4
+captures the 2026-09-25 PH1 decision scope. The Vault direction remains one operational endpoint
+for Core v0 with a future one-to-many custody seam, and PG4 remains `NOT-RUN`.
 
 ## 6. Author reconciliation record
 
@@ -200,3 +232,14 @@ formal T016/PG4 disposition, and PG4 remains `NOT-RUN`.
 | Method | Compare the P01-reviewed plan `0.1` at commit `303b7225...` with the current plan `0.2` at commit `8c3e1af7...`; compute SHA-256 from Git blob bytes; verify that `IE-CHG-PLAN-ID-001` declares no Feature, Spec, Tech, Product Scope, Q-15, PDA, PG3 or PG4 change |
 | Result | `PASS` — the reviewed planning input and current planning successor are separately identified and reproducible |
 | Scope of result | Planning-source identity and non-impact only; P01 remains the recorded Project Reviewer result for its exact input; this correction does not resolve D0 or authorize PH1 |
+
+### 6.2 T023 freeze record
+
+| Field | Result |
+|---|---|
+| Frozen commit | `a9924f467585354cda8017b0f578954a8af0dfd7` |
+| Frozen by / date | Principal Product Author / 2026-09-25 |
+| Scope | Current Feature/Spec/Tech-supporting sources, roadmap/planning sources, ADR status and P03/T016 authority evidence listed in Section 2.4 |
+| Result | `FROZEN_FOR_REVIEW` — hashes are reproducible from the exact commit; no approval is inferred from a hash |
+| Known limitation | The frozen source documents retain their own `Draft`/`NOT-RUN` prose where applicable. PG3 gate use is bounded to PH1 F01–F05 because ADR-0009 remains Proposed. |
+| Next action | Run T024 checks and prepare T025 review package from this commit; do not use this freeze as PG4 authorization. |
