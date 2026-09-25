@@ -1,7 +1,7 @@
 # PH0 Trace Matrix
 
 **Increment**: `IE-INC-READY-001`
-**Version / status**: `0.5` / Draft; T009 author trace prepared; P02/T011 reviewer walkthrough `NOT-RUN`; P04/P05/P06 scoped results `PASS`, application verification `NOT-RUN`
+**Version / status**: `0.6` / Draft; T009 author trace prepared; P02/T011 reviewer walkthrough `NOT-RUN`; P04/P05/P06 scoped results `PASS`, application verification `NOT-RUN`
 **Purpose**: Một mặt phẳng trace để nối work package, yêu cầu readiness và nguồn sản phẩm đã
 được duyệt. Tài liệu này không tạo `REQ-*` mới và không thay DOC-04.
 
@@ -26,7 +26,7 @@ Các nguồn sản phẩm trong bảng dưới đây là các phiên bản của
 [`IE-CHG-PDA-APPROVAL-002`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-19-pda-approval-approval-policy.md)
 cho Approval Policy và
 [`IE-CHG-PDA-APPROVAL-003`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pda-approval-checkin-scope.md)
-cho ba nhánh Check-in. `DOC-05@0.25` và `VVP@0.19` là nguồn Draft hỗ trợ đối chiếu hai quyết định
+cho ba nhánh Check-in. `DOC-05@0.26` và `VVP@0.19` là nguồn Draft hỗ trợ đối chiếu hai quyết định
 có phạm vi hẹp này, không phải toàn bộ successor đã được duyệt. `NOT-RUN` là trạng thái
 verification của PH0, không phải thiếu ID.
 
@@ -36,14 +36,15 @@ verification của PH0, không phải thiếu ID.
 | Logical Document and exact Generation | `P02` | `FR-004`, `SC-002` | `REQ-ID-001…009`, `REQ-WS-001…004` | `DOC-05@0.20 §1, §7.1`; `ARCH-VIEW-SEQ-001` | `VVP-001`, `IF-01…06` | `canonical-scenario.md` | `NOT-RUN` | Source pin is predecessor; successor delta is not inherited. |
 | Explicit Checkout/Reference scope | `P02` | `FR-004`, `SC-002` | `REQ-WS-001…003` | `DOC-05@0.20 §7.1`; `ARCH-VIEW-SEQ-001` | `VVP-002`, `WS-01` | `canonical-scenario.md` | `NOT-RUN` | No hidden cascade. |
 | Materialize and digest-check Workspace | `P02` | `FR-004`, `SC-002` | `REQ-WS-003/004` | `DOC-05@0.20 §7.1`; `IF-ARTIFACT-TRANSFER` | `VVP-002` | `canonical-scenario.md` | `NOT-RUN` | Local path/OS association require P04. |
-| Scan and confirm Check-in scope | `P02` | `FR-004`, `SC-002/003` | `REQ-WS-005/006` | `DOC-05@0.20 §5.3, §7.1` predecessor; `DOC-05@0.25 ARCH-VIEW-ACT-004` Draft view of the scoped approved policy | `VVP-002`, `WS-02`; planned `WS-09…11` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | `IE-CHG-PDA-APPROVAL-003` approves the three dispositions only; no blanket DOC-05 or runtime approval. |
-| Unknown required-dependency scope | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-005/006/010/013` | `DOC-05@0.25 ARCH-VIEW-ACT-004` (Draft view); `IE-CHG-PDA-APPROVAL-003` (policy authority) | `VVP-002`, `WS-09` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | Block, identify unresolved file/reason, preserve local bytes and still-valid Reservations. |
-| Required unreserved change | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-005/006/007/010/013` | `DOC-05@0.25 ARCH-VIEW-ACT-004` (Draft view); `IE-CHG-PDA-APPROVAL-003` (policy authority) | `VVP-002/003`, `WS-10` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | Block the complete proposal; no partial publication or loss of still-valid Reservations. |
-| Proven unrelated unreserved change | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-005/006/007/010/013` | `DOC-05@0.25 ARCH-VIEW-ACT-004`, `ARCH-VIEW-SEQ-002` (Draft views); `IE-CHG-PDA-APPROVAL-003` (policy authority) | `VVP-002/003`, `WS-11` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | Exclude with visible `Modified without Checkout`, require reduced-scope reconfirmation and revalidate at commit. |
+| Scan and confirm Check-in scope | `P02` | `FR-004`, `SC-002/003` | `REQ-WS-005/006` | `DOC-05@0.20 §5.3, §7.1` predecessor; `DOC-05@0.26 ARCH-VIEW-ACT-004` Draft view of the scoped approved policy | `VVP-002`, `WS-02`; planned `WS-09…11` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | `IE-CHG-PDA-APPROVAL-003` approves the three dispositions only; no blanket DOC-05 or runtime approval. |
+| Unknown required-dependency scope | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-005/006/010/013` | `DOC-05@0.26 ARCH-VIEW-ACT-004` (Draft view); `IE-CHG-PDA-APPROVAL-003` (policy authority) | `VVP-002`, `WS-09` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | Block, identify unresolved file/reason, preserve local bytes and still-valid Reservations. |
+| Required unreserved change | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-005/006/007/010/013` | `DOC-05@0.26 ARCH-VIEW-ACT-004` (Draft view); `IE-CHG-PDA-APPROVAL-003` (policy authority) | `VVP-002/003`, `WS-10` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | Block the complete proposal; no partial publication or loss of still-valid Reservations. |
+| Proven unrelated unreserved change | `P02` | `FR-004`, `SC-003/005` | `REQ-WS-005/006/007/010/013` | `DOC-05@0.26 ARCH-VIEW-ACT-004`, `ARCH-VIEW-SEQ-002` (Draft views); `IE-CHG-PDA-APPROVAL-003` (policy authority) | `VVP-002/003`, `WS-11` in VVP@0.19 | `canonical-scenario.md` | `NOT-RUN` | Exclude with visible `Modified without Checkout`, require reduced-scope reconfirmation and revalidate at commit. |
 | Private resumable byte transfer | `P02` | `FR-004`, `SC-005` | `REQ-WS-012/015`, `REQ-OPS-001` | `DOC-05@0.20 §9.1`; `ARCH-VIEW-SEQ-006` | `VVP-003`, `WS-08` | `canonical-scenario.md` | `NOT-RUN` | Direct multi-location `REQ-WS-016` is a later successor/D1 qualification, not an approved predecessor trace. |
 | Changed atomic Check-in | `P02` | `FR-004`, `SC-002/005` | `REQ-WS-007/009/013` | `DOC-05@0.20 §7.2`; `ARCH-VIEW-STATE-004` | `VVP-003`, `WS-02/03` | `canonical-scenario.md` | `NOT-RUN` | Logical all-or-none, not a claim about physical transfer transaction. |
 | NoChange Check-in | `P02` | `FR-004`, `SC-002` | `REQ-WS-008`, `REQ-WS-012/013` | `DOC-05@0.20 §7.2` | `VVP-003`, `QRS-001/002` | `canonical-scenario.md` | `NOT-RUN` | No new Generation or Version. |
 | Review exact Generation | `P02` | `FR-004`, `SC-002` | `REQ-LC-001/002` | `DOC-05@0.20 §7.3`; `ARCH-VIEW-SEQ-003` | `VVP-006`, `WF-01…03` | `canonical-scenario.md` | `NOT-RUN` | Workflow source remains Draft product input. |
+| Review content-revision attempt | `P02` | `FR-004`, `SC-002/005` | `REQ-LC-002/005` | `DOC-05@0.20 §7.3` predecessor; `DOC-05@0.26 ARCH-VIEW-STATE-001/SEQ-003` Draft clarification | `VVP-006`, `WF-03/05` | `canonical-scenario.md` | `NOT-RUN` | Local edit alone does not change the pinned Generation. Changed Check-in is refused during `Under Review`; Withdraw/Reject closes the Round before a new Check-in and resubmission. |
 | Independent decision evidence | `P02` | `FR-004`, `SC-002` | `REQ-LC-003/004/005` | `DOC-05@0.20 §7.3` predecessor; `IE-CHG-PDA-APPROVAL-002` limited policy authority | `VVP-006`, `WF-04…06` | `canonical-scenario.md` | `NOT-RUN` | Pilot uses seeded independent policy; validated versioned policy may separately allow self-approval. Two identities are not two humans. |
 | Exact Release and package | `P02` | `FR-004`, `SC-002` | `REQ-LC-006/007/008`, `REQ-STR-001…005` | `DOC-05@0.20 §7.3`; `ARCH-VIEW-SEQ-003` | `VVP-006`, `SR-01…06` | `canonical-scenario.md` | `NOT-RUN` | Approver identity needs separate applicable Release eligibility; Approval is not Release authority. Release scope is confirmed with no silent cascade. |
 | Historical package retrieval | `P02` | `FR-004`, `SC-002` | `REQ-LC-008/009`, `REQ-STR-001/002` | `DOC-05@0.20 §7.3` | `VVP-006`, `SR-06` | `canonical-scenario.md` | `NOT-RUN` | Exact digest/provenance must be compared. |
@@ -75,3 +76,4 @@ verification của PH0, không phải thiếu ID.
 | 0.3 | 2026-09-18 | Làm rõ trace Audit của P02 bằng `REQ-AUD-001/002` thay cho wildcard `REQ-AUD-*`; không thay đổi hành vi, scope hoặc verification result. | DOC-04 `REQ-AUD-001/002`; review-assistant correction |
 | 0.4 | 2026-09-24 | Đồng bộ kết quả P04/P05 đã review vào trace; giữ ứng dụng, D4 và PG4 ở trạng thái chưa chạy. | `P04-ENV-REVIEW-20260924`; `P05-SERVER-FIXTURES-20260924` |
 | 0.5 | 2026-09-25 | Gắn hai quyết định chính sách được duyệt có phạm vi hẹp vào P02; trace riêng ba nhánh Check-in, làm rõ quyền Release và giữ phân biệt predecessor với Draft successor. T011 và kiểm thử ứng dụng chưa chạy. | `IE-CHG-PDA-APPROVAL-002/003`; `canonical-scenario.md@0.2` |
+| 0.6 | 2026-09-25 | Trace the refused changed Check-in under `Under Review` and the new Round after Withdraw/Reject; point the scoped Draft view references to DOC-05@0.26. T011 and runtime verification remain `NOT-RUN`. | `canonical-scenario.md@0.3`; `IE-CHG-P07-T011-001` |

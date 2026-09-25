@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Architecture Description
 
-> **Instance state**: controlled `Draft 0.25`. This document describes a candidate architecture for
+> **Instance state**: controlled `Draft 0.26`. This document describes a candidate architecture for
 > the recorded product direction and Draft requirements. It does not approve a technology stack,
 > authorize production implementation, or record a successful architecture review.
 
@@ -13,7 +13,7 @@
 | Title | IDEA Engineering Core v0 Architecture Description |
 | Owner | `Principal Product Author`; named person attribution required before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.25` |
+| Document Version | `0.26` |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` / candidate `IE-TECH-CORE-V0-001` |
 | Requirements Input | `IE-PROD-SREQ-001@0.15`; exact successor Feature/Spec decision remains `NOT-RUN` |
 | Effective Date | `NOT APPLICABLE` until approval |
@@ -23,8 +23,8 @@
 | Source Links | [DOC-04](DOC-04-software-requirements-specification.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [architecture input](../../../architecture/idea-product-lifecycle-architecture.md), [ADR index](../../../adr/README.md), [RBAC/diagram source analysis](../../../research/2026-09-10-microsoft-rbac-and-architecture-diagram-standards.md), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [Vault-transfer provenance](../../../research/2026-09-17-vault-transfer-and-multi-location-provenance.md) |
 | Downstream Links | [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), [TECH-001](decision-briefs/TECH-001-technology-and-architecture-proposal.md), future implementation contracts and evidence |
 | Evidence / Claim Status | Architecture and technology evaluation are `Draft`; tests, spikes and operational evidence are `NOT-RUN` |
-| Latest Change (0.25) | Align `ARCH-VIEW-ACT-004` and its text with the Product Decision Authority-approved three-branch Check-in scope policy; preserve the Draft status of the architecture view and `REQ-WS-006` unchanged. See [IE-CHG-PDA-APPROVAL-003](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). |
-| Change History | 0.24: add a focused Check-in scope-decision activity distinguishing unknown dependency scope, required unreserved changes and unrelated unreserved changes; record the reviewer-selected candidate handling without changing `REQ-WS-006` or implying Product Decision Authority approval; [IE-CHG-WS-SCOPE-001](registers/CHG-2026-09-25-checkin-scope-decision-clarification.md). 0.23: correct the reopen result in `ARCH-VIEW-SEQ-011` and add `ARCH-VIEW-ACT-003` to show guarded forward-repair, coordinated-recovery and remain-restricted choices without changing recovery obligations; [IE-CHG-P06-DIAGRAM-001](registers/CHG-2026-09-24-p06-recovery-diagram-clarification.md). 0.22: separate RBAC eligibility from Approval Policy self-approval, keep the seeded independent rule, and make policy conflict, Release separation and audit semantics explicit; [IE-CHG-APPROVAL-POLICY-001](registers/CHG-2026-09-19-approval-policy-self-approval.md). 0.21: separate Artifact control/data planes; add Artifact Gateway and multi-location Vault custody to container, deployment, Check-in, materialization, transfer, storage-evolution and trust views; exact Gateway runtime, provider and durability thresholds remain unselected and `NOT-RUN`; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
+| Latest Change (0.26) | Split Create Copy from confirmed local discard in `ARCH-VIEW-SEQ-005` and clarify that a local edit does not change a submitted Generation. A changed Check-in is refused while the Revision is `Under Review`; Withdraw/Reject precedes any new Check-in and Review Round. No product behavior or authority state changes; see [IE-CHG-P07-T011-001](registers/CHG-2026-09-25-p07-t011-diagram-alignment.md). |
+| Change History | 0.25: align `ARCH-VIEW-ACT-004` and its text with the Product Decision Authority-approved three-branch Check-in scope policy; the view remains Draft; [IE-CHG-PDA-APPROVAL-003](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). 0.24: add a focused Check-in scope-decision activity distinguishing unknown dependency scope, required unreserved changes and unrelated unreserved changes; record the reviewer-selected candidate handling without changing `REQ-WS-006` or implying Product Decision Authority approval; [IE-CHG-WS-SCOPE-001](registers/CHG-2026-09-25-checkin-scope-decision-clarification.md). 0.23: correct the reopen result in `ARCH-VIEW-SEQ-011` and add `ARCH-VIEW-ACT-003` to show guarded forward-repair, coordinated-recovery and remain-restricted choices without changing recovery obligations; [IE-CHG-P06-DIAGRAM-001](registers/CHG-2026-09-24-p06-recovery-diagram-clarification.md). 0.22: separate RBAC eligibility from Approval Policy self-approval, keep the seeded independent rule, and make policy conflict, Release separation and audit semantics explicit; [IE-CHG-APPROVAL-POLICY-001](registers/CHG-2026-09-19-approval-policy-self-approval.md). 0.21: separate Artifact control/data planes; add Artifact Gateway and multi-location Vault custody to container, deployment, Check-in, materialization, transfer, storage-evolution and trust views; exact Gateway runtime, provider and durability thresholds remain unselected and `NOT-RUN`; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.20: redraw the visually dense `ARCH-VIEW-MOD-001` as a scoped C4 Component Diagram; [IE-CHG-DOC-REVIEW-001@0.2](registers/CHG-2026-09-14-post-pull-document-review-corrections.md). Earlier history remains in the controlled change records. |
 | Access Classification / Retention Rule | `INTERNAL`; retain with the controlled product baseline and successor/change records |
 
 <!-- AUTHOR CONTENT START -->
@@ -1014,7 +1014,7 @@ visible and attributable.
 ### 7.1.1 Modified Reference handling
 
 **`ARCH-VIEW-SEQ-005` — Modified Reference decision sequence.** **Model profile:** UML Sequence;
-`Draft 0.12`; engineer and support reviewers. **Question:** which server check permits conversion,
+`Draft 0.13`; engineer and support reviewers. **Question:** which server check permits conversion,
 and what remains safe when it fails? **Scope:** one locally modified Reference entry, its Workspace
 and its expected Generation. **Excludes:**
 automatic CAD/Office merge and generic file comparison. **Trace:** `REQ-WS-003/010/011/014`,
@@ -1029,8 +1029,9 @@ changes the original Logical Document.
    Generation. It succeeds only when that Generation remains current and no other active Reservation
    exists.
 4. If the Generation is stale or unavailable, Workspace preserves the local candidate and lets the
-   user keep a safe copy, materialize the current Generation separately, create a new Logical
-   Document, or discard only after confirmation. CAD/Office content is never auto-merged.
+   user keep a safe copy, materialize the current Generation separately, or create a new Logical
+   Document. Discard affects only the local candidate and requires separate confirmation. CAD/Office
+   content is never auto-merged.
 
 ```mermaid
 sequenceDiagram
@@ -1055,19 +1056,27 @@ sequenceDiagram
             Desktop-->>Engineer: Local candidate is now eligible for later Check-in
         else stale or held by another actor
             Product-->>Desktop: Refuse with current Generation and safe actions
-            Note over Workspace: Keep local candidate unchanged
+            Workspace-->>Desktop: Local candidate retained
         end
     else Keep latest and local work
         Workspace->>Workspace: Preserve local copy and materialize current separately
-    else Create Copy or confirmed discard
-        Desktop->>Server: Create new document, or fetch current after confirmation
+    else Create Copy
+        Engineer->>Desktop: Create Copy from local candidate
+        Desktop->>Server: Request new Logical Document under normal rules
+        Server-->>Desktop: Return new DocumentId or refusal
+        Desktop-->>Engineer: Original document unchanged
+    else Confirm local discard
+        Engineer->>Desktop: Confirm discard of local candidate
+        Desktop->>Workspace: Discard local candidate after confirmation
+        Workspace-->>Desktop: Only local candidate discarded
+        Desktop-->>Engineer: Original document unchanged
     end
 ```
 
 Text alternative: a modified Reference is detected locally and cannot be checked in. Conversion to
 a working copy requires a fresh server Checkout against the same current Generation. If that check
 fails, the original document remains unchanged and the user's local bytes remain available for safe
-copy, comparison/manual reapplication, Create Copy or confirmed discard.
+copy, comparison/manual reapplication, Create Copy or separately confirmed local discard.
 
 ### 7.2 Check-in and stale recovery
 
@@ -1392,7 +1401,8 @@ branches are mutually exclusive lifecycle outcomes; dashed arrows are returned a
    or an explicitly permitted selection, then pins that Workflow Definition and Approval Policy.
 3. A later definition activation affects future instances only; migration of a running instance is
    a separately authorized, previewed and audited operation.
-4. A content-changing Check-in is blocked while the Business Revision is Under Review. The submitter
+4. A local Workspace edit alone does not change the submitted Generation or its Review Round. A
+   content-changing Check-in is blocked while the Business Revision is Under Review. The submitter
    may Withdraw or a reviewer may Reject; either closes the current Review Round and returns to In
    Work. A later changed Check-in and resubmission creates a new Review Round and never inherits the
    earlier decision.

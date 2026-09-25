@@ -1,7 +1,7 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `4.1` / Draft; P01, P04, P05 and P06 `COMPLETE / PASS` for their stated
+**Version / status**: `4.2` / Draft; P01, P04, P05 and P06 `COMPLETE / PASS` for their stated
 scopes; P02, P03 and P07 remain `NOT-RUN`
 **Prepared**: 2026-09-19
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
@@ -35,7 +35,7 @@ scopes; P02, P03 and P07 remain `NOT-RUN`
 | PDA approval reporting rule | When the project user reports that the Product Decision Authority approved something, confirm the exact scope, baseline/hash and date with the user before recording it as PDA evidence. |
 | Approved predecessor authority | `IE-CHG-PDA-APPROVAL-001` pins the approved predecessor to `f269a0445737a7efd7f406ee51517149a8967afa` |
 | Approved predecessor axes | `FEATURE-001@0.12` — `APPROVED`; normative `DOC-04@0.13` — `APPROVED`; `TECH-001@0.14` — `APPROVED` |
-| Pinned successor snapshot for P01 | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the multi-location Vault source set are pinned at commit `109c766e...` in [baseline-manifest.md](baseline-manifest.md), Section 2. Newer Draft sources, including DOC-05@0.25 and VVP@0.19, are not retroactively part of that snapshot; T023 must freeze the exact successor reviewed for PG4. The Node.js 24 delta is in Section 2.1 and execution-planning sources in Sections 3.2–3.3. |
+| Pinned successor snapshot for P01 | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the multi-location Vault source set are pinned at commit `109c766e...` in [baseline-manifest.md](baseline-manifest.md), Section 2. Newer Draft sources, including DOC-05@0.26 and VVP@0.19, are not retroactively part of that snapshot; T023 must freeze the exact successor reviewed for PG4. The Node.js 24 delta is in Section 2.1 and execution-planning sources in Sections 3.2–3.3. |
 | Successor authority state | Mixed: `IE-CHG-PDA-APPROVAL-002` approves only the Approval Policy self-approval correction; `IE-CHG-VAULT-XFER-001` confirms the architecture-preserved Multi-location Artifact Custody direction; remaining exact successor approval is `NOT-RUN`. |
 | Proposed PG4 successor | `IE-INC-PH1-FOUNDATION-CUSTODY-001` — PH1 F01–F05, “Khung hệ thống chạy được”, 72h; proposal only, no feature directory exists |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
@@ -302,7 +302,7 @@ Chúng không thay thế review hoặc runtime evidence.
 
 | Review task | Prepared source identity | Reviewer state | Required action |
 |---|---|---|---|
-| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `DC7B98CBE33E26AE36D9F2A018F88FAA972011CE2B07C32ABE63D280C8354152`; `trace-matrix.md` SHA-256 `FBE28BF57FD929F0F19215B491430CB0DD427A2B4CE74C843D3B0264C27F04B2` (working-tree preparation; pin again at T023) | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
+| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `284E9F829EFE0EABFC4BFEB9AE836B6F86BF1B91A97C4C8F928720697C82B301`; `trace-matrix.md` SHA-256 `E9C66CE89F26C6529126265F9DD872E176BF65145B234158B7DCA0182DC0CADD` (working-tree preparation; pin again at T023) | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
 | T016 — decision review | Mục 5, `D0`–`D5`, P01 source snapshot `109c766e369793b0caa2c4cc3a576df528eddb92` plus analyzed package baseline `ad49bbf...`; [D3 scope evidence](evidence/D3-REVIEW-SCOPE-20260924.md) | `IN-PROGRESS` | D3 review is resolved for P06 documentary scope; authorities must record the remaining applicable dispositions with ID, date, baseline, evidence and reopen trigger. D0 must distinguish confirmed direction from exact successor approval. |
 | T022 — P04/P05/P06 result review | P04 profile SHA-256 `78D7E8905D6E79CBE2DD16E17631AE693DA39EA5872A24ED21A404A700036BFF`; [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md), SHA-256 `5B687457E19ADAB2F0B3F595E3D95CC828F1AB838494D3C794A80B9EADEF3CB1`. P05: `test-data-and-verification.md@0.4` SHA-256 `07526BB9490C548397AD85A689776EE8CEAC47FDE307025971743E92519AE007` and [server fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md), SHA-256 `2498FB0AB6DA1EEE80545C092BFFDACF0EEC35D31D1E11B62B224C77CBF4B4FF`; P06: `recovery-and-security-plan.md@0.5` SHA-256 `9B8064F1A1B3D5428D723B1BF87EB744C04A2B32E072C89C8B933A26D2657700`; [review disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md), SHA-256 `0A92FBE2B3DA99503CB841B39D5E0C95D3AA1A889767ED1D2500868BF44B73F6`; Steps 1–3 SHA-256 `81F37FB4FE952F66A051B9A4E614D22D6B0A1D57F33EAB5AC0315CCEC425F1A8`, `402DD9C73EE14F14F992BA46DBBA12522F2148DF2C5B57C80B9E912630179B3D`, `E89FED41A18F230FE32094F04B0B84E9F83F30097E821F667B2375F30CC980C9` | `COMPLETE` | Project Reviewer recorded P06 `PASS`; tracker P06 is `COMPLETED / PASS` at Execution Register revision 18. All three package results, reviewers, evidence links and hashes are present. |
 | T031 — checklist review | [readiness checklist](checklists/readiness.md), CHK016 reviewed for P04 environment-record completeness; other items remain unchecked; analyzed package baseline `ad49bbf...` | `IN-PROGRESS` | Project Reviewer evaluates remaining checklist items; checklist approval is quality evidence only and cannot authorize PG4 |
@@ -333,7 +333,7 @@ The Project Reviewer records one result for every row. No result is pre-filled.
 | `P02-R06` | Modified Reference cannot publish to its original Logical Document | `________` | `________________` |
 | `P02-R07` | Interrupted transfer preserves the candidate and provides recovery path | `________` | `________________` |
 | `P02-R08` | Lost response retries only the same `OperationId` and identical input | `________` | `________________` |
-| `P02-R09` | Review is invalidated when exact Generation or scope changes | `________` | `________________` |
+| `P02-R09` | Changed Check-in is refused during `Under Review`; local edits do not change the submitted Generation. Withdraw/Reject closes the Round before a revised Check-in and new Submit. | `________` | `________________` |
 | `P02-R10` | Invalid Release scope is refused without silent cascade | `________` | `________________` |
 | `P02-R11` | Historical Controlled Release Package is retrieved by exact digest/baseline | `________` | `________________` |
 | `P02-R12` | Mandatory, deferred and prohibited scope are distinct | `________` | `________________` |
@@ -341,8 +341,8 @@ The Project Reviewer records one result for every row. No result is pre-filled.
 
 | T011 capture field | Reviewer entry |
 |---|---|
-| Scenario SHA-256 | `1704BBA06BA13CD31310D624E6705450FAC99F0C87D6751D4EE803AF22E22134` |
-| Trace-matrix SHA-256 | `408B61494A10D9CB53FF763F3D38DD77FE15791347CEFD3780597DF0161D3B00` |
+| Scenario SHA-256 | `284E9F829EFE0EABFC4BFEB9AE836B6F86BF1B91A97C4C8F928720697C82B301` |
+| Trace-matrix SHA-256 | `E9C66CE89F26C6529126265F9DD872E176BF65145B234158B7DCA0182DC0CADD` |
 | Reviewer identity | `________________` |
 | Review date | `________________` |
 | Overall T011 disposition | `PASS` / `FAIL` / `BLOCKED` |
@@ -394,7 +394,7 @@ Reviewer phải ghi kết quả cho từng mục, không chỉ ghi một nhận 
 | `P02-R06` | Modified Reference không bị ghi vào tài liệu gốc | `canonical-scenario.md` §6 |
 | `P02-R07` | Interrupted transfer giữ candidate và có đường recovery | `canonical-scenario.md` §6; `recovery-and-security-plan.md` §2.1 |
 | `P02-R08` | Lost response chỉ retry cùng OperationId và input hợp lệ | `canonical-scenario.md` §6; `test-data-and-verification.md` §4 |
-| `P02-R09` | Review bị invalidated khi exact Generation hoặc scope thay đổi | `canonical-scenario.md` §6 |
+| `P02-R09` | Chặn changed Check-in khi `Under Review`; local edit không đổi Generation đã gửi. Withdraw/Reject rồi mới Check-in và gửi Round mới | `canonical-scenario.md` §6; `ARCH-VIEW-STATE-001`, `ARCH-VIEW-SEQ-003` |
 | `P02-R10` | Invalid Release scope bị chặn, không silent cascade | `canonical-scenario.md` §6–§7 |
 | `P02-R11` | Historical Controlled Release Package truy xuất đúng digest/baseline | `canonical-scenario.md` §4; `trace-matrix.md` §2 |
 | `P02-R12` | Mandatory/deferred/prohibited scope được phân biệt | `canonical-scenario.md` §7 |
@@ -607,3 +607,4 @@ vẫn cần hoàn tất. Không có đường tắt từ hồ sơ tác giả san
 | 3.9 | 2026-09-24 | Record the Project Reviewer's acceptance of the remaining identity, transfer, local-execution, transaction/Audit and coordinated-recovery controls. Set the P06 documentary result to `PASS` while retaining every runtime check as `NOT-RUN`. | [Final guided-review disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md); `recovery-and-security-plan.md@0.4` |
 | 4.0 | 2026-09-24 | Close the P06 Delivery Card as `COMPLETED / PASS` at Execution Register revision 18; reconcile P06 and T022 states, exact evidence hashes, actual effort and remaining effort. P02/P03/P07, PG4 and P06 runtime checks remain separate. | [P06 final disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md); [Execution Register](../../planning/idea-technical-pilot-execution-register.json) |
 | 4.1 | 2026-09-25 | Separate P07 review-time accounting from the later T026/PG4 decision; correct the T011 preparation hashes, D3 handoff wording and pre-PG4 dependency description. No P02/P03/P07 or PG4 result is inferred. | P07 Kanban@0.8; PG4 gate contract and Tracker boundary check |
+| 4.2 | 2026-09-25 | Align the T011 Review-change wording and preparation hashes with the corrected scenario, trace and DOC-05@0.26 view. Keep all 13 reviewer results and P02/P07/PG4 outcomes unfilled pending review. | `IE-CHG-P07-T011-001`; `IE-VEV-P07-T011-001` |

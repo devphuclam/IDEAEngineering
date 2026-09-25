@@ -1,0 +1,26 @@
+{
+  "evidenceId": "IE-VEV-P07-T011-001",
+  "renderedAt": "2026-09-25T06:45:22.367Z",
+  "browser": "154.0.8037.57",
+  "mermaid": "11.12.0",
+  "sources": [
+    {
+      "name": "DOC-05-architecture-description.md",
+      "sha256": "8ad78e1b861bce9a356e85096d8044588dafa4e17c0cfad2e16eaf61a1089323"
+    },
+    {
+      "name": "DOC-06-data-integration-and-migration-specification.md",
+      "sha256": "ceb2768cabe5f5af477cce0452b474b549ec052a4c48171f491882002c7580de"
+    }
+  ],
+  "results": [
+    {
+      "id": "ARCH-VIEW-SEQ-005",
+      "title": "Modified Reference decision sequence",
+      "description": "A changed local Reference cannot be checked in. The engineer may request Checkout against its exact expected Generation. Only a still-current and available Generation yields a new Reservation while keeping local bytes. Otherwise the original document is unchanged and the local candidate remains available for safe copy, current-file comparison, deliberate reapplication, Create Copy or confirmed discard.",
+      "status": "PASS — RENDER",
+      "diagramSha256": "73bd8f823ab1c382e5f794f6851b0729f14982eab85af807215ff8186ab3f9e2",
+      "svgSha256": "bd84c32d0f793e10852db9169c43a1fb7867ddbb35e92922061cfe35d228cba7"
+    }
+  ]
+}

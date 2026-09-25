@@ -1,0 +1,37 @@
+sequenceDiagram
+    accTitle: Modified Reference decision sequence
+    accDescr: A changed local Reference cannot be checked in. The engineer may request Checkout against its exact expected Generation. Only a still-current and available Generation yields a new Reservation while keeping local bytes. Otherwise the original document is unchanged and the local candidate remains available for safe copy, current-file comparison, deliberate reapplication, Create Copy or confirmed discard.
+
+    actor Engineer
+    participant Desktop as IDEA Desktop
+    participant Workspace as Workspace process
+    participant Server as IDEA Server
+    participant Product as Controlled Product Data
+
+    Workspace->>Workspace: Compare local digest with Reference manifest
+    Workspace-->>Desktop: Reference changed locally
+    Desktop-->>Engineer: Show safe choices and direct Check-in unavailable
+    alt Convert to working copy
+        Engineer->>Desktop: Request Checkout for expected Generation
+        Desktop->>Server: Checkout(document, workspace, expected Generation)
+        Server->>Product: Revalidate current head and active Reservation
+        alt current and available
+            Product-->>Desktop: New active Reservation
+            Desktop-->>Engineer: Local candidate is now eligible for later Check-in
+        else stale or held by another actor
+            Product-->>Desktop: Refuse with current Generation and safe actions
+            Workspace-->>Desktop: Local candidate retained
+        end
+    else Keep latest and local work
+        Workspace->>Workspace: Preserve local copy and materialize current separately
+    else Create Copy
+        Engineer->>Desktop: Create Copy from local candidate
+        Desktop->>Server: Request new Logical Document under normal rules
+        Server-->>Desktop: Return new DocumentId or refusal
+        Desktop-->>Engineer: Original document unchanged
+    else Confirm local discard
+        Engineer->>Desktop: Confirm discard of local candidate
+        Desktop->>Workspace: Discard local candidate after confirmation
+        Workspace-->>Desktop: Only local candidate discarded
+        Desktop-->>Engineer: Original document unchanged
+    end

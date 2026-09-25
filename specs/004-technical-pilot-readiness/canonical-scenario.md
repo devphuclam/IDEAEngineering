@@ -2,7 +2,7 @@
 
 **Increment**: `IE-INC-READY-001`
 **Record ID**: `IE-PH0-P02-SCENARIO-001`
-**Version / status**: `0.2` / Draft; P02 execution `NOT-RUN`
+**Version / status**: `0.3` / Draft; P02 review `NOT-RUN`
 **Owner**: Principal Product Author
 **Reviewer**: Project user acting as Project Reviewer; T011 disposition `NOT-RUN`
 **Applicable baseline**: Approved predecessor pinned by [baseline-manifest.md](baseline-manifest.md):
@@ -11,7 +11,7 @@
 approved. Two later, **scoped** Product Decision Authority decisions also apply to this walkthrough:
 the [Approval Policy self-approval correction](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-19-pda-approval-approval-policy.md)
 and the [three-branch Check-in scope policy](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pda-approval-checkin-scope.md).
-They do not approve the whole successor DOC-04@0.15, DOC-05@0.25 or VVP@0.19. The latter two are
+They do not approve the whole successor DOC-04@0.15, DOC-05@0.26 or VVP@0.19. The latter two are
 Draft supporting sources for the exact Check-in branches and planned WS-09…11 checks.
 
 ## 1. Purpose and evidence boundary
@@ -113,7 +113,7 @@ recovery, never an inferred success.
 | Interrupted transfer | Connection/process fails before all ranges are verified. | Resume the same transfer/OperationId from accepted ranges, or keep it private for reconciliation. | Preserve verified local ranges and the original local work. | `REQ-WS-012/015`; `VVP-003`, `WS-08`, `ARCH-VIEW-SEQ-006` |
 | Lost response | Commit may have succeeded but the response did not arrive. | Query the same `OperationId`; return the committed result, safe progress, or `Needs reconciliation`. Never create a second operation. | Do not discard local work until authoritative status is known. | `REQ-WS-007/010/012/013`; `VVP-003/004`, `WS-03/07`, `ARCH-VIEW-SEQ-007` |
 | Pre-commit failure | Validation, digest, owner or transaction precondition fails before authoritative commit. | No public Change Set/Generation and no confirmed Reservation is ended. | Preserve local candidate; private bytes are reconciled separately. | `REQ-WS-007/010/013/015`; `VVP-003`, `WS-03` |
-| Review invalidation | Content changes after Submit for Review, or required approver/transition is missing. | Pending Review is invalidated or blocked; no approval/release is inferred. | Return to In Work only through the governed Reject/Withdraw path. | `REQ-LC-002/005`; `VVP-006`, `WF-03/05` |
+| Review change or invalid decision | A content-changing Check-in is attempted while the Revision is `Under Review`, or a decision lacks the required approver/transition or targets a different Generation or scope. | Refuse the attempted Check-in or decision. Local edits alone do not change the submitted Generation or invalidate its Review Round. To revise the content or scope, Withdraw or Reject closes that Round and returns the Revision to `In Work`; a later Check-in and Submit create a new Round that inherits no earlier decision. | Preserve local edits; do not release under an invalid or stale Round. | `REQ-LC-002/005`; `ARCH-VIEW-STATE-001`, `ARCH-VIEW-SEQ-003`; `VVP-006`, `WF-03/05` |
 | Release scope invalid | Required Generation, Structure Snapshot, approval, access or exception is stale/ineligible. | Entire confirmed Release is refused; no partial Release Record. | Preserve existing records and Workspace data. | `REQ-LC-006/007`; `VVP-006`, `SR-02/04/05` |
 
 ## 7. Mandatory, deferred and prohibited scope
@@ -164,3 +164,4 @@ recovery, never an inferred success.
 |---|---|---|---|
 | 0.1 | 2026-09-18 | Initial canonical scenario and explicit negative/recovery paths; no execution result claimed. | T007–T010 |
 | 0.2 | 2026-09-25 | Align the pilot narrative with the two narrowly approved policy corrections, identify a separately Release-eligible actor and correct the P05 fixture boundary. P02/T011 review remains `NOT-RUN`. | `IE-CHG-PDA-APPROVAL-002/003`; P05 evidence; T011 preparation |
+| 0.3 | 2026-09-25 | Clarify that changed Check-in is refused during `Under Review`; local edits do not alter the pinned Generation, and Withdraw/Reject precedes a new Check-in and Review Round. No product rule or runtime result changes. | T011 reviewer Q9; `ARCH-VIEW-STATE-001`, `ARCH-VIEW-SEQ-003`; `IE-CHG-P07-T011-001` |
