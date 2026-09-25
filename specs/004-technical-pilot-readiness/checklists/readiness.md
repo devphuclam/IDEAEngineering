@@ -17,88 +17,93 @@ the PH0 work, a product behavior or `PG4` was executed.
 
 ## Baseline and Authority Completeness
 
-- [ ] CHK001 Is the exact approved Feature/Spec/Tech predecessor identified by commit, version,
+- [x] CHK001 Is the exact approved Feature/Spec/Tech predecessor identified by commit, version,
   hash and attributable approval record? [Completeness, Spec §Authority and Scope Boundary, FR-001]
-- [ ] CHK002 Is the difference between content identity and decision evidence stated clearly enough
+- [x] CHK002 Is the difference between content identity and decision evidence stated clearly enough
   that a matching hash cannot be mistaken for approval? [Clarity, FR-001, Baseline Contract §Consistency]
-- [ ] CHK003 Are all later successor sources separated from the approved predecessor with their own
+- [x] CHK003 Are all later successor sources separated from the approved predecessor with their own
   authority state? [Consistency, FR-002, Baseline Contract §Consistency]
-- [ ] CHK004 Does the specification define how conflicts between document status prose, approval
+- [x] CHK004 Does the specification define how conflicts between document status prose, approval
   records, roadmap references and repository state are handled? [Coverage, FR-003]
-- [ ] CHK005 Is it unambiguous that the exact multi-location Vault successor requires its own Product
+- [x] CHK005 Is it unambiguous that the exact multi-location Vault successor requires its own Product
   Decision Authority disposition? [Clarity, FR-008, Spec §Dependencies]
+
+  Reviewer clarification, 2026-09-25: PH1 implements one Vault. F05 must keep `VaultId`,
+  `LocationId`, `ArtifactId`, digest and the Vault Adapter boundary so later multi-Vault work does
+  not change document or Artifact identity. This accepts the written boundary, not a claim that a
+  second Vault, replication or failover has been implemented or tested. See
+  [T031 disposition](../evidence/P07-T031-REVIEW-20260925.md).
 
 ## Scope and Trace Quality
 
-- [ ] CHK006 Is one canonical Technical Pilot scenario required with actors, preconditions, ordered
+- [x] CHK006 Is one canonical Technical Pilot scenario required with actors, preconditions, ordered
   steps, normal outcomes, failure outcomes and completion evidence? [Completeness, FR-004]
-- [ ] CHK007 Does every scenario step require trace to existing `REQ-*`, architecture and VVP sources
+- [x] CHK007 Does every scenario step require trace to existing `REQ-*`, architecture and VVP sources
   rather than permit new behavior to be invented inside PH0? [Traceability, FR-005]
-- [ ] CHK008 Are mandatory pilot scope, deferred product scope and prohibited claims defined as three
+- [x] CHK008 Are mandatory pilot scope, deferred product scope and prohibited claims defined as three
   separate concepts? [Clarity, FR-006]
-- [ ] CHK009 Is deferred product scope explicitly preserved for later increments instead of being
+- [x] CHK009 Is deferred product scope explicitly preserved for later increments instead of being
   interpreted as removed from Core v0? [Consistency, FR-006, SC-003]
-- [ ] CHK010 Are the boundaries between PH0, the later PH1 increment, the full Technical Pilot and
+- [x] CHK010 Are the boundaries between PH0, the later PH1 increment, the full Technical Pilot and
   full Core v0 stated consistently? [Consistency, Spec §Out of Scope, Plan §Summary]
 
 ## Decisions and Dependencies
 
-- [ ] CHK011 Does every unresolved item require one accountable owner, due condition, closure
+- [x] CHK011 Does every unresolved item require one accountable owner, due condition, closure
   evidence, affected work and gate effect? [Completeness, FR-007]
-- [ ] CHK012 Are Engineering recommendations kept distinct from dispositions owned by Product
+- [x] CHK012 Are Engineering recommendations kept distinct from dispositions owned by Product
   Decision Authority, QLHT, Operations, Security or another authority? [Clarity, Decision Contract]
-- [ ] CHK013 Are unresolved environment, topology, dataset and reviewer values classified as owned
+- [x] CHK013 Are unresolved environment, topology, dataset and reviewer values classified as owned
   readiness dependencies rather than vague assumptions? [Clarity, Spec §Assumptions, Research §4]
-- [ ] CHK014 Is the treatment of an unresolved item at the gate explicit—`BLOCKED`, `NOT-RUN` or
+- [x] CHK014 Is the treatment of an unresolved item at the gate explicit—`BLOCKED`, `NOT-RUN` or
   authorized deferral, never implied success? [Coverage, FR-007, FR-015]
-- [ ] CHK015 Are reopen conditions specified for deferred or superseded decisions? [Coverage,
+- [x] CHK015 Are reopen conditions specified for deferred or superseded decisions? [Coverage,
   Data Model §Open Decision, Decision Contract]
 
 ## Environment, Data and Recovery Coverage
 
 - [x] CHK016 Are the required contents of the delivery-environment record complete, including tool
   versions, license state, configuration/secret ownership and prohibited actions? [Completeness, FR-009]
-- [ ] CHK017 Are the representative dataset requirements precise about provenance, synthetic or
+- [x] CHK017 Are the representative dataset requirements precise about provenance, synthetic or
   sanitized classification, identity separation, Artifact size/digest and initial state? [Completeness, FR-010]
-- [ ] CHK018 Does the written requirement distinguish two logical Vault locations from two genuinely
+- [x] CHK018 Does the written requirement distinguish two logical Vault locations from two genuinely
   independent failure domains? [Ambiguity, Spec §Edge Cases, Data Model §Test Dataset Profile]
-- [ ] CHK019 Are normal, denied, stale, interrupted, retry and recovery scenario classes all required
+- [x] CHK019 Are normal, denied, stale, interrupted, retry and recovery scenario classes all required
   by the test matrix? [Coverage, FR-010, SC-005]
-- [ ] CHK020 Does the recovery requirement cover application, schema, metadata, Artifact and local
+- [x] CHK020 Does the recovery requirement cover application, schema, metadata, Artifact and local
   Workspace state without treating replica availability as backup proof? [Completeness, FR-011]
-- [ ] CHK021 Are security-review assets, trust boundaries, abuse cases, reviewer competence and the
+- [x] CHK021 Are security-review assets, trust boundaries, abuse cases, reviewer competence and the
   effect of missing competence all required explicitly? [Coverage, FR-012]
 
 ## License and Future-Commercial Safeguards
 
-- [ ] CHK022 Does the external-source requirement cover software, source code, content, models,
+- [x] CHK022 Does the external-source requirement cover software, source code, content, models,
   datasets, fonts, assets and services rather than only package dependencies? [Completeness, FR-013]
-- [ ] CHK023 Is exact source/version/license intake required before import or adaptation, with a
+- [x] CHK023 Is exact source/version/license intake required before import or adaptation, with a
   reference-only outcome when rights are unclear? [Clarity, FR-013, Spec §Edge Cases]
-- [ ] CHK024 Is current internal-first scope kept separate from the future Commercial Readiness Gate
+- [x] CHK024 Is current internal-first scope kept separate from the future Commercial Readiness Gate
   and from commercial-only features? [Consistency, Spec §Assumptions and Out of Scope]
 
 ## Acceptance and Gate Quality
 
-- [ ] CHK025 Does every P01–P07 completion condition require an owner, exact source, executed result
+- [x] CHK025 Does every P01–P07 completion condition require an owner, exact source, executed result
   and retained evidence link? [Measurability, FR-014]
-- [ ] CHK026 Is a `PG4 PASS` defined narrowly enough to authorize only one exact successor increment?
+- [x] CHK026 Is a `PG4 PASS` defined narrowly enough to authorize only one exact successor increment?
   [Clarity, FR-015, Gate Contract §Outcome semantics]
-- [ ] CHK027 Are the conditions that prevent `PG4 PASS` explicit, including missing material authority,
+- [x] CHK027 Are the conditions that prevent `PG4 PASS` explicit, including missing material authority,
   environment, evidence or review? [Coverage, User Story 5, Gate Contract]
-- [ ] CHK028 Are prohibited inferences from `PG4` complete—no full Core v0, production acceptance,
+- [x] CHK028 Are prohibited inferences from `PG4` complete—no full Core v0, production acceptance,
   rollout, SLA, commercial readiness or customer-data claim? [Completeness, FR-017]
-- [ ] CHK029 Can every success criterion be assessed objectively without inventing performance or
+- [x] CHK029 Can every success criterion be assessed objectively without inventing performance or
   capacity thresholds that belong to later qualification? [Measurability, SC-001–SC-009]
 - [ ] CHK030 Is the rule against production implementation before an attributable `PG4 PASS`
   consistent across the spec, plan, quickstart and gate contract? [Consistency, FR-016]
 
 ## Notes
 
-- The original CHK026/CHK027 still review unconditional `PASS`. CHK030 is retained as historical
-  wording and superseded by CHK033 for the complete authorization rule. CHK016 was reviewed for
-  the P04 delivery-environment record only; all other checklist items remain unreviewed.
-- Leave all items unchecked until the project reviewer performs the requirements-quality review.
+- The Project Reviewer accepted 32 current criteria on 2026-09-25, including CHK016 already
+  marked earlier. CHK030 is retained unchecked as historical wording superseded by CHK033; it is
+  not a failed current criterion. See [T031 disposition](../evidence/P07-T031-REVIEW-20260925.md).
 - Record findings beside the affected item or in a linked change record.
 - `$speckit-implement` may read this checklist as a gate but must not mark review-owned boxes.
 - `checklists/requirements.md` follows the separate built-in lifecycle maintained by
@@ -106,12 +111,12 @@ the PH0 work, a product behavior or `PG4` was executed.
 
 ## Gate-Terminology Correction Review
 
-- [ ] CHK031 Are Gate Execution State, Gate Outcome and individual check results distinct and
+- [x] CHK031 Are Gate Execution State, Gate Outcome and individual check results distinct and
   consistent, including `NOT-APPLICABLE` before a decision and all four completed outcomes?
   [Consistency, Spec §Authority and Scope Boundary, FR-015, Gate Contract]
-- [ ] CHK032 Are every conditional action's owner, affected baseline, due condition/date, expiry,
+- [x] CHK032 Are every conditional action's owner, affected baseline, due condition/date, expiry,
   escalation and non-invalidating rationale required, without waiving missing mandatory inputs?
   [Completeness, FR-015, User Story 5, Gate Contract §Outcome semantics]
-- [ ] CHK033 Is authorization limited to the exact successor with approved PG2/PG3 baselines and
+- [x] CHK033 Is authorization limited to the exact successor with approved PG2/PG3 baselines and
   an attributable `PASS` or valid `PASS-WITH-ACTIONS`, consistently across spec, plan, tasks and
   quickstart? [Consistency, FR-016, SC-009; supersedes CHK030]

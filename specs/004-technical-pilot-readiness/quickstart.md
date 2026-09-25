@@ -143,6 +143,8 @@ checks remain `NOT-RUN`. P02/T011 is `COMPLETE / PASS` for the
 [documentary scenario review](evidence/P02-T011-GUIDED-REVIEW-20260925.md) only. P03/T016 is
 `COMPLETE / PASS` for documentary decision capture; its application/runtime conditions remain
 separate. T023–T025 are prepared on the frozen manifest; [the PG4 review package](pg4-review-package.md)
-is ready for review. P07/`PG4` results remain `NOT-RUN`; T031 and T026 are still required.
-P05's application checks and D4 PH1 gate disposition remain `NOT-RUN`.
-For `PG4`, this is execution state; its outcome is `NOT-APPLICABLE`, not an assessment result.
+is ready for review. [T031](evidence/P07-T031-REVIEW-20260925.md) is complete for
+requirements quality: 32 current criteria accepted, CHK030 superseded. P07 is `IN-PROGRESS`;
+T026/`PG4` remains `NOT-RUN` with outcome `NOT-APPLICABLE`. P05 application checks remain
+`NOT-RUN`; D4's bounded PH1 fixture disposition is recorded in the P03/T016 review. Neither
+the checklist result nor P07 progress is a PG4 outcome.

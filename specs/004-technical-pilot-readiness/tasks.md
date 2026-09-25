@@ -126,7 +126,7 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 - [x] T028 [HANDOFF] Run `$speckit-analyze` over `specs/004-technical-pilot-readiness/spec.md`, `plan.md` and `tasks.md`; emit its report to the review conversation only, with no file writes or remediation inside the read-only analysis (FR-014, FR-015).
 - [x] T029 [HANDOFF] Outside `$speckit-analyze`, save each emitted report and its reviewed source hashes in a new versioned `specs/004-technical-pilot-readiness/analysis-findings*.md` record without rewriting prior analysis evidence; obtain explicit approval for remediation, resolve accepted findings in their owning files and record rejected/deferred findings with rationale; changed source hashes require re-analysis and gate-impact review before any prior authorization is reused (FR-014, FR-015).
 - [x] T030 [HANDOFF] Re-run `git diff --check`, placeholder scans, relative-link checks and source-hash reconciliation from `specs/004-technical-pilot-readiness/quickstart.md`; append only actual outcomes to `readiness-register.md` (FR-014, FR-015).
-- [ ] T031 [HANDOFF] Have the project reviewer evaluate all unchecked items in `specs/004-technical-pilot-readiness/checklists/readiness.md`; checklist approval is requirements-quality evidence only and cannot replace P01–P07 execution or the `PG4` decision (FR-014).
+- [x] T031 [HANDOFF] Have the project reviewer evaluate all unchecked items in `specs/004-technical-pilot-readiness/checklists/readiness.md`; checklist approval is requirements-quality evidence only and cannot replace P01–P07 execution or the `PG4` decision (FR-014). Evidence: [reviewer disposition](evidence/P07-T031-REVIEW-20260925.md); 32 current criteria accepted, CHK030 superseded.
 - [ ] T032 [HANDOFF] Update `specs/004-technical-pilot-readiness/README.md` with final status, exact gate record, remaining blockers and the authorized next action, preserving `NOT-RUN` where no evidence exists (FR-015–FR-016, SC-008–SC-009).
 
 ---
@@ -143,7 +143,7 @@ Spec Kit WorkPackages. `DeliveryCard:P01`–`P03` were superseded by completed p
 | `P04` | T017, T021–T022 (environment portion) | 4 h | Current environment preparation card. |
 | `P05` | T018–T019, T021–T022 (dataset portion) | 4 h | Current fixture preparation card. |
 | `P06` | T020–T022 (recovery/security portion) | 8 h | Current documentary recovery/security card. |
-| `P07` | T011 (complete), T016, T023–T027, T031–T032 (remaining decision, gate and handoff portions) | 4 h | Only effort actually recorded after starting P07 is charged to it; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
+| `P07` | T011, T016, T023–T025 and T031 complete; T026–T027 and T032 remain | 4 h | Only effort actually recorded after starting P07 is charged to it; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
 | **PH0 total** |  | **32 h** | Planned baseline unchanged. |
 
 `WorkPackage:P01` (T004–T006), `WorkPackage:P02` (T007–T011), and `WorkPackage:P03`

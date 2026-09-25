@@ -3,12 +3,12 @@
 | Field | Value |
 |---|---|
 | `package_id` | `IE-INC-READY-001-PG4-REVIEW` |
-| `package_version` | `0.1` |
+| `package_version` | `0.2` |
 | `prepared_date` | 2026-09-25 (Asia/Ho_Chi_Minh) |
 | `prepared_by` | Principal Product Author with Project Reviewer input |
 | `reviewed_manifest_id_and_hash` | `IE-INC-READY-001-BL-001@0.2` / SHA-256 `E37731C0037FCB4F1DBB1E8AFECC3A4C89384439D417BE8E4EAAE8553A93E2CA` |
 | `reviewed_git_commit` | `a9924f467585354cda8017b0f578954a8af0dfd7` (source freeze); manifest control record committed at `c0656468c4922728a97215a0886c50bc497181a9` |
-| `package_state` | `READY_FOR_GATE_REVIEW`; this package is not the PG4 decision |
+| `package_state` | `READY_FOR_GATE_REVIEW`; incorporates the T031 reviewer disposition but is not the PG4 decision |
 
 ## 1. Source baseline summary
 
@@ -28,17 +28,17 @@ Hashes prove reproducibility; they do not replace human approval.
 | `P04` / T022 | `COMPLETE / PASS` for one-developer environment | [P04 review](evidence/P04-ENV-REVIEW-20260924.md); [static-IP observation](evidence/P07-UBUNTU-HOST-STATIC-IP-20260925.md) | No product build, Gateway I/O, accepted deployment or multi-Vault proof |
 | `P05` / T022 | `COMPLETE / PASS` for synthetic preparation | [P05 fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md) | 1 KiB/64 MiB smoke fixtures only; no large-transfer/performance claim |
 | `P06` / T022 | `COMPLETE / PASS` for PH0 documentary plan | [P06 final disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md) | Runtime security, rollback, backup/restore and independent specialist review remain `NOT-RUN` |
-| `P07` / T023–T025 | `IN-PROGRESS`; package prepared, gate not decided | [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md) | T031 checklist and T026 authority decision remain open |
+| `P07` / T023–T025, T031 | `IN-PROGRESS`; package and checklist review complete, gate not decided | [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md); [T031 review](evidence/P07-T031-REVIEW-20260925.md) | T026 authority decision remains open |
 
 ## 3. Open blockers and gate effects
 
 | Item | State | Owner / next proof | Gate effect |
 |---|---|---|---|
-| Reviewer-owned readiness checklist T031 | `IN-PROGRESS`; CHK016 only is marked | Project Reviewer reviews CHK001–CHK033 on this baseline | Required before a defensible PG4 assessment |
+| Reviewer-owned readiness checklist T031 | `COMPLETE / PASS` for requirements quality; 32 current criteria accepted, CHK030 superseded | [Reviewer disposition](evidence/P07-T031-REVIEW-20260925.md) | Does not decide PG4 or demonstrate running product behavior |
 | F05 Gateway/Adapter | Plan resolved; exact runtime/provider/license/endpoint `NOT-RUN` | Engineering/current server operator qualify one endpoint and Grant/Receipt/digest/private staging | Blocks F05 acceptance; not a claim that the unbuilt endpoint failed |
 | Native IDEA accounts and client path | `NOT-RUN` | F03/F05 create test accounts and verify Windows→one Gateway | Blocks affected PH1 execution checks |
 | Format Worker | Boundary selected; exact runtime/toolchain/format qualification `NOT-RUN` | Reopen at first CAD/Office/format-processing work | Deferred from PH1; no Worker runtime claim |
-| Multi-Vault/replication/failover | Design approved; implementation deferred | Reopen before multi-location work or durability/failover claim | Later milestone, not a PH1 prerequisite |
+| Multi-Vault/replication/failover | Design approved; implementation deferred | F05 retains stable Vault/Location/Artifact identities and Vault Adapter path ownership; reopen before multi-location work or durability/failover claim | Extension boundary is a PH1 design-conformance check; second Vault is not a PH1 prerequisite |
 | New dependencies and commercial use | Intake rule resolved; future packages not yet selected | Record exact source/version/license/use before first use; commercial review later | Blocks only the unqualified dependency's use |
 | ADR-0009 | `Proposed` | Resolve graphical-workflow wording conflict before any whole-Core-v0 PG3 claim | PG3 use limited to PH1 F01–F05 |
 
@@ -59,10 +59,10 @@ Hashes prove reproducibility; they do not replace human approval.
 | Field | Proposed value |
 |---|---|
 | Increment ID | `IE-INC-PH1-FOUNDATION-CUSTODY-001` |
-| Feature directory | Not created; T027 is blocked until PG4 authorization |
+| Feature directory | Proposed `specs/005-ph1-foundation-custody/`; not created before PG4 authorization and T027 |
 | First delivery card | `F01-A` only after a valid PG4 `PASS` or `PASS-WITH-ACTIONS` |
 | Scope | F01–F05 within 72h: source/build/test skeleton, PostgreSQL/migrations, controlled bootstrap/session seam, transaction/Audit seam, and one Gateway/Vault custody smoke path |
-| Explicit limits | One Gateway/Vault endpoint; no multi-Vault replication/failover, Format Worker job, CAD/Office conversion, production deployment, customer data or performance claim |
+| Explicit limits | Implement/test one Gateway/Vault endpoint. Preserve `VaultId`, `LocationId`, `ArtifactId`, digest and the Vault Adapter boundary for later multi-Vault work; do not hard-code a physical path into product-domain identity. No second Vault, replication/failover, Format Worker job, CAD/Office conversion, production deployment, customer data or performance claim. |
 
 ## 6. PG2 and PG3 approval evidence
 
@@ -77,7 +77,7 @@ Hashes prove reproducibility; they do not replace human approval.
 2. [Readiness register](readiness-register.md) — P01–P07 status, D0–D5 and action board.
 3. [P03/T016 decision evidence](evidence/P03-T016-DECISIONS-20260925.md).
 4. [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md).
-5. [T031 checklist preview](evidence/P07-T031-CHECKLIST-PREVIEW-20260925.md) — reviewer response surface; it does not mark checklist items.
+5. [T031 reviewer disposition](evidence/P07-T031-REVIEW-20260925.md) and [readiness checklist](checklists/readiness.md) — requirements-quality result; not a gate outcome.
 6. [P04](evidence/P04-ENV-REVIEW-20260924.md), [P05](evidence/P05-SERVER-FIXTURES-20260924.md), [P06](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md), and [P02](evidence/P02-T011-GUIDED-REVIEW-20260925.md) evidence.
 7. [PG4 gate contract](contracts/pg4-gate-record.md) — decision route and Tracker-readable record rules.
 
@@ -88,10 +88,25 @@ rollout, not SLA/availability evidence, not commercial readiness, not permission
 and not permission to create a code-bearing PH1 directory. It does not claim that the IDEA product,
 Gateway, Adapter or Format Worker already runs.
 
-## 9. Decision route and reopen rule
+## 9. Author assessment for the Gate Authority
+
+**Recommended outcome: `PASS` for the exact PH1 successor only.** P01–P06 have bounded,
+attributable results; T023–T025 and T031 are complete; the 2026-09-25 PG2/PG3 authority report
+covers F01–F05. The remaining Gateway runtime, native IDEA accounts and transfer checks are work
+that F01–F05 must create and verify, not missing evidence that PH0 claimed to have already run.
+ADR-0009's workflow-designer conflict stays outside F01–F05. A `PASS-WITH-ACTIONS` is not proposed
+to disguise any missing mandatory gate input. This is an **author recommendation**, not a PG4
+decision or permission to start F01-A.
+
+The Gate Authority must still judge whether the reported approval, scoped review competence,
+residual risks and one-Vault extension boundary are acceptable for this named increment. If any
+mandatory input is judged insufficient, record `BLOCKED` or `FAIL` with the reason instead of
+using this recommendation.
+
+## 10. Decision route and reopen rule
 
 The applicable authority is the named `PG4 Gate Authority` for `IE-INC-READY-001`. The authority
-must complete a gate record using the [PG4 gate contract](contracts/pg4-gate-record.md) after reviewing T031 and this package. Until
+must complete a gate record using the [PG4 gate contract](contracts/pg4-gate-record.md) after reviewing the completed T031 disposition and this package. Until
 then, execution state is `NOT-RUN` or `IN-PROGRESS`, outcome is `NOT-APPLICABLE`, and authorization
 state is `INACTIVE`. Reopen or supersede this package when the frozen source commit changes, ADR-0009
 is resolved, the proposed PH1 scope changes, a mandatory prerequisite expires, or a new claim enters
