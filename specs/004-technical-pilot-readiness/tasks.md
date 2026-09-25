@@ -113,7 +113,7 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 - [x] T024 [US5] Execute the documentary checks in `specs/004-technical-pilot-readiness/quickstart.md` and record actual `PASS`, `FAIL`, `BLOCKED` or `NOT-RUN` results with command/evidence links in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014–FR-015). Evidence: [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md).
 - [x] T025 [US5] Prepare `specs/004-technical-pilot-readiness/pg4-review-package.md` using [contracts/pg4-review-package.md](contracts/pg4-review-package.md), summarizing P01–P06 results and P07 review preparation, open blockers, residual risks, exact proposed PH1 scope and all prohibited inferences without duplicating source authority (FR-015, FR-017, SC-008). Evidence: [PG4 review package](pg4-review-package.md); gate decision remains T026.
 - [x] T026 [US5] After T011/T016 review and T023–T025 preparation, have the applicable gate authority complete `specs/004-technical-pilot-readiness/pg4-gate-record.md` according to `contracts/pg4-gate-record.md`, including its Tracker-readable summary; separate execution state from the four permitted outcomes, retain complete conditional-action fields, approved PG2/PG3 evidence and the exact authorization boundary; an undecided gate has outcome `NOT-APPLICABLE` (FR-015–FR-017, SC-008). Evidence: [PG4 gate record](pg4-gate-record.md), `COMPLETE / PASS` on 2026-09-25 for PH1 F01–F05 only.
-- [ ] T027 [US5] If and only if T026 records an attributable `PASS` or valid `PASS-WITH-ACTIONS`, with approved PG2/PG3 baselines and authorization conditions met, create the next Spec Kit feature directory for the exact PH1 increment and link it from `specs/004-technical-pilot-readiness/pg4-gate-record.md`; otherwise record that production implementation remains unauthorized (FR-016, SC-009).
+- [x] T027 [US5] If and only if T026 records an attributable `PASS` or valid `PASS-WITH-ACTIONS`, with approved PG2/PG3 baselines and authorization conditions met, create the next Spec Kit feature directory for the exact PH1 increment and link it from `specs/004-technical-pilot-readiness/pg4-gate-record.md`; otherwise record that production implementation remains unauthorized (FR-016, SC-009). Evidence: [PH1 delivery specification](../005-ph1-foundation-custody/spec.md) created after the [PG4 decision](pg4-gate-record.md); F01-A effort timer not started.
 
 **Checkpoint**: PH0 ends with an attributable result. No task in this file implements product code.
 
@@ -127,7 +127,7 @@ cannot be interpreted as approval of full Core v0, rollout, an SLA or commercial
 - [x] T029 [HANDOFF] Outside `$speckit-analyze`, save each emitted report and its reviewed source hashes in a new versioned `specs/004-technical-pilot-readiness/analysis-findings*.md` record without rewriting prior analysis evidence; obtain explicit approval for remediation, resolve accepted findings in their owning files and record rejected/deferred findings with rationale; changed source hashes require re-analysis and gate-impact review before any prior authorization is reused (FR-014, FR-015).
 - [x] T030 [HANDOFF] Re-run `git diff --check`, placeholder scans, relative-link checks and source-hash reconciliation from `specs/004-technical-pilot-readiness/quickstart.md`; append only actual outcomes to `readiness-register.md` (FR-014, FR-015).
 - [x] T031 [HANDOFF] Have the project reviewer evaluate all unchecked items in `specs/004-technical-pilot-readiness/checklists/readiness.md`; checklist approval is requirements-quality evidence only and cannot replace P01–P07 execution or the `PG4` decision (FR-014). Evidence: [reviewer disposition](evidence/P07-T031-REVIEW-20260925.md); 32 current criteria accepted, CHK030 superseded.
-- [ ] T032 [HANDOFF] Update `specs/004-technical-pilot-readiness/README.md` with final status, exact gate record, remaining blockers and the authorized next action, preserving `NOT-RUN` where no evidence exists (FR-015–FR-016, SC-008–SC-009).
+- [x] T032 [HANDOFF] Update `specs/004-technical-pilot-readiness/README.md` with final status, exact gate record, remaining blockers and the authorized next action, preserving `NOT-RUN` where no evidence exists (FR-015–FR-016, SC-008–SC-009). Evidence: [PH0 README](README.md) and [readiness register](readiness-register.md) version 4.8.
 
 ---
 
@@ -143,15 +143,15 @@ Spec Kit WorkPackages. `DeliveryCard:P01`–`P03` were superseded by completed p
 | `P04` | T017, T021–T022 (environment portion) | 4 h | Current environment preparation card. |
 | `P05` | T018–T019, T021–T022 (dataset portion) | 4 h | Current fixture preparation card. |
 | `P06` | T020–T022 (recovery/security portion) | 8 h | Current documentary recovery/security card. |
-| `P07` | T011, T016, T023–T025 and T031 complete; T026–T027 and T032 remain | 4 h | Only effort actually recorded after starting P07 is charged to it; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
+| `P07` | T011, T016, T023–T027 and T031–T032 complete as PH0 tasks | 4 h | DeliveryCard completion and actual effort remain separate Tracker actions; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
 | **PH0 total** |  | **32 h** | Planned baseline unchanged. |
 
 `WorkPackage:P01` (T004–T006), `WorkPackage:P02` (T007–T011), and `WorkPackage:P03`
 (T012–T016) remain valid internal Spec Kit identities and evidence groupings. Their earlier
 authoring effort has no separate current Delivery Card or verified actual-effort entry. The
 T011/T016 reviewer actions are shown as P07 substeps in the current Kanban rendition;
-T011 and T016 now have documentary `PASS` results. This does not change their WorkPackage
-identity or imply a P07/PG4 result.
+T011 and T016 have documentary `PASS` results. This does not change their WorkPackage identity;
+the later, separate [PG4 record](pg4-gate-record.md) supplies the P07 gate result.
 T001–T003 and T028–T032 are cross-artifact quality/handoff tasks included in the applicable
 current cards, not additive hours. The eight-hour PH0 operational buffer is controlled schedule
 capacity, not a task or permission to skip authority, review or correctness conditions.

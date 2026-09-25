@@ -1,8 +1,9 @@
 # PH0 — Technical Pilot Implementation Readiness
 
 `IE-INC-READY-001` là increment chuẩn bị quyết định có thể bắt đầu một phần triển khai tiếp theo
-hay chưa. PH0 chỉ tạo hồ sơ, trace và evidence plan; không tạo mã sản phẩm, không chọn lại Tech
-Stack và không phê duyệt successor baseline.
+hay chưa. PH0 chỉ tạo hồ sơ, trace và evidence plan; không tạo mã sản phẩm hoặc chọn lại Tech
+Stack. [PG4 Gate Authority đã quyết định `PASS`](pg4-gate-record.md) ngày 25/09/2026 cho đúng
+PH1 F01–F05; quyết định đó không phải kết quả kiểm thử ứng dụng.
 
 ## Đọc theo thứ tự
 
@@ -24,18 +25,21 @@ Stack và không phê duyệt successor baseline.
 16. [analysis-findings-002.md](analysis-findings-002.md) — bản phân tích mới sau khi bổ sung hồ sơ PH0 và hoàn tất T021 cấp tác giả.
 17. [analysis-findings-003.md](analysis-findings-003.md) — bản phân tích lịch sử sau khi xử lý các finding về link, authority wording và baseline metadata.
 18. [analysis-findings-004.md](analysis-findings-004.md) — snapshot phân tích ngày 2026-09-23, trước khi ghi kết quả review P04 hiện tại.
+19. [PG4 gate record](pg4-gate-record.md) — quyết định và phạm vi được phép bắt đầu.
+20. [PH1 delivery specification](../005-ph1-foundation-custody/spec.md) — hồ sơ Spec Kit mở sau quyết định PG4.
 
 ## Trạng thái hiện tại
 
 | Nội dung | Trạng thái |
 |---|---|
 | PH0 source package | `Draft` |
-| P01–P07 execution | P01–P06 `COMPLETE / PASS` within their documented scopes; P03/T016 is documentary decision capture and does not qualify runtime. [P02/T011](evidence/P02-T011-GUIDED-REVIEW-20260925.md) covers the documentary scenario review, not application behavior. P06 covers PH0 documentary recovery/security readiness; runtime checks remain `NOT-RUN`. P07 has no gate result. P05 covers synthetic fixture preparation only; its application checks remain open. |
+| PH0 work packages | P01–P06 `COMPLETE / PASS` within their documented scopes. P07/T026–T027 and final handoff are complete; [P02/T011](evidence/P02-T011-GUIDED-REVIEW-20260925.md), P03/T016 and P06 are documentary results, not application behavior. P05 covers synthetic fixture preparation only. |
 | D3 review scope | Boss-approved PH1 scope and the user's direct Security/Verification assignment were reported and confirmed on 2026-09-24. The guided P06 review records the reviewer’s introductory competence basis, examined material, findings and documentary `PASS`; specialist runtime/operations review remains deferred under the no-claim condition. |
-| PG4 Gate Execution State | `NOT-RUN` |
-| PG4 Gate Outcome | `NOT-APPLICABLE` until an attributable decision |
-| Production implementation | Unauthorized |
-| Product Feature/Spec/Tech baseline | Unchanged; predecessor approval remains pinned separately |
+| PG4 Gate Execution State | `COMPLETE` — [decision record](pg4-gate-record.md) |
+| PG4 Gate Outcome | `PASS` for `IE-INC-PH1-FOUNDATION-CUSTODY-001`, F01–F05/72 planned task hours only |
+| PH1 implementation | Authorized within the exact gate limits; F01-A is the next delivery card, not automatically started |
+| DeliveryCard:P07 | Tracked separately in the Execution Register/local Tracker; this README does not close its timer or record actual effort |
+| Product Feature/Spec/Tech baseline | Unchanged by this handoff; approved predecessor and current PG2/PG3 evidence remain pinned separately |
 
 ## Quy tắc không được suy diễn
 
@@ -43,8 +47,12 @@ Stack và không phê duyệt successor baseline.
 - Hoàn thành hồ sơ không chứng minh runtime, bảo mật, hiệu năng, recovery hay production readiness.
 - Chỉ PG4 `PASS` hoặc `PASS-WITH-ACTIONS` hợp lệ mới có thể cho phép đúng successor increment;
   các điều kiện bắt buộc và PG2/PG3 baseline phải được đáp ứng.
-- Successor multi-location Vault, Format Worker runtime/toolchain và các giá trị qualification
-  vẫn giữ trạng thái riêng của chúng.
+- PH1 dùng một Gateway/Vault, giữ `VaultId`, `LocationId`, `ArtifactId`, digest và Adapter path
+  ownership tách biệt để còn phát triển multi-vault. Vault thứ hai, replication và failover chưa làm.
+- Build, tài khoản IDEA, Gateway transfer, Format Worker runtime/toolchain và các kiểm thử
+  ứng dụng chưa có bằng chứng tương ứng vẫn là `NOT-RUN`.
+- Đóng DeliveryCard:P07 và bắt đầu F01-A chỉ xảy ra qua thao tác Tracker riêng; không suy diễn
+  giờ công hoặc trạng thái card từ quyết định gate.
 
 ## Tài liệu liên quan
 

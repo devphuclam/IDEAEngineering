@@ -1,8 +1,9 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `4.7` / Draft; P01–P06 `COMPLETE / PASS` for their stated documentary or
-scoped decisions; P07 is `IN-PROGRESS`, while the PG4 decision remains `NOT-RUN`
+**Version / status**: `4.8` / Current PH0 handoff; P01–P06 `COMPLETE / PASS` for their stated
+scopes; P07 gate work `COMPLETE / PASS` for the exact PH1 authorization. DeliveryCard:P07
+effort/timer remains separate in the Execution Register.
 **Prepared**: 2026-09-19
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
@@ -37,7 +38,7 @@ scoped decisions; P07 is `IN-PROGRESS`, while the PG4 decision remains `NOT-RUN`
 | Approved predecessor axes | `FEATURE-001@0.12` — `APPROVED`; normative `DOC-04@0.13` — `APPROVED`; `TECH-001@0.14` — `APPROVED` |
 | Pinned successor snapshot for P01 | `DOC-04@0.15`, `DOC-05@0.22`, `DOC-06@0.18`, `DOC-08@0.13`, `VVP@0.18`, `TECH-001@0.15` and the multi-location Vault source set are pinned at commit `109c766e...` in [baseline-manifest.md](baseline-manifest.md), Section 2. Newer Draft sources, including DOC-05@0.26 and VVP@0.19, are not retroactively part of that snapshot; T023 must freeze the exact successor reviewed for PG4. The Node.js 24 delta is in Section 2.1 and execution-planning sources in Sections 3.2–3.3. |
 | Successor authority state | [`IE-CHG-PDA-APPROVAL-004`](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md) records the user's report of boss approval on 2026-09-25 for current PG2/PG3 sources. PG3 gate use is bounded to PH1 F01–F05; ADR-0009 remains Proposed due a workflow-scope conflict. T023 must pin the exact PG4 input. Earlier limited approvals remain historical. |
-| Proposed PG4 successor | `IE-INC-PH1-FOUNDATION-CUSTODY-001` — PH1 F01–F05, “Khung hệ thống chạy được”, 72h; proposed directory `specs/005-ph1-foundation-custody/` does not exist and cannot be created before PG4 authorization |
+| Authorized PG4 successor | `IE-INC-PH1-FOUNDATION-CUSTODY-001` — PH1 F01–F05, “Khung hệ thống chạy được”, 72 planned task hours; [PH1 Spec Kit directory](../005-ph1-foundation-custody/spec.md) created after [PG4 PASS](pg4-gate-record.md) |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
 | Evidence rule | Không ghi `PASS` nếu chưa có bằng chứng phù hợp với phương pháp và đúng baseline; review tài liệu không thay kiểm thử ứng dụng. |
 | Retention | `INTERNAL`; giữ cùng increment PH0 |
@@ -49,10 +50,10 @@ scoped decisions; P07 is `IN-PROGRESS`, while the PG4 decision remains `NOT-RUN`
 | `P01` | Ghim baseline đã duyệt và phân biệt successor | T004–T006 | Principal Product Author / project reviewer | Trước P02 | `BLOCKS_PG4` nếu chưa xác định được baseline | `COMPLETE` | `PASS` | [baseline manifest](baseline-manifest.md); [review evidence](evidence/P01-BASELINE-001-reviewed-manifest.json), SHA-256 `28F33DE...1F3594` | T006 completed by the Project Reviewer on 2026-09-22; this result identifies sources only and does not approve a successor or PG4 |
 | `P02` | Chốt một canonical Technical Pilot scenario | T007–T011 | Principal Product Author / project reviewer | Sau P01 | `BLOCKS_PG4` | `COMPLETE` | `PASS` — documentary scenario only | [review disposition](evidence/P02-T011-GUIDED-REVIEW-20260925.md); [canonical-scenario.md](canonical-scenario.md); [trace-matrix.md](trace-matrix.md) | Project Reviewer accepted all 13 T011 points on 2026-09-25 for the exact source hashes in Section 9.1. Application checks remain `NOT-RUN`; P03 and PG4 are separate. |
 | `P03` | Ghi mọi quyết định và dependency còn mở | T012–T016 | Principal Product Author và authority tương ứng | Sau P01–P02 | `BLOCKS_PG4` hoặc `DEFERRED_SCOPE` theo từng dòng | `COMPLETE` | `PASS` — documentary decision capture; implementation qualification remains separate | Mục 5; [T016 decision evidence](evidence/P03-T016-DECISIONS-20260925.md) | D1/D2/D4/D5 are resolved for their stated PH1 scope; endpoint, application accounts, runtime qualification and later commercial/deployment checks remain later evidence |
-| `P04` | Mô tả môi trường delivery được phép | T017, T021–T022 | Principal Product Author / Project Reviewer; later deployment owner to be assigned | Trước P07 | `BLOCKS_PG4` nếu thiếu điều kiện bắt buộc | `COMPLETE` | `PASS` | [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md); [Execution Register P04 record](../../planning/idea-technical-pilot-execution-register.json); [environment profile](environment-profile.md); [Ubuntu development runbook](../../deploy/development/README.md); [native runtime intake](../../docs/research/2026-09-23-p04-ubuntu-native-runtime-intake.md); [server template](../../config/idea-core-v0.server.env.example) | Project Reviewer directed a server review and authorized `PASS` if the one-developer development scope is met. The review passed that scoped environment and the Execution Register records P04 as `COMPLETED / PASS` at revision 10. Live SSH confirmed Ubuntu 26.04.1, installed runtimes, active loopback PostgreSQL and mounted artifact storage; Reviewer-supplied evidence confirms Vault directory permissions and separate database-role logins/privileges. Build, Flyway, application endpoints and Vault Adapter I/O remain `NOT-RUN` because IDEA source projects do not yet exist. DHCP address is acceptable for this single-developer setup; reserve DNS/IP before shared use. This PASS does not decide P05/P06/PG4 or accepted deployment. |
+| `P04` | Mô tả môi trường delivery được phép | T017, T021–T022 | Principal Product Author / Project Reviewer; later deployment owner to be assigned | Trước P07 | `BLOCKS_PG4` nếu thiếu điều kiện bắt buộc | `COMPLETE` | `PASS` | [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md); [Execution Register P04 record](../../planning/idea-technical-pilot-execution-register.json); [environment profile](environment-profile.md); [Ubuntu development runbook](../../deploy/development/README.md); [native runtime intake](../../docs/research/2026-09-23-p04-ubuntu-native-runtime-intake.md); [server template](../../config/idea-core-v0.server.env.example) | Project Reviewer accepted the scoped one-developer environment; Execution Register revision 10 records `COMPLETED / PASS`. SSH confirmed Ubuntu 26.04.1, installed runtimes, loopback PostgreSQL and artifact storage; reviewer-supplied evidence confirmed Vault permissions and separate database-role logins/privileges. A later [static-IP observation](evidence/P07-UBUNTU-HOST-STATIC-IP-20260925.md) records the development address. Build, Flyway, application endpoints and Vault Adapter I/O remain `NOT-RUN`; shared-use network/deployment qualification is separate. |
 | `P05` | Chuẩn bị fixture và ma trận verification | T018–T019, T021–T022 | Principal Product Author / Project Reviewer | Trước P07 | `BLOCKS_PG4` nếu thiếu dữ liệu hoặc location cần thiết | `COMPLETE` | `PASS` | [test-data-and-verification.md](test-data-and-verification.md); [server fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md); [Execution Register P05 record](../../planning/idea-technical-pilot-execution-register.json) | Project Reviewer accepted the synthetic preparation on 2026-09-24. The server files, manifest, owner/mode, sizes and SHA-256 matched; Execution Register revision 12 closes P05. Application checks, PH1 accounts, multi-GB measurement and a second Vault remain outside this result. |
 | `P06` | Lập kế hoạch rollback, recovery và security review | T020–T022 | Principal Product Author / assigned Project Reviewer | Trước P07 | `BLOCKS_PG4` nếu thiếu review material | `COMPLETE` | `PASS` | [recovery-and-security-plan.md](recovery-and-security-plan.md); [D3 scope evidence](evidence/D3-REVIEW-SCOPE-20260924.md); [guided review Step 1](evidence/P06-GUIDED-REVIEW-STEP1-20260924.md); [guided review Step 2](evidence/P06-GUIDED-REVIEW-STEP2-20260924.md); [guided review Step 3](evidence/P06-GUIDED-REVIEW-STEP3-20260924.md); [final disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md); [Execution Register](../../planning/idea-technical-pilot-execution-register.json) | Project Reviewer completed the card on 2026-09-24; Execution Register revision 18 records `COMPLETED / PASS`, 1.6167 actual hours and 0 remaining hours. Result scope is PH0 documentary readiness. Runtime abuse, rollback and restore tests remain `NOT-RUN`. |
-| `P07` | Chuẩn bị và ghi quyết định PG4 | T023–T027, T031 | Gate authority | Sau P01–P06 | Quyết định authorization của PH1 | `IN-PROGRESS` | `NOT-RUN` | [PG4 review package](pg4-review-package.md); [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md); [T031 review](evidence/P07-T031-REVIEW-20260925.md) | T023–T025 and T031 complete; T026 authority decision remains |
+| `P07` | Chuẩn bị và ghi quyết định PG4 | T023–T027, T031–T032 | Gate authority / Principal Product Author | Sau P01–P06 | Quyết định authorization của PH1 | `COMPLETE` (work package) | `PASS` — PH1 F01–F05 only | [PG4 gate record](pg4-gate-record.md); [T024 preflight](evidence/P07-T024-PREFLIGHT-20260925.md); [T031 review](evidence/P07-T031-REVIEW-20260925.md); [PH1 spec](../005-ph1-foundation-custody/spec.md) | DeliveryCard:P07 and its actual effort are recorded only through the Tracker; PH1 runtime checks remain open. |
 
 DeliveryCard P07 có thể bắt đầu sau các card tiền nhiệm để ghi giờ T011/T016 và chuẩn bị gate;
 WorkPackage P02/P03 vẫn giữ kết quả review riêng. T026 chỉ được quyết định sau các review và
@@ -64,7 +65,8 @@ nguồn bắt buộc. Đóng card P07 cần một kết quả PG4 đã ghi, kể
 môi trường phát triển nội bộ một người. P05 `PASS` chỉ bao phủ dữ liệu tổng hợp và hồ sơ thử đã
 chuẩn bị. P06 is `COMPLETE / PASS` for its documented PH0 readiness scope; runtime security and
 recovery checks remain `NOT-RUN`. P02 đã `COMPLETE / PASS` cho review tài liệu;
- P03 đã `COMPLETE / PASS` cho việc ghi và phân loại các quyết định D0–D5; P07/PG4 chưa có kết quả.
+ P03 đã `COMPLETE / PASS` cho việc ghi và phân loại các quyết định D0–D5; P07/PG4 đã có
+ [quyết định `COMPLETE / PASS`](pg4-gate-record.md) chỉ cho PH1 F01–F05.
 
 ## 4. Open-decision and dependency index
 
@@ -77,7 +79,7 @@ phần qualification/runtime còn lại được giữ thành điều kiện c�
 
 ## 4.1 PH1 scope locked to the roadmap
 
-The proposed PG4 successor is fixed to **PH1 — F01–F05 — Khung hệ thống chạy được — 72h**.
+The PG4-authorized successor is fixed to **PH1 — F01–F05 — Khung hệ thống chạy được — 72 planned task hours**.
 This register does not compare or introduce another PH1 candidate.
 
 | Roadmap card | Bounded purpose |
@@ -91,7 +93,9 @@ This register does not compare or introduce another PH1 candidate.
 PH1 does not implement Logical Document/Revision/Version/Generation, Checkout/Check-in,
 multi-location failover, Format Worker processing, CAD/Office conversion, multi-GB qualification,
 Review/Release or production rollout. The proposed ID
-`IE-INC-PH1-FOUNDATION-CUSTODY-001` is a planning label only; no PH1 feature directory exists.
+`IE-INC-PH1-FOUNDATION-CUSTODY-001` is the exact authorized increment. Its
+[Spec Kit delivery specification](../005-ph1-foundation-custody/spec.md) now exists; no product
+code or PH1 runtime result follows merely from creating that directory.
 
 ## 5. Decision records prepared for P03
 
@@ -231,7 +235,7 @@ Format Worker or future dependency. D0 and D3 remain resolved only to their stat
 | P04 environment | `P04-ENV-*` | Profile and live-host review | `PASS` | [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md) |
 | P05 dataset | `P05-DATA-*` | Fixture/matrix inspection | `PASS` for preparation only; application checks `NOT-RUN` | [Server fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md) |
 | P06 recovery/security | `P06-RECOVERY-*`, `P06-SECURITY-*` | Procedure and reviewer-competence review; PH0 documentary scope | `PASS`; runtime checks `NOT-RUN` | [Final guided-review disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md) |
-| P07 gate | `P07-GATE-*` | Attributable authority decision | `NOT-RUN` | `NOT-RUN` |
+| P07 gate | `P07-GATE-*` | Attributable authority decision on the frozen manifest | `COMPLETE / PASS` for PH1 F01–F05 only | [PG4 gate record](pg4-gate-record.md) |
 
 ## 7. T021 author-side cross-check
 
@@ -269,12 +273,12 @@ separate and is not implied by this decision capture.
 | Exact review-evidence hash | [`P01-BASELINE-001-reviewed-manifest.json`](evidence/P01-BASELINE-001-reviewed-manifest.json), SHA-256 `28F33DE52C0B4C69888EBAE3F28006C1620F90EEFDF8C4ED696016A15D1F3594` |
 | Reviewer / date | Project user acting as Project Reviewer / 2026-09-22 |
 | `BL-DISC-001` disposition | `ACCEPTED` — the later attributable approval record governs the exact predecessor; historical status prose is retained. |
-| `BL-DISC-002` disposition | Approved predecessor exists; limited PDA policy approval and confirmed Vault direction are recorded separately; remaining successor sources stay separate inputs; exact successor/PH1 disposition remains `NOT-RUN` and tracked as `D0`. |
+| `BL-DISC-002` disposition | At the 2026-09-22 T006 review, approved predecessor, limited PDA policy approval and the Vault direction were separate; the then-current successor/PH1 disposition was `NOT-RUN` and tracked as `D0`. Later authority and gate decisions are recorded in their own records. |
 | `BL-DISC-002` reviewer disposition | `ACCEPTED` — approved predecessor, limited policy approval, confirmed Vault direction and remaining successor states remain separate; D0 is not resolved by this review. |
 | `BL-DISC-003` disposition | `ACCEPTED` — Appendix A@0.6 retains the historical correction; the reviewed planning input is Appendix A@0.9 and `IE-PLAN-DEC2026-003@0.2` at commit `303b7225...`. |
 | Result | `PASS` — source identity and authority-state separation are reproducible. This does not approve a product successor, resolve D0, decide PG4 or authorize PH1. |
 | Required human action | `COMPLETE` — the Project Reviewer inspected the prepared summary and explicitly recorded `PASS`. |
-| Gate effect | P01 is `COMPLETE`/`PASS` and T011/P02 review may begin. P02–P07 and PG4 remain `NOT-RUN`. |
+| Gate effect at T006 | P01 was `COMPLETE`/`PASS` and T011/P02 review could begin; on 2026-09-22, P02–P07 and PG4 were still `NOT-RUN`. This is historical T006 evidence, not the current gate state. |
 
 ### 8.1 T006 compact human decision block
 
@@ -367,7 +371,7 @@ liên kết. Phân loại dùng trong bảng:
 
 | Action ID | Task / package | Phân loại | Vai trò hoặc authority bắt buộc | Việc phải làm và bằng chứng cần xem | Trạng thái hiện tại | Ảnh hưởng / kết quả sau khi hoàn tất |
 |---|---|---|---|---|---|---|
-| `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline manifest](baseline-manifest.md), approval record, reviewed planning sources and BL-DISC-001…003; retain one reproducible review-evidence file. | `COMPLETE` / `PASS`; Project Reviewer, 2026-09-22; [evidence](evidence/P01-BASELINE-001-reviewed-manifest.json) SHA-256 `28F33DE...1F3594` | P01 complete; P02 review may begin; D0 and PG4 remain open. |
+| `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline manifest](baseline-manifest.md), approval record, reviewed planning sources and BL-DISC-001…003; retain one reproducible review-evidence file. | `COMPLETE` / `PASS`; Project Reviewer, 2026-09-22; [evidence](evidence/P01-BASELINE-001-reviewed-manifest.json) SHA-256 `28F33DE...1F3594` | P01 review completed; D0 and PG4 were still open at that point and were decided later in their own records. |
 | `HA-002` | T011 / P02 | B | Project Reviewer; chỉ thêm vai trò khác nếu governance/authority chỉ định | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `COMPLETE / PASS` on 2026-09-25; [review evidence](evidence/P02-T011-GUIDED-REVIEW-20260925.md) | P02 documentary review complete; no requirement or runtime result created. |
 | `HA-003` | T016 / P03 — D0 | D | Product Decision Authority | Đối chiếu quyết định duyệt thiết kế Vault-transfer ngày 2026-09-25 với phạm vi triển khai một endpoint của F05 và source hashes. | `RESOLVED` for PH1; [decision report](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md) | Giữ thiết kế nhiều Vault nhưng hoãn triển khai tới work package sau; D0 không tự giải quyết D1/D2/D4/D5 hoặc PG4. |
 | `HA-004` | T016 / P03 — D1 | C/D | Engineering + current development server operator + authority phù hợp | Ghi riêng D1-A Gateway path cần cho F05 và D1-B Format Worker deferred; xác nhận adapter/runtime/license/endpoint chỉ cho D1-A. | `RESOLVED_FOR_PH1_PLAN`; runtime/toolchain `NOT-RUN` | D1-A chặn F05 acceptance nếu chưa có endpoint/transfer evidence; D1-B mở khi có format-processing work. |
@@ -375,16 +379,16 @@ liên kết. Phân loại dùng trong bảng:
 | `HA-006` | T016 / P03 — D3 | C/D | Boss as reported Product Decision Authority; current Project Reviewer assigned the direct Security/Verification review | PH1 scope and conditional recovery/storage deferral were confirmed on 2026-09-24; record the reviewer's competence basis, examined material, findings and disposition. | `RESOLVED` for the P06 documentary scope: assignment, introductory competence basis, guided material, findings and disposition are recorded | Reopen when backup, failover, production recovery, operational SLA or another claim requires specialist review; this resolution does not close PG4. |
 | `HA-007` | T016 / P03 — D4 | C | Project Reviewer as data custodian and PG4 Gate Authority under reported delegation | Chấp nhận bounded synthetic fixture cho PH1; giữ generator/version, size, SHA-256, provenance và retention/disposal owner; defer large-transfer claims. | `RESOLVED_FOR_PH1_FIXTURE_SCOPE`; bounded fixture provisioning verified | Bounded fixture chỉ hỗ trợ PH1 smoke; không đưa file thật/unlicensed payload vào pilot. |
 | `HA-008` | T016 / P03 — D5 | C/D | Principal Product Author + legal/company owner khi cần | Ghim intake trước khi dùng; native PostgreSQL 18.6, Temurin 25.0.4.1+1 và Node.js 24.21.0 cho nội bộ; lockfiles/security review khi F01 tạo source. | `RESOLVED_FOR_INTERNAL_PH1_INTAKE`; current runtime evidence exists, future package/commercial review remains open | D5 chặn đúng dependency chưa được intake; không tự kết luận quyền thương mại hoặc đổi stack. |
-| `HA-009` | T022 / P04 | C/B | Project Reviewer/current development server operator | Review máy Ubuntu mới, đường SSH/client, native PostgreSQL, one filesystem Vault/Gateway endpoint, allowed versions, secret/config owner, license, build/test entry points và migration controls; Windows giữ Desktop/Workspace/CAD. | `IN-PROGRESS`; SSH/OS/resource, Vault, native runtime, bootstrap và hai role DB login đã có bằng chứng; app source/build, client IDEA endpoint và Adapter I/O chưa có để chạy, chờ Reviewer disposition cho phạm vi P04 | Ghi riêng P04 `PASS`/`FAIL`/`BLOCKED`/`NOT-RUN`; không đổi Tech baseline hoặc coi một môi trường dev là accepted deployment. |
+| `HA-009` | T022 / P04 | C/B | Project Reviewer/current development server operator | Review máy Ubuntu mới, đường SSH/client, native PostgreSQL, one filesystem Vault, allowed versions, secret/config owner, license, build/test entry points và migration controls; Windows giữ Desktop/Workspace/CAD. | `COMPLETE / PASS` for one-developer development environment; [P04 disposition](evidence/P04-ENV-REVIEW-20260924.md). App source/build, client IDEA endpoint and Adapter I/O remain `NOT-RUN`. | Do not treat a scoped development environment as accepted deployment or an application runtime PASS. |
 | `HA-010` | T022 / P05 | C/B | Project Reviewer as data custodian and reviewer; current server operator when needed | Review the two Test Persona profiles, bounded synthetic fixture, server manifest, size/digest, provenance and retention. Native IDEA accounts, Gateway endpoint, Grant/Receipt/private-staging behavior and interruption/retry checks are PH1 execution prerequisites, not P05 preparation results. Multi-GB measurement remains Q03; no second Vault is created. | `COMPLETE / PASS` for P05 preparation; server fixture evidence and Project Reviewer disposition recorded | Do not claim application behavior or independent-human review. |
 | `HA-011` | T022 / P06 | C/B | Current Project Reviewer assigned directly to Security/Verification review; recovery/storage reviewer when later scope requires | Review PH1 rollback/local preservation, session/key handling, Grant/Receipt, trust boundaries, abuse cases and reviewer competence. Full backup/restore/failover evidence remains later under D3's no-claim condition. | `PASS`; scope and competence limit are recorded in the final disposition | Runtime tests and independent specialist review remain `NOT-RUN`; reopen the competence decision if a deferred recovery/storage claim enters scope. |
 | `HA-012` | T023 / P07 preparation | B | Principal Product Author; reviewer/authority sau đó | Lập inventory hash cho exact reviewed source set và freeze manifest chỉ sau khi P01–P06 có result hợp lệ. | `COMPLETE / FROZEN_FOR_REVIEW`; source commit `a9924f467585354cda8017b0f578954a8af0dfd7`, manifest control commit `c0656468c4922728a97215a0886c50bc497181a9` | T023 freeze chỉ xác nhận reproducibility; không đổi authority hoặc mở PG4. |
 | `HA-013` | T024 / P07 preparation | B | Principal Product Author, sau đó reviewer | Chạy documentary checks trên manifest đã freeze và ghi command, baseline, result, evidence. | `COMPLETE / PASS` for documentary checks; [preflight](evidence/P07-T024-PREFLIGHT-20260925.md) | T024 chỉ xác nhận package integrity; không dùng check này để tự mở PG4. |
 | `HA-014` | T025 / P07 preparation | B | Principal Product Author; gate reviewer | Chuẩn bị package với exact proposed successor `IE-INC-PH1-FOUNDATION-CUSTODY-001`, F01–F05/72h, exclusions, blockers, residual risks/owners và prohibited inferences. | `COMPLETE / READY-FOR-GATE-REVIEW`; [pg4-review-package.md](pg4-review-package.md) | Package chỉ là review input; chưa phải T026 decision. |
 | `HA-015` | T031 / handoff | B | Project Reviewer | Đánh giá toàn bộ CHK001–CHK033; chỉ đánh `[x]` khi reviewer chấp nhận tiêu chí chất lượng; ghi finding bên cạnh item hoặc change record. | `COMPLETE / PASS` for requirements quality; [review disposition](evidence/P07-T031-REVIEW-20260925.md); 32 current criteria checked, CHK030 superseded | Checklist không thay P01–P07 hoặc PG4. |
-| `HA-016` | T026 / P07 | D | PG4 Gate Authority | Xem manifest, P01–P06 evidence, PG2/PG3 baselines, blockers, risks và proposed successor; ghi execution state, outcome, authority, date và rationale theo contract. | `NOT-RUN`; outcome `NOT-APPLICABLE` | Có thể ghi một trong bốn outcome hợp lệ; trước đó không có PH1 authorization. |
-| `HA-017` | T027 / PH1 transition | D | PG4 Gate Authority + Principal Product Author thực hiện sau authorization | Chỉ tạo PH1 directory nếu T026 có attributable `PASS` hoặc valid `PASS-WITH-ACTIONS`, PG2/PG3 đã duyệt và điều kiện còn hiệu lực. | Bị chặn bởi T026 | Nếu đủ điều kiện mới được tạo increment code-bearing; nếu không, production vẫn unauthorized. |
-| `HA-018` | T032 / final handoff | B | Principal Product Author sau khi có T026 | Cập nhật README bằng final status, exact gate record, remaining blockers và authorized next action; giữ nguyên `NOT-RUN` nơi chưa có evidence. | Chưa đến thời điểm cập nhật | Hoàn tất handoff sau gate; không dùng README để thay gate record. |
+| `HA-016` | T026 / P07 | D | PG4 Gate Authority | Xem manifest, P01–P06 evidence, PG2/PG3 baselines, blockers, risks và exact successor; ghi execution state, outcome, authority, date và rationale theo contract. | `COMPLETE / PASS` on 2026-09-25 for PH1 F01–F05; [gate record](pg4-gate-record.md). | Authorization applies only to the named 72-hour increment and one Gateway/Vault endpoint; no PH1 runtime result is implied. |
+| `HA-017` | T027 / PH1 transition | B | Principal Product Author after PG4 authorization | Tạo feature directory chỉ sau khi parser xác nhận attributable `PASS` và approved PG2/PG3 evidence. | `COMPLETE`; [PH1 spec](../005-ph1-foundation-custody/spec.md) created after the gate decision. | PH1 may proceed to F01-A under the gate limits; no card timer was started by creating the directory. |
+| `HA-018` | T032 / final handoff | B | Principal Product Author after T026 | Cập nhật README bằng final status, exact gate record, remaining limitations and next action; giữ `NOT-RUN` cho ứng dụng chưa kiểm thử. | `COMPLETE`; [PH0 README](README.md) and this register updated. | Handoff is ready; README does not replace the gate record or Tracker. |
 
 ### 10.1 T011 reviewer checklist
 
@@ -453,7 +457,8 @@ cannot be a PG4 prerequisite when F01–F05 are the work that will create them.
 
 #### 10.4.1 Item-level handoff map
 
-The reviewer can use this map without searching the task list. Checklist markers remain unchecked.
+This is the original reviewer handoff map. [T031's disposition](evidence/P07-T031-REVIEW-20260925.md)
+now records 32 accepted current criteria; CHK030 was superseded and remains unchecked.
 
 | Checklist item | Review surface | Human action |
 |---|---|---|
@@ -525,7 +530,7 @@ chat history.
 Việc một người có thể giữ nhiều vai trò không tự tạo independence; phạm vi và competence phải
 được ghi trong evidence của P04–P06 khi cần.
 
-## 11. Critical path to PG4
+## 11. Critical path to PG4 and handoff result
 
 Đây là **điều kiện phải đủ trước PG4**, không phải thứ tự thời gian đã xảy ra:
 
@@ -544,37 +549,41 @@ Các nhánh có thể chạy song song sau khi prerequisite tương ứng đư�
 - T031 có thể chuẩn bị checklist song song với T022, nhưng review cuối vẫn phải nhìn cùng baseline và không thay result P01–P06.
 - T023–T025 chỉ là chuẩn bị; không dùng chúng để bỏ qua T006/T011/T016/T022.
 
-`PG4` không thể được suy ra chỉ từ P01–P06. P03, T023–T025 và T031 đã hoàn tất trong phạm vi
-được ghi; T026 vẫn cần quyết định riêng của Gate Authority. Không có đường tắt từ hồ sơ tác giả
-sang PH1.
+`PG4` không thể được suy ra chỉ từ P01–P06. T026 đã có
+[quyết định riêng của Gate Authority](pg4-gate-record.md) sau P03, T023–T025 và T031.
+T027 đã mở hồ sơ PH1 đúng phạm vi; không có đường tắt từ hồ sơ tác giả sang PH1.
 
-### 11.1 Remaining sequential human path
+### 11.1 Completed decision path and next card
 
 1. T006/P01 is complete with `PASS` for the manifest hash recorded in §8.1.
 2. T011/P02 đã `COMPLETE / PASS` cho đúng scenario và trace hash trong §9.1.
 3. T016/P03 đã ghi D0–D5 với các disposition áp dụng cho PH1; runtime qualification và các mốc sau vẫn tách riêng.
-4. P04, P05 and P06 have separate recorded results. Before PG4, reviewers and authorities provide any remaining PH1 minimum evidence; P06 runtime checks remain `NOT-RUN`.
+4. P04, P05 and P06 have separate recorded results; P06 runtime checks remain `NOT-RUN`.
 5. Principal Product Author đã freeze manifest và hoàn tất T023–T025.
 6. Project Reviewer đã hoàn tất T031; checklist markers vẫn thuộc quyền reviewer.
-7. PG4 Gate Authority completes T026. Only an attributable `PASS` or valid `PASS-WITH-ACTIONS`
-   naming the exact PH1 successor can authorize implementation.
-8. T027 may create the PH1 Spec Kit directory only after that authorization.
+7. PG4 Gate Authority completed T026 with `PASS` on 2026-09-25 for
+   `IE-INC-PH1-FOUNDATION-CUSTODY-001` F01–F05 only.
+8. T027 created [the PH1 feature directory](../005-ph1-foundation-custody/spec.md) after that
+   authorization. F01-A is next; its Tracker start and DeliveryCard:P07 completion remain
+   separate explicit actions.
 
-### 11.2 Parallel actions available now
+### 11.2 Work that PH1 must verify before accepting its cards
 
-- The Project Reviewer/current server operator can verify the new Ubuntu host, one native PostgreSQL instance, one Gateway/Vault path and Windows access for D2.
-- Engineering and the current server operator can identify the minimum D1-A Gateway adapter/runtime/license;
-  no Format Worker qualification is needed for the F01–F05 scope unless authority chooses otherwise.
-- Security and Verification owners can nominate reviewers and review the Grant/Receipt/session
-  boundary without claiming production security or recovery acceptance.
-- The data custodian can prepare the bounded synthetic fixture profile for D4.
-- The Principal Product Author can inventory native Ubuntu PostgreSQL 18, Temurin 25, Node.js 24
-  and future package locks for D5; no install/runtime result is reported before evidence exists.
+- F01 verifies the build/check entries and exact new dependency intake; source artifacts do not yet
+  exist in PH0 evidence.
+- F02–F04 verify the migration, account/session and transaction/Audit behavior with executed
+  results, not with the PH0 documentary review.
+- F05 qualifies one running Gateway/Adapter endpoint, Windows client path, Grant, Receipt,
+  private staging, digest and the stable Vault/location/Artifact identity seam. It does not
+  qualify another Vault, replication or failover.
+- Recovery/Storage specialist review, Format Worker runtime/toolchain, production deployment and
+  commercial rights remain outside this PH1 acceptance claim until their own triggers.
 
 ## 12. Change log
 
 | Version | Date | Change | Evidence |
 |---|---|---|---|
+| 4.8 | 2026-09-25 | Record Gate Authority's scoped `PG4 COMPLETE / PASS`, create the PH1 Spec Kit successor under T027, and complete PH0 documentary handoff. Keep DeliveryCard:P07 actual effort and all unexecuted PH1 runtime checks separate. | [Gate decision](pg4-gate-record.md); [PH1 spec](../005-ph1-foundation-custody/spec.md); T026–T027/T032 |
 | 0.1 | 2026-09-17 | Initial PH0 register; all work packages and checks initialized `NOT-RUN`. | T001 |
 | 0.2 | 2026-09-17 | Ghi nhận T001–T005 hoàn tất ở cấp tác giả; P01 vẫn `IN-PROGRESS`, readiness result và reviewer disposition vẫn `NOT-RUN`. | T004–T005; T006 còn mở |
 | 0.3 | 2026-09-18 | Hoàn tất phân tích chéo và remediation A1–A6; các readiness result P01–P07 không thay đổi. | T028–T030; [analysis-findings.md](analysis-findings.md) |

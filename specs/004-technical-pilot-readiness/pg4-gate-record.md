@@ -3,7 +3,7 @@
 | Field | Decision |
 |---|---|
 | Gate / increment | `PG4` / `IE-INC-READY-001` |
-| Record version / status | `0.1` / Decided |
+| Record version / status | `0.2` / Decided; 0.2 adds the T027 successor link, with no change to the 0.1 decision |
 | Decision date | 2026-09-25 (Asia/Ho_Chi_Minh) |
 | Decision authority | Project user acting as delegated `PG4 Gate Authority` |
 | Review participants | Project user: Project Reviewer and PG4 Gate Authority; assistant: package preparation and source/evidence cross-check. The boss's PG2/PG3 approval is reported separately in `IE-CHG-PDA-APPROVAL-004`. |
@@ -54,7 +54,7 @@ mandatory input, and there are no PG4 conditional actions.
 | Field | Authorized boundary |
 |---|---|
 | Successor increment | `IE-INC-PH1-FOUNDATION-CUSTODY-001` |
-| Spec Kit feature directory | `specs/005-ph1-foundation-custody/`, to be created under T027 after this decision; no product code is created by this record |
+| Spec Kit feature directory | [specs/005-ph1-foundation-custody/](../005-ph1-foundation-custody/spec.md), created under T027 after this decision; no product code is created by this record |
 | First delivery card | `F01-A` under the current management plan; starting its effort timer requires the user's separate Tracker instruction |
 | Scope and capacity | PH1 F01–F05, 72 planned task hours: source/build/test skeleton, PostgreSQL/migration seam, controlled account/session seam, transaction/Audit seam and one direct Client→Gateway→Vault custody smoke path |
 | Vault limit and extension boundary | Implement and test **one** Gateway/Vault endpoint. Preserve stable `VaultId`, `LocationId`, `ArtifactId` and digest while the Vault Adapter owns physical paths; F05 checks this seam. A second Vault, replication, repair and failover are later implementation and verification work. |
