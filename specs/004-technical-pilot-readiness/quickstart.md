@@ -139,7 +139,8 @@ synthetic files, manifest, digests and two Test Persona profiles.
 Application build, Flyway migration, client-to-application endpoints and Vault Adapter I/O remain
 `NOT-RUN`; the earlier Docker Compose syntax check belongs only to the retired local candidate.
 P06 is `COMPLETE / PASS` in the tracker for PH0 documentary readiness; runtime recovery/security
-checks remain `NOT-RUN`. P02, P03 and P07/`PG4` execution remain `NOT-RUN`
-until their own task evidence is produced; later controlled deltas must be frozen by T023 before PG4.
+checks remain `NOT-RUN`. P02/T011 is `COMPLETE / PASS` for the
+[documentary scenario review](evidence/P02-T011-GUIDED-REVIEW-20260925.md) only. P03 and
+P07/`PG4` results remain `NOT-RUN`; later controlled deltas must be frozen by T023 before PG4.
 P05's application checks and D4 PH1 gate disposition remain `NOT-RUN`.
 For `PG4`, this is execution state; its outcome is `NOT-APPLICABLE`, not an assessment result.

@@ -56,11 +56,11 @@ prohibited-claim boundaries.
 **Independent Test**: A reviewer can walk from authenticated access to exact historical release
 retrieval, see the safe outcome of each material failure and identify every deferred product area.
 
-- [x] T007 [US2] Create `specs/004-technical-pilot-readiness/canonical-scenario.md` with actors, preconditions and ordered steps for native account/RBAC, Logical Document identity, Workspace, Checkout, Reference, changed/`NoChange` Check-in, Review, Release, Audit and exact package retrieval (`P02`, FR-004). Evidence: [canonical-scenario.md](canonical-scenario.md), P02 remains `NOT-RUN` pending review.
+- [x] T007 [US2] Create `specs/004-technical-pilot-readiness/canonical-scenario.md` with actors, preconditions and ordered steps for native account/RBAC, Logical Document identity, Workspace, Checkout, Reference, changed/`NoChange` Check-in, Review, Release, Audit and exact package retrieval (`P02`, FR-004). Evidence: [canonical-scenario.md](canonical-scenario.md); later P02 review result is recorded under T011.
 - [x] T008 [US2] Add normal, denied, stale, wrong-workspace, interrupted, lost-response/idempotent-retry and recovery paths to `specs/004-technical-pilot-readiness/canonical-scenario.md`, preserving local work and separating successful byte transfer from successful Check-in (FR-004, SC-005). Evidence: scenario sections 5–6; execution remains `NOT-RUN`.
-- [x] T009 [US2] Populate `specs/004-technical-pilot-readiness/trace-matrix.md` for every scenario step using existing `REQ-*`, DOC-05/DOC-06 and VVP sources; leave unresolved trace as `BLOCKED` instead of creating substitute product behavior (FR-005, SC-002). Evidence: [trace-matrix.md](trace-matrix.md), all rows remain `NOT-RUN`.
-- [x] T010 [US2] Add mandatory scope, deferred product scope, and prohibited Technical Pilot claims to `specs/004-technical-pilot-readiness/canonical-scenario.md`, including later format breadth, company SSO, graphical workflow design, full Core v0, rollout, SLA and commercial claims (FR-006, SC-003). Evidence: scenario section 7; scope review remains `NOT-RUN`.
-- [ ] T011 [US2] Record the P02 review result, exact scenario/trace hashes and any scope blocker in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014).
+- [x] T009 [US2] Populate `specs/004-technical-pilot-readiness/trace-matrix.md` for every scenario step using existing `REQ-*`, DOC-05/DOC-06 and VVP sources; leave unresolved trace as `BLOCKED` instead of creating substitute product behavior (FR-005, SC-002). Evidence: [trace-matrix.md](trace-matrix.md); application verification rows remain `NOT-RUN` despite the later documentary trace review under T011.
+- [x] T010 [US2] Add mandatory scope, deferred product scope, and prohibited Technical Pilot claims to `specs/004-technical-pilot-readiness/canonical-scenario.md`, including later format breadth, company SSO, graphical workflow design, full Core v0, rollout, SLA and commercial claims (FR-006, SC-003). Evidence: scenario section 7; later scope review result is recorded under T011.
+- [x] T011 [US2] Record the P02 review result, exact scenario/trace hashes and any scope blocker in `specs/004-technical-pilot-readiness/readiness-register.md` (FR-014). Evidence: [P02/T011 guided review](evidence/P02-T011-GUIDED-REVIEW-20260925.md), `COMPLETE / PASS` for documentary scope only; all 13 checks accepted on 2026-09-25. Runtime verification remains `NOT-RUN`.
 
 **Checkpoint**: P02 is independently reviewable; deferred requirements remain visible and owned.
 
@@ -143,14 +143,15 @@ Spec Kit WorkPackages. `DeliveryCard:P01`–`P03` were superseded by completed p
 | `P04` | T017, T021–T022 (environment portion) | 4 h | Current environment preparation card. |
 | `P05` | T018–T019, T021–T022 (dataset portion) | 4 h | Current fixture preparation card. |
 | `P06` | T020–T022 (recovery/security portion) | 8 h | Current documentary recovery/security card. |
-| `P07` | T011, T016, T023–T027, T031–T032 (remaining review, gate and handoff portions) | 4 h | Only effort actually recorded after starting P07 is charged to it; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
+| `P07` | T011 (complete), T016, T023–T027, T031–T032 (remaining decision, gate and handoff portions) | 4 h | Only effort actually recorded after starting P07 is charged to it; earlier work is not backfilled without the project user's explicit retrospective confirmation. |
 | **PH0 total** |  | **32 h** | Planned baseline unchanged. |
 
 `WorkPackage:P01` (T004–T006), `WorkPackage:P02` (T007–T011), and `WorkPackage:P03`
 (T012–T016) remain valid internal Spec Kit identities and evidence groupings. Their earlier
 authoring effort has no separate current Delivery Card or verified actual-effort entry. The
-remaining T011/T016 reviewer actions are shown as P07 substeps in the current Kanban rendition;
-this does not change their WorkPackage identity or silently declare either review `PASS`.
+T011/T016 reviewer actions are shown as P07 substeps in the current Kanban rendition;
+T011 now has a documentary `PASS`, while T016 remains open. This does not change their WorkPackage
+identity or imply a P07/PG4 result.
 T001–T003 and T028–T032 are cross-artifact quality/handoff tasks included in the applicable
 current cards, not additive hours. The eight-hour PH0 operational buffer is controlled schedule
 capacity, not a task or permission to skip authority, review or correctness conditions.

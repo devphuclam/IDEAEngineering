@@ -1,8 +1,8 @@
 # PH0 Readiness Register
 
 **Increment**: `IE-INC-READY-001` — Technical Pilot Implementation Readiness
-**Version / status**: `4.2` / Draft; P01, P04, P05 and P06 `COMPLETE / PASS` for their stated
-scopes; P02, P03 and P07 remain `NOT-RUN`
+**Version / status**: `4.3` / Draft; P01, P02, P04, P05 and P06 `COMPLETE / PASS` for their stated
+scopes; P03 and P07 remain `NOT-RUN`
 **Prepared**: 2026-09-19
 **Purpose**: Sổ theo dõi P01–P07 và bằng chứng cần có trước quyết định `PG4`.
 **Authority**: [tasks.md](tasks.md) và các contract trong [contracts/](contracts/).
@@ -39,7 +39,7 @@ scopes; P02, P03 and P07 remain `NOT-RUN`
 | Successor authority state | Mixed: `IE-CHG-PDA-APPROVAL-002` approves only the Approval Policy self-approval correction; `IE-CHG-VAULT-XFER-001` confirms the architecture-preserved Multi-location Artifact Custody direction; remaining exact successor approval is `NOT-RUN`. |
 | Proposed PG4 successor | `IE-INC-PH1-FOUNDATION-CUSTODY-001` — PH1 F01–F05, “Khung hệ thống chạy được”, 72h; proposal only, no feature directory exists |
 | Source/change trace | [IE-CHG-PH0-CORR-001](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-17-ph0-readiness-correction.md) |
-| Evidence rule | Không ghi `PASS` nếu chưa có bằng chứng chạy trên đúng baseline |
+| Evidence rule | Không ghi `PASS` nếu chưa có bằng chứng phù hợp với phương pháp và đúng baseline; review tài liệu không thay kiểm thử ứng dụng. |
 | Retention | `INTERNAL`; giữ cùng increment PH0 |
 
 ## 3. Work-package status
@@ -47,7 +47,7 @@ scopes; P02, P03 and P07 remain `NOT-RUN`
 | Work package | Mục tiêu ngắn | Task IDs | Owner | Due condition | Gate effect | Task state | Result | Evidence link | Blocker / deviation |
 |---|---|---|---|---|---|---|---|---|---|
 | `P01` | Ghim baseline đã duyệt và phân biệt successor | T004–T006 | Principal Product Author / project reviewer | Trước P02 | `BLOCKS_PG4` nếu chưa xác định được baseline | `COMPLETE` | `PASS` | [baseline manifest](baseline-manifest.md); [review evidence](evidence/P01-BASELINE-001-reviewed-manifest.json), SHA-256 `28F33DE...1F3594` | T006 completed by the Project Reviewer on 2026-09-22; this result identifies sources only and does not approve a successor or PG4 |
-| `P02` | Chốt một canonical Technical Pilot scenario | T007–T011 | Principal Product Author / project reviewer | Sau P01 | `BLOCKS_PG4` | `NOT-RUN` | `NOT-RUN` | [canonical-scenario.md](canonical-scenario.md); [trace-matrix.md](trace-matrix.md) | Hồ sơ scenario đã chuẩn bị; P02 walkthrough chưa chạy |
+| `P02` | Chốt một canonical Technical Pilot scenario | T007–T011 | Principal Product Author / project reviewer | Sau P01 | `BLOCKS_PG4` | `COMPLETE` | `PASS` — documentary scenario only | [review disposition](evidence/P02-T011-GUIDED-REVIEW-20260925.md); [canonical-scenario.md](canonical-scenario.md); [trace-matrix.md](trace-matrix.md) | Project Reviewer accepted all 13 T011 points on 2026-09-25 for the exact source hashes in Section 9.1. Application checks remain `NOT-RUN`; P03 and PG4 are separate. |
 | `P03` | Ghi mọi quyết định và dependency còn mở | T012–T016 | Principal Product Author và authority tương ứng | Sau P01–P02 | `BLOCKS_PG4` hoặc `DEFERRED_SCOPE` theo từng dòng | `NOT-RUN` | `NOT-RUN` | Mục 5 dưới đây | Các decision record đã chuẩn bị; chưa có authority disposition |
 | `P04` | Mô tả môi trường delivery được phép | T017, T021–T022 | Principal Product Author / Project Reviewer; later deployment owner to be assigned | Trước P07 | `BLOCKS_PG4` nếu thiếu điều kiện bắt buộc | `COMPLETE` | `PASS` | [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md); [Execution Register P04 record](../../planning/idea-technical-pilot-execution-register.json); [environment profile](environment-profile.md); [Ubuntu development runbook](../../deploy/development/README.md); [native runtime intake](../../docs/research/2026-09-23-p04-ubuntu-native-runtime-intake.md); [server template](../../config/idea-core-v0.server.env.example) | Project Reviewer directed a server review and authorized `PASS` if the one-developer development scope is met. The review passed that scoped environment and the Execution Register records P04 as `COMPLETED / PASS` at revision 10. Live SSH confirmed Ubuntu 26.04.1, installed runtimes, active loopback PostgreSQL and mounted artifact storage; Reviewer-supplied evidence confirms Vault directory permissions and separate database-role logins/privileges. Build, Flyway, application endpoints and Vault Adapter I/O remain `NOT-RUN` because IDEA source projects do not yet exist. DHCP address is acceptable for this single-developer setup; reserve DNS/IP before shared use. This PASS does not decide P05/P06/PG4 or accepted deployment. |
 | `P05` | Chuẩn bị fixture và ma trận verification | T018–T019, T021–T022 | Principal Product Author / Project Reviewer | Trước P07 | `BLOCKS_PG4` nếu thiếu dữ liệu hoặc location cần thiết | `COMPLETE` | `PASS` | [test-data-and-verification.md](test-data-and-verification.md); [server fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md); [Execution Register P05 record](../../planning/idea-technical-pilot-execution-register.json) | Project Reviewer accepted the synthetic preparation on 2026-09-24. The server files, manifest, owner/mode, sizes and SHA-256 matched; Execution Register revision 12 closes P05. Application checks, PH1 accounts, multi-GB measurement and a second Vault remain outside this result. |
@@ -63,7 +63,8 @@ nguồn bắt buộc. Đóng card P07 cần một kết quả PG4 đã ghi, kể
 `COMPLETE` sau khi reviewer ghi nhận bằng chứng và disposition tương ứng. P04 `PASS` chỉ bao phủ
 môi trường phát triển nội bộ một người. P05 `PASS` chỉ bao phủ dữ liệu tổng hợp và hồ sơ thử đã
 chuẩn bị. P06 is `COMPLETE / PASS` for its documented PH0 readiness scope; runtime security and
-recovery checks remain `NOT-RUN`. P02, P03 and P07 chưa có kết quả.
+recovery checks remain `NOT-RUN`. P02 đã `COMPLETE / PASS` cho review tài liệu;
+P03 và P07 chưa có kết quả.
 
 ## 4. Open-decision and dependency index
 
@@ -222,7 +223,7 @@ bounded-fixture treatment, is not an authority disposition.
 | Check family | Planned checks | Method / baseline | Result | Evidence |
 |---|---|---|---|---|
 | P01 baseline | `P01-BASELINE-*` | Hash và authority record | `PASS` | [reviewed manifest](evidence/P01-BASELINE-001-reviewed-manifest.json), SHA-256 `28F33DE52C0B4C69888EBAE3F28006C1620F90EEFDF8C4ED696016A15D1F3594` |
-| P02 scenario | `P02-SCENARIO-*` | Walkthrough và trace review | `NOT-RUN` | `NOT-RUN` |
+| P02 scenario | `P02-SCENARIO-*` | Walkthrough và trace review | `PASS` for the exact documentary inputs; application checks `NOT-RUN` | [P02/T011 review](evidence/P02-T011-GUIDED-REVIEW-20260925.md) |
 | P03 decisions | `P03-DECISION-*` | Register inspection | `NOT-RUN` | `NOT-RUN` |
 | P04 environment | `P04-ENV-*` | Profile and live-host review | `PASS` | [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md) |
 | P05 dataset | `P05-DATA-*` | Fixture/matrix inspection | `PASS` for preparation only; application checks `NOT-RUN` | [Server fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md) |
@@ -302,7 +303,7 @@ Chúng không thay thế review hoặc runtime evidence.
 
 | Review task | Prepared source identity | Reviewer state | Required action |
 |---|---|---|---|
-| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `284E9F829EFE0EABFC4BFEB9AE836B6F86BF1B91A97C4C8F928720697C82B301`; `trace-matrix.md` SHA-256 `E9C66CE89F26C6529126265F9DD872E176BF65145B234158B7DCA0182DC0CADD` (working-tree preparation; pin again at T023) | `NOT-RUN` | Project reviewer walks the normal, no-change and negative paths and records attributable disposition |
+| T011 — scenario walkthrough | `canonical-scenario.md` SHA-256 `284E9F829EFE0EABFC4BFEB9AE836B6F86BF1B91A97C4C8F928720697C82B301`; `trace-matrix.md` SHA-256 `E9C66CE89F26C6529126265F9DD872E176BF65145B234158B7DCA0182DC0CADD`; pin the successor set again at T023 | `COMPLETE / PASS` | [Project Reviewer disposition](evidence/P02-T011-GUIDED-REVIEW-20260925.md) records all 13 results. Runtime tests remain `NOT-RUN`. |
 | T016 — decision review | Mục 5, `D0`–`D5`, P01 source snapshot `109c766e369793b0caa2c4cc3a576df528eddb92` plus analyzed package baseline `ad49bbf...`; [D3 scope evidence](evidence/D3-REVIEW-SCOPE-20260924.md) | `IN-PROGRESS` | D3 review is resolved for P06 documentary scope; authorities must record the remaining applicable dispositions with ID, date, baseline, evidence and reopen trigger. D0 must distinguish confirmed direction from exact successor approval. |
 | T022 — P04/P05/P06 result review | P04 profile SHA-256 `78D7E8905D6E79CBE2DD16E17631AE693DA39EA5872A24ED21A404A700036BFF`; [P04 review evidence](evidence/P04-ENV-REVIEW-20260924.md), SHA-256 `5B687457E19ADAB2F0B3F595E3D95CC828F1AB838494D3C794A80B9EADEF3CB1`. P05: `test-data-and-verification.md@0.4` SHA-256 `07526BB9490C548397AD85A689776EE8CEAC47FDE307025971743E92519AE007` and [server fixture evidence](evidence/P05-SERVER-FIXTURES-20260924.md), SHA-256 `2498FB0AB6DA1EEE80545C092BFFDACF0EEC35D31D1E11B62B224C77CBF4B4FF`; P06: `recovery-and-security-plan.md@0.5` SHA-256 `9B8064F1A1B3D5428D723B1BF87EB744C04A2B32E072C89C8B933A26D2657700`; [review disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md), SHA-256 `0A92FBE2B3DA99503CB841B39D5E0C95D3AA1A889767ED1D2500868BF44B73F6`; Steps 1–3 SHA-256 `81F37FB4FE952F66A051B9A4E614D22D6B0A1D57F33EAB5AC0315CCEC425F1A8`, `402DD9C73EE14F14F992BA46DBBA12522F2148DF2C5B57C80B9E912630179B3D`, `E89FED41A18F230FE32094F04B0B84E9F83F30097E821F667B2375F30CC980C9` | `COMPLETE` | Project Reviewer recorded P06 `PASS`; tracker P06 is `COMPLETED / PASS` at Execution Register revision 18. All three package results, reviewers, evidence links and hashes are present. |
 | T031 — checklist review | [readiness checklist](checklists/readiness.md), CHK016 reviewed for P04 environment-record completeness; other items remain unchecked; analyzed package baseline `ad49bbf...` | `IN-PROGRESS` | Project Reviewer evaluates remaining checklist items; checklist approval is quality evidence only and cannot authorize PG4 |
@@ -315,38 +316,41 @@ Chúng không thay thế review hoặc runtime evidence.
   and three recorded dispositions. The absent signed artifact is retained as an evidence limitation,
   not an automatic blocker. The Project Reviewer accepted the recorded decision evidence and
   recorded `PASS` on 2026-09-22; T006/P01 is complete for the reviewed manifest hash in Section 8.
-- **P02-R13:** The P02 Audit trace now uses exact `REQ-AUD-001/002`; the previous wildcard ambiguity
-  is resolved. Recommended reviewer disposition: `PASS`, subject to the walkthrough and trace review.
-  T011 remains `NOT-RUN` until the Project Reviewer records it.
+- **P02-R13:** The P02 Audit trace uses exact `REQ-AUD-001/002`; the previous wildcard ambiguity
+  is resolved. The Project Reviewer accepted this trace with the other 12 points in
+  [the T011 disposition](evidence/P02-T011-GUIDED-REVIEW-20260925.md). Runtime verification remains `NOT-RUN`.
 
 ### 9.1 T011 compact human decision block
 
-The Project Reviewer records one result for every row. No result is pre-filled.
+The Project Reviewer accepted all 13 points on 2026-09-25. The concise results below are backed by
+[the guided review evidence](evidence/P02-T011-GUIDED-REVIEW-20260925.md); they are documentary
+review results, not application test results.
 
 | Check | Review point | Result (`PASS`/`FAIL`/`BLOCKED`) | Finding / note |
 |---|---|---|---|
-| `P02-R01` | Normal path: login → Logical Document/Generation → Checkout/Reference → Workspace digest → changed Check-in → Review → Approval → Release → historical retrieval → Audit | `________` | `________________` |
-| `P02-R02` | No-change Check-in ends the in-scope hold and creates no new Generation/Version | `________` | `________________` |
-| `P02-R03` | RBAC denial and business gate refusal identify the reason | `________` | `________________` |
-| `P02-R04` | Stale Generation does not overwrite and local work remains | `________` | `________________` |
-| `P02-R05` | Wrong Workspace or non-owner is refused | `________` | `________________` |
-| `P02-R06` | Modified Reference cannot publish to its original Logical Document | `________` | `________________` |
-| `P02-R07` | Interrupted transfer preserves the candidate and provides recovery path | `________` | `________________` |
-| `P02-R08` | Lost response retries only the same `OperationId` and identical input | `________` | `________________` |
-| `P02-R09` | Changed Check-in is refused during `Under Review`; local edits do not change the submitted Generation. Withdraw/Reject closes the Round before a revised Check-in and new Submit. | `________` | `________________` |
-| `P02-R10` | Invalid Release scope is refused without silent cascade | `________` | `________________` |
-| `P02-R11` | Historical Controlled Release Package is retrieved by exact digest/baseline | `________` | `________________` |
-| `P02-R12` | Mandatory, deferred and prohibited scope are distinct | `________` | `________________` |
-| `P02-R13` | Every path traces to REQ, architecture and VVP; Audit uses exact `REQ-AUD-001` and `REQ-AUD-002` | `________` | `________________` |
+| `P02-R01` | Normal path: login → Logical Document/Generation → Checkout/Reference → Workspace digest → changed Check-in → Review → Approval → Release → historical retrieval → Audit | `PASS` | Ordered path accepted. |
+| `P02-R02` | No-change Check-in ends the in-scope hold and creates no new Generation/Version | `PASS` | No new content identity. |
+| `P02-R03` | RBAC denial and business gate refusal identify the reason | `PASS` | Eligibility and business gate separate. |
+| `P02-R04` | Stale Generation does not overwrite and local work remains | `PASS` | Safe local recovery retained. |
+| `P02-R05` | Wrong Workspace or non-owner is refused | `PASS` | No publication on refusal. |
+| `P02-R06` | Modified Reference cannot publish to its original Logical Document | `PASS` | Copy and confirmed discard separate. |
+| `P02-R07` | Interrupted transfer preserves the candidate and provides recovery path | `PASS` | Private staging is not publication. |
+| `P02-R08` | Lost response retries only the same `OperationId` and identical input | `PASS` | No second business operation. |
+| `P02-R09` | Changed Check-in is refused during `Under Review`; local edits do not change the submitted Generation. Withdraw/Reject closes the Round before a revised Check-in and new Submit. | `PASS` | New Round inherits no prior decision. |
+| `P02-R10` | Invalid Release scope is refused without silent cascade | `PASS` | Whole confirmed scope refused. |
+| `P02-R11` | Historical Controlled Release Package is retrieved by exact digest/baseline | `PASS` | Prior release remains pinned. |
+| `P02-R12` | Mandatory, deferred and prohibited scope are distinct | `PASS` | Deferral does not delete scope. |
+| `P02-R13` | Every path traces to REQ, architecture and VVP; Audit uses exact `REQ-AUD-001` and `REQ-AUD-002` | `PASS` | 20 P02 trace rows checked; no explicit ID missing. |
 
 | T011 capture field | Reviewer entry |
 |---|---|
 | Scenario SHA-256 | `284E9F829EFE0EABFC4BFEB9AE836B6F86BF1B91A97C4C8F928720697C82B301` |
 | Trace-matrix SHA-256 | `E9C66CE89F26C6529126265F9DD872E176BF65145B234158B7DCA0182DC0CADD` |
-| Reviewer identity | `________________` |
-| Review date | `________________` |
-| Overall T011 disposition | `PASS` / `FAIL` / `BLOCKED` |
-| Overall rationale | `________________________________________________________________` |
+| Reviewer identity | Project user acting as Project Reviewer |
+| Review date | 2026-09-25 (Asia/Ho_Chi_Minh) |
+| Overall T011 disposition | `PASS` — P02 documentary scenario review only |
+| Overall rationale | Reviewer accepted Q1–Q10 recommendations and then confirmed Q11–Q13. No P02 documentary blocker; runtime and P03 decisions remain separate. |
+| Review evidence | [P02-T011-GUIDED-REVIEW-20260925](evidence/P02-T011-GUIDED-REVIEW-20260925.md), SHA-256 `092CDA971D0F1F85EA0AD3AF4F60B5EDA7C8DC1717FBB565666032B09D9D1DB4` |
 
 ## 10. PH0 Human Action Board
 
@@ -362,7 +366,7 @@ liên kết. Phân loại dùng trong bảng:
 | Action ID | Task / package | Phân loại | Vai trò hoặc authority bắt buộc | Việc phải làm và bằng chứng cần xem | Trạng thái hiện tại | Ảnh hưởng / kết quả sau khi hoàn tất |
 |---|---|---|---|---|---|---|
 | `HA-001` | T006 / P01 | B | Project Reviewer | Xem [baseline manifest](baseline-manifest.md), approval record, reviewed planning sources and BL-DISC-001…003; retain one reproducible review-evidence file. | `COMPLETE` / `PASS`; Project Reviewer, 2026-09-22; [evidence](evidence/P01-BASELINE-001-reviewed-manifest.json) SHA-256 `28F33DE...1F3594` | P01 complete; P02 review may begin; D0 and PG4 remain open. |
-| `HA-002` | T011 / P02 | B | Project Reviewer; chỉ thêm vai trò khác nếu governance/authority chỉ định | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `READY-FOR-REVIEW`; P01 đã `PASS`, walkthrough P02 chưa chạy | Đóng hoặc chặn P02; không tạo requirement mới. |
+| `HA-002` | T011 / P02 | B | Project Reviewer; chỉ thêm vai trò khác nếu governance/authority chỉ định | Walkthrough 13 mục ở Mục 10.1 trên `canonical-scenario.md` và `trace-matrix.md`; xác nhận hash và ghi result/evidence. | `COMPLETE / PASS` on 2026-09-25; [review evidence](evidence/P02-T011-GUIDED-REVIEW-20260925.md) | P02 documentary review complete; no requirement or runtime result created. |
 | `HA-003` | T016 / P03 — D0 | D | Product Decision Authority | Chọn D0 Option A/B/C trong Mục 5.1; hướng kiến trúc và ranh giới một endpoint cho PH1 đã được xác nhận, nhưng không tự ghi disposition thay authority. | `OPEN` / `direction confirmed for PH1; exact disposition NOT-RUN` | Authority ghi `RESOLVED` hoặc `DEFERRED_SCOPE` với baseline, ngày và rationale; không cần mở lại hướng kiến trúc trừ khi chọn khác. |
 | `HA-004` | T016 / P03 — D1 | C/D | Engineering + current development server operator + authority phù hợp | Ghi riêng D1-A Gateway path cần cho F05 và D1-B Format Worker deferred; xác nhận adapter/runtime/license/endpoint chỉ cho D1-A. | `OPEN`; runtime/toolchain `UNKNOWN`/`NOT-RUN` | D1-A thiếu evidence thì chặn F05; D1-B chỉ mở khi có format-processing work. |
 | `HA-005` | T016 / P03 — D2 | C | Project Reviewer/current development server operator; later Operations owner when named | Xác nhận đúng Ubuntu development host, native PostgreSQL, một Vault, quyền truy cập từ Windows và người giữ secret; trước PH1 acceptance xác nhận Gateway endpoint và hai native accounts. Không yêu cầu hai location cho PH1. | `OPEN`; host, PostgreSQL, một Vault và hai role DB login đã kiểm tra; Server/Web endpoint và Gateway qualification `NOT-RUN` | Phân biệt server phát triển với accepted deployment; không suy diễn `PASS` từ việc cấp máy. |
@@ -374,15 +378,17 @@ liên kết. Phân loại dùng trong bảng:
 | `HA-011` | T022 / P06 | C/B | Current Project Reviewer assigned directly to Security/Verification review; recovery/storage reviewer when later scope requires | Review PH1 rollback/local preservation, session/key handling, Grant/Receipt, trust boundaries, abuse cases and reviewer competence. Full backup/restore/failover evidence remains later under D3's no-claim condition. | `PASS`; scope and competence limit are recorded in the final disposition | Runtime tests and independent specialist review remain `NOT-RUN`; reopen the competence decision if a deferred recovery/storage claim enters scope. |
 | `HA-012` | T023 / P07 preparation | B | Principal Product Author; reviewer/authority sau đó | Lập inventory hash cho exact reviewed source set và freeze manifest chỉ sau khi P01–P06 có result hợp lệ. | Chưa đủ điều kiện; không được freeze sớm | Chuẩn bị được inventory; chưa hoàn tất T023, không đổi baseline lịch sử. |
 | `HA-013` | T024 / P07 preparation | B | Principal Product Author, sau đó reviewer | Chạy documentary checks trên manifest đã freeze và ghi command, baseline, result, evidence; hiện chỉ có thể chuẩn bị command set. | `NOT-RUN`; exact reviewed baseline chưa tồn tại | T024 chỉ hoàn tất khi result gắn với baseline review, không dùng check hiện tại để tự mở PG4. |
-| `HA-014` | T025 / P07 preparation | B | Principal Product Author; gate reviewer | Chuẩn bị package với exact proposed successor `IE-INC-PH1-FOUNDATION-CUSTODY-001`, F01–F05/72h, exclusions, blockers, residual risks/owners và prohibited inferences. | Chưa được lập thành package vì P02, P03 và các gate inputs còn thiếu; P01/P04/P05/P06 có result | Có thể chuẩn bị package draft; chưa đánh dấu T025 complete. |
-| `HA-015` | T031 / handoff | B | Project Reviewer | Đánh giá toàn bộ CHK001–CHK033; chỉ đánh `[x]` khi reviewer chấp nhận tiêu chí chất lượng; ghi finding bên cạnh item hoặc change record. | `NOT-RUN`; toàn bộ marker còn unchecked | Checklist trở thành requirements-quality evidence; không thay P01–P07 hoặc PG4. |
+| `HA-014` | T025 / P07 preparation | B | Principal Product Author; gate reviewer | Chuẩn bị package với exact proposed successor `IE-INC-PH1-FOUNDATION-CUSTODY-001`, F01–F05/72h, exclusions, blockers, residual risks/owners và prohibited inferences. | Chưa được lập thành package vì P03 và các gate inputs còn thiếu; P01/P02/P04/P05/P06 có result | Có thể chuẩn bị package draft; chưa đánh dấu T025 complete. |
+| `HA-015` | T031 / handoff | B | Project Reviewer | Đánh giá toàn bộ CHK001–CHK033; chỉ đánh `[x]` khi reviewer chấp nhận tiêu chí chất lượng; ghi finding bên cạnh item hoặc change record. | `IN-PROGRESS`; CHK016 đã đánh dấu, 32 mục còn lại chưa được chấp nhận | Checklist trở thành requirements-quality evidence; không thay P01–P07 hoặc PG4. |
 | `HA-016` | T026 / P07 | D | PG4 Gate Authority | Xem manifest, P01–P06 evidence, PG2/PG3 baselines, blockers, risks và proposed successor; ghi execution state, outcome, authority, date và rationale theo contract. | `NOT-RUN`; outcome `NOT-APPLICABLE` | Có thể ghi một trong bốn outcome hợp lệ; trước đó không có PH1 authorization. |
 | `HA-017` | T027 / PH1 transition | D | PG4 Gate Authority + Principal Product Author thực hiện sau authorization | Chỉ tạo PH1 directory nếu T026 có attributable `PASS` hoặc valid `PASS-WITH-ACTIONS`, PG2/PG3 đã duyệt và điều kiện còn hiệu lực. | Bị chặn bởi T026 | Nếu đủ điều kiện mới được tạo increment code-bearing; nếu không, production vẫn unauthorized. |
 | `HA-018` | T032 / final handoff | B | Principal Product Author sau khi có T026 | Cập nhật README bằng final status, exact gate record, remaining blockers và authorized next action; giữ nguyên `NOT-RUN` nơi chưa có evidence. | Chưa đến thời điểm cập nhật | Hoàn tất handoff sau gate; không dùng README để thay gate record. |
 
 ### 10.1 T011 reviewer checklist
 
-Reviewer phải ghi kết quả cho từng mục, không chỉ ghi một nhận xét chung:
+Reviewer đã ghi kết quả 13 mục tại §9.1 và trong
+[bằng chứng T011](evidence/P02-T011-GUIDED-REVIEW-20260925.md). Bảng sau giữ vai trò
+điều hướng tới từng nguồn đã review:
 
 | Check | Nội dung cần xác nhận | Nguồn |
 |---|---|---|
@@ -521,7 +527,7 @@ Việc một người có thể giữ nhiều vai trò không tự tạo indepen
 
 Đây là **điều kiện phải đủ trước PG4**, không phải thứ tự thời gian đã xảy ra:
 
-- T006/P01 đã có kết quả; T011/P02 và T016/P03 còn phải được review.
+- T006/P01 và T011/P02 đã có kết quả; T016/P03 còn phải được review.
 - T022 đã ghi riêng kết quả P04, P05 và P06. Nhánh này đã hoàn thành trước T011/T016;
   không ghi lại như một bước tuần tự sau chúng.
 - Khi các nguồn bắt buộc đã rõ: T023 ghim manifest → T024 chạy kiểm tra → T025 lập gói;
@@ -536,13 +542,13 @@ Các nhánh có thể chạy song song sau khi prerequisite tương ứng đư�
 - T031 có thể chuẩn bị checklist song song với T022, nhưng review cuối vẫn phải nhìn cùng baseline và không thay result P01–P06.
 - T023–T025 chỉ là chuẩn bị; không dùng chúng để bỏ qua T006/T011/T016/T022.
 
-`PG4` chưa thể bắt đầu chỉ dựa trên P01–P06: P02, P03, T023–T025, T031 và authority prerequisites
+`PG4` chưa thể bắt đầu chỉ dựa trên P01–P06: P03, T023–T025, T031 và authority prerequisites
 vẫn cần hoàn tất. Không có đường tắt từ hồ sơ tác giả sang PH1.
 
 ### 11.1 Remaining sequential human path
 
 1. T006/P01 is complete with `PASS` for the manifest hash recorded in §8.1.
-2. Project Reviewer completes T011 using §9.1.
+2. T011/P02 đã `COMPLETE / PASS` cho đúng scenario và trace hash trong §9.1.
 3. Authorities complete T016 using the six forms in §5.1; D3 is satisfied for the current P06 documentary scope, while the other decisions still need their applicable dispositions.
 4. P04, P05 and P06 have separate recorded results. Before PG4, reviewers and authorities provide any remaining PH1 minimum evidence; P06 runtime checks remain `NOT-RUN`.
 5. Principal Product Author freezes the exact reviewed manifest and runs T023–T025.
@@ -608,3 +614,4 @@ vẫn cần hoàn tất. Không có đường tắt từ hồ sơ tác giả san
 | 4.0 | 2026-09-24 | Close the P06 Delivery Card as `COMPLETED / PASS` at Execution Register revision 18; reconcile P06 and T022 states, exact evidence hashes, actual effort and remaining effort. P02/P03/P07, PG4 and P06 runtime checks remain separate. | [P06 final disposition](evidence/P06-GUIDED-REVIEW-DISPOSITION-20260924.md); [Execution Register](../../planning/idea-technical-pilot-execution-register.json) |
 | 4.1 | 2026-09-25 | Separate P07 review-time accounting from the later T026/PG4 decision; correct the T011 preparation hashes, D3 handoff wording and pre-PG4 dependency description. No P02/P03/P07 or PG4 result is inferred. | P07 Kanban@0.8; PG4 gate contract and Tracker boundary check |
 | 4.2 | 2026-09-25 | Align the T011 Review-change wording and preparation hashes with the corrected scenario, trace and DOC-05@0.26 view. Keep all 13 reviewer results and P02/P07/PG4 outcomes unfilled pending review. | `IE-CHG-P07-T011-001`; `IE-VEV-P07-T011-001` |
+| 4.3 | 2026-09-25 | Record the Project Reviewer's guided acceptance of all 13 T011 checks and close P02 as `COMPLETE / PASS` for the exact scenario and trace hashes. Keep P03, P07, PG4 and runtime verification separate. | [P02/T011 guided-review evidence](evidence/P02-T011-GUIDED-REVIEW-20260925.md); §9.1 |
