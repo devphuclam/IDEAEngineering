@@ -56,6 +56,15 @@
       "durationMinutes": 134,
       "state": "CLOSED",
       "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-72db326af82a4d8eabd2cc10fb3afbc9",
+      "deliveryCardId": "F01-A",
+      "startedAt": "2026-09-28T14:51:10.4968593+07:00",
+      "stoppedAt": "2026-09-28T17:35:48.0713560+07:00",
+      "durationMinutes": 165,
+      "state": "CLOSED",
+      "recordedBy": "LEAD"
     }
   ],
   "corrections": [

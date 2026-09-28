@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 20,
+  "registerRevision": 22,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
-  "statusDate": "2026-09-25",
+  "statusDate": "2026-09-28",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -442,14 +442,56 @@
         "kind": "DeliveryCard",
         "id": "F01-A"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 8,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F01-A-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": "specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md",
+          "commit": "dbc8aa7f73d136bd96ab8edad6095564ce8aafd0",
+          "sha256": null,
+          "externalUri": null,
+          "description": "F01-A buildable foundation accepted for PH1 internal development: T001-T012 complete and four approved smoke/build checks PASS. Project Reviewer accepted one-time T002 NuGet/Web legal-file timing and T006-T008 missing-original-red-evidence deviations. Verifier NOT RUN per request. No business, security, Vault or commercial-readiness claim.",
+          "result": "PASS",
+          "recordedAt": "2026-09-28T17:35:48.0713560+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F01-A-EVENT-1",
+          "effectiveAt": "2026-09-28T14:51:10.4968593+07:00",
+          "recordedAt": "2026-09-28T14:51:10.4968593+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng yêu cầu Bắt đầu F01-A; PG4 cho phép successor PH1."
+        },
+        {
+          "eventId": "F01-A-EVENT-2",
+          "effectiveAt": "2026-09-28T17:35:48.0713560+07:00",
+          "recordedAt": "2026-09-28T17:35:48.0713560+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Project Reviewer directed completion of F01-A after checking merged PR #13, T001-T012 and four scoped build/smoke results. Ghi nhận 165 phút làm việc thực tế."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
+      "actualStart": "2026-09-28T14:51:10.4968593+07:00",
+      "actualFinish": "2026-09-28T17:35:48.0713560+07:00",
+      "actualEffortHours": 2.75,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-09-28T17:35:48.0713560+07:00",
+      "remainingReviewedAt": "2026-09-28T17:35:48.0713560+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
@@ -1222,6 +1264,20 @@
       "recordedBy": "LEAD",
       "reason": "Người dùng yêu cầu Hoàn thành P07 sau khi PG4 Gate Authority chốt PASS cho PH1 F01-F05; đóng phiên giờ thực tế, không tính giờ kế hoạch thành actual. Ghi nhận 134 phút làm việc thực tế.",
       "sourceEvidence": "Local progress tracker: P07"
+    },
+    {
+      "revision": 21,
+      "recordedAt": "2026-09-28T14:51:10.4968593+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng yêu cầu Bắt đầu F01-A; PG4 cho phép successor PH1.",
+      "sourceEvidence": "Local progress tracker: F01-A"
+    },
+    {
+      "revision": 22,
+      "recordedAt": "2026-09-28T17:35:48.0713560+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Project Reviewer directed completion of F01-A after checking merged PR #13, T001-T012 and four scoped build/smoke results. Ghi nhận 165 phút làm việc thực tế.",
+      "sourceEvidence": "Local progress tracker: F01-A"
     }
   ]
 }
