@@ -2,20 +2,26 @@
 
 This adapter represents Work Items as GitHub Issues and implements tracker operations with the `gh` CLI.
 
+## Pull Request checklist
+
+Use the shared [PR template](../../.github/pull_request_template.md) and follow the
+[repository review procedure](pull-request-review.md) for author self-check and reviewer
+verification. This adapter defines GitHub Work Item operations; the shared procedure owns checklist
+content and status meanings.
+
 ## Author self-review checklist
 
-The pull request template records the author's review intent:
+The shared PR template contains the author self-review checklist; complete it before requesting a
+review rather than duplicating its rows here.
 
-- [ ] I read the Work Item acceptance criteria and checked each one against the diff.
-- [ ] I ran the public verification command and focused tests from a clean checkout.
-- [ ] I checked documentation references, secret-like configuration, and branch scope.
-- [ ] I recorded remaining risks or blockers in the Work Item.
-
-GitHub does not record the pull request author's checklist as an independent approval. This
-repository therefore does not invent an approval event. The provider-neutral review intent remains
-`minimum_human_approvals: 0`; its JSON/API serialization is `reviewIntent.minimumHumanApprovals: 0`.
-Effective GitHub rules still win and may require stricter independent review. A requester vote is not treated as an independent approval unless the selected provider
-explicitly records that event.
+The current provider-neutral setting remains `minimum_human_approvals: 0`, serialized as
+`reviewIntent.minimumHumanApprovals: 0`. During the checklist pilot, the repository's manual
+procedure's separate-reviewer rule still applies before merge; the current setting does not
+technically enforce it. GitHub does not record the pull request author's checklist as an
+independent approval. A requester vote is not treated as an independent approval unless the
+selected provider explicitly records that event. Branch protection and organization rules may
+impose additional requirements. Count an approval only when GitHub records an approval review
+event.
 
 ## Conventions
 

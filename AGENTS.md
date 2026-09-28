@@ -8,6 +8,10 @@ Before work involving PDM, PLM, document identity, Generation, Revision, Checkou
 
 Route Work Item reads, writes, triage, and wayfinding through `docs/agents/issue-tracker.md`. The inherited Core Workspace currently selects the GitHub Platform Adapter; its final PG0 disposition remains separate from C1 product behavior.
 
+### Pull Request review
+
+For every PR, follow [`docs/agents/pull-request-review.md`](docs/agents/pull-request-review.md) and complete the shared [PR template](.github/pull_request_template.md). Pilot results and the formal adoption decision are tracked in [`docs/governance/kaizen/pr-checklist-pilot.md`](docs/governance/kaizen/pr-checklist-pilot.md).
+
 ### Collaboration workflow
 
 Follow [`docs/agents/collaboration.md`](docs/agents/collaboration.md) for provider-neutral branch, worktree, pull request, review, and handoff rules. Use [`docs/agents/local-skills.md`](docs/agents/local-skills.md) and the pinned [`skill manifest`](.agents/skills/manifest.yml) before relying on an optional global Agent plugin.
