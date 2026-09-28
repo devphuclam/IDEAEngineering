@@ -36,9 +36,9 @@ execution boundaries and CHK009/CHK010 evidence expectations. This task list rem
 **Independent test**: Follow [quickstart](quickstart.md) from clean checkouts on Ubuntu and
 Windows; record four project results and a secret/lockfile review.
 
-- [ ] T006 [P] [US1] Write a failing minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`. The test exists and passed after implementation, but its intended pre-implementation failure is not retained; do not present the wrapper launch failure as a test-red result.
-- [ ] T007 [P] [US1] Write a failing Web entry-point test in `apps/web/src/App.test.tsx`. The test exists and passed after implementation; its intended pre-implementation failure is not retained.
-- [ ] T008 [P] [US1] Write failing Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`. Both tests exist and passed after implementation; their intended pre-implementation failures are not retained.
+- [X] T006 [P] [US1] Write a minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`. Its post-implementation pass is retained; the Project Reviewer accepted an explicit exception for the missing original red-run evidence on 2026-09-28. This does not assert that an intended red run was observed.
+- [X] T007 [P] [US1] Write a Web entry-point test in `apps/web/src/App.test.tsx`. Its post-implementation pass is retained under the same 2026-09-28 red-evidence exception.
+- [X] T008 [P] [US1] Write Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`. Both post-implementation passes are retained under the same 2026-09-28 red-evidence exception.
 - [X] T009 [US1] Create the selected Java 25 Spring Boot/Modulith Maven build and minimal health entry point in `apps/server/pom.xml` and `apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java`; implementation and individual Server build result are recorded in [F01-A build results](evidence/F01-A-build-results.md).
 - [X] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
 - [X] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.
