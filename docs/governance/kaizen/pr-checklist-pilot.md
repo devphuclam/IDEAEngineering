@@ -6,7 +6,7 @@
 | Work Item | [#6 — standardize pull request checks and run a pilot](https://github.com/devphuclam/IDEAEngineering/issues/6) |
 | Pilot repository | `devphuclam/IDEAEngineering` |
 | Status | `PILOT-PLANNED`; template and procedure take effect when merged |
-| Pilot owner | `devphuclam` (repository owner and Work Item assignee) |
+| Pilot and maintenance owner | `devphuclam` (repository owner and Work Item assignee) |
 | Start | First PR opened after this change is merged |
 | End | The first 10 PRs targeting `main` or 8 weeks after start, whichever comes first |
 
@@ -65,6 +65,7 @@ the Work Item. The template remains marked as pilot guidance until that decision
 
 ## Maintenance
 
-Repository maintainers own the template and this procedure. Update them when the pilot finds a
-repeated omission, a confusing check, or a repository policy change. Review the procedure at the
-pilot close and at least annually thereafter.
+`devphuclam` is accountable for maintaining the template and this procedure. Repository maintainers
+may propose edits when the pilot finds a repeated omission, a confusing check, or a repository
+policy change. Review the procedure at pilot close and at least annually thereafter; record any
+transfer of ownership in the Work Item.
