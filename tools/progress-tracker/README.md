@@ -11,6 +11,11 @@ Nhấp đúp vào:
 
 `IDEA-Progress-Tracker.cmd` ở thư mục gốc của dự án.
 
+Launcher yêu cầu PowerShell 7 (`pwsh.exe`); nó tìm trong `PATH`, sau đó thử các đường dẫn cài đặt
+chuẩn. Windows PowerShell 5.1 không được dùng làm dự phòng vì không tương thích với encoding của
+các script hiện tại. Nếu `pwsh.exe` không tìm thấy, chạy từ môi trường có PowerShell 7 trong
+`PATH` hoặc cài PowerShell 7.
+
 Script mở một local server ở `http://localhost:8097/` và mở trình duyệt. Không cần cài package hay
 database. Nếu tracker đã chạy, lần nhấp tiếp theo chỉ mở lại đúng trang đang chạy. Nếu cổng `8097`
 bị một chương trình khác sử dụng, tracker tự thử các cổng tiếp theo đến `8107` và hiển thị địa chỉ

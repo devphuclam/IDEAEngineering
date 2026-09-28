@@ -1,2 +1,3 @@
 @echo off
-call "%~dp0tools\progress-tracker\run-idea-progress-tracker.cmd"
+call "%~dp0tools\progress-tracker\run-idea-progress-tracker.cmd" %*
+exit /b %ERRORLEVEL%
