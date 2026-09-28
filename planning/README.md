@@ -8,12 +8,17 @@ This package does not change IDEA Feature, Spec, Tech, Product Scope or any prod
 
 ## Compiler entry point
 
-Give Project Management Compiler these two values:
+Give Project Management Compiler these three values for an official import:
 
 ```text
 repositoryRoot = <IDEAEngineering checkout or immutable snapshot>
 manifestPath   = planning/project-management-compiler-manifest.json
+sourceCommit   = <exact Git commit object on main>
 ```
+
+Fetch `origin/main` in the local checkout, then use `git rev-parse origin/main` to obtain the
+exact `sourceCommit`. A branch name, a README status line or an uncommitted working tree is not
+an official snapshot. The manifest binds its declared sources and register revision at that commit.
 
 The [manifest](project-management-compiler-manifest.json) is the only discovery entry point. It
 declares which source owns each kind of planning data. A consumer must not scan the repository and
@@ -38,12 +43,13 @@ manifest points to those owning files. The HTML Gantt is a visual cross-check on
 
 ## Current execution snapshot
 
-- Baseline: `IE-PLAN-DEC2026-003@0.2`.
-- Completed planning cards: `PLN01`, `PLN02`, `PLN03`.
-- Current actual: 12 hours; current remaining planned work: 500 hours.
-- Delivery ratio: 2.3% of the 512-hour plan. This is planning progress, not software-code progress.
-- Next dependency-ready cards: `P04` and `P05`; WIP limit 1 means only one may be active.
-- Product implementation and `PG4` remain `NOT-RUN` until separately evidenced.
+This README does not repeat live card counts, hours or gate outcomes: those values change after
+each accepted update. At the selected commit, read card state, actual effort and evidence from the
+[Execution Register](idea-technical-pilot-execution-register.json), its expected revision from the
+[manifest](project-management-compiler-manifest.json), and PH1 authorization from the
+[PG4 gate record](../specs/004-technical-pilot-readiness/pg4-gate-record.md). Planned hours and
+dependencies remain in the DOC-07 planning sources named by the manifest. Do not substitute a
+historical summary in a README for these owning records.
 
 ## Recording actual progress
 
@@ -104,4 +110,5 @@ A dirty working tree is a preview, not an official source snapshot. Official han
 - fixtures passing and source totals reconciling;
 - the project user confirming the commit supplied to the Compiler.
 
-Until those conditions are recorded, `sourceReadiness.gateState` remains `NOT_RUN`.
+Read `sourceReadiness.gateState` from the manifest at the import commit; this README does not set
+or advance that state. A previously accepted snapshot does not validate later uncommitted edits.

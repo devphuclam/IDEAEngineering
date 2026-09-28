@@ -6,8 +6,9 @@ can grow toward PLM in the same application. An IDEA Platform requires an indepe
 ## Start here
 
 The project has **eight authored product-document drafts**, three management decision briefs,
-UI prototypes and a delivery roadmap. It is still in analysis and design; the product Core is not
-implemented. Existing repository tools are inherited development infrastructure, not the product.
+UI prototypes and a delivery roadmap. PH1 implementation has started: F01-A supplies buildable
+Server, Web, Desktop and Workspace scaffolds, not working product workflows or a usable Core v0.
+Existing repository tools are inherited development infrastructure, not the product.
 
 | What you need | Where to read | What it owns |
 |---|---|---|
@@ -63,10 +64,13 @@ the [product-document catalogue](docs/product/instances/idea-engineering/README.
 35 Work Packages, 53 executable Delivery Cards, seven zero-effort gates/milestones, 512 planned
 work hours and 88 controlled reserve hours. The older 56-task/756-hour schedule is historical and
 must not be used for current execution. The multi-location Vault successor retains its own change
-and verification records; `PG4` remains `NOT-RUN`.
+and verification records. For the current PH1 authorization, read the
+[PG4 gate record](specs/004-technical-pilot-readiness/pg4-gate-record.md); for card state and actual
+effort, read the [Execution Register](planning/idea-technical-pilot-execution-register.json) at the
+same exact Git commit as the [Compiler manifest](planning/project-management-compiler-manifest.json).
 
-Prepare the next bounded product increment through the [Spec Kit workflow](docs/agents/spec-kit.md).
-Complete its review and planning checks and the applicable readiness gates before production code.
+Continue each authorized product increment through the [Spec Kit workflow](docs/agents/spec-kit.md).
+Check its exact gate scope and current Delivery Card before implementing the next slice.
 Keep feature `003` as the documentation-system delivery history. The prototype supplies design
 evidence, not production code.
 
