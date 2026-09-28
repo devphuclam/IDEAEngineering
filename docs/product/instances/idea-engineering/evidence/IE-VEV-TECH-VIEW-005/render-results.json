@@ -1,0 +1,21 @@
+{
+  "evidenceId": "IE-VEV-TECH-VIEW-005",
+  "renderedAt": "2026-09-28T04:18:29.195Z",
+  "browser": "154.0.8037.57",
+  "mermaid": "11.12.0",
+  "source": {
+    "path": "docs/product/instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md",
+    "sha256": "0712ab0b6bfc6348e796848cc57c73e3dcdf190dc3bd227e71f98c8431fe4a56"
+  },
+  "results": [
+    {
+      "id": "TECH-D03",
+      "title": "Technology to responsibility layer mapping",
+      "description": "Responsibility mapping, not a time sequence. Dashed relationships carry control or identify responsibilities. Thick arrows carry file bytes directly between Workspace, Artifact Gateway and one configured Vault, bypassing the Server. Server-owned Artifact Custody selects the location, issues scoped grants and revalidates receipts; a receipt cannot publish a Generation. Security and persistence are separate Module responsibilities, not sequential transport hops. The Vault and Adapter seam supports later multi-vault work without deploying it in PH1.",
+      "status": "PASS — RENDER",
+      "diagramSha256": "9b8af3b206d2afaeefd583ebc46b42a31988ef84c33bef06a2d5b8945613d93f",
+      "svgSha256": "5638f98994856176be0c0f48360fce93c1d1f88a943d6f6d2e67007a7370d55b",
+      "pngSha256": "4303b1fb351a36ebe3a6875ff368c28f26cd9d8f9c6d390eb341850f65fe84f4"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "evidenceId": "IE-VEV-PH1-TRANSFER-001",
+  "renderedAt": "2026-09-28T04:17:20.347Z",
+  "browser": "154.0.8037.57",
+  "mermaid": "11.12.0",
+  "sources": [
+    {
+      "name": "DOC-05-architecture-description.md",
+      "sha256": "8ad78e1b861bce9a356e85096d8044588dafa4e17c0cfad2e16eaf61a1089323"
+    },
+    {
+      "name": "DOC-06-data-integration-and-migration-specification.md",
+      "sha256": "ceb2768cabe5f5af477cce0452b474b549ec052a4c48171f491882002c7580de"
+    }
+  ],
+  "results": [
+    {
+      "id": "ARCH-VIEW-SEQ-002",
+      "title": "Atomic Check-in publication",
+      "description": "The engineer confirms the exact scope after a local scan. Server-owned Identity, Access Policy and Controlled Product Data perform preflight. Changed bytes go directly from the Desktop Workspace client through a selected Gateway to private Vault staging. Artifact Custody validates authenticated receipts and any required replica evidence. Finalize uses the same OperationId and scope. Current authorization, heads, Reservations and durability are revalidated before one relational owner transaction commits changed Generations, Audit, outcomes and confirmed Reservations Ended. No Change creates no Generation but still ends the confirmed hold. Refusal or known pre-commit failure preserves local work and the prior product baseline. Internal owner calls are detailed in the companion Module and authorization views.",
+      "status": "PASS — RENDER",
+      "diagramSha256": "c42448a812d9664d5acacd654b2ae6901afdab225b946730dc7e45ecd258b1c7",
+      "svgSha256": "d450fd80fcabda9801c65cbd5dac71c9b4ca6147b130b1591821e75d8414e6cb"
+    }
+  ]
+}

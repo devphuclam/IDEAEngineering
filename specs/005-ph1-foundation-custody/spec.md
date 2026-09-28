@@ -1,6 +1,6 @@
 # Feature Specification: PH1 Foundation and Single-Vault Custody
 
-**Feature Branch**: `codex/p07-gate-readiness`
+**Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
 **Version / owner**: `0.1` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
@@ -13,6 +13,12 @@
 The [PG4 decision](../004-technical-pilot-readiness/pg4-gate-record.md) authorizes this exact PH1 increment. The [frozen PH0 manifest](../004-technical-pilot-readiness/baseline-manifest.md) and [PG2/PG3 approval report](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md) identify the controlling product sources. This Spec Kit file organizes delivery and acceptance of their F01–F05 subset; it does not introduce a new Feature, alter a `REQ-*` obligation, select another Tech Stack, or approve the wider Core v0 scope. If a statement here conflicts with a controlled product requirement or architecture decision, stop and resolve the conflict through the owning source.
 
 PH1 implements **one Gateway/Vault endpoint** and retains the approved separation between file identity and physical storage location. It must leave the Vault identity/location and Adapter boundary usable by a later multi-Vault increment. PH1 does **not** implement or claim a second Vault, replication, repair, failover, a Format Worker job, CAD/Office conversion, Logical Document lifecycle, Checkout/Check-in, Review/Release, multi-GB performance, production recovery, shared rollout or commercial readiness.
+
+This is a **PH1 delivery boundary, not cancellation of the Core v0 document flow**. The
+[current roadmap](../../docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
+schedules document identity and Generation in PH2, Workspace with Checkout/Reference/Check-in in
+PH3, and Review/Release in PH4; PH5 checks the integrated flow again. F05 in PH1 proves only a
+direct file-transfer and custody boundary, not a completed document Check-in.
 
 The user’s PG4 decision authorizes implementation but is not evidence that any PH1 application test has passed. Each F01–F05 completion result requires its own executed test and retained evidence. Starting the F01-A effort timer remains a separate Tracker action.
 
@@ -57,11 +63,17 @@ As an account administrator, I need to bootstrap the initial administrator throu
 
 **Independent Test**: Bootstrap once under the documented authority, sign in as a test account, sign out or disable it, and retry a protected request with the old session.
 
+Also re-enable the account and prove the old session stays invalid while a fresh sign-in works.
+Use the F04 sample owner command to exercise disablement/revocation during an in-flight request.
+
 **Acceptance Scenarios**:
 
 1. **Given** a new installation with no initial administrator, **When** the controlled bootstrap is executed, **Then** one attributable administrator account becomes available without opening public registration.
-2. **Given** an active native account, **When** its credentials are verified, **Then** the resulting session is associated with its stable Actor; the client cannot choose another Actor for a protected request.
-3. **Given** a signed-out, disabled or revoked session, **When** it is reused, **Then** the protected request is refused.
+2. **Given** bootstrap has already completed, **When** it is requested again, **Then** no Actor, account or Role Assignment is created or changed and the caller receives a clear already-initialized result; no additional privilege is granted.
+3. **Given** an active native account, **When** its credentials are verified, **Then** the resulting session is associated with its stable Actor; the client cannot choose another Actor for a protected request.
+4. **Given** a signed-out, disabled or revoked session, **When** it is reused, **Then** the protected request is refused.
+5. **Given** a protected command started with an eligible session, **When** account disablement or session revocation commits before the command's authoritative commit, **Then** commit-time eligibility revalidation coordinated with that security change prevents the command from committing a successful business-state change. A check only at request arrival is insufficient.
+6. **Given** an account is re-enabled after disablement, **When** a prior invalidated session is reused, **Then** it remains refused; access requires a fresh eligible sign-in rather than reactivating the old session.
 
 ---
 
@@ -95,6 +107,18 @@ As an authorized client user, I need the Server to grant a bounded transfer to o
 2. **Given** a completed Gateway transfer with matching size and digest, **When** the Server verifies the receipt, **Then** the metadata identifies the exact Artifact, Vault and location without using a physical path as document identity.
 3. **Given** an expired/incorrect grant, a digest mismatch or an interrupted transfer, **When** confirmation is attempted, **Then** no successful custody metadata is recorded and the candidate is handled by the documented failure/retry path.
 
+**Failure outcomes for this one-endpoint PH1 transfer** (from DOC-06 `DATA-REL-031` and its
+exchange rules):
+
+| Situation | Required outcome |
+|---|---|
+| Wrong, altered, expired or improperly replayed Grant; forged or mismatched Receipt | Refuse that confirmation and record no successful custody. A replacement Grant, if appropriate, requires fresh eligibility/state checks for the same operation. |
+| Missing bytes or size/digest mismatch | Keep the candidate private and ineligible for accepted Artifact custody; retain a failure/reconciliation result. Do not treat stored bytes as a verified Artifact. |
+| Interrupted transfer or lost response | Query the existing `OperationId`/`TransferId` result and resume only missing verified ranges when still eligible; a renewed Grant keeps the same operation identity. Do not silently start a second operation. |
+| Repeated request | The same operation and unchanged input resolves to its existing progress/result. Changed input under the same operation is an input conflict, not another success. |
+
+This table does not select an HTTP status code, Grant lifetime or Gateway runtime/toolchain.
+
 ### Edge Cases
 
 - Bootstrap is repeated, attempted without its required authority, or started with an existing administrator.
@@ -113,14 +137,14 @@ As an authorized client user, I need the Server to grant a bounded transfer to o
 - **FR-001 (F01)**: The PH1 source MUST provide documented, repeatable build and basic-check entry points for its Web, Desktop, Server and test projects; the result of each executed check MUST be retainable.
 - **FR-002 (F01)**: Repository configuration MUST contain no working secret; required local values MUST be described without committing credentials.
 - **FR-003 (F02)**: A fresh permitted development database MUST be constructible from identifiable, ordered changes, with a recorded bounded rollback check and separate application/database health outcomes.
-- **FR-004 (F03)**: Initial administrator creation MUST use a controlled bootstrap path; public self-registration MUST NOT be available in PH1.
-- **FR-005 (F03)**: A protected request MUST use a verified session associated with one stable Actor; sign-out, disablement and revocation MUST prevent reuse as an eligible session.
+- **FR-004 (F03)**: Initial administrator creation MUST use a controlled one-time bootstrap path; after completion a repeated request MUST report that initialization is already complete without creating or changing an Actor, account or Role Assignment, and public self-registration MUST NOT be available in PH1.
+- **FR-005 (F03)**: A protected request MUST use a verified session associated with one stable Actor; sign-out, disablement and revocation MUST prevent reuse as an eligible session. Commands MUST revalidate eligibility before their authoritative commit, coordinated with committed disablement/revocation so an invalid command cannot commit. Re-enabling an account MUST require a fresh eligible session; prior invalidated sessions MUST remain invalid.
 - **FR-006 (F04)**: A successful sample business command MUST retain its business result and required Audit evidence with the same correlation identity; Audit evidence MUST NOT determine or mutate that result.
 - **FR-007 (F04)**: A refused or failed sample command MUST have an attributable refusal/failure result without a false successful business-state change.
 - **FR-008 (F05)**: For the approved single-endpoint smoke path, the Server MUST issue only a scoped, time-bounded transfer permission after eligibility checks, and the client MUST send file bytes to the Gateway, not through the business Server.
 - **FR-009 (F05)**: The Server MUST record a successful Artifact custody result only after verifying a Gateway receipt for the expected operation, byte count and digest; an unverified candidate MUST remain distinct from committed metadata.
 - **FR-010 (F05)**: The custody record MUST preserve stable Artifact, Vault and location identity independently of the Adapter-owned physical storage path, so later multi-Vault work does not require file identity to equal one machine path.
-- **FR-011 (F05)**: Wrong, expired, mismatched, interrupted or duplicate transfer attempts MUST have a defined refusal, retry or reconciliation outcome; no attempt may be silently marked successful.
+- **FR-011 (F05)**: Wrong, expired, mismatched, interrupted or duplicate transfer attempts MUST follow the failure-outcome table in User Story 5; no attempt may be silently marked successful, and retry/resume MUST retain the existing operation identity unless an explicit new operation is authorized.
 - **FR-012 (PH1)**: Before first use, each newly introduced third-party package, SDK, source, asset or runtime MUST have its exact source, version, license and intended use recorded under the repository intake rule. PH1 acceptance MUST NOT claim commercial distribution rights from internal-use evidence alone.
 
 ### Key Entities
@@ -136,9 +160,9 @@ As an authorized client user, I need the Server to grant a bounded transfer to o
 
 - **SC-001 (F01)**: A clean-checkout reviewer can run all four named project build/check entry points and retain an actual pass/fail result for each, with zero working secrets committed.
 - **SC-002 (F02)**: One fresh database can be built from the recorded change set; one supported rollback case and both healthy/unavailable database conditions produce distinguishable recorded outcomes.
-- **SC-003 (F03)**: The documented bootstrap, sign-in, sign-out, disable and revocation scenarios each have an executed result; all protected retries with invalidated sessions are refused.
+- **SC-003 (F03)**: The documented first/repeated bootstrap, sign-in/out, disable, revoke and re-enable scenarios each have an executed result; repeated bootstrap creates zero additional privileges and all protected retries with invalidated sessions are refused. F04 provides the in-flight command test: committed disablement/revocation before the command commit yields zero successful business-state changes. Re-enabled accounts accept fresh eligible sign-in but refuse prior invalidated sessions.
 - **SC-004 (F04)**: For the allowed, refused and forced-failure sample commands, the retained evidence identifies the Actor, correlation identity and actual outcome; zero successful results lack their required Audit evidence.
-- **SC-005 (F05)**: Both approved synthetic fixtures (1 KiB and 64 MiB) complete the one-endpoint transfer path with matching size and SHA-256; denied, wrong-digest and interrupted attempts produce zero false successful custody results.
+- **SC-005 (F05)**: Both approved synthetic fixtures (1 KiB and 64 MiB) complete the one-endpoint transfer path with matching size and SHA-256; denied, wrong-digest, interrupted, lost-response and repeated/changed-input attempts produce zero false successful custody results.
 - **SC-006 (boundary)**: The F05 review can identify separate Artifact, Vault, location and physical-path fields and demonstrate that one stored file's logical identity does not depend on its Adapter path. This is a seam check, not a second-Vault test.
 
 ## Assumptions
@@ -149,15 +173,19 @@ As an authorized client user, I need the Server to grant a bounded transfer to o
 - F01–F05 produce their own runtime evidence. PH0 documentary PASS and PG4 PASS do not pre-accept any PH1 test.
 - Later multi-Vault implementation, operational recovery, Format Worker qualification and commercial clearance require their own scoped decisions and evidence.
 
-## Approved-Source Trace
+## Governing-Source Trace
 
-This table locates the owning sources; local `FR-*` numbers above are delivery checks, not new
-`DOC-04` requirement IDs. The [current PH1 roadmap](../../docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md) supplies F01–F05 scope and effort.
+This table locates the owner of each delivery requirement. Local `FR-*` numbers are PH1 delivery
+checks, **not** new `DOC-04` SRS requirement IDs or new Product Decision Authority approvals. The
+[current PH1 roadmap](../../docs/product/instances/idea-engineering/planning/DOC-07-appendix-A-task-breakdown-december-2026.md)
+supplies F01–F05 scope and effort. Constitution and agent procedures govern how work is done;
+they do not create a product feature.
 
-| PH1 card | Approved-source connection | Boundary retained |
-|---|---|---|
-| F01 | `REQ-SEC-001`; DOC-05 application/client boundary | No permanent client-side credential or physical Vault path. |
-| F02 | DOC-07 F02; DOC-05/06 data ownership and migration design | A development migration/rollback check is not an operational restore claim. |
-| F03 | `REQ-IAM-001/002/004/007`; DOC-05 identity boundary | Bootstrap/account/session only; no public registration or implicit document authority. |
-| F04 | `REQ-AUD-001/002`; DOC-05 owner/Audit transaction boundary | Audit records but does not decide the business outcome. |
-| F05 | `REQ-SEC-001/002`, `REQ-OPS-001/006`; DOC-05 Artifact transfer/custody interfaces | One Gateway/Vault endpoint now; `REQ-OPS-007/008` multi-location selection, replication and repair remain later implementation and verification work. |
+| PH1 requirement | Card | Governing source and class | Boundary retained |
+|---|---|---|---|
+| `FR-001/002` | F01 | DOC-07 F01 delivery plan; `REQ-SEC-001` and DOC-05 client boundary for secrets/access | Build evidence belongs to F01; no permanent client credential or physical Vault path. |
+| `FR-003` | F02 | DOC-07 F02 delivery plan; DOC-05/06 data ownership and migration design | A development migration/rollback check is not an operational restore claim. |
+| `FR-004/005` | F03 | DOC-04 `REQ-IAM-001/002/004/007`; DOC-05 identity boundary | Bootstrap/account/session only; no public registration or implicit document authority. |
+| `FR-006/007` | F04 | DOC-04 `REQ-AUD-001/002`; DOC-05 owner/Audit transaction boundary | Audit records but does not decide the business outcome. |
+| `FR-008/009/010/011` | F05 | DOC-04 `REQ-SEC-001/002`, `REQ-OPS-001/006`; DOC-05/06 Artifact transfer/custody interfaces | One Gateway/Vault endpoint now; `REQ-OPS-007/008` multi-location selection, replication and repair remain later implementation and verification work. |
+| `FR-012` | PH1-wide | [Constitution principle I](../../.specify/memory/constitution.md) and [external-source intake](../../docs/agents/external-source-intake.md), both repository process controls | Exact license/source review is required before import/use; internal development does not establish commercial distribution rights. |

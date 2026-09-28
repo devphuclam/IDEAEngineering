@@ -1,0 +1,133 @@
+---
+description: "Dependency-ordered PH1 delivery tasks for F01–F05"
+---
+
+# Tasks: PH1 Foundation and Single-Vault Custody
+
+**Input**: [spec](spec.md), [plan](plan.md), [data model](data-model.md),
+[boundary contract](contracts/ph1-boundaries.md) and [validation guide](quickstart.md).
+**Scope**: The 72 planned hours in F01-A/B, F02, F03-A/B, F04 and F05-A/B. Hours are card
+estimates, never actual effort. Each card needs its own executed evidence before completion.
+**Tests**: Required by SC-001–006 and repository TDD workflow. Write the relevant failing test
+before its behavior and retain red/green results. A Windows result cannot stand in for an Ubuntu
+result or vice versa.
+
+Before implementing or reviewing PH1 tasks, read the [worker handoff](worker-handoff.md) for
+execution boundaries and CHK009/CHK010 evidence expectations. This task list remains the execution source.
+
+## Phase 1: Setup — F01-A prerequisites
+
+**Goal**: Start from the approved PG4 scope without importing unqualified dependencies.
+
+- [ ] T001 Record source commit, F01-A Work Item link and approved PH1 boundary in `specs/005-ph1-foundation-custody/evidence/F01-A-source-and-scope.md`.
+- [ ] T002 Qualify exact source, version, license, transitive obligations and intended internal use of F01 Java, Web, .NET and Maven Wrapper dependencies before first import in `docs/research/2026-09-28-ph1-f01-dependency-intake.md`.
+- [ ] T003 Create build-only scaffolds in `apps/server/pom.xml`, `apps/server/mvnw`, `apps/server/.mvn/wrapper/maven-wrapper.properties`, `apps/web/package.json`, `apps/web/package-lock.json`, `apps/desktop/IdeaDesktop.csproj`, `apps/workspace/IdeaWorkspace.csproj`, `apps/desktop/tests/IdeaDesktop.Tests.csproj` and `apps/workspace/tests/IdeaWorkspace.Tests.csproj`; document their ownership in `apps/README.md`. Do not add application behavior yet.
+
+## Phase 2: Shared foundation — F01-A/B
+
+**Goal**: Give all four projects reproducible build and configuration boundaries before behavior.
+
+- [ ] T004 Add non-secret development configuration names and validation rules to `config/idea-core-v0.server.env.example`; keep filled values ignored by `.gitignore`.
+- [ ] T005 Add one reproducible command per platform and explain required Ubuntu/Windows tools in `apps/README.md` and `deploy/development/README.md`.
+
+## Phase 3: User Story 1 — Buildable application foundation (F01-A/B, P1) 🎯 MVP
+
+**Goal**: Four minimal buildable projects and retained basic-check results from one commit.
+**Independent test**: Follow [quickstart](quickstart.md) from clean checkouts on Ubuntu and
+Windows; record four project results and a secret/lockfile review.
+
+- [ ] T006 [P] [US1] Write a failing minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`.
+- [ ] T007 [P] [US1] Write a failing Web entry-point test in `apps/web/src/App.test.tsx`.
+- [ ] T008 [P] [US1] Write failing Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`.
+- [ ] T009 [US1] Create the selected Java 25 Spring Boot/Modulith Maven build and minimal health entry point in `apps/server/pom.xml` and `apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java`.
+- [ ] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
+- [ ] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.
+- [ ] T012 [US1] Run all four builds/basic checks on their qualified platforms, record command, tool versions, commit and actual result in `specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md`.
+- [ ] T013 [US1] Add and run a repeatable tracked-secret detection check in `tests/ph1/check-no-secrets.ps1`; repeat builds from clean source, inspect lockfiles against intake, and record F01-B evidence in `specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md`.
+
+## Phase 4: User Story 2 — Controlled data baseline (F02, P1)
+
+**Goal**: A fresh dev database is created from ordered changes; health and bounded failure
+results are distinguishable. This is not operational restore evidence.
+**Independent test**: Fresh migration, repeat validation, one bounded rollback/failure case and
+healthy/unavailable database probes.
+
+- [ ] T014 [US2] Write failing migration/health integration checks in `apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java`.
+- [ ] T015 [US2] Add versioned schema for the PH1 identities and metadata in `database/migrations/V1__ph1_foundation.sql` and package that source through `apps/server/pom.xml`; use only the separate migration role.
+- [ ] T016 [US2] Implement separate application and database health outcomes in `apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java`.
+- [ ] T017 [US2] Run fresh migration, repeat validation and bounded rollback/failure procedure; retain actual SQL/version/health results in `specs/005-ph1-foundation-custody/evidence/F02-data-results.md`.
+
+## Phase 5: User Story 3 — Controlled native account and session (F03-A/B, P1)
+
+**Goal**: Bootstrap one administrator without public registration and reject invalidated sessions.
+**Independent test**: Bootstrap once, repeat without a new privilege, then sign in, sign out,
+disable/revoke and retry a protected call.
+
+- [ ] T018 [US3] Write failing first/repeated bootstrap, session eligibility and denial tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; include re-enabling an account, refusing its old invalidated session and accepting a fresh eligible sign-in.
+- [ ] T019 [US3] Implement one-time local administrator bootstrap and Actor/account persistence in `apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java`.
+- [ ] T020 [US3] Implement native login/session ownership and protected-request Actor derivation in `apps/server/src/main/java/com/idea/ddm/identity/SessionService.java`; expose commit-time eligibility validation coordinated with security-state changes for the F04 owner command, and never revive invalidated sessions when re-enabling an account.
+- [ ] T021 [US3] Implement authorized native-account creation, sign-out, disablement and revocation refusal paths in `apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java`.
+- [ ] T022 [US3] Run the F03-A/B scenarios and retain actual results without credentials in `specs/005-ph1-foundation-custody/evidence/F03-identity-results.md`.
+
+## Phase 6: User Story 4 — Attributable owner outcome (F04, P1)
+
+**Goal**: Sample owner result, required Audit and outbox record have one relational fate;
+Audit records the decision without making it.
+**Independent test**: Allowed, refused, forced-failure and same-OperationId retry scenarios.
+
+- [ ] T023 [US4] Write failing allowed/refused/failure/idempotency tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`; use controlled synchronization to commit account disablement or session revocation after request admission but before owner commit, then prove no successful business-state change commits.
+- [ ] T024 [US4] Implement append-only Audit storage in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`.
+- [ ] T025 [US4] Implement sample owner command, required outbox and atomic transaction in `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java`; coordinate commit-time eligibility with IAM security-state changes so a session invalidated before owner commit cannot produce a successful change.
+- [ ] T026 [US4] Run success, refusal, forced-failure and retry tests; retain operation and Audit correlation in `specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md`.
+
+## Phase 7: User Story 5 — Direct single-Vault transfer (F05-A/B, P1)
+
+**Goal**: Client bytes go directly to one Gateway; Server accepts custody only after matching
+verified Receipt. Distinct IDs leave a future multi-Vault seam, not a second-Vault result.
+**Independent test**: Both P05 fixtures match byte count and SHA-256; wrong/expired Grant,
+mismatch, interruption, lost response and duplicate/changed-input attempt produce no false
+accepted custody.
+
+**F05-A path gate:** The Gateway boundary is selected, but its exact runtime/toolchain is still
+`NOT-RUN`. T027 must settle and record that qualification before Gateway code. Then replace the
+directory-only references in T029, T031 and T033 with exact test/source paths in this file and
+rerun read-only `$speckit-analyze` for F05. No `.java`, `.cs` or `.ts` Gateway source path is
+assumed in advance. This gate does not block F01-A through F04.
+
+- [ ] T027 [US5] Qualify exact Gateway runtime, toolchain, Adapter, transport security and package intake in `docs/research/2026-09-28-ph1-f05-gateway-qualification.md`; record exact source/test paths there, refine T029/T031/T033 in `specs/005-ph1-foundation-custody/tasks.md`, and rerun read-only `$speckit-analyze` before Gateway implementation.
+- [ ] T028 [US5] Write failing wrong/expired/replayed Grant, mismatched Receipt, same-operation status and custody tests in `apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java`.
+- [ ] T029 [US5] Write runtime-neutral candidate, size/digest mismatch, interruption, lost-response and repeated/changed-input cases in `tests/ph1/transfer-smoke/gateway-cases.json`; after T027 qualifies the runtime, bind these cases to its failing test harness and record the exact harness path in `apps/gateway/README.md`.
+- [ ] T030 [US5] Implement exact short-lived Grant issuance and same-OperationId lookup in `apps/server/src/main/java/com/idea/ddm/custody/TransferGrantService.java`.
+- [ ] T031 [US5] Implement Gateway candidate handling through one private filesystem Adapter under `apps/gateway/`; record the qualified entrypoint, source filenames and commands in `apps/gateway/README.md` and `specs/005-ph1-foundation-custody/evidence/F05-A-gateway-files.md`.
+- [ ] T032 [US5] Implement authenticated Receipt validation and Artifact/Vault/Location metadata acceptance in `apps/server/src/main/java/com/idea/ddm/custody/ReceiptAcceptanceService.java`.
+- [ ] T033 [US5] Add a client transfer harness using Grant-directed Client→Gateway bytes in `tests/ph1/transfer-smoke/` without routing file bytes through `apps/server/`.
+- [ ] T034 [US5] Run 1 KiB/64 MiB, refusal, mismatch, interruption, lost-response and duplicate/changed-input scenarios; retain manifest comparison, transfer route, receipt and metadata evidence in `specs/005-ph1-foundation-custody/evidence/F05-B-transfer-results.md`.
+
+## Phase 8: Cross-cutting review
+
+- [ ] T035 Review implementation against FR-001–012, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); record residual `NOT-RUN`/`BLOCKED` claims in `specs/005-ph1-foundation-custody/evidence/PH1-coverage-review.md`.
+- [ ] T036 Review exact dependency/license evidence and clean-room provenance before integration in `specs/005-ph1-foundation-custody/evidence/PH1-license-review.md`.
+
+## Dependencies and execution order
+
+| Delivery card | Tasks | Requires |
+|---|---|---|
+| F01-A | T001–T012 | PG4 PASS and T002 intake before package import |
+| F01-B | T013 | F01-A actual build evidence |
+| F02 | T014–T017 | F01 build foundation |
+| F03-A/B | T018–T022 | F02 baseline |
+| F04 | T023–T026 | F03 Actor/session and F02 database |
+| F05-A/B | T027–T034 | F04 outcome/Audit and F02 data baseline; T027 qualification and exact-path task refinement before Gateway implementation |
+| PH1 review | T035–T036 | Targeted story evidence |
+
+Only tasks marked `[P]` use disjoint files and can be prepared in parallel after their stated
+prerequisites; the single current developer may execute them sequentially. Within each story,
+tests must fail for the intended missing behavior before implementation and pass afterward.
+Do not run a PH1 task as proof of a later Core v0 feature.
+
+## Implementation strategy
+
+The first demonstrable increment is **F01-A**, then F01-B. Finish and review each card's actual
+evidence before advancing the Tracker. Continue F02→F03→F04→F05 in dependency order. Product
+requirements, architecture and Tech baseline remain under their controlled owners; changes to
+them are not made by editing this task list.

@@ -1,0 +1,56 @@
+sequenceDiagram
+    accTitle: Atomic Check-in publication
+    accDescr: The engineer confirms the exact scope after a local scan. Server-owned Identity, Access Policy and Controlled Product Data perform preflight. Changed bytes go directly from the Desktop Workspace client through a selected Gateway to private Vault staging. Artifact Custody validates authenticated receipts and any required replica evidence. Finalize uses the same OperationId and scope. Current authorization, heads, Reservations and durability are revalidated before one relational owner transaction commits changed Generations, Audit, outcomes and confirmed Reservations Ended. No Change creates no Generation but still ends the confirmed hold. Refusal or known pre-commit failure preserves local work and the prior product baseline. Internal owner calls are detailed in the companion Module and authorization views.
+
+    actor Engineer
+    participant Client as Desktop / Workspace client
+    participant Server as IDEA Server
+    participant Gateway as Selected Artifact Gateway
+    participant Vault as Selected Vault
+    participant Replica as Policy-selected replica Vault
+    participant DB as Relational store
+
+    Engineer->>Client: Scan and confirm exact Check-in scope
+    Client->>Server: Prepare(session proof, OperationId, scope, input fingerprint)
+    Server->>Server: IAM, Access Policy and CPD validate the complete request
+    alt any entry is stale, unauthorized or invalid
+        Server->>DB: Record owner refusal outcome and Audit only
+        Server-->>Client: Refuse complete scope with affected rows
+        Note over Client,Server: Preserve local work and prior heads<br/>End no Reservation on refusal
+    else complete scope passes preflight
+        Server->>DB: CPD records Prepared OperationId and exact input fingerprint
+        opt changed Artifact bytes are required
+            Server->>Server: Artifact Custody selects eligible Gateway/Vault and policy
+            Server-->>Client: Short-lived exact upload grants
+            loop each changed Artifact
+                Client->>Gateway: Upload/resume missing chunks directly with grant
+                Gateway->>Vault: Persist private chunks and verify full size/digest
+                Gateway-->>Server: Authenticated Transfer Receipt, not Check-in success
+            end
+            opt durability policy requires another verified location
+                Server->>Vault: Artifact Custody authorizes exact replication task
+                Vault->>Replica: Copy immutable bytes directly
+                Replica-->>Server: Authenticated verified replica evidence
+            end
+        end
+        Client->>Server: Finalize same OperationId, scope and input fingerprint
+        Server->>Server: Revalidate current session, receipts and durability policy
+        alt session and custody evidence are eligible
+            Server->>DB: BEGIN shared relational unit of work
+            Server->>Server: CPD locks heads/Reservations and applies current Access Policy
+            alt every commit-time authorization and business gate passes
+                Server->>DB: CPD writes changed Generations/heads, Change Set and confirmed Reservations Ended
+                Server->>DB: Owners retain decisions, Audit, outcomes and outbox in the same UoW
+                Server->>DB: COMMIT complete owner outcome
+                DB-->>Server: Complete committed result for OperationId
+                Server-->>Client: Check-in success with changed and No Change row dispositions
+                Note over Client,Server: No Change creates no Generation<br/>Successful Check-in still ends the confirmed hold
+            else authorization, head, Reservation or business gate changed
+                Server->>DB: ROLLBACK publication UoW
+                Server->>DB: Record owner refusal outcome and Audit separately
+                Server-->>Client: No publication and no hold ended, preserve local work
+            end
+        else session, transfer evidence or durability is unresolved
+            Server-->>Client: Not committed, preserve work and resolve same OperationId
+        end
+    end

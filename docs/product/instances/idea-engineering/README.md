@@ -24,6 +24,10 @@ and are not edited as product content.
 
 ## Architecture diagram package
 
+For PH1 implementation, start with the [PH1 diagram guide](ph1-diagram-guide.md).
+It links the current control/byte paths and distinguishes later Check-in and replica behavior.
+The pre-Gateway upload sequence in `IE-VEV-ARCH-CORR-005` is historical, not an implementation source.
+
 DOC-05@0.26 and DOC-06@0.18 contain the maintained architecture and data views. The
 [current Check-in scope gallery](evidence/IE-VEV-WS-SCOPE-002/index.html) renders
 `ARCH-VIEW-ACT-004` for unknown dependency scope, an unreserved changed required dependency
@@ -62,7 +66,7 @@ does not establish runtime behavior or independently qualified architecture/HCD 
 The separate [Core v0 technology view set](technology/IDEA-core-v0-technology-architecture-views.md)
 contains eight focused views (`TECH-D01…D08`) for the selected Engineering stack, runtime/protocol,
 deployment, dependencies, delivery pipeline and controlled reopen decisions. The
-[current Core v0 technology gallery](evidence/IE-VEV-TECH-VIEW-004/index.html) and its
+[pinned 0.5 Core v0 technology gallery](evidence/IE-VEV-TECH-VIEW-004/index.html) and its
 [rendition record](registers/VEV-2026-09-23-one-vault-core-v0-technology-view-correction.md) record 8/8 render and
 standalone-open checks plus focused review of the corrected one-Vault views. The
 [predecessor correction verification](registers/VEV-2026-09-15-technology-architecture-view-correction.md) and
@@ -71,6 +75,13 @@ predecessor. Version 0.3 added the future multi-location Vault architecture; ver
 for Web build; version 0.5 makes the Core v0 one-Vault runtime boundary explicit without removing the
 future multi-vault seam. These are Draft decision views, not a replacement for DOC-05 or proof that the system
 has been implemented.
+
+Version 0.6 clarifies TECH-D03's control/responsibility and byte-path arrows. Its
+[focused successor](evidence/IE-VEV-TECH-VIEW-005/index.html) replaces only TECH-D03 in the 0.5
+gallery; the other seven diagram sources are unchanged. A
+[current Check-in sequence rendition](evidence/IE-VEV-PH1-TRANSFER-001/index.html) is available
+from DOC-05@0.26. Both focused updates are recorded in
+[IE-VEV-PH1-TRANSFER-001](registers/VEV-2026-09-28-ph1-transfer-diagram-review.md).
 
 ## December 2026 roadmap package
 
@@ -432,7 +443,8 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 | `VEV` | `IE-VEV-TECH-VIEW-001` | [Core v0 Technology Architecture View Set — predecessor](registers/VEV-2026-09-15-technology-architecture-view-set.md) | `Draft 0.1`; initial eight-view render/open evidence retained; superseded for current view-source verification by `IE-VEV-TECH-VIEW-002` |
 | `VEV` | `IE-VEV-TECH-VIEW-002` | [Technology Architecture View Correction](registers/VEV-2026-09-15-technology-architecture-view-correction.md) | `Draft 0.1`; predecessor correction package retained for traceability |
 | `VEV` | `IE-VEV-TECH-VIEW-003` | [Node.js 24 Technology View Rendition and Focused Review](registers/VEV-2026-09-23-node24-technology-view-refresh.md) | `Draft 0.1`; predecessor TECH-D01…D08 source rendered/opened 8/8 `PASS`; focused TECH-D07 author review `PASS`; exact Web build and independent review remain `NOT-RUN` |
-| `VEV` | `IE-VEV-TECH-VIEW-004` | [Core v0 One-Vault Technology View Correction](registers/VEV-2026-09-23-one-vault-core-v0-technology-view-correction.md) | `Draft 0.1`; current TECH-D01…D08 source rendered/opened 8/8 `PASS`; focused TECH-D01/D02/D04/D05 author review `PASS`; runtime and independent review remain `NOT-RUN` |
+| `VEV` | `IE-VEV-TECH-VIEW-004` | [Core v0 One-Vault Technology View Correction](registers/VEV-2026-09-23-one-vault-core-v0-technology-view-correction.md) | `Draft 0.1`; pinned 0.5 eight-view rendition; TECH-D03 superseded by focused 0.6 rendition, other seven diagram sources unchanged |
+| `VEV` | `IE-VEV-PH1-TRANSFER-001` | [PH1 Transfer Diagram Clarification](registers/VEV-2026-09-28-ph1-transfer-diagram-review.md) | `Draft 0.1`; focused TECH-D03 control/byte-path correction in `IE-VEV-TECH-VIEW-005` and DOC-05@0.26 sequence rendition; no scope or runtime-result change |
 | `CHG` | `IE-CHG-DOC-REVIEW-001` | [Post-pull Document and Diagram Review Corrections](registers/CHG-2026-09-14-post-pull-document-review-corrections.md) | `Draft 0.2`; retains the 0.1 review corrections and adds the legibility-only `ARCH-VIEW-MOD-001` C4 Component rendition; no product decision or gate change |
 | `STD` | `IE-STD-TECH-STACK-001` | [Technology Stack Documentation Standard](../../../agents/technology-stack-documentation-standard.md) | `Draft 0.1`; repository instruction state `Effective`; reusable process standard, product normativity `INFORMATIVE`, conformity not claimed |
 | `KNW` | `IE-KNW-TECH-DEC-001` | [Core v0 Technology Decision Matrix](../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md) | `Draft 0.7`; Engineering selected the Linux-first Java/Spring/PostgreSQL Server and Option A Client baseline; Node.js 24 LTS is the approved Web-build family; Flutter is an evaluated alternative behind eight triggers; Q-01…Q-14 `NOT-RUN`, Q-15 `PARTIAL / NO WINNER`; informative only |

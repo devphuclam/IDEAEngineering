@@ -8,7 +8,9 @@ product has been implemented or that a runtime behavior has passed.
 
 | Package | Why it remains expanded |
 |---|---|
-| [`IE-VEV-TECH-VIEW-004`](IE-VEV-TECH-VIEW-004/index.html) | Current TECH-D01…D08 rendition; Core v0 shows one configured Vault and a non-runtime future multi-vault extension seam. |
+| [`IE-VEV-TECH-VIEW-005`](IE-VEV-TECH-VIEW-005/index.html) | Focused TECH-D03 successor: distinguish control/responsibility arrows from direct file bytes. |
+| [`IE-VEV-PH1-TRANSFER-001`](IE-VEV-PH1-TRANSFER-001/index.html) | Focused DOC-05@0.26 Check-in sequence rendition. Later-phase context; does not expand PH1 into Check-in or replication. |
+| [`IE-VEV-TECH-VIEW-004`](IE-VEV-TECH-VIEW-004/index.html) | Pinned 0.5 gallery; TECH-D03 is superseded above, the other seven diagram sources remain unchanged. |
 | [`IE-VEV-P06-DIAGRAM-001`](IE-VEV-P06-DIAGRAM-001/index.html) | Focused successor for the two DOC-05@0.23 recovery views; it does not duplicate the full gallery. |
 | [`IE-VEV-WS-SCOPE-002`](IE-VEV-WS-SCOPE-002/index.html) | Current DOC-05@0.25 Check-in scope view; the three-branch policy is approved, while the architecture view and runtime tests remain unaccepted/unrun. |
 | [`IE-VEV-WS-SCOPE-001`](IE-VEV-WS-SCOPE-001/index.html) | Pre-approval DOC-05@0.24 rendition retained with its exact source/hash record. |
