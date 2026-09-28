@@ -4,22 +4,22 @@
 |---|---|
 | Stable Verification ID | `IE-VEV-PH1-F01-A-001` |
 | Document class / title | `VERIFICATION-RECORD` / F01-A Build and Smoke Results |
-| Version / status | `0.1` / `Draft`; T012 result is `PASS`, but F01-A card acceptance is `NOT-RUN` |
+| Version / status | `0.2` / `Draft`; T012 result is `PASS`, and F01-A card result is `PASS` in Execution Register revision 22 |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this record creates no product requirement or release approval |
 | Owner / author | F01-A Engineering implementer / repository maintainer |
-| Reviewer / acceptance authority | Project Reviewer accepted the two scoped evidence/timing exceptions below; F01-A card acceptance remains `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer accepted the two scoped evidence/timing exceptions below and closed F01-A on 2026-09-28 for its buildable-foundation scope only |
 | Applicable baseline / evidence date | F01-A, source commit `c600f7be41f0732cb57d521017bae0565ab229bd`; tests run 2026-09-28 (Asia/Ho_Chi_Minh) |
-| Upstream / downstream trace | [F01-A source and scope](F01-A-source-and-scope.md), [T001–T012](../tasks.md), GitHub Issue #12 → F01-A card review and F01-B/T013 |
-| Change record / supersession | GitHub Issue #12; first controlled version of this record. No predecessor or successor. |
+| Upstream / downstream trace | [F01-A source and scope](F01-A-source-and-scope.md), [T001–T012](../tasks.md), GitHub Issue #12, [Execution Register revision 22](../../../planning/idea-technical-pilot-execution-register.json) → F01-B/T013 |
+| Change record / supersession | GitHub Issue #12; updates `0.1` after F01-A card acceptance and progress publication in commit `009e1c64d4932d6809b24d356bcb5e97b5321246`. No successor. |
 | Classification / retention | `INTERNAL`; retain with F01-A source and verification evidence while this baseline is used or reviewed |
 | Review trigger / evidence status | Re-review on application source, dependency graph, build environment or test change; four actual checks are recorded below, with stated exclusions and historical limitations |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019); `STD-TEST-001` (ISO/IEC/IEEE 29119-1:2022); `STD-TEST-002` (29119-2:2021); `STD-TEST-003` (29119-3:2021); `STD-TEST-004` (29119-4:2021). All are `STANDARD-GUIDED`. Apply identity/trace and test configuration, procedure and result concepts; tailor them into the compact control, command and result tables below. No standards-conformity claim. |
 
 **T012 disposition:** `PASS` for the four approved foundation smoke/build checks below.
-**Card status:** `IN-PROGRESS`; T002 closed with documented internal-only NuGet and direct Web
-legal-file timing exceptions.
-The four checks passing and the T002 exception do not by themselves close F01-A or establish
-product acceptance.
+**Card result:** `COMPLETED / PASS` in Execution Register revision 22, with 165 minutes
+(`2.75` hours) recorded and `0` hours remaining. T002 was closed with documented internal-only
+NuGet and direct Web legal-file timing exceptions. This accepts the buildable foundation, not
+product behavior, deployment or commercial distribution.
 
 ## Common tested source
 
@@ -109,3 +109,4 @@ PostgreSQL, file custody, transfer performance, multi-Vault operation, or deploy
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 2026-09-28 | Add controlled verification identity, ownership, baseline, trace and retention; record the Project Reviewer's limited direct-Web timing exception without changing the four build/test outcomes. |
+| 0.2 | 2026-09-28 | Align the card result with published Execution Register revision 22. The test outcomes and their exclusions are unchanged. |
