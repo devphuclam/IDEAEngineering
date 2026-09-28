@@ -1,0 +1,13 @@
+<Window x:Class="Idea.Ddm.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:webview="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="IDEA Engineering"
+        MinWidth="960"
+        MinHeight="640"
+        Width="1280"
+        Height="800">
+  <Grid>
+    <webview:WebView2 />
+  </Grid>
+</Window>

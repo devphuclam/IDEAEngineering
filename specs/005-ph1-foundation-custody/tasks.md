@@ -19,16 +19,16 @@ execution boundaries and CHK009/CHK010 evidence expectations. This task list rem
 
 **Goal**: Start from the approved PG4 scope without importing unqualified dependencies.
 
-- [ ] T001 Record source commit, F01-A Work Item link and approved PH1 boundary in `specs/005-ph1-foundation-custody/evidence/F01-A-source-and-scope.md`.
-- [ ] T002 Qualify exact source, version, license, transitive obligations and intended internal use of F01 Java, Web, .NET and Maven Wrapper dependencies before first import in `docs/research/2026-09-28-ph1-f01-dependency-intake.md`.
-- [ ] T003 Create build-only scaffolds in `apps/server/pom.xml`, `apps/server/mvnw`, `apps/server/.mvn/wrapper/maven-wrapper.properties`, `apps/web/package.json`, `apps/web/package-lock.json`, `apps/desktop/IdeaDesktop.csproj`, `apps/workspace/IdeaWorkspace.csproj`, `apps/desktop/tests/IdeaDesktop.Tests.csproj` and `apps/workspace/tests/IdeaWorkspace.Tests.csproj`; document their ownership in `apps/README.md`. Do not add application behavior yet.
+- [X] T001 Record source commit, F01-A Work Item link and approved PH1 boundary in `specs/005-ph1-foundation-custody/evidence/F01-A-source-and-scope.md`.
+- [X] T002 Record F01 direct dependency source, version, license and intended internal use in `docs/research/2026-09-28-ph1-f01-dependency-intake.md`. The first Windows NuGet restore preceded exact transitive evidence, and direct Web LICENSE/NOTICE files were checked after initial `npm ci`. The Project Reviewer closed this F01-A internal build/test prerequisite by one-time timing exceptions on 2026-09-28, documented in the linked NuGet audit and Web section of the intake. This does not make the before-first-use rule retrospectively true, qualify every resolved package, authorize new imports, or clear commercial distribution. Retain the residual risks and T013/T036 follow-up.
+- [X] T003 Create build-only scaffolds in `apps/server/pom.xml`, `apps/server/mvnw`, `apps/server/.mvn/wrapper/maven-wrapper.properties`, `apps/web/package.json`, `apps/web/package-lock.json`, `apps/desktop/IdeaDesktop.csproj`, `apps/workspace/IdeaWorkspace.csproj`, `apps/desktop/tests/IdeaDesktop.Tests.csproj` and `apps/workspace/tests/IdeaWorkspace.Tests.csproj`; document their ownership in `apps/README.md`. Do not add application behavior yet.
 
 ## Phase 2: Shared foundation — F01-A/B
 
 **Goal**: Give all four projects reproducible build and configuration boundaries before behavior.
 
-- [ ] T004 Add non-secret development configuration names and validation rules to `config/idea-core-v0.server.env.example`; keep filled values ignored by `.gitignore`.
-- [ ] T005 Add one reproducible command per platform and explain required Ubuntu/Windows tools in `apps/README.md` and `deploy/development/README.md`.
+- [X] T004 Add non-secret development configuration names and validation rules to `config/idea-core-v0.server.env.example`; keep filled values ignored by `.gitignore`.
+- [X] T005 Add one reproducible command per platform and explain required Ubuntu/Windows tools in `apps/README.md` and `deploy/development/README.md`.
 
 ## Phase 3: User Story 1 — Buildable application foundation (F01-A/B, P1) 🎯 MVP
 
@@ -36,13 +36,13 @@ execution boundaries and CHK009/CHK010 evidence expectations. This task list rem
 **Independent test**: Follow [quickstart](quickstart.md) from clean checkouts on Ubuntu and
 Windows; record four project results and a secret/lockfile review.
 
-- [ ] T006 [P] [US1] Write a failing minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`.
-- [ ] T007 [P] [US1] Write a failing Web entry-point test in `apps/web/src/App.test.tsx`.
-- [ ] T008 [P] [US1] Write failing Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`.
-- [ ] T009 [US1] Create the selected Java 25 Spring Boot/Modulith Maven build and minimal health entry point in `apps/server/pom.xml` and `apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java`.
-- [ ] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
-- [ ] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.
-- [ ] T012 [US1] Run all four builds/basic checks on their qualified platforms, record command, tool versions, commit and actual result in `specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md`.
+- [X] T006 [P] [US1] Write a minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`. Its post-implementation pass is retained; the Project Reviewer accepted an explicit exception for the missing original red-run evidence on 2026-09-28. This does not assert that an intended red run was observed.
+- [X] T007 [P] [US1] Write a Web entry-point test in `apps/web/src/App.test.tsx`. Its post-implementation pass is retained under the same 2026-09-28 red-evidence exception.
+- [X] T008 [P] [US1] Write Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`. Both post-implementation passes are retained under the same 2026-09-28 red-evidence exception.
+- [X] T009 [US1] Create the selected Java 25 Spring Boot/Modulith Maven build and minimal health entry point in `apps/server/pom.xml` and `apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java`; implementation and individual Server build result are recorded in [F01-A build results](evidence/F01-A-build-results.md).
+- [X] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
+- [X] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.
+- [X] T012 [US1] Run all four builds/basic checks on their qualified platforms, record command, tool versions, commit and actual result in [F01-A build results](evidence/F01-A-build-results.md). All checks passed from clean platform-specific archives of the same committed source revision; scope limits are recorded with each result.
 - [ ] T013 [US1] Add and run a repeatable tracked-secret detection check in `tests/ph1/check-no-secrets.ps1`; repeat builds from clean source, inspect lockfiles against intake, and record F01-B evidence in `specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md`.
 
 ## Phase 4: User Story 2 — Controlled data baseline (F02, P1)
@@ -112,7 +112,7 @@ assumed in advance. This gate does not block F01-A through F04.
 
 | Delivery card | Tasks | Requires |
 |---|---|---|
-| F01-A | T001–T012 | PG4 PASS and T002 intake before package import |
+| F01-A | T001–T012 | PG4 PASS; T002 records the one-time exceptions for late NuGet and direct Web legal-file evidence in past internal build/test. Intake still precedes every new import. |
 | F01-B | T013 | F01-A actual build evidence |
 | F02 | T014–T017 | F01 build foundation |
 | F03-A/B | T018–T022 | F02 baseline |
