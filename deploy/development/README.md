@@ -45,11 +45,11 @@ actually present. Do not reuse a path or database found to belong to another wor
 | Component | Planned development location | Evidence still required |
 |---|---|---|
 | Git source checkout and build | Ubuntu, at the same commit as the reviewed Windows checkout | Git access, commit, build-tool and artifact hashes |
-| Java 25 / Temurin 25 Server | Temurin 25.0.4.1+1 under `/opt/idea/tools`; future versioned executable JAR | JDK version/notice checked; IDEA Server build and start untested |
-| React/TypeScript Web | Node.js 24.21.0 under `/opt/idea/tools` for build and development preview | Node/npm version/license checked; Web lockfile, build and browser check untested |
+| Java 25 / Temurin 25 Server | Temurin 25.0.4.1+1 under `/opt/idea/tools`; Apache Maven 3.9.16 is downloaded by the pinned wrapper | Server `verify` and HTTP health smoke test passed 2026-09-28 on an uncommitted source snapshot using a fresh Maven wrapper cache. The host needs `unzip` or the documented BusyBox applet shim; final committed-source rerun remains pending. |
+| React/TypeScript Web | Node.js 24.21.0/npm 11.19.0 under `/opt/idea/tools` for build and development preview | `npm ci`, one smoke test and Vite build passed 2026-09-28 on the target host; browser interaction and committed-source rerun remain untested. |
 | PostgreSQL 18 | Native Ubuntu 18.6 service on loopback; separate `idea_ddm_dev` database | Package/service, bootstrap and distinct role login/privilege checks observed; migration history and application connection untested |
 | Filesystem Vault | One server-local location at `/srv/idea/artifacts/vault-01` on the dedicated IDEA artifact partition | Directory ownership/mode and service-account write test passed; actual Adapter I/O and backup remain untested |
-| IDEA Desktop / Workspace | Windows engineering machine | Windows build, local-file behavior and Server connection |
+| IDEA Desktop / Workspace | Windows engineering machine | WPF/Workspace builds and one startup-boundary smoke test each passed 2026-09-28 on an uncommitted Windows worktree; local-file behavior and Server connection remain untested. |
 
 The earlier PostgreSQL Docker image and Windows Temurin ZIP intake are retained as historical
 research. They are not the current development dependencies. The [native Ubuntu intake](../../docs/research/2026-09-23-p04-ubuntu-native-runtime-intake.md)
@@ -104,12 +104,35 @@ Its readiness record is based on these outcomes:
 5. Record the Project Reviewer's P04 result separately against the Delivery Card and retained
    evidence.
 
-The IDEA application source projects do not yet exist, so the application build, Flyway migration,
-Vault Adapter I/O and Windows-to-application endpoint test cannot run in this PH0 setup. They remain
-`NOT-RUN` and are not represented as P04 test results. Verify the client route when the endpoints
-exist in the authorized implementation increment. P04 PASS is limited to the prepared one-developer
-development environment and its documented delivery process; it does not approve deployment,
-product integration or PG4.
+At the P04 review capture, the IDEA application projects did not yet exist. F01-A now provides only
+buildable scaffolds and the limited smoke checks linked in the
+[F01-A evidence](../../specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md). Flyway
+migration, Vault Adapter I/O and Windows-to-application endpoint tests remain `NOT-RUN`. P04 PASS
+still covers only the prepared one-developer development environment and its documented delivery
+process; it does not approve deployment, product integration or PG4.
 
 Later deployment, backup/restore, security and multi-vault claims keep their own review and
 verification paths. Do not use this one development machine as evidence for those outcomes.
+
+## 5. PH1 build commands
+
+Run build commands only after the relevant package intake is complete and use the same source
+commit on the Ubuntu server and Windows workstation:
+
+```bash
+cd apps/server && ./mvnw -B verify
+cd apps/web && npm ci && npm test && npm run build
+```
+
+On Windows, from the repository root:
+
+```powershell
+dotnet test apps/desktop/tests/IdeaDesktop.Tests.csproj
+dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj
+```
+
+The Server, Web, Desktop and Workspace checks have each passed on the qualified machine as listed
+above and in the [F01-A evidence](../../specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md).
+They were run against per-component uncommitted snapshots, not one shared committed revision;
+therefore T012 and the final F01-A disposition remain open until the committed-source rerun. These
+smoke checks do not establish product integration, behavior, security, database access or Vault I/O.

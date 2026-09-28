@@ -29,16 +29,17 @@ not extra F05 scope.
 The F01 entry points to create under T003–T011 are:
 
 ```text
-Ubuntu Server:   cd apps/server && ./mvnw test
-Ubuntu Web:      cd apps/web && npm ci && npm test -- --run && npm run build
+Ubuntu Server:   cd apps/server && ./mvnw -B verify
+Ubuntu Web:      cd apps/web && npm ci && npm test && npm run build
 Windows Desktop: dotnet test apps/desktop/tests/IdeaDesktop.Tests.csproj
 Windows Desktop: dotnet build apps/desktop/IdeaDesktop.csproj
 Windows Workspace: dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj
 Windows Workspace: dotnet build apps/workspace/IdeaWorkspace.csproj
 ```
 
-These commands are targets, not reports of successful execution. T002 must clear exact package
-intake before `npm ci` or Maven downloads; T003 must provide the wrapper and projects. For F02–F05,
+These commands are targets, not reports of successful execution. T002 must clear the exact package
+intake before `npm ci` or Maven downloads; T003 must provide the wrapper and projects. The pinned
+Maven wrapper requires `unzip` on the Ubuntu host to retain its ZIP checksum path. For F02–F05,
 the card evidence must include the exact migration, application-start and scenario commands added
 with those implementations, because no such executable exists yet.
 
