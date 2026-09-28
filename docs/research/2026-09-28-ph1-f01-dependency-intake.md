@@ -4,7 +4,7 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-DEP-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 Dependency Intake |
-| Version / status | `0.6` / `Draft` |
+| Version / status | `0.7` / `Draft` |
 | Product normativity | `INFORMATIVE` — records source/license evidence; does not change Feature, Tech or product scope |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / repository maintainer |
@@ -16,16 +16,20 @@
 | Downstream trace | F01-A/T003–T012; F01-B/T013; PH1/T036 dependency/license review |
 | Change / Work Item trace | GitHub Issue #12, F01-A; source commit recorded in `evidence/F01-A-source-and-scope.md` |
 | Classification / retention | `INTERNAL`; retain while these dependency versions are used and with later dependency inventory/SBOM |
-| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. Exact NuGet transitive license/notice evidence remains incomplete although Windows package restore already ran; T002 therefore remains open. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
-| Control tailoring | Research note, not a product decision: no effective product date or requirement acceptance. Source evidence and intended-use limits are recorded here; package-level license/notice gaps remain explicit rather than inferred as cleared. |
-| Supersession / review trigger | Supersedes this note's `0.5` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before F01-A closure. |
+| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current Windows NuGet graph, 14 exact archives and license/notice evidence are recorded in the linked NuGet audit; the historical restore linkage is qualified and the Project Reviewer has not yet disposed of the before-first-use deviation. T002 remains open. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
+| Control tailoring | Research note, not a product decision: no effective product date or requirement acceptance. Source evidence, review limits and intended-use conditions are recorded here; later evidence does not retrospectively satisfy the before-first-use rule. |
+| Supersession / review trigger | Supersedes this note's `0.6` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before F01-A closure. |
 
 ## 1. Disposition
 
 **Direct-package disposition: `APPROVED-WITH-OBLIGATIONS` for internal F01 development only.**
 This is not a completed disposition for the full resolved dependency graph or T002. The initial
 Windows restore used NuGet transitive packages before their exact license/notice evidence was
-retained; record this as an order-of-work deviation. Do not infer that the successful build or
+retained; this order-of-work deviation still needs a Project Reviewer decision. The later
+[NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md) records the current
+14-package Windows build/test graph, exact local archives, license and notice evidence, and the
+limit on linking those assets to the historical clean restore. It does not make the
+before-first-use condition retrospectively true. Do not infer that the successful build or
 package metadata cured that gap. The versions below are pinned to named upstream publishers;
 license expressions and known notice obligations are recorded here. Keep required notices with
 any copy of the corresponding package or runtime. Do not bundle these development tools or
@@ -72,9 +76,11 @@ graph is Apache-2.0-dominant. Notable exact exceptions/obligations are:
 
 The graph resolved and `./mvnw -B -Dmaven.repo.local=... verify` passed on the P04 Ubuntu host from
 a clean archive of tested source commit `c600f7be41f0732cb57d521017bae0565ab229bd`, using a fresh
-Maven Wrapper home and local repository. The exact NuGet transitive license/notice review, full
-build-tool/plugin inventory and tracked-secret/broader reproducibility work remain assigned to
-T013/T036. That later review does not permit adding a new direct dependency without intake.
+Maven Wrapper home and local repository. The current NuGet graph's exact license/notice review is
+recorded in the linked audit, pending Project Reviewer disposition for T002. Full build-tool/plugin
+inventory, tracked-secret/broader reproducibility work, and review of the actual integration or
+distribution bundle remain assigned to T013/T036. That later review does not permit adding a new
+direct dependency without intake.
 
 No code, diagram, data, or asset is copied from Aras, DDM, or another product. The Maven Wrapper
 script is the only upstream build script expected to be copied; it is limited to Apache Maven's
@@ -95,7 +101,7 @@ official `only-script` distribution and must retain its upstream copyright/licen
 | Vitest | `vitest:5.0.2`, official release. | MIT, with bundled third-party notices/licenses in the published distribution; preserve when redistributing test tooling. | Development test runner only. The exact npm graph and bundled notices are checked from lock/package artifacts before F01-B review. |
 | TypeScript | `typescript:7.0.2`, official Microsoft TypeScript Go release/package. | Apache License 2.0. Retain license/notice; its npm graph includes platform-specific optional packages that must remain visible in the lockfile review. | Type checker/compiler only; no TypeScript runtime is packaged in Web output. |
 | Windows WebView2 SDK | NuGet `Microsoft.Web.WebView2:1.0.4191.47` from the Microsoft-owned NuGet package. Its package license file contains BSD-style redistribution conditions. | Retain copyright, conditions and disclaimer in source/binary redistribution; do not use Microsoft/contributor names to endorse the product. | Internal WPF build dependency. This is the SDK package, **not** the Evergreen WebView2 Runtime. Runtime servicing and installer redistribution remain separate/not selected here. |
-| .NET test projects | Microsoft `MSTest.Sdk:4.4.1` (test projects only), official NuGet/Microsoft Learn package family; `dotnet test` runner behavior follows the SDK's documented Microsoft Testing Platform mode. | MIT for the Microsoft test SDK/framework; retain license text for redistributed test dependencies. Resolved NuGet graph remains for F01-B/T013 and T036. | F01 startup checks only; test framework choice does not alter the selected product technology. No test package enters the product runtime. |
+| .NET test projects | Microsoft `MSTest.Sdk:4.4.1` (test projects only), official NuGet/Microsoft Learn package family; `dotnet test` runner behavior follows the SDK's documented Microsoft Testing Platform mode. | MIT for the Microsoft test SDK/framework; retain license text for redistributed test dependencies. The current resolved Windows graph is recorded in the [NuGet audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); actual shipped/test-tool bundle review remains for F01-B/T013 and T036. | F01 startup checks only; test framework choice does not alter the selected product technology. No test package enters the product runtime. |
 | .NET SDK/runtime | Existing P04 Windows toolchain: .NET SDK `10.0.300` and .NET 10 targeting/build packs, as captured in the F01 environment check. | Microsoft product terms; this record does not copy or redistribute the SDK/runtime. Any future installer containing .NET or WebView2 runtime needs a separate exact package/EULA intake. | WPF and Workspace only; explicitly not the Format Worker toolchain. |
 | Node/npm | Existing P04 Ubuntu Node.js `24.21.0` / npm `11.19.0`; the exact archive hash and included licenses are in [P04 runtime intake](2026-09-23-p04-ubuntu-native-runtime-intake.md). | Node core uses MIT; the exact release carries licenses for bundled components. Retain the release license files if copying or redistributing the runtime. | Web build/development tool only, not the selected production Server runtime. |
 
@@ -110,7 +116,7 @@ resolved graph.
 | Keep direct package sources and versions equal to this intake; use only official publisher endpoints/repositories. | F01 implementer | Project files and source URLs. |
 | Keep the reviewed npm graph aligned with `apps/web/package-lock.json`; inspect exact package notices, optional-platform behavior and any future bundle before integration/distribution. | F01 implementer | Initial metadata screen recorded here; F01-B/T013 and PH1/T036 complete actual notice/bundle review. |
 | Recheck the pinned Maven project graph when direct versions change; review exact license/notice files and the Maven build-plugin distribution before packaging. | F01 implementer | Graph hash and notable obligations recorded above; F01-B/T013 and PH1/T036 before integration/distribution. |
-| Restore the NuGet test and WebView2 packages on the Windows target; inspect exact package licenses/dependencies, including WPF target assets. | F01 implementer | F01-B/T013 and PH1/T036. |
+| Keep the recorded NuGet test and WebView2 package graph aligned with the Windows target; resolve the order-of-work deviation before T002 closure and recheck actual shipped assets/notices before integration or distribution. | F01 implementer and Project Reviewer | [Current NuGet audit](2026-09-28-ph1-f01-nuget-transitive-audit.md) plus reviewer disposition for T002; F01-B/T013 and PH1/T036 for later bundle checks. |
 | Keep the pinned Maven wrapper URL and checksum paired; make `unzip` available (a BusyBox `unzip` shim works on the current P04 host) and never disable checksum enforcement to bypass a missing extraction tool. | F01 implementer | T005 tool inventory; wrapper ZIP checksum verified against Apache's official SHA-512 sidecar. |
 | If any dependency has a custom, non-commercial, field-of-use, unclear, reciprocal/network-copyleft or redistribution-restricted term, do not use it; request Legal Review Authority disposition. | Engineering + Legal Review Authority | New controlled intake decision before use. |
 | Before external/customer distribution, choose the packaging model, inventory every shipped runtime and transitive component, generate an SBOM, assemble notices/source obligations, and obtain legal/company approval. | Engineering + Legal Review Authority | Separate commercial-release review; this intake is not that approval. |
@@ -128,6 +134,7 @@ commercial distribution are legally cleared.
 - Microsoft TypeScript [7.0.2 release](https://github.com/microsoft/typescript-go/releases/tag/typescript/v7.0.2) and [license](https://github.com/microsoft/typescript-go/blob/main/LICENSE); React types [npm package versions](https://www.npmjs.com/package/%40types/react) and [React DOM types](https://www.npmjs.com/package/%40types/react-dom).
 - Vite [8.3 releases/support line](https://vite.dev/releases), [Vite package license and bundled notices](https://github.com/vitejs/vite/blob/main/packages/vite/LICENSE.md), [React plugin upstream](https://github.com/vitejs/vite-plugin-react); Vitest [5.0.2 signed release](https://github.com/vitest-dev/vitest/releases) and [license notices](https://github.com/vitest-dev/vitest/blob/main/packages/vitest/LICENSE.md).
 - Microsoft [WebView2 NuGet 1.0.4191.47](https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47), its [exact license text](https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47/License), [MSTest SDK 4.4.1](https://www.nuget.org/packages/MSTest.Sdk/4.4.1) and [MSTest SDK documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-mstest-sdk).
+- Exact Windows package archives, publisher-pinned licenses and embedded notices are itemized in the [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md). NuGet's [signed-package metadata definition](https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File) explains why its content hash differs from the full signed archive hash.
 - Spring Boot's [logging guidance](https://docs.spring.io/spring-boot/how-to/logging.html) documents Log4j2 as an alternative; [Apache Log4j](https://logging.apache.org/log4j/2.x/download.cgi) is Apache-2.0. Exact Server graph is retained in `evidence/F01-A-server-dependency-tree.json`.
 - Exact package license evidence: [Jakarta Annotations 3.0.0 LICENSE/NOTICE](https://github.com/jakartaee/common-annotations-api/tree/3.0.0), [Jakarta XML Binding API 4.0.5](https://github.com/jakartaee/jaxb-api/tree/4.0.5), [JUnit 6.0.3 license](https://github.com/junit-team/junit-framework/blob/r6.0.3/LICENSE.md), [ArchUnit 1.4.2 README/license and bundled ASM/Guava obligations](https://github.com/TNG/ArchUnit/blob/v1.4.2/README.md), [SLF4J 2.0.18 license](https://github.com/qos-ch/slf4j/blob/v_2.0.18/LICENSE.txt), [Apache Commons Logging](https://github.com/apache/commons-logging), [Byte Buddy 1.18.11 license and embedded ASM note](https://github.com/raphw/byte-buddy/tree/byte-buddy-1.18.11), [Awaitility](https://github.com/awaitility/awaitility), [Objenesis](https://github.com/easymock/objenesis), and [XMLUnit](https://github.com/xmlunit/xmlunit).
 - Exact Node.js/Temurin hashes, release sources and bundled-license status are recorded in the existing [P04 Ubuntu runtime intake](2026-09-23-p04-ubuntu-native-runtime-intake.md), not re-inferred here.
@@ -142,3 +149,4 @@ commercial distribution are legally cleared.
 | 0.4 | 2026-09-28 | Add the ArchUnit 1.4.2 runtime-transitive license/notice obligations; record all four individual smoke/build outcomes without treating them as one-commit T012 evidence. | Exact Maven graph; ArchUnit v1.4.2 upstream README; F01-A build results |
 | 0.5 | 2026-09-28 | Record clean-source build/test outcomes for all four projects from one committed source revision and preserve remaining NuGet, secret-scan and commercial-distribution boundaries. | F01-A build results, tested commit `c600f7be41f0732cb57d521017bae0565ab229bd` |
 | 0.6 | 2026-09-28 | Separate the direct-package internal-use disposition from the incomplete whole-graph qualification; record the NuGet restore order-of-work deviation and keep T002 open. Add research control tailoring and re-review trigger. | Two-axis F01-A review against external-source intake and PH1 FR-012 |
+| 0.7 | 2026-09-28 | Link the exact current NuGet graph/license/notice audit, distinguish later evidence from the original before-first-use deviation, and reserve T002 closure for Project Reviewer disposition. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); FR-012; T002 |
