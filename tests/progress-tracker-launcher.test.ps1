@@ -2,6 +2,11 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $launcher = Join-Path $repoRoot 'IDEA-Progress-Tracker.cmd'
+$codexPwsh = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.exe'
+if (-not (Test-Path $codexPwsh -PathType Leaf)) {
+    throw "This launcher integration test requires the current user's Codex-bundled PowerShell 7 runtime: $codexPwsh"
+}
+
 $probe = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
 $probe.Start()
 $port = [int]$probe.LocalEndpoint.Port
@@ -16,10 +21,11 @@ $processInfo.CreateNoWindow = $true
 $processInfo.RedirectStandardOutput = $true
 $processInfo.RedirectStandardError = $true
 
-# Reproduce the supported launcher environment: no fixed Program Files install,
-# but PowerShell 7 is available on PATH as it is when this test is run by pwsh.
+# Reproduce a Windows Explorer launch: Codex's private runtime is installed,
+# but it is absent from PATH and both standard PowerShell install locations.
 $processInfo.Environment['ProgramFiles'] = Join-Path ([System.IO.Path]::GetTempPath()) "idea-tracker-no-standard-pwsh-$([guid]::NewGuid().ToString('N'))"
-$processInfo.Environment['PATH'] = "$PSHOME;$env:PATH"
+$processInfo.Environment['LOCALAPPDATA'] = Join-Path ([System.IO.Path]::GetTempPath()) "idea-tracker-no-local-pwsh-$([guid]::NewGuid().ToString('N'))"
+$processInfo.Environment['PATH'] = "$env:SystemRoot\System32;$env:SystemRoot"
 
 $process = [System.Diagnostics.Process]::new()
 $process.StartInfo = $processInfo

@@ -11,9 +11,10 @@ Nhấp đúp vào:
 
 `IDEA-Progress-Tracker.cmd` ở thư mục gốc của dự án.
 
-Launcher yêu cầu PowerShell 7 (`pwsh.exe`); nó tìm trong `PATH`, sau đó thử các đường dẫn cài đặt
-chuẩn. Windows PowerShell 5.1 không được dùng làm dự phòng vì không tương thích với encoding của
-các script hiện tại. Nếu `pwsh.exe` không tìm thấy, chạy từ môi trường có PowerShell 7 trong
+Launcher yêu cầu PowerShell 7 (`pwsh.exe`); nó tìm trong `PATH`, các đường dẫn cài đặt chuẩn, rồi
+runtime Codex của người dùng tại `.cache/codex-runtimes/*/dependencies/native/powershell`. Windows
+PowerShell 5.1 không được dùng làm dự phòng vì không tương thích với encoding của các script hiện
+tại. Nếu không tìm thấy PowerShell 7 ở các vị trí này, chạy từ môi trường có `pwsh.exe` trong
 `PATH` hoặc cài PowerShell 7.
 
 Script mở một local server ở `http://localhost:8097/` và mở trình duyệt. Không cần cài package hay

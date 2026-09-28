@@ -9,6 +9,14 @@ for /f "delims=" %%P in ('where.exe pwsh.exe 2^>nul') do (
 )
 if exist "%ProgramFiles%\PowerShell\7\pwsh.exe" set "PWSH=%ProgramFiles%\PowerShell\7\pwsh.exe"
 if not defined PWSH if exist "%LOCALAPPDATA%\Programs\PowerShell\7\pwsh.exe" set "PWSH=%LOCALAPPDATA%\Programs\PowerShell\7\pwsh.exe"
+if not defined PWSH (
+  for /d %%D in ("%USERPROFILE%\.cache\codex-runtimes\*") do (
+    if exist "%%~D\dependencies\native\powershell\pwsh.exe" (
+      set "PWSH=%%~D\dependencies\native\powershell\pwsh.exe"
+      goto :run
+    )
+  )
+)
 if not defined PWSH goto :not_found
 
 :run
