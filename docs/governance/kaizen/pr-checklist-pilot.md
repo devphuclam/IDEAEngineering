@@ -1,20 +1,22 @@
-# Pull Request Checklist Pilot
+# PR Checklist Kaizen — Optional Measurement Plan
 
 | Field | Value |
 |---|---|
 | Improvement | `KAIZEN-PR-CHECKLIST-001` |
-| Work Item | [#6 — standardize pull request checks and run a pilot](https://github.com/devphuclam/IDEAEngineering/issues/6) |
+| Work Item | [#6 — optional PR checklist guidance](https://github.com/devphuclam/IDEAEngineering/issues/6) |
 | Pilot repository | `devphuclam/IDEAEngineering` |
-| Status | `PILOT-PLANNED`; template and procedure take effect when merged |
+| Status | `REPORT-ONLY / NOT STARTED`; this plan is optional and creates no PR requirement |
 | Pilot and maintenance owner | `devphuclam` (repository owner and Work Item assignee) |
-| Start | First PR opened after this change is merged |
-| End | The first 10 PRs targeting `main` or 8 weeks after start, whichever comes first |
+| Start | Not started. A future pilot requires an explicit owner decision; merge does not start it. |
+| End | Not applicable unless a pilot is explicitly started; then the first 10 PRs targeting `main` or 8 weeks after start, whichever comes first. |
 
 ## Purpose
 
-Check whether the shared author and reviewer checklist is understandable, used consistently, and
-helps catch basic omissions before merge. This pilot tests the process; it does not assume the
-checklist already reduces rework or review time.
+This file preserves the proposed measurement method for company reporting. The owner has decided
+that the Kaizen is a reporting deliverable, not a mandatory repository process. No pilot has been
+started, no pilot data has been collected, and this plan does not require future participation. A
+pilot may be started only by a later explicit owner decision. No reduction in rework, review time,
+or defects is claimed.
 
 ## Historical baseline
 
@@ -25,10 +27,10 @@ GitHub history was inspected on 2026-09-28. Only one merged PR was available bef
 | Historical merged PRs | [#5](https://github.com/devphuclam/IDEAEngineering/pull/5) | The PR body had a change summary and verification notes. GitHub recorded no review event, review comment, or issue comment. | `n=1`; its ready-for-review-to-approval time is unavailable because there was no approval. No conclusion about typical rework or review duration can be drawn. |
 
 The previous PR template had a short author checklist, but the merged PR body did not contain it.
-This is a single observed consistency gap, not a measured repository-wide rate. Keep the baseline
-as `INSUFFICIENT` until a comparable sample exists.
+This is a single observed consistency gap, not a measured repository-wide rate. The baseline is
+`INSUFFICIENT`; no further sample is required unless an optional pilot is explicitly started.
 
-## What to record for each pilot PR
+## What to record if a pilot is explicitly started
 
 Use the PR number as the row key. Record dates and elapsed times from GitHub's timestamps in UTC.
 Do not record credentials or personal performance rankings.
@@ -47,7 +49,7 @@ Do not record credentials or personal performance rankings.
 
 ## Compare and decide
 
-At pilot end, maintainers compare the available pre-pilot and pilot samples using:
+If the owner later starts a pilot, maintainers may compare available pre-pilot and pilot samples using:
 
 1. Checklist completion rate: complete PRs divided by pilot PRs.
 2. PRs with checklist-omission rework: affected PRs divided by PRs with enough review evidence to assess; show the assessed and total sample sizes and the `UNASSESSED` count.
@@ -57,15 +59,15 @@ At pilot end, maintainers compare the available pre-pilot and pilot samples usin
 Show sample sizes beside every rate or median. State when either sample is too small, has no
 comparable approval events, or is otherwise incomplete. Do not claim improvement from missing or
 non-comparable data. If fewer than 10 pilot PRs are available at the 8-week end, report the actual
-sample and decide whether another pilot window is needed.
+sample; the owner may decide whether another pilot window is worthwhile.
 
-Before formal adoption, repository maintainers record one decision: adopt as-is, revise and extend
-the pilot, or stop the change. Include the data, feedback, remaining issues, and decision date in
-the Work Item. The template remains marked as pilot guidance until that decision is recorded.
+Any future decision to adopt, revise, or stop the optional guidance must be recorded with its
+evidence and date in the Work Item. Until then, the template and procedure remain optional aids;
+they do not change repository review or merge policy.
 
 ## Maintenance
 
-`devphuclam` is accountable for maintaining the template and this procedure. Repository maintainers
-may propose edits when the pilot finds a repeated omission, a confusing check, or a repository
-policy change. Review the procedure at pilot close and at least annually thereafter; record any
-transfer of ownership in the Work Item.
+`devphuclam` is the recorded owner of these optional reporting artifacts. Repository maintainers may
+propose edits when feedback or a repository policy change makes them useful. No pilot-close or annual
+review is required unless the owner chooses to adopt this process later; record any ownership
+transfer in the Work Item.

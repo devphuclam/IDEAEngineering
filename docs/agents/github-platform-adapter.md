@@ -2,22 +2,21 @@
 
 This adapter represents Work Items as GitHub Issues and implements tracker operations with the `gh` CLI.
 
-## Pull Request checklist
+## Optional Pull Request checklist
 
-Use the shared [PR template](../../.github/pull_request_template.md) and follow the
-[repository review procedure](pull-request-review.md) for author self-check and reviewer
-verification. This adapter defines GitHub Work Item operations; the shared procedure owns checklist
-content and status meanings.
+The shared [PR template](../../.github/pull_request_template.md) and
+[review guidance](pull-request-review.md) are optional aids. They do not create a GitHub approval,
+reviewer-count, or merge requirement. This adapter defines GitHub Work Item operations; repository
+branch protection and organization rules determine any enforced checks or approvals.
 
 ## Author self-review checklist
 
-The shared PR template contains the author self-review checklist; complete it before requesting a
-review rather than duplicating its rows here.
+The shared PR template contains an optional author self-review checklist; use it when helpful rather
+than duplicating its rows here.
 
 The current provider-neutral setting remains `minimum_human_approvals: 0`, serialized as
-`reviewIntent.minimumHumanApprovals: 0`. During the checklist pilot, the repository's manual
-procedure's separate-reviewer rule still applies before merge; the current setting does not
-technically enforce it. GitHub does not record the pull request author's checklist as an
+`reviewIntent.minimumHumanApprovals: 0`. The Kaizen pilot is not active and adds no manual
+separate-reviewer rule. GitHub does not record the pull request author's checklist as an
 independent approval. A requester vote is not treated as an independent approval unless the
 selected provider explicitly records that event. Branch protection and organization rules may
 impose additional requirements. Count an approval only when GitHub records an approval review

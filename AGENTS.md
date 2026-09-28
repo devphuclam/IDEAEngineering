@@ -8,9 +8,9 @@ Before work involving PDM, PLM, document identity, Generation, Revision, Checkou
 
 Route Work Item reads, writes, triage, and wayfinding through `docs/agents/issue-tracker.md`. The inherited Core Workspace currently selects the GitHub Platform Adapter; its final PG0 disposition remains separate from C1 product behavior.
 
-### Pull Request review
+### Pull Request review and optional Kaizen checklist
 
-For every PR, follow [`docs/agents/pull-request-review.md`](docs/agents/pull-request-review.md) and complete the shared [PR template](.github/pull_request_template.md). Pilot results and the formal adoption decision are tracked in [`docs/governance/kaizen/pr-checklist-pilot.md`](docs/governance/kaizen/pr-checklist-pilot.md).
+For every PR, follow [`docs/agents/pull-request-review.md`](docs/agents/pull-request-review.md) and the repository's actual review and required-check rules. The shared [PR template](.github/pull_request_template.md) is an optional review aid; completing it or taking part in the Kaizen pilot is not an additional merge condition. The pilot is not active. Its reporting plan and recorded limits are in [`docs/governance/kaizen/pr-checklist-pilot.md`](docs/governance/kaizen/pr-checklist-pilot.md).
 
 ### Collaboration workflow
 
