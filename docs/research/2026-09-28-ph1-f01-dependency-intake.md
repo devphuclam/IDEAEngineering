@@ -4,7 +4,7 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-DEP-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 Dependency Intake |
-| Version / status | `0.5` / `Draft` |
+| Version / status | `0.6` / `Draft` |
 | Product normativity | `INFORMATIVE` — records source/license evidence; does not change Feature, Tech or product scope |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / repository maintainer |
@@ -16,15 +16,21 @@
 | Downstream trace | F01-A/T003–T012; F01-B/T013; PH1/T036 dependency/license review |
 | Change / Work Item trace | GitHub Issue #12, F01-A; source commit recorded in `evidence/F01-A-source-and-scope.md` |
 | Classification / retention | `INTERNAL`; retain while these dependency versions are used and with later dependency inventory/SBOM |
-| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. NuGet transitive license/notice review and the tracked-secret/broader reproducibility work remain assigned to T013/T036. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
+| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. Exact NuGet transitive license/notice evidence remains incomplete although Windows package restore already ran; T002 therefore remains open. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
+| Control tailoring | Research note, not a product decision: no effective product date or requirement acceptance. Source evidence and intended-use limits are recorded here; package-level license/notice gaps remain explicit rather than inferred as cleared. |
+| Supersession / review trigger | Supersedes this note's `0.5` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before F01-A closure. |
 
 ## 1. Disposition
 
-**`APPROVED-WITH-OBLIGATIONS` for internal F01 development only.** The versions below are pinned
-to named upstream publishers; their license expressions and known notice obligations are recorded
-here. Keep required notices with any copy of the corresponding package or runtime. Do not bundle
-these development tools or runtimes in a customer package under this record. No commercial package
-or distribution model is approved by this intake.
+**Direct-package disposition: `APPROVED-WITH-OBLIGATIONS` for internal F01 development only.**
+This is not a completed disposition for the full resolved dependency graph or T002. The initial
+Windows restore used NuGet transitive packages before their exact license/notice evidence was
+retained; record this as an order-of-work deviation. Do not infer that the successful build or
+package metadata cured that gap. The versions below are pinned to named upstream publishers;
+license expressions and known notice obligations are recorded here. Keep required notices with
+any copy of the corresponding package or runtime. Do not bundle these development tools or
+runtimes in a customer package under this record. No commercial package or distribution model is
+approved by this intake.
 
 The npm lock graph is pinned in `apps/web/package-lock.json` (SHA-256
 `1C011F5EBFEA15E039E236B4713C3ED7E0B1657A654A95887B3B13D0C84B803D`): 88 exact package
@@ -135,3 +141,4 @@ commercial distribution are legally cleared.
 | 0.3 | 2026-09-28 | Record the resolved 75-package Maven project graph, exact notable license/notice obligations, Log4j2 alternative with no Logback, Server build result, and the P04 host's BusyBox `unzip` workaround while retaining the official ZIP checksum. | Maven dependency-tree SHA-256 and Server build evidence; package artifacts/upstream sources in Section 4; official Apache Maven SHA-512 sidecar; F01-A/T006/T009/T012 |
 | 0.4 | 2026-09-28 | Add the ArchUnit 1.4.2 runtime-transitive license/notice obligations; record all four individual smoke/build outcomes without treating them as one-commit T012 evidence. | Exact Maven graph; ArchUnit v1.4.2 upstream README; F01-A build results |
 | 0.5 | 2026-09-28 | Record clean-source build/test outcomes for all four projects from one committed source revision and preserve remaining NuGet, secret-scan and commercial-distribution boundaries. | F01-A build results, tested commit `c600f7be41f0732cb57d521017bae0565ab229bd` |
+| 0.6 | 2026-09-28 | Separate the direct-package internal-use disposition from the incomplete whole-graph qualification; record the NuGet restore order-of-work deviation and keep T002 open. Add research control tailoring and re-review trigger. | Two-axis F01-A review against external-source intake and PH1 FR-012 |

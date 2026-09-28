@@ -20,7 +20,7 @@ execution boundaries and CHK009/CHK010 evidence expectations. This task list rem
 **Goal**: Start from the approved PG4 scope without importing unqualified dependencies.
 
 - [X] T001 Record source commit, F01-A Work Item link and approved PH1 boundary in `specs/005-ph1-foundation-custody/evidence/F01-A-source-and-scope.md`.
-- [X] T002 Qualify exact source, version, license, transitive obligations and intended internal use of F01 Java, Web, .NET and Maven Wrapper dependencies before first import in `docs/research/2026-09-28-ph1-f01-dependency-intake.md` (direct-use disposition recorded; exact resolved graphs remain assigned to T013/T036 before integration/distribution).
+- [ ] T002 Qualify exact source, version, license, transitive obligations and intended internal use of F01 Java, Web, .NET and Maven Wrapper dependencies before first import in `docs/research/2026-09-28-ph1-f01-dependency-intake.md`. The direct-use record exists, but exact NuGet transitive license/notice evidence is incomplete; the initial restore already occurred. Complete the graph review and obtain a reviewer disposition for this order-of-work deviation before closing T002; do not claim the original prerequisite was met retrospectively.
 - [X] T003 Create build-only scaffolds in `apps/server/pom.xml`, `apps/server/mvnw`, `apps/server/.mvn/wrapper/maven-wrapper.properties`, `apps/web/package.json`, `apps/web/package-lock.json`, `apps/desktop/IdeaDesktop.csproj`, `apps/workspace/IdeaWorkspace.csproj`, `apps/desktop/tests/IdeaDesktop.Tests.csproj` and `apps/workspace/tests/IdeaWorkspace.Tests.csproj`; document their ownership in `apps/README.md`. Do not add application behavior yet.
 
 ## Phase 2: Shared foundation — F01-A/B
@@ -36,9 +36,9 @@ execution boundaries and CHK009/CHK010 evidence expectations. This task list rem
 **Independent test**: Follow [quickstart](quickstart.md) from clean checkouts on Ubuntu and
 Windows; record four project results and a secret/lockfile review.
 
-- [X] T006 [P] [US1] Write a failing minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`; initial red and post-implementation pass are recorded in [F01-A build results](evidence/F01-A-build-results.md).
-- [X] T007 [P] [US1] Write a failing Web entry-point test in `apps/web/src/App.test.tsx`.
-- [X] T008 [P] [US1] Write failing Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`.
+- [ ] T006 [P] [US1] Write a failing minimal Server context/health test in `apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java`. The test exists and passed after implementation, but its intended pre-implementation failure is not retained; do not present the wrapper launch failure as a test-red result.
+- [ ] T007 [P] [US1] Write a failing Web entry-point test in `apps/web/src/App.test.tsx`. The test exists and passed after implementation; its intended pre-implementation failure is not retained.
+- [ ] T008 [P] [US1] Write failing Desktop and Workspace startup checks in `apps/desktop/tests/DesktopSmokeTests.cs` and `apps/workspace/tests/WorkspaceSmokeTests.cs`. Both tests exist and passed after implementation; their intended pre-implementation failures are not retained.
 - [X] T009 [US1] Create the selected Java 25 Spring Boot/Modulith Maven build and minimal health entry point in `apps/server/pom.xml` and `apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java`; implementation and individual Server build result are recorded in [F01-A build results](evidence/F01-A-build-results.md).
 - [X] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
 - [X] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.

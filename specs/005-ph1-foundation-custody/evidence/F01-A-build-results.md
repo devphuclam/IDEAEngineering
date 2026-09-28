@@ -1,7 +1,8 @@
 # F01-A Build and Smoke Results
 
 **T012 disposition:** `PASS` for the four approved foundation smoke/build checks below.
-**Card status:** `IN-PROGRESS / awaiting Project Reviewer closure`. This is not product acceptance.
+**Card status:** `IN-PROGRESS / review corrections open`. The four checks passing does not by
+itself close F01-A or establish product acceptance.
 
 ## Common tested source
 
@@ -66,3 +67,15 @@ the fresh Maven build above passed. The initial failure is resolved, not hidden 
 All four checks therefore exercised the same committed application source revision. The user
 approved these as scaffolding smoke tests only. They do not prove business workflows, security,
 PostgreSQL, file custody, transfer performance, multi-Vault operation, or deployment readiness.
+
+## Review findings — 2026-09-28
+
+- The four green smoke/build outcomes above are supported. The retained record does **not** show
+  an intended test failure before implementing the Server, Web, Desktop or Workspace behavior.
+  The earlier Maven Wrapper CRLF launch failure is a build-launch failure, not a TDD red result.
+  T006–T008 remain open until the missing evidence is resolved through an explicit review decision;
+  a later test-sensitivity run must be labelled retrospective, not presented as an original red run.
+- The [dependency intake](../../../docs/research/2026-09-28-ph1-f01-dependency-intake.md) has
+  not completed exact NuGet transitive license/notice qualification. Windows restore already ran,
+  so T002's before-first-import order was not met. Retain this as a deviation and do not call
+  the entire F01-A prerequisite set complete merely because the four smoke checks passed.

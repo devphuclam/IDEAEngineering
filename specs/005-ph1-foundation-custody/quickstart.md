@@ -1,7 +1,8 @@
 # PH1 validation guide
 
-**State on 2026-09-28:** Planned, application checks `NOT-RUN`. This guide tells a reviewer how
-to prove each slice after its code exists; it is not evidence that any slice passed.
+**State on 2026-09-28:** The four F01-A scaffold build/smoke checks passed for tested source
+commit `c600f7be` (see [F01-A results](evidence/F01-A-build-results.md)). F01-A remains open;
+the F01-B and F02–F05 checks are `NOT-RUN`. This guide is a procedure, not evidence of a result.
 
 ## Before running
 
