@@ -9,17 +9,15 @@ This is the provider-neutral collaboration contract for the Development Workspac
 3. Use one isolated worktree per Agent task. Do not allow concurrent Agent work in one branch or one worktree.
 4. Keep the branch focused on one Work Item and use a pull request or the equivalent review surface for integration.
 5. Complete the author section of the [shared PR template](../../.github/pull_request_template.md), then run the public verification command and focused tests before requesting review. Record actual results and any unrun checks.
-6. A reviewer other than the author completes the reviewer section using the [repository PR review procedure](pull-request-review.md) and submits an approval. Recheck changed files and affected tests when a commit changes after review.
-7. Merge only after that reviewer approval, when required checklist rows pass or have a reasoned N/A, blocking review comments are resolved, and all checks required by repository policy have passed.
+6. Apply the [repository PR review procedure](pull-request-review.md) to complete review and recheck changed files and affected tests when a commit changes after review.
+7. Merge according to that procedure's merge condition and the selected Platform Adapter's rules.
 8. Record decisions, verification evidence, blockers, and the next handoff in the Work Item.
 
 ## Review intent
 
-Every change has one human review intent. During the PR checklist pilot, a reviewer other than the author must complete the reviewer checklist and approve before merge. The provider policy remains `minimum_human_approvals: 0`; it does not technically enforce this manual pilot rule.
+Every change has one human review intent. During the PR checklist pilot, follow the reviewer requirement in `pull-request-review.md`. The provider policy remains `minimum_human_approvals: 0`; the manual process is not technically enforced by that setting.
 
-The Core contract records review intent and checklists; provider-specific approval semantics belong in the selected Platform Adapter. Follow the explicit manual reviewer requirement above even if GitHub branch protection does not enforce it.
-
-The PR checklist supports the review decision but does not create an approval event. Follow the selected provider's actual review and branch protection rules.
+The Core contract records review intent and checklists; provider-specific approval semantics belong in the selected Platform Adapter.
 
 ## Handoff
 

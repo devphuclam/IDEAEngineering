@@ -1,4 +1,4 @@
-> **Pilot:** Complete both the author and reviewer sections for each PR. Please record checklist feedback in Work Item #6.
+> **Pilot:** Complete both sections for each PR. Follow `docs/agents/pull-request-review.md` for reviewer assignment and record feedback in Work Item #6.
 
 ## Purpose and scope
 
@@ -28,11 +28,12 @@ List the relevant commands and actual results. For checks not run, state why and
 
 ## Author self-check
 
-For each row, record `PASS` (`Đạt`), `FAIL` (`Không đạt`), or `N/A` (`Không áp dụng` + reason) and link evidence where applicable. A `FAIL` or unexplained `N/A` blocks review readiness.
+For each row, record `PASS`, `FAIL`, or `N/A` and provide a reason for `N/A`. See `docs/agents/pull-request-review.md` for status meanings. Link evidence where applicable. A `FAIL` or unexplained `N/A` blocks review readiness.
 
 | Check | Status | Evidence / reason |
 |---|---|---|
 | Purpose, scope, Work Item, and acceptance criteria match the diff | | |
+| Documentation references and branch scope match the intended change | | |
 | I reviewed the changed files; debug code, temporary data, and unrelated edits are removed | | |
 | Errors, empty values, and invalid input have deliberate behavior | | |
 | Environment configuration is documented and no password, token, or API key is included | | |
@@ -41,7 +42,7 @@ For each row, record `PASS` (`Đạt`), `FAIL` (`Không đạt`), or `N/A` (`Kh�
 
 ## Reviewer verification
 
-Reviewer other than the PR author: fill this section after inspecting the diff. Record `PASS` (`Đạt`), `FAIL` (`Không đạt`), or `N/A` (`Không áp dụng` + reason) for every row. A `FAIL` or unexplained `N/A` blocks approval.
+Reviewer: fill this section after inspecting the diff. Record `PASS`, `FAIL`, or `N/A` and provide a reason for `N/A` on every row. See `docs/agents/pull-request-review.md` for status meanings and reviewer assignment. A `FAIL` or unexplained `N/A` blocks approval.
 
 | Check | Status | Evidence / reason |
 |---|---|---|
@@ -55,7 +56,7 @@ Reviewer other than the PR author: fill this section after inspecting the diff. 
 ## Merge readiness
 
 - [ ] Every required author and reviewer check is `PASS` or `N/A` with a reason.
-- [ ] A reviewer other than the author completed the review section and submitted an approval.
+- [ ] Reviewer decision and approval are recorded.
 - [ ] No unresolved required change request or blocking comment remains.
 - [ ] Repository-required checks have passed. If none are configured, record that fact in the test results; do not describe an unrun check as passed.
 

@@ -6,9 +6,9 @@
 | Work Item | [#6 — standardize pull request checks and run a pilot](https://github.com/devphuclam/IDEAEngineering/issues/6) |
 | Pilot repository | `devphuclam/IDEAEngineering` |
 | Status | `PILOT-PLANNED`; template and procedure take effect when merged |
-| Pilot owner | Repository maintainers; name a maintainer at the pilot review |
+| Pilot owner | `devphuclam` (repository owner and Work Item assignee) |
 | Start | First PR opened after this change is merged |
-| End | The first 10 eligible pilot PRs or 8 weeks after start, whichever comes first |
+| End | The first 10 PRs targeting `main` or 8 weeks after start, whichever comes first |
 
 ## Purpose
 
@@ -37,7 +37,7 @@ Do not record credentials or personal performance rankings.
 |---|---|
 | Checklist completion | `Complete` only when every row has a status and every `N/A` has a reason; otherwise `Incomplete`. |
 | Separate reviewer | Record whether a reviewer other than the author completed the reviewer section and submitted an approval event. |
-| Checklist omission rework | Count a PR when a review comment or follow-up commit shows that an item in the checklist was missed. Cite the PR comment or commit. A PR counts at most once in the rate; retain the number and category of omissions separately. |
+| Checklist omission rework | Count a PR when a review comment or follow-up commit shows that an item in the checklist was missed. Cite the PR comment or commit. A PR counts at most once in the rate; retain the number and category of omissions separately. Report how many PRs had enough review evidence to assess; unreviewed PRs are `UNASSESSED`, not zero rework. |
 | Ready-to-approval time | Elapsed hours from GitHub's `Ready for review` event to the first reviewer `APPROVED` event. If no such approval occurs, record `N/A — no approval event`; do not substitute merge time. |
 | Required checks | Record the configured checks and their final status. If none are configured, record `None configured`. |
 | User feedback | After review, ask the author and reviewer whether any row was unclear, repetitive, missing, or hard to evidence. Record the suggested change and disposition. |
@@ -50,7 +50,7 @@ Do not record credentials or personal performance rankings.
 At pilot end, maintainers compare the available pre-pilot and pilot samples using:
 
 1. Checklist completion rate: complete PRs divided by pilot PRs.
-2. PRs with checklist-omission rework: affected PRs divided by PRs with review evidence.
+2. PRs with checklist-omission rework: affected PRs divided by PRs with enough review evidence to assess; show the assessed and total sample sizes and the `UNASSESSED` count.
 3. Median ready-for-review-to-first-approval time, only for PRs with both timestamps.
 4. Author and reviewer feedback and recurring `N/A` reasons.
 
