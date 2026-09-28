@@ -1,8 +1,62 @@
-## Review intent
+> **Pilot:** Complete both the author and reviewer sections for each PR. Please record checklist feedback in Work Item #6.
 
-- [ ] I read the Work Item acceptance criteria and checked each one against the diff.
-- [ ] I ran `./scripts/verify-template` and the focused tests from a clean checkout.
-- [ ] I checked documentation references, secret-like configuration, and branch scope.
-- [ ] I recorded remaining risks or blockers in the Work Item.
+## Purpose and scope
 
-`minimum_human_approvals: 0` means the author may satisfy the review intent where the selected platform supports it. GitHub's checklist is not an independent approval event.
+Work Item: #
+
+What changes and why:
+
+What is intentionally out of scope:
+
+## Risk areas
+
+Describe affected behavior, or write `N/A` with a reason.
+
+| Area | Impact and evidence / reason for N/A |
+|---|---|
+| Access, security, or permissions | |
+| Database, schema, or data migration | |
+| Environment configuration or deployment | |
+
+## Test results
+
+List the relevant commands and actual results. For checks not run, state why and what remains unverified.
+
+| Command / check | Result (PASS / FAIL / NOT RUN) | Evidence or reason |
+|---|---|---|
+| `./scripts/verify-template` and applicable focused tests from a clean checkout | | |
+
+## Author self-check
+
+For each row, record `PASS` (`Đạt`), `FAIL` (`Không đạt`), or `N/A` (`Không áp dụng` + reason) and link evidence where applicable. A `FAIL` or unexplained `N/A` blocks review readiness.
+
+| Check | Status | Evidence / reason |
+|---|---|---|
+| Purpose, scope, Work Item, and acceptance criteria match the diff | | |
+| I reviewed the changed files; debug code, temporary data, and unrelated edits are removed | | |
+| Errors, empty values, and invalid input have deliberate behavior | | |
+| Environment configuration is documented and no password, token, or API key is included | | |
+| Required repository verification and applicable focused tests ran from a clean checkout; unrun checks and limits are stated above | | |
+| Access/security, database, and deployment impacts are described and checked | | |
+
+## Reviewer verification
+
+Reviewer other than the PR author: fill this section after inspecting the diff. Record `PASS` (`Đạt`), `FAIL` (`Không đạt`), or `N/A` (`Không áp dụng` + reason) for every row. A `FAIL` or unexplained `N/A` blocks approval.
+
+| Check | Status | Evidence / reason |
+|---|---|---|
+| Changes satisfy the Work Item and do not exceed its scope | | |
+| Logic and effects on existing behavior have been checked | | |
+| Higher-risk areas and the author's evidence have been independently examined | | |
+| Test results and required repository checks support the change | | |
+| Required review comments are resolved | | |
+| Changes made after review were rechecked in the affected files and tests | | |
+
+## Merge readiness
+
+- [ ] Every required author and reviewer check is `PASS` or `N/A` with a reason.
+- [ ] A reviewer other than the author completed the review section and submitted an approval.
+- [ ] No unresolved required change request or blocking comment remains.
+- [ ] Repository-required checks have passed. If none are configured, record that fact in the test results; do not describe an unrun check as passed.
+
+The checklist records review work; it does not create an independent GitHub approval. Repository rules and configured required checks still apply.

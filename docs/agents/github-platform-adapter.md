@@ -2,20 +2,19 @@
 
 This adapter represents Work Items as GitHub Issues and implements tracker operations with the `gh` CLI.
 
-## Author self-review checklist
+## Pull Request checklist
 
-The pull request template records the author's review intent:
+Use the shared [PR template](../../.github/pull_request_template.md) and follow the
+[repository review procedure](pull-request-review.md) for author self-check and reviewer
+verification. This adapter defines GitHub Work Item operations; the shared procedure owns checklist
+content and status meanings.
 
-- [ ] I read the Work Item acceptance criteria and checked each one against the diff.
-- [ ] I ran the public verification command and focused tests from a clean checkout.
-- [ ] I checked documentation references, secret-like configuration, and branch scope.
-- [ ] I recorded remaining risks or blockers in the Work Item.
-
-GitHub does not record the pull request author's checklist as an independent approval. This
-repository therefore does not invent an approval event. The provider-neutral review intent remains
-`minimum_human_approvals: 0`; its JSON/API serialization is `reviewIntent.minimumHumanApprovals: 0`.
-Effective GitHub rules still win and may require stricter independent review. A requester vote is not treated as an independent approval unless the selected provider
-explicitly records that event.
+GitHub does not record the pull request author's checklist as an independent approval. The current
+provider-neutral setting remains `minimum_human_approvals: 0`, serialized as
+`reviewIntent.minimumHumanApprovals: 0`. During the checklist pilot, the repository's manual
+procedure still requires a different person to review and approve before merge; the current setting
+does not technically enforce it. Effective GitHub rules may impose stricter requirements. A
+requester vote is not an approval unless GitHub records an approval review event.
 
 ## Conventions
 
