@@ -4,7 +4,7 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-DEP-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 Dependency Intake |
-| Version / status | `0.4` / `Draft` |
+| Version / status | `0.5` / `Draft` |
 | Product normativity | `INFORMATIVE` — records source/license evidence; does not change Feature, Tech or product scope |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / repository maintainer |
@@ -16,7 +16,7 @@
 | Downstream trace | F01-A/T003–T012; F01-B/T013; PH1/T036 dependency/license review |
 | Change / Work Item trace | GitHub Issue #12, F01-A; source commit recorded in `evidence/F01-A-source-and-scope.md` |
 | Classification / retention | `INTERNAL`; retain while these dependency versions are used and with later dependency inventory/SBOM |
-| Evidence status | npm lock graph resolved and screened; Maven Server graph (75 project dependencies) resolved and build/smoke test passed on the P04 host; Desktop and Workspace build/smoke tests passed on the Windows workstation. NuGet transitive license/notice review and all clean-checkout repeatability remain assigned to T013/T036. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
+| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. NuGet transitive license/notice review and the tracked-secret/broader reproducibility work remain assigned to T013/T036. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
 
 ## 1. Disposition
 
@@ -64,11 +64,11 @@ graph is Apache-2.0-dominant. Notable exact exceptions/obligations are:
   Apache-2.0/BSD-3-Clause/MIT dependencies; Byte Buddy 1.18.11 additionally embeds ASM 9.10.1 under
   BSD-3-Clause and carries its license/NOTICE files.
 
-The graph resolved and passed `bash ./mvnw -B verify` on the P04 Ubuntu host. This source/build
-snapshot is not yet a committed release baseline; the final card evidence must rerun from one
-committed revision. The exact NuGet transitive license/notice review, full build-tool/plugin
-inventory, and clean-checkout repeatability remain assigned to T013/T036. That later review does
-not permit adding a new direct dependency without intake.
+The graph resolved and `./mvnw -B -Dmaven.repo.local=... verify` passed on the P04 Ubuntu host from
+a clean archive of tested source commit `c600f7be41f0732cb57d521017bae0565ab229bd`, using a fresh
+Maven Wrapper home and local repository. The exact NuGet transitive license/notice review, full
+build-tool/plugin inventory and tracked-secret/broader reproducibility work remain assigned to
+T013/T036. That later review does not permit adding a new direct dependency without intake.
 
 No code, diagram, data, or asset is copied from Aras, DDM, or another product. The Maven Wrapper
 script is the only upstream build script expected to be copied; it is limited to Apache Maven's
@@ -134,3 +134,4 @@ commercial distribution are legally cleared.
 | 0.2 | 2026-09-28 | Screen the exact npm lock graph; pin Maven Wrapper and Maven distribution artifacts/checksums; leave resolved Maven/NuGet application graphs and commercial distribution explicitly open. | Official sources/checksums in Section 4; verified npm lock metadata; F01-A T002/T003; P04 runtime intake |
 | 0.3 | 2026-09-28 | Record the resolved 75-package Maven project graph, exact notable license/notice obligations, Log4j2 alternative with no Logback, Server build result, and the P04 host's BusyBox `unzip` workaround while retaining the official ZIP checksum. | Maven dependency-tree SHA-256 and Server build evidence; package artifacts/upstream sources in Section 4; official Apache Maven SHA-512 sidecar; F01-A/T006/T009/T012 |
 | 0.4 | 2026-09-28 | Add the ArchUnit 1.4.2 runtime-transitive license/notice obligations; record all four individual smoke/build outcomes without treating them as one-commit T012 evidence. | Exact Maven graph; ArchUnit v1.4.2 upstream README; F01-A build results |
+| 0.5 | 2026-09-28 | Record clean-source build/test outcomes for all four projects from one committed source revision and preserve remaining NuGet, secret-scan and commercial-distribution boundaries. | F01-A build results, tested commit `c600f7be41f0732cb57d521017bae0565ab229bd` |

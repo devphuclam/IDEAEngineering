@@ -42,7 +42,7 @@ Windows; record four project results and a secret/lockfile review.
 - [X] T009 [US1] Create the selected Java 25 Spring Boot/Modulith Maven build and minimal health entry point in `apps/server/pom.xml` and `apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java`; implementation and individual Server build result are recorded in [F01-A build results](evidence/F01-A-build-results.md).
 - [X] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
 - [X] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.
-- [ ] T012 [US1] Run all four builds/basic checks on their qualified platforms, record command, tool versions, commit and actual result in `specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md`.
+- [X] T012 [US1] Run all four builds/basic checks on their qualified platforms, record command, tool versions, commit and actual result in [F01-A build results](evidence/F01-A-build-results.md). All checks passed from clean platform-specific archives of the same committed source revision; scope limits are recorded with each result.
 - [ ] T013 [US1] Add and run a repeatable tracked-secret detection check in `tests/ph1/check-no-secrets.ps1`; repeat builds from clean source, inspect lockfiles against intake, and record F01-B evidence in `specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md`.
 
 ## Phase 4: User Story 2 — Controlled data baseline (F02, P1)

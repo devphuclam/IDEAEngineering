@@ -1,75 +1,68 @@
 # F01-A Build and Smoke Results
 
-**Card status:** `IN-PROGRESS` — project-level smoke/build checks passed on separate uncommitted
-snapshots. T012 remains open until all four checks are repeated from one committed source revision.
-No F01-A PASS is claimed.
+**T012 disposition:** `PASS` for the four approved foundation smoke/build checks below.
+**Card status:** `IN-PROGRESS / awaiting Project Reviewer closure`. This is not product acceptance.
 
-## Server — P04 Ubuntu development host
+## Common tested source
 
 | Field | Result |
 |---|---|
+| Tested source commit | `c600f7be41f0732cb57d521017bae0565ab229bd` on `codex/ph1-foundation-f01` |
+| Source checkout | Clean application directories exported with `git archive` from the tested commit and extracted to new temporary directories; no build outputs included |
+| Ubuntu archive | `apps/server` + `apps/web`; SHA-256 `5F362E06E26C986CFEB0E1C13938A146F664B039B263B4266E4862D03BF3A593`; uploaded archive hash independently matched on the host |
+| Windows archive | `apps/desktop` + `apps/workspace`; SHA-256 `B222D2F367BC5D2D9F27EBE7E86ADEA1A7A41DAA3CCFD226707114BE9305E2DD` |
 | Run date | 2026-09-28, Asia/Ho_Chi_Minh |
-| Repository branch / base commit | `codex/ph1-foundation-f01` / `03d34d36145186102460d135d8d670c31c63b8ea` |
-| Source state | Uncommitted Server snapshot transferred to a temporary directory on `ideaddmserver`; snapshot archive SHA-256 `2C46ED8D571B99B435658E68CCD487DC8D0DEEC91B1544F130BFBFB2EA66DCF5` |
-| Host / tools | Ubuntu 26.04.1 LTS; Temurin `25.0.4.1+1`; Maven Wrapper `3.3.4`; Apache Maven `3.9.16` |
-| Wrapper check | Ran with a fresh wrapper/Maven cache and retained the pinned Apache ZIP checksum; the host supplied its BusyBox `unzip` applet through a temporary PATH shim. No checksum check was disabled. |
-| Red result before health implementation | The initial health smoke test failed before `/health` was implemented; the failure was followed by the passing run below. |
-| Smoke/build | `bash ./mvnw -B verify` — exit `0`; 1 test passed, Maven build succeeded. The test starts the Server without a database and checks `GET /health` returns HTTP `200` and JSON `status=UP`. |
-| Build note | Mockito emitted a non-fatal Java-agent/dynamic-attach warning. The check still exited successfully; track warning cleanup if a later JDK changes this behavior. |
-| Disposition | `PASS` for this Server smoke/build run only. It does not establish database, security, Gateway, Vault, or product integration behavior. |
+
+## Server — Ubuntu 26.04 development host
+
+| Field | Result |
+|---|---|
+| Tools | Temurin `25.0.4.1+1`; Maven Wrapper `3.3.4`; Apache Maven `3.9.16` |
+| Fresh build cache | New Maven Wrapper home and new Maven local repository under `/tmp`; dependencies were fetched for this clean source export. The repository was not reused from the earlier snapshot run. |
+| Extraction support | A temporary PATH directory pointed `unzip` to the host's BusyBox applet. The wrapper retained and passed the pinned Maven ZIP checksum. |
+| Command | `./mvnw -B -Dmaven.repo.local=/tmp/idea-f01a-m2-c600f7b verify` |
+| Result | Exit `0`, `BUILD SUCCESS`, 1 test passed. The test starts the Server and checks `GET /health` gives HTTP `200` and JSON `status=UP`; no database configuration or database call is used by this scaffold test. |
+| Warning | Mockito printed a non-fatal Java-agent/dynamic-attach warning. It did not affect the result; revisit if a later JDK removes this attach behavior. |
+| Disposition | `PASS` for the Server smoke/build only. No database, authentication, authorization, Gateway, Vault, or product behavior is claimed. |
 
 The exact resolved Server dependency graph is retained in
 [`F01-A-server-dependency-tree.json`](F01-A-server-dependency-tree.json), SHA-256
 `C36F53C13AACAA18CAEA5026B53295ECDA230BC9170DA325412AA65A19756049`.
 
-## Web — P04 Ubuntu development host
+## Web — Ubuntu 26.04 development host
 
 | Field | Result |
 |---|---|
-| Run date | 2026-09-28, Asia/Ho_Chi_Minh |
-| Repository branch / base commit | `codex/ph1-foundation-f01` / `03d34d36145186102460d135d8d670c31c63b8ea` |
-| Source state | Uncommitted Web snapshot, transferred to a temporary directory on `ideaddmserver`; snapshot archive SHA-256 `A9699338985BA920516C4C88616FB9540F9772CEF80926E52CA22076A182A4AD` |
-| Host / tools | Ubuntu 26.04.1 LTS; Node.js `v24.21.0`; npm `11.19.0`; Vitest `5.0.2`; Vite `8.3.1` |
-| Install | `npm ci --no-audit --no-fund` — exit `0`, 44 platform packages installed from the checked-in lockfile |
-| Red result before `App` implementation | `npm test` failed because `src/App` did not yet exist |
-| Smoke test | `npm test` — exit `0`; 1 file passed, 1 test passed. It checks that `App` renders a `<main>` landmark. |
-| Build | `npm run build` — exit `0`; TypeScript check passed; Vite transformed 15 modules and emitted `dist/index.html` plus the production JavaScript bundle. |
-| Disposition | `PASS` for this Web smoke/build run only. It does not pass the F01-A card or assert product behavior. |
+| Tools | Node.js `v24.21.0`; npm `11.19.0`; Vitest `5.0.2`; Vite `8.3.1` |
+| Commands | `npm ci --no-audit --no-fund`; `npm test`; `npm run build` |
+| Result | All commands exited `0`; 44 packages installed from the lockfile; 1 file and 1 test passed. TypeScript check passed; Vite transformed 15 modules and emitted the production HTML and JavaScript bundle. |
+| Disposition | `PASS` for the Web rendering/build check only. The test verifies `App` renders a `<main>` landmark; no user workflow or Server integration is claimed. |
 
-## Desktop — Windows engineering workstation
+## Desktop — Windows x64 engineering workstation
 
 | Field | Result |
 |---|---|
-| Run date | 2026-09-28, Asia/Ho_Chi_Minh |
-| Repository branch / base commit | `codex/ph1-foundation-f01` / `03d34d36145186102460d135d8d670c31c63b8ea` |
-| Source state | Uncommitted Windows worktree snapshot; no shared committed-snapshot archive recorded for this run |
-| Host / tools | Windows x64; .NET SDK `10.0.300`; `net10.0-windows` targeting pack |
-| Red/green test | The initial startup-boundary test failed before the WPF `App` class was added. Final `dotnet test apps/desktop/tests/IdeaDesktop.Tests.csproj --no-restore` — exit `0`; 1 test passed. It verifies `Idea.Ddm.Desktop.App` derives from WPF `Application`. |
-| Build | `dotnet build apps/desktop/IdeaDesktop.csproj --no-restore` — exit `0`; 0 warnings, 0 errors. |
-| Disposition | `PASS` for this Desktop startup-boundary test/build only. No window interaction or product behavior was tested. |
+| Tools | .NET SDK `10.0.300`; Windows `net10.0-windows` targeting pack |
+| Commands | `dotnet test apps/desktop/tests/IdeaDesktop.Tests.csproj`; `dotnet build apps/desktop/IdeaDesktop.csproj` |
+| Result | Restore and both commands succeeded from the clean archive; 1 test passed; build had 0 warnings and 0 errors. Test verifies `Idea.Ddm.Desktop.App` derives from WPF `Application`. |
+| Disposition | `PASS` for the Desktop startup-boundary/build check only. No window interaction or product behavior is claimed. |
 
-## Workspace — Windows engineering workstation
+## Workspace — Windows x64 engineering workstation
 
 | Field | Result |
 |---|---|
-| Run date | 2026-09-28, Asia/Ho_Chi_Minh |
-| Repository branch / base commit | `codex/ph1-foundation-f01` / `03d34d36145186102460d135d8d670c31c63b8ea` |
-| Source state | Uncommitted Windows worktree snapshot; no shared committed-snapshot archive recorded for this run |
-| Host / tools | Windows x64; .NET SDK `10.0.300`; `net10.0-windows` targeting pack |
-| Red/green test | The initial entry-point test failed before the Workspace host was added. Final `dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj --no-restore` — exit `0`; 1 test passed. It verifies the separate public static `Main` has `[STAThread]`. |
-| Build | `dotnet build apps/workspace/IdeaWorkspace.csproj --no-restore` — exit `0`; 0 warnings, 0 errors. |
-| Disposition | `PASS` for this Workspace entry-point test/build only. No file-custody or Server interaction was tested. |
+| Tools | .NET SDK `10.0.300`; Windows `net10.0-windows` targeting pack |
+| Commands | `dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj`; `dotnet build apps/workspace/IdeaWorkspace.csproj` |
+| Result | Restore and both commands succeeded from the clean archive; 1 test passed; build had 0 warnings and 0 errors. Test verifies the separate public static `Main` has `[STAThread]`. |
+| Disposition | `PASS` for the Workspace entry-point/build check only. No file custody or Server interaction is claimed. |
 
-## Shared revision rerun still required
+## Issue found and corrected during verification
 
-The four passing results above came from per-component, uncommitted source snapshots. The Server and
-Web were each copied to the Ubuntu host independently; the Windows checks ran from the Windows
-worktree. The Server archive hash is not the same as the Web archive hash, and neither is a Git
-commit. After the implementation is committed, run all four documented checks from that exact
-commit (or its verified archive), record its full commit ID and archive/hash evidence, and confirm
-the source was clean. Until then T012 remains `NOT-RUN` for the acceptance criterion requiring one
-common committed revision, even though each component check above passed individually.
+The first committed archive (`2a955a66e541f80bc83a2e6303439943db48dc41`) failed on Linux because
+the Maven Wrapper had CRLF after its shebang (`/bin/sh^M`). `.gitattributes` now pins
+`apps/server/mvnw` to LF; the corrected archive from the tested commit had LF and mode `755`, and
+the fresh Maven build above passed. The initial failure is resolved, not hidden as a passing run.
 
-These checks are scaffolding smoke tests only. They do not assert business behavior, authentication,
-authorization, PostgreSQL, Vault I/O, transfer performance, multi-Vault operation, or deployment
-readiness.
+All four checks therefore exercised the same committed application source revision. The user
+approved these as scaffolding smoke tests only. They do not prove business workflows, security,
+PostgreSQL, file custody, transfer performance, multi-Vault operation, or deployment readiness.

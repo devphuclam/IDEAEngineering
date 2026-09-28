@@ -16,12 +16,14 @@ Vault endpoint while retaining distinct Artifact, Vault and Location identity so
 can add multiple Vaults. This README makes no product-behavior or integration claim.
 Current F01-A build and smoke-test results are recorded in
 [`F01-A-build-results.md`](../specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md).
-Those results are per-component, uncommitted snapshots; they do not yet complete the F01-A card.
+All four checks passed from clean platform-specific archives of the same committed source
+revision. F01-A still awaits the Project Reviewer's explicit card closure; the smoke tests do not
+assert product behavior.
 
 ## Build entry points
 
-These are the reproducible entry points. The evidence file above records the commands already
-run and their limits; T012 remains open until all checks are repeated from one committed revision.
+These are the reproducible entry points. The evidence file above records the tested source commit,
+command results and limits; T012 passed for these foundation checks.
 
 | Project | Command | Required tools |
 |---|---|---|
