@@ -4,25 +4,25 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-NUGET-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 NuGet Transitive Intake Audit |
-| Version / status | `0.1` / `Draft` |
+| Version / status | `0.2` / `Draft` |
 | Product normativity | `INFORMATIVE`; this records evidence and a recommendation, not a product or legal decision |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / Codex research agent |
-| Reviewer / acceptance authority | Project Reviewer disposition `NOT-RUN`; Product Decision Authority acceptance `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer accepted the one-time internal F01-A order-of-work exception on 2026-09-28; Product Decision Authority product acceptance `NOT-RUN` |
 | Evidence date | 2026-09-28 (Asia/Ho_Chi_Minh) |
 | Applicable baseline | F01-A source commit `c600f7be41f0732cb57d521017bae0565ab229bd`; current Windows `obj/project.assets.json` snapshots in unchanged Desktop/Workspace project definitions; internal build/test use only |
 | Intended use | `DEPENDENCY`: WPF WebView2 SDK and development/test packages; no customer packaging, runtime redistribution, or commercial release qualified |
 | Upstream trace | [F01 dependency intake](2026-09-28-ph1-f01-dependency-intake.md), [external-source intake](../agents/external-source-intake.md), [PH1 spec FR-012](../../specs/005-ph1-foundation-custody/spec.md), F01-A/T002 |
 | Downstream trace | F01-A Project Reviewer disposition; F01-B/T013; PH1/T036 and later dependency inventory/SBOM |
-| Change / Work Item trace | GitHub Issue #12, F01-A; this note adds a read-only NuGet graph and package-level license/notice audit without changing `tasks.md` |
+| Change / Work Item trace | GitHub Issue #12, F01-A/T002; reviewer decision on 2026-09-28 recorded in §4; T002 status is owned by `tasks.md` |
 | Classification / retention | `INTERNAL`; retain while these exact versions are in use and with later dependency inventory/SBOM |
-| Evidence status | Four assets snapshots and 14 local package archives inspected. Exact package license metadata and three upstream MIT license files verified. NuGet's signed-content versus full-archive hash distinction is explained below; the restored graph's link to the historical tested archive remains qualified. Reviewer decision `NOT-RUN`; commercial distribution `BLOCKED-LEGAL`. |
+| Evidence status | Four assets snapshots and 14 local package archives inspected. Exact package license metadata and three upstream MIT license files verified. NuGet's signed-content versus full-archive hash distinction is explained below; the restored graph's link to the historical tested archive remains qualified. One-time internal-use exception `ACCEPTED` by the Project Reviewer; commercial distribution `BLOCKED-LEGAL`. |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019, `STANDARD-GUIDED`) is used for identity, status, source and trace fields; no standards-conformity claim. This research note has no effective product date or accepted requirement. |
-| Supersession / review trigger | No predecessor or successor. Re-review on package/version/source, resolved graph, license/notice, project configuration, deployment bundle or intended-use change, and before T002 closure. |
+| Supersession / review trigger | Supersedes this note's `0.1` revision; no successor identified. Re-review on package/version/source, resolved graph, license/notice, project configuration, deployment bundle or intended-use change. The exception cannot be reused for a new import. |
 
 ## 1. Scope and reproducibility limit
 
-The [F01-A build record](../../specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md) says Desktop and Workspace restore, test and build passed from clean Windows archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current worktree is at `2b1afb0e9730617f05e6f89e12676aa27c9094bc`; `git diff c600f7b HEAD -- apps/desktop apps/workspace` returned no changes. Thus the four project definitions inspected here match the tested source, but the ignored `obj/project.assets.json` files were generated in this worktree and were **not retained from the clean tested archives**. This is an exact audit of the currently resolved Windows graph for those unchanged definitions, not proof that every archive byte used by the historical F01-A restore was identical.
+The [F01-A build record](../../specs/005-ph1-foundation-custody/evidence/F01-A-build-results.md) says Desktop and Workspace restore, test and build passed from clean Windows archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. At audit time the worktree was at `2b1afb0e9730617f05e6f89e12676aa27c9094bc`; `git diff c600f7b HEAD -- apps/desktop apps/workspace` returned no changes. Thus the four project definitions inspected here match the tested source, but the ignored `obj/project.assets.json` files were generated in this worktree and were **not retained from the clean tested archives**. This is an exact audit of the currently resolved Windows graph for those unchanged definitions, not proof that every archive byte used by the historical F01-A restore was identical.
 
 The four assets snapshots, all dated 2026-09-28 local time, have these SHA-256 hashes:
 
@@ -68,11 +68,19 @@ The exact publisher license sources corresponding to the nuspec repository commi
 
 ## 4. Interpretation, deviation and reviewer disposition
 
-**Engineering recommendation for the defined internal build/test use: `APPROVED-WITH-OBLIGATIONS`, pending Project Reviewer disposition.** The observed exact versions have a publisher-pinned MIT license or WebView2's exact BSD-style package license, with the notice retention above. Keep these versions/source identities stable, retain notice evidence with any copied package files, and reopen intake on change. This is a recommendation based on the inspected current graph, not an accepted disposition or a legal clearance for distribution. Customer/runtime redistribution and any unresolved WebView2 notice applicability remain `BLOCKED-LEGAL` until the exact shipped bundle and terms are reviewed by the Legal Review Authority. T013/T036 still own later clean-source/lockfile and full integration/bundle checks.
+**Internal F01-A build/test disposition: `APPROVED-WITH-OBLIGATIONS` under the one-time Project Reviewer exception below.** The observed exact versions have a publisher-pinned MIT license or WebView2's exact BSD-style package license, with the notice retention above. Keep these versions/source identities stable, retain notice evidence with any copied package files, and reopen intake on change. This disposition applies to the inspected internal build/test graph only; it is not a legal clearance for distribution. Customer/runtime redistribution and any unresolved WebView2 notice applicability remain `BLOCKED-LEGAL` until the exact shipped bundle and terms are reviewed by the Legal Review Authority. T013/T036 still own later clean-source/lockfile and full integration/bundle checks.
 
-**Order-of-work deviation:** Windows NuGet restore and F01-A smoke/build checks already ran before exact transitive license/notice evidence was recorded. The later audit cannot make the FR-012/T002 *before-first-use* condition retrospectively true. The Project Reviewer must decide whether to accept a documented exception with this evidence and any follow-up condition, or require another correction. Until then T002 and F01-A remain open in their owning records; this research note does not change their status.
+**Order-of-work deviation:** Windows NuGet restore and F01-A smoke/build checks already ran before exact transitive license/notice evidence was recorded. The later audit cannot make the FR-012/T002 *before-first-use* condition retrospectively true. The Project Reviewer has accepted this as a documented, one-time exception for the past internal build/test use; the exception does not change FR-012 for any future import. T002 may close with this explicit exception, while F01-A completion remains a separate card decision.
 
-**Question for the Project Reviewer:** Does the now-recorded 14-package NuGet graph, exact archive/license/notice evidence and qualified historical-restore linkage support an internal-only T002 exception for the F01-A work already performed, with T013/T036 and future distribution review retained as conditions? If not, what additional evidence is required, especially for WebView2 package NOTICE or the historical restore linkage? The differing signed-content and full-archive hashes are explained in §1, not presented as an unresolved discrepancy.
+| Exception control | Recorded disposition |
+|---|---|
+| Decision and source | `ACCEPTED` on 2026-09-28 by the Project Reviewer (project user), who stated in this Codex conversation: “Duyệt ngoại lệ T002 cho build/test nội bộ F01-A.” This is a process exception, not Product Decision Authority approval of a release. |
+| Exact scope | Past F01-A Windows NuGet restore and scaffold build/test for source commit `c600f7be41f0732cb57d521017bae0565ab229bd`, using the currently audited 14-package graph for unchanged Desktop/Workspace project definitions. Internal development/test only. |
+| Rationale | The exact current package graph, publisher license texts and package notices are now retained; the inspected terms support the bounded internal use with notice obligations. The Project Reviewer accepts late evidence without asserting the original timing requirement was met. |
+| Residual risk | The ignored assets files and package archives from the historical clean restore were not retained, so their byte-for-byte identity with today's audited cache is unproven. Signatures were not independently verified. Future distribution contents and runtime/installer terms are unreviewed. |
+| Owner and approver | Engineering owns version/notice control and the follow-up; the Project Reviewer approved this one-time exception. Legal Review Authority remains the required authority for any unresolved external distribution terms. |
+| Expiry and boundary | The exception covers only the historical F01-A use above; its operative scope ends at F01-A card review, while this decision remains in the record. It cannot authorize a new package, version, restore graph, project configuration or commercial deployment; those require intake before first use. |
+| Remediation and escalation | Retain this audit; T013 reconciles clean-source/lockfile evidence and T036 reviews the exact integration or distribution bundle. Preserve applicable notices. Escalate any changed or unclear license, WebView2 redistribution or runtime EULA to the Legal Review Authority before external use. |
 
 ## 5. Checks and change log
 
@@ -82,8 +90,9 @@ The exact publisher license sources corresponding to the nuspec repository commi
 | Four current assets files parsed and hashed | `PASS`: package counts and IDs above | Files were not preserved from the tested clean archive |
 | 14 cached package `.nuspec` and `.nupkg` files inspected and SHA-256 hashed | `PASS` for local files | No new download or restore; signed-content and full-archive hashes are distinct as explained in §1 |
 | Three pinned upstream MIT license files and exact WebView2 package license/notice reviewed | `PASS` for stated files | No exhaustive per-binary or future bundle review |
-| Project Reviewer exception and commercial release approval | `NOT-RUN` / `BLOCKED-LEGAL` respectively | Neither is inferred from green builds |
+| Project Reviewer exception and commercial release approval | One-time internal F01-A exception `ACCEPTED` / commercial distribution `BLOCKED-LEGAL` | Neither changes the original before-first-use evidence or grants a commercial release |
 
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 2026-09-28 | Record current F01 Windows NuGet graph, exact local package hashes, publisher license and embedded notice evidence, NuGet signed-package hash semantics, provenance limits, internal-use recommendation and reviewer question. |
+| 0.2 | 2026-09-28 | Record the Project Reviewer's one-time T002 exception, its exact scope, rationale, risk, owner, expiry, follow-up and separation from commercial clearance. |

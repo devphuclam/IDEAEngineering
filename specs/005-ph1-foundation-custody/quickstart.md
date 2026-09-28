@@ -1,8 +1,9 @@
 # PH1 validation guide
 
 **State on 2026-09-28:** The four F01-A scaffold build/smoke checks passed for tested source
-commit `c600f7be` (see [F01-A results](evidence/F01-A-build-results.md)). F01-A remains open;
-the F01-B and F02–F05 checks are `NOT-RUN`. This guide is a procedure, not evidence of a result.
+commit `c600f7be` (see [F01-A results](evidence/F01-A-build-results.md)). T002 closed with a
+documented one-time internal build/test timing exception; F01-A remains open. The F01-B and
+F02–F05 checks are `NOT-RUN`. This guide is a procedure, not evidence of a result.
 
 ## Before running
 
@@ -38,8 +39,9 @@ Windows Workspace: dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj
 Windows Workspace: dotnet build apps/workspace/IdeaWorkspace.csproj
 ```
 
-These commands are targets, not reports of successful execution. T002 must clear the exact package
-intake before `npm ci` or Maven downloads; T003 must provide the wrapper and projects. The pinned
+These commands are targets, not reports of successful execution. Exact package intake is required
+before any new import; the historical NuGet exception in T002 does not waive this rule for another
+package or version. T003 must provide the wrapper and projects. The pinned
 Maven wrapper requires `unzip` on the Ubuntu host to retain its ZIP checksum path. For F02–F05,
 the card evidence must include the exact migration, application-start and scenario commands added
 with those implementations, because no such executable exists yet.

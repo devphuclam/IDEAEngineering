@@ -1,8 +1,9 @@
 # F01-A Build and Smoke Results
 
 **T012 disposition:** `PASS` for the four approved foundation smoke/build checks below.
-**Card status:** `IN-PROGRESS / T002 intake correction open`. The four checks passing does not by
-itself close F01-A or establish product acceptance.
+**Card status:** `IN-PROGRESS`; T002 closed with a documented internal-only timing exception.
+The four checks passing and the T002 exception do not by themselves close F01-A or establish
+product acceptance.
 
 ## Common tested source
 
@@ -77,7 +78,9 @@ PostgreSQL, file custody, transfer performance, multi-Vault operation, or deploy
   Their existing tests and green results count for F01-A, but this decision does not assert that an
   intended red run occurred. A later test-sensitivity run would be retrospective, not an original
   red run. Retain red/green evidence for subsequent implementation slices.
-- The [dependency intake](../../../docs/research/2026-09-28-ph1-f01-dependency-intake.md) has
-  not completed exact NuGet transitive license/notice qualification. Windows restore already ran,
-  so T002's before-first-import order was not met. Retain this as a deviation and do not call
-  the entire F01-A prerequisite set complete merely because the four smoke checks passed.
+- Windows restore ran before exact NuGet transitive license/notice evidence was recorded, so
+  T002's before-first-import order was not met. The later [NuGet audit](../../../docs/research/2026-09-28-ph1-f01-nuget-transitive-audit.md)
+  identifies the current 14-package graph and its historical-restore limit. On 2026-09-28 the
+  Project Reviewer accepted a one-time exception for the past internal F01-A build/test use only.
+  This closes T002 with a documented deviation; it does not retroactively satisfy the timing
+  rule, clear a changed dependency, approve commercial distribution or by itself close F01-A.

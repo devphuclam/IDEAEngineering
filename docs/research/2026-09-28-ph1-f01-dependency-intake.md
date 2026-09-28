@@ -4,11 +4,11 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-DEP-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 Dependency Intake |
-| Version / status | `0.7` / `Draft` |
+| Version / status | `0.8` / `Draft` |
 | Product normativity | `INFORMATIVE` — records source/license evidence; does not change Feature, Tech or product scope |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / repository maintainer |
-| Reviewer / acceptance authority | Project Reviewer / Product Decision Authority acceptance `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer accepted the one-time T002 internal build/test timing exception on 2026-09-28; Product Decision Authority product acceptance `NOT-RUN` |
 | Evidence date | 2026-09-28 (Asia/Ho_Chi_Minh) |
 | Applicable baseline | PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, F01-A; selected Java 25, React 19.3, TypeScript 7, Vite 8.3, WPF/WebView2 and .NET 10 families |
 | Intended use | `DEPENDENCY` for internal development/build/test only; no customer packaging, redistribution or commercial-use approval |
@@ -16,17 +16,18 @@
 | Downstream trace | F01-A/T003–T012; F01-B/T013; PH1/T036 dependency/license review |
 | Change / Work Item trace | GitHub Issue #12, F01-A; source commit recorded in `evidence/F01-A-source-and-scope.md` |
 | Classification / retention | `INTERNAL`; retain while these dependency versions are used and with later dependency inventory/SBOM |
-| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current Windows NuGet graph, 14 exact archives and license/notice evidence are recorded in the linked NuGet audit; the historical restore linkage is qualified and the Project Reviewer has not yet disposed of the before-first-use deviation. T002 remains open. Commercial distribution review is `BLOCKED-LEGAL` until separately completed. |
+| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current Windows NuGet graph, 14 exact archives and license/notice evidence are recorded in the linked NuGet audit; the historical restore linkage remains qualified. The Project Reviewer accepted a one-time exception for the late NuGet intake evidence covering only past internal F01-A build/test. Commercial distribution review remains `BLOCKED-LEGAL`. |
 | Control tailoring | Research note, not a product decision: no effective product date or requirement acceptance. Source evidence, review limits and intended-use conditions are recorded here; later evidence does not retrospectively satisfy the before-first-use rule. |
-| Supersession / review trigger | Supersedes this note's `0.6` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before F01-A closure. |
+| Supersession / review trigger | Supersedes this note's `0.7` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before a distribution decision. The exception does not cover a new import. |
 
 ## 1. Disposition
 
 **Direct-package disposition: `APPROVED-WITH-OBLIGATIONS` for internal F01 development only.**
-This is not a completed disposition for the full resolved dependency graph or T002. The initial
-Windows restore used NuGet transitive packages before their exact license/notice evidence was
-retained; this order-of-work deviation still needs a Project Reviewer decision. The later
-[NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md) records the current
+This is not a qualification of every package in the resolved graphs. The initial Windows restore
+used NuGet transitive packages before their exact license/notice evidence was retained. The
+Project Reviewer accepted a one-time timing exception for that past internal F01-A build/test
+use on 2026-09-28; scope, residual risk, owner, expiry and follow-up are recorded in the
+[NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md). That audit records the current
 14-package Windows build/test graph, exact local archives, license and notice evidence, and the
 limit on linking those assets to the historical clean restore. It does not make the
 before-first-use condition retrospectively true. Do not infer that the successful build or
@@ -34,7 +35,8 @@ package metadata cured that gap. The versions below are pinned to named upstream
 license expressions and known notice obligations are recorded here. Keep required notices with
 any copy of the corresponding package or runtime. Do not bundle these development tools or
 runtimes in a customer package under this record. No commercial package or distribution model is
-approved by this intake.
+approved by this intake. The separate [commercial-license scope note](2026-09-28-ph1-f01-commercial-license-scope.md)
+explains why commercially usable license families do not equal an approved IDEA release.
 
 The npm lock graph is pinned in `apps/web/package-lock.json` (SHA-256
 `1C011F5EBFEA15E039E236B4713C3ED7E0B1657A654A95887B3B13D0C84B803D`): 88 exact package
@@ -77,7 +79,7 @@ graph is Apache-2.0-dominant. Notable exact exceptions/obligations are:
 The graph resolved and `./mvnw -B -Dmaven.repo.local=... verify` passed on the P04 Ubuntu host from
 a clean archive of tested source commit `c600f7be41f0732cb57d521017bae0565ab229bd`, using a fresh
 Maven Wrapper home and local repository. The current NuGet graph's exact license/notice review is
-recorded in the linked audit, pending Project Reviewer disposition for T002. Full build-tool/plugin
+recorded in the linked audit, with the Project Reviewer's one-time T002 disposition. Full build-tool/plugin
 inventory, tracked-secret/broader reproducibility work, and review of the actual integration or
 distribution bundle remain assigned to T013/T036. That later review does not permit adding a new
 direct dependency without intake.
@@ -116,7 +118,7 @@ resolved graph.
 | Keep direct package sources and versions equal to this intake; use only official publisher endpoints/repositories. | F01 implementer | Project files and source URLs. |
 | Keep the reviewed npm graph aligned with `apps/web/package-lock.json`; inspect exact package notices, optional-platform behavior and any future bundle before integration/distribution. | F01 implementer | Initial metadata screen recorded here; F01-B/T013 and PH1/T036 complete actual notice/bundle review. |
 | Recheck the pinned Maven project graph when direct versions change; review exact license/notice files and the Maven build-plugin distribution before packaging. | F01 implementer | Graph hash and notable obligations recorded above; F01-B/T013 and PH1/T036 before integration/distribution. |
-| Keep the recorded NuGet test and WebView2 package graph aligned with the Windows target; resolve the order-of-work deviation before T002 closure and recheck actual shipped assets/notices before integration or distribution. | F01 implementer and Project Reviewer | [Current NuGet audit](2026-09-28-ph1-f01-nuget-transitive-audit.md) plus reviewer disposition for T002; F01-B/T013 and PH1/T036 for later bundle checks. |
+| Keep the recorded NuGet test and WebView2 package graph aligned with the Windows target; retain the one-time T002 deviation decision and recheck actual shipped assets/notices before integration or distribution. | F01 implementer and Project Reviewer | [Current NuGet audit and accepted exception](2026-09-28-ph1-f01-nuget-transitive-audit.md); F01-B/T013 and PH1/T036 for later bundle checks. |
 | Keep the pinned Maven wrapper URL and checksum paired; make `unzip` available (a BusyBox `unzip` shim works on the current P04 host) and never disable checksum enforcement to bypass a missing extraction tool. | F01 implementer | T005 tool inventory; wrapper ZIP checksum verified against Apache's official SHA-512 sidecar. |
 | If any dependency has a custom, non-commercial, field-of-use, unclear, reciprocal/network-copyleft or redistribution-restricted term, do not use it; request Legal Review Authority disposition. | Engineering + Legal Review Authority | New controlled intake decision before use. |
 | Before external/customer distribution, choose the packaging model, inventory every shipped runtime and transitive component, generate an SBOM, assemble notices/source obligations, and obtain legal/company approval. | Engineering + Legal Review Authority | Separate commercial-release review; this intake is not that approval. |
@@ -150,3 +152,4 @@ commercial distribution are legally cleared.
 | 0.5 | 2026-09-28 | Record clean-source build/test outcomes for all four projects from one committed source revision and preserve remaining NuGet, secret-scan and commercial-distribution boundaries. | F01-A build results, tested commit `c600f7be41f0732cb57d521017bae0565ab229bd` |
 | 0.6 | 2026-09-28 | Separate the direct-package internal-use disposition from the incomplete whole-graph qualification; record the NuGet restore order-of-work deviation and keep T002 open. Add research control tailoring and re-review trigger. | Two-axis F01-A review against external-source intake and PH1 FR-012 |
 | 0.7 | 2026-09-28 | Link the exact current NuGet graph/license/notice audit, distinguish later evidence from the original before-first-use deviation, and reserve T002 closure for Project Reviewer disposition. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); FR-012; T002 |
+| 0.8 | 2026-09-28 | Record the Project Reviewer's one-time exception for late NuGet evidence in internal F01-A build/test; retain later distribution and license-review gates. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); [commercial-license scope](2026-09-28-ph1-f01-commercial-license-scope.md); FR-012; T002 |
