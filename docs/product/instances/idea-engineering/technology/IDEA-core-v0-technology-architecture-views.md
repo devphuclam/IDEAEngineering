@@ -5,7 +5,7 @@
 | Stable Document ID | `IE-ARC-TECH-VIEW-001` |
 | Document class | `ARC` / Technology Architecture View Set |
 | Title | IDEA Engineering Core v0 Technology Architecture View Set |
-| Version / status | `0.5` / `Draft` |
+| Version / status | `0.6` / `Draft` |
 | Artifact role | Focused views of the Engineering-selected Core v0 technology baseline; companion to the decision matrix and TECH-001, not a replacement for DOC-05 |
 | Product normativity | `INFORMATIVE` — visualizes the selected implementation direction and creates no FTR/REQ/product behavior |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
@@ -13,15 +13,20 @@
 | Reviewer / acceptance authority | Independent architecture/technology review `NOT-RUN`; Product Decision Authority approved the exact predecessor Tech baseline and Node.js 24 Web-build delta; remaining successor authority states follow their records |
 | Applicable baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; DOC-05@0.22; `IE-KNW-TECH-DEC-001@0.7`; `TECH-001@0.16`; `IE-PLAN-DEC2026-003@0.2` |
 | Source / upstream trace | [`IE-STD-TECH-STACK-001@0.1`](../../../../agents/technology-stack-documentation-standard.md); [DOC-05](../DOC-05-architecture-description.md); [`IE-KNW-TECH-DEC-001@0.7`](../../../knowledge/2026-09-13-core-v0-technology-decision-matrix.md); [`TECH-001@0.16`](../decision-briefs/TECH-001-technology-and-architecture-proposal.md); [ADR-0013](../../../../adr/0013-separate-artifact-control-and-data-planes.md) |
-| Downstream trace | Current Core v0 one-Vault correction rendition and focused author review: [`IE-VEV-TECH-VIEW-004`](../registers/VEV-2026-09-23-one-vault-core-v0-technology-view-correction.md) and [current technology SVG/PNG gallery](../evidence/IE-VEV-TECH-VIEW-004/index.html); Node.js 24 predecessor rendition [`IE-VEV-TECH-VIEW-003`](../registers/VEV-2026-09-23-node24-technology-view-refresh.md), Vault successor gallery [`IE-VEV-VAULT-XFER-002`](../registers/VEV-2026-09-18-vault-transfer-diagram-review.md) and earlier packages remain historical evidence |
+| Downstream trace | [Current diagram guide](../ph1-diagram-guide.md); [TECH-D03 successor](../evidence/IE-VEV-TECH-VIEW-005/index.html); [pinned 0.5 gallery](../evidence/IE-VEV-TECH-VIEW-004/index.html) for the other seven unchanged diagram sources. Earlier galleries remain historical evidence. |
 | Change record | [`IE-CHG-PH0-CORR-002`](../registers/CHG-2026-09-23-post-analysis-consistency-correction.md); [`IE-CHG-TECH-NODE24-001`](../registers/CHG-2026-09-23-node24-web-build-baseline.md); [`IE-CHG-VAULT-XFER-001`](../registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md); predecessor correction [`IE-CHG-TECH-VIEW-CORR-001`](../registers/CHG-2026-09-15-technology-architecture-view-correction.md) |
-| Predecessor | `IE-ARC-TECH-VIEW-001@0.4`; successor source/diagram/SVG/PNG hashes are recorded in the current rendition evidence |
-| Supersedes / superseded by | Supersedes `IE-ARC-TECH-VIEW-001@0.4` / `NOT-APPLICABLE` |
+| Predecessor | `IE-ARC-TECH-VIEW-001@0.5`; presentation-only TECH-D03 correction recorded in [PH1 transfer diagram review](../registers/VEV-2026-09-28-ph1-transfer-diagram-review.md) |
+| Supersedes / superseded by | Supersedes `IE-ARC-TECH-VIEW-001@0.5` / `NOT-APPLICABLE` |
 | Review trigger | Technology baseline, deployment topology, protocol, trust boundary, build/release path or client reopen disposition changes |
 | Access / retention | `INTERNAL`; retain with the technology baseline and successor history |
-| Evidence status | Mermaid source, Core v0 one-Vault correction rendering, standalone-SVG inspection and focused author visual review are recorded in `IE-VEV-TECH-VIEW-004`; independent architecture review and runtime qualification remain `NOT-RUN`; PDA authority is mixed and follows the linked decision records |
+| Evidence status | Focused TECH-D03 successor verification is recorded in [IE-VEV-PH1-TRANSFER-001](../registers/VEV-2026-09-28-ph1-transfer-diagram-review.md); the other seven diagram sources are unchanged from `IE-VEV-TECH-VIEW-004`. Runtime qualification and independent review are not established by this correction. |
 
 ## Reading rule and notation
+
+Version 0.6 changes only TECH-D03's labels and relationships to distinguish responsibility from
+byte transport, checked against DOC-05@0.26. Open the [current PH1 diagram guide](../ph1-diagram-guide.md)
+for the focused TECH-D03 successor and the unchanged runtime views. The full 0.5 gallery below
+remains a pinned predecessor; its TECH-D03 is no longer the current rendition.
 
 These eight views answer different questions. They deliberately omit class-level design, database
 tables and full domain behavior already owned by DOC-05/DOC-06. A box is a logical software/runtime
@@ -31,7 +36,7 @@ uses the C4 meaning (an application or data store), not Docker.
 | Visual convention | Meaning in every view |
 |---|---|
 | Solid box and solid relationship | Selected Core v0 engineering direction or required relationship |
-| Dashed box/relationship | Alternative, conditional, external or planned-but-not-implemented element as labelled |
+| Dashed box/relationship | Alternative, conditional, external or planned-but-not-implemented element as labelled; TECH-D03 instead uses dashed arrows for control/responsibility and thick arrows for bytes, per its local legend |
 | `[SELECT]`, `[ALTERNATIVE]`, `[CONDITIONAL]`, `[DEFER]`, `[REJECT CORE V0]` | Authoritative text status; color is not required to interpret it |
 | Arrow | Dependency, call or transfer in the labelled direction; not a time sequence unless stated |
 | Boundary | Process, trust, node or responsibility boundary named in that view |
@@ -191,7 +196,7 @@ Gateway runtime/provider remains `NOT-RUN`.
 | View ID / title | `TECH-D03` — Technology Layer Mapping |
 | Purpose | Map each selected technology to its bounded responsibility and show where IDEA domain authority remains. |
 | Stakeholders / concerns | Developers and architecture reviewers; framework role, domain ownership and prevention of accidental authority leakage. |
-| Viewpoint / notation | Responsibility/layer mapping; Mermaid flowchart. |
+| Viewpoint / notation | Responsibility/layer mapping; Mermaid flowchart. Dashed arrows are control or responsibility relationships; thick arrows carry file bytes. Not a time sequence. |
 | Source | Matrix@0.7 selected-stack records; DOC-05 Module ownership; accepted ADRs C1-003…006. |
 | Current status / authority | `Draft`; Matrix/TECH own selection, DOC-05 owns business authority and Module boundaries. |
 | Qualification boundary | Does not prescribe classes/packages or prove that module checks and runtime controls are implemented. |
@@ -199,7 +204,7 @@ Gateway runtime/provider remains `NOT-RUN`.
 ```mermaid
 flowchart TB
     accTitle: Technology to responsibility layer mapping
-    accDescr: The presentation layer uses React and TypeScript, a narrow Windows shell uses WPF and WebView2, and local integration belongs to the dotnet Workspace. Spring Boot hosts API and application coordination while Spring Modulith checks module structure. Spring Security authenticates, IDEA Access Policy authorizes, Spring JDBC and PostgreSQL persist relational state, Flyway controls schema change, Artifact Custody selects Vault locations and verifies transfer evidence, while an Artifact Gateway handles scoped bytes without owning product publication.
+    accDescr: Responsibility mapping, not a time sequence. Dashed relationships carry control or identify responsibilities. Thick arrows carry file bytes directly between Workspace, Artifact Gateway and one configured Vault, bypassing the Server. Server-owned Artifact Custody selects the location, issues scoped grants and revalidates receipts; a receipt cannot publish a Generation. Security and persistence are separate Module responsibilities, not sequential transport hops. The Vault and Adapter seam supports later multi-vault work without deploying it in PH1.
 
     P[Presentation<br/>React + TypeScript<br/><b>renders business UI only</b>]
     Shell[Windows native shell<br/>WPF + WebView2<br/><b>hosts approved intents only</b>]
@@ -212,22 +217,25 @@ flowchart TB
     Data[(Relational data<br/>PostgreSQL 18)]
     Custody[Artifact Custody Module<br/><b>selects location, issues grant,<br/>revalidates receipt</b>]
     Gateway[Artifact Gateway boundary<br/>runtime/provider <b>NOT-RUN</b><br/><b>moves and verifies bytes only</b>]
-    Vaults[(Vault locations<br/>immutable Artifact bytes)]
-    Ops[Operations<br/>Nginx + systemd + telemetry + backup]
+    Vaults[(One configured Vault<br/>immutable Artifact bytes<br/>future multi-vault seam retained)]
 
-    P --> Shell --> Local
-    P --> API
-    Local --> API
-    API --> Modules --> Security --> Persist --> Data
-    Migration --> Data
-    Modules --> Custody --> Gateway --> Vaults
-    Ops -. supervises and observes .-> API
-    Ops -. protects and recovers .-> Data
-    Ops -. protects and recovers .-> Vaults
+    P -. installed UI .-> Shell
+    Shell -. local intents .-> Local
+    P -. business API .-> API
+    Local -. prepare and finalize .-> API
+    API -. hosts .-> Modules
+    Modules -. security checks .-> Security
+    Modules -. owner persistence .-> Persist
+    Persist -. relational state .-> Data
+    Migration -. schema changes .-> Data
+    Modules -. custody owner .-> Custody
+    Custody <-.->|control and authenticated receipts| Gateway
+    Local <==>|file bytes with scoped grant| Gateway
+    Gateway <==>|file bytes via Adapter| Vaults
 
     classDef selected fill:#e8f1fb,stroke:#172b4d,stroke-width:2px,color:#111;
     classDef authority fill:#fff,stroke:#172b4d,stroke-width:2px,color:#111;
-    class P,Shell,Local,API,Modules,Security,Persist,Migration,Ops selected;
+    class P,Shell,Local,API,Modules,Security,Persist,Migration selected;
     class Data,Custody,Vaults authority;
     class Gateway selected;
 ```
@@ -238,7 +246,13 @@ than creates Module ownership, Spring Security authenticates and IDEA Access Pol
 Owner Modules retain SQL/state authority through JDBC/PostgreSQL; Flyway owns schema migration;
 Artifact Custody owns location selection, grant/receipt validation and custody policy; the Gateway
 moves/verifies bytes only and Vault locations retain immutable copies. Nginx/systemd/telemetry/backup
-are operational mechanisms. This mapping selects the boundary, not a Gateway runtime or provider.
+are cross-cutting operational mechanisms described here rather than drawn as transport hops.
+This mapping selects the boundary, not a Gateway runtime or provider.
+The dashed Server-to-Gateway relationships carry control and receipts, never file payloads.
+The thick Workspace–Gateway–Vault path carries bytes in either direction. This is not a sequence
+of calls through Spring Security and persistence. See TECH-D04 for process/protocol boundaries and
+DOC-05 `ARCH-VIEW-SEQ-002` for the separate Check-in publication sequence. PH1 uses one Gateway/Vault;
+it does not implement Check-in publication or a second Vault.
 
 ## TECH-D04 — Runtime & Protocol View
 
@@ -603,6 +617,7 @@ force retention of Java in advance.
 
 | Version | Date | Status | Change |
 |---|---|---|---|
+| `0.6` | 2026-09-28 | Draft | Clarify TECH-D03 responsibility versus transport arrows and show direct Workspace–Gateway–Vault bytes. Focused successor render and navigation recorded in `IE-VEV-PH1-TRANSFER-001`. No architecture, technology selection, scope or gate change. |
 | `0.5` | 2026-09-23 | Draft | Correct TECH-D01/D02/D04/D05 so Core v0 deploys one configured Vault while retaining a visibly deferred multi-vault seam. No Feature, Spec, Tech selection, Product Scope, Q-15, PDA or gate state changes. |
 | `0.4` | 2026-09-23 | Draft | Record the PDA-approved Node.js 24 LTS Web-build baseline and refresh TECH-D07; no topology, protocol, Product Scope, Q-15 or gate change. Successor render evidence is recorded separately. |
 | `0.3` | 2026-09-17 | Draft | Add control-plane/data-plane separation and multi-location Vault capability to TECH-D01…D06; correct control/receipt directions and worker byte paths; retain initial filesystem Adapter direction. Current render/open and focused author review are recorded in `IE-VEV-VAULT-XFER-002`. Gateway runtime/provider, independent review and runtime qualification remain `NOT-RUN`; Technology Stack, Q-15, Product Scope, PDA and PG states are unchanged. |

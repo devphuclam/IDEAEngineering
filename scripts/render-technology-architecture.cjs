@@ -11,6 +11,10 @@ const sourcePath = path.join(
   'docs/product/instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md',
 );
 const evidenceId = process.env.IDEA_ARCH_EVIDENCE_ID;
+const selectedViewId = process.env.IDEA_TECH_VIEW_ID || null;
+if (selectedViewId && !/^TECH-D0[1-8]$/.test(selectedViewId)) {
+  throw new Error(`Invalid IDEA_TECH_VIEW_ID: ${selectedViewId}`);
+}
 if (!evidenceId) {
   throw new Error('Set IDEA_ARCH_EVIDENCE_ID to the new evidence record; do not overwrite historical evidence.');
 }
@@ -33,6 +37,7 @@ const html = value => String(value).replace(/[&<>\"]/g, character => ({
 
 (async () => {
   const content = fs.readFileSync(sourcePath, 'utf8');
+  if (fs.existsSync(out)) throw new Error(`Evidence target already exists: ${out}`);
   fs.mkdirSync(out, { recursive: true });
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   const page = await browser.newPage({ viewport: { width: 1800, height: 1400 }, deviceScaleFactor: 1 });
@@ -50,6 +55,7 @@ const html = value => String(value).replace(/[&<>\"]/g, character => ({
     const before = content.slice(0, match.index);
     const ids = [...before.matchAll(/##\s+`?(TECH-D\d{2})`?\s+—/g)];
     const id = ids.at(-1)?.[1];
+    if (selectedViewId && id !== selectedViewId) continue;
     if (!id || results.some(result => result.id === id)) {
       throw new Error(`Missing or duplicate technology view ID: ${id}`);
     }
@@ -87,10 +93,14 @@ const html = value => String(value).replace(/[&<>\"]/g, character => ({
 
     fs.writeFileSync(path.join(out, `${id}.svg`), svg);
     await page.locator('#view svg').screenshot({ path: path.join(out, `${id}.png`) });
-    results.push({ id, title, description, status: 'PASS — RENDER', svgSha256: sha(svg) });
+    fs.writeFileSync(path.join(out, `${id}.mmd`), match[1]);
+    results.push({ id, title, description, status: 'PASS — RENDER',
+      diagramSha256: sha(match[1]), svgSha256: sha(svg),
+      pngSha256: sha(fs.readFileSync(path.join(out, `${id}.png`))) });
   }
 
-  const expected = Array.from({ length: 8 }, (_, index) => `TECH-D${String(index + 1).padStart(2, '0')}`);
+  const expected = selectedViewId ? [selectedViewId]
+    : Array.from({ length: 8 }, (_, index) => `TECH-D${String(index + 1).padStart(2, '0')}`);
   const actual = results.map(result => result.id);
   if (JSON.stringify(actual) !== JSON.stringify(expected)) {
     throw new Error(`Expected ${expected.join(', ')}, rendered ${actual.join(', ')}`);
@@ -130,7 +140,7 @@ const html = value => String(value).replace(/[&<>\"]/g, character => ({
     `<a href="${result.id}.svg" aria-label="Open ${html(result.id)} at full size">` +
     `<img src="${result.id}.svg" alt="${html(result.title)}"></a></article>`,
   ).join('');
-  fs.writeFileSync(path.join(out, 'index.html'), `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IDEA Core v0 — Technology Architecture Views</title><style>body{font:16px Arial,sans-serif;margin:24px auto;padding:0 20px;max-width:1680px;color:#172b4d;line-height:1.45}nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:8px;margin:20px 0}nav a{padding:10px;border:1px solid #ccd5df;border-radius:4px}article{border-top:1px solid #ccd5df;padding:24px 0}img{max-width:100%;height:auto}h2{font-size:20px;margin-bottom:4px}a{color:#155ca0}code{font-weight:bold}</style><h1>IDEA Core v0 — Technology Architecture Views</h1><p>Eight focused views. Select an image to open its SVG at full resolution. These are Draft engineering-baseline views; rendering is not implementation evidence or Product Decision Authority approval.</p><nav>${navigation}</nav>${cards}</html>`);
+  fs.writeFileSync(path.join(out, 'index.html'), `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IDEA Core v0 — Technology Architecture Views</title><style>body{font:16px Arial,sans-serif;margin:24px auto;padding:0 20px;max-width:1680px;color:#172b4d;line-height:1.45}nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:8px;margin:20px 0}nav a{padding:10px;border:1px solid #ccd5df;border-radius:4px}article{border-top:1px solid #ccd5df;padding:24px 0}img{max-width:100%;height:auto}h2{font-size:20px;margin-bottom:4px}a{color:#155ca0}code{font-weight:bold}</style><h1>IDEA Core v0 — Technology Architecture Views</h1><p>${results.length} focused view(s). Select an image to open its SVG at full resolution. These are Draft engineering-baseline views; rendering is not implementation evidence or Product Decision Authority approval.</p><nav>${navigation}</nav>${cards}</html>`);
   fs.writeFileSync(path.join(out, 'render-results.json'), JSON.stringify({
     evidenceId,
     renderedAt: new Date().toISOString(),

@@ -1,0 +1,101 @@
+# Implementation Plan: PH1 Foundation and Single-Vault Custody
+
+**Branch**: `codex/ph1-foundation-f01` | **Date**: 2026-09-28 | **Spec**: [PH1 specification](spec.md)
+
+**Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
+
+## Summary
+
+Build the smallest working path through a Web client, Windows Desktop/Workspace, Java Server,
+PostgreSQL and one Gateway/Vault. F01 establishes repeatable builds; F02 adds versioned data;
+F03 establishes attributable sessions; F04 makes a sample business outcome and Audit atomic;
+F05 sends the 1 KiB and 64 MiB synthetic files directly from Client to Gateway and accepts
+custody metadata only after a verified receipt. The Server remains the control plane. Artifact,
+Vault and Location identifiers never derive from a filesystem path.
+
+The [PG4 record](../004-technical-pilot-readiness/pg4-gate-record.md) authorizes this increment.
+The [roadmap cards](../../docs/product/instances/idea-engineering/planning/idea-technical-pilot-kanban-cario.md)
+own its order and planned hours. This plan refines implementation; it does not amend DOC-04/05/06,
+the selected Tech baseline, or the PG4 decision.
+
+## Technical Context
+
+| Concern | PH1 decision or limit |
+|---|---|
+| Languages and runtimes | Java 25/Eclipse Temurin 25 for Server; React 19.3/TypeScript 7/Vite 8.3 built with Node.js 24; WPF and per-user Workspace on .NET 10. Exact package patches and resolved graphs require intake before first use. |
+| Server framework | Spring Boot 4.1.x and Spring Modulith 2.1.x; Spring Security with ordinary server-side sessions; JDBC/JdbcClient and Boot-managed pgJDBC. Maven Wrapper and Boot BOM control the build. |
+| Storage | PostgreSQL 18 for authoritative metadata, Audit and operation state; one filesystem-backed Vault behind Artifact Custody. Flyway versioned SQL is the only schema migration authority. |
+| Gateway | Separate Artifact Gateway/Vault boundary is selected. Exact Gateway runtime, toolchain and Adapter profile remain `NOT-RUN`; F05-A must qualify and record them before its implementation. F01-A does not silently choose them. |
+| Interfaces | Versioned HTTPS/JSON control API; a scoped Grant and authenticated Receipt cross the Gateway boundary. Client sends bytes to Gateway. Contract details for this increment are in [contracts/ph1-boundaries.md](contracts/ph1-boundaries.md). |
+| Development platforms | Ubuntu 26.04 development Server with native PostgreSQL and one Vault; Windows engineering machine for WPF/Workspace. P04 accepts this one-developer environment, not shared deployment. |
+| Testing | Build/basic checks for each F01 project; fresh-schema and bounded rollback checks; bootstrap/session denial; atomic command/Audit failure injection; 1 KiB/64 MiB size and SHA-256 plus denied, mismatch and interruption transfers. Retain exact command, source commit, environment and result. |
+| Performance and scale | PH1 has no throughput, concurrency, multi-GB or SLA acceptance target. Future multi-GB Artifacts and multi-Vault locations shape the identity and streaming seams only. |
+| Security and licensing | No real secret in Git. No public registration, client-authoritative ActorId, direct database/Vault access, or permanent Vault credential. Record exact source/version/license before importing each new package, SDK, runtime or asset. |
+
+## Constitution Check
+
+*Gate: checked before research and again after design.*
+
+| Principle | Plan response | Result |
+|---|---|---|
+| I. Clean-room product and lawful source intake | Implement only approved IDEA behavior; record exact third-party package and license before use. No competitor code or material enters source. | PASS for plan; dependency intake is an F01 execution prerequisite. |
+| II. Controlled documentation before implementation | PG2/PG3 are approved for F01–F05 and PG4 is `COMPLETE/PASS` for this exact successor. | PASS for PH1 scope. |
+| III. Traceability and controlled change | Tasks map to F01–F05, local FR/SC and owning DOC-04/05/06 rules. A material product change returns to its owning record. | PASS for plan. |
+| IV. Measurable quality and truthful claims | Each story has an executed-result target; planned tests and P04/P05 fixtures do not count as PH1 runtime PASS. | PASS for plan. |
+| V. Least privilege and recovery | Identity, Grant, Receipt, candidate and committed custody remain distinct; failure paths refuse false success. Development rollback is not production restore. | PASS for plan. |
+
+Post-design check: [data model](data-model.md), [boundary contract](contracts/ph1-boundaries.md)
+and [quickstart](quickstart.md) retain the same scope and claims. No constitutional exception is
+requested. `NOT-RUN` qualifications are assigned to explicit tasks rather than treated as PASS.
+
+## Project Structure
+
+### Documentation
+
+```text
+specs/005-ph1-foundation-custody/
+├── spec.md
+├── checklists/
+├── plan.md
+├── research.md
+├── data-model.md
+├── contracts/ph1-boundaries.md
+├── quickstart.md
+└── tasks.md                 # Generated by speckit-tasks
+```
+
+### Source code
+
+```text
+apps/server/                 # Java Server; owner Modules, REST, health and tests
+apps/web/                    # React business UI and its basic checks
+apps/desktop/                # Narrow WPF/WebView2 shell
+apps/workspace/              # Per-user .NET custody process and tests
+apps/gateway/                # Added only after F05 runtime/Adapter qualification
+database/migrations/         # Server-owned Flyway versioned SQL
+config/                      # Non-secret examples; filled values stay outside Git
+deploy/development/          # Existing Ubuntu development runbook
+tests/ph1/                   # Cross-boundary smoke and failure procedures
+```
+
+**Structure decision**: Preserve the monorepo layout selected in the
+[P04 environment profile](../004-technical-pilot-readiness/environment-profile.md#41-planned-monorepo-layout-after-pg4).
+`apps/gateway/` is a separate future PH1 F05 deliverable, not a reason to split Git repositories.
+The Server owns relational authority; the Gateway owns private byte handling through its Adapter.
+
+## Delivery Order and Evidence
+
+1. **F01-A (8 h)**: create the Web, Server, Desktop, Workspace and test skeletons; record build commands and tool versions. A second clean checkout must build them.
+2. **F01-B (8 h)**: add repeatable basic checks, non-secret examples, lockfiles and secret scanning; retain actual check results.
+3. **F02 (12 h)**: introduce ordered PostgreSQL migrations and health checks; run fresh migration and bounded rollback/failure checks.
+4. **F03-A/B (16 h)**: bootstrap and administer native accounts, then sign in/out and revoke sessions; prove invalid sessions are refused.
+5. **F04 (12 h)**: use one shared relational transaction for a sample owner result and Audit Evidence; force failure and verify no partial success.
+6. **F05-A/B (16 h)**: qualify the Gateway implementation and exact dependency intake, then issue a scoped Grant, transfer both synthetic fixtures, verify Receipt and commit custody metadata; run refusal and interruption cases.
+
+Each card receives its own actual evidence before the Progress Tracker may mark it complete.
+The project user starts/stops its timer explicitly; this plan does not record actual effort.
+
+## Complexity Tracking
+
+No exception to the Constitution is requested. The separate Gateway process follows the already
+approved control/data-plane boundary. Only one Gateway/Vault endpoint is built in PH1.

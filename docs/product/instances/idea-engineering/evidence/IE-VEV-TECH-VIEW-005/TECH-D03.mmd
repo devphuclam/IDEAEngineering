@@ -1,0 +1,36 @@
+flowchart TB
+    accTitle: Technology to responsibility layer mapping
+    accDescr: Responsibility mapping, not a time sequence. Dashed relationships carry control or identify responsibilities. Thick arrows carry file bytes directly between Workspace, Artifact Gateway and one configured Vault, bypassing the Server. Server-owned Artifact Custody selects the location, issues scoped grants and revalidates receipts; a receipt cannot publish a Generation. Security and persistence are separate Module responsibilities, not sequential transport hops. The Vault and Adapter seam supports later multi-vault work without deploying it in PH1.
+
+    P[Presentation<br/>React + TypeScript<br/><b>renders business UI only</b>]
+    Shell[Windows native shell<br/>WPF + WebView2<br/><b>hosts approved intents only</b>]
+    Local[Local integration<br/>.NET Workspace<br/><b>owns local custody and tool launch</b>]
+    API[API and application<br/>Spring Boot<br/><b>hosts use cases and REST boundary</b>]
+    Modules[Module structure<br/>Spring Modulith<br/><b>checks boundaries; IDEA Modules own state</b>]
+    Security[Security<br/>Spring Security + IDEA Access Policy<br/><b>authentication is not product authorization</b>]
+    Persist[Persistence<br/>Spring JDBC / JdbcClient / pgJDBC<br/><b>owner Modules own SQL and mappings</b>]
+    Migration[Migration<br/>Flyway + reviewed SQL<br/><b>sole schema-change authority</b>]
+    Data[(Relational data<br/>PostgreSQL 18)]
+    Custody[Artifact Custody Module<br/><b>selects location, issues grant,<br/>revalidates receipt</b>]
+    Gateway[Artifact Gateway boundary<br/>runtime/provider <b>NOT-RUN</b><br/><b>moves and verifies bytes only</b>]
+    Vaults[(One configured Vault<br/>immutable Artifact bytes<br/>future multi-vault seam retained)]
+
+    P -. installed UI .-> Shell
+    Shell -. local intents .-> Local
+    P -. business API .-> API
+    Local -. prepare and finalize .-> API
+    API -. hosts .-> Modules
+    Modules -. security checks .-> Security
+    Modules -. owner persistence .-> Persist
+    Persist -. relational state .-> Data
+    Migration -. schema changes .-> Data
+    Modules -. custody owner .-> Custody
+    Custody <-.->|control and authenticated receipts| Gateway
+    Local <==>|file bytes with scoped grant| Gateway
+    Gateway <==>|file bytes via Adapter| Vaults
+
+    classDef selected fill:#e8f1fb,stroke:#172b4d,stroke-width:2px,color:#111;
+    classDef authority fill:#fff,stroke:#172b4d,stroke-width:2px,color:#111;
+    class P,Shell,Local,API,Modules,Security,Persist,Migration selected;
+    class Data,Custody,Vaults authority;
+    class Gateway selected;

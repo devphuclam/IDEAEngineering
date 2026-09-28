@@ -1,0 +1,9 @@
+{
+  "evidenceId": "IE-VEV-PH1-TRANSFER-001",
+  "checkedAt": "2026-09-28T04:17:22.025Z",
+  "browser": "154.0.8037.57",
+  "check": "Open each standalone SVG through the browser file URL and reject XML parser errors",
+  "count": 1,
+  "failures": [],
+  "status": "PASS"
+}
