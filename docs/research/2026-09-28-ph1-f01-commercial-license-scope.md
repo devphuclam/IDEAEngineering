@@ -3,19 +3,19 @@
 | Control field | Value |
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-COMM-001` |
-| Document class / version / status | `RESEARCH-NOTE` / `0.1` / `Draft` |
+| Document class / version / status | `RESEARCH-NOTE` / `0.2` / `Draft` |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this note creates no product requirement, license grant or release approval |
 | Owner / author | Engineering / Codex research agent |
-| Reviewer / acceptance authority | Project Reviewer accepted the internal T002 timing exception on 2026-09-28; review of this separate commercial-scope note `NOT-RUN`. Legal Review Authority and commercial-release acceptance `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer accepted the internal T002 NuGet and direct-Web timing exceptions on 2026-09-28; review of this separate commercial-scope note `NOT-RUN`. Legal Review Authority and commercial-release acceptance `NOT-RUN` |
 | Evidence date / classification | 2026-09-28 (Asia/Ho_Chi_Minh) / `INTERNAL` |
 | Applicable baseline / intended use | F01-A dependency versions in [dependency intake](2026-09-28-ph1-f01-dependency-intake.md), [NuGet audit](2026-09-28-ph1-f01-nuget-transitive-audit.md) and [P04 runtime intake](2026-09-23-p04-ubuntu-native-runtime-intake.md); current internal build/test, not an identified customer distribution bundle |
 | Upstream / downstream trace | [External-source intake](../agents/external-source-intake.md), F01-A/T002 → F01-B/T013, PH1/T036 and [commercial readiness gate](../product/instances/idea-engineering/registers/GOV-future-commercial-readiness.md) `CR-GATE-04` |
-| Change / retention | GitHub Issue #12; first issue of this research note. Retain with the exact dependency inventory; re-review if version, source, package contents, hosting or distribution model changes. No predecessor or successor. |
+| Change / retention | GitHub Issue #12; supersedes this note's `0.1` revision, with no successor. Retain with the exact dependency inventory; re-review if version, source, package contents, hosting or distribution model changes. |
 | Evidence status / tailoring | Exact local package/archive findings are linked above; first-party license texts and distribution guidance below were checked. The legal terms of an actual future installer/server bundle and counsel's assessment are `NOT-RUN`. `STD-INFO-001` (ISO/IEC/IEEE 15289:2019, `STANDARD-GUIDED`) informs identity and trace fields, without a conformity claim. |
 
 ## 1. Direct answer and scope
 
-**No blanket “all licenses are commercially cleared” conclusion follows from the current evidence.** The inspected open-source license families generally **permit use in a business or commercial product**, provided their conditions are met. That is different from confirming that every exact future binary, installer, notice, runtime, SDK and customer distribution route has been inventoried and approved. The F01-A/T002 exception authorizes only the already performed **internal build/test** despite late recording of the NuGet transitive evidence; it is neither a retroactive before-first-use compliance claim nor permission to sell or distribute IDEA.
+**No blanket “all licenses are commercially cleared” conclusion follows from the current evidence.** The inspected open-source license families generally **permit use in a business or commercial product**, provided their conditions are met. That is different from confirming that every exact future binary, installer, notice, runtime, SDK and customer distribution route has been inventoried and approved. The F01-A/T002 timing exceptions cover only the already performed **internal build/test** despite late recording of NuGet transitive and direct Web legal-file evidence; they are neither a retroactive before-first-use compliance claim nor permission to sell or distribute IDEA.
 
 | Current component or group | Permission indicated by primary terms | Limit that remains for commercial release |
 |---|---|---|
@@ -30,7 +30,7 @@ This table is **not** an exhaustive legal conclusion for the 75 Maven packages, 
 
 ## 2. Decision boundary and next evidence
 
-For the current F01-A work, the defensible statement is: **the reviewed license texts show no general prohibition on commercial-purpose software for the identified families, but only internal build/test is approved in this project record.** The Project Reviewer accepted the documented T002 timing exception for that limited use on 2026-09-28. That decision does not change `CR-GATE-04` from `NOT-RUN` or approve redistribution.
+For the current F01-A work, the defensible statement is: **the reviewed license texts show no general prohibition on commercial-purpose software for the identified families, but only internal build/test is approved in this project record.** The Project Reviewer accepted the documented T002 timing exceptions for that limited use on 2026-09-28. Those decisions do not change `CR-GATE-04` from `NOT-RUN` or approve redistribution.
 
 Before an external installation, paid pilot, offer or sale, Engineering must freeze the exact shipped/hosted components and produce the SBOM, copies of required licenses/notices, source-availability actions where applicable, and the WebView2/.NET/Temurin/CAD/Office runtime/installer terms actually selected. The [commercial readiness register](../product/instances/idea-engineering/registers/GOV-future-commercial-readiness.md) assigns acceptance of redistribution rights to Legal Review Authority and Engineering. Missing authority or terms remain `BLOCKED-LEGAL`; research is not legal advice.
 
@@ -45,3 +45,4 @@ Before an external installation, paid pilot, offer or sale, Engineering must fre
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 2026-09-28 | Distinguish commercial-purpose permission in the inspected license families from an unqualified future sale/distribution bundle; identify component-specific open conditions. |
+| 0.2 | 2026-09-28 | Note the Project Reviewer's added direct-Web timing exception; leave commercial release approval `NOT-RUN`. |

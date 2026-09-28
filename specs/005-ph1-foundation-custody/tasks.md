@@ -20,7 +20,7 @@ execution boundaries and CHK009/CHK010 evidence expectations. This task list rem
 **Goal**: Start from the approved PG4 scope without importing unqualified dependencies.
 
 - [X] T001 Record source commit, F01-A Work Item link and approved PH1 boundary in `specs/005-ph1-foundation-custody/evidence/F01-A-source-and-scope.md`.
-- [X] T002 Record F01 direct dependency source, version, license and intended internal use in `docs/research/2026-09-28-ph1-f01-dependency-intake.md`. The first Windows NuGet restore preceded exact transitive evidence; the Project Reviewer closed this F01-A internal build/test prerequisite by a one-time timing exception on 2026-09-28, documented in the linked NuGet audit. This does not make the before-first-use rule retrospectively true, qualify every resolved package, authorize new imports, or clear commercial distribution. Retain the audit's residual risks and T013/T036 follow-up.
+- [X] T002 Record F01 direct dependency source, version, license and intended internal use in `docs/research/2026-09-28-ph1-f01-dependency-intake.md`. The first Windows NuGet restore preceded exact transitive evidence, and direct Web LICENSE/NOTICE files were checked after initial `npm ci`. The Project Reviewer closed this F01-A internal build/test prerequisite by one-time timing exceptions on 2026-09-28, documented in the linked NuGet audit and Web section of the intake. This does not make the before-first-use rule retrospectively true, qualify every resolved package, authorize new imports, or clear commercial distribution. Retain the residual risks and T013/T036 follow-up.
 - [X] T003 Create build-only scaffolds in `apps/server/pom.xml`, `apps/server/mvnw`, `apps/server/.mvn/wrapper/maven-wrapper.properties`, `apps/web/package.json`, `apps/web/package-lock.json`, `apps/desktop/IdeaDesktop.csproj`, `apps/workspace/IdeaWorkspace.csproj`, `apps/desktop/tests/IdeaDesktop.Tests.csproj` and `apps/workspace/tests/IdeaWorkspace.Tests.csproj`; document their ownership in `apps/README.md`. Do not add application behavior yet.
 
 ## Phase 2: Shared foundation — F01-A/B
@@ -112,7 +112,7 @@ assumed in advance. This gate does not block F01-A through F04.
 
 | Delivery card | Tasks | Requires |
 |---|---|---|
-| F01-A | T001–T012 | PG4 PASS; T002 records the one-time exception for late NuGet evidence in past internal build/test. Intake still precedes every new import. |
+| F01-A | T001–T012 | PG4 PASS; T002 records the one-time exceptions for late NuGet and direct Web legal-file evidence in past internal build/test. Intake still precedes every new import. |
 | F01-B | T013 | F01-A actual build evidence |
 | F02 | T014–T017 | F01 build foundation |
 | F03-A/B | T018–T022 | F02 baseline |

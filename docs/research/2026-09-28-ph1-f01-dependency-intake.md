@@ -4,11 +4,11 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-DEP-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 Dependency Intake |
-| Version / status | `0.8` / `Draft` |
+| Version / status | `0.9` / `Draft` |
 | Product normativity | `INFORMATIVE` — records source/license evidence; does not change Feature, Tech or product scope |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / repository maintainer |
-| Reviewer / acceptance authority | Project Reviewer accepted the one-time T002 internal build/test timing exception on 2026-09-28; Product Decision Authority product acceptance `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer accepted the one-time T002 internal build/test timing exception for late NuGet and direct Web legal-file evidence on 2026-09-28; Product Decision Authority product acceptance `NOT-RUN` |
 | Evidence date | 2026-09-28 (Asia/Ho_Chi_Minh) |
 | Applicable baseline | PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, F01-A; selected Java 25, React 19.3, TypeScript 7, Vite 8.3, WPF/WebView2 and .NET 10 families |
 | Intended use | `DEPENDENCY` for internal development/build/test only; no customer packaging, redistribution or commercial-use approval |
@@ -16,9 +16,9 @@
 | Downstream trace | F01-A/T003–T012; F01-B/T013; PH1/T036 dependency/license review |
 | Change / Work Item trace | GitHub Issue #12, F01-A; source commit recorded in `evidence/F01-A-source-and-scope.md` |
 | Classification / retention | `INTERNAL`; retain while these dependency versions are used and with later dependency inventory/SBOM |
-| Evidence status | npm lock graph resolved and screened; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current Windows NuGet graph, 14 exact archives and license/notice evidence are recorded in the linked NuGet audit; the historical restore linkage remains qualified. The Project Reviewer accepted a one-time exception for the late NuGet intake evidence covering only past internal F01-A build/test. Commercial distribution review remains `BLOCKED-LEGAL`. |
+| Evidence status | npm lock graph resolved and screened; eight direct Web legal-file sets inspected after first import; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current Windows NuGet graph, 14 exact archives and license/notice evidence are recorded in the linked NuGet audit; the historical restore linkage remains qualified. The Project Reviewer accepted one-time timing exceptions for late NuGet and direct Web legal-file evidence covering only past internal F01-A build/test. Commercial distribution review remains `BLOCKED-LEGAL`. |
 | Control tailoring | Research note, not a product decision: no effective product date or requirement acceptance. Source evidence, review limits and intended-use conditions are recorded here; later evidence does not retrospectively satisfy the before-first-use rule. |
-| Supersession / review trigger | Supersedes this note's `0.7` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before a distribution decision. The exception does not cover a new import. |
+| Supersession / review trigger | Supersedes this note's `0.8` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before a distribution decision. The exception does not cover a new import. |
 
 ## 1. Disposition
 
@@ -26,12 +26,13 @@
 This is not a qualification of every package in the resolved graphs. The initial Windows restore
 used NuGet transitive packages before their exact license/notice evidence was retained. The
 Project Reviewer accepted a one-time timing exception for that past internal F01-A build/test
-use on 2026-09-28; scope, residual risk, owner, expiry and follow-up are recorded in the
+use on 2026-09-28; its NuGet-specific scope, residual risk, owner, expiry and follow-up are in the
 [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md). That audit records the current
 14-package Windows build/test graph, exact local archives, license and notice evidence, and the
 limit on linking those assets to the historical clean restore. It does not make the
 before-first-use condition retrospectively true. Do not infer that the successful build or
-package metadata cured that gap. The versions below are pinned to named upstream publishers;
+package metadata cured that gap. A separate late direct-Web legal-file exception is recorded
+below. The versions below are pinned to named upstream publishers;
 license expressions and known notice obligations are recorded here. Keep required notices with
 any copy of the corresponding package or runtime. Do not bundle these development tools or
 runtimes in a customer package under this record. No commercial package or distribution model is
@@ -41,14 +42,56 @@ explains why commercially usable license families do not equal an approved IDEA 
 The npm lock graph is pinned in `apps/web/package-lock.json` (SHA-256
 `1C011F5EBFEA15E039E236B4713C3ED7E0B1657A654A95887B3B13D0C84B803D`): 88 exact package
 versions, all resolved from `registry.npmjs.org` with lockfile integrity values. A read-only
-screen of each exact registry version's declared license metadata found 51 MIT, 23 Apache-2.0,
+screen of the `license` field on each of the 88 exact `node_modules/*` lockfile entries found 51 MIT, 23 Apache-2.0,
 12 MPL-2.0, one ISC and one BSD-3-Clause package; none had missing license metadata or a
 non-registry tarball. The 12 MPL-2.0 entries are `lightningcss@1.33.0` and its 11
 platform-specific packages. They are part of the Web build-tool dependency graph, not the
 produced application runtime. Keep them out of customer runtime bundles; if the build tools or
 their binaries are later redistributed, review MPL source/notice obligations for that exact
 distribution. This metadata screen is not a substitute for T013/T036 review of actual package
-notices, optional-platform inclusion, or any future distribution bundle.
+notices, optional-platform inclusion, or any future distribution bundle. The lockfile retains
+the per-package source URL, version, integrity and declared license; its `dev`/`optional` fields
+show build-only or platform-dependent reach where present. The whole graph is admitted for this
+bounded internal F01 build/test use, not as a customer distribution inventory.
+
+### Direct Web package legal files inspected after the initial import
+
+On 2026-09-28, the eight direct npm packages in the existing local `apps/web/node_modules`
+installation were checked read-only. Each `package.json` version matched its exact
+`node_modules/<name>` entry in the pinned lockfile; each entry has a versioned
+`registry.npmjs.org` tarball URL and SHA-512 integrity value in that lockfile. The table identifies
+the actual legal files read, not merely package metadata or a mutable upstream `main` branch.
+SHA-256 is of the named local file. The local installation was **not retained from the clean
+Ubuntu test archive**, so this check does not prove the historical archive bytes or that these
+files were read before first import.
+
+| Exact direct package | Legal file(s) read in local package | SHA-256 of legal file(s) |
+|---|---|---|
+| `react@19.3.0` | `LICENSE` (MIT) | `DA6D3703ED11CBE42BD212C725957C98DA23CBFF1998C05FA4B3D976D1A58E93` |
+| `react-dom@19.3.0` | `LICENSE` (MIT) | `DA6D3703ED11CBE42BD212C725957C98DA23CBFF1998C05FA4B3D976D1A58E93` |
+| `@types/react@19.3.0` | `LICENSE` (MIT) | `C2CFCCB812FE482101A8F04597DFC5A9991A6B2748266C47AC91B6A5AAE15383` |
+| `@types/react-dom@19.3.0` | `LICENSE` (MIT) | `C2CFCCB812FE482101A8F04597DFC5A9991A6B2748266C47AC91B6A5AAE15383` |
+| `vite@8.3.1` | `LICENSE.md` (MIT; includes bundled notices) | `387DD7BAA307083401A27C58C362C30832F5BA1DBA84F10CC22C33401523F45C` |
+| `@vitejs/plugin-react@6.1.1` | `LICENSE` (MIT) | `29B68325FE026047D13E187B44C33B2ACACF7DC647DEC4583702E59F235E13B5` |
+| `vitest@5.0.2` | `LICENSE.md` (MIT; includes bundled notices) | `D47EB4EEDDB0A8B7776ABD645D9C2D18E14BF6A5FFA52AC75FC3647D672D0260` |
+| `typescript@7.0.2` | `LICENSE` (Apache-2.0); `NOTICE.txt` (third-party notices) | `A7D00BFD54525BC694B6E32F64C7EBCF5E6B7AE3657BE5CC12767BCE74654A47`; `F5C708B59114507B8B27B48181B6883D106BBCA0C1634BBEE45B5E344237B66B` |
+
+The local package files support the stated direct-package license families and notice-retention
+actions for internal use. They do **not** complete an archive-by-archive legal-file review for the
+other 80 npm lock entries or qualify a customer bundle. T013/T036 retain that reconciliation.
+
+**Web timing exception:** The Project Reviewer confirmed in this Codex conversation on
+2026-09-28: “Có, mở rộng ngoại lệ T002 đúng phạm vi này” in response to the question naming the
+eight direct Web packages and late LICENSE/NOTICE-file evidence. This is a one-time acceptance of
+the *recording order* for already performed F01-A internal `npm ci` and build/test at source commit
+`c600f7be41f0732cb57d521017bae0565ab229bd`; it does not assert that the exact legal files
+were read before first import. Engineering owns the license-file hashes, notice retention and
+T013/T036 follow-up. The local install's byte identity with the historical clean Ubuntu install
+was not proved, and the other 80 npm packages still have only metadata-level screening here.
+This exception expires as an authorization at F01-A card review, remains in the historical record,
+and cannot be reused for a new package, version, lockfile graph, customer bundle or commercial
+distribution. New imports still require pre-use intake; unclear redistribution terms remain with
+the Legal Review Authority.
 
 The Maven project dependency graph resolved to 75 exact packages (46 compile/runtime and 29 test)
 with Spring Boot 4.1.1, Spring Modulith 2.1.1 and Java 25. The captured Maven dependency-tree JSON
@@ -132,9 +175,9 @@ commercial distribution are legally cleared.
 - Spring Boot 4.1.1 [release/current stable](https://docs.spring.io/spring-boot/spring-projects.html), [system requirements](https://docs.spring.io/spring-boot/system-requirements.html), [license](https://github.com/spring-projects/spring-boot).
 - Spring Modulith [2.1.1 stable release](https://docs.spring.io/spring-modulith/reference/spring-projects.html), [project and license](https://github.com/spring-projects/spring-modulith).
 - Apache Maven [3.9.16 downloads and official SHA-512 sidecars](https://maven.apache.org/download.cgi); [Maven Wrapper 3.3.4 source/checksum and Apache 2.0 license](https://maven.apache.org/tools/wrapper/download.cgi); [only-script semantics](https://maven.apache.org/tools/wrapper/maven-wrapper-plugin/wrapper-mojo.html); [3.3.4 launch script](https://github.com/apache/maven-wrapper/blob/maven-wrapper-3.3.4/maven-wrapper-distribution/src/resources/only-mvnw).
-- React [19.3 release](https://react.dev/blog/2026/09/09/react-19-3) and [exact React package metadata/license](https://github.com/react/react/blob/main/packages/react/package.json); React DOM follows the same upstream release and license family.
-- Microsoft TypeScript [7.0.2 release](https://github.com/microsoft/typescript-go/releases/tag/typescript/v7.0.2) and [license](https://github.com/microsoft/typescript-go/blob/main/LICENSE); React types [npm package versions](https://www.npmjs.com/package/%40types/react) and [React DOM types](https://www.npmjs.com/package/%40types/react-dom).
-- Vite [8.3 releases/support line](https://vite.dev/releases), [Vite package license and bundled notices](https://github.com/vitejs/vite/blob/main/packages/vite/LICENSE.md), [React plugin upstream](https://github.com/vitejs/vite-plugin-react); Vitest [5.0.2 signed release](https://github.com/vitest-dev/vitest/releases) and [license notices](https://github.com/vitest-dev/vitest/blob/main/packages/vitest/LICENSE.md).
+- React [19.3 release](https://react.dev/blog/2026/09/09/react-19-3); exact `react@19.3.0` and `react-dom@19.3.0` package license files were read from the versioned local installation and hashed in the direct Web table above.
+- Microsoft TypeScript [7.0.2 release](https://github.com/microsoft/typescript-go/releases/tag/typescript/v7.0.2); exact `typescript@7.0.2` license and notice, plus `@types/react@19.3.0` and `@types/react-dom@19.3.0` licenses, were read and hashed above.
+- Vite [8.3 releases/support line](https://vite.dev/releases) and [React plugin upstream](https://github.com/vitejs/vite-plugin-react); exact `vite@8.3.1`, `@vitejs/plugin-react@6.1.1` and `vitest@5.0.2` legal files were read and hashed above.
 - Microsoft [WebView2 NuGet 1.0.4191.47](https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47), its [exact license text](https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47/License), [MSTest SDK 4.4.1](https://www.nuget.org/packages/MSTest.Sdk/4.4.1) and [MSTest SDK documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-mstest-sdk).
 - Exact Windows package archives, publisher-pinned licenses and embedded notices are itemized in the [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md). NuGet's [signed-package metadata definition](https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File) explains why its content hash differs from the full signed archive hash.
 - Spring Boot's [logging guidance](https://docs.spring.io/spring-boot/how-to/logging.html) documents Log4j2 as an alternative; [Apache Log4j](https://logging.apache.org/log4j/2.x/download.cgi) is Apache-2.0. Exact Server graph is retained in `evidence/F01-A-server-dependency-tree.json`.
@@ -153,3 +196,4 @@ commercial distribution are legally cleared.
 | 0.6 | 2026-09-28 | Separate the direct-package internal-use disposition from the incomplete whole-graph qualification; record the NuGet restore order-of-work deviation and keep T002 open. Add research control tailoring and re-review trigger. | Two-axis F01-A review against external-source intake and PH1 FR-012 |
 | 0.7 | 2026-09-28 | Link the exact current NuGet graph/license/notice audit, distinguish later evidence from the original before-first-use deviation, and reserve T002 closure for Project Reviewer disposition. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); FR-012; T002 |
 | 0.8 | 2026-09-28 | Record the Project Reviewer's one-time exception for late NuGet evidence in internal F01-A build/test; retain later distribution and license-review gates. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); [commercial-license scope](2026-09-28-ph1-f01-commercial-license-scope.md); FR-012; T002 |
+| 0.9 | 2026-09-28 | Replace mutable upstream license links for direct Web packages with exact installed package legal-file names and hashes; record the Project Reviewer's one-time internal Web timing exception without erasing the historical or transitive-review limitations. | Versioned local npm packages; pinned Web lockfile; Project Reviewer response on 2026-09-28; F01-A/T002 and F01-B/T013 |
