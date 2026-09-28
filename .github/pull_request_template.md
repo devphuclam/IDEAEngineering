@@ -26,6 +26,15 @@ List the relevant commands and actual results. For checks not run, state why and
 |---|---|---|
 | `./scripts/verify-template` and applicable focused tests from a clean checkout | | |
 
+## Review intent
+
+- [ ] I completed the author self-review checklist below.
+- [ ] Review intent is recorded through the selected Platform Adapter.
+
+The provider-neutral setting remains `minimum_human_approvals: 0`; it does not waive the
+separate-reviewer rule in effect during this pilot. The author's self-check is not an independent approval.
+See `docs/agents/pull-request-review.md` for the merge condition.
+
 ## Author self-check
 
 For each row, record `PASS`, `FAIL`, or `N/A` and provide a reason for `N/A`. See `docs/agents/pull-request-review.md` for status meanings. Link evidence where applicable. A `FAIL` or unexplained `N/A` blocks review readiness.

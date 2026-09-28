@@ -9,12 +9,19 @@ Use the shared [PR template](../../.github/pull_request_template.md) and follow 
 verification. This adapter defines GitHub Work Item operations; the shared procedure owns checklist
 content and status meanings.
 
+## Author self-review checklist
+
+The shared PR template contains the author self-review checklist; complete it before requesting a
+review rather than duplicating its rows here.
+
 The current provider-neutral setting remains `minimum_human_approvals: 0`, serialized as
 `reviewIntent.minimumHumanApprovals: 0`. During the checklist pilot, the repository's manual
 procedure's separate-reviewer rule still applies before merge; the current setting does not
-technically enforce it. A self-check is not an independent GitHub approval. Branch
-protection and organization rules may impose additional requirements. Count an approval only when
-GitHub records an approval review event.
+technically enforce it. GitHub does not record the pull request author's checklist as an
+independent approval. A requester vote is not treated as an independent approval unless the
+selected provider explicitly records that event. Branch protection and organization rules may
+impose additional requirements. Count an approval only when GitHub records an approval review
+event.
 
 ## Conventions
 
