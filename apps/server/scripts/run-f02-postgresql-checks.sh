@@ -19,21 +19,24 @@ export IDEA_DATABASE_APP_USER="${IDEA_DATABASE_APP_USER:-idea_ddm_app}"
 export IDEA_DATABASE_MIGRATION_USER="${IDEA_DATABASE_MIGRATION_USER:-idea_ddm_migrator}"
 export IDEA_F02_TEST_DATABASE_NAME="$DB_NAME"
 
+if [ "$IDEA_DATABASE_APP_USER" != "idea_ddm_app" ] ||
+   [ "$IDEA_DATABASE_MIGRATION_USER" != "idea_ddm_migrator" ] ||
+   [ "$IDEA_DATABASE_APP_USER" = "$IDEA_DATABASE_MIGRATION_USER" ]; then
+  printf '%s\n' 'Refusing to run: F02 requires distinct idea_ddm_app and idea_ddm_migrator roles.' >&2
+  exit 2
+fi
+
 RUN_FRESH_TEST="${IDEA_F02_RUN_FRESH_DATABASE_TEST:-1}"
 if [ "$RUN_FRESH_TEST" != "0" ] && [ "$RUN_FRESH_TEST" != "1" ]; then
   printf '%s\n' 'Refusing to run: IDEA_F02_RUN_FRESH_DATABASE_TEST must be 0 or 1.' >&2
   exit 2
 fi
 
-if [ "$RUN_FRESH_TEST" = "1" ]; then
-  if [ -z "${IDEA_DATABASE_APP_PASSWORD:-}" ]; then
-    read -r -s -p 'IDEA app DB password: ' IDEA_DATABASE_APP_PASSWORD
-    printf '\n'
-  fi
-  export IDEA_DATABASE_APP_PASSWORD
-else
-  unset IDEA_DATABASE_APP_PASSWORD
+if [ -z "${IDEA_DATABASE_APP_PASSWORD:-}" ]; then
+  read -r -s -p 'IDEA app DB password: ' IDEA_DATABASE_APP_PASSWORD
+  printf '\n'
 fi
+export IDEA_DATABASE_APP_PASSWORD
 if [ -z "${IDEA_DATABASE_MIGRATION_PASSWORD:-}" ]; then
   read -r -s -p 'IDEA migration DB password: ' IDEA_DATABASE_MIGRATION_PASSWORD
   printf '\n'
@@ -65,6 +68,7 @@ fi
 if [ "$RUN_FRESH_TEST" = "1" ]; then
   (cd "$SERVER_DIR" && sh ./mvnw -B -Dtest=DataBaselineTest test)
 fi
+(cd "$SERVER_DIR" && sh ./mvnw -B -Dtest=DatabasePrivilegeTest test)
 (cd "$SERVER_DIR" && sh ./scripts/database-migrate.sh)
 (cd "$SERVER_DIR" && sh ./mvnw -B -Dtest=ServerSmokeTest test)
 
