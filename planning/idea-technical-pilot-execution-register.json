@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 22,
+  "registerRevision": 24,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
-  "statusDate": "2026-09-28",
+  "statusDate": "2026-09-29",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -456,7 +456,7 @@
           "externalUri": null,
           "description": "F01-A buildable foundation accepted for PH1 internal development: T001-T012 complete and four approved smoke/build checks PASS. Project Reviewer accepted one-time T002 NuGet/Web legal-file timing and T006-T008 missing-original-red-evidence deviations. Verifier NOT RUN per request. No business, security, Vault or commercial-readiness claim.",
           "result": "PASS",
-          "recordedAt": "2026-09-28T17:35:48.0713560+07:00",
+          "recordedAt": "2026-09-28T17:35:48.071356+07:00",
           "recordedBy": "LEAD"
         }
       ],
@@ -472,8 +472,8 @@
         },
         {
           "eventId": "F01-A-EVENT-2",
-          "effectiveAt": "2026-09-28T17:35:48.0713560+07:00",
-          "recordedAt": "2026-09-28T17:35:48.0713560+07:00",
+          "effectiveAt": "2026-09-28T17:35:48.071356+07:00",
+          "recordedAt": "2026-09-28T17:35:48.071356+07:00",
           "recordedBy": "LEAD",
           "kind": "STATE_CHANGE",
           "reason": "Project Reviewer directed completion of F01-A after checking merged PR #13, T001-T012 and four scoped build/smoke results. Ghi nhận 165 phút làm việc thực tế."
@@ -483,12 +483,12 @@
       "executionState": "COMPLETED",
       "resultState": "PASS",
       "actualStart": "2026-09-28T14:51:10.4968593+07:00",
-      "actualFinish": "2026-09-28T17:35:48.0713560+07:00",
+      "actualFinish": "2026-09-28T17:35:48.071356+07:00",
       "actualEffortHours": 2.75,
       "remainingEffortHours": 0.0,
       "forecastFinish": null,
-      "lastUpdatedAt": "2026-09-28T17:35:48.0713560+07:00",
-      "remainingReviewedAt": "2026-09-28T17:35:48.0713560+07:00",
+      "lastUpdatedAt": "2026-09-28T17:35:48.071356+07:00",
+      "remainingReviewedAt": "2026-09-28T17:35:48.071356+07:00",
       "recordedBy": "LEAD",
       "unplannedWorkType": null,
       "reserveUsedHours": 0
@@ -498,14 +498,56 @@
         "kind": "DeliveryCard",
         "id": "F01-B"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 9,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F01-B-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": null,
+          "commit": "cb129d1f8ccdd9f5dd94d001c825179682905e01",
+          "sha256": null,
+          "externalUri": null,
+          "description": "F01-B Review Result: PASS. Reviewed source commit cb129d1f8ccdd9f5dd94d001c825179682905e01. Reviewer found no blocking or non-blocking defects and confirmed scoped technical evidence is sufficient for F01-B acceptance. ./scripts/verify-template remains NOT-RUN; commercial redistribution/license clearance remains outside F01-B under T036.",
+          "result": "NOT_APPLICABLE",
+          "recordedAt": "2026-09-29T15:17:54.7045256+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F01-B-EVENT-1",
+          "effectiveAt": "2026-09-29T10:29:47.3133174+07:00",
+          "recordedAt": "2026-09-29T10:29:47.3133174+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng yêu cầu Bắt đầu F01-B."
+        },
+        {
+          "eventId": "F01-B-EVENT-2",
+          "effectiveAt": "2026-09-29T15:17:54.7045256+07:00",
+          "recordedAt": "2026-09-29T15:17:54.7045256+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Project Reviewer accepted the F01-B review result and explicitly requested completion. Reviewer confirmed the full running interval counts as actual effort. Ghi nhận 288 phút làm việc thực tế."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "NOT_APPLICABLE",
+      "actualStart": "2026-09-29T10:29:47.3133174+07:00",
+      "actualFinish": "2026-09-29T15:17:54.7045256+07:00",
+      "actualEffortHours": 4.8,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-09-29T15:17:54.7045256+07:00",
+      "remainingReviewedAt": "2026-09-29T15:17:54.7045256+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
@@ -1274,10 +1316,24 @@
     },
     {
       "revision": 22,
-      "recordedAt": "2026-09-28T17:35:48.0713560+07:00",
+      "recordedAt": "2026-09-28T17:35:48.071356+07:00",
       "recordedBy": "LEAD",
       "reason": "Project Reviewer directed completion of F01-A after checking merged PR #13, T001-T012 and four scoped build/smoke results. Ghi nhận 165 phút làm việc thực tế.",
       "sourceEvidence": "Local progress tracker: F01-A"
+    },
+    {
+      "revision": 23,
+      "recordedAt": "2026-09-29T10:29:47.3133174+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng yêu cầu Bắt đầu F01-B.",
+      "sourceEvidence": "Local progress tracker: F01-B"
+    },
+    {
+      "revision": 24,
+      "recordedAt": "2026-09-29T15:17:54.7045256+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Project Reviewer accepted the F01-B review result and explicitly requested completion. Reviewer confirmed the full running interval counts as actual effort. Ghi nhận 288 phút làm việc thực tế.",
+      "sourceEvidence": "Local progress tracker: F01-B"
     }
   ]
 }
