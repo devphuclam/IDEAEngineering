@@ -41,9 +41,12 @@ For F01-B, run `pwsh -NoProfile -File tests/ph1/test-check-no-secrets.ps1` for t
 black-box regression cases, then `pwsh -NoProfile -File tests/ph1/check-no-secrets.ps1` to scan
 Git-tracked text files. The scan checks the working copy and also reads the Git-index version when
 a tracked file is changed or missing, so a local edit or deletion cannot hide staged content. It
-recognizes tracked `.env.local` files. The scan is heuristic, excludes the documented synthetic
-fixture corpora, skips known binary files, and does not inspect untracked or ignored files; a clean
-result is not a guarantee that no secret exists. See the
+recognizes tracked `.env.local` files. The scan is heuristic, skips known binary files, and does not
+inspect untracked or ignored files; a clean result is not a guarantee that no secret exists.
+Synthetic fixture exceptions are limited to exact paths and canonical-text SHA-256 values in
+[`tests/ph1/known-synthetic-fixtures.json`](../tests/ph1/known-synthetic-fixtures.json); new files
+and changed contents are scanned. Quoted credential literals are checked across tracked text files,
+and unquoted assignment checks cover configuration files and common shell scripts. See the
 [F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
 for the exact source, commands, results and limitations.
 

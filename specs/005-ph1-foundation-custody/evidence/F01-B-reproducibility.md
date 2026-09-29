@@ -4,15 +4,15 @@
 |---|---|
 | Stable Verification ID | `IE-VEV-PH1-F01-B-001` |
 | Document class / title | `VERIFICATION-RECORD` / F01-B Clean-Source Reproducibility and Secret-Check Results |
-| Version / status | `0.4` / `Draft`; T013 execution is recorded below; F01-B Delivery Card remains `IN_PROGRESS` pending Project Reviewer closure |
+| Version / status | `0.5` / `Draft`; T013 execution is recorded below; F01-B Delivery Card remains `IN_PROGRESS` pending Project Reviewer closure |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this record creates no product requirement or release approval |
 | Owner / author | F01-B Engineering implementer / repository maintainer |
 | Reviewer / acceptance authority | Project Reviewer; review of this record `NOT-RUN` |
-| Applicable source / evidence date | Clean-source build/test baseline `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; scanner corrections `c2798a45496d5babced6897e9379dc20940f9bbc` and `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7`; checks run 2026-09-29 (Asia/Ho_Chi_Minh) |
+| Applicable source / evidence date | Clean-source build/test baseline `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; scanner corrections `c2798a45496d5babced6897e9379dc20940f9bbc`, `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7` and `f52ecb86147c8e6a2db6774bc189355f9c97a80c`; checks run 2026-09-29 (Asia/Ho_Chi_Minh) |
 | Upstream / downstream trace | [PH1 tasks T001–T013](../tasks.md), [F01-A build evidence](F01-A-build-results.md), [dependency intake](../../../docs/research/2026-09-28-ph1-f01-dependency-intake.md), [NuGet audit](../../../docs/research/2026-09-28-ph1-f01-nuget-transitive-audit.md), GitHub Issue [#17](https://github.com/devphuclam/IDEAEngineering/issues/17) → PH1/T036 |
 | Classification / retention | `INTERNAL`; retain with the tested source and dependency evidence while this baseline is used or reviewed |
-| Change record | GitHub Issue `#17` / Spec Kit task `T013`; predecessor `IE-VEV-PH1-F01-B-001@0.3` at `dfe7241c676b6d9bff52486a99c00167f90418fc`; adds missing control-envelope fields only, with no source/test outcome or product-baseline change |
-| Supersession | Supersedes `IE-VEV-PH1-F01-B-001@0.3`; superseded by `NOT-APPLICABLE` |
+| Change record | GitHub Issue `#17` / Spec Kit task `T013`; predecessor `IE-VEV-PH1-F01-B-001@0.4` at `417ea2c20867e3d75169792fc0c1ba2ec1209d8c`; records scanner corrections from independent review, with no clean-source build outcome or product-baseline change |
+| Supersession | Supersedes `IE-VEV-PH1-F01-B-001@0.4`; superseded by `NOT-APPLICABLE` |
 | Review trigger | Re-review if the tested source revision, dependency lock graph, scanner/harness behavior, or T013 acceptance scope changes |
 | Evidence status | `PASS` for the scoped checks below; Project Reviewer acceptance remains `NOT-RUN` |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019) and `STD-TEST-001` through `STD-TEST-004` (ISO/IEC/IEEE 29119 series), all `STANDARD-GUIDED`; identity, configuration, procedure and result concepts are tailored to the compact records below; no conformity claim |
@@ -25,8 +25,12 @@ applications were tested and built from one clean source archive at
 `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`. Server and Web use their Maven/npm procedures listed
 below. Scanner corrections at `c2798a45496d5babced6897e9379dc20940f9bbc` and
 `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7` add coverage for YAML `secret_key`, tracked
-`.env.local`, and differing or missing working copies; the focused harness and tracked-source scan
-passed against the latter correction. Expected results and actual results are listed separately.
+`.env.local`, and differing or missing working copies. A later independent review found that
+unquoted shell assignments and blanket fixture-directory exclusions were not adequately covered.
+Correction `f52ecb86147c8e6a2db6774bc189355f9c97a80c` adds shell/source-literal regressions and
+replaces blanket exclusions with exact path-and-content-hash exceptions. The focused harness and
+tracked-source scan passed against that correction. Expected results and actual results are listed
+separately.
 
 This is not Product Reviewer acceptance of the Delivery Card. It does not prove that all possible
 secrets are absent, qualify the final dependency bundle for redistribution, close T036, or establish
@@ -38,7 +42,7 @@ Execution Register until the Project Reviewer explicitly closes the card.
 | Field | Result |
 |---|---|
 | Clean-source build/test commit | `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03` on `codex/f01b-secret-check` |
-| Scanner correction commits | `c2798a45496d5babced6897e9379dc20940f9bbc` and `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7` on `codex/f01b-secret-check`; focused harness and repository scan were rerun against the latter revision |
+| Scanner correction commits | `c2798a45496d5babced6897e9379dc20940f9bbc` and `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7` are the earlier fixes; `f52ecb86147c8e6a2db6774bc189355f9c97a80c` adds the independent-review corrections. Focused harness and repository scan were rerun against `f52ecb86147c8e6a2db6774bc189355f9c97a80c`. |
 | Source export | Full tracked repository at the clean-source build/test commit exported with `git archive` to a new temporary directory; no build outputs or ignored local configuration included |
 | Archive SHA-256 | `CA7B294BB7E50954482FF6E248FE605D8F07D69B479E698DA070C97301EC0251`; the uploaded Ubuntu copy independently matched this value |
 | Dependency changes | None; locked graphs match the current F01 intake/audit. No Tech selection or product baseline changed. |
@@ -102,17 +106,21 @@ intake/audit and PH1/T036 for later bundle review.
 
 | Check | Expected result / oracle | Procedure and observed result |
 |---|---|---|
-| Black-box regression harness | Synthetic JSON/YAML credentials and tracked `.env.local` assignments return `1`; output names affected files/category without values; ignored `.env` and placeholders do not create findings; a safe or missing working copy cannot hide a credential in the Git index; after cleaning the tracked files the scan returns `0`. | `pwsh -NoProfile -File tests/ph1/test-check-no-secrets.ps1` — exit `0`; all assertions passed. The harness creates a temporary Git repository and uses synthetic values only. |
-| TDD evidence | The YAML `secret_key` case and Git-index-versus-working-copy cases must fail before their scanner fixes and pass afterward. | The first regression run failed because `settings.yaml` was not reported; the later index-state regression run failed because indexed credentials were missed after working-copy deletion/sanitization. Scanner corrections added `secret[_-]?key` matching and index-blob checks for unstaged or missing paths. The final harness passed; no real credentials were used. |
-| Repository scan | Exit `0` when no findings or scan errors exist; findings and incomplete scans must return nonzero. | `pwsh -NoProfile -File tests/ph1/check-no-secrets.ps1` — exit `0`: `PASS: no secret-like values found in scanned tracked UTF-8 text files; excluded known synthetic fixture files: 202; skipped known binary files: 227.` |
+| Black-box regression harness | Synthetic JSON/YAML credentials and tracked `.env.local` assignments return `1`; shell assignments and quoted PowerShell/JavaScript/TypeScript literals return `1`; new files under formerly excluded roots are scanned; output names affected files/category without values; exact unchanged synthetic fixtures, ignored `.env` and placeholders do not create findings; changed fixture contents are scanned; a safe or missing working copy cannot hide a credential in the Git index; after cleaning the tracked files the scan returns `0`. | `pwsh -NoProfile -File tests/ph1/test-check-no-secrets.ps1` — exit `0`; all assertions passed. The harness creates a temporary Git repository and uses synthetic values only. |
+| TDD evidence | The YAML `secret_key`, Git-index/working-copy, unquoted shell, changed fixture content and new file under a formerly excluded root cases must fail before their scanner fixes and pass afterward. | Those regression cases failed before the relevant correction and passed after it. The independent-review follow-up also verifies quoted literals in `.ps1`, `.js` and `.ts`, exact fixture-content matching, and shell placeholders; final focused harness passed. No real credentials were used. |
+| Repository scan | Exit `0` when no findings or scan errors exist; findings and incomplete scans must return nonzero. | `pwsh -NoProfile -File tests/ph1/check-no-secrets.ps1` — exit `0`: `PASS: no secret-like values found in scanned tracked UTF-8 text files; exact synthetic fixture contents recognized: 10; skipped known binary files: 233.` |
 | Finding behavior | A finding returns `1` and reports only tracked filename/category; inability to complete the scan returns `2`; neither outcome prints a candidate value. | The harness observed exit `1` for synthetic findings in JSON, YAML and `.env.local`, including index content hidden by deleted/sanitized working copies; the synthetic value was absent from output. |
+| Full repository verifier | Not part of this correction's verification scope. | `./scripts/verify-template` — `NOT-RUN`; no full-verifier result is claimed. |
 
 The scan is heuristic. It scans the working copy of Git-indexed regular files and also scans the
 Git-index blob when a tracked path has unstaged changes or is missing from the working copy. This
 covers both the content being prepared for commit and current edits; it does not inspect untracked
 or ignored files. Tracked `.env` variants such as `.env.local` receive configuration-assignment
-matching. The scanner skips known binary files and 202 pre-existing synthetic test fixtures that
-are separately controlled. It does not inspect binary contents, history, environment variables,
+matching; unquoted assignment matching also covers `.sh`, `.bash`, `.zsh` and `.fish`, while quoted
+credential literals are checked in tracked text files. Ten synthetic fixture files are exempted
+only when both their exact repository-relative path and canonical-text SHA-256 match
+`tests/ph1/known-synthetic-fixtures.json`; new paths and changed contents are scanned. The scanner
+skips known binary files. It does not inspect binary contents, history, environment variables,
 processes, external services or every possible credential format. A clean result is not a guarantee
 that the repository has no secret.
 
@@ -136,3 +144,4 @@ complete PH1/T036, prove third-party redistribution rights, or qualify a commerc
 | 0.2 | 2026-09-29 | Add the `secret_key` regression and its correction revision; separate expected result/oracle from actual result for each recorded check. |
 | 0.3 | 2026-09-29 | Add Git-index/working-copy and `.env.local` coverage; clarify platform-specific restore procedures and controlled review state. |
 | 0.4 | 2026-09-29 | Add explicit change, supersession and review-trigger controls required for the verification-record class. |
+| 0.5 | 2026-09-29 | Close independent-review gaps for shell/source literals and broad fixture exclusions; record focused and repository-scan results, exact-content exceptions and the verifier left `NOT-RUN`. |
