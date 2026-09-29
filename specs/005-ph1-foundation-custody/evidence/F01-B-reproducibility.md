@@ -4,15 +4,15 @@
 |---|---|
 | Stable Verification ID | `IE-VEV-PH1-F01-B-001` |
 | Document class / title | `VERIFICATION-RECORD` / F01-B Clean-Source Reproducibility and Secret-Check Results |
-| Version / status | `0.7` / `Draft`; T013 execution is recorded below; F01-B Delivery Card remains `IN_PROGRESS` pending Project Reviewer closure |
+| Version / status | `0.8` / `Draft`; T013 technical-check results are recorded below; F01-B is `NOT_RECORDED` in the Execution Register at source commit `8f2c31a16d1e44f0b93943798c34c6be7f6151b8`; Project Reviewer acceptance remains `NOT-RUN` |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this record creates no product requirement or release approval |
 | Owner / author | F01-B Engineering implementer / repository maintainer |
 | Reviewer / acceptance authority | Project Reviewer; review of this record `NOT-RUN` |
-| Applicable source / evidence date | Clean-source build/test baseline `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; scanner corrections `c2798a45496d5babced6897e9379dc20940f9bbc`, `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7`, `f52ecb86147c8e6a2db6774bc189355f9c97a80c`, `1b4fb72fcc9d74cb3b9df724f701bbe9add69a0b`, `728ccadf33a039915b4f1dcadf0404a036d5e8c6` and `b6247474fefa70afa163bf2833c2238538fa9acd`; checks run 2026-09-29 (Asia/Ho_Chi_Minh) |
+| Applicable source / evidence date | Clean-source build/test baseline `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; scanner corrections `c2798a45496d5babced6897e9379dc20940f9bbc`, `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7`, `f52ecb86147c8e6a2db6774bc189355f9c97a80c`, `1b4fb72fcc9d74cb3b9df724f701bbe9add69a0b`, `728ccadf33a039915b4f1dcadf0404a036d5e8c6` and `b6247474fefa70afa163bf2833c2238538fa9acd`; F01-B register state checked at source commit `8f2c31a16d1e44f0b93943798c34c6be7f6151b8`; checks run 2026-09-29 (Asia/Ho_Chi_Minh) |
 | Upstream / downstream trace | [PH1 tasks T001–T013](../tasks.md), [F01-A build evidence](F01-A-build-results.md), [dependency intake](../../../docs/research/2026-09-28-ph1-f01-dependency-intake.md), [NuGet audit](../../../docs/research/2026-09-28-ph1-f01-nuget-transitive-audit.md), GitHub Issue [#17](https://github.com/devphuclam/IDEAEngineering/issues/17) → PH1/T036 |
 | Classification / retention | `INTERNAL`; retain with the tested source and dependency evidence while this baseline is used or reviewed |
-| Change record | GitHub Issue `#17` / Spec Kit task `T013`; predecessor `IE-VEV-PH1-F01-B-001@0.6` at `903b94daf9af5e349619bd2a7655426d37001494`; extends common shell declaration-assignment coverage to option forms and records regression evidence, with no clean-source build outcome or product-baseline change |
-| Supersession | Supersedes `IE-VEV-PH1-F01-B-001@0.6`; superseded by `NOT-APPLICABLE` |
+| Change record | GitHub Issue `#17` / Spec Kit task `T013`; predecessor `IE-VEV-PH1-F01-B-001@0.7` at `8f2c31a16d1e44f0b93943798c34c6be7f6151b8`; reconciles the card-state statement with the authoritative Execution Register at that source commit; no test/build or product-baseline change |
+| Supersession | Supersedes `IE-VEV-PH1-F01-B-001@0.7`; superseded by `NOT-APPLICABLE` |
 | Review trigger | Re-review if the tested source revision, dependency lock graph, scanner/harness behavior, or T013 acceptance scope changes |
 | Evidence status | `PASS` for the scoped checks below; Project Reviewer acceptance remains `NOT-RUN` |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019) and `STD-TEST-001` through `STD-TEST-004` (ISO/IEC/IEEE 29119 series), all `STANDARD-GUIDED`; identity, configuration, procedure and result concepts are tailored to the compact records below; no conformity claim |
@@ -40,10 +40,15 @@ that common option forms after shell declaration commands were not covered. Corr
 and `local -r`. The focused harness and tracked-source scan passed against this correction.
 Expected results and actual results are listed separately.
 
-This is not Product Reviewer acceptance of the Delivery Card. It does not prove that all possible
-secrets are absent, qualify the final dependency bundle for redistribution, close T036, or establish
-application security, production readiness or product behavior. F01-B remains `IN_PROGRESS` in the
-Execution Register until the Project Reviewer explicitly closes the card.
+This record reports scoped technical checks; it does not set Delivery Card progress. In the
+authoritative [Execution Register](../../../planning/idea-technical-pilot-execution-register.json) at
+source commit
+`8f2c31a16d1e44f0b93943798c34c6be7f6151b8`, F01-B has `recordingState: NOT_RECORDED`, no execution
+state and no events. Any uncommitted local Progress Tracker draft is not part of that snapshot and
+is not input the Project Management Compiler can import. F01-B completion and Project Reviewer
+acceptance are therefore not recorded in this source. This record also does not prove that all
+possible secrets are absent, qualify the final dependency bundle for redistribution, close T036, or
+establish application security, production readiness or product behavior.
 
 ## 2. Common source configuration
 
@@ -158,3 +163,4 @@ complete PH1/T036, prove third-party redistribution rights, or qualify a commerc
 | 0.5 | 2026-09-29 | Close independent-review gaps for shell/source literals and broad fixture exclusions; bind exact-content exceptions to committed `HEAD`; record focused and repository-scan results and the verifier left `NOT-RUN`. |
 | 0.6 | 2026-09-29 | Add regression coverage for `local`, `readonly` and `declare -x` shell credential assignments and record the scanner correction. |
 | 0.7 | 2026-09-29 | Extend shell declaration detection to common option forms; add `export -n` and `local -r` regressions and record the focused test and scan results. |
+| 0.8 | 2026-09-29 | Reconcile F01-B progress wording with the authoritative Execution Register at source commit `8f2c31a`; distinguish uncommitted local tracker drafts from published PMC input. |
