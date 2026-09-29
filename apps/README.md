@@ -47,7 +47,8 @@ Synthetic fixture exceptions are limited to exact paths and canonical-text SHA-2
 committed `HEAD` version of [`tests/ph1/known-synthetic-fixtures.json`](../tests/ph1/known-synthetic-fixtures.json);
 working-tree or staged edits to that manifest cannot exempt pending content. New files and changed
 contents are scanned. Quoted credential literals are checked across tracked text files, and
-unquoted assignment checks cover configuration files and common shell scripts. See the
+unquoted assignment checks cover configuration files and common shell forms: direct, `export`,
+`local`, `readonly`, and `declare` (including option forms such as `declare -x`). See the
 [F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
 for the exact source, commands, results and limitations.
 
