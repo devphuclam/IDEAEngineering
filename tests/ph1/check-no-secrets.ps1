@@ -10,8 +10,8 @@ $sensitiveName = '(?:[A-Za-z0-9_.-]+[_-])?(?:password|passwd|pwd|client[_-]?secr
 $quotedCredentialAssignment = [regex]::new(
     "(?i)(?:\b|[\x27\x22\x60])\`$?(?<name>$sensitiveName)(?:\b|[\x27\x22\x60])\s*(?:=|:)\s*(?<quote>[\x27\x22\x60])(?<candidate>.+?)\k<quote>"
 )
-$configCredentialAssignment = [regex]::new(
-    "(?i)^\s*(?:export\s+)?\`$?(?<name>$sensitiveName)\s*(?:=|:)\s*(?<candidate>[^#\r\n]+)"
+$unquotedCredentialAssignment = [regex]::new(
+    "(?i)^\s*(?:(?:export|local|readonly)\s+|declare(?:\s+-[a-z]+)*\s+)?\`$?(?<name>$sensitiveName)\s*(?:=|:)\s*(?<candidate>[^#\r\n]+)"
 )
 $unquotedCredentialExtensions = @(
     '.env', '.example', '.ini', '.properties', '.toml', '.yaml', '.yml', '.conf', '.cfg',
@@ -263,7 +263,7 @@ function Get-FileFindings([System.IO.TextReader]$reader, [string]$path) {
         $isEnvironmentFile = $leafName -match '(?i)^\.env(?:$|[.-])'
         $matches = @($quotedCredentialAssignment.Matches($line))
         if ($extension -in $unquotedCredentialExtensions -or $isEnvironmentFile) {
-            $matches += @($configCredentialAssignment.Matches($line))
+            $matches += @($unquotedCredentialAssignment.Matches($line))
         }
 
         foreach ($match in $matches) {

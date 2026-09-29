@@ -153,6 +153,42 @@ try {
     Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'deploy.sh')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove synthetic shell credential')
 
+    $localShellValue = 'LocalCredential' + [guid]::NewGuid().ToString('N')
+    $localShellPath = Join-Path $fixtureRoot 'local-secret.sh'
+    [System.IO.File]::WriteAllText($localShellPath, "local SECRET_KEY=$localShellValue`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'local-secret.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic local shell credential')
+    $localShellResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($localShellResult.ExitCode -eq 1) 'Expected an unquoted local shell credential assignment to be detected.'
+    Assert-True ($localShellResult.Output -match 'local-secret\.sh') 'Expected the local shell credential finding to identify the file.'
+    Assert-True ($localShellResult.Output -notmatch [regex]::Escape($localShellValue)) 'Scanner output exposed the local shell credential value.'
+    Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'local-secret.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove synthetic local shell credential')
+
+    $readonlyShellValue = 'ReadonlyCredential' + [guid]::NewGuid().ToString('N')
+    $readonlyShellPath = Join-Path $fixtureRoot 'readonly-secret.sh'
+    [System.IO.File]::WriteAllText($readonlyShellPath, "readonly SECRET_KEY=$readonlyShellValue`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'readonly-secret.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic readonly shell credential')
+    $readonlyShellResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($readonlyShellResult.ExitCode -eq 1) 'Expected an unquoted readonly shell credential assignment to be detected.'
+    Assert-True ($readonlyShellResult.Output -match 'readonly-secret\.sh') 'Expected the readonly shell credential finding to identify the file.'
+    Assert-True ($readonlyShellResult.Output -notmatch [regex]::Escape($readonlyShellValue)) 'Scanner output exposed the readonly shell credential value.'
+    Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'readonly-secret.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove synthetic readonly shell credential')
+
+    $declareShellValue = 'DeclaredCredential' + [guid]::NewGuid().ToString('N')
+    $declareShellPath = Join-Path $fixtureRoot 'declared-secret.sh'
+    [System.IO.File]::WriteAllText($declareShellPath, "declare -x SECRET_KEY=$declareShellValue`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'declared-secret.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic declared shell credential')
+    $declareShellResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($declareShellResult.ExitCode -eq 1) 'Expected a declared unquoted shell credential assignment to be detected.'
+    Assert-True ($declareShellResult.Output -match 'declared-secret\.sh') 'Expected the declared shell credential finding to identify the file.'
+    Assert-True ($declareShellResult.Output -notmatch [regex]::Escape($declareShellValue)) 'Scanner output exposed the declared shell credential value.'
+    Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'declared-secret.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove synthetic declared shell credential')
+
     $nonSecretScriptPath = Join-Path $fixtureRoot 'shell-initialization.sh'
     [System.IO.File]::WriteAllText($nonSecretScriptPath, "WRITTEN_SECRET=()`nexport SECRET_KEY=`$(read-secret)`n", [System.Text.Encoding]::UTF8)
     Invoke-Git $fixtureRoot @('add', '--', 'shell-initialization.sh')
@@ -248,7 +284,7 @@ try {
     Assert-True ($unstagedManifestResult.Output -notmatch [regex]::Escape($stagedFixtureSecret)) 'Scanner output exposed the staged fixture credential value.'
 
     Write-Output 'PASS: tracked credentials in JSON, YAML, and .env.local are detected across Git-index and working-tree states without printing values.'
-    Write-Output 'PASS: unquoted shell assignments, source-language literals, and new fixture-root files are detected without printing values.'
+    Write-Output 'PASS: direct/export/local/readonly/declare shell assignments, source-language literals, and new fixture-root files are detected without printing values.'
     Write-Output 'PASS: exact synthetic fixture content is exempted, but changed content at that path is scanned.'
     Write-Output 'PASS: an unstaged exception-manifest edit cannot exempt staged fixture content.'
     Write-Output 'PASS: placeholders and Git-ignored local configuration do not fail the scan.'
