@@ -69,7 +69,8 @@ try {
     $fixturePath = Join-Path $fixtureRoot 'tracked-fixture.json'
     [System.IO.File]::WriteAllText($fixturePath, ('"' + $fieldName + '": "' + $value + '"' + "`n"), [System.Text.Encoding]::UTF8)
     $yamlFixturePath = Join-Path $fixtureRoot 'settings.yaml'
-    [System.IO.File]::WriteAllText($yamlFixturePath, "$fieldName`: $value`n", [System.Text.Encoding]::UTF8)
+    $yamlFieldName = 'secret' + '_key'
+    [System.IO.File]::WriteAllText($yamlFixturePath, "$yamlFieldName`: $value`n", [System.Text.Encoding]::UTF8)
     Invoke-Git $fixtureRoot @('add', '--', 'tracked-fixture.json', 'settings.yaml')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic credential fixture')
 

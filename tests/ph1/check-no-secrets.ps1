@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$sensitiveName = '(?:[A-Za-z0-9_.-]+[_-])?(?:password|passwd|pwd|secret|client[_-]?secret|apikey|api[_-]?key|access[_-]?token|refresh[_-]?token|auth[_-]?token|private[_-]?key|bearer)'
+$sensitiveName = '(?:[A-Za-z0-9_.-]+[_-])?(?:password|passwd|pwd|client[_-]?secret|secret[_-]?key|secret|apikey|api[_-]?key|access[_-]?token|refresh[_-]?token|auth[_-]?token|private[_-]?key|bearer)'
 $quotedCredentialAssignment = [regex]::new(
     "(?i)(?:\b|['\""`])\`$?(?<name>$sensitiveName)(?:\b|['\""`])\s*(?:=|:)\s*(?<quote>['\""`])(?<candidate>.+?)\k<quote>"
 )
