@@ -4,13 +4,13 @@
 |---|---|
 | Stable Verification ID | `IE-VEV-PH1-F01-A-001` |
 | Document class / title | `VERIFICATION-RECORD` / F01-A Build and Smoke Results |
-| Version / status | `0.2` / `Draft`; T012 result is `PASS`, and F01-A card result is `PASS` in Execution Register revision 22 |
+| Version / status | `0.3` / `Draft`; T012 result is `PASS`, and F01-A card result is `PASS` in Execution Register revision 22 |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this record creates no product requirement or release approval |
 | Owner / author | F01-A Engineering implementer / repository maintainer |
 | Reviewer / acceptance authority | Project Reviewer accepted the two scoped evidence/timing exceptions below and closed F01-A on 2026-09-28 for its buildable-foundation scope only |
 | Applicable baseline / evidence date | F01-A, source commit `c600f7be41f0732cb57d521017bae0565ab229bd`; tests run 2026-09-28 (Asia/Ho_Chi_Minh) |
 | Upstream / downstream trace | [F01-A source and scope](F01-A-source-and-scope.md), [T001–T012](../tasks.md), GitHub Issue #12, [Execution Register revision 22](../../../planning/idea-technical-pilot-execution-register.json) → F01-B/T013 |
-| Change record / supersession | GitHub Issue #12; updates `0.1` after F01-A card acceptance and progress publication in commit `009e1c64d4932d6809b24d356bcb5e97b5321246`. No successor. |
+| Change record / supersession | GitHub Issues #12 and #17; updates `0.2` to correct the recorded dependency-tree SHA-256 after F01-B/T013 compared it with the retained file. Build outcomes and F01-A scope are unchanged. |
 | Classification / retention | `INTERNAL`; retain with F01-A source and verification evidence while this baseline is used or reviewed |
 | Review trigger / evidence status | Re-review on application source, dependency graph, build environment or test change; four actual checks are recorded below, with stated exclusions and historical limitations |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019); `STD-TEST-001` (ISO/IEC/IEEE 29119-1:2022); `STD-TEST-002` (29119-2:2021); `STD-TEST-003` (29119-3:2021); `STD-TEST-004` (29119-4:2021). All are `STANDARD-GUIDED`. Apply identity/trace and test configuration, procedure and result concepts; tailor them into the compact control, command and result tables below. No standards-conformity claim. |
@@ -45,7 +45,12 @@ product behavior, deployment or commercial distribution.
 
 The exact resolved Server dependency graph is retained in
 [`F01-A-server-dependency-tree.json`](F01-A-server-dependency-tree.json), SHA-256
-`C36F53C13AACAA18CAEA5026B53295ECDA230BC9170DA325412AA65A19756049`.
+`59077C834765F9B41AF6537C98ECA7ACFFAE90A1A08289C1EAE615502A5F5579`.
+
+**F01-B hash correction (2026-09-29):** Version `0.2` recorded
+`C36F53C13AACAA18CAEA5026B53295ECDA230BC9170DA325412AA65A19756049`, which does not match the
+retained JSON file. Recalculation gives the SHA-256 above. The dependency-tree file and its package
+contents were not changed by this correction; only the recorded hash was wrong.
 
 ## Web — Ubuntu 26.04 development host
 
@@ -110,3 +115,4 @@ PostgreSQL, file custody, transfer performance, multi-Vault operation, or deploy
 |---|---|---|
 | 0.1 | 2026-09-28 | Add controlled verification identity, ownership, baseline, trace and retention; record the Project Reviewer's limited direct-Web timing exception without changing the four build/test outcomes. |
 | 0.2 | 2026-09-28 | Align the card result with published Execution Register revision 22. The test outcomes and their exclusions are unchanged. |
+| 0.3 | 2026-09-29 | Correct the SHA-256 reference for the retained Server dependency-tree JSON after F01-B/T013 recalculation; no build result or F01-A disposition changed. |

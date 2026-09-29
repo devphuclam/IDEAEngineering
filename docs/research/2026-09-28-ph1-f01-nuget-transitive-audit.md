@@ -4,21 +4,21 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-NUGET-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 NuGet Transitive Intake Audit |
-| Version / status | `0.2` / `Draft` |
+| Version / status | `0.3` / `Draft` |
 | Product normativity | `INFORMATIVE`; this records evidence and a recommendation, not a product or legal decision |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / Codex research agent |
 | Reviewer / acceptance authority | Project Reviewer accepted the one-time internal F01-A order-of-work exception on 2026-09-28; Product Decision Authority product acceptance `NOT-RUN` |
-| Evidence date | 2026-09-28 (Asia/Ho_Chi_Minh) |
-| Applicable baseline | F01-A source commit `c600f7be41f0732cb57d521017bae0565ab229bd`; current Windows `obj/project.assets.json` snapshots in unchanged Desktop/Workspace project definitions; internal build/test use only |
+| Evidence date | 2026-09-29 (Asia/Ho_Chi_Minh) |
+| Applicable baseline | F01-A package/legal audit source commit `c600f7be41f0732cb57d521017bae0565ab229bd`; F01-B lockfiles generated from `9707aab6184848bd01fa5c261a06f54c3f4d757c` and committed in `6c8b6b35c33e96a83001cdbd3f122647c0e5ca85`; final T013 verification commit `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; internal build/test use only |
 | Intended use | `DEPENDENCY`: WPF WebView2 SDK and development/test packages; no customer packaging, runtime redistribution, or commercial release qualified |
 | Upstream trace | [F01 dependency intake](2026-09-28-ph1-f01-dependency-intake.md), [external-source intake](../agents/external-source-intake.md), [PH1 spec FR-012](../../specs/005-ph1-foundation-custody/spec.md), F01-A/T002 |
 | Downstream trace | F01-A Project Reviewer disposition; F01-B/T013; PH1/T036 and later dependency inventory/SBOM |
-| Change / Work Item trace | GitHub Issue #12, F01-A/T002; reviewer decision on 2026-09-28 recorded in §4; T002 status is owned by `tasks.md` |
+| Change / Work Item trace | GitHub Issues #12 and #17; F01-A/T002 and F01-B/T013; reviewer decision on 2026-09-28 recorded in §4; T002 status is owned by `tasks.md` |
 | Classification / retention | `INTERNAL`; retain while these exact versions are in use and with later dependency inventory/SBOM |
-| Evidence status | Four assets snapshots and 14 local package archives inspected. Exact package license metadata and three upstream MIT license files verified. NuGet's signed-content versus full-archive hash distinction is explained below; the restored graph's link to the historical tested archive remains qualified. One-time internal-use exception `ACCEPTED` by the Project Reviewer; commercial distribution `BLOCKED-LEGAL`. |
+| Evidence status | Four F01-B NuGet lockfiles now pin the clean-source graph; their 13 external package IDs match the 2026-09-28 audit, with no dependency/version change. The earlier four assets snapshots and 14 local package archives remain the exact license evidence. NuGet's signed-content versus full-archive hash distinction and historical provenance limit are retained below. One-time internal-use exception `ACCEPTED` by the Project Reviewer; commercial distribution `BLOCKED-LEGAL`. |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019, `STANDARD-GUIDED`) is used for identity, status, source and trace fields; no standards-conformity claim. This research note has no effective product date or accepted requirement. |
-| Supersession / review trigger | Supersedes this note's `0.1` revision; no successor identified. Re-review on package/version/source, resolved graph, license/notice, project configuration, deployment bundle or intended-use change. The exception cannot be reused for a new import. |
+| Supersession / review trigger | Supersedes this note's `0.2` revision; no successor identified. Re-review on package/version/source, resolved graph, license/notice, project configuration, deployment bundle or intended-use change. The exception cannot be reused for a new import. |
 
 ## 1. Scope and reproducibility limit
 
@@ -35,7 +35,32 @@ The four assets snapshots, all dated 2026-09-28 local time, have these SHA-256 h
 
 The Desktop test graph contains the Workspace test graph's 12 external IDs plus WebView2. `MSTest.Sdk/4.4.1` is referenced as the two test projects' **MSBuild project SDK**, so it does not appear among `project.assets.json` libraries; including it gives **14 distinct NuGet package IDs** in the F01 Desktop/Workspace source and build/test graph. Project references and .NET framework/targeting packs are not counted as NuGet packages here. The SDK and all packages other than WebView2 are test/build scoped in this F01 graph; presence of the telemetry extension does not establish application telemetry behavior.
 
-For each of the 13 assets packages, `project.assets.json` `sha512` agrees with its local `.nupkg.metadata` `contentHash`. A fresh SHA-512 of the cached `.nupkg` bytes instead agrees with the adjacent `.nupkg.sha512` and differs from those assets/metadata values for all 13. All 13 archives contain `.signature.p7s`. [NuGet's signed-package metadata definition](https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File) says `ContentHash` excludes signature metadata, whereas `.nupkg.sha512` hashes the entire signed archive; the [NuGet.Client package reader at commit `6844270`](https://github.com/NuGet/NuGet.Client/blob/684427012e25096073d04a7643a9d43dc1f2091d/src/NuGet.Core/NuGet.Packaging/PackageArchiveReader.cs) implements these separate hash paths. The observed difference is therefore expected for signed packages, not by itself a provenance failure. We did not independently recalculate the signature-excluded content hash or cryptographically verify the signatures; signature-file presence alone is not signature validation. The table identifies the **local archive inspected**, using its independently computed SHA-256, without asserting byte identity with the historical clean restore. No restore or package download was run for this audit.
+For each of the 13 assets packages, `project.assets.json` `sha512` agrees with its local `.nupkg.metadata` `contentHash`. A fresh SHA-512 of the cached `.nupkg` bytes instead agrees with the adjacent `.nupkg.sha512` and differs from those assets/metadata values for all 13. All 13 archives contain `.signature.p7s`. [NuGet's signed-package metadata definition](https://github.com/NuGet/Home/wiki/Nupkg-Metadata-File) says `ContentHash` excludes signature metadata, whereas `.nupkg.sha512` hashes the entire signed archive; the [NuGet.Client package reader at commit `6844270`](https://github.com/NuGet/NuGet.Client/blob/684427012e25096073d04a7643a9d43dc1f2091d/src/NuGet.Core/NuGet.Packaging/PackageArchiveReader.cs) implements these separate hash paths. The observed difference is therefore expected for signed packages, not by itself a provenance failure. We did not independently recalculate the signature-excluded content hash or cryptographically verify the signatures; signature-file presence alone is not signature validation. The table identifies the **local archive inspected**, using its independently computed SHA-256, without asserting byte identity with the historical clean restore. No restore or package download was run for this exact 2026-09-28 archive-history audit; the later F01-B locked restores and clean-source builds are separate evidence recorded below.
+
+### F01-B locked restore evidence (2026-09-29)
+
+The four .NET projects now generate and enforce committed NuGet lockfiles with
+`RestorePackagesWithLockFile=true` and `RestoreLockedMode=true`. F01-B generated them from a clean
+source export of `9707aab6184848bd01fa5c261a06f54c3f4d757c`; the lockfile SHA-256 values from that
+export exactly match those generated in the implementation worktree. The four files were committed
+in `6c8b6b35c33e96a83001cdbd3f122647c0e5ca85` and remain unchanged in the final T013 verification
+source `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`. Explicit `dotnet restore
+--locked-mode` succeeded for all four projects. The external package IDs and versions match the
+existing 2026-09-28 audit; no package, version, license or product technology selection changed.
+
+| Project | Lockfile | SHA-256 | External package entries |
+|---|---|---|---:|
+| Desktop | [`apps/desktop/packages.lock.json`](../../apps/desktop/packages.lock.json) | `5386CC9B0B11E8D2C2A4BC5402ABE1598BD1E9167E69EFD71DB0A0C5150EB01E` | 1 |
+| Desktop tests | [`apps/desktop/tests/packages.lock.json`](../../apps/desktop/tests/packages.lock.json) | `68B9F5A6CD4A1ECD8817BAC15F4E6923FA58393FCDF0AF0670D945AF885984A2` | 13 |
+| Workspace | [`apps/workspace/packages.lock.json`](../../apps/workspace/packages.lock.json) | `531D4CF71E5420C1C03DA4C06778BA2A212C7058A3882E7A3A873AE2F811511E` | 0 |
+| Workspace tests | [`apps/workspace/tests/packages.lock.json`](../../apps/workspace/tests/packages.lock.json) | `6260CA6026B00B248878A7ACFEFB09C425296547883B2207F9F3D79A38273A69` | 12 |
+
+Lockfiles also contain the corresponding project-reference entry where applicable; those entries
+are not NuGet packages. The two test lock graphs together retain the same 13 external package IDs
+recorded in §2. `MSTest.Sdk/4.4.1` remains pinned by the exact MSBuild project-SDK reference and
+does not appear as a `PackageReference` lock entry. This update makes package resolution repeatable;
+it does not extend the one-time T002 exception, complete the T036 bundle/license review, or authorize
+customer distribution.
 
 ## 2. Exact package and rights evidence
 
@@ -68,7 +93,7 @@ The exact publisher license sources corresponding to the nuspec repository commi
 
 ## 4. Interpretation, deviation and reviewer disposition
 
-**Internal F01-A build/test disposition: `APPROVED-WITH-OBLIGATIONS` under the one-time Project Reviewer exception below.** The observed exact versions have a publisher-pinned MIT license or WebView2's exact BSD-style package license, with the notice retention above. Keep these versions/source identities stable, retain notice evidence with any copied package files, and reopen intake on change. This disposition applies to the inspected internal build/test graph only; it is not a legal clearance for distribution. Customer/runtime redistribution and any unresolved WebView2 notice applicability remain `BLOCKED-LEGAL` until the exact shipped bundle and terms are reviewed by the Legal Review Authority. T013/T036 still own later clean-source/lockfile and full integration/bundle checks.
+**Internal F01-A build/test disposition: `APPROVED-WITH-OBLIGATIONS` under the one-time Project Reviewer exception below.** The observed exact versions have a publisher-pinned MIT license or WebView2's exact BSD-style package license, with the notice retention above. Keep these versions/source identities stable, retain notice evidence with any copied package files, and reopen intake on change. This disposition applies to the inspected internal build/test graph only; it is not a legal clearance for distribution. Customer/runtime redistribution and any unresolved WebView2 notice applicability remain `BLOCKED-LEGAL` until the exact shipped bundle and terms are reviewed by the Legal Review Authority. F01-B/T013 records the clean-source and lockfile evidence; T036 still owns full integration/bundle review.
 
 **Order-of-work deviation:** Windows NuGet restore and F01-A smoke/build checks already ran before exact transitive license/notice evidence was recorded. The later audit cannot make the FR-012/T002 *before-first-use* condition retrospectively true. The Project Reviewer has accepted this as a documented, one-time exception for the past internal build/test use; the exception does not change FR-012 for any future import. T002 may close with this explicit exception, while F01-A completion remains a separate card decision.
 
@@ -80,7 +105,7 @@ The exact publisher license sources corresponding to the nuspec repository commi
 | Residual risk | The ignored assets files and package archives from the historical clean restore were not retained, so their byte-for-byte identity with today's audited cache is unproven. Signatures were not independently verified. Future distribution contents and runtime/installer terms are unreviewed. |
 | Owner and approver | Engineering owns version/notice control and the follow-up; the Project Reviewer approved this one-time exception. Legal Review Authority remains the required authority for any unresolved external distribution terms. |
 | Expiry and boundary | The exception covers only the historical F01-A use above; its operative scope ends at F01-A card review, while this decision remains in the record. It cannot authorize a new package, version, restore graph, project configuration or commercial deployment; those require intake before first use. |
-| Remediation and escalation | Retain this audit; T013 reconciles clean-source/lockfile evidence and T036 reviews the exact integration or distribution bundle. Preserve applicable notices. Escalate any changed or unclear license, WebView2 redistribution or runtime EULA to the Legal Review Authority before external use. |
+| Remediation and escalation | Retain this audit; T013 records clean-source/lockfile evidence and T036 reviews the exact integration or distribution bundle. Preserve applicable notices. Escalate any changed or unclear license, WebView2 redistribution or runtime EULA to the Legal Review Authority before external use. |
 
 ## 5. Checks and change log
 
@@ -89,6 +114,7 @@ The exact publisher license sources corresponding to the nuspec repository commi
 | Current source project definitions compared with tested commit | `PASS`: no Desktop/Workspace changes | Does not authenticate ignored historical `obj` files |
 | Four current assets files parsed and hashed | `PASS`: package counts and IDs above | Files were not preserved from the tested clean archive |
 | 14 cached package `.nuspec` and `.nupkg` files inspected and SHA-256 hashed | `PASS` for local files | No new download or restore; signed-content and full-archive hashes are distinct as explained in §1 |
+| F01-B NuGet lockfiles and locked restore | `PASS`: all four project locks match the audited external IDs/versions; explicit `--locked-mode` restore succeeds | No package/license decision changed; SDK patch and commercial bundle remain outside this audit |
 | Three pinned upstream MIT license files and exact WebView2 package license/notice reviewed | `PASS` for stated files | No exhaustive per-binary or future bundle review |
 | Project Reviewer exception and commercial release approval | One-time internal F01-A exception `ACCEPTED` / commercial distribution `BLOCKED-LEGAL` | Neither changes the original before-first-use evidence or grants a commercial release |
 
@@ -96,3 +122,4 @@ The exact publisher license sources corresponding to the nuspec repository commi
 |---|---|---|
 | 0.1 | 2026-09-28 | Record current F01 Windows NuGet graph, exact local package hashes, publisher license and embedded notice evidence, NuGet signed-package hash semantics, provenance limits, internal-use recommendation and reviewer question. |
 | 0.2 | 2026-09-28 | Record the Project Reviewer's one-time T002 exception, its exact scope, rationale, risk, owner, expiry, follow-up and separation from commercial clearance. |
+| 0.3 | 2026-09-29 | Add four clean-source NuGet lockfiles and locked-mode restore evidence; confirm the exact external package graph remains the one audited in 0.2. |

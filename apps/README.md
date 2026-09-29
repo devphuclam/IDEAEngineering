@@ -32,8 +32,23 @@ command results and limits; T012 passed for these foundation checks.
 | Desktop (Windows) | `dotnet test apps/desktop/tests/IdeaDesktop.Tests.csproj` then `dotnet build apps/desktop/IdeaDesktop.csproj` | Windows x64 and .NET 10 SDK/Windows targeting pack; NuGet access is needed on first restore. |
 | Workspace (Windows) | `dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj` then `dotnet build apps/workspace/IdeaWorkspace.csproj` | Windows x64 and .NET 10 SDK/Windows targeting pack. |
 
+Desktop and Workspace commit a NuGet `packages.lock.json` beside each project. All four projects
+set `RestoreLockedMode`; ordinary `dotnet test` and `dotnet build` therefore fail rather than
+silently resolving a different package graph. Update a lock only as a deliberate dependency-intake
+change, then reconcile it with the exact-package review before merging.
+
+For F01-B, run `pwsh -NoProfile -File tests/ph1/test-check-no-secrets.ps1` for the isolated
+black-box regression cases, then `pwsh -NoProfile -File tests/ph1/check-no-secrets.ps1` to scan
+Git-tracked text files. The scan checks the working copy and also reads the Git-index version when
+a tracked file is changed or missing, so a local edit or deletion cannot hide staged content. It
+recognizes tracked `.env.local` files. The scan is heuristic, excludes the documented synthetic
+fixture corpora, skips known binary files, and does not inspect untracked or ignored files; a clean
+result is not a guarantee that no secret exists. See the
+[F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
+for the exact source, commands, results and limitations.
+
 The F01 dependency intake permits internal build/test only. The full NuGet license and notice review
-remains for T013/T036; do not package or distribute these projects from this intake. PostgreSQL and
+remains for T036; do not package or distribute these projects from this intake. PostgreSQL and
 Vault are not prerequisites for these F01 build/smoke checks. Use the server-local file described in
 [development deployment](../deploy/development/README.md) for filled configuration; never put
 secrets in this repository.
