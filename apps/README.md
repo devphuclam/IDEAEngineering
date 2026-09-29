@@ -39,9 +39,12 @@ change, then reconcile it with the exact-package review before merging.
 
 For F01-B, run `pwsh -NoProfile -File tests/ph1/test-check-no-secrets.ps1` for the isolated
 black-box regression cases, then `pwsh -NoProfile -File tests/ph1/check-no-secrets.ps1` to scan
-Git-tracked text files. The scan is heuristic, excludes the documented synthetic fixture corpora,
-skips known binary files, and does not inspect untracked or ignored files; a clean result is not a
-guarantee that no secret exists. See the [F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
+Git-tracked text files. The scan checks the working copy and also reads the Git-index version when
+a tracked file is changed or missing, so a local edit or deletion cannot hide staged content. It
+recognizes tracked `.env.local` files. The scan is heuristic, excludes the documented synthetic
+fixture corpora, skips known binary files, and does not inspect untracked or ignored files; a clean
+result is not a guarantee that no secret exists. See the
+[F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
 for the exact source, commands, results and limitations.
 
 The F01 dependency intake permits internal build/test only. The full NuGet license and notice review
