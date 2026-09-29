@@ -143,7 +143,7 @@ try {
     # Shell permits an unquoted credential assignment as a literal value.
     $shellValue = 'ShellCredential' + [guid]::NewGuid().ToString('N')
     $shellPath = Join-Path $fixtureRoot 'deploy.sh'
-    [System.IO.File]::WriteAllText($shellPath, "export SECRET_KEY=$shellValue`n", [System.Text.Encoding]::UTF8)
+    [System.IO.File]::WriteAllText($shellPath, "export -n SECRET_KEY=$shellValue`n", [System.Text.Encoding]::UTF8)
     Invoke-Git $fixtureRoot @('add', '--', 'deploy.sh')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic shell credential fixture')
     $shellResult = Invoke-Scanner $fixtureRoot
@@ -155,7 +155,7 @@ try {
 
     $localShellValue = 'LocalCredential' + [guid]::NewGuid().ToString('N')
     $localShellPath = Join-Path $fixtureRoot 'local-secret.sh'
-    [System.IO.File]::WriteAllText($localShellPath, "local SECRET_KEY=$localShellValue`n", [System.Text.Encoding]::UTF8)
+    [System.IO.File]::WriteAllText($localShellPath, "local -r SECRET_KEY=$localShellValue`n", [System.Text.Encoding]::UTF8)
     Invoke-Git $fixtureRoot @('add', '--', 'local-secret.sh')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic local shell credential')
     $localShellResult = Invoke-Scanner $fixtureRoot

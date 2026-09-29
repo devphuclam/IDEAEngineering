@@ -11,7 +11,7 @@ $quotedCredentialAssignment = [regex]::new(
     "(?i)(?:\b|[\x27\x22\x60])\`$?(?<name>$sensitiveName)(?:\b|[\x27\x22\x60])\s*(?:=|:)\s*(?<quote>[\x27\x22\x60])(?<candidate>.+?)\k<quote>"
 )
 $unquotedCredentialAssignment = [regex]::new(
-    "(?i)^\s*(?:(?:export|local|readonly)\s+|declare(?:\s+-[a-z]+)*\s+)?\`$?(?<name>$sensitiveName)\s*(?:=|:)\s*(?<candidate>[^#\r\n]+)"
+    "(?i)^\s*(?:(?:export|local|readonly)(?:\s+-[a-z]+)*\s+|declare(?:\s+-[a-z]+)*\s+)?\`$?(?<name>$sensitiveName)\s*(?:=|:)\s*(?<candidate>[^#\r\n]+)"
 )
 $unquotedCredentialExtensions = @(
     '.env', '.example', '.ini', '.properties', '.toml', '.yaml', '.yml', '.conf', '.cfg',
