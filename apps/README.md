@@ -37,6 +37,13 @@ set `RestoreLockedMode`; ordinary `dotnet test` and `dotnet build` therefore fai
 silently resolving a different package graph. Update a lock only as a deliberate dependency-intake
 change, then reconcile it with the exact-package review before merging.
 
+For F01-B, run `pwsh -NoProfile -File tests/ph1/test-check-no-secrets.ps1` for the isolated
+black-box regression cases, then `pwsh -NoProfile -File tests/ph1/check-no-secrets.ps1` to scan
+Git-tracked text files. The scan is heuristic, excludes the documented synthetic fixture corpora,
+skips known binary files, and does not inspect untracked or ignored files; a clean result is not a
+guarantee that no secret exists. See the [F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
+for the exact source, commands, results and limitations.
+
 The F01 dependency intake permits internal build/test only. The full NuGet license and notice review
 remains for T036; do not package or distribute these projects from this intake. PostgreSQL and
 Vault are not prerequisites for these F01 build/smoke checks. Use the server-local file described in

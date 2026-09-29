@@ -4,7 +4,7 @@
 |---|---|
 | Stable Research ID | `IE-RES-PH1-F01-DEP-001` |
 | Document class / title | `RESEARCH-NOTE` / PH1 F01 Dependency Intake |
-| Version / status | `0.9` / `Draft` |
+| Version / status | `0.10` / `Draft` |
 | Product normativity | `INFORMATIVE` — records source/license evidence; does not change Feature, Tech or product scope |
 | Repository process authority / instruction state | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
 | Owner / author | Engineering / repository maintainer |
@@ -18,7 +18,7 @@
 | Classification / retention | `INTERNAL`; retain while these dependency versions are used and with later dependency inventory/SBOM |
 | Evidence status | npm lock graph resolved and screened; eight direct Web legal-file sets inspected after first import; all four approved foundation smoke/build checks passed from clean platform-specific archives of source commit `c600f7be41f0732cb57d521017bae0565ab229bd`. The current Windows NuGet graph, 14 exact archives and license/notice evidence are recorded in the linked NuGet audit; the historical restore linkage remains qualified. The Project Reviewer accepted one-time timing exceptions for late NuGet and direct Web legal-file evidence covering only past internal F01-A build/test. Commercial distribution review remains `BLOCKED-LEGAL`. |
 | Control tailoring | Research note, not a product decision: no effective product date or requirement acceptance. Source evidence, review limits and intended-use conditions are recorded here; later evidence does not retrospectively satisfy the before-first-use rule. |
-| Supersession / review trigger | Supersedes this note's `0.8` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before a distribution decision. The exception does not cover a new import. |
+| Supersession / review trigger | Supersedes this note's `0.9` revision; no successor identified. Re-review on exact package/version, source/license, resolved graph, packaging model or intended-use change, and before a distribution decision. The exception does not cover a new import. |
 
 ## 1. Disposition
 
@@ -40,7 +40,7 @@ approved by this intake. The separate [commercial-license scope note](2026-09-28
 explains why commercially usable license families do not equal an approved IDEA release.
 
 The npm lock graph is pinned in `apps/web/package-lock.json` (SHA-256
-`1C011F5EBFEA15E039E236B4713C3ED7E0B1657A654A95887B3B13D0C84B803D`): 88 exact package
+`350E5D24057C55D6ACEF6FB6A71B73948E2711D9279C12E2FE52071B815F611B`): 88 exact package
 versions, all resolved from `registry.npmjs.org` with lockfile integrity values. A read-only
 screen of the `license` field on each of the 88 exact `node_modules/*` lockfile entries found 51 MIT, 23 Apache-2.0,
 12 MPL-2.0, one ISC and one BSD-3-Clause package; none had missing license metadata or a
@@ -53,6 +53,12 @@ notices, optional-platform inclusion, or any future distribution bundle. The loc
 the per-package source URL, version, integrity and declared license; its `dev`/`optional` fields
 show build-only or platform-dependent reach where present. The whole graph is admitted for this
 bounded internal F01 build/test use, not as a customer distribution inventory.
+
+**F01-B hash correction (2026-09-29):** Version `0.9` recorded
+`1C011F5EBFEA15E039E236B4713C3ED7E0B1657A654A95887B3B13D0C84B803D`, which does not match the
+lockfile bytes. Recalculation from the tracked file at source commit
+`b5c4701cf5a1cd37ae8295ed4af1621a6b522d03` gives the SHA-256 above. The lockfile contents, package
+versions and license-family counts were not changed by this correction.
 
 ### Direct Web package legal files inspected after the initial import
 
@@ -197,3 +203,4 @@ commercial distribution are legally cleared.
 | 0.7 | 2026-09-28 | Link the exact current NuGet graph/license/notice audit, distinguish later evidence from the original before-first-use deviation, and reserve T002 closure for Project Reviewer disposition. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); FR-012; T002 |
 | 0.8 | 2026-09-28 | Record the Project Reviewer's one-time exception for late NuGet evidence in internal F01-A build/test; retain later distribution and license-review gates. | [NuGet transitive audit](2026-09-28-ph1-f01-nuget-transitive-audit.md); [commercial-license scope](2026-09-28-ph1-f01-commercial-license-scope.md); FR-012; T002 |
 | 0.9 | 2026-09-28 | Replace mutable upstream license links for direct Web packages with exact installed package legal-file names and hashes; record the Project Reviewer's one-time internal Web timing exception without erasing the historical or transitive-review limitations. | Versioned local npm packages; pinned Web lockfile; Project Reviewer response on 2026-09-28; F01-A/T002 and F01-B/T013 |
+| 0.10 | 2026-09-29 | Correct the recorded npm lockfile SHA-256 after comparing it with the tracked file; package inventory and legal conclusions are unchanged. | F01-B/T013; source commit `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; `Get-FileHash` result |
