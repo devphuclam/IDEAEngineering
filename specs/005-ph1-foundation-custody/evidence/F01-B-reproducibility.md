@@ -4,13 +4,17 @@
 |---|---|
 | Stable Verification ID | `IE-VEV-PH1-F01-B-001` |
 | Document class / title | `VERIFICATION-RECORD` / F01-B Clean-Source Reproducibility and Secret-Check Results |
-| Version / status | `0.3` / `Draft`; T013 execution is recorded below; F01-B Delivery Card remains `IN_PROGRESS` pending Project Reviewer closure |
+| Version / status | `0.4` / `Draft`; T013 execution is recorded below; F01-B Delivery Card remains `IN_PROGRESS` pending Project Reviewer closure |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this record creates no product requirement or release approval |
 | Owner / author | F01-B Engineering implementer / repository maintainer |
 | Reviewer / acceptance authority | Project Reviewer; review of this record `NOT-RUN` |
 | Applicable source / evidence date | Clean-source build/test baseline `b5c4701cf5a1cd37ae8295ed4af1621a6b522d03`; scanner corrections `c2798a45496d5babced6897e9379dc20940f9bbc` and `e9d17ebbdd7c30b0791f1fe64ca15ca89cbd42b7`; checks run 2026-09-29 (Asia/Ho_Chi_Minh) |
 | Upstream / downstream trace | [PH1 tasks T001–T013](../tasks.md), [F01-A build evidence](F01-A-build-results.md), [dependency intake](../../../docs/research/2026-09-28-ph1-f01-dependency-intake.md), [NuGet audit](../../../docs/research/2026-09-28-ph1-f01-nuget-transitive-audit.md), GitHub Issue [#17](https://github.com/devphuclam/IDEAEngineering/issues/17) → PH1/T036 |
 | Classification / retention | `INTERNAL`; retain with the tested source and dependency evidence while this baseline is used or reviewed |
+| Change record | GitHub Issue `#17` / Spec Kit task `T013`; predecessor `IE-VEV-PH1-F01-B-001@0.3` at `dfe7241c676b6d9bff52486a99c00167f90418fc`; adds missing control-envelope fields only, with no source/test outcome or product-baseline change |
+| Supersession | Supersedes `IE-VEV-PH1-F01-B-001@0.3`; superseded by `NOT-APPLICABLE` |
+| Review trigger | Re-review if the tested source revision, dependency lock graph, scanner/harness behavior, or T013 acceptance scope changes |
+| Evidence status | `PASS` for the scoped checks below; Project Reviewer acceptance remains `NOT-RUN` |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019) and `STD-TEST-001` through `STD-TEST-004` (ISO/IEC/IEEE 29119 series), all `STANDARD-GUIDED`; identity, configuration, procedure and result concepts are tailored to the compact records below; no conformity claim |
 
 ## 1. T013 disposition
@@ -131,3 +135,4 @@ complete PH1/T036, prove third-party redistribution rights, or qualify a commerc
 | 0.1 | 2026-09-29 | Record clean-source locked restore/build/test results for all four projects, tracked-secret check behavior and limits, lockfile hashes and the two verified hash corrections. |
 | 0.2 | 2026-09-29 | Add the `secret_key` regression and its correction revision; separate expected result/oracle from actual result for each recorded check. |
 | 0.3 | 2026-09-29 | Add Git-index/working-copy and `.env.local` coverage; clarify platform-specific restore procedures and controlled review state. |
+| 0.4 | 2026-09-29 | Add explicit change, supersession and review-trigger controls required for the verification-record class. |
