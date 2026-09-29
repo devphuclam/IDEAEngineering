@@ -1,7 +1,8 @@
 param()
 
 $ErrorActionPreference = 'Stop'
-$scannerPath = Join-Path $PSScriptRoot 'check-no-secrets.ps1'
+$scannerSourcePath = Join-Path $PSScriptRoot 'check-no-secrets.ps1'
+$manifestSourcePath = Join-Path $PSScriptRoot 'known-synthetic-fixtures.json'
 $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('idea-secret-check-test-' + [guid]::NewGuid().ToString('N'))
 
 function Assert-True([bool]$condition, [string]$message) {
@@ -16,6 +17,7 @@ function Invoke-Git([string]$root, [string[]]$gitArgs) {
 }
 
 function Invoke-Scanner([string]$root) {
+    $scannerPath = Join-Path $root 'tests/ph1/check-no-secrets.ps1'
     if (-not (Test-Path -LiteralPath $scannerPath -PathType Leaf)) {
         throw 'Secret scanner script is missing.'
     }
@@ -44,6 +46,10 @@ function Invoke-Scanner([string]$root) {
 try {
     $fixtureRoot = Join-Path $tempRoot 'repo'
     New-Item -ItemType Directory -Path $fixtureRoot -Force | Out-Null
+    $scannerDirectory = Join-Path $fixtureRoot 'tests/ph1'
+    New-Item -ItemType Directory -Path $scannerDirectory -Force | Out-Null
+    Copy-Item -LiteralPath $scannerSourcePath -Destination (Join-Path $scannerDirectory 'check-no-secrets.ps1')
+    Copy-Item -LiteralPath $manifestSourcePath -Destination (Join-Path $scannerDirectory 'known-synthetic-fixtures.json')
     Invoke-Git $fixtureRoot @('init', '--quiet')
     Invoke-Git $fixtureRoot @('config', 'user.name', 'IDEA secret-check fixture')
     Invoke-Git $fixtureRoot @('config', 'user.email', 'fixture@example.invalid')
@@ -56,7 +62,7 @@ try {
     $placeholderValue = 'REPLACE' + '_ME'
     [System.IO.File]::WriteAllText((Join-Path $fixtureRoot 'config.example'), "$placeholderName=$placeholderValue`n", [System.Text.Encoding]::UTF8)
     [System.IO.File]::WriteAllText((Join-Path $fixtureRoot 'README.md'), "Synthetic scanner fixture.`n", [System.Text.Encoding]::UTF8)
-    Invoke-Git $fixtureRoot @('add', '--', '.gitignore', 'config.example', 'README.md')
+    Invoke-Git $fixtureRoot @('add', '--', '.gitignore', 'config.example', 'README.md', 'tests/ph1/check-no-secrets.ps1', 'tests/ph1/known-synthetic-fixtures.json')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'clean fixture baseline')
 
     $ignoredName = 'PASS' + 'WORD'
@@ -215,9 +221,36 @@ try {
     Assert-True ($changedFixtureResult.Output -match [regex]::Escape($allowlistedRelativePath)) 'Expected a changed approved fixture to be identified by path.'
     Assert-True ($changedFixtureResult.Output -notmatch [regex]::Escape($changedFixtureSecret)) 'Scanner output exposed a credential appended to a known fixture.'
 
+    # A worktree-only change to the exception manifest must not authorize staged fixture bytes.
+    $stagedFixtureSecret = 'StagedFixtureCredential' + [guid]::NewGuid().ToString('N')
+    $baselineFixtureText = [System.IO.File]::ReadAllText($allowlistedSourcePath)
+    [System.IO.File]::WriteAllText($allowlistedFixturePath, $baselineFixtureText, [System.Text.Encoding]::UTF8)
+    $stagedFixtureText = $baselineFixtureText + "`nSECRET_KEY = `"$stagedFixtureSecret`"`n"
+    [System.IO.File]::WriteAllText($allowlistedFixturePath, $stagedFixtureText, [System.Text.Encoding]::UTF8)
+    $stagedFixtureBytes = [System.IO.File]::ReadAllBytes($allowlistedFixturePath)
+    Invoke-Git $fixtureRoot @('add', '--', $allowlistedRelativePath)
+    [System.IO.File]::WriteAllText($allowlistedFixturePath, "{}`n", [System.Text.Encoding]::UTF8)
+
+    $manifestPath = Join-Path $fixtureRoot 'tests/ph1/known-synthetic-fixtures.json'
+    $manifest = [System.IO.File]::ReadAllText($manifestPath, [System.Text.UTF8Encoding]::new($false, $true)) |
+        ConvertFrom-Json -AsHashtable
+    $manifestEntry = @($manifest.files | Where-Object { $_.path -ceq $allowlistedRelativePath })[0]
+    $stagedFixtureTextFromBytes = [System.Text.UTF8Encoding]::new($false, $true).GetString($stagedFixtureBytes)
+    $canonicalStagedText = $stagedFixtureTextFromBytes.Replace("`r`n", "`n").Replace("`r", "`n")
+    $canonicalBytes = [System.Text.UTF8Encoding]::new($false).GetBytes($canonicalStagedText)
+    $manifestEntry.sha256 = [System.Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData($canonicalBytes))
+    $updatedManifest = ConvertTo-Json -InputObject $manifest -Depth 10
+    [System.IO.File]::WriteAllText($manifestPath, $updatedManifest + "`n", [System.Text.UTF8Encoding]::new($false))
+
+    $unstagedManifestResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($unstagedManifestResult.ExitCode -eq 1) 'Expected a worktree-only manifest change not to exempt staged fixture credentials.'
+    Assert-True ($unstagedManifestResult.Output -match [regex]::Escape($allowlistedRelativePath)) 'Expected the staged fixture credential to be reported.'
+    Assert-True ($unstagedManifestResult.Output -notmatch [regex]::Escape($stagedFixtureSecret)) 'Scanner output exposed the staged fixture credential value.'
+
     Write-Output 'PASS: tracked credentials in JSON, YAML, and .env.local are detected across Git-index and working-tree states without printing values.'
     Write-Output 'PASS: unquoted shell assignments, source-language literals, and new fixture-root files are detected without printing values.'
     Write-Output 'PASS: exact synthetic fixture content is exempted, but changed content at that path is scanned.'
+    Write-Output 'PASS: an unstaged exception-manifest edit cannot exempt staged fixture content.'
     Write-Output 'PASS: placeholders and Git-ignored local configuration do not fail the scan.'
 }
 finally {

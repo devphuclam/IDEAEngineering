@@ -127,14 +127,37 @@ function Get-GitBlobBytes([string]$root, [string]$objectId) {
     }
 }
 
-function Read-KnownSyntheticFixtureHashes {
-    $manifestPath = Join-Path $PSScriptRoot 'known-synthetic-fixtures.json'
-    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
-        throw 'Known synthetic fixture manifest is missing.'
+function Get-GitObjectId([string]$root, [string]$expression) {
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = 'git'
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+    $startInfo.StandardErrorEncoding = [System.Text.Encoding]::UTF8
+    foreach ($argument in @('-C', $root, 'rev-parse', '--verify', $expression)) {
+        $startInfo.ArgumentList.Add($argument)
     }
 
-    $manifest = [System.IO.File]::ReadAllText($manifestPath, [System.Text.UTF8Encoding]::new($false, $true)) |
-        ConvertFrom-Json -AsHashtable
+    $process = [System.Diagnostics.Process]::Start($startInfo)
+    $output = $process.StandardOutput.ReadToEnd()
+    $null = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+    $objectId = $output.Trim()
+    if ($process.ExitCode -ne 0 -or $objectId -notmatch '^[0-9a-f]{40,64}$') {
+        throw 'Git could not resolve the committed synthetic-fixture manifest.'
+    }
+
+    return $objectId
+}
+
+function Read-KnownSyntheticFixtureHashes([string]$root) {
+    $manifestRelativePath = 'tests/ph1/known-synthetic-fixtures.json'
+    # Only committed HEAD policy may exempt bytes; worktree/index edits must not expand an exemption.
+    $manifestObjectId = Get-GitObjectId $root "HEAD:$manifestRelativePath"
+    $manifestBytes = Get-GitBlobBytes $root $manifestObjectId
+    $manifestText = [System.Text.UTF8Encoding]::new($false, $true).GetString($manifestBytes)
+    $manifest = $manifestText | ConvertFrom-Json -AsHashtable
     if ($manifest.schemaVersion -ne 1 -or $null -eq $manifest.files) {
         throw 'Known synthetic fixture manifest has an unsupported schema.'
     }
@@ -271,7 +294,7 @@ try {
     $rootPrefix = $rootPath + [System.IO.Path]::DirectorySeparatorChar
     $findings = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $skippedSpecialFiles = [System.Collections.Generic.List[string]]::new()
-    $knownSyntheticFixtureHashes = Read-KnownSyntheticFixtureHashes
+    $knownSyntheticFixtureHashes = Read-KnownSyntheticFixtureHashes $rootPath
     $recognizedSyntheticFixtures = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $skippedBinaryFiles = 0
     $unstagedChangedPaths = Get-UnstagedChangedPaths $rootPath
