@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Exact-content exceptions for reviewed synthetic test data that intentionally resembles credentials. Any changed content is scanned normally.",
+  "files": [
+    {
+      "path": "qualification/q15/option-b/flutter/test/widget_test.dart",
+      "sha256": "05E276FBCE7E74F7BCBE8735CFC1E59AD1874CE935F71F6CF7D72590A7634B18",
+      "reason": "Q15 qualification UI tests use synthetic sign-in data; only this reviewed content is exempt."
+    },
+    {
+      "path": "qualification/q15/shared/contracts/api.openapi.yaml",
+      "sha256": "F4C86946ECDBC45FD3751EDC1D9F8C7874CB70FD5D1915EA447FBFBBEF73BD3A",
+      "reason": "Q15 qualification API examples contain synthetic authentication fields; only this reviewed content is exempt."
+    },
+    {
+      "path": "qualification/q15/shared/dotnet/Idea.Q15.ApiHarness.Tests/ApiHarnessTests.cs",
+      "sha256": "80992CDFD005A5ED8E50F58202424D92ECFDECF45C30B91EB55A4471CC4D592D",
+      "reason": "Q15 API harness tests use synthetic login credentials; only this reviewed content is exempt."
+    },
+    {
+      "path": "qualification/q15/shared/fixtures/locales.json",
+      "sha256": "ACD5DD6EE3849B35193C9BD249FD70A44F4EFF10D00A9C22DE1C3F05C594B263",
+      "reason": "Q15 locale fixture contains synthetic authentication UI copy; only this reviewed content is exempt."
+    },
+    {
+      "path": "qualification/q15/shared/fixtures/qualification-fixture.json",
+      "sha256": "DEA406AB770FA6525A34494EA01FEA5FF53C31DE4E6242593BF879C89E4BCCE5",
+      "reason": "Q15 qualification data contains synthetic users and credentials; only this reviewed content is exempt."
+    },
+    {
+      "path": "tools/agent-workspace/test/blackbox/test_status_evidence.ts",
+      "sha256": "8744BD9729A04158CC95A2C2A7F7C047564C59F56F9A3CB42CC9A93F1E6BC705",
+      "reason": "Offline status-evidence tests embed synthetic token-shaped input to exercise redaction; only this reviewed content is exempt."
+    },
+    {
+      "path": "tools/agent-workspace/test/unit/azure/evidence.test.ts",
+      "sha256": "8FD0A74EE679C21350B7A9302C42DDB1052BDAEE20669C45850927B20341A06B",
+      "reason": "Offline Azure evidence tests use synthetic token-shaped input; only this reviewed content is exempt."
+    },
+    {
+      "path": "tools/agent-workspace/test/unit/index.test.ts",
+      "sha256": "5194FF050411B53563D6242AECDC02C7F0780E0C94BFC345F7AA4D5FC5CBFA3F",
+      "reason": "Offline index tests use synthetic credential-shaped input; only this reviewed content is exempt."
+    },
+    {
+      "path": "tools/agent-workspace/test/unit/secret-scan.test.ts",
+      "sha256": "028E1B8950132EF5F232E1644753596238B49250E7BB42AF93AE682BE350641E",
+      "reason": "Secret-scan unit tests intentionally embed synthetic token-shaped values; only this reviewed content is exempt."
+    },
+    {
+      "path": "tests/verify-template.test.sh",
+      "sha256": "03445629DC6B47AB596C009E0B54A9064687B9883FF8B2A94CF43C0F764C7E04",
+      "reason": "Verifier tests intentionally embed synthetic credential samples; only this reviewed test file content is exempt."
+    }
+  ]
+}

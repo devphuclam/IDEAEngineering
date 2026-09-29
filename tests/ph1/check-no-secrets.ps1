@@ -8,10 +8,14 @@ Set-StrictMode -Version Latest
 
 $sensitiveName = '(?:[A-Za-z0-9_.-]+[_-])?(?:password|passwd|pwd|client[_-]?secret|secret[_-]?key|secret|apikey|api[_-]?key|access[_-]?token|refresh[_-]?token|auth[_-]?token|private[_-]?key|bearer)'
 $quotedCredentialAssignment = [regex]::new(
-    "(?i)(?:\b|['\""`])\`$?(?<name>$sensitiveName)(?:\b|['\""`])\s*(?:=|:)\s*(?<quote>['\""`])(?<candidate>.+?)\k<quote>"
+    "(?i)(?:\b|[\x27\x22\x60])\`$?(?<name>$sensitiveName)(?:\b|[\x27\x22\x60])\s*(?:=|:)\s*(?<quote>[\x27\x22\x60])(?<candidate>.+?)\k<quote>"
 )
 $configCredentialAssignment = [regex]::new(
     "(?i)^\s*(?:export\s+)?\`$?(?<name>$sensitiveName)\s*(?:=|:)\s*(?<candidate>[^#\r\n]+)"
+)
+$unquotedCredentialExtensions = @(
+    '.env', '.example', '.ini', '.properties', '.toml', '.yaml', '.yml', '.conf', '.cfg',
+    '.sh', '.bash', '.zsh', '.fish'
 )
 $privateKeyMarker = [regex]::new('-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----')
 $tokenPatterns = @(
@@ -20,14 +24,9 @@ $tokenPatterns = @(
     [pscustomobject]@{ Name = 'messaging-token'; Pattern = [regex]::new('\bxox[baprs]-[A-Za-z0-9-]{20,}\b') }
 )
 $placeholder = [regex]::new(
-    '^(?i:|null|none|false|true|undefined|changeme|change[_-].*|replace[_-].*|insert[_-].*|put[_-].*|placeholder|example|sample|dummy|fake|synthetic|fixture|your(?:[_-].*)?|<[^>]+>|\$\{[^}]+\}|\$[A-Za-z_][A-Za-z0-9_]*|%[A-Z_][A-Z0-9_]*%|xxx+|\*+|redacted|not.?set|todo)$'
+    '^(?i:|null|none|false|true|undefined|changeme|change[_-].*|replace[_-].*|insert[_-].*|put[_-].*|placeholder|example|sample|dummy|fake|synthetic|fixture|your(?:[_-].*)?|<[^>]+>|\$\{[^}]+\}|\$\([^)]*\)|\$[A-Za-z_][A-Za-z0-9_]*|\(\)|%[A-Z_][A-Z0-9_]*%|xxx+|\*+|redacted|not.?set|todo)$'
 )
 $binaryExtensions = @('.docx', '.ico', '.pdf', '.png', '.pptx', '.ttf', '.zip')
-# These pre-existing corpora deliberately contain fake credentials/tokens for qualification tests;
-# keep them out of the Core v0 source check and review them under their own test-data controls.
-$knownSyntheticFixtureRoots = @('qualification/', 'tools/agent-workspace/test/')
-$knownSyntheticFixtureFiles = @('tests/verify-template.test.sh')
-
 function Stop-WithError([string]$message) {
     [Console]::Error.WriteLine("ERROR: $message")
     exit 2
@@ -128,6 +127,49 @@ function Get-GitBlobBytes([string]$root, [string]$objectId) {
     }
 }
 
+function Read-KnownSyntheticFixtureHashes {
+    $manifestPath = Join-Path $PSScriptRoot 'known-synthetic-fixtures.json'
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+        throw 'Known synthetic fixture manifest is missing.'
+    }
+
+    $manifest = [System.IO.File]::ReadAllText($manifestPath, [System.Text.UTF8Encoding]::new($false, $true)) |
+        ConvertFrom-Json -AsHashtable
+    if ($manifest.schemaVersion -ne 1 -or $null -eq $manifest.files) {
+        throw 'Known synthetic fixture manifest has an unsupported schema.'
+    }
+
+    $hashes = [System.Collections.Generic.Dictionary[string, string]]::new([System.StringComparer]::Ordinal)
+    foreach ($entry in $manifest.files) {
+        if ($entry.path -notmatch '^(?:qualification/|tools/agent-workspace/test/|tests/verify-template\.test\.sh$)' -or
+            $entry.path.Contains('..') -or
+            $entry.sha256 -notmatch '^[A-Fa-f0-9]{64}$' -or
+            [string]::IsNullOrWhiteSpace($entry.reason) -or
+            $hashes.ContainsKey($entry.path)) {
+            throw 'Known synthetic fixture manifest contains an invalid entry.'
+        }
+
+        $hashes.Add($entry.path, $entry.sha256.ToUpperInvariant())
+    }
+
+    return ,$hashes
+}
+
+function Get-CanonicalTextSha256([byte[]]$bytes) {
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    $text = $strictUtf8.GetString($bytes).Replace("`r`n", "`n").Replace("`r", "`n")
+    $canonicalBytes = [System.Text.UTF8Encoding]::new($false).GetBytes($text)
+    return [System.Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData($canonicalBytes))
+}
+
+function Test-KnownSyntheticFixture([string]$path, [byte[]]$bytes, [System.Collections.Generic.Dictionary[string, string]]$hashes) {
+    if (-not $hashes.ContainsKey($path)) {
+        return $false
+    }
+
+    return (Get-CanonicalTextSha256 $bytes) -ceq $hashes[$path]
+}
+
 function Test-Placeholder([string]$candidate) {
     $value = $candidate.Trim().Trim('"', "'", '`')
     return $placeholder.IsMatch($value)
@@ -197,7 +239,7 @@ function Get-FileFindings([System.IO.TextReader]$reader, [string]$path) {
         $leafName = [System.IO.Path]::GetFileName($path)
         $isEnvironmentFile = $leafName -match '(?i)^\.env(?:$|[.-])'
         $matches = @($quotedCredentialAssignment.Matches($line))
-        if ($extension -in @('.env', '.example', '.ini', '.properties', '.toml', '.yaml', '.yml', '.conf', '.cfg') -or $isEnvironmentFile) {
+        if ($extension -in $unquotedCredentialExtensions -or $isEnvironmentFile) {
             $matches += @($configCredentialAssignment.Matches($line))
         }
 
@@ -229,17 +271,12 @@ try {
     $rootPrefix = $rootPath + [System.IO.Path]::DirectorySeparatorChar
     $findings = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $skippedSpecialFiles = [System.Collections.Generic.List[string]]::new()
+    $knownSyntheticFixtureHashes = Read-KnownSyntheticFixtureHashes
+    $recognizedSyntheticFixtures = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $skippedBinaryFiles = 0
-    $excludedSyntheticFixtures = 0
     $unstagedChangedPaths = Get-UnstagedChangedPaths $rootPath
 
     foreach ($entry in @(Get-TrackedFiles $rootPath)) {
-        if ($knownSyntheticFixtureFiles -contains $entry.Path -or
-            @($knownSyntheticFixtureRoots | Where-Object { $entry.Path.StartsWith($_, [System.StringComparison]::Ordinal) }).Count -gt 0) {
-            $excludedSyntheticFixtures++
-            continue
-        }
-
         if ($entry.Stage -ne 0) {
             $skippedSpecialFiles.Add("$($entry.Path) (unmerged index entry)")
             continue
@@ -275,7 +312,10 @@ try {
             }
             else {
                 $indexedBytes = Get-GitBlobBytes $rootPath $entry.ObjectId
-                if (Test-KnownBinaryBytes $indexedBytes $entry.Path) {
+                if (Test-KnownSyntheticFixture $entry.Path $indexedBytes $knownSyntheticFixtureHashes) {
+                    $null = $recognizedSyntheticFixtures.Add($entry.Path)
+                }
+                elseif (Test-KnownBinaryBytes $indexedBytes $entry.Path) {
                     $skippedBinaryFiles++
                 }
                 else {
@@ -306,6 +346,14 @@ try {
 
         if (-not $workingFileExists) {
             continue
+        }
+
+        if ($knownSyntheticFixtureHashes.ContainsKey($entry.Path)) {
+            $workingBytes = [System.IO.File]::ReadAllBytes($filePath)
+            if (Test-KnownSyntheticFixture $entry.Path $workingBytes $knownSyntheticFixtureHashes) {
+                $null = $recognizedSyntheticFixtures.Add($entry.Path)
+                continue
+            }
         }
 
         if (Test-KnownBinaryFile $filePath) {
@@ -349,7 +397,7 @@ try {
         exit 1
     }
 
-    [Console]::WriteLine("PASS: no secret-like values found in scanned tracked UTF-8 text files; excluded known synthetic fixture files: $excludedSyntheticFixtures; skipped known binary files: $skippedBinaryFiles.")
+    [Console]::WriteLine("PASS: no secret-like values found in scanned tracked UTF-8 text files; exact synthetic fixture contents recognized: $($recognizedSyntheticFixtures.Count); skipped known binary files: $skippedBinaryFiles.")
     exit 0
 }
 catch [System.Text.DecoderFallbackException] {

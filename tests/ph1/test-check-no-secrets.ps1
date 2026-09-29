@@ -134,7 +134,90 @@ try {
     Assert-True ($cleanResult.ExitCode -eq 0) 'Expected exit code 0 after removing the synthetic tracked finding.'
     Assert-True ($cleanResult.Output -notmatch [regex]::Escape($ignoredValue)) 'Ignored local configuration affected a clean scan.'
 
+    # Shell permits an unquoted credential assignment as a literal value.
+    $shellValue = 'ShellCredential' + [guid]::NewGuid().ToString('N')
+    $shellPath = Join-Path $fixtureRoot 'deploy.sh'
+    [System.IO.File]::WriteAllText($shellPath, "export SECRET_KEY=$shellValue`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'deploy.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic shell credential fixture')
+    $shellResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($shellResult.ExitCode -eq 1) 'Expected an unquoted shell credential assignment to be detected.'
+    Assert-True ($shellResult.Output -match 'deploy\.sh') 'Expected the unquoted shell credential finding to identify the file.'
+    Assert-True ($shellResult.Output -notmatch [regex]::Escape($shellValue)) 'Scanner output exposed the unquoted shell credential value.'
+    Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'deploy.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove synthetic shell credential')
+
+    $nonSecretScriptPath = Join-Path $fixtureRoot 'shell-initialization.sh'
+    [System.IO.File]::WriteAllText($nonSecretScriptPath, "WRITTEN_SECRET=()`nexport SECRET_KEY=`$(read-secret)`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'shell-initialization.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'shell empty and dynamic values')
+    $nonSecretScriptResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($nonSecretScriptResult.ExitCode -eq 0) 'Expected empty shell arrays and command substitutions not to be treated as committed secret values.'
+
+    $sourceLiteralValue = 'SourceLiteralCredential' + [guid]::NewGuid().ToString('N')
+    $sourceFieldName = 'SECRET' + '_KEY'
+    $sourceCases = @(
+        [pscustomobject]@{ Path = 'deploy.ps1'; Content = ('$env:' + $sourceFieldName + " = '$sourceLiteralValue'`n") }
+        [pscustomobject]@{ Path = 'app.js'; Content = ('const ' + $sourceFieldName + ' = "' + $sourceLiteralValue + '";' + "`n") }
+        [pscustomobject]@{ Path = 'app.ts'; Content = ('const ' + $sourceFieldName + ' = `' + $sourceLiteralValue + '`;' + "`n") }
+    )
+    foreach ($sourceCase in $sourceCases) {
+        [System.IO.File]::WriteAllText((Join-Path $fixtureRoot $sourceCase.Path), $sourceCase.Content, [System.Text.Encoding]::UTF8)
+    }
+    Invoke-Git $fixtureRoot @('add', '--', 'deploy.ps1', 'app.js', 'app.ts')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'source-language credential literals')
+    $sourceLiteralResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($sourceLiteralResult.ExitCode -eq 1) 'Expected quoted credentials in PowerShell, JavaScript, and TypeScript to be detected.'
+    foreach ($sourceCase in $sourceCases) {
+        Assert-True ($sourceLiteralResult.Output -match [regex]::Escape($sourceCase.Path)) "Expected the credential in $($sourceCase.Path) to be detected."
+    }
+    Assert-True ($sourceLiteralResult.Output -notmatch [regex]::Escape($sourceLiteralValue)) 'Scanner output exposed a source-language credential value.'
+    Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'deploy.ps1', 'app.js', 'app.ts')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove source-language credential fixtures')
+
+    $newFixturePaths = @(
+        'qualification/new-fixture/deploy.sh',
+        'tools/agent-workspace/test/new-fixture/deploy.sh'
+    )
+    foreach ($relativePath in $newFixturePaths) {
+        $path = Join-Path $fixtureRoot ($relativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+        $directory = Split-Path -Parent $path
+        New-Item -ItemType Directory -Path $directory -Force | Out-Null
+        $fixtureSecret = 'ExcludedRootCredential' + [guid]::NewGuid().ToString('N')
+        [System.IO.File]::WriteAllText($path, "SECRET_KEY=$fixtureSecret`n", [System.Text.Encoding]::UTF8)
+        Invoke-Git $fixtureRoot @('add', '--', $relativePath)
+        Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic fixture-root credential')
+        $fixtureResult = Invoke-Scanner $fixtureRoot
+        Assert-True ($fixtureResult.ExitCode -eq 1) "Expected a new credential under $relativePath to be detected."
+        Assert-True ($fixtureResult.Output -match [regex]::Escape($relativePath)) "Expected the finding to identify $relativePath."
+        Assert-True ($fixtureResult.Output -notmatch [regex]::Escape($fixtureSecret)) 'Scanner output exposed a fixture-root credential value.'
+        Invoke-Git $fixtureRoot @('rm', '--quiet', '--', $relativePath)
+        Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove synthetic fixture-root credential')
+    }
+
+    Invoke-Git $fixtureRoot @('rm', '--quiet', '--', 'shell-initialization.sh')
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'remove shell initialization fixture')
+
+    $allowlistedRelativePath = 'qualification/q15/shared/fixtures/qualification-fixture.json'
+    $allowlistedSourcePath = Join-Path $PSScriptRoot ('..\..\' + $allowlistedRelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    $allowlistedFixturePath = Join-Path $fixtureRoot ($allowlistedRelativePath.Replace('/', [System.IO.Path]::DirectorySeparatorChar))
+    New-Item -ItemType Directory -Path (Split-Path -Parent $allowlistedFixturePath) -Force | Out-Null
+    Copy-Item -LiteralPath $allowlistedSourcePath -Destination $allowlistedFixturePath
+    Invoke-Git $fixtureRoot @('add', '--', $allowlistedRelativePath)
+    Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'known synthetic qualification fixture')
+    $knownFixtureResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($knownFixtureResult.ExitCode -eq 0) 'Expected the exact approved synthetic fixture content to be exempted.'
+
+    $changedFixtureSecret = 'ChangedFixtureCredential' + [guid]::NewGuid().ToString('N')
+    [System.IO.File]::AppendAllText($allowlistedFixturePath, "`nSECRET_KEY = `"$changedFixtureSecret`"`n", [System.Text.Encoding]::UTF8)
+    $changedFixtureResult = Invoke-Scanner $fixtureRoot
+    Assert-True ($changedFixtureResult.ExitCode -eq 1) 'Expected modified content at an approved fixture path to be scanned.'
+    Assert-True ($changedFixtureResult.Output -match [regex]::Escape($allowlistedRelativePath)) 'Expected a changed approved fixture to be identified by path.'
+    Assert-True ($changedFixtureResult.Output -notmatch [regex]::Escape($changedFixtureSecret)) 'Scanner output exposed a credential appended to a known fixture.'
+
     Write-Output 'PASS: tracked credentials in JSON, YAML, and .env.local are detected across Git-index and working-tree states without printing values.'
+    Write-Output 'PASS: unquoted shell assignments, source-language literals, and new fixture-root files are detected without printing values.'
+    Write-Output 'PASS: exact synthetic fixture content is exempted, but changed content at that path is scanned.'
     Write-Output 'PASS: placeholders and Git-ignored local configuration do not fail the scan.'
 }
 finally {
