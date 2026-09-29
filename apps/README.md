@@ -43,10 +43,11 @@ Git-tracked text files. The scan checks the working copy and also reads the Git-
 a tracked file is changed or missing, so a local edit or deletion cannot hide staged content. It
 recognizes tracked `.env.local` files. The scan is heuristic, skips known binary files, and does not
 inspect untracked or ignored files; a clean result is not a guarantee that no secret exists.
-Synthetic fixture exceptions are limited to exact paths and canonical-text SHA-256 values in
-[`tests/ph1/known-synthetic-fixtures.json`](../tests/ph1/known-synthetic-fixtures.json); new files
-and changed contents are scanned. Quoted credential literals are checked across tracked text files,
-and unquoted assignment checks cover configuration files and common shell scripts. See the
+Synthetic fixture exceptions are limited to exact paths and canonical-text SHA-256 values in the
+committed `HEAD` version of [`tests/ph1/known-synthetic-fixtures.json`](../tests/ph1/known-synthetic-fixtures.json);
+working-tree or staged edits to that manifest cannot exempt pending content. New files and changed
+contents are scanned. Quoted credential literals are checked across tracked text files, and
+unquoted assignment checks cover configuration files and common shell scripts. See the
 [F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
 for the exact source, commands, results and limitations.
 
