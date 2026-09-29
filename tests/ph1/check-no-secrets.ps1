@@ -61,20 +61,104 @@ function Get-TrackedFiles([string]$root) {
 
         $metadata = $record.Substring(0, $tab)
         $path = $record.Substring($tab + 1)
-        if ($metadata -notmatch '^(?<mode>[0-7]{6}) [0-9a-f]{40,64} [0-3]$') {
+        if ($metadata -notmatch '^(?<mode>[0-7]{6}) (?<objectId>[0-9a-f]{40,64}) (?<stage>[0-3])$') {
             throw 'Git returned an unreadable tracked-file record.'
         }
 
         [pscustomobject]@{
             Mode = $Matches.mode
+            ObjectId = $Matches.objectId
+            Stage = [int]$Matches.stage
             Path = $path
         }
+    }
+}
+
+function Get-UnstagedChangedPaths([string]$root) {
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = 'git'
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+    $startInfo.StandardErrorEncoding = [System.Text.Encoding]::UTF8
+    foreach ($argument in @('-C', $root, 'diff', '--name-only', '-z', '--')) {
+        $startInfo.ArgumentList.Add($argument)
+    }
+
+    $process = [System.Diagnostics.Process]::Start($startInfo)
+    $output = $process.StandardOutput.ReadToEnd()
+    $null = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+    if ($process.ExitCode -ne 0) {
+        throw 'Git could not enumerate unstaged tracked-file changes.'
+    }
+
+    $paths = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($path in $output.Split([char]0, [System.StringSplitOptions]::RemoveEmptyEntries)) {
+        $null = $paths.Add($path)
+    }
+    return ,$paths
+}
+
+function Get-GitBlobBytes([string]$root, [string]$objectId) {
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = 'git'
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    foreach ($argument in @('-C', $root, 'cat-file', 'blob', $objectId)) {
+        $startInfo.ArgumentList.Add($argument)
+    }
+
+    $process = [System.Diagnostics.Process]::Start($startInfo)
+    $content = [System.IO.MemoryStream]::new()
+    try {
+        $process.StandardOutput.BaseStream.CopyTo($content)
+        $null = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        if ($process.ExitCode -ne 0) {
+            throw 'Git could not read an indexed tracked-file object.'
+        }
+        return ,$content.ToArray()
+    }
+    finally {
+        $content.Dispose()
+        $process.Dispose()
     }
 }
 
 function Test-Placeholder([string]$candidate) {
     $value = $candidate.Trim().Trim('"', "'", '`')
     return $placeholder.IsMatch($value)
+}
+
+function Test-KnownBinaryBytes([byte[]]$bytes, [string]$path) {
+    if ([System.IO.Path]::GetExtension($path).ToLowerInvariant() -in $binaryExtensions) {
+        return $true
+    }
+
+    if ($bytes.Length -eq 0) {
+        return $false
+    }
+
+    $length = [Math]::Min(8192, $bytes.Length)
+    $prefix = $bytes[0..($length - 1)]
+    $hasUnicodeBom = ($length -ge 2 -and $prefix[0] -eq 0xFF -and $prefix[1] -eq 0xFE) -or
+        ($length -ge 2 -and $prefix[0] -eq 0xFE -and $prefix[1] -eq 0xFF)
+    if (-not $hasUnicodeBom -and $prefix -contains 0) {
+        return $true
+    }
+
+    $hex = [System.Convert]::ToHexString($prefix[0..([Math]::Min(7, $length - 1))])
+    return $hex.StartsWith('D0CF11E0A1B11AE1') -or
+        $hex.StartsWith('504B0304') -or
+        $hex.StartsWith('25504446') -or
+        $hex.StartsWith('89504E47') -or
+        $hex.StartsWith('FFD8FF') -or
+        $hex.StartsWith('47494638') -or
+        $hex.StartsWith('7F454C46') -or
+        $hex.StartsWith('4D5A')
 }
 
 function Test-KnownBinaryFile([string]$path) {
@@ -86,31 +170,54 @@ function Test-KnownBinaryFile([string]$path) {
     try {
         $prefix = [byte[]]::new(8192)
         $length = $stream.Read($prefix, 0, $prefix.Length)
+        if ($length -eq 0) {
+            return $false
+        }
+        return Test-KnownBinaryBytes $prefix[0..($length - 1)] $path
     }
     finally {
         $stream.Dispose()
     }
+}
 
-    if ($length -eq 0) {
-        return $false
+function Get-FileFindings([System.IO.TextReader]$reader, [string]$path) {
+    $fileFindings = [System.Collections.Generic.List[string]]::new()
+    $isBinary = $false
+    while ($null -ne ($line = $reader.ReadLine())) {
+        if ($line.IndexOf([char]0) -ge 0) {
+            $isBinary = $true
+            break
+        }
+
+        if ($privateKeyMarker.IsMatch($line)) {
+            $fileFindings.Add('private-key')
+        }
+
+        $extension = [System.IO.Path]::GetExtension($path).ToLowerInvariant()
+        $leafName = [System.IO.Path]::GetFileName($path)
+        $isEnvironmentFile = $leafName -match '(?i)^\.env(?:$|[.-])'
+        $matches = @($quotedCredentialAssignment.Matches($line))
+        if ($extension -in @('.env', '.example', '.ini', '.properties', '.toml', '.yaml', '.yml', '.conf', '.cfg') -or $isEnvironmentFile) {
+            $matches += @($configCredentialAssignment.Matches($line))
+        }
+
+        foreach ($match in $matches) {
+            if (-not (Test-Placeholder $match.Groups['candidate'].Value)) {
+                $fileFindings.Add('credential-assignment')
+            }
+        }
+
+        foreach ($tokenPattern in $tokenPatterns) {
+            if ($tokenPattern.Pattern.IsMatch($line)) {
+                $fileFindings.Add($tokenPattern.Name)
+            }
+        }
     }
 
-    $bytes = $prefix[0..($length - 1)]
-    $hasUnicodeBom = ($length -ge 2 -and $bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) -or
-        ($length -ge 2 -and $bytes[0] -eq 0xFE -and $bytes[1] -eq 0xFF)
-    if (-not $hasUnicodeBom -and $bytes -contains 0) {
-        return $true
+    return [pscustomobject]@{
+        IsBinary = $isBinary
+        Categories = @($fileFindings | Sort-Object -Unique)
     }
-
-    $hex = [System.Convert]::ToHexString($bytes[0..([Math]::Min(7, $length - 1))])
-    return $hex.StartsWith('D0CF11E0A1B11AE1') -or
-        $hex.StartsWith('504B0304') -or
-        $hex.StartsWith('25504446') -or
-        $hex.StartsWith('89504E47') -or
-        $hex.StartsWith('FFD8FF') -or
-        $hex.StartsWith('47494638') -or
-        $hex.StartsWith('7F454C46') -or
-        $hex.StartsWith('4D5A')
 }
 
 try {
@@ -120,10 +227,11 @@ try {
     }
 
     $rootPrefix = $rootPath + [System.IO.Path]::DirectorySeparatorChar
-    $findings = [System.Collections.Generic.List[string]]::new()
+    $findings = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
     $skippedSpecialFiles = [System.Collections.Generic.List[string]]::new()
     $skippedBinaryFiles = 0
     $excludedSyntheticFixtures = 0
+    $unstagedChangedPaths = Get-UnstagedChangedPaths $rootPath
 
     foreach ($entry in @(Get-TrackedFiles $rootPath)) {
         if ($knownSyntheticFixtureFiles -contains $entry.Path -or
@@ -132,8 +240,13 @@ try {
             continue
         }
 
+        if ($entry.Stage -ne 0) {
+            $skippedSpecialFiles.Add("$($entry.Path) (unmerged index entry)")
+            continue
+        }
+
         if ($entry.Mode -notin @('100644', '100755')) {
-            $skippedSpecialFiles.Add($entry.Path)
+            $skippedSpecialFiles.Add("$($entry.Path) (non-regular index entry)")
             continue
         }
 
@@ -143,7 +256,55 @@ try {
             throw 'Git returned a path outside the repository root.'
         }
 
-        if (-not (Test-Path -LiteralPath $filePath -PathType Leaf)) {
+        if (Test-Path -LiteralPath $filePath) {
+            $attributes = [System.IO.File]::GetAttributes($filePath)
+            if ($attributes.HasFlag([System.IO.FileAttributes]::ReparsePoint) -or
+                $attributes.HasFlag([System.IO.FileAttributes]::Directory)) {
+                $skippedSpecialFiles.Add("$($entry.Path) (working-tree reparse point or directory)")
+                continue
+            }
+        }
+
+        $workingFileExists = Test-Path -LiteralPath $filePath -PathType Leaf
+        # If the working copy differs from or is missing an indexed path, scan both versions.
+        # This prevents a safe local edit or deletion from hiding content staged for commit.
+        $scanIndexedVersion = $unstagedChangedPaths.Contains($entry.Path) -or -not $workingFileExists
+        if ($scanIndexedVersion) {
+            if ([System.IO.Path]::GetExtension($entry.Path).ToLowerInvariant() -in $binaryExtensions) {
+                $skippedBinaryFiles++
+            }
+            else {
+                $indexedBytes = Get-GitBlobBytes $rootPath $entry.ObjectId
+                if (Test-KnownBinaryBytes $indexedBytes $entry.Path) {
+                    $skippedBinaryFiles++
+                }
+                else {
+                    $indexedStream = [System.IO.MemoryStream]::new($indexedBytes)
+                    $indexedReader = [System.IO.StreamReader]::new(
+                        $indexedStream,
+                        [System.Text.UTF8Encoding]::new($false, $true),
+                        $true
+                    )
+                    try {
+                        $indexedResult = Get-FileFindings $indexedReader $filePath
+                    }
+                    finally {
+                        $indexedReader.Dispose()
+                    }
+
+                    if ($indexedResult.IsBinary) {
+                        $skippedBinaryFiles++
+                    }
+                    else {
+                        foreach ($category in $indexedResult.Categories) {
+                            $null = $findings.Add("$($entry.Path) ($category)")
+                        }
+                    }
+                }
+            }
+        }
+
+        if (-not $workingFileExists) {
             continue
         }
 
@@ -152,55 +313,21 @@ try {
             continue
         }
 
-        if ([System.IO.File]::GetAttributes($filePath).HasFlag([System.IO.FileAttributes]::ReparsePoint)) {
-            $skippedSpecialFiles.Add($entry.Path)
-            continue
-        }
-
-        $fileFindings = [System.Collections.Generic.List[string]]::new()
-        $isBinary = $false
         $reader = [System.IO.StreamReader]::new(
             $filePath,
             [System.Text.UTF8Encoding]::new($false, $true),
             $true
         )
         try {
-            while ($null -ne ($line = $reader.ReadLine())) {
-                if ($line.IndexOf([char]0) -ge 0) {
-                    $isBinary = $true
-                    break
-                }
-
-                if ($privateKeyMarker.IsMatch($line)) {
-                    $fileFindings.Add('private-key')
-                }
-
-                $extension = [System.IO.Path]::GetExtension($filePath).ToLowerInvariant()
-                $matches = @($quotedCredentialAssignment.Matches($line))
-                if ($extension -in @('.env', '.example', '.ini', '.properties', '.toml', '.yaml', '.yml', '.conf', '.cfg')) {
-                    $matches += @($configCredentialAssignment.Matches($line))
-                }
-
-                foreach ($match in $matches) {
-                    if (-not (Test-Placeholder $match.Groups['candidate'].Value)) {
-                        $fileFindings.Add('credential-assignment')
-                    }
-                }
-
-                foreach ($tokenPattern in $tokenPatterns) {
-                    if ($tokenPattern.Pattern.IsMatch($line)) {
-                        $fileFindings.Add($tokenPattern.Name)
-                    }
-                }
-            }
+            $workingResult = Get-FileFindings $reader $filePath
         }
         finally {
             $reader.Dispose()
         }
 
-        if (-not $isBinary) {
-            foreach ($category in ($fileFindings | Sort-Object -Unique)) {
-                $findings.Add("$($entry.Path) ($category)")
+        if (-not $workingResult.IsBinary) {
+            foreach ($category in $workingResult.Categories) {
+                $null = $findings.Add("$($entry.Path) ($category)")
             }
         }
         else {
@@ -210,13 +337,13 @@ try {
 
     if ($skippedSpecialFiles.Count -gt 0) {
         foreach ($path in $skippedSpecialFiles) {
-            [Console]::Error.WriteLine("UNSCANNED: $path (non-regular tracked file)")
+            [Console]::Error.WriteLine("UNSCANNED: $path")
         }
-        Stop-WithError 'One or more non-regular tracked files could not be scanned.'
+        Stop-WithError 'One or more tracked-file versions could not be scanned.'
     }
 
     if ($findings.Count -gt 0) {
-        foreach ($finding in $findings) {
+        foreach ($finding in ($findings | Sort-Object)) {
             [Console]::Error.WriteLine("FINDING: $finding")
         }
         exit 1
