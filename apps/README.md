@@ -48,7 +48,8 @@ committed `HEAD` version of [`tests/ph1/known-synthetic-fixtures.json`](../tests
 working-tree or staged edits to that manifest cannot exempt pending content. New files and changed
 contents are scanned. Quoted credential literals are checked across tracked text files, and
 unquoted assignment checks cover configuration files and common shell forms: direct, `export`,
-`local`, `readonly`, and `declare` (including option forms such as `declare -x`). See the
+`local`, `readonly`, and `declare`, including tested option forms `export -n`, `local -r`, and
+`declare -x`. See the
 [F01-B reproducibility record](../specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md)
 for the exact source, commands, results and limitations.
 
