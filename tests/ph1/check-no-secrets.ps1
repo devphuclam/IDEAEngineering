@@ -20,7 +20,7 @@ $tokenPatterns = @(
     [pscustomobject]@{ Name = 'messaging-token'; Pattern = [regex]::new('\bxox[baprs]-[A-Za-z0-9-]{20,}\b') }
 )
 $placeholder = [regex]::new(
-    '^(?i:|null|none|false|true|undefined|changeme|change[_-].*|replace[_-].*|insert[_-].*|put[_-].*|placeholder|example|sample|dummy|fake|synthetic|fixture|your(?:[_-].*)?|<[^>]+>|\$\{[^}]+\}|\$[A-Za-z_][A-Za-z0-9_]*|%[A-Z_][A-Z0-9_]*%|[A-Za-z_][A-Za-z0-9_.]*|xxx+|\*+|redacted|not.?set|todo)$'
+    '^(?i:|null|none|false|true|undefined|changeme|change[_-].*|replace[_-].*|insert[_-].*|put[_-].*|placeholder|example|sample|dummy|fake|synthetic|fixture|your(?:[_-].*)?|<[^>]+>|\$\{[^}]+\}|\$[A-Za-z_][A-Za-z0-9_]*|%[A-Z_][A-Z0-9_]*%|xxx+|\*+|redacted|not.?set|todo)$'
 )
 $binaryExtensions = @('.docx', '.ico', '.pdf', '.png', '.pptx', '.ttf', '.zip')
 # These pre-existing corpora deliberately contain fake credentials/tokens for qualification tests;

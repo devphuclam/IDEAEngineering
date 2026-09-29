@@ -62,22 +62,28 @@ try {
     [System.IO.File]::WriteAllText((Join-Path $fixtureRoot '.env'), "$ignoredName=$ignoredValue`n", [System.Text.Encoding]::UTF8)
     Invoke-Git $fixtureRoot @('check-ignore', '--quiet', '--', '.env')
 
-    $value = 'synthetic-' + [guid]::NewGuid().ToString('N')
+    # Alphanumeric-only values resemble ordinary generated credentials and must not be
+    # mistaken for placeholders merely because they contain no punctuation.
+    $value = 'SyntheticCredential' + [guid]::NewGuid().ToString('N')
     $fieldName = 'pass' + 'word'
     $fixturePath = Join-Path $fixtureRoot 'tracked-fixture.json'
     [System.IO.File]::WriteAllText($fixturePath, ('"' + $fieldName + '": "' + $value + '"' + "`n"), [System.Text.Encoding]::UTF8)
-    Invoke-Git $fixtureRoot @('add', '--', 'tracked-fixture.json')
+    $yamlFixturePath = Join-Path $fixtureRoot 'settings.yaml'
+    [System.IO.File]::WriteAllText($yamlFixturePath, "$fieldName`: $value`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'tracked-fixture.json', 'settings.yaml')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'synthetic credential fixture')
 
     $leakResult = Invoke-Scanner $fixtureRoot
     Assert-True ($leakResult.ExitCode -eq 1) 'Expected exit code 1 for the tracked synthetic credential fixture.'
     Assert-True ($leakResult.Output -match 'tracked-fixture\.json') 'Expected the finding to identify the affected file.'
+    Assert-True ($leakResult.Output -match 'settings\.yaml') 'Expected an unquoted YAML credential assignment to be detected.'
     Assert-True ($leakResult.Output -match 'credential-assignment') 'Expected the finding to identify the type of issue.'
     Assert-True ($leakResult.Output -notmatch [regex]::Escape($value)) 'Scanner output exposed the synthetic credential value.'
     Assert-True ($leakResult.Output -notmatch [regex]::Escape($ignoredValue)) 'Ignored local configuration was scanned or exposed.'
 
     [System.IO.File]::WriteAllText($fixturePath, "{}`n", [System.Text.Encoding]::UTF8)
-    Invoke-Git $fixtureRoot @('add', '--', 'tracked-fixture.json')
+    [System.IO.File]::WriteAllText($yamlFixturePath, "example: value`n", [System.Text.Encoding]::UTF8)
+    Invoke-Git $fixtureRoot @('add', '--', 'tracked-fixture.json', 'settings.yaml')
     Invoke-Git $fixtureRoot @('commit', '--quiet', '-m', 'clean tracked fixture')
     $fixtureStatus = & git -C $fixtureRoot status --porcelain
     if ($LASTEXITCODE -ne 0 -or @($fixtureStatus).Count -ne 0) {
