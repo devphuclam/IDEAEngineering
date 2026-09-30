@@ -424,6 +424,24 @@ class IdentityFlowTest {
         assertEquals(1, roles.evidence(operation).auditEvents());
     }
 
+    @Test
+    void runtimeCannotRewriteOrRemoveExistingRoleAssignments() throws Exception {
+        bootstrap.initialize(organization, "Synthetic IDEA organization", "Synthetic custodian",
+                "fixture.custodian", "Synthetic-only-password-1!");
+        var before = bootstrap.inspect();
+        // PostgreSQL's runtime-role boundary: ordinary SQL cannot rewrite retained authority.
+        try (var connection = app.getConnection(); var statement = connection.createStatement()) {
+            for (var sql : java.util.List.of(
+                    "UPDATE identity_role_assignment SET reason='Synthetic forbidden rewrite'",
+                    "DELETE FROM identity_role_assignment",
+                    "TRUNCATE identity_role_assignment CASCADE")) {
+                var refusal = assertThrows(java.sql.SQLException.class, () -> statement.executeUpdate(sql));
+                assertEquals("42501", refusal.getSQLState(), "The runtime role must lack this database privilege");
+            }
+        }
+        assertEquals(before, bootstrap.inspect(), "Existing assignments and evidence must remain intact");
+    }
+
     private void forceInsertFailure(String table, boolean silentlySuppress) throws Exception {
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("CREATE OR REPLACE FUNCTION " + schema + ".test_fail_insert() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "

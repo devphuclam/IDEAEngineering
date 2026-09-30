@@ -2,7 +2,7 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.1` / Principal Product Author
+**Version / owner**: `0.2` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
 **Classification / verification**: `INTERNAL` / PH1 application results `NOT-RUN`
@@ -21,6 +21,16 @@ PH3, and Review/Release in PH4; PH5 checks the integrated flow again. F05 in PH1
 direct file-transfer and custody boundary, not a completed document Check-in.
 
 The user’s PG4 decision authorizes implementation but is not evidence that any PH1 application test has passed. Each F01–F05 completion result requires its own executed test and retained evidence. Starting the F01-A effort timer remains a separate Tracker action.
+
+## Clarifications
+
+### Session 2026-09-30
+
+- Q: May an effective Super Administrator explicitly assign Account Administrator to itself? → A: Yes, using its already granted, organization-scoped permission to assign that exact role. The new assignment remains separate, version-pinned, reasoned and audited; Super alone has no account CRUD permission. Other delegates cannot broaden their authority or exceed their delegation limits.
+
+The Project Reviewer confirmed this bounded F03-A interpretation of `REQ-AUTH-010` during
+implementation review. It does not authorize arbitrary self-grants, alter other delegation limits,
+or claim a new Product Decision Authority approval for the frozen PG2/PG3 baseline.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -74,6 +84,13 @@ Use the F04 sample owner command to exercise disablement/revocation during an in
 4. **Given** a signed-out, disabled or revoked session, **When** it is reused, **Then** the protected request is refused.
 5. **Given** a protected command started with an eligible session, **When** account disablement or session revocation commits before the command's authoritative commit, **Then** commit-time eligibility revalidation coordinated with that security change prevents the command from committing a successful business-state change. A check only at request arrival is insufficient.
 6. **Given** an account is re-enabled after disablement, **When** a prior invalidated session is reused, **Then** it remains refused; access requires a fresh eligible sign-in rather than reactivating the old session.
+7. **Given** only a Super Administrator assignment, **When** account creation, disablement or re-enablement is attempted, **Then** it is refused. An explicit Account Administrator assignment must first be granted through the ordinary assignment-permission path; its principal may be the assigning Super Administrator under the clarification above.
+8. **Given** an eligible Account Administrator at the correct Organization Scope, **When** an account is created, disabled or re-enabled, **Then** the result is attributable and atomic with IAM outcome and Audit; creation grants no Project/Group membership or product role, and disable/re-enable preserves Actor/account/login identities and history. Ordinary users, wrong-role/wrong-scope and revoked assignments are refused.
+
+Scenarios 1, 2, 7 and 8 belong to the F03-A Server-service checkpoint on real PostgreSQL.
+Creating a pending account is not credential setup or successful sign-in. HTTP authentication,
+session-derived Actor context and old-session behavior remain F03-B; in-flight owner validation
+also requires F04 evidence.
 
 ---
 
@@ -129,6 +146,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - Two identical client requests or a lost acknowledgement must not create an untraceable duplicate outcome.
 - A physical Vault path changes while logical Artifact/Vault/location identities remain stable.
 - A new package, SDK or asset lacks an exact source/version/license intake; its use is blocked until that intake is resolved.
+- A Super Administrator attempts account CRUD without its separate Account Administrator assignment, or an ordinary/delegated actor attempts an unauthorized role grant; both are refused without a privilege change.
 
 ## Requirements *(mandatory)*
 
@@ -146,10 +164,12 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - **FR-010 (F05)**: The custody record MUST preserve stable Artifact, Vault and location identity independently of the Adapter-owned physical storage path, so later multi-Vault work does not require file identity to equal one machine path.
 - **FR-011 (F05)**: Wrong, expired, mismatched, interrupted or duplicate transfer attempts MUST follow the failure-outcome table in User Story 5; no attempt may be silently marked successful, and retry/resume MUST retain the existing operation identity unless an explicit new operation is authorized.
 - **FR-012 (PH1)**: Before first use, each newly introduced third-party package, SDK, source, asset or runtime MUST have its exact source, version, license and intended use recorded under the repository intake rule. PH1 acceptance MUST NOT claim commercial distribution rights from internal-use evidence alone.
+- **FR-013 (F03-A)**: Account CRUD MUST require an independently assigned Account Administrator role at the exact Organization Scope. Assignment MUST pin the Role Definition version, assigner and reason and commit with its Access Policy outcome and Audit. An effective Super Administrator may explicitly self-assign this exact role only through its existing bounded assignment permission; no account type, named Actor or implicit Super privilege may bypass either check. Account creation MUST grant no membership/product authority, disable/re-enable MUST preserve stable identity/history, and required state/outcome/Audit failure MUST roll back the mutation.
 
 ### Key Entities
 
 - **Actor, IDEA Account, Login Identity and Session**: Distinct identity, sign-in and eligibility concepts; an account/login change does not erase the stable Actor.
+- **Role Definition version and Role Assignment**: A protected permission set and a separate attributable principal/version/Organization-Scope grant. Super and Account Administrator are independent assignments, not account types.
 - **Operation and Audit Evidence**: One attempted command and the attributable record of its outcome, joined by a correlation identity.
 - **Transfer Grant and Receipt**: Bounded permission for one attempted transfer and Gateway evidence about the resulting candidate bytes; neither alone is a committed Artifact.
 - **Artifact, Vault and Location**: Logical file identity and custody location, distinct from the Adapter's physical path. PH1 uses one endpoint and keeps these identities separable for future locations.
@@ -189,3 +209,4 @@ they do not create a product feature.
 | `FR-006/007` | F04 | DOC-04 `REQ-AUD-001/002`; DOC-05 owner/Audit transaction boundary | Audit records but does not decide the business outcome. |
 | `FR-008/009/010/011` | F05 | DOC-04 `REQ-SEC-001/002`, `REQ-OPS-001/006`; DOC-05/06 Artifact transfer/custody interfaces | One Gateway/Vault endpoint now; `REQ-OPS-007/008` multi-location selection, replication and repair remain later implementation and verification work. |
 | `FR-012` | PH1-wide | [Constitution principle I](../../.specify/memory/constitution.md) and [external-source intake](../../docs/agents/external-source-intake.md), both repository process controls | Exact license/source review is required before import/use; internal development does not establish commercial distribution rights. |
+| `FR-013` | F03-A | DOC-04 `REQ-IAM-002/003/005`, `REQ-AUTH-004/009/010`; DOC-05 `IF-DIRECTORY-ADMIN` / `IF-RBAC-ADMIN`; [ADR-0012](../../docs/adr/0012-use-principal-role-scope-rbac.md); Project Reviewer clarification on 2026-09-30 | Separate scoped grants; bounded Super self-assignment is explicit, not an implicit CRUD bypass. F03-B session/activation evidence and the broader permission catalogue remain owed. |

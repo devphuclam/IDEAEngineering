@@ -95,7 +95,8 @@ CREATE TRIGGER iam_account_change_evidence_immutable BEFORE UPDATE OR DELETE
 GRANT SELECT, INSERT ON operating_organization, identity_bootstrap_state, iam_owner_outcome,
     access_policy_owner_outcome, identity_authorization_decision, identity_assignment_evidence,
     iam_account_change_evidence TO idea_ddm_app;
-GRANT SELECT, INSERT, UPDATE ON identity_role_assignment TO idea_ddm_app;
+GRANT SELECT, INSERT ON identity_role_assignment TO idea_ddm_app;
+REVOKE UPDATE, DELETE, TRUNCATE ON identity_role_assignment FROM idea_ddm_app;
 GRANT SELECT ON identity_role_version, identity_role_permission TO idea_ddm_app;
 REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON identity_role_version, identity_role_permission FROM idea_ddm_app;
 REVOKE UPDATE, DELETE, TRUNCATE ON operating_organization, identity_bootstrap_state, iam_owner_outcome,
