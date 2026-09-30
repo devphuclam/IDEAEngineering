@@ -3,7 +3,7 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.9 / Draft |
+| Version / status | 0.10 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web checkpoint and whole-F03-A technical reviews relayed by the Project Reviewer; internal Standards/Spec review below; Project Reviewer accepted F03-A on 2026-09-30. F03-B checkpoint technical review and whole-card acceptance are pending |
@@ -12,7 +12,7 @@
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; Execution Register revision 28 / F03-A-EVIDENCE-1; F03-B IN_PROGRESS in local register revision 29, initial HTTP checkpoint only |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.8 at `fcbc7b70ecd07a2b06e3cf92c177bd04f3f475bd`; records the two requested F03-B repairs and their successor execution in section 16. F03-A historical claims and the initial F03-B run remain historical. Superseded by NOT-APPLICABLE |
+| Change / supersession | Supersedes v0.9 at `5d44443a922480e7edcbf06599468a7b6d885dba`; corrects T044's partial-execution status and source trace, and retains repair archive/log hashes in section 16. F03-A historical claims and the initial F03-B run remain historical. Superseded by NOT-APPLICABLE |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
 | Evidence status | F03-A technical review PASS WITH NOTES and Project Reviewer acceptance PASS; initial F03-B checkpoint received REQUEST CHANGES, then the two scoped repairs passed in a 32-test successor run. F03-B remains IN_PROGRESS; whole-card acceptance is pending. Main integration and official progress publication remain separate |
 
@@ -26,7 +26,8 @@ Account Administrator checkpoint and remaining work; section 10 records its exte
 sections 11–12 record the subsequently authorized fresh public and interactive operator runs,
 section 13 records the received whole-card technical-readiness review, and section 14 records
 the subsequent Project Reviewer acceptance. Section 15 records the initial F03-B HTTP session
-checkpoint. Earlier pending dispositions are historical.
+checkpoint; section 16 records its requested repairs and successor execution. Earlier pending
+dispositions are historical.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -685,7 +686,8 @@ not an independent remote raw-log review. The checked-in sanitized excerpt expos
 
 ### Current disposition and remaining work
 
-**Initial session checkpoint: executed PASS. F03-B: IN_PROGRESS, not accepted or completed.**
+**Historical initial run: 30 tests passed; the subsequent review returned REQUEST CHANGES.
+See section 16 for repair evidence. F03-B remains IN_PROGRESS.**
 
 T038 and the initial T039 test slices are checked; shared F03 tasks and T040–T044 remain open
 for their unimplemented/unqualified portions. Before whole-card acceptance, finish:
@@ -705,6 +707,11 @@ Tracker start remains the explicit `2026-09-30T13:01:00.9631915+07:00` action, r
 estimate, official progress publication, push, PR creation or merge is performed by this record.
 No production, multi-Vault, backup/restore, T036 or commercial-clearance claim is made.
 `verify-template` remains **NOT-RUN**.
+
+Historical local checks for section 15: tracked-secret scan PASS (10 recognized synthetic fixtures,
+233 known binary files skipped), 68 focused relative Markdown targets PASS, and git diff --check
+PASS. At that publication, only F03-identity-results.md changed after executed source `441b2e9...`;
+these historical checks do not cover the repair source below.
 
 ## 16. F03-B review repair: servlet budget and rejected-login work
 
@@ -733,40 +740,72 @@ The reviewer also observed that the old `SessionService` condition could reject 
 disabled login before BCrypt, while a known active login with a wrong password performed BCrypt.
 `SessionService` now creates one generated, qualified BCrypt dummy verifier per service instance
 (never an account credential or logged value) and always evaluates the candidate against the real
-verifier or that dummy before refusing. The HTTP regression prepares a synthetic disabled account,
-then interleaves nine wall-clock samples for active/wrong, unknown and disabled logins. It checks
-the safe 401 response and rejects only a gross bypass gap; it is not a constant-time guarantee,
-load test or failed-login-throttling qualification.
+verifier or that dummy before refusing. For valid password candidates within the qualified BCrypt
+input bounds, unknown/disabled logins perform the same encoder work; existing malformed-input
+rejection remains. The HTTP regression prepares a synthetic disabled account through the reviewed
+F03-A services, warms all three paths, then interleaves nine wall-clock samples per path. It checks
+the empty 401 response and requires the unknown/disabled medians to be at least 65% of active/wrong.
+That tolerance detects the gross bypass gap; it is not a constant-time guarantee, load test or
+failed-login-throttling qualification.
 
 Red result on the pre-fix source: median active/wrong **142.846 ms**, unknown **3.557 ms**, disabled
 **3.636 ms**; both assertions failed. Green result: active/wrong **138.520 ms**, unknown **138.572
 ms**, disabled **138.644 ms** (9 samples per path).
 
+### Retained red/green sources and logs
+
+Iterative repair directory: `/home/phuclam/idea-f03b-review-red-Eves4Ne1`, owner `phuclam`,
+mode 700. Start with the archive of reviewed head `fcbc7b70ecd07a2b06e3cf92c177bd04f3f475bd`
+and apply the following retained overlays in order. R1 and R2 were tested separately before
+their corresponding production repair; no test-harness compile failure is counted as behavior RED.
+
+| Retained archive | SHA-256 |
+|---|---|
+| `f03b-review-base.tar` | `18AD89F5850CB9CB8FB4F8D850E573AD1FD98F64B266BDB7EE7AE5B1C5F9DA97` |
+| `f03b-review-r1-test.tar` | `DBF6D8C7B016ED9198FB367E38BF41E8B16F014A9AD4F5DE49B27924E4B8B22D` |
+| `f03b-review-r1-green.tar` | `C4C78F4FEDCC65C99F89AD467BAFE2ADA61B531A67445BA158DCFE6473F8A728` |
+| `f03b-review-r2-test.tar` | `107485CFF459BA56ABD2FDC1632A241B53E6AE61304E3FE6119CC5F080916A02` |
+| `f03b-review-r2-green.tar` | `E403D5CB7AA5AE103C0D0F4D5D7198E811BFDF15FEE8FC0E145F763A94D0E3AA` |
+
+Run R1 with runner filter `HttpSessionFlowTest#effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy`;
+run R2 with `HttpSessionFlowTest#unknownAndDisabledLoginsDoNotBypassPasswordWork`. Each run
+contains one test. Logs below are under `/home/phuclam/`, owned by `phuclam`, mode 600.
+
+| Retained log | Result | SHA-256 |
+|---|---|---|
+| `idea-f03b-test-BhsN1mKF.log` | R1 RED: 1 failure, observed 1800 | `0B204D09B52ECFEA284D781D932DEF2E628D112DBD65B430BA92D64834E7BAB9` |
+| `idea-f03b-test-WkWWremj.log` | R1 GREEN | `3EF5DFDC13667E6C93EA3827060FCC711B597991D22A53A71D84328E569032DD` |
+| `idea-f03b-test-RLyMdHx7.log` | R2 RED: both timing assertions failed | `3817BC710BA3659556F3B89C6E8E9CBC73251D46241B0B1E6C5C1CD446746FE4` |
+| `idea-f03b-test-B3sLMnWc.log` | R2 GREEN: medians 139.869 / 139.660 / 139.345 ms | `7090E3D5DC24C87E30D2217545106FC8CB01068CF69E94FC702C03B07E8A867F` |
+
 ### Successor execution
 
 - Exact committed source: `4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`.
 - Clean source archive SHA-256: `12F6E7CAD4D31257EB437A09F05CE273331DC145CEECF3FBF4B14D5E5F1D2257`.
+- Retained clean extraction: `/home/phuclam/idea-f03b-review-committed-7ODRzC8c`, mode 700;
+  `f03b-review-source.tar` mode 600, owner `phuclam`.
 - Host: `ideaddmserver` / `192.168.137.33`; Temurin `25.0.4.1+1`; PostgreSQL `18.6`.
 - Database: `idea_ddm_f03a_20260930_c91e7a42`; runtime `idea_ddm_app`; migration
   `idea_ddm_migrator`; temporary schemas are UUID-scoped and cleanup is bounded to each test.
 - Command: `bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest`.
 - Result: **32 tests, 0 failures, 0 errors, 0 skipped** — HttpSessionFlowTest 10, IdentityFlowTest
   20, ServerSmokeTest 2; Maven elapsed 28.173 seconds; `F03B_SCOPED_TESTS=PASS`.
+- Maven completed at `2026-09-30T14:19:00+07:00`. Container session budget 28,800 seconds;
+  timing medians active/wrong 138.520, unknown 138.572, disabled 138.644 ms.
 - Retained host log: `/home/phuclam/idea-f03b-test-cJf8mNEG.log`, mode `600`, SHA-256
   `F8F77D06CA595EDA198A0B3736ABEE14F4EDA756620BE9343E86C255DD4C57C7`.
 - Post-run read-only check: PostgreSQL `18.6`, `0` remaining `f03a_`/`f03b_` UUID test schemas,
   and public Flyway versions `1,2,3`. Public V4 remains NOT-RUN in this checkpoint.
 
-The source-to-head trace is now direct: the application/test/config repair commit is the executed
-source; this evidence update is a later documentation-only commit. The raw host log remains an
+From executed source `4ec5471...` to the publication, only this evidence file and tasks.md change;
+no application, test, dependency or migration changes occur after the successor run. T044 remains
+open for its full F03-B and migration/data coverage. The raw host log remains an
 INFO limitation because it is not independently readable through GitHub. `verify-template` remains
 **NOT-RUN** by explicit instruction. Credential setup/reset, temporary login blocking, HTTP account
 administration, complete disable/reset/re-enable/restart invalidation, all-request/F04 eligibility,
 Web/Desktop qualification, fresh public V4 evidence and whole-card Project Reviewer acceptance
 remain open.
 
-Local source/evidence checks: tracked-secret scan **PASS** (10 recognized exact synthetic
-fixtures; 233 known binary files skipped); **68 focused relative Markdown targets PASS**;
-`git diff --check` **PASS**. From executed commit `441b2e9...` to this evidence update,
-only `F03-identity-results.md` changes; no application, dependency, migration or test changes
-are silently covered by an older run.
+Repair publication checks: tracked-secret scan **PASS** (10 recognized exact synthetic fixtures;
+233 known binary files skipped); repository hygiene **PASS**; 17 relative Markdown targets in
+this evidence and tasks.md **PASS**; git diff --check **PASS**.
