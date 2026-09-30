@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.8 / Draft |
+| Version / status | 0.9 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web checkpoint and whole-F03-A technical reviews relayed by the Project Reviewer; internal Standards/Spec review below; Project Reviewer accepted F03-A on 2026-09-30. F03-B checkpoint technical review and whole-card acceptance are pending |
 | Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
-| Applicable baseline | PH1 F03-A historical sources below; initial F03-B HTTP checkpoint source `441b2e9a9b15b7046f67005a18ad15598844fa32`, based on `79373e95502474e64dd2a72604c2d9629daa9e36` |
+| Applicable baseline | PH1 F03-A historical sources below; F03-B repair checkpoint source `4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`, based on `d4268d8d16e6287b7cde937eab4688fc59754fa7` |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; Execution Register revision 28 / F03-A-EVIDENCE-1; F03-B IN_PROGRESS in local register revision 29, initial HTTP checkpoint only |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.5 at `79373e95502474e64dd2a72604c2d9629daa9e36`; retains the unpublished v0.6/v0.7 F03-A review/acceptance records and adds initial F03-B execution in section 15. F03-A historical claims are unchanged. Superseded by NOT-APPLICABLE |
+| Change / supersession | Supersedes v0.8 at `fcbc7b70ecd07a2b06e3cf92c177bd04f3f475bd`; records the two requested F03-B repairs and their successor execution in section 16. F03-A historical claims and the initial F03-B run remain historical. Superseded by NOT-APPLICABLE |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A technical review PASS WITH NOTES and Project Reviewer acceptance PASS; initial F03-B checkpoint has 30 executed tests PASS, not whole-card acceptance. F03-B remains IN_PROGRESS. Main integration and official progress publication remain separate |
+| Evidence status | F03-A technical review PASS WITH NOTES and Project Reviewer acceptance PASS; initial F03-B checkpoint received REQUEST CHANGES, then the two scoped repairs passed in a 32-test successor run. F03-B remains IN_PROGRESS; whole-card acceptance is pending. Main integration and official progress publication remain separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -705,6 +705,65 @@ Tracker start remains the explicit `2026-09-30T13:01:00.9631915+07:00` action, r
 estimate, official progress publication, push, PR creation or merge is performed by this record.
 No production, multi-Vault, backup/restore, T036 or commercial-clearance claim is made.
 `verify-template` remains **NOT-RUN**.
+
+## 16. F03-B review repair: servlet budget and rejected-login work
+
+The Project Reviewer returned **REQUEST CHANGES** for the initial F03-B checkpoint at head
+`fcbc7b70ecd07a2b06e3cf92c177bd04f3f475bd` (base `d4268d8d16e6287b7cde937eab4688fc59754fa7`).
+The two findings were limited to the implemented HTTP/session checkpoint and were repaired in
+the following two vertical slices. This section supersedes the initial checkpoint's technical
+disposition; it does not turn the remaining F03-B tasks into PASS.
+
+### Repair R1 — effective servlet session budget
+
+The reviewer observed that Spring Boot's default Servlet `HttpSession` inactivity interval was
+30 minutes, which could end the container session before IDEA's PostgreSQL eligibility policy of
+2 hours idle / 8 hours absolute. `apps/server/src/main/resources/application.properties` now
+sets `server.servlet.session.timeout=8h`. `HttpSessionFlowTest` creates a real loopback HTTP
+session and captures `HttpSession.getMaxInactiveInterval()` through a test-only listener; it
+requires **28,800 seconds**. The test is about the actual container configuration, not the
+injected eligibility clock and not an eight-hour soak.
+
+Red result on the pre-fix source: **1,800 seconds** (the default), assertion failure. Green result
+after the property: `F03B_EFFECTIVE_SERVLET_IDLE_SECONDS=28800`.
+
+### Repair R2 — unknown and disabled login password work
+
+The reviewer also observed that the old `SessionService` condition could reject an unknown or
+disabled login before BCrypt, while a known active login with a wrong password performed BCrypt.
+`SessionService` now creates one generated, qualified BCrypt dummy verifier per service instance
+(never an account credential or logged value) and always evaluates the candidate against the real
+verifier or that dummy before refusing. The HTTP regression prepares a synthetic disabled account,
+then interleaves nine wall-clock samples for active/wrong, unknown and disabled logins. It checks
+the safe 401 response and rejects only a gross bypass gap; it is not a constant-time guarantee,
+load test or failed-login-throttling qualification.
+
+Red result on the pre-fix source: median active/wrong **142.846 ms**, unknown **3.557 ms**, disabled
+**3.636 ms**; both assertions failed. Green result: active/wrong **138.520 ms**, unknown **138.572
+ms**, disabled **138.644 ms** (9 samples per path).
+
+### Successor execution
+
+- Exact committed source: `4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`.
+- Clean source archive SHA-256: `12F6E7CAD4D31257EB437A09F05CE273331DC145CEECF3FBF4B14D5E5F1D2257`.
+- Host: `ideaddmserver` / `192.168.137.33`; Temurin `25.0.4.1+1`; PostgreSQL `18.6`.
+- Database: `idea_ddm_f03a_20260930_c91e7a42`; runtime `idea_ddm_app`; migration
+  `idea_ddm_migrator`; temporary schemas are UUID-scoped and cleanup is bounded to each test.
+- Command: `bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest`.
+- Result: **32 tests, 0 failures, 0 errors, 0 skipped** — HttpSessionFlowTest 10, IdentityFlowTest
+  20, ServerSmokeTest 2; Maven elapsed 28.173 seconds; `F03B_SCOPED_TESTS=PASS`.
+- Retained host log: `/home/phuclam/idea-f03b-test-cJf8mNEG.log`, mode `600`, SHA-256
+  `F8F77D06CA595EDA198A0B3736ABEE14F4EDA756620BE9343E86C255DD4C57C7`.
+- Post-run read-only check: PostgreSQL `18.6`, `0` remaining `f03a_`/`f03b_` UUID test schemas,
+  and public Flyway versions `1,2,3`. Public V4 remains NOT-RUN in this checkpoint.
+
+The source-to-head trace is now direct: the application/test/config repair commit is the executed
+source; this evidence update is a later documentation-only commit. The raw host log remains an
+INFO limitation because it is not independently readable through GitHub. `verify-template` remains
+**NOT-RUN** by explicit instruction. Credential setup/reset, temporary login blocking, HTTP account
+administration, complete disable/reset/re-enable/restart invalidation, all-request/F04 eligibility,
+Web/Desktop qualification, fresh public V4 evidence and whole-card Project Reviewer acceptance
+remain open.
 
 Local source/evidence checks: tracked-secret scan **PASS** (10 recognized exact synthetic
 fixtures; 233 known binary files skipped); **68 focused relative Markdown targets PASS**;
