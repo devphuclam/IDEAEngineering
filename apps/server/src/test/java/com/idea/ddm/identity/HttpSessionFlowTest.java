@@ -522,6 +522,7 @@ class HttpSessionFlowTest {
     @Test
     void resetProofBindingIsMigratorOwnedAndRuntimeCannotRetargetOrDeleteIt() throws Exception {
         var fixture = setupFixture();
+        proofFor(fixture, fixture.target()); // The predecessor must enforce the same complete consumption pair.
         var target = new IdentityAdministration(appDataSource()).inspect(fixture.administrator().accountId());
         assertEquals(200, issueReset(fixture.issuer(), target.organizationId(), target).statusCode());
         try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
@@ -536,6 +537,13 @@ class HttpSessionFlowTest {
                 try (var statement = connection.createStatement()) {
                     var refusal = assertThrows(java.sql.SQLException.class, () -> statement.execute(sql));
                     assertEquals("42501", refusal.getSQLState());
+                }
+            }
+            for (var table : java.util.List.of("credential_reset_proof", "credential_setup_proof")) {
+                try (var statement = connection.createStatement()) {
+                    var incomplete = assertThrows(java.sql.SQLException.class, () -> statement.execute(
+                            "UPDATE " + table + " SET consumed_operation_id=issue_operation_id"));
+                    assertEquals("23514", incomplete.getSQLState(), "Consumed OperationId cannot exist without consumed_at");
                 }
             }
         }

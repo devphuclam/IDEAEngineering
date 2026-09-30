@@ -18,8 +18,15 @@ CREATE TABLE credential_reset_proof (
     FOREIGN KEY (login_identity_id, account_id) REFERENCES login_identity(login_identity_id, account_id),
     CHECK (expires_at = issued_at + INTERVAL '15 minutes'),
     CHECK ((consumed_at IS NULL AND consumed_operation_id IS NULL)
-        OR (consumed_at >= issued_at AND consumed_at < expires_at AND consumed_operation_id IS NOT NULL))
+        OR (consumed_at IS NOT NULL AND consumed_at >= issued_at AND consumed_at < expires_at
+            AND consumed_operation_id IS NOT NULL))
 );
 REVOKE ALL ON credential_reset_proof FROM idea_ddm_app;
 GRANT SELECT, INSERT ON credential_reset_proof TO idea_ddm_app;
 GRANT UPDATE (consumed_at, consumed_operation_id) ON credential_reset_proof TO idea_ddm_app;
+
+-- Harden the predecessor's same complete-pair invariant additively, never rewrite V5.
+-- Existing contradictory rows make migration fail rather than silently repair evidence.
+ALTER TABLE credential_setup_proof ADD CONSTRAINT credential_setup_consumption_complete
+    CHECK ((consumed_at IS NULL AND consumed_operation_id IS NULL)
+        OR (consumed_at IS NOT NULL AND consumed_operation_id IS NOT NULL));
