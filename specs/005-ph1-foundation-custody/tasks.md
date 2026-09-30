@@ -43,7 +43,7 @@ Windows; record four project results and a secret/lockfile review.
 - [X] T010 [P] [US1] Implement the minimal React/TypeScript/Vite entry point in `apps/web/src/App.tsx` using the qualified build scaffold and resolved lockfile from T003.
 - [X] T011 [P] [US1] Implement the narrow WPF/WebView2 shell in `apps/desktop/App.xaml.cs` and the .NET 10 Workspace startup boundary in `apps/workspace/WorkspaceHost.cs`.
 - [X] T012 [US1] Run all four builds/basic checks on their qualified platforms, record command, tool versions, commit and actual result in [F01-A build results](evidence/F01-A-build-results.md). All checks passed from clean platform-specific archives of the same committed source revision; scope limits are recorded with each result.
-- [X] T013 [US1] Add and run a repeatable tracked-secret detection check in `tests/ph1/check-no-secrets.ps1`; repeat builds from clean source, inspect lockfiles against intake, and record F01-B evidence in `specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md`. Execution evidence is recorded; the Delivery Card remains open pending Project Reviewer closure.
+- [X] T013 [US1] Add and run a repeatable tracked-secret detection check in `tests/ph1/check-no-secrets.ps1`; repeat builds from clean source, inspect lockfiles against intake, and record F01-B evidence in `specs/005-ph1-foundation-custody/evidence/F01-B-reproducibility.md`. Project Reviewer accepted and closed F01-B; the published Execution Register records completion. Wider license review remains T036.
 
 ## Phase 4: User Story 2 — Controlled data baseline (F02, P1)
 
@@ -55,7 +55,7 @@ healthy/unavailable database probes.
 - [X] T014 [US2] Write failing migration/health integration checks in `apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java`.
 - [X] T015 [US2] Add versioned schema for the PH1 identities and metadata in `database/migrations/V1__ph1_foundation.sql` and package that source through `apps/server/pom.xml`; use only the separate migration role.
 - [X] T016 [US2] Implement separate application and database health outcomes in `apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java`.
-- [X] T017 [US2] Run fresh migration, repeat validation and bounded rollback/failure procedure; retain actual SQL/version/health results in `specs/005-ph1-foundation-custody/evidence/F02-data-results.md`. Executed evidence is `PASS`; F02 Delivery Card acceptance remains separate and pending Project Reviewer review.
+- [X] T017 [US2] Run fresh migration, repeat validation and bounded rollback/failure procedure; retain actual SQL/version/health results in `specs/005-ph1-foundation-custody/evidence/F02-data-results.md`. Executed evidence is `PASS`; Project Reviewer accepted and closed F02 on 2026-09-30, published in Execution Register revision 26.
 
 ## Phase 5: User Story 3 — Controlled native account and session (F03-A/B, P1)
 
@@ -63,8 +63,26 @@ healthy/unavailable database probes.
 **Independent test**: Bootstrap once, repeat without a new privilege, then sign in, sign out,
 disable/revoke and retry a protected call.
 
+**F03-A/F03-B execution split (Project Reviewer approved 2026-09-30; Work Item #22):**
+
+- F03-A: one-time local Super Administrator bootstrap; separate explicit, audited Account
+  Administrator assignment; create/disable/re-enable account services. Test the Server service
+  boundary on real PostgreSQL, including exact role-version/scope, refusal, preserved identity
+  and atomic failure. The test-only trusted Actor context is not HTTP authentication evidence.
+- F03-B: verified HTTP login/session-derived Actor context, sign-out/revocation, CSRF, expiry and
+  old-session refusal after re-enable. HTTP/session work remains unchecked until executed.
+- T018/T021/T022 span both cards: record partial F03-A evidence without checking their markers
+  as though F03-B were done. T019 may close independently after its actual bootstrap evidence.
+- Preserve reviewed V1/V2. V2 supplies bootstrap organization/role/assignment state; add
+  `database/migrations/V3__account_administration.sql` for the account-administration permission
+  subset, Organization-linked accounts and required authorization/change evidence.
+- The approved seed is only the F03 account-administration subset, not the full open permission
+  catalogue. No document, Approval or Release authority is granted by account creation.
+
+- [X] T037 [US3] Implement F03-A account-administration services in `apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java`, with failing/green PostgreSQL tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; retain scoped results in `evidence/F03-identity-results.md`. Technical checkpoint executed from `acb772e99b96c13a10dc7ad905d6eb7daec0493a`: 20 identity + 2 Server smoke tests PASS. The explicit bounded Super self-assignment clarification is in spec Session 2026-09-30 / FR-013. T037 is the service part of T021, not extra roadmap scope/hours; marking it implemented does not accept or close F03-A/Issue #22, provision a live account, or complete F03-B.
+
 - [ ] T018 [US3] Write failing first/repeated bootstrap, session eligibility and denial tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; include re-enabling an account, refusing its old invalidated session and accepting a fresh eligible sign-in.
-- [ ] T019 [US3] Implement one-time local administrator bootstrap and Actor/account persistence in `apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java`.
+- [X] T019 [US3] Implement one-time local administrator bootstrap and Actor/account persistence in `apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java`. Source `89eab7129a72844e45807f13baedfbee39a9ac92` additionally passed fresh public V1/V2/V3 and the real interactive packaged operator + unchanged repeat on 2026-09-30 in dedicated `idea_ddm_f03a_20260930_c91e7a42`; see [F03 evidence](evidence/F03-identity-results.md) sections 11–12. This closes the technical bootstrap task, not whole-card acceptance, Issue #22 or F03-B.
 - [ ] T020 [US3] Implement native login/session ownership and protected-request Actor derivation in `apps/server/src/main/java/com/idea/ddm/identity/SessionService.java`; expose commit-time eligibility validation coordinated with security-state changes for the F04 owner command, and never revive invalidated sessions when re-enabling an account.
 - [ ] T021 [US3] Implement authorized native-account creation, sign-out, disablement and revocation refusal paths in `apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java`.
 - [ ] T022 [US3] Run the F03-A/B scenarios and retain actual results without credentials in `specs/005-ph1-foundation-custody/evidence/F03-identity-results.md`.

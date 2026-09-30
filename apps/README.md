@@ -58,3 +58,37 @@ remains for T036; do not package or distribute these projects from this intake. 
 Vault are not prerequisites for these F01 build/smoke checks. Use the server-local file described in
 [development deployment](../deploy/development/README.md) for filled configuration; never put
 secrets in this repository.
+
+## F03-A local bootstrap and account administration
+
+This is a Server service checkpoint, not HTTP/session authentication. Read
+[F03 evidence](../specs/005-ph1-foundation-custody/evidence/F03-identity-results.md) for executed scope.
+V1/V2 are unchanged; V3 adds the account-administration subset. Do not apply it to a live or shared
+database merely to run these tests. The scoped runner uses isolated UUID schemas in the approved
+dedicated database and removes only those schemas.
+
+An authorized operator builds the Server, applies the reviewed migrations through the migration
+command, and loads protected local runtime configuration outside Git. Set the five
+`IDEA_DATABASE_HOST/PORT/NAME/APP_USER/APP_PASSWORD` values; the operator tool requires
+`idea_ddm_app`, not the migration or PostgreSQL superuser role. Do not put passwords in command
+arguments or chat. From an interactive Ubuntu terminal at repository root:
+
+```bash
+bash apps/server/scripts/bootstrap-administrator.sh --inspect
+bash apps/server/scripts/bootstrap-administrator.sh --initialize
+```
+
+`--initialize` requires a real interactive console, asks for a named Organization/custodian and a
+confirmed non-echoed new password, and refuses headless input. An already initialized installation
+keeps its original identity/assignment without asking for another password. The tool invokes no
+Spring application or HTTP route and never runs automatically at Server startup. It does not grant
+Account Administrator, Project, document, Approval or Release authority.
+
+Access Policy's separate `RoleAssignmentAdministration` command grants exactly Account
+Administrator@1 at Organization Scope through the current permission/assignment evaluator.
+`IdentityAdministration` requires that independent grant for create/disable/re-enable. A new
+account is `PENDING` with no password or product membership/role. Re-enable preserves the Actor,
+Account and Login Identity and increments the security version; without a configured credential
+it returns to `PENDING`, not `ACTIVE`. One-use credential setup, verified HTTP sessions and
+revocation are F03-B. No HTTP adapter is supplied by F03-A, and its package-restricted ActorContext
+fixture is not permission to trust an ActorId supplied by a client.
