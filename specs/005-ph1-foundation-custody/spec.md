@@ -2,7 +2,7 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.4` / Principal Product Author
+**Version / owner**: `0.5` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
 **Classification / verification**: `INTERNAL` / PH1 application results `NOT-RUN`
@@ -41,6 +41,8 @@ synthetic-account development and testing only; it does not settle `SPEC-OPEN-06
 company accounts or claim production security approval. F03-A acceptance is unchanged.
 
 - Q: How does Account Administrator gain setup/reset authority without expanding v1 assignments? → A: The Project Reviewer approved protected successor `account-administrator@2` on 2026-09-30. It contains `account.create`, `account.disable`, `account.re-enable`, `account.credential.setup.issue` and `account.credential.reset.issue`. Version 1 and its assignments remain unchanged. The existing Super assignment permission may grant a separate, exact supported v2 Role Assignment at Organization Scope with assigner, reason, Access Policy outcome and Audit; it grants no implicit Super setup/reset authority. First setup applies only to a pending account without a credential. Proof-bound redemption needs no Account Administrator role. Reset remains a distinct purpose/path. Preserve v1/F03-A regressions; neither `SPEC-OPEN-03` nor `SPEC-OPEN-06` closes for the wider product.
+
+- Q: Can a disabled synthetic account reset its credential without being re-enabled? → A: Yes. The Project Reviewer authorized the relayed review proposal subject to Engineering checking the baseline on 2026-09-30; Engineering confirmed it matches REQ-IAM-003/004 and the contract. Reset is allowed for ACTIVE or DISABLED accounts that already have a credential. Its separate, target/login/security-version-bound one-use proof expires after 15 minutes in the synthetic profile. Redemption replaces the credential, increments security_version and invalidates all affected sessions/prior credential proofs atomically with IAM outcome and Audit. It preserves the account status and actor.disabled_at. A DISABLED account cannot sign in even with the new password; separate re-enable at the new expected version is required, followed by fresh sign-in with the new credential. Re-enable does not change the password. PENDING/no-credential accounts use first setup, never reset. This supersedes the unaccepted ACTIVE-only recommendation; it is not a new live-company policy or product-gate approval.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -99,6 +101,7 @@ Use the F04 sample owner command to exercise disablement/revocation during an in
 9. **Given** a pending synthetic account and a correctly bound setup proof, **When** its first credential is set before expiry, **Then** it becomes eligible for fresh sign-in only after successful setup; wrong-target, expired or reused proof attempts leave its credentials and activation state unchanged.
 10. **Given** an eligible synthetic session, **When** either development-profile deadline is reached, **Then** a protected request is refused. Eligible activity refreshes only the idle deadline, never the absolute deadline. Logout, account disablement and password reset apply the profile's revocation rules without deleting local candidate files.
 11. **Given** a synthetic account undergoing credential setup or sign-in, **When** a password violates the development profile or the failed-login threshold is reached, **Then** setup is refused without changing credentials or login is temporarily blocked as applicable. At the block deadline, an otherwise eligible account can attempt fresh sign-in; this neither re-enables a disabled account nor restores an old session.
+12. **Given** an ACTIVE or DISABLED synthetic account with an existing credential and a valid reset proof, **When** the proof is redeemed, **Then** the password changes, security version increments and all prior sessions/proofs become ineligible in the same transaction as the IAM outcome and Audit. Account status and Actor disablement are unchanged. A disabled account accepts neither password until a separate re-enable; afterward only the new password establishes a fresh session. Wrong-target, stale-version, expired, wrong-purpose or reused proof cannot change credentials or enablement.
 
 Scenarios 1, 2, 7 and 8 belong to the F03-A Server-service checkpoint on real PostgreSQL.
 Creating a pending account is not credential setup or successful sign-in. HTTP authentication,
@@ -112,6 +115,7 @@ choices, not universal security rules or company policy):
 |---|---|
 | First credential setup | Eligible Account Administrator issues a proof bound to the target pending account; successful use sets its first credential. Public registration remains unavailable. |
 | Setup proof | One successful use; expires 15 minutes after issue. Wrong-target, expired or reused proofs cannot set credentials or activate an account. |
+| Password reset | Separate reset Permission/proof for ACTIVE or DISABLED accounts with an existing credential; 15-minute, one-use, target/login/security-version-bound proof. Redemption changes the credential/version and invalidates all affected old sessions/proofs without changing account enablement or Actor disablement. Re-enable remains a separate expected-version command. |
 | Setup delivery | Protected synthetic test harness only; no working password or proof in repository, logs or chat. Live delivery and wider recovery policy require separate qualification. |
 | Idle session limit | 2 hours since the last eligible activity; enforced by the Server. |
 | Absolute session limit | 8 hours from successful sign-in; activity cannot extend it. The earlier deadline wins; at the deadline the session is expired. |

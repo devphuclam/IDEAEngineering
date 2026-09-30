@@ -20,18 +20,20 @@ import org.springframework.http.ResponseEntity;
 class IdentityController {
     private final SessionService sessions;
     private final CredentialSetupService credentials;
+    private final CredentialResetService resets;
     private final boolean syntheticDelivery;
 
-    IdentityController(SessionService sessions, CredentialSetupService credentials,
+    IdentityController(SessionService sessions, CredentialSetupService credentials, CredentialResetService resets,
             @Value("${idea.identity.synthetic-credential-delivery.enabled:false}") boolean syntheticDelivery) {
         this.sessions = sessions;
         this.credentials = credentials;
+        this.resets = resets;
         this.syntheticDelivery = syntheticDelivery;
     }
 
     record CsrfProof(String headerName, String token) {}
     record IssueCredential(UUID operationId, UUID organizationId, String purpose, long expectedSecurityVersion, String reason) {}
-    record RedeemCredential(UUID operationId, UUID accountId, String proof, String password) {
+    record RedeemCredential(UUID operationId, UUID accountId, String proof, String password, String purpose) {
         @Override public String toString() { return "RedeemCredential[credentials=REDACTED]"; }
     }
 
@@ -42,6 +44,8 @@ class IdentityController {
         if (!syntheticDelivery) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         try {
             var identity = authentication.getPrincipal() instanceof SessionService.Identity value ? value : null;
+            if ("RESET".equals(request.purpose())) return ResponseEntity.ok(resets.issue(sessions.context(identity),
+                    request.operationId(), request.organizationId(), account, request.expectedSecurityVersion(), request.reason()));
             return ResponseEntity.ok(credentials.issue(sessions.context(identity), request.operationId(), request.organizationId(), account,
                     request.purpose(), request.expectedSecurityVersion(), request.reason()));
         } catch (AuthenticationException exception) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); }
@@ -54,7 +58,11 @@ class IdentityController {
     @PostMapping("/credentials")
     ResponseEntity<Void> redeemProof(@RequestBody RedeemCredential request) {
         try {
-            credentials.redeem(request.operationId(), request.accountId(), request.proof(), request.password());
+            if ("RESET".equals(request.purpose())) {
+                resets.redeem(request.operationId(), request.accountId(), request.proof(), request.password());
+            } else if (request.purpose() == null || "FIRST_SETUP".equals(request.purpose())) {
+                credentials.redeem(request.operationId(), request.accountId(), request.proof(), request.password());
+            } else throw new IdentityRefusal("INVALID_CREDENTIAL_PROOF");
             return ResponseEntity.noContent().build();
         } catch (IdentityRefusal exception) { return ResponseEntity.badRequest().build(); }
         catch (IllegalStateException exception) { return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build(); }

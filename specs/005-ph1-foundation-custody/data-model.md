@@ -32,7 +32,11 @@ Checkout, Review or Release record is created by this increment.
   exactly one proof; replay/wrong-target/stale-account-version attempts change no credential.
   V5 implements FIRST_SETUP only for PENDING/no-verifier targets. Proof-authorized redemption
   activates that same account and increments its security version atomically; no administrator
-  role is required of the holder. Reset and login-block records remain later additive slices.
+  role is required of the holder. V6 adds separate RESET proof for ACTIVE/DISABLED targets with
+  an existing credential. Reset preserves account status and Actor disablement, replaces the
+  verifier and increments the security version while revoking all affected sessions atomically.
+  Captured versions make prior proofs stale; later re-enable requires the new expected version
+  and never changes the verifier. Login-block records remain a later additive slice.
 - Password length is checked as Unicode code points for the minimum, and UTF-8 bytes for the
   already-qualified BCrypt maximum. Reject rather than truncate; do not silently normalize or
   trim a submitted password. Numeric values are owned by spec's synthetic development profile.

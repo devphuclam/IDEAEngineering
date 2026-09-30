@@ -213,6 +213,335 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void resetWhileDisabledChangesCredentialButRequiresSeparateReenableAndFreshSignin() throws Exception {
+        var fixture = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var oldPassword = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), fixture.target().accountId(), proofFor(fixture, fixture.target()), oldPassword).statusCode());
+        var active = accounts.inspect(fixture.target().accountId());
+        var targetLogin = new Fixture(active.actorId(), active.accountId(), active.organizationId(), active.normalizedLogin(), oldPassword);
+        var oldSessions = new HttpClient[] { signedIn(targetLogin), signedIn(targetLogin) };
+        var context = new ActorContext(fixture.administrator().actorId(), 1);
+        var disabled = accounts.disable(context, UUID.randomUUID(), active.organizationId(), active.accountId(),
+                active.securityVersion(), "Synthetic compromised credential");
+        var disabledAt = actorDisabledAt(disabled.actorId());
+        assertNotNull(disabledAt);
+        var issued = issueReset(fixture.issuer(), active.organizationId(), disabled);
+        assertEquals(200, issued.statusCode(), "Recovery must not require enabling the compromised credential first");
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeemReset(client(), disabled.accountId(), jsonField(issued.body(), "proof"), password).statusCode());
+        var reset = accounts.inspect(disabled.accountId());
+        assertEquals("DISABLED", reset.status());
+        assertEquals(disabled.securityVersion() + 1, reset.securityVersion());
+        assertEquals(disabled.actorId(), reset.actorId());
+        assertEquals(disabled.loginIdentityId(), reset.loginIdentityId());
+        assertEquals(disabledAt, actorDisabledAt(reset.actorId()), "Reset must preserve the original disablement timestamp");
+        assertEquals(401, loginAttempt(client(), reset.normalizedLogin(), oldPassword).statusCode());
+        assertEquals(401, loginAttempt(client(), reset.normalizedLogin(), password).statusCode());
+        var enabled = accounts.reenable(context, UUID.randomUUID(), active.organizationId(), reset.accountId(),
+                reset.securityVersion(), "Separate synthetic re-enable after recovery");
+        assertEquals("ACTIVE", enabled.status());
+        assertEquals(reset.securityVersion() + 1, enabled.securityVersion());
+        for (var session : oldSessions) assertEquals(401, get(session, "/api/v1/identity/session").statusCode());
+        assertEquals(401, loginAttempt(client(), enabled.normalizedLogin(), oldPassword).statusCode());
+        assertEquals(200, loginAttempt(client(), enabled.normalizedLogin(), password).statusCode());
+        assertEquals(200, get(fixture.issuer(), "/api/v1/identity/session").statusCode(), "Another account's session is not revoked");
+    }
+
+    private HttpResponse<String> issueReset(HttpClient issuer, UUID organization, IdentityAdministration.Account target) throws Exception {
+        return postJson(issuer, "/api/v1/identity/accounts/" + target.accountId() + "/credential-proofs",
+                jsonField(get(issuer, "/api/v1/identity/csrf").body(), "token"),
+                "{\"operationId\":\"" + UUID.randomUUID() + "\",\"organizationId\":\"" + organization
+                + "\",\"purpose\":\"RESET\",\"expectedSecurityVersion\":" + target.securityVersion()
+                + ",\"reason\":\"Synthetic credential recovery without enablement\"}");
+    }
+
+    @Test
+    void activeResetIsProofAuthorizedAndRevokesEveryOldSessionAndSameVersionProof() throws Exception {
+        var fixture = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var oldPassword = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), fixture.target().accountId(), proofFor(fixture, fixture.target()), oldPassword).statusCode());
+        var active = accounts.inspect(fixture.target().accountId());
+        var oldLogin = new Fixture(active.actorId(), active.accountId(), active.organizationId(), active.normalizedLogin(), oldPassword);
+        var first = signedIn(oldLogin);
+        var second = signedIn(oldLogin);
+        var issued = issueReset(fixture.issuer(), active.organizationId(), active);
+        var another = issueReset(fixture.issuer(), active.organizationId(), active);
+        assertEquals(200, issued.statusCode());
+        assertEquals(200, another.statusCode());
+        assertTrue(issued.headers().firstValue("Cache-Control").orElseThrow().contains("no-store"));
+        assertEquals("2026-09-30T06:15:00Z", jsonField(issued.body(), "expiresAt"));
+        var holder = client(); // No administrative role/session is required for proof redemption.
+        var proof = jsonField(issued.body(), "proof");
+        assertEquals(400, redeem(holder, active.accountId(), proof, UUID.randomUUID().toString()).statusCode(), "Reset proof is not first setup");
+        assertEquals(400, redeemReset(holder, UUID.randomUUID(), proof, UUID.randomUUID().toString()).statusCode());
+        assertEquals(400, redeemReset(holder, active.accountId(), proof, "a".repeat(14)).statusCode());
+        assertEquals(403, postJson(holder, "/api/v1/identity/credentials", "incorrect-csrf",
+                redemption(active.accountId(), proof, UUID.randomUUID().toString()).replace("}", ",\"purpose\":\"RESET\"}")).statusCode());
+        assertEquals(active, accounts.inspect(active.accountId()));
+        assertEquals(200, get(first, "/api/v1/identity/session").statusCode());
+        var operation = UUID.randomUUID();
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeemReset(holder, operation, active.accountId(), proof, password).statusCode());
+        var reset = accounts.inspect(active.accountId());
+        assertEquals("ACTIVE", reset.status());
+        assertEquals(active.securityVersion() + 1, reset.securityVersion());
+        assertEquals(active.actorId(), reset.actorId());
+        assertEquals(active.loginIdentityId(), reset.loginIdentityId());
+        assertEquals(active.roleAssignments(), reset.roleAssignments());
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        assertEquals(401, get(first, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(second, "/api/v1/identity/session").statusCode());
+        assertEquals(400, redeemReset(holder, active.accountId(), proof, UUID.randomUUID().toString()).statusCode());
+        assertEquals(400, redeemReset(holder, active.accountId(), jsonField(another.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+        assertEquals(401, loginAttempt(client(), active.normalizedLogin(), oldPassword).statusCode());
+        assertEquals(200, loginAttempt(client(), active.normalizedLogin(), password).statusCode());
+        assertEquals(200, get(fixture.issuer(), "/api/v1/identity/session").statusCode());
+        try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
+                "SELECT count(*) FROM session_record WHERE account_id=? AND security_version=? AND revoked_at IS NULL")) {
+            query.setObject(1, active.accountId());
+            query.setLong(2, active.securityVersion());
+            try (var row = query.executeQuery()) { assertTrue(row.next()); assertEquals(0, row.getLong(1)); }
+        }
+    }
+
+    private HttpResponse<String> redeemReset(HttpClient holder, UUID account, String proof, String password) throws Exception {
+        return redeemReset(holder, UUID.randomUUID(), account, proof, password);
+    }
+
+    @Test
+    void resetIssuanceRequiresExplicitV2ScopeEligibleSessionAndSyntheticOptIn() throws Exception {
+        var fixture = fixture();
+        var context = new ActorContext(fixture.actorId(), 1);
+        var accounts = new IdentityAdministration(appDataSource());
+        var target = accounts.inspect(fixture.accountId());
+        var issuer = signedIn(fixture);
+        assertEquals(403, issueReset(issuer, fixture.organizationId(), target).statusCode(), "Super is not a reset issuer");
+        var roles = new RoleAssignmentAdministration(appDataSource());
+        var v1 = roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"), fixture.organizationId(), "Synthetic v1 reset refusal");
+        var unchanged = roles.inspect(v1.assignmentId());
+        assertEquals(403, issueReset(issuer, fixture.organizationId(), target).statusCode(), "v1 is not silently expanded");
+        roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), fixture.organizationId(), "Explicit v2 reset issuer");
+        assertEquals(unchanged, roles.inspect(v1.assignmentId()));
+        target = accounts.inspect(fixture.accountId()); // Explicit role grants above intentionally changed assignment count.
+        assertEquals(403, issueReset(issuer, UUID.randomUUID(), target).statusCode());
+        assertEquals(401, issueReset(client(), fixture.organizationId(), target).statusCode());
+        var pending = pendingTarget(fixture);
+        assertEquals(403, issueReset(issuer, fixture.organizationId(), pending).statusCode(), "No credential to reset");
+        assertEquals(200, issueReset(issuer, fixture.organizationId(), target).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+        assertEquals(401, issueReset(issuer, fixture.organizationId(), target).statusCode());
+        assertEquals(200, issueReset(signedIn(fixture), fixture.organizationId(), target).statusCode());
+        server.close();
+        startHttpServer(false);
+        var refused = issueReset(signedIn(fixture), fixture.organizationId(), target);
+        assertEquals(503, refused.statusCode());
+        assertEquals("", refused.body());
+        assertEquals(target, accounts.inspect(target.accountId()), "Issuing/refusing proof changes no target enablement/credential version");
+    }
+
+    private HttpResponse<String> redeemReset(HttpClient holder, UUID operation, UUID account, String proof, String password) throws Exception {
+        var body = redemption(operation, account, proof, password);
+        return postJson(holder, "/api/v1/identity/credentials", jsonField(get(holder, "/api/v1/identity/csrf").body(), "token"),
+                body.substring(0, body.length() - 1) + ",\"purpose\":\"RESET\"}");
+    }
+
+    private HttpResponse<String> loginAttempt(HttpClient caller, String login, String password) throws Exception {
+        return post(caller, "/api/v1/identity/login", jsonField(get(caller, "/api/v1/identity/csrf").body(), "token"),
+                "username=" + form(login) + "&password=" + form(password));
+    }
+
+    private java.sql.Timestamp actorDisabledAt(UUID actor) throws Exception {
+        try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
+                "SELECT disabled_at FROM actor WHERE actor_id=?")) {
+            query.setObject(1, actor);
+            try (var row = query.executeQuery()) { assertTrue(row.next()); return row.getTimestamp(1); }
+        }
+    }
+
+    @Test
+    void missingResetAuditRollsBackPasswordVersionSessionsAndProofConsumption() throws Exception {
+        requiredResetFailure("audit_evidence");
+    }
+
+    @Test
+    void missingResetIamOutcomeRollsBackPasswordVersionSessionsAndProofConsumption() throws Exception {
+        requiredResetFailure("iam_owner_outcome");
+    }
+
+    @Test
+    void suppressedSessionRevocationCannotCommitCredentialReset() throws Exception {
+        requiredResetFailure("session_record");
+    }
+
+    private void requiredResetFailure(String table) throws Exception {
+        assertTrue(java.util.Set.of("audit_evidence", "iam_owner_outcome", "session_record").contains(table));
+        var fixture = setupFixture();
+        var oldPassword = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), fixture.target().accountId(), proofFor(fixture, fixture.target()), oldPassword).statusCode());
+        var accounts = new IdentityAdministration(appDataSource());
+        var active = accounts.inspect(fixture.target().accountId());
+        var oldSession = signedIn(new Fixture(active.actorId(), active.accountId(), active.organizationId(), active.normalizedLogin(), oldPassword));
+        var issued = issueReset(fixture.issuer(), active.organizationId(), active);
+        assertEquals(200, issued.statusCode());
+        var proof = jsonField(issued.body(), "proof");
+        var operation = UUID.randomUUID();
+        var password = UUID.randomUUID().toString();
+        var history = accounts.history(active.accountId());
+        var sessionFault = table.equals("session_record");
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_reset() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF "
+                    + (sessionFault ? "NEW.revoked_at IS NOT NULL AND OLD.revoked_at IS NULL" : "NEW.action='account.credential.reset.redeem'")
+                    + " THEN RETURN NULL; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE TRIGGER suppress_reset BEFORE " + (sessionFault ? "UPDATE" : "INSERT") + " ON "
+                    + schema + "." + table + " FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_reset()");
+        }
+        try {
+            var refused = redeemReset(client(), operation, active.accountId(), proof, password);
+            assertEquals(503, refused.statusCode());
+            assertEquals("", refused.body());
+            assertEquals(active, accounts.inspect(active.accountId()));
+            assertEquals(history, accounts.history(active.accountId()));
+            assertEquals(new IdentityAdministration.Evidence(null, 0, 0), accounts.evidence(operation));
+            assertEquals(200, get(oldSession, "/api/v1/identity/session").statusCode());
+            assertEquals(401, loginAttempt(client(), active.normalizedLogin(), password).statusCode());
+            assertEquals(200, loginAttempt(client(), active.normalizedLogin(), oldPassword).statusCode());
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_reset ON " + schema + "." + table);
+            }
+        }
+        assertEquals(204, redeemReset(client(), operation, active.accountId(), proof, password).statusCode(), "Failed transaction did not consume proof");
+        assertEquals(active.securityVersion() + 1, accounts.inspect(active.accountId()).securityVersion());
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        assertEquals(history.size() + 1, accounts.history(active.accountId()).size());
+        assertEquals(401, get(oldSession, "/api/v1/identity/session").statusCode());
+        assertEquals(200, loginAttempt(client(), active.normalizedLogin(), password).statusCode());
+    }
+
+    @Test
+    void resetProofExpiresAtFifteenMinutesAndCannotCrossSecurityTransitions() throws Exception {
+        var fixture = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var targets = new IdentityAdministration.Account[] { fixture.target(), pendingTarget(fixture.administrator()),
+                pendingTarget(fixture.administrator()) };
+        var proofs = new String[3];
+        for (int index = 0; index < targets.length; index++) {
+            assertEquals(204, redeem(client(), targets[index].accountId(), proofFor(fixture, targets[index]), UUID.randomUUID().toString()).statusCode());
+            targets[index] = accounts.inspect(targets[index].accountId());
+            var issued = issueReset(fixture.issuer(), targets[index].organizationId(), targets[index]);
+            assertEquals(200, issued.statusCode());
+            proofs[index] = jsonField(issued.body(), "proof");
+        }
+        clock.advanceTo(Instant.parse("2026-09-30T06:14:59.999999Z"));
+        assertEquals(204, redeemReset(client(), targets[0].accountId(), proofs[0], UUID.randomUUID().toString()).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00Z"));
+        assertEquals(400, redeemReset(client(), targets[1].accountId(), proofs[1], UUID.randomUUID().toString()).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00.000001Z"));
+        assertEquals(400, redeemReset(client(), targets[2].accountId(), proofs[2], UUID.randomUUID().toString()).statusCode());
+        assertEquals(targets[1], accounts.inspect(targets[1].accountId()));
+        assertEquals(targets[2], accounts.inspect(targets[2].accountId()));
+        var current = targets[1];
+        var issuedBeforeDisable = issueReset(fixture.issuer(), current.organizationId(), current);
+        assertEquals(200, issuedBeforeDisable.statusCode());
+        var context = new ActorContext(fixture.administrator().actorId(), 1);
+        var disabled = accounts.disable(context, UUID.randomUUID(), current.organizationId(), current.accountId(),
+                current.securityVersion(), "Synthetic stale-proof disablement");
+        assertEquals(400, redeemReset(client(), disabled.accountId(), jsonField(issuedBeforeDisable.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+        var issuedWhileDisabled = issueReset(fixture.issuer(), current.organizationId(), disabled);
+        assertEquals(200, issuedWhileDisabled.statusCode());
+        var reenabled = accounts.reenable(context, UUID.randomUUID(), current.organizationId(), disabled.accountId(),
+                disabled.securityVersion(), "Synthetic separate re-enable invalidates prior proof");
+        assertEquals(400, redeemReset(client(), reenabled.accountId(), jsonField(issuedWhileDisabled.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+        assertEquals(reenabled, accounts.inspect(reenabled.accountId()));
+        var fresh = issueReset(fixture.issuer(), current.organizationId(), reenabled);
+        assertEquals(200, fresh.statusCode());
+        assertEquals(204, redeemReset(client(), reenabled.accountId(), jsonField(fresh.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+    }
+
+    @Test
+    void firstSetupProofCannotBecomeResetProofOrBeConsumedByResetRefusal() throws Exception {
+        var fixture = setupFixture();
+        var proof = proofFor(fixture, fixture.target());
+        assertEquals(400, redeemReset(client(), fixture.target().accountId(), proof, UUID.randomUUID().toString()).statusCode());
+        assertEquals(fixture.target(), new IdentityAdministration(appDataSource()).inspect(fixture.target().accountId()));
+        assertEquals(204, redeem(client(), fixture.target().accountId(), proof, UUID.randomUUID().toString()).statusCode());
+    }
+
+    @Test
+    void concurrentResetAcceptsOneCredentialAndOneAuditedVersionChange() throws Exception {
+        var fixture = setupFixture();
+        var oldPassword = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), fixture.target().accountId(), proofFor(fixture, fixture.target()), oldPassword).statusCode());
+        var accounts = new IdentityAdministration(appDataSource());
+        var active = accounts.inspect(fixture.target().accountId());
+        var oldSession = signedIn(new Fixture(active.actorId(), active.accountId(), active.organizationId(), active.normalizedLogin(), oldPassword));
+        var issued = issueReset(fixture.issuer(), active.organizationId(), active);
+        assertEquals(200, issued.statusCode());
+        var proof = jsonField(issued.body(), "proof");
+        var before = accounts.history(active.accountId()).size();
+        var clients = new HttpClient[] { client(), client() };
+        var tokens = new String[] { jsonField(get(clients[0], "/api/v1/identity/csrf").body(), "token"),
+                jsonField(get(clients[1], "/api/v1/identity/csrf").body(), "token") };
+        var operations = new UUID[] { UUID.randomUUID(), UUID.randomUUID() };
+        var passwords = new String[] { UUID.randomUUID().toString(), UUID.randomUUID().toString() };
+        var ready = new java.util.concurrent.CountDownLatch(2);
+        var start = new java.util.concurrent.CountDownLatch(1);
+        try (var executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
+            var attempts = new java.util.ArrayList<java.util.concurrent.Future<Integer>>();
+            for (int index = 0; index < 2; index++) {
+                final int attempt = index;
+                attempts.add(executor.submit(() -> {
+                    ready.countDown();
+                    assertTrue(start.await(10, java.util.concurrent.TimeUnit.SECONDS));
+                    var body = redemption(operations[attempt], active.accountId(), proof, passwords[attempt]);
+                    return postJson(clients[attempt], "/api/v1/identity/credentials", tokens[attempt],
+                            body.substring(0, body.length() - 1) + ",\"purpose\":\"RESET\"}").statusCode();
+                }));
+            }
+            assertTrue(ready.await(10, java.util.concurrent.TimeUnit.SECONDS));
+            start.countDown();
+            var statuses = new int[] { attempts.get(0).get(10, java.util.concurrent.TimeUnit.SECONDS),
+                    attempts.get(1).get(10, java.util.concurrent.TimeUnit.SECONDS) };
+            assertArrayEquals(new int[] { 204, 400 }, java.util.Arrays.stream(statuses).sorted().toArray());
+            int winner = statuses[0] == 204 ? 0 : 1;
+            assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operations[winner]));
+            assertEquals(new IdentityAdministration.Evidence(null, 0, 0), accounts.evidence(operations[1 - winner]));
+            assertEquals(before + 1, accounts.history(active.accountId()).size());
+            assertEquals(active.securityVersion() + 1, accounts.inspect(active.accountId()).securityVersion());
+            assertEquals(401, get(oldSession, "/api/v1/identity/session").statusCode());
+            assertEquals(401, loginAttempt(client(), active.normalizedLogin(), oldPassword).statusCode());
+            assertEquals(401, loginAttempt(client(), active.normalizedLogin(), passwords[1 - winner]).statusCode());
+            assertEquals(200, loginAttempt(client(), active.normalizedLogin(), passwords[winner]).statusCode());
+        }
+    }
+
+    @Test
+    void resetProofBindingIsMigratorOwnedAndRuntimeCannotRetargetOrDeleteIt() throws Exception {
+        var fixture = setupFixture();
+        var target = new IdentityAdministration(appDataSource()).inspect(fixture.administrator().accountId());
+        assertEquals(200, issueReset(fixture.issuer(), target.organizationId(), target).statusCode());
+        try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
+                "SELECT tableowner FROM pg_tables WHERE schemaname=? AND tablename='credential_reset_proof'")) {
+            query.setString(1, schema);
+            try (var row = query.executeQuery()) { assertTrue(row.next()); assertEquals("idea_ddm_migrator", row.getString(1)); }
+            for (var sql : new String[] { "UPDATE credential_reset_proof SET account_id=account_id",
+                    "UPDATE credential_reset_proof SET security_version=security_version",
+                    "UPDATE credential_reset_proof SET proof_digest=proof_digest",
+                    "UPDATE credential_reset_proof SET expires_at=expires_at",
+                    "DELETE FROM credential_reset_proof", "TRUNCATE credential_reset_proof" }) {
+                try (var statement = connection.createStatement()) {
+                    var refusal = assertThrows(java.sql.SQLException.class, () -> statement.execute(sql));
+                    assertEquals("42501", refusal.getSQLState());
+                }
+            }
+        }
+    }
+
+    @Test
     void wrongTargetAndBadCsrfCannotConsumeProofAndSuccessfulReplayCannotChangePassword() throws Exception {
         var fixture = setupFixture();
         var other = pendingTarget(fixture.administrator());
@@ -278,8 +607,8 @@ class HttpSessionFlowTest {
         var csrf = jsonField(get(fixture.issuer(), "/api/v1/identity/csrf").body(), "token");
         assertEquals(400, postJson(fixture.issuer(), "/api/v1/identity/accounts/" + active.accountId() + "/credential-proofs",
                 csrf, "{\"operationId\":\"" + UUID.randomUUID() + "\",\"organizationId\":\""
-                + fixture.administrator().organizationId() + "\",\"purpose\":\"RESET\",\"expectedSecurityVersion\":"
-                + active.securityVersion() + ",\"reason\":\"Reset is a separate future slice\"}").statusCode());
+                + fixture.administrator().organizationId() + "\",\"purpose\":\"UNSUPPORTED\",\"expectedSecurityVersion\":"
+                + active.securityVersion() + ",\"reason\":\"Unsupported purpose remains refused\"}").statusCode());
     }
 
     @Test

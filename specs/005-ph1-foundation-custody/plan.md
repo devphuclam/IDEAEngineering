@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-09-30 | **Spec**: [PH1 specification v0.4](spec.md)
+**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-09-30 | **Spec**: [PH1 specification v0.5](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -153,3 +153,11 @@ test harness; no browser/email/live credential delivery is qualified by this sli
 
 No exception to the Constitution is requested. The separate Gateway process follows the already
 approved control/data-plane boundary. Only one Gateway/Vault endpoint is built in PH1.
+
+Reset refinement (2026-09-30): use additive V6 and a separate reset service/Permission. Preserve
+V1–V5 and F03-A behavior. An existing-credential target may be ACTIVE or DISABLED; reset changes
+neither status nor actor.disabled_at. Its one-use proof captures the current security version;
+redemption increments it and revokes all account sessions in the same locked IAM transaction.
+Prior proofs are thereby stale. Re-enable stays a separate expected-version operation and never
+changes the credential. Test both states and failures through the already-approved HTTP/PostgreSQL
+seam, not a new client path. No dependency, Core Product Document or product gate is changed.

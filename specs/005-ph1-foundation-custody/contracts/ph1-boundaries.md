@@ -76,7 +76,10 @@ Its issuer request carries `operationId`, `organizationId`, `purpose=FIRST_SETUP
 authority comes only from authentication. With `idea.identity.synthetic-credential-delivery.enabled`
 explicitly enabled in the protected synthetic harness, success returns `proof` and `expiresAt`
 with no-store response handling; this opt-in defaults to false (503, no proof). No live or
-browser-visible delivery is qualified. Reset-purpose requests remain unsupported in this slice.
+browser-visible delivery is qualified. The successor reset slice uses `purpose=RESET` and the
+separate `account.credential.reset.issue` Permission. Targets must already have a credential and
+be ACTIVE or DISABLED at the exact expected security version; PENDING/no-credential targets are
+refused. It uses the same default-off protected synthetic delivery profile, not live recovery.
 
 Redemption carries `operationId`, `accountId`, `proof` and `password`, with CSRF but no
 administrative role requirement. Successful first setup returns 204; a rejected proof/password
@@ -84,6 +87,15 @@ returns a generic empty 400. Issuance refuses unauthorized scope/permission with
 ineligible session with 401; required persistence failure returns empty 503, never success or
 credential diagnostics. Only a valid, unconsumed proof at its pending target/login/version before
 expiry can activate that stable account. It cannot reset an ACTIVE or DISABLED account.
+
+Reset redemption additionally carries `purpose=RESET`; omitted purpose preserves the reviewed
+FIRST_SETUP contract. A reset proof cannot redeem as first setup or vice versa. A valid reset
+returns 204 after atomically replacing the verifier, incrementing security_version, revoking all
+affected sessions and recording IAM outcome/Audit. It leaves account status and actor.disabled_at
+unchanged. Existing proofs pinned to the previous version are stale. A DISABLED target still
+cannot sign in; separate re-enable at the new version is required, followed by fresh sign-in with
+the new password. Invalid proof/state/purpose/password returns empty 400; persistence failure
+returns empty 503 with no partial credential, revocation or evidence change.
 
 Use Spring Security session-fixation and CSRF mechanisms, deny cross-origin credential access,
 and use Secure/HttpOnly/SameSite cookies with host-only scope under same-origin HTTPS. Expiry,

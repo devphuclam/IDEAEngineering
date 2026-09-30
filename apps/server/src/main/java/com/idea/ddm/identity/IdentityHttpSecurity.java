@@ -29,6 +29,11 @@ class IdentityHttpSecurity {
     }
 
     @Bean
+    CredentialResetService credentialResets(DataSource dataSource, Clock identityClock, SessionService sessions) {
+        return new CredentialResetService(dataSource, identityClock, sessions);
+    }
+
+    @Bean
     AuthenticationProvider nativeIdentityProvider(SessionService sessions) {
         return new AuthenticationProvider() {
             @Override
