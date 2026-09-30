@@ -1,20 +1,20 @@
-# F03 Identity Results — Account Administration, HTTP Sessions and First Credential Setup
+# F03 Identity Results — Account Administration, HTTP Sessions and Credential Recovery
 
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.12 / Draft |
+| Version / status | 0.14 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web checkpoint and whole-F03-A technical reviews relayed by the Project Reviewer; internal Standards/Spec review below; Project Reviewer accepted F03-A on 2026-09-30. GPT Web accepted the initial repaired F03-B checkpoint as PASS WITH NOTES at head `3fdf9f56238bb3f0b18ec5004143a699d0f9f27e`; whole-F03-B acceptance remains pending |
+| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. GPT Web reviewed the initial repaired F03-B checkpoint and first-setup head `153d0258108cfe1fdc490d42d57f64aa9098e82f` as PASS WITH NOTES; whole-F03-B acceptance remains pending |
 | Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
-| Applicable baseline | PH1 F03-A historical sources below; F03-B first-setup source `0d740bddc09456f70753996a59dd5f585805d743`, based on `d4268d8d16e6287b7cde937eab4688fc59754fa7`; prior HTTP repair source remains historical |
+| Applicable baseline | Reset successor source `976bd031913edb3e4554af6e23744a1dd55d8527`, based on reviewed first-setup head `153d0258108cfe1fdc490d42d57f64aa9098e82f`; prior F03-A/B sources below remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
-| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); first-setup checkpoint for PR #25 review, not whole-card acceptance |
+| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); reset checkpoint for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.11 at `b29df705db6ffc0770d387986a6e52c95017115f`; section 18 records the subsequent v2 approval, first setup/redemption implementation and execution. Earlier claims and pending decisions retain their historical scope. Superseded by NOT-APPLICABLE |
+| Change / supersession | Supersedes v0.12 at `153d0258108cfe1fdc490d42d57f64aa9098e82f`; v0.13 recorded received review (§19); v0.14 adds the reset clarification, V6 integrity repair and 57-test successor (§20). No dependency or card-state change. Earlier claims retain historical scope. Superseded by NOT-APPLICABLE |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; initial repaired F03-B checkpoint reviewed PASS WITH NOTES. First-setup source executed 47 scoped tests PASS with internal Standards/Spec review; GPT Web review of this new checkpoint and whole-F03-B acceptance remain pending. Main integration and official progress publication remain separate |
+| Evidence status | F03-A accepted; initial repaired F03-B and first-setup checkpoints reviewed PASS WITH NOTES. Reset source executed 57 scoped tests PASS with internal Standards/Spec review; external reset review and whole-F03-B acceptance remain pending. Main integration and official progress publication remain separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -28,7 +28,8 @@ section 13 records the received whole-card technical-readiness review, and secti
 the subsequent Project Reviewer acceptance. Section 15 records the initial F03-B HTTP session
 checkpoint; section 16 records its requested repairs and successor execution; section 17 records
 the received review of that repaired checkpoint. Section 18 records the next approved first-setup
-checkpoint. Earlier pending dispositions are historical.
+checkpoint; section 19 records its received external technical review; section 20 records the reset
+successor. Earlier pending dispositions are historical.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -1033,3 +1034,164 @@ Publication checks: tracked-secret scan PASS (10 exact synthetic fixtures recogn
 binary files skipped); repository hygiene PASS; 37 relative targets across the changed PH1
 documents PASS; git diff --check PASS. No verifier was run. Post-implementation extension hooks
 are NOT-APPLICABLE: `.specify/extensions.yml` is absent.
+
+## 19. Received first-setup checkpoint review
+
+On 2026-09-30 the Project Reviewer supplied GPT Web's read-only review of PR #25:
+
+| Pin | Revision |
+|---|---|
+| Review base | `19587d1b43635822e6a27d86dcae01db9c0220d8` |
+| Reviewed head | `153d0258108cfe1fdc490d42d57f64aa9098e82f` |
+| Executed source | `0d740bddc09456f70753996a59dd5f585805d743` |
+| Disposition | PASS WITH NOTES for first credential setup only |
+| Source record | Human-relayed GPT Web text, SHA-256 `CA08DB1C77F7BCEC641B4301410EBD9B2DF027890A15DC9F04E55ED0F43A8125` |
+
+The review reports no BLOCKER, MAJOR or MINOR in exact v2 assignment, unchanged v1 authority,
+first-setup issuance/redemption, binding/expiry/password boundaries, concurrency, atomic failure,
+default-off synthetic delivery, or admission/commit session eligibility. It accepts section 18's
+47-test execution as scoped technical evidence, not whole-card acceptance. Local comparison
+confirms that the executed-source-to-head delta contains only this evidence, tasks and the three
+already-published progress files; accepted V1–V4 and F03-A regression source did not change.
+
+The reviewer did not independently read private raw host logs. Public V4/V5 remain NOT-RUN;
+the 47 tests migrated only their own UUID schemas. Reset/all-session invalidation, temporary
+login blocking, full HTTP administration/request eligibility, F04's owner-commit race, client
+qualification and affected migration/data regression remain open. SPEC-OPEN-03/06, T036 and
+production/commercial clearance are not closed. No verifier was run or inferred PASS.
+
+This records received technical feedback, not a GitHub approval, new gate decision, merge,
+Issue #24 closure, Tracker action or actual-effort estimate. F03-B remains IN_PROGRESS.
+No runtime rerun was needed to record this review because runtime source did not change.
+The next approved implementation slice is separate password reset and session invalidation;
+the initially unresolved DISABLED state branch was subsequently clarified in spec v0.5:
+reset preserves disablement; re-enable remains a separate operation.
+
+## 20. Reset recovery without account enablement
+
+### Decision, impact and scope
+
+On 2026-09-30 the Project Reviewer authorized the relayed reset proposal if Engineering found it
+consistent. Code inspection confirmed that re-enable activates an account with a verifier:
+requiring re-enable before reset would allow the compromised old password between those actions.
+The proposal matches REQ-IAM-003/004 and the existing contract: reset cannot re-enable a disabled
+account. [Spec v0.5](../spec.md), story 3 scenario 12 and its synthetic profile record the decision;
+[contract](../contracts/ph1-boundaries.md), [plan](../plan.md) and [data model](../data-model.md) carry
+the implementation trace. No new product-gate or live-company security approval is claimed.
+
+`CredentialResetService` uses the existing exact scoped reset permission, shared security-write
+lock, password validator and assignment/session eligibility. ACTIVE and DISABLED targets must
+already have a verifier. RESET has a separate V6 proof table bound to account, login identity,
+purpose and security version; only the digest is stored. Redemption is proof-authorized, not
+role-authorized. Omitted purpose retains FIRST_SETUP compatibility.
+
+Accepted reset replaces the verifier, advances security version, revokes all affected sessions,
+consumes proof and retains IAM outcome, history and Audit in one transaction. Account status and
+the exact `actor.disabled_at` timestamp remain unchanged. Prior proofs become ineligible by
+version, not deleted. DISABLED targets reject both passwords until separate expected-version
+re-enable; afterward only fresh new-password sign-in works. Other accounts' sessions and pinned
+v1 assignments are unaffected. No dependency, live delivery channel or HTTP account-lifecycle
+route was added; issuance still requires explicit synthetic-delivery opt-in.
+
+V1–V5 source and all 20 F03-A regression tests are unchanged. One prior setup test's unsupported
+purpose changes from RESET to UNSUPPORTED because RESET now has a separate path; its FIRST_SETUP
+state/refusal assertions remain intact.
+
+### TDD and source trace
+
+Iterations used reviewed `153d025` archive of `apps/server` + `database`, SHA-256
+`6265342E14D238A95041E1ED1E71ACDEDEABE9FB4359614228595FD743CDE1FF`, in
+`/home/phuclam/idea-f03b-reset-5pQjV0yv`. Apply RED `f03b-reset-red-01.tar`, SHA-256
+`D57FEC44D17C60CA1C70AE2357A5560EEDB330D00BC5AF415E908807F0220CA7`:
+`HttpSessionFlowTest#resetWhileDisabledChangesCredentialButRequiresSeparateReenableAndFreshSignin`
+failed expected 200 / actual 400. Log `idea-f03b-test-JcmVh0ZB.log`, SHA-256
+`40EC587829D00791EAFBD5FE8C066197734B49F4F1D17336A4691EE125DFE789`.
+Apply GREEN production `f03b-reset-green-01.tar`, SHA-256
+`DFF7A009E088C19E0EAFE86D359FBEC11C42B9D7737D3C34028ECA4036EA2BE9`:
+same method passed 1/1. Log `idea-f03b-test-lmYjZvlW.log`, SHA-256
+`59CFAF7F393D6EB06E3D2E02342B720F6D3E569B18C1A620287C14F333453147`.
+
+Regression extensions covered the ten reset cases below. An intermediate issuer test incorrectly
+compared assignment counts captured before its explicit v1/v2 grants. That oracle error was
+corrected, not treated as a production failure or PASS.
+
+Initial committed `78ce36575c884c54dde82eb9f47c49a33f3d9444` ran 57 tests PASS, but internal review
+found a DB invariant not covered: PostgreSQL CHECK accepts UNKNOWN, allowing a consumption
+OperationId without timestamp. Its new regression used that runtime plus test overlay
+`f03b-reset-check-07-red.tar`, SHA-256
+`E0A20404AAED0E19008732378AFCA0FC82E00A0439040FDB1088C45224209AC7`; app's malformed update
+succeeded, so the test failed. RED log `idea-f03b-test-oLiJ68Hg.log`, SHA-256
+`23832BB816A0C29F5BCFA6E76268C46972408B0BC13F5F865C6CF7D87AA34994`.
+
+Successor V6 explicitly requires a non-null consumption timestamp and additively enforces the
+same complete-pair invariant on setup proof, without rewriting V5. Both malformed app updates
+now fail `23514`. Existing contradictory predecessor rows make migration fail closed; no
+evidence is repaired silently. The affected public-data migration remains NOT-RUN.
+
+### Final exact-source execution
+
+Executed source: **`976bd031913edb3e4554af6e23744a1dd55d8527`**. Clean archive command:
+`git archive --format=tar HEAD apps/server database`. SHA-256
+`4AE5C5CC2884AC44AB24CD79E0B545875E898A7E89A41B929296241ABC9880D6` matched on the server;
+fresh extraction `/home/phuclam/idea-f03b-reset-final-oRLdeafN` contained no build outputs/overlays.
+
+```text
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+HttpSessionFlowTest: 35 / failures 0 / errors 0 / skipped 0
+IdentityFlowTest:    20 / failures 0 / errors 0 / skipped 0
+ServerSmokeTest:      2 / failures 0 / errors 0 / skipped 0
+TOTAL:              57 / failures 0 / errors 0 / skipped 0
+BUILD SUCCESS; elapsed 57.418 seconds; finished 2026-09-30 16:29:41 +07:00
+```
+
+Actual Ubuntu PostgreSQL `18.6-0ubuntu0.26.04.1`, Temurin `25.0.4.1+1`, Spring Boot `4.1.1`;
+distinct authenticated `idea_ddm_migrator` and `idea_ddm_app`. Only test-owned UUID `f03a_`/`f03b_`
+schemas in authorized `idea_ddm_f03a_20260930_c91e7a42` were migrated V1–V6 and dropped. Postflight:
+0 owned UUID schemas remain; public Flyway still `1,2,3`. No dev/F02 database or Vault mutation.
+Loopback HTTP, test-only Secure-cookie false and controlled Clock do not qualify Web HTTPS.
+Real idle/absolute budgets stay 2h/8h; proof expiry stays 15 minutes, without wall-clock waiting.
+
+Ten new reset tests cover disabled/active recovery, exact disablement preservation, old passwords
+and sessions, separate re-enable, other-account isolation, explicit v2/scope/session authorization,
+default-off issuance, target/purpose/password/CSRF refusal, replay/staleness, before/at/after expiry,
+IAM/Audit/session-revocation fault rollback, concurrent redemption with one winner, and DB
+owner/immutable binding/complete-consumption constraints.
+
+Final raw log `/home/phuclam/idea-f03b-test-sKJg4Gif.log`, `600 phuclam`, SHA-256
+`7CA74ED7066EFEC703B0F0D27BB32E3A363EAFB2D20A22692B7F1B704E7DB609`.
+Raw host logs stay private, not independently read by GPT Web. Hashes identify files; they do not
+replace independent raw-log review. No password or proof value is published.
+
+### Standards
+
+Source-only review at `78ce365`: one proof-integrity finding, repaired and rechecked at `976bd03`.
+Final Standards: 0 open findings; no material smell judgment identified.
+
+### Spec
+
+Source-only review at `78ce365` and repair `976bd03`: 0 open Spec findings in this reset slice.
+No scope creep. Reviewers did not execute tests/read credentials. Standards 0 open; Spec 0 open;
+external reset review remains pending. These reviews do not accept the whole card.
+
+### Clarification coverage and remaining work
+
+No extra question: one supplied decision integrated. Spec quality 16/16 → 16/16, no checkbox
+change/regression; reviewer checklist stays 12/12. Sections touched: Clarifications, story 3
+acceptance scenario and synthetic profile, with contract/plan/data-model trace.
+
+| Clarification category | Status |
+|---|---|
+| Functional scope/behavior; domain/data; edge cases/failure | Resolved: disabled reset and separate enablement explicit |
+| Interaction/UX; non-functional attributes; integration/dependencies; constraints/tradeoffs; terminology; completion signals; placeholders | Clear within the approved synthetic reset slice |
+
+No reset-slice ambiguity remains; continue the existing implementation plan. Temporary failed-login
+blocking is next. Full HTTP administration, all applicable protected requests/F04 commit race,
+Web/Desktop qualification, fresh public V4–V6 and affected migration/data regression remain open.
+T040–T044, SPEC-OPEN-03/06, T036 and whole-F03-B acceptance are not closed. `verify-template` is
+NOT-RUN. No timer/hours/Tracker action, Issue closure or merge was inferred. Extension hooks are
+NOT-APPLICABLE: `.specify/extensions.yml` is absent. Changes after executed source are evidence
+and tasks only; runtime/tests/migrations/dependencies remain pinned to the final run.
+
+Publication checks: tracked-secret scan PASS (10 exact synthetic fixtures recognized; 233 known
+binary files skipped); repository hygiene PASS; 41 relative targets across changed PH1 documents
+PASS; git diff --check PASS. None is `verify-template`. No new progress publication occurred.
