@@ -9,12 +9,12 @@ Checkout, Review or Release record is created by this increment.
 | Record | Minimum identity and data | Owner and relationship | PH1 invariant |
 |---|---|---|---|
 | Actor | Stable `ActorId`; display identity | Identity and Accounts; may have one native IDEA Account | Never take `ActorId` from an untrusted client request. Disablement does not reassign history. |
-| IDEA Account / Login Identity | Account ID, linked `ActorId`, login identifier, password verifier, status/security version | Identity and Accounts | Bootstrap is controlled and one-time; no public registration. Credentials and verifier never enter Audit or source. |
+| IDEA Account / Login Identity | Account ID, linked `ActorId`; distinct Login Identity ID, login identifier and verifier; Account status/security version | Identity and Accounts; one Account has 0..* Login Identities under DOC-06 | No assumption of one login per Account. RESET requires the exact Login Identity ID and validates its Account/Organization/version/credential/state. Bootstrap is one-time; no public registration. Credentials/verifiers never enter Audit or source. |
 | Account Administrator Role Definition version | Protected role-version ID, role code, exact version and Permissions | Access Policy | Version 1 keeps its three account lifecycle actions. Version 2 adds distinct setup/reset issuance Permissions; no overwrite or automatic assignment retargeting. Only exact supported versions are assignable. |
 | Administrative Role Assignment | Assignment ID, Actor principal, exact role-version ID, Organization Scope, assigned_by, reason and evidence | Access Policy | Super grants v1/v2 through its existing assignment Permission; Super alone cannot issue credential proof. Each successor assignment has its own outcome/Audit. |
 | Session | Internal SessionId, linked Account/Actor, security version, issued time, last eligible activity, absolute expiry and revocation state | Identity and Accounts; native HTTP session registry owns live proof binding | Disabled/stale-version, expired or revoked proof is ineligible. Last eligible activity controls idle expiry; absolute expiry cannot move. Retained metadata cannot restore proof after restart. Never expose a live proof through ActorContext JSON or Audit. |
 | Credential setup/reset proof | ProofId, target Account/Login Identity, purpose, captured security version, digest of high-entropy proof, issue/expiry/consumption state | Identity and Accounts | One successful use at the bound target/state; no plaintext proof in storage/Audit. Redemption changes credential/state and required outcome/Audit atomically. A disabled target cannot become active through reset. Live delivery/recovery qualification remains separate. |
-| Failed-login observation | Login key, bounded observation/failure count and blocked-until state | Identity and Accounts | Apply spec's synthetic window/threshold atomically under concurrent requests. Temporary block is not account disablement, a role grant or identity replacement. |
+| Failed-login observation | Normalized login key, bounded rolling failures and blocked-until state | Identity and Accounts | Apply spec v0.5's window/block boundaries atomically; successful eligible sign-in clears state atomically with session establishment. Blocked refusal retains equivalent password work. Arbitrary unknown identifiers cannot create unbounded durable state; the later test/design contract must define and qualify bounds/expiry before implementation. Temporary block is not disablement or identity replacement. |
 | Sample owner operation | `OperationId`, `ActorId`, command kind, correlation ID, accepted/refused result | PH1 sample authoritative owner; one result for an idempotent operation | It demonstrates the owner/Audit transaction, not a document workflow or general-purpose product object. |
 | Audit Evidence | Evidence ID, `OperationId`, `ActorId`, action, target, timestamp, outcome/reason | Audit Evidence; references owner operation | Append-only. A committed successful owner result and its required evidence share one relational transaction. Audit does not decide the result. |
 | Vault Endpoint | Stable `VaultId`/endpoint identity, adapter kind, eligibility | Artifact Custody | PH1 configures one endpoint. Identity is not its hostname, directory or Adapter key. |
@@ -33,8 +33,12 @@ Checkout, Review or Release record is created by this increment.
   V5 implements FIRST_SETUP only for PENDING/no-verifier targets. Proof-authorized redemption
   activates that same account and increments its security version atomically; no administrator
   role is required of the holder. V6 adds separate RESET proof for ACTIVE/DISABLED targets with
-  an existing credential. Reset preserves account status and Actor disablement, replaces the
-  verifier and increments the security version while revoking all affected sessions atomically.
+  an existing credential. Issuance requires an explicit Login Identity ID even for a single-login
+  Account; validate the exact tuple, never infer the first login. V6 already supplies the proof's
+  Account/Login Identity foreign key, so T046 changes no migration. Reset preserves account status
+  and Actor disablement, replaces only the pinned login's verifier and increments Account security
+  version while revoking all old Account sessions atomically. Sibling credentials remain unchanged
+  and allow fresh sign-in only when the Account is ACTIVE.
   Captured versions make prior proofs stale; later re-enable requires the new expected version
   and never changes the verifier. Login-block records remain a later additive slice.
 - Password length is checked as Unicode code points for the minimum, and UTF-8 bytes for the

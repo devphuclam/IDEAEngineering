@@ -27,7 +27,7 @@ not extra F05 scope.
 
 ## Run by card
 
-The F01 entry points to create under T003–T011 are:
+The F01 entry points created under T003–T011 are:
 
 ```text
 Ubuntu Server:   cd apps/server && ./mvnw -B verify
@@ -40,10 +40,10 @@ Windows Workspace: dotnet build apps/workspace/IdeaWorkspace.csproj
 
 These commands are targets, not reports of successful execution. Exact package intake is required
 before any new import; the historical NuGet exception in T002 does not waive this rule for another
-package or version. T003 must provide the wrapper and projects. The pinned
+package or version. T003 provides the wrapper and projects. The pinned
 Maven wrapper requires `unzip` on the Ubuntu host to retain its ZIP checksum path. For F02–F05,
-the card evidence must include the exact migration, application-start and scenario commands added
-with those implementations, because no such executable exists yet.
+the card evidence must include the exact migration, application-start and scenario commands from
+each implemented checkpoint; commands for unfinished slices remain planned, never presumed PASS.
 
 | Card | Run and retain | Expected result / limit |
 |---|---|---|
@@ -88,11 +88,26 @@ new `f03b_<32 hexadecimal UUID>` schema: migrate and remove only that exact sche
 public and retained F03-A state unchanged; no development/F02 database or Vault write.
 Missing access is BLOCKED, not permission to substitute an in-memory database.
 
-The scoped runner to implement is `apps/server/scripts/run-f03b-postgresql-checks.sh`.
-It must fail closed if required credentials/roles/database are missing and report skipped tests
-as NOT-RUN, not PASS. First tracer: anonymous GET to the protected session route must return
-401; it must not return an Actor or login-page redirect. Continue one red/green behavior at a time
-through the [HTTP contract](contracts/ph1-boundaries.md#f03-b-http-refinement).
+The scoped runner is `apps/server/scripts/run-f03b-postgresql-checks.sh`. It fails closed if
+required credentials/roles/database are missing; any skipped check must be reported NOT-RUN,
+not PASS. The anonymous-session tracer is historical evidence. The current next step is T046's
+explicit Login Identity reset repair, one RED → GREEN behavior at a time through the
+[HTTP contract](contracts/ph1-boundaries.md#f03-b-http-refinement). RESET requests now require
+loginIdentityId even for one login; test both selections on a two-login Account, missing/foreign
+selectors, credential/scope/version refusal, sibling credential preservation, Account-wide old
+session revocation, stale sibling proof and disabled recovery followed by separate re-enable.
+
+Run the affected checkpoint from an archive of the exact committed source:
+
+```bash
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+```
+
+Preserve T045/§20 and V1–V6. Append successor evidence, obtain external review, then rerun
+`speckit-analyze` before throttling; do not implement throttling or merge in this repair.
+Spec v0.5 owns rolling-window and resource/timing requirements. Client qualification remains
+T043's seam → failing tests/evidence contract → implementation if needed → real Web/Desktop
+execution, never inferred from this Java HTTP runner.
 
 Check default profile values, then advance test time at setup-proof, idle, absolute and login
 block boundaries. Do not wait minutes/hours or change the server's clock. Cookie/session/CSRF

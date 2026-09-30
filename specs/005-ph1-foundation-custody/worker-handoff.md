@@ -28,8 +28,8 @@ Use the existing card evidence files named in tasks.md; do not create a competin
 | Checklist | Tasks that deliver or verify the approved content | Completion evidence |
 |---|---|---|
 | CHK001–002: scope | T001, T035 | Compare delivered source and configuration with F01–F05. Exactly one Gateway/Vault is configured for PH1; later document workflow, multi-vault and Format Worker remain scheduled/deferred, not claimed delivered. |
-| CHK003: trace | T035 | Every local FR-001–012 maps to its governing source and applicable implementation/test evidence. Missing trace remains an explicit gap. |
-| CHK004–005: identity/session | T018–T022, T023/T025 | Executed tests for server-derived Actor, first/repeated bootstrap, sign-out, disable/revoke, re-enable with fresh login, and commit-time invalidation. Preserve evidence of the controlled race ordering. |
+| CHK003: trace | T035 | Every local FR-001–014 maps to its governing source and applicable implementation/test evidence. Missing trace remains an explicit gap. |
+| CHK004–005: identity/session | T018–T022, refinement T038–T046, T023/T025 | Executed tests for server-derived Actor, first/repeated bootstrap, exact-login credential recovery, sign-out, disable/revoke, re-enable with fresh login, and commit-time invalidation. Preserve evidence of the controlled race ordering. |
 | CHK006: owner outcome/Audit | T023–T026 | Allowed, refused, forced-failure and same-ID retry results; database assertions prove outcome/Audit consistency and no partial success. |
 | CHK007–008: control, bytes, custody | T028–T034 | Actual Client→Gateway route and candidate/Receipt/accepted-metadata assertions. No Generation or Check-in result is created by the PH1 fixture transfer. |
 | CHK009–010: failures and future multi-vault seam | T028–T034 | Each detailed check below has retained test/review evidence, not merely source comments. |
@@ -40,6 +40,30 @@ Scope/trace items require source review; behavior items require executed tests. 
 for the other. Before closing a card, inspect every applicable row; before claiming PH1 complete,
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
+
+## Current F03-B repair handoff
+
+Use spec v0.5, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
+implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
+rewrite evidence §20. The approved current work is successor T046, not throttling:
+
+1. Repair Spec Kit/current handoff references without changing historical pins or frozen sources.
+2. Follow TDD at the approved real Server HTTP + PostgreSQL seam: require explicit RESET
+   loginIdentityId; validate the exact target tuple; prove both L1/L2 choices, refusals, unchanged
+   sibling credentials and Account-wide invalidation. See spec scenario 12 and the HTTP contract.
+   Never add a one-login invariant, first-row fallback or new migration; preserve V1–V6.
+3. Rerun on exact committed source and append successor evidence. Retain RED/GREEN and limits.
+4. Publish the successor checkpoint for external review without merge. After that review, run
+   read-only `speckit-analyze`; only then consider the later throttling implementation slice.
+
+A1 throttling is clarification/test planning only here. Spec owns its rolling-window rules.
+Before its future code, define failing-test contracts for atomic concurrent updates and
+success/session clearing, deadline boundaries, equivalent blocked password work and bounded
+unknown-identifier state. T043 owns four ordered client steps: qualification seam → failing
+test/evidence contract → implementation if needed → actual Web/Desktop evidence. Java HTTP
+harness results cannot replace client qualification; unrun remains NOT-RUN/BLOCKED.
+
+Keep F03-B IN_PROGRESS, Issue #24 open and verifier NOT-RUN. No merge or whole-card PASS.
 
 ## Detailed evidence for CHK009 and CHK010
 

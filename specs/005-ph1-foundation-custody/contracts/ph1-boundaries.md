@@ -77,9 +77,13 @@ authority comes only from authentication. With `idea.identity.synthetic-credenti
 explicitly enabled in the protected synthetic harness, success returns `proof` and `expiresAt`
 with no-store response handling; this opt-in defaults to false (503, no proof). No live or
 browser-visible delivery is qualified. The successor reset slice uses `purpose=RESET` and the
-separate `account.credential.reset.issue` Permission. Targets must already have a credential and
-be ACTIVE or DISABLED at the exact expected security version; PENDING/no-credential targets are
-refused. It uses the same default-off protected synthetic delivery profile, not live recovery.
+separate `account.credential.reset.issue` Permission. RESET additionally requires `loginIdentityId`,
+even when the Account has only one login. Validate that exact login belongs to the route Account,
+the Account belongs to the requested Organization, the security version matches and the selected
+login has a credential in an eligible ACTIVE/DISABLED Account. Missing/null selector returns empty
+400; unknown/foreign/ineligible binding returns empty 403 under eligible issuer authority, without
+proof or credential mutation. Never choose a first row or fallback. PENDING/no-credential targets
+are refused. It uses the same default-off protected synthetic delivery profile, not live recovery.
 
 Redemption carries `operationId`, `accountId`, `proof` and `password`, with CSRF but no
 administrative role requirement. Successful first setup returns 204; a rejected proof/password
@@ -90,11 +94,14 @@ expiry can activate that stable account. It cannot reset an ACTIVE or DISABLED a
 
 Reset redemption additionally carries `purpose=RESET`; omitted purpose preserves the reviewed
 FIRST_SETUP contract. A reset proof cannot redeem as first setup or vice versa. A valid reset
-returns 204 after atomically replacing the verifier, incrementing security_version, revoking all
+returns 204 after atomically replacing only the proof-pinned Login Identity's verifier, incrementing Account security_version, revoking all
 affected sessions and recording IAM outcome/Audit. It leaves account status and actor.disabled_at
 unchanged. Existing proofs pinned to the previous version are stale. A DISABLED target still
 cannot sign in; separate re-enable at the new version is required, followed by fresh sign-in with
-the new password. Invalid proof/state/purpose/password returns empty 400; persistence failure
+the selected login's new password. Other Login Identity credentials remain unchanged and may
+establish fresh sessions when the Account is ACTIVE; their old sessions and version-pinned proofs
+are still invalidated by the Account-wide transition. Redemption cannot override the proof's login
+target. Invalid proof/state/purpose/password returns empty 400; persistence failure
 returns empty 503 with no partial credential, revocation or evidence change.
 
 Use Spring Security session-fixation and CSRF mechanisms, deny cross-origin credential access,
@@ -104,3 +111,10 @@ loopback transport/timing overrides must be recorded and cannot weaken the norma
 be exposed as a client-accessible control route. Native Desktop binding/protected-custody
 qualification is separate from a Java HTTP harness; no password or session secret enters page
 JavaScript. F04 retains the owner-commit race test, using a verified session reference.
+
+Throttling remains planned, not implemented by T046. Its HTTP test contract must exercise spec
+v0.5's rolling failure window and before/at/after block deadlines, generic refusal with equivalent
+qualified password work on blocked paths, atomic concurrent updates and success/session clearing,
+and bounded unknown-login state. Actual Web/Desktop qualification proceeds through agreed seam,
+failing-test/evidence contract, implementation if needed, then real-client execution; unrun stays
+NOT-RUN/BLOCKED. The Java HTTP harness alone cannot qualify either client.

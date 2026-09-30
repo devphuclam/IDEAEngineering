@@ -249,11 +249,239 @@ class HttpSessionFlowTest {
     }
 
     private HttpResponse<String> issueReset(HttpClient issuer, UUID organization, IdentityAdministration.Account target) throws Exception {
+        return issueReset(issuer, organization, target, target.loginIdentityId());
+    }
+
+    private HttpResponse<String> issueReset(HttpClient issuer, UUID organization, IdentityAdministration.Account target,
+            UUID loginIdentity) throws Exception {
         return postJson(issuer, "/api/v1/identity/accounts/" + target.accountId() + "/credential-proofs",
                 jsonField(get(issuer, "/api/v1/identity/csrf").body(), "token"),
                 "{\"operationId\":\"" + UUID.randomUUID() + "\",\"organizationId\":\"" + organization
                 + "\",\"purpose\":\"RESET\",\"expectedSecurityVersion\":" + target.securityVersion()
+                + (loginIdentity == null ? "" : ",\"loginIdentityId\":\"" + loginIdentity + "\"")
                 + ",\"reason\":\"Synthetic credential recovery without enablement\"}");
+    }
+
+    @Test
+    void resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin() throws Exception {
+        var fixture = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var target = accounts.inspect(fixture.administrator().accountId());
+        var refused = issueReset(fixture.issuer(), target.organizationId(), target, null);
+        assertEquals(400, refused.statusCode(), "RESET cannot infer even a single Login Identity");
+        assertEquals("", refused.body());
+        assertEquals(target, accounts.inspect(target.accountId()));
+        assertEquals(200, get(fixture.issuer(), "/api/v1/identity/session").statusCode());
+    }
+
+    private record DualLoginFixture(SetupFixture setup, IdentityAdministration.Account account,
+            Fixture first, UUID secondLoginIdentityId, Fixture second) {}
+
+    private DualLoginFixture dualLoginFixture() throws Exception {
+        var setup = setupFixture();
+        var firstPassword = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), setup.target().accountId(), proofFor(setup, setup.target()), firstPassword).statusCode());
+        var account = new IdentityAdministration(appDataSource()).inspect(setup.target().accountId());
+        var secondId = UUID.randomUUID();
+        var secondLogin = "synthetic.second." + UUID.randomUUID();
+        var secondPassword = UUID.randomUUID().toString();
+        // Fixture construction only: the controlled model permits multiple Login Identities.
+        // The mutation under test still crosses the real HTTP authority/transaction boundary.
+        try (var connection = migrator(); var insert = connection.prepareStatement("INSERT INTO " + schema
+                + ".login_identity(login_identity_id,account_id,login_identifier,normalized_login_identifier,password_verifier) VALUES (?,?,?,?,?)")) {
+            insert.setObject(1, secondId);
+            insert.setObject(2, account.accountId());
+            insert.setString(3, secondLogin);
+            insert.setString(4, secondLogin);
+            insert.setString(5, new NativePasswordVerifier().encodeNewCredential(secondPassword));
+            assertEquals(1, insert.executeUpdate());
+        }
+        return new DualLoginFixture(setup, account,
+                new Fixture(account.actorId(), account.accountId(), account.organizationId(), account.normalizedLogin(), firstPassword),
+                secondId, new Fixture(account.actorId(), account.accountId(), account.organizationId(), secondLogin, secondPassword));
+    }
+
+    @Test
+    void resetExplicitSecondLoginChangesOnlyItAndInvalidatesEveryAccountSession() throws Exception {
+        var fixture = dualLoginFixture();
+        var account = fixture.account();
+        var oldFirst = signedIn(fixture.first());
+        var oldSecond = signedIn(fixture.second());
+        var siblingProof = issueReset(fixture.setup().issuer(), account.organizationId(), account, account.loginIdentityId());
+        assertEquals(200, siblingProof.statusCode());
+        var issued = issueReset(fixture.setup().issuer(), account.organizationId(), account, fixture.secondLoginIdentityId());
+        assertEquals(200, issued.statusCode());
+        var password = UUID.randomUUID().toString();
+        var operation = UUID.randomUUID();
+        assertEquals(204, redeemReset(client(), operation, account.accountId(), jsonField(issued.body(), "proof"), password).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.second().login(), password).statusCode(), "Explicit L2, not the first row, must change");
+        assertEquals(401, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.first().login(), password).statusCode());
+        assertEquals(401, get(oldFirst, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(oldSecond, "/api/v1/identity/session").statusCode());
+        assertEquals(400, redeemReset(client(), account.accountId(), jsonField(siblingProof.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+        var accounts = new IdentityAdministration(appDataSource());
+        assertEquals(account.securityVersion() + 1, accounts.inspect(account.accountId()).securityVersion());
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        assertEquals(200, get(fixture.setup().issuer(), "/api/v1/identity/session").statusCode());
+    }
+
+    @Test
+    void resetExplicitFirstLoginPreservesSecondCredentialAndRejectsReplay() throws Exception {
+        var fixture = dualLoginFixture();
+        var account = fixture.account();
+        var oldFirst = signedIn(fixture.first());
+        var oldSecond = signedIn(fixture.second());
+        var siblingProof = issueReset(fixture.setup().issuer(), account.organizationId(), account, fixture.secondLoginIdentityId());
+        assertEquals(200, siblingProof.statusCode());
+        var issued = issueReset(fixture.setup().issuer(), account.organizationId(), account, account.loginIdentityId());
+        assertEquals(200, issued.statusCode());
+        var proof = jsonField(issued.body(), "proof");
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeemReset(client(), account.accountId(), proof, password).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.first().login(), password).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.second().login(), password).statusCode());
+        assertEquals(401, get(oldFirst, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(oldSecond, "/api/v1/identity/session").statusCode());
+        assertEquals(400, redeemReset(client(), account.accountId(), proof, UUID.randomUUID().toString()).statusCode());
+        assertEquals(400, redeemReset(client(), account.accountId(), jsonField(siblingProof.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+        assertEquals(account.securityVersion() + 1, new IdentityAdministration(appDataSource()).inspect(account.accountId()).securityVersion());
+    }
+
+    @Test
+    void resetRejectsUnknownForeignCredentiallessAndStaleExactLoginTargets() throws Exception {
+        var fixture = dualLoginFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var account = fixture.account();
+        var noCredentialId = UUID.randomUUID();
+        var noCredentialLogin = "synthetic.no-credential." + UUID.randomUUID();
+        try (var connection = migrator(); var insert = connection.prepareStatement("INSERT INTO " + schema
+                + ".login_identity(login_identity_id,account_id,login_identifier,normalized_login_identifier,password_verifier) VALUES (?,?,?,?,NULL)")) {
+            insert.setObject(1, noCredentialId);
+            insert.setObject(2, account.accountId());
+            insert.setString(3, noCredentialLogin);
+            insert.setString(4, noCredentialLogin);
+            assertEquals(1, insert.executeUpdate());
+        }
+        var foreignLogin = accounts.inspect(fixture.setup().administrator().accountId()).loginIdentityId();
+        var firstSession = signedIn(fixture.first());
+        var secondSession = signedIn(fixture.second());
+        var beforeHistory = accounts.history(account.accountId());
+        for (var invalid : new UUID[] { UUID.randomUUID(), foreignLogin, noCredentialId }) {
+            var refused = issueReset(fixture.setup().issuer(), account.organizationId(), account, invalid);
+            assertEquals(403, refused.statusCode());
+            assertEquals("", refused.body(), "No existence/credential diagnostics or proof on refusal");
+        }
+        assertEquals(403, issueReset(fixture.setup().issuer(), UUID.randomUUID(), account, account.loginIdentityId()).statusCode());
+        var stale = new IdentityAdministration.Account(account.actorId(), account.accountId(), account.loginIdentityId(),
+                account.organizationId(), account.displayName(), account.normalizedLogin(), account.status(), account.securityVersion() + 1,
+                account.roleAssignments());
+        assertEquals(403, issueReset(fixture.setup().issuer(), account.organizationId(), stale, fixture.secondLoginIdentityId()).statusCode());
+        var nullSelector = postJson(fixture.setup().issuer(), "/api/v1/identity/accounts/" + account.accountId() + "/credential-proofs",
+                jsonField(get(fixture.setup().issuer(), "/api/v1/identity/csrf").body(), "token"),
+                "{\"operationId\":\"" + UUID.randomUUID() + "\",\"organizationId\":\"" + account.organizationId()
+                + "\",\"purpose\":\"RESET\",\"expectedSecurityVersion\":" + account.securityVersion()
+                + ",\"loginIdentityId\":null,\"reason\":\"Synthetic explicit null refusal\"}");
+        assertEquals(400, nullSelector.statusCode());
+        assertEquals("", nullSelector.body());
+        assertEquals(account.securityVersion(), accounts.inspect(account.accountId()).securityVersion());
+        assertEquals(beforeHistory, accounts.history(account.accountId()));
+        assertEquals(200, get(firstSession, "/api/v1/identity/session").statusCode());
+        assertEquals(200, get(secondSession, "/api/v1/identity/session").statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+    }
+
+    @Test
+    void disabledTwoLoginResetPreservesDisablementAndSiblingCredentialUntilSeparateReenable() throws Exception {
+        var fixture = dualLoginFixture();
+        var account = fixture.account();
+        var accounts = new IdentityAdministration(appDataSource());
+        var oldFirst = signedIn(fixture.first());
+        var oldSecond = signedIn(fixture.second());
+        var authority = new ActorContext(fixture.setup().administrator().actorId(), 1);
+        var disabled = accounts.disable(authority, UUID.randomUUID(), account.organizationId(), account.accountId(),
+                account.securityVersion(), "Synthetic dual-login compromise");
+        var disabledAt = actorDisabledAt(account.actorId());
+        assertNotNull(disabledAt);
+        var sibling = issueReset(fixture.setup().issuer(), account.organizationId(), disabled, account.loginIdentityId());
+        assertEquals(200, sibling.statusCode());
+        var issued = issueReset(fixture.setup().issuer(), account.organizationId(), disabled, fixture.secondLoginIdentityId());
+        assertEquals(200, issued.statusCode());
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeemReset(client(), account.accountId(), jsonField(issued.body(), "proof"), password).statusCode());
+        var reset = accounts.inspect(account.accountId());
+        assertEquals("DISABLED", reset.status());
+        assertEquals(disabled.securityVersion() + 1, reset.securityVersion());
+        assertEquals(account.actorId(), reset.actorId());
+        assertEquals(disabledAt, actorDisabledAt(account.actorId()));
+        assertEquals(401, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.second().login(), password).statusCode());
+        assertEquals(400, redeemReset(client(), account.accountId(), jsonField(sibling.body(), "proof"), UUID.randomUUID().toString()).statusCode());
+        var enabled = accounts.reenable(authority, UUID.randomUUID(), account.organizationId(), account.accountId(),
+                reset.securityVersion(), "Separate enablement after selected-login recovery");
+        assertEquals("ACTIVE", enabled.status());
+        assertEquals(reset.securityVersion() + 1, enabled.securityVersion());
+        assertEquals(200, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.first().login(), password).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.second().login(), password).statusCode());
+        assertEquals(401, get(oldFirst, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(oldSecond, "/api/v1/identity/session").statusCode());
+        assertEquals(200, get(fixture.setup().issuer(), "/api/v1/identity/session").statusCode());
+    }
+
+    @Test
+    void twoLoginResetAuditFailureRollsBackAndRedemptionCannotRetargetPinnedLogin() throws Exception {
+        var fixture = dualLoginFixture();
+        var account = fixture.account();
+        var accounts = new IdentityAdministration(appDataSource());
+        var oldFirst = signedIn(fixture.first());
+        var oldSecond = signedIn(fixture.second());
+        var issued = issueReset(fixture.setup().issuer(), account.organizationId(), account, fixture.secondLoginIdentityId());
+        assertEquals(200, issued.statusCode());
+        var operation = UUID.randomUUID();
+        var password = UUID.randomUUID().toString();
+        var beforeHistory = accounts.history(account.accountId());
+        var holder = client();
+        var csrf = jsonField(get(holder, "/api/v1/identity/csrf").body(), "token");
+        var body = redemption(operation, account.accountId(), jsonField(issued.body(), "proof"), password);
+        body = body.substring(0, body.length() - 1) + ",\"purpose\":\"RESET\",\"loginIdentityId\":\"" + account.loginIdentityId() + "\"}";
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_dual_reset_audit() RETURNS trigger LANGUAGE plpgsql AS $$ "
+                    + "BEGIN IF NEW.action='account.credential.reset.redeem' THEN RETURN NULL; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE TRIGGER suppress_dual_reset_audit BEFORE INSERT ON " + schema
+                    + ".audit_evidence FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_dual_reset_audit()");
+        }
+        try {
+            var refused = postJson(holder, "/api/v1/identity/credentials", csrf, body);
+            assertEquals(503, refused.statusCode());
+            assertEquals("", refused.body());
+            assertEquals(account.securityVersion(), accounts.inspect(account.accountId()).securityVersion());
+            assertEquals(beforeHistory, accounts.history(account.accountId()));
+            assertEquals(new IdentityAdministration.Evidence(null, 0, 0), accounts.evidence(operation));
+            assertEquals(200, get(oldFirst, "/api/v1/identity/session").statusCode());
+            assertEquals(200, get(oldSecond, "/api/v1/identity/session").statusCode());
+            assertEquals(200, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+            assertEquals(200, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+            assertEquals(401, loginAttempt(client(), fixture.second().login(), password).statusCode());
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_dual_reset_audit ON " + schema + ".audit_evidence");
+            }
+        }
+        assertEquals(204, postJson(holder, "/api/v1/identity/credentials", csrf, body).statusCode(), "Failed audit did not consume proof");
+        assertEquals(200, loginAttempt(client(), fixture.second().login(), password).statusCode(), "Proof-pinned L2 beats untrusted L1 selector");
+        assertEquals(401, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(401, loginAttempt(client(), fixture.first().login(), password).statusCode());
+        assertEquals(401, get(oldFirst, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(oldSecond, "/api/v1/identity/session").statusCode());
+        assertEquals(account.securityVersion() + 1, accounts.inspect(account.accountId()).securityVersion());
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
     }
 
     @Test

@@ -32,21 +32,22 @@ final class CredentialResetService {
     }
 
     CredentialSetupService.IssuedProof issue(ActorContext issuer, UUID operation, UUID organization,
-            UUID target, long expectedVersion, String reason) {
-        if (operation == null || organization == null || target == null || expectedVersion < 1
+            UUID target, UUID targetLoginIdentity, long expectedVersion, String reason) {
+        if (operation == null || organization == null || target == null || targetLoginIdentity == null || expectedVersion < 1
                 || reason == null || reason.isBlank() || reason.length() > 500
                 || reason.codePoints().anyMatch(Character::isISOControl)) throw new IdentityRefusal("INVALID_INPUT");
         return transactions.mutate(issuer, operation, organization, "account.credential.reset.issue",
                 "IDEA_ACCOUNT", target.toString(), IdentityTransactions.Owner.IAM, connection -> {
                     sessions.requireEligible(connection, issuer);
-                    try (var query = connection.prepareStatement("SELECT l.login_identity_id FROM idea_account a "
+                    try (var query = connection.prepareStatement("SELECT 1 FROM idea_account a "
                             + "JOIN actor p USING(actor_id) JOIN login_identity l USING(account_id) "
-                            + "WHERE a.account_id=? AND a.organization_id=? AND a.security_version=? "
+                            + "WHERE a.account_id=? AND a.organization_id=? AND a.security_version=? AND l.login_identity_id=? "
                             + "AND ((a.status='ACTIVE' AND p.disabled_at IS NULL) "
                             + "OR (a.status='DISABLED' AND p.disabled_at IS NOT NULL)) AND l.password_verifier IS NOT NULL")) {
                         query.setObject(1, target);
                         query.setObject(2, organization);
                         query.setLong(3, expectedVersion);
+                        query.setObject(4, targetLoginIdentity);
                         try (var row = query.executeQuery()) {
                             if (!row.next()) throw new IdentityRefusal("INELIGIBLE_TARGET");
                             var entropy = new byte[32];
@@ -57,7 +58,7 @@ final class CredentialResetService {
                             AdministratorBootstrap.insert(connection, "INSERT INTO credential_reset_proof "
                                     + "(proof_id,account_id,login_identity_id,purpose,security_version,proof_digest,issued_by,"
                                     + "issue_operation_id,reason,issued_at,expires_at) VALUES (?,?,?,'RESET',?,?,?,?,?,?,?)",
-                                    UUID.randomUUID(), target, row.getObject(1, UUID.class), expectedVersion, digest(proof),
+                                    UUID.randomUUID(), target, targetLoginIdentity, expectedVersion, digest(proof),
                                     issuer.actorId(), operation, reason, Timestamp.from(issued), Timestamp.from(expires));
                             return new CredentialSetupService.IssuedProof(proof, expires);
                         }

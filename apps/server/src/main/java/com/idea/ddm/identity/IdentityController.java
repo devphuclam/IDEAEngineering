@@ -32,7 +32,8 @@ class IdentityController {
     }
 
     record CsrfProof(String headerName, String token) {}
-    record IssueCredential(UUID operationId, UUID organizationId, String purpose, long expectedSecurityVersion, String reason) {}
+    record IssueCredential(UUID operationId, UUID organizationId, String purpose, long expectedSecurityVersion, String reason,
+            UUID loginIdentityId) {}
     record RedeemCredential(UUID operationId, UUID accountId, String proof, String password, String purpose) {
         @Override public String toString() { return "RedeemCredential[credentials=REDACTED]"; }
     }
@@ -45,7 +46,7 @@ class IdentityController {
         try {
             var identity = authentication.getPrincipal() instanceof SessionService.Identity value ? value : null;
             if ("RESET".equals(request.purpose())) return ResponseEntity.ok(resets.issue(sessions.context(identity),
-                    request.operationId(), request.organizationId(), account, request.expectedSecurityVersion(), request.reason()));
+                    request.operationId(), request.organizationId(), account, request.loginIdentityId(), request.expectedSecurityVersion(), request.reason()));
             return ResponseEntity.ok(credentials.issue(sessions.context(identity), request.operationId(), request.organizationId(), account,
                     request.purpose(), request.expectedSecurityVersion(), request.reason()));
         } catch (AuthenticationException exception) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); }

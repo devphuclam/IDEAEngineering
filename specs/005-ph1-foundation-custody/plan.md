@@ -130,9 +130,11 @@ The Project Reviewer approved the real HTTP/real PostgreSQL test seam on 2026-09
 Pre/post-design Constitution check: this refinement implements FR-005/014 under the existing
 PH1 authority, keeps live policy `SPEC-OPEN-06` open, and retains pre-use intake and truthful
 NOT-RUN states. It requests no constitutional exception or new product-gate approval.
-The next tracer bullet is an anonymous request to the protected session endpoint: expect 401,
-not a login-page redirect, an Actor or a successful response. Its green implementation depends
-on HTTP Security intake; its initial red run uses only already-qualified build dependencies.
+The initial anonymous-session tracer and reviewed first-setup/reset checkpoints are retained in
+the evidence record. The current next step is T046: exact Login Identity reset repair through
+the approved HTTP/PostgreSQL seam, exact-source rerun and successor evidence, then external
+review and read-only `speckit-analyze`. Do not implement throttling before that sequence finishes.
+F03-B remains IN_PROGRESS; Issue #24 open, verifier NOT-RUN and no merge.
 
 ## Complexity Tracking
 
@@ -141,8 +143,10 @@ v2 assignment and first setup proof; proof redemption/activation; separate reset
 invalidation; temporary failed-login block. V5 introduces the v2 seed and first-setup data without
 changing V1–V4 or existing assignments. The assignment command supports only the exact seeded
 v1/v2 IDs and versions, not arbitrary versions sharing a role code. Permission contents are
-owned by spec's clarification. Later reset/throttling use successor migrations, not a rewrite
-of a committed V5. All v1/F03-A tests remain applicable and unchanged.
+owned by spec's clarification. Reset's V6 is committed; preserve V1–V6. The exact-login repair
+needs no migration because V6 already pins the Account/Login Identity tuple. A future throttling
+slice may add a successor migration, never rewrite these baselines. All v1/F03-A tests remain
+applicable and unchanged.
 
 First-setup issuance checks session eligibility before permission/scope evaluation and again
 under the security-write lock. Rejected requests do not refresh idle activity; accepted owner
@@ -161,3 +165,19 @@ redemption increments it and revokes all account sessions in the same locked IAM
 Prior proofs are thereby stale. Re-enable stays a separate expected-version operation and never
 changes the credential. Test both states and failures through the already-approved HTTP/PostgreSQL
 seam, not a new client path. No dependency, Core Product Document or product gate is changed.
+
+External-review repair T046: require `loginIdentityId` on RESET issuance and validate it against
+the requested Account, Organization, version, credential and state; never choose a first login
+or infer one. Only the pinned login's credential changes. Account-wide version/session invalidation
+still applies; other Login Identities retain their credentials for fresh eligible sign-in. Keep
+historical T045 and evidence §20 unchanged and append successor evidence.
+
+Throttling planning only: spec v0.5 owns the rolling-window/deadline semantics. The later red-test
+contract must prove atomic concurrent counting, atomic success/session establishment and clearing,
+generic equivalent password work including blocked refusal, and bounded unknown-identifier state
+with explicit capacity/expiry behavior before implementation. Controlled time tests cover
+immediately before, exactly at and after window/block boundaries. No throttling code is added here.
+
+T043 client qualification order is: agree the actual client seam → define failing tests/evidence
+contract → implement if needed → execute real Web/Desktop and retain platform evidence. Java
+HTTP evidence is not client qualification; unexecuted paths remain NOT-RUN/BLOCKED.
