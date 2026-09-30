@@ -92,6 +92,24 @@
       "durationMinutes": 55,
       "state": "CLOSED",
       "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-5f3fd9f4a66340e18a7ecb22fc0370bb",
+      "deliveryCardId": "F03-A",
+      "startedAt": "2026-09-30T09:28:18.8836947+07:00",
+      "stoppedAt": "2026-09-30T11:43:28.233063+07:00",
+      "durationMinutes": 135,
+      "state": "CLOSED",
+      "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-2c2ad5078a794e89b294d532d1b4b788",
+      "deliveryCardId": "F03-B",
+      "startedAt": "2026-09-30T13:01:00.9631915+07:00",
+      "stoppedAt": null,
+      "durationMinutes": null,
+      "state": "RUNNING",
+      "recordedBy": "LEAD"
     }
   ],
   "corrections": [

@@ -1,7 +1,7 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 26,
+  "registerRevision": 29,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
@@ -610,28 +610,91 @@
         "kind": "DeliveryCard",
         "id": "F03-A"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 11,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F03-A-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": null,
+          "commit": "79373e95502474e64dd2a72604c2d9629daa9e36",
+          "sha256": null,
+          "externalUri": null,
+          "description": "Accepted F03-A: controlled one-time bootstrap; independent exact-version/Organization-scoped Account Administrator assignment; account create/disable/re-enable, authorization refusal, stable identities and atomic outcome/Audit. Published evidence at this exact commit: specs/005-ph1-foundation-custody/evidence/F03-identity-results.md v0.5, sections 6–12; PR https://github.com/devphuclam/IDEAEngineering/pull/23. 22 tests PASS; dedicated fresh public V1/V2/V3 and repeat migration PASS; real interactive initialize/repeat with unchanged state PASS. Whole-scope GPT Web review PASS WITH NOTES; private host logs not independently read by Web reviewer is INFO, not a blocker. Project Reviewer conditional completion accepted after factual check. F03-B, verifier NOT-RUN, T036/commercial, production and multi-Vault remain excluded. COMMIT evidence refers to the published branch commit, not a file present on main; integration/progress publication are separate.",
+          "result": "PASS",
+          "recordedAt": "2026-09-30T11:43:28.233063+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F03-A-EVENT-1",
+          "effectiveAt": "2026-09-30T09:28:18.8836947+07:00",
+          "recordedAt": "2026-09-30T09:28:18.8836947+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng chốt hai đề nghị và yêu cầu Bắt đầu F03-A ngày 30/09/2026."
+        },
+        {
+          "eventId": "F03-A-EVENT-2",
+          "effectiveAt": "2026-09-30T11:43:28.233063+07:00",
+          "recordedAt": "2026-09-30T11:43:28.233063+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Project Reviewer yêu cầu Hoàn thành F03-A nếu không còn blocker ngày 30/09/2026. Đối chiếu Issue #22, source/evidence và review toàn F03-A tại 79373e95502474e64dd2a72604c2d9629daa9e36: không còn blocker trong phạm vi đã chốt. Không suy ra F03-B hay merge/công bố tiến độ. Ghi nhận 135 phút làm việc thực tế."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
+      "actualStart": "2026-09-30T09:28:18.8836947+07:00",
+      "actualFinish": "2026-09-30T11:43:28.233063+07:00",
+      "actualEffortHours": 2.25,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-09-30T11:43:28.233063+07:00",
+      "remainingReviewedAt": "2026-09-30T11:43:28.233063+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
         "kind": "DeliveryCard",
         "id": "F03-B"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 12,
       "disposition": "ACTIVE",
       "evidence": [],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F03-B-EVENT-1",
+          "effectiveAt": "2026-09-30T13:01:00.9631915+07:00",
+          "recordedAt": "2026-09-30T13:01:00.9631915+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng yêu cầu Bắt đầu F03-B ngày 30/09/2026. Thực hiện HTTP authentication/session, credential setup và kiểm thử PostgreSQL thật theo profile đã chốt: idle 2h, absolute 8h; tăng tốc thời gian test, không chạy verifier."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "IN_PROGRESS",
+      "resultState": "NOT_APPLICABLE",
+      "actualStart": "2026-09-30T13:01:00.9631915+07:00",
+      "actualFinish": null,
+      "actualEffortHours": 0.0,
+      "remainingEffortHours": 8.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-09-30T13:01:00.9631915+07:00",
+      "remainingReviewedAt": "2026-09-30T13:01:00.9631915+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
@@ -1390,6 +1453,27 @@
       "recordedBy": "LEAD",
       "reason": "Project Reviewer accepted the F02 review PASS and explicitly requested completion on 2026-09-30. Timer reconciled to user-confirmed work periods: 29/09 15:30-18:00 and 30/09 from 08:00; overnight break excluded. Ghi nhận 55 phút làm việc thực tế.",
       "sourceEvidence": "Local progress tracker: F02"
+    },
+    {
+      "revision": 27,
+      "recordedAt": "2026-09-30T09:28:18.8836947+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng chốt hai đề nghị và yêu cầu Bắt đầu F03-A ngày 30/09/2026.",
+      "sourceEvidence": "Local progress tracker: F03-A"
+    },
+    {
+      "revision": 28,
+      "recordedAt": "2026-09-30T11:43:28.233063+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Project Reviewer yêu cầu Hoàn thành F03-A nếu không còn blocker ngày 30/09/2026. Đối chiếu Issue #22, source/evidence và review toàn F03-A tại 79373e95502474e64dd2a72604c2d9629daa9e36: không còn blocker trong phạm vi đã chốt. Không suy ra F03-B hay merge/công bố tiến độ. Ghi nhận 135 phút làm việc thực tế.",
+      "sourceEvidence": "Local progress tracker: F03-A"
+    },
+    {
+      "revision": 29,
+      "recordedAt": "2026-09-30T13:01:00.9631915+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng yêu cầu Bắt đầu F03-B ngày 30/09/2026. Thực hiện HTTP authentication/session, credential setup và kiểm thử PostgreSQL thật theo profile đã chốt: idle 2h, absolute 8h; tăng tốc thời gian test, không chạy verifier.",
+      "sourceEvidence": "Local progress tracker: F03-B"
     }
   ]
 }
