@@ -73,12 +73,13 @@ disable/revoke and retry a protected call.
   old-session refusal after re-enable. HTTP/session work remains unchecked until executed.
 - T018/T021/T022 span both cards: record partial F03-A evidence without checking their markers
   as though F03-B were done. T019 may close independently after its actual bootstrap evidence.
-- Preserve applied V1; add `database/migrations/V2__identity_administration.sql` for the required
-  organization, versioned roles, assignments, bootstrap state and IAM outcome/authorization evidence.
+- Preserve reviewed V1/V2. V2 supplies bootstrap organization/role/assignment state; add
+  `database/migrations/V3__account_administration.sql` for the account-administration permission
+  subset, Organization-linked accounts and required authorization/change evidence.
 - The approved seed is only the F03 account-administration subset, not the full open permission
   catalogue. No document, Approval or Release authority is granted by account creation.
 
-- [ ] T037 [US3] Implement F03-A account-administration services in `apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java`, with failing/green PostgreSQL tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; retain scoped results in `evidence/F03-identity-results.md`. T037 is the bounded service part of T021, not extra roadmap scope/hours.
+- [X] T037 [US3] Implement F03-A account-administration services in `apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java`, with failing/green PostgreSQL tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; retain scoped results in `evidence/F03-identity-results.md`. Technical checkpoint executed from `acb772e99b96c13a10dc7ad905d6eb7daec0493a`: 20 identity + 2 Server smoke tests PASS. The explicit bounded Super self-assignment clarification is in spec Session 2026-09-30 / FR-013. T037 is the service part of T021, not extra roadmap scope/hours; marking it implemented does not accept or close F03-A/Issue #22, provision a live account, or complete F03-B.
 
 - [ ] T018 [US3] Write failing first/repeated bootstrap, session eligibility and denial tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; include re-enabling an account, refusing its old invalidated session and accepting a fresh eligible sign-in.
 - [ ] T019 [US3] Implement one-time local administrator bootstrap and Actor/account persistence in `apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java`.
