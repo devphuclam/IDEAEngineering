@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.10 / Draft |
+| Version / status | 0.11 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web checkpoint and whole-F03-A technical reviews relayed by the Project Reviewer; internal Standards/Spec review below; Project Reviewer accepted F03-A on 2026-09-30. F03-B checkpoint technical review and whole-card acceptance are pending |
+| Reviewer / acceptance authority | GPT Web checkpoint and whole-F03-A technical reviews relayed by the Project Reviewer; internal Standards/Spec review below; Project Reviewer accepted F03-A on 2026-09-30. GPT Web accepted the initial repaired F03-B checkpoint as PASS WITH NOTES at head `3fdf9f56238bb3f0b18ec5004143a699d0f9f27e`; whole-F03-B acceptance remains pending |
 | Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
 | Applicable baseline | PH1 F03-A historical sources below; F03-B repair checkpoint source `4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`, based on `d4268d8d16e6287b7cde937eab4688fc59754fa7` |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; Execution Register revision 28 / F03-A-EVIDENCE-1; F03-B IN_PROGRESS in local register revision 29, initial HTTP checkpoint only |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.9 at `5d44443a922480e7edcbf06599468a7b6d885dba`; corrects T044's partial-execution status and source trace, and retains repair archive/log hashes in section 16. F03-A historical claims and the initial F03-B run remain historical. Superseded by NOT-APPLICABLE |
+| Change / supersession | Supersedes v0.10 at `3fdf9f56238bb3f0b18ec5004143a699d0f9f27e`; section 17 records the Project Reviewer's relay of the repaired checkpoint review and the next permission-version decision. No code, migration, dependency or executed result changes. F03-A and earlier F03-B claims retain their stated historical scope. Superseded by NOT-APPLICABLE |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A technical review PASS WITH NOTES and Project Reviewer acceptance PASS; initial F03-B checkpoint received REQUEST CHANGES, then the two scoped repairs passed in a 32-test successor run. F03-B remains IN_PROGRESS; whole-card acceptance is pending. Main integration and official progress publication remain separate |
+| Evidence status | F03-A technical review PASS WITH NOTES and Project Reviewer acceptance PASS; repaired initial F03-B checkpoint technical review PASS WITH NOTES, including closure of the two earlier MAJOR findings. F03-B remains IN_PROGRESS; whole-card acceptance is pending. Main integration and official progress publication remain separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -26,8 +26,8 @@ Account Administrator checkpoint and remaining work; section 10 records its exte
 sections 11–12 record the subsequently authorized fresh public and interactive operator runs,
 section 13 records the received whole-card technical-readiness review, and section 14 records
 the subsequent Project Reviewer acceptance. Section 15 records the initial F03-B HTTP session
-checkpoint; section 16 records its requested repairs and successor execution. Earlier pending
-dispositions are historical.
+checkpoint; section 16 records its requested repairs and successor execution; section 17 records
+the received review of that repaired checkpoint. Earlier pending dispositions are historical.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -809,3 +809,44 @@ remain open.
 Repair publication checks: tracked-secret scan **PASS** (10 recognized exact synthetic fixtures;
 233 known binary files skipped); repository hygiene **PASS**; 17 relative Markdown targets in
 this evidence and tasks.md **PASS**; git diff --check **PASS**.
+
+## 17. Received repaired-checkpoint review and next slice
+
+On 2026-09-30 the Project Reviewer relayed GPT Web's read-only **PASS WITH NOTES** for
+PR #25 at base `d4268d8d16e6287b7cde937eab4688fc59754fa7`, reviewed head
+`3fdf9f56238bb3f0b18ec5004143a699d0f9f27e` and executed source
+`4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`. This is a conversation-sourced technical
+review record, not a claim of a submitted GitHub approval or whole-card Project Reviewer acceptance.
+
+The review closes both prior MAJOR findings: the effective servlet timeout no longer pre-empts
+the 2-hour idle policy, and unknown/disabled login paths no longer bypass BCrypt work. The
+reviewer found no new defect in the initial checkpoint. Its source trace and 32-test successor
+execution remain those in section 16; this record does not rerun or broaden those results.
+
+The reviewer could inspect source, retained result summaries and file hashes through GitHub,
+but could not independently read the private host logs. Timing evidence detects the gross
+password-work bypass, not constant-time authentication. Fresh public V4 remains **NOT-RUN**.
+All remaining F03-B work listed in section 16 remains open, including client qualification.
+`verify-template` remains **NOT-RUN**; no production, commercial or T036 clearance is implied.
+
+The next planned slice is first credential setup through real HTTP and PostgreSQL. Before its
+implementation, the permission-version choice needs confirmation: V3 seeds
+`account-administrator@1` with only `account.create`, `account.disable` and `account.re-enable`,
+while T041 requires explicit setup/reset permissions. CONTEXT Role Definition and DOC-04
+`REQ-AUTH-002/004` prohibit silently extending a version-pinned assignment's authority.
+
+Engineering recommendation, **NOT APPROVED / NOT IMPLEMENTED**: introduce protected
+`account-administrator@2` with the three predecessor actions plus
+`account.credential.setup.issue` and `account.credential.reset.issue`; keep version 1 and its
+assignments unchanged. Permit Super to grant only the supported Account Administrator versions
+through the ordinary organization-scoped, reasoned and audited assignment path, including
+explicit self-assignment. No Super-only credential authority or automatic assignment upgrade.
+This exact version/permission selection is a decision pending Project Reviewer confirmation;
+it does not change the approved requirement for independently assigned Account Administrator
+authority. After confirmation, execute the first-setup slice by TDD; reset and throttling remain
+separate subsequent slices. T040–T044 and F03-B remain open.
+
+Documentation checks: tracked-secret scan **PASS** (10 exact synthetic fixtures, 233 known
+binary files skipped); repository hygiene **PASS**; 17 relative Markdown targets **PASS**;
+git diff --check **PASS**. No runtime retest: only this record and tasks.md changed after the
+reviewed head. No Tracker, acceptance or integration state was changed.
