@@ -50,10 +50,30 @@ with those implementations, because no such executable exists yet.
 |---|---|---|
 | F01-A | From a clean checkout, run each documented Server, Web, Desktop and Workspace build plus basic test command on its qualified platform. | Four actual results tied to commit and tool versions; a planned command is not PASS. |
 | F01-B | Repeat automated checks; inspect tracked config and build inputs for working secrets; inspect lockfiles and exact dependency intake. | Repeatable checks and no committed working secret; record any blocked package separately. |
-| F02 | Apply migrations to a fresh permitted dev database; re-run supported migration validation; exercise one bounded rollback/failure case; compare app and data health while DB is unavailable. | Ordered migration history and distinct health outcomes. This is not a backup/restore or production recovery result. |
+| F02 | Create a fresh, isolated database named `idea_ddm_f02_<run-id>`; set exact, distinct role names `idea_ddm_app` and `idea_ddm_migrator`, and export their credentials separately. Set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that same database. Run `DataBaselineTest` first to apply V1 once and verify a repeat is a no-op, then run `DatabasePrivilegeTest` against the migrated schema to verify object ownership and refused app DDL. Run the packaged migration command and `ServerSmokeTest` afterward. | One fresh migration, repeat no-op, all baseline objects owned by the migration role, app role cannot create a schema/table, bounded failing DDL rollback in a generated temporary schema, and distinct process/database health. This is not a backup/restore or production recovery result. |
 | F03-A/B | Run controlled initial-admin bootstrap twice; create/disable a native test account; sign in/out, revoke, and retry protected calls with old proof. | The second bootstrap reports already initialized with no Actor, account or Role Assignment change; attributable Actor/session; no public registration; all invalidated retries refused. Do not print passwords or session secrets. |
 | F04 | Run one allowed, one refused and one forced-failure sample owner command with a fixed `OperationId` per attempt. Query owner/Audit/outbox outcomes. | No successful result without required Audit, no partial success under forced failure, and no duplicate result from a same-ID retry. |
 | F05-A/B | Record exact Gateway runtime, Adapter and transport qualification; transfer approved 1 KiB and 64 MiB fixtures directly to one Gateway; compare size and SHA-256 with manifest, then inspect receipt and accepted metadata. Repeat with wrong/expired grant, wrong digest, interruption, lost response and same-ID repeated/changed input. | Matching verified custody for both happy-path fixtures; zero false successful custody for failures. Retries resolve the same operation. Artifact/Vault/Location IDs stay distinct from private Adapter path. No second Vault or throughput claim. |
+
+For the F02 integration test, run the dedicated helper from an interactive Ubuntu shell after
+creating the isolated database described in this card. It prompts for the application and
+migration passwords without echoing them, rejects any target outside the `idea_ddm_f02_` prefix,
+and writes a mode-600 log in the operator home directory. It does not create or drop databases.
+Run from the repository root for a fresh isolated database:
+
+```bash
+bash apps/server/scripts/run-f02-postgresql-checks.sh
+```
+
+If the fresh-database migration test already passed for this same F02 database, preserve that
+result and rerun the role-boundary test plus packaged migration/no-op and server smoke checks with:
+
+```bash
+IDEA_F02_RUN_FRESH_DATABASE_TEST=0 bash apps/server/scripts/run-f02-postgresql-checks.sh
+```
+
+This resume mode does not repeat or replace the first-migration evidence. It prompts for the app
+and migration passwords separately, without echoing them.
 
 For F03, re-enable a disabled test account: its old invalidated session must remain refused,
 while a fresh eligible sign-in works. For F04, use controlled synchronization to pause a sample

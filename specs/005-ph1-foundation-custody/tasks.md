@@ -52,10 +52,10 @@ results are distinguishable. This is not operational restore evidence.
 **Independent test**: Fresh migration, repeat validation, one bounded rollback/failure case and
 healthy/unavailable database probes.
 
-- [ ] T014 [US2] Write failing migration/health integration checks in `apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java`.
-- [ ] T015 [US2] Add versioned schema for the PH1 identities and metadata in `database/migrations/V1__ph1_foundation.sql` and package that source through `apps/server/pom.xml`; use only the separate migration role.
-- [ ] T016 [US2] Implement separate application and database health outcomes in `apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java`.
-- [ ] T017 [US2] Run fresh migration, repeat validation and bounded rollback/failure procedure; retain actual SQL/version/health results in `specs/005-ph1-foundation-custody/evidence/F02-data-results.md`.
+- [X] T014 [US2] Write failing migration/health integration checks in `apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java`.
+- [X] T015 [US2] Add versioned schema for the PH1 identities and metadata in `database/migrations/V1__ph1_foundation.sql` and package that source through `apps/server/pom.xml`; use only the separate migration role.
+- [X] T016 [US2] Implement separate application and database health outcomes in `apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java`.
+- [X] T017 [US2] Run fresh migration, repeat validation and bounded rollback/failure procedure; retain actual SQL/version/health results in `specs/005-ph1-foundation-custody/evidence/F02-data-results.md`. Executed evidence is `PASS`; F02 Delivery Card acceptance remains separate and pending Project Reviewer review.
 
 ## Phase 5: User Story 3 — Controlled native account and session (F03-A/B, P1)
 
