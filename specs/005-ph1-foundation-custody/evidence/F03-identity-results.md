@@ -1,20 +1,20 @@
-# F03 Identity Results — Bootstrap and Account Administration Checkpoints
+# F03 Identity Results — Account Administration and Initial HTTP Session Checkpoints
 
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.5 / Draft |
+| Version / status | 0.8 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web bootstrap and Account Administrator checkpoint reviews relayed by the Project Reviewer; internal Standards/Spec review recorded below; Project Reviewer F03-A acceptance remains pending |
+| Reviewer / acceptance authority | GPT Web checkpoint and whole-F03-A technical reviews relayed by the Project Reviewer; internal Standards/Spec review below; Project Reviewer accepted F03-A on 2026-09-30. F03-B checkpoint technical review and whole-card acceptance are pending |
 | Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
-| Applicable baseline | PH1 F03-A; bootstrap source `2acf4dafeb19e52e36d8aa9c280b033ac20be56a`; account-checkpoint source `acb772e99b96c13a10dc7ad905d6eb7daec0493a`; fresh public successor source `89eab7129a72844e45807f13baedfbee39a9ac92` |
-| Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [PH1 spec](../spec.md) FR-013 / clarification 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md) |
-| Downstream trace | F03-A service implementation and later card acceptance; F03-B remains unimplemented |
+| Applicable baseline | PH1 F03-A historical sources below; initial F03-B HTTP checkpoint source `441b2e9a9b15b7046f67005a18ad15598844fa32`, based on `79373e95502474e64dd2a72604c2d9629daa9e36` |
+| Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
+| Downstream trace | F03-A accepted; Execution Register revision 28 / F03-A-EVIDENCE-1; F03-B IN_PROGRESS in local register revision 29, initial HTTP checkpoint only |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes published v0.3 at `89eab7129a72844e45807f13baedfbee39a9ac92`; incorporates the local v0.4 received-review record and the user-authorized fresh public successor + positive interactive/repeat verification. Historical results are retained; application source, migrations and card acceptance are unchanged. Superseded by NOT-APPLICABLE |
-| Review trigger | Bootstrap, migration, password encoder, account-administration or test-scope change |
-| Evidence status | 20 identity tests and 2 Server smoke tests PASS; package/headless boundary PASS; fresh public V1/V2/V3, repeat migration and runtime-role separation PASS; positive interactive initialization/repeat PASS. F03-A IN_PROGRESS; whole-card review/acceptance pending |
+| Change / supersession | Supersedes v0.5 at `79373e95502474e64dd2a72604c2d9629daa9e36`; retains the unpublished v0.6/v0.7 F03-A review/acceptance records and adds initial F03-B execution in section 15. F03-A historical claims are unchanged. Superseded by NOT-APPLICABLE |
+| Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
+| Evidence status | F03-A technical review PASS WITH NOTES and Project Reviewer acceptance PASS; initial F03-B checkpoint has 30 executed tests PASS, not whole-card acceptance. F03-B remains IN_PROGRESS. Main integration and official progress publication remain separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -23,7 +23,10 @@ Spec Kit path; it is not an added Core Product Document, architecture view or pr
 
 Sections 1–5 retain the earlier bootstrap checkpoint. Sections 6–9 describe the newer
 Account Administrator checkpoint and remaining work; section 10 records its external review,
-and sections 11–12 record the subsequently authorized fresh public and interactive operator runs.
+sections 11–12 record the subsequently authorized fresh public and interactive operator runs,
+section 13 records the received whole-card technical-readiness review, and section 14 records
+the subsequent Project Reviewer acceptance. Section 15 records the initial F03-B HTTP session
+checkpoint. Earlier pending dispositions are historical.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -272,8 +275,8 @@ Summary: Standards 0 documented violations / 1 nonblocking heuristic; Spec 0 con
 - F03-A remains **IN_PROGRESS**; Issue #22 stays open. The Account Administrator checkpoint
   review is recorded in section 10; it is not Project Reviewer whole-card acceptance.
 - Positive interactive operator initialization and repeat are now **PASS**, using only the
-  synthetic identity in section 12. Whole-card review/acceptance is still pending; no real
-  company account was provisioned.
+  synthetic identity in section 12. Whole-card technical-readiness review is recorded in
+  section 13; Project Reviewer acceptance is pending. No real company account was provisioned.
 - The fresh public-database V1+V2+V3 successor is now **PASS** in the separate database in
   section 11. Earlier NOT-RUN statements remain historical; UUID-schema tests were not used
   as substitute evidence for this run.
@@ -489,3 +492,222 @@ PASS. Spec Kit checklist gate remains 16/16 + 12/12 with no checkbox changes;
 `.specify/extensions.yml` is absent, so no implementation extension hooks apply.
 Only this evidence record and `tasks.md` change from executed source `89eab712…`; no application,
 migration, dependency or test change needs an inferred rerun. `verify-template` is NOT-RUN.
+
+## 13. Whole-F03-A technical-readiness review received
+
+On 2026-09-30 the Project Reviewer relayed a GPT Web read-only review of PR #23 at exact head
+`79373e95502474e64dd2a72604c2d9629daa9e36`, against Issue #22 and this record v0.5.
+The reported conclusion is **PASS WITH NOTES for the whole agreed F03-A technical scope**:
+no remaining technical implementation or test gap was found before Project Reviewer acceptance.
+
+The reviewer closed both prior execution notes using sections 11–12: fresh real public-schema
+V1/V2/V3 with separate roles and zero repeat migrations, plus positive interactive operator
+initialization and same-identity/state repeat. They confirmed the reviewed head changes only
+evidence/tasks from executed source `89eab7129a72844e45807f13baedfbee39a9ac92`.
+
+The conclusion covers local Super bootstrap, separate exact-version/Organization-scoped audited
+Account Administrator assignment, account create/disable/re-enable, authorization/scope refusal,
+preserved identity/history and atomic failure on the agreed Server + real PostgreSQL boundary.
+T019/T037 are technically complete. Unchecked tasks containing F03-B work do not imply an
+unimplemented F03-A obligation or authorize marking F03-B complete.
+
+The remaining note is **INFO: the reviewer did not independently read private raw host logs**.
+They inspected repository source, recorded commands/hashes, state oracle and commit trace.
+This user-relayed AI review is not a GitHub approval event, a new test run, qualified independent
+security review or Project Reviewer card acceptance. Its limits remain explicit: verifier NOT-RUN,
+F03-B unaccepted, T036/commercial clearance open, and no production/backup/restore/multi-Vault claim.
+
+Engineering verified the current PR head and recorded task/evidence split before recording this
+feedback. No code change or further F03-A technical test is requested by this review.
+**Next action: explicit Project Reviewer acceptance and `Hoàn thành F03-A`, with attributable actual
+effort through the existing Tracker.** Until then, keep F03-A IN_PROGRESS, Issue #22 OPEN and PR #23
+DRAFT; this local review record neither merges nor changes the timer/progress files.
+
+## 14. Project Reviewer acceptance and Tracker completion
+
+On 2026-09-30 the Project Reviewer instructed: if no blocker remains, `Hoàn thành F03-A`.
+Engineering checked Issue #22, the approved A/B task split, source at
+`79373e95502474e64dd2a72604c2d9629daa9e36` and the executed evidence in sections 6–12.
+A read-only factual cross-check found no remaining F03-A implementation/test blocker.
+The instruction therefore accepts the agreed whole-card scope; no additional vote was inferred.
+
+The existing Tracker `complete` action recorded **COMPLETED / PASS** at
+`2026-09-30T11:43:28.233063+07:00`, Execution Register **revision 28**, evidence
+`F03-A-EVIDENCE-1` pinned to that reviewed commit. It closed the existing session started at
+`09:28:18.8836947+07:00`: **135 minutes / 2.25 actual hours**, remaining **0 hours**.
+No planned-hour substitution or retrospective effort correction was made.
+
+The private-host-log independent-access limitation remains INFO. F03-B, T036/commercial
+clearance and production/backup/restore/multi-Vault claims remain excluded;
+`verify-template` is **NOT-RUN**. No new test run or GitHub approval event is claimed.
+Acceptance and progress files are local drafts in this turn; PR #23 integration and official
+progress publication to main are not performed by the Tracker completion action.
+
+## 15. Initial F03-B HTTP session checkpoint
+
+### Scope and approved test boundary
+
+On 2026-09-30 the Project Reviewer instructed `Bắt đầu F03-B` and approved real Server HTTP
+with real PostgreSQL, accelerated test time, synthetic identities and no verifier. The current
+checkpoint implements login, the session probe, logout, CSRF and the two session deadlines.
+It is **not** the complete credential/account-administration/client qualification scope.
+
+The accepted synthetic development profile is in spec v0.3: idle **2 hours**, absolute
+**8 hours**, whichever expires first; equality is expired. Only an eligible authenticated
+activity refreshes idle time. The proof/password/failed-login rules remain requirements for
+later slices; their presence in the spec is not executed evidence.
+
+The implementation follows DOC-05 `ARCH-VIEW-SEQ-008` and the qualified Spring Security
+HTTP-session boundary. PostgreSQL records eligibility metadata, not a replayable login cookie.
+There is no generated administrator, public bootstrap endpoint, custom JWT or persistent-session
+restoration. A runtime-instance binding rejects metadata belonging to another Server instance;
+an executed restart test and complete request/commit-time eligibility remain open.
+
+T038's exact pre-use intake was admitted before the new dependency resolution. Intake v0.3
+records matching publisher hashes for five JARs and the actual dependency graph: Log4j2 retained,
+no Logback or `spring-boot-starter-logging`. T036 and commercial redistribution clearance remain
+open. No additional library was added for the HTTP harness or controlled Clock.
+
+### Exact source, environment and procedure
+
+Authoritative checkpoint execution uses a **clean Git archive**, not the earlier iterative overlay:
+
+- Source: `441b2e9a9b15b7046f67005a18ad15598844fa32` on `codex/f03b-authentication-sessions`.
+- Base: `79373e95502474e64dd2a72604c2d9629daa9e36`.
+- Archive SHA-256: `13BB98831B590273B979015919C3B53E0F72539BF82924289C7F518828C83F9D`.
+- Extracted directory: `/home/phuclam/idea-f03b-committed-441b2e9-F34PnKTp`, mode `700`,
+  owner `phuclam`; retained `source.tar` mode `600`.
+- Host: `ideaddmserver`, `192.168.137.33`, Linux `7.0.0-34-generic`;
+  Temurin `25.0.4.1+1`; PostgreSQL server `18.6` observed by Flyway.
+- Database: **`idea_ddm_f03a_20260930_c91e7a42`**, not the F02 or development database.
+- Migrator: `idea_ddm_migrator`; runtime: `idea_ddm_app`, authenticated separately.
+- HTTP: real Server on random loopback port; Java HttpClient with ordinary cookie custody.
+
+From the extracted source:
+
+```bash
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+```
+
+The runner reads the existing operator-owned, non-symlink mode-600 credential file, with shell
+tracing disabled. No credential value is in this command, Git evidence or test output excerpt.
+HTTP fixtures generate unique synthetic logins/passwords in memory. They do not provision
+company accounts or use the operator-bootstrap identity in `public`.
+
+Each HTTP test migrates V1–V4 into its own `f03b_<32-hex UUID>` schema; the F03-A regression
+tests use their own `f03a_<32-hex UUID>` schemas in the same authorized database. Cleanup is
+limited to each test's regex-validated generated schema. V1–V3 source is unchanged; V4 is additive.
+These runs do not migrate `public`, `idea_ddm_dev`, the F02 database or the Vault.
+
+A subsequent read-only check authenticated as the app role and returned PostgreSQL server
+`18.6`, **0 remaining** schemas matching `^f03[ab]_[a-f0-9]{32}$`, and successful `public`
+Flyway versions **1,2,3**. This confirms temporary-schema cleanup and that public V4 was not
+executed; it is not a byte-for-byte comparison of every public row.
+
+Production configuration retains Secure/HttpOnly/SameSite=Strict cookies. **Only this loopback
+HTTP harness overrides Secure=false.** It does not qualify actual browser HTTPS/cookie behavior
+or Desktop protected custody. No mock/H2/database substitute is used.
+
+### Executed results
+
+Run start **13:44:20 +07**; Maven completion **13:44:43 +07**; Maven elapsed **21.064 seconds**.
+Sanitized result excerpt from the retained log:
+
+```text
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0 -- HttpSessionFlowTest
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0 -- IdentityFlowTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0 -- ServerSmokeTest
+Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+F03B_SCOPED_TESTS=PASS
+```
+
+| HTTP scenario | Observed result | Disposition |
+|---|---|---|
+| Anonymous session probe | 401; no ActorId or login redirect | PASS |
+| Anonymous CSRF acquisition | Token available; still no identity privilege | PASS |
+| Login and caller-supplied ActorId | Correct Server-derived Actor/account; session proof rotates; old proof refused | PASS |
+| Logout | GET and bad CSRF do not log out; valid POST returns 204, old proof refused; other session remains usable | PASS |
+| Idle boundary | Before 2h accepted; exactly 2h and after refused; eligible activity renews idle only | PASS |
+| Absolute boundary | Activity through the eighth hour does not extend the limit; exactly 8h and after refused | PASS |
+| Missing/bad CSRF and wrong/unknown credentials | 403 for invalid CSRF; identical safe 401 responses for credential refusals; no identity granted | PASS |
+| Ineligible traffic | Failed CSRF, public health and CSRF fetch do not renew eligible idle activity | PASS |
+
+The test-only injected Clock begins at `2026-09-30T06:00:00Z`. Tests advance it to literal
+before/at/after boundary instants, including microsecond offsets; they do not change the host
+clock, sleep for hours or expose a public clock-control route. These are boundary checks, not
+eight-hour soak, scheduling or concurrency qualification.
+
+The affected 20 F03-A service tests remain green with V4 in their fresh temporary schemas.
+The two health tests still prove process 200/UP and unreachable-database 503/DOWN without
+credential disclosure. DataBaselineTest and a fresh public V1–V4 successor were **NOT-RUN**
+in this checkpoint; previous public V1–V3 evidence remains historical, not a V4 claim.
+
+### Red/green history and retained evidence
+
+Development used vertical test/code slices in `/home/phuclam/idea-f03b-Qw74tmdH`. The first
+corrected RED archive combines base `79373e9...` (archive SHA-256
+`4027C8D4237986EDCF613579EDCF648ED40C43872B91CE8248E2D2753BC35657`) with retained
+`red-overlay.tar` SHA-256 `0479D30AF82ED2B85B5DD21035E494EC9463D3F071F71EECDE8FD22196A5F257`.
+The anonymous-session test then observed **404 instead of required 401**.
+
+Later RED failures observed missing CSRF endpoint (401 instead of 200), missing login
+(401 instead of 200), missing logout (404 instead of 204), missing idle refusal
+(200 instead of 401), and anonymous invalid-CSRF mapping (401 instead of 403).
+Initial test-harness compilation/Clock wiring errors were corrected but are **not** claimed as
+intended behavior RED. The 8h test is supplementary coverage of an already introduced cutoff;
+it is not falsely recorded as an earlier RED cycle.
+
+All log paths below are under `/home/phuclam/`, owner `phuclam`, mode `600`.
+
+| Retained log | Result / phase | SHA-256 |
+|---|---|---|
+| `idea-f03b-test-6EC2Zw8z.log` | Anonymous session RED | `51836A5C6F3A47DAE051FD435158BC4878D91B4781806D3836580B55851D9308` |
+| `idea-f03b-test-T7paKTNU.log` | Anonymous session + health GREEN, 3 tests | `B231575F0DDF8362ACF35D6D48614816C5D0E601FAF6685A600906B261CB00DF` |
+| `idea-f03b-test-zh2qmCTN.log` | CSRF endpoint RED | `35D0506792F6816816B92FACF0942F00A2F8FCA79B16452F80C26949601869ED` |
+| `idea-f03b-test-R9fWaK7X.log` | CSRF GREEN, 2 tests | `0DA183BE0CCB03ADCAA8DEDAB9B22FA6CC0C2479A2971B5ADA76304582C58769` |
+| `idea-f03b-test-ZBoF4jvN.log` | Login RED | `260556117B543082FA6E97D7E86A80068077C5CDE35A4F39924025C786A13590` |
+| `idea-f03b-test-f86TB4hL.log` | Login + health GREEN, 5 tests | `0B727741FB3C0AE9571CB6AE528958E11A8765BACAB61DFBF1EE177D3B11EABD` |
+| `idea-f03b-test-XNU7EAdO.log` | Logout RED | `D7D10E5C8BFA3B60FB3873F5139F8DBD714CFC911C7D2B2E1DF03DF60E9E90CD` |
+| `idea-f03b-test-Vcpv9gNF.log` | Logout + health GREEN, 6 tests | `3A8DD80E5760E0BDDEFC4E3AD3F1595438D8365D75DC44EF2B835C375203E7A5` |
+| `idea-f03b-test-CQDrkoGp.log` | Idle boundary RED | `D81D61DAC522DD5BB5481B22B4742C4F6D01D76712A8158FE6E60E872C8FBB7B` |
+| `idea-f03b-test-UrVUI4Hf.log` | Idle + health GREEN, 7 tests | `5405518608A112A51B8699A7C4866A7C39CCFCE63167A53DC8FB3C9D9FD12430` |
+| `idea-f03b-test-4fimjXud.log` | Absolute limit + health GREEN, 8 tests | `2AB17793B4ABDB6052C58D7680A72896EA06312E4F24FF6481B6561481579214` |
+| `idea-f03b-test-clny9Pax.log` | Invalid anonymous CSRF mapping RED | `83EBD4D5BF8DDB95A2B5AF3B83B2BF605B009D5A1948889FE3F55838967ED736` |
+| `idea-f03b-test-UlGQHlgy.log` | Final iterative worktree GREEN, 30 tests | `A8A16DA7055C43D5EAFF208E2273B854C242D8CBE834C338B2BFC2FCCE800050` |
+| `idea-f03b-test-MZMGtWtI.log` | Authoritative committed-source GREEN, 30 tests | `08B4462C6B8CC317B48A65B9D3C6025CC8E0CE134BDBCAE5D098068FA7A05434` |
+
+Later iterative overlays were replaced during development and not retained individually as
+exact source archives. Their logs document observed iteration, **not independently reproducible
+commit-pinned executions**. The authoritative result is the clean archive of `441b2e9...` and
+its last log above. Private host logs still require host access; this summary/hash record is
+not an independent remote raw-log review. The checked-in sanitized excerpt exposes counts only.
+
+### Current disposition and remaining work
+
+**Initial session checkpoint: executed PASS. F03-B: IN_PROGRESS, not accepted or completed.**
+
+T038 and the initial T039 test slices are checked; shared F03 tasks and T040–T044 remain open
+for their unimplemented/unqualified portions. Before whole-card acceptance, finish:
+
+- target-bound one-use setup/reset proof, exact password bounds and atomic redemption;
+- race-safe 5-failure/15-minute temporary login block and refusal evidence;
+- authenticated account-administration HTTP routes through the existing role/scope evaluator;
+- session invalidation on disable/reset, no resurrection on re-enable/restart, required
+  failure/atomicity cases, and verified eligibility on all applicable requests;
+- the verified ActorContext/session reference needed for later F04 commit-time checking;
+- actual Web HTTPS/CSRF/cookie and native Desktop binding/protected-custody qualification;
+- affected migration/data regression and any required fresh public-schema successor evidence;
+- checkpoint/full-scope review and explicit Project Reviewer whole-card acceptance.
+
+Tracker start remains the explicit `2026-09-30T13:01:00.9631915+07:00` action, register revision
+29. The open timer is not counted here as final actual effort. No stop, complete, retrospective
+estimate, official progress publication, push, PR creation or merge is performed by this record.
+No production, multi-Vault, backup/restore, T036 or commercial-clearance claim is made.
+`verify-template` remains **NOT-RUN**.
+
+Local source/evidence checks: tracked-secret scan **PASS** (10 recognized exact synthetic
+fixtures; 233 known binary files skipped); **68 focused relative Markdown targets PASS**;
+`git diff --check` **PASS**. From executed commit `441b2e9...` to this evidence update,
+only `F03-identity-results.md` changes; no application, dependency, migration or test changes
+are silently covered by an older run.
