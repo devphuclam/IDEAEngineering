@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.14 / Draft |
+| Version / status | 0.15 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. GPT Web reviewed the initial repaired F03-B checkpoint and first-setup head `153d0258108cfe1fdc490d42d57f64aa9098e82f` as PASS WITH NOTES; whole-F03-B acceptance remains pending |
 | Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
-| Applicable baseline | Reset successor source `976bd031913edb3e4554af6e23744a1dd55d8527`, based on reviewed first-setup head `153d0258108cfe1fdc490d42d57f64aa9098e82f`; prior F03-A/B sources below remain historical |
+| Applicable baseline | Exact-login reset successor source `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142`, based on the reviewed reset head `064f55ffa62e8f67ee6e062e3ab1c827e5509c23`; prior F03-A/B sources below remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); reset checkpoint for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.12 at `153d0258108cfe1fdc490d42d57f64aa9098e82f`; v0.13 recorded received review (§19); v0.14 adds the reset clarification, V6 integrity repair and 57-test successor (§20). No dependency or card-state change. Earlier claims retain historical scope. Superseded by NOT-APPLICABLE |
+| Change / supersession | Supersedes v0.14 for the T046 successor only; §20 remains historical and unchanged. v0.15 records the exact Login Identity reset repair, 63-test successor and external-review handoff. No dependency, migration or card-state change. Earlier claims retain historical scope. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; initial repaired F03-B and first-setup checkpoints reviewed PASS WITH NOTES. Reset source executed 57 scoped tests PASS with internal Standards/Spec review; external reset review and whole-F03-B acceptance remain pending. Main integration and official progress publication remain separate |
+| Evidence status | F03-A accepted; initial repaired F03-B and first-setup checkpoints reviewed PASS WITH NOTES. T046 exact-login source executed 63 scoped tests PASS with internal Standards/Spec review; external reset review and whole-F03-B acceptance remain pending. Main integration and official progress publication remain separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -1195,3 +1195,75 @@ and tasks only; runtime/tests/migrations/dependencies remain pinned to the final
 Publication checks: tracked-secret scan PASS (10 exact synthetic fixtures recognized; 233 known
 binary files skipped); repository hygiene PASS; 41 relative targets across changed PH1 documents
 PASS; git diff --check PASS. None is `verify-template`. No new progress publication occurred.
+
+## 21. T046 exact Login Identity reset successor
+
+### Scope and disposition
+
+External review of reset checkpoint `064f55ffa62e8f67ee6e062e3ab1c827e5509c23` found one
+MAJOR: RESET issuance selected an arbitrary Login Identity when an Account could have more than
+one. T046 repairs that contract without reopening T045 or changing historical §20. The request
+now requires `loginIdentityId`, even for a single-login Account. The Server validates the exact
+Account, Organization, expected `security_version`, existing credential and ACTIVE/DISABLED state;
+the proof stores that exact Login Identity. Redemption updates only the pinned credential, advances
+the Account version and revokes all old Account sessions/proofs. Sibling credentials remain intact.
+V1–V6 are unchanged and no migration was added.
+
+The existing F03 schema deliberately has one `operating_organization` row (the singleton/check
+and Account foreign key in V2/V3). Therefore a valid second-Organization fixture cannot be created
+without violating the approved schema. Tests cover wrong requested scope, foreign Login Identity,
+unknown selector, credentialless selector and stale version; the production predicate still
+checks target Organization explicitly. This is not a waiver of the Organization check and does
+not justify weakening the schema merely to force a mutation-sensitivity test.
+
+### RED → GREEN and exact-source execution
+
+The first RED used the reviewed source archive plus a test overlay (archive SHA-256
+`671F0270B1B539A2FF72597D0880019BBFF2DC71C8FA2F01C127C5E61AB0DE66`).
+`resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin` expected HTTP 400 but the
+unrepaired controller returned 200. Its private sanitized runner log was
+`/home/phuclam/idea-f03b-test-xe9Ojrzo.log`, SHA-256
+`376F421220EB3033ADEB6857AAB75C1A2B84EE24F316ED31F0F7A8CC2A18774`.
+
+The minimal GREEN overlay added the request field, service parameter and exact predicate (overlay
+SHA-256 `D850CA6F0900F0673C983D5EC048D5D4154C671EB187AAE51B56D140B7CD20C1`). The same test then
+passed 1/1 with no failure/error/skip; its private log was
+`/home/phuclam/idea-f03b-test-o7GBjHT3.log`, SHA-256
+`91F9A5A6EA91CF83D8E06DAB926668CBA5E733C5E23729885FB298AE95DCBBD5`.
+
+The successor matrix added real HTTP/PostgreSQL cases for explicit L1 and L2 selection, sibling
+credential preservation, missing/unknown/foreign/credentialless/stale selectors, Account-wide
+session invalidation, sibling-proof staleness, disabled reset followed by separate re-enable, and
+Audit-failure rollback. The committed exact-source archive for `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142`
+was SHA-256 `A18910563B6BA8566F2A9BCB325EC44B46CBA47979C82B8B6C7E072FE0DDD815`; the server
+matched it before extraction into a fresh directory.
+
+```text
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+HttpSessionFlowTest: 41 / failures 0 / errors 0 / skipped 0
+IdentityFlowTest:    20 / failures 0 / errors 0 / skipped 0
+ServerSmokeTest:      2 / failures 0 / errors 0 / skipped 0
+TOTAL:              63 / failures 0 / errors 0 / skipped 0
+BUILD SUCCESS; elapsed 01:06 min; finished 2026-09-30 17:44:25 +07:00
+```
+
+Final runner log was `/home/phuclam/idea-f03b-test-qM08P9q4.log`, mode `600` owned by `phuclam`,
+SHA-256 `40C0F0652389F73E818C00D2E408CE640BE8419B64FF78C78F8AC29F2424FC55`. The run used
+PostgreSQL `18.6-0ubuntu0.26.04.1`, Temurin `25.0.4.1+1`, distinct `idea_ddm_migrator` and
+`idea_ddm_app`, and only test-owned UUID `f03b_` schemas in the authorized F03 database. Postflight
+left zero owned UUID schemas; public Flyway remains V1–V3. No F02/dev database or Vault was touched.
+
+### Review and limits
+
+Internal Standards review found 0 hard findings and one optional duplicated-test-assertion smell.
+Spec review found no implementation or scope issue after the schema-singleton clarification; the
+Organization predicate remains in production and the accepted refusal matrix is retained. The
+late Maven Clean Plugin intake was a one-time internal cleanup exception explicitly accepted by
+the Project Reviewer; its Apache LICENSE/NOTICE and JAR hash were checked, and no new dependency
+was added. This exception does not qualify future imports or commercial distribution.
+
+T046 technical execution is complete, but the external reset review is **PENDING**. F03-B remains
+`IN_PROGRESS`; Issue #24 remains open; T040–T044, T041 throttling, T043 client qualification,
+fresh public V4–V6, affected migration/data regression, T036, `verify-template` and whole-card
+acceptance remain open. A1 throttling is still documentation/test-plan only. No merge or Tracker
+completion was performed.
