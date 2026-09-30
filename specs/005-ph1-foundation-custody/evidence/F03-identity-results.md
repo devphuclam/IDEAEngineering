@@ -10,7 +10,7 @@
 | Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
 | Applicable baseline | PH1 F03-A historical sources below; F03-B first-setup source `0d740bddc09456f70753996a59dd5f585805d743`, based on `d4268d8d16e6287b7cde937eab4688fc59754fa7`; prior HTTP repair source remains historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
-| Downstream trace | F03-A accepted; Execution Register revision 28 / F03-A-EVIDENCE-1; F03-B IN_PROGRESS in local register revision 29; first-setup checkpoint for PR #25 review, not whole-card acceptance |
+| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); first-setup checkpoint for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
 | Change / supersession | Supersedes v0.11 at `b29df705db6ffc0770d387986a6e52c95017115f`; section 18 records the subsequent v2 approval, first setup/redemption implementation and execution. Earlier claims and pending decisions retain their historical scope. Superseded by NOT-APPLICABLE |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
@@ -1023,8 +1023,10 @@ but its operation is not implemented. `verify-template` is **NOT-RUN** by instru
 `SPEC-OPEN-03/06`, T036 and production/commercial readiness remain open. No timer, actual hours,
 Tracker completion, Issue closure or merge was inferred from generic continuation.
 
-From executed `0d740bd` to evidence publication, only this evidence and tasks.md change. No code,
-test, dependency or migration change is covered by an unrerun earlier result. Next runtime slice:
+After executed `0d740bd`, changes are this evidence/tasks and synchronization of the three
+progress files already published on main at `19587d1b43635822e6a27d86dcae01db9c0220d8`.
+This sync made no new Tracker action. Runtime source, tests, dependencies and migrations did not
+change after the final run. Next runtime slice:
 separate password-reset proof and session invalidation after review of this checkpoint.
 
 Publication checks: tracked-secret scan PASS (10 exact synthetic fixtures recognized, 233 known
