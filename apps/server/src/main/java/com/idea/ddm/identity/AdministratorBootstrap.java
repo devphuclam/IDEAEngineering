@@ -50,8 +50,8 @@ public final class AdministratorBootstrap {
                 insert(connection, "INSERT INTO operating_organization(organization_id,display_name) VALUES (?,?)",
                         organizationId, organizationName);
                 insert(connection, "INSERT INTO actor(actor_id,display_name) VALUES (?,?)", actorId, displayName);
-                insert(connection, "INSERT INTO idea_account(account_id,actor_id,status) VALUES (?,?,'ACTIVE')",
-                        accountId, actorId);
+                insert(connection, "INSERT INTO idea_account(account_id,actor_id,organization_id,status) VALUES (?,?,?,'ACTIVE')",
+                        accountId, actorId, organizationId);
                 insert(connection, "INSERT INTO login_identity(login_identity_id,account_id,login_identifier,"
                         + "normalized_login_identifier,password_verifier) VALUES (?,?,?,?,?)", UUID.randomUUID(),
                         accountId, login, login.strip().toLowerCase(Locale.ROOT), encoded);

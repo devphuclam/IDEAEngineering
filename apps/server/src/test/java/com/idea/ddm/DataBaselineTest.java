@@ -53,7 +53,7 @@ class DataBaselineTest {
         assertTrue(testDatabaseName().startsWith("idea_ddm_f02_"), "Use only a dedicated F02 test database");
         assertEquals(testDatabaseName(), requiredEnvironment("IDEA_DATABASE_NAME"),
                 "Migration command and application must target the same isolated F02 database");
-        assertEquals(2, DatabaseMigrationCommand.migrate(System.getenv()), "The fresh database must apply V1 and the F03 identity successor V2");
+        assertEquals(3, DatabaseMigrationCommand.migrate(System.getenv()), "The fresh database must apply V1 and F03 identity successors V2/V3");
         assertEquals(0, DatabaseMigrationCommand.migrate(System.getenv()),
                 "A second migration run must be a no-op");
 
