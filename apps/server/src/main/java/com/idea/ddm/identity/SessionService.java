@@ -19,6 +19,8 @@ public final class SessionService {
     private final Clock clock;
     private final UUID runtimeInstance = UUID.randomUUID();
     private final NativePasswordVerifier passwords = new NativePasswordVerifier();
+    // Same qualified BCrypt cost as native credentials; generated once, never an account credential.
+    private final String refusedLoginVerifier = passwords.encode(UUID.randomUUID().toString());
 
     SessionService(DataSource dataSource, Clock clock) {
         this.dataSource = dataSource;
@@ -37,7 +39,11 @@ public final class SessionService {
                         + "AND a.status='ACTIVE' AND p.disabled_at IS NULL")) {
                     query.setString(1, login.strip().toLowerCase(Locale.ROOT));
                     try (var row = query.executeQuery()) {
-                        if (!row.next() || !passwords.matches(password, row.getString(4))) throw refused();
+                        boolean eligible = row.next();
+                        // Unknown/disabled accounts take BCrypt work too, but can never authenticate.
+                        boolean credentialMatches = passwords.matches(password,
+                                eligible ? row.getString(4) : refusedLoginVerifier);
+                        if (!eligible || !credentialMatches) throw refused();
                         var identity = new Identity(row.getObject(1, UUID.class), row.getObject(2, UUID.class),
                                 row.getLong(3), UUID.randomUUID());
                         var now = clock.instant().truncatedTo(ChronoUnit.MICROS);

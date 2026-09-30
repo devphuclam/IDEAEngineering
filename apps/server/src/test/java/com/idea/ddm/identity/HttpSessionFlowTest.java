@@ -3,6 +3,8 @@ package com.idea.ddm.identity;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.IdeaServerApplication;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 import java.net.URI;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -13,6 +15,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.sql.DriverManager;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -31,6 +34,7 @@ class HttpSessionFlowTest {
     private String schema;
     private ConfigurableApplicationContext server;
     private int port;
+    private final AtomicInteger servletIdleSeconds = new AtomicInteger(-1);
     private final ControlledTime clock = new ControlledTime(Instant.parse("2026-09-30T06:00:00Z"));
 
     @BeforeEach
@@ -46,7 +50,14 @@ class HttpSessionFlowTest {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
         }
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
-                .initializers(context -> context.getBeanFactory().registerSingleton("testIdentityClock", clock)).run(
+                .initializers(context -> {
+                    context.getBeanFactory().registerSingleton("testIdentityClock", clock);
+                    context.getBeanFactory().registerSingleton("testSessionBudgetListener", new HttpSessionListener() {
+                        @Override public void sessionCreated(HttpSessionEvent event) {
+                            servletIdleSeconds.set(event.getSession().getMaxInactiveInterval());
+                        }
+                    });
+                }).run(
                 "--server.address=127.0.0.1", "--server.port=0",
                 "--spring.datasource.url=" + url() + "?currentSchema=" + schema,
                 "--spring.datasource.username=idea_ddm_app",
@@ -63,6 +74,14 @@ class HttpSessionFlowTest {
                 statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
             }
         }
+    }
+
+    @Test
+    void effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy() throws Exception {
+        assertEquals(200, get(client(), "/api/v1/identity/csrf").statusCode());
+        assertEquals(8 * 3600, servletIdleSeconds.get(),
+                "Actual container session must retain the configured eight-hour budget");
+        System.out.println("F03B_EFFECTIVE_SERVLET_IDLE_SECONDS=" + servletIdleSeconds.get());
     }
 
     @Test
@@ -190,6 +209,49 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void unknownAndDisabledLoginsDoNotBypassPasswordWork() throws Exception {
+        var fixture = fixture();
+        var app = appDataSource();
+        var operator = new ActorContext(fixture.actorId(), 1);
+        new RoleAssignmentAdministration(app).assignAccountAdministrator(operator, UUID.randomUUID(),
+                fixture.actorId(), UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"),
+                fixture.organizationId(), "Synthetic timing-test account preparation");
+        var accounts = new IdentityAdministration(app);
+        var disabled = accounts.create(operator, UUID.randomUUID(), fixture.organizationId(),
+                "Synthetic disabled timing target", "synthetic.disabled." + UUID.randomUUID());
+        assertEquals("DISABLED", accounts.disable(operator, UUID.randomUUID(), fixture.organizationId(),
+                disabled.accountId(), disabled.securityVersion(), "Synthetic refusal fixture").status());
+
+        var client = client();
+        var csrf = jsonField(get(client, "/api/v1/identity/csrf").body(), "token");
+        var candidate = UUID.randomUUID().toString();
+        var logins = new String[] { fixture.login(), "synthetic.unknown." + UUID.randomUUID(), disabled.normalizedLogin() };
+        // Observe real HTTP wall time, not the injected eligibility Clock or private encoder calls.
+        // Warm all paths, then rotate their order to reduce one-off startup/order effects.
+        for (int round = 0; round < 3; round++) {
+            for (var login : logins) refusedLoginNanos(client, csrf, login, candidate);
+        }
+        var samples = new long[3][9];
+        for (int round = 0; round < 9; round++) {
+            for (int position = 0; position < 3; position++) {
+                int path = (round + position) % 3;
+                samples[path][round] = refusedLoginNanos(client, csrf, logins[path], candidate);
+            }
+        }
+        var medians = java.util.Arrays.stream(samples)
+                .mapToLong(values -> java.util.Arrays.stream(values).sorted().toArray()[4]).toArray();
+        System.out.printf(java.util.Locale.ROOT,
+                "F03B_LOGIN_MEDIAN_MS=active-wrong:%.3f,unknown:%.3f,disabled:%.3f; samples=9/path%n",
+                medians[0] / 1_000_000.0, medians[1] / 1_000_000.0, medians[2] / 1_000_000.0);
+        assertAll("Bounded timing regression, not a constant-time or load qualification",
+                () -> assertTrue(medians[1] >= medians[0] * 0.65,
+                        "Unknown login must not expose the gross BCrypt-bypass timing gap"),
+                () -> assertTrue(medians[2] >= medians[0] * 0.65,
+                        "Disabled login must not expose the gross BCrypt-bypass timing gap"));
+        assertEquals(401, get(client, "/api/v1/identity/session").statusCode());
+    }
+
+    @Test
     void rejectedCsrfAndPublicTrafficCannotRefreshEligibleIdleActivity() throws Exception {
         var fixture = fixture();
         var client = signedIn(fixture);
@@ -218,16 +280,31 @@ class HttpSessionFlowTest {
         return client;
     }
 
-    private record Fixture(UUID actorId, UUID accountId, String login, String password) {}
+    private record Fixture(UUID actorId, UUID accountId, UUID organizationId, String login, String password) {}
 
     private Fixture fixture() {
-        var app = new DriverManagerDataSource(url() + "?currentSchema=" + schema,
-                "idea_ddm_app", env("IDEA_DATABASE_APP_PASSWORD"));
+        var app = appDataSource();
         var login = "synthetic." + UUID.randomUUID();
         var password = UUID.randomUUID().toString() + "-synthetic-only";
-        var result = new AdministratorBootstrap(app).initialize(UUID.randomUUID(),
+        var organization = UUID.randomUUID();
+        var result = new AdministratorBootstrap(app).initialize(organization,
                 "Synthetic HTTP organization", "Synthetic HTTP custodian", login, password);
-        return new Fixture(result.actorId(), result.accountId(), login, password);
+        return new Fixture(result.actorId(), result.accountId(), organization, login, password);
+    }
+
+    private DriverManagerDataSource appDataSource() {
+        return new DriverManagerDataSource(url() + "?currentSchema=" + schema,
+                "idea_ddm_app", env("IDEA_DATABASE_APP_PASSWORD"));
+    }
+
+    private long refusedLoginNanos(HttpClient client, String csrf, String login, String candidate) throws Exception {
+        long started = System.nanoTime();
+        var response = post(client, "/api/v1/identity/login", csrf,
+                "username=" + form(login) + "&password=" + form(candidate));
+        long elapsed = System.nanoTime() - started;
+        assertEquals(401, response.statusCode());
+        assertEquals("", response.body(), "Credential refusals must have the same safe HTTP body");
+        return elapsed;
     }
 
     private static String form(String value) { return URLEncoder.encode(value, StandardCharsets.UTF_8); }
