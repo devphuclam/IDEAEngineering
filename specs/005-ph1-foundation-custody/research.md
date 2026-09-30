@@ -74,3 +74,24 @@ executed against the exact source and environment.
 
 **Alternative considered**: Assigning a Gateway runtime from the Server stack without
 qualification. That would turn an open implementation choice into an unrecorded Tech decision.
+
+## R6 — F03-B HTTP identity and accelerated deadline checks
+
+**Decision**: Reuse the ordinary Spring Security session selection from
+[TECH-001](../../docs/product/instances/idea-engineering/decision-briefs/TECH-001-technology-and-architecture-proposal.md)
+and the account/session/security-mutation sequence `ARCH-VIEW-SEQ-008` in
+[DOC-05](../../docs/product/instances/idea-engineering/DOC-05-architecture-description.md).
+The 2026-09-30 synthetic policy and its exact thresholds belong to [spec User Story 3](spec.md),
+not this research note. HTTP Security exact-package intake is separate from the crypto-only
+[F03-A intake](../../docs/research/2026-09-30-ph1-f03a-security-crypto-intake.md).
+
+**Rationale**: Existing account security_version rejects account-wide invalidation but cannot
+alone identify one-session logout or expiry at owner commit. Carry a verified session reference
+and revalidate it with current IAM state. Track last eligible activity explicitly so rejected
+requests cannot extend idle eligibility. Controlled test time proves deadline behavior without
+hours of sleep; the test still runs the actual Server and PostgreSQL.
+
+**Alternatives considered**: JWT, persistence that silently restores sessions after restart,
+mock/H2 integration evidence, changing the host clock, or waiting two/eight hours. These do not
+deliver the selected boundary or the approved fast test method. Browser TLS/cookie and native
+binding/protected-storage qualifications remain explicit execution work, not assumed PASS.

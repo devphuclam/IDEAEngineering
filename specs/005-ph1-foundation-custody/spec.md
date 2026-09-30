@@ -2,7 +2,7 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.2` / Principal Product Author
+**Version / owner**: `0.3` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
 **Classification / verification**: `INTERNAL` / PH1 application results `NOT-RUN`
@@ -31,6 +31,14 @@ The user’s PG4 decision authorizes implementation but is not evidence that any
 The Project Reviewer confirmed this bounded F03-A interpretation of `REQ-AUTH-010` during
 implementation review. It does not authorize arbitrary self-grants, alter other delegation limits,
 or claim a new Product Decision Authority approval for the frozen PG2/PG3 baseline.
+
+- Q: How is the first password set for a pending account in F03-B? → A: An eligible Account Administrator issues a target-bound, single-use setup proof that expires after 15 minutes. In development, deliver it only through the protected synthetic test harness; do not add public registration or company email integration, or put credentials/proofs in Git, logs or chat.
+- Q: What session expiry and invalidation rules apply in F03-B development, and must tests wait for the real deadlines? → A: Expire after 2 hours without eligible activity or 8 hours from sign-in, whichever comes first. Logout revokes the current session; account disablement or password reset revokes all affected sessions; re-enable requires fresh sign-in and never revives old sessions. Keep local candidate files. Tests use controlled time or isolated seconds-based settings, not hours of waiting.
+- Q: What password and failed-login policy applies to synthetic F03-B accounts? → A: At least 15 characters without mandatory upper/lowercase, digit or symbol mixtures; retain the qualified BCrypt limit of 72 UTF-8 bytes and reject over-limit input rather than truncating. Five failed sign-ins within 15 minutes temporarily block that login for 15 minutes; this is not permanent account disablement. MFA is outside this synthetic development profile, not waived for a future live rollout.
+
+The Project Reviewer confirmed the F03-B development profile on 2026-09-30. It qualifies
+synthetic-account development and testing only; it does not settle `SPEC-OPEN-06` for real
+company accounts or claim production security approval. F03-A acceptance is unchanged.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -86,11 +94,38 @@ Use the F04 sample owner command to exercise disablement/revocation during an in
 6. **Given** an account is re-enabled after disablement, **When** a prior invalidated session is reused, **Then** it remains refused; access requires a fresh eligible sign-in rather than reactivating the old session.
 7. **Given** only a Super Administrator assignment, **When** account creation, disablement or re-enablement is attempted, **Then** it is refused. An explicit Account Administrator assignment must first be granted through the ordinary assignment-permission path; its principal may be the assigning Super Administrator under the clarification above.
 8. **Given** an eligible Account Administrator at the correct Organization Scope, **When** an account is created, disabled or re-enabled, **Then** the result is attributable and atomic with IAM outcome and Audit; creation grants no Project/Group membership or product role, and disable/re-enable preserves Actor/account/login identities and history. Ordinary users, wrong-role/wrong-scope and revoked assignments are refused.
+9. **Given** a pending synthetic account and a correctly bound setup proof, **When** its first credential is set before expiry, **Then** it becomes eligible for fresh sign-in only after successful setup; wrong-target, expired or reused proof attempts leave its credentials and activation state unchanged.
+10. **Given** an eligible synthetic session, **When** either development-profile deadline is reached, **Then** a protected request is refused. Eligible activity refreshes only the idle deadline, never the absolute deadline. Logout, account disablement and password reset apply the profile's revocation rules without deleting local candidate files.
+11. **Given** a synthetic account undergoing credential setup or sign-in, **When** a password violates the development profile or the failed-login threshold is reached, **Then** setup is refused without changing credentials or login is temporarily blocked as applicable. At the block deadline, an otherwise eligible account can attempt fresh sign-in; this neither re-enables a disabled account nor restores an old session.
 
 Scenarios 1, 2, 7 and 8 belong to the F03-A Server-service checkpoint on real PostgreSQL.
 Creating a pending account is not credential setup or successful sign-in. HTTP authentication,
 session-derived Actor context and old-session behavior remain F03-B; in-flight owner validation
 also requires F04 evidence.
+
+**F03-B synthetic development profile** (the measurable values below are Project Reviewer
+choices, not universal security rules or company policy):
+
+| Control | Required development behavior |
+|---|---|
+| First credential setup | Eligible Account Administrator issues a proof bound to the target pending account; successful use sets its first credential. Public registration remains unavailable. |
+| Setup proof | One successful use; expires 15 minutes after issue. Wrong-target, expired or reused proofs cannot set credentials or activate an account. |
+| Setup delivery | Protected synthetic test harness only; no working password or proof in repository, logs or chat. Live delivery and wider recovery policy require separate qualification. |
+| Idle session limit | 2 hours since the last eligible activity; enforced by the Server. |
+| Absolute session limit | 8 hours from successful sign-in; activity cannot extend it. The earlier deadline wins; at the deadline the session is expired. |
+| Revocation | Logout invalidates the current session. Account disablement or password reset invalidates all affected sessions. Re-enable never restores old sessions; fresh sign-in is required. Preserve local candidate files. |
+| New password | At least 15 characters; no mandatory character-class mixture. The currently qualified BCrypt path accepts at most 72 UTF-8 bytes, not 72 characters; reject larger input without truncation. This bounded development constraint does not qualify the future live password policy. |
+| Failed-login block | Five failed sign-ins for the same login within a 15-minute observation window start a 15-minute block. No credential attempt can authenticate during the block. This is temporary login throttling, not account disablement or identity replacement. |
+| MFA | Not required for synthetic development accounts; live policy remains unqualified. |
+
+**Fast expiry verification**: Check the configured profile values, including 2-hour idle and
+8-hour absolute limits, then exercise setup-proof expiry, idle/absolute expiry, failed-login
+observation-window and block deadlines immediately before and at/after each boundary using
+controllable test time or an explicitly
+isolated seconds-based test configuration. Do not wait 2 or 8 real hours, change the host's clock,
+or expose a time-control route to clients. HTTP/session and persistence evidence must still use
+the actual Server and PostgreSQL; accelerated timing is not a mock-database substitute or an
+8-hour soak result. Record the timing method and any test-only settings with the evidence.
 
 ---
 
@@ -147,6 +182,8 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - A physical Vault path changes while logical Artifact/Vault/location identities remain stable.
 - A new package, SDK or asset lacks an exact source/version/license intake; its use is blocked until that intake is resolved.
 - A Super Administrator attempts account CRUD without its separate Account Administrator assignment, or an ordinary/delegated actor attempts an unauthorized role grant; both are refused without a privilege change.
+- A setup proof is used for another account, repeated, expired, or submitted with a password below 15 characters or above 72 UTF-8 bytes; no failed setup activates the account or changes its credential.
+- Rejected/unauthenticated traffic must not keep a session alive; eligible activity cannot extend its absolute deadline. A temporary login block must not disable an account or revive an invalidated session when it expires.
 
 ## Requirements *(mandatory)*
 
@@ -156,7 +193,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - **FR-002 (F01)**: Repository configuration MUST contain no working secret; required local values MUST be described without committing credentials.
 - **FR-003 (F02)**: A fresh permitted development database MUST be constructible from identifiable, ordered changes, with a recorded bounded rollback check and separate application/database health outcomes.
 - **FR-004 (F03)**: Initial administrator creation MUST use a controlled one-time bootstrap path; after completion a repeated request MUST report that initialization is already complete without creating or changing an Actor, account or Role Assignment, and public self-registration MUST NOT be available in PH1.
-- **FR-005 (F03)**: A protected request MUST use a verified session associated with one stable Actor; sign-out, disablement and revocation MUST prevent reuse as an eligible session. Commands MUST revalidate eligibility before their authoritative commit, coordinated with committed disablement/revocation so an invalid command cannot commit. Re-enabling an account MUST require a fresh eligible session; prior invalidated sessions MUST remain invalid.
+- **FR-005 (F03)**: A protected request MUST use a verified session associated with one stable Actor; expiry, sign-out, disablement and revocation MUST prevent reuse as an eligible session. F03-B development MUST enforce User Story 3's idle/absolute limits and password-reset revocation rule. Commands MUST revalidate eligibility before their authoritative commit, coordinated with committed disablement/revocation so an invalid command cannot commit. Re-enabling an account MUST require a fresh eligible session; prior invalidated sessions MUST remain invalid.
 - **FR-006 (F04)**: A successful sample business command MUST retain its business result and required Audit evidence with the same correlation identity; Audit evidence MUST NOT determine or mutate that result.
 - **FR-007 (F04)**: A refused or failed sample command MUST have an attributable refusal/failure result without a false successful business-state change.
 - **FR-008 (F05)**: For the approved single-endpoint smoke path, the Server MUST issue only a scoped, time-bounded transfer permission after eligibility checks, and the client MUST send file bytes to the Gateway, not through the business Server.
@@ -165,6 +202,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - **FR-011 (F05)**: Wrong, expired, mismatched, interrupted or duplicate transfer attempts MUST follow the failure-outcome table in User Story 5; no attempt may be silently marked successful, and retry/resume MUST retain the existing operation identity unless an explicit new operation is authorized.
 - **FR-012 (PH1)**: Before first use, each newly introduced third-party package, SDK, source, asset or runtime MUST have its exact source, version, license and intended use recorded under the repository intake rule. PH1 acceptance MUST NOT claim commercial distribution rights from internal-use evidence alone.
 - **FR-013 (F03-A)**: Account CRUD MUST require an independently assigned Account Administrator role at the exact Organization Scope. Assignment MUST pin the Role Definition version, assigner and reason and commit with its Access Policy outcome and Audit. An effective Super Administrator may explicitly self-assign this exact role only through its existing bounded assignment permission; no account type, named Actor or implicit Super privilege may bypass either check. Account creation MUST grant no membership/product authority, disable/re-enable MUST preserve stable identity/history, and required state/outcome/Audit failure MUST roll back the mutation.
+- **FR-014 (F03-B development)**: First credential setup for a pending synthetic account MUST follow the target-bound, single-use proof, protected delivery and password rules in User Story 3's development profile. Account creation alone MUST NOT enable sign-in; failed setup MUST NOT activate the account or consume another account's proof. Sign-in MUST enforce the profile's temporary failed-login block without permanently disabling the account or replacing its identity.
 
 ### Key Entities
 
@@ -180,7 +218,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 
 - **SC-001 (F01)**: A clean-checkout reviewer can run all four named project build/check entry points and retain an actual pass/fail result for each, with zero working secrets committed.
 - **SC-002 (F02)**: One fresh database can be built from the recorded change set; one supported rollback case and both healthy/unavailable database conditions produce distinguishable recorded outcomes.
-- **SC-003 (F03)**: The documented first/repeated bootstrap, sign-in/out, disable, revoke and re-enable scenarios each have an executed result; repeated bootstrap creates zero additional privileges and all protected retries with invalidated sessions are refused. F04 provides the in-flight command test: committed disablement/revocation before the command commit yields zero successful business-state changes. Re-enabled accounts accept fresh eligible sign-in but refuse prior invalidated sessions.
+- **SC-003 (F03)**: The documented first/repeated bootstrap, first credential setup, sign-in/out, expiry, disable, revoke and re-enable scenarios each have an executed result; repeated bootstrap creates zero additional privileges and all protected retries with invalidated sessions are refused. F03-B proves the development profile's setup-proof, idle/absolute and failed-login deadlines through the fast verification method in User Story 3; at/after expiry there are zero successful protected retries, and during a login block there are zero successful sign-ins. Password boundary cases include below/at 15 characters and at/above 72 UTF-8 bytes, including multibyte input; valid length alone does not qualify a credential or live policy. F04 provides the in-flight command test: committed disablement/revocation before the command commit yields zero successful business-state changes. Re-enabled accounts accept fresh eligible sign-in but refuse prior invalidated sessions.
 - **SC-004 (F04)**: For the allowed, refused and forced-failure sample commands, the retained evidence identifies the Actor, correlation identity and actual outcome; zero successful results lack their required Audit evidence.
 - **SC-005 (F05)**: Both approved synthetic fixtures (1 KiB and 64 MiB) complete the one-endpoint transfer path with matching size and SHA-256; denied, wrong-digest, interrupted, lost-response and repeated/changed-input attempts produce zero false successful custody results.
 - **SC-006 (boundary)**: The F05 review can identify separate Artifact, Vault, location and physical-path fields and demonstrate that one stored file's logical identity does not depend on its Adapter path. This is a seam check, not a second-Vault test.
@@ -192,6 +230,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - The selected technology and detailed interface/transaction rules remain in the approved Tech, architecture and data sources. This delivery specification records outcomes and does not choose an alternative stack or transfer protocol.
 - F01–F05 produce their own runtime evidence. PH0 documentary PASS and PG4 PASS do not pre-accept any PH1 test.
 - Later multi-Vault implementation, operational recovery, Format Worker qualification and commercial clearance require their own scoped decisions and evidence.
+- F03-B's numeric authentication profile is limited to synthetic development/testing. Live-company credential delivery, recovery and security-policy qualification remain open under `SPEC-OPEN-06`.
 
 ## Governing-Source Trace
 
@@ -210,3 +249,4 @@ they do not create a product feature.
 | `FR-008/009/010/011` | F05 | DOC-04 `REQ-SEC-001/002`, `REQ-OPS-001/006`; DOC-05/06 Artifact transfer/custody interfaces | One Gateway/Vault endpoint now; `REQ-OPS-007/008` multi-location selection, replication and repair remain later implementation and verification work. |
 | `FR-012` | PH1-wide | [Constitution principle I](../../.specify/memory/constitution.md) and [external-source intake](../../docs/agents/external-source-intake.md), both repository process controls | Exact license/source review is required before import/use; internal development does not establish commercial distribution rights. |
 | `FR-013` | F03-A | DOC-04 `REQ-IAM-002/003/005`, `REQ-AUTH-004/009/010`; DOC-05 `IF-DIRECTORY-ADMIN` / `IF-RBAC-ADMIN`; [ADR-0012](../../docs/adr/0012-use-principal-role-scope-rbac.md); Project Reviewer clarification on 2026-09-30 | Separate scoped grants; bounded Super self-assignment is explicit, not an implicit CRUD bypass. F03-B session/activation evidence and the broader permission catalogue remain owed. |
+| `FR-014` and User Story 3 development profile | F03-B | DOC-04 `REQ-IAM-003/004`, `REQ-SEC-001`; DOC-05 identity boundary; Project Reviewer clarification on 2026-09-30 (development-profile decision) | Synthetic accounts only; does not close `SPEC-OPEN-06`, qualify live recovery/delivery or amend the frozen product approvals. |

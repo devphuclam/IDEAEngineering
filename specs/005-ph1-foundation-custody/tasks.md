@@ -70,7 +70,10 @@ disable/revoke and retry a protected call.
   boundary on real PostgreSQL, including exact role-version/scope, refusal, preserved identity
   and atomic failure. The test-only trusted Actor context is not HTTP authentication evidence.
 - F03-B: verified HTTP login/session-derived Actor context, sign-out/revocation, CSRF, expiry and
-  old-session refusal after re-enable. HTTP/session work remains unchecked until executed.
+  old-session refusal after re-enable, plus protected first credential setup and temporary
+  failed-login block under spec v0.3's synthetic development profile. Work Item #24 owns this
+  continuation. The Project Reviewer approved real HTTP/real PostgreSQL and accelerated timing
+  tests on 2026-09-30; HTTP/session work remains unchecked until actually executed.
 - T018/T021/T022 span both cards: record partial F03-A evidence without checking their markers
   as though F03-B were done. T019 may close independently after its actual bootstrap evidence.
 - Preserve reviewed V1/V2. V2 supplies bootstrap organization/role/assignment state; add
@@ -79,13 +82,33 @@ disable/revoke and retry a protected call.
 - The approved seed is only the F03 account-administration subset, not the full open permission
   catalogue. No document, Approval or Release authority is granted by account creation.
 
+**F03-A acceptance:** Project Reviewer accepted the agreed whole-card scope on 2026-09-30
+after a no-blocker check of reviewed head `79373e95502474e64dd2a72604c2d9629daa9e36`.
+Tracker records COMPLETED / PASS in local Execution Register revision 28, 2.25 actual hours,
+0 remaining; see [F03 evidence](evidence/F03-identity-results.md) sections 13–14.
+Integration/publication are separate. F03-B and its shared unchecked task markers remain open.
+
 - [X] T037 [US3] Implement F03-A account-administration services in `apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java`, with failing/green PostgreSQL tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; retain scoped results in `evidence/F03-identity-results.md`. Technical checkpoint executed from `acb772e99b96c13a10dc7ad905d6eb7daec0493a`: 20 identity + 2 Server smoke tests PASS. The explicit bounded Super self-assignment clarification is in spec Session 2026-09-30 / FR-013. T037 is the service part of T021, not extra roadmap scope/hours; marking it implemented does not accept or close F03-A/Issue #22, provision a live account, or complete F03-B.
 
-- [ ] T018 [US3] Write failing first/repeated bootstrap, session eligibility and denial tests in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java`; include re-enabling an account, refusing its old invalidated session and accepting a fresh eligible sign-in.
+- [ ] T018 [US3] Retain existing first/repeated bootstrap coverage in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java` and write session eligibility/denial coverage one slice at a time in `apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java`; include re-enabling an account, refusing its old invalidated session and accepting fresh sign-in. T039/T042 refine the remaining F03-B work, not extra card hours.
 - [X] T019 [US3] Implement one-time local administrator bootstrap and Actor/account persistence in `apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java`. Source `89eab7129a72844e45807f13baedfbee39a9ac92` additionally passed fresh public V1/V2/V3 and the real interactive packaged operator + unchanged repeat on 2026-09-30 in dedicated `idea_ddm_f03a_20260930_c91e7a42`; see [F03 evidence](evidence/F03-identity-results.md) sections 11–12. This closes the technical bootstrap task, not whole-card acceptance, Issue #22 or F03-B.
 - [ ] T020 [US3] Implement native login/session ownership and protected-request Actor derivation in `apps/server/src/main/java/com/idea/ddm/identity/SessionService.java`; expose commit-time eligibility validation coordinated with security-state changes for the F04 owner command, and never revive invalidated sessions when re-enabling an account.
 - [ ] T021 [US3] Implement authorized native-account creation, sign-out, disablement and revocation refusal paths in `apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java`.
 - [ ] T022 [US3] Run the F03-A/B scenarios and retain actual results without credentials in `specs/005-ph1-foundation-custody/evidence/F03-identity-results.md`.
+
+**F03-B task refinement:** T038–T044 refine the unchecked parts of T018/T020/T021/T022,
+not new roadmap cards/hours. Execute in vertical test/implementation pairs; never write the
+whole imagined test suite before its first behavior. T039's initial red test uses only current
+qualified build dependencies and may run while T038 is prepared; green HTTP Security code
+requires T038. No client credential or time-control shortcut is allowed.
+
+- [X] T038 [P] [US3] Complete exact pre-use HTTP Security dependency/license intake in `docs/research/2026-09-30-ph1-f03b-http-security-intake.md`; pin newly resolved components before importing them in `apps/server/pom.xml` and preserve the Log4j2/no-Logback graph. v0.2 admission preceded first resolution; v0.3 retains matching five-JAR hashes and actual logging graph. Wider T036/commercial clearance remains open.
+- [X] T039 [P] [US3] Write and run the first failing real-HTTP anonymous-session refusal in `apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java` through `apps/server/scripts/run-f03b-postgresql-checks.sh`, then extend one behavior at a time for sign-in/out, CSRF, server-derived Actor and fixation protection. Separate roles and test-owned UUID schemas were used; 8 HTTP tests and 22 affected regression checks passed without skips. This closes the initial test slices, not T040–T044 or whole F03-B acceptance; checkpoint evidence is retained in `evidence/F03-identity-results.md`.
+- [ ] T040 [US3] After T038 and the relevant red test, implement ordinary Spring HTTP session configuration in `apps/server/src/main/java/com/idea/ddm/identity/IdentityHttpSecurity.java`, `SessionService.java` and `IdentityController.java`, plus needed session fields in `database/migrations/V4__native_http_sessions.sql`. Preserve V1–V3; carry a verified session reference in ActorContext for account-version, per-session revocation and commit-time checks. Never trust client ActorId or resurrect persisted sessions on restart.
+- [ ] T041 [US3] In separate red/green slices implement target-bound one-use credential proof, password validation and race-safe temporary login blocking in `apps/server/src/main/java/com/idea/ddm/identity/CredentialSetupService.java`, `NativePasswordVerifier.java` and `database/migrations/V5__credential_setup_and_login_throttling.sql`. Apply spec's exact profile: proof 15 minutes; minimum 15 Unicode characters, maximum 72 UTF-8 bytes without truncation; 5 failed sign-ins within 15 minutes starts a 15-minute login block. Setup/reset permission is explicit; proof-authorized redemption and material state/outcome/Audit must be atomic. Reset never re-enables DISABLED accounts.
+- [ ] T042 [US3] Extend `apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java` through the actual HTTP contract to prove idle 2 hours/absolute 8 hours, logout/account disable/reset revocation, old-session refusal after re-enable, password/proof/block boundaries and atomic failure. Use controlled test time, no hour-long sleeps, host-clock changes or public clock route. Expose the same verified eligibility seam for F04; do not claim its owner race has already run.
+- [ ] T043 [US3] Record browser HTTPS/cookie/CSRF and native Desktop binding/protected-custody qualification in `specs/005-ph1-foundation-custody/evidence/F03-identity-results.md`, mapped to `apps/web/src/App.tsx`, `apps/desktop/App.xaml.cs` and the HTTP contract. Actual client paths need their own agreed test seam before test/code changes. A loopback Java HTTP harness cannot mark Web TLS or Desktop custody PASS; any required unqualified client path remains open.
+- [ ] T044 [US3] Run scoped HTTP/PostgreSQL checks and affected F03-A/health/migration regressions; retain red/green command, exact source snapshot/hash, roles/database/schema, default and accelerated timing values, sanitized output and limits in `specs/005-ph1-foundation-custody/evidence/F03-identity-results.md`. Keep F03-B IN_PROGRESS until all applicable evidence/review/Project Reviewer acceptance exists; verifier remains NOT-RUN.
 
 ## Phase 6: User Story 4 — Attributable owner outcome (F04, P1)
 
@@ -123,7 +146,7 @@ assumed in advance. This gate does not block F01-A through F04.
 
 ## Phase 8: Cross-cutting review
 
-- [ ] T035 Review implementation against FR-001–012, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); record residual `NOT-RUN`/`BLOCKED` claims in `specs/005-ph1-foundation-custody/evidence/PH1-coverage-review.md`.
+- [ ] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); record residual `NOT-RUN`/`BLOCKED` claims in `specs/005-ph1-foundation-custody/evidence/PH1-coverage-review.md`.
 - [ ] T036 Review exact dependency/license evidence and clean-room provenance before integration in `specs/005-ph1-foundation-custody/evidence/PH1-license-review.md`.
 
 ## Dependencies and execution order
@@ -133,7 +156,8 @@ assumed in advance. This gate does not block F01-A through F04.
 | F01-A | T001–T012 | PG4 PASS; T002 records the one-time exceptions for late NuGet and direct Web legal-file evidence in past internal build/test. Intake still precedes every new import. |
 | F01-B | T013 | F01-A actual build evidence |
 | F02 | T014–T017 | F01 build foundation |
-| F03-A/B | T018–T022 | F02 baseline |
+| F03-A | T019/T037; accepted A portions of T018/T021/T022 | F02 baseline; F03-A reviewed/accepted service and interactive-bootstrap evidence |
+| F03-B | Remaining T018/T020/T021/T022; refinement T038–T044 | F03-A acceptance; qualified exact HTTP Security intake before new dependency use; approved real HTTP/PostgreSQL test seam |
 | F04 | T023–T026 | F03 Actor/session and F02 database |
 | F05-A/B | T027–T034 | F04 outcome/Audit and F02 data baseline; T027 qualification and exact-path task refinement before Gateway implementation |
 | PH1 review | T035–T036 | Targeted story evidence |

@@ -16,6 +16,15 @@ final class NativePasswordVerifier {
         return encoder.encode(candidate);
     }
 
+    boolean matches(String candidate, String encoded) {
+        if (!valid(candidate) || encoded == null || !encoded.startsWith("{bcrypt}")) return false;
+        try {
+            return encoder.matches(candidate, encoded);
+        } catch (IllegalArgumentException exception) {
+            return false;
+        }
+    }
+
     private static boolean valid(String candidate) {
         return candidate != null && !candidate.isBlank()
                 && candidate.getBytes(StandardCharsets.UTF_8).length <= 72;

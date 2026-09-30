@@ -1,9 +1,8 @@
 # PH1 validation guide
 
-**State on 2026-09-28:** The four F01-A scaffold build/smoke checks passed for tested source
-commit `c600f7be` (see [F01-A results](evidence/F01-A-build-results.md)). T002 closed with a
-documented one-time internal build/test timing exception; F01-A remains open. The F01-B and
-F02–F05 checks are `NOT-RUN`. This guide is a procedure, not evidence of a result.
+**Procedure updated 2026-09-30:** This guide is not a progress register or test result.
+Per-card evidence and the Execution Register own actual status. F03-A acceptance does not
+pre-accept F03-B HTTP/session work; retain each executed red/green result separately.
 
 ## Before running
 
@@ -80,6 +79,27 @@ while a fresh eligible sign-in works. For F04, use controlled synchronization to
 command after admission, commit account disablement or session revocation, then let the command
 reach its commit check. It must produce no successful business-state change. Retain the ordering
 evidence; an arbitrary sleep alone does not establish that the race was exercised.
+
+### F03-B fast HTTP/PostgreSQL checks
+
+Use the protected operator credential file, separate `idea_ddm_app`/`idea_ddm_migrator` roles
+and existing dedicated `idea_ddm_f03a_20260930_c91e7a42` database. The HTTP test owns only a
+new `f03b_<32 hexadecimal UUID>` schema: migrate and remove only that exact schema. Leave
+public and retained F03-A state unchanged; no development/F02 database or Vault write.
+Missing access is BLOCKED, not permission to substitute an in-memory database.
+
+The scoped runner to implement is `apps/server/scripts/run-f03b-postgresql-checks.sh`.
+It must fail closed if required credentials/roles/database are missing and report skipped tests
+as NOT-RUN, not PASS. First tracer: anonymous GET to the protected session route must return
+401; it must not return an Actor or login-page redirect. Continue one red/green behavior at a time
+through the [HTTP contract](contracts/ph1-boundaries.md#f03-b-http-refinement).
+
+Check default profile values, then advance test time at setup-proof, idle, absolute and login
+block boundaries. Do not wait minutes/hours or change the server's clock. Cookie/session/CSRF
+checks use real HTTP; migrations/authentication use real PostgreSQL. An isolated loopback HTTP
+profile must disclose transport/cookie overrides and is not HTTPS/Desktop qualification.
+Retain hashes and sanitized assertions, never password, proof, cookie or CSRF values in logs.
+`verify-template` remains NOT-RUN at the user's instruction.
 
 For every run, retain the exact command/procedure, commit, environment, timestamp, actual output,
 reviewer and `PASS`/`FAIL`/`BLOCKED`/`NOT-RUN` disposition in the card's evidence record. Update

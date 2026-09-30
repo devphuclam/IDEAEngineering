@@ -48,3 +48,32 @@ accept Artifact custody. Neither outcome is document Check-in or Generation publ
 
 The second Vault, replication, failover, large-file throughput, document Check-in and production
 recovery are outside this contract.
+
+## F03-B HTTP refinement
+
+Engineering route mapping for spec FR-005/014; not a new product approval. Tests use actual
+Server HTTP and PostgreSQL, with synthetic identities and protected in-memory credential input.
+
+| Route | Observable result and authority |
+|---|---|
+| `GET /api/v1/identity/csrf` | Obtain the anonymous/current session's CSRF token through the same-origin boundary. No identity privilege is granted. |
+| `POST /api/v1/identity/login` | Native login/password plus CSRF proof; verify active account and credential. Establish a fresh/fixation-protected session. Safe success identifies server-derived Actor; failure returns generic 401 without credential, existence or privileged-role disclosure. |
+| `GET /api/v1/identity/session` | Current eligible session gives 200 with its Actor/account identity only. Anonymous, expired, revoked or stale-version proof gives 401, never a redirect or client-chosen Actor. |
+| `POST /api/v1/identity/logout` | Valid CSRF and session; invalidate the current proof and cookie. Old proof is refused. GET must not log a user out. |
+| `POST /api/v1/identity/accounts` and `POST /api/v1/identity/accounts/{id}/disable` or `/re-enable` | Session-derived Actor and CSRF; reuse F03-A's exact scoped permission and mutation path. Creation remains PENDING with no credential or implicit membership/role. |
+| `POST /api/v1/identity/accounts/{id}/credential-proofs` | Eligible Account Administrator explicitly requests initial setup or reset for one account. Issue one-use, purpose/target/version-bound proof; retain attributable outcome/Audit, never its secret. Protected delivery is synthetic harness-only in this increment's development profile. |
+| `POST /api/v1/identity/credentials` | Target identity, bound one-use proof, new password and CSRF. Redeem atomically; refuse wrong/expired/replayed/stale proof or invalid password without activation/credential mutation. Reset invalidates old sessions and cannot re-enable a disabled account. |
+
+All other application routes deny anonymous access unless individually designated public.
+The existing `/health` and `/health/database` process/data probes retain their accepted contract;
+they expose no credentials or internal connection strings. Bootstrap remains a local operator
+command, never a controller or startup callback. Clients cannot pass an authoritative ActorId.
+Authenticated identity alone is not an administration or product permission.
+
+Use Spring Security session-fixation and CSRF mechanisms, deny cross-origin credential access,
+and use Secure/HttpOnly/SameSite cookies with host-only scope under same-origin HTTPS. Expiry,
+failed-login block and setup proof behavior follows spec's development profile. Test-only
+loopback transport/timing overrides must be recorded and cannot weaken the normal profile or
+be exposed as a client-accessible control route. Native Desktop binding/protected-custody
+qualification is separate from a Java HTTP harness; no password or session secret enters page
+JavaScript. F04 retains the owner-commit race test, using a verified session reference.

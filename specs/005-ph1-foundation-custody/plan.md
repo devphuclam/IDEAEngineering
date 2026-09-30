@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/ph1-foundation-f01` | **Date**: 2026-09-28 | **Spec**: [PH1 specification](spec.md)
+**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-09-30 | **Spec**: [PH1 specification v0.3](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -94,6 +94,45 @@ The Server owns relational authority; the Gateway owns private byte handling thr
 
 Each card receives its own actual evidence before the Progress Tracker may mark it complete.
 The project user starts/stops its timer explicitly; this plan does not record actual effort.
+
+## F03-B execution refinement
+
+Work Item [#24](https://github.com/devphuclam/IDEAEngineering/issues/24) continues the accepted
+F03-A services at `79373e95502474e64dd2a72604c2d9629daa9e36`. PR #23 integration and local
+F03-A acceptance notes remain separate; reuse the existing worktree, not another checkout.
+The Project Reviewer approved the real HTTP/real PostgreSQL test seam on 2026-09-30.
+
+1. Keep ordinary Spring Security server-side sessions. Add only exact, qualified HTTP Security
+   dependencies after pre-use intake; exclude starter-logging so the selected Log4j2 graph does
+   not acquire Logback. Do not add JWT, Spring Session JDBC or a custom cookie authenticator.
+2. Use a deny-by-default HTTP boundary and the routes in [the contract](contracts/ph1-boundaries.md#f03-b-http-refinement).
+   Server establishes ActorContext from authenticated session proof. Account management calls
+   the existing scoped permission evaluator and owner transaction, never a named-Super bypass.
+3. Retain a verified internal session reference in ActorContext. SessionService checks account
+   eligibility/security version, per-session revocation and both deadlines. F04 uses the same
+   eligibility seam under the existing security-write coordination lock before owner commit.
+   Process restart invalidates sessions; persisted metadata cannot resurrect a container session.
+4. Add successor migrations only when their slice needs them; preserve reviewed V1–V3. Separate
+   session metadata from credential proofs and temporary failed-login state. Credential setup
+   uses target-bound proof authority, not an invented administrative grant for a pending account.
+   Material security mutation, IAM outcome and required Audit share one transaction.
+5. Use the numeric development profile in spec User Story 3 without repeating a live-policy
+   approval. Inject test time at the time boundary; compare immediately before/at/after each
+   deadline. Leave the host clock unchanged and never expose a time-control HTTP route.
+6. Test one behavior at a time with a real HTTP client and PostgreSQL 18. Migrate a UUID-owned
+   temporary schema inside the existing dedicated F03-A test database; never migrate/clean its
+   public schema, the F02 database, `idea_ddm_dev` or Vault. A test failure is not a card PASS.
+7. Qualify browser cookie/CSRF behavior and the native-client binding before claiming the
+   corresponding client path. Same-origin HTTPS, Secure/HttpOnly/SameSite cookies and no
+   JavaScript-visible credentials remain the baseline. A loopback HTTP harness must disclose
+   its test-only transport/cookie overrides; it cannot qualify HTTPS or Windows protected custody.
+
+Pre/post-design Constitution check: this refinement implements FR-005/014 under the existing
+PH1 authority, keeps live policy `SPEC-OPEN-06` open, and retains pre-use intake and truthful
+NOT-RUN states. It requests no constitutional exception or new product-gate approval.
+The next tracer bullet is an anonymous request to the protected session endpoint: expect 401,
+not a login-page redirect, an Actor or a successful response. Its green implementation depends
+on HTTP Security intake; its initial red run uses only already-qualified build dependencies.
 
 ## Complexity Tracking
 

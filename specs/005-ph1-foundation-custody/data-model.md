@@ -10,7 +10,9 @@ Checkout, Review or Release record is created by this increment.
 |---|---|---|---|
 | Actor | Stable `ActorId`; display identity | Identity and Accounts; may have one native IDEA Account | Never take `ActorId` from an untrusted client request. Disablement does not reassign history. |
 | IDEA Account / Login Identity | Account ID, linked `ActorId`, login identifier, password verifier, status/security version | Identity and Accounts | Bootstrap is controlled and one-time; no public registration. Credentials and verifier never enter Audit or source. |
-| Session | Opaque session identity, `ActorId`, security version, expiry/revocation state | Identity and Accounts | A disabled account, logout or revocation makes protected reuse ineligible. A cookie/token is proof, not Actor identity. |
+| Session | Internal SessionId, linked Account/Actor, security version, issued time, last eligible activity, absolute expiry and revocation state | Identity and Accounts; native HTTP session registry owns live proof binding | Disabled/stale-version, expired or revoked proof is ineligible. Last eligible activity controls idle expiry; absolute expiry cannot move. Retained metadata cannot restore proof after restart. Never expose a live proof through ActorContext JSON or Audit. |
+| Credential setup/reset proof | ProofId, target Account/Login Identity, purpose, captured security version, digest of high-entropy proof, issue/expiry/consumption state | Identity and Accounts | One successful use at the bound target/state; no plaintext proof in storage/Audit. Redemption changes credential/state and required outcome/Audit atomically. A disabled target cannot become active through reset. Live delivery/recovery qualification remains separate. |
+| Failed-login observation | Login key, bounded observation/failure count and blocked-until state | Identity and Accounts | Apply spec's synthetic window/threshold atomically under concurrent requests. Temporary block is not account disablement, a role grant or identity replacement. |
 | Sample owner operation | `OperationId`, `ActorId`, command kind, correlation ID, accepted/refused result | PH1 sample authoritative owner; one result for an idempotent operation | It demonstrates the owner/Audit transaction, not a document workflow or general-purpose product object. |
 | Audit Evidence | Evidence ID, `OperationId`, `ActorId`, action, target, timestamp, outcome/reason | Audit Evidence; references owner operation | Append-only. A committed successful owner result and its required evidence share one relational transaction. Audit does not decide the result. |
 | Vault Endpoint | Stable `VaultId`/endpoint identity, adapter kind, eligibility | Artifact Custody | PH1 configures one endpoint. Identity is not its hostname, directory or Adapter key. |
@@ -24,6 +26,11 @@ Checkout, Review or Release record is created by this increment.
 
 - Session: `Active` → `Expired` or `Revoked`; disabling an account invalidates eligibility without
   deleting the Actor or historical outcomes.
+- Credential proof: issued → consumed, expired or superseded. Successful redemption consumes
+  exactly one proof; replay/wrong-target/stale-account-version attempts change no credential.
+- Password length is checked as Unicode code points for the minimum, and UTF-8 bytes for the
+  already-qualified BCrypt maximum. Reject rather than truncate; do not silently normalize or
+  trim a submitted password. Numeric values are owned by spec's synthetic development profile.
 - Transfer: `Preparing` → `Transferring` → `Verified` → `Consumed`; failure, expiry or an
   indeterminate response leads to `Failed`, `Expired` or `NeedsReconciliation`. An idempotent
   retry of the same `OperationId` must resolve the prior state before creating another result.
