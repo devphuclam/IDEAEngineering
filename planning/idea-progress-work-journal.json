@@ -74,6 +74,24 @@
       "durationMinutes": 288,
       "state": "CLOSED",
       "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-a8887607c4dd4b24babc4f5b7a5c3c3d",
+      "deliveryCardId": "F02",
+      "startedAt": "2026-09-29T15:30:48.5207478+07:00",
+      "stoppedAt": "2026-09-29T18:00:00+07:00",
+      "durationMinutes": 149,
+      "state": "CLOSED",
+      "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-0c6c43e638f0445387bc4a08de256ee8",
+      "deliveryCardId": "F02",
+      "startedAt": "2026-09-30T08:00:00+07:00",
+      "stoppedAt": "2026-09-30T08:55:23.5324211+07:00",
+      "durationMinutes": 55,
+      "state": "CLOSED",
+      "recordedBy": "LEAD"
     }
   ],
   "corrections": [
@@ -130,6 +148,17 @@
       "newRemainingEffortHours": 8,
       "reason": "Hiệu chỉnh ghi nhận thời gian: phiên 29 phút (13:21–13:50 ngày 24/09/2026) đã gắn vào P06 nhưng thực tế là trao đổi hướng dẫn nhập và làm rõ thẻ P05 trên CARIO/Tracker, không thực hiện đầu ra P06. Giữ nguyên phiên gốc trong Work Journal để truy vết; loại 0,4833 giờ khỏi actual của P06, không chuyển sang card khác.",
       "recordedAt": "2026-09-24T13:55:45.1034837+07:00",
+      "recordedBy": "LEAD"
+    },
+    {
+      "correctionId": "CORRECTION-f02-timer-20260930",
+      "deliveryCardId": "F02",
+      "previousActualEffortHours": 0.0,
+      "newActualEffortHours": 2.4833,
+      "previousRemainingEffortHours": 12.0,
+      "newRemainingEffortHours": 9.5167,
+      "reason": "Người dùng xác nhận F02 dừng lúc 18:00 ngày 29/09 và làm tiếp từ 08:00 ngày 30/09. Bộ đếm chưa được dừng qua đêm; tách phiên gốc thành 149 phút ngày 29/09 và phiên mới từ 08:00 ngày 30/09. Không tính thời gian nghỉ 18:00–08:00; giờ kế hoạch không dùng làm actual.",
+      "recordedAt": "2026-09-30T08:54:15+07:00",
       "recordedBy": "LEAD"
     }
   ]

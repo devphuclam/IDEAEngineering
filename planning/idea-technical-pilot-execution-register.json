@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 24,
+  "registerRevision": 26,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
-  "statusDate": "2026-09-29",
+  "statusDate": "2026-09-30",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -554,14 +554,56 @@
         "kind": "DeliveryCard",
         "id": "F02"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 10,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F02-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": "specs/005-ph1-foundation-custody/evidence/F02-data-results.md",
+          "commit": "d766e423e8db896a0671531f7dd141cadb7cd612",
+          "sha256": null,
+          "externalUri": null,
+          "description": "PR #21 merged after read-only PASS review at head 7c5927d; T014-T017 evidence PASS on real PostgreSQL 18.6, including separate app/migrator role boundary, migration repeat, health, bounded rollback. verify-template NOT-RUN; T036 commercial review remains outside F02.",
+          "result": "PASS",
+          "recordedAt": "2026-09-30T08:55:23.5324211+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F02-EVENT-1",
+          "effectiveAt": "2026-09-29T15:30:48.5207478+07:00",
+          "recordedAt": "2026-09-29T15:30:48.5207478+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng yêu cầu Bắt đầu F02."
+        },
+        {
+          "eventId": "F02-EVENT-2",
+          "effectiveAt": "2026-09-30T08:55:23.5324211+07:00",
+          "recordedAt": "2026-09-30T08:55:23.5324211+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Project Reviewer accepted the F02 review PASS and explicitly requested completion on 2026-09-30. Timer reconciled to user-confirmed work periods: 29/09 15:30-18:00 and 30/09 from 08:00; overnight break excluded. Ghi nhận 55 phút làm việc thực tế."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
+      "actualStart": "2026-09-29T15:30:48.5207478+07:00",
+      "actualFinish": "2026-09-30T08:55:23.5324211+07:00",
+      "actualEffortHours": 3.4,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-09-30T08:55:23.5324211+07:00",
+      "remainingReviewedAt": "2026-09-30T08:55:23.5324211+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
@@ -1334,6 +1376,20 @@
       "recordedBy": "LEAD",
       "reason": "Project Reviewer accepted the F01-B review result and explicitly requested completion. Reviewer confirmed the full running interval counts as actual effort. Ghi nhận 288 phút làm việc thực tế.",
       "sourceEvidence": "Local progress tracker: F01-B"
+    },
+    {
+      "revision": 25,
+      "recordedAt": "2026-09-29T15:30:48.5207478+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng yêu cầu Bắt đầu F02.",
+      "sourceEvidence": "Local progress tracker: F02"
+    },
+    {
+      "revision": 26,
+      "recordedAt": "2026-09-30T08:55:23.5324211+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Project Reviewer accepted the F02 review PASS and explicitly requested completion on 2026-09-30. Timer reconciled to user-confirmed work periods: 29/09 15:30-18:00 and 30/09 from 08:00; overnight break excluded. Ghi nhận 55 phút làm việc thực tế.",
+      "sourceEvidence": "Local progress tracker: F02"
     }
   ]
 }
