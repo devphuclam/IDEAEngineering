@@ -24,6 +24,11 @@ class IdentityHttpSecurity {
     SessionService sessions(DataSource dataSource, Clock identityClock) { return new SessionService(dataSource, identityClock); }
 
     @Bean
+    CredentialSetupService firstCredentials(DataSource dataSource, Clock identityClock, SessionService sessions) {
+        return new CredentialSetupService(dataSource, identityClock, sessions);
+    }
+
+    @Bean
     AuthenticationProvider nativeIdentityProvider(SessionService sessions) {
         return new AuthenticationProvider() {
             @Override
@@ -42,7 +47,7 @@ class IdentityHttpSecurity {
             SessionService sessions) throws Exception {
         http.authorizeHttpRequests(access -> access
                 .requestMatchers(HttpMethod.GET, "/health", "/health/database", "/api/v1/identity/csrf").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/identity/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/identity/login", "/api/v1/identity/credentials").permitAll()
                 .anyRequest().authenticated())
                 .authenticationProvider(nativeIdentityProvider)
                 .exceptionHandling(errors -> errors

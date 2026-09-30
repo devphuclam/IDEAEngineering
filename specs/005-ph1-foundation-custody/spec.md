@@ -2,7 +2,7 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.3` / Principal Product Author
+**Version / owner**: `0.4` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
 **Classification / verification**: `INTERNAL` / PH1 application results `NOT-RUN`
@@ -39,6 +39,8 @@ or claim a new Product Decision Authority approval for the frozen PG2/PG3 baseli
 The Project Reviewer confirmed the F03-B development profile on 2026-09-30. It qualifies
 synthetic-account development and testing only; it does not settle `SPEC-OPEN-06` for real
 company accounts or claim production security approval. F03-A acceptance is unchanged.
+
+- Q: How does Account Administrator gain setup/reset authority without expanding v1 assignments? → A: The Project Reviewer approved protected successor `account-administrator@2` on 2026-09-30. It contains `account.create`, `account.disable`, `account.re-enable`, `account.credential.setup.issue` and `account.credential.reset.issue`. Version 1 and its assignments remain unchanged. The existing Super assignment permission may grant a separate, exact supported v2 Role Assignment at Organization Scope with assigner, reason, Access Policy outcome and Audit; it grants no implicit Super setup/reset authority. First setup applies only to a pending account without a credential. Proof-bound redemption needs no Account Administrator role. Reset remains a distinct purpose/path. Preserve v1/F03-A regressions; neither `SPEC-OPEN-03` nor `SPEC-OPEN-06` closes for the wider product.
 
 ## User Scenarios & Testing *(mandatory)*
 

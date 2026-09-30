@@ -10,6 +10,8 @@ Checkout, Review or Release record is created by this increment.
 |---|---|---|---|
 | Actor | Stable `ActorId`; display identity | Identity and Accounts; may have one native IDEA Account | Never take `ActorId` from an untrusted client request. Disablement does not reassign history. |
 | IDEA Account / Login Identity | Account ID, linked `ActorId`, login identifier, password verifier, status/security version | Identity and Accounts | Bootstrap is controlled and one-time; no public registration. Credentials and verifier never enter Audit or source. |
+| Account Administrator Role Definition version | Protected role-version ID, role code, exact version and Permissions | Access Policy | Version 1 keeps its three account lifecycle actions. Version 2 adds distinct setup/reset issuance Permissions; no overwrite or automatic assignment retargeting. Only exact supported versions are assignable. |
+| Administrative Role Assignment | Assignment ID, Actor principal, exact role-version ID, Organization Scope, assigned_by, reason and evidence | Access Policy | Super grants v1/v2 through its existing assignment Permission; Super alone cannot issue credential proof. Each successor assignment has its own outcome/Audit. |
 | Session | Internal SessionId, linked Account/Actor, security version, issued time, last eligible activity, absolute expiry and revocation state | Identity and Accounts; native HTTP session registry owns live proof binding | Disabled/stale-version, expired or revoked proof is ineligible. Last eligible activity controls idle expiry; absolute expiry cannot move. Retained metadata cannot restore proof after restart. Never expose a live proof through ActorContext JSON or Audit. |
 | Credential setup/reset proof | ProofId, target Account/Login Identity, purpose, captured security version, digest of high-entropy proof, issue/expiry/consumption state | Identity and Accounts | One successful use at the bound target/state; no plaintext proof in storage/Audit. Redemption changes credential/state and required outcome/Audit atomically. A disabled target cannot become active through reset. Live delivery/recovery qualification remains separate. |
 | Failed-login observation | Login key, bounded observation/failure count and blocked-until state | Identity and Accounts | Apply spec's synthetic window/threshold atomically under concurrent requests. Temporary block is not account disablement, a role grant or identity replacement. |
@@ -28,6 +30,9 @@ Checkout, Review or Release record is created by this increment.
   deleting the Actor or historical outcomes.
 - Credential proof: issued → consumed, expired or superseded. Successful redemption consumes
   exactly one proof; replay/wrong-target/stale-account-version attempts change no credential.
+  V5 implements FIRST_SETUP only for PENDING/no-verifier targets. Proof-authorized redemption
+  activates that same account and increments its security version atomically; no administrator
+  role is required of the holder. Reset and login-block records remain later additive slices.
 - Password length is checked as Unicode code points for the minimum, and UTF-8 bytes for the
   already-qualified BCrypt maximum. Reject rather than truncate; do not silently normalize or
   trim a submitted password. Numeric values are owned by spec's synthetic development profile.

@@ -49,6 +49,17 @@ class HttpSessionFlowTest {
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
         }
+        startHttpServer(true);
+    }
+
+    private void startHttpServer(boolean syntheticDelivery) {
+        var arguments = new java.util.ArrayList<>(java.util.List.of(
+                "--server.address=127.0.0.1", "--server.port=0",
+                "--spring.datasource.url=" + url() + "?currentSchema=" + schema,
+                "--spring.datasource.username=idea_ddm_app",
+                "--spring.flyway.enabled=false",
+                "--server.servlet.session.cookie.secure=false"));
+        if (syntheticDelivery) arguments.add("--idea.identity.synthetic-credential-delivery.enabled=true");
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
                 .initializers(context -> {
                     context.getBeanFactory().registerSingleton("testIdentityClock", clock);
@@ -57,12 +68,7 @@ class HttpSessionFlowTest {
                             servletIdleSeconds.set(event.getSession().getMaxInactiveInterval());
                         }
                     });
-                }).run(
-                "--server.address=127.0.0.1", "--server.port=0",
-                "--spring.datasource.url=" + url() + "?currentSchema=" + schema,
-                "--spring.datasource.username=idea_ddm_app",
-                "--spring.flyway.enabled=false",
-                "--server.servlet.session.cookie.secure=false");
+                }).run(arguments.toArray(String[]::new));
         port = ((WebServerApplicationContext) server).getWebServer().getPort();
     }
 
@@ -74,6 +80,367 @@ class HttpSessionFlowTest {
                 statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
             }
         }
+    }
+
+    @Test
+    void accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1() {
+        var fixture = fixture();
+        var roles = new RoleAssignmentAdministration(appDataSource());
+        var context = new ActorContext(fixture.actorId(), 1);
+        var v1 = roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"), fixture.organizationId(),
+                "Synthetic predecessor assignment");
+        var predecessor = roles.inspect(v1.assignmentId());
+        var operation = UUID.randomUUID();
+        var v2 = roles.assignAccountAdministrator(context, operation, fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), fixture.organizationId(),
+                "Explicit synthetic credential administration assignment");
+        var successor = roles.inspect(v2.assignmentId());
+        assertEquals(predecessor, roles.inspect(v1.assignmentId()), "No silent predecessor retargeting");
+        assertEquals(2, successor.version());
+        assertEquals(fixture.actorId(), successor.assignedBy());
+        assertEquals(fixture.organizationId(), successor.organizationId());
+        assertEquals("Explicit synthetic credential administration assignment", successor.reason());
+        assertEquals(new RoleAssignmentAdministration.Evidence("ACCEPTED", 1, 1), roles.evidence(operation));
+    }
+
+    @Test
+    void explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount() throws Exception {
+        var fixture = fixture();
+        var context = new ActorContext(fixture.actorId(), 1);
+        var app = appDataSource();
+        new RoleAssignmentAdministration(app).assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), fixture.organizationId(), "Synthetic v2 setup issuer");
+        var accounts = new IdentityAdministration(app);
+        var pending = accounts.create(context, UUID.randomUUID(), fixture.organizationId(),
+                "Synthetic setup target", "synthetic.setup." + UUID.randomUUID());
+        var issuer = signedIn(fixture);
+        var issued = issueSetup(issuer, fixture.organizationId(), pending);
+        assertEquals(200, issued.statusCode());
+        assertTrue(issued.headers().firstValue("Cache-Control").orElseThrow().contains("no-store"));
+        assertEquals("2026-09-30T06:15:00Z", jsonField(issued.body(), "expiresAt"));
+        assertEquals("PENDING", accounts.inspect(pending.accountId()).status());
+        var password = UUID.randomUUID().toString();
+        var holder = client(); // Proof authority, not an Account Administrator session/assignment.
+        var csrf = jsonField(get(holder, "/api/v1/identity/csrf").body(), "token");
+        var redeemed = postJson(holder, "/api/v1/identity/credentials", csrf,
+                redemption(pending.accountId(), jsonField(issued.body(), "proof"), password));
+        assertEquals(204, redeemed.statusCode());
+        var active = accounts.inspect(pending.accountId());
+        assertEquals("ACTIVE", active.status());
+        assertEquals(pending.actorId(), active.actorId());
+        assertEquals(pending.loginIdentityId(), active.loginIdentityId());
+        assertEquals(0, active.roleAssignments());
+        var login = post(holder, "/api/v1/identity/login", csrf,
+                "username=" + form(pending.normalizedLogin()) + "&password=" + form(password));
+        assertEquals(200, login.statusCode());
+        assertEquals(pending.actorId().toString(), jsonField(login.body(), "actorId"));
+    }
+
+    private HttpResponse<String> issueSetup(HttpClient issuer, UUID organization, IdentityAdministration.Account target)
+            throws Exception {
+        var csrf = jsonField(get(issuer, "/api/v1/identity/csrf").body(), "token");
+        return postJson(issuer, "/api/v1/identity/accounts/" + target.accountId() + "/credential-proofs", csrf,
+                "{\"operationId\":\"" + UUID.randomUUID() + "\",\"organizationId\":\"" + organization
+                + "\",\"purpose\":\"FIRST_SETUP\",\"expectedSecurityVersion\":" + target.securityVersion()
+                + ",\"reason\":\"Synthetic first credential setup\"}");
+    }
+
+    @Test
+    void superAndV1CannotIssueProofWhileExplicitV2IsStillBoundToItsOrganization() throws Exception {
+        var fixture = fixture();
+        var context = new ActorContext(fixture.actorId(), 1);
+        var roles = new RoleAssignmentAdministration(appDataSource());
+        var issuer = signedIn(fixture);
+        var nonexistent = new IdentityAdministration.Account(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
+                fixture.organizationId(), "Synthetic", "synthetic", "PENDING", 1, 0);
+        assertEquals(403, issueSetup(issuer, fixture.organizationId(), nonexistent).statusCode(), "Super-only has no setup permission");
+        var predecessor = roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"), fixture.organizationId(), "Synthetic v1");
+        var pinnedV1 = roles.inspect(predecessor.assignmentId());
+        var accounts = new IdentityAdministration(appDataSource());
+        var target = accounts.create(context, UUID.randomUUID(), fixture.organizationId(), "Synthetic target",
+                "synthetic.target." + UUID.randomUUID());
+        assertEquals(403, issueSetup(issuer, fixture.organizationId(), target).statusCode(), "v1 must not acquire setup permission");
+        assertThrows(IdentityRefusal.class, () -> roles.assignAccountAdministrator(context, UUID.randomUUID(),
+                fixture.actorId(), UUID.randomUUID(), fixture.organizationId(), "Unsupported version remains refused"));
+        roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), fixture.organizationId(), "Explicit synthetic v2");
+        assertEquals(pinnedV1, roles.inspect(predecessor.assignmentId()));
+        assertEquals(403, issueSetup(issuer, UUID.randomUUID(), target).statusCode(), "Wrong scope cannot issue proof");
+        assertEquals(200, issueSetup(issuer, fixture.organizationId(), target).statusCode());
+        var anonymous = client();
+        assertEquals(401, issueSetup(anonymous, fixture.organizationId(), target).statusCode());
+        var badCsrf = postJson(issuer, "/api/v1/identity/accounts/" + target.accountId() + "/credential-proofs",
+                "incorrect-csrf", "{}");
+        assertEquals(403, badCsrf.statusCode());
+        assertEquals("PENDING", accounts.inspect(target.accountId()).status());
+    }
+
+    private String redemption(UUID account, String proof, String password) {
+        return redemption(UUID.randomUUID(), account, proof, password);
+    }
+
+    private String redemption(UUID operation, UUID account, String proof, String password) {
+        return "{\"operationId\":\"" + operation + "\",\"accountId\":\"" + account
+                + "\",\"proof\":\"" + proof + "\",\"password\":\"" + password + "\"}";
+    }
+
+    private record SetupFixture(Fixture administrator, HttpClient issuer, IdentityAdministration.Account target) {}
+
+    private SetupFixture setupFixture() throws Exception {
+        var fixture = fixture();
+        new RoleAssignmentAdministration(appDataSource()).assignAccountAdministrator(new ActorContext(fixture.actorId(), 1),
+                UUID.randomUUID(), fixture.actorId(), UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"),
+                fixture.organizationId(), "Synthetic setup preparation");
+        return new SetupFixture(fixture, signedIn(fixture), pendingTarget(fixture));
+    }
+
+    private IdentityAdministration.Account pendingTarget(Fixture fixture) {
+        return new IdentityAdministration(appDataSource()).create(new ActorContext(fixture.actorId(), 1), UUID.randomUUID(),
+                fixture.organizationId(), "Synthetic pending credential target", "synthetic.pending." + UUID.randomUUID());
+    }
+
+    private String proofFor(SetupFixture fixture, IdentityAdministration.Account target) throws Exception {
+        var issued = issueSetup(fixture.issuer(), fixture.administrator().organizationId(), target);
+        assertEquals(200, issued.statusCode());
+        return jsonField(issued.body(), "proof");
+    }
+
+    private HttpResponse<String> redeem(HttpClient holder, UUID account, String proof, String password) throws Exception {
+        return postJson(holder, "/api/v1/identity/credentials", jsonField(get(holder, "/api/v1/identity/csrf").body(), "token"),
+                redemption(account, proof, password));
+    }
+
+    @Test
+    void wrongTargetAndBadCsrfCannotConsumeProofAndSuccessfulReplayCannotChangePassword() throws Exception {
+        var fixture = setupFixture();
+        var other = pendingTarget(fixture.administrator());
+        var proof = proofFor(fixture, fixture.target());
+        var holder = client();
+        var password = UUID.randomUUID().toString();
+        assertEquals(400, redeem(holder, other.accountId(), proof, password).statusCode());
+        assertEquals(403, postJson(holder, "/api/v1/identity/credentials", "wrong-csrf",
+                redemption(fixture.target().accountId(), proof, password)).statusCode());
+        assertEquals(204, redeem(holder, fixture.target().accountId(), proof, password).statusCode());
+        var replacement = UUID.randomUUID().toString();
+        var replay = redeem(holder, fixture.target().accountId(), proof, replacement);
+        assertEquals(400, replay.statusCode());
+        assertEquals("", replay.body(), "Refusal exposes no proof, credential or existence detail");
+        assertEquals("PENDING", new IdentityAdministration(appDataSource()).inspect(other.accountId()).status());
+        var csrf = jsonField(get(holder, "/api/v1/identity/csrf").body(), "token");
+        assertEquals(401, post(holder, "/api/v1/identity/login", csrf,
+                "username=" + form(fixture.target().normalizedLogin()) + "&password=" + form(replacement)).statusCode());
+        assertEquals(200, post(holder, "/api/v1/identity/login", csrf,
+                "username=" + form(fixture.target().normalizedLogin()) + "&password=" + form(password)).statusCode());
+    }
+
+    @Test
+    void firstSetupExpiresExactlyAtFifteenMinutesWithoutWallClockWaiting() throws Exception {
+        var fixture = setupFixture();
+        var atTarget = pendingTarget(fixture.administrator());
+        var afterTarget = pendingTarget(fixture.administrator());
+        var beforeProof = proofFor(fixture, fixture.target());
+        var atProof = proofFor(fixture, atTarget);
+        var afterProof = proofFor(fixture, afterTarget);
+        var holder = client();
+        clock.advanceTo(Instant.parse("2026-09-30T06:14:59.999999Z"));
+        assertEquals(204, redeem(holder, fixture.target().accountId(), beforeProof, UUID.randomUUID().toString()).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00Z"));
+        assertEquals(400, redeem(holder, atTarget.accountId(), atProof, UUID.randomUUID().toString()).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00.000001Z"));
+        assertEquals(400, redeem(holder, afterTarget.accountId(), afterProof, UUID.randomUUID().toString()).statusCode());
+        var accounts = new IdentityAdministration(appDataSource());
+        assertEquals(atTarget, accounts.inspect(atTarget.accountId()));
+        assertEquals(afterTarget, accounts.inspect(afterTarget.accountId()));
+    }
+
+    @Test
+    void firstSetupCannotResetActiveDisabledOrStaleReenabledTargets() throws Exception {
+        var fixture = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var proof = proofFor(fixture, fixture.target());
+        var context = new ActorContext(fixture.administrator().actorId(), 1);
+        var disabled = accounts.disable(context, UUID.randomUUID(), fixture.administrator().organizationId(),
+                fixture.target().accountId(), fixture.target().securityVersion(), "Synthetic state transition");
+        assertEquals(403, issueSetup(fixture.issuer(), fixture.administrator().organizationId(), disabled).statusCode());
+        var holder = client();
+        assertEquals(400, redeem(holder, disabled.accountId(), proof, UUID.randomUUID().toString()).statusCode());
+        var reenabled = accounts.reenable(context, UUID.randomUUID(), fixture.administrator().organizationId(),
+                disabled.accountId(), disabled.securityVersion(), "Synthetic re-enable");
+        assertEquals("PENDING", reenabled.status());
+        assertEquals(400, redeem(holder, reenabled.accountId(), proof, UUID.randomUUID().toString()).statusCode());
+        var freshProof = proofFor(fixture, reenabled);
+        assertEquals(204, redeem(holder, reenabled.accountId(), freshProof, UUID.randomUUID().toString()).statusCode());
+        var active = accounts.inspect(reenabled.accountId());
+        assertEquals(fixture.target().actorId(), active.actorId());
+        assertEquals(403, issueSetup(fixture.issuer(), fixture.administrator().organizationId(), active).statusCode());
+        var csrf = jsonField(get(fixture.issuer(), "/api/v1/identity/csrf").body(), "token");
+        assertEquals(400, postJson(fixture.issuer(), "/api/v1/identity/accounts/" + active.accountId() + "/credential-proofs",
+                csrf, "{\"operationId\":\"" + UUID.randomUUID() + "\",\"organizationId\":\""
+                + fixture.administrator().organizationId() + "\",\"purpose\":\"RESET\",\"expectedSecurityVersion\":"
+                + active.securityVersion() + ",\"reason\":\"Reset is a separate future slice\"}").statusCode());
+    }
+
+    @Test
+    void newPasswordBoundsCountUnicodeCharactersAndUtf8BytesWithoutTrimming() throws Exception {
+        var fixture = setupFixture();
+        var proof = proofFor(fixture, fixture.target());
+        var holder = client();
+        var accounts = new IdentityAdministration(appDataSource());
+        for (var invalid : new String[] { "a".repeat(14), "😀".repeat(14), "界".repeat(24) + "x" }) {
+            assertEquals(400, redeem(holder, fixture.target().accountId(), proof, invalid).statusCode());
+            assertEquals(fixture.target(), accounts.inspect(fixture.target().accountId()));
+        }
+        var minimum = "a".repeat(15); // No mandatory character-class mixture.
+        assertEquals(204, redeem(holder, fixture.target().accountId(), proof, minimum).statusCode());
+        signedIn(new Fixture(fixture.target().actorId(), fixture.target().accountId(), fixture.administrator().organizationId(),
+                fixture.target().normalizedLogin(), minimum));
+        var maximumTarget = pendingTarget(fixture.administrator());
+        var maximum = "界".repeat(24); // 24 code points, exactly 72 UTF-8 bytes.
+        assertEquals(204, redeem(holder, maximumTarget.accountId(), proofFor(fixture, maximumTarget), maximum).statusCode());
+        signedIn(new Fixture(maximumTarget.actorId(), maximumTarget.accountId(), fixture.administrator().organizationId(),
+                maximumTarget.normalizedLogin(), maximum));
+        var spacedTarget = pendingTarget(fixture.administrator());
+        var spaced = "  " + "a".repeat(15) + "  ";
+        assertEquals(204, redeem(holder, spacedTarget.accountId(), proofFor(fixture, spacedTarget), spaced).statusCode());
+        var csrf = jsonField(get(holder, "/api/v1/identity/csrf").body(), "token");
+        assertEquals(401, post(holder, "/api/v1/identity/login", csrf,
+                "username=" + form(spacedTarget.normalizedLogin()) + "&password=" + form(spaced.strip())).statusCode());
+        assertEquals(200, post(holder, "/api/v1/identity/login", csrf,
+                "username=" + form(spacedTarget.normalizedLogin()) + "&password=" + form(spaced)).statusCode());
+    }
+
+    @Test
+    void missingSetupAuditRollsBackCredentialActivationAndProofConsumption() throws Exception {
+        requiredSetupEvidenceFailure("audit_evidence");
+    }
+
+    @Test
+    void missingSetupIamOutcomeRollsBackCredentialActivationAndProofConsumption() throws Exception {
+        requiredSetupEvidenceFailure("iam_owner_outcome");
+    }
+
+    @Test
+    void concurrentRedemptionAcceptsExactlyOnePasswordAndOneOutcome() throws Exception {
+        var fixture = setupFixture();
+        var proof = proofFor(fixture, fixture.target());
+        var accounts = new IdentityAdministration(appDataSource());
+        var historyBefore = accounts.history(fixture.target().accountId()).size();
+        var clients = new HttpClient[] { client(), client() };
+        var tokens = new String[] { jsonField(get(clients[0], "/api/v1/identity/csrf").body(), "token"),
+                jsonField(get(clients[1], "/api/v1/identity/csrf").body(), "token") };
+        var operations = new UUID[] { UUID.randomUUID(), UUID.randomUUID() };
+        var passwords = new String[] { UUID.randomUUID().toString(), UUID.randomUUID().toString() };
+        var ready = new java.util.concurrent.CountDownLatch(2);
+        var start = new java.util.concurrent.CountDownLatch(1);
+        try (var executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
+            var attempts = new java.util.ArrayList<java.util.concurrent.Future<Integer>>();
+            for (int index = 0; index < 2; index++) {
+                final int attempt = index;
+                attempts.add(executor.submit(() -> {
+                    ready.countDown();
+                    assertTrue(start.await(10, java.util.concurrent.TimeUnit.SECONDS));
+                    return postJson(clients[attempt], "/api/v1/identity/credentials", tokens[attempt],
+                            redemption(operations[attempt], fixture.target().accountId(), proof, passwords[attempt])).statusCode();
+                }));
+            }
+            assertTrue(ready.await(10, java.util.concurrent.TimeUnit.SECONDS));
+            start.countDown();
+            var statuses = new int[] { attempts.get(0).get(10, java.util.concurrent.TimeUnit.SECONDS),
+                    attempts.get(1).get(10, java.util.concurrent.TimeUnit.SECONDS) };
+            assertArrayEquals(new int[] { 204, 400 }, java.util.Arrays.stream(statuses).sorted().toArray());
+            int winner = statuses[0] == 204 ? 0 : 1;
+            assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operations[winner]));
+            assertEquals(new IdentityAdministration.Evidence(null, 0, 0), accounts.evidence(operations[1 - winner]));
+            assertEquals(historyBefore + 1, accounts.history(fixture.target().accountId()).size());
+            var loginClient = client();
+            var csrf = jsonField(get(loginClient, "/api/v1/identity/csrf").body(), "token");
+            assertEquals(401, post(loginClient, "/api/v1/identity/login", csrf,
+                    "username=" + form(fixture.target().normalizedLogin()) + "&password=" + form(passwords[1 - winner])).statusCode());
+            assertEquals(200, post(loginClient, "/api/v1/identity/login", csrf,
+                    "username=" + form(fixture.target().normalizedLogin()) + "&password=" + form(passwords[winner])).statusCode());
+        }
+    }
+
+    @Test
+    void expiredIssuerSessionCannotIssueProofDespiteHavingV2Permission() throws Exception {
+        var fixture = setupFixture();
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+        assertEquals(401, issueSetup(fixture.issuer(), fixture.administrator().organizationId(), fixture.target()).statusCode());
+        assertEquals(fixture.target(), new IdentityAdministration(appDataSource()).inspect(fixture.target().accountId()));
+        var fresh = signedIn(fixture.administrator());
+        assertEquals(200, issueSetup(fresh, fixture.administrator().organizationId(), fixture.target()).statusCode());
+    }
+
+    @Test
+    void syntheticProofDeliveryIsUnavailableWithoutExplicitOptIn() throws Exception {
+        var fixture = setupFixture();
+        server.close();
+        startHttpServer(false); // Omit the flag: exercise the actual default, not a test override.
+        var response = issueSetup(signedIn(fixture.administrator()), fixture.administrator().organizationId(), fixture.target());
+        assertEquals(503, response.statusCode());
+        assertEquals("", response.body());
+        assertEquals(fixture.target(), new IdentityAdministration(appDataSource()).inspect(fixture.target().accountId()));
+        try (var connection = appDataSource().getConnection(); var query = connection.createStatement();
+                var row = query.executeQuery("SELECT count(*) FROM credential_setup_proof")) {
+            assertTrue(row.next());
+            assertEquals(0, row.getLong(1));
+        }
+    }
+
+    private void requiredSetupEvidenceFailure(String table) throws Exception {
+        assertTrue(java.util.Set.of("audit_evidence", "iam_owner_outcome").contains(table));
+        var fixture = setupFixture();
+        var proof = proofFor(fixture, fixture.target());
+        var holder = client();
+        var operation = UUID.randomUUID();
+        var body = redemption(operation, fixture.target().accountId(), proof, UUID.randomUUID().toString());
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.history(fixture.target().accountId());
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_first_setup() RETURNS trigger LANGUAGE plpgsql AS $$ "
+                    + "BEGIN IF NEW.action='account.credential.setup.redeem' THEN RETURN NULL; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE TRIGGER suppress_first_setup BEFORE INSERT ON " + schema + "." + table
+                    + " FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_first_setup()");
+        }
+        try {
+            var response = postJson(holder, "/api/v1/identity/credentials",
+                    jsonField(get(holder, "/api/v1/identity/csrf").body(), "token"), body);
+            assertEquals(503, response.statusCode());
+            assertEquals("", response.body());
+            assertEquals(fixture.target(), accounts.inspect(fixture.target().accountId()));
+            assertEquals(before, accounts.history(fixture.target().accountId()));
+            assertEquals(new IdentityAdministration.Evidence(null, 0, 0), accounts.evidence(operation));
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_first_setup ON " + schema + "." + table);
+            }
+        }
+        // Same proof/OperationId still works after the failed unit of work; no partial success.
+        assertEquals(204, postJson(holder, "/api/v1/identity/credentials",
+                jsonField(get(holder, "/api/v1/identity/csrf").body(), "token"), body).statusCode());
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        assertEquals(before.size() + 1, accounts.history(fixture.target().accountId()).size());
+    }
+
+    @Test
+    void malformedUnicodeCannotBecomeAReplacementCharacterCredential() throws Exception {
+        var fixture = setupFixture();
+        var proof = proofFor(fixture, fixture.target());
+        var holder = client();
+        // A lone surrogate is not a Unicode scalar value; JSON transport must not silently repair it.
+        var body = redemption(fixture.target().accountId(), proof, "a".repeat(14) + "\\ud800");
+        assertEquals(400, postJson(holder, "/api/v1/identity/credentials",
+                jsonField(get(holder, "/api/v1/identity/csrf").body(), "token"), body).statusCode());
+        assertEquals("PENDING", new IdentityAdministration(appDataSource()).inspect(fixture.target().accountId()).status());
+        assertEquals(204, redeem(holder, fixture.target().accountId(), proof, UUID.randomUUID().toString()).statusCode());
+    }
+
+    private HttpResponse<String> postJson(HttpClient client, String path, String csrf, String body) throws Exception {
+        return client.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + path))
+                .header("Content-Type", "application/json").header("X-CSRF-TOKEN", csrf)
+                .POST(HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
     }
 
     @Test

@@ -16,6 +16,14 @@ final class NativePasswordVerifier {
         return encoder.encode(candidate);
     }
 
+    String encodeNewCredential(String candidate) {
+        if (!valid(candidate) || candidate.codePointCount(0, candidate.length()) < 15
+                || candidate.codePoints().anyMatch(point -> point >= 0xD800 && point <= 0xDFFF)) {
+            throw new IllegalArgumentException("Unsupported new credential input");
+        }
+        return encoder.encode(candidate); // Never trim, normalize or truncate a submitted password.
+    }
+
     boolean matches(String candidate, String encoded) {
         if (!valid(candidate) || encoded == null || !encoded.startsWith("{bcrypt}")) return false;
         try {

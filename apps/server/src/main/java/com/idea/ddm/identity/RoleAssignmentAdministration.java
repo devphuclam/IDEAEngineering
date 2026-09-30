@@ -6,6 +6,9 @@ import javax.sql.DataSource;
 
 /** Access Policy command, deliberately separate from IF-DIRECTORY-ADMIN account CRUD. */
 public final class RoleAssignmentAdministration {
+    private static final java.util.Map<UUID, Integer> SUPPORTED_ACCOUNT_ADMINISTRATORS = java.util.Map.of(
+            UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"), 1,
+            UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), 2);
     private final DataSource dataSource;
     private final IdentityTransactions transactions;
     public record Result(UUID assignmentId) {}
@@ -25,9 +28,12 @@ public final class RoleAssignmentAdministration {
                 "ROLE_ASSIGNMENT", assignment.toString(), IdentityTransactions.Owner.ACCESS_POLICY, connection -> {
                     if (reason == null || reason.isBlank() || reason.length() > 500
                             || reason.codePoints().anyMatch(Character::isISOControl)) throw new IdentityRefusal("INVALID_INPUT");
+                    var supportedVersion = SUPPORTED_ACCOUNT_ADMINISTRATORS.get(roleVersion);
+                    if (supportedVersion == null) throw new IdentityRefusal("UNSUPPORTED_ROLE_VERSION");
                     try (var statement = connection.prepareStatement("SELECT 1 FROM identity_role_version "
-                            + "WHERE role_version_id=? AND role_code='account-administrator' AND version=1")) {
+                            + "WHERE role_version_id=? AND role_code='account-administrator' AND version=?")) {
                         statement.setObject(1, roleVersion);
+                        statement.setInt(2, supportedVersion);
                         try (var row = statement.executeQuery()) {
                             if (!row.next()) throw new IdentityRefusal("UNSUPPORTED_ROLE_VERSION");
                         }

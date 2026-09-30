@@ -70,6 +70,21 @@ they expose no credentials or internal connection strings. Bootstrap remains a l
 command, never a controller or startup callback. Clients cannot pass an authoritative ActorId.
 Authenticated identity alone is not an administration or product permission.
 
+The first-setup slice uses the explicit v2 permissions in spec's 2026-09-30 clarification.
+Its issuer request carries `operationId`, `organizationId`, `purpose=FIRST_SETUP`,
+`expectedSecurityVersion` and `reason`; the target Account ID is in the route. Actor/session
+authority comes only from authentication. With `idea.identity.synthetic-credential-delivery.enabled`
+explicitly enabled in the protected synthetic harness, success returns `proof` and `expiresAt`
+with no-store response handling; this opt-in defaults to false (503, no proof). No live or
+browser-visible delivery is qualified. Reset-purpose requests remain unsupported in this slice.
+
+Redemption carries `operationId`, `accountId`, `proof` and `password`, with CSRF but no
+administrative role requirement. Successful first setup returns 204; a rejected proof/password
+returns a generic empty 400. Issuance refuses unauthorized scope/permission with 403 and an
+ineligible session with 401; required persistence failure returns empty 503, never success or
+credential diagnostics. Only a valid, unconsumed proof at its pending target/login/version before
+expiry can activate that stable account. It cannot reset an ACTIVE or DISABLED account.
+
 Use Spring Security session-fixation and CSRF mechanisms, deny cross-origin credential access,
 and use Secure/HttpOnly/SameSite cookies with host-only scope under same-origin HTTPS. Expiry,
 failed-login block and setup proof behavior follows spec's development profile. Test-only

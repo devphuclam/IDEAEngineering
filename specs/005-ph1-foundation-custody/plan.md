@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-09-30 | **Spec**: [PH1 specification v0.3](spec.md)
+**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-09-30 | **Spec**: [PH1 specification v0.4](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -135,6 +135,19 @@ not a login-page redirect, an Actor or a successful response. Its green implemen
 on HTTP Security intake; its initial red run uses only already-qualified build dependencies.
 
 ## Complexity Tracking
+
+Approved credential slice order (Project Reviewer, 2026-09-30): explicit Account Administrator
+v2 assignment and first setup proof; proof redemption/activation; separate reset and session
+invalidation; temporary failed-login block. V5 introduces the v2 seed and first-setup data without
+changing V1–V4 or existing assignments. The assignment command supports only the exact seeded
+v1/v2 IDs and versions, not arbitrary versions sharing a role code. Permission contents are
+owned by spec's clarification. Later reset/throttling use successor migrations, not a rewrite
+of a committed V5. All v1/F03-A tests remain applicable and unchanged.
+
+First-setup issuance rechecks its session at owner mutation under the security-write lock and
+uses the ordinary scope/permission evaluator; redemption uses target-bound proof authority.
+The synthetic delivery opt-in is off by default and enabled only in the protected Java HTTP
+test harness; no browser/email/live credential delivery is qualified by this slice.
 
 No exception to the Constitution is requested. The separate Gateway process follows the already
 approved control/data-plane boundary. Only one Gateway/Vault endpoint is built in PH1.
