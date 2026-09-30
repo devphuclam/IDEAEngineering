@@ -4,20 +4,20 @@
 |---|---|
 | Stable Verification ID | `IE-VEV-PH1-F02-001` |
 | Document class / title | `VERIFICATION-RECORD` / F02 Database and Health Verification Results |
-| Version / status | `0.1` / `Draft`; T017 execution result is `PASS`; F02 Delivery Card review/closure is pending |
+| Version / status | `0.2` / `Draft`; T017 execution result and F02 Delivery Card review are `PASS` |
 | Product normativity / process authority | `INFORMATIVE` / `NOT-APPLICABLE`; this record creates no product requirement, deployment approval or gate decision |
 | Owner / author | F02 Engineering implementer / repository maintainer |
-| Reviewer / acceptance authority | Project Reviewer; review and F02 card acceptance `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer; F02 card accepted on 2026-09-30 after read-only PR #21 review returned `PASS` |
 | Applicable baseline / evidence date | F02 under PH1; initial run 2026-09-29 and role-boundary follow-up 2026-09-30 (Asia/Ho_Chi_Minh); source branch `codex/f02-db-baseline` based on `aa74672a5c4588cb7a18835d0311ad5ebceefdf1` |
 | Upstream / downstream trace | PG4-authorized PH1 scope; [F02 task](../tasks.md), GitHub [Work Item #20](https://github.com/devphuclam/IDEAEngineering/issues/20), T014–T017 → F03/F04/F05 |
-| Change record / supersession | The initial fresh-database run used the uncommitted source archive identified below. Its migration and application/test sources were subsequently committed in PR #21 at `8001216d2a00b7c1d0b34e4fd6e024e724ae430b`; the packaging correction was included before the resumed packaged-command run. The role-boundary follow-up was run 2026-09-30 from commit `d9b36b3f90aaf559fd20a6f43008db23a9b00263`. No Feature, Spec or Tech baseline changed. |
+| Change record / supersession | The initial fresh-database run used the uncommitted source archive identified below. Its migration and application/test sources were subsequently committed in PR #21 at `8001216d2a00b7c1d0b34e4fd6e024e724ae430b`; the packaging correction was included before the resumed packaged-command run. The role-boundary follow-up was run 2026-09-30 from commit `d9b36b3f90aaf559fd20a6f43008db23a9b00263`. PR #21 was reviewed at head `7c5927dcae84abb1c6734f28ae3dcb05a02bb519` and merged as `d766e423e8db896a0671531f7dd141cadb7cd612`; this revision records Project Reviewer acceptance without changing tested code. No Feature, Spec or Tech baseline changed. |
 | Classification / retention | `INTERNAL`; retain with the PH1 source and all three host logs while F02 evidence is relied upon |
 | Standards tailoring | `STD-INFO-001` (ISO/IEC/IEEE 15289:2019), `STD-TEST-001` (ISO/IEC/IEEE 29119-1:2022), `STD-TEST-002` (29119-2:2021), `STD-TEST-003` (29119-3:2021) and `STD-TEST-004` (29119-4:2021), all `STANDARD-GUIDED`; tailor their information-item and test-result concepts. This is not a standards-conformity claim. |
 | Review trigger / evidence status | Re-review on migration, role grants, datasource/health behavior, package/build configuration or tested source change. Actual F02 test outcomes and limits are recorded below. |
 
 ## Disposition
 
-**T017 recorded execution: `PASS` for the checks listed below.** The migration and health checks ran against a dedicated PostgreSQL test database on the Ubuntu development host. The explicit role-boundary follow-up also passed against that database on 2026-09-30. This record does not close the F02 Delivery Card; Project Reviewer acceptance is still required. No backup, restore, production hardening, multi-Vault, transfer, performance or commercial-release claim is made.
+**T017 execution and F02 Delivery Card review: `PASS` within the checks listed below.** The migration and health checks ran against a dedicated PostgreSQL test database on the Ubuntu development host. The explicit role-boundary follow-up also passed against that database on 2026-09-30. A read-only reviewer reported `PASS` for PR #21 at head `7c5927dcae84abb1c6734f28ae3dcb05a02bb519`, and the Project Reviewer explicitly requested F02 completion on 2026-09-30. The Progress Tracker owns the separate card state and actual-effort record. No backup, restore, production hardening, multi-Vault, transfer, performance or commercial-release claim is made.
 
 ## Tested environment and source
 
@@ -79,4 +79,4 @@ change test outcomes; revisit if a later JDK removes dynamic self-attachment.
 - No production deployment, concurrent load, real user workflow, authentication, authorization or file transfer is claimed.
 - T036 still must inspect the exact resolved transitive dependency/license inventory and preserve applicable notices. The F02 intake allows internal build/test only; it does not clear commercial distribution.
 - `verify-template` was not run, per the project instruction for this work.
-- F02 Delivery Card review, actual-effort publication and closure remain separate from this T017 execution result.
+- F02 Delivery Card acceptance is distinct from T017 execution; its state, corrected work sessions and actual-effort publication are recorded in the Execution Register and Work Journal.
