@@ -144,8 +144,10 @@ v1/v2 IDs and versions, not arbitrary versions sharing a role code. Permission c
 owned by spec's clarification. Later reset/throttling use successor migrations, not a rewrite
 of a committed V5. All v1/F03-A tests remain applicable and unchanged.
 
-First-setup issuance rechecks its session at owner mutation under the security-write lock and
-uses the ordinary scope/permission evaluator; redemption uses target-bound proof authority.
+First-setup issuance checks session eligibility before permission/scope evaluation and again
+under the security-write lock. Rejected requests do not refresh idle activity; accepted owner
+activity shares the mutation's transaction. The ordinary scoped role evaluator still supplies
+permission authority; redemption uses target-bound proof authority.
 The synthetic delivery opt-in is off by default and enabled only in the protected Java HTTP
 test harness; no browser/email/live credential delivery is qualified by this slice.
 

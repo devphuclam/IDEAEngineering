@@ -31,7 +31,7 @@ final class CredentialSetupService {
         this.dataSource = dataSource;
         this.clock = clock;
         this.sessions = sessions;
-        this.transactions = new IdentityTransactions(dataSource);
+        this.transactions = new IdentityTransactions(dataSource, sessions::checkEligibility);
     }
 
     IssuedProof issue(ActorContext issuer, UUID operation, UUID organization, UUID target,

@@ -374,6 +374,47 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void expiredSessionIsRefusedBeforeRoleOrScopeEvaluation() throws Exception {
+        var fixture = fixture();
+        var superOnly = signedIn(fixture);
+        var target = new IdentityAdministration.Account(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
+                fixture.organizationId(), "Synthetic", "synthetic", "PENDING", 1, 0);
+        assertEquals(403, issueSetup(superOnly, fixture.organizationId(), target).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T07:59:59Z"));
+        assertEquals(403, issueSetup(superOnly, fixture.organizationId(), target).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+        assertEquals(401, issueSetup(superOnly, fixture.organizationId(), target).statusCode());
+        assertEquals(401, issueSetup(superOnly, UUID.randomUUID(), target).statusCode());
+    }
+
+    @Test
+    void disabledAndReenabledIssuerCannotReuseItsOldProofIssuanceSession() throws Exception {
+        var fixture = setupFixture();
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), fixture.target().accountId(), proofFor(fixture, fixture.target()), password).statusCode());
+        var administrator = fixture.administrator();
+        var superContext = new ActorContext(administrator.actorId(), 1);
+        new RoleAssignmentAdministration(appDataSource()).assignAccountAdministrator(superContext, UUID.randomUUID(),
+                fixture.target().actorId(), UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"),
+                administrator.organizationId(), "Synthetic delegated proof issuer");
+        var issuerFixture = new Fixture(fixture.target().actorId(), fixture.target().accountId(), administrator.organizationId(),
+                fixture.target().normalizedLogin(), password);
+        var oldSession = signedIn(issuerFixture);
+        var target = pendingTarget(administrator);
+        assertEquals(200, issueSetup(oldSession, administrator.organizationId(), target).statusCode());
+        var accounts = new IdentityAdministration(appDataSource());
+        var activeIssuer = accounts.inspect(fixture.target().accountId());
+        var disabled = accounts.disable(superContext, UUID.randomUUID(), administrator.organizationId(),
+                activeIssuer.accountId(), activeIssuer.securityVersion(), "Synthetic issuer disable");
+        assertEquals(401, issueSetup(oldSession, administrator.organizationId(), target).statusCode());
+        accounts.reenable(superContext, UUID.randomUUID(), administrator.organizationId(),
+                disabled.accountId(), disabled.securityVersion(), "Synthetic issuer re-enable");
+        assertEquals(401, issueSetup(oldSession, administrator.organizationId(), target).statusCode());
+        assertEquals(200, issueSetup(signedIn(issuerFixture), administrator.organizationId(), target).statusCode());
+        assertEquals(target, accounts.inspect(target.accountId()));
+    }
+
+    @Test
     void syntheticProofDeliveryIsUnavailableWithoutExplicitOptIn() throws Exception {
         var fixture = setupFixture();
         server.close();

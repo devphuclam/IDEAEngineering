@@ -73,29 +73,12 @@ public final class SessionService {
             connection.setAutoCommit(false);
             try {
                 AdministratorBootstrap.execute(connection, "SELECT pg_advisory_xact_lock(73003002)");
-                var now = java.sql.Timestamp.from(clock.instant().truncatedTo(ChronoUnit.MICROS));
-                try (var query = connection.prepareStatement(
-                        "SELECT a.actor_id,a.account_id FROM session_record s JOIN idea_account a USING(account_id) "
-                                + "JOIN actor p ON p.actor_id=a.actor_id WHERE s.session_id=? AND s.actor_id=? "
-                                + "AND a.actor_id=s.actor_id AND s.security_version=? AND a.security_version=s.security_version "
-                                + "AND s.runtime_instance_id=? AND s.revoked_at IS NULL AND a.status='ACTIVE' AND p.disabled_at IS NULL "
-                                + "AND s.issued_at<=? AND s.expires_at>? AND s.last_eligible_activity_at+INTERVAL '2 hours'>?")) {
-                    query.setObject(1, identity.sessionId());
-                    query.setObject(2, identity.actorId());
-                    query.setLong(3, identity.securityVersion());
-                    query.setObject(4, runtimeInstance);
-                    query.setTimestamp(5, now);
-                    query.setTimestamp(6, now);
-                    query.setTimestamp(7, now);
-                    try (var row = query.executeQuery()) {
-                        if (!row.next()) throw refused();
-                        var view = new View(row.getObject(1, UUID.class), row.getObject(2, UUID.class));
-                        AdministratorBootstrap.insert(connection, "UPDATE session_record SET last_eligible_activity_at=? WHERE session_id=?",
-                                now, identity.sessionId());
-                        connection.commit();
-                        return view;
-                    }
-                }
+                var view = requireEligible(connection, context(identity));
+                connection.commit();
+                return view;
+            } catch (IdentityRefusal exception) {
+                connection.rollback();
+                throw refused();
             } catch (SQLException | RuntimeException exception) {
                 connection.rollback();
                 throw exception;
@@ -132,11 +115,11 @@ public final class SessionService {
         return new ActorContext(identity.actorId(), identity.securityVersion(), identity.sessionId());
     }
 
-    /** Caller owns the security-write lock/transaction; successful owner activity shares its fate. */
-    void requireEligible(java.sql.Connection connection, ActorContext context) throws SQLException {
+    /** Read-only admission and commit check; rejected permission/scope attempts never refresh idle time. */
+    View checkEligibility(java.sql.Connection connection, ActorContext context) throws SQLException {
         if (context.sessionId() == null) throw new IdentityRefusal("INELIGIBLE_SESSION");
         var now = java.sql.Timestamp.from(clock.instant().truncatedTo(ChronoUnit.MICROS));
-        try (var query = connection.prepareStatement("SELECT 1 FROM session_record s "
+        try (var query = connection.prepareStatement("SELECT a.actor_id,a.account_id FROM session_record s "
                 + "JOIN idea_account a USING(account_id) JOIN actor p ON p.actor_id=a.actor_id "
                 + "WHERE s.session_id=? AND s.actor_id=? AND a.actor_id=s.actor_id "
                 + "AND s.security_version=? AND a.security_version=s.security_version "
@@ -151,10 +134,17 @@ public final class SessionService {
             query.setTimestamp(7, now);
             try (var row = query.executeQuery()) {
                 if (!row.next()) throw new IdentityRefusal("INELIGIBLE_SESSION");
+                return new View(row.getObject(1, UUID.class), row.getObject(2, UUID.class));
             }
         }
+    }
+
+    /** Caller owns the security-write lock/transaction; successful owner activity shares its fate. */
+    View requireEligible(java.sql.Connection connection, ActorContext context) throws SQLException {
+        var view = checkEligibility(connection, context);
         AdministratorBootstrap.insert(connection, "UPDATE session_record SET last_eligible_activity_at=? WHERE session_id=?",
-                now, context.sessionId());
+                java.sql.Timestamp.from(clock.instant().truncatedTo(ChronoUnit.MICROS)), context.sessionId());
+        return view;
     }
 
     private static BadCredentialsException refused() { return new BadCredentialsException("Identity proof refused"); }
