@@ -1777,6 +1777,42 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void httpAccountTransitionsSupportZeroLoginIdentitiesWithoutCreatingOrSelectingALogin() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var target = setup.target();
+        // Controlled fixture for the governing 0..* cardinality; no public login-deletion API.
+        try (var connection = migrator(); var statement = connection.prepareStatement(
+                "DELETE FROM " + schema + ".login_identity WHERE account_id=?")) {
+            statement.setObject(1, target.accountId());
+            assertEquals(1, statement.executeUpdate());
+        }
+        var before = accounts.totals();
+        var disable = UUID.randomUUID();
+        var disabled = changeAccount(setup.issuer(), disable, target.organizationId(), target, "disable", 1);
+        assertEquals(200, disabled.statusCode());
+        assertEquals("DISABLED", jsonField(disabled.body(), "status"));
+        assertEquals(target.actorId().toString(), jsonField(disabled.body(), "actorId"));
+        assertEquals(target.accountId().toString(), jsonField(disabled.body(), "accountId"));
+        assertFalse(disabled.body().contains("loginIdentityId"));
+        var reenable = UUID.randomUUID();
+        var restored = changeAccount(setup.issuer(), reenable, target.organizationId(), target, "re-enable", 2);
+        assertEquals(200, restored.statusCode());
+        assertEquals("PENDING", jsonField(restored.body(), "status"));
+        assertEquals(target.actorId().toString(), jsonField(restored.body(), "actorId"));
+        assertEquals(target.accountId().toString(), jsonField(restored.body(), "accountId"));
+        assertFalse(restored.body().contains("loginIdentityId"));
+        assertEquals(before.actors(), accounts.totals().actors());
+        assertEquals(before.accounts(), accounts.totals().accounts());
+        assertEquals(before.logins(), accounts.totals().logins());
+        assertEquals(3, accounts.history(target.accountId()).size());
+        assertEquals(3, accounts.history(target.accountId()).get(2).afterSecurityVersion());
+        for (var operation : java.util.List.of(disable, reenable)) {
+            assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        }
+    }
+
+    @Test
     void httpAccountAuthorityRequiresCurrentScopedAssignmentAndCsrfNotSuperOrClientIdentity() throws Exception {
         var fixture = fixture();
         var issuer = signedIn(fixture);
@@ -2031,6 +2067,34 @@ class HttpSessionFlowTest {
         assertEquals("create".equals(action) ? 201 : 200, retry.statusCode());
         assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
         assertEquals(clock.instant(), issuerActivity(setup.administrator().accountId()));
+    }
+
+    @Test
+    void httpAccountCreationRejectsAnOverlongNormalizedLoginWithoutPartialState() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        var operation = UUID.randomUUID();
+        clock.advanceTo(Instant.parse("2026-09-30T07:00:00Z"));
+        // U+0130 expands to two characters under Locale.ROOT lowercase: 128 becomes 256.
+        var response = createAccount(setup.issuer(), operation, setup.administrator().organizationId(),
+                "\u0130".repeat(128), "");
+        assertEquals(400, response.statusCode());
+        assertEquals("", response.body());
+        var after = accounts.totals();
+        assertEquals(before.actors(), after.actors());
+        assertEquals(before.accounts(), after.accounts());
+        assertEquals(before.logins(), after.logins());
+        assertEquals(before.assignments(), after.assignments());
+        assertEquals(before.changeEvidence(), after.changeEvidence());
+        assertEquals(new IdentityAdministration.Evidence("REFUSED", 1, 1), accounts.evidence(operation));
+        assertEquals(Instant.parse("2026-09-30T06:00:00Z"), issuerActivity(setup.administrator().accountId()));
+        var accepted = createAccount(setup.issuer(), UUID.randomUUID(), setup.administrator().organizationId(),
+                "\u0130".repeat(127), "");
+        assertEquals(201, accepted.statusCode());
+        var account = accounts.inspect(UUID.fromString(jsonField(accepted.body(), "accountId")));
+        assertEquals("i\u0307".repeat(127), account.normalizedLogin());
+        assertEquals("PENDING", account.status());
     }
 
     @Test

@@ -13,6 +13,7 @@ public final class IdentityAdministration {
     private final DataSource dataSource;
     private final IdentityTransactions transactions;
     private final SessionService sessions;
+    /** Login fields are optional diagnostics, never an account-action or credential-recovery selector. */
     public record Account(UUID actorId, UUID accountId, UUID loginIdentityId, UUID organizationId,
             String displayName, String normalizedLogin, String status, long securityVersion, long roleAssignments) {}
     public record Totals(long actors, long accounts, long logins, long assignments, long ownerOutcomes,
@@ -44,6 +45,7 @@ public final class IdentityAdministration {
                     validText(displayName, 160);
                     validText(login, 254);
                     var normalized = login.strip().toLowerCase(Locale.ROOT);
+                    validText(normalized, 254);
                     try (var statement = connection.prepareStatement(
                             "SELECT 1 FROM login_identity WHERE normalized_login_identifier=?")) {
                         statement.setString(1, normalized);
@@ -156,7 +158,7 @@ public final class IdentityAdministration {
         try (var statement = connection.prepareStatement("SELECT a.actor_id,a.account_id,l.login_identity_id,a.organization_id,"
                 + "p.display_name,l.normalized_login_identifier,a.status,a.security_version,"
                 + "(SELECT count(*) FROM identity_role_assignment r WHERE r.principal_actor_id=a.actor_id) "
-                + "FROM idea_account a JOIN actor p USING(actor_id) JOIN login_identity l USING(account_id) WHERE a.account_id=?")) {
+                + "FROM idea_account a JOIN actor p USING(actor_id) LEFT JOIN login_identity l USING(account_id) WHERE a.account_id=?")) {
             statement.setObject(1, account);
             try (var row = statement.executeQuery()) {
                 if (!row.next()) throw new IdentityRefusal("ACCOUNT_NOT_FOUND");
