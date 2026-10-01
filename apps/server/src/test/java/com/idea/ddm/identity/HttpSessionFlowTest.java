@@ -1126,6 +1126,25 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void expiredLogoutIsRefusedWithoutAcceptedEvidenceOrRevocation() throws Exception {
+        var fixture = fixture();
+        var caller = signedIn(fixture);
+        var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+        var response = post(caller, "/api/v1/identity/logout", csrf, "");
+        assertEquals(401, response.statusCode());
+        assertEquals("", response.body());
+        assertEquals(before, accounts.totals(), "Ineligible logout cannot publish ACCEPTED IAM/Audit");
+        try (var connection = migrator(); var statement = connection.createStatement();
+                var rows = statement.executeQuery("SELECT count(*) FROM " + schema + ".session_record WHERE revoked_at IS NOT NULL")) {
+            assertTrue(rows.next());
+            assertEquals(0, rows.getLong(1), "Refusal leaves session metadata unchanged");
+        }
+    }
+
+    @Test
     void idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting() throws Exception {
         var fixture = fixture();
         var before = signedIn(fixture);

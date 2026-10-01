@@ -27,6 +27,13 @@ not extra F05 scope.
 
 ## Run by card
 
+**F03-B closure execution gate:** current Maven `test/package` invokes `exec-maven-plugin` during
+`generate-resources`. The separate [closure process exception](../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md)
+authorizes the exact nine cached JARs for T040/T042/T044 and necessary Issue #24 / PR #25 regression
+only. Verify hashes/graph before execution; use offline resolution, preserve Web packaging and
+check build tools stay outside `BOOT-INF/lib`. Missing/changed/additional artifacts are BLOCKED,
+not permission to download. Follow the [closure procedure](evidence/F03-B-closure-matrix.md#4-t044-execution-gate-and-procedure).
+
 The F01 entry points created under T003–T011 are:
 
 ```text
@@ -69,7 +76,7 @@ each implemented checkpoint; commands for unfinished slices remain planned, neve
 |---|---|---|
 | F01-A | From a clean checkout, run each documented Server, Web, Desktop and Workspace build plus basic test command on its qualified platform. | Four actual results tied to commit and tool versions; a planned command is not PASS. |
 | F01-B | Repeat automated checks; inspect tracked config and build inputs for working secrets; inspect lockfiles and exact dependency intake. | Repeatable checks and no committed working secret; record any blocked package separately. |
-| F02 | Create a fresh, isolated database named `idea_ddm_f02_<run-id>`; set exact, distinct role names `idea_ddm_app` and `idea_ddm_migrator`, and export their credentials separately. Set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that same database. Run `DataBaselineTest` first to apply V1 once and verify a repeat is a no-op, then run `DatabasePrivilegeTest` against the migrated schema to verify object ownership and refused app DDL. Run the packaged migration command and `ServerSmokeTest` afterward. | One fresh migration, repeat no-op, all baseline objects owned by the migration role, app role cannot create a schema/table, bounded failing DDL rollback in a generated temporary schema, and distinct process/database health. This is not a backup/restore or production recovery result. |
+| F02 / T044 data successor | Create a completely new isolated database matching `idea_ddm_f02_<run-id>`; use exact distinct app/migrator roles and set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that exact new name. After T044 tooling approval and initial-empty-state witness, `DataBaselineTest` on current source expects V1–V7 once, repeat zero; run `DatabasePrivilegeTest` and additional successor ownership/privilege assertions, then packaged migration/no-op and health checks. Never use the runner's historical default database for T044. | Seven migrations on current source, valid history/checksums, no pending migration and repeat zero; migrator-owned objects and refused app migration authority; bounded rollback and distinct process/data health. Historical F02 evidence is unchanged, not retrospectively changed to seven migrations. No backup/restore claim. |
 | F03-A/B | Run controlled initial-admin bootstrap twice; create/disable a native test account; sign in/out, revoke, and retry protected calls with old proof. | The second bootstrap reports already initialized with no Actor, account or Role Assignment change; attributable Actor/session; no public registration; all invalidated retries refused. Do not print passwords or session secrets. |
 | F04 | Run one allowed, one refused and one forced-failure sample owner command with a fixed `OperationId` per attempt. Query owner/Audit/outbox outcomes. | No successful result without required Audit, no partial success under forced failure, and no duplicate result from a same-ID retry. |
 | F05-A/B | Record exact Gateway runtime, Adapter and transport qualification; transfer approved 1 KiB and 64 MiB fixtures directly to one Gateway; compare size and SHA-256 with manifest, then inspect receipt and accepted metadata. Repeat with wrong/expired grant, wrong digest, interruption, lost response and same-ID repeated/changed input. | Matching verified custody for both happy-path fixtures; zero false successful custody for failures. Retries resolve the same operation. Artifact/Vault/Location IDs stay distinct from private Adapter path. No second Vault or throughput claim. |
@@ -137,9 +144,10 @@ test-classpath Clock file advances synthetic time without changing the host cloc
 a public route. Read [§28](evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification)
 for the exact-source result; do not infer the result from this procedure. Existing idle/absolute,
 logout/reset/re-enable and throttling matrices remain in `HttpSessionFlowTest`. Request external
-restart checkpoint review before continuing; do not merge. Client qualification remains
-T043's seam → failing tests/evidence contract → implementation if needed → real Web/Desktop
-execution, never inferred from this Java HTTP runner.
+restart checkpoint review before continuing; the received review and its exact head are retained
+in the closure matrix. Client qualification is never inferred from this Java HTTP runner.
+T043-Web is SATISFIED by accepted W01–W10; Desktop/Workspace binding belongs to a successor Work
+Item after F03-B closure. Continue T040/T042 reconciliation and T044, not another client feature.
 
 Check default profile values, then advance test time at setup-proof, idle, absolute and login
 block boundaries. Do not wait minutes/hours or change the server's clock. Cookie/session/CSRF

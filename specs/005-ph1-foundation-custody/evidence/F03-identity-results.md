@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.24 / Draft |
+| Version / status | 0.26 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; earlier scoped reviews retained below. Project Reviewer accepted F03-A on 2026-09-30. Actual Web successor received PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4`; whole-F03-B acceptance remains pending |
 | Evidence date | Latest actual Chrome successor 2026-10-01, +07:00; earlier execution dates remain historical |
 | Applicable baseline | Actual Web/Server source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4`, qualification source `738eb5ae05600b443ad2c107e1352de6dac45def`; earlier sources remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-005/013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md) T040/T042/T044 for restart qualification, DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
-| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); T043 actual Web successor for PR #25 review, not whole-card acceptance |
+| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); accepted T043-Web and [F03-B closure matrix](F03-B-closure-matrix.md), not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.23's current control envelope; §33 records received actual Web review. §1–32 history unchanged; documentation only, no application/migration/card-state change. |
+| Change / supersession | Supersedes v0.25's current control envelope; §36 records the separate pre-execution closure tooling authorization. §1–35 history unchanged; no application/migration/card-state change. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; §29 historical partial browser evidence; §30–31 accepted packaging; §32 actual Chrome W01–W10 PASS, external PASS WITH NOTES received in §33. Whole T043/F03-B acceptance pending; private raw-log limitation and separate progress/integration retained |
+| Evidence status | F03-A accepted; historical execution/reviews unchanged. T043-Web SATISFIED by accepted W01–W10; combined T043 unchecked and Desktop successor NOT-RUN, not a F03-B blocker. Closure coverage pending; tooling AUTHORIZED FOR F03-B CLOSURE ONLY, nine-artifact/descriptor preflight PASS; offline lifecycle resolution/fresh public/final regression NOT-RUN. Private raw-log limitation and separate progress/integration retained |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -1998,3 +1998,97 @@ Next: agree the actual Desktop/WebView2 and native binding/protected-custody sea
 contract before code. Fresh public V4–V7/data, affected final regressions and wider reconciliation
 remain outstanding. T043 unchecked, F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN;
 no merge, whole-card acceptance or Tracker action.
+
+## 34. Received restart review and current scope authority
+
+The Project Reviewer previously relayed external **PASS WITH NOTES** for the restart/session
+qualification at PR #25 head `0101cc3ae3fe09fd264d0a50fcd96ae3f9d407b0`, executed source
+`074f62ae713e7a1f627f7fb1bbe600e4e4d37296`, following reviewed head
+`171173a5266fa5c9a732f2fe1316fb1c5c0f836d`. The received text SHA-256 is
+`50840DF07D07DDAADE95F6712B841AB77BAA16ACB827CF2CA3175ED5C83546CD`.
+
+The review confirms the three restart cases and the retained 101-check execution, with zero
+BLOCKER/MAJOR/MINOR in that scope. It supersedes §28's pending external disposition, not its
+historical execution. Old-cookie refusal does not independently isolate the DB runtime predicate;
+source inspection remains separate. Private logs were not independently read through GitHub.
+It does not accept T040/T042 wholesale, fresh public migration, clients or F03-B as a whole.
+
+After accepting Web W01–W10, the Project Reviewer explicitly declined Desktop/Workspace binding
+implementation in this F03-B turn and approved reconciling scope with Issue #24. Current delivery
+disposition supersedes the earlier next-Desktop wording in §31–33: **T043-Web SATISFIED;
+Desktop/WebView2/Workspace binding successor Work Item, NOT-RUN, not a F03-B blocker**. Keep the
+historical combined T043 checkbox unchecked. No successor issue is created or implementation
+approved here; present its seam/test contract after F03-B closes. Architecture and existing
+credential/session requirements remain unchanged.
+
+## 35. Approved F03-B closure reconciliation
+
+On 2026-10-01 the Project Reviewer approved: scope reconciliation → T040 matrix → T042 matrix →
+resolve a genuine requirement gap if demonstrated → fresh isolated V1–V7 → T044 affected
+regression → whole-card closure matrix → external review. The
+[closure matrix](F03-B-closure-matrix.md) records existing source, named tests, full executed SHA
+keys, evidence sections, scoped external dispositions and pending final states. It is coverage
+within Issue #24, not another feature/checkpoint/task register.
+
+The inspection baseline is `b0e0e6d68e5dc50b4dce26691c219d14b317264b`. The production/source
+diff from accepted packaged source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4` across
+`apps/server`, `apps/web` and `database/migrations` is empty. This revision changes delivery
+records only; it creates no Server, Desktop, Workspace, migration or dependency implementation.
+Unchecked T040/T042 markers are not a reason to rewrite delivered behavior. The logout concern
+remains a contract/negative-profile coverage comparison, **not a concluded defect**.
+
+T044 is **BLOCKED before any Maven execution**: `exec-maven-plugin:3.6.3` is bound to
+`generate-resources`, while its existing exception admits only internal T043 build/test.
+Retain a broader approved intake or explicitly approved bounded execution path before use;
+neither has been granted by reconciliation. No retrospective admission or silent T043 exception
+reuse. Fresh `public` means only the public schema of a completely new named test database,
+never `idea_ddm_dev`, historical F02 or retained F03-A public. The matrix requires initial
+emptiness, V1–V7/history/checksum/no-pending/repeat evidence and full successor ownership/privilege
+coverage rather than assuming the existing 12-table assertion covers all objects.
+
+Focused documentation checks passed: eight changed/new delivery records have 152 relative
+targets and 47 heading anchors, zero errors; no trailing whitespace; `git diff --check` passed.
+Sections §1–33 are byte-identical after LF normalization to inspection source `b0e0e6d`; their
+body SHA-256 is `1001DE081110646FFC2767EFF73C019F21441BC064055AA753F120D4B680C2E8`.
+Diff across application projects, migrations and reviewer checklists is empty. No runtime
+execution is claimed. Reviewer requirement checklist states remain 16/16 and
+12/12; hooks absent. Maven/PostgreSQL/browser/Desktop execution, fresh migration and affected
+regression NOT-RUN; verifier NOT-RUN. F03-B remains IN_PROGRESS, Issue #24 OPEN, combined T043
+unchecked; no whole-card acceptance, merge, Tracker timer/effort change or progress publication.
+
+## 36. Pre-execution F03-B closure tooling exception
+
+On 2026-10-01 the Project Reviewer explicitly approved a bounded internal engineering process
+exception for the exact `exec-maven-plugin:3.6.3` and eight runtime dependency JARs previously
+inventoried/hashed in `IE-RES-T043-MAVEN-WEB-INTAKE-20261001`. The separate
+[successor record](../../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md),
+`IE-RES-F03B-CLOSURE-BUILDTOOL-EXCEPTION-20261001`, records the approval before execution.
+The historical T043 intake and prior execution/review sections remain unchanged.
+
+Authority is **AUTHORIZED FOR F03-B CLOSURE ONLY**: Issue #24 / PR #25 T040/T042/T044 and
+necessary regression, internal build/test only, nine exact cached JARs/hashes/graph, offline
+resolution, build-only and excluded from `BOOT-INF/lib`. Missing artifacts, mismatch or any
+additional plugin execution JAR stops execution; no download fallback. No F04/F05/general
+development, legal/commercial/distribution approval or substitution for T036/Legal Review.
+
+Initial artifact preflight PASS: all nine cached JAR hashes matched; the embedded plugin
+descriptor lists exactly the eight admitted runtime dependencies. The exception retains its
+descriptor/intake/helper hashes and existing Maven/Java/Node version probes. Complete offline
+lifecycle resolution, fresh migration and affected regression remain NOT-RUN; this is not
+whole-card acceptance.
+F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN; no merge or Tracker action.
+
+## 37. Authorized logout closure repair
+
+Contract comparison identified no ineligible-session cleanup exception: DOC-04 REQ-IAM-001/004,
+DOC-06 account/session interface and spec FR-005 require current eligible authority for protected
+operations; the logout HTTP contract requires a valid session. On 2026-10-01 the Project Reviewer
+approved the proposed disposition: valid CSRF with anonymous/expired/revoked/stale/disabled
+session returns empty 401 and no ACCEPTED IAM/Audit; eligible logout returns 204 after committing
+only its current-session revocation and required evidence; required persistence failure returns
+empty 503 without success. This makes the formerly open coverage concern an authorized repair.
+
+Use the existing real HTTP + PostgreSQL seam with synthetic fixtures, separate roles and test-owned
+UUID schema, controlled time and bounded persistence faults. Retain one RED → minimal GREEN
+slice at a time and qualify remaining negative profiles/atomic failure. No idle/reset/throttle
+rewrite, client protocol, migration change or verifier. Execution is NOT-RUN in this revision.

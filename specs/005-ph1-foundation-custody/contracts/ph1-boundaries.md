@@ -59,7 +59,7 @@ Server HTTP and PostgreSQL, with synthetic identities and protected in-memory cr
 | `GET /api/v1/identity/csrf` | Obtain the anonymous/current session's CSRF token through the same-origin boundary. No identity privilege is granted. |
 | `POST /api/v1/identity/login` | Native login/password plus CSRF proof; verify active account and credential. Establish a fresh/fixation-protected session. Safe success identifies server-derived Actor; failure returns generic 401 without credential, existence or privileged-role disclosure. |
 | `GET /api/v1/identity/session` | Current eligible session gives 200 with its Actor/account identity only. Anonymous, expired, revoked or stale-version proof gives 401, never a redirect or client-chosen Actor. |
-| `POST /api/v1/identity/logout` | Valid CSRF and session; invalidate the current proof and cookie. Old proof is refused. GET must not log a user out. |
+| `POST /api/v1/identity/logout` | Valid CSRF and eligible session; invalidate only the current proof and cookie, returning 204 after required IAM/Audit commit. With valid CSRF, anonymous/expired/revoked/stale-version/disabled-session attempts return empty 401 without ACCEPTED IAM/Audit; required persistence failure returns empty 503 without success. There is no ineligible-session cleanup exception. Old proof is refused. GET must not log a user out. |
 | `POST /api/v1/identity/accounts` and `POST /api/v1/identity/accounts/{id}/disable` or `/re-enable` | Session-derived Actor and CSRF; reuse F03-A's exact scoped permission and mutation path. Creation remains PENDING with no credential or implicit membership/role. |
 | `POST /api/v1/identity/accounts/{id}/credential-proofs` | Eligible Account Administrator explicitly requests initial setup or reset for one account. Issue one-use, purpose/target/version-bound proof; retain attributable outcome/Audit, never its secret. Protected delivery is synthetic harness-only in this increment's development profile. |
 | `POST /api/v1/identity/credentials` | Target identity, bound one-use proof, new password and CSRF. Redeem atomically; refuse wrong/expired/replayed/stale proof or invalid password without activation/credential mutation. Reset invalidates old sessions and cannot re-enable a disabled account. |
@@ -212,7 +212,15 @@ an invented RED → GREEN. Retain exact-source execution and affected regression
 
 **Approval:** Project Reviewer, 2026-10-01, Web only. This is the actual client qualification
 for FR-005/014, not a new product architecture or whole F03-B acceptance. Actual results are
-NOT-RUN until retained; Desktop is a separate checkpoint.
+NOT-RUN until retained; the later accepted W01–W10 result is linked below. Desktop qualification
+belongs to a successor Work Item, not the F03-B acceptance boundary.
+
+**Current delivery disposition (Project Reviewer, 2026-10-01):** W01–W10 is accepted as
+T043-Web SATISFIED; see [actual browser evidence](../evidence/T043-web-browser-successor-20261001.md).
+Retain the original combined T043 marker unchecked. Desktop/Workspace binding remains NOT-RUN
+for separate successor qualification after F03-B closure; its architecture is preserved, not
+implemented or globally waived. Use the [closure matrix](../evidence/F03-B-closure-matrix.md)
+for Server/Web acceptance. This disposition changes no W oracle or HTTP route semantics.
 
 **Boundary:** Build actual `apps/web` and serve its shell/assets from the actual IDEA Server
 at the same HTTPS origin as `/api/v1/identity/*`. Use installed Google Chrome on Windows

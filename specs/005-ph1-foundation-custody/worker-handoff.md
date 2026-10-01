@@ -41,7 +41,15 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B Web qualification handoff
+## Current F03-B closure handoff
+
+Start with the [closure matrix](evidence/F03-B-closure-matrix.md), not another client feature.
+The Project Reviewer approved scope reconciliation and closure on 2026-10-01. Map T040, then
+T042 to existing source/tests/execution; only a demonstrated unmet requirement can justify new
+code. T044 tooling is AUTHORIZED FOR F03-B CLOSURE ONLY under the separate process exception;
+verify the exact nine cached JARs/graph and resolve offline before Maven. Follow its gate and isolated-database
+procedure in the matrix. No Desktop/Workspace binding, new feature checkpoint, Issue #24 closure,
+merge or Tracker action is authorized by this handoff.
 
 Use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
@@ -73,9 +81,10 @@ and [sign-in integration](plan.md#planned-sign-in-transaction-integration):
 
 Additive V7 enforces the existing-identity bound and retains least privilege. Do not modify V1–V6.
 Do not claim servlet/PostgreSQL distributed
-ACID: no tentative proof is eligible without committed database state. T043 still owns four
-ordered client steps: qualification seam → failing test/evidence contract → implementation if
-needed → actual Web/Desktop evidence. Java HTTP harness results cannot replace client qualification.
+ACID: no tentative proof is eligible without committed database state. The four-step client method
+remains qualification seam → failing test/evidence contract → implementation if needed → actual
+client evidence. T043-Web is now SATISFIED; Desktop is a successor Work Item, not a F03-B blocker.
+Java HTTP harness results cannot replace actual client qualification.
 
 For T043, follow spec's accepted 2026-10-01 Web credential-lifecycle clarification. Do not impose
 an absolute ban on controlled-input state: clear password control/state after submission and
@@ -123,9 +132,11 @@ checks and two Server/two Web smoke tests pass; this is not actual Chrome W01–
 External packaging PASS WITH NOTES at `82a30adb55482096e421821891734d82ec990351` is received
 ([§31](evidence/F03-identity-results.md#31-external-review-of-t043-packaging-repair)); the prior
 MAJOR is closed. Its authorized follow-up was the actual Chrome run recorded below, using an
-exact-source, UUID-owned fixture before the separate Desktop checkpoint. Do not reopen packaging
-without a new defect. The build-tool exception is internal T043 only; resolve intake before
-F04/F05/general development because ordinary Maven builds invoke that plugin. For existing Ubuntu
+exact-source, UUID-owned fixture. Do not reopen packaging
+without a new defect. Historical build-tool intake remains internal T043 only. The separate
+[closure exception](../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md) admits the same
+nine exact JARs for F03-B T040/T042/T044 only, conditional on offline-cache/hash/graph preflight;
+F04/F05/general development still need separate authority. For existing Ubuntu
 runner scripts, prepend the qualified Node 24 `bin` directory to the process PATH and prepare the
 locked Web dependencies per [quickstart](quickstart.md); no global PATH change/hidden install.
 External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
@@ -137,14 +148,17 @@ No package install/TLS bypass or secret evidence. Read §32 for execution, clean
 External Web PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` is received in
 [§33](evidence/F03-identity-results.md#33-external-review-of-actual-t043-webbrowser-checkpoint).
 Before reusing the Web fixture, resolve the two [next-use hardening notes](evidence/T043-web-browser-successor-20261001.md#received-external-review--2026-10-01);
-the accepted application/execution is unchanged. Next: propose the separate Desktop seam/test
-contract before implementation/qualification. The actual WPF/WebView2 shell is currently only
-the F01 scaffold; its smoke test is not authentication evidence. Preserve the selected separate
-WebView2/Workspace session contexts and server-mediated short-lived binding; pin the exact
-binding flow and Windows per-user protected custody before code, rather than exporting browser
-cookies or injecting native proof into page JavaScript. T043 remains unchecked because both clients
-are required. Remaining issuer/logout profiles, Desktop and fresh public V4–V7/data regression are outstanding;
-this Java HTTP runner is not client qualification. F04 owns its separate owner-command race.
+the accepted application/execution is unchanged. Web W01–W10 satisfies the Web portion of T043;
+keep the historical umbrella marker unchecked, not a Desktop condition on F03-B acceptance.
+Next: complete the T040/T042 mapping and T044 closure procedure. Treat logout eligibility as an
+open contract/coverage concern, not a defect inferred from `signOut()` alone.
+
+Desktop/WebView2/Workspace binding is NOT-RUN and deferred to a successor Work Item after F03-B
+closes; no successor issue is created yet. Preserve separate session contexts, actual IDEA Web
+over HTTPS, server-mediated short-lived binding and Windows per-user protected custody. Exact
+issue/redeem/refresh/revoke/reauth/replay/cross-user/same-user-hostile-client semantics require an
+agreed seam/test contract there, not invention in PR #25. The F01 scaffold is not authentication
+evidence. F04 still owns its separate owner-command race.
 
 ## Detailed evidence for CHK009 and CHK010
 

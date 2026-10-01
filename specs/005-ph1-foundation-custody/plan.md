@@ -121,7 +121,9 @@ The Project Reviewer approved the real HTTP/real PostgreSQL test seam on 2026-09
    deadline. Leave the host clock unchanged and never expose a time-control HTTP route.
 6. Test one behavior at a time with a real HTTP client and PostgreSQL 18. Migrate a UUID-owned
    temporary schema inside the existing dedicated F03-A test database; never migrate/clean its
-   public schema, the F02 database, `idea_ddm_dev` or Vault. A test failure is not a card PASS.
+   public schema, the historical F02 database, `idea_ddm_dev` or Vault. The separately authorized
+   T044 fresh-public run uses a completely new test database under the closure procedure below.
+   A test failure is not a card PASS.
 7. Qualify browser cookie/CSRF behavior and the native-client binding before claiming the
    corresponding client path. Retain same-origin HTTPS and Secure/HttpOnly/SameSite cookies;
    page JavaScript must never read the session cookie. Web password entry/submission may use
@@ -185,8 +187,45 @@ Run vertical slices: same-origin shell/assets → CSRF → login/protected-sessi
 → observed cookie/security properties → invalidated-session UI. Each first RED must expose missing
 actual Web behavior/integration, not a certificate or package failure. Qualify previously correct
 Server behavior without inventing a RED or changing it unnecessarily. Retain exact Web/Server
-source and artifacts per checkpoint. Desktop follows separately; T043 remains open until both
-clients' applicable evidence is complete.
+source and artifacts per checkpoint. Web W01–W10 subsequently received external PASS WITH NOTES;
+its portion of T043 is SATISFIED. Desktop/Workspace binding belongs to a successor Work Item,
+not the F03-B closure boundary. The historical combined T043 marker remains unchecked.
+
+### F03-B scope reconciliation and closure (approved 2026-10-01)
+
+Issue #24 explicitly separates Desktop binding qualification. The Project Reviewer accepted
+Web W01–W10 and approved reconciling delivery records with that authority. This changes delivery
+wording, not the selected WPF/WebView2/Workspace architecture or a frozen product requirement.
+Desktop qualification remains NOT-RUN for a successor Work Item; its exact binding/custody
+semantics require an agreed seam/test contract after F03-B closure. No successor is created or
+implemented by this reconciliation, and no new feature checkpoint or card hours are added.
+
+Follow the [closure matrix](evidence/F03-B-closure-matrix.md) in order: scope reconciliation →
+T040 coverage → T042 coverage → resolve a demonstrated requirement gap, if any → fresh isolated
+V1–V7 → T044 affected regression → whole-F03-B external review. Map existing implementation and
+execution instead of rewriting it because a task marker is unchecked. The logout concern is
+an open coverage/contract comparison, not an accepted defect or an authorization to change policy.
+
+Before **any** F03-B closure Maven invocation, including logout qualification and T044, verify
+its approved cached build-tool artifacts. `exec-maven-plugin`
+3.6.3 is bound to `generate-resources`; ordinary `test/package` and the current runners use it.
+The [intake exception](../../docs/research/2026-10-01-t043-maven-web-build-intake.md) admits only
+internal T043 build/test. The separate [closure process exception](../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md)
+authorizes only Issue #24 / PR #25 T040/T042/T044 and necessary regression using the same nine
+JARs, exact hashes/graph and offline cache. Preflight missing/hash-changed/additional artifacts
+are BLOCKED; no downloads or extension to F04/F05/general development. Keep actual Web packaging
+and prove these tools stay outside application dependencies/`BOOT-INF/lib`. No legal clearance.
+
+The fresh run's `public` means **only** the public schema of a completely new database such as
+`idea_ddm_f02_f03b_closure_<run-id>` (the prefix satisfies existing data-test guards). Pin the
+exact new name before creation; refuse an existing name or nonempty initial schema. Never use
+`idea_ddm_dev`, the historical F02 database or retained F03-A public evidence. Migrate as
+`idea_ddm_migrator`, use `idea_ddm_app` at runtime, retain initial emptiness, V1–V7 history/checksum
+validation, zero pending/repeat migrations and all applicable ownership/privilege assertions.
+
+Keep F03-B IN_PROGRESS, Issue #24 OPEN and verifier NOT-RUN. F04 owns its future owner-command
+race; company policy/MFA, T036/commercial, deployment and merge are separate. Final matrix review
+and Project Reviewer whole-card acceptance are still required.
 
 ## Complexity Tracking
 
@@ -269,6 +308,7 @@ finally success/binding fault fate. Preserve the existing F03-A, setup/reset, CS
 session deadlines and health regressions. If the qualified framework seam cannot meet the
 contract, report it before weakening the required oracle or changing authentication mechanisms.
 
-T043 client qualification order is: agree the actual client seam → define failing tests/evidence
-contract → implement if needed → execute real Web/Desktop and retain platform evidence. Java
-HTTP evidence is not client qualification; unexecuted paths remain NOT-RUN/BLOCKED.
+Client qualification order remains: agree the actual client seam → define failing tests/evidence
+contract → implement if needed → execute that real client and retain platform evidence. T043-Web
+is SATISFIED by accepted W01–W10. Desktop follows in a successor Work Item, not as a F03-B blocker.
+Java HTTP evidence is not client qualification; unexecuted successor paths remain NOT-RUN/BLOCKED.

@@ -3,12 +3,12 @@
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-VER-T043-WEB-BROWSER-20261001` / verification record |
-| Version / status / normativity | `0.2` / Draft / INFORMATIVE; client execution, not whole-card/gate acceptance |
+| Version / status / normativity | `0.3` / Draft / INFORMATIVE; client execution, not whole-card/gate acceptance |
 | Owner / author / reviewer | Project Reviewer / Codex / internal Standards and Spec review complete; external PASS WITH NOTES received at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` |
 | Baseline / date | PH1 F03-B, Issue #24 / 2026-10-01 +07:00 |
 | Upstream | Spec v0.7 FR-005/014; [W01–W10 contract](../contracts/ph1-boundaries.md#t043-web-qualification-contract); [accepted packaging repair](T043-web-packaging-repair-20261001.md) |
-| Downstream / disposition | PR #25; actual Web W01–W10 PASS; T043 unchecked, F03-B IN_PROGRESS, whole-card acceptance PENDING |
-| Change / supersession | Supersedes v0.1 control envelope; append received external review without changing execution history or the historical [partial browser record](T043-web-qualification-20261001.md) |
+| Downstream / disposition | PR #25; accepted W01–W10, T043-Web SATISFIED; historical combined T043 unchecked; Desktop successor, not a F03-B blocker; whole-card acceptance PENDING |
+| Change / supersession | Supersedes v0.2 control envelope; append approved delivery-scope reconciliation. Execution and received review history unchanged, including the historical [partial browser record](T043-web-qualification-20261001.md) |
 | Classification / retention | INTERNAL; retain sanitized results/source/hashes in Git; no secret values, HAR, trace, storageState or screenshot retained |
 | Review trigger / tailoring | Web/Server/tool/browser/TLS/fixture/oracle change; focused verification under repository authoring standard, no conformity or production claim |
 
@@ -143,3 +143,16 @@ Private host log access remains a declared limitation. The reviewer did not requ
 Web/Server changes. Next is the separately agreed Desktop seam/test contract, then authorized
 implementation and real-client execution. T043 remains unchecked, F03-B IN_PROGRESS,
 Issue #24 OPEN, verifier NOT-RUN; no merge or Tracker action.
+
+## Current delivery disposition — 2026-10-01
+
+The Project Reviewer accepted the Web portion of T043 and approved reconciliation with Issue
+#24: **T043-Web SATISFIED; Desktop/Workspace binding belongs to a successor Work Item, not a
+F03-B blocker**. The previous next-Desktop instructions are historical and are superseded by
+the [F03-B closure matrix](F03-B-closure-matrix.md). Exact binding/custody semantics require a
+separate agreed seam/test contract after F03-B closes; no Desktop implementation is authorized
+here. Keep the original combined T043 marker unchecked.
+
+This adds no execution or change to accepted source/artifacts, W01–W10, review limitations or
+the two harness next-use notes. Resolve T044 tooling before fresh isolated public V1–V7 and
+affected regression. F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN; no merge or Tracker action.
