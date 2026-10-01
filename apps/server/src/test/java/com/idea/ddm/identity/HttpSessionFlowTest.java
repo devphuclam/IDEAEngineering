@@ -1238,6 +1238,41 @@ class HttpSessionFlowTest {
     private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
 
     @Test
+    void concurrentFailuresReachOneFifthFailureWithoutLostUpdatesOrUnboundedState() throws Exception {
+        var fixture = fixture();
+        var callers = new java.util.ArrayList<HttpClient>();
+        var csrf = new java.util.ArrayList<String>();
+        for (int number = 0; number < 10; number++) {
+            var caller = client();
+            callers.add(caller);
+            csrf.add(jsonField(get(caller, "/api/v1/identity/csrf").body(), "token"));
+        }
+        var ready = new java.util.concurrent.CountDownLatch(10);
+        var start = new java.util.concurrent.CountDownLatch(1);
+        try (var workers = java.util.concurrent.Executors.newFixedThreadPool(10)) {
+            var results = new java.util.ArrayList<java.util.concurrent.Future<HttpResponse<String>>>();
+            for (int number = 0; number < 10; number++) {
+                int position = number;
+                results.add(workers.submit(() -> {
+                    ready.countDown();
+                    assertTrue(start.await(20, java.util.concurrent.TimeUnit.SECONDS));
+                    return post(callers.get(position), "/api/v1/identity/login", csrf.get(position),
+                            "username=" + form(fixture.login()) + "&password=" + form(UUID.randomUUID().toString()));
+                }));
+            }
+            assertTrue(ready.await(20, java.util.concurrent.TimeUnit.SECONDS));
+            start.countDown();
+            for (var result : results) {
+                var refused = result.get(30, java.util.concurrent.TimeUnit.SECONDS);
+                assertEquals(401, refused.statusCode());
+                assertEquals("", refused.body());
+            }
+        } finally { start.countDown(); }
+        assertEquals(new LoginWitness(1, 5, Instant.parse("2026-09-30T06:15:00Z"), 0, 0, 0), loginWitness(fixture.login()));
+        assertEquals(401, loginAttempt(client(), fixture.login(), fixture.password()).statusCode());
+    }
+
+    @Test
     void suppressedFailureClearingCannotPublishSuccessfulSignIn() throws Exception {
         requiredSignInFailure("login_failure_state");
     }
