@@ -1145,6 +1145,36 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void logoutAuditFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry() throws Exception {
+        var fixture = fixture();
+        var caller = signedIn(fixture);
+        var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_logout() RETURNS trigger LANGUAGE plpgsql AS $$ "
+                    + "BEGIN IF NEW.action='identity.sign-out' THEN RETURN NULL; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE TRIGGER suppress_logout BEFORE INSERT ON " + schema + ".audit_evidence "
+                    + "FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_logout()");
+        }
+        try {
+            var response = post(caller, "/api/v1/identity/logout", csrf, "");
+            assertEquals(503, response.statusCode());
+            assertEquals("", response.body());
+            assertEquals(before, accounts.totals());
+            assertEquals(200, get(caller, "/api/v1/identity/session").statusCode(), "Failed logout must not clear ordinary proof");
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_logout ON " + schema + ".audit_evidence");
+            }
+        }
+        assertEquals(204, post(caller, "/api/v1/identity/logout", csrf, "").statusCode());
+        assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        assertEquals(before.ownerOutcomes() + 1, accounts.totals().ownerOutcomes());
+        assertEquals(before.auditEvents() + 1, accounts.totals().auditEvents());
+    }
+
+    @Test
     void idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting() throws Exception {
         var fixture = fixture();
         var before = signedIn(fixture);
