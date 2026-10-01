@@ -1265,6 +1265,23 @@ class HttpSessionFlowTest {
 
     private record IdentityStorageWitness(long failures, long actors, long accounts, long logins, long sessions, long outcomes, long audit) {}
 
+    @Test
+    void normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent() throws Exception {
+        var fixture = dualLoginFixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.first().login(), 1);
+        wrongAttempts(caller, "  " + fixture.first().login().toUpperCase(java.util.Locale.ROOT) + "  ", 3);
+        assertEquals(4, loginWitness(fixture.first().login()).failures());
+        assertEquals(200, loginAttempt(caller, fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(4, loginWitness(fixture.first().login()).failures(), "L2 success cannot clear L1");
+        wrongAttempts(caller, fixture.first().login().toUpperCase(java.util.Locale.ROOT), 1);
+        assertEquals(401, loginAttempt(client(), fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(200, loginAttempt(client(), fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(5, loginWitness(fixture.first().login()).failures());
+        assertEquals(Instant.parse("2026-09-30T06:15:00Z"), loginWitness(fixture.first().login()).blockedUntil());
+        assertEquals(0, loginWitness(fixture.second().login()).rows());
+    }
+
     private IdentityStorageWitness identityStorageWitness() throws Exception {
         try (var connection = appDataSource().getConnection(); var query = connection.createStatement(); var row = query.executeQuery(
                 "SELECT (SELECT count(*) FROM login_failure_state),(SELECT count(*) FROM actor),"
