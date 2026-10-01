@@ -30,7 +30,23 @@ public final class DatabaseMigrationCommand {
                 .validateMigrationNaming(true)
                 .cleanDisabled(true)
                 .load();
-        return flyway.migrate().migrationsExecuted;
+        int applied = flyway.migrate().migrationsExecuted;
+        // Bootstrap default ACLs must not give runtime authority over migration history.
+        // Also run on a no-op migrate, so existing test databases receive the same restriction.
+        try (var connection = flyway.getConfiguration().getDataSource().getConnection()) {
+            connection.setAutoCommit(false);
+            try (var statement = connection.createStatement()) {
+                statement.execute("REVOKE ALL ON TABLE public.flyway_schema_history FROM PUBLIC, idea_ddm_app");
+                statement.execute("GRANT SELECT ON TABLE public.flyway_schema_history TO idea_ddm_app");
+                connection.commit();
+            } catch (java.sql.SQLException exception) {
+                connection.rollback();
+                throw exception;
+            }
+        } catch (java.sql.SQLException exception) {
+            throw new IllegalStateException("Migration history runtime privilege restriction failed", exception);
+        }
+        return applied;
     }
 
     private static String required(Map<String, String> environment, String name) {

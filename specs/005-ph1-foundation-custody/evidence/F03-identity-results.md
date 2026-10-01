@@ -2092,3 +2092,19 @@ Use the existing real HTTP + PostgreSQL seam with synthetic fixtures, separate r
 UUID schema, controlled time and bounded persistence faults. Retain one RED → minimal GREEN
 slice at a time and qualify remaining negative profiles/atomic failure. No idle/reset/throttle
 rewrite, client protocol, migration change or verifier. Execution is NOT-RUN in this revision.
+
+## 38. T044 Flyway history privilege finding and authorized repair
+
+Fresh-public execution from `7d2a59c672ca7976c62169ee8399aa6e2d8ac575` applied V1–V7 and
+repeated with zero migrations. The subsequent privilege suite was FAIL: bootstrap default ACLs
+gave `idea_ddm_app` INSERT/UPDATE/DELETE on `public.flyway_schema_history`. A denied-DML probe
+did not throw; its transaction was rolled back, so no migration history was deleted. Read-only
+ACL inspection confirmed the three permissions; TRUNCATE was already denied.
+
+On 2026-10-01 the Project Reviewer approved a narrow repair: the explicit migration command
+must restrict runtime to SELECT on that history table after every migration, including a no-op.
+The command must fail rather than report success if restriction fails. V1–V7 remain immutable;
+no new dependency, migration, company database modification or startup migration is introduced.
+The fresh test database remains retained; its initial execution is not relabelled PASS for the
+failed privilege suite. Qualify the no-op repair on it, then retain a distinct fresh-successor
+execution before closure. This is T044 closure work, not another feature/checkpoint task.

@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
+import com.idea.ddm.migration.DatabaseMigrationCommand;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -64,6 +65,32 @@ class F03BPublicMigrationTest {
                 assertTrue(rows.next());
                 assertEquals(7, rows.getInt(1));
                 assertTrue(rows.getBoolean(2));
+            }
+        }
+    }
+
+    @Test
+    void noOpMigrationRestoresReadOnlyHistoryAfterBootstrapStyleAclDrift() throws Exception {
+        // Owned test database only. Reproduce the default-ACL defect, then use the real command.
+        try (var connection = connection("idea_ddm_migrator"); var statement = connection.createStatement()) {
+            statement.execute("GRANT INSERT,UPDATE,DELETE ON public.flyway_schema_history TO idea_ddm_app");
+        }
+        try {
+            assertEquals(0, DatabaseMigrationCommand.migrate(System.getenv()));
+            try (var connection = connection("idea_ddm_app"); var statement = connection.createStatement()) {
+                for (var mutation : Set.of("INSERT", "UPDATE", "DELETE", "TRUNCATE")) {
+                    try (var rows = statement.executeQuery("SELECT has_table_privilege(current_user,'public.flyway_schema_history','" + mutation + "')")) {
+                        assertTrue(rows.next());
+                        assertFalse(rows.getBoolean(1), mutation);
+                    }
+                }
+                denied(connection, "UPDATE public.flyway_schema_history SET success=success");
+            }
+        } finally {
+            // Narrow cleanup also protects retained evidence if an assertion/command fails.
+            try (var connection = connection("idea_ddm_migrator"); var statement = connection.createStatement()) {
+                statement.execute("REVOKE ALL ON public.flyway_schema_history FROM PUBLIC,idea_ddm_app");
+                statement.execute("GRANT SELECT ON public.flyway_schema_history TO idea_ddm_app");
             }
         }
     }

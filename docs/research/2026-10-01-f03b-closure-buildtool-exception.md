@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Stable ID / class | `IE-RES-F03B-CLOSURE-BUILDTOOL-EXCEPTION-20261001` / bounded process-exception record |
-| Version / status | `0.1` / Approved for the process scope below; initial artifact preflight PASS |
+| Version / status | `0.2` / Approved for the process scope below; initial artifact preflight PASS |
 | Product normativity | INFORMATIVE; no product requirement or license/legal approval |
 | Owner / author | Engineering / Codex |
 | Authorization / authority | Project Reviewer, explicit user approval on 2026-10-01 before closure execution |
@@ -13,6 +13,7 @@
 | Downstream | [Closure execution gate](../../specs/005-ph1-foundation-custody/evidence/F03-B-closure-matrix.md#4-t044-execution-gate-and-procedure), T040/T042/T044 Maven build/test commands |
 | Change / supersession | New successor authorization; does not rewrite or supersede the historical T043 intake or its execution evidence |
 | Review trigger | Any artifact, version, graph, hash, use-scope or distribution change; missing approved cache/source |
+| Expiry / remediation | Expires at F03-B whole-card acceptance or earlier withdrawal/scope change. Further use requires separate intake/authorization; no authority carries into F04/F05. Engineering retains the inventory, attribution and open T036/Legal Review obligations. |
 | Evidence / limits | Prior artifact inspection is referenced, not repeated as a legal determination. Closure execution NOT-RUN; independent Legal Review and T036 remain separate |
 
 ## Authorization
