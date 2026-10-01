@@ -33,7 +33,8 @@ case "$action" in
     test -d "$root/classes" && test ! -e "$root/server.pid" || exit 2
     tls=/home/phuclam/idea-f03b-web-tls-739db09df96d4d97ac69fce17bc32fae
     export IDEA_SERVER_TLS_ENABLED=true IDEA_SERVER_TLS_KEY_STORE="$tls/server.p12"
-    export IDEA_SERVER_TLS_KEY_STORE_PASSWORD="$(< "$tls/store-password")"
+    IFS= read -r IDEA_SERVER_TLS_KEY_STORE_PASSWORD < "$tls/store-password" || test -n "${IDEA_SERVER_TLS_KEY_STORE_PASSWORD:-}"
+    export IDEA_SERVER_TLS_KEY_STORE_PASSWORD
     export IDEA_SERVER_TLS_KEY_STORE_TYPE=PKCS12 IDEA_SERVER_TLS_KEY_ALIAS=idea-t043
     nohup "$java_root/bin/java" -jar "$jar" --server.address=127.0.0.1 --server.port=18444 \
       --logging.level.root=WARN > "$root/server.log" 2>&1 < /dev/null &

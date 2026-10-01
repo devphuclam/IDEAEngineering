@@ -111,8 +111,9 @@ public final class WebQualificationFixture {
     }
 
     private static DriverManagerDataSource dataSource(String url, boolean migrator) {
-        return new DriverManagerDataSource(url, env(migrator ? "IDEA_DATABASE_MIGRATION_USER" : "IDEA_DATABASE_APP_USER"),
-                env(migrator ? "IDEA_DATABASE_MIGRATION_PASSWORD" : "IDEA_DATABASE_APP_PASSWORD"));
+        if (migrator) return new DriverManagerDataSource(url, env("IDEA_DATABASE_MIGRATION_USER"),
+                env("IDEA_DATABASE_MIGRATION_PASSWORD"));
+        return new DriverManagerDataSource(url, env("IDEA_DATABASE_APP_USER"), env("IDEA_DATABASE_APP_PASSWORD"));
     }
 
     private static String env(String key) {
