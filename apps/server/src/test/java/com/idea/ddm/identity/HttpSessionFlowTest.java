@@ -1238,6 +1238,38 @@ class HttpSessionFlowTest {
     private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
 
     @Test
+    void suppressedFailureClearingCannotPublishSuccessfulSignIn() throws Exception {
+        requiredSignInFailure("login_failure_state");
+    }
+
+    private void requiredSignInFailure(String table) throws Exception {
+        assertTrue(java.util.Set.of("login_failure_state", "session_record", "iam_owner_outcome", "audit_evidence").contains(table));
+        var fixture = fixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.login(), 4);
+        var before = loginWitness(fixture.login());
+        boolean clearing = table.equals("login_failure_state");
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_signin() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    + (clearing || table.equals("session_record") ? "RETURN NULL;"
+                            : "IF NEW.action='identity.sign-in' THEN RETURN NULL; END IF; RETURN NEW;") + " END $$");
+            statement.execute("CREATE TRIGGER suppress_signin BEFORE " + (clearing ? "DELETE" : "INSERT") + " ON "
+                    + schema + "." + table + " FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_signin()");
+        }
+        try {
+            assertNotEquals(200, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+            assertEquals(before, loginWitness(fixture.login()));
+            assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_signin ON " + schema + "." + table);
+            }
+        }
+        wrongAttempts(caller, fixture.login(), 1);
+        assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+    }
+
+    @Test
     void unknownLoginSprayCreatesNoDurableStateOrInheritedFailures() throws Exception {
         var fixture = setupFixture();
         var before = identityStorageWitness();
