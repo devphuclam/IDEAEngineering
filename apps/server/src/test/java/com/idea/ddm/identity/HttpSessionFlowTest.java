@@ -1237,6 +1237,44 @@ class HttpSessionFlowTest {
 
     private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
 
+    @Test
+    void unknownLoginSprayCreatesNoDurableStateOrInheritedFailures() throws Exception {
+        var fixture = setupFixture();
+        var before = identityStorageWitness();
+        var caller = client();
+        for (int number = 0; number < 100; number++) {
+            wrongAttempts(caller, "synthetic.unknown.batch." + number, 1);
+        }
+        assertEquals(before, identityStorageWitness(), "No arbitrary-name durable records, identities or authenticated sessions");
+        assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        var admin = fixture.administrator();
+        var target = new IdentityAdministration(appDataSource()).create(new ActorContext(admin.actorId(), 1),
+                UUID.randomUUID(), admin.organizationId(), "Synthetic formerly-unknown target", "synthetic.unknown.batch.0");
+        assertEquals(0, loginWitness(target.normalizedLogin()).rows());
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), target.accountId(), proofFor(fixture, target), password).statusCode());
+        wrongAttempts(caller, target.normalizedLogin(), 4);
+        assertEquals(4, loginWitness(target.normalizedLogin()).failures());
+        assertEquals(200, loginAttempt(caller, target.normalizedLogin(), password).statusCode(), "No inherited unknown-login history");
+        var cleared = loginWitness(target.normalizedLogin());
+        assertEquals(0, cleared.rows());
+        assertEquals(1, cleared.sessions());
+        assertEquals(before.sessions() + 1, cleared.outcomes());
+        assertEquals(cleared.outcomes(), cleared.audit());
+    }
+
+    private record IdentityStorageWitness(long failures, long actors, long accounts, long logins, long sessions, long outcomes, long audit) {}
+
+    private IdentityStorageWitness identityStorageWitness() throws Exception {
+        try (var connection = appDataSource().getConnection(); var query = connection.createStatement(); var row = query.executeQuery(
+                "SELECT (SELECT count(*) FROM login_failure_state),(SELECT count(*) FROM actor),"
+                + "(SELECT count(*) FROM idea_account),(SELECT count(*) FROM login_identity),(SELECT count(*) FROM session_record),"
+                + "(SELECT count(*) FROM iam_owner_outcome),(SELECT count(*) FROM audit_evidence)")) {
+            assertTrue(row.next());
+            return new IdentityStorageWitness(row.getLong(1), row.getLong(2), row.getLong(3), row.getLong(4), row.getLong(5), row.getLong(6), row.getLong(7));
+        }
+    }
+
     // Approved bounded SQL witnesses for state/transaction invariants unavailable over HTTP.
     private LoginWitness loginWitness(String login) throws Exception {
         try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
