@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 public final class IdentityAdministration {
     private final DataSource dataSource;
     private final IdentityTransactions transactions;
+    private final SessionService sessions;
     public record Account(UUID actorId, UUID accountId, UUID loginIdentityId, UUID organizationId,
             String displayName, String normalizedLogin, String status, long securityVersion, long roleAssignments) {}
     public record Totals(long actors, long accounts, long logins, long assignments, long ownerOutcomes,
@@ -21,8 +22,15 @@ public final class IdentityAdministration {
             Long beforeSecurityVersion, long afterSecurityVersion, UUID changedBy, String reason) {}
 
     public IdentityAdministration(DataSource dataSource) {
+        this(dataSource, null);
+    }
+
+    /** HTTP adapter uses current session eligibility; the existing service fixture seam stays separate. */
+    IdentityAdministration(DataSource dataSource, SessionService sessions) {
         this.dataSource = java.util.Objects.requireNonNull(dataSource);
-        this.transactions = new IdentityTransactions(dataSource);
+        this.sessions = sessions;
+        this.transactions = sessions == null ? new IdentityTransactions(dataSource)
+                : new IdentityTransactions(dataSource, sessions::checkEligibility);
     }
 
     /** Issue an identity awaiting F03-B's protected one-use credential setup; no temporary/default password. */
@@ -32,6 +40,7 @@ public final class IdentityAdministration {
         var loginId = UUID.randomUUID();
         return transactions.mutate(context, operation, organization, "account.create", "IDEA_ACCOUNT",
                 account.toString(), IdentityTransactions.Owner.IAM, connection -> {
+                    if (sessions != null) sessions.requireEligible(connection, context);
                     validText(displayName, 160);
                     validText(login, 254);
                     var normalized = login.strip().toLowerCase(Locale.ROOT);
@@ -68,6 +77,7 @@ public final class IdentityAdministration {
             long expectedSecurityVersion, String reason, boolean disabling) {
         return transactions.mutate(context, operation, organization, disabling ? "account.disable" : "account.re-enable",
                 "IDEA_ACCOUNT", target.toString(), IdentityTransactions.Owner.IAM, connection -> {
+                    if (sessions != null) sessions.requireEligible(connection, context);
                     validText(reason, 500);
                     try (var statement = connection.prepareStatement("SELECT actor_id,status,security_version,organization_id "
                             + "FROM idea_account WHERE account_id=? FOR UPDATE")) {

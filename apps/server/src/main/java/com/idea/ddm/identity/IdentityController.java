@@ -21,21 +21,83 @@ class IdentityController {
     private final SessionService sessions;
     private final CredentialSetupService credentials;
     private final CredentialResetService resets;
+    private final IdentityAdministration accounts;
     private final boolean syntheticDelivery;
 
     IdentityController(SessionService sessions, CredentialSetupService credentials, CredentialResetService resets,
+            IdentityAdministration accounts,
             @Value("${idea.identity.synthetic-credential-delivery.enabled:false}") boolean syntheticDelivery) {
         this.sessions = sessions;
         this.credentials = credentials;
         this.resets = resets;
+        this.accounts = accounts;
         this.syntheticDelivery = syntheticDelivery;
     }
 
     record CsrfProof(String headerName, String token) {}
+    record CreateAccount(UUID operationId, UUID organizationId, String displayName, String login) {}
+    record CreatedAccount(UUID actorId, UUID accountId, UUID loginIdentityId, String status, long securityVersion) {}
+    record ChangeAccount(UUID operationId, UUID organizationId, long expectedSecurityVersion, String reason) {}
+    record AccountState(UUID actorId, UUID accountId, String status, long securityVersion) {}
     record IssueCredential(UUID operationId, UUID organizationId, String purpose, long expectedSecurityVersion, String reason,
             UUID loginIdentityId) {}
     record RedeemCredential(UUID operationId, UUID accountId, String proof, String password, String purpose) {
         @Override public String toString() { return "RedeemCredential[credentials=REDACTED]"; }
+    }
+
+    @PostMapping("/accounts")
+    ResponseEntity<CreatedAccount> createAccount(@RequestBody CreateAccount request, Authentication authentication) {
+        if (request.operationId() == null || request.organizationId() == null) return ResponseEntity.badRequest().build();
+        try {
+            var identity = authentication.getPrincipal() instanceof SessionService.Identity value ? value : null;
+            var created = accounts.create(sessions.context(identity), request.operationId(), request.organizationId(),
+                    request.displayName(), request.login());
+            return ResponseEntity.status(HttpStatus.CREATED).body(new CreatedAccount(created.actorId(), created.accountId(),
+                    created.loginIdentityId(), created.status(), created.securityVersion()));
+        } catch (AuthenticationException exception) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); }
+        catch (IdentityRefusal exception) { return ResponseEntity.status(accountRefusalStatus(exception)).build(); }
+        catch (IllegalStateException exception) { return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build(); }
+    }
+
+    @PostMapping("/accounts/{account}/disable")
+    ResponseEntity<AccountState> disableAccount(@PathVariable UUID account, @RequestBody ChangeAccount request,
+            Authentication authentication) {
+        return changeAccount(account, request, authentication, true);
+    }
+
+    @PostMapping("/accounts/{account}/re-enable")
+    ResponseEntity<AccountState> reenableAccount(@PathVariable UUID account, @RequestBody ChangeAccount request,
+            Authentication authentication) {
+        return changeAccount(account, request, authentication, false);
+    }
+
+    private ResponseEntity<AccountState> changeAccount(UUID account, ChangeAccount request,
+            Authentication authentication, boolean disabling) {
+        if (request.operationId() == null || request.organizationId() == null || request.expectedSecurityVersion() < 1) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            var identity = authentication.getPrincipal() instanceof SessionService.Identity value ? value : null;
+            var context = sessions.context(identity);
+            var changed = disabling
+                    ? accounts.disable(context, request.operationId(), request.organizationId(), account,
+                            request.expectedSecurityVersion(), request.reason())
+                    : accounts.reenable(context, request.operationId(), request.organizationId(), account,
+                            request.expectedSecurityVersion(), request.reason());
+            // Account-level transition: do not imply selection of one arbitrary sibling Login Identity.
+            return ResponseEntity.ok(new AccountState(changed.actorId(), changed.accountId(), changed.status(), changed.securityVersion()));
+        } catch (AuthenticationException exception) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); }
+        catch (IdentityRefusal exception) { return ResponseEntity.status(accountRefusalStatus(exception)).build(); }
+        catch (IllegalStateException exception) { return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build(); }
+    }
+
+    private static HttpStatus accountRefusalStatus(IdentityRefusal exception) {
+        return switch (exception.reason()) {
+            case "INELIGIBLE_SESSION" -> HttpStatus.UNAUTHORIZED;
+            case "INVALID_INPUT" -> HttpStatus.BAD_REQUEST;
+            case "LOGIN_IDENTIFIER_EXISTS", "STALE_ACCOUNT_VERSION", "INVALID_ACCOUNT_STATE" -> HttpStatus.CONFLICT;
+            default -> HttpStatus.FORBIDDEN;
+        };
     }
 
     @PostMapping("/accounts/{account}/credential-proofs")

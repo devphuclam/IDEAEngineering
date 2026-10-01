@@ -1687,6 +1687,379 @@ class HttpSessionFlowTest {
         @Override public Clock withZone(ZoneId zone) { return Clock.fixed(now, zone); }
     }
 
+    @Test
+    void httpAccountCreationUsesTheSessionActorAndCreatesOnlyAPendingIdentity() throws Exception {
+        var setup = setupFixture();
+        var operation = UUID.randomUUID();
+        var login = "synthetic.http.created." + UUID.randomUUID();
+        var response = createAccount(setup.issuer(), operation, setup.administrator().organizationId(), login,
+                ",\"actorId\":\"" + UUID.randomUUID() + "\"");
+        assertEquals(201, response.statusCode());
+        var accountId = UUID.fromString(jsonField(response.body(), "accountId"));
+        var account = new IdentityAdministration(appDataSource()).inspect(accountId);
+        assertEquals("PENDING", account.status());
+        assertEquals(0, account.roleAssignments());
+        assertEquals(account.actorId().toString(), jsonField(response.body(), "actorId"));
+        assertEquals(account.loginIdentityId().toString(), jsonField(response.body(), "loginIdentityId"));
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1),
+                new IdentityAdministration(appDataSource()).evidence(operation));
+        assertEquals(setup.administrator().actorId(), new IdentityAdministration(appDataSource()).history(accountId).getFirst().changedBy());
+        var holder = client();
+        var csrf = jsonField(get(holder, "/api/v1/identity/csrf").body(), "token");
+        assertEquals(401, post(holder, "/api/v1/identity/login", csrf,
+                "username=" + form(login) + "&password=" + form(UUID.randomUUID().toString())).statusCode());
+        try (var connection = migrator(); var statement = connection.prepareStatement(
+                "SELECT count(*) FROM login_identity WHERE account_id=? AND password_verifier IS NOT NULL")) {
+            statement.setObject(1, account.accountId());
+            try (var row = statement.executeQuery()) {
+                assertTrue(row.next());
+                assertEquals(0, row.getLong(1));
+            }
+        }
+    }
+
+    private HttpResponse<String> createAccount(HttpClient issuer, UUID operation, UUID organization, String login,
+            String extraFields) throws Exception {
+        var csrf = jsonField(get(issuer, "/api/v1/identity/csrf").body(), "token");
+        return postJson(issuer, "/api/v1/identity/accounts", csrf,
+                "{\"operationId\":\"" + operation + "\",\"organizationId\":\"" + organization
+                + "\",\"displayName\":\"Synthetic HTTP target\",\"login\":\"" + login + "\"" + extraFields + "}");
+    }
+
+    @Test
+    void httpDisableAndReenableKeepIdentityHistoryAndRequireFreshSigninForEveryOldSession() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var target = setup.target();
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), target.accountId(), proofFor(setup, target), password).statusCode());
+        var active = accounts.inspect(target.accountId());
+        var first = client();
+        var second = client();
+        assertEquals(200, loginAttempt(first, active.normalizedLogin(), password).statusCode());
+        assertEquals(200, loginAttempt(second, active.normalizedLogin(), password).statusCode());
+        var disable = UUID.randomUUID();
+        var disabledResponse = changeAccount(setup.issuer(), disable, setup.administrator().organizationId(), active,
+                "disable", active.securityVersion());
+        assertEquals(200, disabledResponse.statusCode());
+        assertEquals("DISABLED", jsonField(disabledResponse.body(), "status"));
+        var disabled = accounts.inspect(active.accountId());
+        assertEquals(active.actorId(), disabled.actorId());
+        assertEquals(active.loginIdentityId(), disabled.loginIdentityId());
+        assertEquals(active.securityVersion() + 1, disabled.securityVersion());
+        assertEquals(401, get(first, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(second, "/api/v1/identity/session").statusCode());
+        assertEquals(401, loginAttempt(client(), active.normalizedLogin(), password).statusCode());
+        var reenable = UUID.randomUUID();
+        assertEquals(200, changeAccount(setup.issuer(), reenable, setup.administrator().organizationId(), disabled,
+                "re-enable", disabled.securityVersion()).statusCode());
+        var restored = accounts.inspect(active.accountId());
+        assertEquals("ACTIVE", restored.status());
+        assertEquals(active.actorId(), restored.actorId());
+        assertEquals(active.loginIdentityId(), restored.loginIdentityId());
+        assertEquals(active.securityVersion() + 2, restored.securityVersion());
+        assertEquals(401, get(first, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(second, "/api/v1/identity/session").statusCode());
+        assertEquals(200, loginAttempt(client(), active.normalizedLogin(), password).statusCode());
+        for (var operation : java.util.List.of(disable, reenable)) {
+            assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+            assertEquals(setup.administrator().actorId(), accounts.history(active.accountId()).stream()
+                    .filter(change -> change.operationId().equals(operation)).findFirst().orElseThrow().changedBy());
+        }
+    }
+
+    private HttpResponse<String> changeAccount(HttpClient issuer, UUID operation, UUID organization,
+            IdentityAdministration.Account target, String action, long expectedVersion) throws Exception {
+        var csrf = jsonField(get(issuer, "/api/v1/identity/csrf").body(), "token");
+        return postJson(issuer, "/api/v1/identity/accounts/" + target.accountId() + "/" + action, csrf,
+                "{\"operationId\":\"" + operation + "\",\"organizationId\":\"" + organization
+                + "\",\"expectedSecurityVersion\":" + expectedVersion + ",\"reason\":\"Synthetic HTTP lifecycle\"}");
+    }
+
+    @Test
+    void httpAccountAuthorityRequiresCurrentScopedAssignmentAndCsrfNotSuperOrClientIdentity() throws Exception {
+        var fixture = fixture();
+        var issuer = signedIn(fixture);
+        var anonymous = client();
+        assertEquals(401, createAccount(anonymous, UUID.randomUUID(), fixture.organizationId(),
+                "synthetic.anonymous." + UUID.randomUUID(), "").statusCode());
+        assertEquals(403, createAccount(issuer, UUID.randomUUID(), fixture.organizationId(),
+                "synthetic.super-only." + UUID.randomUUID(), "").statusCode());
+        var roles = new RoleAssignmentAdministration(appDataSource());
+        var context = new ActorContext(fixture.actorId(), 1);
+        var v1 = roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"), fixture.organizationId(), "Synthetic HTTP v1");
+        var predecessor = roles.inspect(v1.assignmentId());
+        var response = createAccount(issuer, UUID.randomUUID(), fixture.organizationId(),
+                "synthetic.http.v1." + UUID.randomUUID(), "");
+        assertEquals(201, response.statusCode(), "Existing v1 still has account lifecycle permission");
+        var accounts = new IdentityAdministration(appDataSource());
+        var target = accounts.inspect(UUID.fromString(jsonField(response.body(), "accountId")));
+        var beforeHistory = accounts.history(target.accountId());
+        var before = accounts.totals();
+        var badCsrf = postJson(issuer, "/api/v1/identity/accounts", "incorrect-csrf", "{}");
+        assertEquals(403, badCsrf.statusCode());
+        assertEquals(before, accounts.totals());
+        for (var action : java.util.List.of("disable", "re-enable")) {
+            assertEquals(403, postJson(issuer, "/api/v1/identity/accounts/" + target.accountId() + "/" + action,
+                    "incorrect-csrf", "{}").statusCode());
+        }
+        assertAccountHttpRefusal(issuer, UUID.randomUUID(), target, 403);
+        roles.assignAccountAdministrator(context, UUID.randomUUID(), fixture.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), fixture.organizationId(), "Synthetic HTTP v2");
+        assertEquals(predecessor, roles.inspect(v1.assignmentId()));
+        var setup = new SetupFixture(fixture, issuer, target);
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), target.accountId(), proofFor(setup, target), password).statusCode());
+        var ordinary = client();
+        assertEquals(200, loginAttempt(ordinary, target.normalizedLogin(), password).statusCode());
+        assertAccountHttpRefusal(ordinary, fixture.organizationId(), target, 403);
+        var afterSetup = accounts.inspect(target.accountId());
+        var history = accounts.history(target.accountId());
+        // Controlled fixture revocation by migrator; runtime cannot edit role assignments.
+        try (var connection = migrator(); var statement = connection.prepareStatement("UPDATE " + schema
+                + ".identity_role_assignment SET revoked_at=CURRENT_TIMESTAMP WHERE principal_actor_id=? "
+                + "AND role_version_id IN ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a002','9d80f77e-85a6-4c12-a72d-8ef6b7e0a003')")) {
+            statement.setObject(1, fixture.actorId());
+            assertEquals(2, statement.executeUpdate());
+        }
+        assertAccountHttpRefusal(issuer, fixture.organizationId(), target, 403);
+        assertEquals(afterSetup, accounts.inspect(target.accountId()));
+        assertEquals(history, accounts.history(target.accountId()));
+        assertEquals(1, beforeHistory.size());
+    }
+
+    private void assertAccountHttpRefusal(HttpClient issuer, UUID organization, IdentityAdministration.Account target,
+            int status) throws Exception {
+        var created = createAccount(issuer, UUID.randomUUID(), organization, "synthetic.refused." + UUID.randomUUID(), "");
+        assertEquals(status, created.statusCode());
+        assertEquals("", created.body());
+        for (var action : java.util.List.of("disable", "re-enable")) {
+            var response = changeAccount(issuer, UUID.randomUUID(), organization, target, action, target.securityVersion());
+            assertEquals(status, response.statusCode());
+            assertEquals("", response.body());
+        }
+    }
+
+    @Test
+    void httpAdministrationRefusesIdleExpiryBeforeScopeAndRefusalsDoNotRefreshActivity() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.inspect(setup.target().accountId());
+        var history = accounts.history(before.accountId());
+        clock.advanceTo(Instant.parse("2026-09-30T07:59:59Z"));
+        assertAccountHttpRefusal(setup.issuer(), UUID.randomUUID(), before, 403);
+        assertEquals(Instant.parse("2026-09-30T06:00:00Z"), issuerActivity(setup.administrator().accountId()));
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+        assertAccountHttpRefusal(setup.issuer(), UUID.randomUUID(), before, 401);
+        assertAccountHttpRefusal(setup.issuer(), setup.administrator().organizationId(), before, 401);
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:01Z"));
+        assertAccountHttpRefusal(setup.issuer(), setup.administrator().organizationId(), before, 401);
+        assertEquals(before, accounts.inspect(before.accountId()));
+        assertEquals(history, accounts.history(before.accountId()));
+        assertEquals(Instant.parse("2026-09-30T06:00:00Z"), issuerActivity(setup.administrator().accountId()));
+    }
+
+    @Test
+    void httpAdministrationRefusesAbsoluteExpiryEvenAfterEligibleActivity() throws Exception {
+        var setup = setupFixture();
+        for (int hour = 7; hour <= 13; hour++) {
+            clock.advanceTo(Instant.parse("2026-09-30T" + String.format("%02d", hour) + ":00:00Z"));
+            assertEquals(200, get(setup.issuer(), "/api/v1/identity/session").statusCode());
+        }
+        clock.advanceTo(Instant.parse("2026-09-30T13:59:59Z"));
+        assertEquals(200, get(setup.issuer(), "/api/v1/identity/session").statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T14:00:00Z"));
+        assertAccountHttpRefusal(setup.issuer(), setup.administrator().organizationId(), setup.target(), 401);
+        clock.advanceTo(Instant.parse("2026-09-30T14:00:01Z"));
+        assertAccountHttpRefusal(setup.issuer(), setup.administrator().organizationId(), setup.target(), 401);
+    }
+
+    @Test
+    void httpAdministrationRefusesDisabledReenabledAndRevokedIssuerSessionsWithoutLosingFreshAuthority() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), setup.target().accountId(), proofFor(setup, setup.target()), password).statusCode());
+        var delegate = accounts.inspect(setup.target().accountId());
+        new RoleAssignmentAdministration(appDataSource()).assignAccountAdministrator(
+                new ActorContext(setup.administrator().actorId(), 1), UUID.randomUUID(), delegate.actorId(),
+                UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a003"), delegate.organizationId(), "Synthetic HTTP delegate");
+        var issuer = client();
+        assertEquals(200, loginAttempt(issuer, delegate.normalizedLogin(), password).statusCode());
+        var target = pendingTarget(setup.administrator());
+        assertEquals(200, changeAccount(setup.issuer(), UUID.randomUUID(), delegate.organizationId(), delegate,
+                "disable", delegate.securityVersion()).statusCode());
+        assertAccountHttpRefusal(issuer, delegate.organizationId(), target, 401);
+        var disabled = accounts.inspect(delegate.accountId());
+        assertEquals(200, changeAccount(setup.issuer(), UUID.randomUUID(), delegate.organizationId(), disabled,
+                "re-enable", disabled.securityVersion()).statusCode());
+        assertAccountHttpRefusal(issuer, delegate.organizationId(), target, 401);
+        var fresh = client();
+        assertEquals(200, loginAttempt(fresh, delegate.normalizedLogin(), password).statusCode());
+        assertEquals(201, createAccount(fresh, UUID.randomUUID(), delegate.organizationId(),
+                "synthetic.fresh.authority." + UUID.randomUUID(), "").statusCode());
+        try (var connection = migrator(); var statement = connection.prepareStatement("UPDATE " + schema
+                + ".session_record SET revoked_at=CURRENT_TIMESTAMP WHERE account_id=? AND revoked_at IS NULL")) {
+            statement.setObject(1, delegate.accountId());
+            assertTrue(statement.executeUpdate() > 0);
+        }
+        assertAccountHttpRefusal(fresh, delegate.organizationId(), target, 401);
+    }
+
+    @Test
+    void httpAdministrationAcceptedActivityRefreshesIdleButInvalidMutationDoesNot() throws Exception {
+        var setup = setupFixture();
+        clock.advanceTo(Instant.parse("2026-09-30T07:00:00Z"));
+        assertEquals(201, createAccount(setup.issuer(), UUID.randomUUID(), setup.administrator().organizationId(),
+                "synthetic.activity." + UUID.randomUUID(), "").statusCode());
+        assertEquals(clock.instant(), issuerActivity(setup.administrator().accountId()));
+        clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+        assertEquals(409, changeAccount(setup.issuer(), UUID.randomUUID(), setup.administrator().organizationId(),
+                setup.target(), "disable", setup.target().securityVersion() + 1).statusCode());
+        assertEquals(Instant.parse("2026-09-30T07:00:00Z"), issuerActivity(setup.administrator().accountId()));
+        clock.advanceTo(Instant.parse("2026-09-30T09:00:00Z"));
+        assertAccountHttpRefusal(setup.issuer(), setup.administrator().organizationId(), setup.target(), 401);
+    }
+
+    private Instant issuerActivity(UUID account) throws Exception {
+        try (var connection = migrator(); var statement = connection.prepareStatement("SELECT last_eligible_activity_at FROM "
+                + schema + ".session_record WHERE account_id=? ORDER BY issued_at DESC")) {
+            statement.setObject(1, account);
+            try (var row = statement.executeQuery()) { assertTrue(row.next()); return row.getTimestamp(1).toInstant(); }
+        }
+    }
+
+    @Test
+    void httpAdministrationRevalidatesSessionAfterWaitingForTheSecurityWriteLock() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        var pool = java.util.concurrent.Executors.newSingleThreadExecutor();
+        try (var connection = migrator(); var statement = connection.createStatement();
+                var observer = migrator(); var observation = observer.createStatement()) {
+            connection.setAutoCommit(false);
+            statement.execute("SELECT pg_advisory_xact_lock(73003002)");
+            var response = pool.submit(() -> createAccount(setup.issuer(), UUID.randomUUID(),
+                    setup.administrator().organizationId(), "synthetic.locked." + UUID.randomUUID(), ""));
+            // pg_stat_activity hides another role's wait details. Observe the exact pg_locks key
+            // through an autocommit connection instead, without granting extra monitoring privilege.
+            long deadline = System.nanoTime() + java.time.Duration.ofSeconds(10).toNanos();
+            boolean waiting = false;
+            while (!waiting && System.nanoTime() < deadline) {
+                try (var row = observation.executeQuery("SELECT EXISTS (SELECT 1 FROM pg_locks l "
+                        + "JOIN pg_stat_activity a ON a.pid=l.pid "
+                        + "WHERE a.datname=current_database() AND a.usename='idea_ddm_app' "
+                        + "AND l.locktype='advisory' AND l.classid=0 AND l.objid=73003002 "
+                        + "AND l.objsubid=1 AND NOT l.granted)")) {
+                    assertTrue(row.next());
+                    waiting = row.getBoolean(1);
+                }
+                if (!waiting) java.util.concurrent.locks.LockSupport.parkNanos(10_000_000);
+            }
+            assertTrue(waiting, "Request must reach the real security-write lock before time advances");
+            clock.advanceTo(Instant.parse("2026-09-30T08:00:00Z"));
+            connection.commit();
+            assertEquals(401, response.get(10, java.util.concurrent.TimeUnit.SECONDS).statusCode());
+            var after = accounts.totals();
+            assertEquals(before.actors(), after.actors());
+            assertEquals(before.accounts(), after.accounts());
+            assertEquals(before.logins(), after.logins());
+            assertEquals(before.changeEvidence(), after.changeEvidence());
+            assertEquals(Instant.parse("2026-09-30T06:00:00Z"), issuerActivity(setup.administrator().accountId()));
+        } finally { pool.shutdownNow(); }
+    }
+
+    @Test
+    void httpAccountCreationRollsBackIfRequiredAuditIsMissing() throws Exception { requiredHttpAccountFailure("create", "audit_evidence"); }
+
+    @Test
+    void httpAccountCreationRollsBackIfRequiredIamOutcomeIsMissing() throws Exception { requiredHttpAccountFailure("create", "iam_owner_outcome"); }
+
+    @Test
+    void httpAccountDisableRollsBackIfRequiredAuditIsMissing() throws Exception { requiredHttpAccountFailure("disable", "audit_evidence"); }
+
+    @Test
+    void httpAccountDisableRollsBackIfRequiredIamOutcomeIsMissing() throws Exception { requiredHttpAccountFailure("disable", "iam_owner_outcome"); }
+
+    @Test
+    void httpAccountReenableRollsBackIfRequiredAuditIsMissing() throws Exception { requiredHttpAccountFailure("re-enable", "audit_evidence"); }
+
+    @Test
+    void httpAccountReenableRollsBackIfRequiredIamOutcomeIsMissing() throws Exception { requiredHttpAccountFailure("re-enable", "iam_owner_outcome"); }
+
+    private void requiredHttpAccountFailure(String action, String table) throws Exception {
+        assertTrue(java.util.Set.of("create", "disable", "re-enable").contains(action));
+        assertTrue(java.util.Set.of("audit_evidence", "iam_owner_outcome").contains(table));
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        if ("re-enable".equals(action)) {
+            assertEquals(200, changeAccount(setup.issuer(), UUID.randomUUID(), setup.administrator().organizationId(),
+                    setup.target(), "disable", setup.target().securityVersion()).statusCode());
+        }
+        var target = accounts.inspect(setup.target().accountId());
+        var before = accounts.totals();
+        var history = accounts.history(target.accountId());
+        var operation = UUID.randomUUID();
+        var login = "synthetic.fault." + UUID.randomUUID();
+        clock.advanceTo(Instant.parse("2026-09-30T07:00:00Z"));
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_http_account() RETURNS trigger LANGUAGE plpgsql AS $$ "
+                    + "BEGIN IF NEW.action='account." + action + "' THEN RETURN NULL; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE TRIGGER suppress_http_account BEFORE INSERT ON " + schema + "." + table
+                    + " FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_http_account()");
+        }
+        try {
+            var response = "create".equals(action)
+                    ? createAccount(setup.issuer(), operation, setup.administrator().organizationId(), login, "")
+                    : changeAccount(setup.issuer(), operation, setup.administrator().organizationId(), target, action, target.securityVersion());
+            assertEquals(503, response.statusCode());
+            assertEquals("", response.body());
+            assertEquals(before, accounts.totals());
+            assertEquals(target, accounts.inspect(target.accountId()));
+            assertEquals(history, accounts.history(target.accountId()));
+            assertEquals(new IdentityAdministration.Evidence(null, 0, 0), accounts.evidence(operation));
+            assertEquals(Instant.parse("2026-09-30T06:00:00Z"), issuerActivity(setup.administrator().accountId()));
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_http_account ON " + schema + "." + table);
+            }
+        }
+        var retry = "create".equals(action)
+                ? createAccount(setup.issuer(), operation, setup.administrator().organizationId(), login, "")
+                : changeAccount(setup.issuer(), operation, setup.administrator().organizationId(), target, action, target.securityVersion());
+        assertEquals("create".equals(action) ? 201 : 200, retry.statusCode());
+        assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        assertEquals(clock.instant(), issuerActivity(setup.administrator().accountId()));
+    }
+
+    @Test
+    void httpAccountInputAndStateRefusalsAreSafeAndLeaveNoPartialMutation() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.inspect(setup.target().accountId());
+        var csrf = jsonField(get(setup.issuer(), "/api/v1/identity/csrf").body(), "token");
+        assertEquals(400, postJson(setup.issuer(), "/api/v1/identity/accounts", csrf, "{}").statusCode());
+        assertEquals(400, postJson(setup.issuer(), "/api/v1/identity/accounts/" + before.accountId() + "/disable", csrf, "{}").statusCode());
+        var invalid = createAccount(setup.issuer(), UUID.randomUUID(), before.organizationId(), "", "");
+        assertEquals(400, invalid.statusCode());
+        assertEquals("", invalid.body());
+        var duplicate = createAccount(setup.issuer(), UUID.randomUUID(), before.organizationId(), before.normalizedLogin(), "");
+        assertEquals(409, duplicate.statusCode());
+        assertEquals("", duplicate.body());
+        assertEquals(409, changeAccount(setup.issuer(), UUID.randomUUID(), before.organizationId(), before,
+                "disable", before.securityVersion() + 1).statusCode());
+        assertEquals(409, changeAccount(setup.issuer(), UUID.randomUUID(), before.organizationId(), before,
+                "re-enable", before.securityVersion()).statusCode());
+        var missing = new IdentityAdministration.Account(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
+                before.organizationId(), "Synthetic missing", "synthetic.missing", "ACTIVE", 1, 0);
+        assertEquals(403, changeAccount(setup.issuer(), UUID.randomUUID(), before.organizationId(), missing, "disable", 1).statusCode());
+        var superAccount = accounts.inspect(setup.administrator().accountId());
+        assertEquals(403, changeAccount(setup.issuer(), UUID.randomUUID(), before.organizationId(), superAccount, "disable", 1).statusCode());
+        assertEquals(before, accounts.inspect(before.accountId()));
+        assertEquals(superAccount, accounts.inspect(superAccount.accountId()));
+    }
+
     private HttpClient signedIn(Fixture fixture) throws Exception {
         var client = client();
         var csrf = get(client, "/api/v1/identity/csrf");

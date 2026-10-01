@@ -41,7 +41,7 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B throttling review handoff
+## Current F03-B HTTP account-administration handoff
 
 Use spec v0.6, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
@@ -52,9 +52,10 @@ and the exact-login repair; no single-login invariant or implicit selector.
 Read-only `speckit-analyze` preceded T041 implementation. The runtime successor and its exact
 source, RED/GREEN results, internal review and remaining limits are in
 [evidence §24](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
-Next: request external review of this checkpoint; do not start another slice first. The
+External PASS WITH NOTES at `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3` is received in
+[§25](evidence/F03-identity-results.md#25-external-review-of-t041). The received review covered the
 [qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
-and [sign-in integration](plan.md#planned-sign-in-transaction-integration) govern review:
+and [sign-in integration](plan.md#planned-sign-in-transaction-integration):
 
 1. Check the fifth-failure tracer RED/GREEN and subsequent rolling/deadline tests. Unknown
    zero-state behavior already existed; its additional state-bound oracle passed without a
@@ -77,6 +78,15 @@ ordered client steps: qualification seam → failing test/evidence contract → 
 needed → actual Web/Desktop evidence. Java HTTP harness results cannot replace client qualification.
 
 Keep F03-B IN_PROGRESS, Issue #24 open and verifier NOT-RUN. No merge or whole-card PASS.
+
+Next authorized slice (Project Reviewer, 2026-10-01): contracted HTTP account creation,
+disablement and re-enablement. Run one RED → GREEN behavior at a time at real HTTP/PostgreSQL.
+Derive ActorContext only from the authenticated principal. Reuse the existing F03-A owner and
+permission evaluator with current session eligibility at admission and locked mutation; refresh
+idle activity only in the successful owner's transaction. Verify CSRF, v1/v2 and wrong/absent/
+revoked authority, invalidated/expired sessions, stable identity/history and required-write
+rollback. Retain each actual result, then exact-source regression and external checkpoint review.
+Actual clients and fresh public V4–V7 remain separate outstanding work.
 
 ## Detailed evidence for CHK009 and CHK010
 

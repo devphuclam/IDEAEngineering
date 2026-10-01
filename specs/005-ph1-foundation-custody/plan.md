@@ -136,7 +136,12 @@ the evidence record. T046 received external PASS WITH NOTES at
 The approved unknown-identifier clarification is in spec v0.6. Read-only `speckit-analyze`
 preceded the authorized T041 implementation. Its throttling successor is recorded in
 [execution evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint);
-external checkpoint review is the next action, not another clarification or F03-B slice.
+external PASS WITH NOTES at `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3` is recorded in
+[§25](evidence/F03-identity-results.md#25-external-review-of-t041). The next authorized slice
+connects the contracted account create/disable/re-enable routes to the existing owner services.
+Use the HTTP-configured service with read-only session eligibility at admission and under the
+security-write lock; accepted activity shares the owner mutation's transaction. Client ActorId
+is never authority. Preserve v1/v2 scope evaluation and account state/outcome/Audit atomicity.
 F03-B remains IN_PROGRESS; Issue #24 open, verifier NOT-RUN and no merge.
 
 ## Complexity Tracking

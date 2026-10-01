@@ -70,6 +70,33 @@ they expose no credentials or internal connection strings. Bootstrap remains a l
 command, never a controller or startup callback. Clients cannot pass an authoritative ActorId.
 Authenticated identity alone is not an administration or product permission.
 
+### HTTP account-administration mapping
+
+The 2026-10-01 authorized slice reuses F03-A's account owner and exact scoped permissions.
+Creation accepts `operationId`, `organizationId`, `displayName` and `login`. Success returns
+201 with `actorId`, `accountId`, the newly created `loginIdentityId`, `status=PENDING` and
+`securityVersion`; no credential, product role or membership is created. Disable/re-enable
+accept `operationId`, `organizationId`, `expectedSecurityVersion` and `reason`, with the
+Account ID in the route. Success returns 200 with stable Actor/Account IDs, status and version;
+this Account-level response does not select or expose an arbitrary sibling Login Identity.
+
+All three routes require CSRF and a server-derived session Actor. Check current session
+eligibility before scope/permission evaluation and again after the security-write lock;
+accepted owner activity refreshes idle time in the same transaction as mutation/IAM/Audit.
+Refused or failed mutation does not refresh activity. Super-only identity has no implicit
+account authority; exact Account Administrator v1/v2 assignments retain their respective
+permissions. Client-supplied Actor fields cannot grant authority or change attribution.
+
+Refusals are empty responses: ineligible session 401; absent/revoked/wrong-scope permission,
+unknown or foreign target, or last-Super recovery protection 403; invalid input 400; duplicate
+login, stale version or invalid transition 409; required persistence failure 503. CSRF refusal
+remains 403 at Spring's boundary. Disable/re-enable preserves identity/history, increments
+the Account security version and cannot revive an old session. Re-enable does not change
+credentials; a credentialless Account remains PENDING and otherwise requires fresh sign-in.
+Runtime qualification is retained in the successor evidence, not inferred from this mapping.
+
+### Credential issuance and redemption mapping
+
 The first-setup slice uses the explicit v2 permissions in spec's 2026-09-30 clarification.
 Its issuer request carries `operationId`, `organizationId`, `purpose=FIRST_SETUP`,
 `expectedSecurityVersion` and `reason`; the target Account ID is in the route. Actor/session

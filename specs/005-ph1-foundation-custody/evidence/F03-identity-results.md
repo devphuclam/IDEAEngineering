@@ -3,7 +3,7 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.17 / Draft |
+| Version / status | 0.18 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. GPT Web reviewed the initial repaired F03-B, first-setup and T046 head `281e46651e774b44a0b2e1c18fe30bd50a1f3151` checkpoints as PASS WITH NOTES; whole-F03-B acceptance remains pending |
@@ -12,9 +12,9 @@
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); T041 throttling checkpoint for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.16 for current execution trace. v0.17 adds §24 T041 throttling successor, RED/GREEN, exact-source regression and internal review. §20–23 remain historical and unchanged. Runtime/test changes and additive V7 are explicit; no dependency or card-state change. Earlier claims retain historical scope. |
+| Change / supersession | Supersedes v0.17 for current review receipt. v0.18 adds §25 T041 external PASS WITH NOTES and the authorized HTTP account-administration continuation. §20–24 remain historical and unchanged; no dependency, migration or card-state change is inferred from this receipt. Earlier claims retain historical scope. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; initial repaired F03-B, first-setup and T046 checkpoints reviewed PASS WITH NOTES. T041 throttling source executed 81 checks with zero failures/errors/skips; internal Standards/Spec findings repaired and rechecked. External throttling review and whole-F03-B acceptance remain pending. Private raw-log access limitation remains; main integration and official progress publication are separate |
+| Evidence status | F03-A accepted; initial repaired F03-B, first-setup, T046 and T041 checkpoints reviewed PASS WITH NOTES. T041 external review of head `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3` is received in §25. The next authorized HTTP account-administration slice is in progress; whole-F03-B acceptance remains pending. Private raw-log access limitation remains; main integration and official progress publication are separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -31,8 +31,8 @@ the received review of that repaired checkpoint. Section 18 records the next app
 checkpoint; section 19 records its received external technical review; section 20 records the reset
 successor; section 21 records its exact-login repair, section 22 the received repair review, and
 section 23 the approved bounded-state clarification and planned test design. Section 24 records
-T041 implementation/execution and internal review. Earlier pending dispositions are historical;
-section 23 adds no runtime execution evidence.
+T041 implementation/execution and internal review; section 25 records its external review.
+Earlier pending dispositions are historical; section 23 adds no runtime execution evidence.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -1506,3 +1506,28 @@ lock establishes correctness in these controlled tests, not high-throughput qual
 `verify-template` stays **NOT-RUN**; T036, commercial/production readiness, backup/restore and
 multi-Vault are not cleared by this checkpoint. Extension hooks were skipped because
 `.specify/extensions.yml` is absent.
+
+## 25. External review of T041
+
+On 2026-10-01 the Project Reviewer relayed GPT Web's **PASS WITH NOTES** for the T041
+throttling checkpoint. Source base is `19587d1b43635822e6a27d86dcae01db9c0220d8`, reviewed
+head `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3`, executed source
+`b08709c581de195e05aea26450495cd593722059`. Execution-to-head changes are seven delivery
+documents only; application/test/dependency/migration contents and historical §20–23 match.
+
+No BLOCKER, MAJOR or MINOR implementation defect was reported. Review accepted rolling
+window/deadline boundaries, bounded known-login state, zero unknown state, normalized/sibling
+login behavior, qualified refused-path password work, successful clearing/session/IAM/Audit
+fate after ordinary Spring binding, fault rollback and additive V7/least privilege.
+The recorded 81 checks had zero failures/errors/skips. This is a relayed technical review,
+not an independently registered GitHub approval or new execution of private host logs.
+
+Raw mode-600 log access remains an INFO limitation. Fresh public V4–V7/data regression,
+actual clients and wider T040/T042–T044 obligations remain open. The advisory-lock tests do
+not establish throughput. T041's implementation/execution checkpoint is accepted; F03-B
+stays IN_PROGRESS, Issue #24 open, verifier NOT-RUN, no merge or whole-card acceptance.
+
+The Project Reviewer subsequently authorized the recommended HTTP account-administration
+slice through the existing real HTTP/PostgreSQL seam: account create/disable/re-enable,
+CSRF, exact scope/permission, current session eligibility and required-state/evidence rollback.
+This does not change product requirements or authorize client qualification or F04 race claims.

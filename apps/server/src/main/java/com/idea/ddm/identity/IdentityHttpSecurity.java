@@ -36,6 +36,11 @@ class IdentityHttpSecurity {
     SessionService sessions(DataSource dataSource, Clock identityClock) { return new SessionService(dataSource, identityClock); }
 
     @Bean
+    IdentityAdministration identityAdministration(DataSource dataSource, SessionService sessions) {
+        return new IdentityAdministration(dataSource, sessions);
+    }
+
+    @Bean
     CredentialSetupService firstCredentials(DataSource dataSource, Clock identityClock, SessionService sessions) {
         return new CredentialSetupService(dataSource, identityClock, sessions);
     }
