@@ -176,7 +176,9 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: approved T043 Web implementation after its environment prerequisites.
+Current next step: review the [partial T043 Web checkpoint](evidence/T043-web-qualification-20261001.md),
+then complete the approved browser/network, refusal, invalidation/reload and secret-lifecycle
+oracles. This implementation and exploratory run do not close T043 or F03-B.
 HTTP account-administration external PASS WITH NOTES is received (§27); its 98-check execution
 remains historical (§26). Restart qualification source `074f62ae713e7a1f627f7fb1bbe600e4e4d37296`
 adds only `ServerRestartFlowTest.java`; evidence §28 records actual execution and remaining limits.

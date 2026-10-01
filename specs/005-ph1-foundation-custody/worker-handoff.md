@@ -108,7 +108,15 @@ actual result. The test also witnesses unchanged identity/credential and histori
 pre-revoked/idle-expired refusal, and PostgreSQL throttle survival. Existing behavior was GREEN
 on first qualification; production code, dependencies and V1–V7 are unchanged.
 
-Next action: T043 Web environment preflight, then the contract's ordered vertical slices.
+The first Web implementation and exploratory Chrome run are now retained in
+[T043 partial Web evidence](evidence/T043-web-qualification-20261001.md). Source
+`2d2bcfc4892cb6903fa3196ae6fc47dbd8424121` adds the actual React sign-in/out UI, same-origin
+Server static bundle packaging and test TLS configuration. The run has partial browser
+observations, not full W01–W10 acceptance. The schema used a fixed test name rather than the
+planned UUID name; direct cookie/network, bad-CSRF, invalidation/reload and error/leak oracles
+remain unexecuted. Maven executed 81 checks and skipped 24; F03-A and fresh data/privilege suites
+were not executed in that run. Next action: review this partial checkpoint, then complete the
+approved Web oracles before the separate Desktop checkpoint.
 External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
 access limitation and historical evidence. Preserve immutable migrations. Remaining
 issuer/logout profiles, actual Web/Desktop and fresh public V4–V7/data regression are outstanding;

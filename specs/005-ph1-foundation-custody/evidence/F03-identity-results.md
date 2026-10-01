@@ -1915,3 +1915,20 @@ F04 retains its owner-command race; T036/commercial remains separate. No HA/fail
 recovery, company-data, production, client or multi-Vault qualification is claimed.
 F03-B stays IN_PROGRESS, Issue #24 OPEN; shared T018/T020/T021/T022 and T040/T042–T044 remain
 unchecked. Verifier NOT-RUN, no merge, Tracker timer/hours or official progress publication.
+
+## 29. Partial T043 Web implementation and browser observations
+
+The current Web checkpoint is recorded separately in
+[IE-VER-T043-WEB-20261001 v0.2](T043-web-qualification-20261001.md), against spec v0.7 and the
+approved W01–W10 contract. Source `2d2bcfc4892cb6903fa3196ae6fc47dbd8424121` adds actual
+React sign-in/out served by IDEA Server at the same HTTPS origin. Browser observations were
+made using Chrome 154.0.8037.92 and an authorized, trusted loopback test certificate.
+
+Disposition is **PARTIAL**, with external review pending. Browser observations are kept distinct
+from unexecuted network/cookie, bad-CSRF, invalidation/reload and error/secrets oracles. The
+record also discloses the fixed-name isolated schema and worktree-before-commit execution.
+The affected Maven run declared 105 checks, executed 81 (76 HTTP, 3 restart, 2 health), skipped
+24 (20 F03-A, 3 data, 1 privilege), and reported no failures/errors. Skips are not PASS.
+
+No whole T043 or F03-B acceptance is inferred. Desktop and fresh public V4–V7/data regression
+remain separate outstanding work. F03-B stays IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN.
