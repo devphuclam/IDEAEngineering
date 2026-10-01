@@ -176,8 +176,10 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: external review of the [actual Chrome successor](evidence/T043-web-browser-successor-20261001.md),
-then agree the separate Desktop seam/test contract before implementation/qualification.
+Current next step: agree the separate Desktop seam/test contract before implementation/qualification.
+The [actual Chrome successor](evidence/T043-web-browser-successor-20261001.md#received-external-review--2026-10-01)
+received external PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4`;
+W01–W10 accepted, zero BLOCKER/MAJOR/MINOR. Resolve its two harness-hardening notes before reuse.
 Web W01–W10 passed on qualification source `738eb5ae05600b443ad2c107e1352de6dac45def` and the
 unchanged packaged application source `2fe89d4`; this does not close T043 or F03-B.
 The [clean packaging repair](evidence/T043-web-packaging-repair-20261001.md) received external

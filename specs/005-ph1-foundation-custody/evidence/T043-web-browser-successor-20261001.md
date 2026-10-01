@@ -3,12 +3,12 @@
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-VER-T043-WEB-BROWSER-20261001` / verification record |
-| Version / status / normativity | `0.1` / Draft / INFORMATIVE; client execution, not whole-card/gate acceptance |
-| Owner / author / reviewer | Project Reviewer / Codex / internal Standards and Spec review complete; external successor review PENDING |
+| Version / status / normativity | `0.2` / Draft / INFORMATIVE; client execution, not whole-card/gate acceptance |
+| Owner / author / reviewer | Project Reviewer / Codex / internal Standards and Spec review complete; external PASS WITH NOTES received at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` |
 | Baseline / date | PH1 F03-B, Issue #24 / 2026-10-01 +07:00 |
 | Upstream | Spec v0.7 FR-005/014; [W01–W10 contract](../contracts/ph1-boundaries.md#t043-web-qualification-contract); [accepted packaging repair](T043-web-packaging-repair-20261001.md) |
 | Downstream / disposition | PR #25; actual Web W01–W10 PASS; T043 unchecked, F03-B IN_PROGRESS, whole-card acceptance PENDING |
-| Change / supersession | New UUID-owned exact-source run; historical [partial browser record](T043-web-qualification-20261001.md) unchanged |
+| Change / supersession | Supersedes v0.1 control envelope; append received external review without changing execution history or the historical [partial browser record](T043-web-qualification-20261001.md) |
 | Classification / retention | INTERNAL; retain sanitized results/source/hashes in Git; no secret values, HAR, trace, storageState or screenshot retained |
 | Review trigger / tailoring | Web/Server/tool/browser/TLS/fixture/oracle change; focused verification under repository authoring standard, no conformity or production claim |
 
@@ -121,3 +121,25 @@ is NOT-RUN and cannot be replaced by the UUID fixture migration. Desktop and fin
 reconciliation remain outstanding. Build-tool exception remains internal T043 only; resolve broader
 use before F04/F05/general builds. T043 unchecked, F03-B IN_PROGRESS, Issue #24 OPEN, verifier
 NOT-RUN, no merge/Tracker action. No production/HA/recovery/multi-Vault/T036/commercial claim.
+
+## Received external review — 2026-10-01
+
+The Project Reviewer relayed GPT Web **PASS WITH NOTES** for PR #25 at
+`24ecdf0c9d5246223837ba1c3b349b3005cb5be4`, comparing the accepted packaging checkpoint,
+executed qualification source `738eb5ae` and actual packaged source `2fe89d48`.
+The reviewer accepted W01–W10 with **BLOCKER 0, MAJOR 0, MINOR 0**. This supersedes the
+pending external disposition above; execution/source/artifact history remains unchanged.
+The received text SHA-256 is `323096BEBBF8C5C0217956D52488A65538B813F385A9541EB6A6F90DDC4B3E17`.
+It is a user-relayed review, not a GitHub approval event or independent raw-log inspection.
+
+Two reusable-harness hardening notes remain; neither invalidates the final Web run:
+
+| Note | Reviewer observation | Required next-use action / status |
+|---|---|---|
+| JVM shutdown before schema removal | `run-browser-fixture.sh` sends SIGTERM and waits, but does not assert the owned JVM is dead before dropping the schema. Final execution separately witnessed the closed port and cleanup PASS. | Before reusing this runner, refuse schema cleanup if the verified owned PID remains alive, or force-stop only that PID and assert termination. Source repair/test NOT-RUN. |
+| ActorId header-value oracle | `qualify-chrome.mjs` checks header names, body and query, but not all header values against the fixture ActorId. Current actual Web source does not send ActorId. | Strengthen the oracle before next reuse to check header values as well as names/body/query; retain only a Boolean. Source repair/test NOT-RUN. |
+
+Private host log access remains a declared limitation. The reviewer did not request application
+Web/Server changes. Next is the separately agreed Desktop seam/test contract, then authorized
+implementation and real-client execution. T043 remains unchecked, F03-B IN_PROGRESS,
+Issue #24 OPEN, verifier NOT-RUN; no merge or Tracker action.

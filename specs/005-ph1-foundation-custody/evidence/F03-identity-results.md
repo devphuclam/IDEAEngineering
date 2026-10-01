@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.23 / Draft |
+| Version / status | 0.24 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; earlier scoped reviews retained below. Project Reviewer accepted F03-A on 2026-09-30. Packaging successor received PASS WITH NOTES at `82a30adb55482096e421821891734d82ec990351`; whole-F03-B acceptance remains pending |
+| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; earlier scoped reviews retained below. Project Reviewer accepted F03-A on 2026-09-30. Actual Web successor received PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4`; whole-F03-B acceptance remains pending |
 | Evidence date | Latest actual Chrome successor 2026-10-01, +07:00; earlier execution dates remain historical |
 | Applicable baseline | Actual Web/Server source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4`, qualification source `738eb5ae05600b443ad2c107e1352de6dac45def`; earlier sources remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-005/013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md) T040/T042/T044 for restart qualification, DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); T043 actual Web successor for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.22's current control envelope; §32 indexes actual Chrome successor. §1–31 history unchanged; external fixture changes only, no application/migration/card-state change. |
+| Change / supersession | Supersedes v0.23's current control envelope; §33 records received actual Web review. §1–32 history unchanged; documentation only, no application/migration/card-state change. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; §29 historical partial browser evidence; §30–31 accepted packaging; §32 actual Chrome W01–W10 PASS, external successor review pending. Whole T043/F03-B acceptance pending; private raw-log limitation and separate progress/integration retained |
+| Evidence status | F03-A accepted; §29 historical partial browser evidence; §30–31 accepted packaging; §32 actual Chrome W01–W10 PASS, external PASS WITH NOTES received in §33. Whole T043/F03-B acceptance pending; private raw-log limitation and separate progress/integration retained |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -1980,3 +1980,21 @@ Successful test schemas were removed; public remains version 3. Source review cl
 teardown concerns. External Web successor review PENDING; private raw-log limitation retained.
 Desktop, fresh public V4–V7/data and wider regression/final reconciliation remain outstanding;
 no whole T043/F03-B PASS, verifier, merge or Tracker action.
+
+## 33. External review of actual T043 Web/browser checkpoint
+
+On 2026-10-01 the Project Reviewer relayed **PASS WITH NOTES** for PR #25 head
+`24ecdf0c9d5246223837ba1c3b349b3005cb5be4`. The reviewer accepted Web W01–W10 with
+zero BLOCKER/MAJOR/MINOR findings, confirmed actual Chrome/HTTPS/Server boundary, UUID
+fixture isolation and source-to-evidence trace. See the
+[received review and next-use notes](T043-web-browser-successor-20261001.md#received-external-review--2026-10-01).
+
+This supersedes §32's pending external disposition. Two non-blocking harness notes require
+shutdown-before-schema-cleanup and header-value ActorId oracle hardening before reuse; they
+do not invalidate the executed checkpoint or require application changes. Private raw logs
+remain unavailable to independent GitHub inspection. No new execution is claimed here.
+
+Next: agree the actual Desktop/WebView2 and native binding/protected-custody seam and test
+contract before code. Fresh public V4–V7/data, affected final regressions and wider reconciliation
+remain outstanding. T043 unchecked, F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN;
+no merge, whole-card acceptance or Tracker action.

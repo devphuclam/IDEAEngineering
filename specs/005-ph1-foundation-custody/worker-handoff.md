@@ -134,8 +134,15 @@ The [actual Chrome successor](evidence/T043-web-browser-successor-20261001.md) n
 W01–W10 PASS on unchanged actual Web/Server source `2fe89d4`, with qualification harness
 `738eb5ae05600b443ad2c107e1352de6dac45def`, normal trusted HTTPS and a fresh UUID-owned fixture.
 No package install/TLS bypass or secret evidence. Read §32 for execution, cleanup and limits.
-Next: external review of the actual Web checkpoint, then propose the separate Desktop seam/test
-contract before its implementation/qualification. T043 remains unchecked because both clients
+External Web PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` is received in
+[§33](evidence/F03-identity-results.md#33-external-review-of-actual-t043-webbrowser-checkpoint).
+Before reusing the Web fixture, resolve the two [next-use hardening notes](evidence/T043-web-browser-successor-20261001.md#received-external-review--2026-10-01);
+the accepted application/execution is unchanged. Next: propose the separate Desktop seam/test
+contract before implementation/qualification. The actual WPF/WebView2 shell is currently only
+the F01 scaffold; its smoke test is not authentication evidence. Preserve the selected separate
+WebView2/Workspace session contexts and server-mediated short-lived binding; pin the exact
+binding flow and Windows per-user protected custody before code, rather than exporting browser
+cookies or injecting native proof into page JavaScript. T043 remains unchecked because both clients
 are required. Remaining issuer/logout profiles, Desktop and fresh public V4–V7/data regression are outstanding;
 this Java HTTP runner is not client qualification. F04 owns its separate owner-command race.
 
