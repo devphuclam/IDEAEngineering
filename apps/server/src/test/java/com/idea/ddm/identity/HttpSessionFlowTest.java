@@ -1557,13 +1557,11 @@ class HttpSessionFlowTest {
     }
 
     @Test
-    void unknownAndDisabledLoginsDoNotBypassPasswordWork() throws Exception {
-        var fixture = fixture();
+    void unknownDisabledAndBlockedLoginsDoNotBypassPasswordWork() throws Exception {
+        var dual = dualLoginFixture();
+        var fixture = dual.first();
         var app = appDataSource();
-        var operator = new ActorContext(fixture.actorId(), 1);
-        new RoleAssignmentAdministration(app).assignAccountAdministrator(operator, UUID.randomUUID(),
-                fixture.actorId(), UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"),
-                fixture.organizationId(), "Synthetic timing-test account preparation");
+        var operator = new ActorContext(dual.setup().administrator().actorId(), 1);
         var accounts = new IdentityAdministration(app);
         var disabled = accounts.create(operator, UUID.randomUUID(), fixture.organizationId(),
                 "Synthetic disabled timing target", "synthetic.disabled." + UUID.randomUUID());
@@ -1571,31 +1569,37 @@ class HttpSessionFlowTest {
                 disabled.accountId(), disabled.securityVersion(), "Synthetic refusal fixture").status());
 
         var client = client();
-        var csrf = jsonField(get(client, "/api/v1/identity/csrf").body(), "token");
+        var activeClient = client();
+        wrongAttempts(client, dual.second().login(), 5);
         var candidate = UUID.randomUUID().toString();
-        var logins = new String[] { fixture.login(), "synthetic.unknown." + UUID.randomUUID(), disabled.normalizedLogin() };
+        var logins = new String[] { fixture.login(), "synthetic.unknown." + UUID.randomUUID(), disabled.normalizedLogin(), dual.second().login() };
         // Observe real HTTP wall time, not the injected eligibility Clock or private encoder calls.
         // Warm all paths, then rotate their order to reduce one-off startup/order effects.
-        for (int round = 0; round < 3; round++) {
-            for (var login : logins) refusedLoginNanos(client, csrf, login, candidate);
-        }
-        var samples = new long[3][9];
-        for (int round = 0; round < 9; round++) {
-            for (int position = 0; position < 3; position++) {
-                int path = (round + position) % 3;
-                samples[path][round] = refusedLoginNanos(client, csrf, logins[path], candidate);
+        var samples = new long[4][9];
+        for (int round = 0; round < 12; round++) {
+            for (int position = 0; position < 4; position++) {
+                int path = (round + position) % 4;
+                var caller = path == 0 ? activeClient : client;
+                var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
+                var elapsed = refusedLoginNanos(caller, csrf, logins[path], candidate);
+                if (round >= 3) samples[path][round - 3] = elapsed;
+                // Keep active/wrong genuinely outside a block, using real eligible HTTP sign-in.
+                if (path == 0) assertEquals(200, loginAttempt(activeClient, fixture.login(), fixture.password()).statusCode());
             }
         }
         var medians = java.util.Arrays.stream(samples)
                 .mapToLong(values -> java.util.Arrays.stream(values).sorted().toArray()[4]).toArray();
         System.out.printf(java.util.Locale.ROOT,
-                "F03B_LOGIN_MEDIAN_MS=active-wrong:%.3f,unknown:%.3f,disabled:%.3f; samples=9/path%n",
-                medians[0] / 1_000_000.0, medians[1] / 1_000_000.0, medians[2] / 1_000_000.0);
+                "F03B_LOGIN_MEDIAN_MS=active-wrong:%.3f,unknown:%.3f,disabled:%.3f,blocked:%.3f; samples=9/path%n",
+                medians[0] / 1_000_000.0, medians[1] / 1_000_000.0, medians[2] / 1_000_000.0, medians[3] / 1_000_000.0);
         assertAll("Bounded timing regression, not a constant-time or load qualification",
                 () -> assertTrue(medians[1] >= medians[0] * 0.65,
                         "Unknown login must not expose the gross BCrypt-bypass timing gap"),
                 () -> assertTrue(medians[2] >= medians[0] * 0.65,
-                        "Disabled login must not expose the gross BCrypt-bypass timing gap"));
+                        "Disabled login must not expose the gross BCrypt-bypass timing gap"),
+                () -> assertTrue(medians[3] >= medians[0] * 0.65,
+                        "Blocked login must not expose the gross BCrypt-bypass timing gap"));
+        assertEquals(5, loginWitness(dual.second().login()).failures());
         assertEquals(401, get(client, "/api/v1/identity/session").statusCode());
     }
 
