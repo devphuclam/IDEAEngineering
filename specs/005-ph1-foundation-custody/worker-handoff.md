@@ -115,8 +115,15 @@ Server static bundle packaging and test TLS configuration. The run has partial b
 observations, not full W01–W10 acceptance. The schema used a fixed test name rather than the
 planned UUID name; direct cookie/network, bad-CSRF, invalidation/reload and error/leak oracles
 remain unexecuted. Maven executed 81 checks and skipped 24; F03-A and fresh data/privilege suites
-were not executed in that run. Next action: review this partial checkpoint, then complete the
-approved Web oracles before the separate Desktop checkpoint.
+were not executed in that run. The external reviewer requested one build-integration repair;
+[clean packaging successor evidence](evidence/T043-web-packaging-repair-20261001.md) now retains
+RED/GREEN from committed archives. Source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4` makes Maven
+build/package actual Web without copying generated assets into source. Verified-HTTPS shell/asset
+checks and two Server/two Web smoke tests pass; this is not actual Chrome W01–W10 acceptance.
+Next action: external review of that repair, then complete the approved Web oracles with an
+exact-source, UUID-owned fixture before the separate Desktop checkpoint. For existing Ubuntu
+runner scripts, prepend the qualified Node 24 `bin` directory to the process PATH and prepare the
+locked Web dependencies per [quickstart](quickstart.md); no global PATH change/hidden install.
 External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
 access limitation and historical evidence. Preserve immutable migrations. Remaining
 issuer/logout profiles, actual Web/Desktop and fresh public V4–V7/data regression are outstanding;

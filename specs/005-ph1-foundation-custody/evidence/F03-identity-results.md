@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.20 / Draft |
+| Version / status | 0.21 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. HTTP account-administration external PASS WITH NOTES at `171173a5266fa5c9a732f2fe1316fb1c5c0f836d` is received (§27). Restart checkpoint external review and whole-F03-B acceptance remain pending |
-| Evidence date | Server restart qualification 2026-10-01, +07:00; earlier execution dates remain historical |
-| Applicable baseline | Restart qualification successor `074f62ae713e7a1f627f7fb1bbe600e4e4d37296`, based on reviewed HTTP account-administration head `171173a5266fa5c9a732f2fe1316fb1c5c0f836d`; earlier F03-A/B sources below remain historical |
+| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; earlier scoped reviews retained below. Project Reviewer accepted F03-A on 2026-09-30. Partial Web review at `9090db56fef6602a1898012a5d4f691f108a7310` requested packaging changes; successor review and whole-F03-B acceptance remain pending |
+| Evidence date | Latest packaging repair 2026-10-01, +07:00; earlier execution dates remain historical |
+| Applicable baseline | Clean packaging executed source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4`; predecessor partial Web/restart and earlier F03-A/B sources below remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-005/013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md) T040/T042/T044 for restart qualification, DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
-| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); restart qualification successor for PR #25 review, not whole-card acceptance |
+| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); T043 packaging successor for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.19 for current execution trace. Adds §27 received HTTP account-administration review and §28 restart qualification. §20–26 remain historical and unchanged. Adds only restart tests; production code, V1–V7, dependencies and card state are unchanged. |
+| Change / supersession | Supersedes v0.20's current control envelope. §29 partial Web and §30 packaging repair link separate records; §1–28 remain historical and unchanged. Packaging uses an admitted build plugin under the internal T043 exception; no authentication behavior/migration/card-state change. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; repaired HTTP, first-setup, T046, T041 and HTTP account-administration checkpoints reviewed PASS WITH NOTES within their scope. §28 records restart qualification and actual results; external restart review and whole-F03-B acceptance remain pending. Private raw-log access limitation remains; main integration and official progress publication are separate |
+| Evidence status | F03-A accepted; earlier scoped reviews/results retained below. §29 is partial browser evidence; §30 records exact-archive packaging RED/GREEN with external successor review pending. Whole T043/F03-B acceptance remains pending. Private raw-log access limitation remains; main integration and official progress publication are separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -1932,3 +1932,20 @@ The affected Maven run declared 105 checks, executed 81 (76 HTTP, 3 restart, 2 h
 
 No whole T043 or F03-B acceptance is inferred. Desktop and fresh public V4–V7/data regression
 remain separate outstanding work. F03-B stays IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN.
+
+## 30. T043 clean Web packaging repair
+
+The external reviewer requested changes at `9090db56fef6602a1898012a5d4f691f108a7310` for one
+MAJOR: Maven could package a clean checkout without the actual Web. The successor
+[packaging verification](T043-web-packaging-repair-20261001.md) retains behavior RED at
+`f50ddad70b9d0989149a332dee8e19d2a35c5cc8` and clean committed-archive GREEN at
+`2fe89d481842f4cf26078c07d4b78fb3bdacd7c4`.
+
+Maven now owns real Web compilation/resource packaging. The built JAR serves its exact shell
+and hashed asset over verified HTTPS (200), while anonymous protected session remains 401.
+Two Server smoke and two Web markup tests pass; missing locked dependencies fail packaging
+without producing a JAR. This focused run does not rerun the full authentication/data suite.
+The build-tool intake and user-authorized internal T043 exception precede execution.
+
+External successor review PENDING; all partial/unexecuted actual browser W01–W10 states remain
+unchanged. No full T043/F03-B PASS, Desktop/fresh-data qualification, verifier or merge is inferred.
