@@ -1380,6 +1380,79 @@ class HttpSessionFlowTest {
     private record IdentityStorageWitness(long failures, long actors, long accounts, long logins, long sessions, long outcomes, long audit) {}
 
     @Test
+    void pendingAndDisabledAccountsCannotClearFailuresOrBecomeEnabledThroughLogin() throws Exception {
+        var fixture = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var pending = fixture.target();
+        var active = pendingTarget(fixture.administrator());
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), active.accountId(), proofFor(fixture, active), password).statusCode());
+        active = accounts.inspect(active.accountId());
+        var caller = client();
+        wrongAttempts(caller, pending.normalizedLogin(), 4);
+        assertEquals(401, loginAttempt(caller, pending.normalizedLogin(), password).statusCode());
+        assertEquals(5, loginWitness(pending.normalizedLogin()).failures());
+        assertEquals("PENDING", accounts.inspect(pending.accountId()).status());
+        wrongAttempts(caller, active.normalizedLogin(), 4);
+        var admin = fixture.administrator();
+        var disabled = accounts.disable(new ActorContext(admin.actorId(), 1), UUID.randomUUID(), admin.organizationId(),
+                active.accountId(), active.securityVersion(), "Synthetic disabled refusal");
+        var disabledAt = actorDisabledAt(disabled.actorId());
+        assertEquals(401, loginAttempt(caller, disabled.normalizedLogin(), password).statusCode());
+        assertEquals(5, loginWitness(disabled.normalizedLogin()).failures());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00Z"));
+        assertEquals(401, loginAttempt(caller, pending.normalizedLogin(), password).statusCode());
+        assertEquals(401, loginAttempt(caller, disabled.normalizedLogin(), password).statusCode());
+        assertEquals(1, loginWitness(disabled.normalizedLogin()).failures());
+        assertEquals(1, loginWitness(pending.normalizedLogin()).failures());
+        assertEquals(0, loginWitness(disabled.normalizedLogin()).sessions());
+        assertEquals(0, loginWitness(pending.normalizedLogin()).sessions());
+        assertEquals(disabled, accounts.inspect(disabled.accountId()));
+        assertEquals(disabledAt, actorDisabledAt(disabled.actorId()));
+        assertEquals("PENDING", accounts.inspect(pending.accountId()).status());
+        assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+    }
+
+    @Test
+    void additiveThrottleMigrationRepeatsWithoutChangesAndEnforcesIdentitySizeAndRoleBounds() throws Exception {
+        var fixture = fixture();
+        var flyway = Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"), env("IDEA_DATABASE_MIGRATION_PASSWORD"))
+                .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
+        assertEquals(7, flyway.info().applied().length);
+        assertEquals(0, flyway.migrate().migrationsExecuted);
+        var loginId = new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).loginIdentityId();
+        try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
+                "SELECT current_user,has_database_privilege(current_user,current_database(),'CREATE'),"
+                + "has_schema_privilege(current_user,?,'CREATE'),(SELECT tableowner FROM pg_tables WHERE schemaname=? AND tablename='login_failure_state')")) {
+            query.setString(1, schema);
+            query.setString(2, schema);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                assertEquals("idea_ddm_app", row.getString(1));
+                assertFalse(row.getBoolean(2));
+                assertFalse(row.getBoolean(3));
+                assertEquals("idea_ddm_migrator", row.getString(4));
+            }
+            try (var statement = connection.createStatement()) {
+                assertEquals("42501", assertThrows(java.sql.SQLException.class,
+                        () -> statement.execute("CREATE TABLE " + schema + ".forbidden_runtime_ddl(id int)")).getSQLState());
+                assertEquals("42501", assertThrows(java.sql.SQLException.class,
+                        () -> statement.execute("TRUNCATE login_failure_state")).getSQLState());
+            }
+            try (var insert = connection.prepareStatement("INSERT INTO login_failure_state VALUES (?,ARRAY[?]::timestamptz[],NULL)")) {
+                insert.setObject(1, UUID.randomUUID());
+                insert.setTimestamp(2, java.sql.Timestamp.from(clock.instant()));
+                assertEquals("23503", assertThrows(java.sql.SQLException.class, insert::executeUpdate).getSQLState());
+            }
+            try (var insert = connection.prepareStatement("INSERT INTO login_failure_state VALUES (?,array_fill(now(),ARRAY[6]),NULL)")) {
+                insert.setObject(1, loginId);
+                assertEquals("23514", assertThrows(java.sql.SQLException.class, insert::executeUpdate).getSQLState());
+            }
+        }
+        assertEquals(0, loginWitness(fixture.login()).rows());
+    }
+
+    @Test
     void normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent() throws Exception {
         var fixture = dualLoginFixture();
         var caller = client();
