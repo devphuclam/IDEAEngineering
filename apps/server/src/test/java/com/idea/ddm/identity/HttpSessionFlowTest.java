@@ -1238,6 +1238,41 @@ class HttpSessionFlowTest {
     private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
 
     @Test
+    void blockedCredentiallessLoginOnActiveAccountStillPerformsQualifiedPasswordWork() throws Exception {
+        var fixture = fixture();
+        var noCredential = "synthetic.credentialless." + UUID.randomUUID();
+        try (var connection = migrator(); var insert = connection.prepareStatement("INSERT INTO " + schema
+                + ".login_identity(login_identity_id,account_id,login_identifier,normalized_login_identifier,password_verifier) VALUES (?,?,?,?,NULL)")) {
+            insert.setObject(1, UUID.randomUUID());
+            insert.setObject(2, fixture.accountId());
+            insert.setString(3, noCredential);
+            insert.setString(4, noCredential);
+            assertEquals(1, insert.executeUpdate());
+        }
+        var caller = client();
+        wrongAttempts(caller, fixture.login(), 5);
+        wrongAttempts(caller, noCredential, 5);
+        var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
+        var candidate = UUID.randomUUID().toString();
+        var logins = new String[] {fixture.login(), noCredential};
+        var samples = new long[2][9];
+        for (int round = 0; round < 12; round++) {
+            for (int position = 0; position < 2; position++) {
+                int path = (round + position) % 2;
+                long elapsed = refusedLoginNanos(caller, csrf, logins[path], candidate);
+                if (round >= 3) samples[path][round - 3] = elapsed;
+            }
+        }
+        var medians = java.util.Arrays.stream(samples).mapToLong(values -> java.util.Arrays.stream(values).sorted().toArray()[4]).toArray();
+        System.out.printf(java.util.Locale.ROOT, "F03B_BLOCKED_MEDIAN_MS=credential:%.3f,credentialless:%.3f; samples=9/path%n",
+                medians[0] / 1_000_000.0, medians[1] / 1_000_000.0);
+        assertTrue(medians[1] >= medians[0] * 0.65, "Credentialless ACTIVE-account Login Identity must not bypass BCrypt");
+        assertEquals(5, loginWitness(noCredential).failures());
+        assertEquals(0, loginWitness(noCredential).sessions());
+        assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+    }
+
+    @Test
     void suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure() throws Exception {
         var fixture = fixture();
         var caller = client();
