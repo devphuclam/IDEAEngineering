@@ -43,17 +43,15 @@ deferred capabilities merely to turn a scope-boundary row green.
 
 ## Current F03-B closure handoff
 
-Start with the [closure matrix](evidence/F03-B-closure-matrix.md), not another client feature.
-The approved reconciliation, logout/history repairs and closure execution are complete technically;
-see [F03 §39](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
-Final source `989bf5a9fc09c03ee2d5fa88d09b3cee78335616` passed 108 checks; fresh public/package
-`38b99f50de09370a8e8554cc80fc66a0afa70b62`, final public checks `989bf5a9...` and actual browser
-`9238b7e8ad6878687e72823e7bed1d4f083b9699` have separate PASS receipts (§39–40) and unchanged production
-content. Next: external whole-F03-B review of the exact published head, then human acceptance.
-Any rerun requires nine cached JAR/graph preflight and offline execution under the closure-only
-exception; follow the matrix's isolated-database procedure. No Desktop/Workspace binding, new
-feature checkpoint, Issue #24 closure,
-merge or Tracker action is authorized by this handoff.
+The approved reconciliation, logout/history repairs, closure execution and whole-card technical review are completed; see [closure matrix](evidence/F03-B-closure-matrix.md) and [F03 §39–41](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
+Final source `989bf5a9fc09c03ee2d5fa88d09b3cee78335616` passed 108 checks; fresh public/package `38b99f50de09370a8e8554cc80fc66a0afa70b62`, final public checks `989bf5a9...` and actual browser `9238b7e8ad6878687e72823e7bed1d4f083b9699` have separate PASS receipts (§39–40) and unchanged production content.
+Whole-card technical review at `92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0`: PASS WITH NOTES.
+Project Reviewer whole-card acceptance: **COMPLETE / ACCEPTED**.
+Card status: **F03-B = COMPLETED / PASS**.
+Work item status: **Issue #24 = CLOSED**.
+Actual effort: Progress Tracker recorded **11 giờ 20 phút** (11.3333h, revision 32 published).
+PR #25 integrated into `main` via merge commit `25ef993524b9d309f28d61adeef0095355c9c66e`.
+Desktop/WebView2/Workspace binding transferred to separate successor Work Item. Verifier remains NOT-RUN.
 
 Use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or

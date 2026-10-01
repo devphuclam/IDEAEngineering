@@ -3,17 +3,17 @@
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F03B-CLOSURE-001` / verification coverage and closure record |
-| Version / status / normativity | `0.4` / Draft / INFORMATIVE; requirement coverage and actual closure execution, not whole-card acceptance |
+| Version / status / normativity | `0.5` / Accepted / INFORMATIVE; requirement coverage and final accepted closure record |
 | Owner / author | Engineering / Codex |
-| Reviewer / acceptance | Project Reviewer approved reconciliation and closure procedure on 2026-10-01; whole-F03-B external review and Project Reviewer acceptance PENDING |
+| Reviewer / acceptance | Project Reviewer accepted F03-B as COMPLETED / PASS on 2026-10-01; whole-card technical review PASS WITH NOTES; Issue #24 CLOSED |
 | Applicability / date | F03-B, Issue #24, PR #25; spec v0.7, FR-005/014, SC-003 / 2026-10-01 +07:00 |
 | Inspection / execution baseline | Initial inspection `b0e0e6d68e5dc50b4dce26691c219d14b317264b`; final regression/public `989bf5a9fc09c03ee2d5fa88d09b3cee78335616`, fresh/package `38b99f50de09370a8e8554cc80fc66a0afa70b62`, browser `9238b7e8ad6878687e72823e7bed1d4f083b9699` |
 | Upstream | [Issue #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [spec](../spec.md), [HTTP contract](../contracts/ph1-boundaries.md#f03-b-http-refinement), [F03 evidence](F03-identity-results.md) and the Project Reviewer's approved reconciliation |
 | Downstream | [T040/T042/T043/T044](../tasks.md), [plan](../plan.md#f03-b-scope-reconciliation-and-closure-approved-2026-10-01), [worker handoff](../worker-handoff.md#current-f03-b-closure-handoff), whole-card external review |
-| Change / supersession | Supersedes v0.3; final hygiene-successor rerun, after authorized logout/history repairs. No new feature, task register, card hours or Desktop implementation |
+| Change / supersession | Supersedes v0.4; records final whole-card technical review (PASS WITH NOTES), Project Reviewer acceptance, Issue #24 closure, and integration of PR #25 into main. Actual effort 11h20. |
 | Classification / retention | INTERNAL; retain with F03-B review and acceptance evidence; no credential, cookie or proof values |
 | Review trigger | Scope, source/test/migration/tooling change, new execution or external disposition |
-| Evidence status / tailoring | Final 108-test regression, fresh V1–V7, 7 public privilege/health checks and actual Chrome W01–W10 PASS; prior failures retained. External whole-card review/acceptance PENDING. Scoped tooling/realm/package verification PASS. Tailored repository verification fields; no conformity or production claim |
+| Evidence status / tailoring | Final 108-test regression, fresh V1–V7, 7 public privilege/health checks and actual Chrome W01–W10 PASS; prior failures retained. Whole-card review PASS WITH NOTES; Project Reviewer acceptance COMPLETE / ACCEPTED. Tailored repository verification fields; no conformity or production claim |
 
 ## 1. Authority and delivery disposition
 
@@ -30,7 +30,7 @@ scope reduction from missing tools or unchecked tasks.
 | Desktop direction | Retain WPF/WebView2 hosting actual IDEA Web over HTTPS, separate native session context, server-mediated short-lived binding and Windows per-user protected custody. Exact issue/redeem/refresh/revoke/reauth/replay/cross-user/same-user-hostile-client semantics are not qualified here. |
 | F04 owner-command race | Future F04 T023/T025/T026. F03-B exposes the verified eligibility seam; it does not claim F04 business-command race execution. |
 | Company policy/MFA, live proof delivery/recovery, T036/commercial, deployment | Separate, not claimed accepted or closed. |
-| Verifier / integration / progress | `verify-template` NOT-RUN; merge separate. F03-B IN_PROGRESS, Issue #24 OPEN; no Tracker action or invented effort. |
+| Verifier / integration / progress | `verify-template` NOT-RUN; PR #25 merged into main; Issue #24 CLOSED; actual effort Tracker = 11 giờ 20 phút (11.3333h); publication rev 32 on main; F03-B COMPLETED / PASS. |
 
 The task list is the only execution register. Rows below are requirement/evidence references,
 not new tasks. `TECHNICAL PASS / REVIEW PENDING` means the named oracle actually executed on the
@@ -196,15 +196,19 @@ requires preflight; this execution does not expand the exception scope.
    stays open and F03-B IN_PROGRESS until that acceptance. Publication/merge and tracker completion
    remain separately authorized actions.
 
-## 5. Current result and next action
+## 5. Final result and acceptance receipt
 
 Applicable T040/T042/shared Server obligations and T044 execution are technically satisfied by
 R7–R10 and the retained historical coverage. Authorized logout/history repairs are executed;
 fresh isolated V1–V7, full object privileges, final 108-check regression and actual Chrome W01–W10
 are PASS. Prior FAIL results remain explicit in F03 §39–40. No Desktop/client protocol was added.
 
-Next action: external whole-F03-B review of this matrix and the exact published head, then
-Project Reviewer whole-card acceptance. Those are PENDING; this record does not record either
-as PASS. Desktop is separate, F04 owns its future race, T036 remains open. F03-B IN_PROGRESS,
-Issue #24 OPEN, verifier NOT-RUN, no merge/Tracker action. Private host-log access remains a
-declared limitation: hash identity is not independent raw-log review.
+Whole-card technical review at `92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0` (executed source `989bf5a9fc09c03ee2d5fa88d09b3cee78335616`):
+- Standards review: PASS WITH NOTES (zero documented breaches; optional refactoring noted).
+- Spec review: PASS WITH NOTES (zero confirmed requirement findings; historical observation wording preserved).
+- Project Reviewer whole-card acceptance: **COMPLETE / ACCEPTED**.
+- Card status: **F03-B = COMPLETED / PASS**.
+- Work item status: **Issue #24 = CLOSED**.
+- Actual effort: Progress Tracker recorded **11 giờ 20 phút** (11.3333 hours, office hours 08:00–12:00, 13:00–17:00; lunch/overnight excluded; execution register revision 32 published).
+- Scope boundaries preserved: Server + T043-Web accepted; historical combined T043 remains unchecked; Desktop/WebView2/Workspace binding remains a separate successor Work Item; F04 business-owner race remains future F04; verifier remains NOT-RUN.
+- Integration: PR #25 merged into `main` via merge commit `25ef993524b9d309f28d61adeef0095355c9c66e`.
