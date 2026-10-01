@@ -1158,6 +1158,20 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void fifthWrongPasswordBlocksEvenCorrectCredentialsWithoutDisablingAccount() throws Exception {
+        var fixture = fixture();
+        var caller = client();
+        for (int attempt = 1; attempt <= 5; attempt++) {
+            assertEquals(401, loginAttempt(caller, fixture.login(), UUID.randomUUID().toString()).statusCode());
+        }
+        assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode(),
+                "Failure five must block even valid credentials");
+        assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        assertEquals("ACTIVE", new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).status(),
+                "A temporary login block is not Account disablement");
+    }
+
+    @Test
     void loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity() throws Exception {
         var fixture = fixture();
         var client = client();
