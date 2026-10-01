@@ -1238,6 +1238,32 @@ class HttpSessionFlowTest {
     private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
 
     @Test
+    void suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure() throws Exception {
+        var fixture = fixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.login(), 4);
+        var before = loginWitness(fixture.login());
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".suppress_deadline() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    + "IF NEW.blocked_until IS NOT NULL THEN RETURN NULL; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE TRIGGER suppress_deadline BEFORE UPDATE ON " + schema
+                    + ".login_failure_state FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_deadline()");
+        }
+        try {
+            wrongAttempts(caller, fixture.login(), 1);
+            assertEquals(before, loginWitness(fixture.login()), "Fifth observation and block deadline share one transaction");
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER suppress_deadline ON " + schema + ".login_failure_state");
+            }
+        }
+        wrongAttempts(caller, fixture.login(), 1);
+        assertEquals(5, loginWitness(fixture.login()).failures());
+        assertEquals(Instant.parse("2026-09-30T06:15:00Z"), loginWitness(fixture.login()).blockedUntil());
+        assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+    }
+
+    @Test
     void concurrentFailuresReachOneFifthFailureWithoutLostUpdatesOrUnboundedState() throws Exception {
         var fixture = fixture();
         var callers = new java.util.ArrayList<HttpClient>();
