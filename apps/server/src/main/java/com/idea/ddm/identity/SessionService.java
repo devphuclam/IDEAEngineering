@@ -34,19 +34,28 @@ public final class SessionService {
             try {
                 AdministratorBootstrap.execute(connection, "SELECT pg_advisory_xact_lock(73003002)");
                 try (var query = connection.prepareStatement("SELECT a.actor_id,a.account_id,a.security_version,"
-                        + "l.password_verifier FROM login_identity l JOIN idea_account a USING(account_id) "
-                        + "JOIN actor p ON p.actor_id=a.actor_id WHERE l.normalized_login_identifier=? "
-                        + "AND a.status='ACTIVE' AND p.disabled_at IS NULL")) {
+                        + "l.password_verifier,l.login_identity_id,a.status='ACTIVE' AND p.disabled_at IS NULL "
+                        + "FROM login_identity l JOIN idea_account a USING(account_id) "
+                        + "JOIN actor p ON p.actor_id=a.actor_id WHERE l.normalized_login_identifier=?")) {
                     query.setString(1, login.strip().toLowerCase(Locale.ROOT));
                     try (var row = query.executeQuery()) {
-                        boolean eligible = row.next();
+                        boolean known = row.next();
+                        boolean eligible = known && row.getBoolean(6);
                         // Unknown/disabled accounts take BCrypt work too, but can never authenticate.
                         boolean credentialMatches = passwords.matches(password,
                                 eligible ? row.getString(4) : refusedLoginVerifier);
-                        if (!eligible || !credentialMatches) throw refused();
+                        var now = clock.instant().truncatedTo(ChronoUnit.MICROS);
+                        if (!known) throw refused(); // No durable state for unknown login identifiers.
+                        var loginIdentityId = row.getObject(5, UUID.class);
+                        if (LoginFailures.blocked(connection, loginIdentityId, now)) throw refused();
+                        if (!eligible || !credentialMatches) {
+                            LoginFailures.failed(connection, loginIdentityId, now);
+                            connection.commit(); // Persist refusal state, never an authenticated proof.
+                            throw refused();
+                        }
                         var identity = new Identity(row.getObject(1, UUID.class), row.getObject(2, UUID.class),
                                 row.getLong(3), UUID.randomUUID());
-                        var now = clock.instant().truncatedTo(ChronoUnit.MICROS);
+                        LoginFailures.clear(connection, loginIdentityId);
                         AdministratorBootstrap.insert(connection, "INSERT INTO session_record(session_id,actor_id,"
                                 + "account_id,security_version,issued_at,last_eligible_activity_at,expires_at,runtime_instance_id) "
                                 + "VALUES (?,?,?,?,?,?,?,?)", identity.sessionId(), identity.actorId(), identity.accountId(),
