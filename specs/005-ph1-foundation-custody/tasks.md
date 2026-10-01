@@ -176,8 +176,10 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: complete the approved browser/network, refusal, invalidation/reload and secret-lifecycle
-oracles. This implementation and exploratory run do not close T043 or F03-B.
+Current next step: external review of the [actual Chrome successor](evidence/T043-web-browser-successor-20261001.md),
+then agree the separate Desktop seam/test contract before implementation/qualification.
+Web W01–W10 passed on qualification source `738eb5ae05600b443ad2c107e1352de6dac45def` and the
+unchanged packaged application source `2fe89d4`; this does not close T043 or F03-B.
 The [clean packaging repair](evidence/T043-web-packaging-repair-20261001.md) received external
 PASS WITH NOTES at `82a30adb55482096e421821891734d82ec990351`; prior packaging MAJOR CLOSED.
 Use an exact-source, UUID-owned fixture; preserve historical partial browser observations.

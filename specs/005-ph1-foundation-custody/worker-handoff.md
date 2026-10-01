@@ -122,15 +122,21 @@ build/package actual Web without copying generated assets into source. Verified-
 checks and two Server/two Web smoke tests pass; this is not actual Chrome W01–W10 acceptance.
 External packaging PASS WITH NOTES at `82a30adb55482096e421821891734d82ec990351` is received
 ([§31](evidence/F03-identity-results.md#31-external-review-of-t043-packaging-repair)); the prior
-MAJOR is closed. Next action: complete the approved actual Chrome Web oracles with an
+MAJOR is closed. Its authorized follow-up was the actual Chrome run recorded below, using an
 exact-source, UUID-owned fixture before the separate Desktop checkpoint. Do not reopen packaging
 without a new defect. The build-tool exception is internal T043 only; resolve intake before
 F04/F05/general development because ordinary Maven builds invoke that plugin. For existing Ubuntu
 runner scripts, prepend the qualified Node 24 `bin` directory to the process PATH and prepare the
 locked Web dependencies per [quickstart](quickstart.md); no global PATH change/hidden install.
 External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
-access limitation and historical evidence. Preserve immutable migrations. Remaining
-issuer/logout profiles, actual Web/Desktop and fresh public V4–V7/data regression are outstanding;
+access limitation and historical evidence. Preserve immutable migrations.
+The [actual Chrome successor](evidence/T043-web-browser-successor-20261001.md) now retains
+W01–W10 PASS on unchanged actual Web/Server source `2fe89d4`, with qualification harness
+`738eb5ae05600b443ad2c107e1352de6dac45def`, normal trusted HTTPS and a fresh UUID-owned fixture.
+No package install/TLS bypass or secret evidence. Read §32 for execution, cleanup and limits.
+Next: external review of the actual Web checkpoint, then propose the separate Desktop seam/test
+contract before its implementation/qualification. T043 remains unchecked because both clients
+are required. Remaining issuer/logout profiles, Desktop and fresh public V4–V7/data regression are outstanding;
 this Java HTTP runner is not client qualification. F04 owns its separate owner-command race.
 
 ## Detailed evidence for CHK009 and CHK010
