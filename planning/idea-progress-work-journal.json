@@ -106,9 +106,27 @@
       "sessionId": "SESSION-2c2ad5078a794e89b294d532d1b4b788",
       "deliveryCardId": "F03-B",
       "startedAt": "2026-09-30T13:01:00.9631915+07:00",
-      "stoppedAt": null,
-      "durationMinutes": null,
-      "state": "RUNNING",
+      "stoppedAt": "2026-09-30T17:00:00+07:00",
+      "durationMinutes": 239,
+      "state": "CLOSED",
+      "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-6a3f6dc77b7e40629669d59429415388",
+      "deliveryCardId": "F03-B",
+      "startedAt": "2026-10-01T08:00:00+07:00",
+      "stoppedAt": "2026-10-01T12:00:00+07:00",
+      "durationMinutes": 240,
+      "state": "CLOSED",
+      "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-dcafd325f31b43748abeb26d9e6b7b88",
+      "deliveryCardId": "F03-B",
+      "startedAt": "2026-10-01T13:00:00+07:00",
+      "stoppedAt": "2026-10-01T16:20:58.6312075+07:00",
+      "durationMinutes": 201,
+      "state": "CLOSED",
       "recordedBy": "LEAD"
     }
   ],
@@ -178,6 +196,31 @@
       "reason": "Người dùng xác nhận F02 dừng lúc 18:00 ngày 29/09 và làm tiếp từ 08:00 ngày 30/09. Bộ đếm chưa được dừng qua đêm; tách phiên gốc thành 149 phút ngày 29/09 và phiên mới từ 08:00 ngày 30/09. Không tính thời gian nghỉ 18:00–08:00; giờ kế hoạch không dùng làm actual.",
       "recordedAt": "2026-09-30T08:54:15+07:00",
       "recordedBy": "LEAD"
+    },
+    {
+      "correctionId": "CORRECTION-f03b-office-hours-20261001",
+      "deliveryCardId": "F03-B",
+      "previousActualEffortHours": 0,
+      "newActualEffortHours": 7.9833,
+      "previousRemainingEffortHours": 8,
+      "newRemainingEffortHours": 0.0167,
+      "reason": "Người dùng xác nhận làm F03-B từ lúc bắt đầu bộ đếm, chỉ trừ ngoài giờ hành chính; khung 08:00–12:00 và 13:00–17:00. Tách thành 30/09 13:01–17:00 (239 phút), 01/10 08:00–12:00 (240 phút) và phiên từ 13:00 ngày 01/10. Loại nghỉ trưa 12:00–13:00 và qua đêm 17:00–08:00. Giữ snapshot phiên gốc trong correction; không dùng giờ kế hoạch làm actual.",
+      "recordedAt": "2026-10-01T16:18:53.5699518+07:00",
+      "recordedBy": "LEAD",
+      "originalSession": {
+        "sessionId": "SESSION-2c2ad5078a794e89b294d532d1b4b788",
+        "deliveryCardId": "F03-B",
+        "startedAt": "2026-09-30T13:01:00.9631915+07:00",
+        "stoppedAt": null,
+        "durationMinutes": null,
+        "state": "RUNNING",
+        "recordedBy": "LEAD"
+      },
+      "correctedSessionIds": [
+        "SESSION-2c2ad5078a794e89b294d532d1b4b788",
+        "SESSION-6a3f6dc77b7e40629669d59429415388",
+        "SESSION-dcafd325f31b43748abeb26d9e6b7b88"
+      ]
     }
   ]
 }
