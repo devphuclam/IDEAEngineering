@@ -3,14 +3,14 @@
 | Field | Value |
 |---|---|
 | Stable ID / class | `IE-VER-T043-WEB-PACKAGE-20261001` / verification record |
-| Version / status | `0.1` / `Draft` |
+| Version / status | `0.2` / `Draft` |
 | Product normativity | `INFORMATIVE`; execution evidence, not product/gate acceptance |
 | Owner / author | Project Reviewer / Codex |
-| Reviewer / acceptance | External successor review `PENDING`; whole T043/F03-B acceptance `NOT-RUN` |
+| Reviewer / acceptance | External `PASS WITH NOTES` at `82a30adb55482096e421821891734d82ec990351`, relayed by Project Reviewer on 2026-10-01; whole T043/F03-B acceptance `NOT-RUN` |
 | Baseline / date | PH1, Issue #24 / 2026-10-01, Asia/Ho_Chi_Minh |
 | Source trace | External REQUEST CHANGES at `9090db56fef6602a1898012a5d4f691f108a7310`; [T043 contract](../contracts/ph1-boundaries.md#t043-web-qualification-contract) |
 | Downstream | PR #25; T043 remains unchecked; F03-B remains IN_PROGRESS |
-| Change / supersession | Successor packaging repair; does not rewrite [partial browser evidence](T043-web-qualification-20261001.md) |
+| Change / supersession | v0.2 records received external review; execution/source identities are unchanged; does not rewrite [partial browser evidence](T043-web-qualification-20261001.md) |
 | Classification / retention | INTERNAL; retain commands, source IDs and sanitized results in Git; host build/log artifacts retained for review |
 | Review trigger | Any build, test, Web source, dependency, TLS or environment change |
 | Evidence status | Packaging boundary PASS on exact committed archive; browser W01–W10 remain PARTIAL/NOT-RUN |
@@ -128,3 +128,21 @@ this packaging-only successor; historical executed evidence is not rewritten or 
 No schema, credential, auth policy, migration or Web application behavior changed. F03-B IN_PROGRESS,
 Issue #24 OPEN, T043 unchecked, verifier NOT-RUN, no merge, no Tracker/time/progress publication.
 No production, HA/failover/recovery, multi-Vault, legal approval or T036/commercial clearance claim.
+
+## Received external review — 2026-10-01
+
+The Project Reviewer relayed **PASS WITH NOTES** for PR #25 head
+`82a30adb55482096e421821891734d82ec990351`. The reviewer closed the prior packaging MAJOR and
+reported zero new BLOCKER/MAJOR/MINOR findings within this repair. Maven lifecycle integration,
+clean-archive RED/GREEN, verified-HTTPS packaged-byte oracle, missing-dependency refusal and
+executed-source trace were accepted. From `2fe89d48` to the reviewed head only three delivery
+documents changed; application/build/test/dependency/migration content was unchanged.
+
+The remaining note is explicit: the custom-license build-tool exception permits only internal
+T043 build/test. Because the plugin runs in the ordinary Maven lifecycle, resolve its intake
+scope before F04/F05 or general development use; T036/commercial clearance is not implied.
+Private host logs remain unavailable to the external reviewer; recorded hashes are not independent
+raw-log inspection. Browser W01–W10, Desktop and fresh-data/full regression obligations are unchanged.
+Continue actual Chrome qualification with exact source and a UUID-owned fixture; do not reopen
+packaging unless a genuine new defect appears. T043 unchecked, F03-B IN_PROGRESS, Issue #24 OPEN,
+verifier NOT-RUN and no merge.

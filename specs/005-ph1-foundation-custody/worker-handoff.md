@@ -120,8 +120,12 @@ were not executed in that run. The external reviewer requested one build-integra
 RED/GREEN from committed archives. Source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4` makes Maven
 build/package actual Web without copying generated assets into source. Verified-HTTPS shell/asset
 checks and two Server/two Web smoke tests pass; this is not actual Chrome W01–W10 acceptance.
-Next action: external review of that repair, then complete the approved Web oracles with an
-exact-source, UUID-owned fixture before the separate Desktop checkpoint. For existing Ubuntu
+External packaging PASS WITH NOTES at `82a30adb55482096e421821891734d82ec990351` is received
+([§31](evidence/F03-identity-results.md#31-external-review-of-t043-packaging-repair)); the prior
+MAJOR is closed. Next action: complete the approved actual Chrome Web oracles with an
+exact-source, UUID-owned fixture before the separate Desktop checkpoint. Do not reopen packaging
+without a new defect. The build-tool exception is internal T043 only; resolve intake before
+F04/F05/general development because ordinary Maven builds invoke that plugin. For existing Ubuntu
 runner scripts, prepend the qualified Node 24 `bin` directory to the process PATH and prepare the
 locked Web dependencies per [quickstart](quickstart.md); no global PATH change/hidden install.
 External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
