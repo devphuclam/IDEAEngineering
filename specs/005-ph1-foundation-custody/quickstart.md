@@ -147,7 +147,11 @@ logout/reset/re-enable and throttling matrices remain in `HttpSessionFlowTest`. 
 restart checkpoint review before continuing; the received review and its exact head are retained
 in the closure matrix. Client qualification is never inferred from this Java HTTP runner.
 T043-Web is SATISFIED by accepted W01–W10; Desktop/Workspace binding belongs to a successor Work
-Item after F03-B closure. Continue T040/T042 reconciliation and T044, not another client feature.
+Item after F03-B closure. T040/T042 reconciliation and T044 have final executed evidence in
+[F03 §39](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission), including
+fresh isolated V1–V7, full public privileges, 108 regression checks and actual Chrome W01–W10.
+Next is external whole-card review, not another client feature. Keep each exact source/database
+context separate; this receipt does not permit unguarded rerun against a retained public database.
 
 Check default profile values, then advance test time at setup-proof, idle, absolute and login
 block boundaries. Do not wait minutes/hours or change the server's clock. Cookie/session/CSRF

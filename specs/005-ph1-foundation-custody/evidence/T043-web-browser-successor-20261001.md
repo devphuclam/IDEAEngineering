@@ -3,12 +3,12 @@
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-VER-T043-WEB-BROWSER-20261001` / verification record |
-| Version / status / normativity | `0.3` / Draft / INFORMATIVE; client execution, not whole-card/gate acceptance |
+| Version / status / normativity | `0.4` / Draft / INFORMATIVE; client execution, not whole-card/gate acceptance |
 | Owner / author / reviewer | Project Reviewer / Codex / internal Standards and Spec review complete; external PASS WITH NOTES received at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` |
 | Baseline / date | PH1 F03-B, Issue #24 / 2026-10-01 +07:00 |
 | Upstream | Spec v0.7 FR-005/014; [W01–W10 contract](../contracts/ph1-boundaries.md#t043-web-qualification-contract); [accepted packaging repair](T043-web-packaging-repair-20261001.md) |
 | Downstream / disposition | PR #25; accepted W01–W10, T043-Web SATISFIED; historical combined T043 unchecked; Desktop successor, not a F03-B blocker; whole-card acceptance PENDING |
-| Change / supersession | Supersedes v0.2 control envelope; append approved delivery-scope reconciliation. Execution and received review history unchanged, including the historical [partial browser record](T043-web-qualification-20261001.md) |
+| Change / supersession | Supersedes v0.3 control envelope; append actual closure requalification on repaired Server and hardened harness. Earlier execution/review unchanged, including [partial browser record](T043-web-qualification-20261001.md) |
 | Classification / retention | INTERNAL; retain sanitized results/source/hashes in Git; no secret values, HAR, trace, storageState or screenshot retained |
 | Review trigger / tailoring | Web/Server/tool/browser/TLS/fixture/oracle change; focused verification under repository authoring standard, no conformity or production claim |
 
@@ -156,3 +156,42 @@ here. Keep the original combined T043 marker unchecked.
 This adds no execution or change to accepted source/artifacts, W01–W10, review limitations or
 the two harness next-use notes. Resolve T044 tooling before fresh isolated public V1–V7 and
 affected regression. F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN; no merge or Tracker action.
+
+## Closure requalification — 2026-10-01
+
+The approved logout repair changed Server behavior. Before reuse, both received harness notes
+were resolved: runner requires verified owned JVM termination before removing its exact schema;
+ActorId oracle checks all request header values/names plus body/query against the fixture UUID.
+The earlier NOT-RUN notes remain historical; this successor supplies actual qualification.
+
+| Configuration | Exact witness |
+|---|---|
+| Application/package source | `38b99f50de09370a8e8554cc80fc66a0afa70b62`; production Web unchanged, authorized Server logout/history repairs included |
+| Qualification source | `9238b7e8ad6878687e72823e7bed1d4f083b9699` |
+| Executable JAR | `/home/phuclam/idea-f03b-closure-final-package-13/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar`; SHA-256 `AC4F74E1FE5453B7716E13DA970027BA403D695340974CA13503F3D8989332FF` |
+| Actual browser | Headed Chrome `154.0.8037.92`, Playwright `1.62.1`, runner Node `24.16.0`; admitted bundled tool hashes rechecked, no download |
+| TLS | Same authorized CurrentUser-trusted test certificate and SHA-256 above, valid for both hosts; normal Chrome validation, no bypass |
+| Isolation | Dedicated F03 test DB; new `t043_web_28766643706248f097711d2e96743f03`, V1–V7 by migrator, Server runtime app; no retained public/dev/F02/Vault writes |
+| Fixture archive | `7CCC01076EC39DC93A494FEFD741D6C5FA077C2E7F443CE10CE1652BA0B9DE17` |
+| Harness bytes | runner `5111C277F498FC525CFC50C35A872EF9CB7301146DB5173F1B17288CCE68D6B5`; Chrome harness `B499B904E48D6C06DD11D50A838EC90452757F51ED47A0CF8F84B356A4546D8B`; Java fixture `3AE1443E72795C87E3B90144BC05A4F7DF21E0B6D8E2A55FE5CF23B842AFB8D3` |
+| Result interval | Local retained file created 15:38:05, last write 15:38:23 +07:00, including fixture preparation/cleanup; not a separately measured browser-only duration |
+| Retained sanitized result | Local `.tmp/f03b-closure/browser-28766643706248f097711d2e96743f03.log`; SHA-256 `3EB9931A36B968A9E5001F3C36A39D84397B728A18C0C6D6114105E187CFC6B5` |
+
+Actual result: **W01–W10 PASS**, including W04/W09's separate actions. Observed CSRF header=true,
+cookie attributes=true, authoritative ActorId sent=false, secret leak=false; cleanup PASS.
+These are case results and Boolean observations, not cookie/password/proof values. No HAR,
+trace, storageState or screenshot retained. Qualification used actual Server-served React, not
+a test-only page, and browser request behavior, not the Java HTTP harness.
+
+Read-only witness at 15:45:03 confirmed owned JVM stopped, port closed, zero UUID schemas;
+retained F03 public remains V3. Private server log mode 600, SHA-256
+`10C7D78AFACF9B44CC07813E510D7E4247536C8857F6A49461AA30097D9DA022`, under
+`/home/phuclam/idea-t043-browser-28766643706248f097711d2e96743f03/server.log`.
+Source review covers the refuse-cleanup-if-JVM-alive branch; it was not separately fault-injected.
+
+No production change after package source, only qualification/test-oracle changes; the final
+Server regression at `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066` passed 108 checks. See
+[F03 §39](F03-identity-results.md#39-f03-b-closure-execution-and-review-submission) for package,
+tooling and migration receipts. Whole-F03-B external review/acceptance PENDING; private raw-log
+limit retained, Desktop successor not a blocker, combined T043 unchecked, verifier NOT-RUN,
+F03-B IN_PROGRESS, Issue #24 OPEN; no merge/Tracker action.

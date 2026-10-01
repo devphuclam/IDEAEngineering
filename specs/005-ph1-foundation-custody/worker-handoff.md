@@ -44,11 +44,15 @@ deferred capabilities merely to turn a scope-boundary row green.
 ## Current F03-B closure handoff
 
 Start with the [closure matrix](evidence/F03-B-closure-matrix.md), not another client feature.
-The Project Reviewer approved scope reconciliation and closure on 2026-10-01. Map T040, then
-T042 to existing source/tests/execution; only a demonstrated unmet requirement can justify new
-code. T044 tooling is AUTHORIZED FOR F03-B CLOSURE ONLY under the separate process exception;
-verify the exact nine cached JARs/graph and resolve offline before Maven. Follow its gate and isolated-database
-procedure in the matrix. No Desktop/Workspace binding, new feature checkpoint, Issue #24 closure,
+The approved reconciliation, logout/history repairs and closure execution are complete technically;
+see [F03 §39](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
+Final source `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066` passed 108 checks; fresh public/package
+`38b99f50de09370a8e8554cc80fc66a0afa70b62` and public/browser qualification
+`9238b7e8ad6878687e72823e7bed1d4f083b9699` have separate PASS receipts and unchanged production
+content. Next: external whole-F03-B review of the exact published head, then human acceptance.
+Any rerun requires nine cached JAR/graph preflight and offline execution under the closure-only
+exception; follow the matrix's isolated-database procedure. No Desktop/Workspace binding, new
+feature checkpoint, Issue #24 closure,
 merge or Tracker action is authorized by this handoff.
 
 Use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
@@ -147,11 +151,13 @@ W01–W10 PASS on unchanged actual Web/Server source `2fe89d4`, with qualificati
 No package install/TLS bypass or secret evidence. Read §32 for execution, cleanup and limits.
 External Web PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` is received in
 [§33](evidence/F03-identity-results.md#33-external-review-of-actual-t043-webbrowser-checkpoint).
-Before reusing the Web fixture, resolve the two [next-use hardening notes](evidence/T043-web-browser-successor-20261001.md#received-external-review--2026-10-01);
-the accepted application/execution is unchanged. Web W01–W10 satisfies the Web portion of T043;
+Both [next-use hardening notes](evidence/T043-web-browser-successor-20261001.md#closure-requalification--2026-10-01)
+were repaired before closure Web reuse; actual Chrome W01–W10 passed on the repaired Server.
+Web W01–W10 satisfies the Web portion of T043;
 keep the historical umbrella marker unchecked, not a Desktop condition on F03-B acceptance.
-Next: complete the T040/T042 mapping and T044 closure procedure. Treat logout eligibility as an
-open contract/coverage concern, not a defect inferred from `signOut()` alone.
+T040/T042/shared Server tasks and T044 are technically satisfied by §39 and the matrix.
+Logout contract comparison led to an explicitly approved, executed repair; prior failures are
+retained. Whole-card external review and Project Reviewer acceptance remain PENDING.
 
 Desktop/WebView2/Workspace binding is NOT-RUN and deferred to a successor Work Item after F03-B
 closes; no successor issue is created yet. Preserve separate session contexts, actual IDEA Web

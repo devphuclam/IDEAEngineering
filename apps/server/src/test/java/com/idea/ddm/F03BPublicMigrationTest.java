@@ -170,8 +170,9 @@ class F03BPublicMigrationTest {
     }
 
     private static Connection connection(String user) throws SQLException {
-        return DriverManager.getConnection(url(), user, environment(user.equals("idea_ddm_app")
-                ? "IDEA_DATABASE_APP_PASSWORD" : "IDEA_DATABASE_MIGRATION_PASSWORD"));
+        var credentialName = "IDEA_DATABASE_MIGRATION_PASSWORD";
+        if (user.equals("idea_ddm_app")) credentialName = "IDEA_DATABASE_APP_PASSWORD";
+        return DriverManager.getConnection(url(), user, environment(credentialName));
     }
 
     private static String url() {

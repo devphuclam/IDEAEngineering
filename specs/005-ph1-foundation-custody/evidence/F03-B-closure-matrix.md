@@ -3,17 +3,17 @@
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F03B-CLOSURE-001` / verification coverage and closure record |
-| Version / status / normativity | `0.2` / Draft / INFORMATIVE; delivery reconciliation and scoped tooling authority, not a new requirement or execution result |
+| Version / status / normativity | `0.3` / Draft / INFORMATIVE; requirement coverage and actual closure execution, not whole-card acceptance |
 | Owner / author | Engineering / Codex |
 | Reviewer / acceptance | Project Reviewer approved reconciliation and closure procedure on 2026-10-01; whole-F03-B external review and Project Reviewer acceptance PENDING |
 | Applicability / date | F03-B, Issue #24, PR #25; spec v0.7, FR-005/014, SC-003 / 2026-10-01 +07:00 |
-| Inspection baseline | `b0e0e6d68e5dc50b4dce26691c219d14b317264b`, before these delivery-only edits; no Maven/PostgreSQL/browser execution in this revision |
+| Inspection / execution baseline | Initial inspection `b0e0e6d68e5dc50b4dce26691c219d14b317264b`; final regression `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066`, fresh/package `38b99f50de09370a8e8554cc80fc66a0afa70b62`, public/browser `9238b7e8ad6878687e72823e7bed1d4f083b9699` |
 | Upstream | [Issue #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [spec](../spec.md), [HTTP contract](../contracts/ph1-boundaries.md#f03-b-http-refinement), [F03 evidence](F03-identity-results.md) and the Project Reviewer's approved reconciliation |
 | Downstream | [T040/T042/T043/T044](../tasks.md), [plan](../plan.md#f03-b-scope-reconciliation-and-closure-approved-2026-10-01), [worker handoff](../worker-handoff.md#current-f03-b-closure-handoff), whole-card external review |
-| Change / supersession | New closure coverage record within existing Issue #24; supersedes NOT-APPLICABLE. No new feature, task register, card hours or implementation checkpoint |
+| Change / supersession | Supersedes v0.2; authorized logout/history repairs and final execution. No new feature, task register, card hours or Desktop implementation |
 | Classification / retention | INTERNAL; retain with F03-B review and acceptance evidence; no credential, cookie or proof values |
 | Review trigger | Scope, source/test/migration/tooling change, new execution or external disposition |
-| Evidence status / tailoring | Source inspection plus identified historical executed evidence; tooling AUTHORIZED FOR F03-B CLOSURE ONLY, nine-artifact/descriptor preflight PASS; offline lifecycle resolution and final T044 execution NOT-RUN. Verification/control fields tailored from repository authoring standard; no conformity or production claim |
+| Evidence status / tailoring | Final 108-test regression, fresh V1–V7, 7 public privilege/health checks and actual Chrome W01–W10 PASS; prior failures retained. External whole-card review/acceptance PENDING. Scoped tooling/realm/package verification PASS. Tailored repository verification fields; no conformity or production claim |
 
 ## 1. Authority and delivery disposition
 
@@ -33,9 +33,9 @@ scope reduction from missing tools or unchecked tasks.
 | Verifier / integration / progress | `verify-template` NOT-RUN; merge separate. F03-B IN_PROGRESS, Issue #24 OPEN; no Tracker action or invented effort. |
 
 The task list is the only execution register. Rows below are requirement/evidence references,
-not new tasks. `COVERED / FINAL PENDING` means identified historical implementation, execution
-and scoped review, not current-head T044 or whole-card acceptance. `OPEN-COVERAGE` is not a
-confirmed defect. A skip is NOT-RUN, never PASS.
+not new tasks. `TECHNICAL PASS / REVIEW PENDING` means the named oracle actually executed on the
+identified final source; it does not infer external whole-card review or human acceptance.
+A skip is NOT-RUN, never PASS. Historical review dispositions remain separate from successor runs.
 
 ## 2. Source, test and execution keys
 
@@ -56,6 +56,7 @@ confirmed defect. A skip is NOT-RUN, never PASS.
 | P | [ServerRestartFlowTest](../../../apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java) |
 | A | [IdentityFlowTest](../../../apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java); accepted F03-A regression |
 | D | [DataBaselineTest](../../../apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java), [DatabasePrivilegeTest](../../../apps/server/src/test/java/com/idea/ddm/DatabasePrivilegeTest.java), [privilege assertions](../../../apps/server/src/test/java/com/idea/ddm/DatabasePrivilegeAssertions.java), [ServerSmokeTest](../../../apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java) |
+| L / M | [LogoutBoundary](../../../apps/server/src/main/java/com/idea/ddm/identity/LogoutBoundary.java), [F03BPublicMigrationTest](../../../apps/server/src/test/java/com/idea/ddm/F03BPublicMigrationTest.java) |
 | W | [W01–W10 contract](../contracts/ph1-boundaries.md#t043-web-qualification-contract), [actual Chrome harness](../../../tests/ph1/web-qualification/qualify-chrome.mjs) |
 
 ### Exact executed SHA and received disposition
@@ -72,15 +73,16 @@ user-relayed read-only dispositions, not GitHub approval events or independent r
 | R4 | `a0874f40555f1119b830f043a7aaf5bda8752d8a` | F03 §26–27: HTTP account administration, PASS WITH NOTES at `171173a5266fa5c9a732f2fe1316fb1c5c0f836d`. |
 | R5 | `074f62ae713e7a1f627f7fb1bbe600e4e4d37296` | F03 §28: 3 restart + 76 HTTP + 20 F03-A + 2 health checks, 0 failures/errors/skips. Received restart PASS WITH NOTES at `0101cc3ae3fe09fd264d0a50fcd96ae3f9d407b0` is recorded in F03 §34; §28's pending review remains historical. |
 | R6 | Qualification `738eb5ae05600b443ad2c107e1352de6dac45def`; packaged Web/Server `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4` | F03 §32–33 and actual browser record: W01–W10 PASS, external PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4`. |
-| R7 | NOT-RUN; pin exact committed source only after gates below | T044 fresh public/data and final affected regression; external whole-card review PENDING. |
+| R7 | `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066` | F03 §39: final 108 checks (83 HTTP + 3 restart + 20 F03-A + 2 health), zero failures/errors/skips. External whole-card review PENDING. |
+| R8 | `38b99f50de09370a8e8554cc80fc66a0afa70b62` | F03 §39: new empty successor public V1–V7 first 7/repeat 0, 3 data checks PASS; actual Web/Server package from this source. |
+| R9 | `9238b7e8ad6878687e72823e7bed1d4f083b9699` | F03 §39: 4 full successor public + 1 baseline privilege + 2 health checks PASS; same production code as R8/R7. |
+| R10 | Qualification `9238b7e8ad6878687e72823e7bed1d4f083b9699`; package `38b99f50de09370a8e8554cc80fc66a0afa70b62` | F03 §39 and actual browser successor: W01–W10 requalification PASS on repaired Server, both harness notes resolved. |
 
-At inspection, `git diff 2fe89d4..b0e0e6d -- apps/server apps/web database/migrations` is empty.
-Accepted Web evidence therefore needs no repeat merely for this documentation reconciliation.
-R5 predates the T043 packaging/public-asset integration; it is historical regression, not a final
-run of current packaged source. R7 must reconcile that difference rather than accumulate prior
-test counts into a fictitious final run. If source changes affect accepted Web, assess/requalify
-the affected W oracles before closure. The two Web harness next-use notes stay applicable before
-reuse, not new implementation requirements for current accepted Web.
+Initial inspection had no application diff from accepted Web; the subsequently authorized logout
+and migration-command repairs required successor execution. R7–R10 provide that evidence rather
+than summing historical counts. From R8 through R9 to R7, production code/Web/dependencies/V1–V7
+are unchanged; only test oracles and the external qualification harness change. R10 requalifies
+actual Chrome after both next-use harness notes were fixed. Publication after R7 is docs-only.
 
 ## 3. Requirement → implementation → executed evidence
 
@@ -88,52 +90,46 @@ reuse, not new implementation requirements for current accepted Web.
 
 | Acceptance requirement | Source | Test / oracle | Executed SHA key | Evidence section | External disposition | Final status |
 |---|---|---|---|---|---|---|
-| FR-005 / US3.3: ordinary Server session; verified, stable, server-derived Actor; no caller identity authority | S1/S2/S4 | H `realLoginRotatesSessionAndServerDerivesActorDespiteCallerSuppliedIdentity`, `anonymousSessionProbeIsRefusedWithoutActorOrLoginRedirect` | R0; affected R5 | F03 §16–17, §28 | Initial HTTP PASS WITH NOTES; final review PENDING | COVERED / FINAL PENDING |
-| FR-005: session reference checks current Account version/status, revocation, runtime and deadlines | S2 `context/checkEligibility/requireEligible`, V4 | H idle/absolute, reset and account-transition cases below; P old-cookie refusal | R0/R2/R4/R5 | F03 §16, §21, §26, §28 | Scoped reviews received | COVERED / FINAL PENDING |
-| US3 / HTTP contract: CSRF acquisition does not authenticate; login/logout require CSRF; no implicit Basic/public bootstrap/signup | S1/S4; bootstrap operator stays local | H `anonymousClientCanObtainCsrfProofWithoutIdentityPrivilege`, `loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity`; A/bootstrap evidence; W04 | R0/R5/R6 | F03 §11–14, §16–17, §28, §32–33 | F03-A accepted; initial HTTP and Web scoped reviews received | COVERED / FINAL PENDING |
-| FR-005: protected owner paths use eligibility before permission and after security-write lock; accepted activity shares transaction | S2/S4/S5 | H `expiredSessionIsRefusedBeforeRoleOrScopeEvaluation`, `httpAdministrationRevalidatesSessionAfterWaitingForTheSecurityWriteLock`, accepted/refused activity and required-write cases | R1/R4; affected R5 | F03 §18, §26–28 | Setup/admin scoped PASS WITH NOTES | COVERED / FINAL PENDING; F04 race separate |
-| FR-005: restart cannot adopt persisted authentication proof or rewrite identity/credential; fresh session pins new runtime | S2 runtime pin; ordinary servlet session in S1 | P process A→B on same endpoint/schema, metadata/identity digest and fresh-session assertions | R5 | F03 §28; receipt §34 | Restart PASS WITH NOTES | COVERED / FINAL PENDING; no HA/restoration claim |
+| FR-005 / US3.3: ordinary Server session; verified, stable, server-derived Actor; no caller identity authority | S1/S2/S4 | H `realLoginRotatesSessionAndServerDerivesActorDespiteCallerSuppliedIdentity`, `anonymousSessionProbeIsRefusedWithoutActorOrLoginRedirect` | R0; affected R5; R7 | F03 §16–17, §28, §39 | Initial HTTP PASS WITH NOTES; final review PENDING | TECHNICAL PASS / REVIEW PENDING |
+| FR-005: session reference checks current Account version/status, revocation, runtime and deadlines | S2 `context/checkEligibility/requireEligible`, V4 | H idle/absolute, reset and account-transition cases below; P old-cookie refusal | R0/R2/R4/R5; R7 | F03 §16, §21, §26, §28, §39 | Scoped reviews received | TECHNICAL PASS / REVIEW PENDING |
+| US3 / HTTP contract: CSRF acquisition does not authenticate; login/logout require CSRF; no implicit Basic/public bootstrap/signup | S1/S4; bootstrap operator stays local | H `anonymousClientCanObtainCsrfProofWithoutIdentityPrivilege`, `loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity`; A/bootstrap evidence; W04 | R0/R5/R6; R7 | F03 §11–14, §16–17, §28, §32–33, §39 | F03-A accepted; initial HTTP and Web scoped reviews received | TECHNICAL PASS / REVIEW PENDING |
+| FR-005: protected owner paths use eligibility before permission and after security-write lock; accepted activity shares transaction | S2/S4/S5 | H `expiredSessionIsRefusedBeforeRoleOrScopeEvaluation`, `httpAdministrationRevalidatesSessionAfterWaitingForTheSecurityWriteLock`, accepted/refused activity and required-write cases | R1/R4; affected R5; R7 | F03 §18, §26–28, §39 | Setup/admin scoped PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING; F04 race separate |
+| FR-005: restart cannot adopt persisted authentication proof or rewrite identity/credential; fresh session pins new runtime | S2 runtime pin; ordinary servlet session in S1 | P process A→B on same endpoint/schema, metadata/identity digest and fresh-session assertions | R5; R7 | F03 §28; receipt §34, §39 | Restart PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING; no HA/restoration claim |
 
 ### T042 scenario coverage
 
 | Acceptance requirement | Source | Test / oracle | Executed SHA key | Evidence section | External disposition | Final status |
 |---|---|---|---|---|---|---|
-| FR-005 / SC-003: eligible logout revokes only current session, old proof refused; GET/bad CSRF cannot logout | S1 logout chain / S2 `signOut` | H `csrfProtectedLogoutInvalidatesOnlyCurrentSessionAndGetCannotLogOut`; W07 | R0/R5/R6 | F03 §16, §28, §32–33 | Initial HTTP and actual Web PASS WITH NOTES | COVERED for eligible logout / FINAL PENDING |
-| Logout HTTP contract with expired/revoked/stale authentication | S1 logout handler / S2 `signOut`; no eligibility evaluator invocation in that method | Existing eligible logout and protected-session refusal are not exact negative-logout execution. Compare valid-CSRF POST logout for idle-expired, absolute-expired, revoked and stale-version proof, including HTTP outcome and accepted IAM/Audit effects | NOT-RUN for these exact logout profiles | Inspection baseline; concern below | No defect disposition yet | OPEN-COVERAGE; do not close T040/T042 from adjacent tests |
-| US3.10 / SC-003: idle 2h and absolute 8h, before/at/after; eligible activity cannot extend absolute limit; servlet budget does not pre-empt | S1 config / S2 | H `effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy`, `idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting`, `activityCannotExtendEightHourAbsoluteDeadline`, `rejectedCsrfAndPublicTrafficCannotRefreshEligibleIdleActivity` | R0/R3; affected R5 | F03 §16, §24, §28 | Initial repair/throttling PASS WITH NOTES | COVERED / FINAL PENDING |
-| US3.4/6/8: disable/re-enable preserves identity/history, no implicit access, every old session dead and fresh sign-in usable | S4/S7; session metadata S2 | H `httpDisableAndReenableKeepIdentityHistoryAndRequireFreshSigninForEveryOldSession`, `httpAccountTransitionsSupportZeroLoginIdentitiesWithoutCreatingOrSelectingALogin`, authority/refusal cases | R4/R5 | F03 §26–28 | HTTP administration PASS WITH NOTES | COVERED / FINAL PENDING |
-| Issuer routes: expiry/disabled/re-enabled/revoked session refused before authority; explicit scope/version retained | S4/S5 / S2 eligibility seam | H `expiredIssuerSessionCannotIssueProofDespiteHavingV2Permission`, `disabledAndReenabledIssuerCannotReuseItsOldProofIssuanceSession`, `resetIssuanceRequiresExplicitV2ScopeEligibleSessionAndSyntheticOptIn`, `httpAdministrationRefusesDisabledReenabledAndRevokedIssuerSessionsWithoutLosingFreshAuthority` | R1/R2/R4; affected R5 | F03 §18, §21, §26, §28 | Corresponding scoped PASS WITH NOTES | COVERED for named profiles / FINAL PENDING; no new issuer protocol |
-| FR-014 / US3.9: explicit v2 assignment; v1 unchanged; first setup target-bound/one-use/15m; pending account activates only on success | S5/S7 / V5 | H `accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1`, `explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount`, wrong-target/replay/exact-expiry/concurrent-redemption cases | R1; affected R5 | F03 §18–19, §28 | First setup PASS WITH NOTES | COVERED / FINAL PENDING; synthetic delivery only |
-| SC-003 / reset clarification: exact Login Identity selector, two-login sibling preserved, Account-wide old-session invalidation; DISABLED reset is not re-enable | S5/S4 / V6 | H `resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin`, `resetExplicitSecondLoginChangesOnlyItAndInvalidatesEveryAccountSession`, `resetExplicitFirstLoginPreservesSecondCredentialAndRejectsReplay`, `disabledTwoLoginResetPreservesDisablementAndSiblingCredentialUntilSeparateReenable`, refusal/race/fault cases | R2; affected R5 | F03 §21–22, §28 | T046 PASS WITH NOTES | COVERED / FINAL PENDING |
-| FR-014 / SC-003: minimum 15 code points, max 72 UTF-8 bytes; reject invalid/malformed input, no trimming | S5 verifier/setup/reset | H `newPasswordBoundsCountUnicodeCharactersAndUtf8BytesWithoutTrimming`, `malformedUnicodeCannotBecomeAReplacementCharacterCredential` | R1; affected R5 | F03 §18–19, §28 | First setup scoped review received | COVERED / FINAL PENDING |
-| FR-014 / SC-003: rolling 15m window, fifth failure/block, exact boundary, no deadline extension, normalized-login/sibling independence | S6 | H `rollingWindowExcludesFailuresExactlyFifteenMinutesOld`, `blockDeadlineDoesNotMoveAndIsOpenExactlyAtAndAfterExpiry`, `normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent`, concurrent fifth-failure and required-write cases | R3/R5 | F03 §24–25, §28 | T041 PASS WITH NOTES | COVERED / FINAL PENDING |
-| FR-014: bounded existing-identity state; unknown identifiers create zero state; generic refusal and qualified refused-path password work | S6/S2 | H `unknownLoginSprayCreatesNoDurableStateOrInheritedFailures`, `pendingAndDisabledAccountsCannotClearFailuresOrBecomeEnabledThroughLogin`, `unknownDisabledAndBlockedLoginsDoNotBypassPasswordWork` | R3/R5 | F03 §24–25, §28 | T041 PASS WITH NOTES | COVERED / FINAL PENDING; not constant-time/DoS qualification |
-| Session/sign-in, setup/reset and administration share required transaction fate; failures publish no partial success | S3/S4/S5/S6 | H missing session/IAM/Audit, suppressed clearing/revocation, concurrent proof use, Spring before/after-binding faults, deferred DB commit failure and admin fault cases | R1/R2/R3/R4; affected R5 | F03 §18, §21, §24, §26, §28 | Corresponding scoped reviews received | COVERED / FINAL PENDING; not servlet/DB XA |
-| Restart preserves durable login block and identity/history; pre-revoked/idle-expired proof stays unusable | S2/S6 | P three executed restart cases, old-cookie state oracle and retained DB throttle digest | R5 | F03 §28; receipt §34 | Restart PASS WITH NOTES | COVERED / FINAL PENDING |
-| Actual Web consumes ordinary session, CSRF, trusted HTTPS cookie contract and fails closed without retained secrets | S9 | W01–W10, actual headed Chrome/Server; no Java harness substitution | R6 | F03 §32–33; actual browser record | Accepted PASS WITH NOTES | T043-Web SATISFIED; whole-card review still pending |
+| FR-005 / SC-003: eligible logout revokes only current session, old proof refused; GET/bad CSRF cannot logout | S1 logout chain / S2 `signOut` | H `csrfProtectedLogoutInvalidatesOnlyCurrentSessionAndGetCannotLogOut`; W07 | R0/R5/R6; R7 | F03 §16, §28, §32–33, §39 | Initial HTTP and actual Web PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING |
+| Logout contract: anonymous/idle-expired/absolute-expired/revoked/stale/disabled/re-enabled old proof returns 401, no ACCEPTED IAM/Audit; IAM/Audit/commit failure returns 503 with rollback/retry; eligible success clears only current proof/cookie | L / S1 / S2 `signOut` eligibility under security-write lock | H `expiredLogoutIsRefusedWithoutAcceptedEvidenceOrRevocation`, `absoluteExpiredLogoutCannotPublishAcceptedEvidenceDespiteRecentActivity`, `anonymousRevokedAndStaleVersionLogoutAreRefusedWithoutAcceptedEvidence`, `disabledAndReenabledOldSessionCannotLogoutButFreshSessionCan`, `logoutIamFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry`, `logoutAuditFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry`, `logoutCommitFailureRollsBackRevocationAndKeepsOrdinaryProofForRetry`, eligible CookieManager oracle; W07 | R7/R10 | F03 §37/39 | Repair explicitly approved; successor external review PENDING | TECHNICAL PASS / REVIEW PENDING |
+| US3.10 / SC-003: idle 2h and absolute 8h, before/at/after; eligible activity cannot extend absolute limit; servlet budget does not pre-empt | S1 config / S2 | H `effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy`, `idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting`, `activityCannotExtendEightHourAbsoluteDeadline`, `rejectedCsrfAndPublicTrafficCannotRefreshEligibleIdleActivity` | R0/R3; affected R5; R7 | F03 §16, §24, §28, §39 | Initial repair/throttling PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING |
+| US3.4/6/8: disable/re-enable preserves identity/history, no implicit access, every old session dead and fresh sign-in usable | S4/S7; session metadata S2 | H `httpDisableAndReenableKeepIdentityHistoryAndRequireFreshSigninForEveryOldSession`, `httpAccountTransitionsSupportZeroLoginIdentitiesWithoutCreatingOrSelectingALogin`, authority/refusal cases | R4/R5; R7 | F03 §26–28, §39 | HTTP administration PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING |
+| Issuer routes: expiry/disabled/re-enabled/revoked session refused before authority; explicit scope/version retained | S4/S5 / S2 eligibility seam | H `expiredIssuerSessionCannotIssueProofDespiteHavingV2Permission`, `disabledAndReenabledIssuerCannotReuseItsOldProofIssuanceSession`, `resetIssuanceRequiresExplicitV2ScopeEligibleSessionAndSyntheticOptIn`, `httpAdministrationRefusesDisabledReenabledAndRevokedIssuerSessionsWithoutLosingFreshAuthority` | R1/R2/R4; affected R5; R7 | F03 §18, §21, §26, §28, §39 | Corresponding scoped PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING; no new issuer protocol |
+| FR-014 / US3.9: explicit v2 assignment; v1 unchanged; first setup target-bound/one-use/15m; pending account activates only on success | S5/S7 / V5 | H `accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1`, `explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount`, wrong-target/replay/exact-expiry/concurrent-redemption cases | R1; affected R5; R7 | F03 §18–19, §28, §39 | First setup PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING; synthetic delivery only |
+| SC-003 / reset clarification: exact Login Identity selector, two-login sibling preserved, Account-wide old-session invalidation; DISABLED reset is not re-enable | S5/S4 / V6 | H `resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin`, `resetExplicitSecondLoginChangesOnlyItAndInvalidatesEveryAccountSession`, `resetExplicitFirstLoginPreservesSecondCredentialAndRejectsReplay`, `disabledTwoLoginResetPreservesDisablementAndSiblingCredentialUntilSeparateReenable`, refusal/race/fault cases | R2; affected R5; R7 | F03 §21–22, §28, §39 | T046 PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING |
+| FR-014 / SC-003: minimum 15 code points, max 72 UTF-8 bytes; reject invalid/malformed input, no trimming | S5 verifier/setup/reset | H `newPasswordBoundsCountUnicodeCharactersAndUtf8BytesWithoutTrimming`, `malformedUnicodeCannotBecomeAReplacementCharacterCredential` | R1; affected R5; R7 | F03 §18–19, §28, §39 | First setup scoped review received | TECHNICAL PASS / REVIEW PENDING |
+| FR-014 / SC-003: rolling 15m window, fifth failure/block, exact boundary, no deadline extension, normalized-login/sibling independence | S6 | H `rollingWindowExcludesFailuresExactlyFifteenMinutesOld`, `blockDeadlineDoesNotMoveAndIsOpenExactlyAtAndAfterExpiry`, `normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent`, concurrent fifth-failure and required-write cases | R3/R5; R7 | F03 §24–25, §28, §39 | T041 PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING |
+| FR-014: bounded existing-identity state; unknown identifiers create zero state; generic refusal and qualified refused-path password work | S6/S2 | H `unknownLoginSprayCreatesNoDurableStateOrInheritedFailures`, `pendingAndDisabledAccountsCannotClearFailuresOrBecomeEnabledThroughLogin`, `unknownDisabledAndBlockedLoginsDoNotBypassPasswordWork` | R3/R5; R7 | F03 §24–25, §28, §39 | T041 PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING; not constant-time/DoS qualification |
+| Session/sign-in, setup/reset and administration share required transaction fate; failures publish no partial success | S3/S4/S5/S6 | H missing session/IAM/Audit, suppressed clearing/revocation, concurrent proof use, Spring before/after-binding faults, deferred DB commit failure and admin fault cases | R1/R2/R3/R4; affected R5; R7 | F03 §18, §21, §24, §26, §28, §39 | Corresponding scoped reviews received | TECHNICAL PASS / REVIEW PENDING; not servlet/DB XA |
+| Restart preserves durable login block and identity/history; pre-revoked/idle-expired proof stays unusable | S2/S6 | P three executed restart cases, old-cookie state oracle and retained DB throttle digest | R5; R7 | F03 §28; receipt §34, §39 | Restart PASS WITH NOTES | TECHNICAL PASS / REVIEW PENDING |
+| Actual Web consumes ordinary session, CSRF, trusted HTTPS cookie contract and fails closed without retained secrets | S9 | W01–W10, actual headed Chrome/Server; no Java harness substitution | R6/R10 | F03 §32–33; actual browser record, §39 | Accepted PASS WITH NOTES; successor review PENDING | T043-Web SATISFIED; whole-card review still pending |
 
 ### T044 final migration/data/regression obligations
 
 | Acceptance requirement | Source | Test / oracle | Executed SHA key | Evidence section | External disposition | Final status |
 |---|---|---|---|---|---|---|
-| Completely new, initially empty test database; fresh public V1→V7, valid history/checksums and repeat zero/no pending | S8 / immutable V1–V7 | Initial catalog witness; D `freshVersionedMigrationAppliesOnceAndThenDoesNothing`; explicit Flyway validation/info and seven successful history entries | R7 | Future successor in F03 evidence, not old retained public data | PENDING | NOT-RUN; scoped tooling authorized, offline resolution pending |
-| Distinct exact app/migrator; all expected migrated objects migrator-owned; app cannot obtain migration authority | S8 / migrations' grants/revokes | D privilege checks plus successor object/function inventory, owner and role-membership/SET ROLE/DDL/mutation denials below | R7 | Future T044 successor | PENDING | NOT-RUN; baseline 12-table assertion alone is insufficient |
-| Bounded failed-DDL rollback, process/data health and affected identity/session/restart/F03-A regressions on final exact source | S1–S8 | D three data + one privilege + two health checks; H/P/A scoped runner, actual counts/skips retained; no arbitrary reuse of old results | R7 | Future T044 successor | PENDING | NOT-RUN; no forced RED if existing behavior is correct |
+| Completely new, initially empty test database; fresh public V1→V7, valid history/checksums and repeat zero/no pending | S8 / immutable V1–V7 | Initial zero tables/functions/history witness in `idea_ddm_f02_f03b_closure_20261001_b555f0b`; D first 7/repeat 0; M `freshPublicHasValidatedSevenMigrationHistoryEntriesAndExactMigratorOwnedObjects` | R8/R9 | F03 §39 | PENDING | TECHNICAL PASS / REVIEW PENDING |
+| Distinct exact app/migrator; all objects migrator-owned; app cannot obtain migration authority or mutate history; exact v1/v2 permissions preserved | S8 / migrations' grants/revokes | M exact 26 tables + function/DB owner, role flags/membership/SET ROLE/DDL `42501`, protected mutation and bounded consumption probes; `noOpMigrationRestoresReadOnlyHistoryAfterBootstrapStyleAclDrift`; exact v1/v2 literal permission sets and no new identity state | R9 | F03 §38/39: initial ACL FAIL, approved repair, new successor GREEN | PENDING | TECHNICAL PASS / REVIEW PENDING |
+| Bounded failed-DDL rollback, process/data health and affected identity/session/restart/F03-A regressions on final exact source | S1–S8 | D 3 data + 1 baseline privilege + 2 health; M 4 public; H/P/A/health 108 checks, zero failures/errors/skips. Separate counts, not a fictional combined run | R7/R8/R9 | F03 §39 | PENDING | TECHNICAL PASS / REVIEW PENDING |
 | Whole-card requirement coverage, external review and Project Reviewer acceptance | This matrix / card evidence | Every applicable row has exact source, executed oracle and disposition; excluded scopes remain visible | R7 plus identified inherited runs | Final matrix and review receipt | PENDING | F03-B IN_PROGRESS; Issue #24 OPEN |
 
-### Logout concern: compare before changing
+### Logout concern: disposition and authorized repair
 
-Source inspection confirms `signOut()` serializes and revokes its exact runtime/session row and
-records accepted IAM/Audit, but does not call `checkEligibility/requireEligible`. The current HTTP
-contract says valid CSRF and session; FR-005 refuses ineligible protected reuse. Existing tests
-prove eligible logout and refusal on `/session`, not the exact negative logout profiles above.
-
-Therefore **no defect is concluded in this revision**. First compare the governing contract and
-those observable cases: determine whether logout is an explicitly permitted cleanup exception
-or must refuse an ineligible session without accepted evidence. Do not invent an exception or
-rewrite the contract to match code. If authority remains ambiguous, ask the Project Reviewer for
-that narrow decision. If a requirement is demonstrably unmet, present/execute the bounded TDD
-repair under the existing card before closure; do not add an unrelated client protocol.
+Contract comparison found no cleanup exception. The Project Reviewer explicitly approved empty
+401 for ineligible logout and 503 for mandatory persistence failure. First RED expected 401 but
+observed 204; the bounded repair now revalidates eligibility and commits revocation/evidence before
+clearing ordinary proof. R7 exercises every named negative and failure profile; R10 requalifies
+actual Web. See F03 §37/39 for approval, RED/GREEN, test-oracle correction and retained limits.
 
 ## 4. T044 execution gate and procedure
 
@@ -155,8 +151,9 @@ the exact plugin runtime graph from the approved cache, then resolve offline. Mi
 hash/graph changes or any additional execution JAR are BLOCKED; do not download replacements.
 Retain the preflight result before execution and check none of the nine enters `BOOT-INF/lib`.
 Preserve actual Web packaging. Initial nine-artifact/descriptor preflight PASS is recorded in
-the exception; complete offline lifecycle resolution, fresh migration and regression remain
-NOT-RUN. This is an execution prerequisite, not a feature checkpoint.
+the exception. Offline lifecycle resolution, realm inspection, fresh migration, regression and
+build-only package exclusion subsequently passed as retained in F03 §39. Each future use still
+requires preflight; this execution does not expand the exception scope.
 
 ### Procedure after tooling and coverage resolution
 
@@ -200,17 +197,13 @@ NOT-RUN. This is an execution prerequisite, not a feature checkpoint.
 
 ## 5. Current result and next action
 
-Reconciliation is documented; T040/T042 have mapped historical source/test/evidence. Their
-markers and shared T018/T020/T021/T022 remain unchecked while coverage disposition, T044 and
-final review are pending. No Server/client/migration/tooling implementation changed here.
+Applicable T040/T042/shared Server obligations and T044 execution are technically satisfied by
+R7–R10 and the retained historical coverage. Authorized logout/history repairs are executed;
+fresh isolated V1–V7, full object privileges, final 108-check regression and actual Chrome W01–W10
+are PASS. Prior FAIL results remain explicit in F03 §39. No Desktop/client protocol was added.
 
-Open closure items: exact negative-logout coverage/contract disposition; pre-use tooling
-artifact/cache verification under the scoped exception; fresh isolated V1–V7 and affected
-regression; final external review and acceptance.
-Desktop is not among the blockers. No matrix-driven defect has yet been established.
-
-Documentation/source checks passed and are recorded in F03 evidence §35: 152 relative targets,
-47 heading anchors, zero errors; historical §1–33 unchanged and no application/migration diff.
-Maven, PostgreSQL,
-browser, Desktop, verifier and merge were NOT-RUN in this reconciliation. Private host-log access
-remains a disclosed limitation; recording a hash does not make it independent review.
+Next action: external whole-F03-B review of this matrix and the exact published head, then
+Project Reviewer whole-card acceptance. Those are PENDING; this record does not record either
+as PASS. Desktop is separate, F04 owns its future race, T036 remains open. F03-B IN_PROGRESS,
+Issue #24 OPEN, verifier NOT-RUN, no merge/Tracker action. Private host-log access remains a
+declared limitation: hash identity is not independent raw-log review.

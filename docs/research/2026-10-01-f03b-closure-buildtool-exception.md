@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Stable ID / class | `IE-RES-F03B-CLOSURE-BUILDTOOL-EXCEPTION-20261001` / bounded process-exception record |
-| Version / status | `0.2` / Approved for the process scope below; initial artifact preflight PASS |
+| Version / status | `0.3` / Approved for the process scope below; preflight and scoped offline execution PASS |
 | Product normativity | INFORMATIVE; no product requirement or license/legal approval |
 | Owner / author | Engineering / Codex |
 | Authorization / authority | Project Reviewer, explicit user approval on 2026-10-01 before closure execution |
@@ -11,10 +11,10 @@
 | Classification / retention | INTERNAL; retain with F03-B closure and the referenced historical intake |
 | Upstream | [Historical exact-artifact intake](2026-10-01-t043-maven-web-build-intake.md), [source-intake rule](../agents/external-source-intake.md), Project Reviewer's scoped approval |
 | Downstream | [Closure execution gate](../../specs/005-ph1-foundation-custody/evidence/F03-B-closure-matrix.md#4-t044-execution-gate-and-procedure), T040/T042/T044 Maven build/test commands |
-| Change / supersession | New successor authorization; does not rewrite or supersede the historical T043 intake or its execution evidence |
+| Change / supersession | Supersedes v0.2 control envelope; append actual scoped execution. Does not rewrite or supersede historical T043 intake/evidence |
 | Review trigger | Any artifact, version, graph, hash, use-scope or distribution change; missing approved cache/source |
 | Expiry / remediation | Expires at F03-B whole-card acceptance or earlier withdrawal/scope change. Further use requires separate intake/authorization; no authority carries into F04/F05. Engineering retains the inventory, attribution and open T036/Legal Review obligations. |
-| Evidence / limits | Prior artifact inspection is referenced, not repeated as a legal determination. Closure execution NOT-RUN; independent Legal Review and T036 remain separate |
+| Evidence / limits | Prior artifact inspection is not a legal determination. Scoped offline build/test, realm and package exclusion PASS; whole-card acceptance PENDING; Legal Review and T036 separate |
 
 ## Authorization
 
@@ -72,3 +72,20 @@ Existing Maven distribution reports `3.9.16` at
 `25.0.4.1+1`; Node reports `24.21.0`. `mvn -v` is a version probe only. Complete offline
 build/test resolution and resulting package exclusion remain NOT-RUN and must be recorded
 separately; artifact preflight does not assert every lifecycle dependency is cached.
+
+## Scoped execution receipt — 2026-10-01
+
+The initial NOT-RUN wording above remains the historical pre-execution state. Subsequent runs
+completed offline with all nine hashes/descriptor rechecked before Maven. Fresh public V1–V7,
+successor ownership/privileges, final 108-test regression and actual Web requalification passed;
+prior failed tests and repairs remain explicit in [F03 evidence §39](../../specs/005-ph1-foundation-custody/evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
+
+Credential-free offline realm inspection included seven admitted JARs (plugin, plexus-utils,
+plexus-xml, commons-exec, asm, asm-commons, asm-tree); provided Maven API was imported from its
+existing realm. No additional plugin execution JAR was present. This does not claim all nine
+inventoried artifacts were loaded. The resulting executable JAR contained none of the nine in
+`BOOT-INF/lib`; all packaged SQL matched V1–V7 and actual Web remained packaged.
+
+Execution receipts identify exact sources, package/helper/log hashes and commands in §39.
+No artifact/version/graph/download was added. The exception remains bounded and expires as
+specified above; no authority carries into F04/F05/general development or legal/commercial use.

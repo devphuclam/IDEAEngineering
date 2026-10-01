@@ -203,8 +203,10 @@ implemented by this reconciliation, and no new feature checkpoint or card hours 
 Follow the [closure matrix](evidence/F03-B-closure-matrix.md) in order: scope reconciliation →
 T040 coverage → T042 coverage → resolve a demonstrated requirement gap, if any → fresh isolated
 V1–V7 → T044 affected regression → whole-F03-B external review. Map existing implementation and
-execution instead of rewriting it because a task marker is unchecked. The logout concern is
-an open coverage/contract comparison, not an accepted defect or an authorization to change policy.
+execution instead of rewriting it because a task marker is unchecked. The logout comparison
+subsequently led to an explicitly approved repair, followed by an approved Flyway history ACL
+repair; neither creates a new product scope or changes immutable V1–V7. Actual results and
+retained failures are in [F03 §39](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
 
 Before **any** F03-B closure Maven invocation, including logout qualification and T044, verify
 its approved cached build-tool artifacts. `exec-maven-plugin`
@@ -222,6 +224,11 @@ exact new name before creation; refuse an existing name or nonempty initial sche
 `idea_ddm_dev`, the historical F02 database or retained F03-A public evidence. Migrate as
 `idea_ddm_migrator`, use `idea_ddm_app` at runtime, retain initial emptiness, V1–V7 history/checksum
 validation, zero pending/repeat migrations and all applicable ownership/privilege assertions.
+
+Execution receipt: fresh V1–V7 first 7/repeat 0, full public ownership/privileges, final 108-test
+regression and repaired-package actual Chrome W01–W10 PASS. Next is external whole-F03-B review,
+then human acceptance; technical task markers do not record whole-card acceptance. The matrix
+pins each separate exact source, rather than combining historical test counts into one run.
 
 Keep F03-B IN_PROGRESS, Issue #24 OPEN and verifier NOT-RUN. F04 owns its future owner-command
 race; company policy/MFA, T036/commercial, deployment and merge are separate. Final matrix review
