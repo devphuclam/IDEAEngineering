@@ -1172,6 +1172,35 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void rollingWindowExcludesFailuresExactlyFifteenMinutesOld() throws Exception {
+        var fixture = dualLoginFixture();
+        var before = fixture.setup().administrator();
+        var at = fixture.first();
+        var after = fixture.second();
+        var caller = client();
+        for (var login : java.util.List.of(before, at, after)) wrongAttempts(caller, login.login(), 1);
+        clock.advanceTo(Instant.parse("2026-09-30T06:01:00Z"));
+        for (var login : java.util.List.of(before, at, after)) wrongAttempts(caller, login.login(), 3);
+        clock.advanceTo(Instant.parse("2026-09-30T06:14:59.999999Z"));
+        wrongAttempts(caller, before.login(), 1);
+        assertEquals(401, loginAttempt(caller, before.login(), before.password()).statusCode());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00Z"));
+        wrongAttempts(caller, at.login(), 1);
+        assertEquals(200, loginAttempt(caller, at.login(), at.password()).statusCode(), "Cutoff is exclusive");
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00.000001Z"));
+        wrongAttempts(caller, after.login(), 1);
+        assertEquals(200, loginAttempt(caller, after.login(), after.password()).statusCode());
+    }
+
+    private void wrongAttempts(HttpClient caller, String login, int count) throws Exception {
+        for (int attempt = 0; attempt < count; attempt++) {
+            var refused = loginAttempt(caller, login, UUID.randomUUID().toString());
+            assertEquals(401, refused.statusCode());
+            assertEquals("", refused.body());
+        }
+    }
+
+    @Test
     void loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity() throws Exception {
         var fixture = fixture();
         var client = client();
