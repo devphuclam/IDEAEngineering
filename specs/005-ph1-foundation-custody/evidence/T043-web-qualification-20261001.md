@@ -5,8 +5,8 @@
 | Stable ID | `IE-VER-T043-WEB-20261001` |
 | Status | `PARTIAL / PASS WITH LIMITS`; whole T043 and F03-B remain `IN_PROGRESS` |
 | Evidence date | 2026-10-01 |
-| Web source | Current worktree, not yet committed at execution time (`EXACT-SHA: NOT-RUN`) |
-| Server source | Current worktree packaged on the test server (`EXACT-SHA: NOT-RUN`) |
+| Web source | `2d2bcfc` (`feat(web): add same-origin T043 qualification slice`); execution used the same worktree before commit with no source/test changes between execution and commit |
+| Server source | `2d2bcfc` packaged on the test server; execution used the same worktree before commit with no source/test changes between execution and commit |
 | Browser | Branded Chrome `154.0.8037.92` |
 | Server boundary | IDEA Server HTTPS on `127.0.0.1:18443` through an SSH loopback forward to Ubuntu test server |
 | Certificate | Subject `CN=IDEA T043 loopback test`; SAN `localhost`, `127.0.0.1`; SHA-256 `71D16C7626E9ED97C84EC6167FE8E88CB753BFF5135EE547FB221EB0828D3DE2`; trusted in Windows `CurrentUser\\Root` |
@@ -34,6 +34,13 @@ password, cookie, CSRF token, private key or credential verifier is retained in 
 The login refusal before the isolated schema was correctly wired was treated as environment setup
 failure, not as a Web result; the final W01–W07 observations were rerun after schema binding and
 synthetic identity setup.
+
+## Affected server regression
+
+The exact worktree used for the Web qualification was also exercised with the existing PostgreSQL
+and HTTP regression suite against the controlled test database. Result: **105 tests, 0 failures,
+0 errors, 24 skipped; Maven BUILD SUCCESS**. The run used PostgreSQL 18.6, Java 25.0.4.1 and
+bounded temporary `f03b_<UUID>` schemas; no production schema or Vault data was used.
 
 ## Limits and next action
 
