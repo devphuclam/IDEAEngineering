@@ -143,6 +143,10 @@ try {
     if (url.origin !== origin || !url.pathname.startsWith(identity)) return;
     const body = request.postData() ?? '';
     outboundActor ||= /actor_?id/i.test(body) || /actor_?id/i.test(url.search);
+    const headerObservation = request.allHeaders().then(headers => {
+      outboundActor ||= Object.keys(headers).some(name => /actor[-_]?id/i.test(name));
+    });
+    pendingObservations.push(headerObservation);
     if (url.pathname === `${identity}login`) {
       loginRequests++;
       const submittedCsrf = csrf;
