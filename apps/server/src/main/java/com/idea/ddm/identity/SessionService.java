@@ -47,14 +47,16 @@ public final class SessionService {
                     try (var row = query.executeQuery()) {
                         boolean known = row.next();
                         boolean eligible = known && row.getBoolean(6);
-                        // Unknown/disabled accounts take BCrypt work too, but can never authenticate.
+                        String credentialVerifier = known ? row.getString(4) : null;
+                        boolean hasCredential = credentialVerifier != null;
+                        // Unknown, disabled and credentialless identities take qualified BCrypt work too.
                         boolean credentialMatches = passwords.matches(password,
-                                eligible ? row.getString(4) : refusedLoginVerifier);
+                                eligible && hasCredential ? credentialVerifier : refusedLoginVerifier);
                         var now = clock.instant().truncatedTo(ChronoUnit.MICROS);
                         if (!known) throw refused(); // No durable state for unknown login identifiers.
                         var loginIdentityId = row.getObject(5, UUID.class);
                         if (LoginFailures.blocked(connection, loginIdentityId, now)) throw refused();
-                        if (!eligible || !credentialMatches) {
+                        if (!eligible || !hasCredential || !credentialMatches) {
                             LoginFailures.failed(connection, loginIdentityId, now);
                             connection.commit(); // Persist refusal state, never an authenticated proof.
                             throw refused();
