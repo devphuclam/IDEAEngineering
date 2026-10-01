@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.15 / Draft |
+| Version / status | 0.16 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. GPT Web reviewed the initial repaired F03-B checkpoint and first-setup head `153d0258108cfe1fdc490d42d57f64aa9098e82f` as PASS WITH NOTES; whole-F03-B acceptance remains pending |
-| Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
+| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. GPT Web reviewed the initial repaired F03-B, first-setup and T046 head `281e46651e774b44a0b2e1c18fe30bd50a1f3151` checkpoints as PASS WITH NOTES; whole-F03-B acceptance remains pending |
+| Evidence date | Execution dates remain 2026-09-30; review receipt and planned-design record updated 2026-10-01, Asia/Ho_Chi_Minh |
 | Applicable baseline | Exact-login reset successor source `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142`, based on the reviewed reset head `064f55ffa62e8f67ee6e062e3ab1c827e5509c23`; prior F03-A/B sources below remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); reset checkpoint for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.14 for the T046 successor only; §20 remains historical and unchanged. v0.15 records the exact Login Identity reset repair, 63-test successor and external-review handoff. No dependency, migration or card-state change. Earlier claims retain historical scope. |
+| Change / supersession | Supersedes v0.15 for current review disposition and planned-design trace only. v0.16 adds §22 T046 external-review receipt and §23 approved unknown-identifier clarification/test design. §20–21 remain historical and unchanged. No runtime, test, dependency, migration, new execution or card-state change. Earlier claims retain historical scope. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; initial repaired F03-B and first-setup checkpoints reviewed PASS WITH NOTES. T046 exact-login source executed 63 scoped tests PASS with internal Standards/Spec review; external reset review and whole-F03-B acceptance remain pending. Main integration and official progress publication remain separate |
+| Evidence status | F03-A accepted; initial repaired F03-B, first-setup and T046 checkpoints reviewed PASS WITH NOTES. T046 exact-login source executed 63 scoped tests; its private raw-log access limitation remains. Throttling runtime/tests NOT-RUN; whole-F03-B acceptance remains pending. Main integration and official progress publication remain separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -29,7 +29,9 @@ the subsequent Project Reviewer acceptance. Section 15 records the initial F03-B
 checkpoint; section 16 records its requested repairs and successor execution; section 17 records
 the received review of that repaired checkpoint. Section 18 records the next approved first-setup
 checkpoint; section 19 records its received external technical review; section 20 records the reset
-successor. Earlier pending dispositions are historical.
+successor; section 21 records its exact-login repair, section 22 the received repair review, and
+section 23 the approved bounded-state clarification and planned test design. Earlier pending
+dispositions are historical; section 23 adds no runtime execution evidence.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -1267,3 +1269,74 @@ T046 technical execution is complete, but the external reset review is **PENDING
 fresh public V4–V6, affected migration/data regression, T036, `verify-template` and whole-card
 acceptance remain open. A1 throttling is still documentation/test-plan only. No merge or Tracker
 completion was performed.
+
+## 22. External review of T046
+
+**Source class / disposition:** External technical review supplied by the Project Reviewer;
+**PASS WITH NOTES** for T046 only. It is not an independently executed test or whole-card
+acceptance. The reviewed revision was PR #25:
+
+| Revision | Exact source |
+|---|---|
+| Base | `19587d1b43635822e6a27d86dcae01db9c0220d8` |
+| Reviewed head | `281e46651e774b44a0b2e1c18fe30bd50a1f3151` |
+| Executed source retained in §21 | `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` |
+| Pre-repair reset head | `064f55ffa62e8f67ee6e062e3ab1c827e5509c23` |
+
+The reviewer closed the original MAJOR arbitrary-Login-Identity selection finding. Explicit
+selector enforcement, exact target binding, both L1/L2 choices, sibling credential preservation,
+Account-wide old-session invalidation, disabled reset/separate re-enable and atomic rollback
+were accepted in the repaired checkpoint. No new BLOCKER/MAJOR/MINOR was identified in that scope.
+
+The reviewer verified that executed source → reviewed head changed only evidence/tasks and
+that historical §20 was unchanged. The retained execution summary is 41 HTTP + 20 identity +
+2 health checks, 63 total with zero failures/errors/skips. This section records the received
+review of §21, not another run or independent raw-log inspection.
+
+**Remaining note:** The reviewer could not independently read the mode-600 private host log.
+Its SHA-256 identifies the referenced file but does not substitute for reading its contents.
+Fresh public V4–V6 and affected migration/data regression remain later work, not waived results.
+
+T046 remains `[X]`; T045/§20 are not reopened. F03-B remains IN_PROGRESS, Issue #24 open,
+throttling unimplemented, verifier NOT-RUN and whole-card acceptance pending. The reviewer
+recommended read-only `speckit-analyze` before the later throttling slice. No merge or progress
+publication is inferred from this review.
+
+## 23. Approved existing-identity state bound and planned throttling tests
+
+**Decision source:** The Project Reviewer agreed to the recommended zero-unknown-record design
+in the grilling exchange on 2026-09-30. This documentation update continued on 2026-10-01.
+It refines the synthetic development profile only, not live-company rate/DoS qualification.
+
+Spec v0.6 requires zero failure-observation records for unknown identifiers, with generic refusal
+and qualified dummy-password work retained. Existing Login Identities retain the approved rolling
+15-minute window, fifth-failure 15-minute block, non-extending blocked attempts and atomic eligible
+success clearing. Unknown attempts are not inherited by an identity provisioned later. Anonymous
+servlet sessions used for CSRF are not authenticated session records or identity creation.
+
+Engineering bounds known-login state to one record, five timestamps and one deadline per existing
+Login Identity, with on-access expiry and no arbitrary-name cache/queue/history. See the
+[data model](../data-model.md#state-and-transaction-rules) and
+[design rationale](../research.md#r7--failed-login-state-has-an-existing-identity-bound).
+The [test contract](../contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+defines ten oracle groups at the already-approved real HTTP/PostgreSQL seam: threshold, rolling
+window, block deadline, state bound, unknown identifiers, normalization/two logins, concurrent
+failures, successful clearing, binding/write failure and timing/regressions. They are planned
+vertical RED → GREEN cases, not existing tests or executed PASS results.
+
+The [plan](../plan.md#planned-sign-in-transaction-integration) addresses the current provider's
+commit-before-framework-binding order and rollback-on-refusal path. Planned integration persists
+known-login failures before refusal; success/session/IAM/Audit and clearing remain pending until
+ordinary Spring binding is checked. It does not claim distributed ACID, qualify a new session
+mechanism, import a dependency or change V1–V6. Future code must prove the fault/concurrency oracle.
+
+One supplied decision was integrated; no additional user answer is needed for this design.
+The affected sections are Clarifications, development profile, edge cases, FR-014/SC-003 and
+their plan/data-model/contract/research/tasks/quickstart/handoff traces. Requirement-quality and
+Project Reviewer checklist states remain unchanged; approval does not mark runtime tests complete.
+
+The previous U2 unknown-identifier capacity/expiry question is resolved by zero unknown state and
+the explicit existing-identity bound. Read-only `speckit-analyze` is the next consistency check,
+not a new execution result in this record. T041 throttling, T043 actual client qualification,
+fresh public successors, wider regressions and whole-F03-B acceptance remain open. No code/test,
+timer, actual-hour, Tracker, Issue closure, verifier execution or merge occurs in this update.

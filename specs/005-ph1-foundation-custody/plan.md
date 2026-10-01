@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-09-30 | **Spec**: [PH1 specification v0.5](spec.md)
+**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-10-01 | **Spec**: [PH1 specification v0.6](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -131,9 +131,11 @@ Pre/post-design Constitution check: this refinement implements FR-005/014 under 
 PH1 authority, keeps live policy `SPEC-OPEN-06` open, and retains pre-use intake and truthful
 NOT-RUN states. It requests no constitutional exception or new product-gate approval.
 The initial anonymous-session tracer and reviewed first-setup/reset checkpoints are retained in
-the evidence record. The current next step is T046: exact Login Identity reset repair through
-the approved HTTP/PostgreSQL seam, exact-source rerun and successor evidence, then external
-review and read-only `speckit-analyze`. Do not implement throttling before that sequence finishes.
+the evidence record. T046 received external PASS WITH NOTES at
+`281e46651e774b44a0b2e1c18fe30bd50a1f3151`; see [review receipt](evidence/F03-identity-results.md#22-external-review-of-t046).
+The approved unknown-identifier clarification is now in spec v0.6. This update finishes its
+design and failing-test contract, then runs read-only `speckit-analyze`. T041 throttling runtime
+implementation and execution remain NOT-RUN; they require the next implementation slice.
 F03-B remains IN_PROGRESS; Issue #24 open, verifier NOT-RUN and no merge.
 
 ## Complexity Tracking
@@ -172,11 +174,50 @@ or infer one. Only the pinned login's credential changes. Account-wide version/s
 still applies; other Login Identities retain their credentials for fresh eligible sign-in. Keep
 historical T045 and evidence §20 unchanged and append successor evidence.
 
-Throttling planning only: spec v0.5 owns the rolling-window/deadline semantics. The later red-test
-contract must prove atomic concurrent counting, atomic success/session establishment and clearing,
-generic equivalent password work including blocked refusal, and bounded unknown-identifier state
-with explicit capacity/expiry behavior before implementation. Controlled time tests cover
-immediately before, exactly at and after window/block boundaries. No throttling code is added here.
+Throttling planning only: spec v0.6 owns the rolling-window/deadline semantics. Unknown identifiers
+create zero failure-observation records. Existing Login Identities have at most one state record,
+five timestamps and one block deadline, evaluated on access; see [state rules](data-model.md#state-and-transaction-rules).
+There is no arbitrary-name pool, eviction rule or background cleanup requirement. Controlled time
+tests cover immediately before, exactly at and after window/block boundaries. The
+[qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+requires concurrent updates, successful clearing, fault rollback and equivalent blocked password
+work through real HTTP/PostgreSQL. No throttling code or test execution is added here.
+
+### Planned sign-in transaction integration
+
+The current provider commits `SessionService.signIn` before ordinary Spring session fixation and
+SecurityContext persistence. Its refusal exception also rolls back the current transaction.
+Consequently, simply adding counters/clearing inside that method would not meet the approved
+failure persistence and success/session atomicity contract. [R8](research.md#r8--sign-in-needs-a-transaction-aware-framework-boundary)
+records the pinned framework sequence and the planned integration:
+
+1. Resolve an existing Login Identity by normalized login independently of Account eligibility.
+   Unknown identifiers perform qualified dummy verification and generic refusal without state.
+   Existing identities use the shared security-write lock; recheck eligibility under that lock.
+2. For a refused known-login attempt outside an active block, prune expired timestamps, append
+   the failure and set the fifth-failure deadline in one bounded PostgreSQL transaction. Commit
+   that failure state before returning the generic refusal; do not throw through a rollback-only
+   success path. An active block retains its deadline and observations unchanged. All refused
+   valid-length paths, including blocked paths, retain equivalent qualified password work.
+3. For eligible credentials, stage the session row, current-login failure-state clearing, IAM
+   outcome and Audit in one still-uncommitted transaction. A request-scoped completion object
+   owns the JDBC resources; never place a live connection/transaction in a principal or HttpSession.
+4. Use a narrow integration around the ordinary Spring form-authentication filter, retaining its
+   fixation, CSRF and SecurityContext mechanisms. After fixation/context persistence, verify the
+   actual servlet session contains the expected authenticated identity, then commit PostgreSQL
+   before publishing HTTP success. A success handler alone is insufficient: earlier binding may
+   fail or silently omit persistence. Abort/rollback in every unsuccessful exit and clear/invalidate
+   tentative authentication. Do not add a custom cookie parser, JWT or session store.
+5. Servlet state and PostgreSQL are not an XA transaction. Provisional container proof remains
+   ineligible without its committed database session row; controlled binding/required-write faults
+   must leave no eligible proof and preserve prior failure state. A lost network response after a
+   valid commit is not a rollback claim. Verify this boundary before claiming sign-in atomicity.
+
+Implement these steps in vertical RED → GREEN cases, not as a prewritten full test suite. Start
+with unknown/known state bounds, then rolling-window/deadline behavior, concurrent failures and
+finally success/binding fault fate. Preserve the existing F03-A, setup/reset, CSRF/fixation,
+session deadlines and health regressions. If the qualified framework seam cannot meet the
+contract, report it before weakening the required oracle or changing authentication mechanisms.
 
 T043 client qualification order is: agree the actual client seam → define failing tests/evidence
 contract → implement if needed → execute real Web/Desktop and retain platform evidence. Java

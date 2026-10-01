@@ -39,7 +39,7 @@ transaction. Artifact bytes remain private outside that transaction. The Server 
 Gateway Receipt before custody metadata can become successful. A staged file is not a published
 document or committed Artifact reference.
 
-**Rationale**: [DOC-05 §5](../../docs/product/instances/idea-engineering/DOC-05-architecture-description.md#5-module-decomposition-and-authority)
+**Rationale**: [DOC-05 §5](../../docs/product/instances/idea-engineering/DOC-05-architecture-description.md#5-deep-modules-interfaces-and-ownership)
 assigns state ownership. [DOC-06](../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md)
 distinguishes Artifact, Location, Transfer, Grant, Receipt and Audit. This maintains one
 authoritative owner per state and makes interrupted transfer recoverable without false success.
@@ -95,3 +95,56 @@ hours of sleep; the test still runs the actual Server and PostgreSQL.
 mock/H2 integration evidence, changing the host clock, or waiting two/eight hours. These do not
 deliver the selected boundary or the approved fast test method. Browser TLS/cookie and native
 binding/protected-storage qualifications remain explicit execution work, not assumed PASS.
+
+## R7 — Failed-login state has an existing-identity bound
+
+**Decision**: The Project Reviewer approved zero failure-observation records for unknown login
+identifiers on 2026-09-30. Known identities retain spec's rolling window/block behavior; unknown
+identifiers retain generic refusal and qualified dummy-password work. Engineering plans at most
+one state record with five timestamps and one block deadline per existing Login Identity, with
+on-access expiry. The state population therefore follows provisioned identities, not arbitrary
+request strings. See [data model](data-model.md) and [qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned).
+
+**Rationale**: The existing flow already refuses unknown identifiers and uses qualified dummy
+password verification. Giving each submitted name its own record would introduce another
+capacity/eviction mechanism without making an unknown identity eligible. The selected bound
+keeps the failure-state requirement testable without a cache, queue or new dependency.
+
+**Alternatives considered**: Durable rows or an in-memory cache for unknown identifiers. Both
+need an extra capacity/expiry/eviction policy and are unnecessary for the approved profile.
+This choice does not qualify endpoint-wide rate limiting or protection against resource
+exhaustion. The implementation, successor migration and execution remain NOT-RUN.
+
+## R8 — Sign-in needs a transaction-aware framework boundary
+
+**Observed source**: At reviewed `281e46651e774b44a0b2e1c18fe30bd50a1f3151`,
+`SessionService.signIn` commits the database session/IAM/Audit before the authentication provider
+returns. Refusal throws through a catch that rolls back. The later Spring filter owns session
+fixation and SecurityContext persistence; counter writes cannot simply join either current path.
+
+**Primary evidence**: The already-qualified Spring Security 7.1.1 source pin
+`a825937b8175ee85872c49d9c7fc25eea8cff991` is recorded in the
+[existing intake](../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md).
+Its [authentication filter](https://raw.githubusercontent.com/spring-projects/spring-security/a825937b8175ee85872c49d9c7fc25eea8cff991/web/src/main/java/org/springframework/security/web/authentication/AbstractAuthenticationProcessingFilter.java)
+runs the provider, session strategy and successful-authentication/context-save path in that
+order, before the success handler. Its
+[session context repository](https://raw.githubusercontent.com/spring-projects/spring-security/a825937b8175ee85872c49d9c7fc25eea8cff991/web/src/main/java/org/springframework/security/web/context/HttpSessionSecurityContextRepository.java)
+has a void save operation and can omit session persistence. These are source observations, not
+executed IDEA qualification or imported third-party code.
+
+**Engineering design**: Commit known-login refusal state before returning generic refusal.
+Keep a successful attempt's database work pending until ordinary fixation/context persistence
+has been checked, then commit before HTTP success. A request-scoped completion boundary around
+the ordinary form filter must roll back and invalidate tentative proof on unsuccessful exit.
+Do not store transaction resources in the authenticated principal or servlet session. See the
+[plan](plan.md#planned-sign-in-transaction-integration) and the
+[fault oracle](contracts/ph1-boundaries.md#throttling-qualification-contract-planned).
+
+**Alternatives rejected**: Clearing state in the existing provider commits before binding can
+fail; a success-handler-only rollback misses earlier failures. Merely writing counters before
+the existing refusal exception rolls them back. A new JWT/cookie authenticator or session store
+would replace the selected authentication boundary rather than integrate it.
+
+**Limit**: This is not distributed ACID between servlet memory and PostgreSQL. Eligibility
+requires the committed database session row, so tentative binding must fail closed. The actual
+integration, fault/concurrency tests and additive migration remain NOT-RUN.

@@ -113,8 +113,34 @@ qualification is separate from a Java HTTP harness; no password or session secre
 JavaScript. F04 retains the owner-commit race test, using a verified session reference.
 
 Throttling remains planned, not implemented by T046. Its HTTP test contract must exercise spec
-v0.5's rolling failure window and before/at/after block deadlines, generic refusal with equivalent
+v0.6's rolling failure window and before/at/after block deadlines, generic refusal with equivalent
 qualified password work on blocked paths, atomic concurrent updates and success/session clearing,
-and bounded unknown-login state. Actual Web/Desktop qualification proceeds through agreed seam,
+and the existing-identity state bound below. Actual Web/Desktop qualification proceeds through agreed seam,
 failing-test/evidence contract, implementation if needed, then real-client execution; unrun stays
 NOT-RUN/BLOCKED. The Java HTTP harness alone cannot qualify either client.
+
+### Throttling qualification contract (planned)
+
+Use the already-approved real Server HTTP/PostgreSQL seam and controlled Clock. These are
+future vertical RED → GREEN cases in `HttpSessionFlowTest`, not a claim that tests exist or ran.
+Perform sign-in through the existing login/CSRF contract and observe protected-session eligibility.
+Reuse owned-schema fixtures and bounded persistence witnesses only where HTTP cannot expose a
+resource/transaction invariant; do not add a public counter, test hook or clock route.
+
+| Case | Required oracle |
+|---|---|
+| Four failures / fifth failure | Use separate fixtures: after four failures, correct eligible credentials succeed and clear state; after five failures on another login, a correct password during the block still gets the same empty 401. No Account disablement or identity replacement. |
+| Rolling-window boundary | Independently worked timestamps just before, exactly at and after 15 minutes demonstrate that an exactly 15-minute-old failure is excluded; do not substitute a fixed window. |
+| Block boundary | Correct eligible credentials are refused immediately before `blocked_until`, allowed exactly at/after it; intervening blocked attempts do not extend it. |
+| Known-login state bound | At most one record, five timestamps and one deadline per existing Login Identity, including repeated attempts while blocked and after expiry. Expired observations no longer count on access. |
+| Unknown identifiers | A deterministic batch of 100 distinct unknown names creates zero failure-observation records, Actor/Account/Login Identity or authenticated session records. Anonymous servlet sessions for CSRF are permitted, not authenticated proof. Refusals retain the same empty 401 and qualified dummy-password work. Provision a previously unknown name and prove earlier attempts are not inherited. The batch is a state-bound test, not load/DoS qualification. |
+| Normalization and two logins | Case/outer-whitespace variants resolve to the same existing login and failure state. Two logins on one Account have independent state: blocking L1 does not block an otherwise eligible L2; successful L2 sign-in does not clear L1's block. |
+| Concurrent failures | Synchronized real HTTP requests reach one atomic fifth-failure transition; no lost updates or moving block deadline. Use controlled barriers, not an arbitrary sleep. |
+| Successful clearing / refusal | Successful eligible sign-in clears its current state with the new session/IAM outcome/Audit. Wrong credentials, disabled/PENDING accounts and active blocks cannot clear it or produce an eligible session. |
+| Required-write or framework-binding failure | Forced PostgreSQL/session-binding failure leaves no eligible new proof and does not clear prior failures. After removing the fault, the next wrong attempt still reaches the expected threshold. No successful sign-in is published before the required transaction and ordinary Spring binding succeed. |
+| Timing and regressions | Interleave warmed-up valid-length active/wrong, unknown, disabled and blocked attempts to detect gross password-work bypass, without claiming constant time. Keep F03-A, exact-login setup/reset, expiry, CSRF/fixation and health regressions. |
+
+Migrate only a test-owned UUID schema using the separate migrator; runtime remains the app role.
+Keep V1–V6 immutable. A future additive migration must enforce the identity/size bound and preserve
+runtime least privilege. Retain exact source, expected/actual boundary instants, result and sanitized
+log hash; no proof, cookie, password or submitted unknown-name history in evidence.

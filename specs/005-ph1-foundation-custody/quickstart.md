@@ -1,6 +1,6 @@
 # PH1 validation guide
 
-**Procedure updated 2026-09-30:** This guide is not a progress register or test result.
+**Procedure updated 2026-10-01:** This guide is not a progress register or test result.
 Per-card evidence and the Execution Register own actual status. F03-A acceptance does not
 pre-accept F03-B HTTP/session work; retain each executed red/green result separately.
 
@@ -90,12 +90,13 @@ Missing access is BLOCKED, not permission to substitute an in-memory database.
 
 The scoped runner is `apps/server/scripts/run-f03b-postgresql-checks.sh`. It fails closed if
 required credentials/roles/database are missing; any skipped check must be reported NOT-RUN,
-not PASS. The anonymous-session tracer is historical evidence. The current next step is T046's
-explicit Login Identity reset repair, one RED → GREEN behavior at a time through the
-[HTTP contract](contracts/ph1-boundaries.md#f03-b-http-refinement). RESET requests now require
-loginIdentityId even for one login; test both selections on a two-login Account, missing/foreign
-selectors, credential/scope/version refusal, sibling credential preservation, Account-wide old
-session revocation, stale sibling proof and disabled recovery followed by separate re-enable.
+not PASS. The anonymous-session tracer is historical evidence. T046's explicit Login Identity
+repair received external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151`; retain
+its two-login and refusal regressions. The current update finishes spec v0.6's state-bound/test
+design and read-only `speckit-analyze`, not runtime implementation. Future T041 execution follows
+one RED → GREEN behavior at a time through the
+[throttling contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+and [planned sign-in integration](plan.md#planned-sign-in-transaction-integration).
 
 Run the affected checkpoint from an archive of the exact committed source:
 
@@ -103,9 +104,11 @@ Run the affected checkpoint from an archive of the exact committed source:
 bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
 ```
 
-Preserve T045/§20 and V1–V6. Append successor evidence, obtain external review, then rerun
-`speckit-analyze` before throttling; do not implement throttling or merge in this repair.
-Spec v0.5 owns rolling-window and resource/timing requirements. Client qualification remains
+Preserve T045/§20 and V1–V6. Spec v0.6 owns rolling-window and resource/timing requirements:
+unknown identifiers create zero failure records; each known Login Identity stays within one
+record/five timestamps/one deadline. Future tests must prove concurrent counting, successful
+clearing/session fate and binding/write-failure rollback, not only the counter threshold. No
+throttling tests have run in this documentation update. Do not merge. Client qualification remains
 T043's seam → failing tests/evidence contract → implementation if needed → real Web/Desktop
 execution, never inferred from this Java HTTP runner.
 

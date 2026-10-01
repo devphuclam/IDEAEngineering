@@ -41,27 +41,40 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B repair handoff
+## Current F03-B throttling planning handoff
 
-Use spec v0.5, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
+Use spec v0.6, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
-rewrite evidence §20. The approved current work is successor T046, not throttling:
+rewrite evidence §20. T046 ran from `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` and received
+external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151` (§22). Preserve V1–V6
+and the exact-login repair; no single-login invariant or implicit selector.
 
-1. Repair Spec Kit/current handoff references without changing historical pins or frozen sources.
-2. Follow TDD at the approved real Server HTTP + PostgreSQL seam: require explicit RESET
-   loginIdentityId; validate the exact target tuple; prove both L1/L2 choices, refusals, unchanged
-   sibling credentials and Account-wide invalidation. See spec scenario 12 and the HTTP contract.
-   Never add a one-login invariant, first-row fallback or new migration; preserve V1–V6.
-3. Rerun on exact committed source and append successor evidence. Retain RED/GREEN and limits.
-4. Publish the successor checkpoint for external review without merge. After that review, run
-   read-only `speckit-analyze`; only then consider the later throttling implementation slice.
+This update is documentation/test planning only. Finish read-only `speckit-analyze` before the
+next authorized T041 implementation slice. Use the
+[qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+and [sign-in integration](plan.md#planned-sign-in-transaction-integration), in this order:
 
-A1 throttling is clarification/test planning only here. Spec owns its rolling-window rules.
-Before its future code, define failing-test contracts for atomic concurrent updates and
-success/session clearing, deadline boundaries, equivalent blocked password work and bounded
-unknown-identifier state. T043 owns four ordered client steps: qualification seam → failing
-test/evidence contract → implementation if needed → actual Web/Desktop evidence. Java HTTP
-harness results cannot replace client qualification; unrun remains NOT-RUN/BLOCKED.
+1. One failing real-HTTP/PostgreSQL test for unknown identifiers creating zero failure records;
+   implement just that behavior. Preserve generic refusal/dummy verification; anonymous CSRF
+   servlet sessions are not authenticated sessions. No arbitrary-name cache, queue or history.
+2. Add a known-login failing behavior; keep at most one row/five timestamps/one deadline per
+   existing Login Identity. Extend rolling-window and fifth-failure block tests vertically with
+   controlled time before/at/after deadlines. Case/strip variants share state; L1/L2 do not.
+3. Prove synchronized concurrent failures do not lose updates or extend a block. Keep required
+   lock/transaction boundaries, qualified password work and the existing runtime-role restrictions.
+4. Prove successful clearing and session/IAM/Audit fate, including required-write and ordinary
+   Spring binding failures. Refused attempts must persist their bounded state before throwing;
+   successful state must not commit before binding is checked. Use a request-scoped transaction
+   boundary, not a live connection in Identity/HttpSession or a success-handler-only patch.
+5. Rerun affected F03-A, setup/reset, expiry, CSRF/fixation and health regressions on exact
+   committed source; append successor evidence and publish a reviewable checkpoint without merge.
+   Tests/migration that have not run remain NOT-RUN; never infer whole-card completion.
+
+If implementation needs an additive migration, its constraints must enforce the existing-identity
+bound and retain least privilege. Do not modify V1–V6. Do not claim servlet/PostgreSQL distributed
+ACID: no tentative proof is eligible without committed database state. T043 still owns four
+ordered client steps: qualification seam → failing test/evidence contract → implementation if
+needed → actual Web/Desktop evidence. Java HTTP harness results cannot replace client qualification.
 
 Keep F03-B IN_PROGRESS, Issue #24 open and verifier NOT-RUN. No merge or whole-card PASS.
 
