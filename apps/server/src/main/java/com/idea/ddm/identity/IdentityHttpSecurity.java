@@ -76,6 +76,9 @@ class IdentityHttpSecurity {
                 // One authoritative attempt: no parent provider fallback repeating a refusal.
                 .authenticationManager(new ProviderManager(List.of(nativeIdentityProvider)))
                 .securityContext(context -> context.securityContextRepository(identityContexts))
+                // CsrfFilter precedes this boundary; refused/failed logout cannot clear a valid proof.
+                .addFilterAt(new LogoutBoundary(sessions, identityContexts),
+                        org.springframework.security.web.authentication.logout.LogoutFilter.class)
                 .addFilterBefore(signIns, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> response.setStatus(401))
@@ -91,12 +94,7 @@ class IdentityHttpSecurity {
                             response.getWriter().write("{\"actorId\":\"" + identity.actorId() + "\"}");
                         })
                         .failureHandler((request, response, exception) -> response.setStatus(401)))
-                .logout(logout -> logout.logoutUrl("/api/v1/identity/logout")
-                        .addLogoutHandler((request, response, authentication) -> sessions.signOut(
-                                authentication != null && authentication.getPrincipal() instanceof SessionService.Identity identity
-                                        ? identity : null))
-                        .deleteCookies("IDEA_SESSION")
-                        .logoutSuccessHandler((request, response, authentication) -> response.setStatus(204)));
+                .logout(logout -> logout.disable());
         return http.build();
     }
 }

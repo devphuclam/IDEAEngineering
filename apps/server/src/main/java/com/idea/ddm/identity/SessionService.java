@@ -160,6 +160,7 @@ public final class SessionService {
             connection.setAutoCommit(false);
             try {
                 AdministratorBootstrap.execute(connection, "SELECT pg_advisory_xact_lock(73003002)");
+                checkEligibility(connection, context(identity));
                 AdministratorBootstrap.insert(connection, "UPDATE session_record SET revoked_at=? "
                         + "WHERE session_id=? AND actor_id=? AND account_id=? AND runtime_instance_id=? AND revoked_at IS NULL",
                         java.sql.Timestamp.from(clock.instant().truncatedTo(ChronoUnit.MICROS)), identity.sessionId(),
