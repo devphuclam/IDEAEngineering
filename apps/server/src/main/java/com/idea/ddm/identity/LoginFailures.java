@@ -41,9 +41,15 @@ final class LoginFailures {
     }
 
     static void clear(Connection connection, UUID loginIdentityId) throws SQLException {
-        try (var query = connection.prepareStatement("DELETE FROM login_failure_state WHERE login_identity_id=?")) {
+        try (var query = connection.prepareStatement("WITH observed AS MATERIALIZED "
+                + "(SELECT login_identity_id FROM login_failure_state WHERE login_identity_id=?),"
+                + "removed AS (DELETE FROM login_failure_state WHERE login_identity_id=? RETURNING login_identity_id) "
+                + "SELECT (SELECT count(*) FROM observed),(SELECT count(*) FROM removed)")) {
             query.setObject(1, loginIdentityId);
-            query.executeUpdate();
+            query.setObject(2, loginIdentityId);
+            try (var row = query.executeQuery()) {
+                if (!row.next() || row.getLong(1) != row.getLong(2)) throw new SQLException("Login failure state not cleared");
+            }
         }
     }
 }
