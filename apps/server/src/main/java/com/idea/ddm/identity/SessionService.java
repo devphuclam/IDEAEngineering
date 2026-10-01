@@ -19,6 +19,7 @@ public final class SessionService {
     private final Clock clock;
     private final UUID runtimeInstance = UUID.randomUUID();
     private final NativePasswordVerifier passwords = new NativePasswordVerifier();
+    private final ThreadLocal<SignInAttempt> signInAttempt = new ThreadLocal<>();
     // Same qualified BCrypt cost as native credentials; generated once, never an account credential.
     private final String refusedLoginVerifier = passwords.encode(UUID.randomUUID().toString());
 
@@ -28,8 +29,13 @@ public final class SessionService {
     }
 
     Identity signIn(String login, String password) {
+        var attempt = signInAttempt.get();
+        if (attempt == null) throw new InternalAuthenticationServiceException("Missing sign-in transaction boundary");
         if (login == null || login.length() > 254) throw refused();
-        try (var connection = dataSource.getConnection()) {
+        java.sql.Connection connection = null;
+        boolean transferred = false;
+        try {
+            connection = dataSource.getConnection();
             connection.setAutoCommit(false);
             try {
                 AdministratorBootstrap.execute(connection, "SELECT pg_advisory_xact_lock(73003002)");
@@ -63,7 +69,9 @@ public final class SessionService {
                                 java.sql.Timestamp.from(now.plus(Duration.ofHours(8))), runtimeInstance);
                         AdministratorBootstrap.record(connection, UUID.randomUUID(), identity.actorId(),
                                 "identity.sign-in", identity.accountId().toString(), "ACCEPTED", null);
-                        connection.commit();
+                        attempt.connection = connection;
+                        attempt.identity = identity;
+                        transferred = true; // Request boundary now owns the still-uncommitted resources.
                         return identity;
                     }
                 }
@@ -73,7 +81,54 @@ public final class SessionService {
             }
         } catch (SQLException exception) {
             throw new InternalAuthenticationServiceException("Identity verification unavailable", exception);
+        } finally {
+            if (!transferred && connection != null) {
+                try { connection.close(); }
+                catch (SQLException exception) { throw new InternalAuthenticationServiceException("Identity verification unavailable", exception); }
+            }
         }
+    }
+
+    void beginSignIn() {
+        if (signInAttempt.get() != null) throw new IllegalStateException("Nested sign-in boundary");
+        signInAttempt.set(new SignInAttempt());
+    }
+
+    void commitSignIn(Identity identity) {
+        var attempt = signInAttempt.get();
+        if (attempt == null || attempt.connection == null || !identity.equals(attempt.identity) || attempt.committed) {
+            throw new InternalAuthenticationServiceException("Incomplete sign-in transaction");
+        }
+        try {
+            attempt.connection.commit();
+            attempt.committed = true;
+        } catch (SQLException exception) {
+            throw new InternalAuthenticationServiceException("Identity verification unavailable", exception);
+        }
+    }
+
+    boolean uncommittedSignIn() {
+        var attempt = signInAttempt.get();
+        return attempt != null && attempt.connection != null && !attempt.committed;
+    }
+
+    void endSignIn() {
+        var attempt = signInAttempt.get();
+        try {
+            if (attempt != null && attempt.connection != null) {
+                try {
+                    if (!attempt.committed) attempt.connection.rollback();
+                } finally { attempt.connection.close(); }
+            }
+        } catch (SQLException exception) {
+            throw new InternalAuthenticationServiceException("Identity verification unavailable", exception);
+        } finally { signInAttempt.remove(); }
+    }
+
+    private static final class SignInAttempt {
+        java.sql.Connection connection;
+        Identity identity;
+        boolean committed;
     }
 
     View current(Identity identity) {

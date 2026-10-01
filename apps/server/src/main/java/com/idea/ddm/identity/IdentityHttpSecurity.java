@@ -62,6 +62,7 @@ class IdentityHttpSecurity {
     @Bean
     SecurityFilterChain identityBoundary(HttpSecurity http, AuthenticationProvider nativeIdentityProvider,
             SessionService sessions, SecurityContextRepository identityContexts) throws Exception {
+        var signIns = new SignInBoundary(sessions);
         http.authorizeHttpRequests(access -> access
                 .requestMatchers(HttpMethod.GET, "/health", "/health/database", "/api/v1/identity/csrf").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/identity/login", "/api/v1/identity/credentials").permitAll()
@@ -69,6 +70,7 @@ class IdentityHttpSecurity {
                 // One authoritative attempt: no parent provider fallback repeating a refusal.
                 .authenticationManager(new ProviderManager(List.of(nativeIdentityProvider)))
                 .securityContext(context -> context.securityContextRepository(identityContexts))
+                .addFilterBefore(signIns, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> response.setStatus(401))
                         .accessDeniedHandler((request, response, exception) -> response.setStatus(403)))
@@ -78,6 +80,7 @@ class IdentityHttpSecurity {
                         .loginProcessingUrl("/api/v1/identity/login")
                         .successHandler((request, response, authentication) -> {
                             var identity = (SessionService.Identity) authentication.getPrincipal();
+                            signIns.complete(request, identity);
                             response.setContentType("application/json");
                             response.getWriter().write("{\"actorId\":\"" + identity.actorId() + "\"}");
                         })
