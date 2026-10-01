@@ -112,7 +112,7 @@ be exposed as a client-accessible control route. Native Desktop binding/protecte
 qualification is separate from a Java HTTP harness; no password or session secret enters page
 JavaScript. F04 retains the owner-commit race test, using a verified session reference.
 
-Throttling remains planned, not implemented by T046. Its HTTP test contract must exercise spec
+T046 did not implement throttling. The separate T041 successor exercises this contract and spec
 v0.6's rolling failure window and before/at/after block deadlines, generic refusal with equivalent
 qualified password work on blocked paths, atomic concurrent updates and success/session clearing,
 and the existing-identity state bound below. Actual Web/Desktop qualification proceeds through agreed seam,
@@ -122,7 +122,10 @@ NOT-RUN/BLOCKED. The Java HTTP harness alone cannot qualify either client.
 ### Throttling qualification contract (planned)
 
 Use the already-approved real Server HTTP/PostgreSQL seam and controlled Clock. These are
-future vertical RED → GREEN cases in `HttpSessionFlowTest`, not a claim that tests exist or ran.
+vertical RED → GREEN cases in `HttpSessionFlowTest`; the original planned heading is retained
+as a stable link. Actual results are in
+[T041 execution evidence](../evidence/F03-identity-results.md#24-t041-throttling-checkpoint),
+not inferred from this contract.
 Perform sign-in through the existing login/CSRF contract and observe protected-session eligibility.
 Reuse owned-schema fixtures and bounded persistence witnesses only where HTTP cannot expose a
 resource/transaction invariant; do not add a public counter, test hook or clock route.
@@ -141,6 +144,6 @@ resource/transaction invariant; do not add a public counter, test hook or clock 
 | Timing and regressions | Interleave warmed-up valid-length active/wrong, unknown, disabled and blocked attempts to detect gross password-work bypass, without claiming constant time. Keep F03-A, exact-login setup/reset, expiry, CSRF/fixation and health regressions. |
 
 Migrate only a test-owned UUID schema using the separate migrator; runtime remains the app role.
-Keep V1–V6 immutable. A future additive migration must enforce the identity/size bound and preserve
+Keep V1–V6 immutable. Additive V7 enforces the identity/size bound and preserves
 runtime least privilege. Retain exact source, expected/actual boundary instants, result and sanitized
 log hash; no proof, cookie, password or submitted unknown-name history in evidence.

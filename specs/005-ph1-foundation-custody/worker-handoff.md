@@ -41,7 +41,7 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B throttling planning handoff
+## Current F03-B throttling review handoff
 
 Use spec v0.6, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
@@ -49,29 +49,29 @@ rewrite evidence §20. T046 ran from `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` 
 external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151` (§22). Preserve V1–V6
 and the exact-login repair; no single-login invariant or implicit selector.
 
-This update is documentation/test planning only. Finish read-only `speckit-analyze` before the
-next authorized T041 implementation slice. Use the
+Read-only `speckit-analyze` preceded T041 implementation. The runtime successor and its exact
+source, RED/GREEN results, internal review and remaining limits are in
+[evidence §24](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
+Next: request external review of this checkpoint; do not start another slice first. The
 [qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
-and [sign-in integration](plan.md#planned-sign-in-transaction-integration), in this order:
+and [sign-in integration](plan.md#planned-sign-in-transaction-integration) govern review:
 
-1. One failing real-HTTP/PostgreSQL test for unknown identifiers creating zero failure records;
-   implement just that behavior. Preserve generic refusal/dummy verification; anonymous CSRF
-   servlet sessions are not authenticated sessions. No arbitrary-name cache, queue or history.
-2. Add a known-login failing behavior; keep at most one row/five timestamps/one deadline per
-   existing Login Identity. Extend rolling-window and fifth-failure block tests vertically with
-   controlled time before/at/after deadlines. Case/strip variants share state; L1/L2 do not.
-3. Prove synchronized concurrent failures do not lose updates or extend a block. Keep required
-   lock/transaction boundaries, qualified password work and the existing runtime-role restrictions.
-4. Prove successful clearing and session/IAM/Audit fate, including required-write and ordinary
-   Spring binding failures. Refused attempts must persist their bounded state before throwing;
-   successful state must not commit before binding is checked. Use a request-scoped transaction
-   boundary, not a live connection in Identity/HttpSession or a success-handler-only patch.
-5. Rerun affected F03-A, setup/reset, expiry, CSRF/fixation and health regressions on exact
-   committed source; append successor evidence and publish a reviewable checkpoint without merge.
-   Tests/migration that have not run remain NOT-RUN; never infer whole-card completion.
+1. Check the fifth-failure tracer RED/GREEN and subsequent rolling/deadline tests. Unknown
+   zero-state behavior already existed; its additional state-bound oracle passed without a
+   fabricated RED. Anonymous CSRF servlet sessions are not authenticated sessions.
+2. Check one row/five timestamps/one deadline per existing Login Identity, controlled-time
+   before/at/after boundaries, shared normalized variants and independent L1/L2 state.
+3. Check synchronized concurrent counting and qualified refused-path password work, including
+   the credentialless successor, with the existing runtime-role restrictions.
+4. Check refusal-state persistence and successful clearing/session/IAM/Audit fate. Required-write
+   and ordinary Spring binding faults must preserve prior failures and no eligible tentative
+   proof. JDBC resources remain request-scoped, never in Identity/HttpSession.
+5. Check exact source `b08709c581de195e05aea26450495cd593722059`, its 81-test result and the
+   source-to-review-head diff. Unrun clients/fresh-public migration remain NOT-RUN; no merge or
+   whole-card completion is implied.
 
-If implementation needs an additive migration, its constraints must enforce the existing-identity
-bound and retain least privilege. Do not modify V1–V6. Do not claim servlet/PostgreSQL distributed
+Additive V7 enforces the existing-identity bound and retains least privilege. Do not modify V1–V6.
+Do not claim servlet/PostgreSQL distributed
 ACID: no tentative proof is eligible without committed database state. T043 still owns four
 ordered client steps: qualification seam → failing test/evidence contract → implementation if
 needed → actual Web/Desktop evidence. Java HTTP harness results cannot replace client qualification.

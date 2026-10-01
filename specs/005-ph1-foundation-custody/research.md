@@ -100,7 +100,7 @@ binding/protected-storage qualifications remain explicit execution work, not ass
 
 **Decision**: The Project Reviewer approved zero failure-observation records for unknown login
 identifiers on 2026-09-30. Known identities retain spec's rolling window/block behavior; unknown
-identifiers retain generic refusal and qualified dummy-password work. Engineering plans at most
+identifiers retain generic refusal and qualified dummy-password work. Engineering selected at most
 one state record with five timestamps and one block deadline per existing Login Identity, with
 on-access expiry. The state population therefore follows provisioned identities, not arbitrary
 request strings. See [data model](data-model.md) and [qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned).
@@ -113,7 +113,8 @@ keeps the failure-state requirement testable without a cache, queue or new depen
 **Alternatives considered**: Durable rows or an in-memory cache for unknown identifiers. Both
 need an extra capacity/expiry/eviction policy and are unnecessary for the approved profile.
 This choice does not qualify endpoint-wide rate limiting or protection against resource
-exhaustion. The implementation, successor migration and execution remain NOT-RUN.
+exhaustion. Additive V7 and the implemented boundary are qualified in
+[T041 successor evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
 
 ## R8 — Sign-in needs a transaction-aware framework boundary
 
@@ -147,4 +148,5 @@ would replace the selected authentication boundary rather than integrate it.
 
 **Limit**: This is not distributed ACID between servlet memory and PostgreSQL. Eligibility
 requires the committed database session row, so tentative binding must fail closed. The actual
-integration, fault/concurrency tests and additive migration remain NOT-RUN.
+integration, fault/concurrency tests and additive V7 have successor execution evidence in §24.
+That evidence does not qualify actual Web/Desktop clients or a distributed transaction.

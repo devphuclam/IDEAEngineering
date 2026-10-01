@@ -133,9 +133,10 @@ NOT-RUN states. It requests no constitutional exception or new product-gate appr
 The initial anonymous-session tracer and reviewed first-setup/reset checkpoints are retained in
 the evidence record. T046 received external PASS WITH NOTES at
 `281e46651e774b44a0b2e1c18fe30bd50a1f3151`; see [review receipt](evidence/F03-identity-results.md#22-external-review-of-t046).
-The approved unknown-identifier clarification is now in spec v0.6. This update finishes its
-design and failing-test contract, then runs read-only `speckit-analyze`. T041 throttling runtime
-implementation and execution remain NOT-RUN; they require the next implementation slice.
+The approved unknown-identifier clarification is in spec v0.6. Read-only `speckit-analyze`
+preceded the authorized T041 implementation. Its throttling successor is recorded in
+[execution evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint);
+external checkpoint review is the next action, not another clarification or F03-B slice.
 F03-B remains IN_PROGRESS; Issue #24 open, verifier NOT-RUN and no merge.
 
 ## Complexity Tracking
@@ -146,9 +147,8 @@ invalidation; temporary failed-login block. V5 introduces the v2 seed and first-
 changing V1–V4 or existing assignments. The assignment command supports only the exact seeded
 v1/v2 IDs and versions, not arbitrary versions sharing a role code. Permission contents are
 owned by spec's clarification. Reset's V6 is committed; preserve V1–V6. The exact-login repair
-needs no migration because V6 already pins the Account/Login Identity tuple. A future throttling
-slice may add a successor migration, never rewrite these baselines. All v1/F03-A tests remain
-applicable and unchanged.
+needs no migration because V6 already pins the Account/Login Identity tuple. Throttling adds
+V7 without rewriting these baselines. All v1/F03-A tests remain applicable and unchanged.
 
 First-setup issuance checks session eligibility before permission/scope evaluation and again
 under the security-write lock. Rejected requests do not refresh idle activity; accepted owner
@@ -174,19 +174,20 @@ or infer one. Only the pinned login's credential changes. Account-wide version/s
 still applies; other Login Identities retain their credentials for fresh eligible sign-in. Keep
 historical T045 and evidence §20 unchanged and append successor evidence.
 
-Throttling planning only: spec v0.6 owns the rolling-window/deadline semantics. Unknown identifiers
+Throttling design: spec v0.6 owns the rolling-window/deadline semantics. Unknown identifiers
 create zero failure-observation records. Existing Login Identities have at most one state record,
 five timestamps and one block deadline, evaluated on access; see [state rules](data-model.md#state-and-transaction-rules).
 There is no arbitrary-name pool, eviction rule or background cleanup requirement. Controlled time
 tests cover immediately before, exactly at and after window/block boundaries. The
 [qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
 requires concurrent updates, successful clearing, fault rollback and equivalent blocked password
-work through real HTTP/PostgreSQL. No throttling code or test execution is added here.
+work through real HTTP/PostgreSQL. See §24 of the evidence record for execution and its limits.
 
 ### Planned sign-in transaction integration
 
-The current provider commits `SessionService.signIn` before ordinary Spring session fixation and
-SecurityContext persistence. Its refusal exception also rolls back the current transaction.
+At the pre-throttling head `281e46651e774b44a0b2e1c18fe30bd50a1f3151`, the provider committed
+`SessionService.signIn` before ordinary Spring session fixation and SecurityContext persistence.
+Its refusal exception also rolled back the current transaction.
 Consequently, simply adding counters/clearing inside that method would not meet the approved
 failure persistence and success/session atomicity contract. [R8](research.md#r8--sign-in-needs-a-transaction-aware-framework-boundary)
 records the pinned framework sequence and the planned integration:

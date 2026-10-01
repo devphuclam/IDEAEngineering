@@ -92,9 +92,8 @@ The scoped runner is `apps/server/scripts/run-f03b-postgresql-checks.sh`. It fai
 required credentials/roles/database are missing; any skipped check must be reported NOT-RUN,
 not PASS. The anonymous-session tracer is historical evidence. T046's explicit Login Identity
 repair received external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151`; retain
-its two-login and refusal regressions. The current update finishes spec v0.6's state-bound/test
-design and read-only `speckit-analyze`, not runtime implementation. Future T041 execution follows
-one RED → GREEN behavior at a time through the
+its two-login and refusal regressions. Read-only `speckit-analyze` preceded spec v0.6's authorized
+T041 execution. The successor follows one RED → GREEN behavior at a time through the
 [throttling contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
 and [planned sign-in integration](plan.md#planned-sign-in-transaction-integration).
 
@@ -106,9 +105,10 @@ bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,Ident
 
 Preserve T045/§20 and V1–V6. Spec v0.6 owns rolling-window and resource/timing requirements:
 unknown identifiers create zero failure records; each known Login Identity stays within one
-record/five timestamps/one deadline. Future tests must prove concurrent counting, successful
-clearing/session fate and binding/write-failure rollback, not only the counter threshold. No
-throttling tests have run in this documentation update. Do not merge. Client qualification remains
+record/five timestamps/one deadline. The T041 successor covers concurrent counting, successful
+clearing/session fate and binding/write-failure rollback, not only the counter threshold;
+see [exact-source evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
+External throttling checkpoint review is next. Do not merge. Client qualification remains
 T043's seam → failing tests/evidence contract → implementation if needed → real Web/Desktop
 execution, never inferred from this Java HTTP runner.
 

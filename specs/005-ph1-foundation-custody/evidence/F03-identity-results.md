@@ -3,18 +3,18 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.16 / Draft |
+| Version / status | 0.17 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; internal Standards/Spec review below. Project Reviewer accepted F03-A on 2026-09-30. GPT Web reviewed the initial repaired F03-B, first-setup and T046 head `281e46651e774b44a0b2e1c18fe30bd50a1f3151` checkpoints as PASS WITH NOTES; whole-F03-B acceptance remains pending |
-| Evidence date | Execution dates remain 2026-09-30; review receipt and planned-design record updated 2026-10-01, Asia/Ho_Chi_Minh |
-| Applicable baseline | Exact-login reset successor source `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142`, based on the reviewed reset head `064f55ffa62e8f67ee6e062e3ab1c827e5509c23`; prior F03-A/B sources below remain historical |
+| Evidence date | T041 execution and internal review 2026-10-01, Asia/Ho_Chi_Minh; earlier execution dates remain historical |
+| Applicable baseline | T041 throttling source `b08709c581de195e05aea26450495cd593722059`, based on externally reviewed T046 head `281e46651e774b44a0b2e1c18fe30bd50a1f3151`; prior F03-A/B sources below remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
-| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); reset checkpoint for PR #25 review, not whole-card acceptance |
+| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); T041 throttling checkpoint for PR #25 review, not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.15 for current review disposition and planned-design trace only. v0.16 adds §22 T046 external-review receipt and §23 approved unknown-identifier clarification/test design. §20–21 remain historical and unchanged. No runtime, test, dependency, migration, new execution or card-state change. Earlier claims retain historical scope. |
+| Change / supersession | Supersedes v0.16 for current execution trace. v0.17 adds §24 T041 throttling successor, RED/GREEN, exact-source regression and internal review. §20–23 remain historical and unchanged. Runtime/test changes and additive V7 are explicit; no dependency or card-state change. Earlier claims retain historical scope. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
-| Evidence status | F03-A accepted; initial repaired F03-B, first-setup and T046 checkpoints reviewed PASS WITH NOTES. T046 exact-login source executed 63 scoped tests; its private raw-log access limitation remains. Throttling runtime/tests NOT-RUN; whole-F03-B acceptance remains pending. Main integration and official progress publication remain separate |
+| Evidence status | F03-A accepted; initial repaired F03-B, first-setup and T046 checkpoints reviewed PASS WITH NOTES. T041 throttling source executed 81 checks with zero failures/errors/skips; internal Standards/Spec findings repaired and rechecked. External throttling review and whole-F03-B acceptance remain pending. Private raw-log access limitation remains; main integration and official progress publication are separate |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -30,8 +30,9 @@ checkpoint; section 16 records its requested repairs and successor execution; se
 the received review of that repaired checkpoint. Section 18 records the next approved first-setup
 checkpoint; section 19 records its received external technical review; section 20 records the reset
 successor; section 21 records its exact-login repair, section 22 the received repair review, and
-section 23 the approved bounded-state clarification and planned test design. Earlier pending
-dispositions are historical; section 23 adds no runtime execution evidence.
+section 23 the approved bounded-state clarification and planned test design. Section 24 records
+T041 implementation/execution and internal review. Earlier pending dispositions are historical;
+section 23 adds no runtime execution evidence.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -1340,3 +1341,168 @@ the explicit existing-identity bound. Read-only `speckit-analyze` is the next co
 not a new execution result in this record. T041 throttling, T043 actual client qualification,
 fresh public successors, wider regressions and whole-F03-B acceptance remain open. No code/test,
 timer, actual-hour, Tracker, Issue closure, verifier execution or merge occurs in this update.
+
+## 24. T041 throttling checkpoint
+
+### Scope and source
+
+The Project Reviewer authorized this slice on 2026-10-01 after spec v0.6 and read-only Analyze
+settled the unknown-login bound. No new clarification or requirement was introduced by execution.
+T041 adds temporary failed-login blocking; it does not complete F03-B or qualify client paths.
+
+| Execution field | Actual value |
+|---|---|
+| Exact source | `b08709c581de195e05aea26450495cd593722059` |
+| Fixed review point | Externally reviewed T046 head `281e46651e774b44a0b2e1c18fe30bd50a1f3151` |
+| Source archive | `git archive HEAD apps/server database`; SHA-256 `54EE57A8A1E12EF48517C2E5620A202D2DD5FDFE4F6DDB949156BD46B8C0E739` matched locally and on the server |
+| Execution directory | `/home/phuclam/idea-f03b-throttle-successor-tzLuLByr` |
+| Database / roles | `idea_ddm_f03a_20260930_c91e7a42`; migrator `idea_ddm_migrator`, runtime `idea_ddm_app` |
+| Test isolation | Owned `f03b_<32-hex UUID>` / `f03a_<32-hex UUID>` schemas only; synthetic identities/passwords; loopback HTTP with test-only Secure-cookie override and controlled Clock |
+| Runtime | PostgreSQL 18.6 (`18.6-0ubuntu0.26.04.1`), Temurin 25.0.4.1+1, qualified Spring Boot 4.1.1 / Spring Security 7.1.1 |
+| Final command | `bash apps/server/scripts/run-f03b-postgresql-checks.sh 'HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest'` |
+| Finished | `2026-10-01T08:54:48+07:00`; Maven elapsed `01:35 min` |
+| Final result | 59 HTTP + 20 unchanged F03-A + 2 health tests = **81 PASS**, failures/errors/skips **0/0/0** |
+| Final private log | `/home/phuclam/idea-f03b-test-Kj4lLM0p.log`, mode `600 phuclam:phuclam`; SHA-256 `95502E9BAECE1D448E11133A69BC8D252CE12D21385B3E1BD080A54159CAB4A7` |
+| Post-run check | `OWNED_TEST_SCHEMAS=0`; `PUBLIC_MAX_VERSION=3` |
+
+The archive contains committed source, not the subsequently edited evidence/handoff. Publication
+after this source changes delivery documents only; reviewer trace must check that no application,
+test, dependency or migration changed after the run. No dependency was added. V1–V6 and
+`IdentityFlowTest` remain unchanged. `DataBaselineTest`'s previously stale three-migration
+expectation was aligned to seven and the new table's visibility; that class compiled but its
+fresh-public tests were **NOT-RUN**, not counted in the 81 checks.
+
+### Delivered boundary
+
+Additive V7 stores one row per existing Login Identity, enforced by a primary key/foreign key,
+with one-to-five non-null timestamps and one optional deadline. Unknown submitted names create
+no identity, failure row or name-history/cache. Runtime receives the needed row operations,
+not schema CREATE or table TRUNCATE authority.
+
+`SessionService` resolves the normalized login independently of eligibility. It performs qualified
+BCrypt work for refused valid-length unknown, disabled, blocked and credentialless paths; none
+can authenticate through the dummy verifier. A known refusal outside an active block prunes the
+rolling window, appends one failure and commits it before returning the same empty 401. Active
+block attempts leave the timestamps and deadline unchanged. The explicit ProviderManager has no
+fallback parent: one HTTP attempt must not invoke the same provider twice and count two failures.
+
+Eligible success stages failure-state clearing, the session row, IAM outcome and Audit in one
+database transaction under the existing security-write lock. `SignInBoundary` surrounds ordinary
+Spring form authentication. It checks the actual authenticated servlet-session binding after
+ordinary fixation/context persistence, commits PostgreSQL, then publishes success. Failed writes,
+missing binding, before/after-save exceptions and failed commit roll back; tentative context is
+cleared and the servlet session invalidated. JDBC resources stay request-scoped, never in Identity
+or HttpSession. This is a verified eligibility boundary, **not** servlet/PostgreSQL XA.
+
+### RED → GREEN trace
+
+Each focused command used the scoped runner with `HttpSessionFlowTest#<method>` from a fresh
+archive/extraction of the recorded commit. The test methods below are public-behavior names,
+not new HTTP routes. The first missing behavior was fifth-failure blocking; further state-bound
+and regression cases were added vertically. Unknown zero-state behavior already existed and its
+added oracle passed; it is not presented as a missing-feature RED.
+
+| Behavior / method | RED source and actual failure | GREEN source and result |
+|---|---|---|
+| `fifthWrongPasswordBlocksEvenCorrectCredentialsWithoutDisablingAccount` | `251d5737abacfc43aa3ae5ae76a61fb17dc64e6b`: correct credential after five failures returned 200 instead of 401 | `50c580974305b9fe095e265b07ddf4f8c6aeb5e4`: PASS |
+| `rollingWindowExcludesFailuresExactlyFifteenMinutesOld` | `9c663d15d9e8cb22ec91e3426a6c64c516dbd5ad`: exact cutoff still refused (401 instead of 200); investigation found provider fallback counting one refusal twice | `5a79df9123ac16fa05bf26d4d91c99186f48da64`: threshold and rolling boundary 2/2 PASS |
+| `silentlyMissingSpringBindingCannotCommitSessionOrClearFourFailures` | `97ab00a2dcb958fb1fd402b04203ffafc22b7d82`: omitted binding still published 200 and committed state | `68e4df6777a5343eef83d55db1d174ecfe0993ae`: 3 focused checks PASS |
+| `suppressedFailureClearingCannotPublishSuccessfulSignIn` | `c6332ff0166d94973d6baaf771ab1297b007a519`: suppressed DELETE still published 200 | `d4ebd21f5c03030112e38af84c6849a919fc41bb`: 2 focused checks PASS |
+| `suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure` | `a43ab6059428e5c4ea51d669ea783e7715078d43`: suppressed deadline UPDATE committed five observations without a block | `af827899e3770be34878f0a042aca06e587a235e`: PASS; row-count guard rolls back to four |
+| `blockedCredentiallessLoginOnActiveAccountStillPerformsQualifiedPasswordWork` | `1586c1e826df24d9d7d1a6d19f8811f8d767dbff`: blocked credential / credentialless medians 72.453 / 3.271 ms | `b08709c581de195e05aea26450495cd593722059`: focused PASS, 70.839 / 70.983 ms |
+
+All referenced raw logs were checked as mode `600`, owner `phuclam`. Prefix for each filename
+below is `/home/phuclam/`; SHA-256 identifies the retained file, not independent reviewer access.
+
+| Run | Retained filename | SHA-256 |
+|---|---|---|
+| Threshold RED | `idea-f03b-test-6fdjYGtG.log` | `A8F1F3E48152FF7D56797928BB6066B89B159FFDF94C187357CC874FBFBD3DBA` |
+| Threshold GREEN | `idea-f03b-test-jNNN3gTP.log` | `601CF8768C09A739AAF3B54DDD398D28DA83916631FB9BBC9AA385A7ED090D57` |
+| Rolling RED | `idea-f03b-test-GSWBcDCm.log` | `53A3C833645DC193743B5E352C4B8300882AD19E64696AE324D27898914358D0` |
+| Rolling GREEN | `idea-f03b-test-wUrDMO2e.log` | `19984F90C670E07D8391267866A67EE62FFE74C546EE04B3E9AB1BEB94664BE3` |
+| Binding RED | `idea-f03b-test-SvakRZPg.log` | `993701A2D0FCA3FD5C3D977417BF70DFEF87A6FF5E422CE58EC45773EDA29803` |
+| Binding GREEN | `idea-f03b-test-YCRlB1NV.log` | `AF80A8A5DCA736C1C54715B206EF6F0F9EEA021D96A98B37780977002EFC77C7` |
+| Clear RED | `idea-f03b-test-rdgBqvBL.log` | `1B43B428C3E726FD50E71FF1E94664F86D7FE7BB644B2F1F065AAD589D592C18` |
+| Clear GREEN | `idea-f03b-test-VTzuUz9w.log` | `14824F8082944AF12FE4BD703981B812C08E6A416D3FDCF55B8CE231C716B3B3` |
+| Deadline RED | `idea-f03b-test-ZwKJOcJH.log` | `85B5B051B041DA2026F9FFCF1160AC456AD717409B8B2670E4A4381D4E108F74` |
+| Deadline GREEN | `idea-f03b-test-ECYWODSO.log` | `604125458569779D38D41B1941EF19BDBD8A32BDEE621061FE7F30E20031FAAC` |
+| Credentialless RED | `idea-f03b-test-JKx1rCUp.log` | `94A5B4D318412F89DAE9654348E798CF043EC7B046C1EFE28D5B7E1745B3A156` |
+| Credentialless GREEN | `idea-f03b-test-zwbOgpMb.log` | `7F357802667A827D550CCF446D6CA10223EB3384A90FAB43CE03F9554C8658F5` |
+
+During test construction, the Flyway info oracle incorrectly counted its schema-creation marker
+as an eighth version. The oracle was corrected to count only non-null version entries; this was
+a test-oracle failure, not a missing migration. A preliminary full run at `9d1e245` passed 79 checks,
+but internal review then found two defects below. The 81-check run above supersedes that result
+for current implementation; no prior PASS is used to cover subsequent code changes.
+
+### Executed oracles
+
+| Case | Observed result in final run |
+|---|---|
+| Threshold / successful clear | Four failures followed by eligible success clear only that login's row with session/IAM/Audit; five failures block even correct credentials without disabling Account |
+| Rolling cutoff | Failure at `06:00Z` plus three at `06:01Z`: new failure at `06:14:59.999999Z` blocks; at `06:15:00Z` / `06:15:00.000001Z` the first failure is excluded and eligible sign-in succeeds |
+| Block deadline | Block at `06:00Z` expires `06:15Z`; ten attempts immediately before expiry preserve the complete witness; exactly at expiry a wrong attempt starts one current observation, then eligible success clears; after expiry the sibling succeeds |
+| Normalization / siblings | Case/outer-space variants share one row; blocking L1 does not block L2, and successful L2 does not clear L1 |
+| Unknown-name spray | 100 distinct unknown attempts leave zero failure/identity/authenticated-session rows and no extra IAM/Audit; provisioning a previously unknown name inherits no observations |
+| Concurrency | Ten synchronized real HTTP failures reach one five-observation row and one deadline; blocked retries neither append nor extend; no session/IAM/Audit success |
+| Disabled / PENDING | Correct password attempts cannot activate, clear failure state or create an eligible session; temporary blocks preserve Actor/Account state; expired observations do not remain counted |
+| Required-write failure | Suppressed failure-state DELETE, fifth-deadline UPDATE, session INSERT, IAM outcome, Audit and deferred commit failures preserve prior failures and no eligible success |
+| Framework binding failure | Silent context-save omission and before/after-save exceptions preserve prior failures, roll back database success and leave session probe 401 |
+| Migration / privilege | UUID schema V1–V7 followed by repeat 0; exact migrator/app identities; app has no DB/schema CREATE; nonexistent identity FK and six-timestamp array rejected; DDL/TRUNCATE refused |
+| Regression | F03-A v1/bootstrap/assignment/lifecycle, first setup, exact-login reset, revocation, expiry, fixation/CSRF and health remain PASS in the stated classes |
+
+Times in the boundary oracles are synthetic `2026-09-30` UTC Clock instants, not test wall-clock
+dates. No host-clock change or long sleep was used.
+
+Final warmed/interleaved timing medians (nine samples/path): active/wrong **80.293 ms**, unknown
+**70.746 ms**, disabled **70.770 ms**, blocked **70.015 ms**. Separate blocked credential /
+credentialless medians were **69.156 / 69.065 ms**. The active comparator is kept genuinely
+unblocked with a successful sign-in between observations. These tests detect gross BCrypt
+bypass; they do **not** establish constant-time behavior or endpoint capacity/DoS protection.
+
+### Standards review
+
+Read-only internal Standards review first covered `9d1e245` against the fixed T046 point.
+It found one documented failure-handling defect: fifth-deadline UPDATE did not require one
+affected row. The successor guard and its suppressed-write RED/GREEN close that finding.
+Review of `b08709c` found no remaining documented-standard defect or actionable baseline smell;
+resource ownership, binding abandonment, rollback, connection closure and ThreadLocal removal
+were coherent. The credentialless successor and migration-oracle correction were also checked.
+The review agent ran no tests; command execution is separately recorded above.
+
+### Spec review
+
+Read-only internal Spec review at `9d1e245` found two defects: a suppressed fifth-deadline UPDATE
+could commit an unblocked fifth observation, and a credentialless Login Identity on an ACTIVE
+Account skipped BCrypt on blocked refusal. Both have successor RED/GREEN evidence.
+Review of `b08709c` reported zero remaining T041 findings and no scope creep. It rechecked rolling
+cutoff, deadline/state preservation, normalization, siblings, unknown-state bound, immutable
+V1–V6 and the staged clearing/session/IAM/Audit fate. This is not external reviewer acceptance.
+
+### Disposition and remaining limits
+
+Focused repository checks also passed: `git diff --check`, repository hygiene and the F01-B
+tracked-file secret scan (ten exact synthetic fixtures recognized; 233 known binary files
+excluded from that text scan). The delivery-document check found 96 valid relative targets and
+28 heading anchors. Quality/reviewer checklists remain 16/16 and 12/12; no checklist approval
+was changed. Historical §20–21 match the reviewed T046 point; §22–23 match the pre-execution
+delivery source. These focused checks are not the unrun verifier or new runtime evidence.
+
+T041 implementation/execution is complete; its marker records that scope only. **External
+throttling checkpoint review is pending.** T045/T046 and historical §20–23 are preserved.
+F03-B remains **IN_PROGRESS**, Issue #24 open; no timer/hours/Tracker publication, merge or
+whole-card acceptance is inferred. T040/T042–T044, actual Web HTTPS/cookie/CSRF and Desktop
+binding/custody, applicable protected-request qualification and F04 owner-commit race remain
+separate work. Java HTTP tests do not qualify real clients.
+
+Public V4–V7/fresh `DataBaselineTest` execution remains **NOT-RUN**; all migrations in this run
+were confined to owned UUID schemas, and retained public is still V3. No F02/`idea_ddm_dev`/Vault
+mutation or cleanup is claimed. The dedicated database and private logs remain retained for review.
+
+GPT Web cannot independently read these mode-600 host logs from GitHub. Repository source,
+commands, result summaries, hashes and commit trace are reviewable; hashes do not substitute for
+reading raw logs. No proof/cookie/CSRF/password values are published here. The global security-write
+lock establishes correctness in these controlled tests, not high-throughput qualification.
+`verify-template` stays **NOT-RUN**; T036, commercial/production readiness, backup/restore and
+multi-Vault are not cleared by this checkpoint. Extension hooks were skipped because
+`.specify/extensions.yml` is absent.
