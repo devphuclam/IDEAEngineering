@@ -1177,6 +1177,35 @@ class HttpSessionFlowTest {
         requiredLogoutEvidenceFailure("iam_owner_outcome");
     }
 
+    @Test
+    void logoutCommitFailureRollsBackRevocationAndKeepsOrdinaryProofForRetry() throws Exception {
+        var caller = signedIn(fixture());
+        var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".refuse_logout_commit() RETURNS trigger LANGUAGE plpgsql AS $$ "
+                    + "BEGIN IF NEW.action='identity.sign-out' THEN RAISE EXCEPTION 'Synthetic logout commit fault'; END IF; RETURN NEW; END $$");
+            statement.execute("CREATE CONSTRAINT TRIGGER refuse_logout_commit AFTER INSERT ON " + schema
+                    + ".iam_owner_outcome DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION " + schema + ".refuse_logout_commit()");
+        }
+        try {
+            var response = post(caller, "/api/v1/identity/logout", csrf, "");
+            assertEquals(503, response.statusCode());
+            assertEquals("", response.body());
+            assertEquals(before, accounts.totals());
+            assertEquals(200, get(caller, "/api/v1/identity/session").statusCode());
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER refuse_logout_commit ON " + schema + ".iam_owner_outcome");
+            }
+        }
+        assertEquals(204, post(caller, "/api/v1/identity/logout", csrf, "").statusCode());
+        assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        assertEquals(before.ownerOutcomes() + 1, accounts.totals().ownerOutcomes());
+        assertEquals(before.auditEvents() + 1, accounts.totals().auditEvents());
+    }
+
     private void requiredLogoutEvidenceFailure(String table) throws Exception {
         assertTrue(java.util.Set.of("audit_evidence", "iam_owner_outcome").contains(table));
         var fixture = fixture();
