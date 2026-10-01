@@ -35,6 +35,7 @@ class HttpSessionFlowTest {
     private ConfigurableApplicationContext server;
     private int port;
     private final AtomicInteger servletIdleSeconds = new AtomicInteger(-1);
+    private final BindingRepository bindingRepository = new BindingRepository();
     private final ControlledTime clock = new ControlledTime(Instant.parse("2026-09-30T06:00:00Z"));
 
     @BeforeEach
@@ -63,6 +64,7 @@ class HttpSessionFlowTest {
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
                 .initializers(context -> {
                     context.getBeanFactory().registerSingleton("testIdentityClock", clock);
+                    context.getBeanFactory().registerSingleton("testContextRepository", bindingRepository);
                     context.getBeanFactory().registerSingleton("testSessionBudgetListener", new HttpSessionListener() {
                         @Override public void sessionCreated(HttpSessionEvent event) {
                             servletIdleSeconds.set(event.getSession().getMaxInactiveInterval());
@@ -1190,6 +1192,70 @@ class HttpSessionFlowTest {
         clock.advanceTo(Instant.parse("2026-09-30T06:15:00.000001Z"));
         wrongAttempts(caller, after.login(), 1);
         assertEquals(200, loginAttempt(caller, after.login(), after.password()).statusCode());
+    }
+
+    @Test
+    void silentlyMissingSpringBindingCannotCommitSessionOrClearFourFailures() throws Exception {
+        var fixture = fixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.login(), 4);
+        var before = loginWitness(fixture.login());
+        assertEquals(4, before.failures());
+        bindingRepository.fault = BindingFault.SUPPRESS;
+        try {
+            assertNotEquals(200, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+            assertEquals(before, loginWitness(fixture.login()), "Binding failure must preserve the prior transaction state");
+            assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        } finally { bindingRepository.fault = BindingFault.NONE; }
+        wrongAttempts(caller, fixture.login(), 1);
+        assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode(), "Prior four failures were not cleared");
+    }
+
+    private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
+
+    // Approved bounded SQL witnesses for state/transaction invariants unavailable over HTTP.
+    private LoginWitness loginWitness(String login) throws Exception {
+        try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
+                "SELECT CASE WHEN s.login_identity_id IS NULL THEN 0 ELSE 1 END,coalesce(cardinality(s.failed_at),0),s.blocked_until,"
+                + "(SELECT count(*) FROM session_record WHERE account_id=l.account_id),"
+                + "(SELECT count(*) FROM iam_owner_outcome WHERE action='identity.sign-in'),"
+                + "(SELECT count(*) FROM audit_evidence WHERE action='identity.sign-in') "
+                + "FROM login_identity l LEFT JOIN login_failure_state s USING(login_identity_id) WHERE normalized_login_identifier=?")) {
+            query.setString(1, login);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                var deadline = row.getTimestamp(3);
+                return new LoginWitness(row.getInt(1), row.getInt(2), deadline == null ? null : deadline.toInstant(),
+                        row.getLong(4), row.getLong(5), row.getLong(6));
+            }
+        }
+    }
+
+    private enum BindingFault { NONE, SUPPRESS, BEFORE_SAVE, AFTER_SAVE }
+
+    /** Faults only at the qualified Spring/container boundary; normal paths use the real repositories. */
+    private static final class BindingRepository implements org.springframework.security.web.context.SecurityContextRepository {
+        private final org.springframework.security.web.context.SecurityContextRepository delegate =
+                new org.springframework.security.web.context.DelegatingSecurityContextRepository(
+                        new org.springframework.security.web.context.RequestAttributeSecurityContextRepository(),
+                        new org.springframework.security.web.context.HttpSessionSecurityContextRepository());
+        volatile BindingFault fault = BindingFault.NONE;
+        @Override @SuppressWarnings("deprecation")
+        public org.springframework.security.core.context.SecurityContext loadContext(
+                org.springframework.security.web.context.HttpRequestResponseHolder holder) { return delegate.loadContext(holder); }
+        @Override public org.springframework.security.core.context.DeferredSecurityContext loadDeferredContext(
+                jakarta.servlet.http.HttpServletRequest request) { return delegate.loadDeferredContext(request); }
+        @Override public boolean containsContext(jakarta.servlet.http.HttpServletRequest request) { return delegate.containsContext(request); }
+        @Override public void saveContext(org.springframework.security.core.context.SecurityContext context,
+                jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) {
+            boolean signIn = context.getAuthentication() != null
+                    && context.getAuthentication().getPrincipal() instanceof SessionService.Identity
+                    && request.getMethod().equals("POST") && request.getServletPath().equals("/api/v1/identity/login");
+            if (signIn && fault == BindingFault.SUPPRESS) return;
+            if (signIn && fault == BindingFault.BEFORE_SAVE) throw new org.springframework.security.authentication.BadCredentialsException("Synthetic binding fault");
+            delegate.saveContext(context, request, response);
+            if (signIn && fault == BindingFault.AFTER_SAVE) throw new IllegalStateException("Synthetic post-binding fault");
+        }
     }
 
     private void wrongAttempts(HttpClient caller, String login, int count) throws Exception {

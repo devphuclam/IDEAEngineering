@@ -13,6 +13,10 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 /** Deny by default; no generated account, Basic authentication or public bootstrap. */
 @Configuration(proxyBeanMethods = false)
@@ -20,6 +24,13 @@ class IdentityHttpSecurity {
     @Bean
     @ConditionalOnMissingBean(Clock.class)
     Clock identityClock() { return Clock.systemUTC(); }
+
+    @Bean
+    @ConditionalOnMissingBean(SecurityContextRepository.class)
+    SecurityContextRepository identityContexts() {
+        return new DelegatingSecurityContextRepository(new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository());
+    }
 
     @Bean
     SessionService sessions(DataSource dataSource, Clock identityClock) { return new SessionService(dataSource, identityClock); }
@@ -50,13 +61,14 @@ class IdentityHttpSecurity {
 
     @Bean
     SecurityFilterChain identityBoundary(HttpSecurity http, AuthenticationProvider nativeIdentityProvider,
-            SessionService sessions) throws Exception {
+            SessionService sessions, SecurityContextRepository identityContexts) throws Exception {
         http.authorizeHttpRequests(access -> access
                 .requestMatchers(HttpMethod.GET, "/health", "/health/database", "/api/v1/identity/csrf").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/identity/login", "/api/v1/identity/credentials").permitAll()
                 .anyRequest().authenticated())
                 // One authoritative attempt: no parent provider fallback repeating a refusal.
                 .authenticationManager(new ProviderManager(List.of(nativeIdentityProvider)))
+                .securityContext(context -> context.securityContextRepository(identityContexts))
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> response.setStatus(401))
                         .accessDeniedHandler((request, response, exception) -> response.setStatus(403)))
