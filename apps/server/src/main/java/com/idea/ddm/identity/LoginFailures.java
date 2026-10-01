@@ -22,21 +22,27 @@ final class LoginFailures {
 
     static void failed(Connection connection, UUID loginIdentityId, Instant now) throws SQLException {
         // Strict cutoff: a failure exactly 15 minutes old is no longer in the window.
+        int failures;
         try (var query = connection.prepareStatement("INSERT INTO login_failure_state VALUES (?,ARRAY[?]::timestamptz[],NULL) "
                 + "ON CONFLICT (login_identity_id) DO UPDATE SET failed_at="
                 + "ARRAY(SELECT t FROM unnest(login_failure_state.failed_at) t WHERE t>?) || ARRAY[?]::timestamptz[],"
-                + "blocked_until=NULL")) {
+                + "blocked_until=NULL RETURNING cardinality(failed_at)")) {
             query.setObject(1, loginIdentityId);
             query.setTimestamp(2, Timestamp.from(now));
             query.setTimestamp(3, Timestamp.from(now.minus(WINDOW)));
             query.setTimestamp(4, Timestamp.from(now));
-            if (query.executeUpdate() != 1) throw new SQLException("Login failure state not recorded");
+            try (var row = query.executeQuery()) {
+                if (!row.next()) throw new SQLException("Login failure state not recorded");
+                failures = row.getInt(1);
+            }
         }
-        try (var query = connection.prepareStatement("UPDATE login_failure_state SET blocked_until=? "
-                + "WHERE login_identity_id=? AND cardinality(failed_at)=5")) {
-            query.setTimestamp(1, Timestamp.from(now.plus(WINDOW)));
-            query.setObject(2, loginIdentityId);
-            query.executeUpdate();
+        if (failures == 5) {
+            try (var query = connection.prepareStatement("UPDATE login_failure_state SET blocked_until=? "
+                    + "WHERE login_identity_id=? AND cardinality(failed_at)=5")) {
+                query.setTimestamp(1, Timestamp.from(now.plus(WINDOW)));
+                query.setObject(2, loginIdentityId);
+                if (query.executeUpdate() != 1) throw new SQLException("Login block deadline not recorded");
+            }
         }
     }
 
