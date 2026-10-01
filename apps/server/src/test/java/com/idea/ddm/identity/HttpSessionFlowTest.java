@@ -1216,6 +1216,34 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void disabledAndReenabledOldSessionCannotLogoutButFreshSessionCan() throws Exception {
+        var setup = setupFixture();
+        var accounts = new IdentityAdministration(appDataSource());
+        var password = UUID.randomUUID().toString();
+        assertEquals(204, redeem(client(), setup.target().accountId(), proofFor(setup, setup.target()), password).statusCode());
+        var active = accounts.inspect(setup.target().accountId());
+        var old = client();
+        assertEquals(200, loginAttempt(old, active.normalizedLogin(), password).statusCode());
+        var csrf = jsonField(get(old, "/api/v1/identity/csrf").body(), "token");
+        assertEquals(200, changeAccount(setup.issuer(), UUID.randomUUID(), active.organizationId(), active,
+                "disable", active.securityVersion()).statusCode());
+        var disabled = accounts.inspect(active.accountId());
+        var before = accounts.totals();
+        assertEquals(401, post(old, "/api/v1/identity/logout", csrf, "").statusCode());
+        assertEquals(before, accounts.totals());
+        assertEquals(disabled, accounts.inspect(active.accountId()));
+        assertEquals(200, changeAccount(setup.issuer(), UUID.randomUUID(), disabled.organizationId(), disabled,
+                "re-enable", disabled.securityVersion()).statusCode());
+        before = accounts.totals();
+        assertEquals(401, post(old, "/api/v1/identity/logout", csrf, "").statusCode());
+        assertEquals(before, accounts.totals());
+        var fresh = client();
+        assertEquals(200, loginAttempt(fresh, active.normalizedLogin(), password).statusCode());
+        assertEquals(204, post(fresh, "/api/v1/identity/logout",
+                jsonField(get(fresh, "/api/v1/identity/csrf").body(), "token"), "").statusCode());
+    }
+
+    @Test
     void idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting() throws Exception {
         var fixture = fixture();
         var before = signedIn(fixture);
