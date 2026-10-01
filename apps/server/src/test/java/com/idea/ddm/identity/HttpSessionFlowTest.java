@@ -1418,7 +1418,9 @@ class HttpSessionFlowTest {
         var fixture = fixture();
         var flyway = Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"), env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
-        assertEquals(7, flyway.info().applied().length);
+        // Flyway also records schema creation; only versioned migrations are V1–V7.
+        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7"), java.util.Arrays.stream(flyway.info().applied())
+                .filter(migration -> migration.getVersion() != null).map(migration -> migration.getVersion().toString()).toList());
         assertEquals(0, flyway.migrate().migrationsExecuted);
         var loginId = new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).loginIdentityId();
         try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
