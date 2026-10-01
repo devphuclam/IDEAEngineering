@@ -1277,6 +1277,53 @@ class HttpSessionFlowTest {
         requiredSignInFailure("login_failure_state");
     }
 
+    @Test void missingSignInSessionCannotClearFailures() throws Exception { requiredSignInFailure("session_record"); }
+    @Test void missingSignInIamOutcomeCannotClearFailures() throws Exception { requiredSignInFailure("iam_owner_outcome"); }
+    @Test void missingSignInAuditCannotClearFailures() throws Exception { requiredSignInFailure("audit_evidence"); }
+
+    @Test void springExceptionBeforeBindingCannotCommitSignIn() throws Exception { exceptionalBindingFailure(BindingFault.BEFORE_SAVE); }
+    @Test void springExceptionAfterBindingCannotLeaveEligibleTentativeProof() throws Exception { exceptionalBindingFailure(BindingFault.AFTER_SAVE); }
+
+    private void exceptionalBindingFailure(BindingFault fault) throws Exception {
+        var fixture = fixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.login(), 4);
+        var before = loginWitness(fixture.login());
+        bindingRepository.fault = fault;
+        try {
+            assertNotEquals(200, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+            assertEquals(before, loginWitness(fixture.login()));
+            assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        } finally { bindingRepository.fault = BindingFault.NONE; }
+        wrongAttempts(caller, fixture.login(), 1);
+        assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+    }
+
+    @Test
+    void deferredDatabaseCommitFailureRollsBackAlreadyBoundTentativeSession() throws Exception {
+        var fixture = fixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.login(), 4);
+        var before = loginWitness(fixture.login());
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION " + schema + ".refuse_signin_commit() RETURNS trigger LANGUAGE plpgsql AS $$ "
+                    + "BEGIN RAISE EXCEPTION 'Synthetic commit fault'; END $$");
+            statement.execute("CREATE CONSTRAINT TRIGGER refuse_signin_commit AFTER INSERT ON " + schema
+                    + ".session_record DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION " + schema + ".refuse_signin_commit()");
+        }
+        try {
+            assertNotEquals(200, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+            assertEquals(before, loginWitness(fixture.login()));
+            assertEquals(401, get(caller, "/api/v1/identity/session").statusCode());
+        } finally {
+            try (var connection = migrator(); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER refuse_signin_commit ON " + schema + ".session_record");
+            }
+        }
+        wrongAttempts(caller, fixture.login(), 1);
+        assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode());
+    }
+
     private void requiredSignInFailure(String table) throws Exception {
         assertTrue(java.util.Set.of("login_failure_state", "session_record", "iam_owner_outcome", "audit_evidence").contains(table));
         var fixture = fixture();
