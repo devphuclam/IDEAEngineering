@@ -78,6 +78,10 @@ class F03BPublicMigrationTest {
         try {
             assertEquals(0, DatabaseMigrationCommand.migrate(System.getenv()));
             try (var connection = connection("idea_ddm_app"); var statement = connection.createStatement()) {
+                try (var rows = statement.executeQuery("SELECT count(*) FROM public.flyway_schema_history WHERE success")) {
+                    assertTrue(rows.next());
+                    assertEquals(7, rows.getInt(1), "Runtime retains read-only history visibility");
+                }
                 for (var mutation : Set.of("INSERT", "UPDATE", "DELETE", "TRUNCATE")) {
                     try (var rows = statement.executeQuery("SELECT has_table_privilege(current_user,'public.flyway_schema_history','" + mutation + "')")) {
                         assertTrue(rows.next());

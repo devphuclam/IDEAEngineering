@@ -1116,7 +1116,11 @@ class HttpSessionFlowTest {
         assertEquals(403, post(first, "/api/v1/identity/logout", "incorrect-csrf", "").statusCode());
         assertEquals(200, get(first, "/api/v1/identity/session").statusCode(), "Bad CSRF must not log out");
         var csrf = get(first, "/api/v1/identity/csrf");
-        assertEquals(204, post(first, "/api/v1/identity/logout", jsonField(csrf.body(), "token"), "").statusCode());
+        var logout = post(first, "/api/v1/identity/logout", jsonField(csrf.body(), "token"), "");
+        assertEquals(204, logout.statusCode());
+        assertTrue(logout.headers().allValues("Set-Cookie").stream().anyMatch(cookie ->
+                cookie.startsWith("IDEA_SESSION=") && cookie.toLowerCase(java.util.Locale.ROOT).contains("max-age=0")),
+                "Committed logout explicitly expires the ordinary browser proof cookie");
         assertEquals(401, get(first, "/api/v1/identity/session").statusCode());
         var replay = HttpClient.newHttpClient().send(HttpRequest.newBuilder(
                 URI.create("http://127.0.0.1:" + port + "/api/v1/identity/session"))
