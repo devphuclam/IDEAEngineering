@@ -93,7 +93,7 @@ Integration/publication are separate. F03-B and its shared unchecked task marker
 - [ ] T018 [US3] Retain existing first/repeated bootstrap coverage in `apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java` and write session eligibility/denial coverage one slice at a time in `apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java`; include re-enabling an account, refusing its old invalidated session and accepting fresh sign-in. T039/T042 refine the remaining F03-B work, not extra card hours.
 - [X] T019 [US3] Implement one-time local administrator bootstrap and Actor/account persistence in `apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java`. Source `89eab7129a72844e45807f13baedfbee39a9ac92` additionally passed fresh public V1/V2/V3 and the real interactive packaged operator + unchanged repeat on 2026-09-30 in dedicated `idea_ddm_f03a_20260930_c91e7a42`; see [F03 evidence](evidence/F03-identity-results.md) sections 11–12. This closes the technical bootstrap task, not whole-card acceptance, Issue #22 or F03-B.
 - [ ] T020 [US3] Implement native login/session ownership and protected-request Actor derivation in `apps/server/src/main/java/com/idea/ddm/identity/SessionService.java`; expose commit-time eligibility validation coordinated with security-state changes for the F04 owner command, and never revive invalidated sessions when re-enabling an account.
-- [ ] T021 [US3] Implement authorized native-account creation, sign-out, disablement and revocation refusal paths in `apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java`.
+- [ ] T021 [US3] Implement authorized native-account creation, sign-out, disablement and revocation refusal paths in `apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java`. HTTP create/disable/re-enable implementation and successor execution ran from `a0874f40555f1119b830f043a7aaf5bda8752d8a` with 98 scoped checks (§26), including normalized-login and zero-login Account repairs; external checkpoint review is pending. This is partial evidence, not closure of wider sign-out/revocation qualification or whole F03-B.
 - [ ] T022 [US3] Run the F03-A/B scenarios and retain actual results without credentials in `specs/005-ph1-foundation-custody/evidence/F03-identity-results.md`.
 
 **F03-B task refinement:** T038–T046 refine the unchecked parts of T018/T020/T021/T022,
@@ -176,10 +176,11 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: the Project Reviewer authorized the contracted HTTP account create/disable/
-re-enable slice on 2026-10-01, through real Server HTTP/PostgreSQL with CSRF, exact scoped
-permissions, verified-session admission/locked revalidation and atomic failure. T041 external
-PASS WITH NOTES at `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3` is received; see evidence §25.
+Current next step: external review of the contracted HTTP account create/disable/re-enable
+checkpoint. Exact source `a0874f40555f1119b830f043a7aaf5bda8752d8a` passed 98 real Server
+HTTP/PostgreSQL checks; evidence §26 retains CSRF, scope/permission, session admission/locked
+revalidation and rollback results. T041 external PASS WITH NOTES remains received (§25).
 This continues T021/T040/T042/T044, not another card or additional hours. Shared markers stay
-open until their wider obligations are met. F03-B remains IN_PROGRESS, Issue #24 open;
+open for explicit restart/remaining applicable-route qualification, actual clients and fresh
+public V4–V7/data regression. F03-B remains IN_PROGRESS, Issue #24 open;
 verifier NOT-RUN, no merge.

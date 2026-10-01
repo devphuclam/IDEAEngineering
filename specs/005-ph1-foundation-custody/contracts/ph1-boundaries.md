@@ -79,6 +79,10 @@ Creation accepts `operationId`, `organizationId`, `displayName` and `login`. Suc
 accept `operationId`, `organizationId`, `expectedSecurityVersion` and `reason`, with the
 Account ID in the route. Success returns 200 with stable Actor/Account IDs, status and version;
 this Account-level response does not select or expose an arbitrary sibling Login Identity.
+Creation validates the normalized login's existing `validText(..., 254)` input bound
+(Java UTF-16 code units) before persistence. Account
+enablement also supports zero Login Identities: disable/re-enable does not create a login,
+and a credentialless Account returns to PENDING rather than gaining sign-in capability.
 
 All three routes require CSRF and a server-derived session Actor. Check current session
 eligibility before scope/permission evaluation and again after the security-write lock;
@@ -87,10 +91,12 @@ Refused or failed mutation does not refresh activity. Super-only identity has no
 account authority; exact Account Administrator v1/v2 assignments retain their respective
 permissions. Client-supplied Actor fields cannot grant authority or change attribution.
 
-Refusals are empty responses: ineligible session 401; absent/revoked/wrong-scope permission,
+Controller/owner-generated refusals are empty responses: ineligible session 401; absent/revoked/wrong-scope permission,
 unknown or foreign target, or last-Super recovery protection 403; invalid input 400; duplicate
 login, stale version or invalid transition 409; required persistence failure 503. CSRF refusal
-remains 403 at Spring's boundary. Disable/re-enable preserves identity/history, increments
+remains 403 at Spring's boundary. These empty-body guarantees do not cover Spring's pre-controller
+JSON/UUID binding-error responses; this checkpoint does not qualify their body format.
+Disable/re-enable preserves identity/history, increments
 the Account security version and cannot revive an old session. Re-enable does not change
 credentials; a credentialless Account remains PENDING and otherwise requires fresh sign-in.
 Runtime qualification is retained in the successor evidence, not inferred from this mapping.

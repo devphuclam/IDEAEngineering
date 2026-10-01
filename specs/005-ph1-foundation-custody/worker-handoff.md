@@ -79,14 +79,19 @@ needed → actual Web/Desktop evidence. Java HTTP harness results cannot replace
 
 Keep F03-B IN_PROGRESS, Issue #24 open and verifier NOT-RUN. No merge or whole-card PASS.
 
-Next authorized slice (Project Reviewer, 2026-10-01): contracted HTTP account creation,
-disablement and re-enablement. Run one RED → GREEN behavior at a time at real HTTP/PostgreSQL.
-Derive ActorContext only from the authenticated principal. Reuse the existing F03-A owner and
-permission evaluator with current session eligibility at admission and locked mutation; refresh
-idle activity only in the successful owner's transaction. Verify CSRF, v1/v2 and wrong/absent/
-revoked authority, invalidated/expired sessions, stable identity/history and required-write
-rollback. Retain each actual result, then exact-source regression and external checkpoint review.
-Actual clients and fresh public V4–V7 remain separate outstanding work.
+The authorized HTTP account create/disable/re-enable slice ran from
+`a0874f40555f1119b830f043a7aaf5bda8752d8a`: 98 scoped checks, 0 failures/errors/skips.
+[§26](evidence/F03-identity-results.md#26-http-account-administration-checkpoint) retains route
+RED/GREEN, permission/CSRF/current-session checks, accepted-activity fate, six required-write
+faults, lock-time expiry and test-first normalized-login/zero-login Account repairs.
+ActorContext comes from the authenticated principal; the existing
+F03-A owner revalidates current eligibility before scoped authority and after the lock.
+
+Next action: read-only external checkpoint review of this exact source and docs-only successor.
+Repair any in-scope findings with affected tests before further qualification. Preserve the
+historical evidence and immutable migrations. Remaining explicit restart/issuer/logout profiles,
+actual Web/Desktop and fresh public V4–V7/data regression are outstanding; the Java HTTP harness
+is not client qualification. F04 owns its separate owner-command race.
 
 ## Detailed evidence for CHK009 and CHK010
 

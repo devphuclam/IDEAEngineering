@@ -108,8 +108,10 @@ unknown identifiers create zero failure records; each known Login Identity stays
 record/five timestamps/one deadline. The T041 successor covers concurrent counting, successful
 clearing/session fate and binding/write-failure rollback, not only the counter threshold;
 see [exact-source evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
-External throttling review is received (evidence §25). Continue the authorized HTTP account
-administration slice through the same runner and owned-schema boundary. Do not merge. Client qualification remains
+External throttling review is received (evidence §25). The HTTP account-administration successor
+has 98 scoped checks at `a0874f40555f1119b830f043a7aaf5bda8752d8a` (evidence §26), through
+the same runner/owned-schema boundary. Request external checkpoint review before continuing;
+do not merge. Client qualification remains
 T043's seam → failing tests/evidence contract → implementation if needed → real Web/Desktop
 execution, never inferred from this Java HTTP runner.
 
