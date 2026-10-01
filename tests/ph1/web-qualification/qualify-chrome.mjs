@@ -22,11 +22,13 @@ const sshArguments = ['-o', 'BatchMode=yes', '-o', 'ConnectTimeout=10', '-i', ke
 const fixture = (action, input) => {
   const result = spawnSync('ssh', [...sshArguments, `bash ${remoteRoot}/run-browser-fixture.sh ${action} ${runId}`],
     { input, encoding: 'utf8', windowsHide: true, timeout: 60000, maxBuffer: 1024 * 1024 });
+  if (action === 'prepare' && result.stdout?.includes('T043_OWNED_SCHEMA_CREATED=YES')) prepared = true;
   // stdout/stderr are never included in assertion diagnostics.
   assert.equal(result.status, 0, `Owned fixture ${action} must succeed`);
   return result.stdout;
 };
-const check = (condition, safeLabel) => assert.ok(Boolean(condition), safeLabel);
+let lastOracle = 'Environment setup';
+const check = (condition, safeLabel) => { lastOracle = safeLabel; assert.ok(Boolean(condition), safeLabel); };
 const results = [];
 const statuses = [];
 const assetStatuses = [];
@@ -292,12 +294,14 @@ try {
     observed: { csrfHeader: loginCsrfMatched, cookieAttributes: acceptedCookieProperties,
       authoritativeActorSent: outboundActor, secretLeak: observedSecretLeak }, statuses }));
 } catch {
-  console.log(JSON.stringify({ disposition: 'FAIL_OR_BLOCKED', case: currentCase, completed: results }));
+  console.log(JSON.stringify({ disposition: 'FAIL_OR_BLOCKED', case: currentCase, oracle: lastOracle, completed: results }));
   process.exitCode = 1;
 } finally {
   password = ''; anonymousCookie = null; csrf = null; secretNeedles.clear();
-  if (browser) await browser.close();
-  if (tunnel) tunnel.kill();
+  try { if (browser) await browser.close(); }
+  catch { console.log('BROWSER_CLEANUP=BLOCKED'); process.exitCode = 1; }
+  try { if (tunnel) tunnel.kill(); }
+  catch { console.log('TUNNEL_CLEANUP=BLOCKED'); process.exitCode = 1; }
   if (prepared) {
     try { check(fixture('cleanup').includes('T043_OWNED_SCHEMA_REMOVED=YES'), 'Exact fixture cleanup'); console.log('CLEANUP=PASS'); }
     catch { console.log('CLEANUP=BLOCKED; retain exact owned fixture for controlled follow-up'); process.exitCode = 1; }

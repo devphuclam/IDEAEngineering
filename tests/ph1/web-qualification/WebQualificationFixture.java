@@ -39,6 +39,7 @@ public final class WebQualificationFixture {
                     statement.execute("CREATE SCHEMA " + schema + " AUTHORIZATION idea_ddm_migrator");
                     statement.execute("COMMENT ON SCHEMA " + schema + " IS '" + marker + "'");
                 }
+                System.out.println("T043_OWNED_SCHEMA_CREATED=YES");
                 Flyway.configure().dataSource(migrator).schemas(schema).defaultSchema(schema)
                         .locations("classpath:db/migration").cleanDisabled(true).load().migrate();
                 try (var connection = migrator.getConnection(); var statement = connection.createStatement()) {

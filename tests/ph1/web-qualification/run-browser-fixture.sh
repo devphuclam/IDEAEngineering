@@ -16,6 +16,7 @@ set -a
 source /home/phuclam/.config/idea/f03a-test.env
 set +a
 export IDEA_DATABASE_HOST=127.0.0.1 IDEA_DATABASE_PORT=5432
+export IDEA_DATABASE_APP_USER=idea_ddm_app IDEA_DATABASE_MIGRATION_USER=idea_ddm_migrator
 export IDEA_DATABASE_NAME=idea_ddm_f03a_20260930_c91e7a42
 export IDEA_DATABASE_SCHEMA="t043_web_$run_id"
 classpath="$root/classes:$root/extracted/BOOT-INF/classes:$root/extracted/BOOT-INF/lib/*"
