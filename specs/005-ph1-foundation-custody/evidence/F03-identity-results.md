@@ -1,20 +1,20 @@
-# F03 Identity Results — Bootstrap and Account Administration Checkpoints
+# F03 Identity Results — Account Administration, HTTP Sessions and Credential Recovery
 
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.5 / Draft |
+| Version / status | 0.28 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
-| Reviewer / acceptance authority | GPT Web bootstrap and Account Administrator checkpoint reviews relayed by the Project Reviewer; internal Standards/Spec review recorded below; Project Reviewer F03-A acceptance remains pending |
-| Evidence date | 2026-09-30, Asia/Ho_Chi_Minh |
-| Applicable baseline | PH1 F03-A; bootstrap source `2acf4dafeb19e52e36d8aa9c280b033ac20be56a`; account-checkpoint source `acb772e99b96c13a10dc7ad905d6eb7daec0493a`; fresh public successor source `89eab7129a72844e45807f13baedfbee39a9ac92` |
-| Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [PH1 spec](../spec.md) FR-013 / clarification 2026-09-30, [PH1 tasks](../tasks.md), DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md) |
-| Downstream trace | F03-A service implementation and later card acceptance; F03-B remains unimplemented |
+| Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; earlier scoped reviews retained below. Project Reviewer accepted F03-A on 2026-09-30. Actual Web successor received PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4`; whole-F03-B acceptance remains pending |
+| Evidence date | Latest closure execution 2026-10-01, +07:00; earlier execution dates remain historical |
+| Applicable baseline | Final regression/public checks `989bf5a9fc09c03ee2d5fa88d09b3cee78335616`; fresh/package application `38b99f50de09370a8e8554cc80fc66a0afa70b62`; actual browser qualification `9238b7e8ad6878687e72823e7bed1d4f083b9699`; earlier sources remain historical |
+| Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-005/013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md) T040/T042/T044 for restart qualification, DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
+| Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); accepted T043-Web and [F03-B closure matrix](F03-B-closure-matrix.md), not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes published v0.3 at `89eab7129a72844e45807f13baedfbee39a9ac92`; incorporates the local v0.4 received-review record and the user-authorized fresh public successor + positive interactive/repeat verification. Historical results are retained; application source, migrations and card acceptance are unchanged. Superseded by NOT-APPLICABLE |
-| Review trigger | Bootstrap, migration, password encoder, account-administration or test-scope change |
-| Evidence status | 20 identity tests and 2 Server smoke tests PASS; package/headless boundary PASS; fresh public V1/V2/V3, repeat migration and runtime-role separation PASS; positive interactive initialization/repeat PASS. F03-A IN_PROGRESS; whole-card review/acceptance pending |
+| Change / supersession | Supersedes v0.27 control envelope; §40 appends hygiene-only test-expression correction and final rerun. §1–39 execution history retained; V1–V7/dependencies/production unchanged after §39 package; no card-state change. |
+| Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
+| Evidence status | Closure execution PASS: fresh V1–V7, successor privileges, final 108-test regression and actual Chrome W01–W10; prior FAIL results retained. Whole-F03-B external review/acceptance PENDING. Combined T043 unchecked; Desktop successor NOT-RUN, not a blocker. Private raw-log limit, scoped tooling exception, verifier NOT-RUN and separate integration/progress retained |
 
 Tailoring: use the repository authoring standard's verification fields, guided by
 ISO/IEC/IEEE 15289:2019, ISO 10007:2017 and the selected ISO/IEC/IEEE 29119 evidence approach.
@@ -23,7 +23,18 @@ Spec Kit path; it is not an added Core Product Document, architecture view or pr
 
 Sections 1–5 retain the earlier bootstrap checkpoint. Sections 6–9 describe the newer
 Account Administrator checkpoint and remaining work; section 10 records its external review,
-and sections 11–12 record the subsequently authorized fresh public and interactive operator runs.
+sections 11–12 record the subsequently authorized fresh public and interactive operator runs,
+section 13 records the received whole-card technical-readiness review, and section 14 records
+the subsequent Project Reviewer acceptance. Section 15 records the initial F03-B HTTP session
+checkpoint; section 16 records its requested repairs and successor execution; section 17 records
+the received review of that repaired checkpoint. Section 18 records the next approved first-setup
+checkpoint; section 19 records its received external technical review; section 20 records the reset
+successor; section 21 records its exact-login repair, section 22 the received repair review, and
+section 23 the approved bounded-state clarification and planned test design. Section 24 records
+T041 implementation/execution and internal review; section 25 records its external review,
+section 26 records the HTTP account-administration successor, section 27 its received review,
+and section 28 the approved restart/session-continuity qualification.
+Earlier pending dispositions are historical; section 23 adds no runtime execution evidence.
 
 ## 1. Historical bootstrap scope and preconditions
 
@@ -272,8 +283,8 @@ Summary: Standards 0 documented violations / 1 nonblocking heuristic; Spec 0 con
 - F03-A remains **IN_PROGRESS**; Issue #22 stays open. The Account Administrator checkpoint
   review is recorded in section 10; it is not Project Reviewer whole-card acceptance.
 - Positive interactive operator initialization and repeat are now **PASS**, using only the
-  synthetic identity in section 12. Whole-card review/acceptance is still pending; no real
-  company account was provisioned.
+  synthetic identity in section 12. Whole-card technical-readiness review is recorded in
+  section 13; Project Reviewer acceptance is pending. No real company account was provisioned.
 - The fresh public-database V1+V2+V3 successor is now **PASS** in the separate database in
   section 11. Earlier NOT-RUN statements remain historical; UUID-schema tests were not used
   as substitute evidence for this run.
@@ -489,3 +500,1839 @@ PASS. Spec Kit checklist gate remains 16/16 + 12/12 with no checkbox changes;
 `.specify/extensions.yml` is absent, so no implementation extension hooks apply.
 Only this evidence record and `tasks.md` change from executed source `89eab712…`; no application,
 migration, dependency or test change needs an inferred rerun. `verify-template` is NOT-RUN.
+
+## 13. Whole-F03-A technical-readiness review received
+
+On 2026-09-30 the Project Reviewer relayed a GPT Web read-only review of PR #23 at exact head
+`79373e95502474e64dd2a72604c2d9629daa9e36`, against Issue #22 and this record v0.5.
+The reported conclusion is **PASS WITH NOTES for the whole agreed F03-A technical scope**:
+no remaining technical implementation or test gap was found before Project Reviewer acceptance.
+
+The reviewer closed both prior execution notes using sections 11–12: fresh real public-schema
+V1/V2/V3 with separate roles and zero repeat migrations, plus positive interactive operator
+initialization and same-identity/state repeat. They confirmed the reviewed head changes only
+evidence/tasks from executed source `89eab7129a72844e45807f13baedfbee39a9ac92`.
+
+The conclusion covers local Super bootstrap, separate exact-version/Organization-scoped audited
+Account Administrator assignment, account create/disable/re-enable, authorization/scope refusal,
+preserved identity/history and atomic failure on the agreed Server + real PostgreSQL boundary.
+T019/T037 are technically complete. Unchecked tasks containing F03-B work do not imply an
+unimplemented F03-A obligation or authorize marking F03-B complete.
+
+The remaining note is **INFO: the reviewer did not independently read private raw host logs**.
+They inspected repository source, recorded commands/hashes, state oracle and commit trace.
+This user-relayed AI review is not a GitHub approval event, a new test run, qualified independent
+security review or Project Reviewer card acceptance. Its limits remain explicit: verifier NOT-RUN,
+F03-B unaccepted, T036/commercial clearance open, and no production/backup/restore/multi-Vault claim.
+
+Engineering verified the current PR head and recorded task/evidence split before recording this
+feedback. No code change or further F03-A technical test is requested by this review.
+**Next action: explicit Project Reviewer acceptance and `Hoàn thành F03-A`, with attributable actual
+effort through the existing Tracker.** Until then, keep F03-A IN_PROGRESS, Issue #22 OPEN and PR #23
+DRAFT; this local review record neither merges nor changes the timer/progress files.
+
+## 14. Project Reviewer acceptance and Tracker completion
+
+On 2026-09-30 the Project Reviewer instructed: if no blocker remains, `Hoàn thành F03-A`.
+Engineering checked Issue #22, the approved A/B task split, source at
+`79373e95502474e64dd2a72604c2d9629daa9e36` and the executed evidence in sections 6–12.
+A read-only factual cross-check found no remaining F03-A implementation/test blocker.
+The instruction therefore accepts the agreed whole-card scope; no additional vote was inferred.
+
+The existing Tracker `complete` action recorded **COMPLETED / PASS** at
+`2026-09-30T11:43:28.233063+07:00`, Execution Register **revision 28**, evidence
+`F03-A-EVIDENCE-1` pinned to that reviewed commit. It closed the existing session started at
+`09:28:18.8836947+07:00`: **135 minutes / 2.25 actual hours**, remaining **0 hours**.
+No planned-hour substitution or retrospective effort correction was made.
+
+The private-host-log independent-access limitation remains INFO. F03-B, T036/commercial
+clearance and production/backup/restore/multi-Vault claims remain excluded;
+`verify-template` is **NOT-RUN**. No new test run or GitHub approval event is claimed.
+Acceptance and progress files are local drafts in this turn; PR #23 integration and official
+progress publication to main are not performed by the Tracker completion action.
+
+## 15. Initial F03-B HTTP session checkpoint
+
+### Scope and approved test boundary
+
+On 2026-09-30 the Project Reviewer instructed `Bắt đầu F03-B` and approved real Server HTTP
+with real PostgreSQL, accelerated test time, synthetic identities and no verifier. The current
+checkpoint implements login, the session probe, logout, CSRF and the two session deadlines.
+It is **not** the complete credential/account-administration/client qualification scope.
+
+The accepted synthetic development profile is in spec v0.3: idle **2 hours**, absolute
+**8 hours**, whichever expires first; equality is expired. Only an eligible authenticated
+activity refreshes idle time. The proof/password/failed-login rules remain requirements for
+later slices; their presence in the spec is not executed evidence.
+
+The implementation follows DOC-05 `ARCH-VIEW-SEQ-008` and the qualified Spring Security
+HTTP-session boundary. PostgreSQL records eligibility metadata, not a replayable login cookie.
+There is no generated administrator, public bootstrap endpoint, custom JWT or persistent-session
+restoration. A runtime-instance binding rejects metadata belonging to another Server instance;
+an executed restart test and complete request/commit-time eligibility remain open.
+
+T038's exact pre-use intake was admitted before the new dependency resolution. Intake v0.3
+records matching publisher hashes for five JARs and the actual dependency graph: Log4j2 retained,
+no Logback or `spring-boot-starter-logging`. T036 and commercial redistribution clearance remain
+open. No additional library was added for the HTTP harness or controlled Clock.
+
+### Exact source, environment and procedure
+
+Authoritative checkpoint execution uses a **clean Git archive**, not the earlier iterative overlay:
+
+- Source: `441b2e9a9b15b7046f67005a18ad15598844fa32` on `codex/f03b-authentication-sessions`.
+- Base: `79373e95502474e64dd2a72604c2d9629daa9e36`.
+- Archive SHA-256: `13BB98831B590273B979015919C3B53E0F72539BF82924289C7F518828C83F9D`.
+- Extracted directory: `/home/phuclam/idea-f03b-committed-441b2e9-F34PnKTp`, mode `700`,
+  owner `phuclam`; retained `source.tar` mode `600`.
+- Host: `ideaddmserver`, `192.168.137.33`, Linux `7.0.0-34-generic`;
+  Temurin `25.0.4.1+1`; PostgreSQL server `18.6` observed by Flyway.
+- Database: **`idea_ddm_f03a_20260930_c91e7a42`**, not the F02 or development database.
+- Migrator: `idea_ddm_migrator`; runtime: `idea_ddm_app`, authenticated separately.
+- HTTP: real Server on random loopback port; Java HttpClient with ordinary cookie custody.
+
+From the extracted source:
+
+```bash
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+```
+
+The runner reads the existing operator-owned, non-symlink mode-600 credential file, with shell
+tracing disabled. No credential value is in this command, Git evidence or test output excerpt.
+HTTP fixtures generate unique synthetic logins/passwords in memory. They do not provision
+company accounts or use the operator-bootstrap identity in `public`.
+
+Each HTTP test migrates V1–V4 into its own `f03b_<32-hex UUID>` schema; the F03-A regression
+tests use their own `f03a_<32-hex UUID>` schemas in the same authorized database. Cleanup is
+limited to each test's regex-validated generated schema. V1–V3 source is unchanged; V4 is additive.
+These runs do not migrate `public`, `idea_ddm_dev`, the F02 database or the Vault.
+
+A subsequent read-only check authenticated as the app role and returned PostgreSQL server
+`18.6`, **0 remaining** schemas matching `^f03[ab]_[a-f0-9]{32}$`, and successful `public`
+Flyway versions **1,2,3**. This confirms temporary-schema cleanup and that public V4 was not
+executed; it is not a byte-for-byte comparison of every public row.
+
+Production configuration retains Secure/HttpOnly/SameSite=Strict cookies. **Only this loopback
+HTTP harness overrides Secure=false.** It does not qualify actual browser HTTPS/cookie behavior
+or Desktop protected custody. No mock/H2/database substitute is used.
+
+### Executed results
+
+Run start **13:44:20 +07**; Maven completion **13:44:43 +07**; Maven elapsed **21.064 seconds**.
+Sanitized result excerpt from the retained log:
+
+```text
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0 -- HttpSessionFlowTest
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0 -- IdentityFlowTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0 -- ServerSmokeTest
+Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+F03B_SCOPED_TESTS=PASS
+```
+
+| HTTP scenario | Observed result | Disposition |
+|---|---|---|
+| Anonymous session probe | 401; no ActorId or login redirect | PASS |
+| Anonymous CSRF acquisition | Token available; still no identity privilege | PASS |
+| Login and caller-supplied ActorId | Correct Server-derived Actor/account; session proof rotates; old proof refused | PASS |
+| Logout | GET and bad CSRF do not log out; valid POST returns 204, old proof refused; other session remains usable | PASS |
+| Idle boundary | Before 2h accepted; exactly 2h and after refused; eligible activity renews idle only | PASS |
+| Absolute boundary | Activity through the eighth hour does not extend the limit; exactly 8h and after refused | PASS |
+| Missing/bad CSRF and wrong/unknown credentials | 403 for invalid CSRF; identical safe 401 responses for credential refusals; no identity granted | PASS |
+| Ineligible traffic | Failed CSRF, public health and CSRF fetch do not renew eligible idle activity | PASS |
+
+The test-only injected Clock begins at `2026-09-30T06:00:00Z`. Tests advance it to literal
+before/at/after boundary instants, including microsecond offsets; they do not change the host
+clock, sleep for hours or expose a public clock-control route. These are boundary checks, not
+eight-hour soak, scheduling or concurrency qualification.
+
+The affected 20 F03-A service tests remain green with V4 in their fresh temporary schemas.
+The two health tests still prove process 200/UP and unreachable-database 503/DOWN without
+credential disclosure. DataBaselineTest and a fresh public V1–V4 successor were **NOT-RUN**
+in this checkpoint; previous public V1–V3 evidence remains historical, not a V4 claim.
+
+### Red/green history and retained evidence
+
+Development used vertical test/code slices in `/home/phuclam/idea-f03b-Qw74tmdH`. The first
+corrected RED archive combines base `79373e9...` (archive SHA-256
+`4027C8D4237986EDCF613579EDCF648ED40C43872B91CE8248E2D2753BC35657`) with retained
+`red-overlay.tar` SHA-256 `0479D30AF82ED2B85B5DD21035E494EC9463D3F071F71EECDE8FD22196A5F257`.
+The anonymous-session test then observed **404 instead of required 401**.
+
+Later RED failures observed missing CSRF endpoint (401 instead of 200), missing login
+(401 instead of 200), missing logout (404 instead of 204), missing idle refusal
+(200 instead of 401), and anonymous invalid-CSRF mapping (401 instead of 403).
+Initial test-harness compilation/Clock wiring errors were corrected but are **not** claimed as
+intended behavior RED. The 8h test is supplementary coverage of an already introduced cutoff;
+it is not falsely recorded as an earlier RED cycle.
+
+All log paths below are under `/home/phuclam/`, owner `phuclam`, mode `600`.
+
+| Retained log | Result / phase | SHA-256 |
+|---|---|---|
+| `idea-f03b-test-6EC2Zw8z.log` | Anonymous session RED | `51836A5C6F3A47DAE051FD435158BC4878D91B4781806D3836580B55851D9308` |
+| `idea-f03b-test-T7paKTNU.log` | Anonymous session + health GREEN, 3 tests | `B231575F0DDF8362ACF35D6D48614816C5D0E601FAF6685A600906B261CB00DF` |
+| `idea-f03b-test-zh2qmCTN.log` | CSRF endpoint RED | `35D0506792F6816816B92FACF0942F00A2F8FCA79B16452F80C26949601869ED` |
+| `idea-f03b-test-R9fWaK7X.log` | CSRF GREEN, 2 tests | `0DA183BE0CCB03ADCAA8DEDAB9B22FA6CC0C2479A2971B5ADA76304582C58769` |
+| `idea-f03b-test-ZBoF4jvN.log` | Login RED | `260556117B543082FA6E97D7E86A80068077C5CDE35A4F39924025C786A13590` |
+| `idea-f03b-test-f86TB4hL.log` | Login + health GREEN, 5 tests | `0B727741FB3C0AE9571CB6AE528958E11A8765BACAB61DFBF1EE177D3B11EABD` |
+| `idea-f03b-test-XNU7EAdO.log` | Logout RED | `D7D10E5C8BFA3B60FB3873F5139F8DBD714CFC911C7D2B2E1DF03DF60E9E90CD` |
+| `idea-f03b-test-Vcpv9gNF.log` | Logout + health GREEN, 6 tests | `3A8DD80E5760E0BDDEFC4E3AD3F1595438D8365D75DC44EF2B835C375203E7A5` |
+| `idea-f03b-test-CQDrkoGp.log` | Idle boundary RED | `D81D61DAC522DD5BB5481B22B4742C4F6D01D76712A8158FE6E60E872C8FBB7B` |
+| `idea-f03b-test-UrVUI4Hf.log` | Idle + health GREEN, 7 tests | `5405518608A112A51B8699A7C4866A7C39CCFCE63167A53DC8FB3C9D9FD12430` |
+| `idea-f03b-test-4fimjXud.log` | Absolute limit + health GREEN, 8 tests | `2AB17793B4ABDB6052C58D7680A72896EA06312E4F24FF6481B6561481579214` |
+| `idea-f03b-test-clny9Pax.log` | Invalid anonymous CSRF mapping RED | `83EBD4D5BF8DDB95A2B5AF3B83B2BF605B009D5A1948889FE3F55838967ED736` |
+| `idea-f03b-test-UlGQHlgy.log` | Final iterative worktree GREEN, 30 tests | `A8A16DA7055C43D5EAFF208E2273B854C242D8CBE834C338B2BFC2FCCE800050` |
+| `idea-f03b-test-MZMGtWtI.log` | Authoritative committed-source GREEN, 30 tests | `08B4462C6B8CC317B48A65B9D3C6025CC8E0CE134BDBCAE5D098068FA7A05434` |
+
+Later iterative overlays were replaced during development and not retained individually as
+exact source archives. Their logs document observed iteration, **not independently reproducible
+commit-pinned executions**. The authoritative result is the clean archive of `441b2e9...` and
+its last log above. Private host logs still require host access; this summary/hash record is
+not an independent remote raw-log review. The checked-in sanitized excerpt exposes counts only.
+
+### Current disposition and remaining work
+
+**Historical initial run: 30 tests passed; the subsequent review returned REQUEST CHANGES.
+See section 16 for repair evidence. F03-B remains IN_PROGRESS.**
+
+T038 and the initial T039 test slices are checked; shared F03 tasks and T040–T044 remain open
+for their unimplemented/unqualified portions. Before whole-card acceptance, finish:
+
+- target-bound one-use setup/reset proof, exact password bounds and atomic redemption;
+- race-safe 5-failure/15-minute temporary login block and refusal evidence;
+- authenticated account-administration HTTP routes through the existing role/scope evaluator;
+- session invalidation on disable/reset, no resurrection on re-enable/restart, required
+  failure/atomicity cases, and verified eligibility on all applicable requests;
+- the verified ActorContext/session reference needed for later F04 commit-time checking;
+- actual Web HTTPS/CSRF/cookie and native Desktop binding/protected-custody qualification;
+- affected migration/data regression and any required fresh public-schema successor evidence;
+- checkpoint/full-scope review and explicit Project Reviewer whole-card acceptance.
+
+Tracker start remains the explicit `2026-09-30T13:01:00.9631915+07:00` action, register revision
+29. The open timer is not counted here as final actual effort. No stop, complete, retrospective
+estimate, official progress publication, push, PR creation or merge is performed by this record.
+No production, multi-Vault, backup/restore, T036 or commercial-clearance claim is made.
+`verify-template` remains **NOT-RUN**.
+
+Historical local checks for section 15: tracked-secret scan PASS (10 recognized synthetic fixtures,
+233 known binary files skipped), 68 focused relative Markdown targets PASS, and git diff --check
+PASS. At that publication, only F03-identity-results.md changed after executed source `441b2e9...`;
+these historical checks do not cover the repair source below.
+
+## 16. F03-B review repair: servlet budget and rejected-login work
+
+The Project Reviewer returned **REQUEST CHANGES** for the initial F03-B checkpoint at head
+`fcbc7b70ecd07a2b06e3cf92c177bd04f3f475bd` (base `d4268d8d16e6287b7cde937eab4688fc59754fa7`).
+The two findings were limited to the implemented HTTP/session checkpoint and were repaired in
+the following two vertical slices. This section supersedes the initial checkpoint's technical
+disposition; it does not turn the remaining F03-B tasks into PASS.
+
+### Repair R1 — effective servlet session budget
+
+The reviewer observed that Spring Boot's default Servlet `HttpSession` inactivity interval was
+30 minutes, which could end the container session before IDEA's PostgreSQL eligibility policy of
+2 hours idle / 8 hours absolute. `apps/server/src/main/resources/application.properties` now
+sets `server.servlet.session.timeout=8h`. `HttpSessionFlowTest` creates a real loopback HTTP
+session and captures `HttpSession.getMaxInactiveInterval()` through a test-only listener; it
+requires **28,800 seconds**. The test is about the actual container configuration, not the
+injected eligibility clock and not an eight-hour soak.
+
+Red result on the pre-fix source: **1,800 seconds** (the default), assertion failure. Green result
+after the property: `F03B_EFFECTIVE_SERVLET_IDLE_SECONDS=28800`.
+
+### Repair R2 — unknown and disabled login password work
+
+The reviewer also observed that the old `SessionService` condition could reject an unknown or
+disabled login before BCrypt, while a known active login with a wrong password performed BCrypt.
+`SessionService` now creates one generated, qualified BCrypt dummy verifier per service instance
+(never an account credential or logged value) and always evaluates the candidate against the real
+verifier or that dummy before refusing. For valid password candidates within the qualified BCrypt
+input bounds, unknown/disabled logins perform the same encoder work; existing malformed-input
+rejection remains. The HTTP regression prepares a synthetic disabled account through the reviewed
+F03-A services, warms all three paths, then interleaves nine wall-clock samples per path. It checks
+the empty 401 response and requires the unknown/disabled medians to be at least 65% of active/wrong.
+That tolerance detects the gross bypass gap; it is not a constant-time guarantee, load test or
+failed-login-throttling qualification.
+
+Red result on the pre-fix source: median active/wrong **142.846 ms**, unknown **3.557 ms**, disabled
+**3.636 ms**; both assertions failed. Green result: active/wrong **138.520 ms**, unknown **138.572
+ms**, disabled **138.644 ms** (9 samples per path).
+
+### Retained red/green sources and logs
+
+Iterative repair directory: `/home/phuclam/idea-f03b-review-red-Eves4Ne1`, owner `phuclam`,
+mode 700. Start with the archive of reviewed head `fcbc7b70ecd07a2b06e3cf92c177bd04f3f475bd`
+and apply the following retained overlays in order. R1 and R2 were tested separately before
+their corresponding production repair; no test-harness compile failure is counted as behavior RED.
+
+| Retained archive | SHA-256 |
+|---|---|
+| `f03b-review-base.tar` | `18AD89F5850CB9CB8FB4F8D850E573AD1FD98F64B266BDB7EE7AE5B1C5F9DA97` |
+| `f03b-review-r1-test.tar` | `DBF6D8C7B016ED9198FB367E38BF41E8B16F014A9AD4F5DE49B27924E4B8B22D` |
+| `f03b-review-r1-green.tar` | `C4C78F4FEDCC65C99F89AD467BAFE2ADA61B531A67445BA158DCFE6473F8A728` |
+| `f03b-review-r2-test.tar` | `107485CFF459BA56ABD2FDC1632A241B53E6AE61304E3FE6119CC5F080916A02` |
+| `f03b-review-r2-green.tar` | `E403D5CB7AA5AE103C0D0F4D5D7198E811BFDF15FEE8FC0E145F763A94D0E3AA` |
+
+Run R1 with runner filter `HttpSessionFlowTest#effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy`;
+run R2 with `HttpSessionFlowTest#unknownAndDisabledLoginsDoNotBypassPasswordWork`. Each run
+contains one test. Logs below are under `/home/phuclam/`, owned by `phuclam`, mode 600.
+
+| Retained log | Result | SHA-256 |
+|---|---|---|
+| `idea-f03b-test-BhsN1mKF.log` | R1 RED: 1 failure, observed 1800 | `0B204D09B52ECFEA284D781D932DEF2E628D112DBD65B430BA92D64834E7BAB9` |
+| `idea-f03b-test-WkWWremj.log` | R1 GREEN | `3EF5DFDC13667E6C93EA3827060FCC711B597991D22A53A71D84328E569032DD` |
+| `idea-f03b-test-RLyMdHx7.log` | R2 RED: both timing assertions failed | `3817BC710BA3659556F3B89C6E8E9CBC73251D46241B0B1E6C5C1CD446746FE4` |
+| `idea-f03b-test-B3sLMnWc.log` | R2 GREEN: medians 139.869 / 139.660 / 139.345 ms | `7090E3D5DC24C87E30D2217545106FC8CB01068CF69E94FC702C03B07E8A867F` |
+
+### Successor execution
+
+- Exact committed source: `4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`.
+- Clean source archive SHA-256: `12F6E7CAD4D31257EB437A09F05CE273331DC145CEECF3FBF4B14D5E5F1D2257`.
+- Retained clean extraction: `/home/phuclam/idea-f03b-review-committed-7ODRzC8c`, mode 700;
+  `f03b-review-source.tar` mode 600, owner `phuclam`.
+- Host: `ideaddmserver` / `192.168.137.33`; Temurin `25.0.4.1+1`; PostgreSQL `18.6`.
+- Database: `idea_ddm_f03a_20260930_c91e7a42`; runtime `idea_ddm_app`; migration
+  `idea_ddm_migrator`; temporary schemas are UUID-scoped and cleanup is bounded to each test.
+- Command: `bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest`.
+- Result: **32 tests, 0 failures, 0 errors, 0 skipped** — HttpSessionFlowTest 10, IdentityFlowTest
+  20, ServerSmokeTest 2; Maven elapsed 28.173 seconds; `F03B_SCOPED_TESTS=PASS`.
+- Maven completed at `2026-09-30T14:19:00+07:00`. Container session budget 28,800 seconds;
+  timing medians active/wrong 138.520, unknown 138.572, disabled 138.644 ms.
+- Retained host log: `/home/phuclam/idea-f03b-test-cJf8mNEG.log`, mode `600`, SHA-256
+  `F8F77D06CA595EDA198A0B3736ABEE14F4EDA756620BE9343E86C255DD4C57C7`.
+- Post-run read-only check: PostgreSQL `18.6`, `0` remaining `f03a_`/`f03b_` UUID test schemas,
+  and public Flyway versions `1,2,3`. Public V4 remains NOT-RUN in this checkpoint.
+
+From executed source `4ec5471...` to the publication, only this evidence file and tasks.md change;
+no application, test, dependency or migration changes occur after the successor run. T044 remains
+open for its full F03-B and migration/data coverage. The raw host log remains an
+INFO limitation because it is not independently readable through GitHub. `verify-template` remains
+**NOT-RUN** by explicit instruction. Credential setup/reset, temporary login blocking, HTTP account
+administration, complete disable/reset/re-enable/restart invalidation, all-request/F04 eligibility,
+Web/Desktop qualification, fresh public V4 evidence and whole-card Project Reviewer acceptance
+remain open.
+
+Repair publication checks: tracked-secret scan **PASS** (10 recognized exact synthetic fixtures;
+233 known binary files skipped); repository hygiene **PASS**; 17 relative Markdown targets in
+this evidence and tasks.md **PASS**; git diff --check **PASS**.
+
+## 17. Received repaired-checkpoint review and next slice
+
+On 2026-09-30 the Project Reviewer relayed GPT Web's read-only **PASS WITH NOTES** for
+PR #25 at base `d4268d8d16e6287b7cde937eab4688fc59754fa7`, reviewed head
+`3fdf9f56238bb3f0b18ec5004143a699d0f9f27e` and executed source
+`4ec5471c6a8f8b05e0293b32b6194e1b904e16b6`. This is a conversation-sourced technical
+review record, not a claim of a submitted GitHub approval or whole-card Project Reviewer acceptance.
+
+The review closes both prior MAJOR findings: the effective servlet timeout no longer pre-empts
+the 2-hour idle policy, and unknown/disabled login paths no longer bypass BCrypt work. The
+reviewer found no new defect in the initial checkpoint. Its source trace and 32-test successor
+execution remain those in section 16; this record does not rerun or broaden those results.
+
+The reviewer could inspect source, retained result summaries and file hashes through GitHub,
+but could not independently read the private host logs. Timing evidence detects the gross
+password-work bypass, not constant-time authentication. Fresh public V4 remains **NOT-RUN**.
+All remaining F03-B work listed in section 16 remains open, including client qualification.
+`verify-template` remains **NOT-RUN**; no production, commercial or T036 clearance is implied.
+
+The next planned slice is first credential setup through real HTTP and PostgreSQL. Before its
+implementation, the permission-version choice needs confirmation: V3 seeds
+`account-administrator@1` with only `account.create`, `account.disable` and `account.re-enable`,
+while T041 requires explicit setup/reset permissions. CONTEXT Role Definition and DOC-04
+`REQ-AUTH-002/004` prohibit silently extending a version-pinned assignment's authority.
+
+Engineering recommendation, **NOT APPROVED / NOT IMPLEMENTED**: introduce protected
+`account-administrator@2` with the three predecessor actions plus
+`account.credential.setup.issue` and `account.credential.reset.issue`; keep version 1 and its
+assignments unchanged. Permit Super to grant only the supported Account Administrator versions
+through the ordinary organization-scoped, reasoned and audited assignment path, including
+explicit self-assignment. No Super-only credential authority or automatic assignment upgrade.
+This exact version/permission selection is a decision pending Project Reviewer confirmation;
+it does not change the approved requirement for independently assigned Account Administrator
+authority. After confirmation, execute the first-setup slice by TDD; reset and throttling remain
+separate subsequent slices. T040–T044 and F03-B remain open.
+
+Documentation checks: tracked-secret scan **PASS** (10 exact synthetic fixtures, 233 known
+binary files skipped); repository hygiene **PASS**; 17 relative Markdown targets **PASS**;
+git diff --check **PASS**. No runtime retest: only this record and tasks.md changed after the
+reviewed head. No Tracker, acceptance or integration state was changed.
+
+## 18. Approved Account Administrator v2 and first-setup checkpoint
+
+### Decision and scope
+
+After section 17, the Project Reviewer explicitly approved the v2 recommendation on 2026-09-30.
+This supersedes that section's pending recommendation, not the approved F03-A implementation:
+
+- `account-administrator@1` keeps `account.create`, `account.disable`, `account.re-enable`.
+- Protected `account-administrator@2` adds separate `account.credential.setup.issue` and
+  `account.credential.reset.issue` Permissions. Neither v1's permission set nor its assignments
+  is overwritten or retargeted.
+- Super may grant a separate exact supported v1/v2 assignment using its existing scoped
+  assignment Permission. The assignment retains assigner, reason, Access Policy outcome and Audit.
+  Super alone has no credential issuance authority.
+- First setup applies only to a PENDING account with no credential. Redemption is authorized by
+  the target-bound, one-use, expiring proof, not an Account Administrator role.
+- Execute v2/first setup, redemption/activation, separate reset/invalidation, then failed-login
+  blocking. The last two slices remain unimplemented. `SPEC-OPEN-03/06` and full F03-B stay open.
+
+Impact: add V5 and setup HTTP/service behavior; retain the existing scoped evaluator, stable
+identities, required evidence and least-privilege runtime/migrator separation. Spec v0.4,
+plan, data model and contract record this clarification. No new dependency, roadmap hours,
+product gate, public signup, live proof-delivery channel, company account or commercial approval.
+Standard JDK random/digest primitives and the already-qualified BCrypt/HTTP stack are reused.
+
+### Executed behavior
+
+`CredentialSetupService` issues 256-bit random URL-safe proof, stores only its SHA-256 digest,
+and binds target Account/Login Identity, purpose FIRST_SETUP, security version and 15-minute expiry.
+The protected synthetic harness opt-in defaults off; issuance then gives empty 503 and creates
+no proof. Enabled synthetic responses use no-store. No live/browser delivery is qualified.
+
+Session eligibility is checked before permission/scope evaluation and again under the shared
+security-write lock. An ineligible issuer returns 401; eligible but unauthorized scope/permission
+returns 403. Only accepted owner activity refreshes idle time, within the same transaction.
+V1/Super-only, wrong scope, anonymous and bad-CSRF issuance attempts were refused.
+
+An anonymous proof holder with CSRF may redeem at its bound pending target. Success atomically
+consumes proof, writes BCrypt verifier, activates the same account, increments security version
+and retains IAM outcome, account-change evidence and Audit. No membership/role is created.
+Replay, wrong target, expired proof, ACTIVE/DISABLED target and stale proof after re-enable were
+refused without credential change. Concurrent redemption accepted exactly one password/outcome.
+Suppressed IAM outcome or Audit forced 503 and rollback; the same proof/OperationId worked after
+the injected fault was removed. Invalid password input did not consume the proof.
+
+Password tests cover 14 versus 15 Unicode code points, 72 versus 73 UTF-8 bytes, surrogate refusal,
+and preservation of leading/trailing spaces. Test Clock covers before/at/after proof expiry;
+the host clock and the default 2-hour/8-hour session policy were not shortened or changed.
+
+### TDD snapshots and execution
+
+Initial iterations used clean `b29df705db6ffc0770d387986a6e52c95017115f` archive SHA-256
+`6BB5EED865DB35F6FA596990246EA85026CB0FE7C31DB9EC07FD15253775E97E`, then ordered overlays
+in `/home/phuclam/idea-f03b-setup-TvQEb3VP`. These were uncommitted worktree snapshots,
+not tests executed from the eventual PR head. Overlay hashes matched local/server copies.
+To rebuild a listed snapshot, apply the listed overlays in order over that base:
+
+| Order / archive | SHA-256 |
+|---|---|
+| 1 `f03b-v2-red.tar` | `6032125DC30A352F90DC7B6D33F1843E9637351C437BB7B3DB54DFEC456F644C` |
+| 2 `f03b-v2-green.tar` | `28372D16061674051046530FCF84B3B747E16F3B58ED244B0BD534DDED1C352F` |
+| 3 `f03b-setup-red.tar` | `59DB9037DD3E2FECC97DA5BAA019128A8637B2B653FA0593056670FB4B2D94A0` |
+| 4 `f03b-setup-green.tar` | `C7F70B9852A9604CEA24C5660BDD906D0AFB6525027DCB82A89703D4D8B81C42` |
+| 5 `f03b-authorization-tests.tar` | `6F51ED324AE1CE12CE5D15A002C4650BE43954A777F53468304C0BFAFC0D37BE` |
+| 6 `f03b-unicode-red.tar` | `E05EFC340F6A9FD85DE8DB31320B968EFE1F4F6AF960FC97BAB3EE50CA285561` |
+| 7 `f03b-unicode-green.tar` | `87CDFEE118BA9AC033AB28F6CBFB87C22B4FAC2B85A3FDE6C5F29A0F71CE5E80` |
+| 8 `f03b-unicode-http-green.tar` | `E410377D8AC515C55B6A706BC07AB136A143B01ACCDFC72689EF28FEFDE8206E` |
+| 9 `f03b-binding-tests.tar` | `BE0DE6B487FF6E6ED8F7176297AEAB66352B70C99BE5FA8AA654D1A449FC0AAD` |
+| 10 `f03b-expiry-tests.tar` | `3FC626F811B4AC05CD867D0E3EA8E8A21F84174ED6C005F476064E82905247A0` |
+| 11 `f03b-state-tests.tar` | `9110A7B2E5BAB5C246032479DE338FF1D349648673534CC49BEFF97B6F98BDE5` |
+| 12 `f03b-password-tests.tar` | `3B1912E15C464A5CBDE9168E7BD2042FA7BBAE50137593BCA45BB05B5600A8D7` |
+| 13 `f03b-audit-fault-tests.tar` (corrected helper) | `397EB207A2ABCD0073CBECDF72D917E07A9770100FCD3912ECD3DC7957757031` |
+| 14 `f03b-iam-fault-tests.tar` | `EC1BB021ECEDABF1D738F2A65E3C72B9AB51C5C12E56BFDC1FF3E44970EC09A1` |
+| 15 `f03b-final-boundary-tests.tar` | `BC57A4F8D3CD5BF9A4A293BC2632BB59A003D6AF2AC5A0DEA80C688CC7DCCF31` |
+
+Command: `bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest#<method>`.
+Compilation was forced after overlays by updating source mtimes; no content changed in that step.
+
+| Method / snapshot | Actual result | Private log basename / SHA-256 |
+|---|---|---|
+| `accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1`, order 1 | RED: unsupported role version, 1 error | `idea-f03b-test-nk4Evt3L.log` / `93628BA4A5023DEBB8BD2FB464447C738D901312E77A1692C2631F6489262598` |
+| Same, through order 2 | GREEN: 1 PASS | `idea-f03b-test-RzX5SHyj.log` / `526FDF2DBEA6957F2FA902AD5A23ED0CA65DFA53E87F686D892D98B32E7AD3C5` |
+| `explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount`, through order 3 | RED: expected 200, got 404 | `idea-f03b-test-pxxi4LrV.log` / `426728779E61ADD43DF6A46FC88EDD64238C23B664AEA490DB2433671C3578C0` |
+| Same, through order 4 | GREEN: 1 PASS | `idea-f03b-test-qfNkl8WQ.log` / `71C07E3D0F1309DDACC85AFE483A0ED4C914619B565E3A53E028C760E1A8B5A5` |
+| `malformedUnicodeCannotBecomeAReplacementCharacterCredential`, through order 6 | RED: expected 400, got 204 | `idea-f03b-test-LOagaadm.log` / `CB433584DCE7CCAD863E14B28F53265571BF54260D62BBBFA46CE9B564F43E6C` |
+| Same, through order 8 | GREEN: 1 PASS | `idea-f03b-test-byIVx7YE.log` / `3F38E30AD9C9B593B75775B619AA4AEE31EF13EC59F983693E1A0C3F737CB062` |
+
+An intermediate Unicode run rejected input but returned 401 through error dispatch; the controller
+was corrected to return empty responses directly. A stale incremental build, incomplete archive
+transfer and test-helper compilation mistake also occurred during iteration; none is PASS evidence.
+Final authority below uses a clean committed archive without build outputs or overlays.
+
+Internal review of `2ab07a1cbf9217a108aaad46e3eb7fb0b17103ef` found the ineligible-issuer
+401/403 mismatch. Its clean archive was SHA-256
+`51ECD50341909CA62844EFA55A17BE1555AA4200DAD5F86DEBC1FDAC992C62E3`;
+45 tests passed at that revision, but they did not cover the newly identified case.
+The repair's RED run used the iterative base/overlays through order 15 (whose runtime changes
+were committed at `2ab07a1`), then `f03b-review-session-red.tar`, SHA-256
+`72537A69F767C048C0E09E0A265287C8DEE390466FF27AC9406253BBECCCB4BA`.
+`expiredSessionIsRefusedBeforeRoleOrScopeEvaluation` failed expected 401/actual 403;
+log `idea-f03b-test-t4GRhIHC.log`, SHA-256
+`6F0840C83491431A68668697F97B76FDE58B5DC1EA7C5D7A421E5E33DE95F295`.
+Apply repair overlay `f03b-review-session-green.tar`, SHA-256
+`9AF2AD474E9F5930AEB45442CCB6F9496B069147857A0C3960BFBA5C0892C0A9`;
+the expired unauthorized/scope and disabled/re-enabled issuer methods passed 2/2:
+log `idea-f03b-test-tIsdnmXn.log`, SHA-256
+`3B2BA3917498A43A3A22F712355107552E9D5B6D2A8FF08D958A431128845ED3`.
+This is intermediate repair evidence; the final commit additionally checks that near-deadline
+permission refusals cannot renew the idle deadline.
+
+### Final exact-source successor
+
+Executed source: **`0d740bddc09456f70753996a59dd5f585805d743`**. A clean archive containing
+all tracked `apps/server` and `database` inputs was made by
+`git archive --format=tar HEAD apps/server database`. SHA-256:
+`7C4953479F76CC5CC9ACAA4B43508E03EB61E723C26A63643F495353C043D537`.
+It was unpacked into fresh `/home/phuclam/idea-f03b-setup-final-UQMntH1q`, not an incremental
+build directory. Archive hash matched before extraction; Maven compiled 17 source and 6 test files.
+
+```text
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+HttpSessionFlowTest: 25 / failures 0 / errors 0 / skipped 0
+IdentityFlowTest:    20 / failures 0 / errors 0 / skipped 0
+ServerSmokeTest:      2 / failures 0 / errors 0 / skipped 0
+TOTAL:              47 / failures 0 / errors 0 / skipped 0
+BUILD SUCCESS; elapsed 43.169 seconds; finished 2026-09-30 15:25:25 +07:00
+```
+
+Environment: Ubuntu development host, PostgreSQL `18.6-0ubuntu0.26.04.1`, Temurin `25.0.4.1+1`,
+Spring Boot `4.1.1`; distinct actual `idea_ddm_migrator` and `idea_ddm_app` logins.
+Only own UUID `f03a_`/`f03b_` schemas in authorized `idea_ddm_f03a_20260930_c91e7a42` were migrated
+V1–V5 and dropped. Real HTTP binds loopback with ephemeral port and test-only Secure-cookie false;
+synthetic delivery is explicitly enabled except the default-off regression. No mock/H2 database.
+Post-run read-only oracle: 0 owned UUID schemas remain; public Flyway versions still `1,2,3`.
+No `idea_ddm_dev`, F02 database or Vault mutation.
+
+Final log `/home/phuclam/idea-f03b-test-I9elmWq0.log`, mode `600 phuclam`, SHA-256:
+`104FB5719FB409AC7A4BE2B8B9222B43F0454576B28F28C13DFF4D095DD2465B`.
+Retained raw logs are private and not independently readable through GitHub; hashes identify
+files, not independent review of their contents. Logs/proofs/passwords were not published.
+Existing timing regression remains only a gross-work-bypass check, not constant-time proof.
+
+V1–V4, dependency graph and `IdentityFlowTest.java` are unchanged from the previous reviewed
+F03-B head `3fdf9f5`. The existing F03-A behavior assertions also remain unchanged from accepted
+`79373e9`; the earlier F03-B checkpoint only broadened its test DB allowlist to include this
+dedicated F03-A database. All 20 tests reran; no accepted v1 regression was removed.
+
+### Standards
+
+Internal source-only review at `0d740bd`: 0 documented-standard breaches, 0 open smell judgments.
+The initial nonblocking duplicated eligibility query was removed: session inspection and proof
+issuance share the query, preserving transaction ownership and refusal mapping. Reviewers did not
+run tests or read credentials/private host logs.
+
+### Spec
+
+Internal source-only review at `0d740bd`: 0 open Spec findings. The initial ineligible-session
+HTTP mismatch is closed by admission/commit eligibility checks and new regressions. No scope creep
+or missing requirement was identified within this first-setup checkpoint. Counts remain separate:
+Standards 0 open; Spec 0 open. These reviews do not substitute for Project Reviewer acceptance.
+
+### Remaining work and disposition
+
+This successor is scoped technical evidence for PR #25, not F03-B completion. Reset proof and
+all-session invalidation, temporary failed-login block, HTTP account administration, complete
+protected-request/F04 commit-race eligibility, client Web HTTPS/Desktop custody qualification,
+fresh public V4/V5 and affected migration/data regression remain open. Reset Permission is seeded
+but its operation is not implemented. `verify-template` is **NOT-RUN** by instruction.
+`SPEC-OPEN-03/06`, T036 and production/commercial readiness remain open. No timer, actual hours,
+Tracker completion, Issue closure or merge was inferred from generic continuation.
+
+After executed `0d740bd`, changes are this evidence/tasks and synchronization of the three
+progress files already published on main at `19587d1b43635822e6a27d86dcae01db9c0220d8`.
+This sync made no new Tracker action. Runtime source, tests, dependencies and migrations did not
+change after the final run. Next runtime slice:
+separate password-reset proof and session invalidation after review of this checkpoint.
+
+Publication checks: tracked-secret scan PASS (10 exact synthetic fixtures recognized, 233 known
+binary files skipped); repository hygiene PASS; 37 relative targets across the changed PH1
+documents PASS; git diff --check PASS. No verifier was run. Post-implementation extension hooks
+are NOT-APPLICABLE: `.specify/extensions.yml` is absent.
+
+## 19. Received first-setup checkpoint review
+
+On 2026-09-30 the Project Reviewer supplied GPT Web's read-only review of PR #25:
+
+| Pin | Revision |
+|---|---|
+| Review base | `19587d1b43635822e6a27d86dcae01db9c0220d8` |
+| Reviewed head | `153d0258108cfe1fdc490d42d57f64aa9098e82f` |
+| Executed source | `0d740bddc09456f70753996a59dd5f585805d743` |
+| Disposition | PASS WITH NOTES for first credential setup only |
+| Source record | Human-relayed GPT Web text, SHA-256 `CA08DB1C77F7BCEC641B4301410EBD9B2DF027890A15DC9F04E55ED0F43A8125` |
+
+The review reports no BLOCKER, MAJOR or MINOR in exact v2 assignment, unchanged v1 authority,
+first-setup issuance/redemption, binding/expiry/password boundaries, concurrency, atomic failure,
+default-off synthetic delivery, or admission/commit session eligibility. It accepts section 18's
+47-test execution as scoped technical evidence, not whole-card acceptance. Local comparison
+confirms that the executed-source-to-head delta contains only this evidence, tasks and the three
+already-published progress files; accepted V1–V4 and F03-A regression source did not change.
+
+The reviewer did not independently read private raw host logs. Public V4/V5 remain NOT-RUN;
+the 47 tests migrated only their own UUID schemas. Reset/all-session invalidation, temporary
+login blocking, full HTTP administration/request eligibility, F04's owner-commit race, client
+qualification and affected migration/data regression remain open. SPEC-OPEN-03/06, T036 and
+production/commercial clearance are not closed. No verifier was run or inferred PASS.
+
+This records received technical feedback, not a GitHub approval, new gate decision, merge,
+Issue #24 closure, Tracker action or actual-effort estimate. F03-B remains IN_PROGRESS.
+No runtime rerun was needed to record this review because runtime source did not change.
+The next approved implementation slice is separate password reset and session invalidation;
+the initially unresolved DISABLED state branch was subsequently clarified in spec v0.5:
+reset preserves disablement; re-enable remains a separate operation.
+
+## 20. Reset recovery without account enablement
+
+### Decision, impact and scope
+
+On 2026-09-30 the Project Reviewer authorized the relayed reset proposal if Engineering found it
+consistent. Code inspection confirmed that re-enable activates an account with a verifier:
+requiring re-enable before reset would allow the compromised old password between those actions.
+The proposal matches REQ-IAM-003/004 and the existing contract: reset cannot re-enable a disabled
+account. [Spec v0.5](../spec.md), story 3 scenario 12 and its synthetic profile record the decision;
+[contract](../contracts/ph1-boundaries.md), [plan](../plan.md) and [data model](../data-model.md) carry
+the implementation trace. No new product-gate or live-company security approval is claimed.
+
+`CredentialResetService` uses the existing exact scoped reset permission, shared security-write
+lock, password validator and assignment/session eligibility. ACTIVE and DISABLED targets must
+already have a verifier. RESET has a separate V6 proof table bound to account, login identity,
+purpose and security version; only the digest is stored. Redemption is proof-authorized, not
+role-authorized. Omitted purpose retains FIRST_SETUP compatibility.
+
+Accepted reset replaces the verifier, advances security version, revokes all affected sessions,
+consumes proof and retains IAM outcome, history and Audit in one transaction. Account status and
+the exact `actor.disabled_at` timestamp remain unchanged. Prior proofs become ineligible by
+version, not deleted. DISABLED targets reject both passwords until separate expected-version
+re-enable; afterward only fresh new-password sign-in works. Other accounts' sessions and pinned
+v1 assignments are unaffected. No dependency, live delivery channel or HTTP account-lifecycle
+route was added; issuance still requires explicit synthetic-delivery opt-in.
+
+V1–V5 source and all 20 F03-A regression tests are unchanged. One prior setup test's unsupported
+purpose changes from RESET to UNSUPPORTED because RESET now has a separate path; its FIRST_SETUP
+state/refusal assertions remain intact.
+
+### TDD and source trace
+
+Iterations used reviewed `153d025` archive of `apps/server` + `database`, SHA-256
+`6265342E14D238A95041E1ED1E71ACDEDEABE9FB4359614228595FD743CDE1FF`, in
+`/home/phuclam/idea-f03b-reset-5pQjV0yv`. Apply RED `f03b-reset-red-01.tar`, SHA-256
+`D57FEC44D17C60CA1C70AE2357A5560EEDB330D00BC5AF415E908807F0220CA7`:
+`HttpSessionFlowTest#resetWhileDisabledChangesCredentialButRequiresSeparateReenableAndFreshSignin`
+failed expected 200 / actual 400. Log `idea-f03b-test-JcmVh0ZB.log`, SHA-256
+`40EC587829D00791EAFBD5FE8C066197734B49F4F1D17336A4691EE125DFE789`.
+Apply GREEN production `f03b-reset-green-01.tar`, SHA-256
+`DFF7A009E088C19E0EAFE86D359FBEC11C42B9D7737D3C34028ECA4036EA2BE9`:
+same method passed 1/1. Log `idea-f03b-test-lmYjZvlW.log`, SHA-256
+`59CFAF7F393D6EB06E3D2E02342B720F6D3E569B18C1A620287C14F333453147`.
+
+Regression extensions covered the ten reset cases below. An intermediate issuer test incorrectly
+compared assignment counts captured before its explicit v1/v2 grants. That oracle error was
+corrected, not treated as a production failure or PASS.
+
+Initial committed `78ce36575c884c54dde82eb9f47c49a33f3d9444` ran 57 tests PASS, but internal review
+found a DB invariant not covered: PostgreSQL CHECK accepts UNKNOWN, allowing a consumption
+OperationId without timestamp. Its new regression used that runtime plus test overlay
+`f03b-reset-check-07-red.tar`, SHA-256
+`E0A20404AAED0E19008732378AFCA0FC82E00A0439040FDB1088C45224209AC7`; app's malformed update
+succeeded, so the test failed. RED log `idea-f03b-test-oLiJ68Hg.log`, SHA-256
+`23832BB816A0C29F5BCFA6E76268C46972408B0BC13F5F865C6CF7D87AA34994`.
+
+Successor V6 explicitly requires a non-null consumption timestamp and additively enforces the
+same complete-pair invariant on setup proof, without rewriting V5. Both malformed app updates
+now fail `23514`. Existing contradictory predecessor rows make migration fail closed; no
+evidence is repaired silently. The affected public-data migration remains NOT-RUN.
+
+### Final exact-source execution
+
+Executed source: **`976bd031913edb3e4554af6e23744a1dd55d8527`**. Clean archive command:
+`git archive --format=tar HEAD apps/server database`. SHA-256
+`4AE5C5CC2884AC44AB24CD79E0B545875E898A7E89A41B929296241ABC9880D6` matched on the server;
+fresh extraction `/home/phuclam/idea-f03b-reset-final-oRLdeafN` contained no build outputs/overlays.
+
+```text
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+HttpSessionFlowTest: 35 / failures 0 / errors 0 / skipped 0
+IdentityFlowTest:    20 / failures 0 / errors 0 / skipped 0
+ServerSmokeTest:      2 / failures 0 / errors 0 / skipped 0
+TOTAL:              57 / failures 0 / errors 0 / skipped 0
+BUILD SUCCESS; elapsed 57.418 seconds; finished 2026-09-30 16:29:41 +07:00
+```
+
+Actual Ubuntu PostgreSQL `18.6-0ubuntu0.26.04.1`, Temurin `25.0.4.1+1`, Spring Boot `4.1.1`;
+distinct authenticated `idea_ddm_migrator` and `idea_ddm_app`. Only test-owned UUID `f03a_`/`f03b_`
+schemas in authorized `idea_ddm_f03a_20260930_c91e7a42` were migrated V1–V6 and dropped. Postflight:
+0 owned UUID schemas remain; public Flyway still `1,2,3`. No dev/F02 database or Vault mutation.
+Loopback HTTP, test-only Secure-cookie false and controlled Clock do not qualify Web HTTPS.
+Real idle/absolute budgets stay 2h/8h; proof expiry stays 15 minutes, without wall-clock waiting.
+
+Ten new reset tests cover disabled/active recovery, exact disablement preservation, old passwords
+and sessions, separate re-enable, other-account isolation, explicit v2/scope/session authorization,
+default-off issuance, target/purpose/password/CSRF refusal, replay/staleness, before/at/after expiry,
+IAM/Audit/session-revocation fault rollback, concurrent redemption with one winner, and DB
+owner/immutable binding/complete-consumption constraints.
+
+Final raw log `/home/phuclam/idea-f03b-test-sKJg4Gif.log`, `600 phuclam`, SHA-256
+`7CA74ED7066EFEC703B0F0D27BB32E3A363EAFB2D20A22692B7F1B704E7DB609`.
+Raw host logs stay private, not independently read by GPT Web. Hashes identify files; they do not
+replace independent raw-log review. No password or proof value is published.
+
+### Standards
+
+Source-only review at `78ce365`: one proof-integrity finding, repaired and rechecked at `976bd03`.
+Final Standards: 0 open findings; no material smell judgment identified.
+
+### Spec
+
+Source-only review at `78ce365` and repair `976bd03`: 0 open Spec findings in this reset slice.
+No scope creep. Reviewers did not execute tests/read credentials. Standards 0 open; Spec 0 open;
+external reset review remains pending. These reviews do not accept the whole card.
+
+### Clarification coverage and remaining work
+
+No extra question: one supplied decision integrated. Spec quality 16/16 → 16/16, no checkbox
+change/regression; reviewer checklist stays 12/12. Sections touched: Clarifications, story 3
+acceptance scenario and synthetic profile, with contract/plan/data-model trace.
+
+| Clarification category | Status |
+|---|---|
+| Functional scope/behavior; domain/data; edge cases/failure | Resolved: disabled reset and separate enablement explicit |
+| Interaction/UX; non-functional attributes; integration/dependencies; constraints/tradeoffs; terminology; completion signals; placeholders | Clear within the approved synthetic reset slice |
+
+No reset-slice ambiguity remains; continue the existing implementation plan. Temporary failed-login
+blocking is next. Full HTTP administration, all applicable protected requests/F04 commit race,
+Web/Desktop qualification, fresh public V4–V6 and affected migration/data regression remain open.
+T040–T044, SPEC-OPEN-03/06, T036 and whole-F03-B acceptance are not closed. `verify-template` is
+NOT-RUN. No timer/hours/Tracker action, Issue closure or merge was inferred. Extension hooks are
+NOT-APPLICABLE: `.specify/extensions.yml` is absent. Changes after executed source are evidence
+and tasks only; runtime/tests/migrations/dependencies remain pinned to the final run.
+
+Publication checks: tracked-secret scan PASS (10 exact synthetic fixtures recognized; 233 known
+binary files skipped); repository hygiene PASS; 41 relative targets across changed PH1 documents
+PASS; git diff --check PASS. None is `verify-template`. No new progress publication occurred.
+
+## 21. T046 exact Login Identity reset successor
+
+### Scope and disposition
+
+External review of reset checkpoint `064f55ffa62e8f67ee6e062e3ab1c827e5509c23` found one
+MAJOR: RESET issuance selected an arbitrary Login Identity when an Account could have more than
+one. T046 repairs that contract without reopening T045 or changing historical §20. The request
+now requires `loginIdentityId`, even for a single-login Account. The Server validates the exact
+Account, Organization, expected `security_version`, existing credential and ACTIVE/DISABLED state;
+the proof stores that exact Login Identity. Redemption updates only the pinned credential, advances
+the Account version and revokes all old Account sessions/proofs. Sibling credentials remain intact.
+V1–V6 are unchanged and no migration was added.
+
+The existing F03 schema deliberately has one `operating_organization` row (the singleton/check
+and Account foreign key in V2/V3). Therefore a valid second-Organization fixture cannot be created
+without violating the approved schema. Tests cover wrong requested scope, foreign Login Identity,
+unknown selector, credentialless selector and stale version; the production predicate still
+checks target Organization explicitly. This is not a waiver of the Organization check and does
+not justify weakening the schema merely to force a mutation-sensitivity test.
+
+### RED → GREEN and exact-source execution
+
+The first RED used the reviewed source archive plus a test overlay (archive SHA-256
+`671F0270B1B539A2FF72597D0880019BBFF2DC71C8FA2F01C127C5E61AB0DE66`).
+`resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin` expected HTTP 400 but the
+unrepaired controller returned 200. Its private sanitized runner log was
+`/home/phuclam/idea-f03b-test-xe9Ojrzo.log`, SHA-256
+`376F421220EB3033ADEB6857AAB75C1A2B84EE24F316ED31F0F7A8CC2A18774`.
+
+The minimal GREEN overlay added the request field, service parameter and exact predicate (overlay
+SHA-256 `D850CA6F0900F0673C983D5EC048D5D4154C671EB187AAE51B56D140B7CD20C1`). The same test then
+passed 1/1 with no failure/error/skip; its private log was
+`/home/phuclam/idea-f03b-test-o7GBjHT3.log`, SHA-256
+`91F9A5A6EA91CF83D8E06DAB926668CBA5E733C5E23729885FB298AE95DCBBD5`.
+
+The successor matrix added real HTTP/PostgreSQL cases for explicit L1 and L2 selection, sibling
+credential preservation, missing/unknown/foreign/credentialless/stale selectors, Account-wide
+session invalidation, sibling-proof staleness, disabled reset followed by separate re-enable, and
+Audit-failure rollback. The committed exact-source archive for `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142`
+was SHA-256 `A18910563B6BA8566F2A9BCB325EC44B46CBA47979C82B8B6C7E072FE0DDD815`; the server
+matched it before extraction into a fresh directory.
+
+```text
+bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+HttpSessionFlowTest: 41 / failures 0 / errors 0 / skipped 0
+IdentityFlowTest:    20 / failures 0 / errors 0 / skipped 0
+ServerSmokeTest:      2 / failures 0 / errors 0 / skipped 0
+TOTAL:              63 / failures 0 / errors 0 / skipped 0
+BUILD SUCCESS; elapsed 01:06 min; finished 2026-09-30 17:44:25 +07:00
+```
+
+Final runner log was `/home/phuclam/idea-f03b-test-qM08P9q4.log`, mode `600` owned by `phuclam`,
+SHA-256 `40C0F0652389F73E818C00D2E408CE640BE8419B64FF78C78F8AC29F2424FC55`. The run used
+PostgreSQL `18.6-0ubuntu0.26.04.1`, Temurin `25.0.4.1+1`, distinct `idea_ddm_migrator` and
+`idea_ddm_app`, and only test-owned UUID `f03b_` schemas in the authorized F03 database. Postflight
+left zero owned UUID schemas; public Flyway remains V1–V3. No F02/dev database or Vault was touched.
+
+### Review and limits
+
+Internal Standards review found 0 hard findings and one optional duplicated-test-assertion smell.
+Spec review found no implementation or scope issue after the schema-singleton clarification; the
+Organization predicate remains in production and the accepted refusal matrix is retained. The
+late Maven Clean Plugin intake was a one-time internal cleanup exception explicitly accepted by
+the Project Reviewer; its Apache LICENSE/NOTICE and JAR hash were checked, and no new dependency
+was added. This exception does not qualify future imports or commercial distribution.
+
+T046 technical execution is complete, but the external reset review is **PENDING**. F03-B remains
+`IN_PROGRESS`; Issue #24 remains open; T040–T044, T041 throttling, T043 client qualification,
+fresh public V4–V6, affected migration/data regression, T036, `verify-template` and whole-card
+acceptance remain open. A1 throttling is still documentation/test-plan only. No merge or Tracker
+completion was performed.
+
+## 22. External review of T046
+
+**Source class / disposition:** External technical review supplied by the Project Reviewer;
+**PASS WITH NOTES** for T046 only. It is not an independently executed test or whole-card
+acceptance. The reviewed revision was PR #25:
+
+| Revision | Exact source |
+|---|---|
+| Base | `19587d1b43635822e6a27d86dcae01db9c0220d8` |
+| Reviewed head | `281e46651e774b44a0b2e1c18fe30bd50a1f3151` |
+| Executed source retained in §21 | `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` |
+| Pre-repair reset head | `064f55ffa62e8f67ee6e062e3ab1c827e5509c23` |
+
+The reviewer closed the original MAJOR arbitrary-Login-Identity selection finding. Explicit
+selector enforcement, exact target binding, both L1/L2 choices, sibling credential preservation,
+Account-wide old-session invalidation, disabled reset/separate re-enable and atomic rollback
+were accepted in the repaired checkpoint. No new BLOCKER/MAJOR/MINOR was identified in that scope.
+
+The reviewer verified that executed source → reviewed head changed only evidence/tasks and
+that historical §20 was unchanged. The retained execution summary is 41 HTTP + 20 identity +
+2 health checks, 63 total with zero failures/errors/skips. This section records the received
+review of §21, not another run or independent raw-log inspection.
+
+**Remaining note:** The reviewer could not independently read the mode-600 private host log.
+Its SHA-256 identifies the referenced file but does not substitute for reading its contents.
+Fresh public V4–V6 and affected migration/data regression remain later work, not waived results.
+
+T046 remains `[X]`; T045/§20 are not reopened. F03-B remains IN_PROGRESS, Issue #24 open,
+throttling unimplemented, verifier NOT-RUN and whole-card acceptance pending. The reviewer
+recommended read-only `speckit-analyze` before the later throttling slice. No merge or progress
+publication is inferred from this review.
+
+## 23. Approved existing-identity state bound and planned throttling tests
+
+**Decision source:** The Project Reviewer agreed to the recommended zero-unknown-record design
+in the grilling exchange on 2026-09-30. This documentation update continued on 2026-10-01.
+It refines the synthetic development profile only, not live-company rate/DoS qualification.
+
+Spec v0.6 requires zero failure-observation records for unknown identifiers, with generic refusal
+and qualified dummy-password work retained. Existing Login Identities retain the approved rolling
+15-minute window, fifth-failure 15-minute block, non-extending blocked attempts and atomic eligible
+success clearing. Unknown attempts are not inherited by an identity provisioned later. Anonymous
+servlet sessions used for CSRF are not authenticated session records or identity creation.
+
+Engineering bounds known-login state to one record, five timestamps and one deadline per existing
+Login Identity, with on-access expiry and no arbitrary-name cache/queue/history. See the
+[data model](../data-model.md#state-and-transaction-rules) and
+[design rationale](../research.md#r7--failed-login-state-has-an-existing-identity-bound).
+The [test contract](../contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+defines ten oracle groups at the already-approved real HTTP/PostgreSQL seam: threshold, rolling
+window, block deadline, state bound, unknown identifiers, normalization/two logins, concurrent
+failures, successful clearing, binding/write failure and timing/regressions. They are planned
+vertical RED → GREEN cases, not existing tests or executed PASS results.
+
+The [plan](../plan.md#planned-sign-in-transaction-integration) addresses the current provider's
+commit-before-framework-binding order and rollback-on-refusal path. Planned integration persists
+known-login failures before refusal; success/session/IAM/Audit and clearing remain pending until
+ordinary Spring binding is checked. It does not claim distributed ACID, qualify a new session
+mechanism, import a dependency or change V1–V6. Future code must prove the fault/concurrency oracle.
+
+One supplied decision was integrated; no additional user answer is needed for this design.
+The affected sections are Clarifications, development profile, edge cases, FR-014/SC-003 and
+their plan/data-model/contract/research/tasks/quickstart/handoff traces. Requirement-quality and
+Project Reviewer checklist states remain unchanged; approval does not mark runtime tests complete.
+
+The previous U2 unknown-identifier capacity/expiry question is resolved by zero unknown state and
+the explicit existing-identity bound. Read-only `speckit-analyze` is the next consistency check,
+not a new execution result in this record. T041 throttling, T043 actual client qualification,
+fresh public successors, wider regressions and whole-F03-B acceptance remain open. No code/test,
+timer, actual-hour, Tracker, Issue closure, verifier execution or merge occurs in this update.
+
+## 24. T041 throttling checkpoint
+
+### Scope and source
+
+The Project Reviewer authorized this slice on 2026-10-01 after spec v0.6 and read-only Analyze
+settled the unknown-login bound. No new clarification or requirement was introduced by execution.
+T041 adds temporary failed-login blocking; it does not complete F03-B or qualify client paths.
+
+| Execution field | Actual value |
+|---|---|
+| Exact source | `b08709c581de195e05aea26450495cd593722059` |
+| Fixed review point | Externally reviewed T046 head `281e46651e774b44a0b2e1c18fe30bd50a1f3151` |
+| Source archive | `git archive HEAD apps/server database`; SHA-256 `54EE57A8A1E12EF48517C2E5620A202D2DD5FDFE4F6DDB949156BD46B8C0E739` matched locally and on the server |
+| Execution directory | `/home/phuclam/idea-f03b-throttle-successor-tzLuLByr` |
+| Database / roles | `idea_ddm_f03a_20260930_c91e7a42`; migrator `idea_ddm_migrator`, runtime `idea_ddm_app` |
+| Test isolation | Owned `f03b_<32-hex UUID>` / `f03a_<32-hex UUID>` schemas only; synthetic identities/passwords; loopback HTTP with test-only Secure-cookie override and controlled Clock |
+| Runtime | PostgreSQL 18.6 (`18.6-0ubuntu0.26.04.1`), Temurin 25.0.4.1+1, qualified Spring Boot 4.1.1 / Spring Security 7.1.1 |
+| Final command | `bash apps/server/scripts/run-f03b-postgresql-checks.sh 'HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest'` |
+| Finished | `2026-10-01T08:54:48+07:00`; Maven elapsed `01:35 min` |
+| Final result | 59 HTTP + 20 unchanged F03-A + 2 health tests = **81 PASS**, failures/errors/skips **0/0/0** |
+| Final private log | `/home/phuclam/idea-f03b-test-Kj4lLM0p.log`, mode `600 phuclam:phuclam`; SHA-256 `95502E9BAECE1D448E11133A69BC8D252CE12D21385B3E1BD080A54159CAB4A7` |
+| Post-run check | `OWNED_TEST_SCHEMAS=0`; `PUBLIC_MAX_VERSION=3` |
+
+The archive contains committed source, not the subsequently edited evidence/handoff. Publication
+after this source changes delivery documents only; reviewer trace must check that no application,
+test, dependency or migration changed after the run. No dependency was added. V1–V6 and
+`IdentityFlowTest` remain unchanged. `DataBaselineTest`'s previously stale three-migration
+expectation was aligned to seven and the new table's visibility; that class compiled but its
+fresh-public tests were **NOT-RUN**, not counted in the 81 checks.
+
+### Delivered boundary
+
+Additive V7 stores one row per existing Login Identity, enforced by a primary key/foreign key,
+with one-to-five non-null timestamps and one optional deadline. Unknown submitted names create
+no identity, failure row or name-history/cache. Runtime receives the needed row operations,
+not schema CREATE or table TRUNCATE authority.
+
+`SessionService` resolves the normalized login independently of eligibility. It performs qualified
+BCrypt work for refused valid-length unknown, disabled, blocked and credentialless paths; none
+can authenticate through the dummy verifier. A known refusal outside an active block prunes the
+rolling window, appends one failure and commits it before returning the same empty 401. Active
+block attempts leave the timestamps and deadline unchanged. The explicit ProviderManager has no
+fallback parent: one HTTP attempt must not invoke the same provider twice and count two failures.
+
+Eligible success stages failure-state clearing, the session row, IAM outcome and Audit in one
+database transaction under the existing security-write lock. `SignInBoundary` surrounds ordinary
+Spring form authentication. It checks the actual authenticated servlet-session binding after
+ordinary fixation/context persistence, commits PostgreSQL, then publishes success. Failed writes,
+missing binding, before/after-save exceptions and failed commit roll back; tentative context is
+cleared and the servlet session invalidated. JDBC resources stay request-scoped, never in Identity
+or HttpSession. This is a verified eligibility boundary, **not** servlet/PostgreSQL XA.
+
+### RED → GREEN trace
+
+Each focused command used the scoped runner with `HttpSessionFlowTest#<method>` from a fresh
+archive/extraction of the recorded commit. The test methods below are public-behavior names,
+not new HTTP routes. The first missing behavior was fifth-failure blocking; further state-bound
+and regression cases were added vertically. Unknown zero-state behavior already existed and its
+added oracle passed; it is not presented as a missing-feature RED.
+
+| Behavior / method | RED source and actual failure | GREEN source and result |
+|---|---|---|
+| `fifthWrongPasswordBlocksEvenCorrectCredentialsWithoutDisablingAccount` | `251d5737abacfc43aa3ae5ae76a61fb17dc64e6b`: correct credential after five failures returned 200 instead of 401 | `50c580974305b9fe095e265b07ddf4f8c6aeb5e4`: PASS |
+| `rollingWindowExcludesFailuresExactlyFifteenMinutesOld` | `9c663d15d9e8cb22ec91e3426a6c64c516dbd5ad`: exact cutoff still refused (401 instead of 200); investigation found provider fallback counting one refusal twice | `5a79df9123ac16fa05bf26d4d91c99186f48da64`: threshold and rolling boundary 2/2 PASS |
+| `silentlyMissingSpringBindingCannotCommitSessionOrClearFourFailures` | `97ab00a2dcb958fb1fd402b04203ffafc22b7d82`: omitted binding still published 200 and committed state | `68e4df6777a5343eef83d55db1d174ecfe0993ae`: 3 focused checks PASS |
+| `suppressedFailureClearingCannotPublishSuccessfulSignIn` | `c6332ff0166d94973d6baaf771ab1297b007a519`: suppressed DELETE still published 200 | `d4ebd21f5c03030112e38af84c6849a919fc41bb`: 2 focused checks PASS |
+| `suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure` | `a43ab6059428e5c4ea51d669ea783e7715078d43`: suppressed deadline UPDATE committed five observations without a block | `af827899e3770be34878f0a042aca06e587a235e`: PASS; row-count guard rolls back to four |
+| `blockedCredentiallessLoginOnActiveAccountStillPerformsQualifiedPasswordWork` | `1586c1e826df24d9d7d1a6d19f8811f8d767dbff`: blocked credential / credentialless medians 72.453 / 3.271 ms | `b08709c581de195e05aea26450495cd593722059`: focused PASS, 70.839 / 70.983 ms |
+
+All referenced raw logs were checked as mode `600`, owner `phuclam`. Prefix for each filename
+below is `/home/phuclam/`; SHA-256 identifies the retained file, not independent reviewer access.
+
+| Run | Retained filename | SHA-256 |
+|---|---|---|
+| Threshold RED | `idea-f03b-test-6fdjYGtG.log` | `A8F1F3E48152FF7D56797928BB6066B89B159FFDF94C187357CC874FBFBD3DBA` |
+| Threshold GREEN | `idea-f03b-test-jNNN3gTP.log` | `601CF8768C09A739AAF3B54DDD398D28DA83916631FB9BBC9AA385A7ED090D57` |
+| Rolling RED | `idea-f03b-test-GSWBcDCm.log` | `53A3C833645DC193743B5E352C4B8300882AD19E64696AE324D27898914358D0` |
+| Rolling GREEN | `idea-f03b-test-wUrDMO2e.log` | `19984F90C670E07D8391267866A67EE62FFE74C546EE04B3E9AB1BEB94664BE3` |
+| Binding RED | `idea-f03b-test-SvakRZPg.log` | `993701A2D0FCA3FD5C3D977417BF70DFEF87A6FF5E422CE58EC45773EDA29803` |
+| Binding GREEN | `idea-f03b-test-YCRlB1NV.log` | `AF80A8A5DCA736C1C54715B206EF6F0F9EEA021D96A98B37780977002EFC77C7` |
+| Clear RED | `idea-f03b-test-rdgBqvBL.log` | `1B43B428C3E726FD50E71FF1E94664F86D7FE7BB644B2F1F065AAD589D592C18` |
+| Clear GREEN | `idea-f03b-test-VTzuUz9w.log` | `14824F8082944AF12FE4BD703981B812C08E6A416D3FDCF55B8CE231C716B3B3` |
+| Deadline RED | `idea-f03b-test-ZwKJOcJH.log` | `85B5B051B041DA2026F9FFCF1160AC456AD717409B8B2670E4A4381D4E108F74` |
+| Deadline GREEN | `idea-f03b-test-ECYWODSO.log` | `604125458569779D38D41B1941EF19BDBD8A32BDEE621061FE7F30E20031FAAC` |
+| Credentialless RED | `idea-f03b-test-JKx1rCUp.log` | `94A5B4D318412F89DAE9654348E798CF043EC7B046C1EFE28D5B7E1745B3A156` |
+| Credentialless GREEN | `idea-f03b-test-zwbOgpMb.log` | `7F357802667A827D550CCF446D6CA10223EB3384A90FAB43CE03F9554C8658F5` |
+
+During test construction, the Flyway info oracle incorrectly counted its schema-creation marker
+as an eighth version. The oracle was corrected to count only non-null version entries; this was
+a test-oracle failure, not a missing migration. A preliminary full run at `9d1e245` passed 79 checks,
+but internal review then found two defects below. The 81-check run above supersedes that result
+for current implementation; no prior PASS is used to cover subsequent code changes.
+
+### Executed oracles
+
+| Case | Observed result in final run |
+|---|---|
+| Threshold / successful clear | Four failures followed by eligible success clear only that login's row with session/IAM/Audit; five failures block even correct credentials without disabling Account |
+| Rolling cutoff | Failure at `06:00Z` plus three at `06:01Z`: new failure at `06:14:59.999999Z` blocks; at `06:15:00Z` / `06:15:00.000001Z` the first failure is excluded and eligible sign-in succeeds |
+| Block deadline | Block at `06:00Z` expires `06:15Z`; ten attempts immediately before expiry preserve the complete witness; exactly at expiry a wrong attempt starts one current observation, then eligible success clears; after expiry the sibling succeeds |
+| Normalization / siblings | Case/outer-space variants share one row; blocking L1 does not block L2, and successful L2 does not clear L1 |
+| Unknown-name spray | 100 distinct unknown attempts leave zero failure/identity/authenticated-session rows and no extra IAM/Audit; provisioning a previously unknown name inherits no observations |
+| Concurrency | Ten synchronized real HTTP failures reach one five-observation row and one deadline; blocked retries neither append nor extend; no session/IAM/Audit success |
+| Disabled / PENDING | Correct password attempts cannot activate, clear failure state or create an eligible session; temporary blocks preserve Actor/Account state; expired observations do not remain counted |
+| Required-write failure | Suppressed failure-state DELETE, fifth-deadline UPDATE, session INSERT, IAM outcome, Audit and deferred commit failures preserve prior failures and no eligible success |
+| Framework binding failure | Silent context-save omission and before/after-save exceptions preserve prior failures, roll back database success and leave session probe 401 |
+| Migration / privilege | UUID schema V1–V7 followed by repeat 0; exact migrator/app identities; app has no DB/schema CREATE; nonexistent identity FK and six-timestamp array rejected; DDL/TRUNCATE refused |
+| Regression | F03-A v1/bootstrap/assignment/lifecycle, first setup, exact-login reset, revocation, expiry, fixation/CSRF and health remain PASS in the stated classes |
+
+Times in the boundary oracles are synthetic `2026-09-30` UTC Clock instants, not test wall-clock
+dates. No host-clock change or long sleep was used.
+
+Final warmed/interleaved timing medians (nine samples/path): active/wrong **80.293 ms**, unknown
+**70.746 ms**, disabled **70.770 ms**, blocked **70.015 ms**. Separate blocked credential /
+credentialless medians were **69.156 / 69.065 ms**. The active comparator is kept genuinely
+unblocked with a successful sign-in between observations. These tests detect gross BCrypt
+bypass; they do **not** establish constant-time behavior or endpoint capacity/DoS protection.
+
+### Standards review
+
+Read-only internal Standards review first covered `9d1e245` against the fixed T046 point.
+It found one documented failure-handling defect: fifth-deadline UPDATE did not require one
+affected row. The successor guard and its suppressed-write RED/GREEN close that finding.
+Review of `b08709c` found no remaining documented-standard defect or actionable baseline smell;
+resource ownership, binding abandonment, rollback, connection closure and ThreadLocal removal
+were coherent. The credentialless successor and migration-oracle correction were also checked.
+The review agent ran no tests; command execution is separately recorded above.
+
+### Spec review
+
+Read-only internal Spec review at `9d1e245` found two defects: a suppressed fifth-deadline UPDATE
+could commit an unblocked fifth observation, and a credentialless Login Identity on an ACTIVE
+Account skipped BCrypt on blocked refusal. Both have successor RED/GREEN evidence.
+Review of `b08709c` reported zero remaining T041 findings and no scope creep. It rechecked rolling
+cutoff, deadline/state preservation, normalization, siblings, unknown-state bound, immutable
+V1–V6 and the staged clearing/session/IAM/Audit fate. This is not external reviewer acceptance.
+
+### Disposition and remaining limits
+
+Focused repository checks also passed: `git diff --check`, repository hygiene and the F01-B
+tracked-file secret scan (ten exact synthetic fixtures recognized; 233 known binary files
+excluded from that text scan). The delivery-document check found 96 valid relative targets and
+28 heading anchors. Quality/reviewer checklists remain 16/16 and 12/12; no checklist approval
+was changed. Historical §20–21 match the reviewed T046 point; §22–23 match the pre-execution
+delivery source. These focused checks are not the unrun verifier or new runtime evidence.
+
+T041 implementation/execution is complete; its marker records that scope only. **External
+throttling checkpoint review is pending.** T045/T046 and historical §20–23 are preserved.
+F03-B remains **IN_PROGRESS**, Issue #24 open; no timer/hours/Tracker publication, merge or
+whole-card acceptance is inferred. T040/T042–T044, actual Web HTTPS/cookie/CSRF and Desktop
+binding/custody, applicable protected-request qualification and F04 owner-commit race remain
+separate work. Java HTTP tests do not qualify real clients.
+
+Public V4–V7/fresh `DataBaselineTest` execution remains **NOT-RUN**; all migrations in this run
+were confined to owned UUID schemas, and retained public is still V3. No F02/`idea_ddm_dev`/Vault
+mutation or cleanup is claimed. The dedicated database and private logs remain retained for review.
+
+GPT Web cannot independently read these mode-600 host logs from GitHub. Repository source,
+commands, result summaries, hashes and commit trace are reviewable; hashes do not substitute for
+reading raw logs. No proof/cookie/CSRF/password values are published here. The global security-write
+lock establishes correctness in these controlled tests, not high-throughput qualification.
+`verify-template` stays **NOT-RUN**; T036, commercial/production readiness, backup/restore and
+multi-Vault are not cleared by this checkpoint. Extension hooks were skipped because
+`.specify/extensions.yml` is absent.
+
+## 25. External review of T041
+
+On 2026-10-01 the Project Reviewer relayed GPT Web's **PASS WITH NOTES** for the T041
+throttling checkpoint. Source base is `19587d1b43635822e6a27d86dcae01db9c0220d8`, reviewed
+head `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3`, executed source
+`b08709c581de195e05aea26450495cd593722059`. Execution-to-head changes are seven delivery
+documents only; application/test/dependency/migration contents and historical §20–23 match.
+
+No BLOCKER, MAJOR or MINOR implementation defect was reported. Review accepted rolling
+window/deadline boundaries, bounded known-login state, zero unknown state, normalized/sibling
+login behavior, qualified refused-path password work, successful clearing/session/IAM/Audit
+fate after ordinary Spring binding, fault rollback and additive V7/least privilege.
+The recorded 81 checks had zero failures/errors/skips. This is a relayed technical review,
+not an independently registered GitHub approval or new execution of private host logs.
+
+Raw mode-600 log access remains an INFO limitation. Fresh public V4–V7/data regression,
+actual clients and wider T040/T042–T044 obligations remain open. The advisory-lock tests do
+not establish throughput. T041's implementation/execution checkpoint is accepted; F03-B
+stays IN_PROGRESS, Issue #24 open, verifier NOT-RUN, no merge or whole-card acceptance.
+
+The Project Reviewer subsequently authorized the recommended HTTP account-administration
+slice through the existing real HTTP/PostgreSQL seam: account create/disable/re-enable,
+CSRF, exact scope/permission, current session eligibility and required-state/evidence rollback.
+This does not change product requirements or authorize client qualification or F04 race claims.
+
+## 26. HTTP account-administration checkpoint
+
+### Objective and configuration
+
+The Project Reviewer authorized this slice after §25. It exposes the already-contracted
+account create/disable/re-enable routes, reusing the F03-A owner and exact scoped permissions.
+It implements parts of T021/T040/T042/T044, not an additional card or estimate.
+
+Initial executed source: `db46e6fc1544278fb318cd71284de1effbbe897f`, successor of reviewed T041
+head `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3`. A clean Git archive was transferred to
+`/home/phuclam/idea-f03b-httpadmin-exact-db46e6f`; archive SHA-256:
+`BB873BA5F16D33BD06606AE91E29DAD8D2308C22E7DF42E83C76779E65EEBD7B`.
+The internal-review successor below changes application/test source and reruns the complete
+scoped suite at `a0874f4`; the initial result is retained, not reused as successor execution.
+
+Environment: native Ubuntu development server `192.168.137.33`, PostgreSQL `18.6`
+(`18.6-0ubuntu0.26.04.1`), Temurin `25.0.4.1+1`, qualified Spring Boot `4.1.1` / Security
+`7.1.1`. Database: retained dedicated `idea_ddm_f03a_20260930_c91e7a42`. Migrator and runtime
+authenticate separately as `idea_ddm_migrator` and `idea_ddm_app`. Synthetic identities only;
+each identity-flow test creates/migrates/drops its own `f03a_`/`f03b_` UUID schema. The two
+health checks use an intentionally unavailable database fixture and create no schema. Transport is isolated
+loopback HTTP with recorded test-only cookie settings, not real-client HTTPS qualification.
+The in-process controlled Clock supplies exact expiry instants; no host-clock change or
+public clock/control endpoint. No new dependency or migration; V1–V7 remain unchanged.
+
+```bash
+bash apps/server/scripts/run-f03b-postgresql-checks.sh 'HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest'
+```
+
+### Observable contract and result
+
+`IdentityController` returns safe identity/status/version DTOs. Creation returns 201 with
+the new Login Identity; Account-level disable/re-enable returns 200 without selecting an
+arbitrary sibling Login Identity. Input/refusal mapping is in the
+[HTTP account mapping](../contracts/ph1-boundaries.md#http-account-administration-mapping).
+`IdentityHttpSecurity` injects session-qualified `IdentityAdministration`; its existing
+trusted F03-A fixture constructor remains separate. Eligibility is read-only at admission
+and after the security-write lock, before scoped permission evaluation. Accepted activity
+refresh shares the owner mutation/IAM/Audit transaction; rollback/refusal cannot refresh it.
+
+| Scenario through real HTTP/PostgreSQL | Expected and observed oracle | Result |
+|---|---|---|
+| Create | 201; stable Actor/Account/new Login IDs; PENDING, no verifier or role assignment; cannot sign in; client Actor field cannot change server attribution | PASS |
+| Disable/re-enable | 200; stable identity/history, increasing security version; both old sessions refused after disable and after re-enable; fresh sign-in succeeds with unchanged credential | PASS |
+| Authority/CSRF | Anonymous 401; Super-only, ordinary, wrong-scope or revoked assignment 403; exact v1/v2 account authority works; v1 does not gain v2 permissions; bad CSRF rejects all three routes | PASS |
+| Idle/absolute deadlines | All three routes refuse at/after 2h idle or 8h absolute; successful activity can refresh idle, never absolute lifetime | PASS |
+| Old issuer proof | Disabled, re-enabled-old or explicitly revoked issuer session refuses all three routes; fresh eligible delegated authority works | PASS |
+| Rejected activity | Wrong scope/stale mutation does not update activity; exact idle boundary is still refused | PASS |
+| Lock-time expiry | Witness the actual request waiting for lock `73003002`, advance to exact idle expiry, then release: 401, no Actor/Account/Login/change row or activity refresh | PASS |
+| Required writes | Six fault cases: create/disable/re-enable × missing IAM outcome/Audit. Empty 503; mutation/history/evidence/activity roll back; same OperationId retry succeeds after removing the exact test-owned trigger | PASS |
+| Input/state/recovery | Missing IDs/blank input 400; duplicate/stale/invalid transition 409; unknown target or last-Super disable 403; no partial account mutation | PASS |
+| Prior behavior | Unchanged F03-A, credential setup/reset/exact-login, throttling/session and health regressions remain passing | PASS |
+
+Creation writes no Project/Group Membership or product Role Assignment. Those membership
+tables do not yet exist in this increment; this claim is based on owner-source inspection
+and role-assignment/credential witnesses, not fabricated queries against absent tables.
+
+Initial committed result at **2026-10-01T09:31:48+07:00**: **96 tests, 0 failures, 0 errors, 0 skipped**
+(74 HTTP, 20 F03-A, 2 health), Maven duration 1m50s. Post-run read-only checks found zero
+owned UUID schemas, retained `public` migration version 3, and no app CREATE authority on
+database or `public`. Fresh public V4–V7/`DataBaselineTest` remains NOT-RUN.
+Read-only post-run log: `/home/phuclam/idea-f03b-httpadmin-postrun-lLOVqJgJ.log`, SHA-256
+`B9BCACD9F7758DDE30CFFA45DB032443B0283FB498F742A24C23801155BEB385`.
+
+### Test-first chronology and retained files
+
+Initial executions used tracked worktree overlays over `74c2d3d`, not clean committed
+snapshots. Their actual archives/logs are retained; the initial regression above used only committed
+`db46e6f`. Behavioral REDs were missing routes, not compilation failures.
+
+| Run | Actual result | Private host log basename | Log SHA-256 |
+|---|---|---|---|
+| create RED | 1 failure: expected 201, actual 404 | `idea-f03b-test-BTMXK94K.log` | `0319954FDB441EAF1C6142A252448A332A66C0AFFFB219CFFB448DF75E029A87` |
+| create GREEN | 1 PASS | `idea-f03b-test-AciMxdfI.log` | `95B1E7E9C6243D4E9DB2F228CEA96BCE169CC3D3CC4C664A095550820C244693` |
+| lifecycle RED | 1 failure: expected 200, actual 404 | `idea-f03b-test-uGAdmmzR.log` | `F310C892F58BD4FC0DCA29650BF15EF222415F9117E899F9215F69971D874A3D` |
+| lifecycle GREEN | 1 PASS | `idea-f03b-test-4ZwwYAS5.log` | `D1AFEBAD7FAC7552F05829E123C8431B8CD2217E20B15F25C06EE97051122DDE` |
+| authority | 1 PASS, no separately observed RED | `idea-f03b-test-nM6Vojsp.log` | `7834CC41730F334BA437FBECD79EF2A146FD44EC97AC05D400433BEBA0AA2BAD` |
+| eligibility | 4 PASS, no separately observed RED | `idea-f03b-test-J68R9lKy.log` | `7808B82583D0B6BDC9E88F237EB75666F69C2B79479DAF767AD2327D0C11BD39` |
+| faults/lock initial | 10 tests: 9 PASS, 1 lock-witness failure | `idea-f03b-test-ag9Vb54o.log` | `15CB8AFA3EA960AE6C1BDEF0CC65B3C04A2CB3BFFF49CFFA3F98C6799F3F1FA0` |
+| observer diagnostic | 1 lock-witness failure, product mutation not evaluated | `idea-f03b-test-T6pzLmkv.log` | `EE3D966E6B168CB6F77F02702F5CDF78427B69A8D491FC34B61D1600E9069610` |
+| corrected lock witness | 1 PASS | `idea-f03b-test-f8YMK60I.log` | `DD2C3F5E5E70FD7EAF0C4E63661B7D6EF00FA5E0C2B0480E5A21D906A0D15AC9` |
+| exact committed regression | 96 PASS | `idea-f03b-test-HdMhymH5.log` | `8AB6444B05BE0C8A6134DFA1176BFD601B8C390A6CF41FFF23DCE6583EE45254` |
+
+All log paths are under `/home/phuclam/`; final log mode is `600 phuclam`. Dirty-overlay
+archive SHA-256 values, in the same first-nine-run order:
+
+```text
+966699650DEBE1F1982FDDD42E70D1D8EFBBAF99ADC9582D53378C176CD0AD0C
+08B567B597AF9C09669D1D0CE93077A2802F104576DB93FD370621E5191630AB
+1D93504CD77BB9089CB9CA2BFC3BF8E1418AB15904DDE44ABC284BB7B687150B
+07E0F3F677CAEC982106126DA60B1C2D3743650DA356BA619BBC8E7EEB6D2935
+0E2BF55B2920E49FBDFDA6DBE1223D9DB01175172F496FF9577B8A5A9136A58C
+0714C85CA6AEC977CE46355B3BBEC07897178AF6CCFA23CADEC8A51BC33AD6B9
+BF67FDBA73B2FFEB0A1663E87CF35F6FA8332DC6B1715BEC541C2AA21F80A245
+8B74893101A2A129956CB84C580274DC1FC110D4915C0B504BA7A76193FBE614
+45A9B59487F3180EB5D535485201915BE68EE2E907ED69E47BD3374B128E08F0
+```
+
+The initial create test's unused membership-table witness was corrected before GREEN because
+those tables do not exist yet; it was never reached in the 404 RED. The lock test's first
+`pg_stat_activity` witness could not see the other role's wait details; separating an autocommit
+observer alone still failed. The corrected observer uses the exact pending `pg_locks` key,
+joined to visible database/user identity. It grants no monitoring privilege, does not use
+elapsed sleep as the state oracle and changed no product code. Do not count these harness
+failures as missing-product REDs. Additional authority/fault cases extended already-working
+guards without inventing RED execution. No debug instrumentation was retained.
+
+### Internal-review repairs and successor execution
+
+Initial Spec review found two observable defects in `db46e6f`:
+
+- Unicode lowercasing can expand a valid-length submitted login beyond the existing 254-unit
+  input bound (Java UTF-16 code units). U+0130 repeated 128 times normalized to 256 units and returned
+  503 instead of the required input refusal. Validate the normalized value before mutation.
+- The Account diagnostic query used an inner Login Identity join, so an Account with zero
+  Login Identities was incorrectly treated as absent. Use a left join; Account enablement
+  does not require a Login Identity and re-enable cannot invent one.
+
+Both repairs were exercised test-first through real HTTP/PostgreSQL. These four executions
+used tracked overlays over committed `db46e6f`; the final clean archive below includes the
+repairs and both tests.
+
+| Repair run | Actual result | Private host log basename | Log SHA-256 |
+|---|---|---|---|
+| Unicode RED | 1 failure: expected 400, actual 503 | `idea-f03b-test-Iw3SB12o.log` | `B517E5154ABDBA6BF69B7638AB8E84C62511F406B0B1EC19809C6359639591F3` |
+| Unicode GREEN | 1 PASS | `idea-f03b-test-L4GkJ8KI.log` | `5CD11FEA0141934BA6A3FCC9F62041D3E4D0D4F60768C53CB0225A0BD268C002` |
+| Zero-login RED | 1 failure: expected 200, actual 403 | `idea-f03b-test-jDtvhPI2.log` | `926A7813B2F0037DB546AD35EB250A866F158EDB0467CAE217E80A825EFC5DDC` |
+| Zero-login GREEN | 1 PASS | `idea-f03b-test-IlANAVbn.log` | `EFD42F03951DA622E7D0CFF24F3C142E4341222EE271948FEC8BDBF66433AA13` |
+
+Overlay archive SHA-256 values in that same order:
+
+```text
+062A7B3EBB1E00FC8CC9E24C5D363E69E737D547A325CAC079F6A5970D5ACDED
+238DAB7B4E279F83E0245A9C76D55B6BD6303175B9C16F476317BA8FF2A0849F
+22CBF7C148327B8CFB21A117ABB228F91C68AB11890C3F1C8F6A48F8FD0CD751
+E457BABA9CC1879B01F3F0B3F2F7D65A72DA131E0913BE3F709F9DE12E2C202D
+```
+
+The Unicode GREEN also accepts a normalized 254-unit boundary and proves the rejected
+request creates no identity/history or accepted-activity change, with one refused IAM/Audit
+outcome. The zero-login GREEN proves disable/re-enable 200, stable Actor/Account/history and
+increasing security versions, retained PENDING state after re-enable, zero Login Identities,
+Account-only response DTOs and required IAM/Audit. Its synthetic fixture removes only that
+test-owned pending Login Identity using the migrator, not a company or retained public record.
+
+Final executed source: **`a0874f40555f1119b830f043a7aaf5bda8752d8a`**, clean Git archive in
+`/home/phuclam/idea-f03b-httpadmin-final-httpadmin`. Archive SHA-256:
+`3222ECA82ADE27EE46F39F9A055411EBEFEF94266B70DBB473CA75E39FC04E99`.
+The command and qualified environment are the same as the initial run above. At
+**2026-10-01T09:49:57+07:00**, Maven completed in **1m51s**:
+
+| Suite | Executed | Failures / errors / skipped |
+|---|---:|---|
+| `HttpSessionFlowTest` | 76 | 0 / 0 / 0 |
+| Unchanged F03-A `IdentityFlowTest` | 20 | 0 / 0 / 0 |
+| `ServerSmokeTest` | 2 | 0 / 0 / 0 |
+| **Total** | **98** | **0 / 0 / 0** |
+
+Actual result: `BUILD SUCCESS`, `F03B_SCOPED_TESTS=PASS`.
+Private final log: `/home/phuclam/idea-f03b-test-AsK5chS9.log`, mode `600 phuclam`, SHA-256
+`0094A31AD70381ABC48927EFB14F6FC128B16DA4D3C50F9BC6232A3CAC715201`.
+The final read-only post-run check again observed `OWNED_UUID_SCHEMAS=0`, retained
+`public` version 3 and `PUBLIC_APP_CREATE=false; DATABASE_APP_CREATE=false`.
+Post-run log: `/home/phuclam/idea-f03b-httpadmin-postrun-k6h6LdwJ.log`, mode `600 phuclam`, SHA-256
+`4A85E82493E98C4B5835B5411D2F4894224FBFF79D54ABDA9033CAAB8E28CDAE`.
+No test-owned schema remains; fresh public V4–V7/data regression remains NOT-RUN.
+
+After `a0874f4`, checkpoint publication changes only the six delivery-document files
+(contract, evidence, plan, quickstart, tasks and worker handoff), not application code,
+tests, dependencies or migrations. This statement is checked before push; it does not
+claim an external review of the publication head.
+
+### Internal review and disposition
+
+#### Standards
+
+Read-only review of `74c2d3d...db46e6f` found a documentation defect: the new mapping
+claimed empty bodies for all input errors, although Spring JSON/UUID binding precedes the
+controller. The successor contract scopes emptiness to controller/owner-generated refusals
+and explicitly leaves framework binding-body format unqualified. A second documentation
+finding distinguished per-identity-test UUID schemas from the two unavailable-database health
+checks. Both were corrected. Read-only successor review through `a0874f4` found no open hard
+Standards issue or new actionable smell; the reviewer did not execute tests independently.
+One optional P3 Duplicated Code judgment remains: create and change endpoints repeat the same
+exception-to-status mapping. This is a maintainability opportunity, not a repository-standard
+violation; this checkpoint retains the two local mappings without an extra command abstraction.
+
+#### Spec
+
+The two initial runtime findings are described with RED/GREEN above. Read-only successor
+review of `db46e6f..a0874f4` found both closed and no remaining runtime Spec finding, scope
+creep or changed F03-A/migration/dependency baseline. Execution is the separately recorded
+98-test run, not inferred from this source review. External checkpoint review is pending.
+
+#### Checks and remaining work
+
+Scoped secret scan, repository hygiene and `git diff --check` passed; all 101 relative
+delivery-document targets and 33 heading anchors resolve.
+Historical §20–24 were checked unchanged against `74c2d3d`; §25 is unchanged from `db46e6f`.
+Dependencies/V1–V7 and F03-A test contents are unchanged from the reviewed T041 head.
+Reviewer checklists remain 16/16 and 12/12, with no marker changes. Extension hooks are absent.
+
+External HTTP account-administration review is pending. F03-B remains IN_PROGRESS, Issue #24
+OPEN; T018/T020/T021/T022 and T040/T042–T044 remain open for their wider obligations. Explicit
+restart invalidation, remaining applicable issuer/logout profiles, actual Web HTTPS/cookie/CSRF
+and Desktop binding/custody, and fresh public V4–V7/data regression remain separate work.
+F04 owns its owner-command race; this checkpoint does not claim it. Private raw host logs are
+not independently available through GitHub; a hash identifies the file, not independent log
+inspection. No verifier, merge, Tracker timer/hours or progress-publication action occurred.
+No company credential, cookie/proof/password, production/commercial/T036 clearance, recovery,
+load/throughput or multi-Vault claim is made.
+
+## 27. External review of HTTP account administration
+
+The Project Reviewer relayed GPT Web **PASS WITH NOTES** on 2026-10-01:
+
+| Review identity | Exact revision |
+|---|---|
+| PR / Work Item | #25 / #24; review scope from PR comment `5923801596` |
+| Main/base | `19587d1b43635822e6a27d86dcae01db9c0220d8` |
+| Reviewed head | `171173a5266fa5c9a732f2fe1316fb1c5c0f836d` |
+| Executed source | `a0874f40555f1119b830f043a7aaf5bda8752d8a` |
+
+No BLOCKER/MAJOR/MINOR implementation finding remained. The received review confirmed create,
+disable/re-enable, exact authority/scope, CSRF, admission/locked eligibility and atomic mutation/
+IAM/Audit, including the Unicode-normalization and zero-Login-Identity repairs. It checked the
+98-test summary, docs-only source-to-head trace and unchanged historical §20–24.
+
+Notes remain: private raw logs were not independently read through GitHub; pre-controller
+binding-error body format is not qualified; duplicated local exception/status mapping is a
+non-blocking P3 opportunity. This receipt is a relayed technical review, not a GitHub approval,
+independently repeated execution or whole-F03-B acceptance. F03-B stays IN_PROGRESS, Issue #24
+open, verifier NOT-RUN and no merge.
+
+## 28. Server restart and session continuity qualification
+
+### Scope and seam
+
+On 2026-10-01 the Project Reviewer authorized only restart of synthetic **Server test processes**.
+Before adding tests, Engineering checked `HttpSessionFlowTest`: detailed idle/absolute, logout,
+reset/re-enable and throttle matrices already exist; no actual process-restart case existed.
+`ServerRestartFlowTest.java` adds three qualification cases, not replacement matrices or a new
+authentication mechanism. Production code, dependencies and V1–V7 are unchanged from `171173a`.
+
+The parent test migrates one `f03b_<32-hex UUID>` schema per case in dedicated database
+`idea_ddm_f03a_20260930_c91e7a42`. Migrator owns migration/cleanup; child Servers authenticate as
+`idea_ddm_app`. No public-schema migration, company identity, `idea_ddm_dev`, F02 DB or Vault write.
+Two real child JVM processes run the actual application at **the same loopback HTTP endpoint**
+and on the same schema, A stopped before B starts. No Ubuntu/service/host restart is requested.
+
+The test-only launcher uses ordinary production SecurityContext storage. It overrides Secure
+cookie only for loopback HTTP, disables automatic Flyway and sets root logging to WARN. A private
+test-classpath Clock file advances synthetic time; no production clock hook, HTTP time-control
+route, host-clock change or hour-long wait. Ready/clock/child-log files are owner-only in a private
+directory under this build's ignored `target/`. Credentials arrive through the existing protected
+operator environment, never command arguments or output. Fixture credentials/cookies/proofs stay
+in memory/private files; row witnesses expose digests, not credential/verifier contents.
+
+### Oracles
+
+| Qualification case | Observed contract |
+|---|---|
+| Retained metadata / old cookie | A login 200 and protected session 200; stop A; distinct B PID at the same port; old cookie empty 401. Actor/Account/Login and credential digest, all session rows, session total and accepted IAM/Audit totals are unchanged through startup/refusal. Fresh login with the same credential is 200, protected session 200, with a different cookie/session/runtime ID. Only the fresh sign-in adds one session and one accepted IAM/Audit each; the old row remains unchanged. |
+| Pre-revoked / pre-idle-expired | A establishes logout-revoked and idle-expired cookies plus a still-eligible control. B refuses all three old cookies. Metadata and identity remain unchanged; fresh login/protected session succeeds with a new runtime ID. Revoked row remains revoked and the expired row's activity is not refreshed. |
+| Durable throttle | A establishes the existing five-failure block at synthetic START. B retains the full failure-state digest and original START+900s deadline; valid credentials during the block are empty 401, without success or changed/extended state. At START+901s fresh login/protected session succeeds and clears state; identity/credential remains unchanged. Detailed threshold/deadline/concurrency regressions stay in T041. |
+
+Source inspection separately confirms `SessionService` generates a runtime UUID, stores it on
+sign-in and pins eligibility to it. The HTTP old-cookie refusal does **not** independently isolate
+that guard: B also lacks A's servlet SecurityContext. No adoption/restore path is introduced.
+This qualifies process-local authentication continuity, not HA/failover/recovery/backup semantics.
+
+### Execution trace
+
+Each newly added case passed on its first targeted run against the existing implementation.
+This is **previously implemented behavior newly qualified**, not fabricated RED → GREEN.
+The staged-test archives overlay base `171173a`; they are not claimed as committed source.
+
+| Initial targeted case | Archive SHA-256 | Private Maven log under `/home/phuclam/` | Result |
+|---|---|---|---|
+| Old-cookie/fresh-login | `5BCAD9BF16A449466DBF71D6840ECE4AD3925EB50AF71240843D8587128F1B44` | `idea-f03b-test-Eu2vnQzA.log` | 1 / 0 failures / 0 errors / 0 skips |
+| Revoked/idle-expired | `096F342632911DA6AFAE8665C3DF6D493580C550AB2D0800E735D6500EA0349A` | `idea-f03b-test-KOpGdpOQ.log` | 1 / 0 / 0 / 0 |
+| Durable throttle | `740F7C36C1A31D1551062FB06CAB99A55F1FD3355AAE9CF5200E191348A5F7BC` | `idea-f03b-test-w3xEAnU4.log` | 1 / 0 / 0 / 0 |
+
+Initial committed source `60e64d12bae1daed71c4e0523465f64d81a93dbc` ran all 101 scoped checks
+PASS at 10:19:02 +07:00, 2026-10-01, archive SHA-256
+`A336015BB22FB68994162F043B0BFAD276C2F0D58E98F99253ED676D88067661`, private log
+`/home/phuclam/idea-f03b-test-7Pm2WxAZ.log`. Internal Standards review found one teardown
+reliability edge: an exception after confirmed child termination could skip schema cleanup.
+Successor `074f62ae713e7a1f627f7fb1bbe600e4e4d37296` adds `finally` with a confirmed-dead guard;
+non-graceful shutdown remains a failing qualification even when scoped cleanup is attempted.
+If a child remains live, cleanup is refused. This does not guarantee retention of the original
+exception if cleanup itself also fails. No production behavior is changed or RED qualification invented.
+
+The successor was exported as a clean Git archive, transferred with matching SHA-256
+`83F11AB77CB3DAD5253B57FA650DFCEC5649E3DBC80C4EDA01DDBF507603E6CE` and built afresh in
+`/home/phuclam/idea-f03b-httpadmin-restart-final-02`. No `mvn clean`, dependency change or verifier.
+Environment: native Ubuntu 26.04 development host, PostgreSQL 18.6, Temurin 25.0.4.1+1;
+same qualified dependency graph as the prior checkpoint. Exact command:
+
+```bash
+bash apps/server/scripts/run-f03b-postgresql-checks.sh ServerRestartFlowTest,HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+```
+
+Final successor execution completed **2026-10-01 10:22:08 +07:00**, total Maven time 2m13s:
+
+| Suite | Tests | Failures / errors / skips |
+|---|---:|---|
+| `ServerRestartFlowTest` | 3 | 0 / 0 / 0 |
+| Existing `HttpSessionFlowTest` | 76 | 0 / 0 / 0 |
+| Unchanged F03-A `IdentityFlowTest` | 20 | 0 / 0 / 0 |
+| `ServerSmokeTest` | 2 | 0 / 0 / 0 |
+| **Total** | **101** | **0 / 0 / 0** |
+
+Actual result: `BUILD SUCCESS`, `F03B_SCOPED_TESTS=PASS`. Maven log
+`/home/phuclam/idea-f03b-test-Ztjs5CMa.log`, mode `600 phuclam`, SHA-256
+`71DBCF23F306F12F090A551D9C6585470EE66683B3F637F53CC87E7ADCEE44B1`.
+The log retains three same-endpoint process pairs, all stopped gracefully:
+
+| Pair | Runtime A PID | Runtime B PID | Loopback port |
+|---|---:|---:|---:|
+| 1 | 46981 | 47072 | 38267 |
+| 2 | 47165 | 47244 | 37695 |
+| 3 | 47336 | 47405 | 38847 |
+
+Six child logs under the final build's `target/f03b-restart-*/runtime-{1,2}.log` are retained,
+mode `600 phuclam`; they are **empty** at WARN level, each SHA-256
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`.
+They are not behavior evidence; Maven/JUnit assertions and process markers provide that result.
+The ready/clock fixtures remain private; no cookie, proof, password or credential verifier is published.
+
+Initial private log SHA-256 values, in the three targeted-case table's order:
+`2BD9CA28CEA872C5D82F1FA6C10BDD1D1A159E0D73FC807A22568B724A2ED6AC`,
+`1EE12844257AEB57A7682500F5C3A81E747B489605E1BFE1F49A3AC447EAD2AB`,
+`826A322122A8A06EB14C09373AF738DD03D46F5D931A132ED9F65C2FD25F6A29`.
+Initial 101-test run log SHA-256:
+`78371D6700868CCA6E0257193F2CEFEEE02B4F8AF3A32FFD9A1DBD61FDB20B7B`.
+
+A read-only post-run check observed `OWNED_UUID_SCHEMAS=0`, retained `public` version 3 and
+`PUBLIC_APP_CREATE=false; DATABASE_APP_CREATE=false`. Post-run log
+`/home/phuclam/idea-f03b-restart-postrun-5214P0PV.log`, mode `600 phuclam`, SHA-256
+`94D30AF6DF9D94700E2DB4875BB6284DD404BD9AE41508B0C3DC3D9B376F2BB2`.
+No test-owned schema remains. Fresh public V4–V7/data qualification remains NOT-RUN.
+
+### Internal review
+
+#### Standards
+
+Read-only review of `171173a...60e64d1` found the teardown cleanup edge above; successor
+`074f62a` closes it. No hard source-standard violation or actionable Fowler smell remained.
+Delivery review found stale T021 text still saying account-administration review was pending;
+the current task now points to received §27, with its wider checkbox still open.
+Final read-only pass: both findings closed; no remaining hard Standards or actionable heuristic
+finding. No independent test execution or private-log inspection was performed by this reviewer.
+
+#### Spec
+
+Read-only review found no restart-oracle defect, missing approved case or production scope
+expansion. Successor review requested explicit FR-005/T040/T042 trace and narrower failure-
+preservation wording; both are corrected here. The source-inspected runtime pin and the
+HTTP guard-isolation limit remain separate. These reviews did not independently execute tests.
+Final read-only pass: both documentation points closed; no remaining Spec finding or overclaim.
+Open findings: Standards 0 (none remaining); Spec 0 (none remaining).
+
+### Checks, disposition and limits
+
+Scoped secret scan and repository hygiene passed. Historical §20–26 is unchanged from
+`171173a`; spec v0.6, migrations/dependencies and F03-A test contents are unchanged.
+Reviewer checklist markers remain 16/16 and 12/12; extension hooks are absent. All 106 relative
+targets and 38 heading anchors resolve; `git diff --check` passes. After `074f62a`, publication changes
+only six delivery documents, not application code, tests, dependencies or migrations.
+
+Technical restart qualification is PASS on the recorded exact source; **external restart review
+is PENDING**. Private raw host logs are not independently accessible through GitHub; hashes
+identify files, not independent inspection. All six child processes stopped normally in this run;
+forced-shutdown/error-cleanup paths are source-reviewed, not separately executed qualifications.
+Remaining applicable issuer/logout profiles, actual Web HTTPS/cookie/CSRF and Desktop binding/
+custody, fresh public V4–V7/data regression and final reconciliation are separate obligations.
+F04 retains its owner-command race; T036/commercial remains separate. No HA/failover, backup,
+recovery, company-data, production, client or multi-Vault qualification is claimed.
+F03-B stays IN_PROGRESS, Issue #24 OPEN; shared T018/T020/T021/T022 and T040/T042–T044 remain
+unchecked. Verifier NOT-RUN, no merge, Tracker timer/hours or official progress publication.
+
+## 29. Partial T043 Web implementation and browser observations
+
+The current Web checkpoint is recorded separately in
+[IE-VER-T043-WEB-20261001 v0.2](T043-web-qualification-20261001.md), against spec v0.7 and the
+approved W01–W10 contract. Source `2d2bcfc4892cb6903fa3196ae6fc47dbd8424121` adds actual
+React sign-in/out served by IDEA Server at the same HTTPS origin. Browser observations were
+made using Chrome 154.0.8037.92 and an authorized, trusted loopback test certificate.
+
+Disposition is **PARTIAL**, with external review pending. Browser observations are kept distinct
+from unexecuted network/cookie, bad-CSRF, invalidation/reload and error/secrets oracles. The
+record also discloses the fixed-name isolated schema and worktree-before-commit execution.
+The affected Maven run declared 105 checks, executed 81 (76 HTTP, 3 restart, 2 health), skipped
+24 (20 F03-A, 3 data, 1 privilege), and reported no failures/errors. Skips are not PASS.
+
+No whole T043 or F03-B acceptance is inferred. Desktop and fresh public V4–V7/data regression
+remain separate outstanding work. F03-B stays IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN.
+
+## 30. T043 clean Web packaging repair
+
+The external reviewer requested changes at `9090db56fef6602a1898012a5d4f691f108a7310` for one
+MAJOR: Maven could package a clean checkout without the actual Web. The successor
+[packaging verification](T043-web-packaging-repair-20261001.md) retains behavior RED at
+`f50ddad70b9d0989149a332dee8e19d2a35c5cc8` and clean committed-archive GREEN at
+`2fe89d481842f4cf26078c07d4b78fb3bdacd7c4`.
+
+Maven now owns real Web compilation/resource packaging. The built JAR serves its exact shell
+and hashed asset over verified HTTPS (200), while anonymous protected session remains 401.
+Two Server smoke and two Web markup tests pass; missing locked dependencies fail packaging
+without producing a JAR. This focused run does not rerun the full authentication/data suite.
+The build-tool intake and user-authorized internal T043 exception precede execution.
+
+External successor review PENDING; all partial/unexecuted actual browser W01–W10 states remain
+unchanged. No full T043/F03-B PASS, Desktop/fresh-data qualification, verifier or merge is inferred.
+
+## 31. External review of T043 packaging repair
+
+On 2026-10-01 the Project Reviewer relayed **PASS WITH NOTES** at PR #25 head
+`82a30adb55482096e421821891734d82ec990351`. The prior packaging MAJOR is CLOSED; zero new
+BLOCKER/MAJOR/MINOR findings were reported in the clean Web packaging repair. See the
+[received review](T043-web-packaging-repair-20261001.md#received-external-review--2026-10-01)
+for scope, exact-source trace and the retained build-tool intake note.
+
+This review supersedes §30's pending external disposition, not its historical execution.
+The plugin exception remains limited to internal T043 build/test; resolve broader use before
+F04/F05/general development. The reviewer did not independently access private host logs.
+Next is actual Chrome W01–W10 on a UUID-owned fixture, followed by separate Desktop qualification
+and remaining regression/fresh-data work. T043 remains unchecked, F03-B IN_PROGRESS, Issue #24
+OPEN, verifier NOT-RUN; no merge, whole-card acceptance or Tracker action.
+
+## 32. Actual Chrome T043 Web successor
+
+[Exact-source client evidence](T043-web-browser-successor-20261001.md) retains W01–W10 PASS
+through headed Chrome 154.0.8037.92, normally trusted HTTPS and the accepted executable
+Server/Web JAR from `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4`. Qualification source
+`738eb5ae05600b443ad2c107e1352de6dac45def` uses a new owned UUID schema and admitted bundled
+Playwright, without installation, TLS bypass or secret artifacts. Application/build/dependency/
+migration content is unchanged; this is client qualification, not a fabricated behavioral RED.
+
+The actual browser witnesses CSRF submission/refusal, cookie flags/rotation/host scope,
+logout, eligible/invalidated reload, error fail-closed and password/storage/diagnostic boundaries.
+Successful test schemas were removed; public remains version 3. Source review closed fixture
+teardown concerns. External Web successor review PENDING; private raw-log limitation retained.
+Desktop, fresh public V4–V7/data and wider regression/final reconciliation remain outstanding;
+no whole T043/F03-B PASS, verifier, merge or Tracker action.
+
+## 33. External review of actual T043 Web/browser checkpoint
+
+On 2026-10-01 the Project Reviewer relayed **PASS WITH NOTES** for PR #25 head
+`24ecdf0c9d5246223837ba1c3b349b3005cb5be4`. The reviewer accepted Web W01–W10 with
+zero BLOCKER/MAJOR/MINOR findings, confirmed actual Chrome/HTTPS/Server boundary, UUID
+fixture isolation and source-to-evidence trace. See the
+[received review and next-use notes](T043-web-browser-successor-20261001.md#received-external-review--2026-10-01).
+
+This supersedes §32's pending external disposition. Two non-blocking harness notes require
+shutdown-before-schema-cleanup and header-value ActorId oracle hardening before reuse; they
+do not invalidate the executed checkpoint or require application changes. Private raw logs
+remain unavailable to independent GitHub inspection. No new execution is claimed here.
+
+Next: agree the actual Desktop/WebView2 and native binding/protected-custody seam and test
+contract before code. Fresh public V4–V7/data, affected final regressions and wider reconciliation
+remain outstanding. T043 unchecked, F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN;
+no merge, whole-card acceptance or Tracker action.
+
+## 34. Received restart review and current scope authority
+
+The Project Reviewer previously relayed external **PASS WITH NOTES** for the restart/session
+qualification at PR #25 head `0101cc3ae3fe09fd264d0a50fcd96ae3f9d407b0`, executed source
+`074f62ae713e7a1f627f7fb1bbe600e4e4d37296`, following reviewed head
+`171173a5266fa5c9a732f2fe1316fb1c5c0f836d`. The received text SHA-256 is
+`50840DF07D07DDAADE95F6712B841AB77BAA16ACB827CF2CA3175ED5C83546CD`.
+
+The review confirms the three restart cases and the retained 101-check execution, with zero
+BLOCKER/MAJOR/MINOR in that scope. It supersedes §28's pending external disposition, not its
+historical execution. Old-cookie refusal does not independently isolate the DB runtime predicate;
+source inspection remains separate. Private logs were not independently read through GitHub.
+It does not accept T040/T042 wholesale, fresh public migration, clients or F03-B as a whole.
+
+After accepting Web W01–W10, the Project Reviewer explicitly declined Desktop/Workspace binding
+implementation in this F03-B turn and approved reconciling scope with Issue #24. Current delivery
+disposition supersedes the earlier next-Desktop wording in §31–33: **T043-Web SATISFIED;
+Desktop/WebView2/Workspace binding successor Work Item, NOT-RUN, not a F03-B blocker**. Keep the
+historical combined T043 checkbox unchecked. No successor issue is created or implementation
+approved here; present its seam/test contract after F03-B closes. Architecture and existing
+credential/session requirements remain unchanged.
+
+## 35. Approved F03-B closure reconciliation
+
+On 2026-10-01 the Project Reviewer approved: scope reconciliation → T040 matrix → T042 matrix →
+resolve a genuine requirement gap if demonstrated → fresh isolated V1–V7 → T044 affected
+regression → whole-card closure matrix → external review. The
+[closure matrix](F03-B-closure-matrix.md) records existing source, named tests, full executed SHA
+keys, evidence sections, scoped external dispositions and pending final states. It is coverage
+within Issue #24, not another feature/checkpoint/task register.
+
+The inspection baseline is `b0e0e6d68e5dc50b4dce26691c219d14b317264b`. The production/source
+diff from accepted packaged source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4` across
+`apps/server`, `apps/web` and `database/migrations` is empty. This revision changes delivery
+records only; it creates no Server, Desktop, Workspace, migration or dependency implementation.
+Unchecked T040/T042 markers are not a reason to rewrite delivered behavior. The logout concern
+remains a contract/negative-profile coverage comparison, **not a concluded defect**.
+
+T044 is **BLOCKED before any Maven execution**: `exec-maven-plugin:3.6.3` is bound to
+`generate-resources`, while its existing exception admits only internal T043 build/test.
+Retain a broader approved intake or explicitly approved bounded execution path before use;
+neither has been granted by reconciliation. No retrospective admission or silent T043 exception
+reuse. Fresh `public` means only the public schema of a completely new named test database,
+never `idea_ddm_dev`, historical F02 or retained F03-A public. The matrix requires initial
+emptiness, V1–V7/history/checksum/no-pending/repeat evidence and full successor ownership/privilege
+coverage rather than assuming the existing 12-table assertion covers all objects.
+
+Focused documentation checks passed: eight changed/new delivery records have 152 relative
+targets and 47 heading anchors, zero errors; no trailing whitespace; `git diff --check` passed.
+Sections §1–33 are byte-identical after LF normalization to inspection source `b0e0e6d`; their
+body SHA-256 is `1001DE081110646FFC2767EFF73C019F21441BC064055AA753F120D4B680C2E8`.
+Diff across application projects, migrations and reviewer checklists is empty. No runtime
+execution is claimed. Reviewer requirement checklist states remain 16/16 and
+12/12; hooks absent. Maven/PostgreSQL/browser/Desktop execution, fresh migration and affected
+regression NOT-RUN; verifier NOT-RUN. F03-B remains IN_PROGRESS, Issue #24 OPEN, combined T043
+unchecked; no whole-card acceptance, merge, Tracker timer/effort change or progress publication.
+
+## 36. Pre-execution F03-B closure tooling exception
+
+On 2026-10-01 the Project Reviewer explicitly approved a bounded internal engineering process
+exception for the exact `exec-maven-plugin:3.6.3` and eight runtime dependency JARs previously
+inventoried/hashed in `IE-RES-T043-MAVEN-WEB-INTAKE-20261001`. The separate
+[successor record](../../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md),
+`IE-RES-F03B-CLOSURE-BUILDTOOL-EXCEPTION-20261001`, records the approval before execution.
+The historical T043 intake and prior execution/review sections remain unchanged.
+
+Authority is **AUTHORIZED FOR F03-B CLOSURE ONLY**: Issue #24 / PR #25 T040/T042/T044 and
+necessary regression, internal build/test only, nine exact cached JARs/hashes/graph, offline
+resolution, build-only and excluded from `BOOT-INF/lib`. Missing artifacts, mismatch or any
+additional plugin execution JAR stops execution; no download fallback. No F04/F05/general
+development, legal/commercial/distribution approval or substitution for T036/Legal Review.
+
+Initial artifact preflight PASS: all nine cached JAR hashes matched; the embedded plugin
+descriptor lists exactly the eight admitted runtime dependencies. The exception retains its
+descriptor/intake/helper hashes and existing Maven/Java/Node version probes. Complete offline
+lifecycle resolution, fresh migration and affected regression remain NOT-RUN; this is not
+whole-card acceptance.
+F03-B IN_PROGRESS, Issue #24 OPEN, verifier NOT-RUN; no merge or Tracker action.
+
+## 37. Authorized logout closure repair
+
+Contract comparison identified no ineligible-session cleanup exception: DOC-04 REQ-IAM-001/004,
+DOC-06 account/session interface and spec FR-005 require current eligible authority for protected
+operations; the logout HTTP contract requires a valid session. On 2026-10-01 the Project Reviewer
+approved the proposed disposition: valid CSRF with anonymous/expired/revoked/stale/disabled
+session returns empty 401 and no ACCEPTED IAM/Audit; eligible logout returns 204 after committing
+only its current-session revocation and required evidence; required persistence failure returns
+empty 503 without success. This makes the formerly open coverage concern an authorized repair.
+
+Use the existing real HTTP + PostgreSQL seam with synthetic fixtures, separate roles and test-owned
+UUID schema, controlled time and bounded persistence faults. Retain one RED → minimal GREEN
+slice at a time and qualify remaining negative profiles/atomic failure. No idle/reset/throttle
+rewrite, client protocol, migration change or verifier. Execution is NOT-RUN in this revision.
+
+## 38. T044 Flyway history privilege finding and authorized repair
+
+Fresh-public execution from `7d2a59c672ca7976c62169ee8399aa6e2d8ac575` applied V1–V7 and
+repeated with zero migrations. The subsequent privilege suite was FAIL: bootstrap default ACLs
+gave `idea_ddm_app` INSERT/UPDATE/DELETE on `public.flyway_schema_history`. A denied-DML probe
+did not throw; its transaction was rolled back, so no migration history was deleted. Read-only
+ACL inspection confirmed the three permissions; TRUNCATE was already denied.
+
+On 2026-10-01 the Project Reviewer approved a narrow repair: the explicit migration command
+must restrict runtime to SELECT on that history table after every migration, including a no-op.
+The command must fail rather than report success if restriction fails. V1–V7 remain immutable;
+no new dependency, migration, company database modification or startup migration is introduced.
+The fresh test database remains retained; its initial execution is not relabelled PASS for the
+failed privilege suite. Qualify the no-op repair on it, then retain a distinct fresh-successor
+execution before closure. This is T044 closure work, not another feature/checkpoint task.
+
+## 39. F03-B closure execution and review submission
+
+### Objective, authority and configuration
+
+Qualify the approved logout repair (§37), Flyway history privilege repair (§38), fresh public
+V1–V7 and affected regressions; requalify actual Web against the repaired Server. The
+[closure matrix](F03-B-closure-matrix.md) maps each acceptance requirement to source, named oracle,
+executed SHA, evidence and disposition. This is final closure evidence, not a new feature slice.
+
+Server/build runs used synthetic fixtures, SSH `phuclam@ideaddmserver`, Ubuntu 26.04.1, PostgreSQL 18.6,
+Temurin 25.0.4.1+1, existing Maven 3.9.16 and Web Node 24.21.0/npm 11.19.0. Credentials remained
+in the owner-only mode-600 host file and process environment; no credential was copied into Git
+or the retained result summaries. No company database/Vault, Ubuntu restart, verifier, dependency
+download or `mvn clean` was used.
+
+Each Maven run first checked all nine cached build-tool JARs and descriptor against the
+[closure-only process exception](../../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md).
+Application lockfile bytes matched the accepted cached Web dependencies before copying them into
+each fresh exact-source archive. Maven ran offline. A credential-free offline realm probe also
+confirmed every execution JAR was within that inventory; package inspection excluded all nine
+from `BOOT-INF/lib`. Historical T043 intake is unchanged; no legal/commercial clearance follows.
+
+### Logout RED, GREEN and failure qualification
+
+The first real HTTP test used valid CSRF with an idle-expired session: expected empty 401 and no
+accepted evidence/revocation. Before repair it returned 204. `LogoutBoundary` now checks current
+eligibility through `SessionService.signOut()` under the existing security-write lock; successful
+revocation + IAM outcome + Audit commit precede ordinary session/cookie clearing and 204.
+Ineligible profiles return empty 401; required IAM/Audit/commit failure returns empty 503 with
+rollback and an ordinary proof that can retry. CSRF rejection still precedes the logout boundary.
+
+| Execution / exact SHA | Actual result | Host log suffix / SHA-256 |
+|---|---|---|
+| Idle-expired RED `aa71ba30d7db6f7b91a7bebfcc5d6294f31adabd` | 1 test, 1 failure: expected 401, actual 204 | `SZqFUbZp.log` / `7F35B7DDCB91A50ECBE9614AB984EDDB6DDEE463D3D4799F7983E6D93742D86F` |
+| Minimal GREEN `f20f7df6231954f0c077b54b335a773879210d02` | 2 tests PASS: expired refusal and eligible/CSRF logout | `Hk0GAibP.log` / `E0B4944C15B6622F489A2B9C105D15515CBCED120B05D1884655410A4BBAD708` |
+| Audit fault `5cba38a5cc2a4255a7a1df41d264ddbccd2757f1` | 1 PASS | `TWEwHsPT.log` / `D0115BC0495D1E09F6B092B70DC949F5B8666A7EAE6182414DF8DD3C2975B014` |
+| Anonymous/revoked/stale `adc3b53a732f8653a775c83d5558a3fd4f9a6ae0` | 1 PASS | `XNkyIyFM.log` / `A22524B21F9DCD90EC2F3EA7F55BAB1E1C6E7ACC2B680396A7D1853299151875` |
+| IAM fault `e734f50ae6c6b5a89e859239f34ab586862ae8dd` | 1 PASS | `3irv3Eb6.log` / `0DABCAB6D09B26AA0FBACCB68193F5D850791550EEB993013DFA67CA620A99CF` |
+| Disabled/re-enabled `a4c1cb19019cc4af80add46e6386ef7765fa7172` | 1 PASS | `fGshzqq8.log` / `D0A72C12F2F46502C112A2A54F26BE1702DCADFCBFE2EA4DA94C47AA5A560A44` |
+| Absolute-expired `afba3313069ab1d298c15182cc547522787fc1cb` | 1 PASS | `PlElF8Du.log` / `EAF024525A5B0D31E06D00334B90405D9C04AE0F8E9F237864280F70F1E210BE` |
+| Deferred commit fault `7d2a59c672ca7976c62169ee8399aa6e2d8ac575` | 1 PASS | `TahbwZAa.log` / `9800B1455109BF276967BDED33C4E54B11F1063DA1AA19F2AD1414DEF785B310` |
+
+These log suffixes expand to `/home/phuclam/idea-f03b-closure-<suffix>`. Runs occurred between
+15:11:05 and 15:27:16 +07:00. Controlled test Clock advances cover expiry; no hour-long waiting.
+The final suite below reruns these oracles; counts above are not added to its total.
+
+### Fresh-public failure, authorized repair and distinct successor
+
+Initial database `idea_ddm_f02_f03b_closure_20261001_aa71ba3` was explicitly created by the operator
+after its absent-name check. It had zero public tables/functions/history, owner migrator.
+Source `7d2a59c672ca7976c62169ee8399aa6e2d8ac575` passed 3 data tests (first 7, repeat 0) and
+108 regressions, but the 6-check public privilege suite had **1 FAIL**, 5 PASS: app history DML
+authority. Failed denial probes rolled back. The raw logs remain:
+
+| Result | Log suffix / SHA-256 |
+|---|---|
+| Initial data PASS | `zfv7CGtj.log` / `0B86FF2039570656E7E2B70B7DAE7212D851D43606ABC3B6F8AFE9656FDF8DC9` |
+| Initial 108 regression PASS | `sLWB8LGt.log` / `C13467A80E80AFFCD0AA0F97666C6F94BDA06DA6A4B51346F701FC8A871921B7` |
+| Initial privilege FAIL | `UVPXcrOO.log` / `3F4B6081C425828D115CA54D17C88E277C5302F482FDAB03D81FCD89F70FF765` |
+| No-op repair GREEN `b555f0b07ca3c216d7a8c25e76f8f8898300ea28`, 7 tests | `g79rDlI1.log` / `922A3B2928B0B33D77B74497413E5B1D0EB537DB043D54A0553E86B641281BBF` |
+
+After approval, `DatabaseMigrationCommand` restricts app history to SELECT after every migrate,
+including zero migrations. SQL restriction failure is propagated as command failure, not
+`MIGRATIONS_APPLIED` success. V1–V7, dependencies and startup-disabled migration remain unchanged.
+The first database is retained as failure/repair evidence, not passed off as a fresh repaired run.
+
+The operator separately created **`idea_ddm_f02_f03b_closure_20261001_b555f0b`**, initially zero
+public tables/functions/history and owned by `idea_ddm_migrator`. DataBaselineTest performed its
+first migration from source `38b99f50de09370a8e8554cc80fc66a0afa70b62`: 7 applied, repeat 0.
+Follow-up source `9238b7e8ad6878687e72823e7bed1d4f083b9699` validated all seven checksums, zero
+pending, exactly 26 migrator-owned tables and one migrator-owned function. Runtime authenticated
+as `idea_ddm_app`, not superuser/CREATEDB/CREATEROLE/replication/BYPASSRLS or migrator member;
+SET ROLE, CREATE SCHEMA/TABLE and protected mutations actually failed with SQLSTATE `42501`.
+Consumption-column probes were zero-row updates in rolled-back transactions. Exact v1/v2
+permissions and empty identity/proof/session tables were independently asserted.
+
+No-op regression deliberately recreates the history ACL defect in this database, invokes the
+actual migration command, expects 0 new migrations and SELECT count 7, and denies history
+INSERT/UPDATE/DELETE/TRUNCATE. Narrow finally-cleanup restores that exact table ACL if the test
+fails. Post-run witness at 15:45:03 confirmed history SELECT=true and all four mutations=false.
+
+| Migration | Flyway checksum | Success |
+|---|---:|---|
+| V1 | 1303435172 | true |
+| V2 | 142124024 | true |
+| V3 | -732402698 | true |
+| V4 | -1548789621 | true |
+| V5 | 1279122544 | true |
+| V6 | 260123860 | true |
+| V7 | 1165048512 | true |
+
+### Exact-source final execution
+
+Direct Maven path for all commands: `/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn`.
+Tests ran from `apps/server` as `mvn -o -B -Dtest=<selector> test`; package used
+`mvn -o -B -DskipTests package` plus DEBUG logging selectors (no test PASS inferred from packaging).
+Fresh/data/public tests set both database-name guards to the new successor above.
+HTTP/restart/F03-A tests used only UUID-owned `f03a_`/`f03b_` schemas in dedicated
+`idea_ddm_f03a_20260930_c91e7a42`; its retained public history remained V3. This is not the fresh
+successor DB, historical F02 or `idea_ddm_dev`. Final counts come from separate executions:
+
+| Run / exact executed source | Selector / interval +07:00 | Actual result | Log suffix / SHA-256 |
+|---|---|---|---|
+| Fresh `38b99f50de09370a8e8554cc80fc66a0afa70b62` | `DataBaselineTest`, 15:35:59–15:36:11 | 3 PASS, 0 failures/errors/skips | `BsjwfouG.log` / `BE2BFD17A0ACA972628D9C7438C4860137B8699037D3C58D03F6E6CFA622BE8F` |
+| Public successor `9238b7e8ad6878687e72823e7bed1d4f083b9699` | `DatabasePrivilegeTest,F03BPublicMigrationTest,ServerSmokeTest`, 15:37:28–15:37:40 | 7 PASS (1 + 4 + 2), 0 failures/errors/skips | `BDSIai8E.log` / `698242A75A1AAF8508F5C8336D1A6BE3546840F7323DE6AFA62F4AB95BC11669` |
+| Initial final regression `38b99f50de09370a8e8554cc80fc66a0afa70b62` | HTTP/restart/F03-A/health, 15:36:07–15:38:31 | **FAIL**: 108 run, 1 cookie-header assertion failure, 107 PASS, 0 errors/skips | `CtxH3qqG.log` / `33C14075C6859F198539852FBEEADA7F092AEA9CB88B1096548D707FDE469CDB` |
+| Corrected cookie oracle `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066` | eligible logout case, 15:40:02–15:40:12 | 1 PASS | `wzclWIax.log` / `850A91F749BCEF64E241A2DFC573BB6FFFA07A0347D3317CE46510079F729831` |
+| Final regression `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066` | `HttpSessionFlowTest,IdentityFlowTest,ServerRestartFlowTest,ServerSmokeTest`, 15:40:47–15:43:08 | **108 PASS**: 83 HTTP + 3 restart + 20 F03-A + 2 health; 0 failures/errors/skips | `m56c5Shm.log` / `649FB6EFA3C48AE7703BCA13CAE11045B8ACDECC853E829DD4D76A5FA5737257` |
+
+The failed header-only cookie assertion is retained, not relabelled PASS. Its successor observes
+the actual HTTP client's CookieManager store: no IDEA_SESSION immediately after 204, before
+any follow-up session/CSRF request; sibling session still works. No production change was made
+to make this test pass. Chrome separately observed rotation, attributes and post-logout refusal;
+cookie removal is the Java CookieManager oracle, not a Chrome deletion observation.
+
+Source archive SHA-256: fresh/package `D3142A79115C87FDBBAB46D3E74AADF306FF7367F3365E9C710AD759412E6718`;
+public/browser `98C242B6380B6FFDA654FB9F94C1B308690CC00E0C169670BFA9916E7FC32089`;
+final regression `51DCFE7F6CDF535238893A9C4DF9A8E5FF719412BF7656DB299330ACA51B14F9`.
+Server-side execution helper hashes: fresh `run.sh`
+`383D4E7EB1032BAAA5CA41322A47D916AC6B6CFC5B65421E70C6CB504CC64008`;
+package `run.sh` `7301F5F053DDCFE9D178970064B843AE51EE6BC13F984CDF46AC7B209116506A`.
+
+### Packaged application and actual Web requalification
+
+Offline clean-source packaging (fresh archive, not `mvn clean`) from `38b99f50de09370a8e8554cc80fc66a0afa70b62`
+passed 15:36:15–15:36:22. Log `/home/phuclam/idea-f03b-package-ihHMY37B.log`, SHA-256
+`DA21B5265DD3367726B91DF2991995CCAA68E6B02E84C1F6C89C9C6D3F88E33D`;
+JAR `AC4F74E1FE5453B7716E13DA970027BA403D695340974CA13503F3D8989332FF`.
+Every packaged SQL byte sequence matched immutable source V1–V7; actual Web assets were packaged,
+not a test-only page. Web index hash `5F4AB29878C576DDD0DAFF5472457D8CD65B6CE48A48CD7863E5B393C2947E79`;
+JS asset hash `A34548822CF5CADF32E485F6B302052105407894DFACBE77A9717A3A12BB6552`, unchanged from accepted Web.
+Package inventory helper `D455656B947574249BBEA0EC5C502DD6F1AE409FCCCD6982236AA07FEA418F4F`
+confirmed none of the nine build-tool JARs in `BOOT-INF/lib`.
+
+Credential-free `mvn -o -B -X generate-resources` realm inspection used the same exact source/cache.
+Log `/home/phuclam/idea-f03b-realm-OO2GQ5Ay.log`, SHA-256
+`BE26CE2A13DC153AEFF114D61D64EFA7B0577F615D93E71E741A14BAC955AECA`;
+helper `C9D50CF57528716A4D814666D5FF0C8B37C3BB640B928DC43B2130EDBA14F9F3`.
+The realm included seven admitted JARs (plugin, plexus-utils, plexus-xml, commons-exec, asm,
+asm-commons, asm-tree); Maven API came from its provided realm. No JAR outside the nine-artifact
+inventory was added to plugin execution; this is not a claim that all nine were loaded.
+
+[Actual browser successor](T043-web-browser-successor-20261001.md#closure-requalification--2026-10-01)
+reran **W01–W10 PASS** on application/package source `38b99f50...`, harness source `9238b7e8...`,
+headed Chrome 154.0.8037.92, admitted Playwright 1.62.1 and normally trusted HTTPS, no TLS bypass.
+Both reusable-harness notes were fixed before reuse: confirmed owned JVM death precedes schema
+removal; the ActorId oracle checks header values as well as names/body/query. Only Boolean
+security observations and case statuses were retained, no passwords/cookies/proofs/HAR/trace.
+
+At 15:45:03 the browser port was closed, owned JVM stopped and zero UUID test schemas remained.
+Both fresh public databases are retained for review; no database was deleted. The private browser
+server log has mode 600 and SHA-256 `10C7D78AFACF9B44CC07813E510D7E4247536C8857F6A49461AA30097D9DA022`.
+
+### Trace, internal review and limits
+
+From packaged source `38b99f50...` through `9238b7e8...` to final regression `6e394ab9...`,
+production code, Web, dependencies and migrations did not change. Changes were only test oracles
+and the external qualification fixture; final source reran the affected Server suite. Subsequent
+closure publication changes documentation only. V1–V7, historical §1–33 (LF-normalized, TrimEnd body hash
+`1001DE081110646FFC2767EFF73C019F21441BC064055AA753F120D4B680C2E8`) and frozen intake remain intact.
+
+**Standards:** internal source review against accepted Web head `24ecdf0c...` found the exception's
+missing expiry/remediation field; it was added before final disposition. Follow-up review at
+`6e394ab9...` reported zero remaining documented breaches/actionable smells. Optional duplicated
+logout fault-oracle shape is deferred as a refactoring opportunity, not an acceptance defect.
+
+**Spec:** separate internal review at `6e394ab9...` reported zero confirmed scope/requirement
+findings. Optional app SELECT/cookie oracles and both harness hardening notes were addressed.
+These are read-only source reviews, not independent test execution or external acceptance.
+
+Current technical result: T040/T042/T044 applicable Server/accepted-Web closure coverage PASS;
+whole-F03-B external disposition and Project Reviewer acceptance **PENDING**. Private raw host
+logs remain unavailable to GPT Web; recorded hashes identify files, not independent log review.
+Desktop successor and F04 owner race remain separate. No company policy/MFA, live proof-delivery,
+T036/legal/commercial, production, HA/failover/recovery/backup or multi-Vault claim. F03-B stays
+IN_PROGRESS, Issue #24 OPEN, historical combined T043 unchecked, verifier NOT-RUN; no merge,
+Tracker action, changed timer or invented actual effort.
+
+## 40. Hygiene successor and exact-source final rerun
+
+Tracked-text secret scanning flagged the test helper's adjacent quoted environment-key names
+and ternary colon in `F03BPublicMigrationTest.connection()` as a credential assignment. They
+were variable names, not secret values. Replace only that key-selection expression with an
+equivalent local variable/if; scanner rules/exemptions were not changed. This supersedes §39's
+docs-only post-run expectation: one test helper changed and required successor execution. This test-only source
+change and closure documentation were committed as **`989bf5a9fc09c03ee2d5fa88d09b3cee78335616`**.
+
+No production, Web, dependency, V1–V7, HTTP/restart/F03-A/health test or qualification-harness
+change follows the earlier executed sources. Nevertheless, both affected public checks and the
+108-test suite were rerun on this exact committed source; same guarded databases, offline
+commands, credentials and nine-artifact preflight as §39. Archive SHA-256:
+`CDE9D5A73B515EFD4DEEF1096E4FCF63398971A6F96C6866B73ECF4175E08332`.
+
+| Selector / interval +07:00 | Result | Private host log / SHA-256 |
+|---|---|---|
+| `DatabasePrivilegeTest,F03BPublicMigrationTest,ServerSmokeTest`, 15:54:03–15:54:16 | 7 PASS (1 + 4 + 2), zero failures/errors/skips | `/home/phuclam/idea-f03b-closure-B20ObAEl.log` / `5C4AD3F89F1696CB01AD5A605BC61890383E54B2A1E7545B374B4464E69447F8` |
+| `HttpSessionFlowTest,IdentityFlowTest,ServerRestartFlowTest,ServerSmokeTest`, 15:54:03–15:56:26 | 108 PASS (83 + 20 + 3 + 2), zero failures/errors/skips | `/home/phuclam/idea-f03b-closure-5RkRAwJY.log` / `7D6A13A6E77D21B39FD5368FDEC1A2CE6FAB6B4AA633CAACF68CB90988F0651A` |
+
+Fresh DataBaselineTest and actual browser were **not rerun** for this test-only helper change;
+their §39 sources/package are unchanged in production content and remain the actual evidence,
+not misrepresented as executions on `989bf5a9...`. Both fresh databases are retained; no broad
+cleanup. Post-run witness again found 26 migrator-owned tables, SELECT-only app history, retained
+F03 public V3, zero UUID schemas and stopped owned browser JVM/closed port.
+
+Author checks PASS: tracked UTF-8 secret scan (10 exact synthetic fixtures recognized, 233 known
+binary files skipped), 207 relative document links/63 heading anchors, source-ref resolution,
+whitespace and unchanged migration/dependency/source trace. Historical §1–38 is unchanged after
+LF normalization/TrimEnd; §1–33 retains `1001DE...C2E8`. Checklists are read-only 16/16 and 12/12;
+extension hooks absent. Verifier NOT-RUN.
+
+## Standards
+
+Internal follow-up source/documentation review: zero remaining documented breaches; expiry field
+finding resolved. Optional configuration wording was clarified to distinguish Server/build tools
+from the local browser runner. Optional duplicated logout fault-oracle shape remains a deferred
+refactoring opportunity, not an acceptance defect.
+
+## Spec
+
+Internal follow-up source/documentation review: zero remaining confirmed scope/requirement findings.
+One execution-description overclaim was corrected: Chrome observed rotation/attributes/refusal,
+while actual cookie removal is the Java CookieManager oracle. Historical execution was not
+rewritten. Both reviews are source reviews, not independent private-log execution/inspection.
+
+Summary: Standards 0 unresolved documented breaches; Spec 0 unresolved confirmed findings.
+Whole-F03-B external review and human acceptance PENDING; F03-B IN_PROGRESS, Issue #24 OPEN,
+combined T043 unchecked, Desktop successor separate, verifier NOT-RUN; no merge or Tracker action.

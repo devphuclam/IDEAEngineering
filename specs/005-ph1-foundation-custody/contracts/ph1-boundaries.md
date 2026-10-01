@@ -48,3 +48,232 @@ accept Artifact custody. Neither outcome is document Check-in or Generation publ
 
 The second Vault, replication, failover, large-file throughput, document Check-in and production
 recovery are outside this contract.
+
+## F03-B HTTP refinement
+
+Engineering route mapping for spec FR-005/014; not a new product approval. Tests use actual
+Server HTTP and PostgreSQL, with synthetic identities and protected in-memory credential input.
+
+| Route | Observable result and authority |
+|---|---|
+| `GET /api/v1/identity/csrf` | Obtain the anonymous/current session's CSRF token through the same-origin boundary. No identity privilege is granted. |
+| `POST /api/v1/identity/login` | Native login/password plus CSRF proof; verify active account and credential. Establish a fresh/fixation-protected session. Safe success identifies server-derived Actor; failure returns generic 401 without credential, existence or privileged-role disclosure. |
+| `GET /api/v1/identity/session` | Current eligible session gives 200 with its Actor/account identity only. Anonymous, expired, revoked or stale-version proof gives 401, never a redirect or client-chosen Actor. |
+| `POST /api/v1/identity/logout` | Valid CSRF and eligible session; invalidate only the current proof and cookie, returning 204 after required IAM/Audit commit. With valid CSRF, anonymous/expired/revoked/stale-version/disabled-session attempts return empty 401 without ACCEPTED IAM/Audit; required persistence failure returns empty 503 without success. There is no ineligible-session cleanup exception. Old proof is refused. GET must not log a user out. |
+| `POST /api/v1/identity/accounts` and `POST /api/v1/identity/accounts/{id}/disable` or `/re-enable` | Session-derived Actor and CSRF; reuse F03-A's exact scoped permission and mutation path. Creation remains PENDING with no credential or implicit membership/role. |
+| `POST /api/v1/identity/accounts/{id}/credential-proofs` | Eligible Account Administrator explicitly requests initial setup or reset for one account. Issue one-use, purpose/target/version-bound proof; retain attributable outcome/Audit, never its secret. Protected delivery is synthetic harness-only in this increment's development profile. |
+| `POST /api/v1/identity/credentials` | Target identity, bound one-use proof, new password and CSRF. Redeem atomically; refuse wrong/expired/replayed/stale proof or invalid password without activation/credential mutation. Reset invalidates old sessions and cannot re-enable a disabled account. |
+
+All other application routes deny anonymous access unless individually designated public.
+The existing `/health` and `/health/database` process/data probes retain their accepted contract;
+they expose no credentials or internal connection strings. Bootstrap remains a local operator
+command, never a controller or startup callback. Clients cannot pass an authoritative ActorId.
+Authenticated identity alone is not an administration or product permission.
+
+### HTTP account-administration mapping
+
+The 2026-10-01 authorized slice reuses F03-A's account owner and exact scoped permissions.
+Creation accepts `operationId`, `organizationId`, `displayName` and `login`. Success returns
+201 with `actorId`, `accountId`, the newly created `loginIdentityId`, `status=PENDING` and
+`securityVersion`; no credential, product role or membership is created. Disable/re-enable
+accept `operationId`, `organizationId`, `expectedSecurityVersion` and `reason`, with the
+Account ID in the route. Success returns 200 with stable Actor/Account IDs, status and version;
+this Account-level response does not select or expose an arbitrary sibling Login Identity.
+Creation validates the normalized login's existing `validText(..., 254)` input bound
+(Java UTF-16 code units) before persistence. Account
+enablement also supports zero Login Identities: disable/re-enable does not create a login,
+and a credentialless Account returns to PENDING rather than gaining sign-in capability.
+
+All three routes require CSRF and a server-derived session Actor. Check current session
+eligibility before scope/permission evaluation and again after the security-write lock;
+accepted owner activity refreshes idle time in the same transaction as mutation/IAM/Audit.
+Refused or failed mutation does not refresh activity. Super-only identity has no implicit
+account authority; exact Account Administrator v1/v2 assignments retain their respective
+permissions. Client-supplied Actor fields cannot grant authority or change attribution.
+
+Controller/owner-generated refusals are empty responses: ineligible session 401; absent/revoked/wrong-scope permission,
+unknown or foreign target, or last-Super recovery protection 403; invalid input 400; duplicate
+login, stale version or invalid transition 409; required persistence failure 503. CSRF refusal
+remains 403 at Spring's boundary. These empty-body guarantees do not cover Spring's pre-controller
+JSON/UUID binding-error responses; this checkpoint does not qualify their body format.
+Disable/re-enable preserves identity/history, increments
+the Account security version and cannot revive an old session. Re-enable does not change
+credentials; a credentialless Account remains PENDING and otherwise requires fresh sign-in.
+Runtime qualification is retained in the successor evidence, not inferred from this mapping.
+
+### Credential issuance and redemption mapping
+
+The first-setup slice uses the explicit v2 permissions in spec's 2026-09-30 clarification.
+Its issuer request carries `operationId`, `organizationId`, `purpose=FIRST_SETUP`,
+`expectedSecurityVersion` and `reason`; the target Account ID is in the route. Actor/session
+authority comes only from authentication. With `idea.identity.synthetic-credential-delivery.enabled`
+explicitly enabled in the protected synthetic harness, success returns `proof` and `expiresAt`
+with no-store response handling; this opt-in defaults to false (503, no proof). No live or
+browser-visible delivery is qualified. The successor reset slice uses `purpose=RESET` and the
+separate `account.credential.reset.issue` Permission. RESET additionally requires `loginIdentityId`,
+even when the Account has only one login. Validate that exact login belongs to the route Account,
+the Account belongs to the requested Organization, the security version matches and the selected
+login has a credential in an eligible ACTIVE/DISABLED Account. Missing/null selector returns empty
+400; unknown/foreign/ineligible binding returns empty 403 under eligible issuer authority, without
+proof or credential mutation. Never choose a first row or fallback. PENDING/no-credential targets
+are refused. It uses the same default-off protected synthetic delivery profile, not live recovery.
+
+Redemption carries `operationId`, `accountId`, `proof` and `password`, with CSRF but no
+administrative role requirement. Successful first setup returns 204; a rejected proof/password
+returns a generic empty 400. Issuance refuses unauthorized scope/permission with 403 and an
+ineligible session with 401; required persistence failure returns empty 503, never success or
+credential diagnostics. Only a valid, unconsumed proof at its pending target/login/version before
+expiry can activate that stable account. It cannot reset an ACTIVE or DISABLED account.
+
+Reset redemption additionally carries `purpose=RESET`; omitted purpose preserves the reviewed
+FIRST_SETUP contract. A reset proof cannot redeem as first setup or vice versa. A valid reset
+returns 204 after atomically replacing only the proof-pinned Login Identity's verifier, incrementing Account security_version, revoking all
+affected sessions and recording IAM outcome/Audit. It leaves account status and actor.disabled_at
+unchanged. Existing proofs pinned to the previous version are stale. A DISABLED target still
+cannot sign in; separate re-enable at the new version is required, followed by fresh sign-in with
+the selected login's new password. Other Login Identity credentials remain unchanged and may
+establish fresh sessions when the Account is ACTIVE; their old sessions and version-pinned proofs
+are still invalidated by the Account-wide transition. Redemption cannot override the proof's login
+target. Invalid proof/state/purpose/password returns empty 400; persistence failure
+returns empty 503 with no partial credential, revocation or evidence change.
+
+Use Spring Security session-fixation and CSRF mechanisms, deny cross-origin credential access,
+and use Secure/HttpOnly/SameSite cookies with host-only scope under same-origin HTTPS. Expiry,
+failed-login block and setup proof behavior follows spec's development profile. Test-only
+loopback transport/timing overrides must be recorded and cannot weaken the normal profile or
+be exposed as a client-accessible control route. Native Desktop binding/protected-custody
+qualification is separate from a Java HTTP harness. Under spec's 2026-10-01 Web clarification,
+password may exist transiently in the password control, necessary controlled-input framework state
+and request submission. Clear application password control/state after submission and on unmount,
+including refusal/error paths; do not retain it for retry, persist/copy it elsewhere, or expose it
+in URL, DOM text, diagnostics, logs, localStorage/sessionStorage or retained evidence. CSRF may
+exist in RAM; page JavaScript must never read the session cookie. The separate Desktop/WebView2
+password/token custody rule is unchanged. The later T043 Web approval and prerequisites are
+recorded below; Q1's credential clarification alone was not implementation authority.
+F04 retains the owner-commit race test, using a verified session reference.
+
+T046 did not implement throttling. The separate T041 successor exercises this contract and spec
+v0.6's rolling failure window and before/at/after block deadlines, generic refusal with equivalent
+qualified password work on blocked paths, atomic concurrent updates and success/session clearing,
+and the existing-identity state bound below. Actual Web/Desktop qualification proceeds through agreed seam,
+failing-test/evidence contract, implementation if needed, then real-client execution; unrun stays
+NOT-RUN/BLOCKED. The Java HTTP harness alone cannot qualify either client.
+
+### Throttling qualification contract (planned)
+
+Use the already-approved real Server HTTP/PostgreSQL seam and controlled Clock. These are
+vertical RED → GREEN cases in `HttpSessionFlowTest`; the original planned heading is retained
+as a stable link. Actual results are in
+[T041 execution evidence](../evidence/F03-identity-results.md#24-t041-throttling-checkpoint),
+not inferred from this contract.
+Perform sign-in through the existing login/CSRF contract and observe protected-session eligibility.
+Reuse owned-schema fixtures and bounded persistence witnesses only where HTTP cannot expose a
+resource/transaction invariant; do not add a public counter, test hook or clock route.
+
+| Case | Required oracle |
+|---|---|
+| Four failures / fifth failure | Use separate fixtures: after four failures, correct eligible credentials succeed and clear state; after five failures on another login, a correct password during the block still gets the same empty 401. No Account disablement or identity replacement. |
+| Rolling-window boundary | Independently worked timestamps just before, exactly at and after 15 minutes demonstrate that an exactly 15-minute-old failure is excluded; do not substitute a fixed window. |
+| Block boundary | Correct eligible credentials are refused immediately before `blocked_until`, allowed exactly at/after it; intervening blocked attempts do not extend it. |
+| Known-login state bound | At most one record, five timestamps and one deadline per existing Login Identity, including repeated attempts while blocked and after expiry. Expired observations no longer count on access. |
+| Unknown identifiers | A deterministic batch of 100 distinct unknown names creates zero failure-observation records, Actor/Account/Login Identity or authenticated session records. Anonymous servlet sessions for CSRF are permitted, not authenticated proof. Refusals retain the same empty 401 and qualified dummy-password work. Provision a previously unknown name and prove earlier attempts are not inherited. The batch is a state-bound test, not load/DoS qualification. |
+| Normalization and two logins | Case/outer-whitespace variants resolve to the same existing login and failure state. Two logins on one Account have independent state: blocking L1 does not block an otherwise eligible L2; successful L2 sign-in does not clear L1's block. |
+| Concurrent failures | Synchronized real HTTP requests reach one atomic fifth-failure transition; no lost updates or moving block deadline. Use controlled barriers, not an arbitrary sleep. |
+| Successful clearing / refusal | Successful eligible sign-in clears its current state with the new session/IAM outcome/Audit. Wrong credentials, disabled/PENDING accounts and active blocks cannot clear it or produce an eligible session. |
+| Required-write or framework-binding failure | Forced PostgreSQL/session-binding failure leaves no eligible new proof and does not clear prior failures. After removing the fault, the next wrong attempt still reaches the expected threshold. No successful sign-in is published before the required transaction and ordinary Spring binding succeed. |
+| Timing and regressions | Interleave warmed-up valid-length active/wrong, unknown, disabled and blocked attempts to detect gross password-work bypass, without claiming constant time. Keep F03-A, exact-login setup/reset, expiry, CSRF/fixation and health regressions. |
+
+Migrate only a test-owned UUID schema using the separate migrator; runtime remains the app role.
+Keep V1–V6 immutable. Additive V7 enforces the identity/size bound and preserves
+runtime least privilege. Retain exact source, expected/actual boundary instants, result and sanitized
+log hash; no proof, cookie, password or submitted unknown-name history in evidence.
+
+### Server restart qualification contract
+
+Use `ServerRestartFlowTest` through the scoped runner and a test-owned UUID schema. Stop only
+the test-created Server child JVM, then start a distinct child JVM at the same loopback endpoint
+and on the same schema. Leave Ubuntu, public data and Vault unchanged. Advance time through a
+private test-classpath Clock fixture, not a production hook or host-clock change.
+
+| Case | Required oracle |
+|---|---|
+| Previously usable cookie | A signs in (200), protected session works (200); after A stops, B refuses A's cookie (empty 401), with no added Actor, session or accepted IAM/Audit. Persisted metadata stays unchanged. Fresh sign-in with the same credential succeeds (200) and yields a new session/runtime ID and a usable protected session. |
+| Revoked and idle-expired before restart | Establish those preconditions through existing HTTP behavior, with a still-eligible control session. After restart all old cookies are refused; metadata remains historical, identity/credential unchanged, fresh sign-in works. Detailed timeout/logout/reset matrices stay in existing tests. |
+| Durable login block | Establish the existing five-failure block. Restart preserves its timestamps and deadline; a valid-password attempt during that block is still empty 401 without extending it or publishing success. After its original deadline, eligible sign-in succeeds and clears state. |
+
+This qualifies existing process-local authentication proof, not HA, failover, backup or recovery.
+Inspect the existing runtime-instance eligibility pin separately; an HTTP refusal alone does
+not isolate which eligibility guard rejected the request. No cookie-adoption or DB-session
+restoration path is added. First GREEN is previously implemented behavior newly qualified, not
+an invented RED → GREEN. Retain exact-source execution and affected regressions in
+[§28](../evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification).
+
+### T043 Web qualification contract
+
+**Approval:** Project Reviewer, 2026-10-01, Web only. This is the actual client qualification
+for FR-005/014, not a new product architecture or whole F03-B acceptance. Actual results are
+NOT-RUN until retained; the later accepted W01–W10 result is linked below. Desktop qualification
+belongs to a successor Work Item, not the F03-B acceptance boundary.
+
+**Current delivery disposition (Project Reviewer, 2026-10-01):** W01–W10 is accepted as
+T043-Web SATISFIED; see [actual browser evidence](../evidence/T043-web-browser-successor-20261001.md).
+Retain the original combined T043 marker unchecked. Desktop/Workspace binding remains NOT-RUN
+for separate successor qualification after F03-B closure; its architecture is preserved, not
+implemented or globally waived. Use the [closure matrix](../evidence/F03-B-closure-matrix.md)
+for Server/Web acceptance. This disposition changes no W oracle or HTTP route semantics.
+
+**Boundary:** Build actual `apps/web` and serve its shell/assets from the actual IDEA Server
+at the same HTTPS origin as `/api/v1/identity/*`. Use installed Google Chrome on Windows
+(preflight inventory: 154.0.8037.92; recheck at execution). No substitute HTML/static server,
+JWT, browser-storage bearer or client-authoritative ActorId. Permit only the needed public
+GET shell/assets; APIs retain their existing authority. POST CSRF travels in the server-named
+header, which the browser does not automatically attach. Acquire it at startup and again
+after login/logout; hold it only in RAM.
+
+**Environment prerequisites, not RED:**
+
+- Use actual Server TLS at a controlled high port, real PostgreSQL, separate app/migrator roles
+  and only a test-owned UUID schema in the dedicated F03 test database. No public/dev/F02/Vault writes.
+- The test certificate must validate normally, have SANs for `localhost` and `127.0.0.1`,
+  and have user/IT-authorized trust. Record fingerprint, validity, SANs and trust scope before
+  execution. No TLS-warning click-through, `ignoreHTTPSErrors` or certificate-error launch flags.
+  A missing/untrusted/expired certificate is BLOCKED, not evidence of missing Web behavior.
+- Actual Chrome may be operated manually. Optional Playwright uses `channel: "chrome"`,
+  headed for the client run, only after exact dependency/version/license/provenance intake
+  and verified internal/approved package availability. No Internet npm install or Chromium download.
+  If no legitimate source exists, automation is BLOCKED; manual Chrome remains eligible.
+- Browser tooling must observe the required network/cookie facts without retaining secret values.
+  Record automation/manual method per case; a Java HTTP harness is not a replacement.
+
+**Expected oracles:**
+
+| Case | Actual Web/browser action and required result |
+|---|---|
+| W01 Same origin | Anonymous Chrome loads Server-served React shell and referenced built assets (200); protected session request is 401 and UI is signed out. A 401 shell or missing Web behavior is an intended integration RED. |
+| W02 Sign-in | Actual form acquires CSRF, submits login/password/header (200), then protected session returns 200. UI reports only the identity returned by Server; outbound requests carry no authoritative ActorId. |
+| W03 Wrong password | Actual form gets generic 401 and never shows authenticated success. Password control/application state is cleared after submission; no automatic credential retry. |
+| W04 Bad CSRF | External qualification tooling omits/changes the header on actual Web submission: login/logout get 403. UI does not report success; refused logout does not claim the eligible session ended. No app debug/CSRF-bypass control. |
+| W05 Cookie | Chrome/network evidence observes IDEA_SESSION as Secure, HttpOnly, SameSite=Strict and Set-Cookie with no Domain (host-only). Page JavaScript cannot read it; fixation rotates proof without retaining either value. Config alone is insufficient. |
+| W06 Host scope | A cookie established at 127.0.0.1 is not sent to localhost on the same trusted fixture; protected request is 401. This qualifies browser cookie scoping, not a new application-host requirement. |
+| W07 Logout | Actual UI POST logout is 204; subsequent protected request is 401, UI clears identity, then fresh sign-in works with newly acquired CSRF. |
+| W08 Invalidation | A separate authorized synthetic fixture disables the target account. Its actual Web protected request gets 401 and UI clears authenticated identity; no refusal becomes success. |
+| W09 Reload | Reload with an eligible cookie obtains current identity from Server. Reload after logout/invalidation stays signed out; no new mechanism or stored-password submission restores authentication. |
+| W10 Error/secrets | Controlled request failure gives safe error/non-success UI, not stale authenticated success. Password may exist transiently only in its control/necessary framework state and submission; clear after submit/unmount, including errors. No persistence/copies in URL, DOM text, diagnostics, console, storage or evidence. CSRF is RAM-only; session cookie is never JavaScript-readable. |
+
+Negative CSRF and network-failure injection belong to external test tooling, not production controls.
+If manual tooling cannot exercise a mandatory oracle safely, that case stays BLOCKED/NOT-RUN;
+manual happy-path checks do not waive negative cases. Reuse existing Server expiry/reset/throttle
+qualification rather than repeating all matrices here.
+
+**Retained evidence:** Record exact Web and Server source SHAs (plus any dirty snapshot disclosure),
+Web dist/JAR and lockfile hashes, actual browser/OS/Java/Node/PostgreSQL versions, HTTPS origin,
+certificate/trust witness, schema/roles, procedure, timestamps and expected/actual result per W case.
+Allowlist status codes, cookie names/attributes, secret-free UI text and Boolean rotation/leak checks.
+Do not retain request bodies, passwords, CSRF/proof/cookie values, raw HAR, storage state or traces
+that capture them. Screenshots only after secret controls are cleared. Disable unsafe automatic
+failure artifacts too; inspect/sanitize before retaining evidence, including failed runs.
+
+PASS requires all applicable mandatory oracles executed on actual Web/Chrome/HTTPS with evidence.
+Environment failure is BLOCKED; an unexecuted case is NOT-RUN; an incorrect app result is FAIL.
+This does not qualify Desktop, other browsers, managed deployment, production security, HA,
+SPEC-OPEN-03/06 or T036. Keep F03-B IN_PROGRESS, Issue #24 open, verifier NOT-RUN and no merge.

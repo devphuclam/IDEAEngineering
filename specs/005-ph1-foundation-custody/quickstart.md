@@ -1,9 +1,8 @@
 # PH1 validation guide
 
-**State on 2026-09-28:** The four F01-A scaffold build/smoke checks passed for tested source
-commit `c600f7be` (see [F01-A results](evidence/F01-A-build-results.md)). T002 closed with a
-documented one-time internal build/test timing exception; F01-A remains open. The F01-B and
-F02–F05 checks are `NOT-RUN`. This guide is a procedure, not evidence of a result.
+**Procedure updated 2026-10-01:** This guide is not a progress register or test result.
+Per-card evidence and the Execution Register own actual status. F03-A acceptance does not
+pre-accept F03-B HTTP/session work; retain each executed red/green result separately.
 
 ## Before running
 
@@ -28,7 +27,14 @@ not extra F05 scope.
 
 ## Run by card
 
-The F01 entry points to create under T003–T011 are:
+**F03-B closure execution gate:** current Maven `test/package` invokes `exec-maven-plugin` during
+`generate-resources`. The separate [closure process exception](../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md)
+authorizes the exact nine cached JARs for T040/T042/T044 and necessary Issue #24 / PR #25 regression
+only. Verify hashes/graph before execution; use offline resolution, preserve Web packaging and
+check build tools stay outside `BOOT-INF/lib`. Missing/changed/additional artifacts are BLOCKED,
+not permission to download. Follow the [closure procedure](evidence/F03-B-closure-matrix.md#4-t044-execution-gate-and-procedure).
+
+The F01 entry points created under T003–T011 are:
 
 ```text
 Ubuntu Server:   cd apps/server && ./mvnw -B verify
@@ -39,18 +45,38 @@ Windows Workspace: dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj
 Windows Workspace: dotnet build apps/workspace/IdeaWorkspace.csproj
 ```
 
+T043 Server packaging builds the actual `apps/web` in Maven `generate-resources` and includes its
+generated shell/assets in the executable JAR. First install the **unchanged, admitted lockfile**
+under `apps/web` with `npm ci --ignore-scripts`. Then `cd apps/server && ./mvnw -B -DskipTests package`
+needs no manual Web build/copy. Use `-Didea.node.executable=/absolute/path/to/node` when the approved
+Node 24 is not on PATH. Missing Node/npm/Web dependencies fail packaging rather than produce an
+API-only JAR. Do not commit `dist`, `target` or copied static output. The new build plugin's scoped
+internal T043 exception and exact versions are in the [tool intake](../../docs/research/2026-10-01-t043-maven-web-build-intake.md);
+that exception does not admit expanded use or commercial distribution.
+
+For the packaging regression only, configure a **trusted test TLS keystore** through the existing
+`IDEA_SERVER_TLS_*` environment variables, without logging its password, and run:
+
+```text
+node tests/ph1/web-qualification/check-packaged-web.mjs apps/server/target/idea-server-0.1.0-SNAPSHOT.jar /absolute/path/to/test-ca.pem
+```
+
+It starts/stops only its own loopback JVM, checks exact packaged shell/asset bytes through verified
+HTTPS and anonymous session refusal, and writes no database/Vault data. This Node packaging check
+does not substitute for actual Chrome W01–W10 or Desktop qualification.
+
 These commands are targets, not reports of successful execution. Exact package intake is required
 before any new import; the historical NuGet exception in T002 does not waive this rule for another
-package or version. T003 must provide the wrapper and projects. The pinned
+package or version. T003 provides the wrapper and projects. The pinned
 Maven wrapper requires `unzip` on the Ubuntu host to retain its ZIP checksum path. For F02–F05,
-the card evidence must include the exact migration, application-start and scenario commands added
-with those implementations, because no such executable exists yet.
+the card evidence must include the exact migration, application-start and scenario commands from
+each implemented checkpoint; commands for unfinished slices remain planned, never presumed PASS.
 
 | Card | Run and retain | Expected result / limit |
 |---|---|---|
 | F01-A | From a clean checkout, run each documented Server, Web, Desktop and Workspace build plus basic test command on its qualified platform. | Four actual results tied to commit and tool versions; a planned command is not PASS. |
 | F01-B | Repeat automated checks; inspect tracked config and build inputs for working secrets; inspect lockfiles and exact dependency intake. | Repeatable checks and no committed working secret; record any blocked package separately. |
-| F02 | Create a fresh, isolated database named `idea_ddm_f02_<run-id>`; set exact, distinct role names `idea_ddm_app` and `idea_ddm_migrator`, and export their credentials separately. Set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that same database. Run `DataBaselineTest` first to apply V1 once and verify a repeat is a no-op, then run `DatabasePrivilegeTest` against the migrated schema to verify object ownership and refused app DDL. Run the packaged migration command and `ServerSmokeTest` afterward. | One fresh migration, repeat no-op, all baseline objects owned by the migration role, app role cannot create a schema/table, bounded failing DDL rollback in a generated temporary schema, and distinct process/database health. This is not a backup/restore or production recovery result. |
+| F02 / T044 data successor | Create a completely new isolated database matching `idea_ddm_f02_<run-id>`; use exact distinct app/migrator roles and set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that exact new name. After T044 tooling approval and initial-empty-state witness, `DataBaselineTest` on current source expects V1–V7 once, repeat zero; run `DatabasePrivilegeTest` and additional successor ownership/privilege assertions, then packaged migration/no-op and health checks. Never use the runner's historical default database for T044. | Seven migrations on current source, valid history/checksums, no pending migration and repeat zero; migrator-owned objects and refused app migration authority; bounded rollback and distinct process/data health. Historical F02 evidence is unchanged, not retrospectively changed to seven migrations. No backup/restore claim. |
 | F03-A/B | Run controlled initial-admin bootstrap twice; create/disable a native test account; sign in/out, revoke, and retry protected calls with old proof. | The second bootstrap reports already initialized with no Actor, account or Role Assignment change; attributable Actor/session; no public registration; all invalidated retries refused. Do not print passwords or session secrets. |
 | F04 | Run one allowed, one refused and one forced-failure sample owner command with a fixed `OperationId` per attempt. Query owner/Audit/outbox outcomes. | No successful result without required Audit, no partial success under forced failure, and no duplicate result from a same-ID retry. |
 | F05-A/B | Record exact Gateway runtime, Adapter and transport qualification; transfer approved 1 KiB and 64 MiB fixtures directly to one Gateway; compare size and SHA-256 with manifest, then inspect receipt and accepted metadata. Repeat with wrong/expired grant, wrong digest, interruption, lost response and same-ID repeated/changed input. | Matching verified custody for both happy-path fixtures; zero false successful custody for failures. Retries resolve the same operation. Artifact/Vault/Location IDs stay distinct from private Adapter path. No second Vault or throughput claim. |
@@ -80,6 +106,59 @@ while a fresh eligible sign-in works. For F04, use controlled synchronization to
 command after admission, commit account disablement or session revocation, then let the command
 reach its commit check. It must produce no successful business-state change. Retain the ordering
 evidence; an arbitrary sleep alone does not establish that the race was exercised.
+
+### F03-B fast HTTP/PostgreSQL checks
+
+Use the protected operator credential file, separate `idea_ddm_app`/`idea_ddm_migrator` roles
+and existing dedicated `idea_ddm_f03a_20260930_c91e7a42` database. The HTTP test owns only a
+new `f03b_<32 hexadecimal UUID>` schema: migrate and remove only that exact schema. Leave
+public and retained F03-A state unchanged; no development/F02 database or Vault write.
+Missing access is BLOCKED, not permission to substitute an in-memory database.
+
+The scoped runner is `apps/server/scripts/run-f03b-postgresql-checks.sh`. It fails closed if
+required credentials/roles/database are missing; any skipped check must be reported NOT-RUN,
+not PASS. The anonymous-session tracer is historical evidence. T046's explicit Login Identity
+repair received external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151`; retain
+its two-login and refusal regressions. Read-only `speckit-analyze` preceded spec v0.6's authorized
+T041 execution. The successor follows one RED → GREEN behavior at a time through the
+[throttling contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+and [planned sign-in integration](plan.md#planned-sign-in-transaction-integration).
+
+Run the affected checkpoint from an archive of the exact committed source:
+
+```bash
+bash apps/server/scripts/run-f03b-postgresql-checks.sh ServerRestartFlowTest,HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+```
+
+Preserve T045/§20 and V1–V6. Spec v0.6 owns rolling-window and resource/timing requirements:
+unknown identifiers create zero failure records; each known Login Identity stays within one
+record/five timestamps/one deadline. The T041 successor covers concurrent counting, successful
+clearing/session fate and binding/write-failure rollback, not only the counter threshold;
+see [exact-source evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
+External throttling review is received (evidence §25). The HTTP account-administration successor
+has 98 scoped checks at `a0874f40555f1119b830f043a7aaf5bda8752d8a` (evidence §26), through
+the same runner/owned-schema boundary. Its external PASS WITH NOTES is received (§27).
+For the approved restart slice, `ServerRestartFlowTest` starts/stops only its two owned JVM
+Server processes, at the same endpoint on one UUID schema. It never restarts Ubuntu. Its private
+test-classpath Clock file advances synthetic time without changing the host clock or adding
+a public route. Read [§28](evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification)
+for the exact-source result; do not infer the result from this procedure. Existing idle/absolute,
+logout/reset/re-enable and throttling matrices remain in `HttpSessionFlowTest`. Request external
+restart checkpoint review before continuing; the received review and its exact head are retained
+in the closure matrix. Client qualification is never inferred from this Java HTTP runner.
+T043-Web is SATISFIED by accepted W01–W10; Desktop/Workspace binding belongs to a successor Work
+Item after F03-B closure. T040/T042 reconciliation and T044 have final executed evidence in
+[F03 §39](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission), including
+fresh isolated V1–V7, full public privileges, 108 regression checks and actual Chrome W01–W10.
+Next is external whole-card review, not another client feature. Keep each exact source/database
+context separate; this receipt does not permit unguarded rerun against a retained public database.
+
+Check default profile values, then advance test time at setup-proof, idle, absolute and login
+block boundaries. Do not wait minutes/hours or change the server's clock. Cookie/session/CSRF
+checks use real HTTP; migrations/authentication use real PostgreSQL. An isolated loopback HTTP
+profile must disclose transport/cookie overrides and is not HTTPS/Desktop qualification.
+Retain hashes and sanitized assertions, never password, proof, cookie or CSRF values in logs.
+`verify-template` remains NOT-RUN at the user's instruction.
 
 For every run, retain the exact command/procedure, commit, environment, timestamp, actual output,
 reviewer and `PASS`/`FAIL`/`BLOCKED`/`NOT-RUN` disposition in the card's evidence record. Update

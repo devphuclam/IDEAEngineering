@@ -28,8 +28,8 @@ Use the existing card evidence files named in tasks.md; do not create a competin
 | Checklist | Tasks that deliver or verify the approved content | Completion evidence |
 |---|---|---|
 | CHK001–002: scope | T001, T035 | Compare delivered source and configuration with F01–F05. Exactly one Gateway/Vault is configured for PH1; later document workflow, multi-vault and Format Worker remain scheduled/deferred, not claimed delivered. |
-| CHK003: trace | T035 | Every local FR-001–012 maps to its governing source and applicable implementation/test evidence. Missing trace remains an explicit gap. |
-| CHK004–005: identity/session | T018–T022, T023/T025 | Executed tests for server-derived Actor, first/repeated bootstrap, sign-out, disable/revoke, re-enable with fresh login, and commit-time invalidation. Preserve evidence of the controlled race ordering. |
+| CHK003: trace | T035 | Every local FR-001–014 maps to its governing source and applicable implementation/test evidence. Missing trace remains an explicit gap. |
+| CHK004–005: identity/session | T018–T022, refinement T038–T046, T023/T025 | Executed tests for server-derived Actor, first/repeated bootstrap, exact-login credential recovery, sign-out, disable/revoke, re-enable with fresh login, and commit-time invalidation. Preserve evidence of the controlled race ordering. |
 | CHK006: owner outcome/Audit | T023–T026 | Allowed, refused, forced-failure and same-ID retry results; database assertions prove outcome/Audit consistency and no partial success. |
 | CHK007–008: control, bytes, custody | T028–T034 | Actual Client→Gateway route and candidate/Receipt/accepted-metadata assertions. No Generation or Check-in result is created by the PH1 fixture transfer. |
 | CHK009–010: failures and future multi-vault seam | T028–T034 | Each detailed check below has retained test/review evidence, not merely source comments. |
@@ -40,6 +40,131 @@ Scope/trace items require source review; behavior items require executed tests. 
 for the other. Before closing a card, inspect every applicable row; before claiming PH1 complete,
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
+
+## Current F03-B closure handoff
+
+Start with the [closure matrix](evidence/F03-B-closure-matrix.md), not another client feature.
+The approved reconciliation, logout/history repairs and closure execution are complete technically;
+see [F03 §39](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
+Final source `989bf5a9fc09c03ee2d5fa88d09b3cee78335616` passed 108 checks; fresh public/package
+`38b99f50de09370a8e8554cc80fc66a0afa70b62`, final public checks `989bf5a9...` and actual browser
+`9238b7e8ad6878687e72823e7bed1d4f083b9699` have separate PASS receipts (§39–40) and unchanged production
+content. Next: external whole-F03-B review of the exact published head, then human acceptance.
+Any rerun requires nine cached JAR/graph preflight and offline execution under the closure-only
+exception; follow the matrix's isolated-database procedure. No Desktop/Workspace binding, new
+feature checkpoint, Issue #24 closure,
+merge or Tracker action is authorized by this handoff.
+
+Use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
+implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
+rewrite evidence §20. T046 ran from `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` and received
+external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151` (§22). Preserve V1–V6
+and the exact-login repair; no single-login invariant or implicit selector.
+
+Read-only `speckit-analyze` preceded T041 implementation. The runtime successor and its exact
+source, RED/GREEN results, internal review and remaining limits are in
+[evidence §24](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
+External PASS WITH NOTES at `74c2d3dbeabc38bc292f22220e358aaa5e0f46d3` is received in
+[§25](evidence/F03-identity-results.md#25-external-review-of-t041). The received review covered the
+[qualification contract](contracts/ph1-boundaries.md#throttling-qualification-contract-planned)
+and [sign-in integration](plan.md#planned-sign-in-transaction-integration):
+
+1. Check the fifth-failure tracer RED/GREEN and subsequent rolling/deadline tests. Unknown
+   zero-state behavior already existed; its additional state-bound oracle passed without a
+   fabricated RED. Anonymous CSRF servlet sessions are not authenticated sessions.
+2. Check one row/five timestamps/one deadline per existing Login Identity, controlled-time
+   before/at/after boundaries, shared normalized variants and independent L1/L2 state.
+3. Check synchronized concurrent counting and qualified refused-path password work, including
+   the credentialless successor, with the existing runtime-role restrictions.
+4. Check refusal-state persistence and successful clearing/session/IAM/Audit fate. Required-write
+   and ordinary Spring binding faults must preserve prior failures and no eligible tentative
+   proof. JDBC resources remain request-scoped, never in Identity/HttpSession.
+5. Check exact source `b08709c581de195e05aea26450495cd593722059`, its 81-test result and the
+   source-to-review-head diff. Unrun clients/fresh-public migration remain NOT-RUN; no merge or
+   whole-card completion is implied.
+
+Additive V7 enforces the existing-identity bound and retains least privilege. Do not modify V1–V6.
+Do not claim servlet/PostgreSQL distributed
+ACID: no tentative proof is eligible without committed database state. The four-step client method
+remains qualification seam → failing test/evidence contract → implementation if needed → actual
+client evidence. T043-Web is now SATISFIED; Desktop is a successor Work Item, not a F03-B blocker.
+Java HTTP harness results cannot replace actual client qualification.
+
+For T043, follow spec's accepted 2026-10-01 Web credential-lifecycle clarification. Do not impose
+an absolute ban on controlled-input state: clear password control/state after submission and
+unmount, including refusal/error, with no persistence, copies elsewhere or diagnostic/evidence
+exposure. CSRF may remain in RAM; the session cookie is never page-JavaScript-readable. Desktop
+custody is unchanged. The Project Reviewer approved Web first on 2026-10-01. Read the
+[T043 Web contract](contracts/ph1-boundaries.md#t043-web-qualification-contract) before code:
+qualify trusted HTTPS and legitimate tooling, then one actual Web behavior RED → minimal GREEN.
+Serve the built React application from actual IDEA Server; include packaging and narrowly public
+GET assets. Optional Playwright uses installed Chrome only after intake/approved package sourcing;
+no Internet install. Manual actual Chrome is allowed but cannot waive blocked mandatory oracles.
+Missing trust/package is an environment blocker, never the Web RED. Desktop stays separate.
+
+Keep F03-B IN_PROGRESS, Issue #24 open and verifier NOT-RUN. No merge or whole-card PASS.
+
+The authorized HTTP account create/disable/re-enable slice ran from
+`a0874f40555f1119b830f043a7aaf5bda8752d8a`: 98 scoped checks, 0 failures/errors/skips.
+[§26](evidence/F03-identity-results.md#26-http-account-administration-checkpoint) retains route
+RED/GREEN, permission/CSRF/current-session checks, accepted-activity fate, six required-write
+faults, lock-time expiry and test-first normalized-login/zero-login Account repairs.
+ActorContext comes from the authenticated principal; the existing
+F03-A owner revalidates current eligibility before scoped authority and after the lock.
+
+External PASS WITH NOTES at `171173a5266fa5c9a732f2fe1316fb1c5c0f836d` is received in
+[§27](evidence/F03-identity-results.md#27-external-review-of-http-account-administration).
+The authorized restart slice uses `ServerRestartFlowTest.java`: real process A login and usable
+cookie → stop A → real process B on the same endpoint/schema refuses the old cookie → fresh
+login/protected request succeeds with a different runtime ID. Read §28 for the exact source and
+actual result. The test also witnesses unchanged identity/credential and historical metadata,
+pre-revoked/idle-expired refusal, and PostgreSQL throttle survival. Existing behavior was GREEN
+on first qualification; production code, dependencies and V1–V7 are unchanged.
+
+The first Web implementation and exploratory Chrome run are now retained in
+[T043 partial Web evidence](evidence/T043-web-qualification-20261001.md). Source
+`2d2bcfc4892cb6903fa3196ae6fc47dbd8424121` adds the actual React sign-in/out UI, same-origin
+Server static bundle packaging and test TLS configuration. The run has partial browser
+observations, not full W01–W10 acceptance. The schema used a fixed test name rather than the
+planned UUID name; direct cookie/network, bad-CSRF, invalidation/reload and error/leak oracles
+remain unexecuted. Maven executed 81 checks and skipped 24; F03-A and fresh data/privilege suites
+were not executed in that run. The external reviewer requested one build-integration repair;
+[clean packaging successor evidence](evidence/T043-web-packaging-repair-20261001.md) now retains
+RED/GREEN from committed archives. Source `2fe89d481842f4cf26078c07d4b78fb3bdacd7c4` makes Maven
+build/package actual Web without copying generated assets into source. Verified-HTTPS shell/asset
+checks and two Server/two Web smoke tests pass; this is not actual Chrome W01–W10 acceptance.
+External packaging PASS WITH NOTES at `82a30adb55482096e421821891734d82ec990351` is received
+([§31](evidence/F03-identity-results.md#31-external-review-of-t043-packaging-repair)); the prior
+MAJOR is closed. Its authorized follow-up was the actual Chrome run recorded below, using an
+exact-source, UUID-owned fixture. Do not reopen packaging
+without a new defect. Historical build-tool intake remains internal T043 only. The separate
+[closure exception](../../docs/research/2026-10-01-f03b-closure-buildtool-exception.md) admits the same
+nine exact JARs for F03-B T040/T042/T044 only, conditional on offline-cache/hash/graph preflight;
+F04/F05/general development still need separate authority. For existing Ubuntu
+runner scripts, prepend the qualified Node 24 `bin` directory to the process PATH and prepare the
+locked Web dependencies per [quickstart](quickstart.md); no global PATH change/hidden install.
+External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
+access limitation and historical evidence. Preserve immutable migrations.
+The [actual Chrome successor](evidence/T043-web-browser-successor-20261001.md) now retains
+W01–W10 PASS on unchanged actual Web/Server source `2fe89d4`, with qualification harness
+`738eb5ae05600b443ad2c107e1352de6dac45def`, normal trusted HTTPS and a fresh UUID-owned fixture.
+No package install/TLS bypass or secret evidence. Read §32 for execution, cleanup and limits.
+External Web PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4` is received in
+[§33](evidence/F03-identity-results.md#33-external-review-of-actual-t043-webbrowser-checkpoint).
+Both [next-use hardening notes](evidence/T043-web-browser-successor-20261001.md#closure-requalification--2026-10-01)
+were repaired before closure Web reuse; actual Chrome W01–W10 passed on the repaired Server.
+Web W01–W10 satisfies the Web portion of T043;
+keep the historical umbrella marker unchecked, not a Desktop condition on F03-B acceptance.
+T040/T042/shared Server tasks and T044 are technically satisfied by §39 and the matrix.
+Logout contract comparison led to an explicitly approved, executed repair; prior failures are
+retained. Whole-card external review and Project Reviewer acceptance remain PENDING.
+
+Desktop/WebView2/Workspace binding is NOT-RUN and deferred to a successor Work Item after F03-B
+closes; no successor issue is created yet. Preserve separate session contexts, actual IDEA Web
+over HTTPS, server-mediated short-lived binding and Windows per-user protected custody. Exact
+issue/redeem/refresh/revoke/reauth/replay/cross-user/same-user-hostile-client semantics require an
+agreed seam/test contract there, not invention in PR #25. The F01 scaffold is not authentication
+evidence. F04 still owns its separate owner-command race.
 
 ## Detailed evidence for CHK009 and CHK010
 

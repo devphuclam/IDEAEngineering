@@ -9,4 +9,13 @@ describe("Web entry point", () => {
 
     expect(html).toMatch(/<main(?:\s|>)/);
   });
+
+  it("renders a fail-closed login boundary without a bearer-token field", () => {
+    const html = renderToStaticMarkup(createElement(App));
+
+    expect(html).toContain('aria-label="Đăng nhập"');
+    expect(html).toContain('type="password"');
+    expect(html).not.toContain("localStorage");
+    expect(html).not.toContain("sessionStorage");
+  });
 });

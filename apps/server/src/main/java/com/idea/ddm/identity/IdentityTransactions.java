@@ -9,9 +9,16 @@ import javax.sql.DataSource;
 final class IdentityTransactions {
     enum Owner { IAM, ACCESS_POLICY }
     @FunctionalInterface interface Mutation<T> { T apply(Connection connection) throws SQLException; }
+    @FunctionalInterface interface Eligibility { void check(Connection connection, ActorContext context) throws SQLException; }
     private final DataSource dataSource;
+    private final Eligibility eligibility;
 
-    IdentityTransactions(DataSource dataSource) { this.dataSource = java.util.Objects.requireNonNull(dataSource); }
+    IdentityTransactions(DataSource dataSource) { this(dataSource, (connection, context) -> {}); }
+
+    IdentityTransactions(DataSource dataSource, Eligibility eligibility) {
+        this.dataSource = java.util.Objects.requireNonNull(dataSource);
+        this.eligibility = java.util.Objects.requireNonNull(eligibility);
+    }
 
     <T> T mutate(ActorContext context, UUID operation, UUID organization, String permission,
             String targetType, String target, Owner owner, Mutation<T> mutation) {
@@ -19,7 +26,7 @@ final class IdentityTransactions {
         java.util.Objects.requireNonNull(operation);
         java.util.Objects.requireNonNull(organization);
         try (var connection = dataSource.getConnection()) {
-            var initial = IdentityAccessPolicy.evaluate(connection, context, organization, permission);
+            var initial = evaluate(connection, context, organization, permission);
             connection.setAutoCommit(false);
             if (!initial.granted()) {
                 try {
@@ -33,7 +40,7 @@ final class IdentityTransactions {
             IdentityAccessPolicy.Decision current = null;
             try {
                 AdministratorBootstrap.execute(connection, "SELECT pg_advisory_xact_lock(73003002)");
-                current = IdentityAccessPolicy.evaluate(connection, context, organization, permission);
+                current = evaluate(connection, context, organization, permission);
                 if (!current.granted()) throw new IdentityRefusal(current.refusal());
                 var value = mutation.apply(connection);
                 IdentityAccessPolicy.retain(connection, operation, "REQUEST", initial);
@@ -56,6 +63,15 @@ final class IdentityTransactions {
         } catch (SQLException exception) {
             throw new IllegalStateException("Identity command failed; no successful outcome is reported", exception);
         }
+    }
+
+    private IdentityAccessPolicy.Decision evaluate(Connection connection, ActorContext context, UUID organization,
+            String permission) throws SQLException {
+        try { eligibility.check(connection, context); }
+        catch (IdentityRefusal refusal) {
+            return new IdentityAccessPolicy.Decision(context, organization, permission, false, null, null, refusal.reason());
+        }
+        return IdentityAccessPolicy.evaluate(connection, context, organization, permission);
     }
 
     private static void outcome(Connection connection, Owner owner, UUID operation, UUID actor, String action,

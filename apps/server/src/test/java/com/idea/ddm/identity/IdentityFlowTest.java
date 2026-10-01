@@ -12,7 +12,8 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /** Agreed F03-A seam: Server identity services + real PostgreSQL. Not an HTTP/session test. */
-@EnabledIfEnvironmentVariable(named = "IDEA_F03_TEST_DATABASE_NAME", matches = "idea_ddm_f02_[a-z0-9_]+")
+@EnabledIfEnvironmentVariable(named = "IDEA_F03_TEST_DATABASE_NAME",
+        matches = "idea_ddm_f02_20260929_a52f44f6|idea_ddm_f03a_20260930_c91e7a42")
 class IdentityFlowTest {
     private String schema;
     private DriverManagerDataSource app;
