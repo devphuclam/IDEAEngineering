@@ -1150,6 +1150,29 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void absoluteExpiredLogoutCannotPublishAcceptedEvidenceDespiteRecentActivity() throws Exception {
+        var fixture = fixture();
+        var caller = signedIn(fixture);
+        var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
+        for (int hour = 1; hour < 8; hour++) {
+            clock.advanceTo(Instant.parse("2026-09-30T06:00:00Z").plusSeconds(hour * 3600));
+            assertEquals(200, get(caller, "/api/v1/identity/session").statusCode());
+        }
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        clock.advanceTo(Instant.parse("2026-09-30T14:00:00Z"));
+        var response = post(caller, "/api/v1/identity/logout", csrf, "");
+        assertEquals(401, response.statusCode());
+        assertEquals("", response.body());
+        assertEquals(before, accounts.totals());
+        try (var connection = migrator(); var statement = connection.createStatement();
+                var rows = statement.executeQuery("SELECT count(*) FROM " + schema + ".session_record WHERE revoked_at IS NOT NULL")) {
+            assertTrue(rows.next());
+            assertEquals(0, rows.getLong(1));
+        }
+    }
+
+    @Test
     void logoutIamFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry() throws Exception {
         requiredLogoutEvidenceFailure("iam_owner_outcome");
     }
