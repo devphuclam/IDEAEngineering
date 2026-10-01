@@ -20,6 +20,7 @@
   <properties>
     <java.version>25</java.version>
     <spring-modulith.version>2.1.1</spring-modulith.version>
+    <idea.node.executable>node</idea.node.executable>
   </properties>
 
   <dependencyManagement>
@@ -101,6 +102,26 @@
 
   <build>
     <plugins>
+      <!-- T043 internal build-tool intake/exception: IE-RES-T043-MAVEN-WEB-INTAKE-20261001. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.6.3</version>
+        <executions>
+          <execution>
+            <id>build-actual-web</id>
+            <phase>generate-resources</phase>
+            <goals><goal>exec</goal></goals>
+            <configuration>
+              <executable>${idea.node.executable}</executable>
+              <arguments>
+                <argument>${project.basedir}/scripts/build-web-static.mjs</argument>
+                <argument>${project.build.directory}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -109,6 +130,13 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <!-- Ignore historical manually copied bundles; Maven owns generated Web resources. -->
+        <excludes><exclude>static/**</exclude></excludes>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-resources/web</directory>
+        <targetPath>static</targetPath>
         <filtering>false</filtering>
       </resource>
       <resource>

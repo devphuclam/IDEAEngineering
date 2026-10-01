@@ -38,6 +38,26 @@ Windows Workspace: dotnet test apps/workspace/tests/IdeaWorkspace.Tests.csproj
 Windows Workspace: dotnet build apps/workspace/IdeaWorkspace.csproj
 ```
 
+T043 Server packaging builds the actual `apps/web` in Maven `generate-resources` and includes its
+generated shell/assets in the executable JAR. First install the **unchanged, admitted lockfile**
+under `apps/web` with `npm ci --ignore-scripts`. Then `cd apps/server && ./mvnw -B -DskipTests package`
+needs no manual Web build/copy. Use `-Didea.node.executable=/absolute/path/to/node` when the approved
+Node 24 is not on PATH. Missing Node/npm/Web dependencies fail packaging rather than produce an
+API-only JAR. Do not commit `dist`, `target` or copied static output. The new build plugin's scoped
+internal T043 exception and exact versions are in the [tool intake](../../docs/research/2026-10-01-t043-maven-web-build-intake.md);
+that exception does not admit expanded use or commercial distribution.
+
+For the packaging regression only, configure a **trusted test TLS keystore** through the existing
+`IDEA_SERVER_TLS_*` environment variables, without logging its password, and run:
+
+```text
+node tests/ph1/web-qualification/check-packaged-web.mjs apps/server/target/idea-server-0.1.0-SNAPSHOT.jar /absolute/path/to/test-ca.pem
+```
+
+It starts/stops only its own loopback JVM, checks exact packaged shell/asset bytes through verified
+HTTPS and anonymous session refusal, and writes no database/Vault data. This Node packaging check
+does not substitute for actual Chrome W01–W10 or Desktop qualification.
+
 These commands are targets, not reports of successful execution. Exact package intake is required
 before any new import; the historical NuGet exception in T002 does not waive this rule for another
 package or version. T003 provides the wrapper and projects. The pinned

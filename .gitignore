@@ -10,7 +10,7 @@ build/
 *.log
 .env*
 
-# Generated Web bundle copied into the Server classpath by the T043 build script
+# Historical manually copied Web output; Maven now builds resources under ignored target/
 /apps/server/src/main/resources/static/
 
 # IDEA Core v0 local configuration and runtime data
