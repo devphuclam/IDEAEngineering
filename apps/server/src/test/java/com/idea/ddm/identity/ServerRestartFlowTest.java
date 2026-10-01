@@ -64,10 +64,14 @@ class ServerRestartFlowTest {
 
     @AfterEach
     void stopOnlyTheOwnedProcessBeforeRemovingOnlyTheOwnedSchema() throws Exception {
-        stopRuntime();
-        if (schema != null && schema.matches("f03b_[a-f0-9]{32}")) {
-            try (var connection = migrator(); var statement = connection.createStatement()) {
-                statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
+        try {
+            stopRuntime();
+        } finally {
+            // Keep the shutdown failure, but still clean up once the exact child is dead.
+            if ((runtime == null || !runtime.isAlive()) && schema != null && schema.matches("f03b_[a-f0-9]{32}")) {
+                try (var connection = migrator(); var statement = connection.createStatement()) {
+                    statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
+                }
             }
         }
         // Private child logs remain under this source build's target/ for scoped evidence.
