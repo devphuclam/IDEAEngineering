@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import java.time.Clock;
 import java.util.List;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -54,7 +55,8 @@ class IdentityHttpSecurity {
                 .requestMatchers(HttpMethod.GET, "/health", "/health/database", "/api/v1/identity/csrf").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/identity/login", "/api/v1/identity/credentials").permitAll()
                 .anyRequest().authenticated())
-                .authenticationProvider(nativeIdentityProvider)
+                // One authoritative attempt: no parent provider fallback repeating a refusal.
+                .authenticationManager(new ProviderManager(List.of(nativeIdentityProvider)))
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> response.setStatus(401))
                         .accessDeniedHandler((request, response, exception) -> response.setStatus(403)))

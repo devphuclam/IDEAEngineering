@@ -1186,11 +1186,6 @@ class HttpSessionFlowTest {
         assertEquals(401, loginAttempt(caller, before.login(), before.password()).statusCode());
         clock.advanceTo(Instant.parse("2026-09-30T06:15:00Z"));
         wrongAttempts(caller, at.login(), 1);
-        try (var connection = appDataSource().getConnection(); var query = connection.prepareStatement(
-                "SELECT failed_at,blocked_until FROM login_failure_state JOIN login_identity USING(login_identity_id) WHERE normalized_login_identifier=?")) {
-            query.setString(1, at.login());
-            try (var row = query.executeQuery()) { assertTrue(row.next()); System.out.println("WINDOW_WITNESS=" + row.getArray(1) + ";" + row.getTimestamp(2)); }
-        }
         assertEquals(200, loginAttempt(caller, at.login(), at.password()).statusCode(), "Cutoff is exclusive");
         clock.advanceTo(Instant.parse("2026-09-30T06:15:00.000001Z"));
         wrongAttempts(caller, after.login(), 1);
