@@ -41,7 +41,7 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B HTTP account-administration handoff
+## Current F03-B restart/session-continuity handoff
 
 Use spec v0.6, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
@@ -87,11 +87,19 @@ faults, lock-time expiry and test-first normalized-login/zero-login Account repa
 ActorContext comes from the authenticated principal; the existing
 F03-A owner revalidates current eligibility before scoped authority and after the lock.
 
-Next action: read-only external checkpoint review of this exact source and docs-only successor.
-Repair any in-scope findings with affected tests before further qualification. Preserve the
-historical evidence and immutable migrations. Remaining explicit restart/issuer/logout profiles,
-actual Web/Desktop and fresh public V4–V7/data regression are outstanding; the Java HTTP harness
-is not client qualification. F04 owns its separate owner-command race.
+External PASS WITH NOTES at `171173a5266fa5c9a732f2fe1316fb1c5c0f836d` is received in
+[§27](evidence/F03-identity-results.md#27-external-review-of-http-account-administration).
+The authorized restart slice uses `ServerRestartFlowTest.java`: real process A login and usable
+cookie → stop A → real process B on the same endpoint/schema refuses the old cookie → fresh
+login/protected request succeeds with a different runtime ID. Read §28 for the exact source and
+actual result. The test also witnesses unchanged identity/credential and historical metadata,
+pre-revoked/idle-expired refusal, and PostgreSQL throttle survival. Existing behavior was GREEN
+on first qualification; production code, dependencies and V1–V7 are unchanged.
+
+Next action: external restart-checkpoint review. Repair in-scope findings with affected tests
+before further qualification. Preserve historical evidence and immutable migrations. Remaining
+issuer/logout profiles, actual Web/Desktop and fresh public V4–V7/data regression are outstanding;
+this Java HTTP runner is not client qualification. F04 owns its separate owner-command race.
 
 ## Detailed evidence for CHK009 and CHK010
 

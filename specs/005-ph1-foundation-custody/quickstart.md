@@ -100,7 +100,7 @@ and [planned sign-in integration](plan.md#planned-sign-in-transaction-integratio
 Run the affected checkpoint from an archive of the exact committed source:
 
 ```bash
-bash apps/server/scripts/run-f03b-postgresql-checks.sh HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
+bash apps/server/scripts/run-f03b-postgresql-checks.sh ServerRestartFlowTest,HttpSessionFlowTest,IdentityFlowTest,ServerSmokeTest
 ```
 
 Preserve T045/§20 and V1–V6. Spec v0.6 owns rolling-window and resource/timing requirements:
@@ -110,8 +110,14 @@ clearing/session fate and binding/write-failure rollback, not only the counter t
 see [exact-source evidence](evidence/F03-identity-results.md#24-t041-throttling-checkpoint).
 External throttling review is received (evidence §25). The HTTP account-administration successor
 has 98 scoped checks at `a0874f40555f1119b830f043a7aaf5bda8752d8a` (evidence §26), through
-the same runner/owned-schema boundary. Request external checkpoint review before continuing;
-do not merge. Client qualification remains
+the same runner/owned-schema boundary. Its external PASS WITH NOTES is received (§27).
+For the approved restart slice, `ServerRestartFlowTest` starts/stops only its two owned JVM
+Server processes, at the same endpoint on one UUID schema. It never restarts Ubuntu. Its private
+test-classpath Clock file advances synthetic time without changing the host clock or adding
+a public route. Read [§28](evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification)
+for the exact-source result; do not infer the result from this procedure. Existing idle/absolute,
+logout/reset/re-enable and throttling matrices remain in `HttpSessionFlowTest`. Request external
+restart checkpoint review before continuing; do not merge. Client qualification remains
 T043's seam → failing tests/evidence contract → implementation if needed → real Web/Desktop
 execution, never inferred from this Java HTTP runner.
 

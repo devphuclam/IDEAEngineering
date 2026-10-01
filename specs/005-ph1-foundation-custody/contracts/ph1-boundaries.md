@@ -180,3 +180,23 @@ Migrate only a test-owned UUID schema using the separate migrator; runtime remai
 Keep V1–V6 immutable. Additive V7 enforces the identity/size bound and preserves
 runtime least privilege. Retain exact source, expected/actual boundary instants, result and sanitized
 log hash; no proof, cookie, password or submitted unknown-name history in evidence.
+
+### Server restart qualification contract
+
+Use `ServerRestartFlowTest` through the scoped runner and a test-owned UUID schema. Stop only
+the test-created Server child JVM, then start a distinct child JVM at the same loopback endpoint
+and on the same schema. Leave Ubuntu, public data and Vault unchanged. Advance time through a
+private test-classpath Clock fixture, not a production hook or host-clock change.
+
+| Case | Required oracle |
+|---|---|
+| Previously usable cookie | A signs in (200), protected session works (200); after A stops, B refuses A's cookie (empty 401), with no added Actor, session or accepted IAM/Audit. Persisted metadata stays unchanged. Fresh sign-in with the same credential succeeds (200) and yields a new session/runtime ID and a usable protected session. |
+| Revoked and idle-expired before restart | Establish those preconditions through existing HTTP behavior, with a still-eligible control session. After restart all old cookies are refused; metadata remains historical, identity/credential unchanged, fresh sign-in works. Detailed timeout/logout/reset matrices stay in existing tests. |
+| Durable login block | Establish the existing five-failure block. Restart preserves its timestamps and deadline; a valid-password attempt during that block is still empty 401 without extending it or publishing success. After its original deadline, eligible sign-in succeeds and clears state. |
+
+This qualifies existing process-local authentication proof, not HA, failover, backup or recovery.
+Inspect the existing runtime-instance eligibility pin separately; an HTTP refusal alone does
+not isolate which eligibility guard rejected the request. No cookie-adoption or DB-session
+restoration path is added. First GREEN is previously implemented behavior newly qualified, not
+an invented RED → GREEN. Retain exact-source execution and affected regressions in
+[§28](../evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification).

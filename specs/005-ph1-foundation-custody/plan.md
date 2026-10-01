@@ -143,7 +143,17 @@ create/disable/re-enable successor ran from `a0874f40555f1119b830f043a7aaf5bda87
 scoped checks, including normalized-login and zero-login Account repairs. It uses read-only
 eligibility at admission and under the security-write lock;
 accepted activity shares the owner mutation's transaction. Client ActorId is never authority.
-The next action is external review of this checkpoint before further F03-B qualification.
+External PASS WITH NOTES at `171173a5266fa5c9a732f2fe1316fb1c5c0f836d` is received in
+[§27](evidence/F03-identity-results.md#27-external-review-of-http-account-administration).
+The Project Reviewer authorized test-process restart qualification next. Use
+`ServerRestartFlowTest` with two real child JVMs at the same loopback endpoint and the same
+test-owned UUID schema. Qualify retained metadata, old-cookie refusal, fresh sign-in with a
+new runtime ID, pre-revoked/idle-expired refusal and durable throttle continuity. Keep the
+existing detailed expiry/logout/reset/re-enable tests; add no production mechanism unless
+qualification exposes a gap. A first GREEN is qualification of existing behavior, not a
+fabricated RED → GREEN. Exact execution and review are in
+[§28](evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification).
+Request external review of this slice before subsequent qualification.
 F03-B remains IN_PROGRESS; Issue #24 open, verifier NOT-RUN and no merge.
 
 ## Complexity Tracking
