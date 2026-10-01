@@ -1211,6 +1211,30 @@ class HttpSessionFlowTest {
         assertEquals(401, loginAttempt(caller, fixture.login(), fixture.password()).statusCode(), "Prior four failures were not cleared");
     }
 
+    @Test
+    void blockDeadlineDoesNotMoveAndIsOpenExactlyAtAndAfterExpiry() throws Exception {
+        var fixture = dualLoginFixture();
+        var caller = client();
+        wrongAttempts(caller, fixture.first().login(), 5);
+        wrongAttempts(caller, fixture.second().login(), 5);
+        var blocked = loginWitness(fixture.first().login());
+        assertEquals(1, blocked.rows());
+        assertEquals(5, blocked.failures());
+        assertEquals(Instant.parse("2026-09-30T06:15:00Z"), blocked.blockedUntil());
+        clock.advanceTo(Instant.parse("2026-09-30T06:14:59.999999Z"));
+        wrongAttempts(caller, fixture.first().login(), 10);
+        assertEquals(401, loginAttempt(caller, fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(blocked, loginWitness(fixture.first().login()), "Blocked attempts cannot append or extend state");
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00Z"));
+        wrongAttempts(caller, fixture.first().login(), 1);
+        assertEquals(1, loginWitness(fixture.first().login()).failures(), "Expired observations no longer count on access");
+        assertEquals(200, loginAttempt(caller, fixture.first().login(), fixture.first().password()).statusCode());
+        assertEquals(0, loginWitness(fixture.first().login()).rows());
+        clock.advanceTo(Instant.parse("2026-09-30T06:15:00.000001Z"));
+        assertEquals(200, loginAttempt(caller, fixture.second().login(), fixture.second().password()).statusCode());
+        assertEquals(0, loginWitness(fixture.second().login()).rows());
+    }
+
     private record LoginWitness(int rows, int failures, Instant blockedUntil, long sessions, long outcomes, long audit) {}
 
     // Approved bounded SQL witnesses for state/transaction invariants unavailable over HTTP.
