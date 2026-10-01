@@ -1175,6 +1175,37 @@ class HttpSessionFlowTest {
     }
 
     @Test
+    void anonymousRevokedAndStaleVersionLogoutAreRefusedWithoutAcceptedEvidence() throws Exception {
+        var anonymous = client();
+        var anonymousCsrf = jsonField(get(anonymous, "/api/v1/identity/csrf").body(), "token");
+        assertEquals(401, post(anonymous, "/api/v1/identity/logout", anonymousCsrf, "").statusCode());
+        var fixture = fixture();
+        var revoked = signedIn(fixture);
+        var revokedCsrf = jsonField(get(revoked, "/api/v1/identity/csrf").body(), "token");
+        // Isolate the PostgreSQL revocation guard while ordinary servlet proof remains present.
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            assertEquals(1, statement.executeUpdate("UPDATE " + schema + ".session_record SET revoked_at=issued_at"));
+        }
+        var accounts = new IdentityAdministration(appDataSource());
+        var before = accounts.totals();
+        var response = post(revoked, "/api/v1/identity/logout", revokedCsrf, "");
+        assertEquals(401, response.statusCode());
+        assertEquals("", response.body());
+        assertEquals(before, accounts.totals());
+        var stale = signedIn(fixture);
+        var staleCsrf = jsonField(get(stale, "/api/v1/identity/csrf").body(), "token");
+        // Isolate the version guard without also revoking this second session.
+        try (var connection = migrator(); var statement = connection.createStatement()) {
+            assertEquals(1, statement.executeUpdate("UPDATE " + schema + ".idea_account SET security_version=security_version+1"));
+        }
+        before = accounts.totals();
+        response = post(stale, "/api/v1/identity/logout", staleCsrf, "");
+        assertEquals(401, response.statusCode());
+        assertEquals("", response.body());
+        assertEquals(before, accounts.totals());
+    }
+
+    @Test
     void idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting() throws Exception {
         var fixture = fixture();
         var before = signedIn(fixture);
