@@ -1146,6 +1146,16 @@ class HttpSessionFlowTest {
 
     @Test
     void logoutAuditFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry() throws Exception {
+        requiredLogoutEvidenceFailure("audit_evidence");
+    }
+
+    @Test
+    void logoutIamFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry() throws Exception {
+        requiredLogoutEvidenceFailure("iam_owner_outcome");
+    }
+
+    private void requiredLogoutEvidenceFailure(String table) throws Exception {
+        assertTrue(java.util.Set.of("audit_evidence", "iam_owner_outcome").contains(table));
         var fixture = fixture();
         var caller = signedIn(fixture);
         var csrf = jsonField(get(caller, "/api/v1/identity/csrf").body(), "token");
@@ -1154,7 +1164,7 @@ class HttpSessionFlowTest {
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("CREATE FUNCTION " + schema + ".suppress_logout() RETURNS trigger LANGUAGE plpgsql AS $$ "
                     + "BEGIN IF NEW.action='identity.sign-out' THEN RETURN NULL; END IF; RETURN NEW; END $$");
-            statement.execute("CREATE TRIGGER suppress_logout BEFORE INSERT ON " + schema + ".audit_evidence "
+            statement.execute("CREATE TRIGGER suppress_logout BEFORE INSERT ON " + schema + "." + table + " "
                     + "FOR EACH ROW EXECUTE FUNCTION " + schema + ".suppress_logout()");
         }
         try {
@@ -1165,7 +1175,7 @@ class HttpSessionFlowTest {
             assertEquals(200, get(caller, "/api/v1/identity/session").statusCode(), "Failed logout must not clear ordinary proof");
         } finally {
             try (var connection = migrator(); var statement = connection.createStatement()) {
-                statement.execute("DROP TRIGGER suppress_logout ON " + schema + ".audit_evidence");
+                statement.execute("DROP TRIGGER suppress_logout ON " + schema + "." + table);
             }
         }
         assertEquals(204, post(caller, "/api/v1/identity/logout", csrf, "").statusCode());
