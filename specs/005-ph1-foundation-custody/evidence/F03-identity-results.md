@@ -3,16 +3,16 @@
 | Control field | Value |
 |---|---|
 | Stable Evidence ID / class | `IE-VEV-PH1-F03-001` (new F03 record) / verification record |
-| Version / status | 0.27 / Draft |
+| Version / status | 0.28 / Draft |
 | Product normativity | INFORMATIVE; no changed product requirement or gate |
 | Owner / author | Engineering / Codex, assisting the Project Reviewer |
 | Reviewer / acceptance authority | GPT Web technical reviews relayed by the Project Reviewer; earlier scoped reviews retained below. Project Reviewer accepted F03-A on 2026-09-30. Actual Web successor received PASS WITH NOTES at `24ecdf0c9d5246223837ba1c3b349b3005cb5be4`; whole-F03-B acceptance remains pending |
 | Evidence date | Latest closure execution 2026-10-01, +07:00; earlier execution dates remain historical |
-| Applicable baseline | Final regression `6e394ab9757c6f7a4a9b57c86d93e3fba6ea6066`; fresh/package application `38b99f50de09370a8e8554cc80fc66a0afa70b62`; public/browser qualification `9238b7e8ad6878687e72823e7bed1d4f083b9699`; earlier sources remain historical |
+| Applicable baseline | Final regression/public checks `989bf5a9fc09c03ee2d5fa88d09b3cee78335616`; fresh/package application `38b99f50de09370a8e8554cc80fc66a0afa70b62`; actual browser qualification `9238b7e8ad6878687e72823e7bed1d4f083b9699`; earlier sources remain historical |
 | Upstream trace | [Work Item #22](https://github.com/devphuclam/IDEAEngineering/issues/22), [Work Item #24](https://github.com/devphuclam/IDEAEngineering/issues/24), [PH1 spec](../spec.md) FR-005/013/014 / clarifications 2026-09-30, [PH1 tasks](../tasks.md) T040/T042/T044 for restart qualification, DOC-04 REQ-IAM-002/003/005/007 / REQ-AUTH-004/009/010, DOC-05 IF-DIRECTORY-ADMIN / IF-RBAC-ADMIN / ARCH-VIEW-SEQ-008, [ADR-0012](../../../docs/adr/0012-use-principal-role-scope-rbac.md), [HTTP Security intake](../../../docs/research/2026-09-30-ph1-f03b-http-security-intake.md) |
 | Downstream trace | F03-A accepted; F03-B IN_PROGRESS in published Execution Register revision 29 (`19587d1b43635822e6a27d86dcae01db9c0220d8` on main); accepted T043-Web and [F03-B closure matrix](F03-B-closure-matrix.md), not whole-card acceptance |
 | Classification / retention | INTERNAL; retain with F03 source and acceptance evidence |
-| Change / supersession | Supersedes v0.26 control envelope; §39 appends authorized logout/Flyway repairs and final closure execution. §1–38 history retained; V1–V7 and dependencies unchanged; no card-state change. |
+| Change / supersession | Supersedes v0.27 control envelope; §40 appends hygiene-only test-expression correction and final rerun. §1–39 execution history retained; V1–V7/dependencies/production unchanged after §39 package; no card-state change. |
 | Review trigger | Bootstrap, migration, password encoder, account administration, HTTP security/session or test-scope change |
 | Evidence status | Closure execution PASS: fresh V1–V7, successor privileges, final 108-test regression and actual Chrome W01–W10; prior FAIL results retained. Whole-F03-B external review/acceptance PENDING. Combined T043 unchecked; Desktop successor NOT-RUN, not a blocker. Private raw-log limit, scoped tooling exception, verifier NOT-RUN and separate integration/progress retained |
 
@@ -2286,3 +2286,53 @@ Desktop successor and F04 owner race remain separate. No company policy/MFA, liv
 T036/legal/commercial, production, HA/failover/recovery/backup or multi-Vault claim. F03-B stays
 IN_PROGRESS, Issue #24 OPEN, historical combined T043 unchecked, verifier NOT-RUN; no merge,
 Tracker action, changed timer or invented actual effort.
+
+## 40. Hygiene successor and exact-source final rerun
+
+Tracked-text secret scanning flagged the test helper's adjacent quoted environment-key names
+and ternary colon in `F03BPublicMigrationTest.connection()` as a credential assignment. They
+were variable names, not secret values. Replace only that key-selection expression with an
+equivalent local variable/if; scanner rules/exemptions were not changed. This supersedes §39's
+docs-only post-run expectation: one test helper changed and required successor execution. This test-only source
+change and closure documentation were committed as **`989bf5a9fc09c03ee2d5fa88d09b3cee78335616`**.
+
+No production, Web, dependency, V1–V7, HTTP/restart/F03-A/health test or qualification-harness
+change follows the earlier executed sources. Nevertheless, both affected public checks and the
+108-test suite were rerun on this exact committed source; same guarded databases, offline
+commands, credentials and nine-artifact preflight as §39. Archive SHA-256:
+`CDE9D5A73B515EFD4DEEF1096E4FCF63398971A6F96C6866B73ECF4175E08332`.
+
+| Selector / interval +07:00 | Result | Private host log / SHA-256 |
+|---|---|---|
+| `DatabasePrivilegeTest,F03BPublicMigrationTest,ServerSmokeTest`, 15:54:03–15:54:16 | 7 PASS (1 + 4 + 2), zero failures/errors/skips | `/home/phuclam/idea-f03b-closure-B20ObAEl.log` / `5C4AD3F89F1696CB01AD5A605BC61890383E54B2A1E7545B374B4464E69447F8` |
+| `HttpSessionFlowTest,IdentityFlowTest,ServerRestartFlowTest,ServerSmokeTest`, 15:54:03–15:56:26 | 108 PASS (83 + 20 + 3 + 2), zero failures/errors/skips | `/home/phuclam/idea-f03b-closure-5RkRAwJY.log` / `7D6A13A6E77D21B39FD5368FDEC1A2CE6FAB6B4AA633CAACF68CB90988F0651A` |
+
+Fresh DataBaselineTest and actual browser were **not rerun** for this test-only helper change;
+their §39 sources/package are unchanged in production content and remain the actual evidence,
+not misrepresented as executions on `989bf5a9...`. Both fresh databases are retained; no broad
+cleanup. Post-run witness again found 26 migrator-owned tables, SELECT-only app history, retained
+F03 public V3, zero UUID schemas and stopped owned browser JVM/closed port.
+
+Author checks PASS: tracked UTF-8 secret scan (10 exact synthetic fixtures recognized, 233 known
+binary files skipped), 207 relative document links/63 heading anchors, source-ref resolution,
+whitespace and unchanged migration/dependency/source trace. Historical §1–38 is unchanged after
+LF normalization/TrimEnd; §1–33 retains `1001DE...C2E8`. Checklists are read-only 16/16 and 12/12;
+extension hooks absent. Verifier NOT-RUN.
+
+## Standards
+
+Internal follow-up source/documentation review: zero remaining documented breaches; expiry field
+finding resolved. Optional configuration wording was clarified to distinguish Server/build tools
+from the local browser runner. Optional duplicated logout fault-oracle shape remains a deferred
+refactoring opportunity, not an acceptance defect.
+
+## Spec
+
+Internal follow-up source/documentation review: zero remaining confirmed scope/requirement findings.
+One execution-description overclaim was corrected: Chrome observed rotation/attributes/refusal,
+while actual cookie removal is the Java CookieManager oracle. Historical execution was not
+rewritten. Both reviews are source reviews, not independent private-log execution/inspection.
+
+Summary: Standards 0 unresolved documented breaches; Spec 0 unresolved confirmed findings.
+Whole-F03-B external review and human acceptance PENDING; F03-B IN_PROGRESS, Issue #24 OPEN,
+combined T043 unchecked, Desktop successor separate, verifier NOT-RUN; no merge or Tracker action.
