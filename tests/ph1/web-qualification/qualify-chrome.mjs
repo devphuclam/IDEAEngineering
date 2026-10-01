@@ -142,9 +142,11 @@ try {
     const url = new URL(request.url());
     if (url.origin !== origin || !url.pathname.startsWith(identity)) return;
     const body = request.postData() ?? '';
-    outboundActor ||= /actor_?id/i.test(body) || /actor_?id/i.test(url.search);
+    outboundActor ||= /actor_?id/i.test(body) || /actor_?id/i.test(url.search)
+      || body.includes(fixtureData.actorId) || url.search.includes(fixtureData.actorId);
     const headerObservation = request.allHeaders().then(headers => {
-      outboundActor ||= Object.keys(headers).some(name => /actor[-_]?id/i.test(name));
+      outboundActor ||= Object.entries(headers).some(([name, value]) =>
+        /actor[-_]?id/i.test(name) || /actor[-_]?id/i.test(value) || value.includes(fixtureData.actorId));
     });
     pendingObservations.push(headerObservation);
     if (url.pathname === `${identity}login`) {
@@ -294,7 +296,7 @@ try {
     await secretCheck(page);
   });
   console.log(JSON.stringify({ disposition: 'PASS', browser: browser.version(), schema: fixtureData.schema,
-    applicationSource: '2fe89d481842f4cf26078c07d4b78fb3bdacd7c4', results,
+    applicationSource: '38b99f50de09370a8e8554cc80fc66a0afa70b62', results,
     observed: { csrfHeader: loginCsrfMatched, cookieAttributes: acceptedCookieProperties,
       authoritativeActorSent: outboundActor, secretLeak: observedSecretLeak }, statuses }));
 } catch {

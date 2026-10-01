@@ -9,8 +9,8 @@ run_id=${2:?32-hex run identifier required}
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 [[ "$root" == "/home/phuclam/idea-t043-browser-$run_id" ]] || exit 2
 java_root=/opt/idea/tools/jdk-25.0.4.1+1
-jar=/home/phuclam/idea-t043-package-green-2fe89d4/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar
-expected_jar=733f93d6ae4a5d9db42e79ec6e4f60812c89855fd2bb3508eeef815f98230c22
+jar=/home/phuclam/idea-f03b-closure-final-package-13/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar
+expected_jar=ac4f74e1fe5453b7716e13da970027ba403d695340974ca13503f3d8989332ff
 [[ "$(sha256sum "$jar" | cut -d ' ' -f 1)" == "$expected_jar" ]] || exit 2
 set -a
 source /home/phuclam/.config/idea/f03a-test.env
@@ -55,6 +55,11 @@ case "$action" in
           kill -0 "$pid" 2>/dev/null || break
           sleep 0.1
         done
+        # Refuse database cleanup while the owned JVM might still use its schema.
+        if kill -0 "$pid" 2>/dev/null; then
+          printf 'T043_SERVER_TERMINATION=BLOCKED; owned schema retained\n' >&2
+          exit 2
+        fi
       fi
     fi
     "$java_root/bin/java" -cp "$classpath" com.idea.ddm.identity.WebQualificationFixture cleanup "$run_id"
