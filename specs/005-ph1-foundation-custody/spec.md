@@ -2,7 +2,7 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.6` / Principal Product Author
+**Version / owner**: `0.7` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
 **Classification / verification**: `INTERNAL` / PH1 application results `NOT-RUN`
@@ -47,6 +47,20 @@ company accounts or claim production security approval. F03-A acceptance is unch
 - Q: Which Login Identity does reset target when an Account has more than one? → A: The Project Reviewer requires `loginIdentityId` on every RESET issuance, including single-login accounts. Validate that exact Login Identity's Account, Organization, expected security version, existing credential and ACTIVE/DISABLED eligibility. Never select a first row or infer a login. Redemption changes only that pinned Login Identity's credential; the Account version still increments and every old Account session is revoked. Other Login Identities keep their credentials and can establish fresh sessions when the Account is ACTIVE. V1–V6 remain immutable; T046 is the successor repair, not reopening historical T045 or rewriting evidence §20.
 - Q: What are the exact temporary-block boundaries and resource limits? → A: Use a rolling 15-minute failure window per normalized login; a failure exactly 15 minutes old no longer counts. Failure five starts a 15-minute block. During it, attempts neither increment failures nor reset/extend `blocked_until`; at that deadline retry is allowed. Successful eligible sign-in clears current failure state atomically with session establishment. Concurrent updates must be atomic. Keep generic refusal and equivalent qualified password work on blocked paths; arbitrary unknown login identifiers must not create unbounded durable state. This approval is for clarification/test planning only; implement throttling only after T046's external review and successor Spec Kit analyze.
 - Q: Must unknown login identifiers have their own failed-login state? → A: No. The Project Reviewer approved tracking only existing Login Identities. An unknown identifier creates zero failure-observation records, is always refused generically and retains the qualified dummy-password work. Existing identities retain the approved rolling-window/block rules; Account eligibility still determines whether sign-in is allowed. The choice applies only to this synthetic development profile, not a general request-rate or production denial-of-service guarantee.
+
+### Session 2026-10-01
+
+- Q: May the Web sign-in password temporarily exist in a password control or page JavaScript? → A: Yes, only for password entry and request submission. Controlled-input framework state is permitted when needed; it must not retain the password after submission or component unmount, including refusal or error paths. Do not persist or copy the password elsewhere, or expose it in a URL, DOM text, diagnostics, logs, localStorage/sessionStorage or retained evidence. CSRF may exist in RAM; the session cookie must never be readable by page JavaScript. This clarifies the Web boundary, not the separate Desktop/WebView2 custody rule. At the time of this clarification, approval of the remaining T043 HTTPS/browser seam and test contract was pending; the later approval is recorded below and does not rewrite this historical clarification.
+
+This delivery clarification supersedes only the overbroad Web password wording in the plan and
+boundary contract. It preserves the frozen product approvals and all historical execution evidence;
+spec v0.6's authentication, reset and throttling semantics are unchanged.
+
+The Project Reviewer subsequently approved the T043 Web seam/test contract on 2026-10-01,
+subject to same-origin delivery by the actual IDEA Server, qualified package sourcing and
+normally trusted HTTPS. See [Web qualification contract](contracts/ph1-boundaries.md#t043-web-qualification-contract).
+That later approval authorizes Web implementation after environment prerequisites; it does not
+claim execution or approve the separate Desktop checkpoint.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -128,6 +142,7 @@ choices, not universal security rules or company policy):
 | Failed-login block | For each existing Login Identity, apply a rolling 15-minute failure window using the normalized login lookup; failures exactly 15 minutes old are excluded. Failure five starts a 15-minute block. Attempts during it neither count nor reset/extend the deadline; at `blocked_until` retry is allowed. Successful eligible sign-in clears that login's failure state atomically with session establishment; concurrent updates are atomic. Generic refusal retains equivalent qualified password work even when blocked. This never changes Account.status or identity. |
 | Unknown login identifiers | Create zero failure-observation records. Always refuse generically using the qualified dummy-password path; do not create a Login Identity, account or authenticated session. An anonymous servlet session used for CSRF is not an authenticated session. Attempts before an identity exists do not become its failure history if it is subsequently provisioned. This does not qualify a system-wide request-rate control. |
 | MFA | Not required for synthetic development accounts; live policy remains unqualified. |
+| Web credential lifecycle (T043) | Password exists only transiently in the password control, necessary controlled-input state and request submission. Clear application password control/state after submission and on unmount, including refusal/error paths; do not restore it for a retry. Do not persist/copy it elsewhere or expose it in URL, DOM text, diagnostics, logs, browser localStorage/sessionStorage or retained evidence. CSRF may remain in RAM; page JavaScript cannot read the session cookie. This is a planned qualification obligation, not an executed result. |
 
 **Fast expiry verification**: Check the configured profile values, including 2-hour idle and
 8-hour absolute limits, then exercise setup-proof expiry, idle/absolute expiry, failed-login

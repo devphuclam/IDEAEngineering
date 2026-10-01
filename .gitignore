@@ -10,6 +10,9 @@ build/
 *.log
 .env*
 
+# Generated Web bundle copied into the Server classpath by the T043 build script
+/apps/server/src/main/resources/static/
+
 # IDEA Core v0 local configuration and runtime data
 *.env.local
 config/*.local

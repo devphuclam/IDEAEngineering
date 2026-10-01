@@ -142,8 +142,15 @@ and use Secure/HttpOnly/SameSite cookies with host-only scope under same-origin 
 failed-login block and setup proof behavior follows spec's development profile. Test-only
 loopback transport/timing overrides must be recorded and cannot weaken the normal profile or
 be exposed as a client-accessible control route. Native Desktop binding/protected-custody
-qualification is separate from a Java HTTP harness; no password or session secret enters page
-JavaScript. F04 retains the owner-commit race test, using a verified session reference.
+qualification is separate from a Java HTTP harness. Under spec's 2026-10-01 Web clarification,
+password may exist transiently in the password control, necessary controlled-input framework state
+and request submission. Clear application password control/state after submission and on unmount,
+including refusal/error paths; do not retain it for retry, persist/copy it elsewhere, or expose it
+in URL, DOM text, diagnostics, logs, localStorage/sessionStorage or retained evidence. CSRF may
+exist in RAM; page JavaScript must never read the session cookie. The separate Desktop/WebView2
+password/token custody rule is unchanged. The later T043 Web approval and prerequisites are
+recorded below; Q1's credential clarification alone was not implementation authority.
+F04 retains the owner-commit race test, using a verified session reference.
 
 T046 did not implement throttling. The separate T041 successor exercises this contract and spec
 v0.6's rolling failure window and before/at/after block deadlines, generic refusal with equivalent
@@ -200,3 +207,65 @@ not isolate which eligibility guard rejected the request. No cookie-adoption or 
 restoration path is added. First GREEN is previously implemented behavior newly qualified, not
 an invented RED → GREEN. Retain exact-source execution and affected regressions in
 [§28](../evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification).
+
+### T043 Web qualification contract
+
+**Approval:** Project Reviewer, 2026-10-01, Web only. This is the actual client qualification
+for FR-005/014, not a new product architecture or whole F03-B acceptance. Actual results are
+NOT-RUN until retained; Desktop is a separate checkpoint.
+
+**Boundary:** Build actual `apps/web` and serve its shell/assets from the actual IDEA Server
+at the same HTTPS origin as `/api/v1/identity/*`. Use installed Google Chrome on Windows
+(preflight inventory: 154.0.8037.92; recheck at execution). No substitute HTML/static server,
+JWT, browser-storage bearer or client-authoritative ActorId. Permit only the needed public
+GET shell/assets; APIs retain their existing authority. POST CSRF travels in the server-named
+header, which the browser does not automatically attach. Acquire it at startup and again
+after login/logout; hold it only in RAM.
+
+**Environment prerequisites, not RED:**
+
+- Use actual Server TLS at a controlled high port, real PostgreSQL, separate app/migrator roles
+  and only a test-owned UUID schema in the dedicated F03 test database. No public/dev/F02/Vault writes.
+- The test certificate must validate normally, have SANs for `localhost` and `127.0.0.1`,
+  and have user/IT-authorized trust. Record fingerprint, validity, SANs and trust scope before
+  execution. No TLS-warning click-through, `ignoreHTTPSErrors` or certificate-error launch flags.
+  A missing/untrusted/expired certificate is BLOCKED, not evidence of missing Web behavior.
+- Actual Chrome may be operated manually. Optional Playwright uses `channel: "chrome"`,
+  headed for the client run, only after exact dependency/version/license/provenance intake
+  and verified internal/approved package availability. No Internet npm install or Chromium download.
+  If no legitimate source exists, automation is BLOCKED; manual Chrome remains eligible.
+- Browser tooling must observe the required network/cookie facts without retaining secret values.
+  Record automation/manual method per case; a Java HTTP harness is not a replacement.
+
+**Expected oracles:**
+
+| Case | Actual Web/browser action and required result |
+|---|---|
+| W01 Same origin | Anonymous Chrome loads Server-served React shell and referenced built assets (200); protected session request is 401 and UI is signed out. A 401 shell or missing Web behavior is an intended integration RED. |
+| W02 Sign-in | Actual form acquires CSRF, submits login/password/header (200), then protected session returns 200. UI reports only the identity returned by Server; outbound requests carry no authoritative ActorId. |
+| W03 Wrong password | Actual form gets generic 401 and never shows authenticated success. Password control/application state is cleared after submission; no automatic credential retry. |
+| W04 Bad CSRF | External qualification tooling omits/changes the header on actual Web submission: login/logout get 403. UI does not report success; refused logout does not claim the eligible session ended. No app debug/CSRF-bypass control. |
+| W05 Cookie | Chrome/network evidence observes IDEA_SESSION as Secure, HttpOnly, SameSite=Strict and Set-Cookie with no Domain (host-only). Page JavaScript cannot read it; fixation rotates proof without retaining either value. Config alone is insufficient. |
+| W06 Host scope | A cookie established at 127.0.0.1 is not sent to localhost on the same trusted fixture; protected request is 401. This qualifies browser cookie scoping, not a new application-host requirement. |
+| W07 Logout | Actual UI POST logout is 204; subsequent protected request is 401, UI clears identity, then fresh sign-in works with newly acquired CSRF. |
+| W08 Invalidation | A separate authorized synthetic fixture disables the target account. Its actual Web protected request gets 401 and UI clears authenticated identity; no refusal becomes success. |
+| W09 Reload | Reload with an eligible cookie obtains current identity from Server. Reload after logout/invalidation stays signed out; no new mechanism or stored-password submission restores authentication. |
+| W10 Error/secrets | Controlled request failure gives safe error/non-success UI, not stale authenticated success. Password may exist transiently only in its control/necessary framework state and submission; clear after submit/unmount, including errors. No persistence/copies in URL, DOM text, diagnostics, console, storage or evidence. CSRF is RAM-only; session cookie is never JavaScript-readable. |
+
+Negative CSRF and network-failure injection belong to external test tooling, not production controls.
+If manual tooling cannot exercise a mandatory oracle safely, that case stays BLOCKED/NOT-RUN;
+manual happy-path checks do not waive negative cases. Reuse existing Server expiry/reset/throttle
+qualification rather than repeating all matrices here.
+
+**Retained evidence:** Record exact Web and Server source SHAs (plus any dirty snapshot disclosure),
+Web dist/JAR and lockfile hashes, actual browser/OS/Java/Node/PostgreSQL versions, HTTPS origin,
+certificate/trust witness, schema/roles, procedure, timestamps and expected/actual result per W case.
+Allowlist status codes, cookie names/attributes, secret-free UI text and Boolean rotation/leak checks.
+Do not retain request bodies, passwords, CSRF/proof/cookie values, raw HAR, storage state or traces
+that capture them. Screenshots only after secret controls are cleared. Disable unsafe automatic
+failure artifacts too; inspect/sanitize before retaining evidence, including failed runs.
+
+PASS requires all applicable mandatory oracles executed on actual Web/Chrome/HTTPS with evidence.
+Environment failure is BLOCKED; an unexecuted case is NOT-RUN; an incorrect app result is FAIL.
+This does not qualify Desktop, other browsers, managed deployment, production security, HA,
+SPEC-OPEN-03/06 or T036. Keep F03-B IN_PROGRESS, Issue #24 open, verifier NOT-RUN and no merge.

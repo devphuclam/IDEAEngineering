@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-10-01 | **Spec**: [PH1 specification v0.6](spec.md)
+**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-10-01 | **Spec**: [PH1 specification v0.7](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -123,9 +123,15 @@ The Project Reviewer approved the real HTTP/real PostgreSQL test seam on 2026-09
    temporary schema inside the existing dedicated F03-A test database; never migrate/clean its
    public schema, the F02 database, `idea_ddm_dev` or Vault. A test failure is not a card PASS.
 7. Qualify browser cookie/CSRF behavior and the native-client binding before claiming the
-   corresponding client path. Same-origin HTTPS, Secure/HttpOnly/SameSite cookies and no
-   JavaScript-visible credentials remain the baseline. A loopback HTTP harness must disclose
-   its test-only transport/cookie overrides; it cannot qualify HTTPS or Windows protected custody.
+   corresponding client path. Retain same-origin HTTPS and Secure/HttpOnly/SameSite cookies;
+   page JavaScript must never read the session cookie. Web password entry/submission may use
+   transient controlled-input state, cleared after submission and on unmount even on refusal/error.
+   Do not persist/copy the password elsewhere or expose it in URL, DOM text, diagnostics, logs,
+   browser storage or retained evidence. CSRF may remain in RAM. This follows spec's 2026-10-01
+   Web clarification; the separate Desktop/WebView2 custody boundary is unchanged. The Project
+   Reviewer approved the [T043 Web contract](contracts/ph1-boundaries.md#t043-web-qualification-contract)
+   on 2026-10-01, with environment prerequisites below. A loopback HTTP harness must disclose its
+   test-only transport/cookie overrides; it cannot qualify HTTPS or Windows protected custody.
 
 Pre/post-design Constitution check: this refinement implements FR-005/014 under the existing
 PH1 authority, keeps live policy `SPEC-OPEN-06` open, and retains pre-use intake and truthful
@@ -153,8 +159,34 @@ existing detailed expiry/logout/reset/re-enable tests; add no production mechani
 qualification exposes a gap. A first GREEN is qualification of existing behavior, not a
 fabricated RED → GREEN. Exact execution and review are in
 [§28](evidence/F03-identity-results.md#28-server-restart-and-session-continuity-qualification).
-Request external review of this slice before subsequent qualification.
+The Project Reviewer relayed external PASS WITH NOTES for the restart slice and then authorized
+T043 Web first; preserve the historical execution and its private-log review limitation.
 F03-B remains IN_PROGRESS; Issue #24 open, verifier NOT-RUN and no merge.
+
+### T043 Web implementation order (approved 2026-10-01)
+
+Use the actual `apps/web` React CSR build served by the actual IDEA Server, matching the selected
+Tech baseline. Packaging/copying `apps/web/dist` into Server static resources and narrowly public
+GET shell/assets are part of this slice; a test-only HTML page or separate static server is not.
+API authority remains deny-by-default. Do not add a general API or SPA fallback that hides refusals.
+
+Before the first RED, qualify normally trusted test HTTPS and the browser/tooling prerequisites
+in the [contract](contracts/ph1-boundaries.md#t043-web-qualification-contract). Direct Server TLS
+on an isolated high port is a test fixture, not evidence for the selected managed deployment.
+The operator authorized the Windows current-user certificate store on 2026-10-01; present the
+exact certificate fingerprint before trust. Leave machine-wide stores unchanged.
+
+Use installed branded Chrome. Playwright is optional: exact version, transitive license/provenance
+intake and an internal/approved package source must precede use. Do not install packages from
+the Internet or download Chromium. If automation is unavailable, retain BLOCKED for automation
+and use the approved manual actual-Chrome procedure; missing TLS trust blocks browser execution.
+
+Run vertical slices: same-origin shell/assets → CSRF → login/protected-session UI → logout/refusal
+→ observed cookie/security properties → invalidated-session UI. Each first RED must expose missing
+actual Web behavior/integration, not a certificate or package failure. Qualify previously correct
+Server behavior without inventing a RED or changing it unnecessarily. Retain exact Web/Server
+source and artifacts per checkpoint. Desktop follows separately; T043 remains open until both
+clients' applicable evidence is complete.
 
 ## Complexity Tracking
 

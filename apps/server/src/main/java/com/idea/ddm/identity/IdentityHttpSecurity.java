@@ -69,7 +69,8 @@ class IdentityHttpSecurity {
             SessionService sessions, SecurityContextRepository identityContexts) throws Exception {
         var signIns = new SignInBoundary(sessions);
         http.authorizeHttpRequests(access -> access
-                .requestMatchers(HttpMethod.GET, "/health", "/health/database", "/api/v1/identity/csrf").permitAll()
+                .requestMatchers(HttpMethod.GET, "/", "/index.html", "/assets/**", "/favicon.ico",
+                        "/health", "/health/database", "/api/v1/identity/csrf").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/identity/login", "/api/v1/identity/credentials").permitAll()
                 .anyRequest().authenticated())
                 // One authoritative attempt: no parent provider fallback repeating a refusal.

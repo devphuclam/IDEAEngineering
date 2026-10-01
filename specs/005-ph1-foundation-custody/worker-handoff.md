@@ -41,9 +41,9 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B restart/session-continuity handoff
+## Current F03-B Web qualification handoff
 
-Use spec v0.6, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
+Use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
 rewrite evidence §20. T046 ran from `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` and received
 external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151` (§22). Preserve V1–V6
@@ -77,6 +77,18 @@ ACID: no tentative proof is eligible without committed database state. T043 stil
 ordered client steps: qualification seam → failing test/evidence contract → implementation if
 needed → actual Web/Desktop evidence. Java HTTP harness results cannot replace client qualification.
 
+For T043, follow spec's accepted 2026-10-01 Web credential-lifecycle clarification. Do not impose
+an absolute ban on controlled-input state: clear password control/state after submission and
+unmount, including refusal/error, with no persistence, copies elsewhere or diagnostic/evidence
+exposure. CSRF may remain in RAM; the session cookie is never page-JavaScript-readable. Desktop
+custody is unchanged. The Project Reviewer approved Web first on 2026-10-01. Read the
+[T043 Web contract](contracts/ph1-boundaries.md#t043-web-qualification-contract) before code:
+qualify trusted HTTPS and legitimate tooling, then one actual Web behavior RED → minimal GREEN.
+Serve the built React application from actual IDEA Server; include packaging and narrowly public
+GET assets. Optional Playwright uses installed Chrome only after intake/approved package sourcing;
+no Internet install. Manual actual Chrome is allowed but cannot waive blocked mandatory oracles.
+Missing trust/package is an environment blocker, never the Web RED. Desktop stays separate.
+
 Keep F03-B IN_PROGRESS, Issue #24 open and verifier NOT-RUN. No merge or whole-card PASS.
 
 The authorized HTTP account create/disable/re-enable slice ran from
@@ -96,8 +108,9 @@ actual result. The test also witnesses unchanged identity/credential and histori
 pre-revoked/idle-expired refusal, and PostgreSQL throttle survival. Existing behavior was GREEN
 on first qualification; production code, dependencies and V1–V7 are unchanged.
 
-Next action: external restart-checkpoint review. Repair in-scope findings with affected tests
-before further qualification. Preserve historical evidence and immutable migrations. Remaining
+Next action: T043 Web environment preflight, then the contract's ordered vertical slices.
+External restart PASS WITH NOTES was relayed by the Project Reviewer; preserve its private-log
+access limitation and historical evidence. Preserve immutable migrations. Remaining
 issuer/logout profiles, actual Web/Desktop and fresh public V4–V7/data regression are outstanding;
 this Java HTTP runner is not client qualification. F04 owns its separate owner-command race.
 
