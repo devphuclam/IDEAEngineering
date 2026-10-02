@@ -329,6 +329,19 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void suppressedRequiredEventIsFailureNotPartialSuccess() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        try (var fault = installAppendFailure(operation, "owner_committed_event", true)) {
+            assertThrows(SQLException.class, () -> owner.execute(session.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-suppressed-event",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertCompanions(operation, 0, 0, 0);
+            assertOperationUnlocked(operation);
+        }
+    }
+
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
         var signedIn = fixture.signInThroughRealHttp();
         var operation = UUID.randomUUID();
