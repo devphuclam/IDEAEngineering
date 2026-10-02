@@ -92,6 +92,29 @@ class F04SchemaTest {
         }
     }
 
+    @Test
+    void sampleResultAndAuditExposeCompatibleProvenanceSuccessorFields() throws Exception {
+        try (var connection = open("app"); var query = connection.prepareStatement(
+                "SELECT data_type,is_nullable FROM information_schema.columns "
+                        + "WHERE table_schema=? AND table_name=? AND column_name=?")) {
+            query.setString(1, schema);
+            query.setString(2, "sample_owner_operation");
+            query.setString(3, "organization_id");
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next(), "Sample result must retain its authoritative Organization snapshot");
+                assertEquals("uuid", row.getString(1));
+                assertEquals("NO", row.getString(2));
+            }
+            query.setString(2, "audit_evidence");
+            query.setString(3, "correlation_id");
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next(), "F04 Audit must store the original correlation directly");
+                assertEquals("character varying", row.getString(1));
+                assertEquals("YES", row.getString(2), "Do not fabricate or require correlation on historical F03 rows");
+            }
+        }
+    }
+
     private static UUID[] seedIdentity(Connection connection) throws SQLException {
         var actor = UUID.randomUUID();
         var organization = UUID.randomUUID();
