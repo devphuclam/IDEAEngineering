@@ -56,7 +56,7 @@
     "securitySchemes": {"ideaSession": {"type": "apiKey", "in": "cookie", "name": "IDEA_SESSION", "description": "Ordinary HttpOnly Server session. Sign in at IDEA Web; never paste cookie/proof. Browser sends cookie automatically; this console has no Authorize input."}},
     "parameters": {"Account": {"name": "account", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}},
     "schemas": {
-      "IssuedProof": {"type": "object", "required": ["proof", "expiresAt"], "properties": {"proof": {"type": "string", "writeOnly": true}, "expiresAt": {"type": "string", "format": "date-time"}}},
+      "IssuedProof": {"type": "object", "required": ["proof", "expiresAt"], "properties": {"proof": {"type": "string", "readOnly": true, "description": "Sensitive Server-issued response; this operation is documentation-only"}, "expiresAt": {"type": "string", "format": "date-time", "readOnly": true}}},
       "Session": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid", "readOnly": true}, "accountId": {"type": "string", "format": "uuid", "readOnly": true}}},
       "CreateAccount": {"type": "object", "required": ["operationId", "organizationId", "displayName", "login"], "properties": {"operationId": {"type": "string", "format": "uuid"}, "organizationId": {"type": "string", "format": "uuid"}, "displayName": {"type": "string"}, "login": {"type": "string"}}},
       "CreatedAccount": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid"}, "accountId": {"type": "string", "format": "uuid"}, "loginIdentityId": {"type": "string", "format": "uuid"}, "status": {"type": "string", "enum": ["PENDING"]}, "securityVersion": {"type": "integer", "format": "int64"}}},
