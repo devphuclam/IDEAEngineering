@@ -5,6 +5,20 @@ umask 077
 root=${IDEA_PREVIEW_ROOT:-/home/phuclam/.local/share/idea/dev-preview-26}
 action=${1:-status}
 case "$action" in start|status|stop) ;; *) echo 'BACKEND_ERROR=INVALID_ACTION'; exit 2 ;; esac
+refuse_configuration_overrides() {
+  local entry name
+  while IFS= read -r -d '' entry; do
+    name=${entry%%=*}
+    case "${name^^}" in
+      SPRING_*|SPRING.*|SERVER_*|SERVER.*|JAVA_TOOL_OPTIONS|JDK_JAVA_OPTIONS|_JAVA_OPTIONS)
+        echo 'BACKEND_ERROR=ENVIRONMENT_OVERRIDE_REFUSED; Start requires controlled preview configuration.'
+        exit 2 ;;
+    esac
+  done < <(env -0)
+}
+# Refuse inherited configuration before taking a lock or launching anything. Status/Stop
+# must remain available to inspect/stop an owned runtime from the same shell.
+[[ $action != start ]] || refuse_configuration_overrides
 if [[ ! -f "$root/provisioned" || ! -f "$root/runtime.env" ]]; then
   echo 'BACKEND_STATE=NOT_PROVISIONED'
   exit 3
@@ -81,11 +95,15 @@ fi
 [[ -z $(ss -H -ltn 'sport = :18444') ]] || { echo 'BACKEND_ERROR=REMOTE_PORT_OCCUPIED'; exit 2; }
 [[ ! -L $jar && $(sha256sum "$jar" | cut -d ' ' -f 1) == ac4f74e1fe5453b7716e13da970027ba403d695340974ca13503f3d8989332ff ]] || { echo 'BACKEND_ERROR=ARTIFACT_HASH_MISMATCH'; exit 2; }
 set -a; source "$root/runtime.env"; set +a
+refuse_configuration_overrides
 [[ $IDEA_DATABASE_NAME == idea_ddm_preview_20261001_26 && $IDEA_DATABASE_APP_USER == idea_ddm_app && $IDEA_DATABASE_HOST == 127.0.0.1 && $IDEA_DATABASE_PORT == 5432 ]] || { echo 'BACKEND_ERROR=PREVIEW_CONFIG_MISMATCH'; exit 2; }
 unset IDEA_DATABASE_MIGRATION_PASSWORD IDEA_DATABASE_MIGRATION_USER SPRING_APPLICATION_JSON JAVA_TOOL_OPTIONS JDK_JAVA_OPTIONS _JAVA_OPTIONS
 unset IDEA_IDENTITY_SYNTHETICCREDENTIALDELIVERY_ENABLED IDEA_IDENTITY_SYNTHETIC_CREDENTIAL_DELIVERY_ENABLED
 export IDEA_SERVER_TLS_KEY_STORE_PASSWORD
 IDEA_SERVER_TLS_KEY_STORE_PASSWORD=$(< /home/phuclam/idea-f03b-web-tls-739db09df96d4d97ac69fce17bc32fae/store-password)
+# Only the inspected packaged configuration may supply Spring properties; do not
+# discover application.properties/yaml in the runtime directory or its config/ folder.
+export SPRING_CONFIG_LOCATION=classpath:/application.properties
 cd -- "$root"
 nohup "$java" -jar "$jar" --server.address=127.0.0.1 --server.port=18444 >"$root/server.log" 2>&1 < /dev/null 9>&- &
 pid=$!

@@ -2,12 +2,12 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / version / status | `IE-VER-DEVACCESS-LAUNCHER-001` / `0.1` / Draft |
+| Stable ID / version / status | `IE-VER-DEVACCESS-LAUNCHER-001` / `0.2` / Draft |
 | Class / normativity | Engineering verification record / INFORMATIVE; no product gate or deployment approval |
-| Owner / author / reviewer | Engineering / Codex / Project Reviewer Nguyen Huynh Phuc Lam; focused external source review NOT-RUN |
+| Owner / author / reviewer | Engineering / Codex / Project Reviewer Nguyen Huynh Phuc Lam; agent Standards/Spec source review recorded below; independent external review NOT-RUN |
 | Authority / applicability | User-approved launcher seam and three-stage setup, 2026-10-01; Issue #26 US1 only |
 | Baseline | Launcher worktree snapshot over `92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0`; exact executed file hashes below |
-| Evidence date / classification | 2026-10-01 / INTERNAL |
+| Evidence date / classification | 2026-10-01 original execution; 2026-10-02 integration checks / INTERNAL |
 | Upstream / downstream | [spec](../spec.md), [contract](../contracts/launcher.md), user confirmations / [tasks](../tasks.md), [handoff](../quickstart.md) |
 | Retention / change / supersession | Retain in Git with Issue #26; new record, no predecessor; private runtime state remains on host, outside Git |
 | Review trigger | Launcher/helper/artifact, trust, credentials/data scope or startup lifecycle changes |
@@ -56,7 +56,8 @@ no artificial application change was made merely to produce another RED.
 Status is read-only; Start/Stop use bounded ownership locks. Remote ownership requires PID/start
 ticks, executable, working directory and all Java arguments. Local ownership requires PID/start
 time, SSH executable and exact saved command line. Foreign port/process conflicts refuse action.
-The current Backend was left RUNNING for the user to interact with, not stopped by handoff.
+At the 2026-10-01 handoff the Backend was left RUNNING for the user to interact with.
+This is not a claim about availability on a later day.
 
 ## Exact executed snapshot
 
@@ -92,7 +93,8 @@ project template (newline normalization only).
   No F03-B regression was rerun or claimed from this unchanged retained JAR.
 - Raw sudo/console-password transcripts are deliberately not captured. The record relies on user
   confirmations, sanitized command results and exact file hashes, not independent raw-log review.
-- Focused external code review, whole-feature acceptance, Swagger, push/PR/integration: NOT-RUN.
+- At the original 2026-10-01 handoff: focused external code review, whole-feature acceptance,
+  Swagger, push/PR/integration: NOT-RUN. Successor source review is recorded below.
 - `verify-template`: NOT-RUN by user instruction. No commercial/T036/legal/production clearance.
 - Main's three local progress files and the prior F03-B worktree's closure documentation were
   preserved. No timer started, no Issue #24 reopen, no PR #25 merge inferred.
@@ -106,3 +108,37 @@ project template (newline normalization only).
   not `verify-template`, and its scope is tracked UTF-8 source, not private server configuration.
 - Spec Kit implementation hooks: no `.specify/extensions.yml`; none dispatched. US2 and remaining
   US1 negative qualification are incomplete; no whole-feature completion/acceptance asserted.
+
+## 2026-10-02 integration review and bounded configuration repair
+
+User explicitly requested main integration of the launcher. F03-B was already integrated at main
+`a5498e2b3558bb02663cc4fab2de8e82d55dfca4`; launcher delivery was committed as
+`f6b13dcadfb6b0463c2b822acbe57985d5a45a1a`. Merge `79e8e0573158de70ebf3ba9ccaa795a473aff29d`
+brings that main baseline into the feature branch without changing launcher bytes or replacing
+main's progress/closure records. This section does not assert a remote publication outcome.
+
+- Standards axis: 0 findings. Spec axis: one conditional P2 configuration-isolation finding,
+  repaired and source-reviewed as closed. No product scope or dependency change.
+- Finding: inherited Spring overrides could supersede the validated preview database settings.
+  Start now rejects Spring/servlet/JVM override families before side effects and after reading
+  private runtime configuration, then pins configuration discovery to packaged
+  `classpath:/application.properties`. Status/Stop remain usable. Values are never printed.
+- Same approved public Start/Status/Stop seam: new environment contract test initially failed
+  (Start returned unprovisioned exit 3 rather than override refusal exit 2). Successor GREEN:
+  3 groups PASS, including 13 additional override names and unchanged Status/Stop behavior.
+  A dotted-name probe also failed before the NUL-delimited environment-name scan repair.
+  Executed with installed Git Bash on Windows; this is refusal qualification, not Linux runtime
+  or PostgreSQL qualification. No package install/download or private configuration read.
+- Repaired source SHA-256: `deploy/development/preview/backend.sh` =
+  `05D530136FF618132ECECB8003487914C6F295138C921A0F9AAF00714FC003BD`;
+  `tests/backend-dev-access/environment-contract.test.sh` =
+  `8C638A8E300FE182C01D8243E592D9D6BE3984C9994F25CE904230D38C9D4D9A`.
+  Original executed hashes above remain historical and are not rewritten.
+- Windows launcher prerequisite/CMD suite: 3/3 PASS again. Bash syntax check and diff whitespace
+  check: PASS. Repaired controller deployment and real Java/HTTPS/PG lifecycle: NOT-RUN; SSH to
+  `192.168.137.33` currently fails. No claim that today's Backend is READY or that the remote
+  helper already contains this successor repair.
+- GitHub publication attempts currently time out; local integration and remote publication
+  remain distinct. Issue #26 remains open for Swagger and outstanding US1 qualification.
+- Verifier remains NOT-RUN. Skip-CI commit markers respect the user's no-verifier instruction;
+  no repository rule/protection override is authorized or used.

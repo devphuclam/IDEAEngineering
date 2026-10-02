@@ -1,6 +1,6 @@
 # Backend development access — human handoff
 
-Procedure, not execution evidence. Branch `codex/backend-dev-access`, Issue #26.
+Procedure, not execution evidence. Issue #26; launcher integration authorized on 2026-10-02.
 
 ## Prerequisites
 
@@ -13,7 +13,8 @@ Passwords are entered only in the terminal/Web, never chat.
 Provisioning was completed on 2026-10-01 for `idea_ddm_preview_20261001_26` and login `preview.dev`.
 Use the test password chosen privately during setup. No password is in this document or Git.
 
-On Windows, double-click the root `IDEA-Dev.cmd` in this worktree and choose Start, Status or Stop.
+On Windows, double-click the root `IDEA-Dev.cmd` in the project checkout and choose Start, Status or Stop.
+Main checkout: `C:\Users\TD-999\Research\Projects\IDEA\IDEAEngineering`.
 It uses built-in Windows PowerShell 5.1, not `pwsh` or a Maven build.
 
 Command-line alternatives from this checkout:
@@ -42,14 +43,16 @@ it does not recreate the database. UUID inputs currently require no surrounding 
 ## Failures and limits
 
 - SSH failure: confirm hotspot/Server reachability and the IDEA key; never bypass host-key checks.
+- `ENVIRONMENT_OVERRIDE_REFUSED`: the SSH environment contains Spring/servlet/JVM overrides.
+  Use the controlled preview configuration, not an inherited override. Status/Stop remain available.
 - Local/remote port conflict: stop the unrelated owner yourself or ask for diagnosis; launcher does
   not adopt/kill it. Do not manually edit PID records to authorize Stop.
 - TLS failure: the current approved loopback certificate expires **2026-10-08 10:58:09 +07**.
   Renew/trust through a separately reviewed fingerprint; do not disable validation.
 - Setup/runtime credentials remain in mode-600 files under the mode-700 remote preview directory.
   Server startup uses only app credentials; migration is not run on Start.
-- This preview reuses the retained accepted package from PR #25; it does not depend on that PR
-  already being merged. No push/merge or delivery timer is inferred for this branch.
+- This preview reuses the retained accepted package from PR #25 (already merged into main).
+  Launcher integration does not rebuild it, add Swagger, change a product gate or start a timer.
 
 ## Verification
 
