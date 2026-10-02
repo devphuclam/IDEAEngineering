@@ -36,22 +36,29 @@ public final class SampleOwnerCommandService {
 
     public Result execute(ActorContext context, Command command) throws SQLException {
         Objects.requireNonNull(command, "Sample command required");
-        if (command.decision() != BusinessDecision.ACCEPT) throw new IllegalArgumentException("Unqualified sample decision");
         try (var connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             try {
                 var actor = eligibility.admit(connection, context);
-                UUID eventId;
-                do { eventId = UUID.randomUUID(); } while (eventId.equals(command.operationId()));
+                boolean accepted = command.decision() == BusinessDecision.ACCEPT;
+                UUID eventId = null;
+                if (accepted) {
+                    do { eventId = UUID.randomUUID(); } while (eventId.equals(command.operationId()));
+                }
+                // A deliberate refusal opens only its attributable refusal-evidence transaction.
+                // There is no accepted mutation to salvage or technical FAILED row to invent.
                 var result = new Result(command.operationId(), actor.actorId(), actor.organizationId(),
-                        command.correlationId(), Outcome.ACCEPTED, null, eventId);
+                        command.correlationId(), accepted ? Outcome.ACCEPTED : Outcome.REFUSED,
+                        accepted ? null : "SYNTHETIC_BUSINESS_REFUSAL", eventId);
                 appendOwnerResult(connection, result);
                 AuditEvidenceRepository.append(connection, new AuditEvidenceRepository.Entry(UUID.randomUUID(),
                         result.operationId(), result.actorId(), "sample.command", "SampleOwnerOperation",
                         result.operationId().toString(), result.outcome().name(), result.reasonCode(), result.correlationId()));
-                CommittedEventStore.append(connection, new CommittedEventStore.Entry(result.eventId(), result.operationId(),
-                        "PH1_SAMPLE_OWNER", result.organizationId(), "OPERATION_ACCEPTED", 1, result.actorId(), result.correlationId()));
-                eligibility.coordinateCommit(connection, context, actor, true);
+                if (accepted) {
+                    CommittedEventStore.append(connection, new CommittedEventStore.Entry(result.eventId(), result.operationId(),
+                            "PH1_SAMPLE_OWNER", result.organizationId(), "OPERATION_ACCEPTED", 1, result.actorId(), result.correlationId()));
+                }
+                eligibility.coordinateCommit(connection, context, actor, accepted);
                 connection.commit();
                 return result; // Success is not returned before the owner commit completes.
             } catch (SQLException | RuntimeException exception) {
