@@ -159,6 +159,39 @@ class F04SchemaTest {
         }
     }
 
+    @Test
+    void terminalSampleResultsAreInsertSelectOnlyAndRejectOwnerMutation() throws Exception {
+        try (var connection = open("migration")) {
+            for (var role : new String[] {"idea_ddm_app", "idea_ddm_migrator"}) {
+                for (var mutation : new String[] {"UPDATE sample_owner_operation SET command_kind='REWRITTEN'",
+                        "DELETE FROM sample_owner_operation", "TRUNCATE sample_owner_operation"}) {
+                    connection.setAutoCommit(false);
+                    try (var statement = connection.createStatement()) {
+                        var identity = seedIdentity(connection);
+                        statement.execute("SET LOCAL ROLE " + role);
+                        try (var insert = connection.prepareStatement("INSERT INTO sample_owner_operation"
+                                + "(operation_id,actor_id,organization_id,command_kind,correlation_id,outcome) "
+                                + "VALUES (?,?,?,'SYNTHETIC','f04-sample-test','ACCEPTED')")) {
+                            insert.setObject(1, UUID.randomUUID());
+                            insert.setObject(2, identity[0]);
+                            insert.setObject(3, identity[1]);
+                            assertEquals(1, insert.executeUpdate());
+                        }
+                        try (var row = statement.executeQuery("SELECT count(*) FROM sample_owner_operation")) {
+                            assertTrue(row.next());
+                            assertEquals(1, row.getInt(1));
+                        }
+                        var exception = assertThrows(SQLException.class, () -> statement.execute(mutation),
+                                "Terminal sample contents under " + role + ": " + mutation);
+                        assertEquals("42501", exception.getSQLState());
+                    } finally {
+                        connection.rollback();
+                    }
+                }
+            }
+        }
+    }
+
     private static UUID[] seedIdentity(Connection connection) throws SQLException {
         var actor = UUID.randomUUID();
         var organization = UUID.randomUUID();
