@@ -30,6 +30,14 @@ class AuditEvidenceRepositoryTest {
             AuditEvidenceRepository.append(connection, new AuditEvidenceRepository.Entry(
                     evidence, operation, identity[0], "sample.accept", "SAMPLE_OWNER",
                     operation.toString(), "ACCEPTED", null, correlation));
+            try (var observer = F04SchemaTest.open("app"); var query = observer.prepareStatement(
+                    "SELECT count(*) FROM audit_evidence WHERE evidence_id=?")) {
+                query.setObject(1, evidence);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next());
+                    assertEquals(0, row.getInt(1), "append must not commit or become visible before caller commit");
+                }
+            }
             try (var query = connection.prepareStatement("SELECT evidence_id,operation_id,actor_id,action,"
                     + "target_type,target_id,outcome,reason_code,correlation_id FROM audit_evidence WHERE evidence_id=?")) {
                 query.setObject(1, evidence);
@@ -189,6 +197,40 @@ class AuditEvidenceRepositoryTest {
             try (var fixture = F04SchemaTest.open("migration"); var statement = fixture.createStatement()) {
                 statement.execute("DROP TRIGGER f04_suppress_audit_insert ON audit_evidence");
                 statement.execute("DROP FUNCTION f04_suppress_audit_insert()");
+            }
+        }
+    }
+
+    @Test
+    void refusalAuditBecomesDurableOnlyWhenTheCallerCommits() throws Exception {
+        UUID[] identity;
+        try (var fixture = F04SchemaTest.open("migration")) {
+            identity = F04SchemaTest.seedIdentity(fixture);
+        }
+        var evidence = UUID.randomUUID();
+        var operation = UUID.randomUUID();
+        try (var connection = F04SchemaTest.open("app")) {
+            connection.setAutoCommit(false);
+            try {
+                AuditEvidenceRepository.append(connection, new AuditEvidenceRepository.Entry(
+                        evidence, operation, identity[0], "sample.refuse", "SAMPLE_OWNER",
+                        operation.toString(), "REFUSED", "SAMPLE_POLICY_REFUSAL", "original-correlation"));
+                connection.commit();
+            } finally {
+                connection.rollback();
+            }
+        }
+        try (var observer = F04SchemaTest.open("app"); var query = observer.prepareStatement(
+                "SELECT actor_id,operation_id,outcome,reason_code,correlation_id FROM audit_evidence WHERE evidence_id=?")) {
+            query.setObject(1, evidence);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                assertEquals(identity[0], row.getObject(1, UUID.class));
+                assertEquals(operation, row.getObject(2, UUID.class));
+                assertEquals("REFUSED", row.getString(3));
+                assertEquals("SAMPLE_POLICY_REFUSAL", row.getString(4));
+                assertEquals("original-correlation", row.getString(5));
+                assertFalse(row.next());
             }
         }
     }
