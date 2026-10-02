@@ -30,7 +30,7 @@ const identity = '/api/v1/identity/';
 const remote = `/home/phuclam/idea-devaccess-browser-${id}`;
 const key = join(homedir(), '.ssh/idea_ddm_dev_ed25519');
 const ssh = ['-i', key, '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=10'];
-let browser, tunnel, prepared = false, password = randomBytes(24).toString('hex');
+let browser, tunnel, page, prepared = false, password = randomBytes(24).toString('hex');
 let current = 'ENVIRONMENT', oracle = 'Prerequisites';
 const results = [], statuses = [], observations = [], secrets = new Set([password]);
 let csrf = null, csrfSubmitted = false, actorSent = false, diagnosticLeak = false;
@@ -79,7 +79,7 @@ try {
     { stdio: 'ignore', windowsHide: true });
   browser = await chromium.launch({ channel: 'chrome', headless: false });
   const context = await browser.newContext();
-  const page = await context.newPage(); page.setDefaultTimeout(15000);
+  page = await context.newPage(); page.setDefaultTimeout(15000);
   page.on('console', message => {
     requestMethodFailure ||= message.text().includes('toUpperCase');
     diagnosticLeak ||= [...secrets].some(value => value && message.text().includes(value));
@@ -174,7 +174,10 @@ try {
     : message.includes('ERR_HTTP_RESPONSE_CODE_FAILURE') ? 'HTTP_NAVIGATION_REFUSAL'
     : message.includes('ERR_CERT') ? 'TLS_TRUST' : message.includes('ERR_CONNECTION') ? 'CONNECTIVITY'
     : message.includes('Timeout') ? 'OBSERVATION_TIMEOUT' : failure?.name === 'AssertionError' ? 'ORACLE_REFUSAL' : 'HARNESS_ERROR';
-  console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, classification, requestMethodFailure,
+  const loadingProbe = page ? await page.evaluate(() => ({ swaggerGlobal: typeof SwaggerUIBundle,
+    methodFailure: document.body.innerText.includes('toUpperCase'), definitionFailure: document.body.innerText.includes('Failed to load API definition'),
+    interceptorRefusal: document.body.innerText.includes('API credential/CSRF'), operations: document.querySelectorAll('.opblock').length })).catch(() => null) : null;
+  console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, classification, requestMethodFailure, loadingProbe,
     completed: results, statuses })); process.exitCode = 1;
 } finally {
   password = ''; secrets.clear(); csrf = null;

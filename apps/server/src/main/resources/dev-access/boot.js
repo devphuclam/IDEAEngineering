@@ -38,7 +38,8 @@
         throw new Error("Chỉ gọi API cùng origin; API credential/CSRF chỉ để đọc tài liệu.");
       }
       request.credentials = "same-origin";
-      if (!["GET", "HEAD", "OPTIONS"].includes(request.method.toUpperCase())) {
+      // Definition download requests can omit method; Fetch/Swagger default them to GET.
+      if (!["GET", "HEAD", "OPTIONS"].includes((request.method || "GET").toUpperCase())) {
         const response = await fetch("/api/v1/identity/csrf", { credentials: "same-origin", cache: "no-store" });
         if (!response.ok) throw new Error("Không lấy được CSRF; chưa gửi yêu cầu thay đổi.");
         const csrf = await response.json();
