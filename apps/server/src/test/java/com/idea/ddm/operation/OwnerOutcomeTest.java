@@ -3,6 +3,8 @@ package com.idea.ddm.operation;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.identity.F04SessionFixture;
+import com.idea.ddm.identity.OwnerSessionEligibility;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,5 +28,71 @@ class OwnerOutcomeTest {
         var signedIn = fixture.signInThroughRealHttp();
         assertEquals(signedIn.expectedActorId(), signedIn.context().actorId());
         assertEquals(1, signedIn.context().securityVersion());
+    }
+
+    @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
+        var signedIn = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        String correlation = "f04-accepted-original-correlation";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var result = owner.execute(signedIn.context(), new SampleOwnerCommandService.Command(
+                operation, correlation, SampleOwnerCommandService.BusinessDecision.ACCEPT));
+
+        assertEquals(operation, result.operationId());
+        assertEquals(signedIn.expectedActorId(), result.actorId());
+        assertEquals(signedIn.expectedOrganizationId(), result.organizationId());
+        assertEquals(correlation, result.correlationId());
+        assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, result.outcome());
+        assertNull(result.reasonCode());
+        assertNotNull(result.eventId());
+        assertNotEquals(operation, result.eventId(), "An event occurrence is not the operation identity");
+
+        try (var connection = F04SchemaTest.open("app")) {
+            try (var query = connection.prepareStatement("SELECT actor_id,organization_id,command_kind,correlation_id,"
+                    + "outcome,reason_code FROM sample_owner_operation WHERE operation_id=?")) {
+                query.setObject(1, operation);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next());
+                    assertEquals(signedIn.expectedActorId(), row.getObject(1, UUID.class));
+                    assertEquals(signedIn.expectedOrganizationId(), row.getObject(2, UUID.class));
+                    assertEquals("SYNTHETIC_SAMPLE_COMMAND", row.getString(3));
+                    assertEquals(correlation, row.getString(4));
+                    assertEquals("ACCEPTED", row.getString(5));
+                    assertNull(row.getString(6));
+                    assertFalse(row.next(), "Exactly one authoritative owner result");
+                }
+            }
+            try (var query = connection.prepareStatement("SELECT actor_id,action,target_type,target_id,outcome,"
+                    + "reason_code,correlation_id FROM audit_evidence WHERE operation_id=?")) {
+                query.setObject(1, operation);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next());
+                    assertEquals(signedIn.expectedActorId(), row.getObject(1, UUID.class));
+                    assertEquals("sample.command", row.getString(2));
+                    assertEquals("SampleOwnerOperation", row.getString(3));
+                    assertEquals(operation.toString(), row.getString(4));
+                    assertEquals("ACCEPTED", row.getString(5));
+                    assertNull(row.getString(6));
+                    assertEquals(correlation, row.getString(7));
+                    assertFalse(row.next(), "Exactly one required owner Audit");
+                }
+            }
+            try (var query = connection.prepareStatement("SELECT event_id,producer_owner,organization_id,event_kind,"
+                    + "contract_version,actor_id,correlation_id,recorded_at FROM owner_committed_event WHERE operation_id=?")) {
+                query.setObject(1, operation);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next());
+                    assertEquals(result.eventId(), row.getObject(1, UUID.class));
+                    assertEquals("PH1_SAMPLE_OWNER", row.getString(2));
+                    assertEquals(signedIn.expectedOrganizationId(), row.getObject(3, UUID.class));
+                    assertEquals("OPERATION_ACCEPTED", row.getString(4));
+                    assertEquals(1, row.getInt(5));
+                    assertEquals(signedIn.expectedActorId(), row.getObject(6, UUID.class));
+                    assertEquals(correlation, row.getString(7));
+                    assertNotNull(row.getTimestamp(8), "DB records the committed envelope timestamp");
+                    assertFalse(row.next(), "Exactly one committed sample event");
+                }
+            }
+        }
     }
 }

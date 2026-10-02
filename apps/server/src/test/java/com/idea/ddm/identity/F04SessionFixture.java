@@ -19,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 import javax.sql.DataSource;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.server.context.WebServerApplicationContext;
@@ -49,7 +50,7 @@ public final class F04SessionFixture implements AutoCloseable {
         assertEquals(AdministratorBootstrap.State.INITIALIZED, identity.state());
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
                 .initializers(context -> context.getBeanFactory().registerSingleton("f04TestPrincipalCapture",
-                        new PrincipalCapture(captured)))
+                        new PrincipalCapture(captured, () -> context.getBean(SessionService.class))))
                 .run("--server.address=127.0.0.1", "--server.port=0",
                         "--spring.datasource.url=" + F04SchemaTest.url(),
                         "--spring.datasource.username=idea_ddm_app", "--spring.flyway.enabled=false",
@@ -114,7 +115,11 @@ public final class F04SessionFixture implements AutoCloseable {
 
     private static final class PrincipalCapture extends OncePerRequestFilter {
         private final AtomicReference<ActorContext> captured;
-        PrincipalCapture(AtomicReference<ActorContext> captured) { this.captured = captured; }
+        private final Supplier<SessionService> sessions;
+        PrincipalCapture(AtomicReference<ActorContext> captured, Supplier<SessionService> sessions) {
+            this.captured = captured;
+            this.sessions = sessions;
+        }
 
         @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                 FilterChain chain) throws ServletException, IOException {
@@ -125,7 +130,7 @@ public final class F04SessionFixture implements AutoCloseable {
                 if (authentication != null && authentication.isAuthenticated()
                         && authentication.getPrincipal() instanceof SessionService.Identity identity) {
                     // Same established principal as the qualified route, not request parameters/headers.
-                    captured.set(new ActorContext(identity.actorId(), identity.securityVersion(), identity.sessionId()));
+                    captured.set(sessions.get().context(identity));
                 }
             }
         }
