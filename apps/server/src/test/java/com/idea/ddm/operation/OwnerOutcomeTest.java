@@ -442,6 +442,33 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void heldOperationLockTimesOutWithoutCommitAndRetryCanProceed() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.pooledAppDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var executor = Executors.newSingleThreadExecutor();
+        try (var blocker = F04SchemaTest.open("migration")) {
+            advisory(blocker, "pg_advisory_lock", operation.hashCode());
+            var attempt = executor.submit(() -> owner.execute(session.context(), new SampleOwnerCommandService.Command(
+                    operation, "f04-c-lock-timeout", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            try {
+                awaitOperationWaiters(blocker, operation, 1);
+                var failure = assertThrows(java.util.concurrent.ExecutionException.class, () -> attempt.get(8, TimeUnit.SECONDS));
+                var sql = assertInstanceOf(SQLException.class, failure.getCause());
+                assertEquals("57014", sql.getSQLState(), "Actual PostgreSQL acquisition cancellation, not a test sleep");
+                assertCompanions(operation, 0, 0, 0);
+            } finally { advisory(blocker, "pg_advisory_unlock", operation.hashCode()); }
+            assertOperationUnlocked(operation);
+            assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, owner.execute(session.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-after-timeout",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT)).outcome());
+            assertCompanions(operation, 1, 1, 1);
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+        }
+    }
+
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
         var signedIn = fixture.signInThroughRealHttp();
         var operation = UUID.randomUUID();
