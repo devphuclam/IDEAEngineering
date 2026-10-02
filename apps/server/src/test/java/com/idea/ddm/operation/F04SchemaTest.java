@@ -310,8 +310,20 @@ public class F04SchemaTest {
     }
 
     public static Connection open(String role) throws Exception {
-        return DriverManager.getConnection(url(), "idea_ddm_" + (role.equals("app") ? "app" : "migrator"),
-                env(role.equals("app") ? "IDEA_DATABASE_APP_PASSWORD" : "IDEA_DATABASE_MIGRATION_PASSWORD"));
+        String user;
+        String credentialSource;
+        switch (role) {
+            case "app" -> {
+                user = "idea_ddm_app";
+                credentialSource = "IDEA_DATABASE_APP_PASSWORD";
+            }
+            case "migration" -> {
+                user = "idea_ddm_migrator";
+                credentialSource = "IDEA_DATABASE_MIGRATION_PASSWORD";
+            }
+            default -> throw new IllegalArgumentException("Unknown F04 fixture database role");
+        }
+        return DriverManager.getConnection(url(), user, env(credentialSource));
     }
 
     public static String url() {
