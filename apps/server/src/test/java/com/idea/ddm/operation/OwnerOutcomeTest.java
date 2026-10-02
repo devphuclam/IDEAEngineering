@@ -95,4 +95,51 @@ class OwnerOutcomeTest {
             }
         }
     }
+
+    @Test void businessRefusalRetainsOwnerAndRequiredAuditButNoCommittedEvent() throws Exception {
+        var signedIn = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        String correlation = "f04-refused-original-correlation";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var result = owner.execute(signedIn.context(), new SampleOwnerCommandService.Command(
+                operation, correlation, SampleOwnerCommandService.BusinessDecision.REFUSE));
+        assertEquals(operation, result.operationId());
+        assertEquals(signedIn.expectedActorId(), result.actorId());
+        assertEquals(signedIn.expectedOrganizationId(), result.organizationId());
+        assertEquals(correlation, result.correlationId());
+        assertEquals(SampleOwnerCommandService.Outcome.REFUSED, result.outcome());
+        assertEquals("SYNTHETIC_BUSINESS_REFUSAL", result.reasonCode());
+        assertNull(result.eventId(), "Business refusal is not a committed change event");
+
+        try (var connection = F04SchemaTest.open("app")) {
+            try (var query = connection.prepareStatement("SELECT o.actor_id,o.organization_id,o.correlation_id,o.outcome,"
+                    + "o.reason_code,a.actor_id,a.correlation_id,a.outcome,a.reason_code,a.action,a.target_type,a.target_id "
+                    + "FROM sample_owner_operation o JOIN audit_evidence a USING(operation_id) WHERE o.operation_id=?")) {
+                query.setObject(1, operation);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next(), "Durable refusal must have its required Audit companion");
+                    assertEquals(signedIn.expectedActorId(), row.getObject(1, UUID.class));
+                    assertEquals(signedIn.expectedOrganizationId(), row.getObject(2, UUID.class));
+                    assertEquals(correlation, row.getString(3));
+                    assertEquals("REFUSED", row.getString(4));
+                    assertEquals("SYNTHETIC_BUSINESS_REFUSAL", row.getString(5));
+                    assertEquals(signedIn.expectedActorId(), row.getObject(6, UUID.class));
+                    assertEquals(correlation, row.getString(7));
+                    assertEquals("REFUSED", row.getString(8));
+                    assertEquals("SYNTHETIC_BUSINESS_REFUSAL", row.getString(9));
+                    assertEquals("sample.command", row.getString(10));
+                    assertEquals("SampleOwnerOperation", row.getString(11));
+                    assertEquals(operation.toString(), row.getString(12));
+                    assertFalse(row.next(), "No duplicate refusal/Audit companion");
+                }
+            }
+            try (var query = connection.prepareStatement("SELECT count(*) FROM owner_committed_event WHERE operation_id=?")) {
+                query.setObject(1, operation);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next());
+                    assertEquals(0, row.getInt(1), "REFUSED must never emit the sample accepted event");
+                }
+            }
+        }
+    }
 }
