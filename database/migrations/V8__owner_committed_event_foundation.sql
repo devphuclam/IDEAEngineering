@@ -14,3 +14,14 @@ CREATE TABLE owner_committed_event (
 
 GRANT SELECT, INSERT ON owner_committed_event TO idea_ddm_app;
 REVOKE UPDATE, DELETE, TRUNCATE ON owner_committed_event FROM idea_ddm_app;
+
+CREATE FUNCTION reject_retained_owner_mutation() RETURNS TRIGGER
+LANGUAGE plpgsql AS $$
+BEGIN
+    RAISE EXCEPTION 'retained owner content is append-only' USING ERRCODE = '42501';
+END;
+$$;
+
+CREATE TRIGGER owner_committed_event_append_only
+    BEFORE UPDATE OR DELETE OR TRUNCATE ON owner_committed_event
+    FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
