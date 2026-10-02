@@ -51,6 +51,14 @@ public class F04SchemaTest {
                     + ".flyway_schema_history FROM idea_ddm_app");
             statement.execute("GRANT SELECT ON " + schema + ".flyway_schema_history TO idea_ddm_app");
         }
+        try (var connection = open("app"); var query = connection.createStatement(); var row = query.executeQuery(
+                "SELECT current_user,has_database_privilege(current_user,current_database(),'CREATE'),"
+                        + "has_schema_privilege(current_user,current_schema(),'CREATE')")) {
+            assertTrue(row.next());
+            assertEquals("idea_ddm_app", row.getString(1));
+            assertFalse(row.getBoolean(2), "Runtime app cannot acquire database CREATE");
+            assertFalse(row.getBoolean(3), "Runtime app cannot acquire owned-schema CREATE");
+        }
         System.out.println("F04_SCHEMA_READY=" + schema + "; MIGRATIONS_APPLIED=" + result.migrationsExecuted);
         // Runner retains the result/log before guarded cleanup; this class never drops a schema.
     }

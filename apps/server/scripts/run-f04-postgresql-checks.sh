@@ -101,7 +101,7 @@ test_selector="${1:-F04SchemaTest}"
 # Confirm server version and app authority before the test is allowed to create its schema.
 export PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE="$IDEA_F04_TEST_DATABASE_NAME"
 export PGUSER=idea_ddm_app PGPASSWORD="$IDEA_DATABASE_APP_PASSWORD"
-prerequisite="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT current_setting('server_version_num')='180006' AND current_user='idea_ddm_app' AND NOT has_database_privilege(current_user,current_database(),'CREATE')")"
+prerequisite="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT current_setting('server_version_num')='180006' AND current_user='idea_ddm_app' AND NOT has_database_privilege(current_user,current_database(),'CREATE') AND NOT has_schema_privilege(current_user,'public','CREATE')")"
 [ "$prerequisite" = t ] || { printf '%s\n' 'BLOCKED: PostgreSQL version/app authority changed' >&2; exit 2; }
 unset PGPASSWORD
 log_file="$(mktemp /home/phuclam/idea-f04-schema-XXXXXXXX.log)"
