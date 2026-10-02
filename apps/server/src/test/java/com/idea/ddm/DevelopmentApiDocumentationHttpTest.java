@@ -94,6 +94,27 @@ class DevelopmentApiDocumentationHttpTest {
         assertFalse(contract.body().contains(password), "Documentation must not contain the fixture credential");
     }
 
+    @Test
+    void documentationUsesOrdinarySessionAndCsrfRefusalsWithoutCreatingAnotherAuthenticationMechanism() throws Exception {
+        assertEquals(401, get(client(), "/api/v1/identity/session").statusCode());
+        var developer = signedIn();
+        assertEquals(200, get(developer, "/api/v1/identity/session").statusCode());
+        assertEquals(404, get(developer, "/dev-api/assets/unknown.js").statusCode());
+        var refused = developer.send(HttpRequest.newBuilder(uri("/api/v1/identity/logout"))
+                .header("X-CSRF-TOKEN", "synthetic-invalid-csrf")
+                .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(403, refused.statusCode());
+        assertEquals(200, get(developer, "/api/v1/identity/session").statusCode(),
+                "Rejected Swagger mutation must leave the ordinary session usable");
+        var token = JsonMapper.builder().build().readTree(get(developer, "/api/v1/identity/csrf").body());
+        var accepted = developer.send(HttpRequest.newBuilder(uri("/api/v1/identity/logout"))
+                .header(token.path("headerName").asString(), token.path("token").asString())
+                .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(204, accepted.statusCode());
+        assertEquals(401, get(developer, "/api/v1/identity/session").statusCode());
+        assertEquals(401, get(developer, "/dev-api/").statusCode());
+    }
+
     private HttpClient signedIn() throws Exception {
         var client = client();
         var token = JsonMapper.builder().build().readTree(get(client, "/api/v1/identity/csrf").body());
