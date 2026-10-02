@@ -280,11 +280,16 @@ class OwnerOutcomeTest {
     }
 
     private static AutoCloseable installAppendFailure(UUID operation, String table) throws Exception {
+        return installAppendFailure(operation, table, false);
+    }
+
+    private static AutoCloseable installAppendFailure(UUID operation, String table, boolean suppress) throws Exception {
         assertTrue(java.util.Set.of("audit_evidence", "owner_committed_event").contains(table));
         try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
             statement.execute("CREATE FUNCTION f04_c_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
-                    + "IF NEW.operation_id='" + operation + "'::uuid THEN RAISE EXCEPTION 'Controlled F04 failure' "
-                    + "USING ERRCODE='P0001'; END IF; RETURN NEW; END; $$");
+                    + "IF NEW.operation_id='" + operation + "'::uuid THEN "
+                    + (suppress ? "RETURN NULL;" : "RAISE EXCEPTION 'Controlled F04 failure' USING ERRCODE='P0001';")
+                    + " END IF; RETURN NEW; END; $$");
             statement.execute("CREATE TRIGGER f04_c_fault BEFORE INSERT ON " + table
                     + " FOR EACH ROW EXECUTE FUNCTION f04_c_fault()");
         }
@@ -308,6 +313,19 @@ class OwnerOutcomeTest {
             assertOperationUnlocked(operation);
             System.out.println("F04_CONFIRMED_ROLLBACK=EVENT_APPEND; OP=" + operation + "; ACTOR="
                     + session.expectedActorId() + "; CORRELATION=f04-c-event-failed; COMMITTED_COMPANIONS=0/0/0");
+        }
+    }
+
+    @Test void suppressedRequiredAuditIsFailureNotPartialSuccess() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        try (var fault = installAppendFailure(operation, "audit_evidence", true)) {
+            assertThrows(SQLException.class, () -> owner.execute(session.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-suppressed-audit",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertCompanions(operation, 0, 0, 0);
+            assertOperationUnlocked(operation);
         }
     }
 
