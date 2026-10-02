@@ -30,7 +30,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /** Test-only bridge on the existing protected session route; no F04 HTTP route or raw-ID context. */
 public final class F04SessionFixture implements AutoCloseable {
     public record SignedIn(ActorContext context, UUID expectedActorId, UUID expectedAccountId,
-            UUID expectedOrganizationId) {}
+            UUID expectedOrganizationId) {
+        public boolean hasDifferentSessionFrom(SignedIn other) {
+            return !context.sessionId().equals(other.context.sessionId());
+        }
+    }
 
     private final org.springframework.context.ConfigurableApplicationContext server;
     private final AtomicReference<ActorContext> captured = new AtomicReference<>();

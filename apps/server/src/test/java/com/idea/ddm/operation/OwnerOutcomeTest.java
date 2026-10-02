@@ -30,6 +30,36 @@ class OwnerOutcomeTest {
         assertEquals(1, signedIn.context().securityVersion());
     }
 
+    @Test void freshSessionResolvesOriginalAcceptedWithoutCompanionDuplicates() throws Exception {
+        var first = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var original = owner.execute(first.context(), new SampleOwnerCommandService.Command(
+                operation, "f04-c-original", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+        var retry = fixture.signInThroughRealHttp();
+        assertTrue(retry.hasDifferentSessionFrom(first));
+        assertEquals(first.expectedActorId(), retry.expectedActorId());
+        var resolved = owner.execute(retry.context(), new SampleOwnerCommandService.Command(
+                operation, "f04-c-retry-must-not-overwrite", SampleOwnerCommandService.BusinessDecision.REFUSE));
+        assertEquals(original, resolved, "Resolve the exact canonical terminal result, not the retry decision");
+        assertCompanions(operation, 1, 1, 1);
+    }
+
+    private static void assertCompanions(UUID operation, int owners, int audits, int events) throws Exception {
+        try (var connection = F04SchemaTest.open("app"); var query = connection.prepareStatement(
+                "SELECT (SELECT count(*) FROM sample_owner_operation WHERE operation_id=?),"
+                + "(SELECT count(*) FROM audit_evidence WHERE operation_id=?),"
+                + "(SELECT count(*) FROM owner_committed_event WHERE operation_id=?)")) {
+            for (int parameter = 1; parameter <= 3; parameter++) query.setObject(parameter, operation);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                assertEquals(owners, row.getInt(1));
+                assertEquals(audits, row.getInt(2));
+                assertEquals(events, row.getInt(3));
+            }
+        }
+    }
+
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
         var signedIn = fixture.signInThroughRealHttp();
         var operation = UUID.randomUUID();
