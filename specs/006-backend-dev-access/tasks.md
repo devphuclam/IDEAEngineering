@@ -39,8 +39,8 @@ Admission completed before execution on 2026-10-02. This did not block independe
 
 ## Phase 5: Review/handoff
 
-- [ ] T017 Focused source/link/secret checks and review; retain scoped dispositions in specs/006-backend-dev-access/evidence/launcher-results.md. No verifier or automatic acceptance.
-- [ ] T018 Converge against specs/006-backend-dev-access/spec.md and provide reviewed branch/PR handoff; integration, main publication and human acceptance separate.
+- [x] T017 Focused source/link/secret checks and review; retain scoped dispositions in specs/006-backend-dev-access/evidence/launcher-results.md and evidence/swagger-results.md. Standards/Spec source reviews: 0 remaining findings; final author delta/doc check, 35 local Markdown targets and tracked-text secret check PASS. No verifier or automatic acceptance.
+- [x] T018 Converge against specs/006-backend-dev-access/spec.md and provide reviewed branch/PR handoff; 12 FR, 5 SC, 7 acceptance scenarios, 9 plan decisions and 5 constitutional principles assessed, no remaining buildable gap; [PR #27](https://github.com/devphuclam/IDEAEngineering/pull/27) published. Integration, main publication and human acceptance separate.
 
 ## Dependencies and implementation strategy
 
