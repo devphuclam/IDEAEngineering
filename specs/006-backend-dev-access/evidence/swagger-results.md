@@ -146,3 +146,37 @@ qualified above. Whole-feature human acceptance, independent external review and
 separate, NOT-RUN actions. Issue #26 remains open. Verifier NOT-RUN. No Account Management UI,
 Desktop/Workspace binding, F04/F05, live proof delivery, company data, production/commercial/T036
 clearance, HA, backup/restore or broader F03 regression claim.
+
+## 6. Authenticated direct-WebJar allowlist repair — 2026-10-02
+
+Focused finding: with development documentation enabled, Spring's ordinary WebJar mapping also
+served `/webjars/swagger-ui/**`; the earlier boundary returned 404 on that route only when
+documentation was disabled. The authored `/dev-api/assets/{file}` allowlist did not constrain this
+separate mapping.
+
+The RED test was added and run at source commit
+`3e4e97e5ae5dbc80b17ebf570fec5dcde3a015b0`. On an authenticated ordinary session, both authored
+asset URLs and the unknown-file refusal passed; direct `/webjars/swagger-ui/5.32.14/swagger-ui.css`
+returned 200 where the contract required 404. Six total tests ran: one intended assertion failure,
+zero errors and zero skips; disabled-documentation and Server health tests passed. Private RED log:
+`/home/phuclam/idea-devaccess-red-web-3e4e/http-red-confirmed.log`, SHA-256
+`0431B847EBE7FC44B1B179832E7C708B75834A6987BC02498287E2943B2F1D26`.
+
+Minimal GREEN at application/test commit `2a74130b88cffe1ee96d28014c7a0ec080d1a199` makes the
+filter return 404 for `/webjars/swagger-ui` and descendants regardless of the feature flag. Disabled
+`/dev-api/**` behavior remains unchanged. An authenticated HTTP regression requires CSS and JS
+under `/dev-api/assets/` to return 200, an unknown asset and direct CSS/JS WebJar URLs to return 404.
+The existing disabled-documentation test continues to check the direct WebJar route while the flag
+is off.
+
+| Affected rerun | Result |
+|---|---|
+| Real PostgreSQL / HTTP suite, source `2a74130b88cffe1ee96d28014c7a0ec080d1a199` | **6/6 PASS**, zero failures/errors/skips; Maven BUILD SUCCESS. Private log `http-green.log`, SHA-256 `338E24B6FB2E84876670D9AEE9CE8415D1118BE9D06FE5BB443FFE700D0CE23F` |
+| Offline Maven package after preflight of the previously authorized nine build-tool JARs | BUILD SUCCESS; no downloads. JAR SHA-256 `7F0A628D2EFD94405BA5F083295C23E6FAF0246DA86C8DD019F669F69482D53C`; private package log SHA-256 `1223C862B5F7F62AE0F9F6D9758BD00B265DB7B36C0CBF886DABA2B4621404BB` |
+| Read-only package comparison to the retained pre-Swagger Server JAR | PASS: only the admitted Swagger WebJar runtime addition; existing runtime JARs, migrations and built Web bytes match; notices remain; build tools are absent from the application package |
+| Actual HTTPS/headed Chrome 154.0.8037.92 with admitted Playwright 1.62.1; harness commit `bfef8459208fa4706c209feb7f00f33c287223e9`, application JAR from the source above | **7/7 PASS**, owned fixture cleanup PASS. In an authenticated browser, `/dev-api/assets/swagger-ui.css` and `/dev-api/assets/swagger-ui-bundle.js` each returned 200; unknown returned 404; direct `/webjars/swagger-ui/5.32.14/swagger-ui.css` and `swagger-ui-bundle.js` each returned 404. Existing sign-in, bad CSRF, eligible logout and post-logout refusal cases passed. Sanitized runner output is retained in the Codex result; no HAR, trace, screenshot, cookie, password or CSRF value was saved |
+
+The package is an isolated test artifact; this repair did not upgrade the developer's persistent
+preview. No dependency/version, session/authentication/CSRF behavior, OpenAPI contract, schema or
+business API changed. PR #27 is the review surface for this successor evidence; its current head SHA
+is supplied in the PR and this handoff.
