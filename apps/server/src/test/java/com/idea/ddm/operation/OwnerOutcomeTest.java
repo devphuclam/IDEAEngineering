@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.identity.F04SessionFixture;
 import com.idea.ddm.identity.OwnerSessionEligibility;
+import com.idea.ddm.identity.IdentityRefusal;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,6 +44,10 @@ class OwnerOutcomeTest {
                 operation, "f04-c-retry-must-not-overwrite", SampleOwnerCommandService.BusinessDecision.REFUSE));
         assertEquals(original, resolved, "Resolve the exact canonical terminal result, not the retry decision");
         assertCompanions(operation, 1, 1, 1);
+        System.out.println("F04_REPLAY=ACCEPTED; OP=" + operation + "; ACTOR=" + original.actorId()
+                + "; ORG=" + original.organizationId() + "; ORIGINAL_SESSION_REFERENCE=" + first.sessionReference()
+                + "; RETRY_SESSION_REFERENCE=" + retry.sessionReference() + "; ORIGINAL_CORRELATION=" + original.correlationId()
+                + "; RETRY_CORRELATION=f04-c-retry-must-not-overwrite; EVENT=" + original.eventId());
     }
 
     private static void assertCompanions(UUID operation, int owners, int audits, int events) throws Exception {
@@ -72,6 +77,38 @@ class OwnerOutcomeTest {
                 operation, "f04-c-retry-accept", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
         assertEquals(SampleOwnerCommandService.Outcome.REFUSED, original.outcome());
         assertCompanions(operation, 1, 1, 0);
+    }
+
+    @Test void otherActorAndRevokedSessionCannotDiscloseEitherTerminalOutcome() throws Exception {
+        var originalSession = fixture.signInThroughRealHttp();
+        var other = fixture.signInSecondActorInSameOrganization();
+        assertNotEquals(originalSession.expectedActorId(), other.expectedActorId());
+        assertEquals(originalSession.expectedOrganizationId(), other.expectedOrganizationId());
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var operations = new java.util.ArrayList<UUID>();
+        for (var decision : SampleOwnerCommandService.BusinessDecision.values()) {
+            var operation = UUID.randomUUID();
+            operations.add(operation);
+            var original = owner.execute(originalSession.context(), new SampleOwnerCommandService.Command(
+                    operation, "f04-c-access-original", decision));
+            var refusal = assertThrows(SampleOwnerCommandService.ResultAccessRefusal.class,
+                    () -> owner.execute(other.context(), new SampleOwnerCommandService.Command(operation,
+                            "f04-c-unauthorized-retry", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertEquals("Sample result unavailable to this caller", refusal.getMessage());
+            assertNull(refusal.getCause(), "Refusal cannot wrap original protected result details");
+            assertEquals(0, refusal.getSuppressed().length);
+            assertCompanions(operation, 1, 1, original.eventId() == null ? 0 : 1);
+            assertEquals(original, owner.execute(originalSession.context(), new SampleOwnerCommandService.Command(
+                    operation, "f04-c-authorized-confirmation", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+        }
+        fixture.revokeOnlyThisSession(originalSession);
+        for (var operation : operations) {
+            assertThrows(IdentityRefusal.class, () -> owner.execute(originalSession.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-revoked-retry",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+        }
+        assertCompanions(operations.get(0), 1, 1, 1);
+        assertCompanions(operations.get(1), 1, 1, 0);
     }
 
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {

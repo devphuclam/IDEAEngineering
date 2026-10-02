@@ -34,6 +34,8 @@ public final class F04SessionFixture implements AutoCloseable {
         public boolean hasDifferentSessionFrom(SignedIn other) {
             return !context.sessionId().equals(other.context.sessionId());
         }
+        /** Database metadata identity only, never the browser/session authentication proof. */
+        public UUID sessionReference() { return context.sessionId(); }
     }
 
     private final org.springframework.context.ConfigurableApplicationContext server;
@@ -67,6 +69,36 @@ public final class F04SessionFixture implements AutoCloseable {
     public SessionService sessions() { return server.getBean(SessionService.class); }
 
     public SignedIn signInThroughRealHttp() throws Exception {
+        return signInThroughRealHttp(login, syntheticCredential, identity.actorId(), identity.accountId());
+    }
+
+    public SignedIn signInSecondActorInSameOrganization() throws Exception {
+        var actor = UUID.randomUUID();
+        var account = UUID.randomUUID();
+        var secondLogin = "f04.second." + UUID.randomUUID();
+        var credential = UUID.randomUUID().toString();
+        try (var connection = F04SchemaTest.open("migration")) {
+            connection.setAutoCommit(false);
+            AdministratorBootstrap.insert(connection, "INSERT INTO actor(actor_id,display_name) VALUES (?,?)",
+                    actor, "Second synthetic F04 Actor; no role grants");
+            AdministratorBootstrap.insert(connection, "INSERT INTO idea_account(account_id,actor_id,organization_id,status) "
+                    + "VALUES (?,?,?,'ACTIVE')", account, actor, organizationId);
+            AdministratorBootstrap.insert(connection, "INSERT INTO login_identity(login_identity_id,account_id,login_identifier,"
+                    + "normalized_login_identifier,password_verifier) VALUES (?,?,?,?,?)", UUID.randomUUID(), account,
+                    secondLogin, secondLogin, new NativePasswordVerifier().encodeNewCredential(credential));
+            connection.commit();
+        }
+        return signInThroughRealHttp(secondLogin, credential, actor, account);
+    }
+
+    public void revokeOnlyThisSession(SignedIn signedIn) throws Exception {
+        try (var connection = F04SchemaTest.open("migration")) {
+            AdministratorBootstrap.insert(connection,
+                    "UPDATE session_record SET revoked_at=CURRENT_TIMESTAMP WHERE session_id=?", signedIn.context().sessionId());
+        }
+    }
+
+    private SignedIn signInThroughRealHttp(String selectedLogin, String credential, UUID actor, UUID account) throws Exception {
         captured.set(null);
         var cookies = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         var client = HttpClient.newBuilder().cookieHandler(cookies).build();
@@ -75,14 +107,14 @@ public final class F04SessionFixture implements AutoCloseable {
             assertNull(captured.get(), "Anonymous access cannot establish ActorContext");
             var csrf = get(client, "/api/v1/identity/csrf");
             assertEquals(200, csrf.statusCode());
-            var submission = "username=" + encode(login) + "&password=" + encode(syntheticCredential);
+            var submission = "username=" + encode(selectedLogin) + "&password=" + encode(credential);
             var response = client.send(HttpRequest.newBuilder(uri("/api/v1/identity/login"))
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .header(field(csrf.body(), "headerName"), field(csrf.body(), "token"))
                     .POST(HttpRequest.BodyPublishers.ofString(submission)).build(),
                     HttpResponse.BodyHandlers.ofString());
             assertEquals(200, response.statusCode(), "Actual F03 HTTP sign-in must succeed");
-            assertEquals(identity.actorId().toString(), field(response.body(), "actorId"));
+            assertEquals(actor.toString(), field(response.body(), "actorId"));
             captured.set(null);
             var forgedActor = UUID.randomUUID();
             var session = client.send(HttpRequest.newBuilder(uri("/api/v1/identity/session?actorId=" + forgedActor))
@@ -90,10 +122,10 @@ public final class F04SessionFixture implements AutoCloseable {
             assertEquals(200, session.statusCode());
             var context = captured.getAndSet(null);
             assertNotNull(context, "Capture requires a Server-established authenticated principal");
-            assertEquals(identity.actorId(), context.actorId());
+            assertEquals(actor, context.actorId());
             assertNotEquals(forgedActor, context.actorId(), "Client ActorId is not authority");
             assertNotNull(context.sessionId(), "A raw ActorId fixture cannot supply the verified session reference");
-            return new SignedIn(context, identity.actorId(), identity.accountId(), organizationId);
+            return new SignedIn(context, actor, account, organizationId);
         } finally {
             cookies.getCookieStore().removeAll();
         }
