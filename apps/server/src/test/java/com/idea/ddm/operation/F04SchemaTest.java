@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -68,6 +70,55 @@ class F04SchemaTest {
                     "organization_id", "uuid", "event_kind", "character varying", "contract_version", "integer",
                     "actor_id", "uuid", "correlation_id", "character varying", "recorded_at", "timestamp with time zone"),
                     columns, "No payload, delivery state, registry or generic operation fields belong in ENVELOPE-9");
+        }
+    }
+
+    @Test
+    void committedEventContentRejectsUpdateDeleteAndTruncateEvenForItsOwner() throws Exception {
+        try (var connection = open("migration")) {
+            for (var mutation : new String[] {"UPDATE owner_committed_event SET contract_version=2",
+                    "DELETE FROM owner_committed_event", "TRUNCATE owner_committed_event"}) {
+                connection.setAutoCommit(false);
+                try {
+                    var identity = seedIdentity(connection);
+                    insertEvent(connection, UUID.randomUUID(), "OTHER_SYNTHETIC_OWNER", identity);
+                    var exception = assertThrows(SQLException.class,
+                            () -> connection.createStatement().execute(mutation), "Immutable content: " + mutation);
+                    assertEquals("42501", exception.getSQLState());
+                } finally {
+                    connection.rollback();
+                }
+            }
+        }
+    }
+
+    private static UUID[] seedIdentity(Connection connection) throws SQLException {
+        var actor = UUID.randomUUID();
+        var organization = UUID.randomUUID();
+        try (var insert = connection.prepareStatement("INSERT INTO actor(actor_id,display_name) VALUES (?,?)")) {
+            insert.setObject(1, actor);
+            insert.setString(2, "Synthetic F04 schema fixture; not authenticated ActorContext");
+            assertEquals(1, insert.executeUpdate());
+        }
+        try (var insert = connection.prepareStatement("INSERT INTO operating_organization(organization_id,display_name) VALUES (?,?)")) {
+            insert.setObject(1, organization);
+            insert.setString(2, "Synthetic F04 schema organization");
+            assertEquals(1, insert.executeUpdate());
+        }
+        return new UUID[] {actor, organization};
+    }
+
+    private static void insertEvent(Connection connection, UUID operation, String producer, UUID[] identity) throws SQLException {
+        try (var insert = connection.prepareStatement("INSERT INTO owner_committed_event(event_id,operation_id,producer_owner,"
+                + "organization_id,event_kind,contract_version,actor_id,correlation_id) VALUES (?,?,?,?,?,1,?,?)")) {
+            insert.setObject(1, UUID.randomUUID());
+            insert.setObject(2, operation);
+            insert.setString(3, producer);
+            insert.setObject(4, identity[1]);
+            insert.setString(5, "OPERATION_ACCEPTED");
+            insert.setObject(6, identity[0]);
+            insert.setString(7, "f04-synthetic-schema-correlation");
+            assertEquals(1, insert.executeUpdate());
         }
     }
 
