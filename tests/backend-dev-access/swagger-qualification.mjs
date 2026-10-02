@@ -115,9 +115,13 @@ try {
     await page.goto(`${origin}/dev-api/`).catch(() => {});
     check((await refused).status() === 401, 'Anonymous documentation refused');
   });
+  current = 'LOGIN-PREREQUISITE'; oracle = 'Existing Web navigation';
   await page.goto(origin);
+  oracle = 'Existing Web anonymous state';
   await page.getByRole('status').filter({ hasText: 'Chưa đăng nhập' }).waitFor();
+  oracle = 'Existing Web login control';
   await page.getByLabel('Login', { exact: true }).fill(`swagger.synthetic.${id}`);
+  oracle = 'Existing Web password control';
   await page.getByLabel('Mật khẩu', { exact: true }).fill(password);
   const login = page.waitForResponse(response => new URL(response.url()).pathname === `${identity}login`);
   await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
@@ -153,8 +157,13 @@ try {
   console.log(JSON.stringify({ result: 'PASS', browser: browser.version(), applicationSource: '4419a9f5fe349571911e0c855a3cd9e253378210',
     jarSha256: '0693ec078ca425ab6b03a21ca8facb5f411c6a34e99ed2526b198825ebe82bfc', results, statuses,
     csrfSubmitted, authoritativeActorSent: actorSent, diagnosticLeak }));
-} catch {
-  console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, completed: results })); process.exitCode = 1;
+} catch (failure) {
+  // Fixed classification only; raw locator/transport diagnostics can contain submitted data.
+  const message = String(failure?.message ?? '');
+  const classification = message.includes('ERR_HTTP_RESPONSE_CODE_FAILURE') ? 'HTTP_NAVIGATION_REFUSAL'
+    : message.includes('ERR_CERT') ? 'TLS_TRUST' : message.includes('ERR_CONNECTION') ? 'CONNECTIVITY'
+    : message.includes('Timeout') ? 'OBSERVATION_TIMEOUT' : failure?.name === 'AssertionError' ? 'ORACLE_REFUSAL' : 'HARNESS_ERROR';
+  console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, classification, completed: results })); process.exitCode = 1;
 } finally {
   password = ''; secrets.clear(); csrf = null;
   try { if (browser) await browser.close(); } catch { console.log('BROWSER_CLEANUP=BLOCKED'); process.exitCode = 1; }
