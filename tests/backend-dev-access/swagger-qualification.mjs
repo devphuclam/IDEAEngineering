@@ -154,6 +154,21 @@ try {
     check((await page.goto(`${origin}/dev-api/`)).status() === 200, 'Actual application-served UI');
     await page.locator('#swagger-ui .opblock').first().waitFor();
     check((await page.getByRole('button', { name: /authorize/i }).count()) === 0, 'No cookie paste or alternative authorization input');
+    const assetStatuses = await page.evaluate(async () => {
+      const paths = [
+        '/dev-api/assets/swagger-ui.css',
+        '/dev-api/assets/swagger-ui-bundle.js',
+        '/dev-api/assets/unknown.js',
+        '/webjars/swagger-ui/5.32.14/swagger-ui.css',
+        '/webjars/swagger-ui/5.32.14/swagger-ui-bundle.js',
+      ];
+      const results = [];
+      for (const path of paths) results.push({ path, status: (await fetch(path, { credentials: 'same-origin' })).status });
+      return results;
+    });
+    check(assetStatuses[0].status === 200 && assetStatuses[1].status === 200
+      && assetStatuses[2].status === 404 && assetStatuses[3].status === 404
+      && assetStatuses[4].status === 404, 'Authenticated browser can use only allowlisted Swagger assets');
     await noSecrets(page, context);
   });
   await test('S03-sensitive-documentation-only', async () => {

@@ -25,8 +25,9 @@ final class DevelopmentDocumentationBoundary extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain chain) throws ServletException, IOException {
         var path = request.getServletPath();
-        if (!enabled && (path.equals("/dev-api") || path.startsWith("/dev-api/")
-                || path.equals("/webjars/swagger-ui") || path.startsWith("/webjars/swagger-ui/"))) {
+        var swaggerWebJarPath = path.equals("/webjars/swagger-ui") || path.startsWith("/webjars/swagger-ui/");
+        var disabledDocumentationPath = path.equals("/dev-api") || path.startsWith("/dev-api/");
+        if (swaggerWebJarPath || (!enabled && disabledDocumentationPath)) {
             response.setStatus(404);
             return;
         }
