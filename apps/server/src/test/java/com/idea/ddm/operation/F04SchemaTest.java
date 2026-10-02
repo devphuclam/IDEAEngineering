@@ -115,6 +115,50 @@ class F04SchemaTest {
         }
     }
 
+    @Test
+    void sampleAcceptedEventIsUniqueAcrossContractVersions() throws Exception {
+        try (var connection = open("migration")) {
+            connection.setAutoCommit(false);
+            try {
+                var identity = seedIdentity(connection);
+                var operation = UUID.randomUUID();
+                insertEvent(connection, operation, "PH1_SAMPLE_OWNER", identity);
+                var exception = assertThrows(SQLException.class, () -> insertEvent(connection,
+                        operation, "PH1_SAMPLE_OWNER", "OPERATION_ACCEPTED", 2, identity),
+                        "Contract-version changes must not bypass the sample's one accepted event");
+                assertEquals("23505", exception.getSQLState());
+            } finally {
+                connection.rollback();
+            }
+        }
+    }
+
+    @Test
+    void commonStoreAllowsMultipleEventsWithoutSampleResultCoupling() throws Exception {
+        try (var connection = open("migration")) {
+            connection.setAutoCommit(false);
+            try {
+                var identity = seedIdentity(connection);
+                var operation = UUID.randomUUID();
+                insertEvent(connection, operation, "OTHER_SYNTHETIC_OWNER", identity);
+                insertEvent(connection, operation, "OTHER_SYNTHETIC_OWNER", identity);
+                insertEvent(connection, operation, "PH1_SAMPLE_OWNER", "OTHER_SYNTHETIC_KIND", 1, identity);
+                insertEvent(connection, operation, "PH1_SAMPLE_OWNER", "OTHER_SYNTHETIC_KIND", 1, identity);
+                try (var query = connection.prepareStatement(
+                        "SELECT count(*),count(DISTINCT event_id) FROM owner_committed_event WHERE operation_id=?")) {
+                    query.setObject(1, operation);
+                    try (var row = query.executeQuery()) {
+                        assertTrue(row.next());
+                        assertEquals(4, row.getInt(1));
+                        assertEquals(4, row.getInt(2));
+                    }
+                }
+            } finally {
+                connection.rollback();
+            }
+        }
+    }
+
     private static UUID[] seedIdentity(Connection connection) throws SQLException {
         var actor = UUID.randomUUID();
         var organization = UUID.randomUUID();
@@ -132,15 +176,21 @@ class F04SchemaTest {
     }
 
     private static void insertEvent(Connection connection, UUID operation, String producer, UUID[] identity) throws SQLException {
+        insertEvent(connection, operation, producer, "OPERATION_ACCEPTED", 1, identity);
+    }
+
+    private static void insertEvent(Connection connection, UUID operation, String producer,
+                                    String kind, int version, UUID[] identity) throws SQLException {
         try (var insert = connection.prepareStatement("INSERT INTO owner_committed_event(event_id,operation_id,producer_owner,"
-                + "organization_id,event_kind,contract_version,actor_id,correlation_id) VALUES (?,?,?,?,?,1,?,?)")) {
+                + "organization_id,event_kind,contract_version,actor_id,correlation_id) VALUES (?,?,?,?,?,?,?,?)")) {
             insert.setObject(1, UUID.randomUUID());
             insert.setObject(2, operation);
             insert.setString(3, producer);
             insert.setObject(4, identity[1]);
-            insert.setString(5, "OPERATION_ACCEPTED");
-            insert.setObject(6, identity[0]);
-            insert.setString(7, "f04-synthetic-schema-correlation");
+            insert.setString(5, kind);
+            insert.setInt(6, version);
+            insert.setObject(7, identity[0]);
+            insert.setString(8, "f04-synthetic-schema-correlation");
             assertEquals(1, insert.executeUpdate());
         }
     }
