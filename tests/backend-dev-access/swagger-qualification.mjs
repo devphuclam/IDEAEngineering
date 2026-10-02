@@ -109,7 +109,11 @@ try {
   }
   check(ready, 'Trusted HTTPS fixture prerequisite');
   await test('S01-anonymous-documentation', async () => {
-    check((await page.goto(`${origin}/dev-api/`)).status() === 401, 'Anonymous documentation refused');
+    // Chrome may represent an empty 401 navigation as an error page. Observe the actual
+    // browser network response, not a successful document-navigation prerequisite.
+    const refused = page.waitForResponse(response => new URL(response.url()).pathname === '/dev-api/');
+    await page.goto(`${origin}/dev-api/`).catch(() => {});
+    check((await refused).status() === 401, 'Anonymous documentation refused');
   });
   await page.goto(origin);
   await page.getByRole('status').filter({ hasText: 'Chưa đăng nhập' }).waitFor();
