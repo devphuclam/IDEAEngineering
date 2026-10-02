@@ -129,8 +129,8 @@ remain NOT-RUN. The separate schema/Audit checkpoint is partially executed below
 **Execution gate**: Separate F04 Maven/tooling authority is recorded in
 `IE-RES-F04-BUILDTOOL-AUTH-20261002`; the scoped runner performs exact artifact preflight before
 each execution. Units below refine four existing tasks, add no cards/hours and do not imply whole-
-F04 completion. Schema/Audit execution is recorded in `evidence/F04-outcome-results.md` v0.2:
-source `82be13ecd2d8b2b339f70a2f47357442dc18cff9`, schema 7/7, predecessor 1/1 and Audit 7/7.
+F04 completion. Schema/Audit execution is recorded in `evidence/F04-outcome-results.md` v0.3:
+source `a7a577b00f4ea427b609b4b862e6f72309ed94ec`, schema 7/7, predecessor 1/1 and Audit 7/7.
 This is not completion of the umbrella tasks. Next unit is T023-B's authenticated owner tracer.
 
 - [ ] T023 [US4] Add vertical failing or qualification tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java` and `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`; use the real-session fixture `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. Cover the F04 contract including concurrent same-ID acceptance/refusal, forced append/commit faults, bounded query access and IAM race. Follow units below rather than writing the entire suite first.
@@ -219,9 +219,10 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: review/publish the F04 documentation baseline under Work Item #29, then
-obtain separate F04 tooling execution authority before T023-A. No production implementation,
-migration creation or merge is authorized by this documentation task. T023–T026 remain unchecked.
+Current next step: publish/review the schema/Audit checkpoint under Work Item #31, then continue
+T023-B's authenticated owner tracer under the recorded F04 execution authority. Work Item #29
+was documentation-only and is closed after PR #30; it is not the current execution gate.
+T023–T026 remain unchecked, whole F04 remains open and no merge is authorized.
 
 Historical F03-B closure handoff below is retained as trace, not current work/status. Applicable
 T040/T042/shared Server tasks and T044 have executed closure evidence in §39; markers record

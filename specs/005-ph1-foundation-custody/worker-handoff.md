@@ -56,14 +56,15 @@ The separate F04 authority is now recorded in
 Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
 OPEN; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
-Current exact executed source: `82be13ecd2d8b2b339f70a2f47357442dc18cff9`.
+Current exact executed source: `a7a577b00f4ea427b609b4b862e6f72309ed94ec`.
 Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
 offline runner. No owner service, event append class, IAM bridge or product route delivered yet.
 Codex implemented Audit after its focused RED; Gemini was not dispatched.
 
 The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
 schema and T024-A Audit execution are partially recorded in [F04 outcome results](evidence/F04-outcome-results.md)
-v0.2: schema 7/7, predecessor 1/1, Audit 7/7 and five no-build admission cases.
+v0.3: schema 7/7, predecessor 1/1 and Audit 7/7 rerun after the fixture repair; the five no-build
+admission cases remain the separately traced execution at `acc8db5...`.
 T023–T026 remain unchecked and no completion/progress action is inferred. Any changed tool,
 artifact, graph, database boundary or architecture reopens the execution gate.
 

@@ -3,19 +3,19 @@
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.2` / Draft / INFORMATIVE |
+| Version / document status / normativity | `0.3` / Draft / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
 | Execution disposition | Partial PASS: schema 7/7, predecessor 1/1, Audit 7/7; whole F04 NOT-RUN |
 | Owner / author | Engineering / Codex |
 | Reviewer | Internal Standards and Spec reviews recorded below; external Project Reviewer review PENDING |
 | Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; execution authorized, checkpoint/whole-card acceptance PENDING |
 | Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), T023-A/T025-A/T024-A; 2026-10-02 +07:00 |
-| Current executed source | `82be13ecd2d8b2b339f70a2f47357442dc18cff9` |
-| Current archive SHA-256 | `5f3ae00ffa6711f0a139e34de9d76a5470d4c225c3c71fa7f896fd0fa636591a` |
+| Current executed source | `a7a577b00f4ea427b609b4b862e6f72309ed94ec` |
+| Current archive SHA-256 | `42bcf0c4d3737077d62619b2a895dde2dd809b34bc239322330123944596344f` |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
 | Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to this record v0.1; its historical schema receipt is retained below. Adds Audit execution, admission repairs and exact-source reruns; no historical F03 record changed. Superseded by NOT-APPLICABLE |
+| Change / supersession | Successor to v0.2; v0.1 schema and v0.2 execution receipts remain below. Section 9 adds the exact-source rerun after fixture credential-source selection repair and final review. No historical F03 record changed. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
 | Standards tailoring | `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
@@ -23,7 +23,7 @@
 
 The following control table and sections 1–3 describe the earlier v0.1 schema-only checkpoint,
 not the current execution or acceptance state. Its incomplete control envelope is superseded
-by the current v0.2 envelope above; its source, hashes and observations are unchanged.
+by the current envelope above; its source, hashes and observations are unchanged.
 
 | Control field | Value |
 |---|---|
@@ -117,10 +117,12 @@ passwords come only from the controlled mode-600 file, never command arguments o
 This Audit REFUSED fixture qualifies the append boundary only; it is not execution of the
 business-refusal transaction, sample owner service, replay or IAM commit-time race.
 
-## 5. Exact-source final reruns
+## 5. Historical v0.2 exact-source reruns
 
-All three runs below used source `82be13ecd2d8b2b339f70a2f47357442dc18cff9` and its archive hash
-in the current control envelope. Each exited Maven 0 with zero failure/error/skip. Results and
+All three runs below used source `82be13ecd2d8b2b339f70a2f47357442dc18cff9` and archive SHA-256
+`5f3ae00ffa6711f0a139e34de9d76a5470d4c225c3c71fa7f896fd0fa636591a`.
+These v0.2 receipts are retained, not current-source claims. Each exited Maven 0 with zero
+failure/error/skip. Results and
 Surefire hashes were retained before cleanup; the runner then verified the exact schema owner
 and run marker, stopped connections with the completed JVM, dropped only that schema and
 confirmed its absence. A foreign/mismatched marker refuses cleanup, rather than reporting success.
@@ -217,3 +219,60 @@ Those are the next authorized T023-B through T026 units. Whole-F04 acceptance re
 Affected F03/data/health regression is NOT-RUN for this partial checkpoint, not inferred from
 prior F03 success. Verifier stays NOT-RUN. No F05, product API/RBAC, dispatcher, preview deployment,
 production/recovery/commercial claim or merge was performed. The existing preview is unchanged.
+
+## 9. Final fixture repair and successor execution
+
+The tracked-text secret check initially flagged two environment-variable-name literals in the
+test fixture's credential-selection ternary. No credential value was present. The successor
+at `a7a577b00f4ea427b609b4b862e6f72309ed94ec` uses an explicit exact app/migrator switch and
+rejects an unsupported role. The secret scanner and its exclusions were not changed. This
+repair changes only `F04SchemaTest.java` after the v0.2 documentation commit; production Audit,
+V8, build inputs and dependency graph are unchanged. Because all three suites use this fixture,
+all three were rerun from the successor archive identified in the current control envelope.
+
+Each command is the selector-specific scoped command in section 4. All runs used the admitted
+offline tooling and controlled DB, with actual separate app/migrator authentication. All returned
+Maven exit 0 with zero failure/error/skip. Schema/Audit runs applied eight migrations; the
+predecessor run preserved its missing-attribution rollback witness, then applied V8 once and
+repeated with zero new migrations. Result hashes were retained before each exact owned-schema
+cleanup; each cleanup returned COMPLETE and confirmed absence after the test JVM completed.
+
+| Suite / result | Build directory under `/home/phuclam/` | Exact owned schema | Log under `/home/phuclam/` / SHA-256 |
+|---|---|---|---|
+| Schema 7/7 | `idea-f04-a7a577b-kN1pJi` | `f04_7394460252c8490cac929f2b6b671359` | `idea-f04-schema-2galWg2w.log` / `e1719f800e711cd6ac715bf1a52df88bce99ceedcfd090f20717578a26ba8abb` |
+| Predecessor 1/1 | `idea-f04-a7a577b-6inkHU` | `f04_69df7a2ac6a54931b77cf51b85b1710f` | `idea-f04-schema-eXBrDpoV.log` / `171a9a7c48f3c08508e380b467030e9969a818f413e9de980a593666ad940064` |
+| Audit 7/7 | `idea-f04-a7a577b-M8tZez` | `f04_53ae39ad3bc74758b1e4fb0f4fa3db99` | `idea-f04-schema-xMbggQsz.log` / `fad7a56aa3dabe822ba231aa556ff6d7c50c24639938fba25e995320f4023ee1` |
+
+| Suite | Surefire XML SHA-256 | Surefire text SHA-256 |
+|---|---|---|
+| Schema | `e07248f89fe54183a1354994559e1feab7f6f785d8c1f4df1442c86f3d1d7bc6` | `e7aa74eb65194d0ffd458af44d262648eefbb00e75ee4b6e7f9d853786a65377` |
+| Predecessor | `f4a30a9aadadef6165c0fdc148794e04bce13b4950feb607dd06fc37231b37b9` | `7217313bd457abe88bdccc436ebf8736031a16057ec955c0a33c9af69e59c14f` |
+| Audit | `c7135b7b3529762738f6299f0b2f40d58739ac12307511172e24a524dc1ff6e0` | `040436080979b2935647befa83e5bd458cf7b3151dd0fb865ed23aa7516ea228` |
+
+Post-run read-only catalog checks returned `PUBLIC_TABLES=23`, `F04_SCHEMA_COUNT=0`,
+`APP_DB_CREATE=false` and `APP_PUBLIC_CREATE=false`. The three successor logs are mode 600,
+owned by phuclam. Catalog counts are cleanup/prerequisite witnesses, not an independent comparison
+of historical public data or a new public-schema qualification run.
+
+Internal successor reviews at exact source `a7a577b...` remain separate:
+
+- Standards: the three documented findings and follow-up privilege gap are resolved; no new
+  documented-standard breach. The possible UUID-array fixture Data Clump remains a non-blocking
+  judgment opportunity for T023-B, not a production defect.
+- Spec: the unchanged-build admission finding is resolved; no remaining schema/Audit mismatch
+  or scope creep in this checkpoint. Unimplemented owner/race behavior stays NOT-RUN.
+
+Both are read-only source/spec reviews, not independent execution or private raw-log review.
+The standalone local `tests/ph1/check-no-secrets.ps1` run after the fixture repair returned exit 0:
+no secret-like values found; ten exact synthetic fixtures recognized; 233 known binary files
+skipped. This is scoped tracked UTF-8 text scanning, not an all-format secret audit.
+The publication successor changes only evidence/task/handoff documentation; application/test/
+migration/build content must remain identical to the current executed SHA for these results to
+apply. External checkpoint review and whole-F04 acceptance remain PENDING; all section 8 limits
+remain in force.
+
+Publication uses a `[skip ci]` head commit because the existing active `verify-template.yml`
+workflow triggers on push/pull_request, while verifier execution is outside this authorization.
+This uses the documented [GitHub skip mechanism](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs),
+not a workflow/configuration change or a passing CI result. Any pending required check stays
+pending; this draft checkpoint is not authorized for merge.
