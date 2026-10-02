@@ -32,7 +32,7 @@ if [[ $action != status ]]; then
 fi
 java=/opt/idea/tools/jdk-25.0.4.1+1/bin/java
 jar="$root/server.jar"
-expected_artifact=48fe98659db3c075b771a90fd0f4fc61f79a01c01cc941114db9a5299a685bde
+expected_artifact=7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c
 report_runtime() {
   echo "BACKEND_STATE=RUNNING; PID=$pid"
   # A legacy two-field record proves process ownership, not its documentation generation.

@@ -180,3 +180,40 @@ The package is an isolated test artifact; this repair did not upgrade the develo
 preview. No dependency/version, session/authentication/CSRF behavior, OpenAPI contract, schema or
 business API changed. PR #27 is the review surface for this successor evidence; its current head SHA
 is supplied in the PR and this handoff.
+
+## 7. Persistent-preview convergence to the allowlist repair — 2026-10-02
+
+This is the current deployment record and supersedes the preview package identity stated in the
+historical checkpoints above. Those earlier observations are preserved as written. The deployed
+application source remains `2a74130b88cffe1ee96d28014c7a0ec080d1a199`; the exact repaired JAR is
+SHA-256 `7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c`. The source/JAR pair is
+the one qualified by the 6/6 real PostgreSQL/HTTP result and 7/7 headed Chrome result in §6.
+
+Before deployment, the owned launcher identified the predecessor runtime PID 83142 and its
+predecessor JAR hash `48fe98659db3c075b771a90fd0f4fc61f79a01c01cc941114db9a5299a685bde`. The normal
+launcher Stop reported `BACKEND_STATE=STOPPED` and `LOCAL_TUNNEL=STOPPED; Preview database retained.`
+It signalled only its verified owned process. The exact repaired JAR already present in the
+previously qualified source package directory was re-hashed, staged in a private directory, and
+promoted without rebuilding or downloading. The backend controller pin was updated to require the
+new exact hash. The predecessor JAR and controller were retained under unique recoverable backup
+names; earlier backups were not overwritten. The persistent directory, private configuration,
+database target and synthetic bootstrap were not recreated.
+
+| Deployment check | Result |
+|---|---|
+| Repaired application JAR / controller pin | `7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c` / controller SHA-256 `f7161030d83609a839905fac48b881ffce09b4eabfbac8d3384ad9c92b0ed058` |
+| Normal launcher Start / final Status | PASS: PID `92389`; `PROCESS=UP`, `DATABASE=UP`, `TLS=VERIFIED`, `SWAGGER=AVAILABLE`; URL `https://localhost:18444/dev-api/` |
+| Focused Windows launcher contract | PASS, 3/3: missing-key refusal, unreachable SSH refusal, CMD/PowerShell 5.1 entry-point refusal behavior |
+| Focused documentation availability check | PASS: actual owned runtime reported `AVAILABLE` and the expected HTTPS URL |
+| Runtime/package binding | PASS: owned runtime record pins the deployed JAR hash and Java process runs `-jar /home/phuclam/.local/share/idea/dev-preview-26/server.jar` |
+| App configuration/setup markers | PASS: `runtime.env`, `operator.env`, `provisioned`, and `database-created` matched their pre-deploy bytes |
+| Synthetic `preview.dev` identity, before → after | PASS, unchanged: ActorId `99fc203b-d303-4d3b-9a26-bdce8d4f725b`; AccountId `872c524d-2ce6-4715-931a-c15785876baf`; LoginIdentityId `7735679a-40b3-41ef-823b-9a4948fadb24`; ACTIVE, security version 1, credential-present flag true (credential value/hash not read) |
+| Preview row counts, before → after | PASS, unchanged: Actor 1; Account 1; Login Identity 1; Session Record 5; Role Assignment 1; bootstrap state 1; IAM outcome 6; Audit 6; login-failure state 0 |
+| Migration/bootstrap | PASS: Flyway V1–V7 versions/checksums/success rows were byte-for-byte-equivalent query output before and after; no migration or bootstrap command was invoked |
+
+The human reviewer should now perform the final browser acceptance at `https://localhost:18444/`
+using the privately held `preview.dev` credential. The agent did not sign in with or access that
+password. This deployment does not merge PR #27 or constitute final human acceptance. It does not
+change Swagger behavior beyond the reviewed allowlist repair, authentication, session, CSRF,
+OpenAPI, dependency graph, migrations or business APIs. See the focused launcher run in
+[launcher-results.md](launcher-results.md).

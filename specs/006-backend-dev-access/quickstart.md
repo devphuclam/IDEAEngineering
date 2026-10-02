@@ -1,7 +1,8 @@
 # Backend development access — human handoff
 
 Procedure, not execution evidence. Issue #26; launcher integration authorized on 2026-10-02.
-Swagger preview qualified/loaded on 2026-10-02; its PR review and main integration are separate.
+Swagger preview qualified/loaded on 2026-10-02; PR #27 remains open for final human acceptance and
+has not been merged.
 
 ## Prerequisites
 
@@ -13,6 +14,12 @@ Passwords are entered only in the terminal/Web, never chat.
 
 Provisioning was completed on 2026-10-01 for `idea_ddm_preview_20261001_26` and login `preview.dev`.
 Use the test password chosen privately during setup. No password is in this document or Git.
+
+Last verified 2026-10-02: the persistent preview runs application source
+`2a74130b88cffe1ee96d28014c7a0ec080d1a199`, packaged JAR SHA-256
+`7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c`. Launcher Status reported
+process UP, PostgreSQL UP, trusted HTTPS, and Swagger AVAILABLE. This identifies the deployed
+generation; it is not a future-uptime guarantee or human acceptance.
 
 On Windows, double-click the root `IDEA-Dev.cmd` in the project checkout and choose Start, Status or Stop.
 Main checkout: `C:\Users\TD-999\Research\Projects\IDEA\IDEAEngineering`.
@@ -69,11 +76,11 @@ it does not recreate the database. UUID inputs currently require no surrounding 
   Renew/trust through a separately reviewed fingerprint; do not disable validation.
 - Setup/runtime credentials remain in mode-600 files under the mode-700 remote preview directory.
   Server startup uses only app credentials; migration is not run on Start.
-- Current preview: separately qualified Swagger successor, application source
-  `daa8c10304db5f61184c285d1735af3d2c0b491d`, artifact SHA-256
-  `48FE98659DB3C075B771A90FD0F4FC61F79A01C01CC941114DB9A5299A685BDE`.
-  V1–V7, product identity code and existing Web bytes are unchanged. Previous package/controller
-  backups remain on the server. No product gate, timer or Swagger merge is inferred.
+- Current preview: application source `2a74130b88cffe1ee96d28014c7a0ec080d1a199`, artifact
+  SHA-256 `7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c`; the controlled
+  backend launcher pins this exact hash. V1–V7, product identity code and existing Web bytes are
+  unchanged. The predecessor package/controller are retained as recoverable backups. No product
+  gate, timer or Swagger merge is inferred.
 
 ## Verification
 

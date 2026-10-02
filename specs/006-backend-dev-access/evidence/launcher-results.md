@@ -191,3 +191,30 @@ No Server JAR, product source, migration, credential or account grant changed.
 The new helpers qualify previously implemented behavior and were GREEN initially; no artificial
 RED or product change is claimed. T010 is satisfied in its approved US1 scope. Swagger intake,
 T013 tests/implementation, external whole-feature review and Issue #26 acceptance remain open.
+
+## 2026-10-02 persistent preview convergence to the Swagger allowlist repair
+
+After the focused PR #27 repair was qualified, the persistent developer preview was converged to
+the same application generation for final human review. This successor entry is the current package
+identity; prior package hashes and observations above remain historical.
+
+- Exact application/test source: `2a74130b88cffe1ee96d28014c7a0ec080d1a199`.
+- Deployed JAR SHA-256: `7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c`.
+- The previously owned runtime was stopped with the normal Windows launcher; its verified PID was
+  83142. The predecessor JAR/controller were backed up under new names without replacing existing
+  backups. The new backend controller pins the repaired JAR SHA-256; its SHA-256 is
+  `f7161030d83609a839905fac48b881ffce09b4eabfbac8d3384ad9c92b0ed058`.
+- The normal launcher restarted the preview as PID 92389. Start and final Status both reported
+  `PROCESS=UP`, `DATABASE=UP`, `TLS=VERIFIED`, `SWAGGER=AVAILABLE` at
+  `https://localhost:18444/dev-api/`.
+- Focused `launcher-contract.test.ps1`: 3/3 PASS. Focused
+  `launcher-documentation.test.ps1 -ExpectedState AVAILABLE`: PASS. No broad lifecycle suite or
+  feature suite was rerun.
+- Before/after database snapshots matched for synthetic Actor/Account/LoginIdentity IDs and their
+  counts, all nine relevant table counts, and Flyway V1–V7 versions/checksums. Private runtime and
+  operator config and setup markers matched byte-for-byte. No migration or bootstrap command ran;
+  no password or password verifier was read.
+- Final human browser sign-in/acceptance is pending. PR #27 remains open and unmerged.
+
+Detailed identity/count/migration snapshot values are in
+[swagger-results.md §7](swagger-results.md#7-persistent-preview-convergence-to-the-allowlist-repair).
