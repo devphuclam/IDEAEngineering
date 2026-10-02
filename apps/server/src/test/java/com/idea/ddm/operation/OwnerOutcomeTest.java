@@ -123,6 +123,45 @@ class OwnerOutcomeTest {
         assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision.REFUSE);
     }
 
+    @Test void refusalHandoffRetainsOperationLockUntilRefusalAuditCommits() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var executor = Executors.newFixedThreadPool(2);
+        try (var blocker = F04SchemaTest.open("migration")) {
+            try (var statement = blocker.createStatement()) {
+                statement.execute("CREATE FUNCTION f04_c_handoff() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                        + "IF NEW.operation_id='" + operation + "'::uuid AND NEW.outcome='REFUSED' THEN "
+                        + "PERFORM pg_advisory_xact_lock(73004991," + operation.hashCode() + "); END IF; RETURN NEW; END; $$");
+                statement.execute("CREATE TRIGGER f04_c_handoff BEFORE INSERT ON sample_owner_operation "
+                        + "FOR EACH ROW EXECUTE FUNCTION f04_c_handoff()");
+            }
+            try {
+                advisory(blocker, "pg_advisory_lock", 73004991, operation.hashCode());
+                var refused = executor.submit(() -> owner.execute(session.context(), new SampleOwnerCommandService.Command(
+                        operation, "f04-handoff-refused", SampleOwnerCommandService.BusinessDecision.REFUSE)));
+                awaitWaiters(blocker, 73004991, operation, 1); // REFUSED insert is after the actual rollback handoff.
+                var accept = executor.submit(() -> owner.execute(session.context(), new SampleOwnerCommandService.Command(
+                        operation, "f04-handoff-loser", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+                awaitOperationWaiters(blocker, operation, 1);
+                advisory(blocker, "pg_advisory_unlock", 73004991, operation.hashCode());
+                var canonical = refused.get(8, TimeUnit.SECONDS);
+                assertEquals(SampleOwnerCommandService.Outcome.REFUSED, canonical.outcome());
+                assertEquals(canonical, accept.get(8, TimeUnit.SECONDS));
+                assertCompanions(operation, 1, 1, 0);
+                assertOperationUnlocked(operation);
+            } finally {
+                advisory(blocker, "pg_advisory_unlock", 73004991, operation.hashCode());
+                executor.shutdownNow();
+                assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+                try (var statement = blocker.createStatement()) {
+                    statement.execute("DROP TRIGGER f04_c_handoff ON sample_owner_operation");
+                    statement.execute("DROP FUNCTION f04_c_handoff()");
+                }
+            }
+        } finally { executor.shutdownNow(); }
+    }
+
     private void assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision secondDecision) throws Exception {
         var first = fixture.signInThroughRealHttp();
         var second = fixture.signInThroughRealHttp();
@@ -174,10 +213,15 @@ class OwnerOutcomeTest {
     }
 
     private static void awaitOperationWaiters(Connection observer, UUID operation, int expected) throws Exception {
+        awaitWaiters(observer, 73004001, operation, expected);
+    }
+
+    private static void awaitWaiters(Connection observer, int namespace, UUID operation, int expected) throws Exception {
         long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
         try (var query = observer.prepareStatement("SELECT count(*) FROM pg_locks WHERE locktype='advisory' "
-                + "AND classid=73004001 AND objid::bigint=? AND objsubid=2 AND NOT granted")) {
-            query.setLong(1, Integer.toUnsignedLong(operation.hashCode()));
+                + "AND classid=? AND objid::bigint=? AND objsubid=2 AND NOT granted")) {
+            query.setInt(1, namespace);
+            query.setLong(2, Integer.toUnsignedLong(operation.hashCode()));
             query.setQueryTimeout(2);
             while (System.nanoTime() < deadline) {
                 try (var row = query.executeQuery()) { row.next(); if (row.getInt(1) == expected) return; }
@@ -188,9 +232,14 @@ class OwnerOutcomeTest {
     }
 
     private static boolean advisory(Connection connection, String function, int key) throws Exception {
+        return advisory(connection, function, 73004001, key);
+    }
+
+    private static boolean advisory(Connection connection, String function, int namespace, int key) throws Exception {
         assertTrue(java.util.Set.of("pg_advisory_lock", "pg_advisory_unlock", "pg_try_advisory_lock").contains(function));
-        try (var query = connection.prepareStatement("SELECT " + function + "(73004001,?)")) {
-            query.setInt(1, key);
+        try (var query = connection.prepareStatement("SELECT " + function + "(?,?)")) {
+            query.setInt(1, namespace);
+            query.setInt(2, key);
             query.setQueryTimeout(3);
             try (var row = query.executeQuery()) {
                 assertTrue(row.next());
