@@ -284,13 +284,19 @@ class OwnerOutcomeTest {
     }
 
     private static AutoCloseable installAppendFailure(UUID operation, String table, boolean suppress) throws Exception {
+        return installAppendFailure(operation, table, suppress, false);
+    }
+
+    private static AutoCloseable installAppendFailure(UUID operation, String table, boolean suppress, boolean deferred) throws Exception {
         assertTrue(java.util.Set.of("audit_evidence", "owner_committed_event").contains(table));
         try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
             statement.execute("CREATE FUNCTION f04_c_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
                     + "IF NEW.operation_id='" + operation + "'::uuid THEN "
                     + (suppress ? "RETURN NULL;" : "RAISE EXCEPTION 'Controlled F04 failure' USING ERRCODE='P0001';")
                     + " END IF; RETURN NEW; END; $$");
-            statement.execute("CREATE TRIGGER f04_c_fault BEFORE INSERT ON " + table
+            statement.execute((deferred ? "CREATE CONSTRAINT TRIGGER f04_c_fault AFTER INSERT ON "
+                    : "CREATE TRIGGER f04_c_fault BEFORE INSERT ON ") + table
+                    + (deferred ? " DEFERRABLE INITIALLY DEFERRED" : "")
                     + " FOR EACH ROW EXECUTE FUNCTION f04_c_fault()");
         }
         return () -> {
@@ -339,6 +345,32 @@ class OwnerOutcomeTest {
                             SampleOwnerCommandService.BusinessDecision.ACCEPT)));
             assertCompanions(operation, 0, 0, 0);
             assertOperationUnlocked(operation);
+        }
+    }
+
+    @Test void deferredCommitFailureIsNotSuccessAndObserverConfirmsNonCommit() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var activityBefore = sessionActivity(session);
+        try (var fault = installAppendFailure(operation, "owner_committed_event", false, true)) {
+            assertEquals("P0001", assertThrows(SQLException.class, () -> owner.execute(session.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-deferred-commit-failed",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT))).getSQLState());
+            // SQLException alone is not rollback evidence: observe independently after the service exits.
+            assertCompanions(operation, 0, 0, 0);
+            assertEquals(activityBefore, sessionActivity(session));
+            assertOperationUnlocked(operation);
+            System.out.println("F04_CONFIRMED_ROLLBACK=DEFERRED_COMMIT; OP=" + operation + "; ACTOR="
+                    + session.expectedActorId() + "; CORRELATION=f04-c-deferred-commit-failed; COMMITTED_COMPANIONS=0/0/0");
+        }
+    }
+
+    private static java.sql.Timestamp sessionActivity(F04SessionFixture.SignedIn session) throws Exception {
+        try (var observer = F04SchemaTest.open("app"); var query = observer.prepareStatement(
+                "SELECT last_eligible_activity_at FROM session_record WHERE session_id=?")) {
+            query.setObject(1, session.sessionReference());
+            try (var row = query.executeQuery()) { assertTrue(row.next()); return row.getTimestamp(1); }
         }
     }
 
