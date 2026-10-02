@@ -7,7 +7,7 @@ action=${1:?action} id=${2:?owned identifier}
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 [[ $root == "/home/phuclam/idea-devaccess-browser-$id" && $(stat -c '%a:%u' "$root") == "700:$(id -u)" ]] || exit 2
 jar=/home/phuclam/idea-devaccess-final-28/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar
-[[ $(sha256sum "$jar" | cut -d ' ' -f 1) == d53c7668a675563c40b6e3d6f0ee761426fc23764635f7bdcbe7c685c34441b9 ]] || exit 2
+[[ $(sha256sum "$jar" | cut -d ' ' -f 1) == 48fe98659db3c075b771a90fd0f4fc61f79a01c01cc941114db9a5299a685bde ]] || exit 2
 java_root=/opt/idea/tools/jdk-25.0.4.1+1
 config=/home/phuclam/.local/share/idea/dev-preview-26
 for file in runtime.env operator.env; do
