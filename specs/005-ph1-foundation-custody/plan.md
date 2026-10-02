@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f03b-authentication-sessions` | **Date**: 2026-10-01 | **Spec**: [PH1 specification v0.7](spec.md)
+**Branch**: `codex/f04-design-baseline` | **Date**: 2026-10-02 | **Spec**: [PH1 specification v0.8](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -89,13 +89,17 @@ The Server owns relational authority; the Gateway owns private byte handling thr
 2. **F01-B (8 h)**: add repeatable basic checks, non-secret examples, lockfiles and secret scanning; retain actual check results.
 3. **F02 (12 h)**: introduce ordered PostgreSQL migrations and health checks; run fresh migration and bounded rollback/failure checks.
 4. **F03-A/B (16 h)**: bootstrap and administer native accounts, then sign in/out and revoke sessions; prove invalid sessions are refused.
-5. **F04 (12 h)**: use one shared relational transaction for a sample owner result and Audit Evidence; force failure and verify no partial success.
+5. **F04 (12 h)**: qualify an internal sample owner result with required Audit/committed event, bounded refusal/result access, concurrent idempotency and commit-time IAM eligibility; verify no partial success. See the scoped design below; no product API or mutable demo entity.
 6. **F05-A/B (16 h)**: qualify the Gateway implementation and exact dependency intake, then issue a scoped Grant, transfer both synthetic fixtures, verify Receipt and commit custody metadata; run refusal and interruption cases.
 
 Each card receives its own actual evidence before the Progress Tracker may mark it complete.
 The project user starts/stops its timer explicitly; this plan does not record actual effort.
 
 ## F03-B execution refinement
+
+Historical implementation/closure instructions in this section are retained as trace, not
+current card status. [F03 evidence §41](evidence/F03-identity-results.md#41-whole-card-review-receipt-acceptance-and-main-integration)
+records whole-card acceptance/integration; the current F04 handoff is below.
 
 Work Item [#24](https://github.com/devphuclam/IDEAEngineering/issues/24) continues the accepted
 F03-A services at `79373e95502474e64dd2a72604c2d9629daa9e36`. PR #23 integration and local
@@ -233,6 +237,89 @@ pins each separate exact source, rather than combining historical test counts in
 Keep F03-B IN_PROGRESS, Issue #24 OPEN and verifier NOT-RUN. F04 owns its future owner-command
 race; company policy/MFA, T036/commercial, deployment and merge are separate. Final matrix review
 and Project Reviewer whole-card acceptance are still required.
+
+## F04 design baseline
+
+The Project Reviewer's 2026-10-02 decisions close the design frontier; [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md)
+records the approved meaning, trade-offs and future seams. [Work Item #29](https://github.com/devphuclam/IDEAEngineering/issues/29)
+is this documentation closure, not F04 implementation acceptance. Source base:
+`7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. T023–T026 stay unchecked/runtime NOT-RUN.
+
+### Execution prerequisite
+
+Current `generate-resources` invokes `exec-maven-plugin` and its eight inventoried build-only
+dependencies. T043, F03-B closure and Issue #26 exceptions do **not** authorize F04. Before any
+F04 Maven/test/package command, obtain separate bounded F04 authority or a separately approved
+execution path; verify exact intake/graph/hash/cache first. This is an execution BLOCKED state,
+not an unresolved event-design decision. Do not run first and record an exception afterward.
+No new tooling/dependency is selected by this design. Retain actual Web packaging when using
+the ordinary build; a skip flag is not an approved alternative by itself.
+
+### Owner and append contracts
+
+- Keep `SampleOwnerCommandService` under `com.idea.ddm.operation` as an internal synthetic
+  consumer, not a controller/operator/startup command. Test-time invocation uses a context
+  captured from the real Server authentication path, never a raw fixture ActorId.
+- Introduce `OwnerSessionEligibility` under Identity and Accounts only as a narrow, caller-
+  connection-aware adapter to existing session/Account eligibility and authoritative Organization
+  resolution. `ActorContext` currently carries Actor/version/session, not Organization. Reuse
+  `SessionService` checks rather than duplicating expiry/revocation SQL in the sample owner.
+  It cannot create context from a client ActorId, grant product Permissions or start a separate
+  transaction. Product authorization remains required for future supported owner commands.
+- `AuditEvidenceRepository` and `CommittedEventStore` each append through the caller's JDBC
+  connection, check exactly one required insert, propagate failure and never commit/rollback
+  or open a second datasource transaction. Audit receives the already-decided result; the event
+  store receives ENVELOPE-9 and has no dependency on the sample owner or its table.
+- Only the sample owner applies its originating-Actor result-read policy. Do not place it in
+  ActorContext, database event constraints or a generic result lookup. The next real owner
+  adopts the append/eligibility seams and defines its own gates, typed event meaning and query
+  reader policy. No shared generic repository or transaction-coordinator framework is needed.
+
+### Transaction and concurrency sequence
+
+1. Establish Actor from verified Server proof and check current eligibility/Organization. An
+   initial invalid proof receives bounded refusal, never a result lookup bypass.
+2. Acquire a **sample-scoped, per-OperationId session advisory lock** on a dedicated connection.
+   Use the two-integer key space with sample namespace `73004001` and a deterministic 32-bit
+   OperationId hash; IAM retains its existing one-key lock. Hash collisions only serialize extra
+   operations: canonical lookup always uses the exact UUID, never the hash. Bound acquisition
+   wait; timeout is a technical non-result, not business REFUSED. Do not acquire while holding the
+   IAM security-write lock. Acquire the existing IAM transaction lock `73003002` afterward;
+   recheck eligibility after waiting. Other IAM writes acquire no sample-operation lock.
+3. Read the canonical sample result. Apply sample result-access policy before returning any
+   outcome/details. Same eligible originating Actor resolves immutable original provenance;
+   other Actors receive non-disclosing refusal with no original Audit/event writes. Authorized
+   replay may use the existing IAM eligible-activity seam, but cannot append owner companions.
+4. For a new accepted result, write sample result → required Audit → envelope through the same
+   transaction. Revalidate eligibility immediately before authoritative commit while holding
+   IAM coordination through commit. Accepted eligible-activity changes, if made, share that
+   transaction. Any required append/affected-row/deferred-commit failure rolls it all back.
+5. For deliberate business or attributable commit-time eligibility refusal, roll back tentative
+   owner writes and start the refusal-evidence transaction on the retained connection. **Keep
+   the sample operation lock across this gap.** Recheck canonical state, append one terminal
+   refusal plus required Audit, no event; commit together. Invalidated proof never turns into an
+   accepted result. This records the admitted original Actor, not new request read authority.
+6. A technical failure is not business REFUSED: confirmed rollback leaves the operation
+   unresolved and records only qualification failure evidence. On indeterminate commit, return
+   uncertainty, not FAILED/rollback/new success. After access becomes eligible, resolution of
+   committed state uses the same ID; no generic status API/reconciliation subsystem is built.
+7. Release the session advisory lock in every exit before closing/returning the connection;
+   balance each successful acquisition with one unlock, after rollback if the transaction has
+   aborted. If unlock/connection health cannot be confirmed, terminate/discard the physical
+   connection rather than return it to a pool. Connection termination releases its locks.
+   Database row/partial uniqueness is a backstop,
+   not a substitute for serialization. Do not retry a unique violation by blindly appending Audit.
+
+The [persistence design](data-model.md#f04-persistence-design) proposes V8 and a producer/kind-
+bounded partial unique event index. The sample primary key stays authoritative for its one
+terminal result. Concurrent ACCEPTED versus REFUSED is first committed canonical result under
+this serialization, not permission to retain both or replace a winner. Tests witness the lock
+ordering and rollback/refusal gap with barriers, not sleeps. No global operation/event count rule.
+
+Post-design Constitution check: preserve PG2/PG3/PG4 hierarchy, no new product obligation or
+permission; retain exact-source evidence/intake and least privilege; scope runtime NOT-RUN.
+No new gate approval or constitutional exception is claimed. Future dispatch, typed domain
+content, access-attempt Audit and owner-specific result readers remain separately governed.
 
 ## Complexity Tracking
 

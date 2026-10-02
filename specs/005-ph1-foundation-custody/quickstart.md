@@ -1,6 +1,6 @@
 # PH1 validation guide
 
-**Procedure updated 2026-10-01:** This guide is not a progress register or test result.
+**Procedure updated 2026-10-02:** This guide is not a progress register or test result.
 Per-card evidence and the Execution Register own actual status. F03-A acceptance does not
 pre-accept F03-B HTTP/session work; retain each executed red/green result separately.
 
@@ -78,7 +78,7 @@ each implemented checkpoint; commands for unfinished slices remain planned, neve
 | F01-B | Repeat automated checks; inspect tracked config and build inputs for working secrets; inspect lockfiles and exact dependency intake. | Repeatable checks and no committed working secret; record any blocked package separately. |
 | F02 / T044 data successor | Create a completely new isolated database matching `idea_ddm_f02_<run-id>`; use exact distinct app/migrator roles and set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that exact new name. After T044 tooling approval and initial-empty-state witness, `DataBaselineTest` on current source expects V1–V7 once, repeat zero; run `DatabasePrivilegeTest` and additional successor ownership/privilege assertions, then packaged migration/no-op and health checks. Never use the runner's historical default database for T044. | Seven migrations on current source, valid history/checksums, no pending migration and repeat zero; migrator-owned objects and refused app migration authority; bounded rollback and distinct process/data health. Historical F02 evidence is unchanged, not retrospectively changed to seven migrations. No backup/restore claim. |
 | F03-A/B | Run controlled initial-admin bootstrap twice; create/disable a native test account; sign in/out, revoke, and retry protected calls with old proof. | The second bootstrap reports already initialized with no Actor, account or Role Assignment change; attributable Actor/session; no public registration; all invalidated retries refused. Do not print passwords or session secrets. |
-| F04 | Run one allowed, one refused and one forced-failure sample owner command with a fixed `OperationId` per attempt. Query owner/Audit/outbox outcomes. | No successful result without required Audit, no partial success under forced failure, and no duplicate result from a same-ID retry. |
+| F04 | Follow the [internal qualification contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) and T023–T026 after separate F04 tooling/database authority. Run internal accepted/refused/confirmed-failure, concurrent retry, result-access and IAM-race cases; inspect sample owner/Audit/event, not a mutable demo resource. | ACCEPTED has one required Audit/event; REFUSED one Audit/no event; confirmed rollback no partial records; same-ID retry adds no original companions. Originating Actor may use a fresh eligible session; another Actor/invalid proof receives no original result. |
 | F05-A/B | Record exact Gateway runtime, Adapter and transport qualification; transfer approved 1 KiB and 64 MiB fixtures directly to one Gateway; compare size and SHA-256 with manifest, then inspect receipt and accepted metadata. Repeat with wrong/expired grant, wrong digest, interruption, lost response and same-ID repeated/changed input. | Matching verified custody for both happy-path fixtures; zero false successful custody for failures. Retries resolve the same operation. Artifact/Vault/Location IDs stay distinct from private Adapter path. No second Vault or throughput claim. |
 
 For the F02 integration test, run the dedicated helper from an interactive Ubuntu shell after
@@ -106,6 +106,34 @@ while a fresh eligible sign-in works. For F04, use controlled synchronization to
 command after admission, commit account disablement or session revocation, then let the command
 reach its commit check. It must produce no successful business-state change. Retain the ordering
 evidence; an arbitrary sleep alone does not establish that the race was exercised.
+
+### F04 validation gate and evidence
+
+Design is closed by the Project Reviewer on 2026-10-02; runtime remains NOT-RUN. Read
+[ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
+[execution prerequisites](plan.md#execution-prerequisite) and [F04 units](tasks.md#f04-implementation-units)
+before issuing commands. No F04 runner exists yet. Prior Maven/build-tool exceptions do not
+admit F04 use: retain BLOCKED until a separate disposition and artifact preflight exist.
+
+After that gate, archive the exact implementation commit, use a test-owned UUID schema in an
+explicitly authorized isolated database, and apply V1→V8 with migrator while executing as app.
+Record first/repeat/history/checksums/ownership and denied mutation checks, preserving original
+V1–V7 files. Test existing migrated predecessor state as well as a fresh schema, including
+sample Organization backfill failure rather than guessed history. No retained public/preview
+database or Vault is a test target. Any fresh-public run needs its exact new DB authorized first.
+
+Observe the [contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) with
+barriers and fresh read connections after each commit/rollback. Compare original Actor,
+Organization, OperationId, EventId and correlation; use separate controlled fault fixtures for
+Audit/event insert, zero affected rows and deferred commit. Witness the rollback/refusal handoff
+and two simultaneous retries. Verify immutable-store privileges and a non-F04 synthetic producer
+with multiple events for one operation, without claiming real multi-owner integration.
+
+T026 retains commands, exact executed source/JAR if packaged, migration hashes, environment,
+schema/roles, expected/actual counts, ordering witness, sanitized output/hash, review and limits
+in `evidence/F04-outcome-results.md`. A first GREEN on existing eligibility is qualification,
+not a fabricated RED. Unknown commit is neither confirmed rollback nor durable FAILED.
+No production, delivery, general RBAC or independent mutable-domain-state claim; verifier NOT-RUN.
 
 ### F03-B fast HTTP/PostgreSQL checks
 

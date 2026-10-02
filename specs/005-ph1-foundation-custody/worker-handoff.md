@@ -30,7 +30,7 @@ Use the existing card evidence files named in tasks.md; do not create a competin
 | CHK001–002: scope | T001, T035 | Compare delivered source and configuration with F01–F05. Exactly one Gateway/Vault is configured for PH1; later document workflow, multi-vault and Format Worker remain scheduled/deferred, not claimed delivered. |
 | CHK003: trace | T035 | Every local FR-001–014 maps to its governing source and applicable implementation/test evidence. Missing trace remains an explicit gap. |
 | CHK004–005: identity/session | T018–T022, refinement T038–T046, T023/T025 | Executed tests for server-derived Actor, first/repeated bootstrap, exact-login credential recovery, sign-out, disable/revoke, re-enable with fresh login, and commit-time invalidation. Preserve evidence of the controlled race ordering. |
-| CHK006: owner outcome/Audit | T023–T026 | Allowed, refused, forced-failure and same-ID retry results; database assertions prove outcome/Audit consistency and no partial success. |
+| CHK006: owner outcome/Audit | T023–T026 | Internal accepted/refused/confirmed-failure and concurrent retry/access results; database assertions prove required Audit/event fate, immutable original provenance and no partial sample outcome. Follow the approved F04 contract; no general product RBAC/delivery claim. |
 | CHK007–008: control, bytes, custody | T028–T034 | Actual Client→Gateway route and candidate/Receipt/accepted-metadata assertions. No Generation or Check-in result is created by the PH1 fixture transfer. |
 | CHK009–010: failures and future multi-vault seam | T028–T034 | Each detailed check below has retained test/review evidence, not merely source comments. |
 | CHK011: measurable acceptance | T012/T013, T017, T022, T026, T034, T035 | Actual results for all six SC criteria on the stated platforms, including both fixture sizes. Preserve NOT-RUN/BLOCKED/FAIL where applicable. |
@@ -41,7 +41,34 @@ for the other. Before closing a card, inspect every applicable row; before claim
 T035 must account for all rows. An unresolved required result keeps completion open. Do not implement
 deferred capabilities merely to turn a scope-boundary row green.
 
-## Current F03-B closure handoff
+## Current F04 design-to-implementation handoff
+
+Design frontier closed by the Project Reviewer on 2026-10-02; documentation Work Item
+[#29](https://github.com/devphuclam/IDEAEngineering/issues/29), branch `codex/f04-design-baseline`,
+base `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. This change delivers no Java or migration.
+Use spec v0.8, FR-001–014, [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
+[F04 contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) and
+[T023–T026 units](tasks.md#f04-implementation-units). `tasks.md` remains the only task list.
+
+Next boundary: obtain separate F04 Maven/tooling authority and exact artifact preflight before
+any test command. Prior T043/F03-B/#26 exceptions do not extend; execution is BLOCKED until that
+prerequisite is resolved. No new design clarification is pending. F04 runtime is NOT-RUN and
+T023–T026 remain unchecked; no completion/progress action is inferred.
+
+After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,
+concurrency tests, exact-source regression/evidence. Only **T024-A** is GEMINI-SAFE after CODEX
+fixes the supplied-Connection Audit contract, schema and failing test. Its output still receives
+CODEX integration review. A Gemini worker changes only that repository class; a need to change
+schema, ownership, transaction, identity or tests returns to CODEX. This is allocation, not an
+instruction to dispatch an implementation worker during documentation closure.
+
+Approved reader rule belongs only to the synthetic sample: currently eligible originating Actor,
+including a fresh session. Immutable original Actor is provenance, not universal read authority.
+No product API/Permission, mutable demo entity, generic registry/payload or dispatcher is planned.
+Use proposed V8 only after confirming the next free migration number; preserve V1–V7 and all
+historical F03 evidence. Keep rollback, terminal business refusal and uncertainty distinct.
+
+## Accepted F03-B receipt and historical checkpoint guidance
 
 The approved reconciliation, logout/history repairs, closure execution and whole-card technical review are completed; see [closure matrix](evidence/F03-B-closure-matrix.md) and [F03 §39–41](evidence/F03-identity-results.md#39-f03-b-closure-execution-and-review-submission).
 Final source `989bf5a9fc09c03ee2d5fa88d09b3cee78335616` passed 108 checks; fresh public/package `38b99f50de09370a8e8554cc80fc66a0afa70b62`, final public checks `989bf5a9...` and actual browser `9238b7e8ad6878687e72823e7bed1d4f083b9699` have separate PASS receipts (§39–40) and unchanged production content.
@@ -53,7 +80,9 @@ Actual effort: Progress Tracker recorded **11 giờ 20 phút** (11.3333h, revisi
 PR #25 integrated into `main` via merge commit `25ef993524b9d309f28d61adeef0095355c9c66e`.
 Desktop/WebView2/Workspace binding transferred to separate successor Work Item. Verifier remains NOT-RUN.
 
-Use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
+The following F03 guidance/versions describe historical checkpoints, not the current F04 task.
+The accepted F03-B receipt above supersedes their former open/IN_PROGRESS instructions.
+At those checkpoints use spec v0.7, FR-001–014 and refinement T038–T046. T045 remains `[X]` as historical
 implementation/execution at `976bd031913edb3e4554af6e23744a1dd55d8527`; do not reopen it or
 rewrite evidence §20. T046 ran from `1e69ac61d2e8f53c742fd1041c36a5bf2c3bf142` and received
 external PASS WITH NOTES at `281e46651e774b44a0b2e1c18fe30bd50a1f3151` (§22). Preserve V1–V6

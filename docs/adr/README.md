@@ -24,6 +24,10 @@ The exact Proposed source hashes are retained in
 
 - [ADR-0009 — Use DDM as the behavioral baseline and Aras as the quality benchmark](0009-use-ddm-baseline-and-aras-quality-benchmark.md)
 
+### Scoped delivery design decisions
+
+- [ADR-0014 — Retain owner committed-event provenance independently of delivery](0014-retain-owner-committed-event-foundation.md): Project Reviewer-approved F04 design, 2026-10-02. Engineering realization of the existing PH1 authority, not a new Core product requirement/gate or universal sample-result reader rule; runtime qualification remains NOT-RUN.
+
 ## Inherited template decision
 
 [ADR-0001 — Coordinate shared Agent work through isolated runs](0001-coordinate-shared-agent-work-through-isolated-runs.md) belongs to inherited Development Workspace Template tooling. It is not part of C1 product behavior and remains only until its PG0 retain/remove disposition is implemented.

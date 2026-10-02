@@ -96,6 +96,10 @@ _Avoid_: owner business-gate result, mutable current access row, client-side per
 The separate attributable result recorded by the authoritative resource owner after its lifecycle, Reservation/Workspace, expected-state, completeness and other business gates. It correlates to an Authorization Decision and commits atomically with authoritative owner state, Audit Evidence and transactional outbox where applicable.
 _Avoid_: Access Policy state, generic cross-module CRUD record, RBAC grant treated as final business success
 
+**Owner Committed Event**:
+An immutable, independently identified record of an authoritative owner's committed operation, retaining its original Actor, Operating Organization, correlation and semantic contract version. Its existence does not imply delivery or consumer success, and its provenance does not itself grant permission to read the operation result.
+_Avoid_: Owner Command Outcome, Audit Evidence, delivery receipt, current caller identity
+
 **Administrator**:
 An Actor who has an effective Role Assignment containing one or more administration Permissions at an explicit Authorization Scope. Administrator is not an account type or a fixed rank: the same Actor may hold several independently assigned administrative roles, and none implies document, Approval or Release authority unless another applicable Role Assignment grants it.
 _Avoid_: all-powerful account, hidden superuser, department identity, administrator hierarchy
