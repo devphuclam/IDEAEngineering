@@ -34,6 +34,7 @@ let browser, tunnel, prepared = false, password = randomBytes(24).toString('hex'
 let current = 'ENVIRONMENT', oracle = 'Prerequisites';
 const results = [], statuses = [], observations = [], secrets = new Set([password]);
 let csrf = null, csrfSubmitted = false, actorSent = false, diagnosticLeak = false;
+let requestMethodFailure = false;
 const check = (condition, label) => { oracle = label; assert.ok(Boolean(condition), label); };
 const fixture = (action, input) => {
   const result = spawnSync('ssh', [...ssh, 'phuclam@192.168.137.33', `bash ${remote}/swagger-browser-fixture.sh ${action} ${id}`],
@@ -79,8 +80,14 @@ try {
   browser = await chromium.launch({ channel: 'chrome', headless: false });
   const context = await browser.newContext();
   const page = await context.newPage(); page.setDefaultTimeout(15000);
-  page.on('console', message => { diagnosticLeak ||= [...secrets].some(value => value && message.text().includes(value)); });
-  page.on('pageerror', failure => { diagnosticLeak ||= [...secrets].some(value => value && failure.message.includes(value)); });
+  page.on('console', message => {
+    requestMethodFailure ||= message.text().includes('toUpperCase');
+    diagnosticLeak ||= [...secrets].some(value => value && message.text().includes(value));
+  });
+  page.on('pageerror', failure => {
+    requestMethodFailure ||= failure.message.includes('toUpperCase');
+    diagnosticLeak ||= [...secrets].some(value => value && failure.message.includes(value));
+  });
   page.on('response', response => {
     if (new URL(response.url()).origin !== origin) return;
     statuses.push({ path: new URL(response.url()).pathname, status: response.status() });
@@ -167,7 +174,8 @@ try {
     : message.includes('ERR_HTTP_RESPONSE_CODE_FAILURE') ? 'HTTP_NAVIGATION_REFUSAL'
     : message.includes('ERR_CERT') ? 'TLS_TRUST' : message.includes('ERR_CONNECTION') ? 'CONNECTIVITY'
     : message.includes('Timeout') ? 'OBSERVATION_TIMEOUT' : failure?.name === 'AssertionError' ? 'ORACLE_REFUSAL' : 'HARNESS_ERROR';
-  console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, classification, completed: results })); process.exitCode = 1;
+  console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, classification, requestMethodFailure,
+    completed: results, statuses })); process.exitCode = 1;
 } finally {
   password = ''; secrets.clear(); csrf = null;
   try { if (browser) await browser.close(); } catch { console.log('BROWSER_CLEANUP=BLOCKED'); process.exitCode = 1; }
