@@ -60,6 +60,20 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void freshSessionResolvesTerminalRefusalDespiteChangedDecision() throws Exception {
+        var first = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var original = owner.execute(first.context(), new SampleOwnerCommandService.Command(
+                operation, "f04-c-original-refusal", SampleOwnerCommandService.BusinessDecision.REFUSE));
+        var retry = fixture.signInThroughRealHttp();
+        assertTrue(retry.hasDifferentSessionFrom(first));
+        assertEquals(original, owner.execute(retry.context(), new SampleOwnerCommandService.Command(
+                operation, "f04-c-retry-accept", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+        assertEquals(SampleOwnerCommandService.Outcome.REFUSED, original.outcome());
+        assertCompanions(operation, 1, 1, 0);
+    }
+
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
         var signedIn = fixture.signInThroughRealHttp();
         var operation = UUID.randomUUID();
