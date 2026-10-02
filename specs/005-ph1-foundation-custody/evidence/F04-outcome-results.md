@@ -3,19 +3,19 @@
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.3` / Draft / INFORMATIVE |
+| Version / document status / normativity | `0.4` / Draft / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
 | Execution disposition | Partial PASS: schema 7/7, predecessor 1/1, Audit 7/7; whole F04 NOT-RUN |
 | Owner / author | Engineering / Codex |
 | Reviewer | Internal Standards and Spec reviews recorded below; external Project Reviewer review PENDING |
 | Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; execution authorized, checkpoint/whole-card acceptance PENDING |
 | Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), T023-A/T025-A/T024-A; 2026-10-02 +07:00 |
-| Current executed source | `a7a577b00f4ea427b609b4b862e6f72309ed94ec` |
-| Current archive SHA-256 | `42bcf0c4d3737077d62619b2a895dde2dd809b34bc239322330123944596344f` |
+| Current executed source | `12555689fd38218d5fe28bfa507215acde45187d` |
+| Current archive SHA-256 | `fad80258426aa4e034647eaee3844ff10e99296f49e153d34b9a6a1b21d5aa6d` |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
 | Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to v0.2; v0.1 schema and v0.2 execution receipts remain below. Section 9 adds the exact-source rerun after fixture credential-source selection repair and final review. No historical F03 record changed. Superseded by NOT-APPLICABLE |
+| Change / supersession | Successor to v0.3; sections 1–9 retain historical execution/review receipts. Section 10 records the unlisted Python utility, prospective tooling clarification and clean requalification. No original authorization/F03 evidence is rewritten. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
 | Standards tailoring | `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
@@ -276,3 +276,41 @@ workflow triggers on push/pull_request, while verifier execution is outside this
 This uses the documented [GitHub skip mechanism](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs),
 not a workflow/configuration change or a passing CI result. Any pending required check stays
 pending; this draft checkpoint is not authorized for merge.
+
+## 10. Review-discovered Python omission and clean requalification
+
+The Project Reviewer technically accepted the schema/Audit checkpoint for continuation, while
+finding that the original F04 tooling authorization omitted the Python harness utility. Prior
+15/15 executions remain technically valid PostgreSQL evidence; their tooling-control envelope
+was incomplete. Sections 1–9 are historical receipts, not proof Python had prior approval.
+
+Prospective authority is [IE-RES-F04-PYTHON-AUTH-20261002](../../../docs/research/2026-10-02-f04-python-harness-authorization.md),
+committed with the guards at `12555689fd38218d5fe28bfa507215acde45187d` before requalification.
+Installed `python3 --version` returned CPython 3.14.4; the exact `/usr/bin/python3.14` hash and
+standard-library-only import scope are recorded there. The runner pins that interpreter and
+invokes `-I -S`; no pip, virtualenv, third-party Python dependency, download or install is used.
+Authority is F04 harness-only and prospective; original authorization text remains unchanged.
+
+The three section-4 commands ran from exact source `1255568...` and its current-envelope archive.
+All passed under the repaired tooling envelope: **15 tests, zero failure/error/skip**, offline
+Maven exit 0. The runtime receipt on each run reports `F04_PYTHON=CPython-3.14.4; ISOLATED=1;
+NO_SITE=1; INTERPRETER_SHA256=EXACT`, followed by the unchanged nine-artifact/build preflight.
+
+| Suite / result | Build under `/home/phuclam/` | Fresh owned schema | Log under `/home/phuclam/` / SHA-256 |
+|---|---|---|---|
+| Schema 7/7 | `idea-f04-1255568-SxM4c6` | `f04_804260da3a004aff97b99b1a12535667` | `idea-f04-schema-CQvc0iak.log` / `c28d858d493e22e17fba520510d4e0c25821437ddfc1396b6770ff68ab5e1f23` |
+| Predecessor 1/1 | `idea-f04-1255568-UO9SQv` | `f04_3f0ae75896c44492a401b41e557d97f4` | `idea-f04-schema-BiGsPWh9.log` / `a5f47948aa9a6015ffe1563fbee582b04622f686d946c28f6917b1d914cc7f2a` |
+| Audit 7/7 | `idea-f04-1255568-cLus8N` | `f04_b8da76c81a3e4f00b947df3c997f194d` | `idea-f04-schema-8GM4EqA4.log` / `e9c6fc0fce19d1fbc3bb702e609056e85c0aa2614b2eebd1b80db16ef9dc1c36` |
+
+| Suite | Surefire XML SHA-256 | Surefire text SHA-256 |
+|---|---|---|
+| Schema | `c4cfbb1f95566e2e72a98345d8927a2f54b1758274b0e4fa5ab8b7c7cae1c7f1` | `28ef0c555283203610af59583b1ae8e002afd8c4063782dd01d591971b7d9ee0` |
+| Predecessor | `3635a607f73a3b27214f3f57e79f075c9ab3377c5676ccc47a9f52fb978981dc` | `f89c35abded98e7218f5c7d0db425799a1b48755142c25888fac84b3ca37f541` |
+| Audit | `8dd53fdff7b1f1656d5bd4befd822db767d1a4d4ff254107880f484b4bcb034f` | `78369d72c622d083cb97fa3e17970963e5de3cf1c5448b6e11c9fbb8c4677021` |
+
+Each run authenticated the distinct app/migrator roles and used a fresh tagged schema. Each
+retained its reports before `F04_OWNED_SCHEMA_CLEANUP=COMPLETE`; the test JVM had completed,
+the exact marker/owner was checked and absence confirmed. All three logs are mode 600, owned
+by phuclam. No historical-public migration or credentials in output/evidence. Private-log access
+limitations remain. The clean requalification allows the approved T023-B tracer to begin, not
+T023–T026 completion or whole-F04 acceptance; PR #32 stays Draft and unmerged.
