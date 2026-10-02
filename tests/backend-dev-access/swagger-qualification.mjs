@@ -172,8 +172,8 @@ try {
     await noSecrets(page, context);
   });
   await test('S07-anonymous-try-out', async () => { await execute(page, 'currentSession', `${identity}session`, 401); await noSecrets(page, context); });
-  console.log(JSON.stringify({ result: 'PASS', browser: browser.version(), applicationSource: '9286706d3eccb16e45d1e8f64c8be109b9c6754d',
-    jarSha256: '0eb0f2852a0e92c03a5969b5c44d95ab752d8b82ff5810b83efe1dd48dc13d3c', results, statuses,
+  console.log(JSON.stringify({ result: 'PASS', browser: browser.version(), applicationSource: '967ecabfeb753ccd355b7b054d5e929425f0e67a',
+    jarSha256: '606fb18ea4233ca2ad23d6a8c66f29bd6078d1fb64861741626c945fe0354b93', results, statuses,
     csrfSubmitted, authoritativeActorSent: actorSent, diagnosticLeak }));
 } catch (failure) {
   // Fixed classification only; raw locator/transport diagnostics can contain submitted data.
