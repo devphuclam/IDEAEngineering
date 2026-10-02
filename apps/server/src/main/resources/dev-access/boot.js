@@ -20,7 +20,7 @@
     showMutatedRequest: false,
     requestSnippetsEnabled: false,
     supportedSubmitMethods: ["get", "post"],
-    plugins: [(system) => ({
+    plugins: [() => ({
       // This console has no credential/cookie entry or alternative authorization mechanism.
       components: {
         authorizeBtn: () => null,
@@ -28,7 +28,8 @@
         authorizationPopup: () => null,
       },
       statePlugins: { spec: { wrapSelectors: {
-        allowTryItOutFor: (original) => (path, method) => original(path, method)
+        // Swagger's wrapper receives state before the public selector arguments.
+        allowTryItOutFor: (original, system) => (_state, path, method) => original(path, method)
           && !system.specSelectors.specJson().getIn(["paths", path, method, "x-idea-documentation-only"], false),
       } } },
     })],
