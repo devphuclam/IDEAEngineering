@@ -152,4 +152,44 @@ class AuditEvidenceRepositoryTest {
             }
         }
     }
+
+    @Test
+    void suppressedInsertIsFailureNotAnAcceptedAuditAppend() throws Exception {
+        UUID[] identity;
+        try (var fixture = F04SchemaTest.open("migration")) {
+            identity = F04SchemaTest.seedIdentity(fixture);
+            try (var statement = fixture.createStatement()) {
+                statement.execute("CREATE FUNCTION f04_suppress_audit_insert() RETURNS trigger LANGUAGE plpgsql "
+                        + "AS $$ BEGIN RETURN NULL; END; $$");
+                statement.execute("CREATE TRIGGER f04_suppress_audit_insert BEFORE INSERT ON audit_evidence "
+                        + "FOR EACH ROW EXECUTE FUNCTION f04_suppress_audit_insert()");
+            }
+        }
+        var evidence = UUID.randomUUID();
+        try {
+            try (var connection = F04SchemaTest.open("app")) {
+                connection.setAutoCommit(false);
+                try {
+                    var entry = new AuditEvidenceRepository.Entry(evidence, UUID.randomUUID(), identity[0],
+                            "sample.accept", "SAMPLE_OWNER", "target", "ACCEPTED", null, "original-correlation");
+                    assertThrows(SQLException.class, () -> AuditEvidenceRepository.append(connection, entry),
+                            "zero affected rows must not be reported as successful Audit persistence");
+                    try (var query = connection.prepareStatement("SELECT count(*) FROM audit_evidence WHERE evidence_id=?")) {
+                        query.setObject(1, evidence);
+                        try (var row = query.executeQuery()) {
+                            assertTrue(row.next());
+                            assertEquals(0, row.getInt(1));
+                        }
+                    }
+                } finally {
+                    connection.rollback();
+                }
+            }
+        } finally {
+            try (var fixture = F04SchemaTest.open("migration"); var statement = fixture.createStatement()) {
+                statement.execute("DROP TRIGGER f04_suppress_audit_insert ON audit_evidence");
+                statement.execute("DROP FUNCTION f04_suppress_audit_insert()");
+            }
+        }
+    }
 }
