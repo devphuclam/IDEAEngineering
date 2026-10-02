@@ -46,3 +46,9 @@ $$;
 CREATE TRIGGER owner_committed_event_append_only
     BEFORE UPDATE OR DELETE OR TRUNCATE ON owner_committed_event
     FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
+
+GRANT SELECT, INSERT ON sample_owner_operation TO idea_ddm_app;
+REVOKE UPDATE, DELETE, TRUNCATE ON sample_owner_operation FROM idea_ddm_app;
+CREATE TRIGGER sample_owner_operation_append_only
+    BEFORE UPDATE OR DELETE OR TRUNCATE ON sample_owner_operation
+    FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
