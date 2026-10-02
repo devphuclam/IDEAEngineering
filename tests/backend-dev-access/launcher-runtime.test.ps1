@@ -15,6 +15,11 @@ $process = Invoke-RestMethod 'https://localhost:18444/health' -TimeoutSec 5
 $database = Invoke-RestMethod 'https://localhost:18444/health/database' -TimeoutSec 5
 if ($process.status -ne 'UP' -or $database.status -ne 'UP') { throw 'Real HTTPS process/database not UP.' }
 Write-Output 'PASS Start qualifies actual trusted HTTPS and PostgreSQL'
+if (($output -join "`n") -notmatch 'SWAGGER=AVAILABLE' -or
+    ($output -join "`n") -notmatch 'SWAGGER_URL=https://localhost:18444/dev-api/') {
+    throw 'Enabled preview documentation must be probed and its working address reported.'
+}
+Write-Output 'PASS launcher reports enabled documentation only after actual HTTPS probe'
 $firstText = $output -join "`n"
 $firstPid = [regex]::Match($firstText, 'PID=(\d+)').Groups[1].Value
 $output = @(& $ps -NoProfile -File $launcher -Action Start -NoBrowser 2>&1)

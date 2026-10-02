@@ -58,12 +58,13 @@ async function noSecrets(page, context) {
   check(!diagnosticLeak && !actorSent, 'No diagnostic secret or authoritative outbound ActorId');
 }
 async function operation(page, id) {
+  oracle = `${id} resolved operation`;
   const block = page.locator(`#operations-default-${id}`);
   if (!await block.locator('.opblock-body').isVisible()) await block.locator('.opblock-summary').click();
   await block.locator('.opblock-body').waitFor({ state: 'visible' });
   // Expansion resolves the operation asynchronously; don't treat its loading placeholder
   // as proof that Try out is absent or that an Execute control is already available.
-  await block.getByRole('heading', { name: 'Responses', exact: true }).waitFor();
+  await block.getByRole('heading', { name: 'Responses', exact: true }).first().waitFor();
   return block;
 }
 async function execute(page, id, path, expected) {
@@ -173,8 +174,8 @@ try {
     await noSecrets(page, context);
   });
   await test('S07-anonymous-try-out', async () => { await execute(page, 'currentSession', `${identity}session`, 401); await noSecrets(page, context); });
-  console.log(JSON.stringify({ result: 'PASS', browser: browser.version(), applicationSource: '967ecabfeb753ccd355b7b054d5e929425f0e67a',
-    jarSha256: '606fb18ea4233ca2ad23d6a8c66f29bd6078d1fb64861741626c945fe0354b93', results, statuses,
+  console.log(JSON.stringify({ result: 'PASS', browser: browser.version(), applicationSource: '1c78e6c2fe39e4009cb2bf3fbe8d07a2d0e735a5',
+    jarSha256: '7d402298742328122cf7e9821cb19066942e04caa753541ecbdba4e69ec104e5', results, statuses,
     csrfSubmitted, authoritativeActorSent: actorSent, diagnosticLeak }));
 } catch (failure) {
   // Fixed classification only; raw locator/transport diagnostics can contain submitted data.

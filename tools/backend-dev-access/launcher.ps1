@@ -14,7 +14,7 @@ Write-Output "BACKEND_HOST=$SshHost"
 Write-Output 'BACKEND_BIND=127.0.0.1'
 Write-Output 'BACKEND_PORT=18444'
 Write-Output 'BACKEND_URL=https://localhost:18444/'
-Write-Output 'SWAGGER=NOT_INSTALLED'
+Write-Output 'SWAGGER=NOT_CHECKED'
 if (-not (Test-Path -LiteralPath $SshKeyPath -PathType Leaf)) {
     Write-Output 'BACKEND_ERROR=SSH_KEY_MISSING; Check the IDEA SSH key path.'
     exit 2
@@ -82,6 +82,27 @@ function Get-Health {
     return 'UP'
 }
 
+function Get-DocumentationState {
+    $request = [Net.HttpWebRequest]::Create($url + 'dev-api/')
+    $request.Timeout = 2500
+    $request.ReadWriteTimeout = 2500
+    $request.AllowAutoRedirect = $false
+    $request.Proxy = $null
+    try {
+        $response = $request.GetResponse()
+        $response.Dispose()
+        return 'UNEXPECTED_RESPONSE'
+    } catch [Net.WebException] {
+        if ($_.Exception.Response) {
+            $status = [int]$_.Exception.Response.StatusCode
+            $_.Exception.Response.Dispose()
+            if ($status -eq 401) { return 'AVAILABLE' }
+            if ($status -eq 404) { return 'DISABLED_OR_NOT_INSTALLED' }
+        }
+        return 'UNVERIFIED'
+    } catch { return 'UNVERIFIED' }
+}
+
 $lock = $null
 $createdTunnel = $false
 try {
@@ -131,6 +152,9 @@ try {
             $ownerCheck = Invoke-Remote 'status'
             if ($ownerCheck.Code -ne 0) { Write-Output $ownerCheck.Text; exit $ownerCheck.Code }
             Write-Output 'BACKEND_STATE=READY; PROCESS=UP; DATABASE=UP; TLS=VERIFIED'
+            $documentation = Get-DocumentationState
+            Write-Output "SWAGGER=$documentation"
+            if ($documentation -eq 'AVAILABLE') { Write-Output 'SWAGGER_URL=https://localhost:18444/dev-api/; Sign in at Backend first.' }
             if ($Action -eq 'Start' -and -not $NoBrowser) { Start-Process $url }
             $createdTunnel = $false
             exit 0

@@ -93,7 +93,7 @@ if [[ -n ${pid:-} ]]; then
   exit 0
 fi
 [[ -z $(ss -H -ltn 'sport = :18444') ]] || { echo 'BACKEND_ERROR=REMOTE_PORT_OCCUPIED'; exit 2; }
-[[ ! -L $jar && $(sha256sum "$jar" | cut -d ' ' -f 1) == ac4f74e1fe5453b7716e13da970027ba403d695340974ca13503f3d8989332ff ]] || { echo 'BACKEND_ERROR=ARTIFACT_HASH_MISMATCH'; exit 2; }
+[[ ! -L $jar && $(sha256sum "$jar" | cut -d ' ' -f 1) == 7d402298742328122cf7e9821cb19066942e04caa753541ecbdba4e69ec104e5 ]] || { echo 'BACKEND_ERROR=ARTIFACT_HASH_MISMATCH'; exit 2; }
 set -a; source "$root/runtime.env"; set +a
 refuse_configuration_overrides
 [[ $IDEA_DATABASE_NAME == idea_ddm_preview_20261001_26 && $IDEA_DATABASE_APP_USER == idea_ddm_app && $IDEA_DATABASE_HOST == 127.0.0.1 && $IDEA_DATABASE_PORT == 5432 ]] || { echo 'BACKEND_ERROR=PREVIEW_CONFIG_MISMATCH'; exit 2; }
@@ -104,6 +104,8 @@ IDEA_SERVER_TLS_KEY_STORE_PASSWORD=$(< /home/phuclam/idea-f03b-web-tls-739db09df
 # Only the inspected packaged configuration may supply Spring properties; do not
 # discover application.properties/yaml in the runtime directory or its config/ folder.
 export SPRING_CONFIG_LOCATION=classpath:/application.properties
+# Explicitly enable the admitted documentation only in this isolated manual preview.
+export IDEA_DEV_API_ENABLED=true
 cd -- "$root"
 nohup "$java" -jar "$jar" --server.address=127.0.0.1 --server.port=18444 >"$root/server.log" 2>&1 < /dev/null 9>&- &
 pid=$!
