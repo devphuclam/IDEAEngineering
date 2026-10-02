@@ -40,23 +40,21 @@ public final class SampleOwnerCommandService {
     public Result execute(ActorContext context, Command command) throws SQLException {
         Objects.requireNonNull(command, "Sample command required");
         try (var connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(false);
             try (var operationLock = OperationLock.acquire(connection, command.operationId())) {
                 var actor = eligibility.admit(connection, context);
                 var existing = committedResult(connection, command.operationId());
                 if (existing != null) {
-                    // This is the conservative sample query policy, not a universal Core read policy.
-                    if (!existing.actorId().equals(actor.actorId())
-                            || !existing.organizationId().equals(actor.organizationId())) throw new ResultAccessRefusal();
-                    eligibility.coordinateCommit(connection, context, actor, true);
-                    connection.commit();
-                    return existing;
+                    return resolveCommitted(connection, context, actor, existing);
                 }
                 boolean accepted = command.decision() == BusinessDecision.ACCEPT;
                 if (!accepted) {
                     // Retain the session-level operation lock across the refusal transaction handoff.
                     connection.rollback();
                     actor = eligibility.admit(connection, context);
+                    existing = committedResult(connection, command.operationId());
+                    if (existing != null) return resolveCommitted(connection, context, actor, existing);
                 }
                 UUID eventId = null;
                 if (accepted) {
@@ -85,6 +83,16 @@ public final class SampleOwnerCommandService {
                 throw exception;
             }
         }
+    }
+
+    private Result resolveCommitted(Connection connection, ActorContext context,
+            OwnerSessionEligibility.EligibleActor actor, Result existing) throws SQLException {
+        // This is the conservative sample query policy, not a universal Core read policy.
+        if (!existing.actorId().equals(actor.actorId())
+                || !existing.organizationId().equals(actor.organizationId())) throw new ResultAccessRefusal();
+        eligibility.coordinateCommit(connection, context, actor, true);
+        connection.commit();
+        return existing;
     }
 
     private static Result committedResult(Connection connection, UUID operation) throws SQLException {
