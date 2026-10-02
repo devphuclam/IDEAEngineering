@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / version / status | `IE-VER-DEVACCESS-LAUNCHER-001` / `0.2` / Draft |
+| Stable ID / version / status | `IE-VER-DEVACCESS-LAUNCHER-001` / `0.3` / Draft |
 | Class / normativity | Engineering verification record / INFORMATIVE; no product gate or deployment approval |
 | Owner / author / reviewer | Engineering / Codex / Project Reviewer Nguyen Huynh Phuc Lam; agent Standards/Spec source review recorded below; independent external review NOT-RUN |
 | Authority / applicability | User-approved launcher seam and three-stage setup, 2026-10-01; Issue #26 US1 only |
@@ -142,3 +142,48 @@ main's progress/closure records. This section does not assert a remote publicati
   remain distinct. Issue #26 remains open for Swagger and outstanding US1 qualification.
 - Verifier remains NOT-RUN. Skip-CI commit markers respect the user's no-verifier instruction;
   no repository rule/protection override is authorized or used.
+
+## 2026-10-02 deployed successor qualification
+
+The preceding NOT-RUN/connectivity/publication states are historical, not the present disposition.
+Main publication was subsequently verified at `1b289e28c29439eeea32bf521e7034426a3ba8b8`.
+The resumed run used that committed launcher/controller source. Three additional qualification
+helpers below were executed as a worktree snapshot over that commit; exact hashes identify them.
+No Server JAR, product source, migration, credential or account grant changed.
+
+1. Verified the remote helper against historical hash `BDA29470...996FDF`, saved it as
+   `backend.pre-02683a3.sh`, and installed the inspected successor at mode 700. Deployed hash:
+   `05D530136FF618132ECECB8003487914C6F295138C921A0F9AAF00714FC003BD`.
+   One status invocation through PowerShell stdin failed INVALID_ACTION because its final argument
+   included CRLF. The install/hash had succeeded; a direct SSH invocation reported RUNNING. No
+   controller code was changed to conceal that transport failure.
+2. Ubuntu environment-refusal suite: 3 groups PASS. Actual Windows lifecycle suite: 5/5 PASS;
+   repeated Start retained the owned PID, Stop removed only owned runtime/tunnel, restart reached
+   trusted HTTPS process/database UP under the repaired configuration guard.
+3. Windows ownership suite: malformed JSON, foreign process and mismatched creation-time profiles
+   each refused Start/Status/Stop with exit 2; the fixture process survived every operation. The
+   last case simulates PID reuse with a stale timestamp, not forced OS PID reuse. A separate
+   temporary LocalAppData tree preserved the developer's real tunnel profile.
+4. Ubuntu controller suite: 5/5 PASS again, including actual retained Java Start/Status/Stop.
+   Occupied Ubuntu loopback port: Start returned REMOTE_PORT_OCCUPIED/2; did not create runtime
+   state, adopt or stop the owned Node listener fixture. Fixture-only cleanup completed.
+5. Negative TLS: generated a one-day untrusted self-signed localhost/127.0.0.1 certificate using
+   installed keytool; no Windows trust-store or host-clock change. Backed up private runtime
+   configuration, temporarily selected that key store and used the actual Windows launcher.
+   Start returned TLS_TRUST_FAILED/1, never READY. In `finally`, stopped the owned test runtime,
+   restored original configuration byte-identically and removed the fixture private key/files.
+   Original certificate expiry was not accelerated or separately executed.
+6. Final Start: READY; PROCESS=UP; DATABASE=UP; TLS=VERIFIED, PID 56330 at this observation.
+   This is current-run readiness, not a future uptime guarantee. No database was deleted and no
+   synthetic identity/credential was reset. Human fresh-login was not repeated today; the original
+   accepted-package human exercise above remains applicable to the unchanged JAR.
+
+| New qualification helper | SHA-256 |
+|---|---|
+| `tests/backend-dev-access/tunnel-ownership.test.ps1` | `BD725EB9B69CB721F072ECE6941AA12BC00B73A08F2390D24FACE5A4F68C9490` |
+| `tests/backend-dev-access/remote-port.test.sh` | `D866A378F4BFF531C0C1AA94CCBB97189A5AAB9BFB243610C79CA5569EDE78BB` |
+| `tests/backend-dev-access/tls-refusal-fixture.sh` | `38E7010E1B757469203DE56E48E5339471B6DD26E32FB2243B1172D4E0DCE3A0` |
+
+The new helpers qualify previously implemented behavior and were GREEN initially; no artificial
+RED or product change is claimed. T010 is satisfied in its approved US1 scope. Swagger intake,
+T013 tests/implementation, external whole-feature review and Issue #26 acceptance remain open.

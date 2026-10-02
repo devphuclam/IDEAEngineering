@@ -1,7 +1,8 @@
 # Tasks: Backend development access
 
 Input: [spec](spec.md), [plan](plan.md), [research](research.md), [launcher contract](contracts/launcher.md).
-TDD launcher seam approved by user on 2026-10-01. Tasks are engineering status, not tracker effort.
+TDD launcher seam approved by user on 2026-10-01; Swagger HTTP/browser seam approved 2026-10-02
+in [contracts/swagger.md](contracts/swagger.md). Tasks are engineering status, not tracker effort.
 
 ## Phase 1: Setup
 
@@ -23,7 +24,7 @@ Independent qualification: real HTTPS/process/database + synthetic sign-in + saf
 - [x] T007 [US1] TDD the owned runtime status/start/stop boundary in deploy/development/preview/backend.sh; PID + process start ticks + exact working directory/JAR/Java identity; no broad signals (FR-004/005).
 - [x] T008 [US1] Add bounded interactive provisioning in deploy/development/preview/setup.sh: new-only idea_ddm_preview_20261001_26, distinct roles, protected runtime config, packaged migration and console bootstrap (FR-006/008/011).
 - [x] T009 [US1] Install inspected helpers and complete user-operated privileged provisioning; retain exact hashes/results in specs/006-backend-dev-access/evidence/launcher-results.md (FR-006/008; focused external code review still pending T017).
-- [ ] T010 [US1] Execute actual trusted HTTPS/PG start/status/sign-in/stop/start/fresh-sign-in and ownership/SSH/TLS/port refusals; retain outcomes in specs/006-backend-dev-access/evidence/launcher-results.md (FR-003/004/005/007/008, SC-001/002/003/005).
+- [x] T010 [US1] Execute actual trusted HTTPS/PG start/status/sign-in/stop/start/fresh-sign-in and ownership/SSH/TLS/port refusals; retain outcomes in specs/006-backend-dev-access/evidence/launcher-results.md (FR-003/004/005/007/008, SC-001/002/003/005). Successor controller deployed and qualified 2026-10-02; negative untrusted TLS, Ubuntu occupied port and malformed/foreign/reused-time local profile PASS; original human sign-in/persistence evidence retained.
 - [x] T011 [US1] Give the developer actual addresses and commands in specs/006-backend-dev-access/quickstart.md; clearly distinguish Swagger NOT_INSTALLED (FR-012).
 
 ## Phase 4: US2 — development Swagger
