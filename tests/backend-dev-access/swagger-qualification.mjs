@@ -59,16 +59,21 @@ async function noSecrets(page, context) {
 }
 async function operation(page, id) {
   const block = page.locator(`#operations-default-${id}`);
-  if (await block.locator('.opblock-body').count() === 0) await block.locator('.opblock-summary').click();
+  if (!await block.locator('.opblock-body').isVisible()) await block.locator('.opblock-summary').click();
+  await block.locator('.opblock-body').waitFor({ state: 'visible' });
   return block;
 }
 async function execute(page, id, path, expected) {
   const block = await operation(page, id);
   if (await block.getByRole('button', { name: 'Try it out', exact: true }).count())
     await block.getByRole('button', { name: 'Try it out', exact: true }).click();
-  const response = page.waitForResponse(value => new URL(value.url()).pathname === path);
+  // Attach rejection handling immediately, while a locator click may itself be pending.
+  const response = page.waitForResponse(value => new URL(value.url()).pathname === path)
+    .then(value => ({ value }), () => ({ value: null }));
+  oracle = `${id} Execute button`;
   await block.getByRole('button', { name: 'Execute', exact: true }).click();
-  check((await response).status() === expected, `${id} HTTP ${expected}`);
+  const observed = (await response).value;
+  check(observed?.status() === expected, `${id} HTTP ${expected}`);
   await block.locator('.responses-inner .response-col_status').filter({ hasText: String(expected) }).first().waitFor();
   return block;
 }
