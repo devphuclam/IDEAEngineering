@@ -32,6 +32,16 @@ if [[ $action != status ]]; then
 fi
 java=/opt/idea/tools/jdk-25.0.4.1+1/bin/java
 jar="$root/server.jar"
+expected_artifact=7d402298742328122cf7e9821cb19066942e04caa753541ecbdba4e69ec104e5
+report_runtime() {
+  echo "BACKEND_STATE=RUNNING; PID=$pid"
+  # A legacy two-field record proves process ownership, not its documentation generation.
+  if [[ ${recorded_artifact:-} == "$expected_artifact" && ! -L $jar && $(sha256sum "$jar" | cut -d ' ' -f 1) == "$expected_artifact" ]]; then
+    echo 'BACKEND_DOCUMENTATION=ENABLED'
+  else
+    echo 'BACKEND_DOCUMENTATION=UNVERIFIED'
+  fi
+}
 process_owned() {
   local stat tail ticks
   [[ $pid =~ ^[1-9][0-9]*$ && $started =~ ^[0-9]+$ && -r /proc/$pid/stat ]] || return 1
@@ -48,8 +58,9 @@ process_owned() {
   [[ ${#args[@]} == 5 && ${args[0]} == "$java" && ${args[1]} == -jar && ${args[2]} == "$jar" && ${args[3]} == --server.address=127.0.0.1 && ${args[4]} == --server.port=18444 ]]
 }
 if [[ -f "$root/runtime.state" ]]; then
-  read -r pid started extra < "$root/runtime.state" || true
-  if [[ ! ${pid:-} =~ ^[1-9][0-9]*$ || ! ${started:-} =~ ^[0-9]+$ || -n ${extra:-} || -L $root/runtime.state ]]; then
+  read -r pid started recorded_artifact extra < "$root/runtime.state" || true
+  if [[ ! ${pid:-} =~ ^[1-9][0-9]*$ || ! ${started:-} =~ ^[0-9]+$ || -n ${extra:-} || -L $root/runtime.state
+      || ( -n ${recorded_artifact:-} && ! $recorded_artifact =~ ^[a-f0-9]{64}$ ) ]]; then
     echo 'BACKEND_ERROR=PROCESS_OWNERSHIP_CONFLICT; No process was signalled.'
     exit 2
   fi
@@ -89,11 +100,11 @@ if [[ $action == stop ]]; then
   exit 1
 fi
 if [[ -n ${pid:-} ]]; then
-  echo "BACKEND_STATE=RUNNING; PID=$pid"
+  report_runtime
   exit 0
 fi
 [[ -z $(ss -H -ltn 'sport = :18444') ]] || { echo 'BACKEND_ERROR=REMOTE_PORT_OCCUPIED'; exit 2; }
-[[ ! -L $jar && $(sha256sum "$jar" | cut -d ' ' -f 1) == 7d402298742328122cf7e9821cb19066942e04caa753541ecbdba4e69ec104e5 ]] || { echo 'BACKEND_ERROR=ARTIFACT_HASH_MISMATCH'; exit 2; }
+[[ ! -L $jar && $(sha256sum "$jar" | cut -d ' ' -f 1) == "$expected_artifact" ]] || { echo 'BACKEND_ERROR=ARTIFACT_HASH_MISMATCH'; exit 2; }
 set -a; source "$root/runtime.env"; set +a
 refuse_configuration_overrides
 [[ $IDEA_DATABASE_NAME == idea_ddm_preview_20261001_26 && $IDEA_DATABASE_APP_USER == idea_ddm_app && $IDEA_DATABASE_HOST == 127.0.0.1 && $IDEA_DATABASE_PORT == 5432 ]] || { echo 'BACKEND_ERROR=PREVIEW_CONFIG_MISMATCH'; exit 2; }
@@ -113,9 +124,10 @@ for ((i=0; i<30; i++)); do
   [[ -r /proc/$pid/stat ]] || { echo 'BACKEND_ERROR=SERVER_START_FAILED; Inspect private server.log locally.'; exit 1; }
   stat=$(cat "/proc/$pid/stat"); tail=${stat##*) }; read -ra fields <<< "$tail"; started=${fields[19]}
   if process_owned; then
-    printf '%s %s\n' "$pid" "$started" > "$root/runtime.state.tmp"
+    recorded_artifact=$expected_artifact
+    printf '%s %s %s\n' "$pid" "$started" "$recorded_artifact" > "$root/runtime.state.tmp"
     mv -- "$root/runtime.state.tmp" "$root/runtime.state"
-    echo "BACKEND_STATE=RUNNING; PID=$pid"
+    report_runtime
     exit 0
   fi
   sleep 0.1

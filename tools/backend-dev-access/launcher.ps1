@@ -82,7 +82,9 @@ function Get-Health {
     return 'UP'
 }
 
-function Get-DocumentationState {
+function Get-DocumentationState([bool]$IdentifiedDocumentation) {
+    # Anonymous 401 also occurs for unknown protected paths on legacy packages.
+    if (-not $IdentifiedDocumentation) { return 'UNVERIFIED' }
     $request = [Net.HttpWebRequest]::Create($url + 'dev-api/')
     $request.Timeout = 2500
     $request.ReadWriteTimeout = 2500
@@ -152,7 +154,7 @@ try {
             $ownerCheck = Invoke-Remote 'status'
             if ($ownerCheck.Code -ne 0) { Write-Output $ownerCheck.Text; exit $ownerCheck.Code }
             Write-Output 'BACKEND_STATE=READY; PROCESS=UP; DATABASE=UP; TLS=VERIFIED'
-            $documentation = Get-DocumentationState
+            $documentation = Get-DocumentationState ($ownerCheck.Text -match '(?m)^BACKEND_DOCUMENTATION=ENABLED\r?$')
             Write-Output "SWAGGER=$documentation"
             if ($documentation -eq 'AVAILABLE') { Write-Output 'SWAGGER_URL=https://localhost:18444/dev-api/; Sign in at Backend first.' }
             if ($Action -eq 'Start' -and -not $NoBrowser) { Start-Process $url }

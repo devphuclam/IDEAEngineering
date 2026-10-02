@@ -93,6 +93,12 @@ class DevelopmentApiDocumentationHttpTest {
                 .path("x-idea-documentation-only").asBoolean());
         assertTrue(json.path("paths").path("/api/v1/identity/credentials").path("post")
                 .path("x-idea-documentation-only").asBoolean());
+        assertEquals("#/components/schemas/IssuedProof", json.path("paths")
+                .path("/api/v1/identity/accounts/{account}/credential-proofs").path("post")
+                .path("responses").path("200").path("content").path("application/json")
+                .path("schema").path("$ref").asString());
+        assertEquals("date-time", json.path("components").path("schemas").path("IssuedProof")
+                .path("properties").path("expiresAt").path("format").asString());
         assertFalse(contract.body().contains(password), "Documentation must not contain the fixture credential");
     }
 
