@@ -188,7 +188,10 @@ class OwnerOutcomeTest {
         try (var query = connection.prepareStatement("SELECT " + function + "(73004001,?)")) {
             query.setInt(1, key);
             query.setQueryTimeout(3);
-            try (var row = query.executeQuery()) { row.next(); return row.getBoolean(1); }
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                return function.equals("pg_advisory_lock") || row.getBoolean(1);
+            }
         }
     }
 
