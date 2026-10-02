@@ -31,7 +31,9 @@ build_inputs={
 for relative,wanted in build_inputs.items():
     path=root/relative
     if not path.is_file(): raise SystemExit('BLOCKED: approved build input missing '+relative)
-    raw=path.read_bytes()
+    # git archive applies this Windows checkout's CRLF conversion to text files.
+    # Pin the qualified Git text blob, allowing only the LF/CRLF representation difference.
+    raw=path.read_bytes().replace(b'\r\n',b'\n')
     actual=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
     if actual!=wanted: raise SystemExit('BLOCKED: qualified build input changed '+relative)
 for directory in (root/'.mvn',root/'apps/server/.mvn'):
