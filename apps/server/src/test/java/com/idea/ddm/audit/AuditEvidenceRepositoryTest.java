@@ -93,4 +93,27 @@ class AuditEvidenceRepositoryTest {
             }
         }
     }
+
+    @Test
+    void appendRequiresAnExplicitCallerTransaction() throws Exception {
+        UUID[] identity;
+        try (var fixture = F04SchemaTest.open("migration")) {
+            identity = F04SchemaTest.seedIdentity(fixture);
+        }
+        var evidence = UUID.randomUUID();
+        try (var connection = F04SchemaTest.open("app")) {
+            assertTrue(connection.getAutoCommit());
+            var entry = new AuditEvidenceRepository.Entry(evidence, UUID.randomUUID(), identity[0],
+                    "sample.accept", "SAMPLE_OWNER", "target", "ACCEPTED", null, "original-correlation");
+            assertThrows(SQLException.class, () -> AuditEvidenceRepository.append(connection, entry),
+                    "An accidental auto-commit append must not publish evidence independently");
+            try (var query = connection.prepareStatement("SELECT count(*) FROM audit_evidence WHERE evidence_id=?")) {
+                query.setObject(1, evidence);
+                try (var row = query.executeQuery()) {
+                    assertTrue(row.next());
+                    assertEquals(0, row.getInt(1));
+                }
+            }
+        }
+    }
 }
