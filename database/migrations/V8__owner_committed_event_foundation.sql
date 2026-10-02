@@ -1,4 +1,20 @@
 -- ADR-0014 / F04 ENVELOPE-9. Event retention is not event delivery.
+-- Retain the exact Actor's Account Organization; never guess from a singleton Organization.
+ALTER TABLE sample_owner_operation ADD COLUMN organization_id UUID;
+UPDATE sample_owner_operation AS sample
+    SET organization_id = account.organization_id
+    FROM idea_account AS account
+    WHERE account.actor_id = sample.actor_id;
+-- An unattributable predecessor row makes migration fail rather than deleting/fabricating history.
+ALTER TABLE sample_owner_operation ALTER COLUMN organization_id SET NOT NULL;
+ALTER TABLE sample_owner_operation ADD CONSTRAINT sample_owner_operation_organization_fk
+    FOREIGN KEY (organization_id) REFERENCES operating_organization (organization_id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+-- Historical F03 appenders may omit correlation; the F04 repository contract requires it.
+ALTER TABLE audit_evidence ADD COLUMN correlation_id VARCHAR(160)
+    CHECK (correlation_id IS NULL OR BTRIM(correlation_id) <> '');
+
 CREATE TABLE owner_committed_event (
     event_id UUID PRIMARY KEY,
     operation_id UUID NOT NULL,
