@@ -63,9 +63,11 @@ schema; only migrator applies migrations, app executes commands. Fresh public V1
 requires a separately authorized completely new database, never existing preview/dev/F03 public
 state. Test-only barriers/faults stay off public surfaces. No mock/H2 integration substitution.
 
-**Preflight:** F04 tooling authority is BLOCKED until separately obtained; prior T043/F03-B/#26
-exceptions do not extend. After approval, verify exact artifacts/graph before commands. Preserve
-V1–V7 and all historical evidence. F04 tests/evidence remain NOT-RUN at this design closure.
+**Execution status:** the separate F04 authority is recorded in
+[IE-RES-F04-BUILDTOOL-AUTH-20261002](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
+The schema checkpoint is partially executed in [F04 outcome results](../evidence/F04-outcome-results.md);
+the scoped runner verifies exact artifacts/graph/hash/cache before commands. Preserve V1–V7 and
+all historical evidence. Remaining owner behavior and whole-card acceptance remain NOT-RUN.
 The seam qualifies sample retained outcomes, not real mutable domain state, product RBAC,
 event delivery, multi-owner coordination, production readiness or recovery.
 

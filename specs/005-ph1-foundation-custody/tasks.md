@@ -125,9 +125,10 @@ product Permission/Role, HTTP or Swagger command. [ADR-0014](../../docs/adr/0014
 and [contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) close the design.
 **Independent test**: Actual Server/PostgreSQL accepted/refused/rollback, concurrent retry,
 originating-Actor result access and controlled disable/revoke-before-commit. Runtime NOT-RUN.
-**Execution gate**: F04 Maven/tooling authority BLOCKED; prior exceptions do not extend. Obtain
-separate authority and exact artifact preflight before any test/package invocation. Units below
-refine four existing tasks, add no cards/hours and authorize no execution in this docs-only change.
+**Execution gate**: Separate F04 Maven/tooling authority is recorded in
+`IE-RES-F04-BUILDTOOL-AUTH-20261002`; the scoped runner performs exact artifact preflight before
+each execution. Units below refine four existing tasks, add no cards/hours and do not imply whole-
+F04 completion. Schema execution is partially recorded in `evidence/F04-outcome-results.md`.
 
 - [ ] T023 [US4] Add vertical failing or qualification tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java` and `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`; use the real-session fixture `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. Cover the F04 contract including concurrent same-ID acceptance/refusal, forced append/commit faults, bounded query access and IAM race. Follow units below rather than writing the entire suite first.
 - [ ] T024 [US4] Implement connection-scoped append-only Audit in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`; require the original correlation, exactly one insert and failure propagation. Caller retains transaction ownership; no second connection/commit, owner decision or IAM change.

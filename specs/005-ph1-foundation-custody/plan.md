@@ -248,10 +248,11 @@ is this documentation closure, not F04 implementation acceptance. Source base:
 ### Execution prerequisite
 
 Current `generate-resources` invokes `exec-maven-plugin` and its eight inventoried build-only
-dependencies. T043, F03-B closure and Issue #26 exceptions do **not** authorize F04. Before any
-F04 Maven/test/package command, obtain separate bounded F04 authority or a separately approved
-execution path; verify exact intake/graph/hash/cache first. This is an execution BLOCKED state,
-not an unresolved event-design decision. Do not run first and record an exception afterward.
+dependencies. T043, F03-B closure and Issue #26 exceptions did not authorize F04; the Project
+Reviewer has now issued the separate bounded authority recorded in
+[IE-RES-F04-BUILDTOOL-AUTH-20261002](../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
+The scoped runner rechecks exact intake/graph/hash/cache before every execution and keeps the
+remaining F04 runtime work bounded. A changed assumption returns this gate to BLOCKED.
 No new tooling/dependency is selected by this design. Retain actual Web packaging when using
 the ordinary build; a skip flag is not an approved alternative by itself.
 

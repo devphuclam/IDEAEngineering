@@ -50,10 +50,12 @@ Use spec v0.8, FR-001–014, [ADR-0014](../../docs/adr/0014-retain-owner-committ
 [F04 contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) and
 [T023–T026 units](tasks.md#f04-implementation-units). `tasks.md` remains the only task list.
 
-Next boundary: obtain separate F04 Maven/tooling authority and exact artifact preflight before
-any test command. Prior T043/F03-B/#26 exceptions do not extend; execution is BLOCKED until that
-prerequisite is resolved. No new design clarification is pending. F04 runtime is NOT-RUN and
-T023–T026 remain unchecked; no completion/progress action is inferred.
+The separate F04 authority is now recorded in
+[IE-RES-F04-BUILDTOOL-AUTH-20261002](../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
+The exact offline artifact preflight is enforced by the scoped runner. T023-A/T025-A schema
+execution is partially recorded in [F04 outcome results](evidence/F04-outcome-results.md);
+T023–T026 remain unchecked and no completion/progress action is inferred. Any changed tool,
+artifact, graph, database boundary or architecture reopens the execution gate.
 
 After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,
 concurrency tests, exact-source regression/evidence. Only **T024-A** is GEMINI-SAFE after CODEX
