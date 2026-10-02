@@ -119,6 +119,10 @@ class OwnerOutcomeTest {
         assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision.ACCEPT);
     }
 
+    @Test void concurrentAcceptAndRefuseResolveOneCanonicalWinner() throws Exception {
+        assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision.REFUSE);
+    }
+
     private void assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision secondDecision) throws Exception {
         var first = fixture.signInThroughRealHttp();
         var second = fixture.signInThroughRealHttp();
