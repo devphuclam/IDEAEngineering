@@ -106,6 +106,16 @@ class DevelopmentApiDocumentationHttpTest {
     }
 
     @Test
+    void signedInDeveloperCanReachSwaggerAssetsOnlyThroughTheAllowlistedDevelopmentRoute() throws Exception {
+        var developer = signedIn();
+        assertEquals(200, get(developer, "/dev-api/assets/swagger-ui.css").statusCode());
+        assertEquals(200, get(developer, "/dev-api/assets/swagger-ui-bundle.js").statusCode());
+        assertEquals(404, get(developer, "/dev-api/assets/unknown.js").statusCode());
+        assertEquals(404, get(developer, "/webjars/swagger-ui/5.32.14/swagger-ui.css").statusCode());
+        assertEquals(404, get(developer, "/webjars/swagger-ui/5.32.14/swagger-ui-bundle.js").statusCode());
+    }
+
+    @Test
     void documentationUsesOrdinarySessionAndCsrfRefusalsWithoutCreatingAnotherAuthenticationMechanism() throws Exception {
         assertEquals(401, get(client(), "/api/v1/identity/session").statusCode());
         var developer = signedIn();
