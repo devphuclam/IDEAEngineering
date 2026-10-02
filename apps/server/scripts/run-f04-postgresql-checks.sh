@@ -58,7 +58,7 @@ maven=/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn
 }
 
 test_selector="${1:-F04SchemaTest}"
-[[ "$test_selector" =~ ^F04SchemaTest(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
+[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
 log_file="$(mktemp /home/phuclam/idea-f04-schema-XXXXXXXX.log)"
 exec > >(tee "$log_file") 2>&1
 printf 'F04_SOURCE=%s; F04_DATABASE=%s; F04_SCHEMA=%s; LOG=%s\n' \
@@ -72,7 +72,7 @@ printf 'F04_MAVEN_EXIT=%s\n' "$result"
 
 # Capture the result before cleanup. Credentials never enter command arguments or output.
 if [ -d target/surefire-reports ]; then
-  find target/surefire-reports -maxdepth 1 -type f -name '*F04SchemaTest*' -exec sha256sum {} \;
+  find target/surefire-reports -maxdepth 1 -type f -name '*F04*Test*' -exec sha256sum {} \;
 fi
 export PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE="$IDEA_F04_TEST_DATABASE_NAME"
 export PGUSER=idea_ddm_migrator PGPASSWORD="$IDEA_DATABASE_MIGRATION_PASSWORD"

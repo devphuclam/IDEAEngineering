@@ -259,16 +259,24 @@ class F04SchemaTest {
 
     static UUID[] seedIdentity(Connection connection) throws SQLException {
         var actor = UUID.randomUUID();
-        var organization = UUID.randomUUID();
+        UUID organization = null;
         try (var insert = connection.prepareStatement("INSERT INTO actor(actor_id,display_name) VALUES (?,?)")) {
             insert.setObject(1, actor);
             insert.setString(2, "Synthetic F04 schema fixture; not authenticated ActorContext");
             assertEquals(1, insert.executeUpdate());
         }
-        try (var insert = connection.prepareStatement("INSERT INTO operating_organization(organization_id,display_name) VALUES (?,?)")) {
-            insert.setObject(1, organization);
-            insert.setString(2, "Synthetic F04 schema organization");
-            assertEquals(1, insert.executeUpdate());
+        // V2 admits exactly one Operating Organization. Reuse only this owned schema's fixture.
+        try (var query = connection.createStatement(); var row = query.executeQuery(
+                "SELECT organization_id FROM operating_organization")) {
+            if (row.next()) organization = row.getObject(1, UUID.class);
+        }
+        if (organization == null) {
+            organization = UUID.randomUUID();
+            try (var insert = connection.prepareStatement("INSERT INTO operating_organization(organization_id,display_name) VALUES (?,?)")) {
+                insert.setObject(1, organization);
+                insert.setString(2, "Synthetic F04 schema organization");
+                assertEquals(1, insert.executeUpdate());
+            }
         }
         return new UUID[] {actor, organization};
     }
