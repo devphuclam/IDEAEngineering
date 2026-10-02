@@ -61,11 +61,14 @@ async function operation(page, id) {
   const block = page.locator(`#operations-default-${id}`);
   if (!await block.locator('.opblock-body').isVisible()) await block.locator('.opblock-summary').click();
   await block.locator('.opblock-body').waitFor({ state: 'visible' });
+  // Expansion resolves the operation asynchronously; don't treat its loading placeholder
+  // as proof that Try out is absent or that an Execute control is already available.
+  await block.getByRole('heading', { name: 'Responses', exact: true }).waitFor();
   return block;
 }
 async function execute(page, id, path, expected) {
   const block = await operation(page, id);
-  if (await block.getByRole('button', { name: 'Try it out', exact: true }).count())
+  if (await block.getByRole('button', { name: 'Cancel', exact: true }).count() === 0)
     await block.getByRole('button', { name: 'Try it out', exact: true }).click();
   // Attach rejection handling immediately, while a locator click may itself be pending.
   const response = page.waitForResponse(value => new URL(value.url()).pathname === path)
