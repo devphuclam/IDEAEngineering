@@ -116,19 +116,24 @@ public final class SampleOwnerCommandService {
     /** Sample-only PostgreSQL session lock: rollback cannot open a create-vs-refuse gap. */
     private static final class OperationLock implements AutoCloseable {
         private final Connection connection;
+        private final Connection physical;
         private final int key;
-        private OperationLock(Connection connection, int key) { this.connection = connection; this.key = key; }
+        private OperationLock(Connection connection, Connection physical, int key) {
+            this.connection = connection; this.physical = physical; this.key = key;
+        }
 
         static OperationLock acquire(Connection connection, UUID operation) throws SQLException {
             int key = operation.hashCode(); // Collisions serialize extra IDs; exact UUID is always the result key.
+            // Qualified pgJDBC/Hikari unwrap yields the dedicated physical JDBC connection.
+            var physical = connection.unwrap(Connection.class);
             try (var query = connection.prepareStatement("SELECT pg_advisory_lock(73004001,?)")) {
                 query.setInt(1, key);
                 query.setQueryTimeout(5);
                 query.execute();
-                return new OperationLock(connection, key);
+                return new OperationLock(connection, physical, key);
             } catch (SQLException failure) {
                 // A timed-out acquisition must never leave an ambiguous session lock in a pool.
-                try { connection.abort(Runnable::run); } catch (SQLException abort) { failure.addSuppressed(abort); }
+                discard(connection, physical, failure);
                 throw failure;
             }
         }
@@ -145,9 +150,15 @@ public final class SampleOwnerCommandService {
                 }
                 connection.rollback();
             } catch (SQLException failure) {
-                try { connection.abort(Runnable::run); } catch (SQLException abort) { failure.addSuppressed(abort); }
+                discard(connection, physical, failure);
                 throw failure;
             }
+        }
+
+        private static void discard(Connection logical, Connection physical, SQLException failure) {
+            try { logical.abort(Runnable::run); } catch (SQLException abort) { failure.addSuppressed(abort); }
+            // Synchronous physical close is not logical pool-return; also required if abort itself fails.
+            try { physical.close(); } catch (SQLException close) { failure.addSuppressed(close); }
         }
     }
 
