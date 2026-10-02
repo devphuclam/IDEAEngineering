@@ -75,4 +75,22 @@ class AuditEvidenceRepositoryTest {
             connection.rollback();
         }
     }
+
+    @Test
+    void f04AppendRequiresOriginalCorrelationEvenThoughHistoricalColumnIsNullable() throws Exception {
+        UUID[] identity;
+        try (var fixture = F04SchemaTest.open("migration")) {
+            identity = F04SchemaTest.seedIdentity(fixture);
+        }
+        try (var connection = F04SchemaTest.open("app")) {
+            connection.setAutoCommit(false);
+            try {
+                var missing = new AuditEvidenceRepository.Entry(UUID.randomUUID(), UUID.randomUUID(), identity[0],
+                        "sample.accept", "SAMPLE_OWNER", "target", "ACCEPTED", null, null);
+                assertThrows(SQLException.class, () -> AuditEvidenceRepository.append(connection, missing));
+            } finally {
+                connection.rollback();
+            }
+        }
+    }
 }

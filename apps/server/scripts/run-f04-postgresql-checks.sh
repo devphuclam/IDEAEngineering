@@ -72,7 +72,7 @@ printf 'F04_MAVEN_EXIT=%s\n' "$result"
 
 # Capture the result before cleanup. Credentials never enter command arguments or output.
 if [ -d target/surefire-reports ]; then
-  find target/surefire-reports -maxdepth 1 -type f -name '*F04*Test*' -exec sha256sum {} \;
+  find target/surefire-reports -maxdepth 1 -type f -name '*Test*' -exec sha256sum {} \;
 fi
 export PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE="$IDEA_F04_TEST_DATABASE_NAME"
 export PGUSER=idea_ddm_migrator PGPASSWORD="$IDEA_DATABASE_MIGRATION_PASSWORD"
