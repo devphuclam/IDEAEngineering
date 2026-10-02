@@ -109,7 +109,7 @@ export IDEA_F04_TEST_SCHEMA="f04_$("$f04_python" -I -S -c 'import uuid; print(uu
 }
 
 test_selector="${1:-F04SchemaTest}"
-[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest|AuditEvidenceRepositoryTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
+[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest|AuditEvidenceRepositoryTest|OwnerOutcomeTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
 # Confirm server version and app authority before the test is allowed to create its schema.
 export PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE="$IDEA_F04_TEST_DATABASE_NAME"
 export PGUSER=idea_ddm_app PGPASSWORD="$IDEA_DATABASE_APP_PASSWORD"
