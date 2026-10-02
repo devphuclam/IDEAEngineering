@@ -58,7 +58,7 @@ maven=/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn
 }
 
 test_selector="${1:-F04SchemaTest}"
-[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
+[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest|AuditEvidenceRepositoryTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
 log_file="$(mktemp /home/phuclam/idea-f04-schema-XXXXXXXX.log)"
 exec > >(tee "$log_file") 2>&1
 printf 'F04_SOURCE=%s; F04_DATABASE=%s; F04_SCHEMA=%s; LOG=%s\n' \
