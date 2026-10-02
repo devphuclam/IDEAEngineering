@@ -6,6 +6,10 @@ import com.idea.ddm.identity.F04SessionFixture;
 import com.idea.ddm.identity.OwnerSessionEligibility;
 import com.idea.ddm.identity.IdentityRefusal;
 import java.util.UUID;
+import java.sql.Connection;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -109,6 +113,90 @@ class OwnerOutcomeTest {
         }
         assertCompanions(operations.get(0), 1, 1, 1);
         assertCompanions(operations.get(1), 1, 1, 0);
+    }
+
+    @Test void concurrentAcceptsResolveOneCanonicalWinner() throws Exception {
+        assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision.ACCEPT);
+    }
+
+    private void assertConcurrentCanonical(SampleOwnerCommandService.BusinessDecision secondDecision) throws Exception {
+        var first = fixture.signInThroughRealHttp();
+        var second = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var ready = new CountDownLatch(2);
+        var start = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+        try (var blocker = F04SchemaTest.open("migration")) {
+            advisory(blocker, "pg_advisory_lock", operation.hashCode());
+            var a = executor.submit(() -> {
+                ready.countDown();
+                assertTrue(start.await(3, TimeUnit.SECONDS));
+                return owner.execute(first.context(), new SampleOwnerCommandService.Command(operation,
+                        "f04-concurrent-a", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+            });
+            var b = executor.submit(() -> {
+                ready.countDown();
+                assertTrue(start.await(3, TimeUnit.SECONDS));
+                return owner.execute(second.context(), new SampleOwnerCommandService.Command(operation,
+                        "f04-concurrent-b", secondDecision));
+            });
+            try {
+                assertTrue(ready.await(3, TimeUnit.SECONDS));
+                start.countDown();
+                awaitOperationWaiters(blocker, operation, 2);
+                // A different ID commits while both same-ID callers are blocked; no global owner mutex.
+                UUID unrelated;
+                do { unrelated = UUID.randomUUID(); } while (unrelated.hashCode() == operation.hashCode());
+                var independent = owner.execute(first.context(), new SampleOwnerCommandService.Command(unrelated,
+                        "f04-unrelated-id", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+                assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, independent.outcome());
+                advisory(blocker, "pg_advisory_unlock", operation.hashCode());
+                var winner = a.get(8, TimeUnit.SECONDS);
+                assertEquals(winner, b.get(8, TimeUnit.SECONDS), "Both callers resolve the same persisted winner");
+                assertTrue(java.util.Set.of("f04-concurrent-a", "f04-concurrent-b").contains(winner.correlationId()));
+                assertCompanions(operation, 1, 1, winner.outcome() == SampleOwnerCommandService.Outcome.ACCEPTED ? 1 : 0);
+                assertOperationUnlocked(operation);
+                System.out.println("F04_CONCURRENCY=" + secondDecision + "; OP=" + operation + "; WINNER="
+                        + winner.outcome() + "; CORRELATION=" + winner.correlationId() + "; EVENT=" + winner.eventId());
+            } finally {
+                start.countDown();
+                advisory(blocker, "pg_advisory_unlock", operation.hashCode());
+            }
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+        }
+    }
+
+    private static void awaitOperationWaiters(Connection observer, UUID operation, int expected) throws Exception {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
+        try (var query = observer.prepareStatement("SELECT count(*) FROM pg_locks WHERE locktype='advisory' "
+                + "AND classid=73004001 AND objid::bigint=? AND objsubid=2 AND NOT granted")) {
+            query.setLong(1, Integer.toUnsignedLong(operation.hashCode()));
+            query.setQueryTimeout(2);
+            while (System.nanoTime() < deadline) {
+                try (var row = query.executeQuery()) { row.next(); if (row.getInt(1) == expected) return; }
+                Thread.onSpinWait(); // Observe actual PostgreSQL contention, never schedule with a sleep.
+            }
+        }
+        fail("Both actual owner connections must reach the held per-operation PostgreSQL lock");
+    }
+
+    private static boolean advisory(Connection connection, String function, int key) throws Exception {
+        assertTrue(java.util.Set.of("pg_advisory_lock", "pg_advisory_unlock", "pg_try_advisory_lock").contains(function));
+        try (var query = connection.prepareStatement("SELECT " + function + "(73004001,?)")) {
+            query.setInt(1, key);
+            query.setQueryTimeout(3);
+            try (var row = query.executeQuery()) { row.next(); return row.getBoolean(1); }
+        }
+    }
+
+    private static void assertOperationUnlocked(UUID operation) throws Exception {
+        try (var observer = F04SchemaTest.open("migration")) {
+            assertTrue(advisory(observer, "pg_try_advisory_lock", operation.hashCode()), "No attempt lock leaked");
+            assertTrue(advisory(observer, "pg_advisory_unlock", operation.hashCode()));
+        }
     }
 
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
