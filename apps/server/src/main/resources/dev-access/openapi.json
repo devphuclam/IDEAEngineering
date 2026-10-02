@@ -43,7 +43,7 @@
       "description": "Separate Account Administrator v2 setup/reset permissions. RESET must target exact loginIdentityId. One-use, expiring, Account/Login/security-version-bound proof; not arbitrary account access. Live delivery remains unqualified, so preview returns 503.",
       "parameters": [{"$ref": "#/components/parameters/Account"}],
       "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/IssueCredential"}}}},
-      "responses": {"200": {"description": "Synthetic qualified-delivery mode only; contains a sensitive proof, never retained in this console"}, "400": {"description": "Invalid input"}, "401": {"description": "Ineligible session"}, "403": {"description": "Permission/scope or CSRF refusal"}, "503": {"description": "Delivery disabled in preview, or required persistence failed"}}
+      "responses": {"200": {"description": "Synthetic qualified-delivery mode only; contains a sensitive proof, never retained in this console", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/IssuedProof"}}}}, "400": {"description": "Invalid input"}, "401": {"description": "Ineligible session"}, "403": {"description": "Permission/scope or CSRF refusal"}, "503": {"description": "Delivery disabled in preview, or required persistence failed"}}
     }},
     "/api/v1/identity/credentials": {"post": {
       "operationId": "redeemCredentialProof", "summary": "Redeem through the official credential flow, not Swagger", "security": [], "x-idea-documentation-only": true,
@@ -56,6 +56,7 @@
     "securitySchemes": {"ideaSession": {"type": "apiKey", "in": "cookie", "name": "IDEA_SESSION", "description": "Ordinary HttpOnly Server session. Sign in at IDEA Web; never paste cookie/proof. Browser sends cookie automatically; this console has no Authorize input."}},
     "parameters": {"Account": {"name": "account", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}},
     "schemas": {
+      "IssuedProof": {"type": "object", "required": ["proof", "expiresAt"], "properties": {"proof": {"type": "string", "writeOnly": true}, "expiresAt": {"type": "string", "format": "date-time"}}},
       "Session": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid", "readOnly": true}, "accountId": {"type": "string", "format": "uuid", "readOnly": true}}},
       "CreateAccount": {"type": "object", "required": ["operationId", "organizationId", "displayName", "login"], "properties": {"operationId": {"type": "string", "format": "uuid"}, "organizationId": {"type": "string", "format": "uuid"}, "displayName": {"type": "string"}, "login": {"type": "string"}}},
       "CreatedAccount": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid"}, "accountId": {"type": "string", "format": "uuid"}, "loginIdentityId": {"type": "string", "format": "uuid"}, "status": {"type": "string", "enum": ["PENDING"]}, "securityVersion": {"type": "integer", "format": "int64"}}},
