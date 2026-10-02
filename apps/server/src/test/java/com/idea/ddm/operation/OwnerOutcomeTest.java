@@ -7,6 +7,7 @@ import com.idea.ddm.identity.OwnerSessionEligibility;
 import com.idea.ddm.identity.IdentityRefusal;
 import java.util.UUID;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -253,6 +254,46 @@ class OwnerOutcomeTest {
             assertTrue(advisory(observer, "pg_try_advisory_lock", operation.hashCode()), "No attempt lock leaked");
             assertTrue(advisory(observer, "pg_advisory_unlock", operation.hashCode()));
         }
+    }
+
+    @Test void requiredAuditFailureRollsBackAllCompanionsThenSameIdCanCommit() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        try (var fault = installAppendFailure(operation, "audit_evidence")) {
+            var failure = assertThrows(SQLException.class, () -> owner.execute(session.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-audit-failed",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertEquals("P0001", failure.getSQLState());
+            assertCompanions(operation, 0, 0, 0); // Independent committed-state observer confirms non-commit.
+            assertOperationUnlocked(operation);
+        }
+        var committed = owner.execute(session.context(), new SampleOwnerCommandService.Command(operation,
+                "f04-c-after-confirmed-rollback", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+        assertEquals("f04-c-after-confirmed-rollback", committed.correlationId());
+        assertCompanions(operation, 1, 1, 1);
+        assertEquals(committed, owner.execute(session.context(), new SampleOwnerCommandService.Command(operation,
+                "f04-c-later-replay", SampleOwnerCommandService.BusinessDecision.REFUSE)));
+        assertCompanions(operation, 1, 1, 1);
+        System.out.println("F04_CONFIRMED_ROLLBACK_RETRY=PASS; OP=" + operation + "; ACTOR=" + committed.actorId()
+                + "; FAILED_CORRELATION=f04-c-audit-failed; COMMITTED_CORRELATION=" + committed.correlationId());
+    }
+
+    private static AutoCloseable installAppendFailure(UUID operation, String table) throws Exception {
+        assertTrue(java.util.Set.of("audit_evidence", "owner_committed_event").contains(table));
+        try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION f04_c_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    + "IF NEW.operation_id='" + operation + "'::uuid THEN RAISE EXCEPTION 'Controlled F04 failure' "
+                    + "USING ERRCODE='P0001'; END IF; RETURN NEW; END; $$");
+            statement.execute("CREATE TRIGGER f04_c_fault BEFORE INSERT ON " + table
+                    + " FOR EACH ROW EXECUTE FUNCTION f04_c_fault()");
+        }
+        return () -> {
+            try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER f04_c_fault ON " + table);
+                statement.execute("DROP FUNCTION f04_c_fault()");
+            }
+        };
     }
 
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
