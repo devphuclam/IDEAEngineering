@@ -28,6 +28,11 @@ CREATE TABLE owner_committed_event (
     recorded_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- This is only the F04 sample's one accepted event, not a common event cardinality.
+CREATE UNIQUE INDEX sample_accepted_event_once
+    ON owner_committed_event (organization_id, operation_id)
+    WHERE producer_owner = 'PH1_SAMPLE_OWNER' AND event_kind = 'OPERATION_ACCEPTED';
+
 GRANT SELECT, INSERT ON owner_committed_event TO idea_ddm_app;
 REVOKE UPDATE, DELETE, TRUNCATE ON owner_committed_event FROM idea_ddm_app;
 
