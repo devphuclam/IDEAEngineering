@@ -110,9 +110,11 @@ try {
     if (new URL(request.url()).origin !== origin) { actorSent = true; return; }
     if (!new URL(request.url()).pathname.startsWith(identity)) return;
     actorSent ||= /actor[-_]?id/i.test(request.postData() ?? '') || /actor[-_]?id/i.test(new URL(request.url()).search);
-    const token = csrf;
-    observations.push(request.allHeaders().then(headers => {
+    // The preceding CSRF response body may still be resolving when request fires.
+    const precedingObservations = observations.slice();
+    observations.push(Promise.all(precedingObservations).then(() => request.allHeaders()).then(headers => {
       actorSent ||= Object.entries(headers).some(([name, value]) => /actor[-_]?id/i.test(name) || /actor[-_]?id/i.test(value));
+      const token = csrf;
       if (new URL(request.url()).pathname === `${identity}logout` && token)
         csrfSubmitted ||= headers[token.headerName.toLowerCase()] === token.token;
     }));
@@ -169,6 +171,7 @@ try {
     await noSecrets(page, context);
   });
   await test('S06-eligible-logout', async () => {
+    csrfSubmitted = false;
     await execute(page, 'signOut', `${identity}logout`, 204);
     await Promise.all(observations); check(csrfSubmitted, 'Swagger automatically submits current Server-named CSRF');
     await noSecrets(page, context);
