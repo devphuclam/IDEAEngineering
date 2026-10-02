@@ -42,3 +42,12 @@ Engineering research notes, 2026-10-01, Issue #26; informative, not dependency a
 - Preserve Log4j2 by excluding starter-logging on the Swagger dependency path. Document filter-based
   login/logout explicitly; integrate current CSRF acquisition without JWT/storage/bypass.
 - Do not enable the currently unqualified live credential-proof delivery channel.
+
+### Implemented successor selection — 2026-10-02
+
+The springdoc candidate above remains reference-only. The [exact intake](../../docs/research/2026-10-01-backend-dev-swagger-intake.md)
+selects one Swagger UI WebJar 5.32.14 with no Maven children and an authored HTTP-qualified OpenAPI
+description. Existing security owns ordinary authentication; API calls still enforce eligibility,
+permission and CSRF. Password/proof APIs are documentation-only. Separate Issue #26 build-tool/browser
+admissions preceded execution. [Swagger qualification](evidence/swagger-results.md) records the final
+preview/source/package, actual Chrome results and limitations; no product auth mechanism was added.

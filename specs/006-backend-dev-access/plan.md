@@ -40,8 +40,9 @@ Trace: user approvals -> Issue #26 -> this feature -> public-boundary test/evide
 history and main's uncommitted progress files remain untouched. Secrets stay in restricted server
 configuration, never Git, process arguments or retained output. Dedicated provisioning preserves
 least privilege and Flyway history protection. Retained artifact/source limits remain explicit.
-Pre/post-design process check: satisfied for P1; P2 tooling/import execution BLOCKED until its
-recorded pre-use dispositions exist.
+Pre/post-design process check: satisfied for P1; P2 tooling/import was blocked until its separate
+pre-use records. Those records preceded execution on 2026-10-02; focused qualification is in
+[Swagger results](evidence/swagger-results.md). Legal/commercial clearance is not implied.
 
 ## Project Structure
 

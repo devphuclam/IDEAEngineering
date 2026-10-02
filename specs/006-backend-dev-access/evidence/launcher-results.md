@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / version / status | `IE-VER-DEVACCESS-LAUNCHER-001` / `0.3` / Draft |
+| Stable ID / version / status | `IE-VER-DEVACCESS-LAUNCHER-001` / `0.4` / Draft |
 | Class / normativity | Engineering verification record / INFORMATIVE; no product gate or deployment approval |
 | Owner / author / reviewer | Engineering / Codex / Project Reviewer Nguyen Huynh Phuc Lam; agent Standards/Spec source review recorded below; independent external review NOT-RUN |
 | Authority / applicability | User-approved launcher seam and three-stage setup, 2026-10-01; Issue #26 US1 only |
@@ -13,7 +13,11 @@
 | Review trigger | Launcher/helper/artifact, trust, credentials/data scope or startup lifecycle changes |
 | Standards tailoring | STD-TEST-001..004 and STD-CM-001, STANDARD-GUIDED verification/configuration trace; no conformity claim |
 
-## Objective and controlled configuration
+Current successor: the 2026-10-02 Swagger-qualified preview and refreshed launcher are recorded in
+[Swagger results](swagger-results.md). Sections below retain the original US1 package/observations;
+their NOT_INSTALLED label is historical, not the current preview capability.
+
+## Original US1 objective and controlled configuration
 
 Make the already accepted Backend usable by its developer without a transient qualification
 harness. No Maven build, dependency import, company data, Vault access, verifier or F03-B source

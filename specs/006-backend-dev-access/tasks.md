@@ -29,13 +29,13 @@ Independent qualification: real HTTPS/process/database + synthetic sign-in + saf
 
 ## Phase 4: US2 — development Swagger
 
-Blocked until exact source/dependency/tooling admission. This does not block independent US1.
+Admission completed before execution on 2026-10-02. This did not block independent US1.
 
-- [ ] T012 [US2] Record exact Swagger/transitive artifact graph, embedded licenses/notices/checksums and separate build-tool authority in docs/research/2026-10-01-backend-dev-swagger-intake.md (FR-011).
-- [ ] T013 [US2] Agree documentation/Try out seam, then add one failing test at a time in tests/backend-dev-access/swagger-qualification.mjs and apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationTest.java (FR-009/010).
-- [ ] T014 [US2] Add admitted development-only OpenAPI/Swagger integration in apps/server/pom.xml and apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java; ordinary session/CSRF and explicit filter login/logout contract, disabled by default (FR-009/010).
-- [ ] T015 [US2] Qualify actual browser Try out allowed/refused requests and packaging on exact admitted source/artifact; record specs/006-backend-dev-access/evidence/swagger-results.md (SC-004/005).
-- [ ] T016 [US2] Update specs/006-backend-dev-access/quickstart.md with working documentation link and capability limits (FR-012).
+- [x] T012 [US2] Record exact Swagger/transitive artifact graph, embedded licenses/notices/checksums and separate build-tool authority in docs/research/2026-10-01-backend-dev-swagger-intake.md (FR-011).
+- [x] T013 [US2] Agree documentation/Try out seam, then add one failing test at a time in tests/backend-dev-access/swagger-qualification.mjs and apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationTest.java (FR-009/010).
+- [x] T014 [US2] Add admitted development-only OpenAPI/Swagger integration in apps/server/pom.xml and apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java; ordinary session/CSRF and explicit filter login/logout contract, disabled by default (FR-009/010).
+- [x] T015 [US2] Qualify actual browser Try out allowed/refused requests and packaging on exact admitted source/artifact; record specs/006-backend-dev-access/evidence/swagger-results.md (SC-004/005). HTTP 5/5 and headed Chrome 7/7 PASS at daa8c103; preview loaded, human acceptance separate.
+- [x] T016 [US2] Update specs/006-backend-dev-access/quickstart.md with working documentation link and capability limits (FR-012).
 
 ## Phase 5: Review/handoff
 

@@ -3,14 +3,14 @@
 | Field | Value |
 |---|---|
 | Stable ID / class | `IE-RES-DEVACCESS-SWAGGER-INTAKE-20261001` / external-source inspection and intake |
-| Version / status / normativity | `0.2` / Approved for the bounded Engineering use below / INFORMATIVE; no product requirement or commercial clearance |
+| Version / status / normativity | `0.3` / Approved for the bounded Engineering use below / INFORMATIVE; no product requirement or commercial clearance |
 | Owner / author / reviewer | Engineering / Codex / Project Reviewer Nguyen Huynh Phuc Lam; independent license review NOT-RUN |
 | Applicability / evidence date | Issue #26 US2, internal engineering development console / 2026-10-02 |
 | Intended use | DEPENDENCY: one unmodified Swagger UI WebJar; COPY-OR-ADAPT: unchanged upstream license/notice texts only |
 | Classification / retention | INTERNAL; retain in Git with Issue #26; inspection downloads outside tracked source |
 | Upstream / downstream | [Source-intake rule](../agents/external-source-intake.md), primary sources below / [T012–T015](../../specs/006-backend-dev-access/tasks.md), [approved seam](../../specs/006-backend-dev-access/contracts/swagger.md) |
 | Change / supersession / trigger | New record, no predecessor; version/graph/hash/terms/use/distribution change reopens intake |
-| Evidence / tailoring | Exact-tag primary-source inspection; resolved graph/artifact hashes/packaging/compatibility NOT-RUN. Tailored research/intake envelope, no conformity claim |
+| Evidence / tailoring | Exact-tag pre-use inspection; 2026-10-02 successor runtime graph/notices/package and bounded HTTP/browser qualification PASS below. Tailored research/intake envelope, no conformity claim |
 | Current disposition | APPROVED-WITH-OBLIGATIONS for exact Swagger UI 5.32.14 internal development hosting; all springdoc/Swagger Core/validation/Jackson candidates remain REFERENCE-ONLY |
 
 ## Primary-source findings
@@ -98,3 +98,12 @@ The other 16 candidate JARs downloaded for inspection were **not** linked, execu
 in the application cache. Their checksum observations do not authorize importing them. Maven resolved
 graph/package verification and actual-browser qualification remain NOT-RUN; an unexpected new
 runtime coordinate or artifact hash change blocks execution and reopens this intake.
+
+## Successor qualification — 2026-10-02
+
+The NOT-RUN statement above describes the pre-use intake checkpoint. Later
+[executed evidence](../../specs/006-backend-dev-access/evidence/swagger-results.md) records exactly one
+runtime addition matching the admitted WebJar hash, unchanged previous runtime graph, exact packaged
+upstream LICENSE/NOTICE and embedded notices, no build-tool runtime leakage, default-off HTTP,
+5/5 HTTP tests and 7/7 actual headed Chrome cases. Existing Web and V1–V7 bytes are unchanged.
+No new version/graph or commercial/legal disposition is authorized by that result.
