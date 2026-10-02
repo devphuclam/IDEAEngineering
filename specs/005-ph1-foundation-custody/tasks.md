@@ -148,8 +148,7 @@ These are unit IDs within T023–T026, not new standalone task/checklist identit
 requires its own intended RED → minimum GREEN or an honestly recorded existing-behavior first
 GREEN. At documentation closure all paths below were planned. Current delivery is limited to
 T023-A/T025-A schema, T024-A Audit and T023-B/minimum T025-B owner tracer; use versioned evidence,
-not this
-historical allocation table as an inferred task-completion record.
+not this historical allocation table as an inferred task-completion record.
 
 | Unit / allocation | Objective and exact expected paths | Tests / completion oracle | Prerequisites | Transaction/concurrency risks |
 |---|---|---|---|---|

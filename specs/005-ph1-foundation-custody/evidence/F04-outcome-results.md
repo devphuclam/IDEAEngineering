@@ -428,3 +428,32 @@ No F05, dispatcher/publishing infrastructure, product HTTP/Swagger/RBAC, mutable
 general operation service, client binding, production/recovery/HA/commercial approval, tracker
 action or merge. Verifier remains NOT-RUN. Sections 1–10 describe their historical control
 versions; their “current” wording is not a successor-source claim.
+
+## 14. Publication review and trace checks
+
+Internal read-only reviews compared checkpoint `fb69096f...` with executed source
+`fbd1ffc6fff7ed5952907316845a8110491cf779`:
+
+- Standards: zero documented breaches. The named identity/session fixture resolves the earlier
+  UUID-array coupling note for authenticated tests. A possible duplicate owner-service setup in
+  the two tracer tests remains an optional maintainability note; the distinct SQL oracles stay explicit.
+- Spec: zero mismatch or scope-creep findings in the prospective tooling repair and bounded
+  T023-B/minimum T025-B ACCEPTED/REFUSED slice. C/D obligations remain explicitly unqualified.
+
+These reviewers did not run tests, access PostgreSQL or independently inspect private raw logs.
+The scoped tracked UTF-8 secret scan returned exit 0: no secret-like values found, ten exact
+synthetic fixtures recognized and 233 known binary files skipped. This is not an all-format audit.
+Diff whitespace check passed. All 78 local Markdown path targets in the five affected records
+exist; anchors were NOT-CHECKED. The original tooling authorization, V1–V8, POM/Web inputs,
+SessionService and historical F03 evidence have no changes after the previously accepted
+schema/Audit checkpoint. Successors after `fbd1ffc...` change only documentation.
+
+A final supplementary read-only SSH catalog probe timed out before executing. Its aggregate
+schema-count/privilege observation is NOT-RUN; do not infer a new catalog receipt. The completed
+per-run marker/owner checks, exact schema drops and absence confirmations in sections 10–12
+remain the executed cleanup evidence. The timeout does not change those retained results.
+
+PR #32 remains OPEN/Draft and Work Item #31 remains OPEN; main is still
+`53c1e174cb0410658752ee48ee97ac1dce05ba6b`. Publication uses the existing `[skip ci]` mechanism;
+verifier remains NOT-RUN. The publication head and review surface are recorded on PR #32 and
+Work Item #31; no merge, F05 or additional implementation is performed at publication.
