@@ -87,6 +87,8 @@ class DevelopmentApiDocumentationHttpTest {
         assertEquals("/", json.path("servers").get(0).path("url").asString());
         assertTrue(json.path("paths").has("/api/v1/identity/login"));
         assertTrue(json.path("paths").has("/api/v1/identity/logout"));
+        assertFalse(json.path("paths").path("/api/v1/identity/login").path("post")
+                .path("responses").has("503"), "Do not promise a persistence status the sign-in filter does not return");
         assertTrue(json.path("paths").path("/api/v1/identity/login").path("post")
                 .path("x-idea-documentation-only").asBoolean());
         assertTrue(json.path("paths").path("/api/v1/identity/credentials").path("post")
