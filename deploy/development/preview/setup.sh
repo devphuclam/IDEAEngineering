@@ -184,7 +184,7 @@ TOTAL_STAGES=3
 root=/home/phuclam/.local/share/idea/dev-preview-26
 here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 java=/opt/idea/tools/jdk-25.0.4.1+1/bin/java
-expected=7d402298742328122cf7e9821cb19066942e04caa753541ecbdba4e69ec104e5
+expected=d53c7668a675563c40b6e3d6f0ee761426fc23764635f7bdcbe7c685c34441b9
 [[ $(id -un) == phuclam && -t 0 && -t 1 ]] || { echo 'Run as phuclam in an interactive SSH terminal, not sudo bash.'; exit 2; }
 [[ -d $root && ! -L $root && $(stat -c '%a:%U' "$root") == 700:phuclam ]] || { echo 'Private preview directory prerequisite missing'; exit 2; }
 [[ $(sha256sum "$root/server.jar" | cut -d ' ' -f 1) == "$expected" ]] || { echo 'Retained JAR hash mismatch'; exit 2; }
