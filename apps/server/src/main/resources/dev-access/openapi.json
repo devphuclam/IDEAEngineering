@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "IDEA · Development API",
+    "version": "dev-access-0.1",
+    "description": "Implemented Server APIs only. Sign in through IDEA Web. The browser supplies its HttpOnly IDEA_SESSION cookie; this console cannot read or accept a copied cookie. Mutations use the current JSON CSRF contract. Synthetic development data only; no implicit Account Administrator, live proof-delivery or operational readiness. Credential and CSRF operations are documentation-only."
+  },
+  "servers": [{"url": "/"}],
+  "security": [{"ideaSession": []}],
+  "paths": {
+    "/health": {"get": {"operationId": "processHealth", "summary": "Process liveness (not database readiness)", "security": [], "responses": {"200": {"description": "status=UP; process only"}}}},
+    "/health/database": {"get": {"operationId": "databaseHealth", "summary": "Actual PostgreSQL readiness", "security": [], "responses": {"200": {"description": "status=UP"}, "503": {"description": "status=DOWN; no credentials returned"}}}},
+    "/api/v1/identity/csrf": {"get": {"operationId": "csrfAcquisition", "summary": "JSON CSRF acquisition (automatic in this console)", "security": [], "x-idea-documentation-only": true, "responses": {"200": {"description": "headerName and token; retain in memory only"}}}},
+    "/api/v1/identity/login": {"post": {
+      "operationId": "nativeSignIn", "summary": "Sign in through IDEA Web, not Swagger",
+      "security": [], "x-idea-documentation-only": true,
+      "description": "Session-backed CSRF is required even for login. Generic refusal covers invalid/disabled/blocked credentials. Successful login rotates servlet proof; Actor is determined by Server. Use the existing Web password control, not an API-console body or generated curl.",
+      "requestBody": {"required": true, "content": {"application/x-www-form-urlencoded": {"schema": {"type": "object", "required": ["username", "password"], "properties": {"username": {"type": "string"}, "password": {"type": "string", "format": "password", "writeOnly": true}}}}}},
+      "responses": {"200": {"description": "Signed in; Server-derived actorId"}, "401": {"description": "Generic authentication refusal"}, "403": {"description": "CSRF refusal"}, "503": {"description": "Required persistence unavailable; no successful session"}}
+    }},
+    "/api/v1/identity/session": {"get": {"operationId": "currentSession", "summary": "Read the eligible Server-derived identity", "responses": {"200": {"description": "Eligible session; actorId and accountId", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Session"}}}}, "401": {"description": "Anonymous, expired, revoked, stale, disabled or unavailable identity verification"}}}},
+    "/api/v1/identity/logout": {"post": {"operationId": "signOut", "summary": "Sign out this eligible session only", "description": "No body. Automatic CSRF header; eligible session required. Success revokes only the current session. Failure does not claim logout success.", "responses": {"204": {"description": "Current session revoked"}, "401": {"description": "Session is not eligible"}, "403": {"description": "CSRF refusal"}, "503": {"description": "Required persistence failed; no successful logout"}}}},
+    "/api/v1/identity/accounts": {"post": {
+      "operationId": "createAccount", "summary": "Create a pending account (explicit Account Administrator required)",
+      "description": "Exact Organization Scope and role assignment are required. Super Administrator alone cannot create accounts. Does not grant project/group/product access or activate credentials.",
+      "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/CreateAccount"}}}},
+      "responses": {"201": {"description": "Pending Actor/Account/Login Identity created", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/CreatedAccount"}}}}, "400": {"description": "Invalid input"}, "401": {"description": "Ineligible session"}, "403": {"description": "Missing permission/wrong scope or CSRF refusal"}, "409": {"description": "Login identifier exists or invalid account state"}, "503": {"description": "Required persistence failed"}}
+    }},
+    "/api/v1/identity/accounts/{account}/disable": {"post": {
+      "operationId": "disableAccount", "summary": "Disable an account; identities/history remain stable",
+      "parameters": [{"$ref": "#/components/parameters/Account"}],
+      "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ChangeAccount"}}}},
+      "responses": {"200": {"description": "Account status/security version changed", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/AccountState"}}}}, "400": {"description": "Invalid input"}, "401": {"description": "Ineligible session"}, "403": {"description": "Permission/scope/last-Super or CSRF refusal"}, "409": {"description": "Stale version/invalid state"}, "503": {"description": "Required persistence failed"}}
+    }},
+    "/api/v1/identity/accounts/{account}/re-enable": {"post": {
+      "operationId": "reenableAccount", "summary": "Re-enable separately from password recovery; fresh login required",
+      "parameters": [{"$ref": "#/components/parameters/Account"}],
+      "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ChangeAccount"}}}},
+      "responses": {"200": {"description": "ACTIVE if credential exists, otherwise PENDING; old sessions remain invalid", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/AccountState"}}}}, "400": {"description": "Invalid input"}, "401": {"description": "Ineligible session"}, "403": {"description": "Permission/scope or CSRF refusal"}, "409": {"description": "Stale version/invalid state"}, "503": {"description": "Required persistence failed"}}
+    }},
+    "/api/v1/identity/accounts/{account}/credential-proofs": {"post": {
+      "operationId": "issueCredentialProof", "summary": "Setup/reset proof issuance (delivery not enabled in preview)", "x-idea-documentation-only": true,
+      "description": "Separate Account Administrator v2 setup/reset permissions. RESET must target exact loginIdentityId. One-use, expiring, Account/Login/security-version-bound proof; not arbitrary account access. Live delivery remains unqualified, so preview returns 503.",
+      "parameters": [{"$ref": "#/components/parameters/Account"}],
+      "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/IssueCredential"}}}},
+      "responses": {"200": {"description": "Synthetic qualified-delivery mode only; contains a sensitive proof, never retained in this console"}, "400": {"description": "Invalid input"}, "401": {"description": "Ineligible session"}, "403": {"description": "Permission/scope or CSRF refusal"}, "503": {"description": "Delivery disabled in preview, or required persistence failed"}}
+    }},
+    "/api/v1/identity/credentials": {"post": {
+      "operationId": "redeemCredentialProof", "summary": "Redeem through the official credential flow, not Swagger", "security": [], "x-idea-documentation-only": true,
+      "description": "Proof authorizes the exact target, not an administrator role. CSRF still required. Reset changes only the pinned Login Identity credential, increases Account security version and invalidates old sessions/proofs; it cannot re-enable a disabled account.",
+      "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/RedeemCredential"}}}},
+      "responses": {"204": {"description": "Credential change committed"}, "400": {"description": "Invalid/stale/expired/used proof or password/input refusal"}, "403": {"description": "CSRF refusal"}, "503": {"description": "Required persistence failed"}}
+    }}
+  },
+  "components": {
+    "securitySchemes": {"ideaSession": {"type": "apiKey", "in": "cookie", "name": "IDEA_SESSION", "description": "Ordinary HttpOnly Server session. Sign in at IDEA Web; never paste cookie/proof. Browser sends cookie automatically; this console has no Authorize input."}},
+    "parameters": {"Account": {"name": "account", "in": "path", "required": true, "schema": {"type": "string", "format": "uuid"}}},
+    "schemas": {
+      "Session": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid", "readOnly": true}, "accountId": {"type": "string", "format": "uuid", "readOnly": true}}},
+      "CreateAccount": {"type": "object", "required": ["operationId", "organizationId", "displayName", "login"], "properties": {"operationId": {"type": "string", "format": "uuid"}, "organizationId": {"type": "string", "format": "uuid"}, "displayName": {"type": "string"}, "login": {"type": "string"}}},
+      "CreatedAccount": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid"}, "accountId": {"type": "string", "format": "uuid"}, "loginIdentityId": {"type": "string", "format": "uuid"}, "status": {"type": "string", "enum": ["PENDING"]}, "securityVersion": {"type": "integer", "format": "int64"}}},
+      "ChangeAccount": {"type": "object", "required": ["operationId", "organizationId", "expectedSecurityVersion", "reason"], "properties": {"operationId": {"type": "string", "format": "uuid"}, "organizationId": {"type": "string", "format": "uuid"}, "expectedSecurityVersion": {"type": "integer", "format": "int64", "minimum": 1}, "reason": {"type": "string"}}},
+      "AccountState": {"type": "object", "properties": {"actorId": {"type": "string", "format": "uuid"}, "accountId": {"type": "string", "format": "uuid"}, "status": {"type": "string", "enum": ["PENDING", "ACTIVE", "DISABLED"]}, "securityVersion": {"type": "integer", "format": "int64"}}},
+      "IssueCredential": {"type": "object", "required": ["operationId", "organizationId", "purpose", "expectedSecurityVersion", "reason"], "properties": {"operationId": {"type": "string", "format": "uuid"}, "organizationId": {"type": "string", "format": "uuid"}, "purpose": {"type": "string", "enum": ["FIRST_SETUP", "RESET"]}, "expectedSecurityVersion": {"type": "integer", "format": "int64", "minimum": 1}, "reason": {"type": "string"}, "loginIdentityId": {"type": "string", "format": "uuid", "description": "Required for RESET; exact Login Identity belonging to target Account"}}},
+      "RedeemCredential": {"type": "object", "required": ["operationId", "accountId", "proof", "password"], "properties": {"operationId": {"type": "string", "format": "uuid"}, "accountId": {"type": "string", "format": "uuid"}, "purpose": {"type": "string", "enum": ["FIRST_SETUP", "RESET"]}, "proof": {"type": "string", "writeOnly": true}, "password": {"type": "string", "format": "password", "writeOnly": true}}}
+    }
+  }
+}

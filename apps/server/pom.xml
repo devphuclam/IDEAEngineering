@@ -98,6 +98,12 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- One unmodified UI artifact; IE-RES-DEVACCESS-SWAGGER-INTAKE-20261001 v0.2. -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>swagger-ui</artifactId>
+      <version>5.32.14</version>
+    </dependency>
   </dependencies>
 
   <build>
