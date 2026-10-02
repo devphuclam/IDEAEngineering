@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 """Read-only admission qualification: no Maven build, credentials or database access."""
+import hashlib
 import json
 import os
 from pathlib import Path
+import sys
 import shutil
 import subprocess
 import tempfile
+
+if (sys.version_info[:3] != (3, 14, 4) or sys.implementation.name != "cpython"
+        or sys.executable != "/usr/bin/python3.14" or sys.prefix != "/usr"
+        or sys.base_prefix != "/usr" or not sys.flags.isolated or not sys.flags.no_site
+        or hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest()
+        != "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"):
+    raise SystemExit("BLOCKED: exact isolated F04 Python runtime required")
 
 repo = Path(__file__).resolve().parents[3]
 retained = Path(tempfile.mkdtemp(prefix="idea-f04-preflight-", dir="/home/phuclam"))
@@ -18,6 +27,7 @@ inputs = (
     "apps/web/package-lock.json",
     "apps/web/vite.config.ts",
     "docs/research/2026-10-02-f04-buildtool-execution-authorization.md",
+    "docs/research/2026-10-02-f04-python-harness-authorization.md",
     "docs/research/2026-10-01-t043-maven-web-build-intake.md",
 )
 for relative in inputs:

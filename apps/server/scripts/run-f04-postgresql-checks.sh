@@ -9,6 +9,13 @@ export IDEA_F04_REPO_ROOT="$(CDPATH= cd -- "$server_dir/../.." && pwd)"
 : "${IDEA_F04_SOURCE_SHA:?Exact committed archive source is required}"
 [[ "$IDEA_F04_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]] || exit 2
 [ -f "$IDEA_F04_REPO_ROOT/docs/research/2026-10-02-f04-buildtool-execution-authorization.md" ] || exit 2
+[ -f "$IDEA_F04_REPO_ROOT/docs/research/2026-10-02-f04-python-harness-authorization.md" ] || exit 2
+f04_python=/usr/bin/python3.14
+if [ ! -x "$f04_python" ] ||
+   [ "$(sha256sum "$f04_python" | cut -d ' ' -f 1)" != 52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41 ]; then
+  printf '%s\n' 'BLOCKED: exact authorized F04 Python interpreter missing/changed' >&2
+  exit 2
+fi
 export JAVA_HOME=/opt/idea/tools/jdk-25.0.4.1+1
 export PATH="$JAVA_HOME/bin:/opt/idea/tools/node-v24.21.0-linux-x64/bin:$PATH"
 maven=/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn
@@ -16,9 +23,14 @@ maven=/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn
 export IDEA_F04_MAVEN="$maven"
 
 # Read-only checksum/descriptor preflight against the authoritative retained inventory.
-python3 - <<'PY'
-import hashlib, json, os, re, subprocess, xml.etree.ElementTree as ET, zipfile
+"$f04_python" -I -S - <<'PY'
+import hashlib, json, os, re, subprocess, sys, xml.etree.ElementTree as ET, zipfile
 from pathlib import Path
+if (sys.version_info[:3] != (3, 14, 4) or sys.implementation.name != 'cpython'
+        or sys.executable != '/usr/bin/python3.14' or sys.prefix != '/usr'
+        or sys.base_prefix != '/usr' or not sys.flags.isolated or not sys.flags.no_site):
+    raise SystemExit('BLOCKED: authorized isolated F04 Python runtime changed')
+print('F04_PYTHON=CPython-3.14.4; ISOLATED=1; NO_SITE=1; INTERPRETER_SHA256=EXACT')
 root=Path(os.environ['IDEA_F04_REPO_ROOT'])
 # Git blob identities from qualified application source 2a74130..., not current mutable files.
 build_inputs={
@@ -91,7 +103,7 @@ export IDEA_DATABASE_APP_PASSWORD IDEA_DATABASE_MIGRATION_PASSWORD
 export IDEA_DATABASE_HOST=127.0.0.1 IDEA_DATABASE_PORT=5432
 export IDEA_DATABASE_APP_USER=idea_ddm_app IDEA_DATABASE_MIGRATION_USER=idea_ddm_migrator
 export IDEA_F04_TEST_DATABASE_NAME=idea_ddm_f03a_20260930_c91e7a42
-export IDEA_F04_TEST_SCHEMA="f04_$(python3 -c 'import uuid; print(uuid.uuid4().hex)')"
+export IDEA_F04_TEST_SCHEMA="f04_$("$f04_python" -I -S -c 'import uuid; print(uuid.uuid4().hex)')"
 [ -f "$IDEA_F04_REPO_ROOT/apps/web/node_modules/typescript/package.json" ] || {
   printf '%s\n' 'BLOCKED: existing locked Web cache must be prepared; no install fallback'; exit 2;
 }
