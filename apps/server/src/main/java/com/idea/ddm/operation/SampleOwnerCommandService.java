@@ -25,6 +25,9 @@ public final class SampleOwnerCommandService {
     }
     public record Result(UUID operationId, UUID actorId, UUID organizationId, String correlationId,
             Outcome outcome, String reasonCode, UUID eventId) {}
+    public static final class ResultAccessRefusal extends RuntimeException {
+        private ResultAccessRefusal() { super("Sample result unavailable to this caller"); }
+    }
 
     private final DataSource dataSource;
     private final OwnerSessionEligibility eligibility;
@@ -38,9 +41,23 @@ public final class SampleOwnerCommandService {
         Objects.requireNonNull(command, "Sample command required");
         try (var connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
-            try {
+            try (var operationLock = OperationLock.acquire(connection, command.operationId())) {
                 var actor = eligibility.admit(connection, context);
+                var existing = committedResult(connection, command.operationId());
+                if (existing != null) {
+                    // This is the conservative sample query policy, not a universal Core read policy.
+                    if (!existing.actorId().equals(actor.actorId())
+                            || !existing.organizationId().equals(actor.organizationId())) throw new ResultAccessRefusal();
+                    eligibility.coordinateCommit(connection, context, actor, true);
+                    connection.commit();
+                    return existing;
+                }
                 boolean accepted = command.decision() == BusinessDecision.ACCEPT;
+                if (!accepted) {
+                    // Retain the session-level operation lock across the refusal transaction handoff.
+                    connection.rollback();
+                    actor = eligibility.admit(connection, context);
+                }
                 UUID eventId = null;
                 if (accepted) {
                     do { eventId = UUID.randomUUID(); } while (eventId.equals(command.operationId()));
@@ -66,6 +83,62 @@ public final class SampleOwnerCommandService {
                 catch (SQLException rollback) { exception.addSuppressed(rollback); }
                 // A thrown commit error is not a durable FAILED outcome or proof of confirmed rollback.
                 throw exception;
+            }
+        }
+    }
+
+    private static Result committedResult(Connection connection, UUID operation) throws SQLException {
+        try (var query = connection.prepareStatement("SELECT o.actor_id,o.organization_id,o.correlation_id,o.outcome,"
+                + "o.reason_code,e.event_id FROM sample_owner_operation o LEFT JOIN owner_committed_event e ON "
+                + "e.operation_id=o.operation_id AND e.organization_id=o.organization_id "
+                + "AND e.producer_owner='PH1_SAMPLE_OWNER' AND e.event_kind='OPERATION_ACCEPTED' WHERE o.operation_id=?")) {
+            query.setObject(1, operation);
+            try (var row = query.executeQuery()) {
+                if (!row.next()) return null;
+                var result = new Result(operation, row.getObject(1, UUID.class), row.getObject(2, UUID.class),
+                        row.getString(3), Outcome.valueOf(row.getString(4)), row.getString(5), row.getObject(6, UUID.class));
+                if (row.next() || (result.outcome() == Outcome.ACCEPTED) != (result.eventId() != null)) {
+                    throw new SQLException("Canonical sample companions are inconsistent");
+                }
+                return result;
+            }
+        }
+    }
+
+    /** Sample-only PostgreSQL session lock: rollback cannot open a create-vs-refuse gap. */
+    private static final class OperationLock implements AutoCloseable {
+        private final Connection connection;
+        private final int key;
+        private OperationLock(Connection connection, int key) { this.connection = connection; this.key = key; }
+
+        static OperationLock acquire(Connection connection, UUID operation) throws SQLException {
+            int key = operation.hashCode(); // Collisions serialize extra IDs; exact UUID is always the result key.
+            try (var query = connection.prepareStatement("SELECT pg_advisory_lock(73004001,?)")) {
+                query.setInt(1, key);
+                query.setQueryTimeout(5);
+                query.execute();
+                return new OperationLock(connection, key);
+            } catch (SQLException failure) {
+                // A timed-out acquisition must never leave an ambiguous session lock in a pool.
+                try { connection.abort(Runnable::run); } catch (SQLException abort) { failure.addSuppressed(abort); }
+                throw failure;
+            }
+        }
+
+        @Override public void close() throws SQLException {
+            try {
+                connection.rollback(); // Clear a possibly aborted transaction before explicit session unlock.
+                try (var query = connection.prepareStatement("SELECT pg_advisory_unlock(73004001,?)")) {
+                    query.setInt(1, key);
+                    query.setQueryTimeout(5);
+                    try (var row = query.executeQuery()) {
+                        if (!row.next() || !row.getBoolean(1)) throw new SQLException("Sample operation lock release unconfirmed");
+                    }
+                }
+                connection.rollback();
+            } catch (SQLException failure) {
+                try { connection.abort(Runnable::run); } catch (SQLException abort) { failure.addSuppressed(abort); }
+                throw failure;
             }
         }
     }
