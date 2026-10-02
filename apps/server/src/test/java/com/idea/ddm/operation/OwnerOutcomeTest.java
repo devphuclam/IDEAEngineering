@@ -82,6 +82,10 @@ class OwnerOutcomeTest {
                 operation, "f04-c-retry-accept", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
         assertEquals(SampleOwnerCommandService.Outcome.REFUSED, original.outcome());
         assertCompanions(operation, 1, 1, 0);
+        System.out.println("F04_REPLAY=REFUSED; OP=" + operation + "; ACTOR=" + original.actorId()
+                + "; ORG=" + original.organizationId() + "; ORIGINAL_SESSION_REFERENCE=" + first.sessionReference()
+                + "; RETRY_SESSION_REFERENCE=" + retry.sessionReference() + "; ORIGINAL_CORRELATION=" + original.correlationId()
+                + "; RETRY_CORRELATION=f04-c-retry-accept; REASON=" + original.reasonCode() + "; EVENT=null");
     }
 
     @Test void otherActorAndRevokedSessionCannotDiscloseEitherTerminalOutcome() throws Exception {
