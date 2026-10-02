@@ -53,30 +53,38 @@ Use spec v0.8, FR-001–014, [ADR-0014](../../docs/adr/0014-retain-owner-committ
 
 The separate F04 authority is now recorded in
 [IE-RES-F04-BUILDTOOL-AUTH-20261002](../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
+Prospective Python admission is separately recorded in
+[IE-RES-F04-PYTHON-AUTH-20261002](../../docs/research/2026-10-02-f04-python-harness-authorization.md);
+the historical omission is preserved, not retroactively approved.
 Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
 OPEN; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
-Current exact executed source: `a7a577b00f4ea427b609b4b862e6f72309ed94ec`.
+Current exact executed source: `fbd1ffc6fff7ed5952907316845a8110491cf779`.
 Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
-offline runner. No owner service, event append class, IAM bridge or product route delivered yet.
+offline runner, plus named real-HTTP principal fixture, internal sample owner, caller-Connection
+event append and IAM eligibility adapter. No product route/Permission/Role or F03 semantic change.
 Codex implemented Audit after its focused RED; Gemini was not dispatched.
 
 The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
-schema and T024-A Audit execution are partially recorded in [F04 outcome results](evidence/F04-outcome-results.md)
-v0.3: schema 7/7, predecessor 1/1 and Audit 7/7 rerun after the fixture repair; the five no-build
+schema, T024-A Audit and T023-B/minimum T025-B execution are partially recorded in
+[F04 outcome results](evidence/F04-outcome-results.md) v0.5: authenticated owner 3/3, schema 7/7,
+predecessor 1/1 and Audit 7/7 on the current source. The prospective Python clean 15/15
+requalification is separately traced at `1255568...`; the five no-build
 admission cases remain the separately traced execution at `acc8db5...`.
 T023–T026 remain unchecked and no completion/progress action is inferred. Any changed tool,
 artifact, graph, database boundary or architecture reopens the execution gate.
 
 For this checkpoint, run the scoped Bash runner separately with `F04SchemaTest`,
-`F04PredecessorMigrationTest` or `AuditEvidenceRepositoryTest` from the exact archive; its approved
+`F04PredecessorMigrationTest`, `AuditEvidenceRepositoryTest` or `OwnerOutcomeTest` from the exact archive; its approved
 Maven command is offline `-o -B -Dtest=<selector> test`. Use only the controlled test DB and fresh
 tagged f04 schema. Read the evidence for commands/hashes/limits before rerunning.
-Next authorized executable unit: T023-B real HTTP sign-in/principal capture into the internal
-owner tracer, paired with minimum T025-B. It must use current Server-established ActorContext,
-not the raw UUID database fixtures used by schema/Audit tests. Whole owner/concurrency/IAM and
-affected F03/data/health regression remain NOT-RUN. No new approval between units is needed while
-the exact authorized assumptions stay unchanged. Keep #31/F04 open and do not merge this branch.
+Current checkpoint is awaiting external review; this task stops at its publication. Next eligible
+unit after review: T023-C paired with T025-C, one replay/access/concurrency/fault behavior per
+RED/GREEN. Then T023-D/T025-D qualifies real disable/revoke-before-commit and reverse ordering.
+Continue using the Server-established ActorContext, not raw UUID schema fixtures. The existing
+final security lock/check is implemented but its race is not qualified yet. Full owner/retry/fault/
+race and broader affected F03/data/health regression remain NOT-RUN. Keep #31/F04 open, PR #32
+Draft, T023–T026 unchecked and verifier NOT-RUN; no merge or F05.
 
 After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,
 concurrency tests, exact-source regression/evidence. Only **T024-A** is GEMINI-SAFE after CODEX

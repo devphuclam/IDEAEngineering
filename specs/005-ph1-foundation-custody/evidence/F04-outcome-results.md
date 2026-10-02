@@ -1,21 +1,21 @@
-# F04 outcome results — schema and Audit checkpoint
+# F04 outcome results — schema, Audit and authenticated owner tracer
 
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.4` / Draft / INFORMATIVE |
+| Version / document status / normativity | `0.5` / Draft / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
-| Execution disposition | Partial PASS: schema 7/7, predecessor 1/1, Audit 7/7; whole F04 NOT-RUN |
+| Execution disposition | Partial PASS: owner tracer 3/3, schema 7/7, predecessor 1/1, Audit 7/7; C/D and whole F04 NOT-RUN |
 | Owner / author | Engineering / Codex |
-| Reviewer | Internal Standards and Spec reviews recorded below; external Project Reviewer review PENDING |
-| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; execution authorized, checkpoint/whole-card acceptance PENDING |
-| Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), T023-A/T025-A/T024-A; 2026-10-02 +07:00 |
-| Current executed source | `12555689fd38218d5fe28bfa507215acde45187d` |
-| Current archive SHA-256 | `fad80258426aa4e034647eaee3844ff10e99296f49e153d34b9a6a1b21d5aa6d` |
+| Reviewer | Schema/Audit technically accepted for continuation; successor internal reviews below; external owner-tracer review PENDING |
+| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; bounded execution authorized, T023-B checkpoint/whole-card acceptance PENDING |
+| Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A units and T023-B/minimum T025-B; 2026-10-02 +07:00 |
+| Current executed source | `fbd1ffc6fff7ed5952907316845a8110491cf779` |
+| Current archive SHA-256 | `0729758e76f2a16f48aca182ecd626b17667bc709fe473a7b5aa6e0768dfe270` |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
 | Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to v0.3; sections 1–9 retain historical execution/review receipts. Section 10 records the unlisted Python utility, prospective tooling clarification and clean requalification. No original authorization/F03 evidence is rewritten. Superseded by NOT-APPLICABLE |
+| Change / supersession | Successor to v0.4; sections 1–10 retain historical receipts. Sections 11–13 add authenticated owner RED/GREEN, exact-source regression and current limits. Original authorization/F03 evidence remains unchanged. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
 | Standards tailoring | `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
@@ -291,7 +291,8 @@ standard-library-only import scope are recorded there. The runner pins that inte
 invokes `-I -S`; no pip, virtualenv, third-party Python dependency, download or install is used.
 Authority is F04 harness-only and prospective; original authorization text remains unchanged.
 
-The three section-4 commands ran from exact source `1255568...` and its current-envelope archive.
+The three section-4 commands ran from exact source `1255568...` and archive SHA-256
+`fad80258426aa4e034647eaee3844ff10e99296f49e153d34b9a6a1b21d5aa6d` (the v0.4 control envelope).
 All passed under the repaired tooling envelope: **15 tests, zero failure/error/skip**, offline
 Maven exit 0. The runtime receipt on each run reports `F04_PYTHON=CPython-3.14.4; ISOLATED=1;
 NO_SITE=1; INTERPRETER_SHA256=EXACT`, followed by the unchanged nine-artifact/build preflight.
@@ -314,3 +315,116 @@ the exact marker/owner was checked and absence confirmed. All three logs are mod
 by phuclam. No historical-public migration or credentials in output/evidence. Private-log access
 limitations remain. The clean requalification allows the approved T023-B tracer to begin, not
 T023–T026 completion or whole-F04 acceptance; PR #32 stays Draft and unmerged.
+
+## 11. T023-B authenticated owner RED/GREEN
+
+Objective: qualify only the approved internal authenticated sample seam, not a product command.
+Prerequisites: clean section-10 requalification, the exact original tooling/cache plus prospective
+Python envelope, real PostgreSQL 18.6, separate app/migrator and fresh run-tagged schemas.
+No dependency, migration, production authentication/session behavior or permission changed.
+
+`F04SessionFixture.SignedIn` is a named test value object. It creates a synthetic native identity
+through the existing bootstrap service, starts the actual Server on a random loopback HTTP port,
+and uses real CSRF/form sign-in plus the existing protected session route. A test-only filter
+captures `SessionService.Identity` from the Server security context only after that protected
+route returned 200, then calls the existing `SessionService.context(identity)`. Anonymous access
+captures nothing; supplied query/header ActorId does not change the established Actor. No F04
+HTTP route, Swagger operation or bearer-proof output is introduced. Cookies/CSRF/credentials stay
+in test memory and are not printed or retained. Loopback HTTP and `cookie.secure=false` are
+test-only transport overrides; this run is not HTTPS or actual-client qualification.
+
+`OwnerSessionEligibility` uses existing IAM eligibility on the owner connection, resolves the
+exact Account Organization, and revalidates under the existing security-write lock before commit.
+`SampleOwnerCommandService` opens the authoritative transaction. ACCEPTED writes the existing
+sample result, required Audit and one common-store ENVELOPE-9 event. The original Actor,
+Organization, OperationId and correlation remain exact; EventId is independently allocated and
+different from OperationId. Audit's existing table has no Organization/EventId column: the exact
+operation link joins its Actor/correlation to the retained owner and event, rather than inventing
+new Audit fields. `CommittedEventStore` only appends through the supplied connection; it has no
+sample lookup, owner decision, independent connection or commit. DB supplies `recorded_at` using
+its transaction timestamp, not a claimed exact wall-clock commit instant or delivery receipt.
+
+The business decision is explicit synthetic fixture input, not an approved product policy.
+Business REFUSED writes only its terminal owner result and required refusal Audit in the
+refusal-evidence transaction, with `SYNTHETIC_BUSINESS_REFUSAL` and zero event. It does not
+refresh successful-session activity. No technical FAILED result is synthesized; a propagated
+commit error is not a claim of confirmed rollback. Fault/uncertainty and rollback/refusal handoff
+qualification remain C/D work, not inferred from these positive tracer executions.
+
+Command for each exact source below:
+
+```bash
+bash apps/server/scripts/run-f04-postgresql-checks.sh OwnerOutcomeTest
+```
+
+| Stage | Exact source / actual result | Archive SHA-256 | Build under `/home/phuclam/` | Schema / disposition | Log under `/home/phuclam/` / SHA-256 |
+|---|---|---|---|---|---|
+| Existing authentication seam qualification | `6ce0e6ac390874b247117a1d521fe7b904b081b4`; 1/1 first GREEN, not fabricated RED | `a6faa5c5514981fd36ed61d5e4776c8607ff98afad836fda098547f0706a7df7` | `idea-f04-6ce0e6a-1KNMN7` | `f04_dc4ddc2bbd8e47c4976628ac1abf5707`; COMPLETE | `idea-f04-schema-FnWAjIql.log` / `c0de8b23db2028016349e4aebd66aa32c0f286ea9c5e78dad9dc306e93727f56` |
+| ACCEPTED tracer RED | `c38cf28b967eaf273705b09fa52c7e233dd68688`; testCompile failed only for absent owner/eligibility classes; tests NOT-RUN | `c33716470e0cea8c12c64070277a05e8106b67a017373f18bb218564d19737ab` | `idea-f04-c38cf28-BJ9DQA` | `f04_f621a4028e87409b90c58db144cc80ee`; NOT-CREATED | `idea-f04-schema-hbMQLmrA.log` / `d8e36ab3fb0bf0d59d169a73fd41e6364df0bf2cf47f24f52ae15343cc5831bd` |
+| Minimum ACCEPTED GREEN | `0a629dfc7b6d356d4c5eebf6335d83a009472c26`; 2/2, zero failure/error/skip | `e6f7580449f17212058ee2fc26b401d787366866d30afafe48d5b455b2466a61` | `idea-f04-0a629df-MJkBG9` | `f04_8a0667b55add4c7c8366207c6d9156eb`; COMPLETE | `idea-f04-schema-B58zmFZY.log` / `27b3664f47e0691b6e91b437521ad667b7d0c4ee037e879928f763dcf69911d5` |
+| REFUSED tracer RED | `a20da3d6388913200b735b6d050904c41f6d1cf9`; 3 tests, 1 error: deliberate REFUSE still unsupported | `2757b12fd997f93c18978e25c9e02751513eb7772522ae96f57bea34bc1023b6` | `idea-f04-a20da3d-wlKFdK` | `f04_952748311cca4b4e8a7be8df1b4e9b1e`; COMPLETE | `idea-f04-schema-pCwPdnFZ.log` / `ae972c07bf535f80cb6e1857292ff53d51facf7b7b42e27b4df0ec41685a7fc9` |
+| REFUSED/ACCEPTED GREEN | `fbd1ffc6fff7ed5952907316845a8110491cf779`; 3/3, zero failure/error/skip | Current envelope | `idea-f04-fbd1ffc-59BYJd` | `f04_b9c6695afcd3470398bafe28bbf3a1a5`; COMPLETE | `idea-f04-schema-Apr3eirs.log` / `70f96e377a7101f0d6b3d087afb0b5f7b28f29bbbcc622ff0be9e56076339c2b` |
+
+The accepted test verifies returned provenance plus exactly one independently queried owner,
+Audit and event. The refused test verifies returned provenance/reason, one owner/Audit companion
+and zero event. The source at `c38cf28...` also routes capture through the original IAM context
+factory rather than repeating its constructor. Its compile RED is not falsely claimed as an
+executed HTTP/SQL test; that capture is exercised by the successor GREENs.
+
+| Stage | Surefire XML SHA-256 | Surefire text SHA-256 |
+|---|---|---|
+| Initial fixture | `95f7f8f04285866f5ec76629c75c1976b50417d2910aa7fce6462f4ef13e6331` | `b05dbf995825935f8671f58e142f20d23a838b36926b9ee91939096e7ba67e1e` |
+| Accepted GREEN | `ef3fb04e1bbc9d80a66a3d8b289ec7b6b3b9028d68bd071ab668e49cae4a99b8` | `d3fc51e0f656ce5a3e8e4c98506f69d9f41462223a68a8e2e1750004d8ee6779` |
+| Refused RED | `afa5a78996d8865928b277c9170b49d10baa193efb27797c439cad0dd4dbcf9d` | `036a7077f67dc746874082395d158bff53ac4bdec410c90e8bc205d56fca1f84` |
+| Final owner GREEN | `eb711864de586b2838856e99ea92749510efdd4b318254399f9458d7742eeafe` | `57298f7aa2fc99f5932ebbd21ebf5d1b64957aee533e5daafcd398a7cc51b2c8` |
+
+A mistyped local helper invocation used a nonexistent source object before the final GREEN.
+Git archive failed closed before SSH, Maven, schema creation or any test; it is neither a product
+RED nor an execution receipt. The final GREEN used the exact committed source above.
+
+## 12. Affected regression on the final owner source
+
+The section-4 three commands ran again from `fbd1ffc...` and its current-envelope archive.
+This is **15/15**, in addition to the owner **3/3** at the same source: **18 tests**, zero
+failure/error/skip, Maven exit 0. All used pinned isolated Python, unchanged nine build artifacts
+and qualified graph/cache, offline Maven, actual app/migrator and the approved database.
+These are focused F04 regressions, not a rerun or new claim for whole F03/data/health acceptance.
+
+| Suite / result | Build under `/home/phuclam/` | Fresh owned schema / cleanup | Log under `/home/phuclam/` / SHA-256 |
+|---|---|---|---|
+| Schema 7/7 | `idea-f04-fbd1ffc-gUm2lL` | `f04_7e7c8632cb6a49c19a1d1432b9f9d7c9`; COMPLETE | `idea-f04-schema-YZSSbX1u.log` / `1abd1781be23dad9dac6c5227030906a129a5a18b18cfe83f9a0257cf3afee5c` |
+| Predecessor 1/1 | `idea-f04-fbd1ffc-hNiUgV` | `f04_5d0f126b685f47248c9a5ab8af69d1c5`; COMPLETE | `idea-f04-schema-hPSkYNrI.log` / `4122ae06de7e845d62682066543a3d956ecab9cae32fa14dc95fc751d7d7cad3` |
+| Audit 7/7 | `idea-f04-fbd1ffc-M3UCE5` | `f04_5ce8a9d45228493689821b6a36de156a`; COMPLETE | `idea-f04-schema-OKFn5T6P.log` / `b7004fdcde20addf69b55557b3a0d632b4dae075884058012df5dbd79c57836f` |
+
+| Suite | Surefire XML SHA-256 | Surefire text SHA-256 |
+|---|---|---|
+| Schema | `a3fb198a8624776fac7fabd498a218ac2c0886d4d3ac187757903002f320432f` | `ef7b0f654e171d7ee5c439b8688ece0a562262d5ec1e9a13676ad633e1fbec65` |
+| Predecessor | `2b22e50d66cf0c3dd5859297870dcc15d4c12038562a9e22c00b8e8f40ec7863` | `8916f3221f7ec3c4605702232e50492f86a97e898009a51b0f04fad8fdcf1c30` |
+| Audit | `eaa108c4ad830d7dbb8bb6ae62dce2e7a4577b204005a20b098aa4547a6ef45a` | `ca811065f88e9404e0059168db2b81a58253f9f9c6c9b109e9bde4ba027a3a22` |
+
+Each completed run stopped its Server/pool/JVM before marker/owner verification and exact-schema
+drop; absence was confirmed. The compile RED never created its reserved schema. Logs are mode
+600, owned by phuclam; hashes identify private receipts, not independent remote raw-log review.
+No public, preview, company or Vault data was an execution/cleanup target.
+
+## 13. Current review boundary and remaining work
+
+Publication after the current executed source must change documentation only. Original tooling
+authorization, V1–V8, F03 evidence, dependency/build inputs and the persistent preview remain
+unchanged by this successor. Internal reviews and tracked-text secret scan are recorded at
+publication; neither is independent execution or human acceptance.
+
+T023-B and minimum T025-B are a partial qualified checkpoint. T023–T026 stay unchecked,
+Work Item #31/F04 remain open/IN_PROGRESS and PR #32 stays Draft, unmerged. Next eligible unit
+after checkpoint review is T023-C paired with T025-C: canonical same-ID replay, fresh same-Actor
+result access, non-disclosure to other Actors/ineligible proof, concurrent accepted/refusal
+arbitration, required append/zero-row/deferred-commit faults and retry after confirmed rollback.
+Then T023-D/T025-D must qualify disable/revoke-before-commit and reverse ordering under real IAM
+coordination. Current source uses the existing final lock/check; it does not claim the race has
+been exercised or the full rollback/refusal handoff completed. T026 still owns broader affected
+data/identity/health execution and whole-contract evidence/review.
+
+No F05, dispatcher/publishing infrastructure, product HTTP/Swagger/RBAC, mutable demo entity,
+general operation service, client binding, production/recovery/HA/commercial approval, tracker
+action or merge. Verifier remains NOT-RUN. Sections 1–10 describe their historical control
+versions; their “current” wording is not a successor-source claim.
