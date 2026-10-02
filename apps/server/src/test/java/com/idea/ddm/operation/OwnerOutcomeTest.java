@@ -374,6 +374,74 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void failedUnlockAndAbortDiscardPhysicalConnectionBeforePoolReturn() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var source = new UnlockAbortFaultDataSource(fixture.pooledAppDataSource());
+        var owner = new SampleOwnerCommandService(source, new OwnerSessionEligibility(fixture.sessions()));
+        try {
+            assertThrows(SQLException.class, () -> owner.execute(session.context(), new SampleOwnerCommandService.Command(
+                    operation, "f04-c-pooled-cleanup-failure", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            // The commit preceded unlock failure: never mislabel this as confirmed rollback.
+            assertCompanions(operation, 1, 1, 1);
+            assertFalse(source.returnedPhysicalWhileOpen.get(), "A lock-bearing physical backend cannot return to the pool");
+            assertTrue(source.physical.get().isClosed());
+            assertOperationUnlocked(operation);
+            try (var replacement = fixture.pooledAppDataSource().getConnection(); var query = replacement.createStatement();
+                    var row = query.executeQuery("SELECT pg_backend_pid()")) {
+                assertTrue(row.next());
+                assertNotEquals(source.originalBackend.get(), row.getInt(1), "Reborrow cannot adopt the discarded backend");
+            }
+            var resolved = new SampleOwnerCommandService(fixture.pooledAppDataSource(), new OwnerSessionEligibility(fixture.sessions()))
+                    .execute(session.context(), new SampleOwnerCommandService.Command(operation, "f04-c-after-cleanup-failure",
+                            SampleOwnerCommandService.BusinessDecision.REFUSE));
+            assertEquals("f04-c-pooled-cleanup-failure", resolved.correlationId());
+            assertCompanions(operation, 1, 1, 1);
+        } finally {
+            if (source.physical.get() != null) source.physical.get().close(); // Only this test's exact backend.
+        }
+    }
+
+    /** JDBC boundary fault only: all authentication, mutations and commit still use actual PostgreSQL/Hikari. */
+    private static final class UnlockAbortFaultDataSource extends org.springframework.jdbc.datasource.AbstractDataSource {
+        private final javax.sql.DataSource delegate;
+        private final java.util.concurrent.atomic.AtomicReference<Connection> physical = new java.util.concurrent.atomic.AtomicReference<>();
+        private final java.util.concurrent.atomic.AtomicReference<Integer> originalBackend = new java.util.concurrent.atomic.AtomicReference<>();
+        private final java.util.concurrent.atomic.AtomicBoolean returnedPhysicalWhileOpen = new java.util.concurrent.atomic.AtomicBoolean();
+        UnlockAbortFaultDataSource(javax.sql.DataSource delegate) { this.delegate = delegate; }
+        @Override public Connection getConnection() throws SQLException {
+            var actual = delegate.getConnection();
+            physical.set(actual.unwrap(Connection.class));
+            try (var query = actual.createStatement(); var row = query.executeQuery("SELECT pg_backend_pid()")) {
+                row.next(); originalBackend.set(row.getInt(1));
+            }
+            return (Connection) java.lang.reflect.Proxy.newProxyInstance(Connection.class.getClassLoader(),
+                    new Class<?>[] {Connection.class}, (proxy, method, arguments) -> {
+                        if (method.getName().equals("abort")) throw new SQLException("Controlled JDBC abort failure", "P0001");
+                        if (method.getName().equals("close")) returnedPhysicalWhileOpen.set(!physical.get().isClosed());
+                        if (method.getName().equals("prepareStatement") && arguments[0] instanceof String sql
+                                && sql.equals("SELECT pg_advisory_unlock(73004001,?)")) {
+                            var prepared = actual.prepareStatement(sql);
+                            return java.lang.reflect.Proxy.newProxyInstance(java.sql.PreparedStatement.class.getClassLoader(),
+                                    new Class<?>[] {java.sql.PreparedStatement.class}, (statementProxy, statementMethod, values) -> {
+                                        if (statementMethod.getName().equals("executeQuery")) {
+                                            throw new SQLException("Controlled JDBC unlock failure", "P0001");
+                                        }
+                                        return invokeJdbc(statementMethod, prepared, values);
+                                    });
+                        }
+                        return invokeJdbc(method, actual, arguments);
+                    });
+        }
+        @Override public Connection getConnection(String username, String password) throws SQLException {
+            throw new SQLException("Only the controlled credential source is allowed");
+        }
+        private static Object invokeJdbc(java.lang.reflect.Method method, Object target, Object[] arguments) throws Throwable {
+            try { return method.invoke(target, arguments); }
+            catch (java.lang.reflect.InvocationTargetException invocation) { throw invocation.getCause(); }
+        }
+    }
+
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
         var signedIn = fixture.signInThroughRealHttp();
         var operation = UUID.randomUUID();

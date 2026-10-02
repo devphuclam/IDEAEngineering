@@ -66,6 +66,7 @@ public final class F04SessionFixture implements AutoCloseable {
     }
 
     public DataSource appDataSource() { return app; }
+    public DataSource pooledAppDataSource() { return server.getBean(DataSource.class); }
     public SessionService sessions() { return server.getBean(SessionService.class); }
 
     public SignedIn signInThroughRealHttp() throws Exception {
