@@ -66,8 +66,8 @@ set -e
 if [[ $code != 0 || $output != *'BACKEND_STATE=RUNNING'* ]]; then
   echo "FAIL Start must launch the owned retained Java package (got $code)"; exit 1
 fi
-IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status | grep -q 'BACKEND_STATE=RUNNING'
-IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status | grep -q 'BACKEND_DOCUMENTATION=ENABLED'
+owned_status=$(IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status)
+[[ $owned_status == *'BACKEND_STATE=RUNNING'* && $owned_status == *'BACKEND_DOCUMENTATION=ENABLED'* ]]
 read -r own_pid own_ticks own_artifact < "$fixture/runtime.state"
 printf '%s %s\n' "$own_pid" "$own_ticks" > "$fixture/runtime.state"
 legacy=$(IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status)

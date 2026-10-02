@@ -99,6 +99,9 @@ class DevelopmentApiDocumentationHttpTest {
                 .path("schema").path("$ref").asString());
         assertEquals("date-time", json.path("components").path("schemas").path("IssuedProof")
                 .path("properties").path("expiresAt").path("format").asString());
+        var proof = json.path("components").path("schemas").path("IssuedProof").path("properties").path("proof");
+        assertTrue(proof.path("readOnly").asBoolean(), "Issued proof is a response field, not request-only");
+        assertFalse(proof.path("writeOnly").asBoolean());
         assertFalse(contract.body().contains(password), "Documentation must not contain the fixture credential");
     }
 
