@@ -77,6 +77,7 @@ async function execute(page, id, path, expected) {
   await block.getByRole('button', { name: 'Execute', exact: true }).click();
   const observed = (await response).value;
   check(observed?.status() === expected, `${id} HTTP ${expected}`);
+  oracle = `${id} visible response status`;
   await block.locator('.responses-inner .response-col_status').filter({ hasText: String(expected) }).first().waitFor();
   return block;
 }
@@ -181,6 +182,7 @@ try {
   const classification = message.includes('interrupted by another navigation') ? 'NAVIGATION_INTERRUPTED'
     : message.includes('ERR_HTTP_RESPONSE_CODE_FAILURE') ? 'HTTP_NAVIGATION_REFUSAL'
     : message.includes('ERR_CERT') ? 'TLS_TRUST' : message.includes('ERR_CONNECTION') ? 'CONNECTIVITY'
+    : message.includes('strict mode violation') ? 'AMBIGUOUS_LOCATOR'
     : message.includes('Timeout') ? 'OBSERVATION_TIMEOUT' : failure?.name === 'AssertionError' ? 'ORACLE_REFUSAL' : 'HARNESS_ERROR';
   const loadingProbe = page ? await page.evaluate(() => ({ swaggerGlobal: typeof SwaggerUIBundle,
     methodFailure: document.body.innerText.includes('toUpperCase'), definitionFailure: document.body.innerText.includes('Failed to load API definition'),
