@@ -17,6 +17,9 @@ public final class AuditEvidenceRepository {
     public static void append(Connection connection, Entry entry) throws SQLException {
         Objects.requireNonNull(connection, "caller connection required");
         Objects.requireNonNull(entry, "audit entry required");
+        if (entry.correlationId() == null || entry.correlationId().isBlank()) {
+            throw new SQLException("Original Audit correlation required");
+        }
         try (PreparedStatement insert = connection.prepareStatement("INSERT INTO audit_evidence "
                 + "(evidence_id,operation_id,actor_id,action,target_type,target_id,outcome,reason_code,correlation_id) "
                 + "VALUES (?,?,?,?,?,?,?,?,?)")) {
