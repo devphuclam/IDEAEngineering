@@ -79,11 +79,16 @@ export PGUSER=idea_ddm_migrator PGPASSWORD="$IDEA_DATABASE_MIGRATION_PASSWORD"
 [[ "$IDEA_F04_TEST_SCHEMA" =~ ^f04_[0-9a-f]{32}$ ]] || exit 2
 marker="IDEA_F04_RUN:$IDEA_F04_SOURCE_SHA:$IDEA_F04_TEST_SCHEMA"
 owned="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT count(*) FROM pg_namespace WHERE nspname='$IDEA_F04_TEST_SCHEMA' AND pg_get_userbyid(nspowner)='idea_ddm_migrator' AND obj_description(oid,'pg_namespace')='$marker'")"
+exists="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT count(*) FROM pg_namespace WHERE nspname='$IDEA_F04_TEST_SCHEMA'")"
 if [ "$owned" = 1 ]; then
   # Maven/test connections are stopped; only this run's exact tagged schema may be removed.
   psql -X -v ON_ERROR_STOP=1 -c "DROP SCHEMA $IDEA_F04_TEST_SCHEMA CASCADE"
+  remaining="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT count(*) FROM pg_namespace WHERE nspname='$IDEA_F04_TEST_SCHEMA'")"
+  [ "$remaining" = 0 ] || { printf '%s\n' 'BLOCKED: owned schema cleanup not confirmed' >&2; exit 2; }
   printf 'F04_OWNED_SCHEMA_CLEANUP=COMPLETE; SCHEMA=%s\n' "$IDEA_F04_TEST_SCHEMA"
-elif [ "$owned" != 0 ]; then
+elif [ "$exists" = 0 ]; then
+  printf 'F04_OWNED_SCHEMA_CLEANUP=NOT-CREATED; SCHEMA=%s\n' "$IDEA_F04_TEST_SCHEMA"
+else
   printf '%s\n' 'BLOCKED: schema ownership marker mismatch; no cleanup performed' >&2
   exit 2
 fi
