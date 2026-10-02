@@ -116,4 +116,40 @@ class AuditEvidenceRepositoryTest {
             }
         }
     }
+
+    @Test
+    void sqlFailurePropagatesWithoutRollingBackOrClosingTheCallerTransaction() throws Exception {
+        UUID[] identity;
+        try (var fixture = F04SchemaTest.open("migration")) {
+            identity = F04SchemaTest.seedIdentity(fixture);
+        }
+        var evidence = UUID.randomUUID();
+        try (var connection = F04SchemaTest.open("app")) {
+            connection.setAutoCommit(false);
+            try {
+                AuditEvidenceRepository.append(connection, new AuditEvidenceRepository.Entry(
+                        evidence, UUID.randomUUID(), identity[0], "sample.refuse", "SAMPLE_OWNER",
+                        "target", "REFUSED", "SAMPLE_POLICY_REFUSAL", "caller-correlation"));
+                var savepoint = connection.setSavepoint();
+                var invalidActor = new AuditEvidenceRepository.Entry(UUID.randomUUID(), UUID.randomUUID(),
+                        UUID.randomUUID(), "sample.accept", "SAMPLE_OWNER", "target", "ACCEPTED", null,
+                        "original-correlation");
+                var failure = assertThrows(SQLException.class,
+                        () -> AuditEvidenceRepository.append(connection, invalidActor));
+                assertEquals("23503", failure.getSQLState(), "real PostgreSQL foreign-key refusal must propagate");
+                assertFalse(connection.isClosed());
+                assertFalse(connection.getAutoCommit());
+                connection.rollback(savepoint);
+                try (var query = connection.prepareStatement("SELECT count(*) FROM audit_evidence WHERE evidence_id=?")) {
+                    query.setObject(1, evidence);
+                    try (var row = query.executeQuery()) {
+                        assertTrue(row.next());
+                        assertEquals(1, row.getInt(1), "the repository must not roll back preceding caller work");
+                    }
+                }
+            } finally {
+                connection.rollback();
+            }
+        }
+    }
 }
