@@ -161,14 +161,16 @@ class F04SchemaTest {
 
     @Test
     void terminalSampleResultsAreInsertSelectOnlyAndRejectOwnerMutation() throws Exception {
-        try (var connection = open("migration")) {
-            for (var role : new String[] {"idea_ddm_app", "idea_ddm_migrator"}) {
+        UUID[] identity;
+        try (var fixture = open("migration")) {
+            identity = seedIdentity(fixture);
+        }
+        for (var role : new String[] {"app", "migration"}) {
+            try (var connection = open(role)) {
                 for (var mutation : new String[] {"UPDATE sample_owner_operation SET command_kind='REWRITTEN'",
                         "DELETE FROM sample_owner_operation", "TRUNCATE sample_owner_operation"}) {
                     connection.setAutoCommit(false);
                     try (var statement = connection.createStatement()) {
-                        var identity = seedIdentity(connection);
-                        statement.execute("SET LOCAL ROLE " + role);
                         try (var insert = connection.prepareStatement("INSERT INTO sample_owner_operation"
                                 + "(operation_id,actor_id,organization_id,command_kind,correlation_id,outcome) "
                                 + "VALUES (?,?,?,'SYNTHETIC','f04-sample-test','ACCEPTED')")) {
