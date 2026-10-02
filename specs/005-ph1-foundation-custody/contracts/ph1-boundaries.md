@@ -65,8 +65,9 @@ state. Test-only barriers/faults stay off public surfaces. No mock/H2 integratio
 
 **Execution status:** the separate F04 authority is recorded in
 [IE-RES-F04-BUILDTOOL-AUTH-20261002](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
-The schema checkpoint is partially executed in [F04 outcome results](../evidence/F04-outcome-results.md);
-the scoped runner verifies exact artifacts/graph/hash/cache before commands. Preserve V1–V7 and
+The schema/Audit checkpoint is partially executed in [F04 outcome results](../evidence/F04-outcome-results.md);
+the scoped runner verifies qualified build inputs/direct versions, exact tools and nine artifact
+hashes/descriptor before commands, with offline-only retained-cache resolution. Preserve V1–V7 and
 all historical evidence. Remaining owner behavior and whole-card acceptance remain NOT-RUN.
 The seam qualifies sample retained outcomes, not real mutable domain state, product RBAC,
 event delivery, multi-owner coordination, production readiness or recovery.

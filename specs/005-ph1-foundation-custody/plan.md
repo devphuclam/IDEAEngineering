@@ -243,7 +243,10 @@ and Project Reviewer whole-card acceptance are still required.
 The Project Reviewer's 2026-10-02 decisions close the design frontier; [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md)
 records the approved meaning, trade-offs and future seams. [Work Item #29](https://github.com/devphuclam/IDEAEngineering/issues/29)
 is this documentation closure, not F04 implementation acceptance. Source base:
-`7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. T023–T026 stay unchecked/runtime NOT-RUN.
+`7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. At design closure runtime was NOT-RUN.
+Implementation [#31](https://github.com/devphuclam/IDEAEngineering/issues/31) starts from merge
+`53c1e174cb0410658752ee48ee97ac1dce05ba6b`; [schema/Audit evidence](evidence/F04-outcome-results.md)
+records its bounded first checkpoint. T023–T026 stay unchecked; remaining owner runtime is NOT-RUN.
 
 ### Execution prerequisite
 
@@ -251,7 +254,10 @@ Current `generate-resources` invokes `exec-maven-plugin` and its eight inventori
 dependencies. T043, F03-B closure and Issue #26 exceptions did not authorize F04; the Project
 Reviewer has now issued the separate bounded authority recorded in
 [IE-RES-F04-BUILDTOOL-AUTH-20261002](../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
-The scoped runner rechecks exact intake/graph/hash/cache before every execution and keeps the
+The scoped runner pins qualified build inputs, direct Web versions, exact tool versions, all nine
+build JAR hashes and their descriptor before every execution; Maven resolves only retained cache
+offline. It checks database/public app CREATE before execution and owned-schema CREATE afterward.
+The runner keeps the
 remaining F04 runtime work bounded. A changed assumption returns this gate to BLOCKED.
 No new tooling/dependency is selected by this design. Retain actual Web packaging when using
 the ordinary build; a skip flag is not an approved alternative by itself.

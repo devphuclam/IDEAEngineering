@@ -43,19 +43,39 @@ deferred capabilities merely to turn a scope-boundary row green.
 
 ## Current F04 design-to-implementation handoff
 
-Design frontier closed by the Project Reviewer on 2026-10-02; documentation Work Item
+Historical design frontier closed by the Project Reviewer on 2026-10-02; documentation Work Item
 [#29](https://github.com/devphuclam/IDEAEngineering/issues/29), branch `codex/f04-design-baseline`,
-base `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. This change delivers no Java or migration.
+base `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. That documentation-only change delivered no Java
+or migration; #29 is closed after PR #30 merged at `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Use spec v0.8, FR-001–014, [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
 [F04 contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) and
 [T023–T026 units](tasks.md#f04-implementation-units). `tasks.md` remains the only task list.
 
 The separate F04 authority is now recorded in
 [IE-RES-F04-BUILDTOOL-AUTH-20261002](../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
-The exact offline artifact preflight is enforced by the scoped runner. T023-A/T025-A schema
-execution is partially recorded in [F04 outcome results](evidence/F04-outcome-results.md);
+Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
+OPEN; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
+Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
+Current exact executed source: `82be13ecd2d8b2b339f70a2f47357442dc18cff9`.
+Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
+offline runner. No owner service, event append class, IAM bridge or product route delivered yet.
+Codex implemented Audit after its focused RED; Gemini was not dispatched.
+
+The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
+schema and T024-A Audit execution are partially recorded in [F04 outcome results](evidence/F04-outcome-results.md)
+v0.2: schema 7/7, predecessor 1/1, Audit 7/7 and five no-build admission cases.
 T023–T026 remain unchecked and no completion/progress action is inferred. Any changed tool,
 artifact, graph, database boundary or architecture reopens the execution gate.
+
+For this checkpoint, run the scoped Bash runner separately with `F04SchemaTest`,
+`F04PredecessorMigrationTest` or `AuditEvidenceRepositoryTest` from the exact archive; its approved
+Maven command is offline `-o -B -Dtest=<selector> test`. Use only the controlled test DB and fresh
+tagged f04 schema. Read the evidence for commands/hashes/limits before rerunning.
+Next authorized executable unit: T023-B real HTTP sign-in/principal capture into the internal
+owner tracer, paired with minimum T025-B. It must use current Server-established ActorContext,
+not the raw UUID database fixtures used by schema/Audit tests. Whole owner/concurrency/IAM and
+affected F03/data/health regression remain NOT-RUN. No new approval between units is needed while
+the exact authorized assumptions stay unchanged. Keep #31/F04 open and do not merge this branch.
 
 After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,
 concurrency tests, exact-source regression/evidence. Only **T024-A** is GEMINI-SAFE after CODEX
