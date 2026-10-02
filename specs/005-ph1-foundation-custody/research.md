@@ -150,3 +150,33 @@ would replace the selected authentication boundary rather than integrate it.
 requires the committed database session row, so tentative binding must fail closed. The actual
 integration, fault/concurrency tests and additive V7 have successor execution evidence in §24.
 That evidence does not qualify actual Web/Desktop clients or a distributed transaction.
+
+## R9 — F04 foundation is not a sample-specific delivery framework
+
+**Decision:** The Project Reviewer approved ENVELOPE-9 and the bounded sample outcome/access
+rules on 2026-10-02. [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md)
+is the canonical decision/trade-off record. Existing `sample_owner_operation` supplies the
+qualification state; an accepted event records retention only, not consumer delivery.
+
+**Observed baseline:** V1 already has sample owner/Audit tables; V2/V3 supply Organization/Account
+identity; V4–V7 and SessionService supply session eligibility/security-write coordination. There
+is no common committed-event store at base `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. App can
+currently update/delete sample rows, so terminal idempotency requires bounded successor protection.
+ActorContext has no Organization field; it must be resolved through IAM, not client input.
+
+**Primary mechanism evidence:** PostgreSQL 18 [advisory-lock semantics](https://www.postgresql.org/docs/18/explicit-locking.html#ADVISORY-LOCKS)
+retain a session lock across transaction rollback until explicit unlock or session termination;
+transaction locks end with their transaction. Its [lock functions](https://www.postgresql.org/docs/18/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS)
+provide non-overlapping one-64-bit and two-32-bit key spaces. This supports the proposed bounded
+handoff and separate sample namespace; it is documentation evidence, not an executed F04 result.
+
+**Engineering realization:** Proposed V8, connection-scoped append boundaries, a sample operation
+lock across success/refusal handoff, existing IAM commit coordination and a sample-only partial
+unique event index. [Plan](plan.md#f04-design-baseline) and [data model](data-model.md#f04-persistence-design)
+own the exact design; implementation/qualification are NOT-RUN. No external package/research
+observation supplies a new product requirement.
+
+**Alternatives:** Operation-only sample outbox loses stable provenance/version/evolution seams;
+full registry/payload/dispatcher/coordinator infrastructure has no current consumer/authority.
+The envelope avoids replacing historical meaning when a real owner adopts it. Runtime F04 builds
+still need their own tooling authority; prior exceptions cannot be reused by implication.

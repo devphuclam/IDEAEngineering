@@ -1,6 +1,6 @@
 # PH1 data model — foundation and one Vault
 
-**Status:** Delivery design, 2026-09-28. This is the F01–F05 subset of
+**Status:** Delivery design; F04 refinement 2026-10-02. This is the F01–F05 subset of
 [DOC-06](../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md),
 not a new product schema approval. Column names and SQL types are implementation decisions in F02;
 the ownership and invariants below are binding for PH1. No Logical Document, Generation,
@@ -15,8 +15,9 @@ Checkout, Review or Release record is created by this increment.
 | Session | Internal SessionId, linked Account/Actor, security version, issued time, last eligible activity, absolute expiry and revocation state | Identity and Accounts; native HTTP session registry owns live proof binding | Disabled/stale-version, expired or revoked proof is ineligible. Last eligible activity controls idle expiry; absolute expiry cannot move. Retained metadata cannot restore proof after restart. Never expose a live proof through ActorContext JSON or Audit. |
 | Credential setup/reset proof | ProofId, target Account/Login Identity, purpose, captured security version, digest of high-entropy proof, issue/expiry/consumption state | Identity and Accounts | One successful use at the bound target/state; no plaintext proof in storage/Audit. Redemption changes credential/state and required outcome/Audit atomically. A disabled target cannot become active through reset. Live delivery/recovery qualification remains separate. |
 | Failed-login observation | Existing Login Identity ID, at most five failure timestamps and one blocked-until value | Identity and Accounts; at most one state record per existing Login Identity, located through normalized login | Apply spec v0.6's window/block rules atomically. Unknown identifiers create zero state records. Successful eligible sign-in clears only the current login's state atomically with session establishment. Blocked refusal retains equivalent password work. Temporary block is not disablement or identity replacement. |
-| Sample owner operation | `OperationId`, `ActorId`, command kind, correlation ID, accepted/refused result | PH1 sample authoritative owner; one result for an idempotent operation | It demonstrates the owner/Audit transaction, not a document workflow or general-purpose product object. |
+| Sample owner operation | `OperationId`, originating `ActorId`, Organization snapshot, command kind, original correlation ID, accepted/refused result | PH1 sample authoritative owner; one terminal result for an idempotent operation | Internal qualification state, not a mutable document/demo entity. Sample result-read authorization remains separate from immutable attribution and idempotency. |
 | Audit Evidence | Evidence ID, `OperationId`, `ActorId`, action, target, timestamp, outcome/reason | Audit Evidence; references owner operation | Append-only. A committed successful owner result and its required evidence share one relational transaction. Audit does not decide the result. |
+| Owner Committed Event | ENVELOPE-9 in [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md) | Producer owns meaning; common store only appends; direct Organization/Actor FK, no sample-operation FK | Immutable historical content; ACCEPTED sample requires one event atomically, REFUSED requires none. No common one-operation-one-event cardinality. |
 | Vault Endpoint | Stable `VaultId`/endpoint identity, adapter kind, eligibility | Artifact Custody | PH1 configures one endpoint. Identity is not its hostname, directory or Adapter key. |
 | Transfer | `TransferId`, `OperationId`, `ActorId`, direction, endpoint ID, expected size/digest, state | Artifact Custody; later custody result is separate from owner product result | One operation identifies retries. Bytes in a private candidate do not imply committed custody. |
 | Transfer Grant | Grant ID, exact Transfer/Operation/endpoint/direction/object claims, allowed byte range, expiry, status | Server-issued, Gateway-validated | A grant is short-lived and scoped; secret material is not retained in domain or Audit fields. Wrong endpoint/object/expiry fails closed. |
@@ -60,9 +61,12 @@ Checkout, Review or Release record is created by this increment.
 - Location: private candidate → verified location. A failed checksum or unverified receipt
   cannot produce a successful Artifact/Location result; an orphan candidate remains private for
   reconciliation/expiry. Physical cleanup is separately governed.
-- F04 owner result, required Audit Evidence and any required outbox record commit or roll back as
-  one PostgreSQL unit of work. File bytes cannot join that transaction; F05 must verify the
-  Gateway Receipt before the relational custody acceptance.
+- F04 ACCEPTED sample result, required Audit and its committed event share one PostgreSQL fate.
+  Business REFUSED is terminal with its required Audit in the refusal-evidence transaction and
+  no sample event. Confirmed technical rollback leaves no partial required companion and uses
+  qualification failure evidence, not a fabricated FAILED owner row. F04 does not qualify a
+  second mutable business entity. File bytes cannot join the transaction; F05 verifies Receipt
+  before relational custody acceptance.
 - Only one Vault is configured and tested in PH1. The distinct `ArtifactId`, `VaultId`,
   `LocationId` and Adapter key are the extension seam, **not** evidence that multi-Vault works.
 
@@ -73,3 +77,53 @@ and encoded value must be explicit and compared with actual bytes; grant expiry 
 the receipt must match the exact transfer, endpoint, expected size and digest. Exact SQL types,
 length limits and grant duration belong to F02/F05 implementation qualification, not to an
 unapproved product rule. F05 fixtures are the approved synthetic 1 KiB and 64 MiB files only.
+
+## F04 persistence design
+
+Engineering proposal for T025-A: **`V8__owner_committed_event_foundation.sql`**. The file does not
+exist at design closure. Preserve V1–V7/checksums. Create only `owner_committed_event`, protect
+terminal sample rows, add a direct Organization snapshot to existing `sample_owner_operation`
+and add optional correlation storage to existing Audit (the F04 append contract requires it).
+No payload, delivery table/state, registry, generic operation table or mutable demo entity.
+
+| `owner_committed_event` column | Proposed storage / constraint |
+|---|---|
+| `event_id` | UUID, primary key; independently generated event identity. |
+| `operation_id` | UUID, NOT NULL; no universal operation FK or uniqueness. |
+| `producer_owner` | VARCHAR(120), NOT NULL, nonblank; stable owner code. |
+| `organization_id` | UUID, NOT NULL, FK `operating_organization(organization_id)`, ON DELETE/UPDATE NO ACTION. |
+| `event_kind` | VARCHAR(120), NOT NULL, nonblank; producer-owned kind. |
+| `contract_version` | INTEGER, NOT NULL, CHECK > 0; F04 starts at 1. |
+| `actor_id` | UUID, NOT NULL, FK `actor(actor_id)`, ON DELETE/UPDATE NO ACTION. |
+| `correlation_id` | VARCHAR(160), NOT NULL, nonblank; matches the sample correlation representation and proposed Audit correlation field. |
+| `recorded_at` | TIMESTAMPTZ, NOT NULL, default database current timestamp; not commit ordering. |
+
+F04 constants are `PH1_SAMPLE_OWNER` / `OPERATION_ACCEPTED` / `1`. Add a **partial** unique
+index on `(organization_id, operation_id)` restricted to that producer/kind, without version
+in the key. Other producers/kinds can retain multiple independently identified events for the
+same operation. No common FK, trigger or Java append service depends on sample-owner rows.
+
+Ordinary `idea_ddm_app` has SELECT/INSERT only on this store and terminal sample results;
+revoke UPDATE/DELETE/TRUNCATE and add an append-only mutation guard using the existing database
+pattern. Migrator owns the objects; app cannot migrate or mutate Flyway history. FK existence
+is not authorization: the owner validates Actor/Organization provenance through IAM, not a
+client's supplied IDs. No database predicate binds future event readers to the original Actor.
+
+The sample Organization column is NOT NULL with the same non-destructive Organization FK.
+For a nonempty predecessor sample table, backfill only by its retained Actor's exact IDEA
+Account/Organization relationship. Fail migration if any row cannot resolve that relationship;
+never guess a singleton Organization or erase history. Fresh installations have no sample
+rows at migration time. Test empty and attributable/non-attributable predecessor cases before
+applying V8; no production-data migration is authorized by this plan.
+
+Protect sample resolve/create/refusal under its operation lock and the final IAM coordination
+rule in [the plan](plan.md#f04-design-baseline). Original Actor/Organization/correlation are
+retained on replay. `EventId` and `OperationId` are separate identities, not a requirement for
+an arbitrary global SQL inequality check. Event/Audit retention remain separately governed.
+
+At the base revision `audit_evidence` links by OperationId but has **no** correlation column.
+V8 adds nullable `correlation_id VARCHAR(160)` with a nonblank-when-present check. Historical
+Audit stays unchanged/NULL and existing F03 appenders remain compatible. T024's F04 append
+requires the original nonblank correlation and stores it directly; tests compare its exact
+value with sample result/event. Do not fabricate historical correlation or make F03 provide
+a new value merely to run its regression. This adds trace storage, not a new Audit authority.

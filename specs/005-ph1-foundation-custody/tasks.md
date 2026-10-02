@@ -65,6 +65,11 @@ disable/revoke and retry a protected call.
 
 **F03-A/F03-B execution split (Project Reviewer approved 2026-09-30; Work Item #22):**
 
+Current status comes from [F03 evidence §41](evidence/F03-identity-results.md#41-whole-card-review-receipt-acceptance-and-main-integration):
+F03-B is accepted/integrated. Historical checkpoint wording below (PENDING/IN_PROGRESS/OPEN)
+describes its recorded execution/review time, not current instruction. Preserve those source
+SHAs/results; the F04 owner-race obligation is still NOT-RUN and T043 Desktop remains separate.
+
 - F03-A: one-time local Super Administrator bootstrap; separate explicit, audited Account
   Administrator assignment; create/disable/re-enable account services. Test the Server service
   boundary on real PostgreSQL, including exact role-version/scope, refusal, preserved identity
@@ -114,14 +119,46 @@ requires T038. No client credential or time-control shortcut is allowed.
 
 ## Phase 6: User Story 4 — Attributable owner outcome (F04, P1)
 
-**Goal**: Sample owner result, required Audit and outbox record have one relational fate;
-Audit records the decision without making it.
-**Independent test**: Allowed, refused, forced-failure and same-OperationId retry scenarios.
+**Goal**: Internal synthetic ACCEPTED sample result + required Audit + ENVELOPE-9 event share
+one relational fate; business REFUSED + its Audit commit without event. No new mutable entity,
+product Permission/Role, HTTP or Swagger command. [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md)
+and [contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) close the design.
+**Independent test**: Actual Server/PostgreSQL accepted/refused/rollback, concurrent retry,
+originating-Actor result access and controlled disable/revoke-before-commit. Runtime NOT-RUN.
+**Execution gate**: F04 Maven/tooling authority BLOCKED; prior exceptions do not extend. Obtain
+separate authority and exact artifact preflight before any test/package invocation. Units below
+refine four existing tasks, add no cards/hours and authorize no execution in this docs-only change.
 
-- [ ] T023 [US4] Write failing allowed/refused/failure/idempotency tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`; use controlled synchronization to commit account disablement or session revocation after request admission but before owner commit, then prove no successful business-state change commits.
-- [ ] T024 [US4] Implement append-only Audit storage in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`.
-- [ ] T025 [US4] Implement sample owner command, required outbox and atomic transaction in `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java`; coordinate commit-time eligibility with IAM security-state changes so a session invalidated before owner commit cannot produce a successful change.
-- [ ] T026 [US4] Run success, refusal, forced-failure and retry tests; retain operation and Audit correlation in `specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md`.
+- [ ] T023 [US4] Add vertical failing or qualification tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java` and `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`; use the real-session fixture `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. Cover the F04 contract including concurrent same-ID acceptance/refusal, forced append/commit faults, bounded query access and IAM race. Follow units below rather than writing the entire suite first.
+- [ ] T024 [US4] Implement connection-scoped append-only Audit in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`; require the original correlation, exactly one insert and failure propagation. Caller retains transaction ownership; no second connection/commit, owner decision or IAM change.
+- [ ] T025 [US4] Implement proposed `database/migrations/V8__owner_committed_event_foundation.sql`, `apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java`, `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java` and narrow `apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java` only after the relevant test. ENVELOPE-9 has no payload/delivery state; F04 constants are `PH1_SAMPLE_OWNER` / `OPERATION_ACCEPTED` / contract 1. Keep V1–V7 immutable, protect retained rows and coordinate sample concurrency/IAM commit-time eligibility per plan.
+- [ ] T026 [US4] Run the authorized scoped runner `apps/server/scripts/run-f04-postgresql-checks.sh` from exact source; execute the contract and affected data/identity/health checks, then retain truthful results/limits in `specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md`. Confirmed rollback is not durable FAILED; no event-delivery/product-RBAC claim or card closure by task markers alone.
+
+### F04 implementation units
+
+These are unit IDs within T023–T026, not new standalone task/checklist identities. Every row
+requires its own intended RED → minimum GREEN or an honestly recorded existing-behavior first
+GREEN. All test/source paths below are **planned**, not implementation delivered by this change.
+
+| Unit / allocation | Objective and exact expected paths | Tests / completion oracle | Prerequisites | Transaction/concurrency risks |
+|---|---|---|---|---|
+| **T023-A — CODEX-REQUIRED** | First schema/append contract tests: `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java`, `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`. | RED witnesses absent event schema/correlation support. Then prove nine columns, non-destructive identity FKs, required correlation, app INSERT/SELECT-only, append failure and caller rollback. No migration/test skip reported PASS. | Separate F04 tooling authority; pinned isolated DB/roles; data-model constraints. | App grants currently permit sample mutation; Audit has no correlation column. No guessed history or ambient auto-commit. |
+| **T025-A — CODEX-REQUIRED** | Minimum additive schema for T023-A: `database/migrations/V8__owner_committed_event_foundation.sql`. | GREEN for event store, sample Organization snapshot, nullable historical Audit correlation, protected retained rows, sample-only partial uniqueness; predecessor backfill resolves exact Account/Org or fails. Other synthetic producer can emit two events under one operation. V1–V7 hashes unchanged. | T023-A intended RED; migration numbering rechecked before creation (V8 proposed only). | No global event uniqueness, sample FK or historical provenance fabrication; migrator/app authority stays separate. |
+| **T024-A — GEMINI-SAFE** | Only `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`, implementing the CodeX-pinned caller-Connection append contract. | Existing T023-A test proves exact original Actor/operation/correlation/result insert, append-only rules, required one-row check and SQL/zero-row failure propagation; caller rollback removes append. | CODEX reviews/pins contract, T025-A schema GREEN and focused Audit RED. CODEX integrates/reviews the result. | Gemini cannot open a second connection, commit/rollback, catch-and-ignore failure, infer outcomes, change schema/IAM or refactor F03 appenders. Any such need returns to CODEX. |
+| **T023-B — CODEX-REQUIRED** | Internal owner tracer in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java` and real authentication bridge in `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. | Real HTTP sign-in/principal → internal service; accepted result/Audit/event exact provenance and distinct event identity; business refusal/Audit/no event; no Role change or route. | T025-A/T024-A; qualified existing Server/PostgreSQL fixture. | ActorContext must not be fabricated from raw ActorId or exported bearer proof; obtain Organization via IAM. Test principal capture remains test-only. |
+| **T025-B — CODEX-REQUIRED** | Minimum tracer implementation in `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java`, `apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java`, `apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java`. | GREEN T023-B; supplied-Connection appends each affect one row; shared commit; store has no sample reference/transaction authority. | T023-B RED and fixed ENVELOPE-9 contract. | No product RBAC bypass claim, second transaction, sample→common-store policy leak or independent event success. |
+| **T023-C — CODEX-REQUIRED** | Extend `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java` one retry/access/fault behavior at a time. | Same-ID accepted/refused stays original after input/condition change; concurrent accepted/refusal yields one canonical winner and exact Audit/event count; rolled-back ID can be attempted again. Fresh same-Actor session resolves; other Actor/ineligible proof discloses nothing. Forced Audit/event/zero-row/deferred-commit fault leaves no partial accepted records. | Tracer GREEN; deterministic barrier/fault fixtures; sample query policy. | No generic changed-input fingerprint/status taxonomy; distinguish request refusal, business refusal and technical failure; tests witness rollback/refusal gap. |
+| **T025-C — CODEX-REQUIRED** | Complete bounded resolve/access/fault behavior in `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java`; adjust `CommittedEventStore.java` only if a failing append contract requires it. | GREEN for each T023-C pair; sample operation lock spans rollback/refusal handoff; result-read policy stays in sample; retained EventId/Actor/correlation; no companion duplication. | Each T023-C RED (do not preimplement whole matrix). | Session lock leak into pool; lock order; two outcomes in handoff gap; unique-error retry that duplicates Audit. Partial index alone is insufficient. |
+| **T023-D — CODEX-REQUIRED** | Controlled IAM race and reverse-order tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, using `F04SessionFixture.java`. | Pause after admission, commit disable or per-session revocation, resume: zero ACCEPTED sample state/events. Required refusal Audit is atomic; fresh eligible session/new operation works as applicable. Reverse ordering preserves already committed result; old proof never reads it. | Tracer/retry/fault GREEN; actual existing IAM mutation path/lock; no sleep-only race. | Holding IAM lock at admission prevents the intended security-first ordering; wrong runtime/session eligibility or stale precommit snapshot. |
+| **T025-D — CODEX-REQUIRED** | Coordinate existing eligibility in `apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java` and `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java`. Touch `SessionService.java` only for a necessary narrow module port, not to change semantics. | GREEN T023-D, current account/session/runtime/version/deadlines checked under existing security lock through owner commit; eligible-activity fate shared, refusal does not refresh it. | Each race RED or recorded first GREEN of already implemented behavior; preserve F03 semantics. | Re-entering IAM mutation during a policy query; releasing coordination before commit; broad lock framework or new permission shortcut. |
+| **T026-A — CODEX-REQUIRED** | Bounded runner `apps/server/scripts/run-f04-postgresql-checks.sh`; migration successors in `apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java`, `apps/server/src/test/java/com/idea/ddm/F03BPublicMigrationTest.java`, and F04 schema/owner tests. | Exact distinct roles, approved DB name and UUID schema guard, first/repeat/history/checksums/privileges, affected F03-A/HTTP/restart/health regressions. Update current-chain expectations for additive V8 without rewriting historical evidence or deleting original V1–V7 assertions. | Required units GREEN; F04-specific offline artifact preflight; explicit authority before any fresh-public DB creation. | Historical runner defaults/public DBs are unsafe targets; leaked locks/faults; expected-count drift; clean-up only owned exact schema after test processes stop. |
+| **T026-B — CODEX-REQUIRED** | `specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md`, F04 markers in `tasks.md`, current handoff. | Requirement→source/test→exact executed SHA→result/log hash→review rows; retained RED/first-GREEN/failure/uncertainty limits. No inferred PASS, credentials or unrelated F03 evidence rewrites. | T026-A actual execution; scoped technical review then separate Project Reviewer acceptance. | Source changes after execution require affected rerun; documentation/design approval is not task/card PASS or merge authority. |
+
+**Sequence:** authorize/preflight → T023-A ↔ T025-A/T024-A → T023-B ↔ T025-B →
+T023-C ↔ T025-C → T023-D ↔ T025-D → T026-A → T026-B. Work one behavior per pair, not
+all tests and then all code. T024-A may be delegated only after its exact contract/tests are
+fixed, in its own worktree; no concurrent changes to shared owner/schema/test files. No `[P]`
+marker is added because the current F04 units are dependency-coupled.
 
 ## Phase 7: User Story 5 — Direct single-Vault transfer (F05-A/B, P1)
 
@@ -160,7 +197,7 @@ assumed in advance. This gate does not block F01-A through F04.
 | F02 | T014–T017 | F01 build foundation |
 | F03-A | T019/T037; accepted A portions of T018/T021/T022 | F02 baseline; F03-A reviewed/accepted service and interactive-bootstrap evidence |
 | F03-B | Remaining T018/T020/T021/T022; refinement T038–T046 | F03-A acceptance; qualified exact HTTP Security intake before new dependency use; approved real HTTP/PostgreSQL test seam |
-| F04 | T023–T026 | F03 Actor/session and F02 database |
+| F04 | T023–T026 (units above) | F03 accepted Actor/session + F02 data; ADR-0014 design; separate F04 tooling/controlled database authority before execution |
 | F05-A/B | T027–T034 | F04 outcome/Audit and F02 data baseline; T027 qualification and exact-path task refinement before Gateway implementation |
 | PH1 review | T035–T036 | Targeted story evidence |
 
@@ -176,8 +213,11 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: submit the [F03-B closure matrix](evidence/F03-B-closure-matrix.md) and exact
-published head for external whole-card review, then Project Reviewer acceptance. Applicable
+Current next step: review/publish the F04 documentation baseline under Work Item #29, then
+obtain separate F04 tooling execution authority before T023-A. No production implementation,
+migration creation or merge is authorized by this documentation task. T023–T026 remain unchecked.
+
+Historical F03-B closure handoff below is retained as trace, not current work/status. Applicable
 T040/T042/shared Server tasks and T044 have executed closure evidence in §39; markers record
 technical task execution only. Prior checkpoints remain historical. Any rerun still requires
 exact cached-tool preflight under the closure-only exception. No new feature or Desktop code.

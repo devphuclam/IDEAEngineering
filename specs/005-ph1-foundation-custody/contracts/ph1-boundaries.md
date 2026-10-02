@@ -12,7 +12,7 @@ take precedence. The exact Gateway runtime/toolchain and wire profile remain `NO
 |---|---|---|
 | Bootstrap | Authorized local operator → Identity and Accounts | One-time, non-public command; creates initial administrator and attributable evidence. No client self-registration route. |
 | Sign-in/session | Web or Desktop → Server/Identity and Accounts | Credentials establish a server-owned Actor/session. Protected commands use that session, never a caller-supplied Actor ID. Sign-out/disable/revoke make the old proof ineligible. |
-| Sample owner command | Authenticated client → Server owner Module | `OperationId` and eligible Actor; result, Audit and required outbox atomically recorded. Repeated operation is resolved idempotently. The sample is not document publication. |
+| Sample owner command | Internal synthetic qualification caller → Server sample owner | Server-established current eligible Actor/session and `OperationId`; ACCEPTED result/Audit/event atomic, business REFUSED result/Audit atomic without event. Bounded originating-Actor result policy; no HTTP/product command or general product RBAC qualification. |
 | Grant | Authenticated client → Server/Artifact Custody | Server checks eligibility and returns a short-lived exact Grant for one Transfer/endpoint/expected size and digest. No filesystem key or permanent Vault credential. |
 | Byte transfer | Client → addressed Gateway/Vault Adapter | Gateway validates the exact Grant and accepts a private candidate. Business Server does not proxy bytes. Interrupted/range retries retain the same transfer identity. |
 | Receipt acceptance | Gateway evidence → Server/Artifact Custody | Server authenticates and matches Receipt to operation, endpoint, size and digest; then accepts or refuses relational custody metadata. No receipt can publish a Generation. |
@@ -24,7 +24,7 @@ does not silently choose a Gateway runtime or claim an executed security test.
 
 ## Outcome meaning
 
-Each material PH1 operation retains its `OperationId`. Responses must distinguish a completed
+For the F05 transfer/custody interface, each material operation retains its `OperationId`. Responses must distinguish a completed
 custody result, a refusal with safe reason, transfer still in progress, and an uncertain result
 that requires status lookup/reconciliation under that same identity. The client must not silently
 start another operation after an uncertain response. Exact API response names and wire codes are
@@ -33,6 +33,41 @@ and Receipt states in DOC-06. Error information may contain a reason and correla
 not credentials, Grant secret, physical path, or another Actor's private details. Gateway byte
 acceptance leaves a private candidate; only Server verification of the matching Receipt can
 accept Artifact custody. Neither outcome is document Check-in or Generation publication.
+
+## F04 internal qualification contract
+
+**Decision authority:** Project Reviewer, 2026-10-02; [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md).
+**Surface:** internal sample service in the actual Server, real PostgreSQL, synthetic identities;
+no product Permission/Role, HTTP/Swagger route or operator/startup exposure. Obtain ActorContext
+from the real authenticated Server session path, not an ActorId-only trusted fixture. The
+qualification fixture may capture the authenticated principal internally, without another route
+or secret output; its contextual seam cannot weaken production authentication.
+
+| Boundary | Required behavior |
+|---|---|
+| New eligible ACCEPTED | One existing-table sample owner result, one required Audit with original correlation, one ENVELOPE-9 event (`PH1_SAMPLE_OWNER`, `OPERATION_ACCEPTED`, contract 1), same originating Actor/Organization and transaction fate. |
+| Deliberate business REFUSED | Terminal sample OwnerCommandOutcome + required refusal Audit commit together in the refusal-evidence transaction; zero sample event/accepted state. Conditions changing do not convert that committed result; a new genuine attempt uses a new ID. |
+| Confirmed technical rollback | Zero partial owner/Audit/event records from that transaction. Retain Actor/OperationId/correlation, failure point and confirmed rollback in qualification evidence, not a fake durable FAILED owner result. |
+| Indeterminate commit | Separate uncertainty; do not report confirmed rollback/FAILED or silently execute a new-ID success. No F05 reconciler/status API is introduced. |
+| Same-ID replay/concurrency | One canonical committed result; preserve original Actor/correlation/EventId, no re-execution, duplicate owner Audit or accepted event. Rolled-back/no-result attempt is not completed. Serialize accepted/refusal handoff as specified in the plan. |
+| Authorized sample result query | Current eligible Server-established Actor equals original stable Actor; fresh valid session is allowed. Preserve provenance, not the old session instance. |
+| Other Actor/Organization or invalid proof | Bounded non-disclosing refusal; no original outcome/detail leakage, replacement, execution or duplicate original Audit/event. Sample reader policy is outside the common store; separately governed access-attempt Audit remains possible later. No HTTP taxonomy is chosen. |
+| Commit-time security transition | Use the existing IAM coordination and a controlled barrier: disable/revoke committed after admission but before owner commit means zero accepted sample state/events. Required refusal evidence may retain the original admitted Actor. |
+| Required append/commit failure | Audit failure, event failure, zero required affected rows and deferred commit failure all prevent partial success. Removing a fault permits a new attempt under the same uncommitted ID. |
+| Common foundation | Immutable contents and direct non-destructive Actor/Organization FKs; denied app UPDATE/DELETE/TRUNCATE; another synthetic producer may retain multiple events under one OperationId. No FK/store dependency on the sample owner. |
+
+**Test ownership:** T023 pairs each oracle with its T024/T025 minimum implementation; no full
+imagined suite before the first vertical slice. T026 retains exact-source actual results in
+`evidence/F04-outcome-results.md`. Use an explicitly authorized dedicated database and UUID-owned
+schema; only migrator applies migrations, app executes commands. Fresh public V1→V8, if used,
+requires a separately authorized completely new database, never existing preview/dev/F03 public
+state. Test-only barriers/faults stay off public surfaces. No mock/H2 integration substitution.
+
+**Preflight:** F04 tooling authority is BLOCKED until separately obtained; prior T043/F03-B/#26
+exceptions do not extend. After approval, verify exact artifacts/graph before commands. Preserve
+V1–V7 and all historical evidence. F04 tests/evidence remain NOT-RUN at this design closure.
+The seam qualifies sample retained outcomes, not real mutable domain state, product RBAC,
+event delivery, multi-owner coordination, production readiness or recovery.
 
 ## F01–F05 compatibility checks
 

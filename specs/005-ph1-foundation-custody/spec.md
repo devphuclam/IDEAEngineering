@@ -2,10 +2,10 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.7` / Principal Product Author
+**Version / owner**: `0.8` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
-**Classification / verification**: `INTERNAL` / PH1 application results `NOT-RUN`
+**Classification / verification**: `INTERNAL` / F01–F03 results belong to retained per-card evidence; F04/F05 runtime `NOT-RUN`; whole-PH1 acceptance incomplete
 **Input**: Deliver only F01–F05 of the approved roadmap (72 planned task hours): a buildable application foundation, controlled data and account foundations, attributable business outcomes, and one direct Client-to-Gateway-to-Vault transfer smoke path.
 
 ## Authority and Scope Boundary
@@ -61,6 +61,15 @@ subject to same-origin delivery by the actual IDEA Server, qualified package sou
 normally trusted HTTPS. See [Web qualification contract](contracts/ph1-boundaries.md#t043-web-qualification-contract).
 That later approval authorizes Web implementation after environment prerequisites; it does not
 claim execution or approve the separate Desktop checkpoint.
+
+### Session 2026-10-02
+
+- Q: What does F04 qualify without creating another product command? → A: The Project Reviewer approved an internal synthetic sample using existing `sample_owner_operation`; no mutable sample entity, new product Permission/Role, HTTP or Swagger operation. A current Server-established eligible Actor/session is still required. ACCEPTED retains owner result, required Audit and an immutable committed event in one transaction; the event claims retention, not delivery. The approved ENVELOPE-9 foundation and Engineering realization are recorded in [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md).
+- Q: How do refusal, failure and retries differ? → A: A committed sample business REFUSED is terminal for its OperationId and retains owner outcome plus refusal Audit, with no F04 event. A same-ID retry resolves the original committed ACCEPTED/REFUSED result without re-execution or duplicate Audit/event; a new genuine attempt uses a new ID. Confirmed technical rollback retains attributable qualification evidence, not a fabricated durable FAILED owner row. An uncertain commit cannot be called rollback or silently retried as a new success. These sample semantics do not establish universal future owner rules or F05 reconciliation.
+- Q: Who may resolve a committed F04 sample result? → A: Only the originating stable Actor, established by Server from a currently eligible session/Account; a fresh valid session for that Actor is allowed. Another Actor, including one in the same Organization, receives non-disclosing refusal without the original outcome/details, mutation, re-execution or duplicate original Audit/event. Original session instance is not authority. This is the sample owner's query policy, separate from provenance/idempotency, not a universal database/store rule. Future owner queries may authorize other readers, and a separately governed access-attempt Audit is not prohibited.
+
+These are Project Reviewer-approved F04 delivery refinements, not new Core requirements, gate
+decisions or executed application results. They preserve F03 historical baselines and decisions.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -157,17 +166,20 @@ the actual Server and PostgreSQL; accelerated timing is not a mock-database subs
 
 ### User Story 4 - Retain an attributable outcome (Priority: P1; F04)
 
-As an operator reviewing an authorized command, I need its business result and Audit evidence to identify the same operation so that a result is not accepted without an attributable record. Audit records must report outcomes, not decide them.
+As the developer qualifying an internal synthetic owner command, I need its result, required Audit and accepted committed event to identify the same operation so that a result is not accepted with missing atomic companions. Audit records outcomes rather than deciding them; this sample is not a supported product/admin command.
 
 **Why this priority**: Traceability and atomicity must exist before file custody is accepted.
 
-**Independent Test**: Execute one allowed and one refused sample command, inspect the resulting business state and Audit evidence, then force a failure at the recorded transaction boundary and check for a partial outcome.
+**Independent Test**: On actual Server/PostgreSQL, invoke the internal seam with a Server-established eligible Actor/session. Inspect existing sample owner state and required Audit/event; exercise business refusal, forced rollback, concurrent same-ID retry, result-access denial and disable/revoke-before-commit. No new HTTP route or mutable demo entity is needed.
 
 **Acceptance Scenarios**:
 
-1. **Given** an eligible Actor and valid sample command, **When** the command succeeds, **Then** its business outcome and Audit evidence share a correlation identifier and neither is missing.
-2. **Given** a refused sample command, **When** it is evaluated, **Then** the refusal remains attributable without the requested business-state change.
-3. **Given** a transaction failure before completion, **When** the result is inspected, **Then** no successful business outcome exists without its required Audit evidence.
+1. **Given** an eligible Actor and valid sample command, **When** it commits, **Then** one accepted owner result, its required Audit and committed event retain the original Actor/Organization/correlation with one atomic fate; event retention is not delivery success.
+2. **Given** a business-refused sample command, **When** its refusal commits, **Then** one terminal refused owner result and required refusal Audit remain attributable, with no accepted sample state or F04 event.
+3. **Given** a proven technical rollback, **When** state is inspected, **Then** no accepted owner result/event or partial required companion survives; retained qualification evidence identifies failure and confirmed rollback, not a fabricated durable FAILED owner result.
+4. **Given** a committed accepted/refused operation, **When** concurrent or later same-ID retries occur, **Then** authorized resolution returns the original result/attribution without re-execution or duplicate original Audit/event. A demonstrably rolled-back attempt with no committed result is not completed.
+5. **Given** the originating Actor in a fresh eligible session, **When** it resolves the sample result, **Then** the original result is available; another Actor or ineligible proof receives bounded non-disclosing refusal with no original-result mutation or duplicate companions. This does not define future product-query reader policy.
+6. **Given** a sample command admitted with eligible proof, **When** account disablement/session revocation commits before the owner commit, **Then** zero accepted sample owner results/events commit. Attribution may remain in the required refusal-evidence transaction; F04 claims no independent mutable product-resource qualification.
 
 ---
 
@@ -213,6 +225,8 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - Two Login Identities share an Account: reset either explicitly, refuse missing/foreign/unknown selectors, preserve the other credential, revoke sessions from both, and reject an outstanding sibling proof after the Account version changes.
 - Concurrent sign-in failures reach the threshold, an attempt occurs during a block, or failure-window/block expiry occurs exactly at its deadline. Successful session establishment and failure-state clearing must share one atomic fate.
 - Many distinct unknown login identifiers are attempted: zero failure-observation records are created. Provisioning a previously unknown identifier starts without inherited failures; each existing Login Identity's state remains bounded independently of traffic volume.
+- Concurrent F04 same-ID acceptance/refusal or a rollback-to-refusal handoff cannot create two terminal results or duplicate companions. Another Actor cannot obtain an original result by supplying its OperationId.
+- F04 required Audit/event append or deferred commit fails: no partial accepted state; a lost response with unproven commit is not classified as rollback.
 
 ## Requirements *(mandatory)*
 
@@ -223,8 +237,8 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - **FR-003 (F02)**: A fresh permitted development database MUST be constructible from identifiable, ordered changes, with a recorded bounded rollback check and separate application/database health outcomes.
 - **FR-004 (F03)**: Initial administrator creation MUST use a controlled one-time bootstrap path; after completion a repeated request MUST report that initialization is already complete without creating or changing an Actor, account or Role Assignment, and public self-registration MUST NOT be available in PH1.
 - **FR-005 (F03)**: A protected request MUST use a verified session associated with one stable Actor; expiry, sign-out, disablement and revocation MUST prevent reuse as an eligible session. F03-B development MUST enforce User Story 3's idle/absolute limits and password-reset revocation rule. Commands MUST revalidate eligibility before their authoritative commit, coordinated with committed disablement/revocation so an invalid command cannot commit. Re-enabling an account MUST require a fresh eligible session; prior invalidated sessions MUST remain invalid.
-- **FR-006 (F04)**: A successful sample business command MUST retain its business result and required Audit evidence with the same correlation identity; Audit evidence MUST NOT determine or mutate that result.
-- **FR-007 (F04)**: A refused or failed sample command MUST have an attributable refusal/failure result without a false successful business-state change.
+- **FR-006 (F04)**: A successful internal sample command MUST retain its existing sample owner result, required Audit and accepted committed event with the original correlation/Actor/Organization and one transaction fate; Audit MUST NOT determine or mutate the result. Concurrent/later same-ID retries MUST resolve the committed result without re-execution or duplicate required companions.
+- **FR-007 (F04)**: A business-refused sample command MUST retain a terminal attributable owner outcome and required refusal Audit, with no F04 event. Confirmed technical rollback MUST leave no false successful state and retain attributable qualification failure evidence rather than inventing a durable FAILED outcome; an unproven commit MUST NOT be called rollback. Sample-result resolution MUST apply the originating-Actor/current-eligibility policy in the 2026-10-02 clarification, separate from provenance/idempotency and future product reader policy.
 - **FR-008 (F05)**: For the approved single-endpoint smoke path, the Server MUST issue only a scoped, time-bounded transfer permission after eligibility checks, and the client MUST send file bytes to the Gateway, not through the business Server.
 - **FR-009 (F05)**: The Server MUST record a successful Artifact custody result only after verifying a Gateway receipt for the expected operation, byte count and digest; an unverified candidate MUST remain distinct from committed metadata.
 - **FR-010 (F05)**: The custody record MUST preserve stable Artifact, Vault and location identity independently of the Adapter-owned physical storage path, so later multi-Vault work does not require file identity to equal one machine path.
@@ -238,6 +252,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - **Actor, IDEA Account, Login Identity and Session**: Distinct identity, sign-in and eligibility concepts; an account/login change does not erase the stable Actor.
 - **Role Definition version and Role Assignment**: A protected permission set and a separate attributable principal/version/Organization-Scope grant. Super and Account Administrator are independent assignments, not account types.
 - **Operation and Audit Evidence**: One attempted command and the attributable record of its outcome, joined by a correlation identity.
+- **Owner Committed Event**: An independently identified immutable statement of a committed owner operation, retaining producer, semantic contract version and original Actor/Organization/correlation. No delivery claim follows from its existence.
 - **Transfer Grant and Receipt**: Bounded permission for one attempted transfer and Gateway evidence about the resulting candidate bytes; neither alone is a committed Artifact.
 - **Artifact, Vault and Location**: Logical file identity and custody location, distinct from the Adapter's physical path. PH1 uses one endpoint and keeps these identities separable for future locations.
 
@@ -248,7 +263,7 @@ This table does not select an HTTP status code, Grant lifetime or Gateway runtim
 - **SC-001 (F01)**: A clean-checkout reviewer can run all four named project build/check entry points and retain an actual pass/fail result for each, with zero working secrets committed.
 - **SC-002 (F02)**: One fresh database can be built from the recorded change set; one supported rollback case and both healthy/unavailable database conditions produce distinguishable recorded outcomes.
 - **SC-003 (F03)**: The documented first/repeated bootstrap, first credential setup, exact-login reset, sign-in/out, expiry, disable, revoke and re-enable scenarios each have an executed result; repeated bootstrap creates zero additional privileges and all protected retries with invalidated sessions are refused. Reset tests exercise both choices on a two-login Account: zero unintended sibling credential changes, zero old-session reuse and zero successful missing/foreign/stale targeting. F03-B proves the development profile's setup-proof, idle/absolute and failed-login deadlines through the fast verification method in User Story 3; at/after expiry there are zero successful protected retries, and during a login block there are zero successful sign-ins. Distinct unknown identifiers create zero failure-observation records; observed state for existing identities stays within the bound in the delivery design. Password boundary cases include below/at 15 characters and at/above 72 UTF-8 bytes, including multibyte input; valid length alone does not qualify a credential or live policy. F04 provides the in-flight command test: committed disablement/revocation before the command commit yields zero successful business-state changes. Re-enabled accounts accept fresh eligible sign-in but refuse prior invalidated sessions.
-- **SC-004 (F04)**: For the allowed, refused and forced-failure sample commands, the retained evidence identifies the Actor, correlation identity and actual outcome; zero successful results lack their required Audit evidence.
+- **SC-004 (F04)**: Retained evidence identifies Actor, Organization, OperationId, correlation and actual outcome: ACCEPTED has exactly one required Audit and one F04 committed event; business REFUSED has one required refusal Audit and zero F04 events; confirmed rollback has zero accepted/partial records. Concurrent/repeated resolution adds zero original-outcome Audit/events; other-Actor/ineligible resolution discloses zero protected original results. The common event store does not impose one-event-per-operation on other producers. Delivery, general product RBAC and real mutable-resource qualification are not claimed.
 - **SC-005 (F05)**: Both approved synthetic fixtures (1 KiB and 64 MiB) complete the one-endpoint transfer path with matching size and SHA-256; denied, wrong-digest, interrupted, lost-response and repeated/changed-input attempts produce zero false successful custody results.
 - **SC-006 (boundary)**: The F05 review can identify separate Artifact, Vault, location and physical-path fields and demonstrate that one stored file's logical identity does not depend on its Adapter path. This is a seam check, not a second-Vault test.
 
@@ -274,7 +289,7 @@ they do not create a product feature.
 | `FR-001/002` | F01 | DOC-07 F01 delivery plan; `REQ-SEC-001` and DOC-05 client boundary for secrets/access | Build evidence belongs to F01; no permanent client credential or physical Vault path. |
 | `FR-003` | F02 | DOC-07 F02 delivery plan; DOC-05/06 data ownership and migration design | A development migration/rollback check is not an operational restore claim. |
 | `FR-004/005` | F03 | DOC-04 `REQ-IAM-001/002/004/007`; DOC-05 identity boundary | Bootstrap/account/session only; no public registration or implicit document authority. |
-| `FR-006/007` | F04 | DOC-04 `REQ-AUD-001/002`; DOC-05 owner/Audit transaction boundary | Audit records but does not decide the business outcome. |
+| `FR-006/007` | F04 | DOC-04 `REQ-AUD-001/002`; DOC-05 owner/Audit unit of work, `IF-COMMITTED-EVENT`, `ARCH-VIEW-SEQ-004`; DOC-06 Organization ownership; Project Reviewer 2026-10-02 / [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md) | Internal sample and retained event only. Audit does not decide the result; bounded result-access/refusal rules are not universal product RBAC/query semantics. |
 | `FR-008/009/010/011` | F05 | DOC-04 `REQ-SEC-001/002`, `REQ-OPS-001/006`; DOC-05/06 Artifact transfer/custody interfaces | One Gateway/Vault endpoint now; `REQ-OPS-007/008` multi-location selection, replication and repair remain later implementation and verification work. |
 | `FR-012` | PH1-wide | [Constitution principle I](../../.specify/memory/constitution.md) and [external-source intake](../../docs/agents/external-source-intake.md), both repository process controls | Exact license/source review is required before import/use; internal development does not establish commercial distribution rights. |
 | `FR-013` | F03-A | DOC-04 `REQ-IAM-002/003/005`, `REQ-AUTH-004/009/010`; DOC-05 `IF-DIRECTORY-ADMIN` / `IF-RBAC-ADMIN`; [ADR-0012](../../docs/adr/0012-use-principal-role-scope-rbac.md); Project Reviewer clarification on 2026-09-30 | Separate scoped grants; bounded Super self-assignment is explicit, not an implicit CRUD bypass. F03-B session/activation evidence and the broader permission catalogue remain owed. |
