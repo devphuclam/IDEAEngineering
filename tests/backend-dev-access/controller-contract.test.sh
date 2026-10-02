@@ -66,7 +66,13 @@ set -e
 if [[ $code != 0 || $output != *'BACKEND_STATE=RUNNING'* ]]; then
   echo "FAIL Start must launch the owned retained Java package (got $code)"; exit 1
 fi
-IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status | grep -q 'BACKEND_STATE=RUNNING'
+owned_status=$(IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status)
+[[ $owned_status == *'BACKEND_STATE=RUNNING'* && $owned_status == *'BACKEND_DOCUMENTATION=ENABLED'* ]]
+read -r own_pid own_ticks own_artifact < "$fixture/runtime.state"
+printf '%s %s\n' "$own_pid" "$own_ticks" > "$fixture/runtime.state"
+legacy=$(IDEA_PREVIEW_ROOT="$fixture" bash "$controller" status)
+[[ $legacy == *'BACKEND_STATE=RUNNING'* && $legacy == *'BACKEND_DOCUMENTATION=UNVERIFIED'* && $legacy != *'BACKEND_DOCUMENTATION=ENABLED'* ]]
+echo 'PASS legacy receipt retains ownership without claiming documentation generation'
 IDEA_PREVIEW_ROOT="$fixture" bash "$controller" stop | grep -q 'BACKEND_STATE=STOPPED'
 echo 'PASS owned real Java runtime starts, is recognized, and stops without deleting configuration'
 [[ -f $fixture/runtime.env && -f $fixture/provisioned ]]

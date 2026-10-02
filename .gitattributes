@@ -7,3 +7,5 @@ tests/*.sh text eol=lf
 .agents/skills/ui-ux-pro-max/data/icons.csv text eol=lf
 .agents/skills/ui-ux-pro-max/data/phosphor-icons-upstream.json text eol=lf
 .agents/skills/ui-styling/canvas-fonts/*-OFL.txt -whitespace
+# Preserve the admitted upstream license/notice bytes and their recorded checksums.
+apps/server/src/main/resources/third-party/swagger-ui/*.txt -text

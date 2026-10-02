@@ -5,7 +5,7 @@ root=/home/phuclam/.local/share/idea/dev-preview-26
 java=/opt/idea/tools/jdk-25.0.4.1+1/bin/java
 [[ $(id -un) == phuclam && -t 0 && -t 1 ]] || { echo 'Interactive phuclam SSH console required'; exit 2; }
 [[ ! -L $root/runtime.env && $(stat -c '%a:%U' "$root/runtime.env") == 600:phuclam ]] || exit 2
-[[ $(sha256sum "$root/server.jar" | cut -d ' ' -f 1) == ac4f74e1fe5453b7716e13da970027ba403d695340974ca13503f3d8989332ff ]] || exit 2
+[[ $(sha256sum "$root/server.jar" | cut -d ' ' -f 1) == 48fe98659db3c075b771a90fd0f4fc61f79a01c01cc941114db9a5299a685bde ]] || exit 2
 set -a; source "$root/runtime.env"; set +a
 [[ $IDEA_DATABASE_NAME == idea_ddm_preview_20261001_26 && $IDEA_DATABASE_APP_USER == idea_ddm_app ]] || exit 2
 echo 'Enter each value WITHOUT leading/trailing spaces:'

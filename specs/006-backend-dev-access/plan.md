@@ -13,11 +13,17 @@ US2 adds development-only interactive documentation after separate intake and bu
 
 - Language/platform: Windows PowerShell 5.1 and CMD; Ubuntu Bash; existing Temurin 25.0.4.1+1.
 - P1 dependencies: installed OpenSSH, native PostgreSQL 18 and retained Server JAR; no package/build.
-- P2 candidate: springdoc WebMVC UI 3.1.1, not admitted yet. Preserve Log4j2/no Logback.
+- P2 selection, 2026-10-02: Swagger UI WebJar 5.32.14, one admitted dependency with no Maven children.
+  The initial springdoc 3.1.1 candidate remains reference-only. Author/HTTP-qualify the existing API
+  contract explicitly; preserve Log4j2/no Logback. See the [bounded intake](../../docs/research/2026-10-01-backend-dev-swagger-intake.md).
 - Storage: `idea_ddm_preview_20261001_26.public`, created only if absent, owned by migrator;
   distinct runtime app role. Protected config and owned process records outside Git.
 - Testing: public launcher exit/status/address outputs; real trusted HTTPS and actual PostgreSQL,
   synthetic login and persistence across owned stop/start. User-approved seam on 2026-10-01.
+- Swagger seam: [same-origin HTTP/browser contract](contracts/swagger.md), approved 2026-10-02;
+  existing Web login, GET session / POST logout Try out, credential/proof operations documentation-only.
+- Build-tool scope: [Issue #26 exception](../../docs/research/2026-10-02-devaccess-buildtool-exception.md)
+  for the exact historical nine artifacts, authorized before execution; not F04/F05/legal clearance.
 - Target/scale: one developer, one Ubuntu runtime, Windows browser through loopback SSH tunnel.
 - Constraints: port 18444, localhost SAN/trust, no TLS bypass, no automatic service/firewall change,
   no verifier, no F03-B source change or implicit PR25 merge.
@@ -34,8 +40,9 @@ Trace: user approvals -> Issue #26 -> this feature -> public-boundary test/evide
 history and main's uncommitted progress files remain untouched. Secrets stay in restricted server
 configuration, never Git, process arguments or retained output. Dedicated provisioning preserves
 least privilege and Flyway history protection. Retained artifact/source limits remain explicit.
-Pre/post-design process check: satisfied for P1; P2 tooling/import execution BLOCKED until its
-recorded pre-use dispositions exist.
+Pre/post-design process check: satisfied for P1; P2 tooling/import was blocked until its separate
+pre-use records. Those records preceded execution on 2026-10-02; focused qualification is in
+[Swagger results](evidence/swagger-results.md). Legal/commercial clearance is not implied.
 
 ## Project Structure
 
