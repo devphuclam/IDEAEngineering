@@ -2334,5 +2334,19 @@ while actual cookie removal is the Java CookieManager oracle. Historical executi
 rewritten. Both reviews are source reviews, not independent private-log execution/inspection.
 
 Summary: Standards 0 unresolved documented breaches; Spec 0 unresolved confirmed findings.
-Whole-F03-B external review and human acceptance PENDING; F03-B IN_PROGRESS, Issue #24 OPEN,
-combined T043 unchecked, Desktop successor separate, verifier NOT-RUN; no merge or Tracker action.
+Whole-card technical review: PASS WITH NOTES. Project Reviewer whole-card acceptance: **COMPLETE / ACCEPTED**.
+Card status: **F03-B = COMPLETED / PASS**. Work item status: **Issue #24 = CLOSED**.
+Actual effort: **11 giờ 20 phút** (11.3333h, execution register revision 32 published).
+Desktop successor separate, verifier NOT-RUN; PR #25 merged into `main`.
+
+## 41. Whole-card review receipt, acceptance and main integration
+
+On 2026-10-01, whole-card technical review at `92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0` (final executed source `989bf5a9fc09c03ee2d5fa88d09b3cee78335616`):
+- Standards review: PASS WITH NOTES (zero documented breaches; optional refactoring noted).
+- Spec review: PASS WITH NOTES (zero confirmed requirement findings; historical observation wording preserved).
+- Project Reviewer whole-card acceptance: **COMPLETE / ACCEPTED**.
+- Card status: **F03-B = COMPLETED / PASS**.
+- Work item status: **Issue #24 = CLOSED**.
+- Actual effort: Progress Tracker recorded **11 giờ 20 phút** (11.3333 hours, office hours 08:00–12:00, 13:00–17:00; lunch/overnight excluded; execution register revision 32 published).
+- Scope boundaries preserved: Server + T043-Web accepted; historical combined T043 remains unchecked; Desktop/WebView2/Workspace binding remains a separate successor Work Item; F04 business-owner race remains future F04; verifier remains NOT-RUN.
+- Integration: PR #25 merged into `main` via merge commit `25ef993524b9d309f28d61adeef0095355c9c66e`.

@@ -199,6 +199,8 @@ execution and private-log review limits remain unchanged. No new client implemen
 by this reconciliation.
 The approved logout/history repairs and final source execution satisfy applicable-route coverage
 and T044 fresh-public/data regression; see §39 and the matrix. Combined T043 remains unchecked:
-only its Web portion is satisfied, Desktop is separate. No additional card/hours were added.
-F03-B remains IN_PROGRESS, Issue #24 open;
-verifier NOT-RUN, no merge.
+only its Web portion is satisfied, Desktop is separate. Actual effort Tracker = 11 giờ 20 phút (11.3333h).
+Whole-card technical review: PASS WITH NOTES. Project Reviewer acceptance: COMPLETE / ACCEPTED.
+F03-B = COMPLETED / PASS; Issue #24 CLOSED; PR #25 integrated into main.
+Desktop/WebView2/Workspace binding transferred to separate successor Work Item.
+verifier NOT-RUN.

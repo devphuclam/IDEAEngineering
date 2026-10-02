@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 29,
+  "registerRevision": 32,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
-  "statusDate": "2026-09-30",
+  "statusDate": "2026-10-01",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -670,7 +670,20 @@
       "priority": "NORMAL",
       "forecastPlannedOrder": 12,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F03-B-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": "specs/005-ph1-foundation-custody/evidence/F03-identity-results.md",
+          "commit": "92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0",
+          "sha256": null,
+          "externalUri": null,
+          "description": "Whole F03-B technical closure PASS WITH NOTES; final 108 regression + separate 7 public/privilege/health checks, fresh isolated V1–V7, actual Chrome W01–W10. Project Reviewer accepted and explicitly directed completion on 2026-10-01. Retain private raw-log limitation; verifier NOT-RUN; Desktop separate; no F04/production/commercial claim.",
+          "result": "PASS",
+          "recordedAt": "2026-10-01T16:20:58.6312075+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
       "events": [
         {
@@ -680,18 +693,42 @@
           "recordedBy": "LEAD",
           "kind": "STATE_CHANGE",
           "reason": "Người dùng yêu cầu Bắt đầu F03-B ngày 30/09/2026. Thực hiện HTTP authentication/session, credential setup và kiểm thử PostgreSQL thật theo profile đã chốt: idle 2h, absolute 8h; tăng tốc thời gian test, không chạy verifier."
+        },
+        {
+          "eventId": "F03-B-EVENT-2",
+          "effectiveAt": "2026-10-01T15:14:47.1752225+07:00",
+          "recordedAt": "2026-10-01T15:14:47.1752225+07:00",
+          "recordedBy": "LEAD",
+          "kind": "EFFORT_UPDATE",
+          "reason": "Đã xem lại giờ còn lại của F03-B; không thay đổi số liệu."
+        },
+        {
+          "eventId": "F03-B-EVENT-3",
+          "effectiveAt": "2026-10-01T16:18:53.5699518+07:00",
+          "recordedAt": "2026-10-01T16:18:53.5699518+07:00",
+          "recordedBy": "LEAD",
+          "kind": "CORRECTION",
+          "reason": "Người dùng xác nhận làm F03-B từ lúc bắt đầu bộ đếm, chỉ trừ ngoài giờ hành chính; khung 08:00–12:00 và 13:00–17:00. Tách thành 30/09 13:01–17:00 (239 phút), 01/10 08:00–12:00 (240 phút) và phiên từ 13:00 ngày 01/10. Loại nghỉ trưa 12:00–13:00 và qua đêm 17:00–08:00. Giữ snapshot phiên gốc trong correction; không dùng giờ kế hoạch làm actual."
+        },
+        {
+          "eventId": "F03-B-EVENT-4",
+          "effectiveAt": "2026-10-01T16:20:58.6312075+07:00",
+          "recordedAt": "2026-10-01T16:20:58.6312075+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Project Reviewer yêu cầu Hoàn thành F03-B nếu không còn bất cập. Rà whole-card review tại 92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0, final executed source 989bf5a9fc09c03ee2d5fa88d09b3cee78335616: BLOCKER/MAJOR/MINOR 0. Chấp nhận phạm vi Server và T043-Web; Desktop/Workspace successor, F04 race, T036 và vận hành tách riêng. Giờ thực tế đã tách theo khung người dùng xác nhận 08:00–12:00, 13:00–17:00; không tính nghỉ trưa/qua đêm. Không chạy verifier, chưa merge/công bố tiến độ. Ghi nhận 201 phút làm việc thực tế."
         }
       ],
       "successorRefs": [],
-      "executionState": "IN_PROGRESS",
-      "resultState": "NOT_APPLICABLE",
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
       "actualStart": "2026-09-30T13:01:00.9631915+07:00",
-      "actualFinish": null,
-      "actualEffortHours": 0.0,
-      "remainingEffortHours": 8.0,
+      "actualFinish": "2026-10-01T16:20:58.6312075+07:00",
+      "actualEffortHours": 11.3333,
+      "remainingEffortHours": 0.0,
       "forecastFinish": null,
-      "lastUpdatedAt": "2026-09-30T13:01:00.9631915+07:00",
-      "remainingReviewedAt": "2026-09-30T13:01:00.9631915+07:00",
+      "lastUpdatedAt": "2026-10-01T16:20:58.6312075+07:00",
+      "remainingReviewedAt": "2026-10-01T16:20:58.6312075+07:00",
       "recordedBy": "LEAD",
       "unplannedWorkType": null,
       "reserveUsedHours": 0
@@ -1473,6 +1510,27 @@
       "recordedAt": "2026-09-30T13:01:00.9631915+07:00",
       "recordedBy": "LEAD",
       "reason": "Người dùng yêu cầu Bắt đầu F03-B ngày 30/09/2026. Thực hiện HTTP authentication/session, credential setup và kiểm thử PostgreSQL thật theo profile đã chốt: idle 2h, absolute 8h; tăng tốc thời gian test, không chạy verifier.",
+      "sourceEvidence": "Local progress tracker: F03-B"
+    },
+    {
+      "revision": 30,
+      "recordedAt": "2026-10-01T15:14:47.1752225+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Đã xem lại giờ còn lại của F03-B; không thay đổi số liệu.",
+      "sourceEvidence": "Local progress tracker: F03-B"
+    },
+    {
+      "revision": 31,
+      "recordedAt": "2026-10-01T16:18:53.5699518+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng xác nhận làm F03-B từ lúc bắt đầu bộ đếm, chỉ trừ ngoài giờ hành chính; khung 08:00–12:00 và 13:00–17:00. Tách thành 30/09 13:01–17:00 (239 phút), 01/10 08:00–12:00 (240 phút) và phiên từ 13:00 ngày 01/10. Loại nghỉ trưa 12:00–13:00 và qua đêm 17:00–08:00. Giữ snapshot phiên gốc trong correction; không dùng giờ kế hoạch làm actual.",
+      "sourceEvidence": "Work Journal CORRECTION-f03b-office-hours-20261001; user-confirmed work hours"
+    },
+    {
+      "revision": 32,
+      "recordedAt": "2026-10-01T16:20:58.6312075+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Project Reviewer yêu cầu Hoàn thành F03-B nếu không còn bất cập. Rà whole-card review tại 92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0, final executed source 989bf5a9fc09c03ee2d5fa88d09b3cee78335616: BLOCKER/MAJOR/MINOR 0. Chấp nhận phạm vi Server và T043-Web; Desktop/Workspace successor, F04 race, T036 và vận hành tách riêng. Giờ thực tế đã tách theo khung người dùng xác nhận 08:00–12:00, 13:00–17:00; không tính nghỉ trưa/qua đêm. Không chạy verifier, chưa merge/công bố tiến độ. Ghi nhận 201 phút làm việc thực tế.",
       "sourceEvidence": "Local progress tracker: F03-B"
     }
   ]
