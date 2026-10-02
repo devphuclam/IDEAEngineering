@@ -18,6 +18,10 @@ class F04SchemaTest {
 
     @BeforeAll
     static void createOnlyThisRunsMigratorOwnedSchema() throws Exception {
+        createOnlyThisRunsMigratorOwnedSchema("latest");
+    }
+
+    static void createOnlyThisRunsMigratorOwnedSchema(String target) throws Exception {
         assertEquals("127.0.0.1", env("IDEA_DATABASE_HOST"));
         assertEquals("5432", env("IDEA_DATABASE_PORT"));
         assertEquals("idea_ddm_f03a_20260930_c91e7a42", env("IDEA_F04_TEST_DATABASE_NAME"));
@@ -40,7 +44,7 @@ class F04SchemaTest {
         var result = Flyway.configure().dataSource(url(), "idea_ddm_migrator",
                         env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).createSchemas(false)
-                .locations("classpath:db/migration").cleanDisabled(true).load().migrate();
+                .locations("classpath:db/migration").target(target).cleanDisabled(true).load().migrate();
         try (var connection = open("migration"); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
             statement.execute("REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON " + schema
@@ -194,7 +198,66 @@ class F04SchemaTest {
         }
     }
 
-    private static UUID[] seedIdentity(Connection connection) throws SQLException {
+    @Test
+    void actualAppCanAppendButCannotRewriteOrDeleteReferencedEventIdentities() throws Exception {
+        UUID[] identity;
+        try (var fixture = open("migration")) {
+            identity = seedIdentity(fixture);
+        }
+        try (var connection = open("app")) {
+            connection.setAutoCommit(false);
+            try {
+                insertEvent(connection, UUID.randomUUID(), "OTHER_SYNTHETIC_OWNER", identity);
+                try (var statement = connection.createStatement(); var row = statement.executeQuery(
+                        "SELECT count(*) FROM owner_committed_event")) {
+                    assertTrue(row.next());
+                    assertEquals(1, row.getInt(1));
+                }
+            } finally {
+                connection.rollback();
+            }
+            for (var mutation : new String[] {"UPDATE owner_committed_event SET contract_version=2",
+                    "DELETE FROM owner_committed_event", "TRUNCATE owner_committed_event"}) {
+                try (var statement = connection.createStatement()) {
+                    insertEvent(connection, UUID.randomUUID(), "OTHER_SYNTHETIC_OWNER", identity);
+                    assertEquals("42501", assertThrows(SQLException.class, () -> statement.execute(mutation)).getSQLState());
+                } finally {
+                    connection.rollback();
+                }
+            }
+            for (var missing : new UUID[][] {{UUID.randomUUID(), identity[1]}, {identity[0], UUID.randomUUID()}}) {
+                try {
+                    assertEquals("23503", assertThrows(SQLException.class, () ->
+                            insertEvent(connection, UUID.randomUUID(), "OTHER_SYNTHETIC_OWNER", missing)).getSQLState());
+                } finally {
+                    connection.rollback();
+                }
+            }
+            try {
+                assertEquals("23514", assertThrows(SQLException.class, () -> insertEvent(connection,
+                        UUID.randomUUID(), "OTHER_SYNTHETIC_OWNER", "OPERATION_ACCEPTED", 0, identity)).getSQLState());
+            } finally {
+                connection.rollback();
+            }
+        }
+        try (var connection = open("migration")) {
+            connection.setAutoCommit(false);
+            for (var mutation : new String[] {"DELETE FROM actor WHERE actor_id='" + identity[0] + "'",
+                    "UPDATE actor SET actor_id='" + UUID.randomUUID() + "' WHERE actor_id='" + identity[0] + "'",
+                    "DELETE FROM operating_organization WHERE organization_id='" + identity[1] + "'",
+                    "UPDATE operating_organization SET organization_id='" + UUID.randomUUID()
+                            + "' WHERE organization_id='" + identity[1] + "'"}) {
+                try (var statement = connection.createStatement()) {
+                    insertEvent(connection, UUID.randomUUID(), "OTHER_SYNTHETIC_OWNER", identity);
+                    assertEquals("23503", assertThrows(SQLException.class, () -> statement.execute(mutation)).getSQLState());
+                } finally {
+                    connection.rollback();
+                }
+            }
+        }
+    }
+
+    static UUID[] seedIdentity(Connection connection) throws SQLException {
         var actor = UUID.randomUUID();
         var organization = UUID.randomUUID();
         try (var insert = connection.prepareStatement("INSERT INTO actor(actor_id,display_name) VALUES (?,?)")) {
@@ -230,16 +293,16 @@ class F04SchemaTest {
         }
     }
 
-    private static Connection open(String role) throws Exception {
+    static Connection open(String role) throws Exception {
         return DriverManager.getConnection(url(), "idea_ddm_" + (role.equals("app") ? "app" : "migrator"),
                 env(role.equals("app") ? "IDEA_DATABASE_APP_PASSWORD" : "IDEA_DATABASE_MIGRATION_PASSWORD"));
     }
 
-    private static String url() {
+    static String url() {
         return "jdbc:postgresql://127.0.0.1:5432/" + env("IDEA_F04_TEST_DATABASE_NAME") + "?currentSchema=" + schema;
     }
 
-    private static String env(String name) {
+    static String env(String name) {
         var value = System.getenv(name);
         if (value == null || value.isBlank()) throw new IllegalStateException("Missing F04 prerequisite: " + name);
         return value;
