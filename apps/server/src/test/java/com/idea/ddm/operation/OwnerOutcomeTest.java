@@ -296,6 +296,21 @@ class OwnerOutcomeTest {
         };
     }
 
+    @Test void requiredEventFailureCannotCommitOwnerOrAudit() throws Exception {
+        var session = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        try (var fault = installAppendFailure(operation, "owner_committed_event")) {
+            assertEquals("P0001", assertThrows(SQLException.class, () -> owner.execute(session.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-c-event-failed",
+                            SampleOwnerCommandService.BusinessDecision.ACCEPT))).getSQLState());
+            assertCompanions(operation, 0, 0, 0);
+            assertOperationUnlocked(operation);
+            System.out.println("F04_CONFIRMED_ROLLBACK=EVENT_APPEND; OP=" + operation + "; ACTOR="
+                    + session.expectedActorId() + "; CORRELATION=f04-c-event-failed; COMMITTED_COMPANIONS=0/0/0");
+        }
+    }
+
     @Test void acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent() throws Exception {
         var signedIn = fixture.signInThroughRealHttp();
         var operation = UUID.randomUUID();
