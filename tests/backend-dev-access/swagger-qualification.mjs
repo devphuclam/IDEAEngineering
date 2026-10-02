@@ -111,9 +111,12 @@ try {
   await test('S01-anonymous-documentation', async () => {
     // Chrome may represent an empty 401 navigation as an error page. Observe the actual
     // browser network response, not a successful document-navigation prerequisite.
-    const refused = page.waitForResponse(response => new URL(response.url()).pathname === '/dev-api/');
-    await page.goto(`${origin}/dev-api/`).catch(() => {});
-    check((await refused).status() === 401, 'Anonymous documentation refused');
+    const anonymousPage = await context.newPage();
+    try {
+      const refused = anonymousPage.waitForResponse(response => new URL(response.url()).pathname === '/dev-api/');
+      await anonymousPage.goto(`${origin}/dev-api/`).catch(() => {});
+      check((await refused).status() === 401, 'Anonymous documentation refused');
+    } finally { await anonymousPage.close(); }
   });
   current = 'LOGIN-PREREQUISITE'; oracle = 'Existing Web navigation';
   await page.goto(origin);
@@ -160,7 +163,8 @@ try {
 } catch (failure) {
   // Fixed classification only; raw locator/transport diagnostics can contain submitted data.
   const message = String(failure?.message ?? '');
-  const classification = message.includes('ERR_HTTP_RESPONSE_CODE_FAILURE') ? 'HTTP_NAVIGATION_REFUSAL'
+  const classification = message.includes('interrupted by another navigation') ? 'NAVIGATION_INTERRUPTED'
+    : message.includes('ERR_HTTP_RESPONSE_CODE_FAILURE') ? 'HTTP_NAVIGATION_REFUSAL'
     : message.includes('ERR_CERT') ? 'TLS_TRUST' : message.includes('ERR_CONNECTION') ? 'CONNECTIVITY'
     : message.includes('Timeout') ? 'OBSERVATION_TIMEOUT' : failure?.name === 'AssertionError' ? 'ORACLE_REFUSAL' : 'HARNESS_ERROR';
   console.log(JSON.stringify({ result: 'FAIL_OR_BLOCKED', case: current, oracle, classification, completed: results })); process.exitCode = 1;
