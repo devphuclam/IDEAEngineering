@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /** Approved T023-A seam: actual migration/schema contract on isolated PostgreSQL, no owner API. */
-class F04SchemaTest {
+public class F04SchemaTest {
     private static String schema;
 
     @BeforeAll
@@ -21,7 +21,7 @@ class F04SchemaTest {
         createOnlyThisRunsMigratorOwnedSchema("latest");
     }
 
-    static void createOnlyThisRunsMigratorOwnedSchema(String target) throws Exception {
+    public static void createOnlyThisRunsMigratorOwnedSchema(String target) throws Exception {
         assertEquals("127.0.0.1", env("IDEA_DATABASE_HOST"));
         assertEquals("5432", env("IDEA_DATABASE_PORT"));
         assertEquals("idea_ddm_f03a_20260930_c91e7a42", env("IDEA_F04_TEST_DATABASE_NAME"));
@@ -257,7 +257,7 @@ class F04SchemaTest {
         }
     }
 
-    static UUID[] seedIdentity(Connection connection) throws SQLException {
+    public static UUID[] seedIdentity(Connection connection) throws SQLException {
         var actor = UUID.randomUUID();
         UUID organization = null;
         try (var insert = connection.prepareStatement("INSERT INTO actor(actor_id,display_name) VALUES (?,?)")) {
@@ -301,16 +301,16 @@ class F04SchemaTest {
         }
     }
 
-    static Connection open(String role) throws Exception {
+    public static Connection open(String role) throws Exception {
         return DriverManager.getConnection(url(), "idea_ddm_" + (role.equals("app") ? "app" : "migrator"),
                 env(role.equals("app") ? "IDEA_DATABASE_APP_PASSWORD" : "IDEA_DATABASE_MIGRATION_PASSWORD"));
     }
 
-    static String url() {
+    public static String url() {
         return "jdbc:postgresql://127.0.0.1:5432/" + env("IDEA_F04_TEST_DATABASE_NAME") + "?currentSchema=" + schema;
     }
 
-    static String env(String name) {
+    public static String env(String name) {
         var value = System.getenv(name);
         if (value == null || value.isBlank()) throw new IllegalStateException("Missing F04 prerequisite: " + name);
         return value;
