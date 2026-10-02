@@ -17,6 +17,9 @@ public final class AuditEvidenceRepository {
     public static void append(Connection connection, Entry entry) throws SQLException {
         Objects.requireNonNull(connection, "caller connection required");
         Objects.requireNonNull(entry, "audit entry required");
+        if (connection.getAutoCommit()) {
+            throw new SQLException("Caller transaction required for Audit append");
+        }
         if (entry.correlationId() == null || entry.correlationId().isBlank()) {
             throw new SQLException("Original Audit correlation required");
         }
