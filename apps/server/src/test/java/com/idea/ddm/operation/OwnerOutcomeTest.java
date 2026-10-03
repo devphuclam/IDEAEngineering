@@ -38,11 +38,27 @@ class OwnerOutcomeTest {
             advisory(barrier, "pg_advisory_unlock", 73004992, operation.hashCode());
             assertEquals("INELIGIBLE_SESSION", attempt.get(8, TimeUnit.SECONDS).reason());
             assertTerminalSecurityRefusal(operation, admitted, correlation);
-            assertEquals(activityBefore, sessionActivity(admitted), "Security refusal is not eligible activity");
+            assertUnchangedSecurityActivity(operation, admitted, activityBefore);
             fixture.assertHttpSessionStatus(admitted, 401);
             assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
                     new SampleOwnerCommandService.Command(operation, "f04-d-old-session", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertEquals("ACTIVE", fixture.reenableThroughIam(operator, admitted).status());
+            fixture.assertHttpSessionStatus(admitted, 401);
+            assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-d-old-after-reenable", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            var fresh = fixture.freshSignIn(admitted);
+            assertTrue(fresh.hasDifferentSessionFrom(admitted));
+            var historical = owner.execute(fresh.context(), new SampleOwnerCommandService.Command(operation,
+                    "f04-d-reenabled-replay", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+            assertEquals(SampleOwnerCommandService.Outcome.REFUSED, historical.outcome());
+            assertEquals(correlation, historical.correlationId());
+            assertTerminalSecurityRefusal(operation, admitted, correlation);
+            var newAttempt = owner.execute(fresh.context(), new SampleOwnerCommandService.Command(UUID.randomUUID(),
+                    "f04-d-reenabled-new-attempt", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+            assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, newAttempt.outcome());
+            assertCompanions(newAttempt.operationId(), 1, 1, 1);
             assertOperationUnlocked(operation);
+            System.out.println("F04_D_REENABLE=PASS; OLD_HTTP=401; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED");
         } finally {
             executor.shutdownNow();
             assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
@@ -79,7 +95,7 @@ class OwnerOutcomeTest {
             advisory(barrier, "pg_advisory_unlock", 73004992, operation.hashCode());
             assertEquals("INELIGIBLE_SESSION", attempt.get(8, TimeUnit.SECONDS).reason());
             assertTerminalSecurityRefusal(operation, admitted, correlation);
-            assertEquals(activityBefore, sessionActivity(admitted));
+            assertUnchangedSecurityActivity(operation, admitted, activityBefore);
             fixture.assertHttpSessionStatus(admitted, 401);
             var neverAdmitted = UUID.randomUUID();
             assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
@@ -137,7 +153,7 @@ class OwnerOutcomeTest {
             assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, original.outcome());
             assertEquals("DISABLED", disable.get(8, TimeUnit.SECONDS).status());
             assertCompanions(operation, 1, 1, 1);
-            assertTrue(sessionActivity(admitted).after(activityBefore), "Activity refresh commits with accepted owner");
+            assertCommittedActivity(operation, admitted, activityBefore);
             fixture.assertHttpSessionStatus(admitted, 401);
             assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
                     new SampleOwnerCommandService.Command(operation, "f04-d-invalid-after-disable", SampleOwnerCommandService.BusinessDecision.REFUSE)));
@@ -175,7 +191,7 @@ class OwnerOutcomeTest {
             assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, original.outcome());
             assertTrue(logout.get(8, TimeUnit.SECONDS));
             assertCompanions(operation, 1, 1, 1);
-            assertTrue(sessionActivity(admitted).after(activityBefore));
+            assertCommittedActivity(operation, admitted, activityBefore);
             fixture.assertHttpSessionStatus(admitted, 401);
             assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
                     new SampleOwnerCommandService.Command(operation, "f04-d-invalid-after-logout", SampleOwnerCommandService.BusinessDecision.REFUSE)));
@@ -189,6 +205,22 @@ class OwnerOutcomeTest {
             assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
             removeOwnerActivityBarrier();
         }
+    }
+
+    private static void assertUnchangedSecurityActivity(UUID operation, F04SessionFixture.SignedIn admitted,
+            java.sql.Timestamp before) throws Exception {
+        var after = sessionActivity(admitted);
+        assertEquals(before, after, "Refusal cannot refresh eligible activity");
+        System.out.println("F04_D_ACTIVITY=REFUSED; OP=" + operation + "; BEFORE=" + before.toInstant()
+                + "; AFTER=" + after.toInstant() + "; UNCHANGED=1");
+    }
+
+    private static void assertCommittedActivity(UUID operation, F04SessionFixture.SignedIn admitted,
+            java.sql.Timestamp before) throws Exception {
+        var after = sessionActivity(admitted);
+        assertTrue(after.after(before), "Activity refresh commits with accepted owner");
+        System.out.println("F04_D_ACTIVITY=ACCEPTED; OP=" + operation + "; BEFORE=" + before.toInstant()
+                + "; AFTER=" + after.toInstant() + "; SHARED_COMMIT=1");
     }
 
     private static Connection ownerActivityBarrier(UUID operation, F04SessionFixture.SignedIn admitted) throws Exception {
