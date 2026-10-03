@@ -114,6 +114,107 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void ownerCommitBeforeDisablePreservesAcceptedHistoryAndSharedActivityFate() throws Exception {
+        var operator = fixture.accountAdministratorThroughRealHttp();
+        var admitted = fixture.signInSecondActorInSameOrganization();
+        var operation = UUID.randomUUID();
+        var correlation = "f04-d-owner-before-disable";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var activityBefore = sessionActivity(admitted);
+        fixture.advanceTime(java.time.Duration.ofSeconds(1));
+        var executor = Executors.newFixedThreadPool(2);
+        try (var barrier = ownerActivityBarrier(operation, admitted)) {
+            var accepted = executor.submit(() -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, correlation, SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            awaitWaiters(barrier, 73004993, operation, 1);
+            assertOwnerHoldsIamLockAtActivityBarrier(barrier, operation);
+            assertCompanions(operation, 0, 0, 0);
+            assertEquals(activityBefore, sessionActivity(admitted), "Activity candidate is not committed early");
+            var disable = executor.submit(() -> fixture.disableThroughIam(operator, admitted));
+            awaitIamWaiter(barrier);
+            advisory(barrier, "pg_advisory_unlock", 73004993, operation.hashCode());
+            var original = accepted.get(8, TimeUnit.SECONDS);
+            assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, original.outcome());
+            assertEquals("DISABLED", disable.get(8, TimeUnit.SECONDS).status());
+            assertCompanions(operation, 1, 1, 1);
+            assertTrue(sessionActivity(admitted).after(activityBefore), "Activity refresh commits with accepted owner");
+            fixture.assertHttpSessionStatus(admitted, 401);
+            assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-d-invalid-after-disable", SampleOwnerCommandService.BusinessDecision.REFUSE)));
+            assertAcceptedHistory(operation, original);
+            assertOperationUnlocked(operation);
+            System.out.println("F04_D_OWNER_FIRST=DISABLE; OP=" + operation + "; ACTOR=" + original.actorId()
+                    + "; ORG=" + original.organizationId() + "; CORRELATION=" + original.correlationId()
+                    + "; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401");
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+            removeOwnerActivityBarrier();
+        }
+    }
+
+    private static Connection ownerActivityBarrier(UUID operation, F04SessionFixture.SignedIn admitted) throws Exception {
+        var barrier = F04SchemaTest.open("migration");
+        try (var statement = barrier.createStatement()) {
+            statement.execute("CREATE FUNCTION f04_d_activity() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    + "IF NEW.session_id='" + admitted.sessionReference() + "'::uuid "
+                    + "AND NEW.last_eligible_activity_at<>OLD.last_eligible_activity_at THEN "
+                    + "PERFORM pg_advisory_xact_lock(73004993," + operation.hashCode() + "); END IF; RETURN NEW; END; $$");
+            statement.execute("CREATE TRIGGER f04_d_activity BEFORE UPDATE ON session_record "
+                    + "FOR EACH ROW EXECUTE FUNCTION f04_d_activity()");
+            advisory(barrier, "pg_advisory_lock", 73004993, operation.hashCode());
+            return barrier;
+        } catch (Exception exception) { barrier.close(); throw exception; }
+    }
+
+    private static void removeOwnerActivityBarrier() throws Exception {
+        try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
+            statement.execute("DROP TRIGGER IF EXISTS f04_d_activity ON session_record");
+            statement.execute("DROP FUNCTION IF EXISTS f04_d_activity()");
+        }
+    }
+
+    private static void assertOwnerHoldsIamLockAtActivityBarrier(Connection observer, UUID operation) throws Exception {
+        try (var query = observer.prepareStatement("SELECT count(*) FROM pg_locks w JOIN pg_locks h USING(pid) "
+                + "WHERE w.locktype='advisory' AND w.classid=73004993 AND w.objid::bigint=? AND w.objsubid=2 AND NOT w.granted "
+                + "AND h.locktype='advisory' AND h.classid=0 AND h.objid=73003002 AND h.objsubid=1 AND h.granted")) {
+            query.setLong(1, Integer.toUnsignedLong(operation.hashCode()));
+            try (var row = query.executeQuery()) { assertTrue(row.next()); assertEquals(1, row.getInt(1)); }
+        }
+    }
+
+    private static void awaitIamWaiter(Connection observer) throws Exception {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
+        try (var query = observer.prepareStatement("SELECT count(*) FROM pg_locks WHERE locktype='advisory' "
+                + "AND classid=0 AND objid=73003002 AND objsubid=1 AND NOT granted")) {
+            query.setQueryTimeout(2);
+            while (System.nanoTime() < deadline) {
+                try (var row = query.executeQuery()) { row.next(); if (row.getInt(1) == 1) return; }
+                Thread.onSpinWait();
+            }
+        }
+        fail("Actual IAM mutation must wait on the owner's existing security-write lock");
+    }
+
+    private static void assertAcceptedHistory(UUID operation, SampleOwnerCommandService.Result original) throws Exception {
+        try (var connection = F04SchemaTest.open("app"); var query = connection.prepareStatement(
+                "SELECT o.actor_id,o.organization_id,o.correlation_id,o.outcome,a.outcome,e.event_id "
+                + "FROM sample_owner_operation o JOIN audit_evidence a USING(operation_id) "
+                + "JOIN owner_committed_event e USING(operation_id) WHERE o.operation_id=?")) {
+            query.setObject(1, operation);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                assertEquals(original.actorId(), row.getObject(1, UUID.class));
+                assertEquals(original.organizationId(), row.getObject(2, UUID.class));
+                assertEquals(original.correlationId(), row.getString(3));
+                assertEquals("ACCEPTED", row.getString(4));
+                assertEquals("ACCEPTED", row.getString(5));
+                assertEquals(original.eventId(), row.getObject(6, UUID.class));
+                assertFalse(row.next());
+            }
+        }
+    }
+
     private static void assertTerminalSecurityRefusal(UUID operation, F04SessionFixture.SignedIn admitted,
             String correlation) throws Exception {
         assertCompanions(operation, 1, 1, 0); // Independent committed-state oracle, not an exception-only rollback claim.
