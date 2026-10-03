@@ -3,14 +3,14 @@
 | Control | Value |
 |---|---|
 | Stable ID / class | IE-VEV-T027-FILESYSTEM-20261003 / proposed qualification contract |
-| Version / status | 0.2 / Approved for the named seam and conditional execution; source published with this package; execution NOT-RUN |
+| Version / status | 0.3 / Approved for the named seam/execution; executed8/8 PASS; result acceptance separate |
 | Product normativity / instruction | INFORMATIVE / NOT-APPLICABLE; no new product requirement |
 | Owner / author / worker | Engineering / Codex / CODEX_ONLY |
 | Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; explicit seam and conditional-execution approval received in conversation 2026-10-03 |
 | Date / timezone / classification | 2026-10-03 / Asia/Ho_Chi_Minh / INTERNAL |
 | Baseline / upstream | Issue #37 / PR #38; accepted [root05 result](2026-10-03-f05a-q02-jsr305-root05-results.md#6-human-acceptance-successor--2026-10-03); frozen [preparation §3/§8/§9](2026-09-28-ph1-f05-gateway-qualification.md) |
 | Downstream | T027 filesystem evidence and future Adapter contract; not apps/gateway implementation |
-| Change / supersession | v0.2 records approval and exact source/tooling/procedure; v0.1 proposal at this worktree was not executed; changes no frozen preparation or historical execution |
+| Change / supersession | v0.3 links actual result; v0.2 approved execution candidate at01340f8035376c37ad3e55b51e1d11df6c9b87a6 and its pre-execution wording below remain historical; no source/oracle changes; changes no frozen preparation |
 | Retention / trigger | Retain exact source/commands/hash receipts and owned fixtures; tool/module/hash/target/oracle/scope drift reopens approval |
 | Evidence / standards tailoring | Proposal only; verification/configuration control under IE-STD-AUTH-001; no conformity claim |
 
@@ -91,7 +91,10 @@ or changed target outside the approved boundary requires separate direction.
 
 ## 4. Result and remaining gates
 
-All filesystem checks are NOT-RUN. Root05 and Q01 remain accepted within their own scopes.
+Current successor: [execution result](2026-10-03-f05a-t027-filesystem-results.md)
+records8/8 PASS on exact source `01340f8035376c37ad3e55b51e1d11df6c9b87a6`;
+result acceptance pending. The following v0.2 wording describes its pre-execution state:
+all filesystem checks were NOT-RUN. Root05 and Q01 remain accepted within their own scopes.
 Success would qualify only this actual JDK/filesystem prerequisite, not whole T027/F05-A.
 Later TLS/certificate trust, owned listeners, control authentication, exact Grant/Receipt
 wire profile, transfer parameters and any Server/database execution still need their

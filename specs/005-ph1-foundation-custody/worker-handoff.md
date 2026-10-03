@@ -103,7 +103,7 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The current unit is F05-A / T027: IN_PROGRESS; Q01 accepted PASS; root05 narrowed graph/package/non-web qualification accepted; other qualification NOT-RUN. The user
+The current unit is F05-A / T027: IN_PROGRESS; Q01/root05 accepted; filesystem prerequisite8/8 PASS with result acceptance pending; other qualification NOT-RUN. The user
 explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
 Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) initially authorized
 clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
@@ -175,9 +175,15 @@ result §6 records acceptance at review head `a3d8bde92f1f3c796a067b90f1cd274c74
 No additional remaining-T027 execution or Gateway implementation authority is inferred from it.
 The user has approved the [JDK filesystem prerequisite seam/execution contract](../../docs/research/2026-10-03-f05a-t027-filesystem-contract.md)
 and conditional execution after exact-source/hash/command/target publication on 2026-10-03.
-Next: publish that exact first-party candidate, verify exported/transferred bytes and
-fresh-root/tooling guards, then launch only the approved filesystem prerequisite.
-No new package, Maven, DB, TLS, port or preview change is needed for that proposed prerequisite.
+Source `01340f8035376c37ad3e55b51e1d11df6c9b87a6` was published before execution;
+[filesystem result](../../docs/research/2026-10-03-f05a-t027-filesystem-results.md)
+records8/8 PASS on Ubuntu/ext4,3/3 source plus manifest identity, archive identity,
+19 tooling pins pre/post and independent completed-object/sentinel oracles. Owned
+filesystem-qualification-01 and private log/fixtures remain retained. Result acceptance
+is pending; this does not qualify a real Adapter, concurrency/races or power-loss durability.
+Next: result review and an exact controlled web/HTTPS listener/certificate/trust package,
+not unapproved provisioning or Gateway product code. No new package/Maven/DB/TLS/port/preview
+change was used for the filesystem prerequisite.
 The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
 Remaining T027 stays NOT-RUN and Q01 stays PASS. No other runtime success is inferred.
