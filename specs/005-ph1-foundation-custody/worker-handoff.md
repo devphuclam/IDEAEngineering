@@ -59,16 +59,21 @@ the historical omission is preserved, not retroactively approved.
 Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
 OPEN; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
-Current exact executed source: `fbd1ffc6fff7ed5952907316845a8110491cf779`.
+Current exact executed source: `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd`.
 Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
 offline runner, plus named real-HTTP principal fixture, internal sample owner, caller-Connection
 event append and IAM eligibility adapter. No product route/Permission/Role or F03 semantic change.
+C adds canonical sample result/access resolution, bounded per-OperationId PostgreSQL session
+lock across refusal rollback, safe physical discard and deterministic real-PG concurrency/fault
+qualification. Only the sample service and two test fixtures change after the accepted B head.
 Codex implemented Audit after its focused RED; Gemini was not dispatched.
 
 The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
-schema, T024-A Audit and T023-B/minimum T025-B execution are partially recorded in
-[F04 outcome results](evidence/F04-outcome-results.md) v0.5: authenticated owner 3/3, schema 7/7,
-predecessor 1/1 and Audit 7/7 on the current source. The prospective Python clean 15/15
+schema, T024-A Audit, T023-B/minimum T025-B and T023-C/T025-C execution are partially recorded in
+[F04 outcome results](evidence/F04-outcome-results.md) v0.6: owner 16/16 (B 3 + C 13), schema 7/7,
+predecessor 1/1 and Audit 7/7 = 31/31 on the current source. All 62 C-run schema cleanup receipts
+are COMPLETE; [exact receipt index](evidence/F04-C-execution-receipts.json) retains both actual
+REDs and each four-suite regression. The prospective Python clean 15/15
 requalification is separately traced at `1255568...`; the five no-build
 admission cases remain the separately traced execution at `acc8db5...`.
 T023–T026 remain unchecked and no completion/progress action is inferred. Any changed tool,
@@ -78,12 +83,12 @@ For this checkpoint, run the scoped Bash runner separately with `F04SchemaTest`,
 `F04PredecessorMigrationTest`, `AuditEvidenceRepositoryTest` or `OwnerOutcomeTest` from the exact archive; its approved
 Maven command is offline `-o -B -Dtest=<selector> test`. Use only the controlled test DB and fresh
 tagged f04 schema. Read the evidence for commands/hashes/limits before rerunning.
-Current checkpoint is awaiting external review; this task stops at its publication. Next eligible
-unit after review: T023-C paired with T025-C, one replay/access/concurrency/fault behavior per
-RED/GREEN. Then T023-D/T025-D qualifies real disable/revoke-before-commit and reverse ordering.
+B was accepted for continuation; C is awaiting external review and this task stops at publication.
+Next eligible unit only after C review: T023-D/T025-D, real disable/revoke-before-commit and
+reverse owner-first ordering, one RED/GREEN or honest existing-behavior qualification at a time.
 Continue using the Server-established ActorContext, not raw UUID schema fixtures. The existing
-final security lock/check is implemented but its race is not qualified yet. Full owner/retry/fault/
-race and broader affected F03/data/health regression remain NOT-RUN. Keep #31/F04 open, PR #32
+final security lock/check is implemented but its race and broader affected F03/data/health
+regression remain NOT-RUN. C is not whole F04 acceptance. Keep #31/F04 open, PR #32
 Draft, T023–T026 unchecked and verifier NOT-RUN; no merge or F05.
 
 After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,

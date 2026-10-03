@@ -125,17 +125,18 @@ product Permission/Role, HTTP or Swagger command. [ADR-0014](../../docs/adr/0014
 and [contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) close the design.
 **Independent test**: Actual Server/PostgreSQL accepted/refused/rollback, concurrent retry,
 originating-Actor result access and controlled disable/revoke-before-commit. The bounded ACCEPTED/
-REFUSED tracer is executed below; full rollback/replay/access/concurrency/race scenarios remain
-NOT-RUN. The separate schema/Audit checkpoint is partially executed below.
+REFUSED tracer and C replay/access/concurrency/fault scenarios have scoped execution below;
+the IAM race and broader affected F03/data/health scenarios remain NOT-RUN.
 **Execution gate**: Separate F04 Maven/tooling authority is recorded in
 `IE-RES-F04-BUILDTOOL-AUTH-20261002` plus prospective Python clarification
 `IE-RES-F04-PYTHON-AUTH-20261002`; the scoped runner performs exact artifact/runtime preflight before
 each execution. Units below refine four existing tasks, add no cards/hours and do not imply whole-
-F04 completion. Current partial execution is in `evidence/F04-outcome-results.md` v0.5:
-source `fbd1ffc6fff7ed5952907316845a8110491cf779`, authenticated owner 3/3, schema 7/7,
-predecessor 1/1 and Audit 7/7. The historical Python omission and prospective clean 15/15
+F04 completion. Current partial execution is in `evidence/F04-outcome-results.md` v0.6:
+source `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd`, owner 16/16 (B 3 + C 13), schema 7/7,
+predecessor 1/1 and Audit 7/7 = 31/31. The historical Python omission and prospective clean 15/15
 requalification remain separately traced. This is not completion of the umbrella tasks.
-Next is checkpoint review, then T023-C/T025-C; C/D and whole F04 remain NOT-RUN.
+B is accepted for continuation; C awaits external review. Stop at publication; T023-D/T025-D
+may start only after C review. D and whole F04 remain NOT-RUN.
 
 - [ ] T023 [US4] Add vertical failing or qualification tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java` and `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`; use the real-session fixture `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. Cover the F04 contract including concurrent same-ID acceptance/refusal, forced append/commit faults, bounded query access and IAM race. Follow units below rather than writing the entire suite first.
 - [ ] T024 [US4] Implement connection-scoped append-only Audit in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`; require the original correlation, exactly one insert and failure propagation. Caller retains transaction ownership; no second connection/commit, owner decision or IAM change.
@@ -147,7 +148,7 @@ Next is checkpoint review, then T023-C/T025-C; C/D and whole F04 remain NOT-RUN.
 These are unit IDs within T023–T026, not new standalone task/checklist identities. Every row
 requires its own intended RED → minimum GREEN or an honestly recorded existing-behavior first
 GREEN. At documentation closure all paths below were planned. Current delivery is limited to
-T023-A/T025-A schema, T024-A Audit and T023-B/minimum T025-B owner tracer; use versioned evidence,
+T023-A/T025-A schema, T024-A Audit, T023-B/minimum T025-B owner tracer and T023-C/T025-C; use versioned evidence,
 not this historical allocation table as an inferred task-completion record.
 
 | Unit / allocation | Objective and exact expected paths | Tests / completion oracle | Prerequisites | Transaction/concurrency risks |
@@ -223,8 +224,9 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: review the authenticated ACCEPTED/REFUSED owner checkpoint under Work Item #31,
-then continue T023-C/T025-C under the recorded F04 execution authority. Work Item #29
+Current next step: externally review T023-C/T025-C canonical replay/access/concurrency/fault
+checkpoint under Work Item #31, then qualify T023-D/T025-D IAM race ordering only after that review.
+Work Item #29
 was documentation-only and is closed after PR #30; it is not the current execution gate.
 T023–T026 remain unchecked, whole F04 remains open and no merge is authorized.
 

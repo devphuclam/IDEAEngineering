@@ -67,12 +67,13 @@ state. Test-only barriers/faults stay off public surfaces. No mock/H2 integratio
 [IE-RES-F04-BUILDTOOL-AUTH-20261002](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
 Prospective Python scope is in
 [IE-RES-F04-PYTHON-AUTH-20261002](../../../docs/research/2026-10-02-f04-python-harness-authorization.md).
-The schema/Audit and authenticated ACCEPTED/REFUSED owner tracer are partially executed in
+The schema/Audit, authenticated ACCEPTED/REFUSED tracer and C replay/access/concurrency/fault
+checkpoint are partially executed (31/31 at `4b4b494...`) in
 [F04 outcome results](../evidence/F04-outcome-results.md);
 the scoped runner verifies qualified build inputs/direct versions, exact tools and nine artifact
 hashes/descriptor before commands, with offline-only retained-cache resolution. Preserve V1–V7 and
-all historical evidence. Replay/access/concurrency/fault/race qualification and whole-card
-acceptance remain NOT-RUN.
+all historical evidence. External C review is PENDING; the IAM commit race and whole-card
+acceptance remain NOT-RUN. T023–T026 remain unchecked; do not start D before C review.
 The seam qualifies sample retained outcomes, not real mutable domain state, product RBAC,
 event delivery, multi-owner coordination, production readiness or recovery.
 

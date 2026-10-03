@@ -1,23 +1,23 @@
-# F04 outcome results — schema, Audit and authenticated owner tracer
+# F04 outcome results — authenticated owner, replay, concurrency and faults
 
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.5` / Draft / INFORMATIVE |
+| Version / document status / normativity | `0.6` / Draft / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
-| Execution disposition | Partial PASS: owner tracer 3/3, schema 7/7, predecessor 1/1, Audit 7/7; C/D and whole F04 NOT-RUN |
+| Execution disposition | Partial PASS: owner 16/16, schema 7/7, predecessor 1/1, Audit 7/7 = 31/31; C executed, external C review PENDING; D and whole F04 NOT-RUN |
 | Owner / author | Engineering / Codex |
-| Reviewer | Schema/Audit technically accepted for continuation; successor internal reviews below; external owner-tracer review PENDING |
-| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; bounded execution authorized, T023-B checkpoint/whole-card acceptance PENDING |
-| Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A units and T023-B/minimum T025-B; 2026-10-02 +07:00 |
-| Current executed source | `fbd1ffc6fff7ed5952907316845a8110491cf779` |
-| Current archive SHA-256 | `0729758e76f2a16f48aca182ecd626b17667bc709fe473a7b5aa6e0768dfe270` |
+| Reviewer | Schema/Audit and T023-B accepted for continuation by relayed Project Reviewer review; internal C reviews in section 20; external C review PENDING |
+| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; bounded C execution authorized, C checkpoint/whole-card acceptance PENDING |
+| Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, spec v0.8, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A/B and T023-C/T025-C; execution 2026-10-02, evidence publication 2026-10-03 +07:00 |
+| Current executed source | `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd` |
+| Current archive SHA-256 | `c427de8fc43f6c6be51db7eaa73601fe876b5af165b4ec922a72c498c2b326bd` |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
 | Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to v0.4; sections 1–10 retain historical receipts. Sections 11–13 add authenticated owner RED/GREEN, exact-source regression and current limits. Original authorization/F03 evidence remains unchanged. Superseded by NOT-APPLICABLE |
+| Change / supersession | Successor to v0.5; sections 1–14 retain historical A/B receipts and their then-current wording. Sections 15–21 add C execution, review and limits; subordinate receipt index `IE-VEV-PH1-F04-C-RECEIPTS-001`. Original authorization/F03 evidence remains unchanged. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
-| Standards tailoring | `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
+| Standards tailoring | Section 15 pins exact editions and TAILOR disposition for `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED scoped information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
 ## Historical v0.1 control and schema receipt
 
@@ -457,3 +457,245 @@ PR #32 remains OPEN/Draft and Work Item #31 remains OPEN; main is still
 `53c1e174cb0410658752ee48ee97ac1dce05ba6b`. Publication uses the existing `[skip ci]` mechanism;
 verifier remains NOT-RUN. The publication head and review surface are recorded on PR #32 and
 Work Item #31; no merge, F05 or additional implementation is performed at publication.
+
+## 15. T023-C/T025-C scope and execution
+
+The Project Reviewer accepted T023-B for continuation at PR head
+`a005f344558b8d4720218b3801e7e5adf3c79a19`, executed source `fbd1ffc...`.
+The next assigned unit was the bounded internal sample replay/access/concurrency/fault matrix.
+This record does not change the approved sample policy or reopen ADR-0014.
+
+Standards applicability for this record and its subordinate receipt index:
+
+| Register ID | Exact edition | Project classification / disposition | Local applicability and tailoring |
+|---|---|---|---|
+| STD-INFO-001 | ISO/IEC/IEEE 15289:2019 | STANDARD-GUIDED / TAILOR | Combined verification narrative plus machine-readable receipts; retain separate item identity, configuration, results and limitations |
+| STD-CM-001 | ISO 10007:2017 | STANDARD-GUIDED / TAILOR | Pin source/archive/tool/schema/receipt identities and documentation-only successors; no broader configuration-system certification |
+| STD-TEST-001 | ISO/IEC/IEEE 29119-1:2022 | STANDARD-GUIDED / TAILOR | Separate verification, acceptance, expected RED, execution result and uncertainty |
+| STD-TEST-002 | ISO/IEC/IEEE 29119-2:2021 | STANDARD-GUIDED / TAILOR | Bounded vertical TDD/qualification, prerequisite checks and exact-schema cleanup |
+| STD-TEST-003 | ISO/IEC/IEEE 29119-3:2021 | STANDARD-GUIDED / TAILOR | Configuration, procedure, oracle, actual result, retained hashes and review limits in linked records |
+| STD-TEST-004 | ISO/IEC/IEEE 29119-4:2021 | STANDARD-GUIDED / TAILOR | Concurrent arbitration, access refusal and required-companion fault cases scoped to F04 C |
+
+This applies the repository register's authoring guidance; it is not a conformity claim.
+
+Objective: resolve one canonical committed result per OperationId; preserve original provenance;
+deny other/ineligible callers without disclosing the result; serialize same-ID decisions across
+the refusal handoff; prove required-companion faults cannot leave partial success.
+Oracles and exact test names are in section 18. Preconditions and commands from sections 4/11
+still apply, now under both the original build authority and prospective Python admission.
+
+All C execution used Temurin 25.0.4.1+1, Maven 3.9.16 offline, pinned isolated CPython 3.14.4
+(`-I -S`, standard library only), PostgreSQL 18.6, distinct `idea_ddm_migrator`/`idea_ddm_app`,
+the exact nine build artifacts/descriptor, five qualified build inputs and eight direct Web
+versions. The ordinary build lifecycle used the retained Node 24.21.0/npm 11.19.0 Web cache.
+No dependency, migration, tool install/download, public-schema write, company identity or Vault
+access was added. Existing pgJDBC 42.7.13/HikariCP 7.0.2 were inspected and qualified in place.
+
+Each suite ran separately from its exact archive:
+
+```bash
+bash apps/server/scripts/run-f04-postgresql-checks.sh OwnerOutcomeTest
+bash apps/server/scripts/run-f04-postgresql-checks.sh F04SchemaTest
+bash apps/server/scripts/run-f04-postgresql-checks.sh F04PredecessorMigrationTest
+bash apps/server/scripts/run-f04-postgresql-checks.sh AuditEvidenceRepositoryTest
+```
+
+The two focused REDs selected only their named owner method using
+`OwnerOutcomeTest#<method>`. The runner executed offline `-o -B -Dtest=<selector> test`.
+The [structured receipt index](F04-C-execution-receipts.json) retains all 62 invocations:
+exact selector/source/archive/build directory/schema, observed counts/exit, raw-log SHA-256,
+both Surefire hashes and cleanup disposition. There are 60 passing suite invocations and two
+expected RED invocations, not a claim of 62 passing tests. The final checkpoint total is 31.
+Host log modification times are recorded as such, not asserted test-start times.
+
+## 16. Individual vertical slices and source-review repairs
+
+The total column is the owner suite plus unchanged schema 7, predecessor 1 and Audit 7.
+Each completed slice below ran all four suites. A previously implemented behavior that first
+passed is labelled qualification GREEN; no artificial RED or unnecessary production change was
+created. The receipt index gives the complete run configuration for every row.
+
+| Slice | Exact source | Observed witness / disposition | Combined regression |
+|---|---|---|---|
+| Accepted replay RED | `47fc161da96a398b052918c3e4fef27102e91964` | Fresh HTTP session, same Actor/OperationId: duplicate sample PK, PostgreSQL `23505`; one test/error, Maven 1. Not a fixture failure. | Focused RED only |
+| Minimum canonical replay GREEN | `7ceb31742e810ba52232e15625313258b08147bd` | Read committed original under sample lock; retain original correlation/EventId, no second append. | 19/19 |
+| Terminal REFUSED replay | `270ee6e8b3cdfa9bc0a78bed8dd079b662ba4b47` | Qualification GREEN: changed ACCEPT input still resolves original REFUSED; 1 owner/1 Audit/0 event. | 20/20 |
+| Other Actor / revoked proof | `74896458b01579dd05fe2bb9451d079fe7eda7c5` | Qualification GREEN for both terminal outcomes; no disclosure or companion change. | 21/21 |
+| Concurrent ACCEPT/ACCEPT | `5a7505c5b781ffe6612cb0d084b839243138b314` | Qualification GREEN: two actual lock waiters resolve the same retained winner; unrelated ID proceeds. | 22/22 |
+| Concurrent ACCEPT/REFUSE | `74f0f708f395ba5f5ea894cd4673c6b2432bd12e` | Qualification GREEN: assert canonical consistency, not scheduler winner. | 23/23 |
+| Rollback/refusal handoff | `a05bcae867746773de0f23e0e5bb7832b4b1aced` | Qualification GREEN: REFUSED insert held after rollback; ACCEPT loser remains blocked on the sample lock. | 24/24 |
+| Required Audit failure / same-ID retry | `32026787266d0d7da9a0944d1597a3d6d2d7a124` | Qualification GREEN: independent observer confirms 0/0/0; removed fault permits canonical retry. | 25/25 |
+| Required event failure | `27799806626bf85ee180f1dff62bde480b61c9e9` | Qualification GREEN: 0 owner/0 Audit/0 event. | 26/26 |
+| Suppressed Audit insert | `3b29154f89d471bf0be49e2115cd41626fd4f079` | Qualification GREEN: required zero-row append fails, no partial commit. | 27/27 |
+| Suppressed event insert | `325ef99082f904e93868e39aea3e15f2fff5ec5c` | Qualification GREEN: required zero-row append fails, no partial commit. | 28/28 |
+| Deferred commit failure | `bbd66fd10f4e279456b37a961f4edd526f20d273` | Qualification GREEN: no success returned; independent 0/0/0 and unchanged session activity prove non-commit. | 29/29 |
+| ADR handoff source-review repair | `79c3336283c0520de64bd3ed039d6471c240b50e` | Explicit canonical recheck after rollback and READ_COMMITTED; required by ADR-0014, not a claimed new RED witness. | 29/29 |
+| Pooled unlock + abort failure RED | `1a92ecd3395353a009c08c851b7bc9759f20e70a` | Actual Hikari/PG: forced unlock and abort errors expose still-open physical connection at logical pool return; one assertion failure, Maven 1. | Focused RED only |
+| Physical discard GREEN | `d4d1c83b4e0139b1252a4361d8b1a1ebbf2a36c7` | Minimal synchronous physical close fallback, shared sample-only discard helper. Actual replacement backend and retained canonical result checked. | 30/30 |
+| Bounded lock acquisition | `16b04b2cbb9b9597c41195580d1b8831734545d2` | Qualification GREEN: held PG operation lock times out `57014`; no committed companions, replacement pool connection and same-ID retry work. | 31/31 |
+| Final retained REFUSED replay metadata | `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd` | Test-only output adds original/retry session metadata and correlation; no application change. | 31/31 |
+
+The first concurrency preparation commit `3afc8d1...` was not executed: its fixture attempted to
+read the void result of a PostgreSQL lock function as boolean. The fixture was corrected before
+the exact `5a7505c...` execution; it is not recorded as requirement RED or PASS.
+
+RED log identities:
+
+| RED | Retained log | SHA-256 |
+|---|---|---|
+| Canonical replay | `/home/phuclam/idea-f04-schema-e8ivGhLD.log` | `f933836b707d6dfe43d38fa4457f6bb47358cf29f755f50842ffe68f41c35078` |
+| Pooled discard | `/home/phuclam/idea-f04-schema-QjIfu62x.log` | `d188007742080b6a745ca4ab890b33d7aed3e599e716b670cddfcc8ff38ad62a` |
+
+## 17. Canonical implementation and transaction boundary
+
+`SampleOwnerCommandService` acquires sample-only PostgreSQL session advisory lock namespace
+`73004001`, with deterministic OperationId-derived key, before admit/create/resolve. Hash
+collisions serialize extra IDs but never substitute for the exact UUID result lookup. The
+actual PostgreSQL waiter tests also show unrelated IDs are not globally serialized.
+The connection is explicitly READ_COMMITTED. The lock remains held across business-refusal
+rollback, re-admission, canonical recheck, attributable REFUSED persistence and commit.
+
+Existing committed results are read, not rebuilt from retry input. The private sample read policy
+requires the current eligible stable Actor and Organization to match original provenance.
+This is not a Core-wide originating-Actor-only query invariant. The service preserves original
+outcome/reason/correlation/EventId; it appends neither owner, Audit nor event on replay.
+Current eligible-session activity can be updated as authorization activity; it is not a new
+owner result or replacement of provenance.
+
+ACCEPTED still commits owner/Audit/event together. REFUSED commits owner/refusal Audit and no
+event. Commit coordination remains sample operation lock → existing IAM security-write lock
+`73003002` → authoritative commit; no IAM semantics were changed.
+Required SQL/zero-row failures propagate. The service does not synthesize durable FAILED or
+equate a thrown commit exception with proven rollback.
+
+Acquisition and release are bounded by a five-second JDBC statement timeout. Release must confirm
+`pg_advisory_unlock`; failure attempts logical abort and then synchronous physical close before
+pool return. The fault wrapper is test-only, around actual Hikari/PG; there is no production
+fault switch. If an unlock failure occurs after a confirmed commit, the canonical 1/1/1 remains:
+the cleanup error is not rewritten as rollback, and retry resolves that already committed result.
+
+Only three application/test files changed after the accepted B head: the sample service,
+`F04SessionFixture` and `OwnerOutcomeTest`. V1–V8, POM/dependencies, IAM production code, event
+and Audit appenders, runner and tooling admission records are unchanged.
+
+## 18. Requirement → test → executed evidence matrix
+
+All rows below execute at `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd`; actual engineering result
+PASS, external C disposition PENDING. Tests are in `OwnerOutcomeTest`, using the named
+`F04SessionFixture` real HTTP principal and PostgreSQL fixture.
+
+| Acceptance oracle | Source boundary / test | Observation |
+|---|---|---|
+| Originating Actor, fresh valid session, exact immutable ACCEPTED provenance | `resolveCommitted` / `freshSessionResolvesOriginalAcceptedWithoutCompanionDuplicates` | Different session reference, same Actor; identical returned original, counts 1/1/1 |
+| Original REFUSED remains terminal despite changed decision/correlation | `resolveCommitted` / `freshSessionResolvesTerminalRefusalDespiteChangedDecision` | Identical original reason/result, counts 1/1/0 |
+| Another Actor in same Org cannot learn either outcome; revoked original proof is refused | Sample query policy + existing eligibility / `otherActorAndRevokedSessionCannotDiscloseEitherTerminalOutcome` | Fixed other-Actor refusal with no protected cause/suppressed details; revoked proof gets existing Identity refusal; retained results unchanged |
+| Concurrent ACCEPT/ACCEPT, no global single-ID bottleneck | `OperationLock` / `concurrentAcceptsResolveOneCanonicalWinner` | Two observed PG waiters, same canonical result, one owner/Audit/event; unrelated ID commits while waiting |
+| Opposing decisions, one canonical winner | `OperationLock` / `concurrentAcceptAndRefuseResolveOneCanonicalWinner` | Both resolve winner; event=1 for ACCEPTED, 0 for REFUSED; no scheduler assumption |
+| Lock retained across rollback → REFUSED evidence | `execute` / `refusalHandoffRetainsOperationLockUntilRefusalAuditCommits` | PG trigger barrier after rollback; ACCEPT waits; canonical REFUSED 1/1/0 |
+| Required Audit failure; confirmed non-commit can retry same ID | Required append/transaction / `requiredAuditFailureRollsBackAllCompanionsThenSameIdCanCommit` | Independent 0/0/0, then fault removed, same ID 1/1/1 with new committed correlation |
+| Required event failure | Required append/transaction / `requiredEventFailureCannotCommitOwnerOrAudit` | Independent 0/0/0, no success |
+| Required Audit/event zero-row append | Required one-row checks / `suppressedRequiredAuditIsFailureNotPartialSuccess`, `suppressedRequiredEventIsFailureNotPartialSuccess` | Independent 0/0/0, no partial success |
+| Deferred failure at commit | Transaction / `deferredCommitFailureIsNotSuccessAndObserverConfirmsNonCommit` | No result returned; independent 0/0/0 and activity unchanged, no FAILED row |
+| Pool cannot retain ambiguous operation lock after unlock/abort error | `discard` / `failedUnlockAndAbortDiscardPhysicalConnectionBeforePoolReturn` | Physical connection closed before logical return; replacement backend works; committed result retained and replay-safe |
+| Held lock acquisition is bounded | `OperationLock.acquire` / `heldOperationLockTimesOutWithoutCommitAndRetryCanProceed` | Actual `57014`; no companions, lock/replacement connection usable, same ID retry commits |
+
+Deterministic concurrency uses latches plus actual `pg_locks` observations, not sleep-based
+scheduling. Fault triggers/functions are migrator-created only in the exact owned test schema,
+target the chosen synthetic OperationId and are removed after each case.
+
+Selected final-run provenance (all identifiers are synthetic; session references are database
+metadata UUIDs, not browser cookies or bearer authentication proofs):
+
+| Field | ACCEPTED replay | REFUSED replay |
+|---|---|---|
+| OperationId | `4e149edd-fbc1-4972-b9fe-cbbe1fb589cd` | `ed1edc06-84ac-40be-98ae-94bf6347e4be` |
+| Original ActorId | `19e667ca-f317-455a-840e-f72bfcc0c8a5` | same |
+| Original OrganizationId | `61943a99-e0f8-4fe7-acc4-8f2dd6321351` | same |
+| Original session reference | `8c330161-6ec6-4005-814d-21d80c4ac841` | `42a7efda-de83-4c33-9215-daf4ead792bb` |
+| Fresh retry session reference | `b04d12c4-3714-4ee3-891a-84abbe89a1f0` | `da4f4da3-97be-4cb6-ada3-7f3d6d6f623c` |
+| Original correlation | `f04-c-original` | `f04-c-original-refusal` |
+| Retry correlation, not persisted over original | `f04-c-retry-must-not-overwrite` | `f04-c-retry-accept` |
+| Original reason/EventId | NULL / `140f0cd1-ffa0-4bca-810d-91195694280a` | `SYNTHETIC_BUSINESS_REFUSAL` / NULL |
+
+The final opposing-decision run happened to choose ACCEPTED. The test permits either scheduler
+winner and asserts the matching event cardinality. The separate held REFUSED handoff test
+deterministically proves the zero-event canonical REFUSED loser-resolution path.
+
+## 19. Final exact-source execution and cleanup
+
+Final source `4b4b494...`, archive `c427de8...`, ran all four suites on 2026-10-02.
+Each exited Maven 0; failures, errors and skips were zero. Full archive, XML/text and raw-log
+hashes are retained in the receipt index, keyed by batch `final-c-regression`.
+
+| Suite / tests | Exact fresh owned schema | Raw log under `/home/phuclam/` | Log SHA-256 |
+|---|---|---|---|
+| Owner 16/16 | `f04_e3df1debd36446eebae293dae7e82322` | `idea-f04-schema-6BkSDKeC.log` | `1e1cd66a9585ce53da7f5f6859b7e116529ea56f2b204686c398d5a7ceef8675` |
+| Schema 7/7 | `f04_62741788076d4e5994c7320648d6d385` | `idea-f04-schema-KItPMGce.log` | `671d8fbf1d7d6cad68a0f6a323500d6bc70ac87941e6a9ded9e1e145d779740f` |
+| Predecessor 1/1 | `f04_9bac204d6ad24906a2d8cab0c9407638` | `idea-f04-schema-Gu1Qgwu2.log` | `513da6d5d60ea46f73a647c769c38bf5a36bc6b3adf8fd923a961aa6e9613cb9` |
+| Audit 7/7 | `f04_7bd1a62951b34fe28cb37904e38fbb3b` | `idea-f04-schema-VUq1eukL.log` | `2b5e04f404d5471902cbcffaa8ed08a19afb244e0fb00d4736db74a6c6b8ef88` |
+
+Total **31/31** = prior B 3 + C 13 + schema/Audit 15.
+Fifteen completed regression batches each retained all four suites. All 62 distinct schemas
+(including two REDs) have per-run COMPLETE cleanup receipts: stop owned Server/pool/JVM, verify
+exact name/owner/run marker, drop only that schema, confirm absence. No cleanup target was
+`public`, another database, preview, company data or Vault.
+
+Raw logs remain mode-600 private host evidence. SHA-256 values were re-observed read-only on
+2026-10-03 after quota interruption; no new qualification run was inferred from that hash check.
+Public hashes/receipts identify retained evidence but do not replace independent raw-log review.
+
+## 20. Internal source review — separate axes
+
+Reviews compare accepted B head `a005f344...` with final executed source `4b4b494...`.
+Neither reviewer ran tests or independently inspected the private execution logs.
+
+### Standards
+
+No remaining documented mandatory breach found. The ADR-0014 handoff finding is closed:
+the service rechecks canonical state after rollback under the retained operation lock.
+The former disposal duplication is closed by the sample-only discard helper, which attempts
+physical close even when abort fails.
+
+One optional heuristic remains: possible Primitive Obsession in the test fixture's
+`installAppendFailure(operation, table, boolean suppress, boolean deferred)`.
+Named fault modes or small named fixture methods would communicate intent and avoid unsupported
+flag combinations. This is a maintainability suggestion, not a standards violation or merge
+condition; it is deferred, with no application change after final execution.
+The JDBC wrapper and PostgreSQL observers remain approved test boundaries; production contains
+no fault-injection switch. No dependency, schema or migration change occurs in the C diff.
+
+### Spec
+
+No remaining actionable findings. The explicit post-rollback canonical recheck is fixed;
+pooled unlock/abort discard and bounded-timeout qualification satisfy the identified gaps.
+Canonical provenance and current eligibility remain separate. Real-PG concurrency/fault fixtures
+are deterministic and scope remains bounded. No scope creep was found.
+This is source review only, not execution or Project Reviewer acceptance.
+
+Summary: Standards 0 mandatory findings, 1 optional test-maintainability heuristic;
+Spec 0 actionable findings. External C checkpoint review remains PENDING.
+
+## 21. Publication boundary and remaining D obligations
+
+Successors after `4b4b494...` change only this evidence, the structured receipt index and current
+task/contract/handoff execution wording. They do not change application/test/migration/dependency/
+tooling inputs and therefore do not assert a new executed-source SHA.
+Publication checks on 2026-10-03: receipt JSON parses as 62 run records with distinct owned schemas;
+15 passing four-suite batches plus two retained REDs; final result 31/31. All referenced source
+objects exist. Scoped tracked UTF-8 secret scan exited 0: no secret-like values found, ten exact
+synthetic fixtures recognized and 233 known binary files skipped. This is not an all-format
+secret audit. Diff whitespace checks passed. All 78 local Markdown path targets in the four
+changed Markdown records exist; anchors are NOT-CHECKED. Read-only evidence reviews separately
+confirmed source/result/hash alignment and preservation of sections 1–14. PR #32 records the
+exact published head; no new test execution is inferred from publication checks.
+
+Stop at C checkpoint publication. T023-D/T025-D still must qualify controlled security-first
+disable/per-session revocation before authoritative owner commit, required atomic refusal
+evidence as applicable, fresh eligible retry/new operation, and reverse owner-first ordering.
+The current final eligibility lock/check is implemented; these IAM race orderings are NOT-RUN.
+T026 still owns broader affected F03/data/health and whole-contract review. Whole F04 is
+IN_PROGRESS; T023–T026 stay unchecked, Issue #31 OPEN, PR #32 Draft. Verifier NOT-RUN.
+
+No product route/RBAC/Swagger, dispatcher, generic payload/fingerprint/lock framework,
+F05 reconciliation, client binding, preview deployment, production/HA/recovery/commercial
+qualification, timer correction, whole-card acceptance or merge is performed.
