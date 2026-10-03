@@ -244,7 +244,9 @@ T023–T026 are complete, PR #32 is merged and Work Item #31 is completed. F05-A
 current unit, using [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md)
 and its actual 2026-10-03 [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
 Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
-T027 remains unchecked / preflight IN_PROGRESS; qualification NOT-RUN and CODEX_ONLY.
+T027 remains unchecked / IN_PROGRESS and CODEX_ONLY. Q01 key-separation qualification is PASS;
+the [exact-source receipt](../../docs/research/2026-10-03-f05a-t027-q01-execution-package.md#7-authorized-execution--q01-only)
+records authorized execution. Remaining runtime/transport/Adapter qualification is NOT-RUN.
 The separate local Tracker timer already runs; do not restart or publish it through this PR.
 No Gateway code or inherited F04 tooling authority follows from preflight approval.
 Do not rerun against retained databases or reopen F04 design. Work Item #29 was documentation-only
