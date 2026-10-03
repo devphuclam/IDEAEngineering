@@ -130,8 +130,13 @@ publish exact standalone source/settings/runner/hashes, construct an isolated of
 run only four pinned direct Maven goals, inspect exact graph/package, then conditionally run
 the predeclared non-web Boot smoke. See its package README for exact input/STOP controls.
 No automatic replacement, original .m2 mutation, installation or further rights waiver.
-At publication this experiment remains NOT-RUN; candidate graph115rows/99unique and runtime38
-are static expected values, not executed PASS. The narrowed graph is prospectively authorized
+Published experiment source is `3efad42448ff6950de6dfa57f5c04f5d14871aeb`.
+The [first-party archive preflight](../../docs/research/2026-10-03-f05a-q02-jsr305-preflight-stop.md)
+STOPPED: seven exported documentation/TSV files became CRLF and failed committed LF hashes.
+Java runner/repository construction/Maven/Boot are NOT-RUN; no runtime or graph PASS.
+Candidate graph115rows/99unique and runtime38 are expected only. Preserve the failed archive;
+corrected exact-byte source export/owned target requires gate clearance before retry.
+The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
 Remaining T027 stays NOT-RUN and Q01 stays PASS. No runtime success is inferred.
 Do not restart the timer or infer qualification/provisioning authority. Use
