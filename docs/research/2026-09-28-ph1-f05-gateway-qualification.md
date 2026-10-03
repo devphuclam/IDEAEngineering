@@ -6,7 +6,7 @@
 | Class / normativity | Preparation/technology research record; product `INFORMATIVE` |
 | Version / document status | `1.0 / Approved` |
 | Disposition | `APPROVED PREPARATION BASELINE`; not a qualification result |
-| Actual publication / approval date | 2026-10-03, Asia/Bangkok; the 2026-09-28 filename is a legacy T027 path, not the creation date |
+| Actual publication / approval date | 2026-10-03, Asia/Ho_Chi_Minh; the 2026-09-28 filename is a legacy T027 path, not the creation date |
 | Owner / author | Project Reviewer / Codex, Primary Implementation Worker |
 | Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; explicit freeze instruction in the project conversation on 2026-10-03 |
 | Worker mode | `CODEX_ONLY` |
