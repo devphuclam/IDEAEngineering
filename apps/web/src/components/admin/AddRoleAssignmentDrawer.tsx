@@ -14,6 +14,7 @@ export interface AddRoleAssignmentDrawerProps {
   actors: AdminActor[];
   groups?: AdminGroup[];
   projects: AdminProject[];
+  departments?: string[];
   preselectedProjectId?: string;
   preselectedActorId?: string;
   initialStep?: 1 | 2 | 3 | 4;
@@ -27,6 +28,7 @@ export function AddRoleAssignmentDrawer({
   roles,
   actors,
   projects,
+  departments,
   preselectedProjectId,
   preselectedActorId,
   initialStep = 1,
@@ -35,6 +37,8 @@ export function AddRoleAssignmentDrawer({
   onAddActor,
 }: AddRoleAssignmentDrawerProps) {
   if (!isOpen) return null;
+
+  const availableDepartments = departments && departments.length > 0 ? departments : ADMIN_DEPARTMENTS;
 
   // Step 1: Dự án (Scope) -> Step 2: Kỹ sư (Engineer) -> Step 3: Vai trò (Role) -> Step 4: Xác nhận (Review)
   const [step, setStep] = useState<1 | 2 | 3 | 4>(initialStep);
@@ -56,17 +60,18 @@ export function AddRoleAssignmentDrawer({
 
   // Step 3: Selected Department & Role Filter
   const [selectedDepartment, setSelectedDepartment] = useState<string>(
-    selectedActor?.department && ADMIN_DEPARTMENTS.includes(selectedActor.department)
+    selectedActor?.department && availableDepartments.includes(selectedActor.department)
       ? selectedActor.department
-      : ADMIN_DEPARTMENTS[0]
+      : availableDepartments[0]
   );
 
   // Auto-sync selectedDepartment when chosen engineer changes
   useEffect(() => {
-    if (selectedActor?.department && ADMIN_DEPARTMENTS.includes(selectedActor.department)) {
+    if (selectedActor?.department && availableDepartments.includes(selectedActor.department)) {
       setSelectedDepartment(selectedActor.department);
     }
-  }, [selectedActorId, selectedActor?.department]);
+  }, [selectedActorId, selectedActor?.department, availableDepartments]);
+
 
   const filteredRoles = roles.filter((r) =>
     r.departments ? r.departments.includes(selectedDepartment) : true
@@ -471,7 +476,7 @@ export function AddRoleAssignmentDrawer({
                   }}
                   aria-label="Chọn phòng ban lọc vai trò"
                 >
-                  {ADMIN_DEPARTMENTS.map((dept) => (
+                  {availableDepartments.map((dept) => (
                     <option key={dept} value={dept}>
                       {dept}
                     </option>

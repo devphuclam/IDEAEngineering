@@ -1,10 +1,19 @@
 import { formatDisplayId, isUuidOrLongIdentifier } from "../../utils/identity";
-import { AdminActor, AdminProject, AdminRoleAssignment } from "./mockAdminData";
+import {
+  AdminActor,
+  AdminDepartment,
+  AdminProject,
+  AdminRole,
+  AdminRoleAssignment,
+} from "./mockAdminData";
 
 export interface AdminInspectorProps {
   selectedActor?: AdminActor | null;
+  selectedDepartment?: AdminDepartment | null;
   selectedProject?: AdminProject | null;
   selectedAssignment?: AdminRoleAssignment | null;
+  actors?: AdminActor[];
+  roles?: AdminRole[];
   onToggleStatus?: (actorId: string) => void;
   onOpenAddRole?: (actorId?: string) => void;
   onRevokeAssignment?: (assignmentId: string) => void;
@@ -12,12 +21,16 @@ export interface AdminInspectorProps {
 
 export function AdminInspector({
   selectedActor,
+  selectedDepartment,
   selectedProject,
   selectedAssignment,
+  actors,
+  roles,
   onToggleStatus,
   onOpenAddRole,
   onRevokeAssignment,
 }: AdminInspectorProps) {
+
   if (selectedActor) {
     const isSuspended = selectedActor.status === "suspended";
     const isLongId = isUuidOrLongIdentifier(selectedActor.id);
@@ -115,7 +128,148 @@ export function AdminInspector({
     );
   }
 
+  if (selectedDepartment) {
+    const deptMembers = actors?.filter((a) => a.department === selectedDepartment.name) || [];
+    const deptRoles = roles?.filter((r) =>
+      selectedDepartment.allowedRoleIds
+        ? selectedDepartment.allowedRoleIds.includes(r.id)
+        : r.departments?.includes(selectedDepartment.name)
+    ) || [];
+
+    return (
+      <aside className="admin-inspector" aria-label="Bảng chi tiết phòng ban">
+        <div className="admin-inspector-head">
+          <span className="admin-rail-eyebrow">Cơ cấu tổ chức</span>
+          <div className="admin-inspector-title">{selectedDepartment.name}</div>
+          <div className="admin-inspector-sub" style={{ fontFamily: "var(--font-mono)" }}>
+            {selectedDepartment.code}
+          </div>
+        </div>
+
+        <div className="admin-inspector-body">
+          <div className="admin-prop-group">
+            <div className="admin-prop-row">
+              <span className="admin-prop-label">Mã phòng ban:</span>
+              <span className="admin-prop-val" style={{ fontFamily: "var(--font-mono)" }}>
+                {selectedDepartment.code}
+              </span>
+            </div>
+            <div className="admin-prop-row">
+              <span className="admin-prop-label">Trưởng bộ phận:</span>
+              <span className="admin-prop-val">{selectedDepartment.lead}</span>
+            </div>
+            <div className="admin-prop-row">
+              <span className="admin-prop-label">Nhân sự trực thuộc:</span>
+              <span className="admin-prop-val">{deptMembers.length} kỹ sư</span>
+            </div>
+            <div className="admin-prop-row">
+              <span className="admin-prop-label">Ngày thành lập:</span>
+              <span className="admin-prop-val">{selectedDepartment.createdAt}</span>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 12 }}>
+            <span
+              style={{
+                display: "block",
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "#64748b",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                marginBottom: 6,
+              }}
+            >
+              Chức năng &amp; Nhiệm vụ:
+            </span>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "12px",
+                color: "#334155",
+                background: "#f8fafc",
+                padding: "8px 10px",
+                borderRadius: 4,
+                border: "1px solid var(--admin-line)",
+              }}
+            >
+              {selectedDepartment.description}
+            </p>
+          </div>
+
+          <div style={{ marginTop: 14 }}>
+            <span
+              style={{
+                display: "block",
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "#64748b",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                marginBottom: 6,
+              }}
+            >
+              Vai trò kỹ thuật cho phép ({deptRoles.length}):
+            </span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+              {deptRoles.map((r) => (
+                <span key={r.id} className="admin-status-pill active" style={{ fontSize: "10.5px" }}>
+                  {r.name}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {deptMembers.length > 0 && (
+            <div style={{ marginTop: 14 }}>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "#64748b",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  marginBottom: 6,
+                }}
+              >
+                Kỹ sư trong phòng ban ({deptMembers.length}):
+              </span>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                  maxHeight: 150,
+                  overflowY: "auto",
+                }}
+              >
+                {deptMembers.map((m) => (
+                  <div
+                    key={m.id}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: "11.5px",
+                      padding: "4px 6px",
+                      background: "#f8fafc",
+                      borderRadius: 4,
+                    }}
+                  >
+                    <span style={{ fontWeight: 600, color: "var(--admin-navy)" }}>{m.fullName}</span>
+                    <span style={{ color: "#64748b" }}>@{m.username}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
+    );
+  }
+
   if (selectedProject) {
+
     return (
       <aside className="admin-inspector" aria-label="Bảng chi tiết dự án">
         <div className="admin-inspector-head">

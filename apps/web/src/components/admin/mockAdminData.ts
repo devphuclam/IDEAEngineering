@@ -26,13 +26,66 @@ export interface AdminRole {
   permissions: { action: string; description: string }[];
 }
 
-export const ADMIN_DEPARTMENTS = [
-  "Phòng Thiết kế Cơ khí JIG & Máy",
-  "Phòng Điện - Tự động hóa",
-  "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
-  "Ban Quản lý Dự án (PMO)",
-  "Ban Công nghệ & IT",
+export interface AdminDepartment {
+  id: string;
+  code: string;
+  name: string;
+  lead: string;
+  description: string;
+  allowedRoleIds: string[];
+  createdAt: string;
+}
+
+export const INITIAL_DEPARTMENTS: AdminDepartment[] = [
+  {
+    id: "dept_mech",
+    code: "DEPT-MECH",
+    name: "Phòng Thiết kế Cơ khí JIG & Máy",
+    lead: "Nguyễn Văn An",
+    description: "Chịu trách nhiệm thiết kế kết cấu cơ khí 3D, chi tiết đồ gá JIG và cây cấu trúc BOM dự án máy.",
+    allowedRoleIds: ["role_design_engineer", "role_reviewer"],
+    createdAt: "2026-01-01",
+  },
+  {
+    id: "dept_elec",
+    code: "DEPT-ELEC",
+    name: "Phòng Điện - Tự động hóa",
+    lead: "Đỗ Minh Quân",
+    description: "Thiết kế sơ đồ nguyên lý điện, lập trình điều khiển PLC, cảm biến và mô phỏng cánh tay Robot.",
+    allowedRoleIds: ["role_automation_engineer", "role_design_engineer"],
+    createdAt: "2026-01-01",
+  },
+  {
+    id: "dept_qa",
+    code: "DEPT-QA",
+    name: "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
+    lead: "Trần Bách Khoa",
+    description: "Thẩm định dung sai, tiêu chuẩn kỹ thuật, phê duyệt phát hành Release và kiểm soát quy trình GD&T.",
+    allowedRoleIds: ["role_reviewer"],
+    createdAt: "2026-01-10",
+  },
+  {
+    id: "dept_pmo",
+    code: "DEPT-PMO",
+    name: "Ban Quản lý Dự án (PMO)",
+    lead: "Bùi Huy Hoàng",
+    description: "Điều phối tiến độ, phân bổ nhân sự, kiểm soát mốc bàn giao dự án máy và nguồn lực sản xuất.",
+    allowedRoleIds: ["role_project_admin"],
+    createdAt: "2026-01-05",
+  },
+  {
+    id: "dept_it",
+    code: "DEPT-IT",
+    name: "Ban Công nghệ & IT",
+    lead: "Trần Minh Trí",
+    description: "Quản trị hạ tầng máy chủ, hệ thống kho icVault, bảo mật định danh IAM và phần mềm bản quyền CAD.",
+    allowedRoleIds: ["role_account_admin"],
+    createdAt: "2026-01-01",
+  },
 ];
+
+export const ADMIN_DEPARTMENTS = INITIAL_DEPARTMENTS.map((d) => d.name);
+
 
 export interface AdminGroup {
   id: string;

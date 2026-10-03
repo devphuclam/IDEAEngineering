@@ -1,9 +1,10 @@
-export type AdminSection = "accounts" | "projects" | "rbac";
+export type AdminSection = "accounts" | "departments" | "projects" | "rbac";
 
 export interface AdminRailProps {
   activeSection: AdminSection;
   counts: {
     accounts: number;
+    departments: number;
     projects: number;
     assignments: number;
   };
@@ -46,6 +47,31 @@ export function AdminRail({
           </svg>
           <span>Tài khoản &amp; Định danh</span>
           <span className="admin-nav-badge">{counts.accounts}</span>
+        </button>
+
+        <button
+          type="button"
+          className={`admin-nav-item ${activeSection === "departments" ? "active" : ""}`}
+          onClick={() => onSelectSection("departments")}
+          aria-current={activeSection === "departments" ? "page" : undefined}
+        >
+          <svg
+            style={{ width: 16, height: 16, flexShrink: 0 }}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span>Cơ cấu tổ chức &amp; Phòng ban</span>
+          <span className="admin-nav-badge">{counts.departments}</span>
         </button>
 
         <button

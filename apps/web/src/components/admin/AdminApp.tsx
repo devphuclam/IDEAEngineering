@@ -5,13 +5,17 @@ import { AddRoleAssignmentDrawer } from "./AddRoleAssignmentDrawer";
 import { AdminInspector } from "./AdminInspector";
 import { AdminRail, AdminSection } from "./AdminRail";
 import { CreateActorDrawer } from "./CreateActorDrawer";
+import { CreateDepartmentDrawer } from "./CreateDepartmentDrawer";
+import { DepartmentsView } from "./DepartmentsView";
 import {
   AdminActor,
+  AdminDepartment,
   AdminGroup,
   AdminProject,
   AdminRoleAssignment,
   INITIAL_ACTORS,
   INITIAL_ASSIGNMENTS,
+  INITIAL_DEPARTMENTS,
   INITIAL_GROUPS,
   INITIAL_PROJECTS,
   INITIAL_ROLES,
@@ -37,9 +41,10 @@ export function AdminApp({
 
   // State collections
   const [actors, setActors] = useState<AdminActor[]>(INITIAL_ACTORS);
+  const [departments, setDepartments] = useState<AdminDepartment[]>(INITIAL_DEPARTMENTS);
   const [groups] = useState<AdminGroup[]>(INITIAL_GROUPS);
   const [projects] = useState<AdminProject[]>(INITIAL_PROJECTS);
-  const [roles] = useState(INITIAL_ROLES);
+  const [roles, setRoles] = useState(INITIAL_ROLES);
   const [assignments, setAssignments] = useState<AdminRoleAssignment[]>(INITIAL_ASSIGNMENTS);
 
   const handleAddActor = (newActor: AdminActor) => {
@@ -47,15 +52,38 @@ export function AdminApp({
     setSelectedActor(newActor);
   };
 
+  const handleCreateDepartment = (newDept: AdminDepartment) => {
+    setDepartments((prev) => [...prev, newDept]);
+    setRoles((prev) =>
+      prev.map((role) => {
+        if (newDept.allowedRoleIds?.includes(role.id)) {
+          const currentDepts = role.departments || [];
+          if (!currentDepts.includes(newDept.name)) {
+            return {
+              ...role,
+              departments: [...currentDepts, newDept.name],
+            };
+          }
+        }
+        return role;
+      })
+    );
+    setSelectedDepartment(newDept);
+    setActiveSection("departments");
+  };
+
   // Selected entities for right-hand inspector
   const [selectedActor, setSelectedActor] = useState<AdminActor | null>(INITIAL_ACTORS[0]);
+  const [selectedDepartment, setSelectedDepartment] = useState<AdminDepartment | null>(INITIAL_DEPARTMENTS[0]);
   const [selectedProject, setSelectedProject] = useState<AdminProject | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<AdminRoleAssignment | null>(null);
 
   // Drawer state
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
   const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
+  const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = useState(false);
   const [preselectedActorId, setPreselectedActorId] = useState<string | undefined>(undefined);
+
 
   // Toggle actor status (Active <-> Suspended)
   const handleToggleActorStatus = (id: string) => {
@@ -157,6 +185,7 @@ export function AdminApp({
           activeSection={activeSection}
           counts={{
             accounts: actors.length,
+            departments: departments.length,
             projects: projects.length,
             assignments: assignments.length,
           }}
@@ -164,15 +193,23 @@ export function AdminApp({
             setActiveSection(sec);
             if (sec === "accounts") {
               setSelectedActor(actors[0]);
+              setSelectedDepartment(null);
+              setSelectedProject(null);
+              setSelectedAssignment(null);
+            } else if (sec === "departments") {
+              setSelectedDepartment(departments[0]);
+              setSelectedActor(null);
               setSelectedProject(null);
               setSelectedAssignment(null);
             } else if (sec === "projects") {
               setSelectedProject(projects[0]);
               setSelectedActor(null);
+              setSelectedDepartment(null);
               setSelectedAssignment(null);
             } else {
               setSelectedAssignment(assignments[0]);
               setSelectedActor(null);
+              setSelectedDepartment(null);
               setSelectedProject(null);
             }
           }}
@@ -185,10 +222,27 @@ export function AdminApp({
             selectedActorId={selectedActor?.id}
             onSelectActor={(actor) => {
               setSelectedActor(actor);
+              setSelectedDepartment(null);
               setSelectedProject(null);
               setSelectedAssignment(null);
             }}
             onOpenAddAccount={() => setIsAddAccountOpen(true)}
+          />
+        )}
+
+        {activeSection === "departments" && (
+          <DepartmentsView
+            departments={departments}
+            actors={actors}
+            roles={roles}
+            selectedDepartmentId={selectedDepartment?.id}
+            onSelectDepartment={(dept) => {
+              setSelectedDepartment(dept);
+              setSelectedActor(null);
+              setSelectedProject(null);
+              setSelectedAssignment(null);
+            }}
+            onOpenCreateDepartment={() => setIsCreateDepartmentOpen(true)}
           />
         )}
 
@@ -199,6 +253,7 @@ export function AdminApp({
             onSelectProject={(proj) => {
               setSelectedProject(proj);
               setSelectedActor(null);
+              setSelectedDepartment(null);
               setSelectedAssignment(null);
             }}
             onOpenAddProject={() => alert("Chức năng tạo dự án máy mới")}
@@ -216,6 +271,7 @@ export function AdminApp({
             onSelectAssignment={(asg) => {
               setSelectedAssignment(asg);
               setSelectedActor(null);
+              setSelectedDepartment(null);
               setSelectedProject(null);
             }}
             onOpenAddAssignment={() => handleOpenAddRole()}
@@ -224,13 +280,17 @@ export function AdminApp({
 
         {/* Col 3: Right Inspector (310px) */}
         <AdminInspector
-          selectedActor={selectedActor}
-          selectedProject={selectedProject}
-          selectedAssignment={selectedAssignment}
+          selectedActor={activeSection === "accounts" ? selectedActor : null}
+          selectedDepartment={activeSection === "departments" ? selectedDepartment : null}
+          selectedProject={activeSection === "projects" ? selectedProject : null}
+          selectedAssignment={activeSection === "rbac" ? selectedAssignment : null}
+          actors={actors}
+          roles={roles}
           onToggleStatus={handleToggleActorStatus}
           onOpenAddRole={handleOpenAddRole}
           onRevokeAssignment={handleRevokeAssignment}
         />
+
       </main>
 
       {/* Row 4: Statusbar (27px) */}
@@ -255,6 +315,7 @@ export function AdminApp({
         actors={actors}
         groups={groups}
         projects={projects}
+        departments={departments.map((d) => d.name)}
         preselectedActorId={preselectedActorId}
         onClose={() => setIsAddRoleOpen(false)}
         onSubmit={handleAddAssignment}
@@ -266,6 +327,7 @@ export function AdminApp({
         isOpen={isAddAccountOpen}
         projects={projects}
         roles={roles}
+        departments={departments.map((d) => d.name)}
         onClose={() => setIsAddAccountOpen(false)}
         onSubmit={(newActor, initialAssignment) => {
           handleAddActor(newActor);
@@ -275,6 +337,16 @@ export function AdminApp({
           setIsAddAccountOpen(false);
         }}
       />
+
+      {/* Create Department Drawer */}
+      <CreateDepartmentDrawer
+        isOpen={isCreateDepartmentOpen}
+        roles={roles}
+        actors={actors}
+        onClose={() => setIsCreateDepartmentOpen(false)}
+        onSubmit={handleCreateDepartment}
+      />
     </div>
   );
 }
+

@@ -11,6 +11,7 @@ export interface CreateActorDrawerProps {
   isOpen: boolean;
   projects: AdminProject[];
   roles: AdminRole[];
+  departments?: string[];
   onClose: () => void;
   onSubmit: (
     newActor: AdminActor,
@@ -18,12 +19,12 @@ export interface CreateActorDrawerProps {
   ) => void;
 }
 
-const DEPARTMENTS = [
+const DEFAULT_DEPARTMENTS = [
   "Phòng Thiết kế Cơ khí JIG & Máy",
   "Phòng Điện - Tự động hóa",
-  "Ban Công nghệ & IT",
   "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
   "Ban Quản lý Dự án (PMO)",
+  "Ban Công nghệ & IT",
 ];
 
 function suggestUsername(fullName: string): string {
@@ -47,16 +48,19 @@ export function CreateActorDrawer({
   isOpen,
   projects,
   roles,
+  departments,
   onClose,
   onSubmit,
 }: CreateActorDrawerProps) {
+  const availableDepartments = departments && departments.length > 0 ? departments : DEFAULT_DEPARTMENTS;
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [isUsernameCustom, setIsUsernameCustom] = useState(false);
   const [email, setEmail] = useState("");
   const [isEmailCustom, setIsEmailCustom] = useState(false);
-  const [department, setDepartment] = useState(DEPARTMENTS[0]);
+  const [department, setDepartment] = useState(availableDepartments[0]);
   const [status, setStatus] = useState<"active" | "pending">("active");
+
 
   // Optional project role assignment
   const [assignProject, setAssignProject] = useState(false);
@@ -106,13 +110,14 @@ export function CreateActorDrawer({
       setIsUsernameCustom(false);
       setEmail("");
       setIsEmailCustom(false);
-      setDepartment(DEPARTMENTS[0]);
+      setDepartment(availableDepartments[0]);
       setStatus("active");
       setAssignProject(false);
       if (projects.length > 0) setSelectedProjectId(projects[0].id);
       if (roles.length > 0) setSelectedRoleId(roles[0].id);
     }
-  }, [isOpen, projects, roles]);
+  }, [isOpen, projects, roles, availableDepartments]);
+
 
   if (!isOpen) return null;
 
@@ -291,7 +296,7 @@ export function CreateActorDrawer({
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                 >
-                  {DEPARTMENTS.map((dept) => (
+                  {availableDepartments.map((dept) => (
                     <option key={dept} value={dept}>
                       {dept}
                     </option>
