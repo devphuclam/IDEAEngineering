@@ -128,6 +128,36 @@
       "durationMinutes": 201,
       "state": "CLOSED",
       "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-f14bd6f97e534abeb00d8e70c6a032a6",
+      "deliveryCardId": "F04",
+      "startedAt": "2026-10-02T10:55:00+07:00",
+      "stoppedAt": "2026-10-02T12:00:00+07:00",
+      "durationMinutes": 65,
+      "state": "CLOSED",
+      "retrospectiveEstimate": true,
+      "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-9159301a35ff4c06a2b1cdb7e2fbfece",
+      "deliveryCardId": "F04",
+      "startedAt": "2026-10-02T13:00:00+07:00",
+      "stoppedAt": "2026-10-02T17:00:00+07:00",
+      "durationMinutes": 240,
+      "state": "CLOSED",
+      "retrospectiveEstimate": true,
+      "recordedBy": "LEAD"
+    },
+    {
+      "sessionId": "SESSION-028a60f690d546199d7873deab318438",
+      "deliveryCardId": "F04",
+      "startedAt": "2026-10-03T08:00:00+07:00",
+      "stoppedAt": "2026-10-03T09:45:00+07:00",
+      "durationMinutes": 105,
+      "state": "CLOSED",
+      "retrospectiveEstimate": true,
+      "recordedBy": "LEAD"
     }
   ],
   "corrections": [
@@ -221,6 +251,42 @@
         "SESSION-6a3f6dc77b7e40629669d59429415388",
         "SESSION-dcafd325f31b43748abeb26d9e6b7b88"
       ]
+    },
+    {
+      "correctionId": "CORRECTION-f04-confirmed-estimate-20261003",
+      "deliveryCardId": "F04",
+      "previousActualEffortHours": 0.0,
+      "newActualEffortHours": 6.8333,
+      "previousRemainingEffortHours": 12.0,
+      "newRemainingEffortHours": 5.1667,
+      "reason": "Người dùng xác nhận ước lượng hồi tố F04 6 giờ 50 phút (410 phút): 02/10 10:55–12:00 (65 phút), 13:00–17:00 (240 phút); 03/10 08:00–09:45 (105 phút). Mốc 10:55 là mốc làm tròn theo ước lượng đã xác nhận, không phải timestamp timer gốc chính xác đến giây. Tách phiên đang chạy xuyên đêm, loại nghỉ trưa/qua đêm và hai lượt governance AI sau khi tích hợp F04. Giữ snapshot phiên gốc trong correction; đánh dấu các khoảng thay thế là retrospectiveEstimate, không lấy 12 giờ kế hoạch làm actual. Tổng giờ được ghi qua thao tác Lưu hiệu chỉnh giờ của Tracker trước khi hoàn thành card.",
+      "recordedAt": "2026-10-03T10:11:45.5551639+07:00",
+      "recordedBy": "LEAD",
+      "originalSession": {
+        "sessionId": "SESSION-f14bd6f97e534abeb00d8e70c6a032a6",
+        "deliveryCardId": "F04",
+        "startedAt": "2026-10-02T10:55:49.7357732+07:00",
+        "stoppedAt": null,
+        "durationMinutes": null,
+        "state": "RUNNING",
+        "recordedBy": "LEAD"
+      },
+      "correctedSessionIds": [
+        "SESSION-f14bd6f97e534abeb00d8e70c6a032a6",
+        "SESSION-9159301a35ff4c06a2b1cdb7e2fbfece",
+        "SESSION-028a60f690d546199d7873deab318438"
+      ]
+    },
+    {
+      "correctionId": "CORRECTION-d66d6bec575749c386e7cc2fbc8d81f7",
+      "deliveryCardId": "F04",
+      "previousActualEffortHours": 0.0,
+      "newActualEffortHours": 6.8333,
+      "previousRemainingEffortHours": 12.0,
+      "newRemainingEffortHours": 5.1667,
+      "reason": "Người dùng xác nhận ước lượng hồi tố F04 6 giờ 50 phút (410 phút), chỉ các khoảng 02/10 10:55–12:00, 13:00–17:00 và 03/10 08:00–09:45. Đã giữ phiên timer gốc và dấu vết hiệu chỉnh trong Work Journal; loại giờ nghỉ/qua đêm và phần governance AI. Không dùng giờ kế hoạch làm actual.",
+      "recordedAt": "2026-10-03T10:12:08.3625702+07:00",
+      "recordedBy": "LEAD"
     }
   ]
 }

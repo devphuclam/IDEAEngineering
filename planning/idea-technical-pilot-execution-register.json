@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 32,
+  "registerRevision": 35,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
-  "statusDate": "2026-10-01",
+  "statusDate": "2026-10-03",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -738,14 +738,64 @@
         "kind": "DeliveryCard",
         "id": "F04"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 13,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F04-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": "specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md",
+          "commit": "5e034cf0d107d49f5217a4150d410c19a2781917",
+          "sha256": null,
+          "externalUri": null,
+          "description": "Whole F04 COMPLETE / ACCEPTED / PASS bởi Project Reviewer ngày 2026-10-03 tại head ac6c96e1090eb4d38aefca607af066dcd6330a67; closure evidence v1.0 §38. F04 36/36, affected F03/health 108/108, fresh-public 8/8, first8/repeat0, packaged repeat0/0. PR #32 đã merge tại 5e034cf0d107d49f5217a4150d410c19a2781917; Issue #31 CLOSED/completed. Giữ raw-log access limitation, DB review retained và verifier NOT-RUN; không suy ra F05 hoặc production/commercial readiness.",
+          "result": "PASS",
+          "recordedAt": "2026-10-03T10:12:08.5994021+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F04-EVENT-1",
+          "effectiveAt": "2026-10-02T10:55:49.7357732+07:00",
+          "recordedAt": "2026-10-02T10:55:49.7357732+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Bắt đầu làm F04 và mở bộ đếm giờ."
+        },
+        {
+          "eventId": "F04-EVENT-2",
+          "effectiveAt": "2026-10-03T10:12:08.3625702+07:00",
+          "recordedAt": "2026-10-03T10:12:08.3625702+07:00",
+          "recordedBy": "LEAD",
+          "kind": "EFFORT_UPDATE",
+          "reason": "Người dùng xác nhận ước lượng hồi tố F04 6 giờ 50 phút (410 phút), chỉ các khoảng 02/10 10:55–12:00, 13:00–17:00 và 03/10 08:00–09:45. Đã giữ phiên timer gốc và dấu vết hiệu chỉnh trong Work Journal; loại giờ nghỉ/qua đêm và phần governance AI. Không dùng giờ kế hoạch làm actual."
+        },
+        {
+          "eventId": "F04-EVENT-3",
+          "effectiveAt": "2026-10-03T10:12:08.5994021+07:00",
+          "recordedAt": "2026-10-03T10:12:08.5994021+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Hoàn thành F04 theo yêu cầu người dùng và Project Reviewer acceptance ngày 03/10/2026. Giờ thực tế đã hiệu chỉnh theo xác nhận 6 giờ 50 phút; mốc kết thúc phần làm F04 là 09:45, actualFinish là thời điểm ghi hoàn thành card."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
+      "actualStart": "2026-10-02T10:55:49.7357732+07:00",
+      "actualFinish": "2026-10-03T10:12:08.5994021+07:00",
+      "actualEffortHours": 6.8333,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-10-03T10:12:08.5994021+07:00",
+      "remainingReviewedAt": "2026-10-03T10:12:08.5994021+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
@@ -1532,6 +1582,27 @@
       "recordedBy": "LEAD",
       "reason": "Project Reviewer yêu cầu Hoàn thành F03-B nếu không còn bất cập. Rà whole-card review tại 92d9c84ef24b2c3c4c6f01ad1df104e9c28880d0, final executed source 989bf5a9fc09c03ee2d5fa88d09b3cee78335616: BLOCKER/MAJOR/MINOR 0. Chấp nhận phạm vi Server và T043-Web; Desktop/Workspace successor, F04 race, T036 và vận hành tách riêng. Giờ thực tế đã tách theo khung người dùng xác nhận 08:00–12:00, 13:00–17:00; không tính nghỉ trưa/qua đêm. Không chạy verifier, chưa merge/công bố tiến độ. Ghi nhận 201 phút làm việc thực tế.",
       "sourceEvidence": "Local progress tracker: F03-B"
+    },
+    {
+      "revision": 33,
+      "recordedAt": "2026-10-02T10:55:49.7357732+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Bắt đầu làm F04 và mở bộ đếm giờ.",
+      "sourceEvidence": "Local progress tracker: F04"
+    },
+    {
+      "revision": 34,
+      "recordedAt": "2026-10-03T10:12:08.3625702+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng xác nhận ước lượng hồi tố F04 6 giờ 50 phút (410 phút), chỉ các khoảng 02/10 10:55–12:00, 13:00–17:00 và 03/10 08:00–09:45. Đã giữ phiên timer gốc và dấu vết hiệu chỉnh trong Work Journal; loại giờ nghỉ/qua đêm và phần governance AI. Không dùng giờ kế hoạch làm actual.",
+      "sourceEvidence": "Local progress tracker: F04"
+    },
+    {
+      "revision": 35,
+      "recordedAt": "2026-10-03T10:12:08.5994021+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Hoàn thành F04 theo yêu cầu người dùng và Project Reviewer acceptance ngày 03/10/2026. Giờ thực tế đã hiệu chỉnh theo xác nhận 6 giờ 50 phút; mốc kết thúc phần làm F04 là 09:45, actualFinish là thời điểm ghi hoàn thành card.",
+      "sourceEvidence": "Local progress tracker: F04"
     }
   ]
 }
