@@ -150,8 +150,17 @@ and exact plugin realms matched. The first package check then STOPPED because it
 detector treated first-party Maven metadata `t027-jsr305-exclusion` as JSR305.
 Package oracle remains incomplete; Boot smoke and final post-smoke cache rehash NOT-RUN;
 JSR305 graph repair NOT-QUALIFIED. Preserve all three owned attempts.
-Next: review the bounded exact-metadata detector repair and fresh root04 proposal in the
-root03 record. No dynamic source repair or further execution is authorized by this STOP.
+The user accepted root03 and authorized the exact outer-only metadata repair and root04.
+Source `f3e5b6aeac351f271b85f1068f1db1942dfc012a` passed15/15 local/remote inputs,
+detector self-check, pinned preflight, Maven BUILD SUCCESS and exact graph/realms.
+[Root04 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root04-results.md) records
+STOP at the final package-set equality: Boot packaged32 JARs, omitting exactly six
+metadata-only dependency-starter JARs from the38-artifact collection. Read-only diagnostics
+verified all32 nested hashes and the omitted starters' manifest types/zero class entries.
+The full frozen package oracle remains FAIL; Boot and final input rehash NOT-RUN;
+graph repair NOT-QUALIFIED. Preserve roots01–04.
+Next: review the exact38-collection→32-payload reconciliation and fresh root05 proposal
+in the root04 record. No dynamic oracle repair or further execution followed this STOP.
 The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
 Remaining T027 stays NOT-RUN and Q01 stays PASS. No runtime success is inferred.
