@@ -9,7 +9,7 @@
 | Reviewer / acceptance authority | Project Reviewer; execution review `NOT-RUN` |
 | Date / classification | 2026-10-03, Asia/Ho_Chi_Minh / `INTERNAL` |
 | Baseline / Work Item | [#37](https://github.com/devphuclam/IDEAEngineering/issues/37); source identity recorded in separate publication receipt before execution |
-| Upstream | [Frozen F05 preparation](2026-09-28-ph1-f05-gateway-qualification.md), [preflight v0.2](2026-10-03-f05a-t027-preflight.md), [native runtime intake](2026-09-23-p04-ubuntu-native-runtime-intake.md), [intake procedure](../agents/external-source-intake.md) |
+| Upstream | [Frozen F05 preparation](2026-09-28-ph1-f05-gateway-qualification.md), [preflight v0.3](2026-10-03-f05a-t027-preflight.md), [native runtime intake](2026-09-23-p04-ubuntu-native-runtime-intake.md), [intake procedure](../agents/external-source-intake.md) |
 | Downstream | [Q01 source/README](../../tests/ph1/f05-qualification/README.md); T027 current handoff; future qualification evidence |
 | Change / retention / supersession | Successor to preparation-only authority following user Q1/Q2 approval in conversation; retain with F05 evidence; supersedes no historical authorization |
 | Trigger / evidence | Tool/source/hash/module/use/target changes reopen gate; live read-only file observations, test execution `NOT-RUN` |
@@ -114,8 +114,13 @@ test ! -e /home/phuclam/idea-f05a-20261003-37 && test ! -L /home/phuclam/idea-f0
 
 Do not use `mkdir -p`, reuse an existing directory or automatically remove it. Copy the two
 exact committed blobs with SCP to those exact filenames; set both files to mode600 using
-`/usr/bin/chmod 600 -- <exact-file>`. Compare both SHA-256 values with the publication receipt
+the commands below. Compare both SHA-256 values with the publication receipt
 before launch; mismatch stops, without overwriting/retrying. No remote build or clone.
+
+```bash
+/usr/bin/chmod 600 -- /home/phuclam/idea-f05a-20261003-37/qualification/Ed25519KeySeparationQualification.java /home/phuclam/idea-f05a-20261003-37/qualification/run-q01.sh
+/usr/bin/sha256sum -- /home/phuclam/idea-f05a-20261003-37/qualification/Ed25519KeySeparationQualification.java /home/phuclam/idea-f05a-20261003-37/qualification/run-q01.sh
+```
 
 Proposed command (SSH child environment; no host-wide environment change):
 
@@ -151,6 +156,20 @@ result. Boot qualification still needs exact complete used graph/license/plugin 
 POM/import/build. Do not select JDK-only as the Gateway runtime just because this probe is small.
 The accepted Gateway direction remains Boot4.1.1 executable JAR. TLS/Adapter/fixture-size slices
 follow their agreed seams and bounded approvals; no full imagined suite in advance.
+
+## 6. Publication receipt — execution candidate, not execution evidence
+
+Source/runner commit: `d01ad4a057a8a14c840320f0c664f6838d12a47e`.
+These are exact Git blob byte hashes (LF), not inferred checkout identities:
+
+| File | SHA-256 |
+|---|---|
+| `Ed25519KeySeparationQualification.java` | `ccf7e62043ccb072631410bf351d42b00b8442a93930e9425e2e99d439cba2a4` |
+| `run-q01.sh` | `d92221a2c04642665c2b33f9adefd1bbfba2235d807fd48693edebf8bfa87670` |
+
+Before SCP, require local file bytes to match these hashes; Windows CRLF conversion is a
+mismatch, not a reason to change the pin. Any source/runner change requires a successor receipt.
+This receipt is published after the candidate commit; it does not imply qualification ran.
 
 | Version | Date | Change |
 |---|---|---|
