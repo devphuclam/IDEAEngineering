@@ -134,8 +134,16 @@ Published experiment source is `3efad42448ff6950de6dfa57f5c04f5d14871aeb`.
 The [first-party archive preflight](../../docs/research/2026-10-03-f05a-q02-jsr305-preflight-stop.md)
 STOPPED: seven exported documentation/TSV files became CRLF and failed committed LF hashes.
 Java runner/repository construction/Maven/Boot are NOT-RUN; no runtime or graph PASS.
-Candidate graph115rows/99unique and runtime38 are expected only. Preserve the failed archive;
-corrected exact-byte source export/owned target requires gate clearance before retry.
+The user cleared the literal-only root02 retry. Source `a51ff70775480e97ceb1c19d61fdb5ae7b2c2042`
+has raw input15/15 locally/remotely, matching archive identity and preflight PASS for99JAR/242POM
+with JSR305 absent before Maven. [Retry result](../../docs/research/2026-10-03-f05a-q02-jsr305-retry-results.md)
+records Maven attempted then rejected at its first oracle; no graph/package/Boot qualification.
+SSH was temporarily lost, then restored by the user. Retained log confirms a first-party
+BootProbe import typo: SpringBootApplication belongs to boot.autoconfigure, not boot.
+Compile FAIL; jar/repackage/package oracle/Boot smoke NOT-RUN. Log hash and exact source
+are in the retry record. No JSR305 dependency requirement is shown; repair NOT-QUALIFIED.
+Next: obtain explicit narrow probe-import/fresh-root successor authority; no dynamic repair/rerun.
+Candidate graph115rows/99unique and runtime38 remain expected only. Preserve both owned attempts.
 The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
 Remaining T027 stays NOT-RUN and Q01 stays PASS. No runtime success is inferred.
