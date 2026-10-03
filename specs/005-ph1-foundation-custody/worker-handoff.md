@@ -142,8 +142,16 @@ SSH was temporarily lost, then restored by the user. Retained log confirms a fir
 BootProbe import typo: SpringBootApplication belongs to boot.autoconfigure, not boot.
 Compile FAIL; jar/repackage/package oracle/Boot smoke NOT-RUN. Log hash and exact source
 are in the retry record. No JSR305 dependency requirement is shown; repair NOT-QUALIFIED.
-Next: obtain explicit narrow probe-import/fresh-root successor authority; no dynamic repair/rerun.
-Candidate graph115rows/99unique and runtime38 remain expected only. Preserve both owned attempts.
+The user subsequently authorized the exact import correction and fresh root03 assertions.
+Source `e6ff16708a8678829f7d1b53a7f49502aced9d00` passed local/remote raw input15/15,
+archive identity and pinned preflight. [Root03 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root03-results.md)
+records Maven BUILD SUCCESS through repackage, actual115 collection rows/99unique coordinates
+and exact plugin realms matched. The first package check then STOPPED because its substring
+detector treated first-party Maven metadata `t027-jsr305-exclusion` as JSR305.
+Package oracle remains incomplete; Boot smoke and final post-smoke cache rehash NOT-RUN;
+JSR305 graph repair NOT-QUALIFIED. Preserve all three owned attempts.
+Next: review the bounded exact-metadata detector repair and fresh root04 proposal in the
+root03 record. No dynamic source repair or further execution is authorized by this STOP.
 The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
 Remaining T027 stays NOT-RUN and Q01 stays PASS. No runtime success is inferred.
