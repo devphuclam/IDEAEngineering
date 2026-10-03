@@ -11,7 +11,7 @@ for name in JAVA_TOOL_OPTIONS _JAVA_OPTIONS JDK_JAVA_OPTIONS MAVEN_OPTS MAVEN_AR
     exit 2
   fi
 done
-cd /home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-04
+cd /home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-05
 sha256sum -c tests/ph1/f05-qualification/jsr305-exclusion/inputs.sha256
 exec /opt/idea/tools/jdk-25.0.4.1+1/bin/java \
   tests/ph1/f05-qualification/jsr305-exclusion/Experiment.java "$1"

@@ -11,7 +11,7 @@ using committed LF bytes. Record the manifest's own hash and exact published com
 in the PR publication receipt. No self-referential checksum is claimed.
 
 Owned extraction root:
-`/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-01`.
+`/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-05`.
 It must initially be absent. Transfer an exact-source Git archive; compare its SHA-256
 on Windows and Ubuntu. Extract using the pinned existing JDK jar utility.
 No third-party archive, install, cache replacement or Python tool is used.
@@ -65,8 +65,17 @@ JSR305 resolution/loading attempt, missing class, graph drift or Maven failure i
 No old legally blocked graph is executed to manufacture a RED test.
 
 Executable JAR: Boot4.1.1 JarLauncher, synthetic BootProbe Start-Class, Java25 bytecode,
-exact embedded loader class bytes from pinned loader-tools, exactly38 application
-BOOT-INF/lib JAR names/full hashes. Reject JSR305 classes, alternate provider, extra
+exact embedded loader class bytes from pinned loader-tools. Application collection
+remains exactly38. BOOT-INF/lib is exactly32 names/full hashes: that pinned collection
+minus only the six exact4.1.1 starters approved in
+[root04 reconciliation](../../../../docs/research/2026-10-03-f05a-q02-jsr305-root04-results.md#5-proposed-package-set-reconciliation--not-implemented).
+The successor user approval authorizes that proposal for root05. The oracle pins each
+omission's exact coordinate/version/hash, dependencies-starter manifest type and zero
+class entries; it permits no seventh omission, extra JAR or generic starter exclusion.
+Roots01–04 and their prior oracle results remain preserved.
+The outer first-party output allows only the three approved Maven metadata entry names;
+cached/core/nested JARs keep the original provider checks. A detector self-check runs
+before Maven. Reject JSR305 classes, alternate provider, extra
 runtime/build-tool dependencies and jarmode-tools. Nested original JAR byte identity
 preserves embedded legal contents; the run/legal companion retains the inspected legal
 entries, Maven legal files and embedded loader archive. Existing source-handling,

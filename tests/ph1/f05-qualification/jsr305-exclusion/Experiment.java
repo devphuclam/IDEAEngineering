@@ -12,7 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 /** Exact, single-use offline qualification runner. No third-party Java dependency. */
 class Experiment {
-    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-04");
+    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-05");
     static final Path PACKAGE = ROOT.resolve("tests/ph1/f05-qualification/jsr305-exclusion");
     static final Path CACHE = Path.of("/home/phuclam/.m2/repository");
     static final Path JDK = Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
@@ -35,6 +35,13 @@ class Experiment {
         "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/",
         "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/pom.xml",
         "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/pom.properties");
+    static final Map<String,String> OMITTED_STARTERS = Map.of(
+        "org.springframework.boot:spring-boot-starter-webmvc:4.1.1", "4aec3edbdf6317fefe23db1b989d8bba143a45a51c1fc32346146ecebf67d625",
+        "org.springframework.boot:spring-boot-starter-log4j2:4.1.1", "cd4c58788a6c92f7f06a46fc888b0ed1e4eba1ff55bf901db6eeda2359e0693d",
+        "org.springframework.boot:spring-boot-starter:4.1.1", "de5b2dd28400eda20914fd4a6054d0c201e68d2e4de35a25a4d89f054ccc2e63",
+        "org.springframework.boot:spring-boot-starter-jackson:4.1.1", "d30e594a3e0f3a090438fc22000a87ab577a3b80c674180a10544ca331207f24",
+        "org.springframework.boot:spring-boot-starter-tomcat:4.1.1", "f224d8504be3b413825ee85ef549a7b1598ee8512e062c6bd5ddce1043cd388a",
+        "org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.1", "580f0d9a9d02a1a6e387640e422af42f9dbdf302836d562ec595fdb2b31a1c29");
     static List<Map<String,String>> graph;
     static Map<String,Map<String,String>> artifacts;
 
@@ -110,6 +117,7 @@ class Experiment {
             for (var entry : ORIGINALS.entrySet()) require(sha(entry.getKey()).equals(entry.getValue()),
                 "original controlled input changed");
             write(RUN.resolve("result.txt"), preflight + "MAVEN=PASS\nACTUAL_GRAPH=PASS\nPACKAGE=PASS\n"
+                + "APPLICATION_COLLECTION=38\nBOOT_INF_LIB=32\nOMITTED_PINNED_STARTERS=6\n"
                 + "BOOT_NON_WEB=PASS\nORIGINAL_CONTROLLED_CACHE_INPUTS_UNCHANGED=PASS\nJAR_SHA256=" + jarHash
                 + "\nJSR305_GRAPH_REPAIR=QUALIFIED\n");
             System.out.println("JSR305_GRAPH_REPAIR=QUALIFIED;BOOT_NON_WEB=PASS;ORIGINAL_INPUTS=UNCHANGED");
@@ -314,9 +322,32 @@ class Experiment {
     }
 
     static void packageOracle(Path jar) throws Exception {
+        var application = graph.stream().filter(row -> row.get("realm").equals("application")).toList();
+        require(application.size() == 38, "application collection is not exact38");
         Map<String,String> expected = new TreeMap<>();
-        for (var row : graph) if (row.get("realm").equals("application"))
-            expected.put(Path.of(row.get("jar_path")).getFileName().toString(), row.get("jar_sha256"));
+        for (var row : application)
+            require(expected.put(Path.of(row.get("jar_path")).getFileName().toString(), row.get("jar_sha256")) == null,
+                "duplicate application JAR filename");
+        for (var omission : OMITTED_STARTERS.entrySet()) {
+            var matches = application.stream().filter(row -> row.get("coordinate").equals(omission.getKey())).toList();
+            require(matches.size() == 1, "approved starter coordinate/version missing: " + omission.getKey());
+            var row = matches.getFirst();
+            Path starter = Path.of(row.get("jar_path"));
+            require(row.get("jar_sha256").equals(omission.getValue()) && sha(starter).equals(omission.getValue()),
+                "approved starter hash drift: " + omission.getKey());
+            try (var zip = new ZipFile(starter.toFile())) {
+                var manifestEntry = zip.getEntry("META-INF/MANIFEST.MF");
+                require(manifestEntry != null, "approved starter manifest missing");
+                var manifest = new Manifest(zip.getInputStream(manifestEntry));
+                require("dependencies-starter".equals(manifest.getMainAttributes().getValue("Spring-Boot-Jar-Type")),
+                    "approved starter type drift: " + omission.getKey());
+                require(Collections.list(zip.entries()).stream().noneMatch(entry -> entry.getName().endsWith(".class")),
+                    "approved starter contains class entries: " + omission.getKey());
+            }
+            require(omission.getValue().equals(expected.remove(starter.getFileName().toString())),
+                "approved starter omission does not match application collection");
+        }
+        require(OMITTED_STARTERS.size() == 6 && expected.size() == 32, "exact-six packaging projection drift");
         Map<String,String> actual = new TreeMap<>();
         rejectJsrProvider(jar, true);
         try (var zip = new ZipFile(jar.toFile())) {
@@ -331,7 +362,8 @@ class Experiment {
                 if (entry.getName().startsWith("BOOT-INF/lib/") && !entry.isDirectory()) {
                     require(entry.getName().endsWith(".jar"), "unexpected runtime payload");
                     byte[] bytes = zip.getInputStream(entry).readAllBytes();
-                    actual.put(entry.getName().substring("BOOT-INF/lib/".length()), hash(bytes));
+                    require(actual.put(entry.getName().substring("BOOT-INF/lib/".length()), hash(bytes)) == null,
+                        "duplicate packaged runtime JAR");
                     rejectJsrProvider(bytes);
                 }
             }
@@ -355,7 +387,8 @@ class Experiment {
                 require(actualClasses.equals(expectedClasses), "loader class set drift");
             }
         }
-        require(actual.equals(expected), "BOOT-INF/lib is not exact 38-JAR runtime set");
+        require(actual.size() == 32 && actual.equals(expected), "BOOT-INF/lib is not exact32 payload from collection38 minus approved6");
+        System.out.println("PACKAGE_PROJECTION=PASS;APPLICATION_COLLECTION=38;OMITTED_PINNED_STARTERS=6;BOOT_INF_LIB=32");
         StringBuilder result = new StringBuilder("jar\tsha256\n");
         actual.forEach((name,hash) -> result.append(name).append('\t').append(hash).append('\n'));
         write(RUN.resolve("package-runtime.tsv"), result.toString());
