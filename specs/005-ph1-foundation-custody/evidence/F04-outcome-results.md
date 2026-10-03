@@ -1286,3 +1286,15 @@ source `878f975f1a20bd8226fcfe760541fed0842ac538` and SHA-256
 This correction changes no F04 acceptance, historical checkpoint, execution/log/receipt hash,
 test result, retained database or verifier disposition. F05 preparation is not T027 qualification,
 Gateway implementation or timer authority; those remain NOT-RUN / NOT-STARTED.
+
+## 40. F05 preparation timezone-only successor — 2026-10-03
+
+PR #36's Project Reviewer disposition requires the project timezone label `Asia/Ho_Chi_Minh`.
+Historical §39 remains the original publication receipt. The corrected package changes only
+that label, with unchanged technical decisions and publication date. Its current source is
+`87376bba753004f5a7fa5121b50b41bbe0179fd3`, Git blob
+`72ecbbfbb2a73aee948d48a5b9ea95b1f10b9d52`, and exact committed SHA-256
+`a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
+The [freeze record v1.1](../../../docs/research/2026-10-03-f05-preparation-freeze-record.md)
+retains both identities and the bounded pre-T027 LOW follow-up. This is no F04 evidence/result
+change or F05 execution authority; T027, Gateway code, timer and Tracker states stay unchanged.

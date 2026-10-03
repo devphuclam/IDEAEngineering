@@ -106,7 +106,7 @@ PR #32 is merged and Issue #31 is completed; consult their provider records for 
 The next eligible unit is F05-A / T027, still NOT-STARTED / qualification NOT-RUN. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
-Content SHA-256: `4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e`.
+Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
 Worker mode CODEX_ONLY. Preparation/path approval does not start T027 or the timer, authorize
 Gateway code, or extend F04 tooling authority to F05.
 Do not create/reuse another target, rerun the retained public database, DROP the review database

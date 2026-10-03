@@ -4,19 +4,19 @@
 |---|---|
 | Stable record ID | `IE-CMP-F05-PREP-FREEZE-20261003` |
 | Class / normativity | Configuration/decision receipt; product `INFORMATIVE` |
-| Record version / status | `1.0 / Approved` |
+| Record version / status | `1.1 / Approved`; timezone metadata correction authorized by Project Reviewer |
 | Owner / author | Project Reviewer / Codex |
 | Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm, explicit project-conversation freeze instruction |
-| Actual publication / freeze date | 2026-10-03, Asia/Bangkok |
+| Actual publication / freeze date | 2026-10-03, Asia/Ho_Chi_Minh; original date unchanged |
 | Classification / retention | `INTERNAL`; retain with frozen package and successor history |
 | Work Item / worker mode | [#35](https://github.com/devphuclam/IDEAEngineering/issues/35), PRE-T027 preparation / `CODEX_ONLY` |
 | Package | [IE-RES-PH1-F05-GATEWAY-QUAL-001](2026-09-28-ph1-f05-gateway-qualification.md) |
 | Canonical path / version | `docs/research/2026-09-28-ph1-f05-gateway-qualification.md` / `1.0` |
 | Package disposition | `FROZEN / APPROVED PREPARATION BASELINE` |
-| Package source commit | `878f975f1a20bd8226fcfe760541fed0842ac538` |
-| Package Git blob | `e5f041e2ac8ea8384b2968a6f96af717c8da677a` |
-| Exact committed content SHA-256 | `4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e` |
-| Hash convention | All 25,594 committed file bytes, UTF-8 without BOM, LF; not rendered Markdown or CRLF worktree bytes |
+| Package source commit | `87376bba753004f5a7fa5121b50b41bbe0179fd3` |
+| Package Git blob | `72ecbbfbb2a73aee948d48a5b9ea95b1f10b9d52` |
+| Exact committed content SHA-256 | `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef` |
+| Hash convention | All 25,598 committed file bytes, UTF-8 without BOM, LF; not rendered Markdown or CRLF worktree bytes |
 | Governing repository inputs | `4e43bc58d94f7eae17346e02ba484e9d0fe4a678`; exact paths/versions in package §1 |
 | Authority input | User-supplied `CODEX TASK — FREEZE F05 PREPARATION BASELINE`, project conversation, 2026-10-03 |
 | Authority attachment checksum | SHA-256 `5cde1e0f29455619cdb7f3dc3bba1b8def615246b83d4a99468148ffe16e109f` of the original supplied text attachment; decision text retained below |
@@ -76,3 +76,38 @@ T027 remains unchecked and `NOT-STARTED`; qualification is `NOT-RUN`. Gateway co
 timer are `NOT-STARTED`. Tracker and actual effort remain unchanged. No database, certificate,
 tunnel, runtime process, migration, dependency or application/test code is created or changed.
 This publication grants no implementation, execution, merge, production or commercial authority.
+
+## Clerical successor and integration authority — 2026-10-03
+
+The Project Reviewer disposition for PR #36 is **PASS WITH ONE CLERICAL FIX**. It authorizes
+correcting the project timezone label to `Asia/Ho_Chi_Minh`, rebinding exact package bytes,
+and then merge-commit integration / completed closure of Issue #35 without another review
+round if technical decisions remain unchanged. This later integration authority supersedes
+only the original publication's no-merge boundary, not its no-execution boundary.
+
+| Freeze lineage | Exact identity / disposition |
+|---|---|
+| Original package publication, 2026-10-03 | Source `878f975f1a20bd8226fcfe760541fed0842ac538`; blob `e5f041e2ac8ea8384b2968a6f96af717c8da677a`; 25,594 bytes; SHA-256 `4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e` |
+| Original freeze record | Version1.0 at `7a10b23ecc5871e3197cf2541d3f0ae1b4059d7b`; the prior timezone label was `Asia/Bangkok` |
+| Corrected package metadata | Source `87376bba753004f5a7fa5121b50b41bbe0179fd3`; blob `72ecbbfbb2a73aee948d48a5b9ea95b1f10b9d52`; 25,598 bytes; SHA-256 `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef` |
+
+The package correction changes exactly one timezone label. Package content version1.0 and
+all accepted decisions, technical contents, governing inputs and original publication/freeze
+date remain unchanged. This receipt is version1.1 so the metadata correction is attributable;
+the original bytes and record remain available at their exact historical commits. Nothing is
+backdated. The corrected package was committed first and hashed as a binary Git blob before
+this successor record was updated; no self-referential hash is created.
+
+### Bounded pre-T027 follow-up
+
+These read-only Spec Kit LOW findings do not invalidate the preparation baseline and do not
+block PR #36. They must be reconciled **before T027 execution**, not silently waived:
+
+| Finding | Owner / bounded action | Due condition / retained state |
+|---|---|---|
+| I1: stale F03/F04 current-status summaries (`spec.md:8`, `tasks.md:100–116`) | Codex aligns current summaries with accepted evidence/handoff; preserve all historical results and attribution | Before T027 execution; OPEN, not repaired in this clerical integration |
+| C1: `plan.md` Constitution Check omits PrincipleVI | Codex adds the current worker-governance assessment without changing product/architecture authority | Before T027 execution; OPEN, not repaired in this clerical integration |
+
+After integration, preparation remains FROZEN / APPROVED; T027 remains NOT-STARTED / NOT-RUN,
+Gateway code and F05-A timer NOT-STARTED, and Tracker unchanged. No qualification, provisioning,
+application/test/migration/dependency change or verifier execution is authorized by this receipt.

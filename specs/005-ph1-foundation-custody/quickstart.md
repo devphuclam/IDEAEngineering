@@ -126,7 +126,7 @@ remains retained. PR #32 is merged and Issue #31 is completed; F05-A / T027 is t
 unit, but remains NOT-STARTED / qualification NOT-RUN. Use the actual 2026-10-03
 [preparation baseline IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md)
 and its [exact-byte freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
-Content SHA-256: `4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e`.
+Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
 Preparation approval is not T027 execution, Gateway qualification or timer authority.
 Private raw-log access limitation remains; verifier NOT-RUN is not an F04 acceptance blocker.
 

@@ -241,7 +241,7 @@ F04 is COMPLETED / ACCEPTED / PASS (2026-10-03), as recorded in evidence v1.0 §
 T023–T026 are complete, PR #32 is merged and Work Item #31 is completed. F05-A / T027 is the
 next eligible unit, using [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md)
 and its actual 2026-10-03 [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
-Content SHA-256: `4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e`.
+Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
 T027 remains unchecked / NOT-STARTED; qualification NOT-RUN and CODEX_ONLY. No timer/Tracker
 change, Gateway code or inherited F04 tooling authority follows from preparation approval.
 Do not rerun against retained databases or reopen F04 design. Work Item #29 was documentation-only
