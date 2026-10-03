@@ -251,8 +251,12 @@ The [HTTPS packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md) i
 authorized for a single synthetic 127.0.0.1:18447 listener and normal dedicated-store
 trust/endpoint verification after source/TLS identity publication. The
 [attempt01 result](../../docs/research/2026-10-03-f05a-t027-https-results.md) is STOP /
-NOT-QUALIFIED at the endpoint-refusal classifier; cleanup complete. No repair/retry authorized;
-other transport/Adapter qualifications remain separate. T027 is not complete.
+NOT-QUALIFIED at the endpoint-refusal classifier; cleanup complete, historical receipt unchanged.
+The user subsequently authorized a bounded classifier/diagnostic repair and fresh-root retry.
+[Attempt02 result](../../docs/research/2026-10-03-f05a-t027-https-results02.md) records technical
+HTTPS PASS at `6999287aa909400039ee504cb4300eb5ca51cd14`, with pre-listener freeze,
+positive/untrusted/hostname observations and owned cleanup; result acceptance pending.
+Other transport/Adapter qualifications remain separate. T027 is not complete.
 The separate local Tracker timer already runs; do not restart or publish it through this PR.
 No Gateway code or inherited F04 tooling authority follows from preflight approval.
 Do not rerun against retained databases or reopen F04 design. Work Item #29 was documentation-only

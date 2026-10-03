@@ -106,7 +106,14 @@ PR #32 is merged and Issue #31 is completed; consult their provider records for 
 The current unit is F05-A / T027: IN_PROGRESS; Q01/root05/filesystem8/8 accepted.
 [HTTPS attempt01](../../docs/research/2026-10-03-f05a-t027-https-results.md) STOPPED at
 the endpoint-refusal classifier; owned process terminated, no18447 listener remains.
-Do not repair or retry without bounded successor authority. Other qualification NOT-RUN. The user
+The user authorized a bounded classifier/diagnostic repair and fresh-root successor;
+[attempt02](../../docs/research/2026-10-03-f05a-t027-https-results02.md) is technical HTTPS PASS
+at exact source `6999287aa909400039ee504cb4300eb5ca51cd14`. Source/freeze were published
+before execution; actual positive/untrusted/hostname cases, listener scope, TLS evidence,
+cleanup and final integrity PASS. Result acceptance is pending; no listener remains.
+Next action: review this bounded result against the frozen preparation before selecting the
+next separately authorized T027 unit. Do not rerun or broaden qualification implicitly.
+Other qualification NOT-RUN. The user
 explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
 Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) initially authorized
 clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
@@ -186,10 +193,11 @@ filesystem-qualification-01 and private log/fixtures remain retained. Result acc
 is pending; this does not qualify a real Adapter, concurrency/races or power-loss durability.
 The user accepted filesystem8/8 as the predecessor and authorized the exact
 [HTTPS loopback packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md)
-on 2026-10-03. Next: publish exact source/hash, offline package, generate/freeze private
+on 2026-10-03. Retained execution recipe: publish exact source/hash, offline package, generate/freeze private
 harness TLS material, publish its public identities before starting one owned
 127.0.0.1:18447 HTTPS listener, execute positive/untrusted/SAN-mismatch probes, then
-terminate it and rehash. HTTPS is NOT-RUN until its successor result exists.
+terminate it and rehash. Attempt01 STOP and attempt02 technical PASS are separately retained above;
+this historical recipe is not an instruction to run another listener.
 No DB/Vault/preview/global trust change, Gateway product code, timer action or merge.
 No new package/Maven/DB/TLS/port/preview change was used for the filesystem prerequisite.
 The narrowed graph is prospectively authorized
