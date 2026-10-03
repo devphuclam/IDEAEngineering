@@ -124,13 +124,16 @@ No legal/company-license/commercial approval, extra rights, whole-F05 or other-w
 JSR305 is explicitly excluded. See [upstream v0.4](../../docs/research/2026-10-03-f05a-q02-upstream-rights.md#authorized-exact-jsr305-publication-inspection--version-04):
 official exact sources were inspected memory-only, with four CC BY2.5 grants and27 files
 without an established applicable grant. Full JSR305 rights remain BLOCKED-LEGAL.
-Next action: attributable publisher/rightsholder clarification or Legal determination covering
-those exact sources/mixed binary, or separately authorized graph repair/new intake.
-No automatic replacement, .m2 copy, installation or further rights waiver.
-The conditional final runnable Q02 package is NOT-READY; do not create qualification POM/source
-or present uncommitted hashes as a frozen execution package. After rights closure, pin/review
-the exact offline command/source/package oracle before execution. Drift reopens intake.
-Maven/Boot and remaining T027 remain NOT-RUN; no current graph inventory is runtime PASS.
+Historical old-graph finding stays BLOCKED-LEGAL. The user has now authorized the bounded
+[JSR305 exclusion experiment](../../docs/research/2026-10-03-t027-jsr305-experiment-authorization.md):
+publish exact standalone source/settings/runner/hashes, construct an isolated offline repository,
+run only four pinned direct Maven goals, inspect exact graph/package, then conditionally run
+the predeclared non-web Boot smoke. See its package README for exact input/STOP controls.
+No automatic replacement, original .m2 mutation, installation or further rights waiver.
+At publication this experiment remains NOT-RUN; candidate graph115rows/99unique and runtime38
+are static expected values, not executed PASS. The narrowed graph is prospectively authorized
+by the explicit successor, not retroactively inserted into the historical frozen exception.
+Remaining T027 stays NOT-RUN and Q01 stays PASS. No runtime success is inferred.
 Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
