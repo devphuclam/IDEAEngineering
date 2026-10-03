@@ -4,7 +4,6 @@ import { describe, expect, it } from "vitest";
 import {
   INITIAL_ACTORS,
   INITIAL_ASSIGNMENTS,
-  INITIAL_GROUPS,
   INITIAL_PROJECTS,
   INITIAL_ROLES,
 } from "./mockAdminData";
@@ -17,7 +16,6 @@ describe("RbacView component", () => {
         assignments: INITIAL_ASSIGNMENTS,
         roles: INITIAL_ROLES,
         actors: INITIAL_ACTORS,
-        groups: INITIAL_GROUPS,
         projects: INITIAL_PROJECTS,
         selectedAssignmentId: INITIAL_ASSIGNMENTS[0].id,
         onSelectAssignment: () => {},
@@ -28,17 +26,16 @@ describe("RbacView component", () => {
     expect(html).toContain("Bảng gán vai trò (Role assignments)");
     expect(html).toContain("Danh mục vai trò (Roles)");
     expect(html).toContain("Kiểm tra quyền thực tế (Check access)");
-    expect(html).toContain("Design Engineer");
+    expect(html).toContain("Project Administrator");
     expect(html).toContain("Dự án P-100");
   });
 
-  it("renders Add Role Assignment button to open Microsoft-style wizard", () => {
+  it("renders Add Role Assignment button to open project assignment wizard", () => {
     const html = renderToStaticMarkup(
       createElement(RbacView, {
         assignments: INITIAL_ASSIGNMENTS,
         roles: INITIAL_ROLES,
         actors: INITIAL_ACTORS,
-        groups: INITIAL_GROUPS,
         projects: INITIAL_PROJECTS,
         onSelectAssignment: () => {},
         onOpenAddAssignment: () => {},
@@ -48,33 +45,29 @@ describe("RbacView component", () => {
     expect(html).toContain("Thêm phân quyền vai trò");
   });
 
-  it("renders Microsoft-style Group RBAC with Security Groups and member counts", () => {
+  it("renders engineer role assignments with project scopes and roles", () => {
     const html = renderToStaticMarkup(
       createElement(RbacView, {
         assignments: INITIAL_ASSIGNMENTS,
         roles: INITIAL_ROLES,
         actors: INITIAL_ACTORS,
-        groups: INITIAL_GROUPS,
         projects: INITIAL_PROJECTS,
         onSelectAssignment: () => {},
         onOpenAddAssignment: () => {},
       })
     );
 
-    expect(html).toContain("Phòng Thiết kế Cơ khí JIG &amp; Máy");
-    expect(html).toContain("SG-MECH-01");
-    expect(html).toContain("8 kỹ sư");
-    expect(html).toContain("👥 Nhóm");
+    expect(html).toContain("Nguyễn Văn An");
+    expect(html).toContain("Dự án P-100");
+    expect(html).toContain("Trực tiếp");
   });
 
-  it("calculates inherited permissions from department group in Check Access", () => {
-    // Check access tab rendered by default shows tabs and selector
+  it("renders Check Access tab and toolbar filters", () => {
     const html = renderToStaticMarkup(
       createElement(RbacView, {
         assignments: INITIAL_ASSIGNMENTS,
         roles: INITIAL_ROLES,
         actors: INITIAL_ACTORS,
-        groups: INITIAL_GROUPS,
         projects: INITIAL_PROJECTS,
         onSelectAssignment: () => {},
         onOpenAddAssignment: () => {},
@@ -82,6 +75,6 @@ describe("RbacView component", () => {
     );
 
     expect(html).toContain("Kiểm tra quyền thực tế (Check access)");
-    expect(html).toContain("Tất cả đối tượng (Nhóm &amp; Kỹ sư)");
+    expect(html).toContain("Tất cả phạm vi Scope");
   });
 });

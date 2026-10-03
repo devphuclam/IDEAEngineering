@@ -387,19 +387,11 @@ export function RbacView({
               </div>
             </div>
 
-            {/* Microsoft Entra ID explanation for new hires */}
-            {hasInheritedRoles && (
-              <div className="admin-tip-box" style={{ marginBottom: 16 }}>
-                <span className="admin-tip-icon" aria-hidden="true">💡</span>
-                <div>
-                  <strong>Giải thích cơ chế phân quyền cho người mới (Microsoft Entra ID):</strong>
-                  <br />
-                  Kỹ sư <strong>{selectedCheckActor.fullName}</strong> thuộc <em>{selectedCheckActor.department}</em>. Khi mới gia nhập công ty hoặc nhận dự án, kỹ sư này <strong>tự động kế thừa quyền</strong> từ chính sách phân quyền của Nhóm phòng ban mà không cần ai phải cấu hình thủ công từng tài khoản.
-                </div>
+            {selectedCheckActor.status === "suspended" ? (
+              <div style={{ padding: 16, background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 4, color: "#991b1b", fontSize: "12.5px" }}>
+                <strong>🚫 TÀI KHOẢN ĐANG BỊ TẠM KHÓA:</strong> Kỹ sư <strong>{selectedCheckActor.fullName}</strong> (@{selectedCheckActor.username}) hiện đang bị tạm dừng truy cập trên toàn hệ thống. Mọi quyền hạn trên <strong>{checkScope}</strong> đều bị vô hiệu hóa an toàn (Fail-closed).
               </div>
-            )}
-
-            {effectiveRoleList.length > 0 ? (
+            ) : effectiveRoleList.length > 0 ? (
               <div style={{ background: "#f8fafc", border: "1px solid var(--admin-line)", padding: 16, borderRadius: 4 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   <span className="admin-status-pill active">Được cấp quyền hợp lệ</span>

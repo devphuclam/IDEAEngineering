@@ -37,19 +37,18 @@ describe("AdminInspector component", () => {
     expect(html).toContain("Tạm khóa");
   });
 
-  it("renders Group RBAC details when inspecting a group role assignment", () => {
-    const groupAssignment = INITIAL_ASSIGNMENTS[0]; // asg_grp_001
+  it("renders role assignment details when inspecting a project role assignment", () => {
+    const asg = INITIAL_ASSIGNMENTS[0]; // Nguyễn Văn An, Project Administrator, Dự án P-100
     const html = renderToStaticMarkup(
       createElement(AdminInspector, {
-        selectedAssignment: groupAssignment,
+        selectedAssignment: asg,
         onRevokeAssignment: () => {},
       })
     );
 
-    expect(html).toContain("Phân quyền Nhóm bảo mật (Group RBAC)");
-    expect(html).toContain("Phòng Thiết kế Cơ khí JIG &amp; Máy");
-    expect(html).toContain("SG-MECH-01");
-    expect(html).toContain("8 kỹ sư trực thuộc");
-    expect(html).toContain("Tự động kế thừa cho người mới");
+    expect(html).toContain("Nguyễn Văn An");
+    expect(html).toContain("Project Administrator");
+    expect(html).toContain("Dự án P-100");
+    expect(html).toContain("Thu hồi vai trò này");
   });
 });
