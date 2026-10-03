@@ -1,366 +1,147 @@
 # AI Worker Role Policy
 
-This document defines the default division of work between implementation assistants used on IDEA Engineering.
+This is the single source for the current worker mapping, delegation boundaries and working modes.
+Read [Constitution principle VI](../../.specify/memory/constitution.md#vi-implementation-continuity-and-bounded-specialist-delegation)
+for provider-neutral continuity, takeover and authority rules. This file implements that principle;
+it does not create product scope, backend contracts, implementation authorization or gate acceptance.
 
-It is a repository workflow rule, not a product architecture or product-scope decision.
+## Current worker mapping
 
-## 1. Primary ownership
+### Primary Implementation Worker — Codex
 
-### Codex — Primary Application Implementation Owner
+Codex is the default implementation worker and continuity owner. Codex owns:
 
-Codex is the default and primary implementation worker for IDEAEngineering.
+- backend, Server and Gateway implementation;
+- database, PostgreSQL and migrations;
+- IAM, authentication, authorization and security behavior;
+- transactions, concurrency and backend retry/idempotency;
+- authoritative business behavior and persistence;
+- API/wire contracts and authoritative DTOs;
+- real API clients and real frontend application state;
+- wiring APIs/backend into UI, session handling and Gateway interaction;
+- cross-module and end-to-end integration;
+- regression, qualification and execution evidence;
+- all work not explicitly delegated.
 
-Codex owns:
+Codex may perform UI/design work when Gemini is not used or unavailable. During integration,
+Codex may change frontend code for correctness, security, accessibility, application state or the
+accepted backend contract, preserving accepted UI/interaction intent where practical. Codex may
+complete a necessary redesign itself; optional Gemini participation is not a prerequisite.
 
-- Server/backend implementation;
-- Gateway implementation;
-- PostgreSQL and migrations;
-- authentication and authorization;
-- security behavior;
-- transaction and concurrency behavior;
-- API and wire contracts;
-- real API clients;
-- connecting real APIs to UI;
-- real frontend application state;
-- authoritative business behavior;
-- integration;
-- regression;
-- qualification;
-- execution evidence;
-- cross-cutting implementation necessary to complete a feature;
-- any work not explicitly delegated to Gemini.
+### Optional Specialist Worker — Gemini
 
-Codex may also perform Design/UI work whenever Gemini is not used or is unavailable.
+Gemini is supplementary, not required for delivery. Its current specialization is Product Design
+and **presentational UI implementation**:
 
-Rule:
+- UX flows, wireframes and screen/component composition;
+- layout and visual hierarchy;
+- React presentational page/component skeletons;
+- CSS, design tokens and visual styling;
+- responsive behavior and accessibility presentation;
+- loading, empty, error, success and progress visual states;
+- mock data/view models, mock adapters and mock-only UI demonstrations;
+- presentational UI tests.
 
-> Anything that determines authoritative system behavior or connects the product end-to-end belongs to Codex.
+Gemini may produce real frontend source that renders from explicit props or view models. It works
+from accepted feature intent, not as an authority to approve new product behavior. Clearly mark
+mock interfaces/data; mocks do not prove that a backend contract exists.
 
-## 2. Gemini ownership
+Real API integration, Java/backend, Gateway behavior, persistence, IAM/security, transactions,
+Grant/Receipt semantics and authoritative contracts remain in the Codex lane. If required backend
+semantics are missing, Gemini returns **DECISION REQUIRED / BACKEND CONTRACT REQUEST** rather than
+inventing an endpoint or wire contract. Any proposed reassignment beyond this mapping follows the
+explicit human authority rule in Constitution principle VI for the named Work Item.
 
-### Gemini — Product Designer + Presentational UI Worker
+## Working modes
 
-Gemini is an optional secondary worker used to accelerate UI/UX work.
-
-Gemini may own:
-
-- UX flow;
-- screen composition;
-- layout;
-- visual hierarchy;
-- component design;
-- React page/component skeletons;
-- CSS and visual styling;
-- responsive behavior;
-- accessibility presentation;
-- loading states;
-- empty states;
-- error states;
-- success states;
-- progress states;
-- mock data;
-- mock view models;
-- mock-only UI demonstrations;
-- presentational frontend tests.
-
-Gemini may produce real frontend source code, but its boundary is **presentational UI**.
-
-A Gemini UI should be able to render from explicit props, view models or mock adapters without requiring Gemini to define authoritative backend behavior.
-
-Rule:
-
-> Gemini designs and builds what the user sees. Codex makes it real.
-
-## 3. Gemini boundary
-
-Gemini does not own:
-
-- Java/backend code;
-- Gateway behavior;
-- PostgreSQL;
-- migrations;
-- IAM/security semantics;
-- transaction semantics;
-- API controller implementation;
-- real API client integration;
-- authoritative DTO or wire-contract decisions;
-- Grant/Receipt semantics;
-- persistence;
-- real business state;
-- backend-driven retry/idempotency rules;
-- cross-module integration.
-
-When Gemini needs a backend/API behavior that current authority has not defined, it must return:
-
-`DECISION REQUIRED / BACKEND CONTRACT REQUEST`
-
-It must not invent an endpoint or backend contract merely to make a UI work.
-
-Mock interfaces are allowed only as presentational seams and must be clearly identified as mocks.
-
-A mock is never evidence that a real backend contract exists.
-
-## 4. Codex integration ownership
-
-Codex takes Gemini's UI output and performs all real integration.
-
-Typical flow:
-
-```text
-Gemini
-UX + UI skeleton
-        |
-        v
-explicit props / mock view model
-        |
-        v
-Codex
-real application state
-API client
-authentication/session
-Server contract
-Gateway interaction
-error/retry behavior
-integration tests
-        |
-        v
-working feature
-```
-
-Codex may modify frontend code where required for:
-
-- real integration;
-- correctness;
-- security;
-- accessibility;
-- application state;
-- accepted backend contracts.
-
-Codex should preserve the accepted UI/interaction intent where practical.
-
-A material redesign may return to Gemini when Gemini is available.
-
-If Gemini is unavailable, Codex completes the redesign itself under the fallback rule.
-
-## 5. Working modes
-
-Every applicable Work Item uses one of three worker modes.
+Record the selected mode in the existing Work Item or handoff. Exactly three modes apply:
 
 ### `CODEX_ONLY`
 
-This is the default mode.
-
-Use when:
-
-- Gemini is unnecessary;
-- Gemini is unavailable;
-- the work is mainly backend/integration;
-- the human chooses Codex only.
-
-Codex owns the entire implementation including any UI needed for completion.
+Default. Codex performs all necessary authorized work, including UI/design. Use when Gemini is
+unnecessary, unavailable, the work is mainly backend/integration, or the human says **Codex only**.
 
 ### `CODEX+GEMINI_UI`
 
-Use when dedicated Design/UI work is useful.
+Use when the human says **Use Gemini for UI** or bounded Design/UI delegation is otherwise
+authorized. Codex continues backend/contracts/security/data/API work and real integration while
+Gemini creates UX and a presentational UI skeleton driven by props/mock view models.
 
-The two workers may proceed in parallel.
+When accepted feature intent defines the UI boundary sufficiently, these lanes may proceed
+concurrently. Neither lane waits for the other to finish the entire feature. Codex integrates
+the UI into real application/backend state and performs the required verification.
 
-#### Codex lane
+```text
+                 accepted feature intent
+                         |
+             +-----------+-----------+
+             |                       |
+             v                       v
+          Codex                    Gemini
+backend/integration          UX + UI skeleton
+security/data/API            mock visual states
+             |                       |
+             +-----------+-----------+
+                         |
+                         v
+                  Codex integrates
+```
 
-Codex continues:
-
-- backend;
-- contracts;
-- integration;
-- database;
-- security;
-- real application behavior.
-
-#### Gemini lane
-
-Gemini works on:
-
-- UX;
-- visual design;
-- presentational components;
-- mock/view-model driven UI skeleton.
-
-The lanes use separate branches/worktrees according to the repository collaboration rules.
-
-Gemini does not need to wait for the entire backend implementation.
-
-It only needs enough accepted feature intent/UI boundary to avoid inventing product behavior.
-
-Codex integrates the result.
+Use separate branches/worktrees under [collaboration.md](collaboration.md). Workers must not
+edit the same branch/worktree concurrently.
 
 ### `FALLBACK_TO_CODEX`
 
-This mode transfers Gemini's current Design/UI work to Codex.
+Activate immediately when Gemini reports token/quota exhaustion, is unavailable, cannot continue,
+or the human says **Fallback to Codex** or otherwise requests takeover. Continue the same
+already-authorized Work Item under Constitution principle VI; no second human authorization is
+required merely for the specialist's loss of availability.
 
-Activate it when:
+1. Read the latest available Gemini handoff and inspect its latest exact usable commit.
+2. Preserve usable UI work and resolve branch/worktree ownership before editing it.
+3. Continue unfinished Design/UI as Codex, then connect it to real application/backend state.
+4. Complete integration and verification under the existing Work Item/specification and gates.
 
-- Gemini reports token/quota exhaustion;
-- Gemini becomes unavailable;
-- Gemini cannot continue the assigned task;
-- the human explicitly says `Fallback to Codex`;
-- the human decides Gemini is no longer useful for that Work Item.
+If there is no usable Gemini commit, continue from the authoritative Work Item, specification,
+accepted contracts and repository state. An incomplete or missing handoff caused by token/quota
+exhaustion must not block takeover or require reconstruction of private reasoning/chat history.
+Worker fallback does not restart a Delivery Card or timer; existing progress rules still apply.
 
-A reported Gemini token/quota/unavailability condition is sufficient authority to activate this mode.
+Codex may take over Gemini's Design/UI lane. The reverse is not automatic: Gemini does not inherit
+Codex's authoritative/backend/integration lane because Codex is busy or unavailable. Apply the
+named-Work-Item human reassignment rule in Constitution principle VI.
 
-Do not ask the human for a second authorization merely to continue the same already-authorized Work Item.
+## Gemini handoff
 
-Fallback does not:
+Before finishing, pausing or losing available capacity, retain these fields when possible:
 
-- reopen architecture;
-- reopen approved product decisions;
-- restart the Work Item;
-- restart the Delivery Card;
-- create a new timer;
-- discard valid Gemini work.
-
-Codex continues from the latest valid repository state.
-
-## 6. Fallback procedure
-
-When `FALLBACK_TO_CODEX` activates:
-
-1. Read Gemini's latest handoff.
-2. Inspect Gemini's latest exact commit if one exists.
-3. Preserve usable UI work.
-4. Continue unfinished Design/UI work as Codex.
-5. Connect the UI to real application/backend state.
-6. Complete integration and verification normally.
-
-If Gemini has no usable commit, Codex resumes from the authoritative:
-
-- Work Item;
-- Spec Kit artifacts;
-- accepted architecture/contracts;
-- current repository state.
-
-Codex may implement the missing UI directly.
-
-Do not reconstruct or wait for Gemini solely because Gemini was originally assigned the UI lane.
-
-## 7. Asymmetric takeover rule
-
-The worker relationship is intentionally asymmetric.
-
-### Allowed
-
-`Gemini → Codex`
-
-Codex may always take over Gemini-owned Design/UI work.
-
-### Not automatic
-
-`Codex → Gemini`
-
-Gemini may not take over Codex-owned authoritative/backend/integration work merely because Codex is busy or unavailable.
-
-Such reassignment requires explicit human authorization for the named Work Item.
-
-Reason:
-
-Gemini is an acceleration lane.
-
-Codex is the project's implementation continuity owner.
-
-## 8. Gemini handoff contract
-
-Before Gemini finishes, pauses or exhausts its available quota, retain as much of this handoff as possible:
-
-- Work Item;
-- branch/worktree;
-- exact commit;
+- Work Item and selected worker mode;
+- branch/worktree and exact commit;
 - changed UI files;
-- intended user flow;
-- supported visual states;
+- intended UX flow and supported visual states;
 - mock/view-model assumptions;
-- responsive/accessibility behavior that matters;
-- unresolved items;
-- backend needs marked `DECISION REQUIRED / BACKEND CONTRACT REQUEST`.
+- responsive/accessibility notes;
+- unresolved items and backend needs marked **DECISION REQUIRED / BACKEND CONTRACT REQUEST**.
 
-The handoff is sufficient when Codex can continue without reconstructing Gemini's private reasoning or chat history.
+The handoff is sufficient when Codex can continue from those repository records without private
+model context. If capacity loss prevents completion, use the fallback procedure above.
 
-If token exhaustion prevents a complete handoff, the latest committed repository state plus existing Work Item/spec remains authoritative.
+## Authority and completion check
 
-Incomplete Gemini handoff must not block Codex takeover.
+Constitution principle VI and [collaboration.md](collaboration.md) govern allocation and continuity.
+Product Decision Authority, Project Reviewer rules, Spec Kit task order, accepted ADRs, security
+and external-source intake gates, and Delivery Card/Tracker rules remain unchanged. Worker modes
+do not authorize a new feature, acceptance, timer action or product/architecture decision.
 
-## 9. Human mode controls
+For each allocation or takeover, verify:
 
-The human may use these short instructions:
+- Codex remains primary/default and Gemini remains optional;
+- Gemini's assigned work is bounded to the approved Design/presentational UI lane unless explicitly
+  reassigned by the human for that Work Item;
+- real API/backend integration remains Codex-owned under the current mapping;
+- Gemini capacity loss cannot block continuity of the same authorized work;
+- the current mode, valid repository state and remaining work are navigable through the Work Item
+  and handoff, without a new architecture/restart cycle.
 
-### `Codex only`
-
-Activate `CODEX_ONLY`.
-
-### `Use Gemini for UI`
-
-Activate `CODEX+GEMINI_UI`.
-
-### `Fallback to Codex`
-
-Activate `FALLBACK_TO_CODEX`.
-
-These are worker-allocation controls only.
-
-They do not change product scope, Delivery Card state or architecture authority.
-
-## 10. Parallel-delivery principle
-
-Where safe, Design/UI and implementation should proceed concurrently.
-
-Preferred pattern:
-
-```text
-Accepted feature intent
-        |
-        +-----------------------+
-        |                       |
-        v                       v
-      CODEX                   GEMINI
-backend/contracts          UX/UI skeleton
-integration               mock visual states
-        |                       |
-        +-----------+-----------+
-                    |
-                    v
-             CODEX integrates
-                    |
-                    v
-              working feature
-```
-
-Do not serialize the entire frontend behind completed backend work when the UI boundary is already sufficiently defined.
-
-Likewise, do not block backend work while waiting for optional Gemini design output.
-
-## 11. Collaboration rule
-
-Both workers must follow [docs/agents/collaboration.md](collaboration.md).
-
-Use separate branch/worktree ownership for simultaneous work.
-
-Do not allow Codex and Gemini to edit the same branch/worktree concurrently.
-
-Worker assignment does not change:
-
-- Product Decision Authority;
-- Project Reviewer authority;
-- Spec Kit task order;
-- accepted ADRs;
-- security gates;
-- external-source intake;
-- Delivery Card progress/timer rules.
-
-## 12. Completion criterion
-
-This policy is correctly applied when:
-
-- every worker knows Codex is primary;
-- Gemini stays inside Design + presentational UI unless explicitly reassigned;
-- real API/backend integration remains Codex-owned;
-- Gemini exhaustion cannot block project progress;
-- Codex can continue the same Work Item without a new architecture/restart cycle;
-- the repository remains the handoff source of truth rather than chat history.
+Historical completed Work Item allocations remain historical records, not a second current
+worker policy. Apply this mapping to current/future allocations without rewriting accepted evidence.

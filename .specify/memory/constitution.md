@@ -1,18 +1,3 @@
-<!--
-Sync Impact Report:
-- Version change: 3.3.0 -> 3.4.0
-- Modified principles:
-  - I. DDM Baseline, Aras-Informed Improvement, and Clean-Room Product Definition
-- Added guidance:
-  - IDEA Engineering remains internal-first for the current multi-year delivery horizon
-  - Current work preserves a lawful future commercial path without creating commercial scope
-  - Third-party software, content, assets, data, models, fonts, and SDKs require controlled license intake
-  - External pilots, offers, customer data, installations, or sales require a separate Commercial Readiness Gate
-- Removed guidance:
-  - The prior rule that a future commercial direction required another constitutional amendment
-- Follow-up TODOs: none
--->
-
 # IDEA Engineering Constitution
 
 ## Core Principles
@@ -165,6 +150,40 @@ MUST NOT be described as equivalent enforcement.
 Rationale: controlled engineering data and the software that governs it require explicit trust
 boundaries, recoverable failure behavior, and honest treatment of environmental limitations.
 
+### VI. Implementation Continuity and Bounded Specialist Delegation
+
+Each authorized Work Item MUST have one **Primary Implementation Worker** accountable for
+implementation continuity, authoritative integration and end-to-end delivery. An **Optional
+Specialist Worker** MAY receive a bounded area such as UX, design or presentational UI.
+Specialist participation MUST remain optional; its absence MUST NOT become a delivery prerequisite.
+Concrete worker names, delegation boundaries and operational modes belong in the repository's
+[worker-role policy](../../docs/agents/worker-roles.md), not in this constitutional principle.
+
+The Primary Implementation Worker MAY immediately take over the same authorized specialist work
+when the specialist is unavailable, exhausts token/quota capacity, cannot continue, or the human
+requests takeover. This continuation MUST preserve accepted product/architecture decisions,
+usable work and existing Delivery Card progress. It MUST NOT restart the Work Item or timer or
+require a second authorization merely because the specialist became unavailable.
+
+Authority is asymmetric: the Optional Specialist Worker MUST NOT automatically inherit backend,
+security, transaction, persistence, authoritative integration or cross-module ownership from the
+Primary Implementation Worker. Reassignment of that ownership requires explicit human authority
+for the named Work Item; worker availability alone is insufficient.
+
+Committed repository state, the Work Item, specification and explicit handoff MUST be the
+continuation source of truth. Private model reasoning or chat history MUST NOT be required.
+An incomplete specialist handoff caused by capacity loss MUST NOT block takeover; the Primary
+Implementation Worker MUST inspect the latest usable commit/handoff and continue from the
+authoritative Work Item/specification/repository state when no usable commit exists.
+
+Worker allocation MUST preserve Product Decision Authority, Project Reviewer authority, Spec Kit
+task order, accepted ADRs, approval/security/intake gates and progress rules. It grants no new
+product scope, implementation authorization, review acceptance or gate PASS. Simultaneous workers
+MUST follow the repository collaboration rules for isolated branch/worktree ownership.
+
+Rationale: optional expertise accelerates bounded work without transferring product authority or
+making delivery dependent on a particular provider's availability or private context.
+
 ## Additional Constraints
 
 - IDEA Engineering is internal-first. DOC-01 through DOC-08 MUST express company stakeholders,
@@ -275,4 +294,19 @@ published, amended, withdrawn, superseded, contractually required, or made appli
 change in system boundary or deployment. A new edition MUST enter through controlled impact and
 tailoring review; it MUST NOT silently replace the approved baseline.
 
-**Version**: 3.4.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-09-17
+### Amendment 3.5.0 — 2026-10-03
+
+Product Owner approval is the explicit Product/Project Decision Authority governance task in the
+project conversation on 2026-10-03. The change adds principle VI to make implementation continuity,
+bounded delegation and asymmetric takeover durable; principles I–V and existing gates are unchanged.
+This is a MINOR addition, not an incompatible authority redefinition or wording-only PATCH.
+
+Impact is limited to worker governance and agent instructions. Product requirements, architecture,
+data, interfaces, UI behavior, tests, roadmap, operations, releases and accepted execution evidence
+are unchanged. Compatibility is additive: apply the role mapping to authorized work without
+reopening baselines, migrating data or restarting cards/timers. Historical task allocations remain
+historical; future allocations use the current policy. The associated governance PR retains the
+Sync Impact Report and instruction-review result. No deferred placeholders or data/runtime migration
+are required.
+
+**Version**: 3.5.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-10-03
