@@ -1272,3 +1272,17 @@ uncertain-commit reconciliation, HA/recovery, production/commercial/T036 clearan
 Desktop/Workspace completion or F05/whole-PH1 completion. Delivery Card timer/actual-effort
 publication remains governed separately by the Progress Tracker workflow; no timer action
 or actual-hour estimate is inferred from this closure publication.
+
+## 39. F05 preparation reference correction — 2026-10-03
+
+The phrase "already frozen F05 Preparation Package" in historical §38 was not supported by an
+identifiable version/hash-bound package at that publication. It is preserved above for attribution,
+not treated as evidence of an earlier freeze. The actual first canonical preparation publication is
+[IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
+frozen on **2026-10-03** under the later explicit Project Reviewer instruction. Its
+[successor freeze record](../../../docs/research/2026-10-03-f05-preparation-freeze-record.md) binds
+source `878f975f1a20bd8226fcfe760541fed0842ac538` and SHA-256
+`4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e`.
+This correction changes no F04 acceptance, historical checkpoint, execution/log/receipt hash,
+test result, retained database or verifier disposition. F05 preparation is not T027 qualification,
+Gateway implementation or timer authority; those remain NOT-RUN / NOT-STARTED.

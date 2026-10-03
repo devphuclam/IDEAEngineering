@@ -102,10 +102,13 @@ preceded execution. Sections 35–37 and the [fresh-public receipt index](eviden
 record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from `088ee3f...`.
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
-PR #32 ready/merge-commit integration and Issue #31 completed closure are separately authorized.
-Consult those provider records for the actual integration SHA and final state. After both are
-confirmed, the next eligible unit is F05-A / T027 using the already frozen F05 Preparation Package;
-do not start it as part of this closure or extend F04 tooling authority to F05.
+PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
+The next eligible unit is F05-A / T027, still NOT-STARTED / qualification NOT-RUN. Use
+[IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
+first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
+Content SHA-256: `4973d522c6cd7e8f6d76205556f88691e3c7d105c8d0c6b4a99590454ec7105e`.
+Worker mode CODEX_ONLY. Preparation/path approval does not start T027 or the timer, authorize
+Gateway code, or extend F04 tooling authority to F05.
 Do not create/reuse another target, rerun the retained public database, DROP the review database
 or deploy the package for closure. Preserve private raw-log access limitation. Verifier remains
 NOT-RUN and is not an F04 acceptance blocker.
