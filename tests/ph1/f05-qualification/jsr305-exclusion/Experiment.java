@@ -141,14 +141,23 @@ class Experiment {
         require(settings.getDocumentElement().getChildNodes().getLength() == 0, "settings not empty");
         var toolchains = parser.parse(MAVEN.resolve("conf/toolchains.xml").toFile());
         require(toolchains.getElementsByTagNameNS("*", "toolchain").getLength() == 0, "active global toolchain");
+        require(!Files.exists(Path.of(System.getProperty("user.home"), ".m2", "toolchains.xml"),
+            LinkOption.NOFOLLOW_LINKS), "unexpected user toolchains input");
         try (var files = Files.walk(MAVEN.resolve("lib/ext"))) {
             require(files.noneMatch(p -> p.toString().endsWith(".jar")), "unexpected Maven core extension");
         }
     }
 
     static void checkToolsAndCore() throws Exception {
-        for (var row : rows(PACKAGE.resolve("toolchain.tsv")))
-            remember(Path.of(row.get("path")), row.get("sha256"));
+        for (var row : rows(PACKAGE.resolve("toolchain.tsv"))) {
+            Path path = Path.of(row.get("path"));
+            if (Set.of("/usr/bin/sha256sum", "/usr/bin/dirname", "/usr/bin/uname", "/usr/bin/env").contains(path.toString())) {
+                Path resolved = Path.of("/usr/lib/cargo/bin/coreutils/" + path.getFileName());
+                require(path.toRealPath().equals(resolved), "host utility alias drift");
+                remember(resolved, row.get("sha256"));
+                ORIGINALS.put(path, row.get("sha256"));
+            } else remember(path, row.get("sha256"));
+        }
         var core = rows(ROOT.resolve(INV + "f05a-q02-maven-distribution.tsv"));
         require(core.size() == 52, "core inventory count drift");
         Set<Path> expected = new HashSet<>();
@@ -185,7 +194,7 @@ class Experiment {
     static void copyCached(Path original, String expected) throws Exception {
         require(original.startsWith(CACHE), "cache path escape");
         Path target = REPO.resolve(CACHE.relativize(original));
-        require(!target.toString().contains("jsr305"), "JSR305 copy attempted");
+        require(!CACHE.relativize(original).toString().contains("jsr305"), "JSR305 copy attempted");
         copy(original, target);
         require(sha(target).equals(expected), "copy checksum mismatch");
     }
@@ -197,7 +206,7 @@ class Experiment {
         try (var files = Files.walk(REPO)) {
             for (Path p : files.toList()) {
                 require(!Files.isSymbolicLink(p), "repository symlink");
-                require(!p.toString().contains("jsr305"), "JSR305 repository path or failed-resolution attempt");
+                require(!REPO.relativize(p).toString().contains("jsr305"), "JSR305 repository path or failed-resolution attempt");
                 if (Files.isRegularFile(p)) {
                     // Resolver-generated origin bookkeeping is not a new artifact or executable input.
                     if (p.getFileName().toString().equals("_remote.repositories")) continue;
@@ -375,9 +384,12 @@ class Experiment {
         env.put("MAVEN_SKIP_RC", "true");
         Process process = builder.start();
         if (!process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS)) {
-            process.descendants().forEach(ProcessHandle::destroy);
+            List<ProcessHandle> children = process.descendants().toList();
+            children.forEach(ProcessHandle::destroy);
             process.destroy();
-            if (!process.waitFor(3, TimeUnit.SECONDS)) process.destroyForcibly();
+            process.waitFor(3, TimeUnit.SECONDS);
+            children.stream().filter(ProcessHandle::isAlive).forEach(ProcessHandle::destroyForcibly);
+            if (process.isAlive()) process.destroyForcibly();
             throw new IllegalStateException("owned process timeout; no successor execution");
         }
         Files.setPosixFilePermissions(log, PosixFilePermissions.fromString("rw-------"));
@@ -424,4 +436,3 @@ class Experiment {
         if (!ok) throw new IllegalStateException(message);
     }
 }
-

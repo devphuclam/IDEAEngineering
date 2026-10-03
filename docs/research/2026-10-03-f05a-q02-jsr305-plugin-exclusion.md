@@ -10,7 +10,7 @@
 | Applicability / evidence date | Exact Boot Maven plugin `4.1.1`, Maven `3.9.16`, Resolver `1.9.27`, Tomlj `1.0.0`; internal T027 `repackage` candidate; accessed 2026-10-03 |
 | Effective date | `NOT-APPLICABLE`; proposal not adopted by this record |
 | Classification / retention | `INTERNAL`; retain with exact graph, source identities and successor qualification record |
-| Baseline / change record | [Issue #37](https://github.com/devphuclam/IDEAEngineering/issues/37), [PR #38](https://github.com/devphuclam/IDEAEngineering/pull/38); read-only project baseline `e6cd0039e5f6da2499f61cd3cf81a9c349694fa2`; local proposal only; PR head and current execution inventories remain unchanged |
+| Baseline / change record | [Issue #37](https://github.com/devphuclam/IDEAEngineering/issues/37), [PR #38](https://github.com/devphuclam/IDEAEngineering/pull/38); inspected baseline `e6cd0039e5f6da2499f61cd3cf81a9c349694fa2`; v0.2 publishes the retained proposal with a separately authorized standalone experiment; historical inventories unchanged |
 | Upstream trace | [Exact effective graph inventory](inventories/f05a-q02-effective-graphs.tsv), [rights record](2026-10-03-f05a-q02-upstream-rights.md), [intake procedure](../agents/external-source-intake.md) |
 | Downstream trace | Engineering graph-narrowing decision and separately authorized Q02 isolated-repository qualification; not future commercial clearance |
 | Supersedes / superseded by | `NOT-APPLICABLE / NOT-APPLICABLE`; JSR305 legal disposition is not revised |
@@ -18,7 +18,7 @@
 | Evidence / tailoring | Exact primary-source observations and separately attributed parent-worker cached-bytecode observations; source-supported inference, dynamic qualification `NOT-RUN`. [IE-STD-AUTH-001](../agents/product-document-authoring-standard.md) tailoring: ISO/IEC/IEEE 15289:2019 identity and ISO 10007:2017 trace `STANDARD-GUIDED`, no conformity claim |
 | Current disposition | `REFERENCE-ONLY`; proposed same-version exclusion is technically supported by inspected source; operational graph and goal success remain `NOT-RUN` |
 
-## Result and boundary
+## Research result and boundary — original v0.1 inspection
 
 Standard Maven plugin dependency configuration can express the proposed narrowing: declare the
 already present `org.springframework.boot:spring-boot-buildpack-platform:4.1.1` directly under
@@ -36,7 +36,9 @@ Official source text was read into memory; no remote artifact was retained or im
 
 The target is the standalone T027 qualification POM proposed in
 [Q02 intake §7](2026-10-03-f05a-t027-q02-intake.md#7-proposed-offline-command-package--not-run--blocked-legal),
-which has not been created or executed. **Do not modify `apps/server/pom.xml` or the persistent
+which had not been created or executed at the original v0.1 inspection. The current
+standalone package is now published separately; execution remains NOT-RUN at publication.
+**Do not modify `apps/server/pom.xml` or the persistent
 preview.** Its proposed Boot plugin was pinned to `4.1.1`, with `includeTools=false` and no
 plugin dependencies; this proposal replaces only the latter condition. The added declaration
 names an existing same-version graph component, not a new library or alternate implementation.

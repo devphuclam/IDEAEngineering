@@ -21,14 +21,19 @@ From the owned extraction root:
 
 Runner validates committed inputs and installed tooling before creating fresh
 `run/repository`, `run/application`, `run/empty-home`, `run/logs`, `run/legal`.
-A pre-existing run directory, symlink, hash drift, unknown artifact or missing cache
+A pre-existing run directory, repository/input symlink, hash drift, unknown artifact or missing cache
 input stops execution. No automatic retry, download or dynamic graph repair.
+The four installed rust-coreutils /usr/bin aliases are explicitly resolved to their
+known /usr/lib/cargo/bin/coreutils/<name> files and verified at identical pinned hashes;
+this does not permit symlinked cache inputs or isolated-repository links.
 
 ## Exact Maven command
 
 One invocation; four direct goals, no lifecycle. Empty controlled user/global settings.
 Process environment is rebuilt with only JAVA_HOME, owned HOME, PATH, LANG and
 MAVEN_SKIP_RC=true. No Maven RC, inherited options, extension or ancestral .mvn.
+Global toolchains must have no active entry; the Java user.home/.m2/toolchains.xml
+must be absent. Isolating process HOME alone is not treated as proof of this.
 
 ```text
 /home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn
