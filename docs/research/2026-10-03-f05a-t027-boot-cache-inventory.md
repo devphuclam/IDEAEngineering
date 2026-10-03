@@ -134,3 +134,9 @@ four plugin acquisition graphs, parent/BOM closure, Maven core evidence, per-coo
 and a proposed offline command package. The v0.2 successor resolves eight evidence-only gaps:
 eleven acquisition rows and five core rows remain BLOCKED-LEGAL;
 there is no Maven/Boot execution or whole-T027 PASS.
+
+Current later successor is intake v0.3 §9: a separate known-term T027 process exception
+is approved/frozen, without changing legal dispositions. Exact reference-only JSR305 source
+inspection is complete (four CC BY2.5 grants,27 files without an established applicable grant).
+JSR305 stays BLOCKED-LEGAL and outside the exception. Final executable-package review and
+Maven/Boot remain NOT-RUN; candidate observations above are historical, not current admission.

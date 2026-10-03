@@ -3,10 +3,10 @@
 | Control | Value |
 |---|---|
 | Stable ID / class | `IE-RES-F05A-Q02-LICENSE-REPAIR-20261003` / bounded intake repair and decision brief |
-| Version / status | `0.1 / Draft`; no exception approved by this record |
+| Version / status | `0.2 / Draft`; current authority is the separate frozen T027 process exception |
 | Product normativity / process instruction | `INFORMATIVE / NOT-APPLICABLE` |
 | Owner / author / mode | Engineering / Codex / `CODEX_ONLY`, bounded research assistance |
-| Review / acceptance authority | Project Reviewer for an explicit process deviation; Legal Review Authority for legal qualification; both decisions `NOT-RUN` |
+| Review / acceptance authority | Project Reviewer for an explicit process deviation; Legal Review Authority for legal qualification; process exception APPROVED in separate successor record; Legal qualification `NOT-RUN` |
 | Date / timezone | 2026-10-03 / Asia/Ho_Chi_Minh |
 | Applicable baseline | Issue #37 / PR #38, source `4ef16ffe1b1c3f5c0321ae9d3e8ee3754813936e`; unchanged Q02 candidate graph |
 | Intended use / classification | Existing unmodified artifacts, internal T027 qualification only / `INTERNAL` |
@@ -39,7 +39,7 @@ Core AOP Alliance and classified Guice identities are also repaired using exact 
 distribution mapping, manifest/POM and actual grants. No graph, version, artifact bytes or
 execution authority changed. This is Engineering rights intake, not legal/commercial approval.
 
-## 2. Known terms that still need an authority decision
+## 2. Known terms — retained Legal duties; process gate covered by successor
 
 | Group | Where used | Known obligations / precise reason for escalation |
 |---|---|---|
@@ -55,7 +55,7 @@ linked evidence records. These terms do not by themselves establish a fee or a b
 testing. The unresolved item is exact rights/obligations disposition under repository authority,
 not an asserted need to buy replacement licenses.
 
-## 3. Exact unresolved grant — JSR3053.0.2
+## 3. Historical v0.1 proposal — exact JSR305 inspection (now performed)
 
 The cached exact JAR/POM and Apache label are known. No actual grant tied to that3.0.2
 publication has yet been established; the old Google reference implementation's BSD text
@@ -69,7 +69,7 @@ isolated evidence location, with recorded URL/hash/contents and no install, exec
 request publisher clarification or Legal Review disposition. Do not use a blanket internal
 exception to invent rights. This instruction has not yet been given; no archive was acquired.
 
-## 4. Proposed route — not approved
+## 4. Historical v0.1 proposed route — superseded by §6
 
 1. The eight evidence-only repairs above are recorded; preserve previous BLOCKED observations.
 2. For the10 known-term acquisition rows and5 installed-core rows, seek the exact legal disposition. If the Project Reviewer chooses the
@@ -99,3 +99,35 @@ timer/Tracker mutation, Gateway implementation and merge remain NOT-RUN / unchan
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 2026-10-03 | Separate evidence repairs from custom/copyleft authority and outline the established bounded exception route without approving it |
+
+## 6. Current decision — exception frozen; JSR305 remains BLOCKED-LEGAL
+
+The human approved the known-term T027 process exception and exact reference-only JSR305
+investigation after this brief's v0.1 proposal. The [exception](2026-10-03-t027-process-exception.md)
+and [freeze receipt](2026-10-03-t027-process-exception-freeze.md) are separate successor records,
+not a rewrite of earlier authorization. Their scope is Issue37/PR38 internal T027 qualification,
+exact existing graph/bytes, offline. Known-term duties in §2 remain unchanged; no legal,
+company-license, commercial or redistribution approval is asserted. JSR305's unidentified
+grant scope is expressly excluded. All actual execution still awaits final package review.
+
+The [completed exact-source investigation](2026-10-03-f05a-q02-upstream-rights.md#authorized-exact-jsr305-publication-inspection--version-04)
+found four CC BY2.5 author grants among31 published Java sources and no established applicable
+grant for the remaining27. Exact source SHA-256:
+`1c9e85e272d0708c6a591dc74828c71603053b48cc75ae83cce56912a2aa063b`.
+Source/POM/checksum correspondence now ties the finding to3.0.2; no artifact/version change.
+The remaining question is full applicable grant coverage, not permission to fetch another archive.
+There is no conclusion that the27 are intrinsically unlicensed or need payment.
+
+**Recommended next instruction:** obtain an attributable publisher/rightsholder clarification
+or Legal determination covering the exact27 sources and the mixed-term3.0.2 binary while
+retaining the existing graph. If that cannot be obtained, authorize a separate graph-repair
+proposal/new intake instead; no replacement is chosen, installed or executed here.
+A second process waiver cannot create missing rights.
+
+Final runnable Q02 package is not ready because the human's JSR305 evidence-close condition
+is unmet. Maven/Boot and package qualification remain NOT-RUN. Q01 remains PASS; no timer,
+Tracker, DB, TLS, preview, Gateway implementation, verifier or merge action.
+
+| Version | Date | Change |
+|---|---|---|
+| 0.2 | 2026-10-03 | Preserve initial proposals as historical; reference approved/frozen exception and completed exact-source investigation; identify remaining27-file grant decision |

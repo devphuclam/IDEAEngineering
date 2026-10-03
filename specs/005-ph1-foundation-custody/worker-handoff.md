@@ -113,12 +113,23 @@ The user subsequently approved Q01 execution; package §7 records PASS at exact 
 `d01ad4a057a8a14c840320f0c664f6838d12a47e`. No blanket T027 execution approval follows.
 Before continuing Q02, read [the exact intake successor](../../docs/research/2026-10-03-f05a-t027-q02-intake.md).
 Q01 has Project Reviewer PASS. Static application/plugin/model/core graphs are reconciled;
-Eight initial rights-evidence gaps are resolved by the current intake v0.2. Eleven acquisition
-rows and five installed-core rows remain BLOCKED-LEGAL;89 acquisition/47 core rights dispositions
-do not authorize execution. Read [the decision brief](../../docs/research/2026-10-03-f05a-q02-license-repair-and-decision.md):
-known custom/copyleft terms need explicit F05 authority, and JSR3053.0.2 still needs attributable
-exact grant/source evidence. Do not self-waive, download or build to unblock either gate.
-Then obtain clearance for the proposed offline qualification package; graph/hash drift stops it.
+Eight initial rights-evidence gaps are resolved. Intake v0.3 retains eleven acquisition
+and five installed-core BLOCKED-LEGAL dispositions;89 acquisition/47 core ordinary rights
+dispositions are not execution authority.
+The [T027 process exception](../../docs/research/2026-10-03-t027-process-exception.md) is
+approved and [frozen](../../docs/research/2026-10-03-t027-process-exception-freeze.md):99 known-term
+acquisition/52 core inputs, unchanged exact versions/hashes/graph, offline internal T027 only,
+Issue37/PR38. It waives only the repository process gate; all actual terms and duties remain.
+No legal/company-license/commercial approval, extra rights, whole-F05 or other-work-item use.
+JSR305 is explicitly excluded. See [upstream v0.4](../../docs/research/2026-10-03-f05a-q02-upstream-rights.md#authorized-exact-jsr305-publication-inspection--version-04):
+official exact sources were inspected memory-only, with four CC BY2.5 grants and27 files
+without an established applicable grant. Full JSR305 rights remain BLOCKED-LEGAL.
+Next action: attributable publisher/rightsholder clarification or Legal determination covering
+those exact sources/mixed binary, or separately authorized graph repair/new intake.
+No automatic replacement, .m2 copy, installation or further rights waiver.
+The conditional final runnable Q02 package is NOT-READY; do not create qualification POM/source
+or present uncommitted hashes as a frozen execution package. After rights closure, pin/review
+the exact offline command/source/package oracle before execution. Drift reopens intake.
 Maven/Boot and remaining T027 remain NOT-RUN; no current graph inventory is runtime PASS.
 Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),

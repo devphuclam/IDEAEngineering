@@ -3,11 +3,11 @@
 | Control | Value |
 |---|---|
 | Stable ID / class | `IE-RES-F05A-Q02-UPSTREAM-RIGHTS-20261003` / external-source rights research record |
-| Version / status | `0.3 / Draft` |
+| Version / status | `0.4 / Draft` |
 | Product normativity / repository instruction | `INFORMATIVE / NOT-APPLICABLE`; no product requirement or execution authorization |
 | Owner / author / worker mode | Engineering / Codex / `CODEX_ONLY`, bounded research worker |
 | Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; review and acceptance `NOT-RUN`; Legal Review Authority owns unresolved legal terms and future commercial review |
-| Applicability / evidence date | F05-A / T027 Q02 internal unmodified Boot runtime candidates and the ten additional build-tool coordinates below; accessed 2026-10-03 |
+| Applicability / evidence date | F05-A / T027 Q02 internal unmodified Boot runtime/build-tool candidates; 0.4 adds authorized reference-only exact JSR305 3.0.2 published-source inspection; accessed 2026-10-03 |
 | Effective date | `NOT-APPLICABLE`; research is not an approved gate decision |
 | Classification / retention | `INTERNAL`; retain with T027 intake, source identities, downstream package evidence and successor decisions |
 | Baseline / change record | [Work Item #37](https://github.com/devphuclam/IDEAEngineering/issues/37), [PR #38](https://github.com/devphuclam/IDEAEngineering/pull/38); repository inspection baseline `33f22635f2e0282a761b40908f4a883042e28022`; new record |
@@ -132,6 +132,7 @@ source records and notice actions into the complete Q02 pre-use package.
 | 0.1 | 2026-10-03 | Exact SnakeYAML 2.6 and JSpecify 1.0.1 upstream rights, supplemental copyright evidence, raw license hashes, inspection limits and prospective internal-use obligations |
 | 0.2 | 2026-10-03 | Add ten exact build-tool candidate rights investigations, license-option selections, remote cached identities and unresolved JSR305 3.0.2 rights |
 | 0.3 | 2026-10-03 | Establish exact ASM9.7 and jdependency2.10 wrapper/shaded rights; retain precise unresolved JSR3053.0.2 publication-to-source linkage |
+| 0.4 | 2026-10-03 | Authorized memory-only exact JSR305 sources inspection: four CC BY 2.5 grants and 27 files without an established applicable grant; retain BLOCKED-LEGAL |
 
 ## Additional build-tool rights investigation — 2026-10-03
 
@@ -391,3 +392,135 @@ package completion, binary authentication, full shaded reproducibility, all-file
 reviewer/Legal acceptance and controlled admission remain `NOT-RUN`. No Maven/Boot/build/test,
 database/TLS/port/preview/verifier, install/download/archive materialization, remote host write, graph change,
 commit/push/merge or timer action was taken. Only this informative note was amended to 0.3.
+
+## Authorized exact JSR305 publication inspection — version 0.4
+
+### Authorization, policy and evidence handling
+
+This successor finding starts from the primary 0.3 record at repository commit
+`10151a51d1492c48c96f5df038d1f03031bebbc3`. Earlier 0.2/0.3 limits and findings remain
+historical observations, not current proof that the source artifact was never inspected.
+The human newly authorized `REFERENCE-ONLY` investigation of the exact official JSR305 3.0.2
+source/legal artifact, isolated from `.m2`, installation, execution and IDEA source imports.
+
+The applicable IDEA Engineering AGENTS.md, worker-role policy and external-source intake were
+checked before acquisition. Their reference-only boundary permits study with provenance but
+does not import material into IDEA or admit dependencies. No additional IDEA workstation rule
+prohibiting this specifically authorized in-memory source inspection was located in the inspected
+instructions. This finding applies only to the inspected IDEA instructions and the explicit
+human authorization; it does not waive corporate policy.
+
+The exact 18,102-byte source artifact was acquired using HTTPS into a memory buffer and opened
+with the already available .NET ZIP API. All 31 Java entries were inspected for legal language;
+their complete source text was read, including the four legal headers below. No archive, source
+entry or upstream legal HTML was written to disk, a repository, a Maven cache or the SSH host.
+Buffers were disposed after inspection. Only authored findings, source URLs and hashes are
+retained here; there is no installed or executable evidence package. This memory-only handling
+avoids implying approval to retain a third-party source archive in IDEA.
+
+### Exact publication-to-cache correspondence
+
+| Claim / source | Direct observation | Interpretation / limitation |
+|---|---|---|
+| Q02-R23 / exact publisher-published source classifier | [Maven Central exact jsr305-3.0.2-sources.jar](https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar): 18,102 bytes; HTTP Last-Modified `2017-03-31T04:55:51Z`; SHA-256 `1c9e85e272d0708c6a591dc74828c71603053b48cc75ae83cce56912a2aa063b`. Its calculated SHA-1 `b19b5927c2c25b6c70f093767041e641ae0b1b35` equals the [published source sidecar](https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar.sha1). | This is the sources classifier of the exact original coordinate/version, not a fork, predecessor or historical RI substitution. The source package is identified by URL and content hash; a Git release commit remains `UNKNOWN`. No detached-signature verification or publisher-key authentication was performed. |
+| Q02-R24 / matching publication POM and binary sidecar | The [official exact POM](https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.pom) has SHA-256 `19889dbdf1b254b2601a5ee645b8147a974644882297684c798afe5d63d78dfe`, equal to the unchanged cached POM. The [official binary SHA-1 sidecar](https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar.sha1) is `25ea2e8b0c338a877313bd4672d3fe056ea78f0d`, equal to a fresh read-only SSH hash of the cached JAR. Cached JAR SHA-256 remains `766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7`. | POM byte equality and official checksum correspondence link the selected cache candidate to this publication. SHA-1 sidecar equality is a consistency observation, not modern cryptographic authentication. No binary was fetched or rebuilt. |
+| Q02-R25 / package contents | Source ZIP contains 38 entries: six directory entries, a manifest and 31 Java source files, with no LICENSE/NOTICE/POM entry. Manifest Built-By `lan` and Build-Jdk `1.8.0_101` match the cached binary's metadata. Its 31 outer source class names correspond to the cached JAR's outer classes; the cached JAR additionally has four nested Checker classes for MatchesPattern, Nonnegative, Nonnull and RegEx. | Source classifier/package correspondence is affirmative exact-publication evidence, not compiled-byte equivalence. Reproducibility and source-to-bytecode verification remain `NOT-RUN`. Absence of archive-wide terms does not prove absence of legal rights. |
+
+This closes the narrower problem of not having inspected the exact published sources. It does
+**not** establish a single grant for all material in the publication. The Apache license label
+in its POM/manifest is still not a substitute for missing or differing actual terms.
+
+### Actual grants and uncovered files
+
+Q02-R26: four exact source entries under `javax/annotation/concurrent/` — `GuardedBy.java`,
+`Immutable.java`, `NotThreadSafe.java` and `ThreadSafe.java` — contain the same copyright/grant
+header. The header names Brian Goetz, copyright 2005, states
+“Released under the Creative Commons Attribution License”, links to
+`http://creativecommons.org/licenses/by/2.5`, and identifies `http://www.jcip.net` as its home.
+These four actual author-attributed grants are established for the exact source entries;
+their presence is not inferred from the POM, a modern jcip package or a historical snapshot.
+They are not missing rights merely because their terms differ from the POM's Apache label.
+
+The linked [official CC BY 2.5 Generic legal code](https://creativecommons.org/licenses/by/2.5/legalcode)
+was read in full. It permits reproduction, derivative works and distribution across media subject
+to its conditions. Distribution requires a license copy or URI, intact legal notices and appropriate
+author/copyright/title/source attribution. It prohibits sublicensing the Work and imposing terms
+or technological measures inconsistent with recipients' licensed rights. Relevant derivative
+credits and requested credit removal also apply. It contains warranty/liability exclusions and
+automatic termination for breach, with no explicit patent grant. No noncommercial, share-alike
+or corresponding-source requirement was identified. This summary is limited to those four
+granted files; it cannot clear the remaining sources or decide whether a particular internal
+packaging arrangement meets the conditions.
+
+Engineering's prospective action for those four files is to preserve Brian Goetz's attribution,
+the original notices and the exact license URI/text in any recipient-facing notices, and have Legal
+Review Authority resolve the mixed-term packaging/metadata discrepancy for the intended binary
+use. No later Apache alternative was assumed. No notice package was prepared or redistributed.
+
+Q02-R27: the other **27** published Java files contain no copyright/license/permission grant,
+and the exact source archive contains no umbrella LICENSE or NOTICE. This is an observation of
+their full contents and package listing. An applicable umbrella grant for these exact files was
+not established from the inspected original-publication sources. The following paths identify
+the uncovered source set; nested compiled Checkers belong to their enclosing source file.
+
+| Source directory | Files with no established applicable grant in this inspection |
+|---|---|
+| `javax/annotation/` — 20 files | CheckForNull.java; CheckForSigned.java; CheckReturnValue.java; Detainted.java; MatchesPattern.java; Nonnegative.java; Nonnull.java; Nullable.java; OverridingMethodsMustInvokeSuper.java; ParametersAreNonnullByDefault.java; ParametersAreNullableByDefault.java; PropertyKey.java; RegEx.java; Signed.java; Syntax.java; Tainted.java; Untainted.java; WillClose.java; WillCloseWhenClosed.java; WillNotClose.java |
+| `javax/annotation/meta/` — 7 files | Exclusive.java; Exhaustive.java; TypeQualifier.java; TypeQualifierDefault.java; TypeQualifierNickname.java; TypeQualifierValidator.java; When.java |
+
+No rights are inferred for these 27 from silence, the POM's Apache designation, the four
+CC-licensed neighboring files, an unrelated version, a foreign fork or historical RI BSD terms.
+The investigation remains bounded to the exact original publication and the license it actually
+references. It does not conclude that those 27 files are necessarily unlicensed or copyleft.
+
+### Source and legal representation hashes
+
+The source artifact hash above pins every entry; these additional raw-file identities make the
+actual grant scope reproducible. No implementation excerpt is imported into IDEA.
+
+| Exact source entry / evidence representation | SHA-256 |
+|---|---|
+| javax/annotation/concurrent/GuardedBy.java — actual CC grant | `394a92efceb1e774e5fcb3a2636fef41eee51042d26673bb6350fe46ae0f6a17` |
+| javax/annotation/concurrent/Immutable.java — actual CC grant | `6f95c78b0412c79b82eb34a44a5f2667d6e10bfe6af2471f3d9202a5e6633724` |
+| javax/annotation/concurrent/NotThreadSafe.java — actual CC grant | `4f87edf90c26f47873aa8199310b18d9b4786304119cfe795a9ada526888c519` |
+| javax/annotation/concurrent/ThreadSafe.java — actual CC grant | `58c3192ce6f8ec7b54d20af2781f56ab54a5b8a12ff87e179e4f1b9ed419eaeb` |
+| javax/annotation/Nonnull.java — representative uncovered grant | `f70f7145344cd816e4736ce1ee67b82243028644625bc706d44e31b9528c9bd7` |
+| javax/annotation/meta/TypeQualifier.java — representative uncovered grant | `6dcbd3db773d5a4e3de5633c5241caa94406241b8c0e99ddec6406087a33a533` |
+| Source JAR META-INF/MANIFEST.MF | `d754cd58bbf0ef474fd9a907d8be8e15d73ef7820997378deb3b481448faa96a` |
+| Published sources.jar.sha1 response bytes | `7bcf8ba860597f2b38aa79d44136468a79cc4afb0b8bc9d719d8286eb952add7` |
+| Published binary .jar.sha1 response bytes | `fba834958ba24dbbad24607b84a2236e7c26d4f5b6da1ed6a78ee741df5aad7b` |
+| CC BY 2.5 official legalcode HTML response, 35,033 bytes; not an extracted legal-text digest | `6f53ec1584dd401724c1cae0fc1139249508ce24cf0891cc70fd6468f4d4b689` |
+
+### Current recommendation and exact next instruction
+
+Recommendation for `com.google.code.findbugs:jsr305:3.0.2` remains `BLOCKED-LEGAL`, with the
+reason narrowed from unavailable exact sources to **27 files lacking an established applicable
+grant, plus an actual four-file CC BY 2.5 supplement differing from Apache-only package metadata**.
+The four-file grant itself is known; unknown package-wide rights must not be waived as an ordinary
+known-term notice obligation. No dependency admission, company exception, recipient package or
+runnable final Q02 package is created by this research note.
+
+Engineering can submit this exact artifact identity and 27-file list to Legal Review Authority
+to obtain an attributable applicable rights determination/grant for the uncovered material and
+mixed-term binary packaging. A publisher/rightsholder clarification must cover this exact 3.0.2
+publication or explicitly identify the covered sources, not merely repeat its metadata label.
+Alternatively, the human can separately authorize graph/version replacement and fresh intake;
+this task neither chooses nor performs that change. Further source downloading alone is no longer
+the precise next request: the authorized exact source inspection is complete and exposed the
+actual remaining grant scope question.
+
+| Verification item | Result / boundary |
+|---|---|
+| Exact source artifact acquisition, full ZIP listing and Java-source legal inspection | `PASS` for reference-only inspection; 31 sources, four actual CC grants and 27 uncovered sources identified |
+| Exact publication/cache consistency | `PASS` for POM SHA-256 equality and published binary/source SHA-1 correspondence only; no publisher-key authentication claim |
+| Full applicable rights for all JSR305 3.0.2 binary material | `BLOCKED`; attributable applicable grant for the 27-file set remains missing; Legal Review owns qualification |
+| Notice packaging, dependency admission, company/Legal acceptance | `NOT-RUN`; no grant or approval is manufactured by the worker |
+| Signature/source-to-bytecode/reproducibility checks | `NOT-RUN`; excluded from this reference-only inspection |
+| Artifact retention into IDEA, `.m2` or SSH host; install/execute/build/graph changes | `NOT-RUN`; HTTPS bytes and ZIP entries were handled only in process memory |
+
+Research-worker inspection boundary before continuity-owner integration: only the isolated
+informative note was amended to0.4. That inspection performed no Maven/Boot/build/test,
+database/TLS/port, Gateway/preview/verifier, code/version change, commit/push/merge, Work Item
+write or timer action. The continuity owner subsequently integrates/publishes authored findings
+and the separately approved process record; publication is not rights or execution approval.
+Predecessor facts remain retained; this research finding changes no authority decision.
