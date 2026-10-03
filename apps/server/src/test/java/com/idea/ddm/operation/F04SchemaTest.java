@@ -71,10 +71,16 @@ public class F04SchemaTest {
                 assertEquals(env("IDEA_F04_TEST_DATABASE_NAME"), row.getString(2));
             }
             // No IF NOT EXISTS: an existing schema must never be adopted by a new run.
+            // Creation and its ownership marker have one transaction fate.
+            connection.setAutoCommit(false);
             statement.execute("CREATE SCHEMA " + schema + " AUTHORIZATION idea_ddm_migrator");
             statement.execute("COMMENT ON SCHEMA " + schema + " IS 'IDEA_F04_RUN:"
                     + env("IDEA_F04_SOURCE_SHA") + ":" + schema + "'");
+            connection.commit();
         }
+        // Register ownership before migration/grants can fail. The runner retains an
+        // explicit BLOCKED disposition rather than silently missing a leftover fixture.
+        System.out.println("F04_SCHEMA_CREATED=" + schema + "; SOURCE=" + env("IDEA_F04_SOURCE_SHA"));
         var result = Flyway.configure().dataSource(url(), "idea_ddm_migrator",
                         env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).createSchemas(false)

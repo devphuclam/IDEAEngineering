@@ -143,7 +143,7 @@ while read -r regression_schema; do
   remaining="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT count(*) FROM pg_namespace WHERE nspname='$regression_schema'")"
   [ "$remaining" = 0 ] || { printf 'BLOCKED: retained regression schema %s; no automatic cleanup\n' "$regression_schema" >&2; exit 2; }
   printf 'F04_REGRESSION_SCHEMA_ABSENT=CONFIRMED; SCHEMA=%s\n' "$regression_schema"
-done < <(sed -nE 's/^F04_SCHEMA_READY=(f04_[0-9a-f]{32});.*/\1/p' "$log_file" | sort -u)
+done < <(sed -nE 's/^F04_SCHEMA_(CREATED|READY)=(f04_[0-9a-f]{32});.*/\2/p' "$log_file" | sort -u)
 while read -r child_pid; do
   if kill -0 "$child_pid" 2>/dev/null; then
     printf 'BLOCKED: restart child PID %s remains live; no cleanup permitted\n' "$child_pid" >&2
