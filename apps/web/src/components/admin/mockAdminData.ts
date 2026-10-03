@@ -52,7 +52,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
     username: "engineer.dev",
-    fullName: "Nguyễn Văn An (Kỹ sư trưởng)",
+    fullName: "Nguyễn Văn An",
     email: "an.nguyen@ideagroupvn.com",
     department: "Phòng Thiết kế Cơ khí JIG & Máy",
     status: "active",
@@ -61,7 +61,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "34ba128a-7e11-4f90-bc42-998811223344",
     username: "linh.nguyen",
-    fullName: "Nguyễn Thị Linh (Kỹ sư CAD)",
+    fullName: "Nguyễn Thị Linh",
     email: "linh.nguyen@ideagroupvn.com",
     department: "Phòng Thiết kế Cơ khí JIG & Máy",
     status: "active",
@@ -70,7 +70,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "77cd4511-9a23-4e89-af12-ccddeeff0011",
     username: "nam.hoang",
-    fullName: "Hoàng Nam (Kỹ sư Tự động hóa)",
+    fullName: "Hoàng Nam",
     email: "nam.hoang@ideagroupvn.com",
     department: "Phòng Điện - Tự động hóa",
     status: "suspended",
@@ -79,7 +79,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "872c524d-2ce6-4715-931a-c15785876baf",
     username: "tri.minh",
-    fullName: "Trần Minh Trí (Quản trị viên hệ thống)",
+    fullName: "Trần Minh Trí",
     email: "tri.minh@ideagroupvn.com",
     department: "Ban Công nghệ & IT",
     status: "active",
@@ -88,7 +88,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "a1b2c3d4-0001-4444-8888-111122223333",
     username: "quan.do",
-    fullName: "Đỗ Minh Quân (Kỹ sư Robot 6 trục)",
+    fullName: "Đỗ Minh Quân",
     email: "quan.do@ideagroupvn.com",
     department: "Phòng Điện - Tự động hóa",
     status: "active",
@@ -97,7 +97,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "a1b2c3d4-0002-4444-8888-111122223333",
     username: "binh.le",
-    fullName: "Lê Thanh Bình (Kỹ sư Cảm biến & PLC)",
+    fullName: "Lê Thanh Bình",
     email: "binh.le@ideagroupvn.com",
     department: "Phòng Điện - Tự động hóa",
     status: "active",
@@ -106,7 +106,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "b2c3d4e5-0003-4444-8888-111122223333",
     username: "tuan.pham",
-    fullName: "Phạm Quốc Tuấn (Kỹ sư kết cấu)",
+    fullName: "Phạm Quốc Tuấn",
     email: "tuan.pham@ideagroupvn.com",
     department: "Phòng Thiết kế Cơ khí JIG & Máy",
     status: "active",
@@ -115,7 +115,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "c3d4e5f6-0004-4444-8888-111122223333",
     username: "khoa.tran",
-    fullName: "Trần Bách Khoa (Chuyên viên Thẩm duyệt)",
+    fullName: "Trần Bách Khoa",
     email: "khoa.tran@ideagroupvn.com",
     department: "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
     status: "active",
@@ -124,7 +124,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "d4e5f6a7-0005-4444-8888-111122223333",
     username: "thao.dang",
-    fullName: "Đặng Thu Thảo (Kỹ sư QA/QC)",
+    fullName: "Đặng Thu Thảo",
     email: "thao.dang@ideagroupvn.com",
     department: "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
     status: "active",
@@ -133,7 +133,7 @@ export const INITIAL_ACTORS: AdminActor[] = [
   {
     id: "e5f6a7b8-0006-4444-8888-111122223333",
     username: "hoang.bui",
-    fullName: "Bùi Huy Hoàng (Điều phối viên dự án)",
+    fullName: "Bùi Huy Hoàng",
     email: "hoang.bui@ideagroupvn.com",
     department: "Ban Quản lý Dự án (PMO)",
     status: "active",
@@ -148,7 +148,7 @@ export const INITIAL_PROJECTS: AdminProject[] = [
     name: "Máy đóng gói tự động tốc độ cao",
     lead: "Nguyễn Văn An",
     memberCount: 8,
-    vault: "Kho chính (icVault-Primary)",
+    vault: "icVault-Primary",
     status: "active",
   },
   {
@@ -157,7 +157,7 @@ export const INITIAL_PROJECTS: AdminProject[] = [
     name: "Đồ gá hàn robot 6 trục cho khung xe điện",
     lead: "Trần Minh Trí",
     memberCount: 5,
-    vault: "Kho chính (icVault-Primary)",
+    vault: "icVault-Primary",
     status: "active",
   },
   {
@@ -166,7 +166,7 @@ export const INITIAL_PROJECTS: AdminProject[] = [
     name: "Cụm cấp phôi rung tự động linh kiện chính xác",
     lead: "Nguyễn Thị Linh",
     memberCount: 4,
-    vault: "Kho chính (icVault-Primary)",
+    vault: "icVault-Primary",
     status: "active",
   },
 ];
@@ -174,7 +174,7 @@ export const INITIAL_PROJECTS: AdminProject[] = [
 export const INITIAL_ROLES: AdminRole[] = [
   {
     id: "role_design_engineer",
-    name: "Design Engineer (Kỹ sư thiết kế)",
+    name: "Design Engineer",
     description: "Toàn quyền tạo mô hình, khóa Checkout, Check-in bản vẽ CAD và chỉnh sửa danh mục BOM dự án.",
     permissions: [
       { action: "cad.view", description: "Xem mô hình CAD 3D và bản vẽ 2D" },
@@ -185,7 +185,7 @@ export const INITIAL_ROLES: AdminRole[] = [
   },
   {
     id: "role_reviewer",
-    name: "Reviewer / Approver (Người thẩm duyệt)",
+    name: "Reviewer / Approver",
     description: "Thẩm duyệt thiết kế, kiểm tra va chạm mô hình lắp ráp, phê duyệt hoặc từ chối phát hành Release.",
     permissions: [
       { action: "cad.view", description: "Xem mô hình CAD và tài liệu kỹ thuật" },
@@ -195,7 +195,7 @@ export const INITIAL_ROLES: AdminRole[] = [
   },
   {
     id: "role_project_admin",
-    name: "Project Administrator (Quản trị viên dự án)",
+    name: "Project Administrator",
     description: "Quản lý nhân sự, phân nhóm kỹ sư và phân công vai trò trong phạm vi dự án máy được ủy quyền.",
     permissions: [
       { action: "project.members", description: "Thêm hoặc bớt thành viên trong dự án" },
@@ -204,7 +204,7 @@ export const INITIAL_ROLES: AdminRole[] = [
   },
   {
     id: "role_account_admin",
-    name: "Account Administrator (Quản trị viên tài khoản)",
+    name: "Account Administrator",
     description: "Cấp tài khoản định danh Actor, quản lý trạng thái kích hoạt hoặc tạm dừng truy cập.",
     permissions: [
       { action: "account.create", description: "Tạo tài khoản kỹ sư mới" },

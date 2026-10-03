@@ -123,9 +123,9 @@ export function RbacView({
       <div className="admin-main-head">
         <div>
           <div className="admin-crumbs">Quản trị hệ thống &gt; Phân quyền vai trò RBAC</div>
-          <h1 className="admin-main-title">Phân Quyền Vai Trò RBAC (Microsoft Azure Parity)</h1>
+          <h1 className="admin-main-title">Phân Quyền Vai Trò RBAC</h1>
           <p className="admin-main-desc">
-            Kiểm soát quyền truy cập theo vai trò kỹ thuật, nhóm phòng ban (Group RBAC) và kiểm tra quyền thực tế.
+            Kiểm soát quyền truy cập theo vai trò kỹ thuật, nhóm phòng ban và kiểm tra quyền thực tế.
           </p>
         </div>
 
@@ -168,7 +168,7 @@ export function RbacView({
             <line x1="18" y1="8" x2="23" y2="8" />
             <line x1="23" y1="11" x2="17" y2="11" />
           </svg>
-          <span>Bảng gán vai trò (Role assignments)</span>
+          <span>Bảng gán vai trò</span>
         </button>
 
         <button
@@ -181,7 +181,7 @@ export function RbacView({
           <svg style={{ width: 15, height: 15 }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
-          <span>Danh mục vai trò (Roles)</span>
+          <span>Danh mục vai trò</span>
         </button>
 
         <button
@@ -194,7 +194,7 @@ export function RbacView({
           <svg style={{ width: 15, height: 15 }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
-          <span>Kiểm tra quyền thực tế (Check access)</span>
+          <span>Kiểm tra quyền thực tế</span>
         </button>
       </div>
 
@@ -215,24 +215,24 @@ export function RbacView({
               onChange={(e) => setTypeFilter(e.target.value as "all" | "group" | "user")}
               aria-label="Lọc theo loại đối tượng"
             >
-              <option value="all">Tất cả đối tượng (Nhóm &amp; Kỹ sư)</option>
-              <option value="group">👥 Nhóm kỹ thuật (Group)</option>
-              <option value="user">👤 Kỹ sư cá nhân (User)</option>
+              <option value="all">Tất cả đối tượng</option>
+              <option value="group">👥 Nhóm kỹ thuật</option>
+              <option value="user">👤 Kỹ sư cá nhân</option>
             </select>
 
             <select
               className="admin-select"
               value={scopeFilter}
               onChange={(e) => setScopeFilter(e.target.value)}
-              aria-label="Lọc theo phạm vi Scope"
+              aria-label="Lọc theo phạm vi"
             >
-              <option value="all">Tất cả phạm vi Scope ({assignments.length})</option>
+              <option value="all">Tất cả phạm vi ({assignments.length})</option>
               {projects.map((p) => (
                 <option key={p.id} value={`Dự án ${p.code}`}>
                   Dự án {p.code} ({p.name})
                 </option>
               ))}
-              <option value="Toàn hệ thống">Toàn hệ thống (Global)</option>
+              <option value="Toàn hệ thống">Toàn hệ thống</option>
             </select>
           </div>
 
@@ -240,9 +240,9 @@ export function RbacView({
             <table className="admin-data-table" aria-label="Bảng phân quyền vai trò">
               <thead>
                 <tr>
-                  <th>Đối tượng thụ hưởng (Principal)</th>
-                  <th>Vai trò (Role)</th>
-                  <th>Phạm vi (Scope)</th>
+                  <th>Đối tượng</th>
+                  <th>Vai trò</th>
+                  <th>Phạm vi</th>
                   <th style={{ width: 120 }}>Cơ chế gán</th>
                   <th style={{ width: 110 }}>Ngày gán</th>
                 </tr>
@@ -339,7 +339,7 @@ export function RbacView({
             }}
           >
             <h3 style={{ margin: "0 0 8px", color: "var(--admin-navy)" }}>
-              Kiểm tra quyền thực tế (Effective Access Checker — Microsoft Azure Parity)
+              Kiểm tra quyền thực tế
             </h3>
             <p style={{ margin: "0 0 16px", color: "#64748b", fontSize: "12.5px" }}>
               Tính toán tổng hợp quyền hạn có hiệu lực cho một kỹ sư trên một dự án máy, bao gồm cả quyền <strong>gán trực tiếp</strong> và quyền <strong>tự động kế thừa từ Nhóm phòng ban</strong>.
@@ -369,7 +369,7 @@ export function RbacView({
 
               <div>
                 <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", marginBottom: 4 }}>
-                  Chọn Phạm vi dự án (Scope):
+                  Chọn Phạm vi dự án:
                 </label>
                 <select
                   className="admin-select"
@@ -382,7 +382,7 @@ export function RbacView({
                       Dự án {p.code} ({p.name})
                     </option>
                   ))}
-                  <option value="Toàn hệ thống">Toàn hệ thống (Global Scope)</option>
+                  <option value="Toàn hệ thống">Toàn hệ thống</option>
                 </select>
               </div>
             </div>

@@ -145,7 +145,7 @@ export function AdminApp({
         <button type="button" className="admin-menu-item">Bảo mật &amp; IAM</button>
         <button type="button" className="admin-menu-item">Trợ giúp</button>
         <div className="admin-menu-spacer" />
-        <span className="admin-surface-badge">Phân hệ DDM Quản trị &bull; Microsoft Azure Parity</span>
+        <span className="admin-surface-badge">Phân hệ DDM Quản trị</span>
       </nav>
 
       {/* Row 3: Workspace 3 Columns */}

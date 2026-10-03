@@ -21,11 +21,11 @@ describe("AddRoleAssignmentDrawer component", () => {
       })
     );
 
-    expect(html).toContain("Phân công nhân sự dự án (Project Role Assignment)");
-    expect(html).toContain("1. Dự án (Project)");
-    expect(html).toContain("2. Kỹ sư (Engineer)");
-    expect(html).toContain("3. Vai trò (Role)");
-    expect(html).toContain("4. Xác nhận (Review)");
+    expect(html).toContain("Phân công nhân sự dự án");
+    expect(html).toContain("1. Dự án");
+    expect(html).toContain("2. Kỹ sư");
+    expect(html).toContain("3. Vai trò");
+    expect(html).toContain("4. Xác nhận");
     expect(html).toContain("Dự án P-100");
   });
 

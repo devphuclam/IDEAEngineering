@@ -110,7 +110,7 @@ export function AddRoleAssignmentDrawer({
       <div className="admin-drawer-panel">
         <div className="admin-drawer-head">
           <div>
-            <h2 className="admin-drawer-title">Phân công nhân sự dự án (Project Role Assignment)</h2>
+            <h2 className="admin-drawer-title">Phân công nhân sự dự án</h2>
             <small style={{ color: "#64748b" }}>
               Quy trình chuẩn kỹ thuật: Dự án &rarr; Kỹ sư &rarr; Vai trò &rarr; Xác nhận
             </small>
@@ -128,10 +128,10 @@ export function AddRoleAssignmentDrawer({
 
         {/* Wizard Steps indicator */}
         <div className="admin-drawer-steps">
-          <span className={`admin-step-pill ${step === 1 ? "active" : ""}`}>1. Dự án (Project)</span>
-          <span className={`admin-step-pill ${step === 2 ? "active" : ""}`}>2. Kỹ sư (Engineer)</span>
-          <span className={`admin-step-pill ${step === 3 ? "active" : ""}`}>3. Vai trò (Role)</span>
-          <span className={`admin-step-pill ${step === 4 ? "active" : ""}`}>4. Xác nhận (Review)</span>
+          <span className={`admin-step-pill ${step === 1 ? "active" : ""}`}>1. Dự án</span>
+          <span className={`admin-step-pill ${step === 2 ? "active" : ""}`}>2. Kỹ sư</span>
+          <span className={`admin-step-pill ${step === 3 ? "active" : ""}`}>3. Vai trò</span>
+          <span className={`admin-step-pill ${step === 4 ? "active" : ""}`}>4. Xác nhận</span>
         </div>
 
         <div className="admin-drawer-body">
@@ -139,7 +139,7 @@ export function AddRoleAssignmentDrawer({
           {step === 1 && (
             <div>
               <h3 style={{ margin: "0 0 6px", fontSize: "14px", color: "var(--admin-navy)" }}>
-                Bước 1: Chọn Dự án máy cần phân công ("Where / Project?")
+                Bước 1: Chọn dự án máy cần phân công
               </h3>
               <p style={{ margin: "0 0 16px", color: "#64748b", fontSize: "12px" }}>
                 Chỉ định dự án máy cơ khí mà bạn muốn thêm nhân sự và phân bổ thẩm quyền thao tác.
@@ -211,7 +211,7 @@ export function AddRoleAssignmentDrawer({
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ fontSize: "16px" }}>🌐</span>
                       <strong style={{ color: "var(--admin-navy)", fontSize: "13px" }}>
-                        Toàn hệ thống (Global Scope)
+                        Toàn hệ thống
                       </strong>
                     </div>
                     <span style={{ display: "block", color: "#64748b", fontSize: "11.5px", marginTop: 3 }}>
@@ -228,7 +228,7 @@ export function AddRoleAssignmentDrawer({
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
                 <h3 style={{ margin: 0, fontSize: "14px", color: "var(--admin-navy)" }}>
-                  Bước 2: Chọn Kỹ sư được phân công ("Who / Engineer?")
+                  Bước 2: Chọn kỹ sư được phân công
                 </h3>
                 <span style={{ fontSize: "11px", color: "var(--admin-blue)", fontWeight: 600 }}>
                   Áp dụng cho: {selectedScope}
@@ -298,7 +298,7 @@ export function AddRoleAssignmentDrawer({
 
                       {isSuspended ? (
                         <span className="admin-status-pill danger" title="Tài khoản bị tạm khóa, không thể phân quyền">
-                          🚫 Tạm khóa (Không thể cấp)
+                          🚫 Tạm khóa
                         </span>
                       ) : (
                         <span className="admin-status-pill active">
@@ -332,7 +332,7 @@ export function AddRoleAssignmentDrawer({
                 <form onSubmit={handleQuickCreateActor} className="admin-inline-create-box">
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                     <strong style={{ fontSize: "12.5px", color: "var(--admin-navy)" }}>
-                      Thêm kỹ sư mới vào dự án (Quick Onboard)
+                      Thêm kỹ sư mới vào dự án
                     </strong>
                     <button
                       type="button"
@@ -363,7 +363,7 @@ export function AddRoleAssignmentDrawer({
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                       <div>
                         <label style={{ display: "block", fontSize: "11px", fontWeight: 600, color: "#475569", marginBottom: 3 }}>
-                          Tên đăng nhập (username):
+                          Tên đăng nhập:
                         </label>
                         <input
                           type="text"
@@ -410,7 +410,7 @@ export function AddRoleAssignmentDrawer({
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
                 <h3 style={{ margin: 0, fontSize: "14px", color: "var(--admin-navy)" }}>
-                  Bước 3: Chọn Vai trò &amp; Quyền kỹ thuật ("What role?")
+                  Bước 3: Chọn vai trò &amp; Quyền kỹ thuật
                 </h3>
                 <span style={{ fontSize: "11px", color: "var(--admin-blue)", fontWeight: 600 }}>
                   Gán cho: {selectedActor.fullName}
@@ -484,17 +484,17 @@ export function AddRoleAssignmentDrawer({
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>
                 <h3 style={{ margin: "0 0 6px", fontSize: "14px", color: "var(--admin-navy)" }}>
-                  Bước 4: Xem xét &amp; Xác nhận phân quyền ("Review &amp; Confirm")
+                  Bước 4: Xem xét &amp; Xác nhận phân quyền
                 </h3>
                 <p style={{ margin: "0 0 10px", color: "#64748b", fontSize: "12px" }}>
                   Kiểm tra lại toàn bộ thông tin trước khi lưu phân quyền vào sổ kiểm toán bảo mật.
                 </p>
               </div>
 
-              {/* 1. DỰ ÁN (WHERE) */}
+              {/* 1. DỰ ÁN */}
               <div style={{ background: "#ffffff", border: "1px solid var(--admin-line)", borderRadius: 6, padding: 14 }}>
                 <span style={{ display: "block", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b", marginBottom: 8 }}>
-                  1. Dự án áp dụng (Where / Project)
+                  1. Dự án áp dụng
                 </span>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                   <span style={{ fontSize: "18px" }}>📁</span>
@@ -516,11 +516,11 @@ export function AddRoleAssignmentDrawer({
                 </div>
               </div>
 
-              {/* 2. KỸ SƯ ĐƯỢC GIAO VIỆC (WHO) */}
+              {/* 2. KỸ SƯ ĐƯỢC GIAO VIỆC */}
               <div style={{ background: "#ffffff", border: "1px solid var(--admin-line)", borderRadius: 6, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b" }}>
-                    2. Kỹ sư được phân công (Who / Engineer)
+                    2. Kỹ sư được phân công
                   </span>
                   <span className="admin-status-pill active">
                     ✓ Hoạt động
@@ -543,11 +543,11 @@ export function AddRoleAssignmentDrawer({
                 </div>
               </div>
 
-              {/* 3. VAI TRÒ & QUYỀN HẠN (WHAT) */}
+              {/* 3. VAI TRÒ & QUYỀN HẠN */}
               <div style={{ background: "#ffffff", border: "1px solid var(--admin-line)", borderRadius: 6, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b" }}>
-                    3. Vai trò &amp; Quyền kỹ thuật được cấp (What / Role)
+                    3. Vai trò &amp; Quyền kỹ thuật được cấp
                   </span>
                   <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--admin-blue)" }}>
                     {selectedRole.name}

@@ -23,9 +23,9 @@ describe("RbacView component", () => {
       })
     );
 
-    expect(html).toContain("Bảng gán vai trò (Role assignments)");
-    expect(html).toContain("Danh mục vai trò (Roles)");
-    expect(html).toContain("Kiểm tra quyền thực tế (Check access)");
+    expect(html).toContain("Bảng gán vai trò");
+    expect(html).toContain("Danh mục vai trò");
+    expect(html).toContain("Kiểm tra quyền thực tế");
     expect(html).toContain("Project Administrator");
     expect(html).toContain("Dự án P-100");
   });
@@ -74,7 +74,7 @@ describe("RbacView component", () => {
       })
     );
 
-    expect(html).toContain("Kiểm tra quyền thực tế (Check access)");
-    expect(html).toContain("Tất cả phạm vi Scope");
+    expect(html).toContain("Kiểm tra quyền thực tế");
+    expect(html).toContain("Tất cả phạm vi");
   });
 });

@@ -14,7 +14,7 @@ describe("AccountsView component", () => {
       })
     );
 
-    expect(html).toContain("Tài Khoản Kỹ Sư &amp; Định Danh (F04)");
+    expect(html).toContain("Tài Khoản Kỹ Sư &amp; Định Danh");
     expect(html).toContain("Nguyễn Văn An");
     expect(html).toContain("engineer.dev");
     expect(html).toContain("Đang hoạt động");

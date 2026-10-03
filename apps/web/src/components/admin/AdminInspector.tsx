@@ -171,7 +171,7 @@ export function AdminInspector({
       <aside className="admin-inspector" aria-label="Bảng chi tiết phân quyền">
         <div className="admin-inspector-head">
           <span className="admin-rail-eyebrow">
-            {isGroup ? "Phân quyền Nhóm bảo mật (Group RBAC)" : "Phân quyền Kỹ sư (User RBAC)"}
+            {isGroup ? "Phân quyền nhóm" : "Phân quyền kỹ sư"}
           </span>
           <div className="admin-inspector-title">{selectedAssignment.roleName}</div>
           <div className="admin-inspector-sub">
@@ -215,7 +215,7 @@ export function AdminInspector({
               </span>
             </div>
             <div className="admin-prop-row">
-              <span className="admin-prop-label">Phạm vi Scope:</span>
+              <span className="admin-prop-label">Phạm vi:</span>
               <span className="admin-prop-val">{selectedAssignment.scope}</span>
             </div>
             <div className="admin-prop-row">

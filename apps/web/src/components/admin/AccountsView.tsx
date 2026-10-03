@@ -36,7 +36,7 @@ export function AccountsView({
       <div className="admin-main-head">
         <div>
           <div className="admin-crumbs">Quản trị hệ thống &gt; Người dùng &amp; Truy cập</div>
-          <h1 className="admin-main-title">Tài Khoản Kỹ Sư &amp; Định Danh (F04)</h1>
+          <h1 className="admin-main-title">Tài Khoản Kỹ Sư &amp; Định Danh</h1>
           <p className="admin-main-desc">
             Quản lý tài khoản đăng nhập, trạng thái hoạt động và phân định danh tính kỹ sư cơ khí.
           </p>
@@ -91,7 +91,7 @@ export function AccountsView({
         <table className="admin-data-table" aria-label="Danh sách tài khoản kỹ sư">
           <thead>
             <tr>
-              <th style={{ width: 160 }}>Mã kỹ sư (Actor ID)</th>
+              <th style={{ width: 160 }}>Mã định danh kỹ sư</th>
               <th>Họ và tên</th>
               <th>Tài khoản</th>
               <th>Phòng ban</th>
