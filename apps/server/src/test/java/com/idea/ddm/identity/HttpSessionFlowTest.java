@@ -3,6 +3,7 @@ package com.idea.ddm.identity;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.IdeaServerApplication;
+import com.idea.ddm.operation.F04SchemaTest;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 import java.net.URI;
@@ -42,6 +43,9 @@ class HttpSessionFlowTest {
     void startServerWithOnlyThisTestsMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
+        if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            schema = F04SchemaTest.createRegressionSchema();
+        } else {
         schema = "f03b_" + UUID.randomUUID().toString().replace("-", "");
         Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"),
                 env("IDEA_DATABASE_MIGRATION_PASSWORD"))
@@ -49,6 +53,7 @@ class HttpSessionFlowTest {
                 .cleanDisabled(true).load().migrate();
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
+        }
         }
         startHttpServer(true);
     }
@@ -77,6 +82,10 @@ class HttpSessionFlowTest {
     @AfterEach
     void closeServerAndRemoveOnlyOwnedUuidSchema() throws Exception {
         if (server != null) server.close();
+        if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            F04SchemaTest.removeRegressionSchema(schema);
+            return;
+        }
         if (schema != null && schema.matches("f03b_[a-f0-9]{32}")) {
             try (var connection = migrator(); var statement = connection.createStatement()) {
                 statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");

@@ -3,6 +3,7 @@ package com.idea.ddm.identity;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.IdeaServerApplication;
+import com.idea.ddm.operation.F04SchemaTest;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.URI;
@@ -47,12 +48,16 @@ class ServerRestartFlowTest {
     void prepareOnlyAnOwnedUuidSchemaAndPrivateProcessFixtures() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
+        if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            schema = F04SchemaTest.createRegressionSchema();
+        } else {
         schema = "f03b_" + UUID.randomUUID().toString().replace("-", "");
         Flyway.configure().dataSource(url(), "idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration")
                 .cleanDisabled(true).load().migrate();
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
+        }
         }
         var buildDirectory = Path.of("target").toAbsolutePath();
         Files.createDirectories(buildDirectory);
@@ -67,6 +72,12 @@ class ServerRestartFlowTest {
         try {
             stopRuntime();
         } finally {
+            if (runtime == null || !runtime.isAlive()) {
+                if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+                    F04SchemaTest.removeRegressionSchema(schema);
+                    schema = null;
+                }
+            }
             // Keep the shutdown failure, but still clean up once the exact child is dead.
             if ((runtime == null || !runtime.isAlive()) && schema != null && schema.matches("f03b_[a-f0-9]{32}")) {
                 try (var connection = migrator(); var statement = connection.createStatement()) {
@@ -420,7 +431,9 @@ class ServerRestartFlowTest {
     /** Test-classpath-only launcher. No production clock hook, public route or credential argument. */
     public static final class RestartRuntime {
         public static void main(String[] args) throws Exception {
-            if (args.length != 4 || !args[0].matches("f03b_[a-f0-9]{32}")) {
+            var schemaPattern = System.getenv("IDEA_F04_SOURCE_SHA") == null
+                    ? "f03b_[a-f0-9]{32}" : "f04_[a-f0-9]{32}";
+            if (args.length != 4 || !args[0].matches(schemaPattern)) {
                 throw new IllegalArgumentException("Expected owned restart fixture inputs");
             }
             var clockPath = Path.of(args[2]);

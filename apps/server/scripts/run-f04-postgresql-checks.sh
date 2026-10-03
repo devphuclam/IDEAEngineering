@@ -103,13 +103,15 @@ export IDEA_DATABASE_APP_PASSWORD IDEA_DATABASE_MIGRATION_PASSWORD
 export IDEA_DATABASE_HOST=127.0.0.1 IDEA_DATABASE_PORT=5432
 export IDEA_DATABASE_APP_USER=idea_ddm_app IDEA_DATABASE_MIGRATION_USER=idea_ddm_migrator
 export IDEA_F04_TEST_DATABASE_NAME=idea_ddm_f03a_20260930_c91e7a42
+export IDEA_F03_TEST_DATABASE_NAME="$IDEA_F04_TEST_DATABASE_NAME"
+export IDEA_F03B_TEST_DATABASE_NAME="$IDEA_F04_TEST_DATABASE_NAME"
 export IDEA_F04_TEST_SCHEMA="f04_$("$f04_python" -I -S -c 'import uuid; print(uuid.uuid4().hex)')"
 [ -f "$IDEA_F04_REPO_ROOT/apps/web/node_modules/typescript/package.json" ] || {
   printf '%s\n' 'BLOCKED: existing locked Web cache must be prepared; no install fallback'; exit 2;
 }
 
 test_selector="${1:-F04SchemaTest}"
-[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest|AuditEvidenceRepositoryTest|OwnerOutcomeTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
+[[ "$test_selector" =~ ^(F04SchemaTest|F04PredecessorMigrationTest|AuditEvidenceRepositoryTest|OwnerOutcomeTest|IdentityFlowTest|HttpSessionFlowTest|ServerRestartFlowTest|ServerSmokeTest)(#[A-Za-z][A-Za-z0-9]*)?$ ]] || exit 2
 # Confirm server version and app authority before the test is allowed to create its schema.
 export PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE="$IDEA_F04_TEST_DATABASE_NAME"
 export PGUSER=idea_ddm_app PGPASSWORD="$IDEA_DATABASE_APP_PASSWORD"
@@ -133,6 +135,22 @@ if [ -d target/surefire-reports ]; then
 fi
 export PGHOST=127.0.0.1 PGPORT=5432 PGDATABASE="$IDEA_F04_TEST_DATABASE_NAME"
 export PGUSER=idea_ddm_migrator PGPASSWORD="$IDEA_DATABASE_MIGRATION_PASSWORD"
+# Regression fixtures close their Server/child processes before marker-guarded cleanup.
+# Verify absence; never automatically drop a leftover nested schema after a failed shutdown.
+while read -r regression_schema; do
+  [[ "$regression_schema" =~ ^f04_[0-9a-f]{32}$ ]] || exit 2
+  [ "$regression_schema" = "$IDEA_F04_TEST_SCHEMA" ] && continue
+  remaining="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT count(*) FROM pg_namespace WHERE nspname='$regression_schema'")"
+  [ "$remaining" = 0 ] || { printf 'BLOCKED: retained regression schema %s; no automatic cleanup\n' "$regression_schema" >&2; exit 2; }
+  printf 'F04_REGRESSION_SCHEMA_ABSENT=CONFIRMED; SCHEMA=%s\n' "$regression_schema"
+done < <(sed -nE 's/^F04_SCHEMA_READY=(f04_[0-9a-f]{32});.*/\1/p' "$log_file" | sort -u)
+while read -r child_pid; do
+  if kill -0 "$child_pid" 2>/dev/null; then
+    printf 'BLOCKED: restart child PID %s remains live; no cleanup permitted\n' "$child_pid" >&2
+    exit 2
+  fi
+  printf 'F04_RESTART_CHILD_STOPPED=%s\n' "$child_pid"
+done < <(sed -nE 's/^F03B_RESTART_RUNTIME=[0-9]+; pid=([0-9]+);.*/\1/p' "$log_file" | sort -u)
 [[ "$IDEA_F04_TEST_SCHEMA" =~ ^f04_[0-9a-f]{32}$ ]] || exit 2
 marker="IDEA_F04_RUN:$IDEA_F04_SOURCE_SHA:$IDEA_F04_TEST_SCHEMA"
 owned="$(psql -X -v ON_ERROR_STOP=1 -Atc "SELECT count(*) FROM pg_namespace WHERE nspname='$IDEA_F04_TEST_SCHEMA' AND pg_get_userbyid(nspowner)='idea_ddm_migrator' AND obj_description(oid,'pg_namespace')='$marker'")"

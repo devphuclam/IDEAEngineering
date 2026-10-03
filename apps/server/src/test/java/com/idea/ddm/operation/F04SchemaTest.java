@@ -22,12 +22,46 @@ public class F04SchemaTest {
     }
 
     public static void createOnlyThisRunsMigratorOwnedSchema(String target) throws Exception {
+        createOnlyThisRunsMigratorOwnedSchema(target, env("IDEA_F04_TEST_SCHEMA"));
+    }
+
+    /** T026 reuses accepted F03 tests, with a distinct marked schema for every test. */
+    public static String createRegressionSchema() throws Exception {
+        var ownedSchema = "f04_" + UUID.randomUUID().toString().replace("-", "");
+        createOnlyThisRunsMigratorOwnedSchema("latest", ownedSchema);
+        return ownedSchema;
+    }
+
+    public static void removeRegressionSchema(String ownedSchema) throws Exception {
+        assertTrue(ownedSchema.matches("f04_[0-9a-f]{32}"));
+        assertEquals("idea_ddm_f03a_20260930_c91e7a42", env("IDEA_F04_TEST_DATABASE_NAME"));
+        assertTrue(env("IDEA_F04_SOURCE_SHA").matches("[0-9a-f]{40}"));
+        try (var connection = open("migration"); var query = connection.prepareStatement(
+                "SELECT pg_get_userbyid(nspowner),obj_description(oid,'pg_namespace') FROM pg_namespace WHERE nspname=?")) {
+            query.setString(1, ownedSchema);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next(), "Do not adopt or remove an absent/unmarked regression schema");
+                assertEquals("idea_ddm_migrator", row.getString(1));
+                assertEquals("IDEA_F04_RUN:" + env("IDEA_F04_SOURCE_SHA") + ":" + ownedSchema, row.getString(2));
+            }
+            try (var statement = connection.createStatement()) {
+                statement.execute("DROP SCHEMA " + ownedSchema + " CASCADE");
+            }
+            try (var row = query.executeQuery()) {
+                assertFalse(row.next(), "Exact marked regression schema must be absent after cleanup");
+            }
+        }
+        System.out.println("F04_REGRESSION_SCHEMA_CLEANUP=COMPLETE; SCHEMA=" + ownedSchema);
+    }
+
+    private static void createOnlyThisRunsMigratorOwnedSchema(String target, String ownedSchema) throws Exception {
         assertEquals("127.0.0.1", env("IDEA_DATABASE_HOST"));
         assertEquals("5432", env("IDEA_DATABASE_PORT"));
         assertEquals("idea_ddm_f03a_20260930_c91e7a42", env("IDEA_F04_TEST_DATABASE_NAME"));
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
-        schema = env("IDEA_F04_TEST_SCHEMA");
+        assertTrue(env("IDEA_F04_TEST_SCHEMA").matches("f04_[0-9a-f]{32}"));
+        schema = ownedSchema;
         assertTrue(schema.matches("f04_[0-9a-f]{32}"), "Only a run-owned F04 UUID schema is allowed");
         assertTrue(env("IDEA_F04_SOURCE_SHA").matches("[0-9a-f]{40}"));
         try (var connection = open("migration"); var statement = connection.createStatement()) {
