@@ -3,6 +3,7 @@ package com.idea.ddm.identity;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.IdeaServerApplication;
+import com.idea.ddm.operation.F04SchemaTest;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 import java.net.URI;
@@ -42,6 +43,9 @@ class HttpSessionFlowTest {
     void startServerWithOnlyThisTestsMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
+        if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            schema = F04SchemaTest.createRegressionSchema();
+        } else {
         schema = "f03b_" + UUID.randomUUID().toString().replace("-", "");
         Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"),
                 env("IDEA_DATABASE_MIGRATION_PASSWORD"))
@@ -49,6 +53,7 @@ class HttpSessionFlowTest {
                 .cleanDisabled(true).load().migrate();
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
+        }
         }
         startHttpServer(true);
     }
@@ -77,6 +82,10 @@ class HttpSessionFlowTest {
     @AfterEach
     void closeServerAndRemoveOnlyOwnedUuidSchema() throws Exception {
         if (server != null) server.close();
+        if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            F04SchemaTest.removeRegressionSchema(schema);
+            return;
+        }
         if (schema != null && schema.matches("f03b_[a-f0-9]{32}")) {
             try (var connection = migrator(); var statement = connection.createStatement()) {
                 statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
@@ -1061,6 +1070,12 @@ class HttpSessionFlowTest {
 
     @Test
     void anonymousSessionProbeIsRefusedWithoutActorOrLoginRedirect() throws Exception {
+        var anonymous = HttpClient.newHttpClient();
+        for (var path : java.util.List.of("/health", "/health/database")) {
+            var health = get(anonymous, path);
+            assertEquals(200, health.statusCode());
+            assertEquals("{\"status\":\"UP\"}", health.body(), "Health returns only public availability");
+        }
         var response = HttpClient.newHttpClient().send(HttpRequest.newBuilder(
                 URI.create("http://127.0.0.1:" + port + "/api/v1/identity/session")).GET().build(),
                 HttpResponse.BodyHandlers.ofString());
@@ -1653,8 +1668,8 @@ class HttpSessionFlowTest {
         var fixture = fixture();
         var flyway = Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"), env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
-        // Flyway also records schema creation; only versioned migrations are V1–V7.
-        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7"), java.util.Arrays.stream(flyway.info().applied())
+        // Current chain includes additive F04 V8; retained F03 execution stays V1–V7.
+        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8"), java.util.Arrays.stream(flyway.info().applied())
                 .filter(migration -> migration.getVersion() != null).map(migration -> migration.getVersion().toString()).toList());
         assertEquals(0, flyway.migrate().migrationsExecuted);
         var loginId = new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).loginIdentityId();

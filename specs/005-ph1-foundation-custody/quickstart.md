@@ -76,7 +76,7 @@ each implemented checkpoint; commands for unfinished slices remain planned, neve
 |---|---|---|
 | F01-A | From a clean checkout, run each documented Server, Web, Desktop and Workspace build plus basic test command on its qualified platform. | Four actual results tied to commit and tool versions; a planned command is not PASS. |
 | F01-B | Repeat automated checks; inspect tracked config and build inputs for working secrets; inspect lockfiles and exact dependency intake. | Repeatable checks and no committed working secret; record any blocked package separately. |
-| F02 / T044 data successor | Create a completely new isolated database matching `idea_ddm_f02_<run-id>`; use exact distinct app/migrator roles and set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that exact new name. After T044 tooling approval and initial-empty-state witness, `DataBaselineTest` on current source expects V1–V7 once, repeat zero; run `DatabasePrivilegeTest` and additional successor ownership/privilege assertions, then packaged migration/no-op and health checks. Never use the runner's historical default database for T044. | Seven migrations on current source, valid history/checksums, no pending migration and repeat zero; migrator-owned objects and refused app migration authority; bounded rollback and distinct process/data health. Historical F02 evidence is unchanged, not retrospectively changed to seven migrations. No backup/restore claim. |
+| F02 / T044 data successor | Create a completely new isolated database matching `idea_ddm_f02_<run-id>`; use exact distinct app/migrator roles and set `IDEA_DATABASE_NAME` and `IDEA_F02_TEST_DATABASE_NAME` to that exact new name. After T044 tooling approval and initial-empty-state witness, `DataBaselineTest` on current source expects V1–V8 once, repeat zero; run `DatabasePrivilegeTest` and additional successor ownership/privilege assertions, then packaged migration/no-op and health checks. Never use the runner's historical default database for T044. | Eight migrations on current source, valid history/checksums, no pending migration and repeat zero; migrator-owned objects and refused app migration authority; bounded rollback and distinct process/data health. Historical F02 evidence is unchanged, not retrospectively changed to eight migrations. No backup/restore claim. |
 | F03-A/B | Run controlled initial-admin bootstrap twice; create/disable a native test account; sign in/out, revoke, and retry protected calls with old proof. | The second bootstrap reports already initialized with no Actor, account or Role Assignment change; attributable Actor/session; no public registration; all invalidated retries refused. Do not print passwords or session secrets. |
 | F04 | Follow the [internal qualification contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) and T023–T026 after separate F04 tooling/database authority. Run internal accepted/refused/confirmed-failure, concurrent retry, result-access and IAM-race cases; inspect sample owner/Audit/event, not a mutable demo resource. | ACCEPTED has one required Audit/event; REFUSED one Audit/no event; confirmed rollback no partial records; same-ID retry adds no original companions. Originating Actor may use a fresh eligible session; another Actor/invalid proof receives no original result. |
 | F05-A/B | Record exact Gateway runtime, Adapter and transport qualification; transfer approved 1 KiB and 64 MiB fixtures directly to one Gateway; compare size and SHA-256 with manifest, then inspect receipt and accepted metadata. Repeat with wrong/expired grant, wrong digest, interruption, lost response and same-ID repeated/changed input. | Matching verified custody for both happy-path fixtures; zero false successful custody for failures. Retries resolve the same operation. Artifact/Vault/Location IDs stay distinct from private Adapter path. No second Vault or throughput claim. |
@@ -109,13 +109,24 @@ evidence; an arbitrary sleep alone does not establish that the race was exercise
 
 ### F04 validation gate and evidence
 
-Design is closed by the Project Reviewer on 2026-10-02; runtime remains NOT-RUN. Read
+Design closed on 2026-10-02; Project Reviewer accepted whole F04 on 2026-10-03 at
+`ac6c96e1090eb4d38aefca607af066dcd6330a67`: **COMPLETED / ACCEPTED / PASS**. Read
 [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
 [execution prerequisites](plan.md#execution-prerequisite) and [F04 units](tasks.md#f04-implementation-units)
-before issuing commands. No F04 runner exists yet. Prior Maven/build-tool exceptions do not
-admit F04 use: retain BLOCKED until a separate disposition and artifact preflight exist.
+before issuing commands. The F04 runner is `apps/server/scripts/run-f04-postgresql-checks.sh`;
+F04 build-tool authorization plus prospective Python admission govern its exact offline preflight.
+Read [accepted closure disposition](evidence/F04-outcome-results.md#38-whole-f04-acceptance-and-closure-publication),
+the [preserved whole-F04 execution matrix](evidence/F04-outcome-results.md#37-current-whole-f04-review-matrix)
+and the [fresh-public authorization](../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md).
+The §34 proposal was authorized on 2026-10-03 and executed on only the new retained test database:
+8/8 public/data/privilege, V1–V8 first8/repeat0, offline package and two direct packaged repeat0.
+Execution source is `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`, unchanged application/test
+content from `f817d8f...`. No rerun or deployment is required for closure; the review database
+remains retained. After authorized PR #32 integration and Issue #31 completed closure, F05-A / T027
+is eligible using the already frozen F05 Preparation Package, not started by this publication.
+Private raw-log access limitation remains; verifier NOT-RUN is not an F04 acceptance blocker.
 
-After that gate, archive the exact implementation commit, use a test-owned UUID schema in an
+For a separately authorized future rerun, archive the exact implementation commit, use a test-owned UUID schema in an
 explicitly authorized isolated database, and apply V1→V8 with migrator while executing as app.
 Record first/repeat/history/checksums/ownership and denied mutation checks, preserving original
 V1–V7 files. Test existing migrated predecessor state as well as a fresh schema, including

@@ -52,7 +52,8 @@ or secret output; its contextual seam cannot weaken production authentication.
 | Same-ID replay/concurrency | One canonical committed result; preserve original Actor/correlation/EventId, no re-execution, duplicate owner Audit or accepted event. Rolled-back/no-result attempt is not completed. Serialize accepted/refusal handoff as specified in the plan. |
 | Authorized sample result query | Current eligible Server-established Actor equals original stable Actor; fresh valid session is allowed. Preserve provenance, not the old session instance. |
 | Other Actor/Organization or invalid proof | Bounded non-disclosing refusal; no original outcome/detail leakage, replacement, execution or duplicate original Audit/event. Sample reader policy is outside the common store; separately governed access-attempt Audit remains possible later. No HTTP taxonomy is chosen. |
-| Commit-time security transition | Use the existing IAM coordination and a controlled barrier: disable/revoke committed after admission but before owner commit means zero accepted sample state/events. Required refusal evidence may retain the original admitted Actor. |
+| Commit-time security transition | Actual IAM disable/qualified per-session logout committed after initial admission but before owner commit discards the ACCEPT candidate. Retain the operation lock across rollback and canonical recheck; commit one terminal REFUSED owner + one required refusal Audit, original admitted Actor/Organization/OperationId/correlation/reason, zero event/activity refresh. Surface security refusal without re-admitting the invalid proof. Initial admission failure creates no owner result. |
+| Reverse security ordering and recovery | Owner holds existing IAM security-write lock through eligible commit; actual later disable/logout waits, then invalidates old proof without rewriting historical 1/1/1 ACCEPTED. Re-enable cannot revive old proof. Fresh eligible same-Actor session can resolve terminal REFUSED; a new genuine attempt uses a new ID. |
 | Required append/commit failure | Audit failure, event failure, zero required affected rows and deferred commit failure all prevent partial success. Removing a fault permits a new attempt under the same uncommitted ID. |
 | Common foundation | Immutable contents and direct non-destructive Actor/Organization FKs; denied app UPDATE/DELETE/TRUNCATE; another synthetic producer may retain multiple events under one OperationId. No FK/store dependency on the sample owner. |
 
@@ -63,9 +64,18 @@ schema; only migrator applies migrations, app executes commands. Fresh public V1
 requires a separately authorized completely new database, never existing preview/dev/F03 public
 state. Test-only barriers/faults stay off public surfaces. No mock/H2 integration substitution.
 
-**Preflight:** F04 tooling authority is BLOCKED until separately obtained; prior T043/F03-B/#26
-exceptions do not extend. After approval, verify exact artifacts/graph before commands. Preserve
-V1–V7 and all historical evidence. F04 tests/evidence remain NOT-RUN at this design closure.
+**Execution status:** the separate F04 authority is recorded in
+[IE-RES-F04-BUILDTOOL-AUTH-20261002](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
+Prospective Python scope is in
+[IE-RES-F04-PYTHON-AUTH-20261002](../../../docs/research/2026-10-02-f04-python-harness-authorization.md).
+The schema/Audit, authenticated ACCEPTED/REFUSED tracer, C replay/access/concurrency/fault and
+D security-ordering checkpoints are partially executed (36/36 at `73abb35...`) in
+[F04 outcome results](../evidence/F04-outcome-results.md);
+the scoped runner verifies qualified build inputs/direct versions, exact tools and nine artifact
+hashes/descriptor before commands, with offline-only retained-cache resolution. Preserve V1–V7 and
+all historical evidence. C has external acceptance for continuation; D external review is PENDING.
+T026 broader affected regression/whole-card acceptance remains NOT-RUN. T023–T026 remain
+unchecked; stop after D publication and begin no T026 execution before D external review.
 The seam qualifies sample retained outcomes, not real mutable domain state, product RBAC,
 event delivery, multi-owner coordination, production readiness or recovery.
 

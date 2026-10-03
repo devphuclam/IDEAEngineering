@@ -124,21 +124,41 @@ one relational fate; business REFUSED + its Audit commit without event. No new m
 product Permission/Role, HTTP or Swagger command. [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md)
 and [contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) close the design.
 **Independent test**: Actual Server/PostgreSQL accepted/refused/rollback, concurrent retry,
-originating-Actor result access and controlled disable/revoke-before-commit. Runtime NOT-RUN.
-**Execution gate**: F04 Maven/tooling authority BLOCKED; prior exceptions do not extend. Obtain
-separate authority and exact artifact preflight before any test/package invocation. Units below
-refine four existing tasks, add no cards/hours and authorize no execution in this docs-only change.
+originating-Actor result access and controlled disable/revoke-before-commit. The bounded ACCEPTED/
+REFUSED tracer, C replay/access/concurrency/fault and D IAM race scenarios have scoped execution
+below; T026 affected F03/health and separately authorized fresh-public/package execution
+are recorded in the current evidence.
+**Execution gate**: Separate F04 Maven/tooling authority is recorded in
+`IE-RES-F04-BUILDTOOL-AUTH-20261002` plus prospective Python clarification
+`IE-RES-F04-PYTHON-AUTH-20261002`; the scoped runner performs exact artifact/runtime preflight before
+each execution. Units below refine four existing tasks and add no cards/hours.
+Current execution and whole-card acceptance are in `evidence/F04-outcome-results.md` v1.0:
+source `f817d8fb4a910185204ed37bd01b78070832196b`, owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
+predecessor 1/1 and Audit 7/7 = 36/36. The historical Python omission and prospective clean 15/15
+requalification remain separately traced; historical execution receipts are unchanged.
+B/C/D are accepted for continuation. The Reviewer authorized the exact §34 database package
+in this conversation on 2026-10-03; the failed GitHub connector attempt created no approval comment.
+The [successor authorization](../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md)
+preceded execution. Sections 35–37 retain source `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`:
+fresh-public 8/8, V1–V8 first8/repeat0, offline package and two packaged repeat0, unchanged
+history/checksums and privileges. The exact new database is retained for review.
+Project Reviewer accepted whole F04 on **2026-10-03** at
+`ac6c96e1090eb4d38aefca607af066dcd6330a67`; §38 records **COMPLETED / ACCEPTED / PASS**.
+T023–T026 are complete. Closure-only PR #32 integration and Issue #31 closure are authorized;
+F05-A / T027 becomes eligible only after both. Verifier remains NOT-RUN.
 
-- [ ] T023 [US4] Add vertical failing or qualification tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java` and `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`; use the real-session fixture `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. Cover the F04 contract including concurrent same-ID acceptance/refusal, forced append/commit faults, bounded query access and IAM race. Follow units below rather than writing the entire suite first.
-- [ ] T024 [US4] Implement connection-scoped append-only Audit in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`; require the original correlation, exactly one insert and failure propagation. Caller retains transaction ownership; no second connection/commit, owner decision or IAM change.
-- [ ] T025 [US4] Implement proposed `database/migrations/V8__owner_committed_event_foundation.sql`, `apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java`, `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java` and narrow `apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java` only after the relevant test. ENVELOPE-9 has no payload/delivery state; F04 constants are `PH1_SAMPLE_OWNER` / `OPERATION_ACCEPTED` / contract 1. Keep V1–V7 immutable, protect retained rows and coordinate sample concurrency/IAM commit-time eligibility per plan.
-- [ ] T026 [US4] Run the authorized scoped runner `apps/server/scripts/run-f04-postgresql-checks.sh` from exact source; execute the contract and affected data/identity/health checks, then retain truthful results/limits in `specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md`. Confirmed rollback is not durable FAILED; no event-delivery/product-RBAC claim or card closure by task markers alone.
+- [X] T023 [US4] Add vertical failing or qualification tests in `apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java`, `apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java` and `apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java`; use the real-session fixture `apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java`. Cover the F04 contract including concurrent same-ID acceptance/refusal, forced append/commit faults, bounded query access and IAM race. Follow units below rather than writing the entire suite first.
+- [X] T024 [US4] Implement connection-scoped append-only Audit in `apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java`; require the original correlation, exactly one insert and failure propagation. Caller retains transaction ownership; no second connection/commit, owner decision or IAM change.
+- [X] T025 [US4] Implement proposed `database/migrations/V8__owner_committed_event_foundation.sql`, `apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java`, `apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java` and narrow `apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java` only after the relevant test. ENVELOPE-9 has no payload/delivery state; F04 constants are `PH1_SAMPLE_OWNER` / `OPERATION_ACCEPTED` / contract 1. Keep V1–V7 immutable, protect retained rows and coordinate sample concurrency/IAM commit-time eligibility per plan.
+- [X] T026 [US4] Run the authorized scoped runner `apps/server/scripts/run-f04-postgresql-checks.sh` from exact source; execute the contract and affected data/identity/health checks, then retain truthful results/limits in `specs/005-ph1-foundation-custody/evidence/F04-outcome-results.md`. Confirmed rollback is not durable FAILED; no event-delivery/product-RBAC claim or card closure by task markers alone.
 
 ### F04 implementation units
 
 These are unit IDs within T023–T026, not new standalone task/checklist identities. Every row
 requires its own intended RED → minimum GREEN or an honestly recorded existing-behavior first
-GREEN. All test/source paths below are **planned**, not implementation delivered by this change.
+GREEN. At documentation closure all paths below were planned. The allocation table is retained
+as historical execution guidance; current completion is established by the whole-card acceptance
+in evidence §38, not inferred from this table.
 
 | Unit / allocation | Objective and exact expected paths | Tests / completion oracle | Prerequisites | Transaction/concurrency risks |
 |---|---|---|---|---|
@@ -213,9 +233,13 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: review/publish the F04 documentation baseline under Work Item #29, then
-obtain separate F04 tooling execution authority before T023-A. No production implementation,
-migration creation or merge is authorized by this documentation task. T023–T026 remain unchecked.
+Current next step: integrate the authorized closure-only PR #32 and close Work Item #31.
+F04 is COMPLETED / ACCEPTED / PASS (2026-10-03), as recorded in evidence v1.0 §38;
+T023–T026 are complete. After confirmed merge and Issue closure, the next eligible unit is
+F05-A / T027 using the already frozen F05 Preparation Package. T027 remains unchecked and
+is not started by closure; its separate qualification/intake gate remains required.
+Do not rerun against retained databases or reopen F04 design. Work Item #29 was documentation-only
+and is closed after PR #30. Verifier remains NOT-RUN, not an F04 acceptance blocker.
 
 Historical F03-B closure handoff below is retained as trace, not current work/status. Applicable
 T040/T042/shared Server tasks and T044 have executed closure evidence in §39; markers record

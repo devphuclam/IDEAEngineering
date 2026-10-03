@@ -43,17 +43,72 @@ deferred capabilities merely to turn a scope-boundary row green.
 
 ## Current F04 design-to-implementation handoff
 
-Design frontier closed by the Project Reviewer on 2026-10-02; documentation Work Item
+**Current disposition: F04 COMPLETED / ACCEPTED / PASS.** Project Reviewer accepted
+head `ac6c96e1090eb4d38aefca607af066dcd6330a67` on 2026-10-03; see
+[closure record](evidence/F04-outcome-results.md#38-whole-f04-acceptance-and-closure-publication).
+The execution guidance below is retained for trace, not an instruction to rerun or reopen F04.
+
+Historical design frontier closed by the Project Reviewer on 2026-10-02; documentation Work Item
 [#29](https://github.com/devphuclam/IDEAEngineering/issues/29), branch `codex/f04-design-baseline`,
-base `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. This change delivers no Java or migration.
+base `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. That documentation-only change delivered no Java
+or migration; #29 is closed after PR #30 merged at `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Use spec v0.8, FR-001–014, [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
 [F04 contract](contracts/ph1-boundaries.md#f04-internal-qualification-contract) and
 [T023–T026 units](tasks.md#f04-implementation-units). `tasks.md` remains the only task list.
 
-Next boundary: obtain separate F04 Maven/tooling authority and exact artifact preflight before
-any test command. Prior T043/F03-B/#26 exceptions do not extend; execution is BLOCKED until that
-prerequisite is resolved. No new design clarification is pending. F04 runtime is NOT-RUN and
-T023–T026 remain unchecked; no completion/progress action is inferred.
+The separate F04 authority is now recorded in
+[IE-RES-F04-BUILDTOOL-AUTH-20261002](../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md).
+Prospective Python admission is separately recorded in
+[IE-RES-F04-PYTHON-AUTH-20261002](../../docs/research/2026-10-02-f04-python-harness-authorization.md);
+the historical omission is preserved, not retroactively approved.
+Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
+accepted for closure; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
+Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
+Current exact executed source: `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0` for fresh-public/package;
+application/test content equals full regression `f817d8fb4a910185204ed37bd01b78070832196b`.
+Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
+offline runner, plus named real-HTTP principal fixture, internal sample owner, caller-Connection
+event append and IAM eligibility adapter. No product route/Permission/Role or F03 semantic change.
+C adds canonical sample result/access resolution, bounded per-OperationId PostgreSQL session
+lock across refusal rollback, safe physical discard and deterministic real-PG concurrency/fault
+qualification. Only the sample service and two test fixtures change after the accepted B head.
+Codex implemented Audit after its focused RED; Gemini was not dispatched.
+
+The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
+schema, T024-A Audit, T023-B/minimum T025-B, T023-C/T025-C and T023-D/T025-D execution are recorded in
+[F04 outcome results](evidence/F04-outcome-results.md) v1.0: owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
+predecessor 1/1 and Audit 7/7 = 36/36 at `f817d8fb4a910185204ed37bd01b78070832196b`. All 62 C-run schema cleanup receipts
+are COMPLETE; [exact receipt index](evidence/F04-C-execution-receipts.json) retains both actual
+REDs and each four-suite regression. The separate [D receipt index](evidence/F04-D-execution-receipts.json)
+retains 24 passing suite runs, one expected RED and one interrupted non-PASS attempt; all 26
+D schemas have confirmed exact-owned cleanup. The prospective Python clean 15/15
+requalification is separately traced at `1255568...`; the five no-build
+admission cases remain the separately traced execution at `acc8db5...`.
+T023–T026 are complete under explicit whole-card acceptance; no timer/actual-effort action is inferred. Any changed tool,
+artifact, graph, database boundary or architecture reopens the execution gate.
+
+Historical checkpoint procedure: the scoped Bash runner was used separately with `F04SchemaTest`,
+`F04PredecessorMigrationTest`, `AuditEvidenceRepositoryTest` or `OwnerOutcomeTest` from the exact archive; its approved
+Maven command is offline `-o -B -Dtest=<selector> test`. Use only the controlled test DB and fresh
+tagged f04 schema. Read the evidence for commands/hashes/limits before rerunning.
+B/C/D have external acceptance for continuation. D has executed real IAM disable and HTTP logout
+security-first/reverse orderings, atomic refusal handoff, old-proof refusal and re-enable/fresh-session
+recovery. T026 permitted regression and a whole-contract matrix are now in evidence sections 29–34
+and the separate T026 receipt index. Current-chain expectations include V8; migrations and
+historical evidence are unchanged. The §34 package was authorized by the human in this conversation
+on 2026-10-03, not by a GitHub approval comment (connector attempt failed403).
+[Successor authorization](../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md)
+preceded execution. Sections 35–37 and the [fresh-public receipt index](evidence/F04-T026-fresh-public-receipts.json)
+record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from `088ee3f...`.
+Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
+Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
+PR #32 ready/merge-commit integration and Issue #31 completed closure are separately authorized.
+Consult those provider records for the actual integration SHA and final state. After both are
+confirmed, the next eligible unit is F05-A / T027 using the already frozen F05 Preparation Package;
+do not start it as part of this closure or extend F04 tooling authority to F05.
+Do not create/reuse another target, rerun the retained public database, DROP the review database
+or deploy the package for closure. Preserve private raw-log access limitation. Verifier remains
+NOT-RUN and is not an F04 acceptance blocker.
 
 After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,
 concurrency tests, exact-source regression/evidence. Only **T024-A** is GEMINI-SAFE after CODEX
@@ -65,7 +120,7 @@ instruction to dispatch an implementation worker during documentation closure.
 Approved reader rule belongs only to the synthetic sample: currently eligible originating Actor,
 including a fresh session. Immutable original Actor is provenance, not universal read authority.
 No product API/Permission, mutable demo entity, generic registry/payload or dispatcher is planned.
-Use proposed V8 only after confirming the next free migration number; preserve V1–V7 and all
+V8 is implemented and schema-qualified; preserve V1–V8 and all
 historical F03 evidence. Keep rollback, terminal business refusal and uncertainty distinct.
 
 ## Accepted F03-B receipt and historical checkpoint guidance

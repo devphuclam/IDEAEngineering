@@ -1,0 +1,2611 @@
+{
+  "control": {
+    "stable_id": "IE-VEV-PH1-F04-T026-RECEIPTS-001",
+    "document_class": "verification execution receipts",
+    "title": "F04 T026 bounded regression and current-chain receipts",
+    "version": "0.1",
+    "status": "Draft",
+    "product_normativity": "INFORMATIVE",
+    "repository_instruction_state": "NOT-APPLICABLE",
+    "owner": "Engineering",
+    "author": "Codex",
+    "reviewer": "D accepted for T026 continuation; internal T026 Standards/Spec review; whole F04 review PENDING",
+    "acceptance_authority": "Project Reviewer Nguyễn Huỳnh Phúc Lâm; fresh-public DB authority REQUIRED; whole F04 acceptance PENDING",
+    "baseline": "IE-INC-PH1-FOUNDATION-CUSTODY-001; spec v0.8; ADR-0014; Issue #31 / PR #32",
+    "evidence_date": "2026-10-03 +07:00",
+    "classification": "INTERNAL",
+    "retention": "Retain with F04 baseline and private host logs until separately governed disposition",
+    "upstream": [
+      "F04-outcome-results.md#29-t026-starting-witness-and-bounded-successors",
+      "../contracts/ph1-boundaries.md#f04-internal-qualification-contract"
+    ],
+    "downstream": [
+      "../tasks.md#f04-implementation-units",
+      "../worker-handoff.md#current-f04-design-to-implementation-handoff"
+    ],
+    "change_record": "New subordinate T026 record; no rewriting of A/B/C/D or F02/F03 historical execution",
+    "supersedes": "NOT-APPLICABLE",
+    "superseded_by": "NOT-APPLICABLE",
+    "review_trigger": "Source/tool/role/database/schema/hash/authority change",
+    "standards_tailoring": "Parent F04 evidence section15 pins exact editions and TAILOR mappings; STANDARD-GUIDED scoped verification/configuration trace under IE-STD-AUTH-001; no conformity claim"
+  },
+  "execution_envelope": {
+    "database": "127.0.0.1:5432/idea_ddm_f03a_20260930_c91e7a42",
+    "roles": [
+      "idea_ddm_migrator",
+      "idea_ddm_app"
+    ],
+    "marker": "IDEA_F04_RUN:<40hex source>:<exact f04_UUID schema>",
+    "tooling": "Temurin25.0.4.1+1; Maven3.9.16 -o; PostgreSQL18.6; CPython3.14.4 -I -S stdlib; Node24.21.0; npm11.19.0; exact admitted cache",
+    "current_executed_source": "f817d8fb4a910185204ed37bd01b78070832196b",
+    "fresh_public": "AUTHORITY REQUIRED / NOT-RUN",
+    "verifier": "NOT-RUN",
+    "final_f04": 36,
+    "final_affected_f03": 108,
+    "receipts": 20,
+    "pass_runs": 18,
+    "expected_red_runs": 1,
+    "interrupted_not_pass_runs": 1
+  },
+  "read_only_post_run": {
+    "command": "Controlled private-file credential, read-only psql catalog inspection; no writes",
+    "result": "F04_CATALOG_REMAINING=0\nF04_PROPOSED_DATABASE_EXISTS=0\nRETAINED_PUBLIC_TABLES=23\nINTERRUPTED_HTTP_XML_RESULT={'tests': '83', 'failures': '0', 'errors': '0', 'skipped': '0'}\nINTERRUPTED_HTTP_XML_SCHEMA_COUNTS=(83, 83)\nINTERRUPTED_HTTP_XML_MISSING_CLEANUP=[]",
+    "interrupted_log_limit": "83/0/0/0 Surefire and exact schema cleanup observed; absent terminal runner receipt is not converted to PASS"
+  },
+  "receipts": [
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "277fd114d2bf37099cd4bf0f1c149f159694cd45932bc1341fe07a157f121112",
+      "log": "/home/phuclam/idea-f04-schema-ycxBsqHn.log",
+      "outer_schema": "f04_890c66eeef2b41a99290a88fe0932aeb",
+      "source": "400ad78cf769fe1e3f1995b7d3f22cfd7f372392",
+      "build": "/home/phuclam/idea-f04-400ad78-2h7yuH",
+      "log_sha256": "1e9df2e66612dac7a006bd8d74e7d1629dae9ab16249de5c7afa627ca9e203db",
+      "log_mode": "0o600",
+      "maven_exit": 1,
+      "disposition": "EXPECTED_RED",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.HttpSessionFlowTest",
+          "counts": {
+            "tests": 1,
+            "failures": 1,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "789d8d6c2487f1e3614f7fb781a01885f70f2ee1a261f2525db97929e009cffb",
+          "text_sha256": "d52c49a8901858b6cfd95226b7113ddbe58221a7411ebe89d1c246e0e929e5c5",
+          "test_names": [
+            "additiveThrottleMigrationRepeatsWithoutChangesAndEnforcesIdentitySizeAndRoleBounds"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_fcafc666517a424eb38ca2d91dcafd71",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-EzVKcOVU.log",
+      "outer_schema": "f04_042eea8d8a674f269704b896049e7454",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-dlS29Z",
+      "log_sha256": "eafc5337df166694b39ddae3a036532c348d650119ce76e845da0321a3cdb1ac",
+      "log_mode": "0o600",
+      "maven_exit": null,
+      "disposition": "INTERRUPTED_NOT_PASS",
+      "outer_cleanup": "NO_TERMINAL_RUNNER_RECEIPT",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.HttpSessionFlowTest",
+          "counts": {
+            "tests": 83,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "97ff1bc29aa7c58bd0e937239f540dd82b127f5c28a33da979095a5a0a6d74e2",
+          "text_sha256": "71fee4167661e78a5098ffe22e63f2a13f817b078776f3fdd9c032e054e50e9c",
+          "test_names": [
+            "missingSignInSessionCannotClearFailures",
+            "rollingWindowExcludesFailuresExactlyFifteenMinutesOld",
+            "explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount",
+            "deferredDatabaseCommitFailureRollsBackAlreadyBoundTentativeSession",
+            "resetWhileDisabledChangesCredentialButRequiresSeparateReenableAndFreshSignin",
+            "concurrentResetAcceptsOneCredentialAndOneAuditedVersionChange",
+            "logoutIamFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry",
+            "httpAccountCreationRejectsAnOverlongNormalizedLoginWithoutPartialState",
+            "httpAdministrationRefusesDisabledReenabledAndRevokedIssuerSessionsWithoutLosingFreshAuthority",
+            "effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy",
+            "suppressedSessionRevocationCannotCommitCredentialReset",
+            "blockDeadlineDoesNotMoveAndIsOpenExactlyAtAndAfterExpiry",
+            "absoluteExpiredLogoutCannotPublishAcceptedEvidenceDespiteRecentActivity",
+            "suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure",
+            "resetProofBindingIsMigratorOwnedAndRuntimeCannotRetargetOrDeleteIt",
+            "idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting",
+            "anonymousRevokedAndStaleVersionLogoutAreRefusedWithoutAcceptedEvidence",
+            "httpAccountInputAndStateRefusalsAreSafeAndLeaveNoPartialMutation",
+            "firstSetupExpiresExactlyAtFifteenMinutesWithoutWallClockWaiting",
+            "loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity",
+            "httpDisableAndReenableKeepIdentityHistoryAndRequireFreshSigninForEveryOldSession",
+            "malformedUnicodeCannotBecomeAReplacementCharacterCredential",
+            "springExceptionBeforeBindingCannotCommitSignIn",
+            "concurrentFailuresReachOneFifthFailureWithoutLostUpdatesOrUnboundedState",
+            "disabledTwoLoginResetPreservesDisablementAndSiblingCredentialUntilSeparateReenable",
+            "httpAdministrationAcceptedActivityRefreshesIdleButInvalidMutationDoesNot",
+            "accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1",
+            "expiredLogoutIsRefusedWithoutAcceptedEvidenceOrRevocation",
+            "resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin",
+            "firstSetupProofCannotBecomeResetProofOrBeConsumedByResetRefusal",
+            "missingResetAuditRollsBackPasswordVersionSessionsAndProofConsumption",
+            "httpAdministrationRevalidatesSessionAfterWaitingForTheSecurityWriteLock",
+            "httpAdministrationRefusesIdleExpiryBeforeScopeAndRefusalsDoNotRefreshActivity",
+            "anonymousSessionProbeIsRefusedWithoutActorOrLoginRedirect",
+            "newPasswordBoundsCountUnicodeCharactersAndUtf8BytesWithoutTrimming",
+            "activityCannotExtendEightHourAbsoluteDeadline",
+            "normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent",
+            "disabledAndReenabledOldSessionCannotLogoutButFreshSessionCan",
+            "missingSignInIamOutcomeCannotClearFailures",
+            "resetIssuanceRequiresExplicitV2ScopeEligibleSessionAndSyntheticOptIn",
+            "springExceptionAfterBindingCannotLeaveEligibleTentativeProof",
+            "superAndV1CannotIssueProofWhileExplicitV2IsStillBoundToItsOrganization",
+            "activeResetIsProofAuthorizedAndRevokesEveryOldSessionAndSameVersionProof",
+            "httpAccountAuthorityRequiresCurrentScopedAssignmentAndCsrfNotSuperOrClientIdentity",
+            "firstSetupCannotResetActiveDisabledOrStaleReenabledTargets",
+            "resetExplicitFirstLoginPreservesSecondCredentialAndRejectsReplay",
+            "unknownDisabledAndBlockedLoginsDoNotBypassPasswordWork",
+            "httpAccountCreationUsesTheSessionActorAndCreatesOnlyAPendingIdentity",
+            "httpAccountDisableRollsBackIfRequiredIamOutcomeIsMissing",
+            "additiveThrottleMigrationRepeatsWithoutChangesAndEnforcesIdentitySizeAndRoleBounds",
+            "expiredIssuerSessionCannotIssueProofDespiteHavingV2Permission",
+            "httpAccountTransitionsSupportZeroLoginIdentitiesWithoutCreatingOrSelectingALogin",
+            "logoutCommitFailureRollsBackRevocationAndKeepsOrdinaryProofForRetry",
+            "unknownLoginSprayCreatesNoDurableStateOrInheritedFailures",
+            "wrongTargetAndBadCsrfCannotConsumeProofAndSuccessfulReplayCannotChangePassword",
+            "logoutAuditFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry",
+            "rejectedCsrfAndPublicTrafficCannotRefreshEligibleIdleActivity",
+            "twoLoginResetAuditFailureRollsBackAndRedemptionCannotRetargetPinnedLogin",
+            "anonymousClientCanObtainCsrfProofWithoutIdentityPrivilege",
+            "pendingAndDisabledAccountsCannotClearFailuresOrBecomeEnabledThroughLogin",
+            "httpAccountDisableRollsBackIfRequiredAuditIsMissing",
+            "disabledAndReenabledIssuerCannotReuseItsOldProofIssuanceSession",
+            "silentlyMissingSpringBindingCannotCommitSessionOrClearFourFailures",
+            "fifthWrongPasswordBlocksEvenCorrectCredentialsWithoutDisablingAccount",
+            "httpAccountReenableRollsBackIfRequiredAuditIsMissing",
+            "resetRejectsUnknownForeignCredentiallessAndStaleExactLoginTargets",
+            "missingSignInAuditCannotClearFailures",
+            "httpAccountCreationRollsBackIfRequiredIamOutcomeIsMissing",
+            "resetProofExpiresAtFifteenMinutesAndCannotCrossSecurityTransitions",
+            "httpAdministrationRefusesAbsoluteExpiryEvenAfterEligibleActivity",
+            "concurrentRedemptionAcceptsExactlyOnePasswordAndOneOutcome",
+            "resetExplicitSecondLoginChangesOnlyItAndInvalidatesEveryAccountSession",
+            "csrfProtectedLogoutInvalidatesOnlyCurrentSessionAndGetCannotLogOut",
+            "missingSetupAuditRollsBackCredentialActivationAndProofConsumption",
+            "syntheticProofDeliveryIsUnavailableWithoutExplicitOptIn",
+            "httpAccountReenableRollsBackIfRequiredIamOutcomeIsMissing",
+            "realLoginRotatesSessionAndServerDerivesActorDespiteCallerSuppliedIdentity",
+            "expiredSessionIsRefusedBeforeRoleOrScopeEvaluation",
+            "httpAccountCreationRollsBackIfRequiredAuditIsMissing",
+            "blockedCredentiallessLoginOnActiveAccountStillPerformsQualifiedPasswordWork",
+            "missingSetupIamOutcomeRollsBackCredentialActivationAndProofConsumption",
+            "missingResetIamOutcomeRollsBackPasswordVersionSessionsAndProofConsumption",
+            "suppressedFailureClearingCannotPublishSuccessfulSignIn"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_001832dd2aed4f699e952f1cdb6a4f5c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_041d016282e54662b86d41dde5dd7000",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_0cf67132a2a94bebad58a504af3affca",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_0d690bc372624c42adb904a0e3fad7e6",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_1163232efb1b4ff69ddf75dcb1f8652b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_12a205acba60428d87522215643ca012",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_130c80dfa1de42d6b580cb8ee3d8031c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_142874a0b5784f669107f6316a637089",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_1544f98d7f774c54a8cb00dab9733b5e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_1954ae8281b147609091010c057b93f9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_1edf489dff0b421cb8a3818f56e3e13e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_27f247b37530492cbb8b3bafdb3429b0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_3097895dfbc647e08a1bd5a9705fb25a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_32d2e8ab87834adfbd4476b2138b8102",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_3315f94092d8418f96646a48979e1056",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_37c092cdf266443789b6edbba921fa6b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_3b7d51c0874f4d19a252745e7b5b4a81",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_3c8a6c1dd9c94615b2b8847e3d40f8ac",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_3d7eec13bd874ad897f31480fd6b4f9b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_3eb59ccbd49e428c9d63b5b84f231db4",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_45839a0027e84365870e6f1adf01c010",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_48d763027caa47e8be5ff1739b435f1a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_4e1602c4bd4446068e81bf8bb62e0997",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_52d1b48ae31544b4a26811c5b38813e1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_5466d3a419ab4e1a8b0dd03d6004c23f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_576b4b47623f482a82e638bd988cd07f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_5801e1bec73b4fd89bf6ad53f7567fed",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_59ec1cb1f0df4b80a15f49c9bab025ef",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_5c3c3470d33e445cbbe9e13526a7ffe9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_5c48cc687e444bb19ac4d54840b4ecbf",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_60c869c24fd6410cb356e6c0256df440",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_60cee8c15c98487ebb891a24eba463b4",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_6d1c744b07b44236be9c1ce80443c29d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_6d6a13f4cd804fe7852e319c598ebb62",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_6d731a859ab040048dce479e921e4188",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_72bb98355e6b4d00813f84e0443a8c12",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_73ea057da7cd42228e2a2fa390cccf40",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_78317c931752452f93f548b6331a6c26",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_784e5b4130374c3e80a58f6085a5d0f0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_79fe741b861b4b1a9e0718582bcca96e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_7a143c498aa3403c86eedc1d54bdd98e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_7c9d5979805142c6808f0ef17f002507",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_7db72db6d0be40e2a8a85c08b2546b11",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_82791df1d4dc413eb2459f6ae79399de",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_845b2efd97194d5c970f579198870ca8",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_8aebf49f2a8141d7a6b7833ebc39867a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_8d2df40d33874838a4fa7b84754ea8aa",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_8e38b87cbd194a9ba8ca64e7e8d31170",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_9330d9b1b7be455a9477a645952a0048",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_9e0a236bb4214ad38681a6504c86a705",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_a1f76be740da4ec0a3fb5bff72c5d7f9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_a52c903d0a544d43b3ffd987371f22f5",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_a63d5f0bafda42b99ac19de8224b5961",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_a91d4c3f8dfd4750ab1593634eb4781c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_a9731eac97bc44c38e861b4ad36b1168",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_a9ecbadf097e45cfadad102bdd4c7bfe",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_aa045faf5bf04d0db41f9ef006f0efe5",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_aa23350f8e41422ebe411a552d3a1e2f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_aaeb0a39f9664801b4071c0c49dc69bc",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_abf8da89abf940029cebeda9115b9e25",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_ae860e6176fe4cfd93a42d17f23682b6",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_b143f6914817470993dc467608b633e7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_b25c8a3dc54947bba303f0a6dbcce131",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_b4f5cb0c442c4841b9c070744a9c2ede",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_b4fd3c730b094c9ea1137570b4abf08d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_c1e3bfbab271447cb3be1e0aafd0978a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_c5fe275cf2624760babac874c36cd976",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_c7ce2f6cf7a1408c9352d85dc946ebb7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_cab9ddafe37349a5baf54e798480df2d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_cb02d841f1df4d07b537e36b40d1ac67",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_d0d034cc70984335ae8fc3d989cbaa28",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_d23b6d04b96c41969102de8bf5b5b9f6",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_d62e46e488af45d98aab0d76d354eebb",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_d6be213235d243e3aee17c7645ad7a79",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_d9111e0589f7482aa53a6c731e04977a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_de9c8e27fc30401dabfbd35871ff306e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_e0646b11e8fc4b8ab33eb47be6015d0d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_e0a9a56faa22437eb790b427f39ba27c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_e7ec70a3087141daaac739803d168943",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_e8d2718298344337b2736308a66c632b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_ed1a7ef8221e472e9f4f2e57aef05425",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_f860920efa254cb7ae5621c5d87d0f44",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        },
+        {
+          "schema": "f04_feebd0f35bbf49bfb731f754ea90e2e9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "READ_ONLY_RECOVERY"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-HfXr3dZW.log",
+      "outer_schema": "f04_5de76ac2c08f4b5da3a184e13d43ae49",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-Q4MGN0",
+      "log_sha256": "979ae8c3f164a69279ce85bc668c347591f131acf5d31d9854506c45bdf926a8",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.F04SchemaTest",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "756a18ad20f95776f03ab297fafe8b77e548bdc74b4480a6f2b7f9c80982ab53",
+          "text_sha256": "ffc1d3bb95460c4288d1cc97911d04107f9c41d2e95632d9518cbfb7e1911293",
+          "test_names": [
+            "sampleAcceptedEventIsUniqueAcrossContractVersions",
+            "committedEventStoreHasExactlyTheApprovedNineFieldEnvelope",
+            "commonStoreAllowsMultipleEventsWithoutSampleResultCoupling",
+            "committedEventContentRejectsUpdateDeleteAndTruncateEvenForItsOwner",
+            "sampleResultAndAuditExposeCompatibleProvenanceSuccessorFields",
+            "terminalSampleResultsAreInsertSelectOnlyAndRejectOwnerMutation",
+            "actualAppCanAppendButCannotRewriteOrDeleteReferencedEventIdentities"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_5de76ac2c08f4b5da3a184e13d43ae49",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-NLfiYxgR.log",
+      "outer_schema": "f04_dc854ee7651e49dcbc12b6813fdbfc54",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-Qw9oYA",
+      "log_sha256": "c697a5320c698fca89235b387393ea067edf35d9482b597fd63ff2380e77a469",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.F04PredecessorMigrationTest",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "582fd9df146d5ce826b110d6ce1a3adfd4bf18fbedd88efe1be7d8e70b860163",
+          "text_sha256": "80c0026bb338514abf96151ddbe319f8c57c2517cf2392c9cadc0d3bede3fffe",
+          "test_names": [
+            "migrationFailsWithoutExactAccountAttributionThenPreservesAttributedHistory"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_dc854ee7651e49dcbc12b6813fdbfc54",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-ZZbsh17R.log",
+      "outer_schema": "f04_b9ef22f72f114aaba62da6187fb4f045",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-tIHEcC",
+      "log_sha256": "a2abe307ced2ec0aef7669c623b6ddbe4720eb4af9a547f498e14699264c6428",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.OwnerOutcomeTest",
+          "counts": {
+            "tests": 21,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "680a86483bbca81566a11d710e8bff4ae68c025316438f60751a06283d530e43",
+          "text_sha256": "0a714e6439dba25c784378804e97b75286a9c3604b065fcd6e83d3c940f82840",
+          "test_names": [
+            "requiredAuditFailureRollsBackAllCompanionsThenSameIdCanCommit",
+            "suppressedCommitTimeRefusalAuditCannotLeavePartialOwnerOrRefreshActivity",
+            "deferredCommitFailureIsNotSuccessAndObserverConfirmsNonCommit",
+            "realSignInCapturesServerPrincipalRatherThanClientActorId",
+            "refusalHandoffRetainsOperationLockUntilRefusalAuditCommits",
+            "businessRefusalRetainsOwnerAndRequiredAuditButNoCommittedEvent",
+            "concurrentAcceptsResolveOneCanonicalWinner",
+            "acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent",
+            "ownerCommitBeforeHttpLogoutPreservesAcceptedHistoryAndSharedActivityFate",
+            "freshSessionResolvesTerminalRefusalDespiteChangedDecision",
+            "freshSessionResolvesOriginalAcceptedWithoutCompanionDuplicates",
+            "committedHttpLogoutBeforeOwnerCommitRetainsRefusalAndAllowsFreshSessionResolution",
+            "requiredEventFailureCannotCommitOwnerOrAudit",
+            "suppressedRequiredAuditIsFailureNotPartialSuccess",
+            "otherActorAndRevokedSessionCannotDiscloseEitherTerminalOutcome",
+            "ownerCommitBeforeDisablePreservesAcceptedHistoryAndSharedActivityFate",
+            "heldOperationLockTimesOutWithoutCommitAndRetryCanProceed",
+            "committedDisableBeforeOwnerCommitRetainsAttributableRefusal",
+            "suppressedRequiredEventIsFailureNotPartialSuccess",
+            "concurrentAcceptAndRefuseResolveOneCanonicalWinner",
+            "failedUnlockAndAbortDiscardPhysicalConnectionBeforePoolReturn"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_b9ef22f72f114aaba62da6187fb4f045",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-cu6L1OWR.log",
+      "outer_schema": "f04_92c7906990cd40439cfdf8cbd0a8c5d0",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-UuCWyH",
+      "log_sha256": "8539fa78d52ccc03c374f750ca3f23cff5de421cd92a0cca61a16fde1c978b40",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.HttpSessionFlowTest",
+          "counts": {
+            "tests": 83,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "268f3277349eae59170987b06c178477ed887bdcd2a7961f3d2f6ef8da2fdfb9",
+          "text_sha256": "74e77cfed2c3c9a79fc75b7611d7fbe91c3e973b98df70b7696a85dfe5c03d42",
+          "test_names": [
+            "missingSignInSessionCannotClearFailures",
+            "rollingWindowExcludesFailuresExactlyFifteenMinutesOld",
+            "explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount",
+            "deferredDatabaseCommitFailureRollsBackAlreadyBoundTentativeSession",
+            "resetWhileDisabledChangesCredentialButRequiresSeparateReenableAndFreshSignin",
+            "concurrentResetAcceptsOneCredentialAndOneAuditedVersionChange",
+            "logoutIamFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry",
+            "httpAccountCreationRejectsAnOverlongNormalizedLoginWithoutPartialState",
+            "httpAdministrationRefusesDisabledReenabledAndRevokedIssuerSessionsWithoutLosingFreshAuthority",
+            "effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy",
+            "suppressedSessionRevocationCannotCommitCredentialReset",
+            "blockDeadlineDoesNotMoveAndIsOpenExactlyAtAndAfterExpiry",
+            "absoluteExpiredLogoutCannotPublishAcceptedEvidenceDespiteRecentActivity",
+            "suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure",
+            "resetProofBindingIsMigratorOwnedAndRuntimeCannotRetargetOrDeleteIt",
+            "idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting",
+            "anonymousRevokedAndStaleVersionLogoutAreRefusedWithoutAcceptedEvidence",
+            "httpAccountInputAndStateRefusalsAreSafeAndLeaveNoPartialMutation",
+            "firstSetupExpiresExactlyAtFifteenMinutesWithoutWallClockWaiting",
+            "loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity",
+            "httpDisableAndReenableKeepIdentityHistoryAndRequireFreshSigninForEveryOldSession",
+            "malformedUnicodeCannotBecomeAReplacementCharacterCredential",
+            "springExceptionBeforeBindingCannotCommitSignIn",
+            "concurrentFailuresReachOneFifthFailureWithoutLostUpdatesOrUnboundedState",
+            "disabledTwoLoginResetPreservesDisablementAndSiblingCredentialUntilSeparateReenable",
+            "httpAdministrationAcceptedActivityRefreshesIdleButInvalidMutationDoesNot",
+            "accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1",
+            "expiredLogoutIsRefusedWithoutAcceptedEvidenceOrRevocation",
+            "resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin",
+            "firstSetupProofCannotBecomeResetProofOrBeConsumedByResetRefusal",
+            "missingResetAuditRollsBackPasswordVersionSessionsAndProofConsumption",
+            "httpAdministrationRevalidatesSessionAfterWaitingForTheSecurityWriteLock",
+            "httpAdministrationRefusesIdleExpiryBeforeScopeAndRefusalsDoNotRefreshActivity",
+            "anonymousSessionProbeIsRefusedWithoutActorOrLoginRedirect",
+            "newPasswordBoundsCountUnicodeCharactersAndUtf8BytesWithoutTrimming",
+            "activityCannotExtendEightHourAbsoluteDeadline",
+            "normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent",
+            "disabledAndReenabledOldSessionCannotLogoutButFreshSessionCan",
+            "missingSignInIamOutcomeCannotClearFailures",
+            "resetIssuanceRequiresExplicitV2ScopeEligibleSessionAndSyntheticOptIn",
+            "springExceptionAfterBindingCannotLeaveEligibleTentativeProof",
+            "superAndV1CannotIssueProofWhileExplicitV2IsStillBoundToItsOrganization",
+            "activeResetIsProofAuthorizedAndRevokesEveryOldSessionAndSameVersionProof",
+            "httpAccountAuthorityRequiresCurrentScopedAssignmentAndCsrfNotSuperOrClientIdentity",
+            "firstSetupCannotResetActiveDisabledOrStaleReenabledTargets",
+            "resetExplicitFirstLoginPreservesSecondCredentialAndRejectsReplay",
+            "unknownDisabledAndBlockedLoginsDoNotBypassPasswordWork",
+            "httpAccountCreationUsesTheSessionActorAndCreatesOnlyAPendingIdentity",
+            "httpAccountDisableRollsBackIfRequiredIamOutcomeIsMissing",
+            "additiveThrottleMigrationRepeatsWithoutChangesAndEnforcesIdentitySizeAndRoleBounds",
+            "expiredIssuerSessionCannotIssueProofDespiteHavingV2Permission",
+            "httpAccountTransitionsSupportZeroLoginIdentitiesWithoutCreatingOrSelectingALogin",
+            "logoutCommitFailureRollsBackRevocationAndKeepsOrdinaryProofForRetry",
+            "unknownLoginSprayCreatesNoDurableStateOrInheritedFailures",
+            "wrongTargetAndBadCsrfCannotConsumeProofAndSuccessfulReplayCannotChangePassword",
+            "logoutAuditFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry",
+            "rejectedCsrfAndPublicTrafficCannotRefreshEligibleIdleActivity",
+            "twoLoginResetAuditFailureRollsBackAndRedemptionCannotRetargetPinnedLogin",
+            "anonymousClientCanObtainCsrfProofWithoutIdentityPrivilege",
+            "pendingAndDisabledAccountsCannotClearFailuresOrBecomeEnabledThroughLogin",
+            "httpAccountDisableRollsBackIfRequiredAuditIsMissing",
+            "disabledAndReenabledIssuerCannotReuseItsOldProofIssuanceSession",
+            "silentlyMissingSpringBindingCannotCommitSessionOrClearFourFailures",
+            "fifthWrongPasswordBlocksEvenCorrectCredentialsWithoutDisablingAccount",
+            "httpAccountReenableRollsBackIfRequiredAuditIsMissing",
+            "resetRejectsUnknownForeignCredentiallessAndStaleExactLoginTargets",
+            "missingSignInAuditCannotClearFailures",
+            "httpAccountCreationRollsBackIfRequiredIamOutcomeIsMissing",
+            "resetProofExpiresAtFifteenMinutesAndCannotCrossSecurityTransitions",
+            "httpAdministrationRefusesAbsoluteExpiryEvenAfterEligibleActivity",
+            "concurrentRedemptionAcceptsExactlyOnePasswordAndOneOutcome",
+            "resetExplicitSecondLoginChangesOnlyItAndInvalidatesEveryAccountSession",
+            "csrfProtectedLogoutInvalidatesOnlyCurrentSessionAndGetCannotLogOut",
+            "missingSetupAuditRollsBackCredentialActivationAndProofConsumption",
+            "syntheticProofDeliveryIsUnavailableWithoutExplicitOptIn",
+            "httpAccountReenableRollsBackIfRequiredIamOutcomeIsMissing",
+            "realLoginRotatesSessionAndServerDerivesActorDespiteCallerSuppliedIdentity",
+            "expiredSessionIsRefusedBeforeRoleOrScopeEvaluation",
+            "httpAccountCreationRollsBackIfRequiredAuditIsMissing",
+            "blockedCredentiallessLoginOnActiveAccountStillPerformsQualifiedPasswordWork",
+            "missingSetupIamOutcomeRollsBackCredentialActivationAndProofConsumption",
+            "missingResetIamOutcomeRollsBackPasswordVersionSessionsAndProofConsumption",
+            "suppressedFailureClearingCannotPublishSuccessfulSignIn"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_0229bdb7659b4c4a906d5ca27ecd55a2",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_048d349230aa46809170fcb8a5c6efc9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_08e3f860c9934a5791b349ff6d03bc36",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_1472e6e7795644e2a9dc33bcddf8ca2b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_215458c4c85a4957b5d9cc6ceacf3035",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_232b05492a4d44eaa0a64c2c527db29c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_2770e9097bc44af79fc08de3f6a4c761",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_283d0e83501d4b2aad9f49c57637cf0a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_2873909b89ad45c48ed29d8cff431b19",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_2f525a1043694e3db99b3a55366ca2f7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_309ab2d039864110826e462eb3ce749d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_336633c2a6c64c828ff3139ffc20bfcc",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_368198ee99cd41839cd4d99dc534eb56",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_3e9dcff78f664e81adae74819d87ae81",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_400b027c503d4b4990d5d69f228fb60e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_41d7f6a85ae44afeb7fcdfe455dc2a22",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_4479f1ac87c441c78a567e8103b53a62",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_4676b198b3a6471dbd6a53de21b0c9b7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_46bf40c785e54d31bbba8002dfd18eee",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_4a6a6367bb334921b252f735dc663f0e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_4bcc51897af84809bf25c6c96090e5c3",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_506c2f6f19d64398af19a83d176c6d49",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5258a2fbcafe44e6b8d104d5e8bb72c1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_533ecca0b1984821892b39651546d0de",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_57147ff10d904204a4d36d022de8829e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_571a835662ad43129bc4ae7f4db16eef",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_58b86395d106414dab5153278d920cf1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_590523f276a544328321fce750aa448f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_601e86af582245e5a75245c99f6b9afc",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6066fcf0c9744b919d5cda4d467e100d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_632e69510e79474c99a8e3e1be7576b4",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_66ec87e62fee43ee836fc517ec76dacc",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_693ec3e403b54d9d915823383687dea7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_69e201860317472587a31affaa7c7e69",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6a534f711e2340cf93933c35d2b9752f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6c7ffb5b2c7d47df83cc04b557a3a179",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6ee3d135719842eda86013d99c178f68",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_71d40ca465a34c6585b316955930bd9c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_72600a2e22d6428a9ff4f8adfa4de1e1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_781facafd68847f5a206914b658b39c7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_79d9b0e001924a04b2cd77abdd26af04",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7a9d928f0fe24919a5bc0d6eb79dbc22",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7e0c03fe26434a1aabdecc9fe5d6de0d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7e5aafe329f845c69b4be7c25ce8c66a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_81f7292af5224a07bdb1aafe46c1485b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_8a507d07b77449b19e06d60099e873b5",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_8bc556cbf9e84d6ebb480dceb453f9cf",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_98073996d32949f68a680b97ab056b0b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9d3f3c4d12954e14bd68511a56437452",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9f271dffc655445b8877e02cc2f19456",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a09273317c4545a5ad8d8333e234c689",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a1263cef5eca4a86a2ac8ac7dc85b917",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_aa398798c34d4dfbaf3207834b4c7242",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ade43a92ee5e498280ba91bad5cdd69b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_af1ce57bac204337a8911e914329f4fb",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b2953c16f7b2424c892ae73bd04176b8",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b5b265e1bacc4835be6dbad6dd9e0f96",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b788811745824734b661c6a94e1c7d1b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b7d2d6b0f376423d84b1a3dcee5694da",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b9a5130d8f4943e88843a2526b8978ea",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b9cdaa3f15ac422d886f6fbfb090718a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_bc790ab354414144a4a6708ecbf9a718",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c15a71815a064a0eb32b8fef81175668",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c1693af3aca44249a6877c60e9db4a2f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c376ad97427046fcb55da5551933ab22",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c5636babe7f74451a4020dd80230be42",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c598a15faeea4910b9d93de75742dadd",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d2798d2975574f6b8ef1f30fac63ccb1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d3babdee975f4e4eba7c8bc1c85c9b32",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d846a6fca6504fd89e98575eb54825eb",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_dad2642647be41c9be7fb31109b55105",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_db49407c0592427cb2e9b3ded91df1c7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_dbba70f594a74b9a981372d8df01d83f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ddd131b1c1c04edaa2c8054867b5923e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_dfcb64b07f194fcebac5ec0109360e73",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_e04bbe5419f04ca5ae45a73c25387543",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_e1c9744dbaee495bb2a2fe949974c5b5",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_eb5e46d4724740d68fa5f7930a6e8b1c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_eebc381f5f774fa5b93fc915abeedc49",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f65130eddce9400d88ad7076e6ebcad1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f723ca36dc774f619842206d22df15da",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f7bf454144e04ee886826185b55345fb",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f7cb3d2ee48445adab999fbabe58bc17",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-uwmmm7dN.log",
+      "outer_schema": "f04_416100c1ef0a47a6bb0e059d535c536b",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-vR5SlE",
+      "log_sha256": "41676d725bce7ab026cee640d369e7830bdc5d84646807f46a4a7e5695f1d89c",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.audit.AuditEvidenceRepositoryTest",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "877eaeef6da0c14045bb6cfdae81a4700775ad45c9a74458e3f004adcf96ad88",
+          "text_sha256": "36ac714e5104b0289c4215f98bce47cb117656b13240ed603bf414465edd5857",
+          "test_names": [
+            "appendPropagatesInvalidInputAndLeavesCallerTransactionUsable",
+            "appendUsesCallerConnectionAndPreservesExactCorrelation",
+            "suppressedInsertIsFailureNotAnAcceptedAuditAppend",
+            "sqlFailurePropagatesWithoutRollingBackOrClosingTheCallerTransaction",
+            "f04AppendRequiresOriginalCorrelationEvenThoughHistoricalColumnIsNullable",
+            "refusalAuditBecomesDurableOnlyWhenTheCallerCommits",
+            "appendRequiresAnExplicitCallerTransaction"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_416100c1ef0a47a6bb0e059d535c536b",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "8f1be94973a242ef220cf88e763673733140ae73bd5a9d4f829a18431c0047cf",
+      "log": "/home/phuclam/idea-f04-schema-WAczyKgF.log",
+      "outer_schema": "f04_c74aee82e15f4b7f85a01a3b327f3989",
+      "source": "725a61359223f62d7115b67ef136bd7d84c04bd0",
+      "build": "/home/phuclam/idea-f04-725a613-XMepdA",
+      "log_sha256": "f6fd4edb2f1363b1f7d08542a13a2dab5162cdfed487edc20189b13701b34c78",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.IdentityFlowTest",
+          "counts": {
+            "tests": 20,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "312c3091300eaf136362922bd5adb4f29978d40b52f3c03506b3af867f0254dc",
+          "text_sha256": "8a127addef352a714282251a15c2284f9ff96301752b6416e5fd56c5f0461ac9",
+          "test_names": [
+            "encoderRejectsOver72Utf8BytesWithoutLeavingPartialIdentity",
+            "failureWritingRequiredEvidenceRollsBackBootstrapAndAllowsARealRetry",
+            "assignmentAuditFailureRollsBackTheSeparateGrantAndOwnerOutcome",
+            "superAloneCannotCreateAccountsButTheIndependentAssignmentCanCreateAPendingIdentity",
+            "silentlySuppressedAuditInsertMustNotProduceBootstrapSuccess",
+            "runtimeCannotRewriteOrRemoveExistingRoleAssignments",
+            "bootstrapOperatorCommandRefusesHeadlessInitializationBeforeConnecting",
+            "superAdministratorGrantsASeparateExactVersionAndScopeAssignment",
+            "disablingTheLastEffectiveSuperAdministratorRecoveryPathIsRefused",
+            "concurrentBootstrapAttemptsHaveExactlyOneWinner",
+            "suppressedLoginInsertCannotLeaveAnIssuedActorOrAccount",
+            "repeatingBootstrapCannotCreateAnotherIdentityOrGrant",
+            "ordinaryWrongScopeAndRevokedAssignmentsCannotPerformAnyAccountAction",
+            "disableAndReenablePreserveIdentityAndHistoryWithoutActivatingAnUnconfiguredAccount",
+            "assignmentRejectsWrongRoleVersionAndChangesNoGrant",
+            "activeIdentityLifecyclePreservesIdsAndRefusesStaleChanges",
+            "suppressedAuditInsertRollsBackBothDisableAndReenable",
+            "invalidAssignmentReasonReturnsAnAttributableRefusalWithoutANewGrant",
+            "firstLocalBootstrapCreatesOnlyOneNamedSuperAdministrator",
+            "requiredIamOutcomeFailureRollsBackIssuedIdentityAndEvidence"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_093010809ccc4cbc8ae9ca15270e1f7e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_0d779851b39e46c990eff8c584f1dab0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_0f4f884fb8cf4a9289e41a1198342121",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_38e4676eb3744500b0c0d37f9b504b60",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_3916a6f817dd4e46b1ad2d632fda45bc",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_39fdb24de631466ab38322d00e555a6a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_519bec04a0514f978f1b6a70badbaca3",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_58428aa0d75f40ba8baf40195c0b28ef",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5a0bca27f14c442db31b6e3858c4486b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_61800a9108dd4a52be00269970c9bd9c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_77beb6ba4d3842ddb26dc8861a75765d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9dca53830022471f80f078a5c787fe6c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a98bdc4c56d5428f8ea1e2f54bf638d5",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a9ce0a880b4544fdb28d584766b93bbf",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ac9d65989bc549e59082bd2b40a55e3b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c09239949e55413e9a9c5b2d29adcca4",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c3996e4636cd466eaaba977de9eb177a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ca62097927244e9fae1747b10a1a7d36",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d2b35458b010421ab97c33c019ad1423",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d30ac0df0b6c4be2b35368fb10cd9a4f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "67780569242dcb874c6b3eed880d481c2d98aba9248d7bd7dc14caa45653eb17",
+      "log": "/home/phuclam/idea-f04-schema-f0YRoWFX.log",
+      "outer_schema": "f04_a1f097cc97df4ff393e91f508ecefed8",
+      "source": "aaeaadef4165ab4caf1c559cb4d2f497a5872630",
+      "build": "/home/phuclam/idea-f04-aaeaade-bFSBOm",
+      "log_sha256": "505965f661c6c0d477ca827f21f09f058637cee781d6c5fee59cc245d3fb2aff",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.OwnerOutcomeTest",
+          "counts": {
+            "tests": 21,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "cacc865cd0cd5da8443604d035f89aff1816d24bbad44d7076c54bee2be2ba61",
+          "text_sha256": "d15fac86e17e59e52605b53ab58c244642960ab5ad2612586e6a30994b09e77a",
+          "test_names": [
+            "requiredAuditFailureRollsBackAllCompanionsThenSameIdCanCommit",
+            "suppressedCommitTimeRefusalAuditCannotLeavePartialOwnerOrRefreshActivity",
+            "deferredCommitFailureIsNotSuccessAndObserverConfirmsNonCommit",
+            "realSignInCapturesServerPrincipalRatherThanClientActorId",
+            "refusalHandoffRetainsOperationLockUntilRefusalAuditCommits",
+            "businessRefusalRetainsOwnerAndRequiredAuditButNoCommittedEvent",
+            "concurrentAcceptsResolveOneCanonicalWinner",
+            "acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent",
+            "ownerCommitBeforeHttpLogoutPreservesAcceptedHistoryAndSharedActivityFate",
+            "freshSessionResolvesTerminalRefusalDespiteChangedDecision",
+            "freshSessionResolvesOriginalAcceptedWithoutCompanionDuplicates",
+            "committedHttpLogoutBeforeOwnerCommitRetainsRefusalAndAllowsFreshSessionResolution",
+            "requiredEventFailureCannotCommitOwnerOrAudit",
+            "suppressedRequiredAuditIsFailureNotPartialSuccess",
+            "otherActorAndRevokedSessionCannotDiscloseEitherTerminalOutcome",
+            "ownerCommitBeforeDisablePreservesAcceptedHistoryAndSharedActivityFate",
+            "heldOperationLockTimesOutWithoutCommitAndRetryCanProceed",
+            "committedDisableBeforeOwnerCommitRetainsAttributableRefusal",
+            "suppressedRequiredEventIsFailureNotPartialSuccess",
+            "concurrentAcceptAndRefuseResolveOneCanonicalWinner",
+            "failedUnlockAndAbortDiscardPhysicalConnectionBeforePoolReturn"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_a1f097cc97df4ff393e91f508ecefed8",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "67780569242dcb874c6b3eed880d481c2d98aba9248d7bd7dc14caa45653eb17",
+      "log": "/home/phuclam/idea-f04-schema-0smxyoH5.log",
+      "outer_schema": "f04_5a67db032258410cb579a9ad2dbadcf9",
+      "source": "aaeaadef4165ab4caf1c559cb4d2f497a5872630",
+      "build": "/home/phuclam/idea-f04-aaeaade-FvCTMi",
+      "log_sha256": "cb04593f9f7a606977f49e0fdbaf82fa022a0d0947c677f19ab641dc5b6b1bc0",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.audit.AuditEvidenceRepositoryTest",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "e0cf22ed1568e8ec7f8589877674aa9b76721a0b881ac195ecdb72e66da30d39",
+          "text_sha256": "664692d03c610e20b04c722d0c99be88ff9eba1a07ab8b66a20e607a6dd02b24",
+          "test_names": [
+            "appendPropagatesInvalidInputAndLeavesCallerTransactionUsable",
+            "appendUsesCallerConnectionAndPreservesExactCorrelation",
+            "suppressedInsertIsFailureNotAnAcceptedAuditAppend",
+            "sqlFailurePropagatesWithoutRollingBackOrClosingTheCallerTransaction",
+            "f04AppendRequiresOriginalCorrelationEvenThoughHistoricalColumnIsNullable",
+            "refusalAuditBecomesDurableOnlyWhenTheCallerCommits",
+            "appendRequiresAnExplicitCallerTransaction"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_5a67db032258410cb579a9ad2dbadcf9",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "67780569242dcb874c6b3eed880d481c2d98aba9248d7bd7dc14caa45653eb17",
+      "log": "/home/phuclam/idea-f04-schema-WVEG3F2T.log",
+      "outer_schema": "f04_692f48401f4843d6a36492f310b992e8",
+      "source": "aaeaadef4165ab4caf1c559cb4d2f497a5872630",
+      "build": "/home/phuclam/idea-f04-aaeaade-tJ1wev",
+      "log_sha256": "e2a774b676d717100d2c68b65c4503cbf32d070880ae7d49014aaf501878d6b9",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.F04SchemaTest",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "2d84a700a9135d46ea489443b4a8887347d318475884b0fdb10657dff71b40ec",
+          "text_sha256": "efd07042385badcfe8733fc1cfa229a5bc7636943df2134bacf251035d75354d",
+          "test_names": [
+            "sampleAcceptedEventIsUniqueAcrossContractVersions",
+            "committedEventStoreHasExactlyTheApprovedNineFieldEnvelope",
+            "commonStoreAllowsMultipleEventsWithoutSampleResultCoupling",
+            "committedEventContentRejectsUpdateDeleteAndTruncateEvenForItsOwner",
+            "sampleResultAndAuditExposeCompatibleProvenanceSuccessorFields",
+            "terminalSampleResultsAreInsertSelectOnlyAndRejectOwnerMutation",
+            "actualAppCanAppendButCannotRewriteOrDeleteReferencedEventIdentities"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_692f48401f4843d6a36492f310b992e8",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "67780569242dcb874c6b3eed880d481c2d98aba9248d7bd7dc14caa45653eb17",
+      "log": "/home/phuclam/idea-f04-schema-VcGDmuBl.log",
+      "outer_schema": "f04_6d481581d3c247b9838933121cfb2ad0",
+      "source": "aaeaadef4165ab4caf1c559cb4d2f497a5872630",
+      "build": "/home/phuclam/idea-f04-aaeaade-tMzUNw",
+      "log_sha256": "a36ee4943c499c40e61ce37ce43b2926ef58ab05ca1444ce6960e9ea1482e4a2",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.F04PredecessorMigrationTest",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "59febfc085d29d6f839dc7d7a75ce4ab1af8ab67e3bf8312890f0e7573cceb17",
+          "text_sha256": "4eb81f44aa98a58aed854c6661d1b7e4b3b7fe383c649e4ccf55702dd8c97226",
+          "test_names": [
+            "migrationFailsWithoutExactAccountAttributionThenPreservesAttributedHistory"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_6d481581d3c247b9838933121cfb2ad0",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-63pEUm88.log",
+      "outer_schema": "f04_041b1d6c4cce45e4a335b2141856511f",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-4WZBF2",
+      "log_sha256": "ae070ad359c656bacd9f66fe19157771e0883d1dfb741dc0fc15f78ac992d5c6",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.ServerRestartFlowTest",
+          "counts": {
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "7161ef253bacdfc8319698d218cccde440ab0ac182ae32eab024c09549f4675a",
+          "text_sha256": "702c7a3be3ed308967d927fa2d68bc8a0f79654d4f0d17ae86aa30e5961de104",
+          "test_names": [
+            "revokedAndIdleExpiredCookiesRemainRefusedAfterProcessRestart",
+            "persistedLoginBlockSurvivesRestartUntilItsOriginalDeadline",
+            "retainedSessionMetadataCannotRestoreAnOldCookieAcrossRealServerProcesses"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_6d75d8fc6d764301860a9f3cf6c5aef3",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7b12d7d7afd9486ba959d1ee6cfce202",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c6227e5d112c430b8e4ecd15c352063b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": [
+        "43180",
+        "43273",
+        "43373",
+        "43454",
+        "43552",
+        "43620"
+      ]
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-cmrlJRWK.log",
+      "outer_schema": "f04_7b2885abfa24469dac8133fa1863cc43",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-7yqPra",
+      "log_sha256": "1182e131aa1c7483eb1c6747c3245e7abc9396cbc2bbcc562402d01be98ed29a",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.ServerSmokeTest",
+          "counts": {
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "7f111ad931046b14a2dd88072bb4615ce6a6d45229ee7feb19d9eb934f42ef11",
+          "text_sha256": "11e8b9a901c832e9032c1a35807aaef04e6478817cfb3ee47fa7e39556c28626",
+          "test_names": [
+            "databaseHealthReportsDownWithoutTakingProcessHealthDown",
+            "healthEndpointReportsProcessAvailabilityWithoutDatabase"
+          ]
+        }
+      ],
+      "schema_receipts": [],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-mTZq9H42.log",
+      "outer_schema": "f04_d237e7ec666247888bbb49b19376f4ed",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-f5IGgG",
+      "log_sha256": "5bab2cf8f16d4dbd0b092a6ff958f3279d1211c8fc3bde4e1cfe18cb901e6a50",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.OwnerOutcomeTest",
+          "counts": {
+            "tests": 21,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "f80e37decf0536b0e76fc320f434b167949cfba27ddd0a7789a1a045da88e234",
+          "text_sha256": "ad70b7efd13e157e99e6526ee0afb9af1949657ca61238063465fcb7adec96fe",
+          "test_names": [
+            "requiredAuditFailureRollsBackAllCompanionsThenSameIdCanCommit",
+            "suppressedCommitTimeRefusalAuditCannotLeavePartialOwnerOrRefreshActivity",
+            "deferredCommitFailureIsNotSuccessAndObserverConfirmsNonCommit",
+            "realSignInCapturesServerPrincipalRatherThanClientActorId",
+            "refusalHandoffRetainsOperationLockUntilRefusalAuditCommits",
+            "businessRefusalRetainsOwnerAndRequiredAuditButNoCommittedEvent",
+            "concurrentAcceptsResolveOneCanonicalWinner",
+            "acceptedCommandRetainsAuthenticatedProvenanceAcrossOwnerAuditAndEvent",
+            "ownerCommitBeforeHttpLogoutPreservesAcceptedHistoryAndSharedActivityFate",
+            "freshSessionResolvesTerminalRefusalDespiteChangedDecision",
+            "freshSessionResolvesOriginalAcceptedWithoutCompanionDuplicates",
+            "committedHttpLogoutBeforeOwnerCommitRetainsRefusalAndAllowsFreshSessionResolution",
+            "requiredEventFailureCannotCommitOwnerOrAudit",
+            "suppressedRequiredAuditIsFailureNotPartialSuccess",
+            "otherActorAndRevokedSessionCannotDiscloseEitherTerminalOutcome",
+            "ownerCommitBeforeDisablePreservesAcceptedHistoryAndSharedActivityFate",
+            "heldOperationLockTimesOutWithoutCommitAndRetryCanProceed",
+            "committedDisableBeforeOwnerCommitRetainsAttributableRefusal",
+            "suppressedRequiredEventIsFailureNotPartialSuccess",
+            "concurrentAcceptAndRefuseResolveOneCanonicalWinner",
+            "failedUnlockAndAbortDiscardPhysicalConnectionBeforePoolReturn"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_d237e7ec666247888bbb49b19376f4ed",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-xLCv6TVv.log",
+      "outer_schema": "f04_a2c48efecd4046f7baa82ec0b2a4bce0",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-gCaUtr",
+      "log_sha256": "b3a7911a4b73009926f3be94adaff14b721e82eb37d3d7fe1e0570a3e010c542",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.IdentityFlowTest",
+          "counts": {
+            "tests": 20,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "426d2352a16711ffa997b6b5c5b3f0d0be893c55877e58a7747407910b46ac68",
+          "text_sha256": "cfc14e80f8471aa1b87e28786c797d615403f622a886d507b3f965221492bd24",
+          "test_names": [
+            "encoderRejectsOver72Utf8BytesWithoutLeavingPartialIdentity",
+            "failureWritingRequiredEvidenceRollsBackBootstrapAndAllowsARealRetry",
+            "assignmentAuditFailureRollsBackTheSeparateGrantAndOwnerOutcome",
+            "superAloneCannotCreateAccountsButTheIndependentAssignmentCanCreateAPendingIdentity",
+            "silentlySuppressedAuditInsertMustNotProduceBootstrapSuccess",
+            "runtimeCannotRewriteOrRemoveExistingRoleAssignments",
+            "bootstrapOperatorCommandRefusesHeadlessInitializationBeforeConnecting",
+            "superAdministratorGrantsASeparateExactVersionAndScopeAssignment",
+            "disablingTheLastEffectiveSuperAdministratorRecoveryPathIsRefused",
+            "concurrentBootstrapAttemptsHaveExactlyOneWinner",
+            "suppressedLoginInsertCannotLeaveAnIssuedActorOrAccount",
+            "repeatingBootstrapCannotCreateAnotherIdentityOrGrant",
+            "ordinaryWrongScopeAndRevokedAssignmentsCannotPerformAnyAccountAction",
+            "disableAndReenablePreserveIdentityAndHistoryWithoutActivatingAnUnconfiguredAccount",
+            "assignmentRejectsWrongRoleVersionAndChangesNoGrant",
+            "activeIdentityLifecyclePreservesIdsAndRefusesStaleChanges",
+            "suppressedAuditInsertRollsBackBothDisableAndReenable",
+            "invalidAssignmentReasonReturnsAnAttributableRefusalWithoutANewGrant",
+            "firstLocalBootstrapCreatesOnlyOneNamedSuperAdministrator",
+            "requiredIamOutcomeFailureRollsBackIssuedIdentityAndEvidence"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_0cd5ce65a8774635a7721adf004da313",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_1c00ac0ac3114861957a2e5448a41b8b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_1c1d8b3b646f4d5991403d7dd52faf77",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_260b967e99154c9b8dba65388dd2d406",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_492b0023b18647e1a5c746e71de64598",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_544ba6fe3895461f86c1df957d6a5d1b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5758257711fd4b0197b92c1145a4697d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_597e488bb70b4acfa144cf95b205d2d4",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7630563a437f40d986234a004e76362a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_777a18c26d5c42798e506d1533d092f6",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7e045fb5cfca4ced891fa7bbba42bcd2",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_8863b651895c4c27bbec42b94cb65fca",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9af83fdffc6f4182a9392b8fc9764955",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b598fd76e09a43c18004d7740fe721f7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c01fe2b72321494ab581c00e6e683559",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c4299632db294bc5801479ed7c9a4c7a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_cf0ac22f87a6400f810d2bc0948257a8",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_e44eba0fa8c146beb32335036d545e81",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_efa763468a464692bf0d15708638caeb",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f91e6f70b6ae4d5d84dc60fa65469938",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-5iDP3spu.log",
+      "outer_schema": "f04_dbf71c7c4b794bd2a0a0d049a0b90bc0",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-tQMCzn",
+      "log_sha256": "3b8b29fa5128987c951d9a08e080b1413fad2fd1ac91a89dbb2e39ea85c769d5",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.audit.AuditEvidenceRepositoryTest",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "04fa34f80faaf0d7a2c790bf87e070db18a9704d4ce01124b41efac0773ad653",
+          "text_sha256": "c5f3d635b52e835cd329b9bbb9d86f46aacf2bdf484ddb771d743c4e8cbc5d6d",
+          "test_names": [
+            "appendPropagatesInvalidInputAndLeavesCallerTransactionUsable",
+            "appendUsesCallerConnectionAndPreservesExactCorrelation",
+            "suppressedInsertIsFailureNotAnAcceptedAuditAppend",
+            "sqlFailurePropagatesWithoutRollingBackOrClosingTheCallerTransaction",
+            "f04AppendRequiresOriginalCorrelationEvenThoughHistoricalColumnIsNullable",
+            "refusalAuditBecomesDurableOnlyWhenTheCallerCommits",
+            "appendRequiresAnExplicitCallerTransaction"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_dbf71c7c4b794bd2a0a0d049a0b90bc0",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-EZ5ZyaEK.log",
+      "outer_schema": "f04_3b85d21973cd410d8b2062ebd1f8a4f6",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-WrBhxf",
+      "log_sha256": "1c8bdf65755ccb122341cf7702b3ebb2a63c7cd87be40a9139de0cb97006c152",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "NOT-CREATED",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.identity.HttpSessionFlowTest",
+          "counts": {
+            "tests": 83,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "a5ca2323e7ca8cd19cccdfb5bfa1180dfd7d9a577ee0b670d923700af1a00ebf",
+          "text_sha256": "153c3172818ea48320326a4741a42e2cef8f323bc86bc531565d8593e176e1f3",
+          "test_names": [
+            "missingSignInSessionCannotClearFailures",
+            "rollingWindowExcludesFailuresExactlyFifteenMinutesOld",
+            "explicitV2CanIssueFirstSetupAndProofHolderActivatesOnlyItsBoundAccount",
+            "deferredDatabaseCommitFailureRollsBackAlreadyBoundTentativeSession",
+            "resetWhileDisabledChangesCredentialButRequiresSeparateReenableAndFreshSignin",
+            "concurrentResetAcceptsOneCredentialAndOneAuditedVersionChange",
+            "logoutIamFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry",
+            "httpAccountCreationRejectsAnOverlongNormalizedLoginWithoutPartialState",
+            "httpAdministrationRefusesDisabledReenabledAndRevokedIssuerSessionsWithoutLosingFreshAuthority",
+            "effectiveServletSessionBudgetDoesNotPreemptIdeaPolicy",
+            "suppressedSessionRevocationCannotCommitCredentialReset",
+            "blockDeadlineDoesNotMoveAndIsOpenExactlyAtAndAfterExpiry",
+            "absoluteExpiredLogoutCannotPublishAcceptedEvidenceDespiteRecentActivity",
+            "suppressedFifthFailureDeadlineRollsBackTheTransitionInsteadOfLeavingAnUnblockedFifthFailure",
+            "resetProofBindingIsMigratorOwnedAndRuntimeCannotRetargetOrDeleteIt",
+            "idleDeadlineRefusesExactlyTwoHoursAndLaterWithoutWaiting",
+            "anonymousRevokedAndStaleVersionLogoutAreRefusedWithoutAcceptedEvidence",
+            "httpAccountInputAndStateRefusalsAreSafeAndLeaveNoPartialMutation",
+            "firstSetupExpiresExactlyAtFifteenMinutesWithoutWallClockWaiting",
+            "loginRequiresCsrfAndWrongOrUnknownCredentialsRevealNoIdentity",
+            "httpDisableAndReenableKeepIdentityHistoryAndRequireFreshSigninForEveryOldSession",
+            "malformedUnicodeCannotBecomeAReplacementCharacterCredential",
+            "springExceptionBeforeBindingCannotCommitSignIn",
+            "concurrentFailuresReachOneFifthFailureWithoutLostUpdatesOrUnboundedState",
+            "disabledTwoLoginResetPreservesDisablementAndSiblingCredentialUntilSeparateReenable",
+            "httpAdministrationAcceptedActivityRefreshesIdleButInvalidMutationDoesNot",
+            "accountAdministratorV2IsAnExplicitAuditedAssignmentWithoutRetargetingV1",
+            "expiredLogoutIsRefusedWithoutAcceptedEvidenceOrRevocation",
+            "resetRequiresExplicitLoginIdentityEvenWhenAccountHasOnlyOneLogin",
+            "firstSetupProofCannotBecomeResetProofOrBeConsumedByResetRefusal",
+            "missingResetAuditRollsBackPasswordVersionSessionsAndProofConsumption",
+            "httpAdministrationRevalidatesSessionAfterWaitingForTheSecurityWriteLock",
+            "httpAdministrationRefusesIdleExpiryBeforeScopeAndRefusalsDoNotRefreshActivity",
+            "anonymousSessionProbeIsRefusedWithoutActorOrLoginRedirect",
+            "newPasswordBoundsCountUnicodeCharactersAndUtf8BytesWithoutTrimming",
+            "activityCannotExtendEightHourAbsoluteDeadline",
+            "normalizedAliasesShareFailuresButSiblingLoginsRemainIndependent",
+            "disabledAndReenabledOldSessionCannotLogoutButFreshSessionCan",
+            "missingSignInIamOutcomeCannotClearFailures",
+            "resetIssuanceRequiresExplicitV2ScopeEligibleSessionAndSyntheticOptIn",
+            "springExceptionAfterBindingCannotLeaveEligibleTentativeProof",
+            "superAndV1CannotIssueProofWhileExplicitV2IsStillBoundToItsOrganization",
+            "activeResetIsProofAuthorizedAndRevokesEveryOldSessionAndSameVersionProof",
+            "httpAccountAuthorityRequiresCurrentScopedAssignmentAndCsrfNotSuperOrClientIdentity",
+            "firstSetupCannotResetActiveDisabledOrStaleReenabledTargets",
+            "resetExplicitFirstLoginPreservesSecondCredentialAndRejectsReplay",
+            "unknownDisabledAndBlockedLoginsDoNotBypassPasswordWork",
+            "httpAccountCreationUsesTheSessionActorAndCreatesOnlyAPendingIdentity",
+            "httpAccountDisableRollsBackIfRequiredIamOutcomeIsMissing",
+            "additiveThrottleMigrationRepeatsWithoutChangesAndEnforcesIdentitySizeAndRoleBounds",
+            "expiredIssuerSessionCannotIssueProofDespiteHavingV2Permission",
+            "httpAccountTransitionsSupportZeroLoginIdentitiesWithoutCreatingOrSelectingALogin",
+            "logoutCommitFailureRollsBackRevocationAndKeepsOrdinaryProofForRetry",
+            "unknownLoginSprayCreatesNoDurableStateOrInheritedFailures",
+            "wrongTargetAndBadCsrfCannotConsumeProofAndSuccessfulReplayCannotChangePassword",
+            "logoutAuditFailureLeavesNoRevocationOrAcceptedEvidenceAndAllowsRetry",
+            "rejectedCsrfAndPublicTrafficCannotRefreshEligibleIdleActivity",
+            "twoLoginResetAuditFailureRollsBackAndRedemptionCannotRetargetPinnedLogin",
+            "anonymousClientCanObtainCsrfProofWithoutIdentityPrivilege",
+            "pendingAndDisabledAccountsCannotClearFailuresOrBecomeEnabledThroughLogin",
+            "httpAccountDisableRollsBackIfRequiredAuditIsMissing",
+            "disabledAndReenabledIssuerCannotReuseItsOldProofIssuanceSession",
+            "silentlyMissingSpringBindingCannotCommitSessionOrClearFourFailures",
+            "fifthWrongPasswordBlocksEvenCorrectCredentialsWithoutDisablingAccount",
+            "httpAccountReenableRollsBackIfRequiredAuditIsMissing",
+            "resetRejectsUnknownForeignCredentiallessAndStaleExactLoginTargets",
+            "missingSignInAuditCannotClearFailures",
+            "httpAccountCreationRollsBackIfRequiredIamOutcomeIsMissing",
+            "resetProofExpiresAtFifteenMinutesAndCannotCrossSecurityTransitions",
+            "httpAdministrationRefusesAbsoluteExpiryEvenAfterEligibleActivity",
+            "concurrentRedemptionAcceptsExactlyOnePasswordAndOneOutcome",
+            "resetExplicitSecondLoginChangesOnlyItAndInvalidatesEveryAccountSession",
+            "csrfProtectedLogoutInvalidatesOnlyCurrentSessionAndGetCannotLogOut",
+            "missingSetupAuditRollsBackCredentialActivationAndProofConsumption",
+            "syntheticProofDeliveryIsUnavailableWithoutExplicitOptIn",
+            "httpAccountReenableRollsBackIfRequiredIamOutcomeIsMissing",
+            "realLoginRotatesSessionAndServerDerivesActorDespiteCallerSuppliedIdentity",
+            "expiredSessionIsRefusedBeforeRoleOrScopeEvaluation",
+            "httpAccountCreationRollsBackIfRequiredAuditIsMissing",
+            "blockedCredentiallessLoginOnActiveAccountStillPerformsQualifiedPasswordWork",
+            "missingSetupIamOutcomeRollsBackCredentialActivationAndProofConsumption",
+            "missingResetIamOutcomeRollsBackPasswordVersionSessionsAndProofConsumption",
+            "suppressedFailureClearingCannotPublishSuccessfulSignIn"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_011e6d872465464ea3fa06c7616eacd3",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_01f36df73cc44528ae1833c017ae10bb",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_022f20854595478fa4043abfdfc41915",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_041fc20fa97c44ba87a083ded1ab78c0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_11c1f205c975439b997f3acd83668cdc",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_129f42e84c1e45549263154de0649036",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_1f42ad6335a44da5865b86ca682e200e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_23f3bd9581044577b846f94bf1b5fdcd",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_25bf9d8f88ae4b02b8af1cf46456e902",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_268fde0cc26449839feb1f8228267e0f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_2aade3ac990141b6a668203684d935d7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_2f5fe4f8ef19412d8ecd0da523bb02a0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_311f40d2ce8e420288e7870385c98e82",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_322f9a7d0cc844d9999de88afbe8c542",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_326ec1e5c3ac4c6390b304e9f23a999c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_3382e0732c7b4ceba8e414dd8787bc7a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_3896d0e12b4c41cfa37c65f85dffe3e0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_395f414a42ea47328a7d6f6b48cde743",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_40d65cc671bf4963bd1fa15aa61308da",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_41625ea605ff440abff30791672403f9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_41b72e5b340847caa1cc19eb5a065686",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_4b5245203a0c45f68c58ddd20fb858f1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_50e6c60dcac444a78539c8331174f0e6",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5158b1aef42e44d2b296689630423f60",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_55c0f3c9de664fe48b99e073d13a359d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_57c1e0dcd20b45a9bbc90b741a741c03",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5a0f7ace65044d93b73a327e1899ba2a",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5cfa452c85ab48d296fc578787aadc81",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_5d9c29de4d2a45bf902bdb90fcfdb5c7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_665fd2770a684a42832b8cf9fa1aab36",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_66e7ccc4cee1446a85338ba993afb0d0",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_67f2f5f594a34f4a839ce0fc49c9ca73",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_67f9587b88434cdf997824c7f0da973b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6835c3d684f74b0fbf59ff2d5dca8000",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6cf55494d5304dbd93f73ff8026df867",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6de3e7e0405041b7b67f7061734e3369",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_6f4772672870420c94c693dd1cb5729e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_71130493f5b94b338f6c8fa60b24a059",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_714721666fa4497986f7e8c27198c382",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_74c92501d1a846fb876c6e0a42d267a1",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7833284940ef44ceb97b32eedb2d5388",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7870c619025d40278ac27b44a9717317",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_7b1211fba02f41e1808b84332c9161c2",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_8100612dd7dd47fbb0a301b961695a8b",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_850ee78fd2da4f11aeff5590eabfe789",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_889fa159fb3b4f7b943a2466e9b5d607",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_89b9602cf866463d9b7214b9eb5d1651",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_8b38f5b62c3e4d839ef0bff513f00026",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_923da7dc87414b13889229fb3dfc3084",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9316f512db8b4cc7a1c693b7fd8275fa",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_932dbe3f67d345feaeb80ee6bdbe9255",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9783d2df071841e59b93db242a51f249",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9952eb258cae4f86bc026363c8912f3e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9a1404ebecc741f7889414cbf6abcc6f",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9d6b4bf5e0df421ea48a0b2edfe1e0e4",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9e828b725adc4d4fa86bc1c0fd251276",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_9f4e7eef87134656a9e18bfeafcb1537",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a59c65a6f36641f282c68e887e97a012",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a70aa2e1541848d487074f82e79b410d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a7b43529fd5a45d5a79edf4dc7e8996d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a7d5cabf4f264406a215a86735a863c3",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_a8c1097919594a959e96e24876c4fcb6",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ad98842577c6448caa4758b067686109",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_adbf6b61075841ec9865a30d2fe56f53",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b3e383b9abef439a9936a006511b7b95",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b78c9a079259468798a642bacf7ef93c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b78ddc62f0944bc3be305d3376b232d9",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_b90931bd987f476b80eb0f31b684ea98",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c2d4b5b225fc4165913e4d8215aaae01",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c2e7dcbd76cd4bd2801493559d897b24",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_c48b04abfac7464aa26384a56440567d",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_cad8764301004ac3b82b18d103ae48aa",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ce0d5d486e8e4506b6c0808104eb6a33",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d04e5381986e402c88b70a6082b8bc15",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_d9ca7651f7484e8580fefbd36365c7a8",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_da77046aa8fa4b58b4495b04ead6e9be",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_e3f327c86759496585f5734b1e10364c",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_eae4bf12faca46dba93aea110fddae49",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_ed4d603be26a461db9530bc04f05d07e",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f2ed3713511b4cc5b1c6b8319d5fcacd",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_f77338580a4e42259fdd76b9d1371534",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_fae9a427632346d592ddaba5939a62d7",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        },
+        {
+          "schema": "f04_fc1c76b3b82748898ed3ced7d72f8292",
+          "fixture_cleanup": "COMPLETE",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-Uha0zJpc.log",
+      "outer_schema": "f04_1ae66d8bd56c4851a719c54803bd2cef",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-XAaRPZ",
+      "log_sha256": "6961a0b3dba40c4598a3894a0c942357b76df81723749d6738d6b49fb306c7fc",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.F04PredecessorMigrationTest",
+          "counts": {
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "c8f4415a70be60375f6f90ec61f06010d4634490e8fe6748e880201ba8bd4174",
+          "text_sha256": "f93a8ac86f4a9690180b09e530dde175d5c4ce0bba31396431f251dc3fd8f79e",
+          "test_names": [
+            "migrationFailsWithoutExactAccountAttributionThenPreservesAttributedHistory"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_1ae66d8bd56c4851a719c54803bd2cef",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    },
+    {
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "archive_sha256": "0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0",
+      "log": "/home/phuclam/idea-f04-schema-DSxKYt2n.log",
+      "outer_schema": "f04_454861c83ee642a99af1c51e4ee9e887",
+      "source": "f817d8fb4a910185204ed37bd01b78070832196b",
+      "build": "/home/phuclam/idea-f04-f817d8f-Y3v8on",
+      "log_sha256": "4d10db04de2ef9cf63602ec96cfe95575f75785f9645d5951d59a98922e6c42e",
+      "log_mode": "0o600",
+      "maven_exit": 0,
+      "disposition": "PASS",
+      "outer_cleanup": "COMPLETE",
+      "reports": [
+        {
+          "suite": "com.idea.ddm.operation.F04SchemaTest",
+          "counts": {
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "xml_sha256": "8beee2d7d67aff118044c04b7ce1819b51f0fd6ea32f0d0ee1152029da56b342",
+          "text_sha256": "a220a6c57dcd70f4e2a6e2cad3e45260aee86b129735411340b22641fbc48af2",
+          "test_names": [
+            "sampleAcceptedEventIsUniqueAcrossContractVersions",
+            "committedEventStoreHasExactlyTheApprovedNineFieldEnvelope",
+            "commonStoreAllowsMultipleEventsWithoutSampleResultCoupling",
+            "committedEventContentRejectsUpdateDeleteAndTruncateEvenForItsOwner",
+            "sampleResultAndAuditExposeCompatibleProvenanceSuccessorFields",
+            "terminalSampleResultsAreInsertSelectOnlyAndRejectOwnerMutation",
+            "actualAppCanAppendButCannotRewriteOrDeleteReferencedEventIdentities"
+          ]
+        }
+      ],
+      "schema_receipts": [
+        {
+          "schema": "f04_454861c83ee642a99af1c51e4ee9e887",
+          "fixture_cleanup": "OUTER_RUNNER",
+          "runner_absence": "CONFIRMED"
+        }
+      ],
+      "stopped_restart_child_pids": []
+    }
+  ]
+}

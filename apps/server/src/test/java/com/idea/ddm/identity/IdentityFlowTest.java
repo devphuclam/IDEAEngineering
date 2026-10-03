@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.DriverManager;
 import java.util.UUID;
+import com.idea.ddm.operation.F04SchemaTest;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,9 @@ class IdentityFlowTest {
     void isolatedMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
+        if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            schema = F04SchemaTest.createRegressionSchema();
+        } else {
         schema = "f03a_" + UUID.randomUUID().toString().replace("-", "");
         Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"),
                 env("IDEA_DATABASE_MIGRATION_PASSWORD"))
@@ -32,6 +36,7 @@ class IdentityFlowTest {
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
         }
+        }
         app = new DriverManagerDataSource(url() + "?currentSchema=" + schema,
                 env("IDEA_DATABASE_APP_USER"), env("IDEA_DATABASE_APP_PASSWORD"));
         bootstrap = new AdministratorBootstrap(app);
@@ -39,6 +44,10 @@ class IdentityFlowTest {
 
     @AfterEach
     void removeOnlyThisTestsUuidSchema() throws Exception {
+        if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+            F04SchemaTest.removeRegressionSchema(schema);
+            return;
+        }
         if (schema != null && schema.matches("f03a_[a-f0-9]{32}")) {
             try (var connection = migrator(); var statement = connection.createStatement()) {
                 statement.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
