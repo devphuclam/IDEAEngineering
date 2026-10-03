@@ -14,7 +14,7 @@ For every PR, follow [`docs/agents/pull-request-review.md`](docs/agents/pull-req
 
 ### Collaboration workflow
 
-Follow [`docs/agents/collaboration.md`](docs/agents/collaboration.md) for provider-neutral branch, worktree, pull request, review, and handoff rules. Use [`docs/agents/local-skills.md`](docs/agents/local-skills.md) and the pinned [`skill manifest`](.agents/skills/manifest.yml) before relying on an optional global Agent plugin.
+Follow [`docs/agents/collaboration.md`](docs/agents/collaboration.md) for provider-neutral branch, worktree, pull request, review, and handoff rules. Use [`docs/agents/local-skills.md`](docs/agents/local-skills.md) and the pinned [`skill manifest`](.agents/skills/manifest.yml) before relying on an optional global Agent plugin. For Codex/Gemini assignment, Design/UI delegation, or worker fallback/takeover, follow [docs/agents/worker-roles.md](docs/agents/worker-roles.md). This includes Gemini unavailability and token/quota exhaustion.
 
 Lần sau tôi mà có nói là push lên main thì push lên luôn.
 
