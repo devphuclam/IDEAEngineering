@@ -109,17 +109,22 @@ evidence; an arbitrary sleep alone does not establish that the race was exercise
 
 ### F04 validation gate and evidence
 
-Design is closed by the Project Reviewer on 2026-10-02; scoped execution is complete for whole-card review. Read
+Design closed on 2026-10-02; Project Reviewer accepted whole F04 on 2026-10-03 at
+`ac6c96e1090eb4d38aefca607af066dcd6330a67`: **COMPLETED / ACCEPTED / PASS**. Read
 [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
 [execution prerequisites](plan.md#execution-prerequisite) and [F04 units](tasks.md#f04-implementation-units)
 before issuing commands. The F04 runner is `apps/server/scripts/run-f04-postgresql-checks.sh`;
 F04 build-tool authorization plus prospective Python admission govern its exact offline preflight.
-Read [current whole-F04 execution matrix](evidence/F04-outcome-results.md#37-current-whole-f04-review-matrix)
+Read [accepted closure disposition](evidence/F04-outcome-results.md#38-whole-f04-acceptance-and-closure-publication),
+the [preserved whole-F04 execution matrix](evidence/F04-outcome-results.md#37-current-whole-f04-review-matrix)
 and the [fresh-public authorization](../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md).
 The §34 proposal was authorized on 2026-10-03 and executed on only the new retained test database:
 8/8 public/data/privilege, V1–V8 first8/repeat0, offline package and two direct packaged repeat0.
 Execution source is `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`, unchanged application/test
-content from `f817d8f...`. Whole-F04 acceptance is next; do not automatically rerun or deploy.
+content from `f817d8f...`. No rerun or deployment is required for closure; the review database
+remains retained. After authorized PR #32 integration and Issue #31 completed closure, F05-A / T027
+is eligible using the already frozen F05 Preparation Package, not started by this publication.
+Private raw-log access limitation remains; verifier NOT-RUN is not an F04 acceptance blocker.
 
 For a separately authorized future rerun, archive the exact implementation commit, use a test-owned UUID schema in an
 explicitly authorized isolated database, and apply V1→V8 with migrator while executing as app.

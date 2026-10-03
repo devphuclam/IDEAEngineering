@@ -3,19 +3,19 @@
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.9` / Draft / INFORMATIVE |
+| Version / document status / normativity | `1.0` / Approved / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
-| Execution disposition | T026 execution PASS: focused F04 36/36 + affected F03/health 108/108 + authorized fresh-public 8/8 + offline package/two packaged repeat0; whole F04 acceptance PENDING |
+| Execution disposition | F04 COMPLETED / ACCEPTED / PASS; focused F04 36/36 + affected F03/health 108/108 + authorized fresh-public 8/8 + offline package/two packaged repeat0; acceptance recorded in §38 |
 | Owner / author | Engineering / Codex |
-| Reviewer | Schema/Audit and B/C/D accepted for continuation by relayed Project Reviewer review; internal T026 Standards/Spec review; whole F04 review PENDING |
-| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; exact §34 database package authorized in this conversation on 2026-10-03; whole-card acceptance PENDING; failed GitHub connector attempt created no approval comment |
+| Reviewer | Project Reviewer whole-F04 acceptance on 2026-10-03 at `ac6c96e1090eb4d38aefca607af066dcd6330a67`; historical checkpoint reviews retained |
+| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; explicit whole-card acceptance and closure/integration authorization in this conversation on 2026-10-03 (§38); historical failed GitHub connector attempt created no approval comment |
 | Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, spec v0.8, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A/B/C/D and T026; 2026-10-03 +07:00 |
 | Current executed source | Fresh-public/package `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`; application/tests unchanged from full regression `f817d8fb4a910185204ed37bd01b78070832196b` |
 | Current archive SHA-256 | `0894c38b2643ca3b52b8dd825a25a194babe719e278f59e35433e6fd8824f0af`; historical full-regression archive retained in §31 |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
-| Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to v0.8; sections 1–34 and original indexes remain unchanged as historical records. Sections 35–37 close the authorized fresh-public/package execution gap and supersede pending current dispositions in §30/33/34; new subordinate `IE-VEV-PH1-F04-T026-PUBLIC-RECEIPTS-001`. Historical F02/F03/tooling evidence unchanged. Superseded by NOT-APPLICABLE |
+| Downstream | Completed T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), PR #32 integration / Work Item #31 closure |
+| Change / supersession | Closure-only successor to v0.9. Sections 1–37 and all execution indexes remain unchanged as historical records; §38 supersedes their pending whole-card/task/integration disposition. Historical F02/F03/tooling evidence unchanged. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
 | Standards tailoring | Section 15 pins exact editions and TAILOR disposition for `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED scoped information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
@@ -1227,3 +1227,48 @@ Keep umbrella tasks unchecked, F04 IN_PROGRESS, Issue31 OPEN, PR32 Draft and ver
 until the separate whole-card disposition. No dispatcher/delivery, real domain payload/product RBAC,
 unknown-commit reconciliation, HA/recovery, Desktop, commercial/T036 or F05 completion claim.
 The next action is **whole-F04 acceptance**, not another feature slice or F05.
+
+## 38. Whole-F04 acceptance and closure publication
+
+On **2026-10-03**, Project Reviewer Nguyễn Huỳnh Phúc Lâm explicitly accepted whole F04
+as **COMPLETE / ACCEPTED / PASS** in this conversation, at review head
+`ac6c96e1090eb4d38aefca607af066dcd6330a67`. Current repository disposition is
+**F04 COMPLETED / PASS**, and umbrella **T023, T024, T025 and T026 are complete**.
+This human acceptance supersedes the pending dispositions in historical sections 1–37;
+those sections and their exact execution receipts have not been rewritten.
+
+The accepted execution lineage remains:
+
+- `f817d8fb4a910185204ed37bd01b78070832196b`: focused F04 **36/36 PASS** and affected
+  F03/health **108/108 PASS**, as retained in §31–33 and the original T026 receipt index.
+- `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`: fresh-public **8/8 PASS**, V1–V8 first
+  application **8**, repeat **0**, offline package and direct packaged migration repeats
+  **0 / 0**, as retained in §35–36 and the fresh-public receipt index.
+- No remaining blocker inside the approved F04 acceptance boundary.
+
+Private raw host logs remain an **independent evidence-access limitation**. Public summaries
+and retained hashes do not claim that the external reviewer independently read those logs.
+`verify-template` remains **NOT-RUN** and is not an F04 acceptance blocker.
+
+This publication changes only current status/evidence/task/handoff records. It does not
+change application code, tests, V1–V8, dependencies, runtime/tooling, execution evidence or
+receipt hashes, and requires no test rerun. The review database
+`idea_ddm_f02_f03b_closure_f04_20261003_t026` remains retained; closure does not authorize
+DROP DATABASE, public-schema cleanup or deployment.
+
+The Reviewer separately authorized marking [PR #32](https://github.com/devphuclam/IDEAEngineering/pull/32)
+ready and merging it by the established merge-commit method after this closure-only commit,
+then closing [Issue #31](https://github.com/devphuclam/IDEAEngineering/issues/31) as completed.
+Actual merge SHA and final provider states are recorded in the PR/Issue integration records,
+not inferred from engineering qualification or this pre-integration publication.
+
+Only after that merge and Issue closure is **F05-A / T027** eligible to start, using the already
+frozen F05 Preparation Package. T027 is Gateway runtime/toolchain/Adapter/transport-security
+qualification; it is **not started by this closure**, and F04 tooling authority does not extend
+to F05. No new F04 checkpoint or design reopening is required.
+
+Acceptance does not claim event delivery, general product RBAC, real domain payloads,
+uncertain-commit reconciliation, HA/recovery, production/commercial/T036 clearance,
+Desktop/Workspace completion or F05/whole-PH1 completion. Delivery Card timer/actual-effort
+publication remains governed separately by the Progress Tracker workflow; no timer action
+or actual-hour estimate is inferred from this closure publication.
