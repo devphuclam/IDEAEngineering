@@ -122,8 +122,12 @@ The §34 proposal was authorized on 2026-10-03 and executed on only the new reta
 8/8 public/data/privilege, V1–V8 first8/repeat0, offline package and two direct packaged repeat0.
 Execution source is `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`, unchanged application/test
 content from `f817d8f...`. No rerun or deployment is required for closure; the review database
-remains retained. After authorized PR #32 integration and Issue #31 completed closure, F05-A / T027
-is eligible using the already frozen F05 Preparation Package, not started by this publication.
+remains retained. PR #32 is merged and Issue #31 is completed; F05-A / T027 is the next eligible
+unit, but remains NOT-STARTED / qualification NOT-RUN. Use the actual 2026-10-03
+[preparation baseline IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md)
+and its [exact-byte freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
+Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
+Preparation approval is not T027 execution, Gateway qualification or timer authority.
 Private raw-log access limitation remains; verifier NOT-RUN is not an F04 acceptance blocker.
 
 For a separately authorized future rerun, archive the exact implementation commit, use a test-owned UUID schema in an

@@ -188,19 +188,21 @@ verified Receipt. Distinct IDs leave a future multi-Vault seam, not a second-Vau
 mismatch, interruption, lost response and duplicate/changed-input attempt produce no false
 accepted custody.
 
-**F05-A path gate:** The Gateway boundary is selected, but its exact runtime/toolchain is still
-`NOT-RUN`. T027 must settle and record that qualification before Gateway code. Then replace the
-directory-only references in T029, T031 and T033 with exact test/source paths in this file and
-rerun read-only `$speckit-analyze` for F05. No `.java`, `.cs` or `.ts` Gateway source path is
-assumed in advance. This gate does not block F01-A through F04.
+**F05-A path gate:** The Gateway boundary and preparation direction are selected; exact
+runtime/toolchain/Adapter/transport qualification remains `NOT-RUN`. The 2026-10-03 frozen
+preparation baseline below refines T029/T031/T033 candidate paths only. No Gateway source,
+test execution, environment provisioning or T027 start is authorized by those filenames.
+T027 requires separate execution authority, exact F05 intake and qualification before Gateway
+implementation; reconcile actual qualified paths and rerun read-only `$speckit-analyze` then.
+This gate does not block F01-A through F04.
 
 - [ ] T027 [US5] Qualify exact Gateway runtime, toolchain, Adapter, transport security and package intake in `docs/research/2026-09-28-ph1-f05-gateway-qualification.md`; record exact source/test paths there, refine T029/T031/T033 in `specs/005-ph1-foundation-custody/tasks.md`, and rerun read-only `$speckit-analyze` before Gateway implementation.
 - [ ] T028 [US5] Write failing wrong/expired/replayed Grant, mismatched Receipt, same-operation status and custody tests in `apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java`.
-- [ ] T029 [US5] Write runtime-neutral candidate, size/digest mismatch, interruption, lost-response and repeated/changed-input cases in `tests/ph1/transfer-smoke/gateway-cases.json`; after T027 qualifies the runtime, bind these cases to its failing test harness and record the exact harness path in `apps/gateway/README.md`.
+- [ ] T029 [US5] Write runtime-neutral candidate, size/digest mismatch, interruption, lost-response and repeated/changed-input cases in `tests/ph1/transfer-smoke/gateway-cases.json`; after T027 qualification, bind them to candidate `apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java` and record the qualified path in `apps/gateway/README.md`. Path refinement only; no tests/code are authorized by PRE-T027 preparation.
 - [ ] T030 [US5] Implement exact short-lived Grant issuance and same-OperationId lookup in `apps/server/src/main/java/com/idea/ddm/custody/TransferGrantService.java`.
-- [ ] T031 [US5] Implement Gateway candidate handling through one private filesystem Adapter under `apps/gateway/`; record the qualified entrypoint, source filenames and commands in `apps/gateway/README.md` and `specs/005-ph1-foundation-custody/evidence/F05-A-gateway-files.md`.
+- [ ] T031 [US5] After T027 qualification and implementation authorization, use candidate entrypoint `apps/gateway/src/main/java/com/idea/ddm/gateway/GatewayApplication.java`, service `apps/gateway/src/main/java/com/idea/ddm/gateway/transfer/GatewayTransferService.java`, verifier `apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java`, signer `apps/gateway/src/main/java/com/idea/ddm/gateway/receipt/TransferReceiptSigner.java`, Adapter `apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java` and test `apps/gateway/src/test/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapterTest.java`; record the qualified paths/commands in `apps/gateway/README.md` and `specs/005-ph1-foundation-custody/evidence/F05-A-gateway-files.md`. No Gateway files are created by preparation.
 - [ ] T032 [US5] Implement authenticated Receipt validation and Artifact/Vault/Location metadata acceptance in `apps/server/src/main/java/com/idea/ddm/custody/ReceiptAcceptanceService.java`.
-- [ ] T033 [US5] Add a client transfer harness using Grant-directed Client→Gateway bytes in `tests/ph1/transfer-smoke/` without routing file bytes through `apps/server/`.
+- [ ] T033 [US5] After T027 and exact F05 Node-harness intake, add candidate `tests/ph1/transfer-smoke/client-transfer.mjs`, `tests/ph1/transfer-smoke/client-transfer.test.mjs` and `tests/ph1/transfer-smoke/README.md` for Grant-directed Client→Gateway bytes without Server payload relay. Node24.19.0 remains a test-harness candidate; this does not qualify Desktop/Workspace or authorize execution during preparation.
 - [ ] T034 [US5] Run 1 KiB/64 MiB, refusal, mismatch, interruption, lost-response and duplicate/changed-input scenarios; retain manifest comparison, transfer route, receipt and metadata evidence in `specs/005-ph1-foundation-custody/evidence/F05-B-transfer-results.md`.
 
 ## Phase 8: Cross-cutting review
@@ -233,11 +235,15 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: integrate the authorized closure-only PR #32 and close Work Item #31.
+Current next step: stop after PRE-T027 preparation publication and read-only analyze; obtain
+separate T027 qualification/intake/environment execution authority before starting F05-A.
 F04 is COMPLETED / ACCEPTED / PASS (2026-10-03), as recorded in evidence v1.0 §38;
-T023–T026 are complete. After confirmed merge and Issue closure, the next eligible unit is
-F05-A / T027 using the already frozen F05 Preparation Package. T027 remains unchecked and
-is not started by closure; its separate qualification/intake gate remains required.
+T023–T026 are complete, PR #32 is merged and Work Item #31 is completed. F05-A / T027 is the
+next eligible unit, using [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md)
+and its actual 2026-10-03 [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
+Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
+T027 remains unchecked / NOT-STARTED; qualification NOT-RUN and CODEX_ONLY. No timer/Tracker
+change, Gateway code or inherited F04 tooling authority follows from preparation approval.
 Do not rerun against retained databases or reopen F04 design. Work Item #29 was documentation-only
 and is closed after PR #30. Verifier remains NOT-RUN, not an F04 acceptance blocker.
 
