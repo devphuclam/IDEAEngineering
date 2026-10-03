@@ -69,11 +69,13 @@ qualification. Only the sample service and two test fixtures change after the ac
 Codex implemented Audit after its focused RED; Gemini was not dispatched.
 
 The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
-schema, T024-A Audit, T023-B/minimum T025-B and T023-C/T025-C execution are partially recorded in
-[F04 outcome results](evidence/F04-outcome-results.md) v0.6: owner 16/16 (B 3 + C 13), schema 7/7,
-predecessor 1/1 and Audit 7/7 = 31/31 on the current source. All 62 C-run schema cleanup receipts
+schema, T024-A Audit, T023-B/minimum T025-B, T023-C/T025-C and T023-D/T025-D execution are partially recorded in
+[F04 outcome results](evidence/F04-outcome-results.md) v0.7: owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
+predecessor 1/1 and Audit 7/7 = 36/36 at `73abb35b32f5930004add0336f679771eeb77a1d`. All 62 C-run schema cleanup receipts
 are COMPLETE; [exact receipt index](evidence/F04-C-execution-receipts.json) retains both actual
-REDs and each four-suite regression. The prospective Python clean 15/15
+REDs and each four-suite regression. The separate [D receipt index](evidence/F04-D-execution-receipts.json)
+retains 24 passing suite runs, one expected RED and one interrupted non-PASS attempt; all 26
+D schemas have confirmed exact-owned cleanup. The prospective Python clean 15/15
 requalification is separately traced at `1255568...`; the five no-build
 admission cases remain the separately traced execution at `acc8db5...`.
 T023–T026 remain unchecked and no completion/progress action is inferred. Any changed tool,
@@ -83,12 +85,12 @@ For this checkpoint, run the scoped Bash runner separately with `F04SchemaTest`,
 `F04PredecessorMigrationTest`, `AuditEvidenceRepositoryTest` or `OwnerOutcomeTest` from the exact archive; its approved
 Maven command is offline `-o -B -Dtest=<selector> test`. Use only the controlled test DB and fresh
 tagged f04 schema. Read the evidence for commands/hashes/limits before rerunning.
-B was accepted for continuation; C is awaiting external review and this task stops at publication.
-Next eligible unit only after C review: T023-D/T025-D, real disable/revoke-before-commit and
-reverse owner-first ordering, one RED/GREEN or honest existing-behavior qualification at a time.
-Continue using the Server-established ActorContext, not raw UUID schema fixtures. The existing
-final security lock/check is implemented but its race and broader affected F03/data/health
-regression remain NOT-RUN. C is not whole F04 acceptance. Keep #31/F04 open, PR #32
+B/C have external acceptance for continuation. D has executed real IAM disable and HTTP logout
+security-first/reverse orderings, atomic refusal handoff, old-proof refusal and re-enable/fresh-session
+recovery. This task stops after publishing D for external review. The next unit is T026 only
+after that review: broader affected F03/data/health regression and whole-contract evidence/acceptance;
+those are NOT-RUN. Continue using the Server-established ActorContext and admitted exact tooling.
+Keep #31/F04 open, PR #32
 Draft, T023–T026 unchecked and verifier NOT-RUN; no merge or F05.
 
 After implementation authorization, CODEX owns schema, owner/transaction/event/IAM coordination,

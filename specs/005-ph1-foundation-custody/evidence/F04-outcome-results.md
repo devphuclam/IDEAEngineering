@@ -1,21 +1,21 @@
-# F04 outcome results — authenticated owner, replay, concurrency and faults
+# F04 outcome results — authenticated owner, replay, concurrency and security coordination
 
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.6` / Draft / INFORMATIVE |
+| Version / document status / normativity | `0.7` / Draft / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
-| Execution disposition | Partial PASS: owner 16/16, schema 7/7, predecessor 1/1, Audit 7/7 = 31/31; C executed, external C review PENDING; D and whole F04 NOT-RUN |
+| Execution disposition | Partial PASS: owner 21/21, schema 7/7, predecessor 1/1, Audit 7/7 = 36/36; C externally accepted for continuation; D executed, external D review PENDING; T026/whole F04 NOT-RUN |
 | Owner / author | Engineering / Codex |
-| Reviewer | Schema/Audit and T023-B accepted for continuation by relayed Project Reviewer review; internal C reviews in section 20; external C review PENDING |
-| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; bounded C execution authorized, C checkpoint/whole-card acceptance PENDING |
-| Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, spec v0.8, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A/B and T023-C/T025-C; execution 2026-10-02, evidence publication 2026-10-03 +07:00 |
-| Current executed source | `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd` |
-| Current archive SHA-256 | `c427de8fc43f6c6be51db7eaa73601fe876b5af165b4ec922a72c498c2b326bd` |
+| Reviewer | Schema/Audit, B and C accepted for continuation by relayed Project Reviewer review; internal D source reviews in section 27; external D review PENDING |
+| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; bounded D execution authorized after C acceptance; D checkpoint/whole-card acceptance PENDING |
+| Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, spec v0.8, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A/B/C and T023-D/T025-D; D execution/publication 2026-10-03 +07:00 |
+| Current executed source | `73abb35b32f5930004add0336f679771eeb77a1d` |
+| Current archive SHA-256 | `8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f` |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
 | Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to v0.5; sections 1–14 retain historical A/B receipts and their then-current wording. Sections 15–21 add C execution, review and limits; subordinate receipt index `IE-VEV-PH1-F04-C-RECEIPTS-001`. Original authorization/F03 evidence remains unchanged. Superseded by NOT-APPLICABLE |
+| Change / supersession | Successor to v0.6; sections 1–21 retain historical A/B/C receipts and then-current status wording unchanged. Sections 22–28 add C acceptance and D execution/review/limits; subordinate `IE-VEV-PH1-F04-D-RECEIPTS-001`. C receipt index and original authorization/F03 evidence remain unchanged. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
 | Standards tailoring | Section 15 pins exact editions and TAILOR disposition for `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED scoped information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
@@ -699,3 +699,227 @@ IN_PROGRESS; T023–T026 stay unchecked, Issue #31 OPEN, PR #32 Draft. Verifier 
 No product route/RBAC/Swagger, dispatcher, generic payload/fingerprint/lock framework,
 F05 reconciliation, client binding, preview deployment, production/HA/recovery/commercial
 qualification, timer correction, whole-card acceptance or merge is performed.
+
+## 22. T023-D/T025-D authority and execution
+
+The relayed Project Reviewer accepted C at PR head
+`b6b114e84694d0f8eb2fc6ba87f8e759f35beebb` (executed source `4b4b494...`) and explicitly
+authorized D. The review accepts C's sample-only 32-bit lock-key collision trade-off; it does
+not authorize a generic operation framework. Sections 1–21 and the C receipt index retain their
+historical, then-current wording, including their former pending-review state.
+
+D qualifies admitted-command security loss and the opposite owner-first ordering through real
+HTTP-established ActorContext, actual existing IAM account disable/re-enable and qualified
+per-session HTTP logout. There is no new product route, Permission, Role Definition or
+bootstrap-Actor shortcut. Fixture setup independently grants the existing Account Administrator
+v1 assignment to the synthetic operator, using the existing authorized assignment service.
+
+Configuration is unchanged: real PostgreSQL 18.6 at
+`127.0.0.1:5432/idea_ddm_f03a_20260930_c91e7a42`, separate
+`idea_ddm_migrator`/`idea_ddm_app`, new tagged `f04_[0-9a-f]{32}` schemas only.
+Temurin 25.0.4.1+1, Maven 3.9.16 offline, CPython 3.14.4 `-I -S` standard-library harness,
+Node 24.21.0/npm 11.19.0 and exact existing cache remain within the two F04 authorization
+records. Every execution passed the unchanged nine-artifact/descriptor, five-build-input,
+eight-direct-Web-version and exact-runtime preflight. No download, install, new dependency,
+migration, public-schema write or preview deployment occurred. Standards editions, classifications
+and TAILOR mapping remain as section 15: STANDARD-GUIDED, not conformity.
+
+The real HTTP test transport remains controlled loopback without TLS, as in B/C; this is
+Server identity/transaction qualification, not new browser/certificate qualification.
+Synthetic credentials, CSRF and ordinary cookies stay private fixture RAM, cleared on fixture
+closure. Safe retained session UUIDs are database metadata, never authentication proof.
+
+## 23. D RED and vertical GREEN lineage
+
+The RED uses `OwnerOutcomeTest#committedDisableBeforeOwnerCommitRetainsAttributableRefusal`.
+The actual disable commits while the owner is paused after admission. The resumed owner throws
+the expected `INELIGIBLE_SESSION`, but an independent observer finds zero owner result where
+one terminal REFUSED was required. This is an assertion RED, not an unavailable environment or
+an exception alone offered as rollback evidence.
+
+| Slice | Exact source | Actual witness | Four-suite result |
+|---|---|---|---|
+| Disable-first RED | `58582cb75db413dfbd365e37862b5cca6d4b9668` | 1 test, 1 assertion failure, 0 errors/skips; expected owner 1, actual 0 after committed IAM disable; Maven 1 | Focused RED only |
+| Minimum handoff GREEN | `82b574601e878227a25d379f0a339c626fc5592e` | Tentative ACCEPT rolls back; terminal security REFUSED owner/Audit = 1/1, event = 0 | 32/32 |
+| Actual HTTP logout-first | `360d2147a311c57c9097747b1e30eaccd46ce4d9` | First GREEN after the general handoff repair; no separate invented logout RED | 33/33 |
+| Owner-first disable | `1fe82ef912eee93f98239773c23f5f1f952f47ce` | Owner holds actual IAM lock; actual disable waiter observed; owner 1/1/1 precedes disable | 34/34 |
+| Owner-first HTTP logout | `85060ca89f105db5b01929cbaa391f75e41f8550` | Actual POST logout waits, commits after owner; old proof refused, accepted history intact | 35/35 |
+| Re-enable/fresh recovery and explicit activity receipts | `eec928d764cdc0b6652fe658d33f9d4e61ae0762` | Old proof stays invalid after re-enable; fresh same-Actor resolves terminal refusal; new ID may accept | 35/35 |
+| Required refusal Audit fault / final D | `73abb35b32f5930004add0336f679771eeb77a1d` | Refusal-only zero-row Audit suppressor leaves 0/0/0, no activity refresh/FAILED; original C regression retained | 36/36 |
+
+Only `SampleOwnerCommandService.java` changed in production, at `82b5746...`.
+Later D changes qualify already-correct behavior through tests/fixture; first GREEN is honestly
+recorded as qualification, not retroactively manufactured RED. V1–V8, IAM production,
+`OwnerSessionEligibility`, Audit/event stores, dependencies/build inputs and runner are unchanged.
+
+The RED raw log is `/home/phuclam/idea-f04-schema-oBmTnXEu.log`,
+SHA-256 `999323f5df66fbeebbdc2afe6820d5fb3e30b65c9ca5929a45af3053459a6583`;
+schema `f04_206f3dd2253e44fbaf235d5dae9694c7` cleanup COMPLETE.
+The [D receipt index](F04-D-execution-receipts.json) retains exact archives and both Surefire
+report hashes for RED and each passing suite, rather than overwriting predecessor evidence.
+
+## 24. Refusal handoff and deterministic race method
+
+For a new command, initial eligibility admission occurs under the retained sample OperationId
+session lock. Test-owned trigger `f04_d_admitted` pauses that exact ACCEPTED operation's insert
+after admission but before commit-time IAM coordination. The test observes the PostgreSQL waiter
+on namespace `73004992`; actual `IdentityAdministration.disable` or actual HTTP
+`POST /api/v1/identity/logout` then commits first. No direct SQL account/status/revoke update
+is used as the D mutation being qualified.
+
+The minimum service repair catches only commit-time `IdentityRefusal` for an already admitted
+new command. It rolls back all tentative ACCEPT companions, retains the session-level sample
+operation lock, rechecks canonical state, and, if none exists, appends original-attribution
+terminal REFUSED plus required refusal Audit in one new transaction. It appends no event,
+does not re-execute the business decision or re-admit the now-invalid session, and does not
+refresh eligible activity. After that commit, it surfaces the original security refusal.
+Initial admission and existing-result query refusal remain outside this handoff and cannot
+invent an owner row or expose the retained result. Required evidence write failure propagates;
+the independent refusal-Audit fault observer finds 0/0/0, not a partial REFUSED or invented FAILED.
+
+For reverse ordering, test-owned `f04_d_activity` pauses the exact session's eligible-activity
+update, after owner final eligibility while the owner still holds the existing IAM advisory
+transaction lock `73003002`. A `pg_locks` join proves the same backend both waits on barrier
+namespace `73004993` and holds the IAM lock. Actual disable or HTTP logout starts on another
+caller; its ungranted waiter on that same IAM lock is observed before release. The owner
+commits 1/1/1 with the activity update, then the IAM mutation proceeds and invalidates old proof.
+Independent retained-state queries prove the later mutation did not rewrite the accepted
+owner/Audit/EventId. Pre-release observers see 0/0/0 and the original activity timestamp.
+
+Lock order stays sample OperationId lock → existing IAM transaction lock → commit/rollback.
+Rollback releases the IAM transaction lock but not the operation session lock; the refusal
+transaction records the already-observed reason rather than falsely treating the old session
+as eligible. No reverse acquisition, production pause hook, sleep-only race or generic
+coordinator was added. All barrier/fault functions and triggers belong only to the run schema
+and are removed before its guarded cleanup.
+
+## 25. D requirement → source/test → executed evidence
+
+All rows execute at `73abb35b32f5930004add0336f679771eeb77a1d`.
+Engineering disposition PASS; external D disposition PENDING. Tests are in `OwnerOutcomeTest`.
+
+| Approved oracle | Source boundary / test | Independent observation |
+|---|---|---|
+| Disable after admission precedes owner commit | Commit-time refusal handoff / `committedDisableBeforeOwnerCommitRetainsAttributableRefusal` | Actual scoped IAM disable; one original REFUSED owner + one original refusal Audit, zero event; old proof HTTP 401 |
+| Per-session revocation precedes owner commit | Same handoff / `committedHttpLogoutBeforeOwnerCommitRetainsRefusalAndAllowsFreshSessionResolution` | Actual CSRF-protected HTTP logout 204; terminal 1/1/0, old proof 401; initial invalid new ID 0/0/0 |
+| Owner commits before actual disable | Existing IAM coordination / `ownerCommitBeforeDisablePreservesAcceptedHistoryAndSharedActivityFate` | Held IAM lock and mutation waiter observed; accepted 1/1/1 and unchanged historical provenance after disable |
+| Owner commits before actual logout | Existing IAM coordination / `ownerCommitBeforeHttpLogoutPreservesAcceptedHistoryAndSharedActivityFate` | Actual HTTP logout waiter; accepted history 1/1/1 remains, old proof 401 |
+| Refusal evidence is itself atomic | Required Audit one-row rule / `suppressedCommitTimeRefusalAuditCannotLeavePartialOwnerOrRefreshActivity` | REFUSED-only suppression after candidate rollback fails; independent 0/0/0, no FAILED or activity refresh; operation lock released |
+| Re-enable never resurrects old session | Existing IAM re-enable + actual fresh HTTP sign-in in disable-first test | Stable Actor/account; old proof still 401/internal refusal; new proof resolves original REFUSED; genuine new ID 1/1/1 |
+| Eligible activity shares owner fate | Controlled private fixture Clock + independent session record observers | Security-first timestamps unchanged; owner-first candidate invisible before commit and later timestamp commits with 1/1/1 |
+| Accepted C baseline retained | All 16 existing B/C tests plus schema/predecessor/Audit suites | Canonical retry/access, concurrency/fault/pool-lock regressions remain passing |
+
+Selected final-run witnesses are synthetic; correlation is original and unchanged on fresh replay:
+
+| Direction | OperationId | Original ActorId | OrganizationId | Original correlation | Owner/Audit/event |
+|---|---|---|---|---|---|
+| Disable first | `88e1ce81-5783-412a-978c-887973dd9bf2` | `1d975917-b441-4582-941a-2b31ed155ecc` | `3ba1982f-c8b6-449b-afb7-90d69e8b9eea` | `f04-d-disable-first` | 1/1/0 REFUSED |
+| Logout first | `7409d3db-c6e6-40af-95a2-1832fece2d68` | `dac93187-471e-4d6a-add0-ccf235a0e6b6` | same | `f04-d-logout-first` | 1/1/0 REFUSED |
+| Owner before disable | `daf4ab73-4656-42bf-b57b-b7b92ecf789f` | `1e902d89-6083-4c4f-830e-7b4b69ad4972` | same | `f04-d-owner-before-disable` | 1/1/1 ACCEPTED |
+| Owner before logout | `e33982f3-e489-4a38-825c-3ccd34a0f4d3` | `dac93187-471e-4d6a-add0-ccf235a0e6b6` | same | `f04-d-owner-before-logout` | 1/1/1 ACCEPTED |
+| Required refusal Audit fault | `7e9f34bf-392b-42dd-b787-0bc5cdba529a` | `02da2f07-5de9-4bb9-834d-19c60452293f` | same | `f04-d-refusal-audit-failure` | 0/0/0 confirmed non-commit |
+
+| Activity direction | Before UTC | After UTC | Actual result |
+|---|---|---|---|
+| Disable first | `2026-10-03T01:30:35.987440Z` | same | Unchanged |
+| Logout first | `2026-10-03T01:30:33.987440Z` | same | Unchanged |
+| Owner before disable | `2026-10-03T01:30:34.987440Z` | `2026-10-03T01:30:35.987440Z` | Shared committed refresh |
+| Owner before logout | `2026-10-03T01:30:32.987440Z` | `2026-10-03T01:30:33.987440Z` | Shared committed refresh |
+| Refusal Audit fault | `2026-10-03T01:30:31.987440Z` | same | Unchanged |
+
+The Clock advances inside the private test fixture, not the host or a production route.
+Existing C deferred-commit fault retains zero committed companions and unchanged activity; its
+fixed-Clock invocation does not independently witness rollback of a changed activity timestamp.
+D owner-first tests directly observe the changed activity candidate's shared commit fate.
+D does not reimplement F03 timeout/reset/throttling matrices.
+
+## 26. Final D execution, interruption and cleanup
+
+Final exact source `73abb35b32f5930004add0336f679771eeb77a1d`,
+archive `8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f`,
+ran all four suites on 2026-10-03. Each exited Maven 0 with zero failures/errors/skips:
+**36/36 = owner 21 (B/C 16 + D 5) + schema 7 + predecessor 1 + Audit 7**.
+
+| Suite / tests | Exact fresh owned schema | Raw log | Log SHA-256 |
+|---|---|---|---|
+| OwnerOutcomeTest 21/21 | `f04_a01127fb7e6f4214a0104f20b0101f8e` | `/home/phuclam/idea-f04-schema-UMRgtfp7.log` | `113c7e55ea1614899529dcb8eeeb36f1dab865da166e7b62f6579fea497d3f96` |
+| F04SchemaTest 7/7 | `f04_0f4fd8170f9e45c0902adebbe060a499` | `/home/phuclam/idea-f04-schema-2kGgPMXN.log` | `80de28d03baf54c2aa904e708f700f040726e3771f9f78d303261679159c05ad` |
+| F04PredecessorMigrationTest 1/1 | `f04_4c65b58c416d41f983b04ad99d669b56` | `/home/phuclam/idea-f04-schema-MJe3RkLf.log` | `8f17f3c3aa49fac8ac504efcbc92ffda2909294dfdaa0a7a8c6c4908e80f8fe6` |
+| AuditEvidenceRepositoryTest 7/7 | `f04_a995b14ac4aa472f9228330288f0e505` | `/home/phuclam/idea-f04-schema-R4XnuwrB.log` | `cc5eba5cef968884392792192d63161a342867cb847f04108a37e338b7e3beb4` |
+
+The [D receipt index](F04-D-execution-receipts.json) retains 25 completed run receipts:
+24 PASS suite runs in six four-suite batches and one expected assertion RED.
+It also retains one interrupted first final-source attempt separately, excluded from PASS and
+the final test count. That interruption stopped before a terminal Maven/Surefire/cleanup result;
+partial successful case output is not treated as a passing checkpoint.
+
+Interrupted schema `f04_49920708dd824bf6b19dee1940552cfc` was later checked against exact source
+marker and migrator owner, with no owned Java process remaining. Only that exact run schema was
+dropped; absence was confirmed. Its original partial log
+`/home/phuclam/idea-f04-schema-7MpEnT1J.log`, SHA-256
+`6803a685ffa9fd48fadb0b871f7fa7dfe7560bd2b4104fb4dff20656a3445f5e`, is unchanged and retained.
+The separately completed final-source batch above supplies the final 36/36 result.
+
+All 26 distinct D schemas now have confirmed cleanup: completed runs use the unchanged runner's
+post-JVM exact schema/name/owner/marker guard; interrupted-run recovery used the same bounded
+ownership conditions after process absence. No broad database cleanup or historical evidence
+deletion occurred. Logs remain private mode 600; read-only SHA-256/mode/mtime observations were
+taken after execution. Hashes identify retained files, not independent raw-log review by a
+remote reviewer. No password, cookie, CSRF or bearer proof is recorded.
+
+## 27. Internal D source review — separate axes
+
+Both read-only reviews compare accepted C `b6b114e...` with exact executed source
+`73abb35...`. Neither ran tests or independently inspected private host logs.
+
+### Standards
+
+No documented mandatory breach found. Production remains sample-only, retains original
+admission provenance and operation lock through the refusal handoff, and shares owner/Audit
+transaction fate. No route, role, dependency or migration is introduced. Private fixture
+credential/cookie custody and bounded test-owned PostgreSQL barriers preserve the approved
+security/qualification boundary.
+
+One optional possible Duplicated Code heuristic remains: explicit owner-first disable and
+owner-first HTTP-logout tests repeat their barrier/lock-wait/history sequence. A small helper
+could reduce drift later, but the separate cases make their independent ordering and oracle
+auditable now. No mandatory refactor or generic race framework is justified for this checkpoint.
+
+### Spec
+
+No missing, incorrect or out-of-scope approved D behavior identified. Initial versus commit-time
+refusal is separated; actual security-first and owner-first mutations, old-proof refusal,
+re-enable/fresh-session/new-ID recovery, activity fate and atomic required-refusal-Audit failure
+have source/test coverage. These source reviews are not external D acceptance.
+
+Summary: Standards **0 mandatory / 1 optional heuristic**; Spec **0 actionable findings**.
+
+Final evidence review corrected one overstatement about the historical C deferred-commit
+activity witness: with D's fixed fixture Clock that case does not independently observe a
+changed timestamp rolling back. Section 25 now states only the supported observation; no source
+or execution was changed. Receipt/source/result/historical-preservation checks otherwise align.
+
+## 28. Publication and next gate
+
+Successors to executed source `73abb35...` update only current contract, evidence/receipt index,
+task and handoff wording. They do not claim a new application execution. Historical sections
+1–21, C receipt index, F03 evidence and original tooling authorization remain unchanged.
+PR #32 records the exact published head independently of the executed source.
+
+Publication checks: the structured index parses as 25 completed receipts (24 PASS, one expected
+RED) plus one interrupted non-PASS record; 26 distinct schemas have cleanup, final four-suite
+count is 36/36, all source objects exist, historical sections 1–21 and C JSON compare unchanged.
+All 81 local Markdown path targets in the four changed Markdown records exist; anchors are
+NOT-CHECKED. Scoped tracked UTF-8 secret scan exited 0, recognizing ten exact synthetic fixtures
+and skipping 233 known binary files; this is not an all-format secret audit. Diff whitespace
+check passed; Spec Kit extension hooks are absent. These checks are not a new qualification run.
+
+Stop after publishing D for external Project Reviewer review. **Do not begin T026 until D
+is reviewed.** Remaining T026 owns broader affected F03-A/HTTP/restart/data/health regression,
+current additive-V8 chain expectations and whole-contract exact-source evidence/review/acceptance.
+A fresh public database would require separate explicit creation authority; no existing public
+schema may be used as its substitute. D's four-suite regression is not completion of T026.
+
+Whole F04 remains IN_PROGRESS; T023–T026 unchecked, Issue #31 OPEN, PR #32 Draft.
+Verifier NOT-RUN, no merge/F05. No product API/RBAC, dispatcher, Desktop binding, preview
+upgrade, production/HA/recovery/commercial qualification or progress/timer action is performed.

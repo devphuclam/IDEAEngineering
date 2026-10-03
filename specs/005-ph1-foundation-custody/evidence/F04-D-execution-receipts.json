@@ -1,0 +1,934 @@
+{
+  "control": {
+    "stable_id": "IE-VEV-PH1-F04-D-RECEIPTS-001",
+    "document_class": "verification execution receipts",
+    "title": "F04 D security coordination exact-source receipts",
+    "version": "0.1",
+    "status": "Draft",
+    "product_normativity": "INFORMATIVE",
+    "repository_instruction_state": "NOT-APPLICABLE",
+    "owner": "Engineering",
+    "author": "Codex",
+    "reviewer": "Internal Standards/Spec source review of 73abb35... recorded in parent section 27; external D review PENDING",
+    "acceptance_authority": "Project Reviewer Nguyễn Huỳnh Phúc Lâm; D checkpoint and whole-card acceptance PENDING",
+    "baseline": "IE-INC-PH1-FOUNDATION-CUSTODY-001; spec v0.8; ADR-0014; Issue #31 / PR #32",
+    "evidence_date": "2026-10-03 +07:00",
+    "execution_date": "2026-10-03 +07:00",
+    "classification": "INTERNAL",
+    "retention": "Retain with F04 baseline and private host logs until separately governed disposition",
+    "upstream": [
+      "F04-outcome-results.md#22-t023-dt025-d-authority-and-execution",
+      "../contracts/ph1-boundaries.md#f04-internal-qualification-contract"
+    ],
+    "downstream": [
+      "../tasks.md#f04-implementation-units",
+      "../worker-handoff.md#current-f04-design-to-implementation-handoff",
+      "https://github.com/devphuclam/IDEAEngineering/pull/32"
+    ],
+    "change_record": "Issue #31 T023-D/T025-D authorized after external acceptance of C head b6b114e84694d0f8eb2fc6ba87f8e759f35beebb; subordinate D index preserves original C receipts unchanged",
+    "supersedes": "NOT-APPLICABLE",
+    "superseded_by": "NOT-APPLICABLE",
+    "review_trigger": "Source/tool/role/database/schema boundary/receipt hash change; inspect affected execution",
+    "standards_tailoring": "STD-INFO-001 ISO/IEC/IEEE 15289:2019; STD-CM-001 ISO 10007:2017; STD-TEST-001 ISO/IEC/IEEE 29119-1:2022; STD-TEST-002 ISO/IEC/IEEE 29119-2:2021; STD-TEST-003 ISO/IEC/IEEE 29119-3:2021; STD-TEST-004 ISO/IEC/IEEE 29119-4:2021. All STANDARD-GUIDED / TAILOR under IE-STD-AUTH-001; scope: identified combined verification records, exact configuration trace and bounded race/fault qualification; parent section 15 retains applicability mapping. No conformity claim."
+  },
+  "execution_envelope": {
+    "database": "127.0.0.1:5432/idea_ddm_f03a_20260930_c91e7a42",
+    "postgresql": "18.6",
+    "migrator": "idea_ddm_migrator",
+    "application_role": "idea_ddm_app",
+    "schema_pattern": "f04_[0-9a-f]{32}",
+    "marker": "IDEA_F04_RUN:<40-hex source SHA>:<exact schema>",
+    "tools": {
+      "java": "Temurin 25.0.4.1+1",
+      "maven": "3.9.16 offline",
+      "python": "CPython 3.14.4 isolated -I -S; standard library only",
+      "node": "24.21.0",
+      "npm": "11.19.0"
+    },
+    "preflight": "Exact nine build JARs/descriptor, five qualified build inputs, eight direct Web versions, exact admitted tools; cache only, no install/download",
+    "runner": "apps/server/scripts/run-f04-postgresql-checks.sh",
+    "maven_command": "-o -B -Dtest=<selector> test",
+    "current_executed_source": "73abb35b32f5930004add0336f679771eeb77a1d",
+    "current_result": {
+      "owner": 21,
+      "schema": 7,
+      "predecessor": 1,
+      "audit": 7,
+      "total": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "receipt_count": 25,
+    "passing_runs": 24,
+    "expected_red_runs": 1,
+    "interrupted_runs": 1,
+    "passing_four_suite_batches": 6,
+    "cleanup_complete": 26,
+    "log_hash_observation_date": "2026-10-03 +07:00",
+    "limitations": [
+      "Private mode-600 host logs/Surefire reports are identified by hashes; not independently inspected by remote reviewer.",
+      "log_mtime_utc is retained modification time, not an asserted execution start.",
+      "The interrupted first final-source attempt has no terminal result; it is not PASS and is excluded from final count.",
+      "D focused regression is not T026 broader affected F03/data/health qualification or whole F04 acceptance.",
+      "Retained safe witnesses contain only synthetic identities/correlation, timestamps and cardinalities; no credential, cookie, CSRF or authentication proof.",
+      "No verifier, merge, F05, product API/RBAC, dispatcher, preview deployment or production/commercial/recovery qualification."
+    ]
+  },
+  "receipts": [
+    {
+      "batch": "d-disable-green-regression",
+      "source_sha": "82b574601e878227a25d379f0a339c626fc5592e",
+      "archive_sha256": "90e9ca0cf7af24208de9660b678fb3171788ec464a72938d59eb5024e5b972f5",
+      "build_directory": "/home/phuclam/idea-f04-82b5746-JXWW8H",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_b59980ea02c24a8096cd540c949ea924",
+      "log_path": "/home/phuclam/idea-f04-schema-9VqT37Sf.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "3493995a0256952a7225cf3ebceb802970dffb5964063be7fb4d1e2af7a5e2fe"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "bdf970a2e59dee420fa4b7480f28abdedfcae2dc2d5bb03bb86d0cc382a8af5c"
+        }
+      ],
+      "safe_witnesses": [
+        "F04_CONCURRENCY=ACCEPT; OP=7b98cebe-62fd-4bd2-98e3-fa7d26545634; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=e981eb66-daef-4820-89c7-83528a042005",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=ddb8620a-0f36-47d9-963a-2aa7ac19ddda; ACTOR=625ff621-5cec-4757-b8b3-7bc75a2bb31f; ORG=43006a79-c60b-4ed2-bf0c-32b9d7bdf786; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_CONCURRENCY=REFUSE; OP=8b6fd53a-77ee-42ad-b08b-5a09519b45fd; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=e62e92fa-84d3-430e-b889-2e9fad928dd2"
+      ],
+      "log_sha256": "cecb58526d2b04384d10121a3980702407eab80c182407215e1ecbe7751cc231",
+      "log_mode": "600",
+      "log_size_bytes": 26414,
+      "log_mtime_utc": "2026-10-03T01:17:43.000Z"
+    },
+    {
+      "batch": "d-disable-green-regression",
+      "source_sha": "82b574601e878227a25d379f0a339c626fc5592e",
+      "archive_sha256": "90e9ca0cf7af24208de9660b678fb3171788ec464a72938d59eb5024e5b972f5",
+      "build_directory": "/home/phuclam/idea-f04-82b5746-Q9VORJ",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_87fb3a7d6d0541bdb40827973ecea10f",
+      "log_path": "/home/phuclam/idea-f04-schema-vb3bV5ZP.log",
+      "suite": "F04SchemaTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04SchemaTest.xml",
+          "sha256": "37b4006f4e8aed33a51e05d8711a3812f22decc1b0cc8b21caf21f77d6e3213b"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04SchemaTest.txt",
+          "sha256": "6ca47a85cf35b1b91a673143fd787a796233f7b2717f49c9467f59d267215b59"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "205b832111b776f63b68c8d9ae929d91bd68a2e57b2dab0fcad8989ae35e7edd",
+      "log_mode": "600",
+      "log_size_bytes": 5919,
+      "log_mtime_utc": "2026-10-03T01:17:53.000Z"
+    },
+    {
+      "batch": "d-disable-green-regression",
+      "source_sha": "82b574601e878227a25d379f0a339c626fc5592e",
+      "archive_sha256": "90e9ca0cf7af24208de9660b678fb3171788ec464a72938d59eb5024e5b972f5",
+      "build_directory": "/home/phuclam/idea-f04-82b5746-njePNT",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_f37624df7c2e4adea7b04cc7439dbf1b",
+      "log_path": "/home/phuclam/idea-f04-schema-H6nytGi5.log",
+      "suite": "F04PredecessorMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04PredecessorMigrationTest.xml",
+          "sha256": "0c31a22ad327d04bfc893f7d18a372a43c312283723efeebd44091d6b39bb0f6"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04PredecessorMigrationTest.txt",
+          "sha256": "f4ea8e454948454a4a66f8227fcf663f6ce81aab1e59c851a0a3ebea067f1a05"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "3cde93eeeff19ddcf681f06572e0d3b1402e4cb5934b957254f592156ac252b0",
+      "log_mode": "600",
+      "log_size_bytes": 6266,
+      "log_mtime_utc": "2026-10-03T01:18:03.000Z"
+    },
+    {
+      "batch": "d-disable-green-regression",
+      "source_sha": "82b574601e878227a25d379f0a339c626fc5592e",
+      "archive_sha256": "90e9ca0cf7af24208de9660b678fb3171788ec464a72938d59eb5024e5b972f5",
+      "build_directory": "/home/phuclam/idea-f04-82b5746-EQz5Qv",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_bf3d76f5e2aa479e859d4c30659e4070",
+      "log_path": "/home/phuclam/idea-f04-schema-wAML0aDo.log",
+      "suite": "AuditEvidenceRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.audit.AuditEvidenceRepositoryTest.txt",
+          "sha256": "ed18d9ac41a447780862fa7edbb8fabba76d6ed02643a0ed7bca498c12271a74"
+        },
+        {
+          "file": "TEST-com.idea.ddm.audit.AuditEvidenceRepositoryTest.xml",
+          "sha256": "53ec59a8ea5c54501bc49ec9d5dcf342e3a24a1aaf1856099985560dbd5118c6"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "0e3f47efffdfa20794eb477c42bc719a34f16fba454f27f5408cab734c6b0209",
+      "log_mode": "600",
+      "log_size_bytes": 5959,
+      "log_mtime_utc": "2026-10-03T01:18:13.000Z"
+    },
+    {
+      "batch": "d-logout-first-regression",
+      "source_sha": "360d2147a311c57c9097747b1e30eaccd46ce4d9",
+      "archive_sha256": "23f48fec84d7e9b9f58d73c04c1b5689cf1a853bc22da7fb2def7294f1a6e21e",
+      "build_directory": "/home/phuclam/idea-f04-360d214-s4lJG1",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_f1c26416992b4fecbd9bba3ded88bc9f",
+      "log_path": "/home/phuclam/idea-f04-schema-r8BplqXd.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "79e42ed997481d72470d491ea2c563410068e28b95322e246420e354c64a53d1"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "28dc2d6ce07fe246e262cf052389d92baa1a9e0eb692d8e40eb69409ad06434d"
+        }
+      ],
+      "safe_witnesses": [
+        "F04_CONCURRENCY=ACCEPT; OP=5d6761eb-bf7f-473b-be8c-5f3f9624a971; WINNER=ACCEPTED; CORRELATION=f04-concurrent-b; EVENT=336b53a1-9a05-4431-8ed3-bcec93b31397",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=1210c6e0-2fd1-48dc-ac7f-e41d7d3eed57; ACTOR=dec994ff-19cf-4d78-8f99-c8a0a13581f5; ORG=75607ffb-b01d-4cb4-a7bb-5db9bf031962; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=1210c6e0-2fd1-48dc-ac7f-e41d7d3eed57; ACTOR=dec994ff-19cf-4d78-8f99-c8a0a13581f5; ORG=75607ffb-b01d-4cb4-a7bb-5db9bf031962; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_LOGOUT_FIRST=PASS; OLD_HTTP=401; INITIAL_INVALID_COMPANIONS=0/0/0; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=04a090a3-9682-460d-b243-147c497757f4; ACTOR=eec74cd2-2839-40a2-bad7-f8b29a99fb35; ORG=75607ffb-b01d-4cb4-a7bb-5db9bf031962; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_CONCURRENCY=REFUSE; OP=8c3eab74-fa1b-461c-9bcd-f4fed691a2c2; WINNER=REFUSED; CORRELATION=f04-concurrent-b; EVENT=null"
+      ],
+      "log_sha256": "29311247db7acc62202f6eb2176eb6ddb8053157c4830863bf4e5341bc65221e",
+      "log_mode": "600",
+      "log_size_bytes": 26902,
+      "log_mtime_utc": "2026-10-03T01:19:22.000Z"
+    },
+    {
+      "batch": "d-logout-first-regression",
+      "source_sha": "360d2147a311c57c9097747b1e30eaccd46ce4d9",
+      "archive_sha256": "23f48fec84d7e9b9f58d73c04c1b5689cf1a853bc22da7fb2def7294f1a6e21e",
+      "build_directory": "/home/phuclam/idea-f04-360d214-5a9ClE",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_eb6445b3cb334f0db26b4f751f2fee9a",
+      "log_path": "/home/phuclam/idea-f04-schema-f66HWeIw.log",
+      "suite": "F04SchemaTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04SchemaTest.xml",
+          "sha256": "a757440aafad5fdb0e13e461c4821aa164b5cbf9f0b4e8cad23eddff0590386e"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04SchemaTest.txt",
+          "sha256": "e3feb0d9ffce32d7fe0d26c6737283c3eadc50e9f400b92ee7e243512693cb98"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "1b6285dbfd65a867ea1f0d053c05b373a81980098eb973f7de8fbe919a4b00d1",
+      "log_mode": "600",
+      "log_size_bytes": 5919,
+      "log_mtime_utc": "2026-10-03T01:19:32.000Z"
+    },
+    {
+      "batch": "d-logout-first-regression",
+      "source_sha": "360d2147a311c57c9097747b1e30eaccd46ce4d9",
+      "archive_sha256": "23f48fec84d7e9b9f58d73c04c1b5689cf1a853bc22da7fb2def7294f1a6e21e",
+      "build_directory": "/home/phuclam/idea-f04-360d214-KaACDT",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_1c4bee346fef4d34ae33e6a2bc631edb",
+      "log_path": "/home/phuclam/idea-f04-schema-hpAChGGd.log",
+      "suite": "F04PredecessorMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04PredecessorMigrationTest.xml",
+          "sha256": "3062b3ddbac8ed7e8a7728fefbda33be053f232e3534c53e6af1e9a96768ecc3"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04PredecessorMigrationTest.txt",
+          "sha256": "d8ca78be5c571f0fe5730ebc0eee486053c589f5185dc04f9c70004692dec3b2"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "b1c52431eb95f8bff6af00e04ed286a1abba4fc9c85cf6a8720facdba84390d7",
+      "log_mode": "600",
+      "log_size_bytes": 6266,
+      "log_mtime_utc": "2026-10-03T01:19:41.000Z"
+    },
+    {
+      "batch": "d-logout-first-regression",
+      "source_sha": "360d2147a311c57c9097747b1e30eaccd46ce4d9",
+      "archive_sha256": "23f48fec84d7e9b9f58d73c04c1b5689cf1a853bc22da7fb2def7294f1a6e21e",
+      "build_directory": "/home/phuclam/idea-f04-360d214-ludBfX",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_bb27f39983b844cc9b7ba86e85a4cf06",
+      "log_path": "/home/phuclam/idea-f04-schema-p33aitpl.log",
+      "suite": "AuditEvidenceRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.audit.AuditEvidenceRepositoryTest.txt",
+          "sha256": "ed18d9ac41a447780862fa7edbb8fabba76d6ed02643a0ed7bca498c12271a74"
+        },
+        {
+          "file": "TEST-com.idea.ddm.audit.AuditEvidenceRepositoryTest.xml",
+          "sha256": "7b5b4e9a3d8068fdf3e3d892ba455165753a8b4903b19a8a664080fafbc3f197"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "7100aa748035384d778f097e4f486a74233b27a6ce51dc7563a4ba396e06dc73",
+      "log_mode": "600",
+      "log_size_bytes": 5959,
+      "log_mtime_utc": "2026-10-03T01:19:51.000Z"
+    },
+    {
+      "batch": "d-owner-before-disable-regression",
+      "source_sha": "1fe82ef912eee93f98239773c23f5f1f952f47ce",
+      "archive_sha256": "a6df0029122f42f2d5d864fc9643fedaf78433495fcd8303fd6058dfe613570b",
+      "build_directory": "/home/phuclam/idea-f04-1fe82ef-HMfm8u",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_a100482f7a184deb8806970f32bcc430",
+      "log_path": "/home/phuclam/idea-f04-schema-6fpP5v1r.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "4892edbad7165e97352996192d43dd5a90008280c9af0ef8dc853e021ce5eb86"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "05f589fc5dd9bc8fee10aa8e96a77b6b3cdb35561981f1fa02bcefd9a16249a7"
+        }
+      ],
+      "safe_witnesses": [
+        "F04_CONCURRENCY=ACCEPT; OP=b7533bd0-00ab-4549-b0ca-31e5f2e74dd5; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=9c7ca9a8-2da6-404c-a057-005258b4d216",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=56804fe4-7fd9-4a18-8ef1-aff110831ea1; ACTOR=662066ab-48c1-4822-8b68-5d71c2f5b0fa; ORG=60c58250-3c05-4fde-b735-3a0f9c9cbe92; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=56804fe4-7fd9-4a18-8ef1-aff110831ea1; ACTOR=662066ab-48c1-4822-8b68-5d71c2f5b0fa; ORG=60c58250-3c05-4fde-b735-3a0f9c9cbe92; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_LOGOUT_FIRST=PASS; OLD_HTTP=401; INITIAL_INVALID_COMPANIONS=0/0/0; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_D_OWNER_FIRST=DISABLE; OP=c560470a-9ae7-4c2a-84d2-f65775243b84; ACTOR=5b955a60-dfe0-45bb-9ed2-49fae369548d; ORG=60c58250-3c05-4fde-b735-3a0f9c9cbe92; CORRELATION=f04-d-owner-before-disable; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=c798d83d-7036-41b8-b2c2-4079f3de2497; ACTOR=963f587e-a0bc-49c2-91ec-d256804d094d; ORG=60c58250-3c05-4fde-b735-3a0f9c9cbe92; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_CONCURRENCY=REFUSE; OP=763dec95-6c35-453d-a8b4-3cd61559f8f0; WINNER=REFUSED; CORRELATION=f04-concurrent-b; EVENT=null"
+      ],
+      "log_sha256": "bff00f0db14ca004d155a724339d0b6f00cb44c4e5fcefd88a75ecd2d811953e",
+      "log_mode": "600",
+      "log_size_bytes": 27169,
+      "log_mtime_utc": "2026-10-03T01:21:04.000Z"
+    },
+    {
+      "batch": "d-owner-before-disable-regression",
+      "source_sha": "1fe82ef912eee93f98239773c23f5f1f952f47ce",
+      "archive_sha256": "a6df0029122f42f2d5d864fc9643fedaf78433495fcd8303fd6058dfe613570b",
+      "build_directory": "/home/phuclam/idea-f04-1fe82ef-ZUapYt",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_56c62d6399744ff89e0cc9cbff8d95a3",
+      "log_path": "/home/phuclam/idea-f04-schema-ZQYh6mqj.log",
+      "suite": "F04SchemaTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04SchemaTest.xml",
+          "sha256": "a75387decb8666f30bec6f0c76434c389410571b784bb0dad34a166e94cb4070"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04SchemaTest.txt",
+          "sha256": "24691f17d4e72650a81973e15c374ac40eddc25895d6eac40c34a313465f402e"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "ba84a81d2b1734723786f588e5908b71bd28ffa3ab9bbe0c840a5e5e1de8610e",
+      "log_mode": "600",
+      "log_size_bytes": 5919,
+      "log_mtime_utc": "2026-10-03T01:21:13.000Z"
+    },
+    {
+      "batch": "d-owner-before-disable-regression",
+      "source_sha": "1fe82ef912eee93f98239773c23f5f1f952f47ce",
+      "archive_sha256": "a6df0029122f42f2d5d864fc9643fedaf78433495fcd8303fd6058dfe613570b",
+      "build_directory": "/home/phuclam/idea-f04-1fe82ef-Ap6uHf",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_90b5f0b71e644c03bede7e0a74087a0d",
+      "log_path": "/home/phuclam/idea-f04-schema-ReiNw6qH.log",
+      "suite": "F04PredecessorMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04PredecessorMigrationTest.xml",
+          "sha256": "844788267b7e2a5096a89c053ff0f5ca38bcdb633bd066fc1be5611a37e70b53"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04PredecessorMigrationTest.txt",
+          "sha256": "831f8ecc5f967cda79170b70a75d042e6f14613b7cb775a37d9fe13f771871a1"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "3820967ec971682d32ef0a7bbf8b2661eb8cf694928b0e8265a3d2f3b4443f88",
+      "log_mode": "600",
+      "log_size_bytes": 6266,
+      "log_mtime_utc": "2026-10-03T01:21:23.000Z"
+    },
+    {
+      "batch": "d-owner-before-disable-regression",
+      "source_sha": "1fe82ef912eee93f98239773c23f5f1f952f47ce",
+      "archive_sha256": "a6df0029122f42f2d5d864fc9643fedaf78433495fcd8303fd6058dfe613570b",
+      "build_directory": "/home/phuclam/idea-f04-1fe82ef-Wawnk7",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_08e3b74a76ab48028663006ddf8fd912",
+      "log_path": "/home/phuclam/idea-f04-schema-WWy53Mzu.log",
+      "suite": "AuditEvidenceRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.audit.AuditEvidenceRepositoryTest.txt",
+          "sha256": "ab6487ad3714095a33618d5de9f13e8da87c7d2bd8c11627072d38fc421ff384"
+        },
+        {
+          "file": "TEST-com.idea.ddm.audit.AuditEvidenceRepositoryTest.xml",
+          "sha256": "46736846c1cd0f638994f309f32e93002200d22d4b3450e83bcb84d484483390"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "9a65e446653694c8b990d7d95643314b671cf0877190ddbfb1f57ca0d8734176",
+      "log_mode": "600",
+      "log_size_bytes": 5959,
+      "log_mtime_utc": "2026-10-03T01:21:32.000Z"
+    },
+    {
+      "batch": "d-owner-before-logout-regression",
+      "source_sha": "85060ca89f105db5b01929cbaa391f75e41f8550",
+      "archive_sha256": "a8bbd0c482e27ce62711ca6b0be3a3208b8bfd936cfcbe02fdbfdf8b2d01e7ae",
+      "build_directory": "/home/phuclam/idea-f04-85060ca-Tyn6Wk",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_7e9a770b0a484dbcab504f047d1e61f9",
+      "log_path": "/home/phuclam/idea-f04-schema-O8P3Jgie.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "e7785ae8d9b12445e0766796705f6be3621ca4cbd05290f67b995d618c513d64"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "c22b1374153618673a889c929c6388e86cbe8253f55349accdf0b4c5ba942f3b"
+        }
+      ],
+      "safe_witnesses": [
+        "F04_CONCURRENCY=ACCEPT; OP=b0062189-cf5c-427b-93c9-e66ad0e0aa95; WINNER=ACCEPTED; CORRELATION=f04-concurrent-b; EVENT=b265099c-a879-4332-9ed2-3975f7a688b2",
+        "F04_D_OWNER_FIRST=LOGOUT; OP=828dbb4c-4ba9-4a01-a0af-85b334434d72; ACTOR=2afbd515-df01-4c83-884b-5e180f132490; ORG=0d260c73-c26f-4396-9f29-e7e4e7b63366; CORRELATION=f04-d-owner-before-logout; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=89698090-d4db-435d-9e9d-8337cc31d611; ACTOR=2afbd515-df01-4c83-884b-5e180f132490; ORG=0d260c73-c26f-4396-9f29-e7e4e7b63366; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=89698090-d4db-435d-9e9d-8337cc31d611; ACTOR=2afbd515-df01-4c83-884b-5e180f132490; ORG=0d260c73-c26f-4396-9f29-e7e4e7b63366; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_LOGOUT_FIRST=PASS; OLD_HTTP=401; INITIAL_INVALID_COMPANIONS=0/0/0; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_D_OWNER_FIRST=DISABLE; OP=8d20c41b-a27f-42e0-be61-740951dcfbfa; ACTOR=9cb14581-97d3-4586-934a-34ee2427171a; ORG=0d260c73-c26f-4396-9f29-e7e4e7b63366; CORRELATION=f04-d-owner-before-disable; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=ba157c4f-9db7-49ad-9ac0-a85f246f8f5f; ACTOR=30292843-bb4f-4b12-9440-23bf5a271efa; ORG=0d260c73-c26f-4396-9f29-e7e4e7b63366; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_CONCURRENCY=REFUSE; OP=0894197a-c92e-4d91-b8f1-be8cbe8e39e6; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=f0042123-8297-4709-83b7-e336f3969edc"
+      ],
+      "log_sha256": "6e1013f4d8c07631677e14c6899bab6c649bae6a9f17d86f3caef06ce3b11154",
+      "log_mode": "600",
+      "log_size_bytes": 27493,
+      "log_mtime_utc": "2026-10-03T01:24:28.000Z"
+    },
+    {
+      "batch": "d-owner-before-logout-regression",
+      "source_sha": "85060ca89f105db5b01929cbaa391f75e41f8550",
+      "archive_sha256": "a8bbd0c482e27ce62711ca6b0be3a3208b8bfd936cfcbe02fdbfdf8b2d01e7ae",
+      "build_directory": "/home/phuclam/idea-f04-85060ca-c9qWxe",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_1a6e3f15b8b84dc3a78942178b64ce1b",
+      "log_path": "/home/phuclam/idea-f04-schema-IKXGupEA.log",
+      "suite": "F04SchemaTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04SchemaTest.xml",
+          "sha256": "7dfcd3b775a4a9884c7cf49cf57839e95012554217c0ec9e14172363db18bbbc"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04SchemaTest.txt",
+          "sha256": "eb498aa4c1e9990e816bacaac58310326b32573d492ccbda29ee256fc0270a6d"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "19b218a69582df7cd49ff36d3a18d03caec95b1a88c413fb2ecea6f5a7470da4",
+      "log_mode": "600",
+      "log_size_bytes": 5919,
+      "log_mtime_utc": "2026-10-03T01:24:38.000Z"
+    },
+    {
+      "batch": "d-owner-before-logout-regression",
+      "source_sha": "85060ca89f105db5b01929cbaa391f75e41f8550",
+      "archive_sha256": "a8bbd0c482e27ce62711ca6b0be3a3208b8bfd936cfcbe02fdbfdf8b2d01e7ae",
+      "build_directory": "/home/phuclam/idea-f04-85060ca-LYmREf",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_2116ac87f4bb4577b2f54c6d7bcde8d4",
+      "log_path": "/home/phuclam/idea-f04-schema-oIddHtWv.log",
+      "suite": "F04PredecessorMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04PredecessorMigrationTest.xml",
+          "sha256": "3f4eae3ceeb7e5779e62ca1960f4841e743dc9e802ed6c506fdd482f75ee428a"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04PredecessorMigrationTest.txt",
+          "sha256": "8916f3221f7ec3c4605702232e50492f86a97e898009a51b0f04fad8fdcf1c30"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "662dfb744bef7d44b99a6eaaf4272baeae544d88ebeb28e42c81fb8f10e891f2",
+      "log_mode": "600",
+      "log_size_bytes": 6266,
+      "log_mtime_utc": "2026-10-03T01:24:48.000Z"
+    },
+    {
+      "batch": "d-owner-before-logout-regression",
+      "source_sha": "85060ca89f105db5b01929cbaa391f75e41f8550",
+      "archive_sha256": "a8bbd0c482e27ce62711ca6b0be3a3208b8bfd936cfcbe02fdbfdf8b2d01e7ae",
+      "build_directory": "/home/phuclam/idea-f04-85060ca-9GSheu",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_5422d9026e29484c96a8995d0cf91da2",
+      "log_path": "/home/phuclam/idea-f04-schema-w0WtrJ11.log",
+      "suite": "AuditEvidenceRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.audit.AuditEvidenceRepositoryTest.txt",
+          "sha256": "2b12d0e251e9d7799612a3ebb26b67d0682bb898eb4ba4765ef0ed127769282d"
+        },
+        {
+          "file": "TEST-com.idea.ddm.audit.AuditEvidenceRepositoryTest.xml",
+          "sha256": "6faac201909a5f0a014e01479a6637316aa2a4da4d7341aaa1b9db408c25dbb3"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "435f32807863ec6d9b373d2e4d87294a1475e74b53daa0d70d9a89efac49fa3e",
+      "log_mode": "600",
+      "log_size_bytes": 5959,
+      "log_mtime_utc": "2026-10-03T01:24:57.000Z"
+    },
+    {
+      "batch": "d-reenable-recovery-regression",
+      "source_sha": "eec928d764cdc0b6652fe658d33f9d4e61ae0762",
+      "archive_sha256": "7922f8bb7860d0c079cc57759d6416f82d5bf0280c58423bec095642f2644684",
+      "build_directory": "/home/phuclam/idea-f04-eec928d-qDgtzZ",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_9075d4d6101d4348ab371d00b7ca728c",
+      "log_path": "/home/phuclam/idea-f04-schema-kxwPFAzh.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "15889926bf94f08a9159bb75f8ea61bb18a6dcb2ad0ca4a271867fe76b880d5c"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "f7e62ee093ffd09bab142432ae0d17466f35847b2c816dc647d72601ec9ab481"
+        }
+      ],
+      "safe_witnesses": [
+        "F04_CONCURRENCY=ACCEPT; OP=368a4fda-22fb-4696-8ecd-11b85405f36b; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=ddfb126b-8c33-43de-9688-40476d60b400",
+        "F04_D_ACTIVITY=ACCEPTED; OP=386224dd-e093-4fa8-9a95-f4a768d65366; BEFORE=2026-10-03T01:25:48.466892Z; AFTER=2026-10-03T01:25:49.466892Z; SHARED_COMMIT=1",
+        "F04_D_OWNER_FIRST=LOGOUT; OP=386224dd-e093-4fa8-9a95-f4a768d65366; ACTOR=11a876d4-efd1-4ccd-987f-a189e5df45b0; ORG=1845cdc6-dd42-4ed6-92a9-399fcd0f537d; CORRELATION=f04-d-owner-before-logout; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=b9084893-dd43-4363-9897-bb19fece07ac; ACTOR=11a876d4-efd1-4ccd-987f-a189e5df45b0; ORG=1845cdc6-dd42-4ed6-92a9-399fcd0f537d; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_ACTIVITY=REFUSED; OP=b9084893-dd43-4363-9897-bb19fece07ac; BEFORE=2026-10-03T01:25:49.466892Z; AFTER=2026-10-03T01:25:49.466892Z; UNCHANGED=1",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=b9084893-dd43-4363-9897-bb19fece07ac; ACTOR=11a876d4-efd1-4ccd-987f-a189e5df45b0; ORG=1845cdc6-dd42-4ed6-92a9-399fcd0f537d; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_LOGOUT_FIRST=PASS; OLD_HTTP=401; INITIAL_INVALID_COMPANIONS=0/0/0; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_D_ACTIVITY=ACCEPTED; OP=37931c5b-3be7-45e0-a32a-3eb2b40ed821; BEFORE=2026-10-03T01:25:50.466892Z; AFTER=2026-10-03T01:25:51.466892Z; SHARED_COMMIT=1",
+        "F04_D_OWNER_FIRST=DISABLE; OP=37931c5b-3be7-45e0-a32a-3eb2b40ed821; ACTOR=5dbe28f3-4495-423f-9442-13e983f9fa24; ORG=1845cdc6-dd42-4ed6-92a9-399fcd0f537d; CORRELATION=f04-d-owner-before-disable; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=f02070b4-5312-4dc5-a488-885529d9bdbf; ACTOR=8f3f60d8-83e6-4cae-be15-2785366045d8; ORG=1845cdc6-dd42-4ed6-92a9-399fcd0f537d; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_D_ACTIVITY=REFUSED; OP=f02070b4-5312-4dc5-a488-885529d9bdbf; BEFORE=2026-10-03T01:25:51.466892Z; AFTER=2026-10-03T01:25:51.466892Z; UNCHANGED=1",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=f02070b4-5312-4dc5-a488-885529d9bdbf; ACTOR=8f3f60d8-83e6-4cae-be15-2785366045d8; ORG=1845cdc6-dd42-4ed6-92a9-399fcd0f537d; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_D_REENABLE=PASS; OLD_HTTP=401; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_CONCURRENCY=REFUSE; OP=545af2ba-fc4b-49b5-8f7a-3e56a5f2d30d; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=a4526fbf-ef98-4709-ae63-6d73af53207a"
+      ],
+      "log_sha256": "24b75551b4fd82dc1b68933615c3105a36b8f146a2cc1bc6dac9db192dd1ea6f",
+      "log_mode": "600",
+      "log_size_bytes": 28374,
+      "log_mtime_utc": "2026-10-03T01:26:01.000Z"
+    },
+    {
+      "batch": "d-reenable-recovery-regression",
+      "source_sha": "eec928d764cdc0b6652fe658d33f9d4e61ae0762",
+      "archive_sha256": "7922f8bb7860d0c079cc57759d6416f82d5bf0280c58423bec095642f2644684",
+      "build_directory": "/home/phuclam/idea-f04-eec928d-dMPjAo",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_2dc1875a4b484e8e937b9acddebe0e3a",
+      "log_path": "/home/phuclam/idea-f04-schema-ftiR6JeT.log",
+      "suite": "F04SchemaTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04SchemaTest.xml",
+          "sha256": "7fa87547835c002f6ad7d27b2a7c446a6a04ed4a1ae26fe1132fe804bf53446f"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04SchemaTest.txt",
+          "sha256": "c3848f77f533b551520c3e523127f03e3f77abac3664b60056edb3b556fd2c54"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "a76a07c30d5eb2aee4da92681be34bafd822be90eab6860b626b01e8167c4382",
+      "log_mode": "600",
+      "log_size_bytes": 5919,
+      "log_mtime_utc": "2026-10-03T01:26:12.000Z"
+    },
+    {
+      "batch": "d-reenable-recovery-regression",
+      "source_sha": "eec928d764cdc0b6652fe658d33f9d4e61ae0762",
+      "archive_sha256": "7922f8bb7860d0c079cc57759d6416f82d5bf0280c58423bec095642f2644684",
+      "build_directory": "/home/phuclam/idea-f04-eec928d-YPFHMR",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_5de9f6779a964bc58f248d9f02daa472",
+      "log_path": "/home/phuclam/idea-f04-schema-zhPtulA8.log",
+      "suite": "F04PredecessorMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04PredecessorMigrationTest.xml",
+          "sha256": "6d44ec2cf820da91e06429d2f311d17d031c69809f7062baa0a51e89c2bfeb99"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04PredecessorMigrationTest.txt",
+          "sha256": "307abcbf62793f6e6b09a0db3efaf47070324bdf91ae6f41622fc312315d9aa7"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "1ef209769e89751bfb38a2fdce75d04deb6eb505bcfe264fc621a24ee56c8a2c",
+      "log_mode": "600",
+      "log_size_bytes": 6266,
+      "log_mtime_utc": "2026-10-03T01:26:23.000Z"
+    },
+    {
+      "batch": "d-reenable-recovery-regression",
+      "source_sha": "eec928d764cdc0b6652fe658d33f9d4e61ae0762",
+      "archive_sha256": "7922f8bb7860d0c079cc57759d6416f82d5bf0280c58423bec095642f2644684",
+      "build_directory": "/home/phuclam/idea-f04-eec928d-J06EAQ",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_6fc78a0857e7442cbb83974c52c44dc4",
+      "log_path": "/home/phuclam/idea-f04-schema-ZZnQ49ds.log",
+      "suite": "AuditEvidenceRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.audit.AuditEvidenceRepositoryTest.txt",
+          "sha256": "46459bd5a5835f45af474297c2f80a6de6b34c2ed7e8f22824f762090248c288"
+        },
+        {
+          "file": "TEST-com.idea.ddm.audit.AuditEvidenceRepositoryTest.xml",
+          "sha256": "401d714d3b73f416010ad8a5b56172c531192848c2d9261fffb363348464c099"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "eca5cf1adae898813c6fad7ab8d2bf7da6769c04902fbaefc19f4c4a14af7c5e",
+      "log_mode": "600",
+      "log_size_bytes": 5959,
+      "log_mtime_utc": "2026-10-03T01:26:33.000Z"
+    },
+    {
+      "batch": "final-d-regression-regression",
+      "source_sha": "73abb35b32f5930004add0336f679771eeb77a1d",
+      "archive_sha256": "8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f",
+      "build_directory": "/home/phuclam/idea-f04-73abb35-pLWlLp",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_a01127fb7e6f4214a0104f20b0101f8e",
+      "log_path": "/home/phuclam/idea-f04-schema-UMRgtfp7.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "8d086355e216afdf78847da11823d0b73294b02a54b5a70e2fa3be6595abbb31"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "2134aa741466c5f40f97c09d02fb5a8b336f2ec29d594803e92032617da48c84"
+        }
+      ],
+      "safe_witnesses": [
+        "F04_D_ACTIVITY=REFUSED; OP=7e9f34bf-392b-42dd-b787-0bc5cdba529a; BEFORE=2026-10-03T01:30:31.987440Z; AFTER=2026-10-03T01:30:31.987440Z; UNCHANGED=1",
+        "F04_D_REFUSAL_AUDIT_FAULT=CONFIRMED_NON_COMMIT; OP=7e9f34bf-392b-42dd-b787-0bc5cdba529a; ACTOR=02da2f07-5de9-4bb9-834d-19c60452293f; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-refusal-audit-failure; COMPANIONS=0/0/0; OLD_HTTP=401; NO_FAILED_ROW=1",
+        "F04_CONCURRENCY=ACCEPT; OP=c4de9b1d-3c14-418c-9b8d-e0ccafa3c846; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=be9ac359-73b2-4ea5-a9d6-d0d78b7bbcdb",
+        "F04_D_ACTIVITY=ACCEPTED; OP=e33982f3-e489-4a38-825c-3ccd34a0f4d3; BEFORE=2026-10-03T01:30:32.987440Z; AFTER=2026-10-03T01:30:33.987440Z; SHARED_COMMIT=1",
+        "F04_D_OWNER_FIRST=LOGOUT; OP=e33982f3-e489-4a38-825c-3ccd34a0f4d3; ACTOR=dac93187-471e-4d6a-add0-ccf235a0e6b6; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-owner-before-logout; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=7409d3db-c6e6-40af-95a2-1832fece2d68; ACTOR=dac93187-471e-4d6a-add0-ccf235a0e6b6; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_ACTIVITY=REFUSED; OP=7409d3db-c6e6-40af-95a2-1832fece2d68; BEFORE=2026-10-03T01:30:33.987440Z; AFTER=2026-10-03T01:30:33.987440Z; UNCHANGED=1",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=7409d3db-c6e6-40af-95a2-1832fece2d68; ACTOR=dac93187-471e-4d6a-add0-ccf235a0e6b6; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-logout-first; COMPANIONS=1/1/0",
+        "F04_D_LOGOUT_FIRST=PASS; OLD_HTTP=401; INITIAL_INVALID_COMPANIONS=0/0/0; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_D_ACTIVITY=ACCEPTED; OP=daf4ab73-4656-42bf-b57b-b7b92ecf789f; BEFORE=2026-10-03T01:30:34.987440Z; AFTER=2026-10-03T01:30:35.987440Z; SHARED_COMMIT=1",
+        "F04_D_OWNER_FIRST=DISABLE; OP=daf4ab73-4656-42bf-b57b-b7b92ecf789f; ACTOR=1e902d89-6083-4c4f-830e-7b4b69ad4972; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-owner-before-disable; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=88e1ce81-5783-412a-978c-887973dd9bf2; ACTOR=1d975917-b441-4582-941a-2b31ed155ecc; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_D_ACTIVITY=REFUSED; OP=88e1ce81-5783-412a-978c-887973dd9bf2; BEFORE=2026-10-03T01:30:35.987440Z; AFTER=2026-10-03T01:30:35.987440Z; UNCHANGED=1",
+        "F04_D_SECURITY_REFUSAL=PASS; OP=88e1ce81-5783-412a-978c-887973dd9bf2; ACTOR=1d975917-b441-4582-941a-2b31ed155ecc; ORG=3ba1982f-c8b6-449b-afb7-90d69e8b9eea; CORRELATION=f04-d-disable-first; COMPANIONS=1/1/0",
+        "F04_D_REENABLE=PASS; OLD_HTTP=401; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED",
+        "F04_CONCURRENCY=REFUSE; OP=941c5228-78fa-4eab-a2c1-96f344664329; WINNER=ACCEPTED; CORRELATION=f04-concurrent-a; EVENT=09417d3e-f4cf-40d1-bb47-441f590f55cd"
+      ],
+      "log_sha256": "113c7e55ea1614899529dcb8eeeb36f1dab865da166e7b62f6579fea497d3f96",
+      "log_mode": "600",
+      "log_size_bytes": 28785,
+      "log_mtime_utc": "2026-10-03T01:30:45.000Z"
+    },
+    {
+      "batch": "final-d-regression-regression",
+      "source_sha": "73abb35b32f5930004add0336f679771eeb77a1d",
+      "archive_sha256": "8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f",
+      "build_directory": "/home/phuclam/idea-f04-73abb35-vYiVDg",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_0f4fd8170f9e45c0902adebbe060a499",
+      "log_path": "/home/phuclam/idea-f04-schema-2kGgPMXN.log",
+      "suite": "F04SchemaTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04SchemaTest.xml",
+          "sha256": "5c9b8ee4bd6a0d68c206959d1fc3b7d3db7ac28cad949d9fa21e78fa4b1bd372"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04SchemaTest.txt",
+          "sha256": "bcbc933d840c6e7c089ad559218c52f30b5d21caf967905dc2d65be30f84986a"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "80de28d03baf54c2aa904e708f700f040726e3771f9f78d303261679159c05ad",
+      "log_mode": "600",
+      "log_size_bytes": 5919,
+      "log_mtime_utc": "2026-10-03T01:30:56.000Z"
+    },
+    {
+      "batch": "final-d-regression-regression",
+      "source_sha": "73abb35b32f5930004add0336f679771eeb77a1d",
+      "archive_sha256": "8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f",
+      "build_directory": "/home/phuclam/idea-f04-73abb35-bWLTiJ",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_4c65b58c416d41f983b04ad99d669b56",
+      "log_path": "/home/phuclam/idea-f04-schema-MJe3RkLf.log",
+      "suite": "F04PredecessorMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "TEST-com.idea.ddm.operation.F04PredecessorMigrationTest.xml",
+          "sha256": "ab1c5420670a4b6530f1e1eb1d2fb4c77b65e7033b0d240a15f440b743665c1f"
+        },
+        {
+          "file": "com.idea.ddm.operation.F04PredecessorMigrationTest.txt",
+          "sha256": "0dcea740b815a8adab1db114c408dcf27179f9e101d99fa876a4a53814286520"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "8f17f3c3aa49fac8ac504efcbc92ffda2909294dfdaa0a7a8c6c4908e80f8fe6",
+      "log_mode": "600",
+      "log_size_bytes": 6266,
+      "log_mtime_utc": "2026-10-03T01:31:07.000Z"
+    },
+    {
+      "batch": "final-d-regression-regression",
+      "source_sha": "73abb35b32f5930004add0336f679771eeb77a1d",
+      "archive_sha256": "8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f",
+      "build_directory": "/home/phuclam/idea-f04-73abb35-ZpVVmK",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_a995b14ac4aa472f9228330288f0e505",
+      "log_path": "/home/phuclam/idea-f04-schema-R4XnuwrB.log",
+      "suite": "AuditEvidenceRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 0,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.audit.AuditEvidenceRepositoryTest.txt",
+          "sha256": "5a57f104058109f1c3c73a77e6a29f9f08eb0374447a7b18ea5b2141e487d207"
+        },
+        {
+          "file": "TEST-com.idea.ddm.audit.AuditEvidenceRepositoryTest.xml",
+          "sha256": "5842cd0b7e4dc8720a529830514bb2da8d8bd64fa5f353ed0065dedbf721d7b8"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "cc5eba5cef968884392792192d63161a342867cb847f04108a37e338b7e3beb4",
+      "log_mode": "600",
+      "log_size_bytes": 5959,
+      "log_mtime_utc": "2026-10-03T01:31:20.000Z"
+    },
+    {
+      "batch": "d-disable-red",
+      "source_sha": "58582cb75db413dfbd365e37862b5cca6d4b9668",
+      "archive_sha256": "2985afb650c2b07da6f84552b5040fa7b25a9bd5b6e46293de3f94345846320f",
+      "build_directory": "/home/phuclam/idea-f04-58582cb-adPnWP",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_206f3dd2253e44fbaf235d5dae9694c7",
+      "log_path": "/home/phuclam/idea-f04-schema-oBmTnXEu.log",
+      "suite": "OwnerOutcomeTest",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "maven_exit": 1,
+      "cleanup": "COMPLETE",
+      "surefire": [
+        {
+          "file": "com.idea.ddm.operation.OwnerOutcomeTest.txt",
+          "sha256": "79152c6acbcf576777c7c75b43adac558150dad92b792d785b08ccd250aadf4e"
+        },
+        {
+          "file": "TEST-com.idea.ddm.operation.OwnerOutcomeTest.xml",
+          "sha256": "24b08f5ecc32b1dfda4e9c0bbb6373b63088a8ea5ff2ded3c43b941cc57ce268"
+        }
+      ],
+      "safe_witnesses": [],
+      "log_sha256": "999323f5df66fbeebbdc2afe6820d5fb3e30b65c9ca5929a45af3053459a6583",
+      "log_mode": "600",
+      "log_size_bytes": 11448,
+      "log_mtime_utc": "2026-10-03T01:16:49.000Z"
+    }
+  ],
+  "interrupted_runs": [
+    {
+      "batch": "final-d-regression-regression",
+      "source_sha": "73abb35b32f5930004add0336f679771eeb77a1d",
+      "archive_sha256": "8b7e477c882b5b8bc12e41913ea54495242d02c650e0b6ac8e5ddb3b480e459f",
+      "build_directory": "/home/phuclam/idea-f04-73abb35-StZJuL",
+      "database": "idea_ddm_f03a_20260930_c91e7a42",
+      "schema": "f04_49920708dd824bf6b19dee1940552cfc",
+      "log_path": "/home/phuclam/idea-f04-schema-7MpEnT1J.log",
+      "disposition": "INTERRUPTED / no terminal result retained; not PASS",
+      "suite": "OwnerOutcomeTest",
+      "log_sha256": "6803a685ffa9fd48fadb0b871f7fa7dfe7560bd2b4104fb4dff20656a3445f5e",
+      "log_mode": "600",
+      "log_size_bytes": 10964,
+      "log_mtime_utc": "2026-10-03T01:27:50.000Z",
+      "cleanup": "COMPLETE after exact owned JVM absence, schema owner/marker match; manual bounded interrupted-run cleanup",
+      "cleanup_receipt": "F04_INTERRUPTED_OWNED_JVM=ABSENT\nF04_INTERRUPTED_SCHEMA_MARKER=EXACT; OWNER=idea_ddm_migrator\nF04_INTERRUPTED_CLEANUP=COMPLETE; SCHEMA=f04_49920708dd824bf6b19dee1940552cfc; SOURCE=73abb35b32f5930004add0336f679771eeb77a1d"
+    }
+  ]
+}
