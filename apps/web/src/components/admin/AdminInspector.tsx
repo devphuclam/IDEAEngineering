@@ -99,7 +99,7 @@ export function AdminInspector({
                 <line x1="20" y1="8" x2="20" y2="14" />
                 <line x1="23" y1="11" x2="17" y2="11" />
               </svg>
-              <span>+ Phân quyền vai trò mới</span>
+              <span>Phân quyền vai trò mới</span>
             </button>
 
             <button
@@ -156,7 +156,7 @@ export function AdminInspector({
               className="admin-btn primary"
               onClick={() => onOpenAddRole?.()}
             >
-              <span>+ Phân công nhân sự vào dự án</span>
+              <span>Phân công nhân sự vào dự án</span>
             </button>
           </div>
         </div>

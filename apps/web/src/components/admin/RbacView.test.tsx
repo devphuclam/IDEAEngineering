@@ -42,6 +42,6 @@ describe("RbacView component", () => {
       })
     );
 
-    expect(html).toContain("+ Thêm phân quyền vai trò");
+    expect(html).toContain("Thêm phân quyền vai trò");
   });
 });
