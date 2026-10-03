@@ -4,6 +4,7 @@ import { AccountsView } from "./AccountsView";
 import { AddRoleAssignmentDrawer } from "./AddRoleAssignmentDrawer";
 import { AdminInspector } from "./AdminInspector";
 import { AdminRail, AdminSection } from "./AdminRail";
+import { CreateActorDrawer } from "./CreateActorDrawer";
 import {
   AdminActor,
   AdminGroup,
@@ -53,6 +54,7 @@ export function AdminApp({
 
   // Drawer state
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
+  const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
   const [preselectedActorId, setPreselectedActorId] = useState<string | undefined>(undefined);
 
   // Toggle actor status (Active <-> Suspended)
@@ -186,7 +188,7 @@ export function AdminApp({
               setSelectedProject(null);
               setSelectedAssignment(null);
             }}
-            onOpenAddAccount={() => alert("Chức năng tạo tài khoản kỹ sư mới (F04)")}
+            onOpenAddAccount={() => setIsAddAccountOpen(true)}
           />
         )}
 
@@ -257,6 +259,21 @@ export function AdminApp({
         onClose={() => setIsAddRoleOpen(false)}
         onSubmit={handleAddAssignment}
         onAddActor={handleAddActor}
+      />
+
+      {/* Create Engineer Account Drawer */}
+      <CreateActorDrawer
+        isOpen={isAddAccountOpen}
+        projects={projects}
+        roles={roles}
+        onClose={() => setIsAddAccountOpen(false)}
+        onSubmit={(newActor, initialAssignment) => {
+          handleAddActor(newActor);
+          if (initialAssignment) {
+            handleAddAssignment(initialAssignment);
+          }
+          setIsAddAccountOpen(false);
+        }}
       />
     </div>
   );

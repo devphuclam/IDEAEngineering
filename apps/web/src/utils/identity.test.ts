@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDisplayId, isUuidOrLongIdentifier } from "./identity";
+import { formatDisplayId, generateUuid, isUuidOrLongIdentifier } from "./identity";
 
 describe("Identity formatting utilities", () => {
   it("formats standard UUID into a compact token", () => {
@@ -25,5 +25,11 @@ describe("Identity formatting utilities", () => {
   it("handles empty or falsy inputs gracefully", () => {
     expect(isUuidOrLongIdentifier("")).toBe(false);
     expect(formatDisplayId("")).toBe("");
+  });
+
+  it("generates valid RFC 4122 v4 UUID", () => {
+    const id = generateUuid();
+    expect(isUuidOrLongIdentifier(id)).toBe(true);
+    expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
   });
 });
