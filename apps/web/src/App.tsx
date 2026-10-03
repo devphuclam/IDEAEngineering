@@ -5,6 +5,7 @@ import { LoginForm } from "./components/auth/LoginForm";
 import { SessionLanding } from "./components/auth/SessionLanding";
 import { BannerType } from "./components/auth/StatusBanner";
 import { Topbar } from "./components/auth/Topbar";
+import { UserProfileScreen } from "./components/profile/UserProfileScreen";
 import "./styles/auth.css";
 
 type CsrfProof = { headerName: string; token: string };
@@ -18,7 +19,8 @@ async function readJson<T>(response: Response): Promise<T> {
 export function App() {
   const [csrf, setCsrf] = useState<CsrfProof | null>(null);
   const [session, setSession] = useState<SessionView | null>(null);
-  const [viewMode, setViewMode] = useState<"session" | "admin">("session");
+  const [viewMode, setViewMode] = useState<"session" | "admin" | "profile">("session");
+
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Vui lòng nhập tài khoản và mật khẩu được cấp.");
@@ -208,6 +210,14 @@ export function App() {
         setViewMode("admin");
         setBusy(false);
         break;
+      case "profile":
+        setSession({
+          actorId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
+          accountId: "872c524d-2ce6-4715-931a-c15785876baf",
+        });
+        setViewMode("profile");
+        setBusy(false);
+        break;
     }
   };
 
@@ -278,6 +288,13 @@ export function App() {
             >
               7. Cổng Quản Trị DDM (RBAC)
             </button>
+            <button
+              type="button"
+              className={`dev-sim-btn ${devScenario === "profile" ? "active" : ""}`}
+              onClick={() => setScenario("profile")}
+            >
+              8. Hồ sơ kỹ sư (Profile)
+            </button>
           </div>
         </header>
       )}
@@ -288,6 +305,16 @@ export function App() {
             actorId={session.actorId}
             logoSrc="/logo-idea.png"
             onExitAdmin={() => setViewMode("session")}
+            onOpenProfile={() => setViewMode("profile")}
+            onLogout={() => void submitLogout()}
+          />
+        ) : viewMode === "profile" ? (
+          <UserProfileScreen
+            actorId={session.actorId}
+            accountId={session.accountId}
+            logoSrc="/logo-idea.png"
+            onBack={() => setViewMode("session")}
+            onOpenAdmin={() => setViewMode("admin")}
             onLogout={() => void submitLogout()}
           />
         ) : (
@@ -298,11 +325,13 @@ export function App() {
               logoSrc="/logo-idea.png"
               onLogout={() => void submitLogout()}
               onOpenAdmin={() => setViewMode("admin")}
+              onOpenProfile={() => setViewMode("profile")}
             />
             <SessionLanding
               actorId={session.actorId}
               accountId={session.accountId}
               onOpenAdmin={() => setViewMode("admin")}
+              onOpenProfile={() => setViewMode("profile")}
               onEnterWorkbench={() =>
                 alert("Chuyển đến Bàn làm việc Kỹ thuật CAD/PDM...")
               }
@@ -310,6 +339,7 @@ export function App() {
           </div>
         )
       ) : (
+
         <div className="auth-split-layout">
           <BrandShowcase sealSrc="/LOGO_IDEA_full_L.png" />
           <section className="auth-stage-container">

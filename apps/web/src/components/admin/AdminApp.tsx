@@ -29,6 +29,7 @@ export interface AdminAppProps {
   logoSrc?: string;
   onExitAdmin: () => void;
   onLogout: () => void;
+  onOpenProfile?: () => void;
 }
 
 export function AdminApp({
@@ -36,7 +37,9 @@ export function AdminApp({
   logoSrc = "/logo-idea.png",
   onExitAdmin,
   onLogout,
+  onOpenProfile,
 }: AdminAppProps) {
+
   const [activeSection, setActiveSection] = useState<AdminSection>("accounts");
 
   // State collections
@@ -142,12 +145,21 @@ export function AdminApp({
         </div>
 
         <div className="admin-topbar-actions">
-          <div className="actor-pill" title={`Quản trị viên: ${actorId}`}>
+          <div
+            className="actor-pill"
+            title={`Quản trị viên: ${actorId}${onOpenProfile ? " — Nhấp để xem hồ sơ" : ""}`}
+            onClick={onOpenProfile}
+            style={{ cursor: onOpenProfile ? "pointer" : "default" }}
+            role={onOpenProfile ? "button" : undefined}
+            tabIndex={onOpenProfile ? 0 : undefined}
+            onKeyDown={onOpenProfile ? (e) => e.key === "Enter" && onOpenProfile() : undefined}
+          >
             <div className="pulse-dot" aria-hidden="true" />
             <span style={{ fontSize: "12px", color: "#cbd5e1" }}>
               Admin: <strong style={{ color: "#ffffff", fontFamily: "var(--font-mono)" }}>{displayActor}</strong>
             </span>
           </div>
+
 
           <button
             type="button"

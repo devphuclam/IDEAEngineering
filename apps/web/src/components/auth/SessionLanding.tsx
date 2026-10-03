@@ -7,6 +7,7 @@ export interface SessionLandingProps {
   vaultName?: string;
   onEnterWorkbench?: () => void;
   onOpenAdmin?: () => void;
+  onOpenProfile?: () => void;
 }
 
 export function SessionLanding({
@@ -15,7 +16,9 @@ export function SessionLanding({
   vaultName = "Kho chính (icVault-Primary)",
   onEnterWorkbench,
   onOpenAdmin,
+  onOpenProfile,
 }: SessionLandingProps) {
+
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const handleCopy = async (id: string, key: string) => {
@@ -192,6 +195,16 @@ export function SessionLanding({
             Không gian quản lý dữ liệu kỹ thuật CAD & PDM đã sẵn sàng.
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {onOpenProfile && (
+              <button
+                type="button"
+                className="admin-btn"
+                style={{ height: 40, padding: "0 18px", color: "var(--admin-navy)", borderColor: "#94a3b8" }}
+                onClick={onOpenProfile}
+              >
+                Hồ Sơ &amp; Quyền Hạn
+              </button>
+            )}
             {onOpenAdmin && (
               <button
                 type="button"
@@ -211,6 +224,7 @@ export function SessionLanding({
               Vào Bàn Làm Việc Kỹ Thuật →
             </button>
           </div>
+
         </div>
       </div>
     </section>

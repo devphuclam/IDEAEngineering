@@ -6,6 +6,7 @@ export interface TopbarProps {
   logoSrc?: string;
   onLogout: () => void;
   onOpenAdmin?: () => void;
+  onOpenProfile?: () => void;
 }
 
 export function Topbar({
@@ -14,6 +15,7 @@ export function Topbar({
   logoSrc = "/logo-idea.png",
   onLogout,
   onOpenAdmin,
+  onOpenProfile,
 }: TopbarProps) {
   const displayId = formatDisplayId(actorId);
 
@@ -29,7 +31,15 @@ export function Topbar({
       </div>
 
       <div className="topbar-actions">
-        <div className="actor-pill" title={`Kỹ sư phụ trách: ${actorId}`}>
+        <div
+          className="actor-pill"
+          title={`Kỹ sư phụ trách: ${actorId}${onOpenProfile ? " — Nhấp để xem hồ sơ" : ""}`}
+          onClick={onOpenProfile}
+          style={{ cursor: onOpenProfile ? "pointer" : "default" }}
+          role={onOpenProfile ? "button" : undefined}
+          tabIndex={onOpenProfile ? 0 : undefined}
+          onKeyDown={onOpenProfile ? (e) => e.key === "Enter" && onOpenProfile() : undefined}
+        >
           <div className="pulse-dot" aria-hidden="true" />
           <svg
             className="actor-icon"
@@ -51,6 +61,37 @@ export function Topbar({
             </strong>
           </span>
         </div>
+
+        {onOpenProfile && (
+          <button
+            type="button"
+            className="admin-btn"
+            style={{
+              height: 36,
+              background: "#1e293b",
+              color: "#cbd5e1",
+              borderColor: "#334155",
+            }}
+            onClick={onOpenProfile}
+            title="Xem hồ sơ cá nhân và quyền hạn kỹ thuật"
+          >
+            <svg
+              style={{ width: 14, height: 14 }}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Hồ sơ</span>
+          </button>
+        )}
+
 
         {onOpenAdmin && (
           <button
