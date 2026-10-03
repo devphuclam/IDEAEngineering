@@ -63,6 +63,50 @@ class OwnerOutcomeTest {
         } catch (Exception exception) { barrier.close(); throw exception; }
     }
 
+    @Test void committedHttpLogoutBeforeOwnerCommitRetainsRefusalAndAllowsFreshSessionResolution() throws Exception {
+        var admitted = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var correlation = "f04-d-logout-first";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var activityBefore = sessionActivity(admitted);
+        fixture.advanceTime(java.time.Duration.ofSeconds(1));
+        var executor = Executors.newSingleThreadExecutor();
+        try (var barrier = ownerAdmissionBarrier(operation)) {
+            var attempt = executor.submit(() -> assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, correlation, SampleOwnerCommandService.BusinessDecision.ACCEPT))));
+            awaitWaiters(barrier, 73004992, operation, 1);
+            fixture.signOutThroughRealHttp(admitted); // Actual POST logout -> qualified SessionService.signOut, never direct SQL revoke.
+            advisory(barrier, "pg_advisory_unlock", 73004992, operation.hashCode());
+            assertEquals("INELIGIBLE_SESSION", attempt.get(8, TimeUnit.SECONDS).reason());
+            assertTerminalSecurityRefusal(operation, admitted, correlation);
+            assertEquals(activityBefore, sessionActivity(admitted));
+            fixture.assertHttpSessionStatus(admitted, 401);
+            var neverAdmitted = UUID.randomUUID();
+            assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(neverAdmitted, "f04-d-initial-invalid", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertCompanions(neverAdmitted, 0, 0, 0);
+            assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-d-old-replay", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            var fresh = fixture.freshSignIn(admitted);
+            assertTrue(fresh.hasDifferentSessionFrom(admitted));
+            var historical = owner.execute(fresh.context(), new SampleOwnerCommandService.Command(operation,
+                    "f04-d-fresh-replay", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+            assertEquals(SampleOwnerCommandService.Outcome.REFUSED, historical.outcome());
+            assertEquals(correlation, historical.correlationId());
+            assertTerminalSecurityRefusal(operation, admitted, correlation);
+            var newAttempt = owner.execute(fresh.context(), new SampleOwnerCommandService.Command(UUID.randomUUID(),
+                    "f04-d-new-genuine-attempt", SampleOwnerCommandService.BusinessDecision.ACCEPT));
+            assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, newAttempt.outcome());
+            assertCompanions(newAttempt.operationId(), 1, 1, 1);
+            assertOperationUnlocked(operation);
+            System.out.println("F04_D_LOGOUT_FIRST=PASS; OLD_HTTP=401; INITIAL_INVALID_COMPANIONS=0/0/0; FRESH_REPLAY=REFUSED; NEW_ID=ACCEPTED");
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+            removeOwnerAdmissionBarrier();
+        }
+    }
+
     private static void removeOwnerAdmissionBarrier() throws Exception {
         try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
             statement.execute("DROP TRIGGER IF EXISTS f04_d_admitted ON sample_owner_operation");

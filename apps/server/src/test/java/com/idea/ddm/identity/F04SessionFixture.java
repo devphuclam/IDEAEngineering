@@ -113,6 +113,16 @@ public final class F04SessionFixture implements AutoCloseable {
         assertEquals(expected, get(browsers.get(signedIn.sessionReference()).client(), "/api/v1/identity/session").statusCode());
     }
 
+    public void signOutThroughRealHttp(SignedIn signedIn) throws Exception {
+        var client = browsers.get(signedIn.sessionReference()).client();
+        var csrf = get(client, "/api/v1/identity/csrf");
+        assertEquals(200, csrf.statusCode());
+        var response = client.send(HttpRequest.newBuilder(uri("/api/v1/identity/logout"))
+                .header(field(csrf.body(), "headerName"), field(csrf.body(), "token"))
+                .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.discarding());
+        assertEquals(204, response.statusCode(), "Actual qualified sign-out must commit");
+    }
+
     public SignedIn signInThroughRealHttp() throws Exception {
         return signInThroughRealHttp(login, syntheticCredential, identity.actorId(), identity.accountId());
     }
