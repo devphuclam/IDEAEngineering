@@ -12,7 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 /** Exact, single-use offline qualification runner. No third-party Java dependency. */
 class Experiment {
-    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-03");
+    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-04");
     static final Path PACKAGE = ROOT.resolve("tests/ph1/f05-qualification/jsr305-exclusion");
     static final Path CACHE = Path.of("/home/phuclam/.m2/repository");
     static final Path JDK = Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
@@ -31,6 +31,10 @@ class Experiment {
     static final Set<String> JSR_CLASSES = Set.of("javax/annotation/Nullable.class",
         "javax/annotation/Nonnull.class", "javax/annotation/ParametersAreNonnullByDefault.class",
         "javax/annotation/CheckReturnValue.class", "javax/annotation/meta/TypeQualifier.class");
+    static final Set<String> FIRST_PARTY_METADATA = Set.of(
+        "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/",
+        "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/pom.xml",
+        "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/pom.properties");
     static List<Map<String,String>> graph;
     static Map<String,Map<String,String>> artifacts;
 
@@ -52,6 +56,7 @@ class Experiment {
             require(graph.size() == 115 && artifacts.size() == 99, "graph count drift");
             compareHistoricalGraph();
             checkToolsAndCore();
+            detectorSelfCheck();
             var models = rows(ROOT.resolve(INV + "f05a-q02-models.tsv")).stream()
                 .filter(r -> !r.get("coordinate").equals("com.google.code.findbugs:jsr305:3.0.2")).toList();
             require(models.size() == 242, "model count drift");
@@ -74,7 +79,7 @@ class Experiment {
             preserveLegal();
             String preflight = "SOURCE=" + args[0] + "\nJDK=" + JDK + "\nJAVA=25.0.4.1+1-LTS\nMAVEN=" + MAVEN
                 + "\nMAVEN_VERSION=3.9.16\nREPOSITORY=" + REPO
-                + "\nACQUIRED_JARS=99\nMODEL_POMS=242\nGRAPH_ROWS=115\nJSR305_ABSENT=PASS\n";
+                + "\nACQUIRED_JARS=99\nMODEL_POMS=242\nGRAPH_ROWS=115\nJSR305_ABSENT=PASS\nDETECTOR_SELF_CHECK=PASS\n";
             write(RUN.resolve("preflight.txt"), preflight);
             System.out.println("PREFLIGHT=PASS;JARS=99;POMS=242;JSR305=ABSENT");
             List<String> command = new ArrayList<>(List.of(MAVEN.resolve("bin/mvn").toString(),
@@ -313,7 +318,7 @@ class Experiment {
         for (var row : graph) if (row.get("realm").equals("application"))
             expected.put(Path.of(row.get("jar_path")).getFileName().toString(), row.get("jar_sha256"));
         Map<String,String> actual = new TreeMap<>();
-        rejectJsrProvider(jar);
+        rejectJsrProvider(jar, true);
         try (var zip = new ZipFile(jar.toFile())) {
             Manifest manifest = new Manifest(zip.getInputStream(zip.getEntry("META-INF/MANIFEST.MF")));
             var attrs = manifest.getMainAttributes();
@@ -357,9 +362,16 @@ class Experiment {
     }
 
     static void rejectJsrProvider(Path jar) throws Exception {
+        rejectJsrProvider(jar, false);
+    }
+
+    static void rejectJsrProvider(Path jar, boolean firstPartyOuter) throws Exception {
+        if (firstPartyOuter)
+            require(jar.equals(APP.resolve("target/t027-jsr305-exclusion-0.1.0.jar")),
+                "metadata exemption requested outside first-party output");
         try (var zip = new ZipFile(jar.toFile())) {
             for (var entry : Collections.list(zip.entries()))
-                require(!isJsr(entry.getName()), "JSR305 provider in controlled JAR: " + jar);
+                require(!isJsr(entry.getName(), firstPartyOuter), "JSR305 provider in controlled JAR: " + jar);
         }
     }
 
@@ -373,6 +385,40 @@ class Experiment {
     static boolean isJsr(String name) {
         return JSR_CLASSES.stream().anyMatch(name::endsWith) || name.contains("jsr305")
             || name.endsWith("javax/annotation/meta/TypeQualifierDefault.class");
+    }
+
+    static boolean isJsr(String name, boolean firstPartyOuter) {
+        return !(firstPartyOuter && FIRST_PARTY_METADATA.contains(name)) && isJsr(name);
+    }
+
+    static void detectorSelfCheck() throws Exception {
+        for (String name : FIRST_PARTY_METADATA) {
+            require(isJsr(name), "historical broad-detector witness changed");
+            require(!isJsr(name, true), "approved outer metadata refused: " + name);
+            require(isJsr(name, false), "metadata exemption escaped outer artifact");
+            var bytes = new ByteArrayOutputStream();
+            try (var zip = new ZipOutputStream(bytes)) {
+                zip.putNextEntry(new ZipEntry(name)); zip.closeEntry();
+            }
+            boolean rejected = false;
+            try { rejectJsrProvider(bytes.toByteArray()); }
+            catch (IllegalStateException expected) { rejected = true; }
+            require(rejected, "nested runtime metadata exemption");
+        }
+        List<String> rejectedNames = List.of(
+            "javax/annotation/Nullable.class", "javax/annotation/Nonnull.class",
+            "javax/annotation/ParametersAreNonnullByDefault.class", "javax/annotation/CheckReturnValue.class",
+            "javax/annotation/meta/TypeQualifier.class", "javax/annotation/meta/TypeQualifierDefault.class",
+            "shaded/javax/annotation/Nullable.class", "BOOT-INF/classes/javax/annotation/meta/TypeQualifier.class",
+            "com/google/code/findbugs/jsr305/", "com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.pom",
+            "jsr305-3.0.2.jar", "jsr305-3.0.2.pom", "BOOT-INF/lib/jsr305-3.0.2.jar",
+            "META-INF/maven/com.google.code.findbugs/jsr305/pom.xml",
+            "META-INF/maven/com.idea.qualification/t027-jsr305-exclusion/extra.xml",
+            "META-INF/maven/other/t027-jsr305-exclusion/pom.xml");
+        for (String name : rejectedNames)
+            require(isJsr(name, true) && isJsr(name, false), "provider/dependency guard weakened: " + name);
+        System.out.println("DETECTOR_SELF_CHECK=PASS;OUTER_ALLOWED=3;NESTED_METADATA_REJECTED=3;PROVIDER_DEPENDENCY_REJECTED="
+            + rejectedNames.size());
     }
 
     static int execute(List<String> command, Path log, Duration timeout) throws Exception {
