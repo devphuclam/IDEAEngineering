@@ -22,8 +22,17 @@ export interface AdminRole {
   id: string;
   name: string;
   description: string;
+  departments: string[];
   permissions: { action: string; description: string }[];
 }
+
+export const ADMIN_DEPARTMENTS = [
+  "Phòng Thiết kế Cơ khí JIG & Máy",
+  "Phòng Điện - Tự động hóa",
+  "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
+  "Ban Quản lý Dự án (PMO)",
+  "Ban Công nghệ & IT",
+];
 
 export interface AdminGroup {
   id: string;
@@ -175,6 +184,7 @@ export const INITIAL_ROLES: AdminRole[] = [
   {
     id: "role_design_engineer",
     name: "Design Engineer",
+    departments: ["Phòng Thiết kế Cơ khí JIG & Máy", "Phòng Điện - Tự động hóa"],
     description: "Toàn quyền tạo mô hình, khóa Checkout, Check-in bản vẽ CAD và chỉnh sửa danh mục BOM dự án.",
     permissions: [
       { action: "cad.view", description: "Xem mô hình CAD 3D và bản vẽ 2D" },
@@ -184,8 +194,21 @@ export const INITIAL_ROLES: AdminRole[] = [
     ],
   },
   {
+    id: "role_automation_engineer",
+    name: "Automation Engineer",
+    departments: ["Phòng Điện - Tự động hóa"],
+    description: "Thiết kế sơ đồ đấu nối điện, lập trình PLC, mô phỏng Robot và cập nhật linh kiện điện trong BOM.",
+    permissions: [
+      { action: "cad.view", description: "Xem mô hình CAD 3D và sơ đồ điện" },
+      { action: "cad.checkout", description: "Khóa bản quyền (Checkout/Reservation) để chỉnh sửa" },
+      { action: "cad.checkin", description: "Lưu phiên bản mới (Check-in Generation) lên icVault" },
+      { action: "bom.edit", description: "Cập nhật linh kiện khí nén & cảm biến trong BOM" },
+    ],
+  },
+  {
     id: "role_reviewer",
     name: "Reviewer / Approver",
+    departments: ["Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật", "Phòng Thiết kế Cơ khí JIG & Máy"],
     description: "Thẩm duyệt thiết kế, kiểm tra va chạm mô hình lắp ráp, phê duyệt hoặc từ chối phát hành Release.",
     permissions: [
       { action: "cad.view", description: "Xem mô hình CAD và tài liệu kỹ thuật" },
@@ -196,6 +219,7 @@ export const INITIAL_ROLES: AdminRole[] = [
   {
     id: "role_project_admin",
     name: "Project Administrator",
+    departments: ["Ban Quản lý Dự án (PMO)"],
     description: "Quản lý nhân sự, phân nhóm kỹ sư và phân công vai trò trong phạm vi dự án máy được ủy quyền.",
     permissions: [
       { action: "project.members", description: "Thêm hoặc bớt thành viên trong dự án" },
@@ -205,6 +229,7 @@ export const INITIAL_ROLES: AdminRole[] = [
   {
     id: "role_account_admin",
     name: "Account Administrator",
+    departments: ["Ban Công nghệ & IT"],
     description: "Cấp tài khoản định danh Actor, quản lý trạng thái kích hoạt hoặc tạm dừng truy cập.",
     permissions: [
       { action: "account.create", description: "Tạo tài khoản kỹ sư mới" },

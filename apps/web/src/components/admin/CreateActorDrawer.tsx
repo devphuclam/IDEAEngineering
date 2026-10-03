@@ -63,7 +63,20 @@ export function CreateActorDrawer({
   const [selectedProjectId, setSelectedProjectId] = useState(
     projects[0]?.id || ""
   );
-  const [selectedRoleId, setSelectedRoleId] = useState(roles[0]?.id || "");
+
+  const filteredRoles = roles.filter((r) =>
+    r.departments ? r.departments.includes(department) : true
+  );
+
+  const [selectedRoleId, setSelectedRoleId] = useState(
+    filteredRoles[0]?.id || roles[0]?.id || ""
+  );
+
+  useEffect(() => {
+    if (filteredRoles.length > 0 && !filteredRoles.some((r) => r.id === selectedRoleId)) {
+      setSelectedRoleId(filteredRoles[0].id);
+    }
+  }, [department, filteredRoles, selectedRoleId]);
 
   // Auto-sync username and email as user types full name if user hasn't explicitly customized them
   const handleFullNameChange = (name: string) => {
@@ -146,7 +159,7 @@ export function CreateActorDrawer({
     onClose();
   };
 
-  const selectedRole = roles.find((r) => r.id === selectedRoleId) || roles[0];
+  const selectedRole = roles.find((r) => r.id === selectedRoleId) || filteredRoles[0] || roles[0];
 
   return (
     <div
@@ -432,7 +445,7 @@ export function CreateActorDrawer({
                         value={selectedRoleId}
                         onChange={(e) => setSelectedRoleId(e.target.value)}
                       >
-                        {roles.map((r) => (
+                        {filteredRoles.map((r) => (
                           <option key={r.id} value={r.id}>
                             {r.name}
                           </option>

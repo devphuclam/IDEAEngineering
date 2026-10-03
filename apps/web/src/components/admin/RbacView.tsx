@@ -312,6 +312,19 @@ export function RbacView({
                 <tr key={r.id}>
                   <td>
                     <strong style={{ color: "var(--admin-navy)" }}>{r.name}</strong>
+                    {r.departments && r.departments.length > 0 && (
+                      <div style={{ marginTop: 4, display: "flex", flexWrap: "wrap", gap: 4 }}>
+                        {r.departments.map((dept) => (
+                          <span
+                            key={dept}
+                            className="admin-status-pill active"
+                            style={{ fontSize: "10px", padding: "1px 6px" }}
+                          >
+                            {dept}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </td>
                   <td>{r.description}</td>
                   <td>

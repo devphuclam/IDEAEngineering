@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AdminActor,
   AdminGroup,
   AdminProject,
   AdminRole,
   AdminRoleAssignment,
+  ADMIN_DEPARTMENTS,
 } from "./mockAdminData";
 
 export interface AddRoleAssignmentDrawerProps {
@@ -15,6 +16,7 @@ export interface AddRoleAssignmentDrawerProps {
   projects: AdminProject[];
   preselectedProjectId?: string;
   preselectedActorId?: string;
+  initialStep?: 1 | 2 | 3 | 4;
   onClose: () => void;
   onSubmit: (assignment: Omit<AdminRoleAssignment, "id" | "assignedAt">) => void;
   onAddActor?: (newActor: AdminActor) => void;
@@ -27,6 +29,7 @@ export function AddRoleAssignmentDrawer({
   projects,
   preselectedProjectId,
   preselectedActorId,
+  initialStep = 1,
   onClose,
   onSubmit,
   onAddActor,
@@ -34,13 +37,14 @@ export function AddRoleAssignmentDrawer({
   if (!isOpen) return null;
 
   // Step 1: Dự án (Scope) -> Step 2: Kỹ sư (Engineer) -> Step 3: Vai trò (Role) -> Step 4: Xác nhận (Review)
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(initialStep);
 
   // Step 1: Selected Project / Scope
   const defaultScope = preselectedProjectId
     ? `Dự án ${projects.find((p) => p.id === preselectedProjectId)?.code || projects[0]?.code}`
     : `Dự án ${projects[0]?.code || "P-100"}`;
   const [selectedScope, setSelectedScope] = useState<string>(defaultScope);
+  const targetProject = projects.find((p) => selectedScope.includes(p.code));
 
   // Step 2: Selected Actor (Default to first ACTIVE actor, NEVER suspended)
   const activeActors = actors.filter((a) => a.status === "active");
@@ -48,8 +52,38 @@ export function AddRoleAssignmentDrawer({
     preselectedActorId || activeActors[0]?.id || actors[0]?.id || ""
   );
 
-  // Step 3: Selected Role
-  const [selectedRoleId, setSelectedRoleId] = useState<string>(roles[0]?.id || "");
+  const selectedActor = actors.find((a) => a.id === selectedActorId) || actors[0];
+
+  // Step 3: Selected Department & Role Filter
+  const [selectedDepartment, setSelectedDepartment] = useState<string>(
+    selectedActor?.department && ADMIN_DEPARTMENTS.includes(selectedActor.department)
+      ? selectedActor.department
+      : ADMIN_DEPARTMENTS[0]
+  );
+
+  // Auto-sync selectedDepartment when chosen engineer changes
+  useEffect(() => {
+    if (selectedActor?.department && ADMIN_DEPARTMENTS.includes(selectedActor.department)) {
+      setSelectedDepartment(selectedActor.department);
+    }
+  }, [selectedActorId, selectedActor?.department]);
+
+  const filteredRoles = roles.filter((r) =>
+    r.departments ? r.departments.includes(selectedDepartment) : true
+  );
+
+  const [selectedRoleId, setSelectedRoleId] = useState<string>(
+    filteredRoles[0]?.id || roles[0]?.id || ""
+  );
+
+  // Ensure selectedRoleId points to an available role in the filtered department list
+  useEffect(() => {
+    if (filteredRoles.length > 0 && !filteredRoles.some((r) => r.id === selectedRoleId)) {
+      setSelectedRoleId(filteredRoles[0].id);
+    }
+  }, [selectedDepartment, filteredRoles, selectedRoleId]);
+
+  const selectedRole = roles.find((r) => r.id === selectedRoleId) || filteredRoles[0] || roles[0];
 
   // Search filter for Step 2
   const [actorSearch, setActorSearch] = useState("");
@@ -59,10 +93,6 @@ export function AddRoleAssignmentDrawer({
   const [newName, setNewName] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const [newDepartment, setNewDepartment] = useState("Phòng Thiết kế Cơ khí JIG & Máy");
-
-  const targetProject = projects.find((p) => selectedScope.includes(p.code));
-  const selectedActor = actors.find((a) => a.id === selectedActorId) || actors[0];
-  const selectedRole = roles.find((r) => r.id === selectedRoleId) || roles[0];
 
   const filteredActors = actors.filter(
     (a) =>
@@ -416,12 +446,45 @@ export function AddRoleAssignmentDrawer({
                   Gán cho: {selectedActor.fullName}
                 </span>
               </div>
-              <p style={{ margin: "0 0 16px", color: "#64748b", fontSize: "12px" }}>
+              <p style={{ margin: "0 0 14px", color: "#64748b", fontSize: "12px" }}>
                 Chỉ định thẩm quyền mà kỹ sư <strong>{selectedActor.fullName}</strong> được phép thực hiện trên <strong>{selectedScope}</strong>.
               </p>
 
+              {/* Bộ chọn phòng ban để lọc vai trò */}
+              <div style={{ marginBottom: 14, background: "#f8fafc", border: "1px solid var(--admin-line)", padding: "10px 12px", borderRadius: 5 }}>
+                <label style={{ display: "block", fontSize: "11.5px", fontWeight: 700, color: "var(--admin-navy)", marginBottom: 4 }}>
+                  Chọn phòng ban:
+                </label>
+                <select
+                  className="admin-select"
+                  style={{ width: "100%", background: "#ffffff" }}
+                  value={selectedDepartment}
+                  onChange={(e) => {
+                    const newDept = e.target.value;
+                    setSelectedDepartment(newDept);
+                    const matching = roles.filter((r) =>
+                      r.departments ? r.departments.includes(newDept) : true
+                    );
+                    if (matching.length > 0) {
+                      setSelectedRoleId(matching[0].id);
+                    }
+                  }}
+                  aria-label="Chọn phòng ban lọc vai trò"
+                >
+                  {ADMIN_DEPARTMENTS.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+                <span style={{ display: "block", fontSize: "11px", color: "#64748b", marginTop: 4 }}>
+                  Hệ thống chỉ hiển thị các vai trò kỹ thuật trực thuộc <strong>{selectedDepartment}</strong> ({filteredRoles.length} vai trò).
+                </span>
+              </div>
+
+              {/* Danh sách vai trò đã lọc theo phòng ban */}
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {roles.map((r) => {
+                {filteredRoles.map((r) => {
                   const isSelected = selectedRoleId === r.id;
                   return (
                     <label
@@ -447,9 +510,14 @@ export function AddRoleAssignmentDrawer({
                         style={{ marginTop: 3 }}
                       />
                       <div style={{ flex: 1 }}>
-                        <strong style={{ display: "block", color: "var(--admin-navy)", fontSize: "13px" }}>
-                          {r.name}
-                        </strong>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 2 }}>
+                          <strong style={{ color: "var(--admin-navy)", fontSize: "13px" }}>
+                            {r.name}
+                          </strong>
+                          <span className="admin-status-pill active" style={{ fontSize: "10.5px" }}>
+                            {selectedDepartment}
+                          </span>
+                        </div>
                         <p style={{ margin: "3px 0 6px", color: "#475569", fontSize: "11.5px" }}>
                           {r.description}
                         </p>
@@ -475,6 +543,12 @@ export function AddRoleAssignmentDrawer({
                     </label>
                   );
                 })}
+
+                {filteredRoles.length === 0 && (
+                  <div style={{ padding: 14, textAlign: "center", color: "#64748b", fontSize: "12px", background: "#f8fafc", borderRadius: 4 }}>
+                    Không có vai trò nào được định nghĩa cho phòng ban này.
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -549,9 +623,14 @@ export function AddRoleAssignmentDrawer({
                   <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b" }}>
                     3. Vai trò &amp; Quyền kỹ thuật được cấp
                   </span>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--admin-blue)" }}>
-                    {selectedRole.name}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span className="admin-status-pill active" style={{ fontSize: "10.5px" }}>
+                      {selectedDepartment}
+                    </span>
+                    <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--admin-blue)" }}>
+                      {selectedRole.name}
+                    </span>
+                  </div>
                 </div>
 
                 <p style={{ margin: "0 0 10px", fontSize: "12px", color: "#475569" }}>
