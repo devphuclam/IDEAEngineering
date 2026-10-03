@@ -1,0 +1,288 @@
+{
+  "stable_id": "IE-VEV-PH1-F04-T026-PUBLIC-RECEIPTS-001",
+  "class": "subordinate verification execution index",
+  "version": "0.1",
+  "document_status": "Draft",
+  "normativity": "INFORMATIVE",
+  "repository_instruction_state": "NOT-APPLICABLE",
+  "owner_author": "Engineering / Codex",
+  "reviewer_acceptance_authority": "Project Reviewer Nguyễn Huỳnh Phúc Lâm; conversation authorization 2026-10-03; whole-F04 acceptance pending",
+  "evidence_date": "2026-10-03 +07:00",
+  "collected_at_utc": "2026-10-03T02:24:08.393417+00:00",
+  "applicability": "Issue #31 / Draft PR #32 / T026 fresh-public and packaged repeat only",
+  "classification_retention": "INTERNAL; retain with F04 evidence and private host logs; database retained for review",
+  "upstream_authority": "IE-RES-F04-T026-FRESH-PUBLIC-AUTH-20261003",
+  "downstream": "F04-outcome-results.md §§35–37 and whole-F04 review",
+  "change_supersession": "Successor evidence to historical §34 proposal, no rewrite of historical receipts; superseded by NOT-APPLICABLE",
+  "review_trigger": "source/test/migration/tool/artifact/hash/graph/target/authority change",
+  "standards_tailoring": "STANDARD-GUIDED under IE-STD-AUTH-001, F04 results §15; no conformity claim",
+  "executed_source": "088ee3fed5175e387a629a7bc4d5ea5a943cdbb0",
+  "application_test_content_baseline": "f817d8fb4a910185204ed37bd01b78070832196b",
+  "archive": {
+    "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/source.tar.gz",
+    "sha256": "0894c38b2643ca3b52b8dd825a25a194babe719e278f59e35433e6fd8824f0af",
+    "mode": "664"
+  },
+  "database": "idea_ddm_f02_f03b_closure_f04_20261003_t026",
+  "host": "127.0.0.1",
+  "port": 5432,
+  "template": "template0",
+  "template_creation_provenance": "exact-name non-reusing wizard statically inspected; human reported setup complete; initial empty witness independently observed before tests",
+  "database_owner": "idea_ddm_migrator",
+  "runtime_role": "idea_ddm_app",
+  "initial_witness": "idea_ddm_f02_f03b_closure_f04_20261003_t026|idea_ddm_migrator|idea_ddm_migrator|180006|IDEA_F04_T026_FRESH_PUBLIC:IE-RES-F04-T026-FRESH-PUBLIC-AUTH-20261003|0|0|t",
+  "app_witness": "idea_ddm_app|f|f|f|f|f|f|f|f",
+  "initial_witness_file": {
+    "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/initial-witness.txt",
+    "sha256": "36914649d209bf1f5c188ce23fcd54e12e4a44899936307b6fe1ad80276cf364",
+    "mode": "600"
+  },
+  "tooling": {
+    "JDK": "Temurin 25.0.4.1+1",
+    "Maven": "3.9.16 offline only",
+    "PostgreSQL": "18.6",
+    "Python": "CPython 3.14.4 -I -S stdlib only",
+    "Node": "24.21.0",
+    "npm": "11.19.0",
+    "build_jars": "9/9 exact inventory/hash/descriptor",
+    "qualified_runtime_cache": "57/57 exact; one jarmode artifact embedded in cached Boot loader tools"
+  },
+  "wizard": {
+    "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/create-database-wizard.sh",
+    "sha256": "9e45568d1a5489446c2459cdb4cfb570cce1e756558aa60bc943879f2a3019c6",
+    "mode": "700"
+  },
+  "execution_harness": {
+    "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/run-t026-fresh-public.sh",
+    "sha256": "7d684dc86cf868e221164c44ebf85e5561ffbe5f51978955b80e5476330eeafe",
+    "mode": "700"
+  },
+  "suite_receipts": [
+    {
+      "suite": "DataBaselineTest",
+      "command": "mvn -o -B -Dtest=DataBaselineTest test",
+      "result": "PASS",
+      "maven_exit": 0,
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "methods": [
+        "freshVersionedMigrationAppliesOnceAndThenDoesNothing",
+        "processAndDatabaseHealthReportSeparateOutcomes",
+        "failedPostgresMigrationRollsBackItsPartialDdlInAnIsolatedSchema"
+      ],
+      "log": {
+        "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/DataBaselineTest.log",
+        "sha256": "a00d9b12e3358ef73e1884d56272fc771d315b744583675762823bd2a6a2a8c3",
+        "mode": "600"
+      },
+      "surefire_xml": {
+        "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/apps/server/target/surefire-reports/TEST-com.idea.ddm.DataBaselineTest.xml",
+        "sha256": "444f3d62c3bdd2bbd380cdde6f7211b63563698284e56eaf9926b4ffed7dee5c",
+        "mode": "600"
+      }
+    },
+    {
+      "suite": "DatabasePrivilegeTest",
+      "command": "mvn -o -B -Dtest=DatabasePrivilegeTest test",
+      "result": "PASS",
+      "maven_exit": 0,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "methods": [
+        "migrationRoleOwnsBaselineAndApplicationRoleHasNoDdlAuthority"
+      ],
+      "log": {
+        "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/DatabasePrivilegeTest.log",
+        "sha256": "bb4c65b26763c7938504ba94b44f4b45f6d0be9a8124de5682da9e3352d2d7da",
+        "mode": "600"
+      },
+      "surefire_xml": {
+        "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/apps/server/target/surefire-reports/TEST-com.idea.ddm.DatabasePrivilegeTest.xml",
+        "sha256": "d7c2d753369568d209feedb82c927204357ee6301c0ddb4e84e12a3b99f8a964",
+        "mode": "600"
+      }
+    },
+    {
+      "suite": "F03BPublicMigrationTest",
+      "command": "mvn -o -B -Dtest=F03BPublicMigrationTest test",
+      "result": "PASS",
+      "maven_exit": 0,
+      "counts": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "methods": [
+        "noOpMigrationRestoresReadOnlyHistoryAfterBootstrapStyleAclDrift",
+        "runtimeCannotAcquireMigrationOrRewriteProtectedAssignmentsAndProofBindings",
+        "freshPublicHasValidatedEightMigrationHistoryEntriesAndExactMigratorOwnedObjects",
+        "successorPreservesExactRoleVersionsWithoutAddingAuthorityToV1"
+      ],
+      "log": {
+        "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/F03BPublicMigrationTest.log",
+        "sha256": "14d6717f188ba4ab77ba12129c5e9a2d474424155e6af65d15c8f5d9c1568c6c",
+        "mode": "600"
+      },
+      "surefire_xml": {
+        "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/apps/server/target/surefire-reports/TEST-com.idea.ddm.F03BPublicMigrationTest.xml",
+        "sha256": "8723ac1d583b1771aaf37f95a615a24819d38a5c64f430a58b1b4631a6268c82",
+        "mode": "600"
+      }
+    }
+  ],
+  "aggregate_counts": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "offline_package": {
+    "command": "mvn -o -B -DskipTests package",
+    "result": "PASS",
+    "maven_exit": 0,
+    "log": {
+      "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/package.log",
+      "sha256": "e0339394b851ea0ef59a05a64efea211cee6d5da70b5a9f37a8864ca5078ad80",
+      "mode": "600"
+    },
+    "jar": {
+      "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar",
+      "sha256": "d5397251b2c7b9cba7a46733e7d8aa8b398fafd368d34b94b01179ba8bfa80b8",
+      "mode": "600"
+    },
+    "qualified_runtime_graph": "57/57 hash-identical to qualified repaired JAR 7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c",
+    "build_tools_excluded": "9/9",
+    "migration_bytes": "V1–V8 exact archive resource bytes"
+  },
+  "packaged_repeat": {
+    "command": "java -Dloader.main=com.idea.ddm.migration.DatabaseMigrationCommand -cp target/idea-server-0.1.0-SNAPSHOT.jar org.springframework.boot.loader.launch.PropertiesLauncher",
+    "result": "PASS",
+    "runs": [
+      {
+        "attempt": 1,
+        "exit": 0,
+        "migrations_applied": 0,
+        "log": {
+          "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/packaged-repeat-1.log",
+          "sha256": "9a62d3256852d02f87988f24fd24774397e078fb3877018fdcbd6484046868bc",
+          "mode": "600"
+        }
+      },
+      {
+        "attempt": 2,
+        "exit": 0,
+        "migrations_applied": 0,
+        "log": {
+          "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/packaged-repeat-2.log",
+          "sha256": "9a62d3256852d02f87988f24fd24774397e078fb3877018fdcbd6484046868bc",
+          "mode": "600"
+        }
+      }
+    ],
+    "history_before": {
+      "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/history-before-package.txt",
+      "sha256": "086aa8c34eba748c845ee921822cb9a5f08790fcafc33fd2318232073980799d",
+      "mode": "600"
+    },
+    "history_after": {
+      "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/history-after-package.txt",
+      "sha256": "086aa8c34eba748c845ee921822cb9a5f08790fcafc33fd2318232073980799d",
+      "mode": "600"
+    },
+    "history_byte_identical": true,
+    "history_rows": [
+      {
+        "installed_rank": "1",
+        "version": "1",
+        "script": "V1__ph1_foundation.sql",
+        "checksum": "1303435172",
+        "success": "t"
+      },
+      {
+        "installed_rank": "2",
+        "version": "2",
+        "script": "V2__identity_administration.sql",
+        "checksum": "142124024",
+        "success": "t"
+      },
+      {
+        "installed_rank": "3",
+        "version": "3",
+        "script": "V3__account_administration.sql",
+        "checksum": "-732402698",
+        "success": "t"
+      },
+      {
+        "installed_rank": "4",
+        "version": "4",
+        "script": "V4__native_http_sessions.sql",
+        "checksum": "-1548789621",
+        "success": "t"
+      },
+      {
+        "installed_rank": "5",
+        "version": "5",
+        "script": "V5__first_credential_setup.sql",
+        "checksum": "1279122544",
+        "success": "t"
+      },
+      {
+        "installed_rank": "6",
+        "version": "6",
+        "script": "V6__credential_reset.sql",
+        "checksum": "260123860",
+        "success": "t"
+      },
+      {
+        "installed_rank": "7",
+        "version": "7",
+        "script": "V7__bounded_login_failures.sql",
+        "checksum": "1165048512",
+        "success": "t"
+      },
+      {
+        "installed_rank": "8",
+        "version": "8",
+        "script": "V8__owner_committed_event_foundation.sql",
+        "checksum": "-1781893784",
+        "success": "t"
+      }
+    ]
+  },
+  "final_witness": {
+    "public_tables": 27,
+    "public_functions": 2,
+    "tables_not_owned_by_migrator": 0,
+    "successful_history_checksums": 8,
+    "history_app_select": true,
+    "history_app_insert_update_delete_truncate": false,
+    "witness_file": {
+      "path": "/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/final-witness.txt",
+      "sha256": "02b74a6dcff76b1903412a8d7c2222453145606c38cdd7f3ef128e131371815c",
+      "mode": "600"
+    }
+  },
+  "cleanup": {
+    "rollback_schema_remaining": 0,
+    "database": "RETAINED FOR REVIEW",
+    "drop_database": "NOT-RUN",
+    "old_databases_preview_company_vault": "NOT-ACCESSED"
+  },
+  "preliminary_guard_stop": "Before database access, embedded jarmode lookup rejected versionless ZIP entry name; read-only inspection confirmed exact prequalified hash, lookup corrected without artifact/version/graph change. Not a Maven/test execution or behavioral FAIL.",
+  "limits": [
+    "Codex extracted test counts/methods from XML and packaged-result witnesses from private logs; full raw Maven logs are not independently available to the external reviewer",
+    "full 36 F04 + 108 affected regressions remain exact f817d8fb historical receipts; not rerun because application/test content unchanged",
+    "packaged migration is repeat0 twice; first8 was DataBaselineTest, not a packaged first run",
+    "no verifier, merge, F05, preview deployment, company/Vault, production/HA/recovery/commercial claim",
+    "T023–T026 remain unchecked pending whole-F04 acceptance; F04 IN_PROGRESS, Issue31 OPEN, PR32 DRAFT"
+  ]
+}

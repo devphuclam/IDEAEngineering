@@ -3,19 +3,19 @@
 | Current control | Value |
 |---|---|
 | Stable ID / class | `IE-VEV-PH1-F04-OUTCOME-001` / verification execution record |
-| Version / document status / normativity | `0.8` / Draft / INFORMATIVE |
+| Version / document status / normativity | `0.9` / Draft / INFORMATIVE |
 | Repository instruction state | NOT-APPLICABLE |
-| Execution disposition | T026 partial PASS: focused F04 36/36 + affected F03/health 108/108; fresh-public V1–V8/package AUTHORITY REQUIRED / NOT-RUN; whole F04 acceptance PENDING |
+| Execution disposition | T026 execution PASS: focused F04 36/36 + affected F03/health 108/108 + authorized fresh-public 8/8 + offline package/two packaged repeat0; whole F04 acceptance PENDING |
 | Owner / author | Engineering / Codex |
 | Reviewer | Schema/Audit and B/C/D accepted for continuation by relayed Project Reviewer review; internal T026 Standards/Spec review; whole F04 review PENDING |
-| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; bounded T026 authorized after D acceptance; fresh-public creation and whole-card acceptance PENDING |
+| Acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; exact §34 database package authorized in this conversation on 2026-10-03; whole-card acceptance PENDING; failed GitHub connector attempt created no approval comment |
 | Applicability / evidence date | `IE-INC-PH1-FOUNDATION-CUSTODY-001`, spec v0.8, Work Item [#31](https://github.com/devphuclam/IDEAEngineering/issues/31), A/B/C/D and T026; 2026-10-03 +07:00 |
-| Current executed source | `f817d8fb4a910185204ed37bd01b78070832196b` |
-| Current archive SHA-256 | `0f704e4e3ad9778f37b60b38ae2ed06cbf6bbdc30a24fd32aa24a78e3957a1f0` |
+| Current executed source | Fresh-public/package `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`; application/tests unchanged from full regression `f817d8fb4a910185204ed37bd01b78070832196b` |
+| Current archive SHA-256 | `0894c38b2643ca3b52b8dd825a25a194babe719e278f59e35433e6fd8824f0af`; historical full-regression archive retained in §31 |
 | Classification / retention | INTERNAL; retain with the F04 baseline and associated server logs until separately governed disposition |
 | Upstream | [ADR-0014](../../../docs/adr/0014-retain-owner-committed-event-foundation.md), [F04 contract](../contracts/ph1-boundaries.md#f04-internal-qualification-contract), [bounded execution authority](../../../docs/research/2026-10-02-f04-buildtool-execution-authorization.md) |
 | Downstream | T023–T026 in [tasks](../tasks.md#f04-implementation-units), [current handoff](../worker-handoff.md#current-f04-design-to-implementation-handoff), Work Item #31 review |
-| Change / supersession | Successor to v0.7; sections 1–28 and C/D indexes remain unchanged. Sections 29–34 add T026 execution/matrix and the pending exact fresh-public proposal; subordinate `IE-VEV-PH1-F04-T026-RECEIPTS-001`. Historical F02/F03/tooling evidence unchanged. Superseded by NOT-APPLICABLE |
+| Change / supersession | Successor to v0.8; sections 1–34 and original indexes remain unchanged as historical records. Sections 35–37 close the authorized fresh-public/package execution gap and supersede pending current dispositions in §30/33/34; new subordinate `IE-VEV-PH1-F04-T026-PUBLIC-RECEIPTS-001`. Historical F02/F03/tooling evidence unchanged. Superseded by NOT-APPLICABLE |
 | Review trigger | Source/test/migration/build-input/tool/cache/authority/boundary change or adoption by the next owner; rerun affected checks before extending disposition |
 | Standards tailoring | Section 15 pins exact editions and TAILOR disposition for `STD-INFO-001`, `STD-CM-001`, `STD-TEST-001…004`: STANDARD-GUIDED scoped information/configuration/test trace under `IE-STD-AUTH-001`; no conformity claim |
 
@@ -1112,3 +1112,118 @@ may be cleaned; retain the new DB for review, no automatic DROP DATABASE/broad/p
 Any failure retains named disposition. No company/Vault/preview/production data.
 After these receipts, update matrix and return for whole-F04 acceptance. This is the sole
 remaining execution blocker, not general database, product or F05 authority.
+
+## 35. Successor authorization and exact execution boundary
+
+This is the current successor to the **historical** §34 proposal and §30/33 pending rows.
+On 2026-10-03, the human approved its exact database package in this conversation.
+[IE-RES-F04-T026-FRESH-PUBLIC-AUTH-20261003](../../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md)
+was committed at **`088ee3fed5175e387a629a7bc4d5ea5a943cdbb0` before execution**.
+The human's GitHub connector attempt failed403 and created no comment; this is conversation
+authorization, not a GitHub approval review. Original tooling authority and historical evidence
+are unchanged.
+
+Only **`idea_ddm_f02_f03b_closure_f04_20261003_t026`**, PostgreSQL18.6 at
+127.0.0.1:5432, was used. The sudo wizard required absence before template0 creation and refused
+existing names; existing migrator owns the DB and runtime remains existing app. No new roles/
+credentials. The human reported setup complete. Codex independently observed before migration:
+correct database/owner/marker/version, **public tables0, public functions0, no Flyway history**,
+app lacks database/schema CREATE and migrator membership/elevated role attributes.
+This clean witness is retained in the [public receipt index](F04-T026-fresh-public-receipts.json);
+it does not claim Codex personally entered sudo or independently watched the entire human terminal.
+
+Exact archive SHA-256 **`0894c38b2643ca3b52b8dd825a25a194babe719e278f59e35433e6fd8824f0af`**; application/tests/migrations/build inputs
+are identical to full-regression `f817d8fb4a910185204ed37bd01b78070832196b`.
+Temurin25.0.4.1+1, Maven3.9.16 offline, isolated stdlib CPython3.14.4, Node24.21.0/npm11.19.0
+remain admitted. Preflight matched nine build JARs, exact descriptor, five build inputs, eight Web
+direct versions and all57 qualified runtime JARs from existing cache. No resolution/download/install.
+
+A preliminary guard stopped **before database access/Maven execution** because the helper looked
+for a versioned jarmode entry inside cached Boot loader tools; its actual entry is
+`META-INF/jarmode/spring-boot-jarmode-tools.jar`. Read-only inspection proved the same previously
+qualified bytes/hash `062a9edf01809f4a2b48bfc2fe392fedd27448a3a57113bef510576673d4397f`.
+Only this lookup was corrected; no tool/artifact/version/graph change or new intake.
+This was not a behavioral test FAIL and did not consume the fresh target.
+
+Retained one-off execution harness:
+`/home/phuclam/idea-f04-088ee3f-We6qBu/run-t026-fresh-public.sh`, SHA-256 `7d684dc86cf868e221164c44ebf85e5561ffbe5f51978955b80e5476330eeafe`.
+Exact wizard hash `9e45568d1a5489446c2459cdb4cfb570cce1e756558aa60bc943879f2a3019c6`; `bash -n` PASS,
+ShellCheck NOT-RUN because unavailable (no substitute installed).
+Credentials came only from the controlled private file; no values enter commands/public records.
+No old F02/F03 DB, preview, company/production data or Vault accessed.
+
+## 36. Fresh-public V1–V8 and packaged repeat results
+
+Ordered actual commands under source **`088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`**:
+
+1. `mvn -o -B -Dtest=DataBaselineTest test`
+2. `mvn -o -B -Dtest=DatabasePrivilegeTest test`
+3. `mvn -o -B -Dtest=F03BPublicMigrationTest test`
+4. `mvn -o -B -DskipTests package`
+5. `java -Dloader.main=com.idea.ddm.migration.DatabaseMigrationCommand -cp target/idea-server-0.1.0-SNAPSHOT.jar org.springframework.boot.loader.launch.PropertiesLauncher`, twice.
+
+Database-name variables all pin the exact new target, host127.0.0.1/port5432 and existing exact
+roles; no historical runner fallback. All three Maven test commands exit0:
+**8 tests, failures0/errors0/skipped0**. Method names, XML hashes and witnesses are in the index.
+
+| Suite | PASS | Retained private log | Log SHA-256 | Surefire XML SHA-256 |
+|---|---:|---|---|---|
+| `DataBaselineTest` | 3/3 | `/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/DataBaselineTest.log` | `a00d9b12e3358ef73e1884d56272fc771d315b744583675762823bd2a6a2a8c3` | `444f3d62c3bdd2bbd380cdde6f7211b63563698284e56eaf9926b4ffed7dee5c` |
+| `DatabasePrivilegeTest` | 1/1 | `/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/DatabasePrivilegeTest.log` | `bb4c65b26763c7938504ba94b44f4b45f6d0be9a8124de5682da9e3352d2d7da` | `d7c2d753369568d209feedb82c927204357ee6301c0ddb4e84e12a3b99f8a964` |
+| `F03BPublicMigrationTest` | 4/4 | `/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/F03BPublicMigrationTest.log` | `14d6717f188ba4ab77ba12129c5e9a2d474424155e6af65d15c8f5d9c1568c6c` | `8723ac1d583b1771aaf37f95a615a24819d38a5c64f430a58b1b4631a6268c82` |
+
+First **V1→V8 applied8**, second in-process migrate0 in DataBaselineTest.
+Actual HTTP process/database health200/UP and bounded failed-DDL rollback also PASS.
+Full public qualification observes **27 migrator-owned tables, two migrator-owned functions,
+eight successful non-null versioned checksums, versions1–8, zero pending**.
+App authenticates separately, cannot SET ROLE migrator, CREATE SCHEMA/TABLE, mutate protected
+definitions/assignments/proof bindings/owner outcome/event or Flyway history (actual42501 probes).
+The controlled history-ACL drift test repairs to **app SELECT-only**, even on no-op migrate.
+Original role versions/permissions unchanged; no Actor/Account/session/proof/owner/event/Audit
+fixture rows remain. V1–V8 were not edited.
+
+Offline package exit0:
+`/home/phuclam/idea-f04-088ee3f-We6qBu/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar`,
+SHA-256 **`d5397251b2c7b9cba7a46733e7d8aa8b398fafd368d34b94b01179ba8bfa80b8`**.
+All57 runtime JAR hashes equal the qualified repaired application graph; nine build-only JARs
+are excluded from BOOT-INF/lib. Packaged V1–V8 match archive resource bytes exactly.
+The non-offline nested-build wrapper was **not invoked**.
+
+Both direct packaged invocations exit0 and print **MIGRATIONS_APPLIED=0**.
+First8 belongs to the fresh test, **not a packaged first-run claim**.
+Retained logs `/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/packaged-repeat-1.log` and
+`/home/phuclam/idea-f04-088ee3f-We6qBu/t026-receipts/packaged-repeat-2.log` both have SHA-256
+`9a62d3256852d02f87988f24fd24774397e078fb3877018fdcbd6484046868bc`.
+History before/after is byte-identical, SHA-256
+`086aa8c34eba748c845ee921822cb9a5f08790fcafc33fd2318232073980799d`; exact eight Flyway checksums remain in the index.
+
+Post-run: rollback-probe schemas remaining0, full public inventory intact, app historySELECT-only.
+New database **RETAINED FOR REVIEW**, no DROP DATABASE/public cleanup. Package retained only
+for qualification; no preview deployment, bootstrap or F05.
+Raw logs remain private600; public summaries/hashes do not imply independent external log access.
+
+## 37. Current whole-F04 review matrix
+
+This current matrix supersedes only the pending execution dispositions in historical §30/33/34.
+The detailed requirement/method mapping in §33 remains valid; its current-chain/package gap is
+now closed by §35–36. Full application/test/migration content did not change after `f817d8f...`;
+only authorization/publication files differ at the fresh-public executed source.
+No unnecessary full-suite rerun or new implementation was introduced for database approval.
+
+| Acceptance requirement | Source/test + executed SHA | Evidence | External disposition / final status |
+|---|---|---|---|
+| Stable event foundation, additive predecessor upgrade, immutable provenance/append-only privileges | V8, CommittedEventStore; Schema7 + Predecessor1 at `f817d8f...` | §31/33, original T026 index | Schema checkpoint accepted for continuation; executed PASS |
+| Caller-Connection required Audit / original Actor, Organization, OperationId, correlation, distinct EventId | AuditEvidenceRepository; Audit7 + authenticated owner B3 within Owner21 at `f817d8f...` | §31/33 and preserved B | B accepted for continuation; executed PASS |
+| Business REFUSED + required Audit/no event; terminal replay, same-ID concurrency, bounded result access, forced failures/confirmed rollback | SampleOwnerCommandService; C13 within Owner21 at `f817d8f...` | §31/33 and preserved C | C accepted for continuation; executed PASS |
+| Disable/logout before commit, reverse order, attributable refusal, activity fate and old-proof recovery | OwnerSessionEligibility/sample service; D5 within Owner21 at `f817d8f...` | §31/33 and preserved D | D accepted for continuation; executed PASS |
+| Affected F03-A, HTTP/session/logout/proof/throttle and runtime restart; process/database health | Identity20 + HTTP83 + Restart3 + Smoke2 at `f817d8f...` | §31 and original T026 index | Earlier F03 acceptance retained; affected regression108 PASS |
+| Fresh public V1–V8, first8/repeat0, exact owner/role/privileges/history/checksums/no pending, original role versions | DataBaseline3 + Privilege1 + F03BPublicMigration4 at `088ee3f...` | §35–36 and fresh-public index | Execution authorized; 8/8 PASS; whole-F04 review PENDING |
+| Offline exact-source package, admitted graph/build-tool exclusion, direct packaged repeat0 twice/no history change | Packaged DatabaseMigrationCommand at `088ee3f...` | §36 and fresh-public index | Execution PASS; package is not deployment/product readiness |
+| Exact tool/target/retention/cleanup trace | Controlled preflight, actual witnesses and private log hashes | §31–32 + §35–36, both indexes | Execution PASS; retained DB and independent raw-log access limitation disclosed |
+| Whole card / integration | All rows above | This matrix | **Project Reviewer whole-F04 acceptance PENDING; no merge authority** |
+
+T023–T026 scoped implementation/execution is **SATISFIED BY EVIDENCE FOR REVIEW**.
+Keep umbrella tasks unchecked, F04 IN_PROGRESS, Issue31 OPEN, PR32 Draft and verifier NOT-RUN
+until the separate whole-card disposition. No dispatcher/delivery, real domain payload/product RBAC,
+unknown-commit reconciliation, HA/recovery, Desktop, commercial/T036 or F05 completion claim.
+The next action is **whole-F04 acceptance**, not another feature slice or F05.

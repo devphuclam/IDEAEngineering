@@ -59,7 +59,8 @@ the historical omission is preserved, not retroactively approved.
 Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
 OPEN; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
-Current exact executed source: `f817d8fb4a910185204ed37bd01b78070832196b`.
+Current exact executed source: `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0` for fresh-public/package;
+application/test content equals full regression `f817d8fb4a910185204ed37bd01b78070832196b`.
 Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
 offline runner, plus named real-HTTP principal fixture, internal sample owner, caller-Connection
 event append and IAM eligibility adapter. No product route/Permission/Role or F03 semantic change.
@@ -69,8 +70,8 @@ qualification. Only the sample service and two test fixtures change after the ac
 Codex implemented Audit after its focused RED; Gemini was not dispatched.
 
 The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
-schema, T024-A Audit, T023-B/minimum T025-B, T023-C/T025-C and T023-D/T025-D execution are partially recorded in
-[F04 outcome results](evidence/F04-outcome-results.md) v0.8: owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
+schema, T024-A Audit, T023-B/minimum T025-B, T023-C/T025-C and T023-D/T025-D execution are recorded in
+[F04 outcome results](evidence/F04-outcome-results.md) v0.9: owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
 predecessor 1/1 and Audit 7/7 = 36/36 at `f817d8fb4a910185204ed37bd01b78070832196b`. All 62 C-run schema cleanup receipts
 are COMPLETE; [exact receipt index](evidence/F04-C-execution-receipts.json) retains both actual
 REDs and each four-suite regression. The separate [D receipt index](evidence/F04-D-execution-receipts.json)
@@ -89,10 +90,14 @@ B/C/D have external acceptance for continuation. D has executed real IAM disable
 security-first/reverse orderings, atomic refusal handoff, old-proof refusal and re-enable/fresh-session
 recovery. T026 permitted regression and a whole-contract matrix are now in evidence sections 29–34
 and the separate T026 receipt index. Current-chain expectations include V8; migrations and
-historical evidence are unchanged. Fresh-public V1–V8/package qualification is AUTHORITY REQUIRED.
-Next action: obtain only the exact new-DB authority in section 34, execute the remaining checks,
-then submit whole F04 for acceptance. Do not reuse retained public or infer package PASS from
-schema tests. Continue using the Server-established ActorContext and admitted exact tooling.
+historical evidence are unchanged. The §34 package was authorized by the human in this conversation
+on 2026-10-03, not by a GitHub approval comment (connector attempt failed403).
+[Successor authorization](../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md)
+preceded execution. Sections 35–37 and the [fresh-public receipt index](evidence/F04-T026-fresh-public-receipts.json)
+record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from `088ee3f...`.
+Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
+Next action: submit whole F04 for Project Reviewer acceptance. Do not create/reuse another target,
+rerun the retained public database, deploy the package or begin F05.
 Keep #31/F04 open, PR #32
 Draft, T023–T026 unchecked and verifier NOT-RUN; no merge or F05.
 

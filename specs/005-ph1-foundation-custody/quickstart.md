@@ -109,15 +109,19 @@ evidence; an arbitrary sleep alone does not establish that the race was exercise
 
 ### F04 validation gate and evidence
 
-Design is closed by the Project Reviewer on 2026-10-02; runtime has partial executed evidence. Read
+Design is closed by the Project Reviewer on 2026-10-02; scoped execution is complete for whole-card review. Read
 [ADR-0014](../../docs/adr/0014-retain-owner-committed-event-foundation.md),
 [execution prerequisites](plan.md#execution-prerequisite) and [F04 units](tasks.md#f04-implementation-units)
 before issuing commands. The F04 runner is `apps/server/scripts/run-f04-postgresql-checks.sh`;
 F04 build-tool authorization plus prospective Python admission govern its exact offline preflight.
-Read [current execution and remaining authority](evidence/F04-outcome-results.md#29-t026-starting-witness-and-bounded-successors).
-Fresh-public current-chain/package execution is still BLOCKED pending section 34's exact proposal.
+Read [current whole-F04 execution matrix](evidence/F04-outcome-results.md#37-current-whole-f04-review-matrix)
+and the [fresh-public authorization](../../docs/research/2026-10-03-f04-t026-fresh-public-authorization.md).
+The §34 proposal was authorized on 2026-10-03 and executed on only the new retained test database:
+8/8 public/data/privilege, V1–V8 first8/repeat0, offline package and two direct packaged repeat0.
+Execution source is `088ee3fed5175e387a629a7bc4d5ea5a943cdbb0`, unchanged application/test
+content from `f817d8f...`. Whole-F04 acceptance is next; do not automatically rerun or deploy.
 
-After that gate, archive the exact implementation commit, use a test-owned UUID schema in an
+For a separately authorized future rerun, archive the exact implementation commit, use a test-owned UUID schema in an
 explicitly authorized isolated database, and apply V1→V8 with migrator while executing as app.
 Record first/repeat/history/checksums/ownership and denied mutation checks, preserving original
 V1–V7 files. Test existing migrated predecessor state as well as a fresh schema, including
