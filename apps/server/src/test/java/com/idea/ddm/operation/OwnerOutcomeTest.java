@@ -153,6 +153,44 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void ownerCommitBeforeHttpLogoutPreservesAcceptedHistoryAndSharedActivityFate() throws Exception {
+        var admitted = fixture.signInThroughRealHttp();
+        var operation = UUID.randomUUID();
+        var correlation = "f04-d-owner-before-logout";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var activityBefore = sessionActivity(admitted);
+        fixture.advanceTime(java.time.Duration.ofSeconds(1));
+        var executor = Executors.newFixedThreadPool(2);
+        try (var barrier = ownerActivityBarrier(operation, admitted)) {
+            var accepted = executor.submit(() -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, correlation, SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            awaitWaiters(barrier, 73004993, operation, 1);
+            assertOwnerHoldsIamLockAtActivityBarrier(barrier, operation);
+            assertCompanions(operation, 0, 0, 0);
+            assertEquals(activityBefore, sessionActivity(admitted));
+            var logout = executor.submit(() -> { fixture.signOutThroughRealHttp(admitted); return true; });
+            awaitIamWaiter(barrier);
+            advisory(barrier, "pg_advisory_unlock", 73004993, operation.hashCode());
+            var original = accepted.get(8, TimeUnit.SECONDS);
+            assertEquals(SampleOwnerCommandService.Outcome.ACCEPTED, original.outcome());
+            assertTrue(logout.get(8, TimeUnit.SECONDS));
+            assertCompanions(operation, 1, 1, 1);
+            assertTrue(sessionActivity(admitted).after(activityBefore));
+            fixture.assertHttpSessionStatus(admitted, 401);
+            assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-d-invalid-after-logout", SampleOwnerCommandService.BusinessDecision.REFUSE)));
+            assertAcceptedHistory(operation, original);
+            assertOperationUnlocked(operation);
+            System.out.println("F04_D_OWNER_FIRST=LOGOUT; OP=" + operation + "; ACTOR=" + original.actorId()
+                    + "; ORG=" + original.organizationId() + "; CORRELATION=" + original.correlationId()
+                    + "; IAM_WAIT_OBSERVED=1; COMPANIONS=1/1/1; ACTIVITY_SHARED=PASS; OLD_HTTP=401");
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+            removeOwnerActivityBarrier();
+        }
+    }
+
     private static Connection ownerActivityBarrier(UUID operation, F04SessionFixture.SignedIn admitted) throws Exception {
         var barrier = F04SchemaTest.open("migration");
         try (var statement = barrier.createStatement()) {
