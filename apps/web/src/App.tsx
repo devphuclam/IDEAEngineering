@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { AdminApp } from "./components/admin/AdminApp";
 import { BrandShowcase } from "./components/auth/BrandShowcase";
 import { LoginForm } from "./components/auth/LoginForm";
 import { SessionLanding } from "./components/auth/SessionLanding";
@@ -17,6 +18,7 @@ async function readJson<T>(response: Response): Promise<T> {
 export function App() {
   const [csrf, setCsrf] = useState<CsrfProof | null>(null);
   const [session, setSession] = useState<SessionView | null>(null);
+  const [viewMode, setViewMode] = useState<"session" | "admin">("session");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Vui lòng nhập tài khoản và mật khẩu được cấp.");
@@ -195,6 +197,15 @@ export function App() {
           actorId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
           accountId: "872c524d-2ce6-4715-931a-c15785876baf",
         });
+        setViewMode("session");
+        setBusy(false);
+        break;
+      case "admin":
+        setSession({
+          actorId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
+          accountId: "872c524d-2ce6-4715-931a-c15785876baf",
+        });
+        setViewMode("admin");
         setBusy(false);
         break;
     }
@@ -260,26 +271,44 @@ export function App() {
             >
               6. Đã đăng nhập
             </button>
+            <button
+              type="button"
+              className={`dev-sim-btn ${devScenario === "admin" ? "active" : ""}`}
+              onClick={() => setScenario("admin")}
+            >
+              7. Cổng Quản Trị DDM (RBAC)
+            </button>
           </div>
         </header>
       )}
 
       {session ? (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-          <Topbar
+        viewMode === "admin" ? (
+          <AdminApp
             actorId={session.actorId}
-            busy={busy}
             logoSrc="/logo-idea.png"
+            onExitAdmin={() => setViewMode("session")}
             onLogout={() => void submitLogout()}
           />
-          <SessionLanding
-            actorId={session.actorId}
-            accountId={session.accountId}
-            onEnterWorkbench={() =>
-              alert("Chuyển đến Bàn làm việc Kỹ thuật CAD/PDM...")
-            }
-          />
-        </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+            <Topbar
+              actorId={session.actorId}
+              busy={busy}
+              logoSrc="/logo-idea.png"
+              onLogout={() => void submitLogout()}
+              onOpenAdmin={() => setViewMode("admin")}
+            />
+            <SessionLanding
+              actorId={session.actorId}
+              accountId={session.accountId}
+              onOpenAdmin={() => setViewMode("admin")}
+              onEnterWorkbench={() =>
+                alert("Chuyển đến Bàn làm việc Kỹ thuật CAD/PDM...")
+              }
+            />
+          </div>
+        )
       ) : (
         <div className="auth-split-layout">
           <BrandShowcase sealSrc="/LOGO_IDEA_full_L.png" />

@@ -6,6 +6,7 @@ export interface SessionLandingProps {
   accountId: string;
   vaultName?: string;
   onEnterWorkbench?: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export function SessionLanding({
@@ -13,6 +14,7 @@ export function SessionLanding({
   accountId,
   vaultName = "Kho chính (icVault-Primary)",
   onEnterWorkbench,
+  onOpenAdmin,
 }: SessionLandingProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -189,14 +191,26 @@ export function SessionLanding({
           <span style={{ fontSize: "13.5px", color: "var(--ink-secondary)" }}>
             Không gian quản lý dữ liệu kỹ thuật CAD & PDM đã sẵn sàng.
           </span>
-          <button
-            type="button"
-            className="submit-btn"
-            style={{ width: "auto", height: 40, padding: "0 22px", margin: 0 }}
-            onClick={onEnterWorkbench}
-          >
-            Vào Bàn Làm Việc Kỹ Thuật →
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {onOpenAdmin && (
+              <button
+                type="button"
+                className="admin-btn"
+                style={{ height: 40, padding: "0 18px", color: "var(--admin-navy)", borderColor: "#94a3b8" }}
+                onClick={onOpenAdmin}
+              >
+                Mở Cổng Quản Trị DDM →
+              </button>
+            )}
+            <button
+              type="button"
+              className="submit-btn"
+              style={{ width: "auto", height: 40, padding: "0 22px", margin: 0 }}
+              onClick={onEnterWorkbench}
+            >
+              Vào Bàn Làm Việc Kỹ Thuật →
+            </button>
+          </div>
         </div>
       </div>
     </section>

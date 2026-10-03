@@ -1,0 +1,207 @@
+export interface AdminActor {
+  id: string;
+  username: string;
+  fullName: string;
+  email: string;
+  department: string;
+  status: "active" | "suspended" | "pending";
+  createdAt: string;
+}
+
+export interface AdminProject {
+  id: string;
+  code: string;
+  name: string;
+  lead: string;
+  memberCount: number;
+  vault: string;
+  status: "active" | "archived";
+}
+
+export interface AdminRole {
+  id: string;
+  name: string;
+  description: string;
+  permissions: { action: string; description: string }[];
+}
+
+export interface AdminRoleAssignment {
+  id: string;
+  principalId: string;
+  principalName: string;
+  principalType: "user" | "group";
+  roleId: string;
+  roleName: string;
+  scope: string;
+  assignmentType: "Direct" | "Inherited";
+  assignedAt: string;
+}
+
+export const INITIAL_ACTORS: AdminActor[] = [
+  {
+    id: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
+    username: "engineer.dev",
+    fullName: "Nguyễn Văn An (Kỹ sư trưởng)",
+    email: "an.nguyen@ideagroupvn.com",
+    department: "Phòng Thiết kế Cơ khí JIG & Máy",
+    status: "active",
+    createdAt: "2026-01-15",
+  },
+  {
+    id: "34ba128a-7e11-4f90-bc42-998811223344",
+    username: "linh.nguyen",
+    fullName: "Nguyễn Thị Linh (Kỹ sư CAD)",
+    email: "linh.nguyen@ideagroupvn.com",
+    department: "Phòng Thiết kế Cơ khí JIG & Máy",
+    status: "active",
+    createdAt: "2026-02-01",
+  },
+  {
+    id: "77cd4511-9a23-4e89-af12-ccddeeff0011",
+    username: "nam.hoang",
+    fullName: "Hoàng Nam (Kỹ sư Tự động hóa)",
+    email: "nam.hoang@ideagroupvn.com",
+    department: "Phòng Điện - Tự động hóa",
+    status: "suspended",
+    createdAt: "2026-02-18",
+  },
+  {
+    id: "872c524d-2ce6-4715-931a-c15785876baf",
+    username: "tri.minh",
+    fullName: "Trần Minh Trí (Quản trị viên hệ thống)",
+    email: "tri.minh@ideagroupvn.com",
+    department: "Ban Công nghệ & IT",
+    status: "active",
+    createdAt: "2026-01-05",
+  },
+];
+
+export const INITIAL_PROJECTS: AdminProject[] = [
+  {
+    id: "proj_p100",
+    code: "P-100",
+    name: "Máy đóng gói tự động tốc độ cao",
+    lead: "Nguyễn Văn An",
+    memberCount: 8,
+    vault: "Kho chính (icVault-Primary)",
+    status: "active",
+  },
+  {
+    id: "proj_p200",
+    code: "P-200",
+    name: "Đồ gá hàn robot 6 trục cho khung xe điện",
+    lead: "Trần Minh Trí",
+    memberCount: 5,
+    vault: "Kho chính (icVault-Primary)",
+    status: "active",
+  },
+  {
+    id: "proj_p300",
+    code: "P-300",
+    name: "Cụm cấp phôi rung tự động linh kiện chính xác",
+    lead: "Nguyễn Thị Linh",
+    memberCount: 4,
+    vault: "Kho chính (icVault-Primary)",
+    status: "active",
+  },
+];
+
+export const INITIAL_ROLES: AdminRole[] = [
+  {
+    id: "role_design_engineer",
+    name: "Design Engineer (Kỹ sư thiết kế)",
+    description: "Toàn quyền tạo mô hình, khóa Checkout, Check-in bản vẽ CAD và chỉnh sửa danh mục BOM dự án.",
+    permissions: [
+      { action: "cad.view", description: "Xem mô hình CAD 3D và bản vẽ 2D" },
+      { action: "cad.checkout", description: "Khóa bản quyền (Checkout/Reservation) để chỉnh sửa" },
+      { action: "cad.checkin", description: "Lưu phiên bản mới (Check-in Generation) lên icVault" },
+      { action: "bom.edit", description: "Thêm bớt chi tiết trong cấu trúc cây BOM" },
+    ],
+  },
+  {
+    id: "role_reviewer",
+    name: "Reviewer / Approver (Người thẩm duyệt)",
+    description: "Thẩm duyệt thiết kế, kiểm tra va chạm mô hình lắp ráp, phê duyệt hoặc từ chối phát hành Release.",
+    permissions: [
+      { action: "cad.view", description: "Xem mô hình CAD và tài liệu kỹ thuật" },
+      { action: "review.approve", description: "Ký duyệt chuyển trạng thái sang Released" },
+      { action: "review.reject", description: "Từ chối phát hành kèm lý do yêu cầu sửa đổi" },
+    ],
+  },
+  {
+    id: "role_project_admin",
+    name: "Project Administrator (Quản trị viên dự án)",
+    description: "Quản lý nhân sự, phân nhóm kỹ sư và phân công vai trò trong phạm vi dự án máy được ủy quyền.",
+    permissions: [
+      { action: "project.members", description: "Thêm hoặc bớt thành viên trong dự án" },
+      { action: "rbac.assign", description: "Gán vai trò Design Engineer hoặc Reviewer trong dự án" },
+    ],
+  },
+  {
+    id: "role_account_admin",
+    name: "Account Administrator (Quản trị viên tài khoản)",
+    description: "Cấp tài khoản định danh Actor, quản lý trạng thái kích hoạt hoặc tạm dừng truy cập.",
+    permissions: [
+      { action: "account.create", description: "Tạo tài khoản kỹ sư mới" },
+      { action: "account.suspend", description: "Tạm khóa hoặc mở khóa tài khoản" },
+    ],
+  },
+];
+
+export const INITIAL_ASSIGNMENTS: AdminRoleAssignment[] = [
+  {
+    id: "asg_001",
+    principalId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
+    principalName: "Nguyễn Văn An",
+    principalType: "user",
+    roleId: "role_design_engineer",
+    roleName: "Design Engineer",
+    scope: "Dự án P-100",
+    assignmentType: "Direct",
+    assignedAt: "2026-01-16",
+  },
+  {
+    id: "asg_002",
+    principalId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
+    principalName: "Nguyễn Văn An",
+    principalType: "user",
+    roleId: "role_project_admin",
+    roleName: "Project Administrator",
+    scope: "Dự án P-100",
+    assignmentType: "Direct",
+    assignedAt: "2026-01-16",
+  },
+  {
+    id: "asg_003",
+    principalId: "34ba128a-7e11-4f90-bc42-998811223344",
+    principalName: "Nguyễn Thị Linh",
+    principalType: "user",
+    roleId: "role_design_engineer",
+    roleName: "Design Engineer",
+    scope: "Dự án P-100",
+    assignmentType: "Inherited",
+    assignedAt: "2026-02-02",
+  },
+  {
+    id: "asg_004",
+    principalId: "872c524d-2ce6-4715-931a-c15785876baf",
+    principalName: "Trần Minh Trí",
+    principalType: "user",
+    roleId: "role_account_admin",
+    roleName: "Account Administrator",
+    scope: "Toàn hệ thống",
+    assignmentType: "Direct",
+    assignedAt: "2026-01-05",
+  },
+  {
+    id: "asg_005",
+    principalId: "34ba128a-7e11-4f90-bc42-998811223344",
+    principalName: "Nguyễn Thị Linh",
+    principalType: "user",
+    roleId: "role_reviewer",
+    roleName: "Reviewer / Approver",
+    scope: "Dự án P-300",
+    assignmentType: "Direct",
+    assignedAt: "2026-02-10",
+  },
+];
