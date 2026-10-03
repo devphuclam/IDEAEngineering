@@ -34,3 +34,6 @@ skills:
     path: .agents/skills/speckit-tasks/SKILL.md
   - name: speckit-taskstoissues
     path: .agents/skills/speckit-taskstoissues/SKILL.md
+  - name: taste-skill
+    path: .agents/skills/taste-skill/SKILL.md
+
