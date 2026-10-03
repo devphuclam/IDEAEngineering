@@ -21,8 +21,9 @@ custody, purpose enforcement inside a future verifier or complete transfer secur
 An independent known-answer vector remains a later qualification check, not inferred from this
 round-trip. RFC8032/8410 are reference-only in this slice; no external vector/source imported.
 
-Execution is **NOT-RUN**. If the first authorized execution passes, retain it as first GREEN
-of existing provider behavior, not invented RED→GREEN implementation evidence. A failing
+Q01 execution is **PASS**, 2026-10-03, exact source/runner `d01ad4a057a8a14c840320f0c664f6838d12a47e`;
+see execution package §7. This is first GREEN of existing provider behavior, not invented
+RED→GREEN implementation evidence. A failing
 runtime/vendor/provider remains FAIL; do not substitute another crypto library or runtime.
 
 Run only after approval of the exact-source execution package. This slice requires no POM,

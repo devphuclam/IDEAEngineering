@@ -103,13 +103,14 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The current unit is F05-A / T027: preflight IN_PROGRESS, qualification NOT-RUN. The user
+The current unit is F05-A / T027: IN_PROGRESS; Q01 key-separation PASS, remaining qualification NOT-RUN. The user
 explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
 Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) initially authorized
 clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
 Successor user Q1/Q2 approval authorizes writing the minimal qualification harness, not running
 it: [Q01 source/tooling/command package](../../docs/research/2026-10-03-f05a-t027-q01-execution-package.md).
-Present its exact committed source/runner hashes and obtain execution approval before launch.
+The user subsequently approved Q01 execution; package §7 records PASS at exact source/runner
+`d01ad4a057a8a14c840320f0c664f6838d12a47e`. No blanket T027 execution approval follows.
 Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).

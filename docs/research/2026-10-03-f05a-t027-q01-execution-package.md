@@ -3,19 +3,22 @@
 | Control | Value |
 |---|---|
 | ID / class | `IE-VEV-F05A-T027-Q01-20261003` / qualification procedure and prospective scoped tooling inventory |
-| Version / status | `0.1 / Proposed`; execution approval pending |
+| Version / status | `0.2 / Draft`; Q01 execution authorized and completed; result review pending |
 | Product normativity / process instruction | `INFORMATIVE / NOT-APPLICABLE` |
 | Owner / author | Project Reviewer Nguyễn Huỳnh Phúc Lâm / Codex, `CODEX_ONLY` |
-| Reviewer / acceptance authority | Project Reviewer; execution review `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer; Q01 execution authorized in conversation; result review `NOT-RUN` |
 | Date / classification | 2026-10-03, Asia/Ho_Chi_Minh / `INTERNAL` |
 | Baseline / Work Item | [#37](https://github.com/devphuclam/IDEAEngineering/issues/37); source identity recorded in separate publication receipt before execution |
 | Upstream | [Frozen F05 preparation](2026-09-28-ph1-f05-gateway-qualification.md), [preflight v0.3](2026-10-03-f05a-t027-preflight.md), [native runtime intake](2026-09-23-p04-ubuntu-native-runtime-intake.md), [intake procedure](../agents/external-source-intake.md) |
 | Downstream | [Q01 source/README](../../tests/ph1/f05-qualification/README.md); T027 current handoff; future qualification evidence |
 | Change / retention / supersession | Successor to preparation-only authority following user Q1/Q2 approval in conversation; retain with F05 evidence; supersedes no historical authorization |
-| Trigger / evidence | Tool/source/hash/module/use/target changes reopen gate; live read-only file observations, test execution `NOT-RUN` |
+| Trigger / evidence | Tool/source/hash/module/use/target changes reopen gate; Q01 executed PASS under §7; other T027 qualification NOT-RUN |
 | Standards tailoring | [Authoring standard](../agents/product-document-authoring-standard.md), verification/configuration identity for one procedure; no conformity claim |
 
 ## 1. Authorization received and remaining approval
+
+Historical proposal wording below is retained. Successor execution authorization and actual
+result are recorded in §7; no blanket T027 authority follows from Q01 approval.
 
 User approved writing a minimal qualification harness and the isolated environment boundary
 through “Theo khuyến nghị hết.” Execution commands must still be presented before use.
@@ -136,6 +139,8 @@ approval alone is not permission to launch it. No DB, network listener, TLS or p
 
 ## 4. Oracle and evidence limits
 
+The following table preserves the pre-execution state at v0.1. Actual Q01 result is in §7.
+
 | Item | Oracle | Actual |
 |---|---|---|
 | Q01 independent signing keys | Correct public key verifies; other independent key refuses; required runtime/vendor; exit0 and `F05_Q01=PASS; checks=1; algorithm=Ed25519` | `NOT-RUN` |
@@ -150,6 +155,9 @@ deterministic encoding, Grant/Receipt scope, TLS, Adapter containment or custody
 Those remain separate T027 or later F05 checks. T027 stays unchecked and F05-A IN_PROGRESS.
 
 ## 5. Next unit and stop boundary
+
+Historical next-step proposal at v0.1 follows. Q01 has since executed; the remaining Boot,
+TLS and Adapter qualification still requires its exact scoped intake and execution package.
 
 Next: publish exact Q01 source/hash/runner and obtain execution approval; then observe first
 result. Boot qualification still needs exact complete used graph/license/plugin intake before
@@ -171,6 +179,47 @@ Before SCP, require local file bytes to match these hashes; Windows CRLF convers
 mismatch, not a reason to change the pin. Any source/runner change requires a successor receipt.
 This receipt is published after the candidate commit; it does not imply qualification ran.
 
+## 7. Authorized execution — Q01 only
+
+Authorization: user “Duyệt. Nhưng mà cái này làm lẹ” on 2026-10-03, following the exact
+Q01-only proposal. Result recorded at 11:39 +07:00 (Asia/Ho_Chi_Minh). This is an engineering
+observation, not Project Reviewer result acceptance or whole-T027 completion.
+
+Executed repository head: `e92e3a78c9b7f0a569d177997eb1f6489fe18918`.
+Source/runner commit remains `d01ad4a057a8a14c840320f0c664f6838d12a47e`; its successor
+changed only this documentation record. Both local and remote file hashes match §6.
+
+Created only the previously absent `/home/phuclam/idea-f05a-20261003-37` and its
+`qualification` child. Strict-host-key SSH/SCP used the existing launcher identity.
+Directories are UID-owned mode700; copied source/runner mode600. The runner confirmed
+canonical location, ownership/mode and every pinned JDK/utility/source hash before launch.
+Existing mkdir/chmod binary hashes were observed to match the §2 utility pin.
+
+Exact launch command is the §3 Bash command, unchanged. SSH process exit: **0**.
+Observed command wall time: approximately **2.84 seconds**, including SSH and preflight.
+Bounded output, retained here in full (UTF-8, LF, final newline):
+
+```text
+F05_Q01_PREFLIGHT=PASS
+F05_Q01_PROVIDER=SunEC
+F05_Q01_RUNTIME=25.0.4.1+1-LTS
+F05_Q01=PASS; checks=1; algorithm=Ed25519
+```
+
+SHA-256 of this retained output representation:
+`46b1e1a35c9c015a2418f39cf5a16e6f791a098ee6f14299d4c22ea49085dc95`.
+This is the normalized four-line tool-captured stdout, not a separately retained raw host log.
+No credential/key/signature bytes were printed. No raw-host-log independent review is claimed.
+
+Disposition: **Q01 PASS / 1 logical check**. This qualifies existing provider behavior;
+no fabricated RED or Gateway implementation was required. Algorithm conformance, key entropy,
+Grant/Receipt contracts, TLS, Adapter and whole T027 remain outside this result.
+No Maven, package download, database, certificate, port, preview, verifier or timer action.
+The isolated two-file directory is retained; no cleanup/delete. PR #38 stays DRAFT, Issue #37
+open, T027 unchecked and F05-A IN_PROGRESS. Next: exact Boot-used graph intake and remaining
+T027 qualification packages, not T028–T034 implementation.
+
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 2026-10-03 | First-party JDK key-separation procedure and prospective scoped runtime inventory; no qualification execution |
+| 0.2 | 2026-10-03 | Recorded explicit Q01 execution approval and exact-source PASS; historical pre-execution state retained |
