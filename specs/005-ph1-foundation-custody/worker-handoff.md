@@ -111,9 +111,11 @@ Successor user Q1/Q2 approval authorizes writing the minimal qualification harne
 it: [Q01 source/tooling/command package](../../docs/research/2026-10-03-f05a-t027-q01-execution-package.md).
 The user subsequently approved Q01 execution; package §7 records PASS at exact source/runner
 `d01ad4a057a8a14c840320f0c664f6838d12a47e`. No blanket T027 execution approval follows.
-Next intake work is in the [Boot cache inventory](../../docs/research/2026-10-03-f05a-t027-boot-cache-inventory.md):
-38 candidate runtime pairs observed; plugin graph/rights/core-provided closure still pending.
-Do not treat candidate hashes as admission or run Maven before the concrete next package is cleared.
+Before continuing Q02, read [the exact intake successor](../../docs/research/2026-10-03-f05a-t027-q02-intake.md).
+Q01 has Project Reviewer PASS. Static application/plugin/model/core graphs are reconciled;
+19 acquisition rights rows and installed-core gates remain BLOCKED-LEGAL. Resolve the exact
+listed legal/evidence items, then obtain clearance for the proposed offline qualification package.
+Maven/Boot and remaining T027 remain NOT-RUN; no current graph inventory is runtime PASS.
 Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).

@@ -124,3 +124,12 @@ This record makes the next intake work reproducible; it is not a technical PASS 
 | Version | Date | Change |
 |---|---|---|
 | 0.1 | 2026-10-03 | Read-only runtime/plugin/embedded legal-file candidate inventory, mediation observations and unresolved tooling/rights gates |
+
+## 7. Current successor — Q02 reconciled intake
+
+The candidate observations above remain historical, including their NOT_ADMITTED state and
+missing flat-descriptor pairs. Read [the Q02 successor](2026-10-03-f05a-t027-q02-intake.md)
+before any further intake/build work. It records the exact bounded 38-JAR application graph,
+four plugin acquisition graphs, parent/BOM closure, Maven core evidence, per-coordinate rights
+and a proposed offline command package. Nineteen acquisition rows remain BLOCKED-LEGAL;
+there is no Maven/Boot execution or whole-T027 PASS.

@@ -1,0 +1,184 @@
+model	profile	activation	property_names	dependency_coordinates	managed_coordinates
+org.apache:apache:37	jdk8	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[,9)</jdk></activation>	maven.compiler.source;maven.compiler.target	none	none
+org.apache:apache:37	jdk9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- this does not support toolchains, https://issues.apache.org/jira/browse/MNG-6943 --><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+org.apache.artemis:artemis-project:2.53.0	release	manual	shade-plugin-create-sources	none	none
+org.apache.artemis:artemis-project:2.53.0	apache-release	manual	shade-plugin-create-sources	none	none
+org.apache.artemis:artemis-project:2.53.0	tests	manual	skipUnitTests;skipJmsTests;skipJoramTests;skipIntegrationTests;skipFeaturesVerification;skipIsolatedIntegrationTests;skipSmokeTests;skipTimingTests;skipStressTests;skipSoakTests;skipPerformanceTests;skipExtraTests;skipLeakTests	none	none
+org.apache.artemis:artemis-project:2.53.0	fast-tests	manual	fast-tests;skipUnitTests;skipJmsTests;skipJoramTests;skipLeakTests;foo;skipIntegrationTests;skipFeaturesVerification;skipSmokeTests	none	none
+org.apache.artemis:artemis-project:2.53.0	jacoco	manual	activemq-surefire-argline	<dependencies xmlns="http://maven.apache.org/POM/4.0.0"><dependency><groupId>org.jacoco</groupId><artifactId>org.jacoco.core</artifactId></dependency></dependencies>	none
+org.glassfish.jersey:jersey-bom:4.0.2	central-release	manual	release.autopublish;release.waitUntil	none	none
+org.apache:apache:35	jdk9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- this does not support toolchains, https://issues.apache.org/jira/browse/MNG-6943 --><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+org.springframework.boot:spring-boot-starter-parent:4.1.1	nativeTest	manual	none	<dependencies xmlns="http://maven.apache.org/POM/4.0.0"><dependency><groupId>org.junit.platform</groupId><artifactId>junit-platform-launcher</artifactId><scope>test</scope></dependency></dependencies>	none
+org.apache.logging.log4j:log4j:2.25.5	java8-tests	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name><value>true</value></property></activation>	none	<dependencies xmlns="http://maven.apache.org/POM/4.0.0"><dependency><groupId>org.jspecify</groupId><artifactId>jspecify</artifactId><version>${jspecify.version}</version><scope>test</scope></dependency></dependencies>	none
+org.apache.logging.log4j:log4j:2.25.5	plugin-processing	<activation xmlns="http://maven.apache.org/POM/4.0.0"><file><exists>.log4j-plugin-processing-activator</exists></file></activation>	log4j.docgen.pluginDescriptorsDir.skipped;log4j.docgen.pluginDescriptorsDir	none	none
+org.yaml:snakeyaml:2.6	with-java11-tests	manual	maven.compiler.testSource;maven.compiler.testTarget;maven.compiler.testRelease	none	none
+org.slf4j:slf4j-parent:2.0.18	skipTests	manual	maven.test.skip	none	none
+tools.jackson.core:jackson-databind:3.1.5	release	manual	maven.test.skip;skipTests	none	none
+org.apache.commons:commons-parent:97	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:97	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:97	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:97	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:97	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:97	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version;commons.spotbugs.impl.version;commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:97	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:97	java-8-9	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,10]</jdk></activation>	commons.spotbugs.plugin.version;commons.spotbugs.impl.version;commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:97	java-11-16	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,16]</jdk></activation>	commons.checkstyle.version;commons.spdx.version	none	none
+org.apache.commons:commons-parent:97	java-17-20	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,20]</jdk></activation>	commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:97	java-17-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,)</jdk></activation>	commons.felix.version;commons.biz.aQute.bndlib.version	none	none
+org.apache.commons:commons-parent:97	java-21-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[21,)</jdk></activation>	argLine	none	none
+org.apache.commons:commons-parent:97	site-basic	manual	skipTests;maven.javadoc.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:97	benchmark	manual	skipTests;benchmark	none	none
+org.apache.maven:maven-parent:47	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:47	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:47	drop-legacy-dependencies	manual	drop-legacy-dependencies.include	none	none
+org.apache.maven:maven-parent:47	palantir-javaformat-dependabot	manual	none	none	<dependencyManagement xmlns="http://maven.apache.org/POM/4.0.0"><dependencies><dependency><groupId>com.palantir.javaformat</groupId><artifactId>palantir-java-format</artifactId><version>${version.palantirJavaFormat}</version></dependency></dependencies></dependencyManagement>
+org.codehaus.plexus:plexus:19	java11+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	maven.compiler.release;checkstyle.spotless.config	none	none
+org.codehaus.plexus:plexus:19	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!format</name></property></activation>	spotless.action	none	none
+org.codehaus.plexus:plexus:19	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>format</name></property></activation>	spotless.action	none	none
+org.slf4j:slf4j-parent:1.7.36	skipTests	manual	maven.test.skip	none	none
+org.codehaus.plexus:plexus:13	java11+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	maven.compiler.release;checkstyle.spotless.config	none	none
+org.codehaus.plexus:plexus:13	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!format</name></property></activation>	spotless.action	none	none
+org.codehaus.plexus:plexus:13	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>format</name></property></activation>	spotless.action	none	none
+org.codehaus.plexus:plexus:24	plexus-release	manual	minimalMavenBuildVersion;njord.enabled	none	none
+org.codehaus.plexus:plexus:24	java17+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,)</jdk></activation>	checkstyle.spotless.config	none	none
+org.codehaus.plexus:plexus:24	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name></property></activation>	spotless.action	none	none
+org.codehaus.plexus:plexus:24	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:39	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!format</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:39	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>format</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:39	drop-legacy-dependencies	manual	drop-legacy-dependencies.include	none	none
+org.apache.maven.shared:maven-shared-components:19	site-release	manual	maven.site.path	none	none
+org.codehaus.plexus:plexus:25	plexus-release	manual	minimalMavenBuildVersion;njord.enabled	none	none
+org.codehaus.plexus:plexus:25	java17+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,)</jdk></activation>	checkstyle.spotless.config	none	none
+org.codehaus.plexus:plexus:25	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name></property></activation>	spotless.action	none	none
+org.codehaus.plexus:plexus:25	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!env.CI</name></property></activation>	spotless.action	none	none
+org.apache.commons:commons-parent:52	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:52	java-1.3	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.4	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java;commons.surefire.version	none	none
+org.apache.commons:commons-parent:52	java-1.5	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.6	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.7	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.9	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.10	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.12	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	java-1.13	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:52	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:52	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;biz.aQute.bndlib.version	none	none
+org.apache.commons:commons-parent:52	site-basic	manual	skipTests;maven.javadoc.skip;cobertura.skip;findbugs.skip;spotbugs.skip;checkstyle.skip;clirr.skip;changes.jira.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+commons-io:commons-io:2.11.0	java9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	coveralls.skip	none	none
+commons-io:commons-io:2.11.0	benchmark	manual	skipTests;benchmark	none	none
+com.thoughtworks.qdox:qdox:2.2.0	linux	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>Linux</family><arch>i386</arch></os></activation>	qdox.byaccj.executable	none	none
+com.thoughtworks.qdox:qdox:2.2.0	linux64	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>Linux</family><arch>amd64</arch></os></activation>	qdox.byaccj.executable	none	none
+com.thoughtworks.qdox:qdox:2.2.0	solaris	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>SunOS</family></os></activation>	qdox.byaccj.executable	none	none
+com.thoughtworks.qdox:qdox:2.2.0	macosx-i386	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>Mac</family><arch>i386</arch></os></activation>	qdox.byaccj.executable	none	none
+com.thoughtworks.qdox:qdox:2.2.0	macosx-powerpc	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>Mac</family><arch>powerpc</arch></os></activation>	qdox.byaccj.executable	none	none
+com.thoughtworks.qdox:qdox:2.2.0	macosx-aarch64	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>Mac</family><arch>aarch64</arch></os></activation>	qdox.byaccj.executable	none	none
+com.thoughtworks.qdox:qdox:2.2.0	windows	<activation xmlns="http://maven.apache.org/POM/4.0.0"><os><family>Windows</family></os></activation>	qdox.byaccj.executable	none	none
+org.codehaus.plexus:plexus:18	java11+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	maven.compiler.release;checkstyle.spotless.config	none	none
+org.codehaus.plexus:plexus:18	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!format</name></property></activation>	spotless.action	none	none
+org.codehaus.plexus:plexus:18	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>format</name></property></activation>	spotless.action	none	none
+org.apache:apache:39	jdk8	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[,9)</jdk></activation>	maven.compiler.source;maven.compiler.target	none	none
+org.apache:apache:39	jdk9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- this does not support toolchains, https://issues.apache.org/jira/browse/MNG-6943 --><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+org.apache.maven:maven-parent:49	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:49	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:49	drop-legacy-dependencies	manual	drop-legacy-dependencies.include	none	none
+org.apache.maven:maven-parent:49	palantir-javaformat-dependabot	manual	none	none	<dependencyManagement xmlns="http://maven.apache.org/POM/4.0.0"><dependencies><dependency><groupId>com.palantir.javaformat</groupId><artifactId>palantir-java-format</artifactId><version>${version.palantirJavaFormat}</version></dependency></dependencies></dependencyManagement>
+org.apache:apache:34	jdk9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- this does not support toolchains, https://issues.apache.org/jira/browse/MNG-6943 --><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+org.apache.maven:maven-parent:44	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:44	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:44	drop-legacy-dependencies	manual	drop-legacy-dependencies.include	none	none
+org.apache.maven:maven-parent:45	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:45	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!env.CI</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:45	drop-legacy-dependencies	manual	drop-legacy-dependencies.include	none	none
+org.apache.commons:commons-parent:98	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:98	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:98	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:98	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:98	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:98	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version;commons.spotbugs.impl.version;commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:98	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:98	java-8-9	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,10]</jdk></activation>	commons.spotbugs.plugin.version;commons.spotbugs.impl.version;commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:98	java-11-16	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,16]</jdk></activation>	commons.checkstyle.version;commons.spdx.version	none	none
+org.apache.commons:commons-parent:98	java-17-20	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,20]</jdk></activation>	commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:98	java-17-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,)</jdk></activation>	commons.felix.version;commons.biz.aQute.bndlib.version;commons.rat.version	none	none
+org.apache.commons:commons-parent:98	java-21-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[21,)</jdk></activation>	commons.checkstyle.version;argLine	none	none
+org.apache.commons:commons-parent:98	site-basic	manual	skipTests;maven.javadoc.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:98	benchmark	manual	skipTests;benchmark	none	none
+commons-io:commons-io:2.22.0	java9-compile	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+commons-io:commons-io:2.22.0	java21-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[21,)</jdk></activation>	EnableDynamicAgentLoading	none	none
+commons-io:commons-io:2.22.0	benchmark	manual	skipTests;benchmark	<dependencies xmlns="http://maven.apache.org/POM/4.0.0"><dependency><groupId>org.openjdk.jmh</groupId><artifactId>jmh-generator-annprocess</artifactId><version>${commons.jmh.version}</version><scope>test</scope></dependency></dependencies>	none
+org.apache.commons:commons-parent:85	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:85	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:85	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:85	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:85	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:85	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:85	site-basic	manual	skipTests;maven.javadoc.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:85	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:85	java-8-9-10	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,10]</jdk></activation>	commons.spotbugs.plugin.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:85	java-11-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:85	java-17-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[17,)</jdk></activation>	commons.felix.version;commons.biz.aQute.bndlib.version	none	none
+org.apache.commons:commons-parent:85	benchmark	manual	skipTests;benchmark	none	none
+org.apache.commons:commons-compress:1.28.0	java9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	maven.compiler.release;animal.sniffer.skip	none	none
+commons-codec:commons-codec:1.19.0	java-8	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>8</jdk></activation>	commons.jacoco.haltOnFailure;commons.jacoco.classRatio;commons.jacoco.instructionRatio;commons.jacoco.methodRatio;commons.jacoco.branchRatio;commons.jacoco.complexityRatio;commons.jacoco.lineRatio	none	none
+commons-codec:commons-codec:1.19.0	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	commons.jacoco.haltOnFailure;commons.jacoco.classRatio;commons.jacoco.instructionRatio;commons.jacoco.methodRatio;commons.jacoco.branchRatio;commons.jacoco.complexityRatio;commons.jacoco.lineRatio	none	none
+org.apache.commons:commons-lang3:3.18.0	java9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	extraArgs	none	none
+org.apache.commons:commons-lang3:3.18.0	benchmark	manual	skipTests;benchmark	none	none
+org.apache.commons:commons-lang3:3.18.0	largeheap	manual	heapSize;systemProperties	none	none
+org.apache:apache:32	jdk9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- this does not support toolchains, https://issues.apache.org/jira/browse/MNG-6943 --><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+org.apache.maven:maven-parent:42	format-check	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>!format</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:42	format	<activation xmlns="http://maven.apache.org/POM/4.0.0"><property><name>format</name></property></activation>	spotless.action	none	none
+org.apache.maven:maven-parent:42	drop-legacy-dependencies	manual	drop-legacy-dependencies.include	none	none
+org.apache.maven.plugins:maven-plugins:42	run-its	manual	invoker.maven.compiler.source;invoker.maven.compiler.target	none	none
+org.apache:apache:33	jdk9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- this does not support toolchains, https://issues.apache.org/jira/browse/MNG-6943 --><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+org.apache.commons:commons-parent:72	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:72	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:72	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:72	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:72	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version	none	none
+org.apache.commons:commons-parent:72	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version	none	none
+org.apache.commons:commons-parent:72	site-basic	manual	skipTests;maven.javadoc.skip;cobertura.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:72	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:72	java-11	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>11</jdk></activation>	commons.javadoc.options	none	none
+org.apache.commons:commons-parent:72	java-11-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:72	benchmark	manual	skipTests;benchmark	none	none
+org.apache.commons:commons-compress:1.27.1	java9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	maven.compiler.release;animal.sniffer.skip;coveralls.skip	none	none
+org.apache.httpcomponents:httpcomponents-parent:14	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!--  active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.httpcomponents:httpcomponents-parent:14	test-deploy	manual	altDeploymentRepository	none	none
+org.apache.commons:commons-parent:81	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:81	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:81	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:81	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:81	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:81	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version;commons.spotbugs.impl.version	none	none
+org.apache.commons:commons-parent:81	site-basic	manual	skipTests;maven.javadoc.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:81	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:81	java-11-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:81	benchmark	manual	skipTests;benchmark	none	none
+org.apache.commons:commons-parent:69	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:69	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:69	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:69	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:69	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version	none	none
+org.apache.commons:commons-parent:69	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version	none	none
+org.apache.commons:commons-parent:69	site-basic	manual	skipTests;maven.javadoc.skip;cobertura.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:69	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:69	java-11-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	commons.checkstyle.version	none	none
+commons-io:commons-io:2.16.1	java9-compile	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	maven.compiler.release	none	none
+commons-io:commons-io:2.16.1	benchmark	manual	skipTests;benchmark	none	none
+org.apache.commons:commons-parent:71	animal-sniffer	<activation xmlns="http://maven.apache.org/POM/4.0.0"><!-- Don't use on Java >= 9, use the release flag instead --><jdk>(,9)</jdk><!-- active unless the file is found --><file><missing>src/site/resources/profile.noanimal</missing></file></activation>	animal-sniffer.signature	none	none
+org.apache.commons:commons-parent:71	java-1.8	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:71	java-1.11	manual	commons.compiler.fork;commons.compiler.compilerVersion;commons.compiler.javac;commons.compiler.javadoc;commons.surefire.java	none	none
+org.apache.commons:commons-parent:71	test-deploy	manual	altDeploymentRepository;commons.release.dryRun	none	none
+org.apache.commons:commons-parent:71	jdk7-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.7,1.8)</jdk></activation>	commons.felix.version;commons.animal-sniffer.version;commons.biz.aQute.bndlib.version	none	none
+org.apache.commons:commons-parent:71	jdk8-plugin-fix-version	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[1.8,1.9)</jdk></activation>	commons.spdx.version	none	none
+org.apache.commons:commons-parent:71	site-basic	manual	skipTests;maven.javadoc.skip;cobertura.skip;spotbugs.skip;checkstyle.skip;rat.skip;jacoco.skip;skipSurefireReport	none	none
+org.apache.commons:commons-parent:71	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	moditect.java.version;commons.moditect-maven-plugin.addServiceUses;maven.compiler.release	none	none
+org.apache.commons:commons-parent:71	java-11	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>11</jdk></activation>	commons.javadoc.options	none	none
+org.apache.commons:commons-parent:71	java-11-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[11,)</jdk></activation>	commons.checkstyle.version	none	none
+org.apache.commons:commons-parent:71	benchmark	manual	skipTests;benchmark	none	none
+commons-codec:commons-codec:1.17.1	java-8	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>8</jdk></activation>	commons.jacoco.haltOnFailure;commons.jacoco.classRatio;commons.jacoco.instructionRatio;commons.jacoco.methodRatio;commons.jacoco.branchRatio;commons.jacoco.complexityRatio;commons.jacoco.lineRatio	none	none
+commons-codec:commons-codec:1.17.1	java-9-up	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	commons.jacoco.haltOnFailure;commons.jacoco.classRatio;commons.jacoco.instructionRatio;commons.jacoco.methodRatio;commons.jacoco.branchRatio;commons.jacoco.complexityRatio;commons.jacoco.lineRatio	none	none
+org.apache.commons:commons-lang3:3.16.0	java9+	<activation xmlns="http://maven.apache.org/POM/4.0.0"><jdk>[9,)</jdk></activation>	argLine	none	none
+org.apache.commons:commons-lang3:3.16.0	benchmark	manual	skipTests;benchmark	none	none
