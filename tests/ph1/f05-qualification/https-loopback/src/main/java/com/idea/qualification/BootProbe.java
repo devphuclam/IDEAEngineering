@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BootProbe {
     private static final AtomicInteger probes = new AtomicInteger();
-    private static final Path TLS = Path.of("/home/phuclam/idea-f05a-20261003-37/https-qualification-01/run/tls");
+    private static final Path TLS = Path.of("/home/phuclam/idea-f05a-20261003-37/https-qualification-02/run/tls");
 
     @GetMapping("/synthetic-probe")
     public ResponseEntity<String> probe() {

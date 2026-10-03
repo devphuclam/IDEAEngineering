@@ -12,7 +12,7 @@ import javax.net.ssl.*;
 
 /** JDK-only, single-use TLS phases. No global trust configuration or bypass. */
 class TlsQualification {
-    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/https-qualification-01");
+    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/https-qualification-02");
     static final Path PACKAGE = ROOT.resolve("tests/ph1/f05-qualification/https-loopback");
     static final Path JDK = Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path RUN = ROOT.resolve("run");
@@ -36,6 +36,11 @@ class TlsQualification {
             for (String key : List.of("javax.net.ssl.trustStore", "javax.net.ssl.keyStore",
                 "jdk.internal.httpclient.disableHostnameVerification"))
                 require(System.getProperty(key) == null, "global TLS override present");
+            if (args.length == 2 && args[1].equals("self-check")) {
+                checkManifest(PACKAGE.resolve("inputs.sha256"));
+                classifierSelfCheck();
+                return;
+            }
             require(Files.readString(RUN.resolve("preflight.txt")).startsWith("SOURCE=" + args[0] + "\n"),
                 "source does not match exact package build");
             preflight();
@@ -182,6 +187,7 @@ class TlsQualification {
             require(portListeners().size() == 1, "multiple 18447 listeners");
             results.add("OWNED_PID=" + process.pid()); results.add("LISTENER=" + owned.getFirst());
             results.add("EXACT_LOOPBACK_SINGLE_LISTENER=PASS");
+            write(RUN.resolve("listener-observation.txt"), String.join("\n", results) + "\n");
             try (HttpClient positive = client("positive-trust.p12", "trust.password")) {
                 var response = positive.send(request("127.0.0.1"), HttpResponse.BodyHandlers.ofString());
                 require(response.statusCode() == 200 && response.body().equals(BODY)
@@ -194,6 +200,7 @@ class TlsQualification {
                 results.add("TLS_PROTOCOL=" + session.getProtocol()); results.add("CIPHER_SUITE=" + session.getCipherSuite());
                 results.add("SUBJECT=" + peer.getSubjectX500Principal().getName()); results.add("SAN=IP:127.0.0.1");
                 results.add("SERIAL_HEX=" + peer.getSerialNumber().toString(16)); results.add("CERT_SHA256=" + hash(peer.getEncoded()));
+                write(RUN.resolve("positive-observation.txt"), String.join("\n", results) + "\n");
             }
             try (HttpClient untrusted = client("negative-trust.p12", "negative.password")) {
                 refusal(untrusted, "127.0.0.1", "trust");
@@ -212,6 +219,8 @@ class TlsQualification {
             require(ownedListeners(process.pid()).size() == 1 && portListeners().size() == 1, "listener scope drift");
         } catch (Exception failure) {
             pending = failure;
+            write(RUN.resolve("probe-stop-observation.txt"), String.join("\n", results) + "\n"
+                + "STOP_CLASS=" + failure.getClass().getName() + "\n" + "STOP_MESSAGE=" + redact(failure.getMessage()) + "\n");
         } finally {
             process.destroy();
             boolean clean = process.waitFor(10, TimeUnit.SECONDS);
@@ -259,12 +268,53 @@ class TlsQualification {
             throw new IllegalStateException("negative TLS request unexpectedly succeeded");
         } catch (SSLHandshakeException expected) {
             StringBuilder causes = new StringBuilder();
-            for (Throwable t = expected; t != null; t = t.getCause()) causes.append(t.getClass().getName()).append(':').append(t.getMessage()).append('\n');
+            for (Throwable t = expected; t != null; t = t.getCause())
+                causes.append(t.getClass().getName()).append(':').append(redact(t.getMessage())).append('\n');
+            write(RUN.resolve("negative-" + kind + "-observation.txt"), "HOST=" + host + "\n" + causes);
             String text = causes.toString().toLowerCase(Locale.ROOT);
             require(kind.equals("trust") ? text.contains("certpath") || text.contains("pkix")
-                : text.contains("subject alternative") && text.contains("localhost"), "wrong TLS refusal category");
+                : endpointMismatch(expected, host), "wrong TLS refusal category");
             System.out.println("TLS_NEGATIVE_" + kind.toUpperCase(Locale.ROOT) + "=SSLHandshakeException");
         }
+    }
+    static boolean endpointMismatch(Throwable failure, String host) {
+        if (!(failure instanceof SSLHandshakeException) || !host.equals("localhost")) return false;
+        for (Throwable t = failure.getCause(); t != null; t = t.getCause()) {
+            if (t instanceof CertificateException && Set.of(
+                "No name matching localhost found",
+                "No subject alternative DNS name matching localhost found.").contains(t.getMessage())) return true;
+        }
+        return false;
+    }
+    static SSLHandshakeException handshake(Throwable cause) {
+        var exception = new SSLHandshakeException("synthetic classifier fixture");
+        exception.initCause(cause); return exception;
+    }
+    static void classifierSelfCheck() {
+        var cnMismatch = handshake(new CertificateException("No name matching localhost found"));
+        String legacyMessage = cnMismatch.getCause().getMessage().toLowerCase(Locale.ROOT);
+        require(!(legacyMessage.contains("subject alternative") && legacyMessage.contains("localhost")),
+            "legacy false-positive witness changed");
+        require(endpointMismatch(cnMismatch, "localhost"), "CN mismatch not classified");
+        require(endpointMismatch(handshake(new CertificateException(
+            "No subject alternative DNS name matching localhost found.")), "localhost"), "DNS mismatch not classified");
+        for (Throwable cause : List.of(new CertificateException("PKIX path building failed"),
+            new CertificateExpiredException("expired"), new IOException("No name matching localhost found"),
+            new CertificateException("No name matching otherhost found")))
+            require(!endpointMismatch(handshake(cause), "localhost"), "unrelated handshake accepted");
+        require(!endpointMismatch(cnMismatch, "otherhost"), "target host not pinned");
+        require(!endpointMismatch(new SSLHandshakeException("No name matching localhost found"), "localhost"),
+            "missing certificate cause accepted");
+        System.out.println("CLASSIFIER_LEGACY_RED_WITNESS=REJECTS_KNOWN_CN_MISMATCH");
+        System.out.println("CLASSIFIER_SELF_CHECK=PASS;POSITIVE=2;NEGATIVE=6");
+    }
+    static String redact(String message) throws Exception {
+        String clean = String.valueOf(message).replaceAll("[\\r\\n\\p{Cntrl}]", " ");
+        for (String name : List.of("key.password", "trust.password", "negative.password")) {
+            Path file = TLS.resolve(name);
+            if (Files.isRegularFile(file)) clean = clean.replace(Files.readString(file).strip(), "<REDACTED>");
+        }
+        return clean.substring(0, Math.min(clean.length(), 500));
     }
     static KeyStore store(String file, String passwordFile) throws Exception {
         char[] password = Files.readString(TLS.resolve(passwordFile)).strip().toCharArray();
