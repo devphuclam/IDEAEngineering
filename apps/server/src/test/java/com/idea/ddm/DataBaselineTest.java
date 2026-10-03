@@ -53,13 +53,14 @@ class DataBaselineTest {
         assertTrue(testDatabaseName().startsWith("idea_ddm_f02_"), "Use only a dedicated F02 test database");
         assertEquals(testDatabaseName(), requiredEnvironment("IDEA_DATABASE_NAME"),
                 "Migration command and application must target the same isolated F02 database");
-        assertEquals(7, DatabaseMigrationCommand.migrate(System.getenv()), "The fresh database must apply V1–V7, including F03 identity/session/credential/throttling successors");
+        assertEquals(8, DatabaseMigrationCommand.migrate(System.getenv()), "The fresh database must apply V1–V8, including the additive F04 committed-event foundation");
         assertEquals(0, DatabaseMigrationCommand.migrate(System.getenv()),
                 "A second migration run must be a no-op");
 
         for (var table : new String[] {"actor", "idea_account", "login_identity", "session_record",
                 "sample_owner_operation", "audit_evidence", "vault_endpoint", "transfer_record",
-                "transfer_grant", "transfer_receipt", "artifact", "artifact_location", "login_failure_state"}) {
+                "transfer_grant", "transfer_receipt", "artifact", "artifact_location", "login_failure_state",
+                "owner_committed_event"}) {
             assertTrue(applicationCanSeeTable(table), "The application role must see migrated table " + table);
         }
     }

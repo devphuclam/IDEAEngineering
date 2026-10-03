@@ -26,18 +26,18 @@ class F03BPublicMigrationTest {
             "identity_role_assignment", "identity_bootstrap_state", "iam_owner_outcome",
             "identity_role_permission", "identity_authorization_decision", "access_policy_owner_outcome",
             "identity_assignment_evidence", "iam_account_change_evidence", "credential_setup_proof",
-            "credential_reset_proof", "login_failure_state", "flyway_schema_history");
+            "credential_reset_proof", "login_failure_state", "flyway_schema_history", "owner_committed_event");
 
     @Test
-    void freshPublicHasValidatedSevenMigrationHistoryEntriesAndExactMigratorOwnedObjects() throws Exception {
+    void freshPublicHasValidatedEightMigrationHistoryEntriesAndExactMigratorOwnedObjects() throws Exception {
         var flyway = Flyway.configure().dataSource(url(), "idea_ddm_migrator",
                 environment("IDEA_DATABASE_MIGRATION_PASSWORD")).locations("classpath:db/migration")
                 .cleanDisabled(true).load();
         flyway.validate();
         var applied = flyway.info().applied();
-        assertEquals(7, applied.length);
+        assertEquals(8, applied.length);
         assertEquals(0, flyway.info().pending().length);
-        for (int index = 0; index < 7; index++) {
+        for (int index = 0; index < 8; index++) {
             assertEquals(Integer.toString(index + 1), applied[index].getVersion().toString());
             assertNotNull(applied[index].getChecksum());
         }
@@ -56,14 +56,16 @@ class F03BPublicMigrationTest {
             }
             assertEquals(TABLES, tables);
             try (var rows = query.executeQuery("SELECT p.proname,pg_get_userbyid(p.proowner) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public'")) {
-                assertTrue(rows.next());
-                assertEquals("reject_audit_evidence_mutation", rows.getString(1));
-                assertEquals("idea_ddm_migrator", rows.getString(2));
-                assertFalse(rows.next());
+                var functions = new HashSet<String>();
+                while (rows.next()) {
+                    functions.add(rows.getString(1));
+                    assertEquals("idea_ddm_migrator", rows.getString(2));
+                }
+                assertEquals(Set.of("reject_audit_evidence_mutation", "reject_retained_owner_mutation"), functions);
             }
             try (var rows = query.executeQuery("SELECT count(*),bool_and(success AND checksum IS NOT NULL) FROM public.flyway_schema_history WHERE version IS NOT NULL")) {
                 assertTrue(rows.next());
-                assertEquals(7, rows.getInt(1));
+                assertEquals(8, rows.getInt(1));
                 assertTrue(rows.getBoolean(2));
             }
         }
@@ -80,7 +82,7 @@ class F03BPublicMigrationTest {
             try (var connection = connection("idea_ddm_app"); var statement = connection.createStatement()) {
                 try (var rows = statement.executeQuery("SELECT count(*) FROM public.flyway_schema_history WHERE success")) {
                     assertTrue(rows.next());
-                    assertEquals(7, rows.getInt(1), "Runtime retains read-only history visibility");
+                    assertEquals(8, rows.getInt(1), "Runtime retains read-only history visibility");
                 }
                 for (var mutation : Set.of("INSERT", "UPDATE", "DELETE", "TRUNCATE")) {
                     try (var rows = statement.executeQuery("SELECT has_table_privilege(current_user,'public.flyway_schema_history','" + mutation + "')")) {
@@ -112,13 +114,16 @@ class F03BPublicMigrationTest {
             for (var table : Set.of("identity_role_version", "identity_role_permission", "identity_role_assignment",
                     "operating_organization", "identity_bootstrap_state", "iam_owner_outcome", "audit_evidence",
                     "access_policy_owner_outcome", "identity_authorization_decision", "identity_assignment_evidence",
-                    "iam_account_change_evidence", "credential_setup_proof", "credential_reset_proof", "flyway_schema_history")) {
+                    "iam_account_change_evidence", "credential_setup_proof", "credential_reset_proof", "flyway_schema_history",
+                    "sample_owner_operation", "owner_committed_event")) {
                 denied(connection, "DELETE FROM public." + table);
                 denied(connection, "TRUNCATE public." + table);
             }
             denied(connection, "UPDATE public.identity_role_version SET version=version");
             denied(connection, "UPDATE public.identity_role_permission SET permission_code=permission_code");
             denied(connection, "UPDATE public.identity_role_assignment SET organization_id=organization_id");
+            denied(connection, "UPDATE public.sample_owner_operation SET outcome=outcome");
+            denied(connection, "UPDATE public.owner_committed_event SET contract_version=contract_version");
             denied(connection, "INSERT INTO public.identity_role_version SELECT * FROM public.identity_role_version WHERE false");
             denied(connection, "INSERT INTO public.identity_role_permission SELECT * FROM public.identity_role_permission WHERE false");
             denied(connection, "UPDATE public.flyway_schema_history SET success=success");
@@ -152,7 +157,8 @@ class F03BPublicMigrationTest {
                     "account-administrator@2:account.credential.setup.issue",
                     "account-administrator@2:account.credential.reset.issue"), actual);
             for (var table : Set.of("actor", "idea_account", "login_identity", "session_record",
-                    "identity_role_assignment", "credential_setup_proof", "credential_reset_proof", "login_failure_state")) {
+                    "identity_role_assignment", "credential_setup_proof", "credential_reset_proof", "login_failure_state",
+                    "sample_owner_operation", "owner_committed_event", "audit_evidence")) {
                 try (var rows = query.executeQuery("SELECT count(*) FROM public." + table)) {
                     assertTrue(rows.next());
                     assertEquals(0, rows.getInt(1), "Fresh qualification must not create identity/custody data: " + table);
