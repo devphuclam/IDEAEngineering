@@ -249,7 +249,9 @@ the [exact-source receipt](../../docs/research/2026-10-03-f05a-t027-q01-executio
 records authorized execution. Root05 graph and filesystem8/8 are accepted predecessors.
 The [HTTPS packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md) is separately
 authorized for a single synthetic 127.0.0.1:18447 listener and normal dedicated-store
-trust/endpoint verification after source/TLS identity publication. Execution NOT-RUN;
+trust/endpoint verification after source/TLS identity publication. The
+[attempt01 result](../../docs/research/2026-10-03-f05a-t027-https-results.md) is STOP /
+NOT-QUALIFIED at the endpoint-refusal classifier; cleanup complete. No repair/retry authorized;
 other transport/Adapter qualifications remain separate. T027 is not complete.
 The separate local Tracker timer already runs; do not restart or publish it through this PR.
 No Gateway code or inherited F04 tooling authority follows from preflight approval.

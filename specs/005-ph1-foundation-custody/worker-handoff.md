@@ -103,7 +103,10 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The current unit is F05-A / T027: IN_PROGRESS; Q01/root05 accepted; filesystem prerequisite8/8 PASS with result acceptance pending; other qualification NOT-RUN. The user
+The current unit is F05-A / T027: IN_PROGRESS; Q01/root05/filesystem8/8 accepted.
+[HTTPS attempt01](../../docs/research/2026-10-03-f05a-t027-https-results.md) STOPPED at
+the endpoint-refusal classifier; owned process terminated, no18447 listener remains.
+Do not repair or retry without bounded successor authority. Other qualification NOT-RUN. The user
 explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
 Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) initially authorized
 clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
