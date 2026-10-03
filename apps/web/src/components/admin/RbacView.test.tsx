@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   INITIAL_ACTORS,
   INITIAL_ASSIGNMENTS,
+  INITIAL_GROUPS,
   INITIAL_PROJECTS,
   INITIAL_ROLES,
 } from "./mockAdminData";
@@ -16,6 +17,7 @@ describe("RbacView component", () => {
         assignments: INITIAL_ASSIGNMENTS,
         roles: INITIAL_ROLES,
         actors: INITIAL_ACTORS,
+        groups: INITIAL_GROUPS,
         projects: INITIAL_PROJECTS,
         selectedAssignmentId: INITIAL_ASSIGNMENTS[0].id,
         onSelectAssignment: () => {},
@@ -36,6 +38,7 @@ describe("RbacView component", () => {
         assignments: INITIAL_ASSIGNMENTS,
         roles: INITIAL_ROLES,
         actors: INITIAL_ACTORS,
+        groups: INITIAL_GROUPS,
         projects: INITIAL_PROJECTS,
         onSelectAssignment: () => {},
         onOpenAddAssignment: () => {},
@@ -43,5 +46,42 @@ describe("RbacView component", () => {
     );
 
     expect(html).toContain("Thêm phân quyền vai trò");
+  });
+
+  it("renders Microsoft-style Group RBAC with Security Groups and member counts", () => {
+    const html = renderToStaticMarkup(
+      createElement(RbacView, {
+        assignments: INITIAL_ASSIGNMENTS,
+        roles: INITIAL_ROLES,
+        actors: INITIAL_ACTORS,
+        groups: INITIAL_GROUPS,
+        projects: INITIAL_PROJECTS,
+        onSelectAssignment: () => {},
+        onOpenAddAssignment: () => {},
+      })
+    );
+
+    expect(html).toContain("Phòng Thiết kế Cơ khí JIG &amp; Máy");
+    expect(html).toContain("SG-MECH-01");
+    expect(html).toContain("8 kỹ sư");
+    expect(html).toContain("👥 Nhóm");
+  });
+
+  it("calculates inherited permissions from department group in Check Access", () => {
+    // Check access tab rendered by default shows tabs and selector
+    const html = renderToStaticMarkup(
+      createElement(RbacView, {
+        assignments: INITIAL_ASSIGNMENTS,
+        roles: INITIAL_ROLES,
+        actors: INITIAL_ACTORS,
+        groups: INITIAL_GROUPS,
+        projects: INITIAL_PROJECTS,
+        onSelectAssignment: () => {},
+        onOpenAddAssignment: () => {},
+      })
+    );
+
+    expect(html).toContain("Kiểm tra quyền thực tế (Check access)");
+    expect(html).toContain("Tất cả đối tượng (Nhóm &amp; Kỹ sư)");
   });
 });

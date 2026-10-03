@@ -2,7 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { AdminInspector } from "./AdminInspector";
-import { INITIAL_ACTORS } from "./mockAdminData";
+import { INITIAL_ACTORS, INITIAL_ASSIGNMENTS } from "./mockAdminData";
 
 describe("AdminInspector component", () => {
   it("renders selected actor details and safety actions without revealing passwords", () => {
@@ -35,5 +35,21 @@ describe("AdminInspector component", () => {
 
     expect(html).toContain("Kích hoạt lại tài khoản");
     expect(html).toContain("Tạm khóa");
+  });
+
+  it("renders Group RBAC details when inspecting a group role assignment", () => {
+    const groupAssignment = INITIAL_ASSIGNMENTS[0]; // asg_grp_001
+    const html = renderToStaticMarkup(
+      createElement(AdminInspector, {
+        selectedAssignment: groupAssignment,
+        onRevokeAssignment: () => {},
+      })
+    );
+
+    expect(html).toContain("Phân quyền Nhóm bảo mật (Group RBAC)");
+    expect(html).toContain("Phòng Thiết kế Cơ khí JIG &amp; Máy");
+    expect(html).toContain("SG-MECH-01");
+    expect(html).toContain("8 kỹ sư trực thuộc");
+    expect(html).toContain("Tự động kế thừa cho người mới");
   });
 });

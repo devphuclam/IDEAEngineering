@@ -25,11 +25,22 @@ export interface AdminRole {
   permissions: { action: string; description: string }[];
 }
 
+export interface AdminGroup {
+  id: string;
+  code: string;
+  name: string;
+  department: string;
+  memberCount: number;
+  description: string;
+}
+
 export interface AdminRoleAssignment {
   id: string;
   principalId: string;
   principalName: string;
   principalType: "user" | "group";
+  groupCode?: string;
+  memberCount?: number;
   roleId: string;
   roleName: string;
   scope: string;
@@ -148,20 +159,83 @@ export const INITIAL_ROLES: AdminRole[] = [
   },
 ];
 
+export const INITIAL_GROUPS: AdminGroup[] = [
+  {
+    id: "grp_mech_1",
+    code: "SG-MECH-01",
+    name: "Phòng Thiết kế Cơ khí JIG & Máy",
+    department: "Phòng Thiết kế Cơ khí JIG & Máy",
+    memberCount: 8,
+    description: "Tập hợp các kỹ sư thiết kế mô hình 3D, chi tiết máy, xuất bản vẽ 2D và quản lý cây BOM.",
+  },
+  {
+    id: "grp_auto_elec",
+    code: "SG-ELEC-02",
+    name: "Phòng Điện - Tự động hóa",
+    department: "Phòng Điện - Tự động hóa",
+    memberCount: 5,
+    description: "Nhóm kỹ sư lập trình PLC, Robot, sơ đồ điều khiển và tích hợp cảm biến công nghiệp.",
+  },
+  {
+    id: "grp_qa_review",
+    code: "SG-QA-STD",
+    name: "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
+    department: "Ban Quản lý Chất lượng",
+    memberCount: 4,
+    description: "Thẩm duyệt va chạm mô hình lắp ráp, kiểm tra dung sai và phê duyệt phát hành Release.",
+  },
+  {
+    id: "grp_pmo",
+    code: "SG-PMO-ADMIN",
+    name: "Ban Quản lý Dự án (PMO)",
+    department: "Khối Quản lý Dự án",
+    memberCount: 3,
+    description: "Điều phối tiến độ, phân bổ nguồn lực kỹ sư và giám sát các mốc bàn giao dự án máy.",
+  },
+];
+
 export const INITIAL_ASSIGNMENTS: AdminRoleAssignment[] = [
   {
-    id: "asg_001",
-    principalId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
-    principalName: "Nguyễn Văn An",
-    principalType: "user",
+    id: "asg_grp_001",
+    principalId: "grp_mech_1",
+    principalName: "Phòng Thiết kế Cơ khí JIG & Máy",
+    principalType: "group",
+    groupCode: "SG-MECH-01",
+    memberCount: 8,
     roleId: "role_design_engineer",
     roleName: "Design Engineer",
     scope: "Dự án P-100",
     assignmentType: "Direct",
-    assignedAt: "2026-01-16",
+    assignedAt: "2026-01-10",
   },
   {
-    id: "asg_002",
+    id: "asg_grp_002",
+    principalId: "grp_qa_review",
+    principalName: "Tổ Thẩm duyệt & Tiêu chuẩn Kỹ thuật",
+    principalType: "group",
+    groupCode: "SG-QA-STD",
+    memberCount: 4,
+    roleId: "role_reviewer",
+    roleName: "Reviewer / Approver",
+    scope: "Dự án P-100",
+    assignmentType: "Direct",
+    assignedAt: "2026-01-10",
+  },
+  {
+    id: "asg_grp_003",
+    principalId: "grp_auto_elec",
+    principalName: "Phòng Điện - Tự động hóa",
+    principalType: "group",
+    groupCode: "SG-ELEC-02",
+    memberCount: 5,
+    roleId: "role_design_engineer",
+    roleName: "Design Engineer",
+    scope: "Dự án P-200",
+    assignmentType: "Direct",
+    assignedAt: "2026-02-01",
+  },
+  {
+    id: "asg_001",
     principalId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
     principalName: "Nguyễn Văn An",
     principalType: "user",
@@ -170,17 +244,6 @@ export const INITIAL_ASSIGNMENTS: AdminRoleAssignment[] = [
     scope: "Dự án P-100",
     assignmentType: "Direct",
     assignedAt: "2026-01-16",
-  },
-  {
-    id: "asg_003",
-    principalId: "34ba128a-7e11-4f90-bc42-998811223344",
-    principalName: "Nguyễn Thị Linh",
-    principalType: "user",
-    roleId: "role_design_engineer",
-    roleName: "Design Engineer",
-    scope: "Dự án P-100",
-    assignmentType: "Inherited",
-    assignedAt: "2026-02-02",
   },
   {
     id: "asg_004",

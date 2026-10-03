@@ -1,15 +1,18 @@
 import { useState } from "react";
 import {
   AdminActor,
+  AdminGroup,
   AdminProject,
   AdminRole,
   AdminRoleAssignment,
+  INITIAL_GROUPS,
 } from "./mockAdminData";
 
 export interface RbacViewProps {
   assignments: AdminRoleAssignment[];
   roles: AdminRole[];
   actors: AdminActor[];
+  groups?: AdminGroup[];
   projects: AdminProject[];
   selectedAssignmentId?: string;
   onSelectAssignment: (assignment: AdminRoleAssignment) => void;
@@ -20,6 +23,7 @@ export function RbacView({
   assignments,
   roles,
   actors,
+  groups = INITIAL_GROUPS,
   projects,
   selectedAssignmentId,
   onSelectAssignment,
@@ -28,6 +32,7 @@ export function RbacView({
   const [activeTab, setActiveTab] = useState<"assignments" | "roles" | "check_access">("assignments");
   const [searchTerm, setSearchTerm] = useState("");
   const [scopeFilter, setScopeFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | "group" | "user">("all");
 
   // State for Check Access tab
   const [checkActorId, setCheckActorId] = useState<string>(actors[0]?.id || "");
@@ -37,21 +42,81 @@ export function RbacView({
     const matchesSearch =
       a.principalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       a.roleName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      a.scope.toLowerCase().includes(searchTerm.toLowerCase());
+      a.scope.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (a.groupCode && a.groupCode.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesScope = scopeFilter === "all" || a.scope === scopeFilter;
+    const matchesType = typeFilter === "all" || a.principalType === typeFilter;
 
-    return matchesSearch && matchesScope;
+    return matchesSearch && matchesScope && matchesType;
   });
 
-  // Compute effective access for Check Access tab
-  const effectiveAssignments = assignments.filter(
-    (a) => a.principalId === checkActorId && (a.scope === checkScope || a.scope === "Toàn hệ thống")
+  // Microsoft-Style Effective Access Computation: Direct + Inherited via Groups
+  const selectedCheckActor = actors.find((a) => a.id === checkActorId) || actors[0];
+
+  // 1. Direct assignments for this actor
+  const directAssignments = assignments.filter(
+    (a) =>
+      a.principalType === "user" &&
+      a.principalId === checkActorId &&
+      (a.scope === checkScope || a.scope === "Toàn hệ thống")
   );
 
-  const effectiveRoles = roles.filter((r) =>
-    effectiveAssignments.some((a) => a.roleId === r.id)
+  // 2. Inherited assignments from Groups matching the actor's department
+  const matchingGroups = groups.filter(
+    (g) =>
+      g.department === selectedCheckActor?.department ||
+      g.name === selectedCheckActor?.department
   );
+
+  const inheritedGroupAssignments = assignments.filter(
+    (a) =>
+      a.principalType === "group" &&
+      matchingGroups.some((g) => g.id === a.principalId) &&
+      (a.scope === checkScope || a.scope === "Toàn hệ thống")
+  );
+
+  interface EffectiveRoleItem {
+    roleId: string;
+    roleName: string;
+    assignmentType: "Direct" | "Inherited";
+    source: string;
+    scope: string;
+    roleDef?: AdminRole;
+  }
+
+  const effectiveRolesMap = new Map<string, EffectiveRoleItem>();
+
+  // Add direct assignments
+  for (const asg of directAssignments) {
+    const roleDef = roles.find((r) => r.id === asg.roleId);
+    effectiveRolesMap.set(asg.roleId, {
+      roleId: asg.roleId,
+      roleName: asg.roleName,
+      assignmentType: "Direct",
+      source: "Gán trực tiếp cho tài khoản",
+      scope: asg.scope,
+      roleDef,
+    });
+  }
+
+  // Add inherited assignments (if already exists directly, direct takes precedence or union)
+  for (const asg of inheritedGroupAssignments) {
+    const roleDef = roles.find((r) => r.id === asg.roleId);
+    if (!effectiveRolesMap.has(asg.roleId)) {
+      effectiveRolesMap.set(asg.roleId, {
+        roleId: asg.roleId,
+        roleName: asg.roleName,
+        assignmentType: "Inherited",
+        source: `Kế thừa từ Nhóm: ${asg.principalName} [${asg.groupCode || "Group"}]`,
+        scope: asg.scope,
+        roleDef,
+      });
+    }
+  }
+
+  const effectiveRoleList = Array.from(effectiveRolesMap.values());
+  const hasInheritedRoles = effectiveRoleList.some((r) => r.assignmentType === "Inherited");
 
   return (
     <div className="admin-main">
@@ -60,7 +125,7 @@ export function RbacView({
           <div className="admin-crumbs">Quản trị hệ thống &gt; Phân quyền vai trò RBAC</div>
           <h1 className="admin-main-title">Phân Quyền Vai Trò RBAC (Microsoft Azure Parity)</h1>
           <p className="admin-main-desc">
-            Kiểm soát quyền truy cập theo vai trò kỹ thuật, phạm vi dự án và kiểm tra quyền thực tế.
+            Kiểm soát quyền truy cập theo vai trò kỹ thuật, nhóm phòng ban (Group RBAC) và kiểm tra quyền thực tế.
           </p>
         </div>
 
@@ -139,10 +204,21 @@ export function RbacView({
             <input
               type="text"
               className="admin-search-input"
-              placeholder="Tìm theo tên kỹ sư, vai trò hoặc dự án..."
+              placeholder="Tìm theo tên kỹ sư, nhóm, vai trò hoặc mã..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+
+            <select
+              className="admin-select"
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value as "all" | "group" | "user")}
+              aria-label="Lọc theo loại đối tượng"
+            >
+              <option value="all">Tất cả đối tượng (Nhóm &amp; Kỹ sư)</option>
+              <option value="group">👥 Nhóm kỹ thuật (Group)</option>
+              <option value="user">👤 Kỹ sư cá nhân (User)</option>
+            </select>
 
             <select
               className="admin-select"
@@ -151,9 +227,11 @@ export function RbacView({
               aria-label="Lọc theo phạm vi Scope"
             >
               <option value="all">Tất cả phạm vi Scope ({assignments.length})</option>
-              <option value="Dự án P-100">Dự án P-100 (Máy đóng gói)</option>
-              <option value="Dự án P-200">Dự án P-200 (Đồ gá hàn)</option>
-              <option value="Dự án P-300">Dự án P-300 (Cấp phôi)</option>
+              {projects.map((p) => (
+                <option key={p.id} value={`Dự án ${p.code}`}>
+                  Dự án {p.code} ({p.name})
+                </option>
+              ))}
               <option value="Toàn hệ thống">Toàn hệ thống (Global)</option>
             </select>
           </div>
@@ -162,11 +240,11 @@ export function RbacView({
             <table className="admin-data-table" aria-label="Bảng phân quyền vai trò">
               <thead>
                 <tr>
-                  <th>Đối tượng (Kỹ sư / Nhóm)</th>
+                  <th>Đối tượng thụ hưởng (Principal)</th>
                   <th>Vai trò (Role)</th>
                   <th>Phạm vi (Scope)</th>
-                  <th style={{ width: 120 }}>Loại gán</th>
-                  <th style={{ width: 120 }}>Ngày gán</th>
+                  <th style={{ width: 120 }}>Cơ chế gán</th>
+                  <th style={{ width: 110 }}>Ngày gán</th>
                 </tr>
               </thead>
               <tbody>
@@ -180,7 +258,23 @@ export function RbacView({
                       onClick={() => onSelectAssignment(a)}
                     >
                       <td>
-                        <strong>{a.principalName}</strong>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          {a.principalType === "group" ? (
+                            <span className="admin-entity-badge group">👥 Nhóm</span>
+                          ) : (
+                            <span className="admin-entity-badge user">👤 Kỹ sư</span>
+                          )}
+                          <div>
+                            <strong style={{ display: "block", color: "var(--admin-navy)" }}>
+                              {a.principalName}
+                            </strong>
+                            {a.principalType === "group" && a.groupCode && (
+                              <span style={{ fontSize: "11px", color: "#64748b", fontFamily: "var(--font-mono)" }}>
+                                {a.groupCode} • {a.memberCount ? `${a.memberCount} kỹ sư` : "Cả phòng ban"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </td>
                       <td>
                         <span style={{ color: "var(--admin-blue)", fontWeight: 600 }}>
@@ -189,7 +283,9 @@ export function RbacView({
                       </td>
                       <td>{a.scope}</td>
                       <td>
-                        <span className="admin-status-pill active">{a.assignmentType}</span>
+                        <span className={`admin-status-pill ${a.assignmentType === "Direct" ? "active" : "pending"}`}>
+                          {a.assignmentType === "Direct" ? "Trực tiếp" : "Kế thừa"}
+                        </span>
                       </td>
                       <td>{a.assignedAt}</td>
                     </tr>
@@ -238,21 +334,21 @@ export function RbacView({
               border: "1px solid var(--admin-line)",
               borderRadius: 6,
               padding: 20,
-              maxWidth: 720,
+              maxWidth: 760,
               marginBottom: 20,
             }}
           >
-            <h3 style={{ margin: "0 0 12px", color: "var(--admin-navy)" }}>
-              Kiểm tra quyền thực tế (Effective Access Checker)
+            <h3 style={{ margin: "0 0 8px", color: "var(--admin-navy)" }}>
+              Kiểm tra quyền thực tế (Effective Access Checker — Microsoft Azure Parity)
             </h3>
             <p style={{ margin: "0 0 16px", color: "#64748b", fontSize: "12.5px" }}>
-              Mô phỏng cơ chế tính toán quyền của Microsoft: Chọn một kỹ sư và phạm vi dự án để tính toán tổng hợp quyền hạn có hiệu lực.
+              Tính toán tổng hợp quyền hạn có hiệu lực cho một kỹ sư trên một dự án máy, bao gồm cả quyền <strong>gán trực tiếp</strong> và quyền <strong>tự động kế thừa từ Nhóm phòng ban</strong>.
             </p>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
               <div>
                 <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", marginBottom: 4 }}>
-                  Chọn Kỹ sư (Actor):
+                  Chọn Kỹ sư kiểm tra:
                 </label>
                 <select
                   className="admin-select"
@@ -266,11 +362,14 @@ export function RbacView({
                     </option>
                   ))}
                 </select>
+                <span style={{ display: "block", marginTop: 4, fontSize: "11px", color: "#64748b" }}>
+                  Phòng ban: <strong>{selectedCheckActor?.department}</strong>
+                </span>
               </div>
 
               <div>
                 <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "#475569", marginBottom: 4 }}>
-                  Chọn Phạm vi (Scope):
+                  Chọn Phạm vi dự án (Scope):
                 </label>
                 <select
                   className="admin-select"
@@ -278,63 +377,103 @@ export function RbacView({
                   value={checkScope}
                   onChange={(e) => setCheckScope(e.target.value)}
                 >
-                  <option value="Dự án P-100">Dự án P-100 (Máy đóng gói)</option>
-                  <option value="Dự án P-200">Dự án P-200 (Đồ gá hàn robot)</option>
-                  <option value="Dự án P-300">Dự án P-300 (Cấp phôi rung)</option>
+                  {projects.map((p) => (
+                    <option key={p.id} value={`Dự án ${p.code}`}>
+                      Dự án {p.code} ({p.name})
+                    </option>
+                  ))}
+                  <option value="Toàn hệ thống">Toàn hệ thống (Global Scope)</option>
                 </select>
               </div>
             </div>
 
-            {effectiveRoles.length > 0 ? (
+            {/* Microsoft Entra ID explanation for new hires */}
+            {hasInheritedRoles && (
+              <div className="admin-tip-box" style={{ marginBottom: 16 }}>
+                <span className="admin-tip-icon" aria-hidden="true">💡</span>
+                <div>
+                  <strong>Giải thích cơ chế phân quyền cho người mới (Microsoft Entra ID):</strong>
+                  <br />
+                  Kỹ sư <strong>{selectedCheckActor.fullName}</strong> thuộc <em>{selectedCheckActor.department}</em>. Khi mới gia nhập công ty hoặc nhận dự án, kỹ sư này <strong>tự động kế thừa quyền</strong> từ chính sách phân quyền của Nhóm phòng ban mà không cần ai phải cấu hình thủ công từng tài khoản.
+                </div>
+              </div>
+            )}
+
+            {effectiveRoleList.length > 0 ? (
               <div style={{ background: "#f8fafc", border: "1px solid var(--admin-line)", padding: 16, borderRadius: 4 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   <span className="admin-status-pill active">Được cấp quyền hợp lệ</span>
                   <span style={{ fontSize: "12px", color: "#475569" }}>
-                    Kỹ sư nắm giữ <strong>{effectiveRoles.length} vai trò</strong> tại {checkScope}:
+                    Kỹ sư nắm giữ <strong>{effectiveRoleList.length} vai trò</strong> tại {checkScope}:
                   </span>
                 </div>
 
-                <ul style={{ margin: "0 0 14px", paddingLeft: 20, fontSize: "12.5px" }}>
-                  {effectiveRoles.map((r) => (
-                    <li key={r.id}>
-                      <strong>{r.name}</strong> — {r.description}
-                    </li>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+                  {effectiveRoleList.map((item) => (
+                    <div
+                      key={item.roleId}
+                      style={{
+                        background: "#ffffff",
+                        border: "1px solid #e2e8f0",
+                        borderRadius: 4,
+                        padding: "10px 12px",
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <strong style={{ color: "var(--admin-navy)", fontSize: "13px" }}>
+                          {item.roleName}
+                        </strong>
+                        <span className={`admin-status-pill ${item.assignmentType === "Direct" ? "active" : "pending"}`}>
+                          {item.assignmentType === "Direct" ? "Gán trực tiếp" : "Kế thừa từ Nhóm"}
+                        </span>
+                      </div>
+                      <div style={{ marginTop: 4, fontSize: "11.5px", color: "#64748b" }}>
+                        Nguồn gốc quyền: <strong style={{ color: "#334155" }}>{item.source}</strong>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
 
                 <h4 style={{ margin: "14px 0 8px", fontSize: "12px", color: "var(--admin-navy)" }}>
-                  Các quyền kỹ thuật được phép thực thi:
+                  Các quyền kỹ thuật được phép thực thi trong dự án:
                 </h4>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {Array.from(
-                    new Set(effectiveRoles.flatMap((r) => r.permissions))
-                  ).map((perm, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        fontSize: "12px",
-                        color: "#1e293b",
-                        background: "#ffffff",
-                        padding: "6px 10px",
-                        border: "1px solid #e2e8f0",
-                        borderRadius: 3,
-                      }}
-                    >
-                      <span style={{ color: "#059669", fontWeight: 700 }}>✓</span>
-                      <strong style={{ fontFamily: "var(--font-mono)", color: "#166fbd" }}>
-                        {perm.action}
-                      </strong>
-                      <span>— {perm.description}</span>
-                    </div>
-                  ))}
+                    new Set(
+                      effectiveRoleList
+                        .flatMap((item) => item.roleDef?.permissions || [])
+                        .map((p) => JSON.stringify(p))
+                    )
+                  ).map((pStr, idx) => {
+                    const perm = JSON.parse(pStr);
+                    return (
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          fontSize: "12px",
+                          color: "#1e293b",
+                          background: "#ffffff",
+                          padding: "6px 10px",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: 3,
+                        }}
+                      >
+                        <span style={{ color: "#059669", fontWeight: 700 }}>✓</span>
+                        <strong style={{ fontFamily: "var(--font-mono)", color: "#166fbd" }}>
+                          {perm.action}
+                        </strong>
+                        <span>— {perm.description}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ) : (
               <div style={{ padding: 16, background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 4, color: "#991b1b", fontSize: "12.5px" }}>
-                Kỹ sư này hiện <strong>không có quyền hạn nào</strong> tại {checkScope}. Mọi thao tác Checkout/Check-in bản vẽ sẽ bị từ chối an toàn (Fail-closed).
+                Kỹ sư này hiện <strong>không có quyền hạn nào</strong> tại {checkScope}. Mọi thao tác Checkout/Check-in bản vẽ CAD sẽ bị từ chối an toàn (Fail-closed).
               </div>
             )}
           </div>

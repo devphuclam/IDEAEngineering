@@ -6,10 +6,12 @@ import { AdminInspector } from "./AdminInspector";
 import { AdminRail, AdminSection } from "./AdminRail";
 import {
   AdminActor,
+  AdminGroup,
   AdminProject,
   AdminRoleAssignment,
   INITIAL_ACTORS,
   INITIAL_ASSIGNMENTS,
+  INITIAL_GROUPS,
   INITIAL_PROJECTS,
   INITIAL_ROLES,
 } from "./mockAdminData";
@@ -34,9 +36,15 @@ export function AdminApp({
 
   // State collections
   const [actors, setActors] = useState<AdminActor[]>(INITIAL_ACTORS);
+  const [groups] = useState<AdminGroup[]>(INITIAL_GROUPS);
   const [projects] = useState<AdminProject[]>(INITIAL_PROJECTS);
   const [roles] = useState(INITIAL_ROLES);
   const [assignments, setAssignments] = useState<AdminRoleAssignment[]>(INITIAL_ASSIGNMENTS);
+
+  const handleAddActor = (newActor: AdminActor) => {
+    setActors((prev) => [newActor, ...prev]);
+    setSelectedActor(newActor);
+  };
 
   // Selected entities for right-hand inspector
   const [selectedActor, setSelectedActor] = useState<AdminActor | null>(INITIAL_ACTORS[0]);
@@ -200,6 +208,7 @@ export function AdminApp({
             assignments={assignments}
             roles={roles}
             actors={actors}
+            groups={groups}
             projects={projects}
             selectedAssignmentId={selectedAssignment?.id}
             onSelectAssignment={(asg) => {
@@ -242,10 +251,12 @@ export function AdminApp({
         isOpen={isAddRoleOpen}
         roles={roles}
         actors={actors}
+        groups={groups}
         projects={projects}
         preselectedActorId={preselectedActorId}
         onClose={() => setIsAddRoleOpen(false)}
         onSubmit={handleAddAssignment}
+        onAddActor={handleAddActor}
       />
     </div>
   );

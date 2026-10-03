@@ -165,30 +165,61 @@ export function AdminInspector({
   }
 
   if (selectedAssignment) {
+    const isGroup = selectedAssignment.principalType === "group";
+
     return (
       <aside className="admin-inspector" aria-label="Bảng chi tiết phân quyền">
         <div className="admin-inspector-head">
-          <span className="admin-rail-eyebrow">Phân quyền RBAC</span>
+          <span className="admin-rail-eyebrow">
+            {isGroup ? "Phân quyền Nhóm bảo mật (Group RBAC)" : "Phân quyền Kỹ sư (User RBAC)"}
+          </span>
           <div className="admin-inspector-title">{selectedAssignment.roleName}</div>
-          <div className="admin-inspector-sub">Cấp cho: {selectedAssignment.principalName}</div>
+          <div className="admin-inspector-sub">
+            {isGroup ? `Cấp cho Nhóm: ${selectedAssignment.principalName}` : `Cấp cho: ${selectedAssignment.principalName}`}
+          </div>
         </div>
 
         <div className="admin-inspector-body">
           <div className="admin-prop-group">
             <div className="admin-prop-row">
-              <span className="admin-prop-label">Người nhận:</span>
-              <span className="admin-prop-val">{selectedAssignment.principalName}</span>
+              <span className="admin-prop-label">Đối tượng:</span>
+              <span className="admin-prop-val">
+                {isGroup ? (
+                  <span className="admin-entity-badge group">👥 Nhóm</span>
+                ) : (
+                  <span className="admin-entity-badge user">👤 Kỹ sư</span>
+                )}
+                {" "}{selectedAssignment.principalName}
+              </span>
             </div>
+            {isGroup && selectedAssignment.groupCode && (
+              <div className="admin-prop-row">
+                <span className="admin-prop-label">Mã nhóm:</span>
+                <span className="admin-prop-val" style={{ fontFamily: "var(--font-mono)" }}>
+                  {selectedAssignment.groupCode}
+                </span>
+              </div>
+            )}
+            {isGroup && selectedAssignment.memberCount && (
+              <div className="admin-prop-row">
+                <span className="admin-prop-label">Quy mô nhóm:</span>
+                <span className="admin-prop-val">
+                  {selectedAssignment.memberCount} kỹ sư trực thuộc
+                </span>
+              </div>
+            )}
             <div className="admin-prop-row">
               <span className="admin-prop-label">Vai trò:</span>
-              <span className="admin-prop-val">{selectedAssignment.roleName}</span>
+              <span className="admin-prop-val" style={{ color: "var(--admin-blue)", fontWeight: 600 }}>
+                {selectedAssignment.roleName}
+              </span>
             </div>
             <div className="admin-prop-row">
               <span className="admin-prop-label">Phạm vi Scope:</span>
               <span className="admin-prop-val">{selectedAssignment.scope}</span>
             </div>
             <div className="admin-prop-row">
-              <span className="admin-prop-label">Loại gán:</span>
+              <span className="admin-prop-label">Cơ chế gán:</span>
               <span className="admin-prop-val">{selectedAssignment.assignmentType}</span>
             </div>
             <div className="admin-prop-row">
@@ -197,7 +228,18 @@ export function AdminInspector({
             </div>
           </div>
 
-          <div className="admin-inspector-actions">
+          {isGroup && (
+            <div className="admin-tip-box" style={{ marginTop: 14 }}>
+              <span className="admin-tip-icon" aria-hidden="true">💡</span>
+              <div style={{ fontSize: "11.5px" }}>
+                <strong>Tự động kế thừa cho người mới:</strong>
+                <br />
+                Mọi kỹ sư mới được tuyển vào nhóm này sẽ tự động nhận quyền hạn này ngay khi tài khoản được kích hoạt.
+              </div>
+            </div>
+          )}
+
+          <div className="admin-inspector-actions" style={{ marginTop: 14 }}>
             <button
               type="button"
               className="admin-btn danger"
