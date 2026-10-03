@@ -103,12 +103,16 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The next eligible unit is F05-A / T027, still NOT-STARTED / qualification NOT-RUN. Use
+The current unit is F05-A / T027: preflight IN_PROGRESS, qualification NOT-RUN. The user
+explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
+Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) authorizes only the
+clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
+Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
 Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
-Worker mode CODEX_ONLY. Preparation/path approval does not start T027 or the timer, authorize
-Gateway code, or extend F04 tooling authority to F05.
+Worker mode CODEX_ONLY. The subsequent preflight authorization does not authorize Gateway code,
+database/certificate/tunnel provisioning, build/qualification execution or inherited F04 tooling.
 Do not create/reuse another target, rerun the retained public database, DROP the review database
 or deploy the package for closure. Preserve private raw-log access limitation. Verifier remains
 NOT-RUN and is not an F04 acceptance blocker.
