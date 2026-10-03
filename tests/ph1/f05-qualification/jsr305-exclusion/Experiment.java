@@ -12,7 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 /** Exact, single-use offline qualification runner. No third-party Java dependency. */
 class Experiment {
-    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-01");
+    static final Path ROOT = Path.of("/home/phuclam/idea-f05a-20261003-37/jsr305-exclusion-02");
     static final Path PACKAGE = ROOT.resolve("tests/ph1/f05-qualification/jsr305-exclusion");
     static final Path CACHE = Path.of("/home/phuclam/.m2/repository");
     static final Path JDK = Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
