@@ -207,6 +207,52 @@ class OwnerOutcomeTest {
         }
     }
 
+    @Test void suppressedCommitTimeRefusalAuditCannotLeavePartialOwnerOrRefreshActivity() throws Exception {
+        var operator = fixture.accountAdministratorThroughRealHttp();
+        var admitted = fixture.signInSecondActorInSameOrganization();
+        var operation = UUID.randomUUID();
+        var correlation = "f04-d-refusal-audit-failure";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var activityBefore = sessionActivity(admitted);
+        fixture.advanceTime(java.time.Duration.ofSeconds(1));
+        var executor = Executors.newSingleThreadExecutor();
+        try (var barrier = ownerAdmissionBarrier(operation); var fault = suppressOnlyRefusalAudit(operation)) {
+            var attempt = executor.submit(() -> assertThrows(SQLException.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, correlation, SampleOwnerCommandService.BusinessDecision.ACCEPT))));
+            awaitWaiters(barrier, 73004992, operation, 1);
+            assertEquals("DISABLED", fixture.disableThroughIam(operator, admitted).status());
+            advisory(barrier, "pg_advisory_unlock", 73004992, operation.hashCode());
+            assertNotNull(attempt.get(8, TimeUnit.SECONDS));
+            assertCompanions(operation, 0, 0, 0);
+            assertUnchangedSecurityActivity(operation, admitted, activityBefore);
+            fixture.assertHttpSessionStatus(admitted, 401);
+            assertOperationUnlocked(operation);
+            System.out.println("F04_D_REFUSAL_AUDIT_FAULT=CONFIRMED_NON_COMMIT; OP=" + operation
+                    + "; ACTOR=" + admitted.expectedActorId() + "; ORG=" + admitted.expectedOrganizationId()
+                    + "; CORRELATION=" + correlation + "; COMPANIONS=0/0/0; OLD_HTTP=401; NO_FAILED_ROW=1");
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+            removeOwnerAdmissionBarrier();
+        }
+    }
+
+    private static AutoCloseable suppressOnlyRefusalAudit(UUID operation) throws Exception {
+        try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
+            statement.execute("CREATE FUNCTION f04_d_refusal_audit_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    + "IF NEW.operation_id='" + operation + "'::uuid AND NEW.outcome='REFUSED' THEN RETURN NULL; "
+                    + "END IF; RETURN NEW; END; $$");
+            statement.execute("CREATE TRIGGER f04_d_refusal_audit_fault BEFORE INSERT ON audit_evidence "
+                    + "FOR EACH ROW EXECUTE FUNCTION f04_d_refusal_audit_fault()");
+        }
+        return () -> {
+            try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
+                statement.execute("DROP TRIGGER f04_d_refusal_audit_fault ON audit_evidence");
+                statement.execute("DROP FUNCTION f04_d_refusal_audit_fault()");
+            }
+        };
+    }
+
     private static void assertUnchangedSecurityActivity(UUID operation, F04SessionFixture.SignedIn admitted,
             java.sql.Timestamp before) throws Exception {
         var after = sessionActivity(admitted);
