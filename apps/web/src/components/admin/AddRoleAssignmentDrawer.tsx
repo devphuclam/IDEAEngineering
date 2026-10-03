@@ -99,6 +99,13 @@ export function AddRoleAssignmentDrawer({
     setNewUsername("");
   };
 
+  const groupMembers = actors.filter(
+    (a) =>
+      a.department === selectedGroup.department ||
+      a.department === selectedGroup.name
+  );
+  const targetProject = projects.find((p) => selectedScope.includes(p.code));
+
   const handleFinish = () => {
     if (principalType === "group") {
       onSubmit({
@@ -132,7 +139,7 @@ export function AddRoleAssignmentDrawer({
         <div className="admin-drawer-head">
           <div>
             <h2 className="admin-drawer-title">Thêm phân quyền vai trò (Add role assignment)</h2>
-            <small style={{ color: "#64748b" }}>Theo quy trình phân quyền 3 bước chuẩn Microsoft Azure</small>
+            <small style={{ color: "#64748b" }}>Quy trình phân quyền 4 bước chuẩn Microsoft Azure</small>
           </div>
           <button
             type="button"
@@ -531,57 +538,173 @@ export function AddRoleAssignmentDrawer({
           )}
 
           {step === 4 && (
-            <div>
-              <h3 style={{ margin: "0 0 10px", fontSize: "14px", color: "var(--admin-navy)" }}>
-                Bước 4: Xem xét &amp; Xác nhận phân quyền ("Review + Assign")
-              </h3>
-              <p style={{ margin: "0 0 16px", color: "#64748b", fontSize: "12px" }}>
-                Kiểm tra lại toàn bộ thông tin theo chuẩn Microsoft Azure trước khi kích hoạt phân quyền.
-              </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div>
+                <h3 style={{ margin: "0 0 6px", fontSize: "14px", color: "var(--admin-navy)" }}>
+                  Bước 4: Xem xét &amp; Xác nhận phân quyền ("Review + Assign")
+                </h3>
+                <p style={{ margin: "0 0 10px", color: "#64748b", fontSize: "12px" }}>
+                  Kiểm tra chi tiết đối tượng nhân sự được phân công, các quyền kỹ thuật được cấp và phạm vi dự án áp dụng.
+                </p>
+              </div>
 
-              <div style={{ background: "#f8fafc", border: "1px solid var(--admin-line)", borderRadius: 4, padding: 14 }}>
-                <div className="admin-prop-row">
-                  <span className="admin-prop-label">Vai trò cần cấp:</span>
-                  <span className="admin-prop-val" style={{ color: "var(--admin-blue)", fontWeight: 700 }}>
-                    {selectedRole.name}
+              {/* Card 1: AI ĐƯỢC PHÂN CÔNG (WHO) */}
+              <div style={{ background: "#ffffff", border: "1px solid var(--admin-line)", borderRadius: 6, padding: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b" }}>
+                    1. Nhân sự được phân công (Who gets access)
                   </span>
+                  {principalType === "group" ? (
+                    <span className="admin-entity-badge group">👥 Nhóm kỹ thuật (Group)</span>
+                  ) : (
+                    <span className="admin-entity-badge user">👤 Kỹ sư cá nhân (User)</span>
+                  )}
                 </div>
-                <div className="admin-prop-row">
-                  <span className="admin-prop-label">Loại đối tượng:</span>
-                  <span className="admin-prop-val">
-                    {principalType === "group" ? (
-                      <span className="admin-entity-badge group">👥 Nhóm kỹ thuật (Security Group)</span>
-                    ) : (
-                      <span className="admin-entity-badge user">👤 Kỹ sư cá nhân (User)</span>
+
+                {principalType === "group" ? (
+                  <div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                      <strong style={{ fontSize: "14px", color: "var(--admin-navy)" }}>
+                        {selectedGroup.name}
+                      </strong>
+                      <span style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "var(--font-mono)" }}>
+                        [{selectedGroup.code}]
+                      </span>
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#475569", margin: "4px 0 10px" }}>
+                      Thuộc: <strong>{selectedGroup.department}</strong> &bull; Quy mô: <strong>{selectedGroup.memberCount} kỹ sư</strong>
+                    </div>
+
+                    <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 4, padding: "10px 12px" }}>
+                      <div style={{ fontSize: "11.5px", fontWeight: 600, color: "#334155", marginBottom: 6 }}>
+                        Danh sách kỹ sư cụ thể trong nhóm này ({groupMembers.length} nhân sự):
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        {groupMembers.length > 0 ? (
+                          groupMembers.map((member) => (
+                            <div
+                              key={member.id}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                fontSize: "12px",
+                                background: "#ffffff",
+                                padding: "6px 10px",
+                                border: "1px solid #cbd5e1",
+                                borderRadius: 3,
+                              }}
+                            >
+                              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                <span style={{ color: "var(--admin-blue)" }}>👤</span>
+                                <strong style={{ color: "#1e293b" }}>{member.fullName}</strong>
+                                <span style={{ color: "#64748b", fontSize: "11px" }}>@{member.username}</span>
+                              </div>
+                              <span className={`admin-status-pill ${member.status}`}>
+                                {member.status === "active" ? "Hoạt động" : "Tạm khóa"}
+                              </span>
+                            </div>
+                          ))
+                        ) : (
+                          <div style={{ fontSize: "11.5px", color: "#64748b", fontStyle: "italic" }}>
+                            Chưa có kỹ sư nào được gán trực tiếp vào phòng ban này trong cơ sở dữ liệu.
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ marginTop: 8, fontSize: "11px", color: "#1e40af", lineHeight: 1.4 }}>
+                        💡 <em>Cơ chế Microsoft Entra ID:</em> Mọi kỹ sư mới được tuyển vào nhóm này sau này sẽ tự động nhận quyền trên dự án mà không cần cấp quyền thủ công.
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#f8fafc", padding: "10px 12px", borderRadius: 4, border: "1px solid #e2e8f0" }}>
+                    <span style={{ fontSize: "20px" }}>👤</span>
+                    <div>
+                      <strong style={{ fontSize: "13.5px", color: "var(--admin-navy)" }}>{selectedActor.fullName}</strong>
+                      <div style={{ fontSize: "11.5px", color: "#64748b" }}>
+                        @{selectedActor.username} &bull; {selectedActor.email}
+                      </div>
+                      <div style={{ fontSize: "11.5px", color: "#475569", marginTop: 2 }}>
+                        Phòng ban: <strong>{selectedActor.department}</strong>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Card 2: PHẠM VI DỰ ÁN (WHERE) */}
+              <div style={{ background: "#ffffff", border: "1px solid var(--admin-line)", borderRadius: 6, padding: 14 }}>
+                <span style={{ display: "block", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b", marginBottom: 8 }}>
+                  2. Phạm vi dự án áp dụng (Where / Scope)
+                </span>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                  <span style={{ fontSize: "18px" }}>📁</span>
+                  <div>
+                    <strong style={{ fontSize: "13.5px", color: "var(--admin-navy)" }}>
+                      {selectedScope} {targetProject ? `— ${targetProject.name}` : ""}
+                    </strong>
+                    {targetProject && (
+                      <div style={{ fontSize: "11.5px", color: "#64748b", marginTop: 2 }}>
+                        Trưởng dự án: <strong>{targetProject.lead}</strong> &bull; Kho lưu trữ: <strong>{targetProject.vault}</strong>
+                      </div>
                     )}
-                  </span>
-                </div>
-                <div className="admin-prop-row">
-                  <span className="admin-prop-label">Đối tượng thụ hưởng:</span>
-                  <span className="admin-prop-val" style={{ fontWeight: 600 }}>
-                    {principalType === "group"
-                      ? `${selectedGroup.name} [${selectedGroup.code}]`
-                      : `${selectedActor.fullName} (@${selectedActor.username})`}
-                  </span>
-                </div>
-                <div className="admin-prop-row">
-                  <span className="admin-prop-label">Phạm vi Scope:</span>
-                  <span className="admin-prop-val" style={{ fontFamily: "var(--font-mono)" }}>
-                    {selectedScope}
-                  </span>
-                </div>
-                <div className="admin-prop-row">
-                  <span className="admin-prop-label">Cơ chế áp dụng:</span>
-                  <span className="admin-prop-val">
-                    {principalType === "group"
-                      ? `Kế thừa tự động cho ${selectedGroup.memberCount} thành viên hiện tại và mọi kỹ sư mới gia nhập phòng ban`
-                      : "Gán trực tiếp cho tài khoản cá nhân"}
-                  </span>
+                    {!targetProject && (
+                      <div style={{ fontSize: "11.5px", color: "#64748b", marginTop: 2 }}>
+                        Quyền hạn có hiệu lực trên toàn bộ kho lưu trữ icVault của các dự án máy thuộc Tập đoàn IDEA.
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <div style={{ marginTop: 16, padding: 12, background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 4, color: "#065f46", fontSize: "12px" }}>
-                ✓ Phân quyền này sẽ có hiệu lực ngay lập tức. Hệ thống sẽ ghi nhận lịch sử vào Audit Trail tuân thủ chuẩn kiểm toán bảo mật.
+              {/* Card 3: VÔ QUYỀN GÌ CỤ THỂ (WHAT) */}
+              <div style={{ background: "#ffffff", border: "1px solid var(--admin-line)", borderRadius: 6, padding: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748b" }}>
+                    3. Quyền hạn kỹ thuật được cấp (What permissions)
+                  </span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--admin-blue)" }}>
+                    {selectedRole.name}
+                  </span>
+                </div>
+
+                <p style={{ margin: "0 0 10px", fontSize: "12px", color: "#475569" }}>
+                  {selectedRole.description}
+                </p>
+
+                <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 4, padding: "8px 10px" }}>
+                  <div style={{ fontSize: "11.5px", fontWeight: 600, color: "#334155", marginBottom: 6 }}>
+                    Các hành động kỹ thuật được phép thực thi ({selectedRole.permissions.length} quyền):
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                    {selectedRole.permissions.map((perm, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          fontSize: "12px",
+                          background: "#ffffff",
+                          padding: "6px 10px",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: 3,
+                        }}
+                      >
+                        <span style={{ color: "#059669", fontWeight: 700 }}>✓</span>
+                        <strong style={{ fontFamily: "var(--font-mono)", color: "#166fbd", fontSize: "11.5px" }}>
+                          {perm.action}
+                        </strong>
+                        <span style={{ color: "#334155" }}>&mdash; {perm.description}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Audit Confirmation Box */}
+              <div style={{ padding: 12, background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 4, color: "#065f46", fontSize: "12px" }}>
+                ✓ <strong>Hiệu lực tức thì:</strong> Sau khi bấm xác nhận, nhân sự sẽ nhận ngay các quyền trên và toàn bộ thao tác sẽ được ghi nhận vào Audit Trail tuân thủ chuẩn an toàn thông tin.
               </div>
             </div>
           )}
