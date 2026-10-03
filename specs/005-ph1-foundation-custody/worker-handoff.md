@@ -159,17 +159,30 @@ metadata-only dependency-starter JARs from the38-artifact collection. Read-only 
 verified all32 nested hashes and the omitted starters' manifest types/zero class entries.
 The full frozen package oracle remains FAIL; Boot and final input rehash NOT-RUN;
 graph repair NOT-QUALIFIED. Preserve roots01–04.
-Next: review the exact38-collection→32-payload reconciliation and fresh root05 proposal
-in the root04 record. No dynamic oracle repair or further execution followed this STOP.
+The user accepted root04 and authorized the exact38 collection /32-payload projection
+with six pinned metadata-only starter omissions and a fresh root05.
+Source `3494921bc7cf2768d0d99c26279b0d8d0e22c0e2` passed every bounded stage;
+[root05 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root05-results.md) records
+JSR305 GRAPH REPAIR = QUALIFIED. Local/remote15/15, pinned preflight, isolated99JAR/242POM,
+actual115-row graph/four realms, exact32 package/loader/provider guards, non-web Boot
+UP/CLOSED and final original-input rehash all PASS. Collection remains38; only the six
+exact approved starters are omitted from payload. Qualified JAR SHA:
+`9722b29be2395ed4a586a1597a2109fb0569c623f6e1746aa1193ba8cc327e73`.
+Public normalized graph/package receipts are linked from the result; private raw-log
+review limitation remains. Preserve roots01–05 and historical rights/STOP evidence.
+Next: Project Reviewer reviews the exact root05 executed-source result. No additional
+remaining-T027 qualification or Gateway implementation authority is inferred from it.
 The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
-Remaining T027 stays NOT-RUN and Q01 stays PASS. No runtime success is inferred.
+Remaining T027 stays NOT-RUN and Q01 stays PASS. No other runtime success is inferred.
 Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
 Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
-Worker mode CODEX_ONLY. The subsequent preflight authorization does not authorize Gateway code,
-database/certificate/tunnel provisioning, build/qualification execution or inherited F04 tooling.
+Worker mode CODEX_ONLY. Original preflight authority alone did not authorize execution;
+the bounded successor experiment authority and result are recorded above. Gateway code,
+database/certificate/tunnel provisioning, other qualification execution and inherited F04
+tooling still require their applicable authority.
 Do not create/reuse another target, rerun the retained public database, DROP the review database
 or deploy the package for closure. Preserve private raw-log access limitation. Verifier remains
 NOT-RUN and is not an F04 acceptance blocker.
