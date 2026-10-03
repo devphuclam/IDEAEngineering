@@ -1,3 +1,5 @@
+import { formatDisplayId } from "../../utils/identity";
+
 export interface TopbarProps {
   actorId: string;
   busy: boolean;
@@ -11,6 +13,8 @@ export function Topbar({
   logoSrc = "/logo-idea.png",
   onLogout,
 }: TopbarProps) {
+  const displayId = formatDisplayId(actorId);
+
   return (
     <nav className="topbar-container" aria-label="Thanh điều hướng chính">
       <div className="topbar-brand">
@@ -23,15 +27,25 @@ export function Topbar({
       </div>
 
       <div className="topbar-actions">
-        <div className="actor-pill">
-          <div className="pulse-dot" />
-          <span>
+        <div className="actor-pill" title={`Kỹ sư phụ trách: ${actorId}`}>
+          <div className="pulse-dot" aria-hidden="true" />
+          <svg
+            className="actor-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span className="actor-label">
             Kỹ sư:{" "}
-            <strong
-              data-testid="session-actor"
-              style={{ fontFamily: "var(--font-mono)", color: "#ffffff" }}
-            >
-              {actorId}
+            <strong data-testid="session-actor" className="actor-code">
+              {displayId}
             </strong>
           </span>
         </div>

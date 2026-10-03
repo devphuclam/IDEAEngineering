@@ -191,7 +191,10 @@ export function App() {
         setBannerType("danger");
         break;
       case "authenticated":
-        setSession({ actorId: "engineer.dev", accountId: "acc_019842a" });
+        setSession({
+          actorId: "99fc203b-d303-4d3b-9a26-bdce8d4f725b",
+          accountId: "872c524d-2ce6-4715-931a-c15785876baf",
+        });
         setBusy(false);
         break;
     }

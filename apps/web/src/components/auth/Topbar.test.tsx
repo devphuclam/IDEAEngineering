@@ -29,4 +29,18 @@ describe("Topbar component", () => {
 
     expect(html).toContain("disabled");
   });
+
+  it("formats long UUID actor IDs cleanly and preserves full ID in tooltip title", () => {
+    const rawUuid = "99fc203b-d303-4d3b-9a26-bdce8d4f725b";
+    const html = renderToStaticMarkup(
+      createElement(Topbar, {
+        actorId: rawUuid,
+        busy: false,
+        onLogout: () => {},
+      })
+    );
+
+    expect(html).toContain("99fc203b...725b");
+    expect(html).toContain(rawUuid);
+  });
 });
