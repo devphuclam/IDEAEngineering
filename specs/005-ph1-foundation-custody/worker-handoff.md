@@ -59,7 +59,7 @@ the historical omission is preserved, not retroactively approved.
 Current implementation Work Item: [#31](https://github.com/devphuclam/IDEAEngineering/issues/31),
 OPEN; branch `codex/f04-owner-foundation`, base `53c1e174cb0410658752ee48ee97ac1dce05ba6b`.
 Worktree: `C:/Users/TD-999/.codex/worktrees/f04-design-baseline/IDEAEngineering` (reused isolated checkout).
-Current exact executed source: `4b4b494cbf2a45f8bd9c666c9bc09c7f362d74dd`.
+Current exact executed source: `f817d8fb4a910185204ed37bd01b78070832196b`.
 Changed seams: additive V8, schema/predecessor fixtures, caller-Connection Audit append and scoped
 offline runner, plus named real-HTTP principal fixture, internal sample owner, caller-Connection
 event append and IAM eligibility adapter. No product route/Permission/Role or F03 semantic change.
@@ -70,8 +70,8 @@ Codex implemented Audit after its focused RED; Gemini was not dispatched.
 
 The exact offline build-admission preflight is enforced by the scoped runner. T023-A/T025-A
 schema, T024-A Audit, T023-B/minimum T025-B, T023-C/T025-C and T023-D/T025-D execution are partially recorded in
-[F04 outcome results](evidence/F04-outcome-results.md) v0.7: owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
-predecessor 1/1 and Audit 7/7 = 36/36 at `73abb35b32f5930004add0336f679771eeb77a1d`. All 62 C-run schema cleanup receipts
+[F04 outcome results](evidence/F04-outcome-results.md) v0.8: owner 21/21 (B 3 + C 13 + D 5), schema 7/7,
+predecessor 1/1 and Audit 7/7 = 36/36 at `f817d8fb4a910185204ed37bd01b78070832196b`. All 62 C-run schema cleanup receipts
 are COMPLETE; [exact receipt index](evidence/F04-C-execution-receipts.json) retains both actual
 REDs and each four-suite regression. The separate [D receipt index](evidence/F04-D-execution-receipts.json)
 retains 24 passing suite runs, one expected RED and one interrupted non-PASS attempt; all 26
@@ -85,11 +85,14 @@ For this checkpoint, run the scoped Bash runner separately with `F04SchemaTest`,
 `F04PredecessorMigrationTest`, `AuditEvidenceRepositoryTest` or `OwnerOutcomeTest` from the exact archive; its approved
 Maven command is offline `-o -B -Dtest=<selector> test`. Use only the controlled test DB and fresh
 tagged f04 schema. Read the evidence for commands/hashes/limits before rerunning.
-B/C have external acceptance for continuation. D has executed real IAM disable and HTTP logout
+B/C/D have external acceptance for continuation. D has executed real IAM disable and HTTP logout
 security-first/reverse orderings, atomic refusal handoff, old-proof refusal and re-enable/fresh-session
-recovery. This task stops after publishing D for external review. The next unit is T026 only
-after that review: broader affected F03/data/health regression and whole-contract evidence/acceptance;
-those are NOT-RUN. Continue using the Server-established ActorContext and admitted exact tooling.
+recovery. T026 permitted regression and a whole-contract matrix are now in evidence sections 29–34
+and the separate T026 receipt index. Current-chain expectations include V8; migrations and
+historical evidence are unchanged. Fresh-public V1–V8/package qualification is AUTHORITY REQUIRED.
+Next action: obtain only the exact new-DB authority in section 34, execute the remaining checks,
+then submit whole F04 for acceptance. Do not reuse retained public or infer package PASS from
+schema tests. Continue using the Server-established ActorContext and admitted exact tooling.
 Keep #31/F04 open, PR #32
 Draft, T023–T026 unchecked and verifier NOT-RUN; no merge or F05.
 
@@ -103,7 +106,7 @@ instruction to dispatch an implementation worker during documentation closure.
 Approved reader rule belongs only to the synthetic sample: currently eligible originating Actor,
 including a fresh session. Immutable original Actor is provenance, not universal read authority.
 No product API/Permission, mutable demo entity, generic registry/payload or dispatcher is planned.
-Use proposed V8 only after confirming the next free migration number; preserve V1–V7 and all
+V8 is implemented and schema-qualified; preserve V1–V8 and all
 historical F03 evidence. Keep rollback, terminal business refusal and uncertainty distinct.
 
 ## Accepted F03-B receipt and historical checkpoint guidance
