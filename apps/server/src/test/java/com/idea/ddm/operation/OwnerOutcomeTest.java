@@ -16,10 +16,85 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-/** Approved T023-B seam: actual HTTP authentication -> internal owner -> retained SQL witnesses. */
+/** Approved F04 seam: actual HTTP authentication -> internal owner -> retained SQL witnesses. */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OwnerOutcomeTest {
     private F04SessionFixture fixture;
+
+    @Test void committedDisableBeforeOwnerCommitRetainsAttributableRefusal() throws Exception {
+        var operator = fixture.accountAdministratorThroughRealHttp();
+        var admitted = fixture.signInSecondActorInSameOrganization();
+        var operation = UUID.randomUUID();
+        var correlation = "f04-d-disable-first";
+        var owner = new SampleOwnerCommandService(fixture.appDataSource(), new OwnerSessionEligibility(fixture.sessions()));
+        var activityBefore = sessionActivity(admitted);
+        fixture.advanceTime(java.time.Duration.ofSeconds(1));
+        var executor = Executors.newSingleThreadExecutor();
+        try (var barrier = ownerAdmissionBarrier(operation)) {
+            var attempt = executor.submit(() -> assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, correlation, SampleOwnerCommandService.BusinessDecision.ACCEPT))));
+            awaitWaiters(barrier, 73004992, operation, 1); // Actual INSERT occurs after eligibility admission, before IAM coordination.
+            assertEquals("DISABLED", fixture.disableThroughIam(operator, admitted).status());
+            advisory(barrier, "pg_advisory_unlock", 73004992, operation.hashCode());
+            assertEquals("INELIGIBLE_SESSION", attempt.get(8, TimeUnit.SECONDS).reason());
+            assertTerminalSecurityRefusal(operation, admitted, correlation);
+            assertEquals(activityBefore, sessionActivity(admitted), "Security refusal is not eligible activity");
+            fixture.assertHttpSessionStatus(admitted, 401);
+            assertThrows(IdentityRefusal.class, () -> owner.execute(admitted.context(),
+                    new SampleOwnerCommandService.Command(operation, "f04-d-old-session", SampleOwnerCommandService.BusinessDecision.ACCEPT)));
+            assertOperationUnlocked(operation);
+        } finally {
+            executor.shutdownNow();
+            assertTrue(executor.awaitTermination(10, TimeUnit.SECONDS));
+            removeOwnerAdmissionBarrier();
+        }
+    }
+
+    private static Connection ownerAdmissionBarrier(UUID operation) throws Exception {
+        var barrier = F04SchemaTest.open("migration");
+        try (var statement = barrier.createStatement()) {
+            statement.execute("CREATE FUNCTION f04_d_admitted() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    + "IF NEW.operation_id='" + operation + "'::uuid AND NEW.outcome='ACCEPTED' THEN "
+                    + "PERFORM pg_advisory_xact_lock(73004992," + operation.hashCode() + "); END IF; RETURN NEW; END; $$");
+            statement.execute("CREATE TRIGGER f04_d_admitted BEFORE INSERT ON sample_owner_operation "
+                    + "FOR EACH ROW EXECUTE FUNCTION f04_d_admitted()");
+            advisory(barrier, "pg_advisory_lock", 73004992, operation.hashCode());
+            return barrier;
+        } catch (Exception exception) { barrier.close(); throw exception; }
+    }
+
+    private static void removeOwnerAdmissionBarrier() throws Exception {
+        try (var connection = F04SchemaTest.open("migration"); var statement = connection.createStatement()) {
+            statement.execute("DROP TRIGGER IF EXISTS f04_d_admitted ON sample_owner_operation");
+            statement.execute("DROP FUNCTION IF EXISTS f04_d_admitted()");
+        }
+    }
+
+    private static void assertTerminalSecurityRefusal(UUID operation, F04SessionFixture.SignedIn admitted,
+            String correlation) throws Exception {
+        assertCompanions(operation, 1, 1, 0); // Independent committed-state oracle, not an exception-only rollback claim.
+        try (var connection = F04SchemaTest.open("app"); var query = connection.prepareStatement(
+                "SELECT o.actor_id,o.organization_id,o.correlation_id,o.outcome,o.reason_code,"
+                + "a.actor_id,a.correlation_id,a.outcome,a.reason_code FROM sample_owner_operation o "
+                + "JOIN audit_evidence a USING(operation_id) WHERE o.operation_id=?")) {
+            query.setObject(1, operation);
+            try (var row = query.executeQuery()) {
+                assertTrue(row.next());
+                assertEquals(admitted.expectedActorId(), row.getObject(1, UUID.class));
+                assertEquals(admitted.expectedOrganizationId(), row.getObject(2, UUID.class));
+                assertEquals(correlation, row.getString(3));
+                assertEquals("REFUSED", row.getString(4));
+                assertEquals("INELIGIBLE_SESSION", row.getString(5));
+                assertEquals(admitted.expectedActorId(), row.getObject(6, UUID.class));
+                assertEquals(correlation, row.getString(7));
+                assertEquals("REFUSED", row.getString(8));
+                assertEquals("INELIGIBLE_SESSION", row.getString(9));
+                assertFalse(row.next());
+            }
+        }
+        System.out.println("F04_D_SECURITY_REFUSAL=PASS; OP=" + operation + "; ACTOR=" + admitted.expectedActorId()
+                + "; ORG=" + admitted.expectedOrganizationId() + "; CORRELATION=" + correlation + "; COMPANIONS=1/1/0");
+    }
 
     @BeforeAll void prepareOnlyTheRunsOwnedSchemaAndServer() throws Exception {
         F04SchemaTest.createOnlyThisRunsMigratorOwnedSchema("latest");

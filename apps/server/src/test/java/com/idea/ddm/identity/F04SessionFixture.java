@@ -41,6 +41,9 @@ public final class F04SessionFixture implements AutoCloseable {
     private final org.springframework.context.ConfigurableApplicationContext server;
     private final AtomicReference<ActorContext> captured = new AtomicReference<>();
     private final DataSource app;
+    private final java.util.Map<UUID, BrowserSession> browsers = new java.util.concurrent.ConcurrentHashMap<>();
+    private final TestClock clock = new TestClock();
+    private boolean accountAdministratorAssigned;
     private final UUID organizationId = UUID.randomUUID();
     private final AdministratorBootstrap.Result identity;
     private final String login = "f04.synthetic." + UUID.randomUUID();
@@ -55,8 +58,11 @@ public final class F04SessionFixture implements AutoCloseable {
                 "F04 Synthetic Actor", login, syntheticCredential);
         assertEquals(AdministratorBootstrap.State.INITIALIZED, identity.state());
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
-                .initializers(context -> context.getBeanFactory().registerSingleton("f04TestPrincipalCapture",
-                        new PrincipalCapture(captured, () -> context.getBean(SessionService.class))))
+                .initializers(context -> {
+                    context.getBeanFactory().registerSingleton("f04TestClock", clock);
+                    context.getBeanFactory().registerSingleton("f04TestPrincipalCapture",
+                            new PrincipalCapture(captured, () -> context.getBean(SessionService.class)));
+                })
                 .run("--server.address=127.0.0.1", "--server.port=0",
                         "--spring.datasource.url=" + F04SchemaTest.url(),
                         "--spring.datasource.username=idea_ddm_app", "--spring.flyway.enabled=false",
@@ -68,6 +74,44 @@ public final class F04SessionFixture implements AutoCloseable {
     public DataSource appDataSource() { return app; }
     public DataSource pooledAppDataSource() { return server.getBean(DataSource.class); }
     public SessionService sessions() { return server.getBean(SessionService.class); }
+
+    public void advanceTime(java.time.Duration duration) { clock.advance(duration); }
+
+    public SignedIn accountAdministratorThroughRealHttp() throws Exception {
+        var operator = signInThroughRealHttp();
+        if (!accountAdministratorAssigned) {
+            new RoleAssignmentAdministration(app).assignAccountAdministrator(operator.context(), UUID.randomUUID(),
+                    operator.expectedActorId(), UUID.fromString("9d80f77e-85a6-4c12-a72d-8ef6b7e0a002"),
+                    organizationId, "Synthetic F04 fixture: existing Account Administrator v1 assignment");
+            accountAdministratorAssigned = true;
+        }
+        return operator;
+    }
+
+    public IdentityAdministration.Account disableThroughIam(SignedIn operator, SignedIn target) {
+        var administration = new IdentityAdministration(app, sessions());
+        return administration.disable(operator.context(), UUID.randomUUID(), organizationId,
+                target.expectedAccountId(), administration.inspect(target.expectedAccountId()).securityVersion(),
+                "Synthetic F04 security-first race");
+    }
+
+    public IdentityAdministration.Account reenableThroughIam(SignedIn operator, SignedIn target) {
+        var administration = new IdentityAdministration(app, sessions());
+        return administration.reenable(operator.context(), UUID.randomUUID(), organizationId,
+                target.expectedAccountId(), administration.inspect(target.expectedAccountId()).securityVersion(),
+                "Synthetic F04 recovery qualification");
+    }
+
+    public SignedIn freshSignIn(SignedIn previous) throws Exception {
+        var browser = browsers.get(previous.sessionReference());
+        assertNotNull(browser);
+        return signInThroughRealHttp(browser.login(), browser.credential(),
+                previous.expectedActorId(), previous.expectedAccountId());
+    }
+
+    public void assertHttpSessionStatus(SignedIn signedIn, int expected) throws Exception {
+        assertEquals(expected, get(browsers.get(signedIn.sessionReference()).client(), "/api/v1/identity/session").statusCode());
+    }
 
     public SignedIn signInThroughRealHttp() throws Exception {
         return signInThroughRealHttp(login, syntheticCredential, identity.actorId(), identity.accountId());
@@ -126,9 +170,11 @@ public final class F04SessionFixture implements AutoCloseable {
             assertEquals(actor, context.actorId());
             assertNotEquals(forgedActor, context.actorId(), "Client ActorId is not authority");
             assertNotNull(context.sessionId(), "A raw ActorId fixture cannot supply the verified session reference");
+            browsers.put(context.sessionId(), new BrowserSession(client, cookies, selectedLogin, credential));
             return new SignedIn(context, actor, account, organizationId);
-        } finally {
+        } catch (Exception | AssertionError exception) {
             cookies.getCookieStore().removeAll();
+            throw exception;
         }
     }
 
@@ -148,6 +194,18 @@ public final class F04SessionFixture implements AutoCloseable {
     @Override public void close() {
         server.close(); // Stop Server/pool before the outer runner retains reports and drops its schema.
         captured.set(null);
+        browsers.values().forEach(browser -> browser.cookies().getCookieStore().removeAll());
+        browsers.clear(); // Credentials/browser proofs remain in private test memory only.
+    }
+
+    private record BrowserSession(HttpClient client, CookieManager cookies, String login, String credential) {}
+
+    private static final class TestClock extends java.time.Clock {
+        private java.time.Instant now = java.time.Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        synchronized void advance(java.time.Duration duration) { now = now.plus(duration); }
+        @Override public synchronized java.time.Instant instant() { return now; }
+        @Override public java.time.ZoneId getZone() { return java.time.ZoneOffset.UTC; }
+        @Override public java.time.Clock withZone(java.time.ZoneId zone) { return this; }
     }
 
     private static final class PrincipalCapture extends OncePerRequestFilter {
