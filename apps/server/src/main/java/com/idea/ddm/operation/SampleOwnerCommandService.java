@@ -4,6 +4,7 @@ import com.idea.ddm.audit.AuditEvidenceRepository;
 import com.idea.ddm.event.CommittedEventStore;
 import com.idea.ddm.identity.ActorContext;
 import com.idea.ddm.identity.OwnerSessionEligibility;
+import com.idea.ddm.identity.IdentityRefusal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -65,15 +66,26 @@ public final class SampleOwnerCommandService {
                 var result = new Result(command.operationId(), actor.actorId(), actor.organizationId(),
                         command.correlationId(), accepted ? Outcome.ACCEPTED : Outcome.REFUSED,
                         accepted ? null : "SYNTHETIC_BUSINESS_REFUSAL", eventId);
-                appendOwnerResult(connection, result);
-                AuditEvidenceRepository.append(connection, new AuditEvidenceRepository.Entry(UUID.randomUUID(),
-                        result.operationId(), result.actorId(), "sample.command", "SampleOwnerOperation",
-                        result.operationId().toString(), result.outcome().name(), result.reasonCode(), result.correlationId()));
+                appendOutcomeAndAudit(connection, result);
                 if (accepted) {
                     CommittedEventStore.append(connection, new CommittedEventStore.Entry(result.eventId(), result.operationId(),
                             "PH1_SAMPLE_OWNER", result.organizationId(), "OPERATION_ACCEPTED", 1, result.actorId(), result.correlationId()));
                 }
-                eligibility.coordinateCommit(connection, context, actor, accepted);
+                try {
+                    eligibility.coordinateCommit(connection, context, actor, accepted);
+                } catch (IdentityRefusal refusal) {
+                    // Already admitted command: discard ACCEPT candidate, retain original attribution and operation lock.
+                    connection.rollback();
+                    var canonical = committedResult(connection, command.operationId());
+                    if (canonical == null) {
+                        var refused = new Result(command.operationId(), actor.actorId(), actor.organizationId(),
+                                command.correlationId(), Outcome.REFUSED, refusal.reason(), null);
+                        appendOutcomeAndAudit(connection, refused);
+                        // Evidence is not a successful protected action: no renewed eligibility/activity or event.
+                        connection.commit();
+                    }
+                    throw refusal; // Invalidated caller cannot read the terminal result, including on replay.
+                }
                 connection.commit();
                 return result; // Success is not returned before the owner commit completes.
             } catch (SQLException | RuntimeException exception) {
@@ -160,6 +172,13 @@ public final class SampleOwnerCommandService {
             // Synchronous physical close is not logical pool-return; also required if abort itself fails.
             try { physical.close(); } catch (SQLException close) { failure.addSuppressed(close); }
         }
+    }
+
+    private static void appendOutcomeAndAudit(Connection connection, Result result) throws SQLException {
+        appendOwnerResult(connection, result);
+        AuditEvidenceRepository.append(connection, new AuditEvidenceRepository.Entry(UUID.randomUUID(),
+                result.operationId(), result.actorId(), "sample.command", "SampleOwnerOperation",
+                result.operationId().toString(), result.outcome().name(), result.reasonCode(), result.correlationId()));
     }
 
     private static void appendOwnerResult(Connection connection, Result result) throws SQLException {
