@@ -3,7 +3,7 @@
 | Control | Value |
 |---|---|
 | Stable ID / class | `IE-RES-F05A-Q02-MAVEN-REALM-20261003` / bounded execution-readiness research record |
-| Version / status | `0.4 / Draft` |
+| Version / status | `0.5 / Draft` |
 | Product normativity / process instruction | `INFORMATIVE / NOT-APPLICABLE`; creates no product requirement or execution authorization |
 | Owner / author / worker mode | Project Reviewer Nguyễn Huỳnh Phúc Lâm / Codex / `CODEX_ONLY` |
 | Reviewer / acceptance authority | Project Reviewer; review and acceptance `NOT-RUN` |
@@ -482,3 +482,119 @@ Its standard-library ZIP/XML reads served this read-only inspection only. Python
 license qualification follows from inspecting files with it. The same distinction applies
 to `javap` disassembly. No host files were written, Maven/plugin code executed, package
 network access initiated, SDK/package installed, timer/verifier run, commit or push performed.
+
+
+## 10. Evidence-only rights repair and remaining decision gates (successor 0.5)
+
+This bounded successor closes metadata/evidence gaps in §9; it does not replace the primary
+worktree's v0.4 graph correction. Current parent evidence at `4ef16ffe` is Boot **39**, application
+**38**, Resources **9**, Compiler **14**, Jar **16**. The parent's corrected graph hash is
+`f7eddbca7c6b102d3fc6778573a7fc9b05e5e8f046f06b5e6e75a93c9b900257`.
+The original worker's Boot32 draft was superseded by the current §8 Boot39 correction;
+this rights-only successor preserves that correction and does not reintroduce its old count.
+No new effective-model or resolver execution was performed here.
+
+### 10.1 Exact distribution provenance and repaired coordinates
+
+The installed distribution's root `M/LICENSE` explicitly maps its third-party paths to
+coordinates and adjacent legal files; SHA-256
+`f414d4d8d468fb5bfd42bb8157c8bdca72255264e13060fb4ce2669b960fe12b`.
+Root `M/NOTICE`, SHA-256
+`9739dd84556b9458e60c049a24f4c78f3146b0d57cddaf5b4fbfb2f71da259eb`,
+was read in full and must be retained. Its Utils 3.2.1 and Sisu 0.3.5 headings are stale
+relative to installed 3.6.1 and 1.0.0; those headings do not override installed identity or
+actual embedded/adjacent terms. The distribution mapping and actual legal files settle ordinary
+tool-component rights evidence; a separate upstream audit of every filename is not required
+merely because it lacks an embedded POM. This is not independent release authentication.
+
+`lib/aopalliance-1.0.jar` is now identified as `aopalliance:aopalliance:1.0` by the exact
+distribution path/GAV mapping. The JAR contains nine expected `org/aopalliance` classes;
+its minimal manifest has no GAV. Its SHA-256 remains
+`0addec670fedcd3f113c5c8091d783280d23f75e3acb841b61a9cdb079376a08`.
+Adjacent `lib/aopalliance.license` contains the complete two-word text `Public Domain`,
+SHA-256 `f6960be1b71d602352d7d9de76a564f54f3dab550b23fa5674049f842116ca55`.
+The [AOP Alliance owner page](https://aopalliance.sourceforge.net/) explicitly declares all
+its supplied source code public domain. Combined with Apache's exact release mapping, this
+repairs the missing rights/provenance evidence for unchanged internal tooling; it is not a
+claim of a separate SPDX license identifier or a commercial-distribution legal opinion.
+
+`lib/guice-5.1.0-classes.jar` is `com.google.inject:guice:5.1.0`, type `jar`, classifier
+`classes`, not the unclassified standard JAR. Its SHA-256 remains
+`142ad4475e19524d2fe3ac995b3f7cbc962fc726f2edb9dbdccc61feab9b2bf9`.
+The [exact Maven release parent POM](https://github.com/apache/maven/blob/maven-3.9.16/pom.xml)
+sets Guice 5.1.0 and manages that classifier. Installed Core and Embedder embedded POMs declare
+the same classifier; their `META-INF/maven/org.apache.maven/{maven-core,maven-embedder}/pom.xml`
+entry hashes are respectively
+`186f17628c5235d03e34c593122d05fdc1be9694440a54d8213b3f957d6379a4` and
+`b3fe6f3e04ed4e4f5dd2fcf58359d3c1c9da4e5e877a8e916b620e97f8913f30`.
+The Guice manifest identifies Google, `com.google.inject`, version 5.1.0 and Apache-2.0;
+entry SHA-256 `c879f5449e5d2a9c61a364195f2bfb5dff91c091a4be07ef74f0bd7098369019`.
+Its embedded Apache license is byte-identical to the fully read text in §9; its embedded
+Google/ASF NOTICE has SHA-256
+`7e7f20226f26a1c2693c5422fc14c1c961d2b56c928d60ac881ab5ad4735025f` and was read in full.
+Root `M/LICENSE` omits the `classes` suffix in its Guice path; the independent release POM,
+installed POMs, manifest and actual embedded grant repair that metadata omission without
+pretending the standard JAR was acquired or substituting any bytes.
+
+### 10.2 Per-row rights proposal, actual obligations and authority boundary
+
+The 52-row distribution TSV now separates `classifier`, `identity_basis`, `rights_basis`,
+`obligation_set`, and `proposed_rights_disposition` from existing `f05_disposition`.
+**47** ordinary rows have `APPROVED-WITH-OBLIGATIONS_PROPOSED`; **5** have `BLOCKED-LEGAL`.
+The separate `rights_intake_disposition` promotes the47 ordinary evidence proposals to
+Engineering `APPROVED-WITH-OBLIGATIONS`, matching the Q02 intake's bounded rights-only
+method. Five legal rows remain blocked. This is not reviewed scope/execution acceptance.
+Every execution field remains `NOT_ADMITTED`.
+`M/` in the TSV means exact root `M` from §4; `JAR!` means that row's actual ZIP entry.
+Filename matches for `.class` entries containing “License” do not constitute legal grants.
+
+| Obligation set / count | Actual evidence and bounded obligations |
+|---|---|
+| `AP2` / 44 | Exact Apache-2.0 embedded text or distribution-mapped adjacent text. Preserve license, copyright, attribution and applicable NOTICE material; identify changes if modified; no implied trademark license; retain patent/termination and warranty provisions. Unchanged internal use is the proposal; redistribution/modification reopens intake. |
+| `BSD3` / 1, ASM 9.9.1 | `lib/asm.license`, SHA-256 `8c920015a749851edea93f71116d45dcd6beefa6069b6baf526c0adcaf26979c`, fully read BSD-3-Clause: source retains notices/conditions/disclaimer, binary distributions reproduce them in documentation/materials, no endorsement without permission. |
+| `MIT` / 1, SLF4J API 1.7.36 | `lib/slf4j-api.license`, SHA-256 `6fbe2eaf44b193b8a40eed9208f52848572224ad8d7672dd09418aa174847e73`, fully read: retain copyright and permission notice in copies/substantial portions and preserve disclaimer. |
+| `PD` / 1, AOP Alliance 1.0 | Exact mapping, adjacent text and owner declaration in §10.1. Retain provenance/legal material under repository intake policy; no new copyleft or custom contractual condition observed. Scope acceptance remains separate. |
+
+The 19 adjacent Apache legal files share SHA-256 `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`:
+`commons-cli`, `commons-codec`, `error_prone_annotations`, `failureaccess`, `gson`, `guava`,
+`guice`, `httpclient`, `httpcore`, `jansi`, `javax.inject`, `jcl-over-slf4j`, `jspecify`,
+`plexus-cipher`, `plexus-component-annotations`, `plexus-interpolation`, `plexus-sec-dispatcher`,
+`plexus-utils` under `lib/*.license`, plus `boot/plexus-classworlds.license`.
+Commons CLI/Codec embedded Apache texts differ only by blank-line formatting and the sample
+license URL's `http`→`https`; read-only comparison found no changed operative clauses.
+Retaining the actual complete distribution and embedded notice files covers the ordinary
+proposal; generic Apache labeling does not override supplemental/custom terms below.
+
+| Genuine core decision row | Evidence / decision still required |
+|---|---|
+| Utils 3.6.1 | Exact JAR and supplemental legal hashes in §9. Extreme Lab custom acknowledgement/name terms survive the adjacent Apache label. Legal Review Authority must disposition this exact internal-tool use and its obligations. |
+| Interpolation 1.29 | Exact bytes and reused source-to-binary evidence in §9: legacy Apache-1.1/modified Codehaus headers and headerless mapped source. Authority disposition remains required; a distribution label alone cannot waive the contrary source evidence. |
+| Sisu Inject 1.0.0 and Sisu Plexus 1.0.0 | Exact JARs and fully read EPL-2.0 adjacent texts in §9. The grant is known, not missing. Authority must record the scoped copyleft exception/obligations; no secondary-license choice or commercial clearance is inferred. |
+| Javax Annotation API 1.3.2 | Installed JAR SHA-256 is in the TSV. Embedded `META-INF/LICENSE.txt` SHA-256 `a4c80869daf4350b6773bd5e6ee1d0a6cc52b63db3a3d2dc20961b0cdd272a5c` starts with CDDL 1.0 and includes GPLv2/Classpath text. Adjacent `lib/javax.annotation-api.license` SHA-256 `1b087ad282cb3cd0a11e4e160318eab4ff0995aae7d22e6ac0d30367e196c6e3` starts with CDDL 1.1 and includes GPLv2/Classpath text. Actual grant/exception text is available; this is a version/choice and scoped-copyleft decision, not a no-license finding. Authority must record the chosen route, preserve notices and establish any distribution source obligations; file-header applicability of the exception is not certified by this ZIP inspection. |
+
+CDDL executable distribution invokes corresponding source availability and license/notice
+conditions; GPLv2 has source/offer conditions on distributed binaries; the Classpath exception
+permits linking qualifying independent modules under their own terms but does not erase the
+library's terms or prove applicability to every file. No distribution, modification, license
+choice or exception waiver occurred here. These five rows remain `BLOCKED-LEGAL` pending an
+exact, attributed decision even though their legal material has been found.
+
+Historical provenance is specifically [F01 dependency intake](2026-09-28-ph1-f01-dependency-intake.md),
+§2 Apache Maven row: official Maven 3.9.16 ZIP, SHA-512
+`ed41650d42485cfc243fad22158caf9cbb5dc408ce7a09ddb94dd42a019de929ca43065bfa450612cf12bf78b5cafa3884b96c090de326ff590448c933454af3`,
+wrapper-pinned SHA-256 `5af3b743dd8b876b5c45da33b676251e5f1687712644abb4ee519ca56e1d89ce`,
+build-tool-only use on the P04 host. Its bundled components remain separate from core licensing.
+“P04 admitted” is shorthand for that historical host/tool context, not a claim that the P04
+native-runtime intake independently reviewed all 52 JARs. This successor neither revokes
+history nor expands it into F05 custom/copyleft exceptions, product runtime or customer delivery.
+
+The Project Reviewer still owns the exact F05 internal-tool scope/command admission; Legal
+Review Authority owns the five exceptions above. Qualification/build/Boot/DB/TLS/port/verifier
+execution remains `NOT-RUN`. Existing Python utility identity and non-admission are unchanged
+from §9. Only read-only SSH and reference-only primary text inspection occurred; no artifacts
+were downloaded, installed, copied onto the host, executed, committed or pushed.
+
+
+| Version | Date | Change |
+|---|---|---|
+| 0.5 | 2026-10-03 | Repair exact distribution coordinates and ordinary rights evidence; preserve current Boot39 graph; identify five core legal decisions without admitting execution |

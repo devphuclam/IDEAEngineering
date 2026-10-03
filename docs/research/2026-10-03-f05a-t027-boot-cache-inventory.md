@@ -131,5 +131,6 @@ The candidate observations above remain historical, including their NOT_ADMITTED
 missing flat-descriptor pairs. Read [the Q02 successor](2026-10-03-f05a-t027-q02-intake.md)
 before any further intake/build work. It records the exact bounded 38-JAR application graph,
 four plugin acquisition graphs, parent/BOM closure, Maven core evidence, per-coordinate rights
-and a proposed offline command package. Nineteen acquisition rows remain BLOCKED-LEGAL;
+and a proposed offline command package. The v0.2 successor resolves eight evidence-only gaps:
+eleven acquisition rows and five core rows remain BLOCKED-LEGAL;
 there is no Maven/Boot execution or whole-T027 PASS.

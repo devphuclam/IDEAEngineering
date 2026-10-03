@@ -3,7 +3,7 @@
 | Control | Value |
 |---|---|
 | Stable ID / class | `IE-RES-F05A-Q02-UPSTREAM-RIGHTS-20261003` / external-source rights research record |
-| Version / status | `0.2 / Draft` |
+| Version / status | `0.3 / Draft` |
 | Product normativity / repository instruction | `INFORMATIVE / NOT-APPLICABLE`; no product requirement or execution authorization |
 | Owner / author / worker mode | Engineering / Codex / `CODEX_ONLY`, bounded research worker |
 | Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; review and acceptance `NOT-RUN`; Legal Review Authority owns unresolved legal terms and future commercial review |
@@ -131,6 +131,7 @@ source records and notice actions into the complete Q02 pre-use package.
 |---|---|---|
 | 0.1 | 2026-10-03 | Exact SnakeYAML 2.6 and JSpecify 1.0.1 upstream rights, supplemental copyright evidence, raw license hashes, inspection limits and prospective internal-use obligations |
 | 0.2 | 2026-10-03 | Add ten exact build-tool candidate rights investigations, license-option selections, remote cached identities and unresolved JSR305 3.0.2 rights |
+| 0.3 | 2026-10-03 | Establish exact ASM9.7 and jdependency2.10 wrapper/shaded rights; retain precise unresolved JSR3053.0.2 publication-to-source linkage |
 
 ## Additional build-tool rights investigation — 2026-10-03
 
@@ -247,3 +248,146 @@ inspection is `BLOCKED`, not a failed runtime test. No future commercial clearan
 All original task boundaries remain: no package download/install, Maven/Boot/build/test/database,
 TLS, listener/port, preview, verifier, commit/push/merge, Work Item write or timer action. The only
 authored path remains this research note in the same isolated worktree.
+
+## Evidence-only blocker checkpoint — version 0.3
+
+This bounded follow-up reviews the three standalone ASM 9.7 coordinates, jdependency 2.10
+and JSR305 3.0.2. Intended use remains unchanged internal T027 build-tool `DEPENDENCY` use
+only. No used graph was edited. An absent embedded LICENSE is a proof/packaging gap, not
+proof that rights do not exist. Actual exact-release terms can close the rights-proof gap;
+Engineering still owns notice delivery and controlled intake. This section supersedes no
+earlier authority decision and grants no commercial clearance.
+
+### ASM exact release evidence and disposition proposal
+
+The publisher's [ASM_9_7 tag API](https://git.ow2.org/api/v4/projects/asm%2Fasm/repository/tags/ASM_9_7)
+reports target object `0e57baee3373d9ee40068ceb78dc0dbc4bf8484a`, resolved commit
+`bde266f0d59dd12739ad15a39f1da43a61143eed`, and tag creation `2024-03-23T14:28:59Z`.
+The [exact build.gradle](https://git.ow2.org/asm/asm/-/blob/bde266f0d59dd12739ad15a39f1da43a61143eed/build.gradle)
+sets release version `9.7` for the subprojects. OW2's service now answers on `git.ow2.org`;
+its API retains historical `gitlab.ow2.org` web URLs. No signature verification is claimed.
+
+The [exact LICENSE.txt](https://git.ow2.org/asm/asm/-/blob/bde266f0d59dd12739ad15a39f1da43a61143eed/LICENSE.txt)
+was read in full. It grants source/binary redistribution and use, with or without modification,
+under three retention/no-endorsement conditions and a warranty/liability disclaimer: the actual
+BSD-3-Clause terms, copyright 2000–2011 INRIA and France Telecom. Legal headers were also read
+in full in the exact modules' [ClassReader.java](https://git.ow2.org/asm/asm/-/blob/bde266f0d59dd12739ad15a39f1da43a61143eed/asm/src/main/java/org/objectweb/asm/ClassReader.java),
+[Remapper.java](https://git.ow2.org/asm/asm/-/blob/bde266f0d59dd12739ad15a39f1da43a61143eed/asm-commons/src/main/java/org/objectweb/asm/commons/Remapper.java)
+and [ClassNode.java](https://git.ow2.org/asm/asm/-/blob/bde266f0d59dd12739ad15a39f1da43a61143eed/asm-tree/src/main/java/org/objectweb/asm/tree/ClassNode.java).
+Each contains that grant, attribution and disclaimer, not only a license identifier.
+The [root tree](https://git.ow2.org/api/v4/projects/asm%2Fasm/repository/tree?ref=bde266f0d59dd12739ad15a39f1da43a61143eed&per_page=100)
+lists LICENSE.txt (Git blob `4d191851af43ec3857c72aeadb09ae15fabe3cad`) and no root NOTICE.
+This is not an all-file header or third-party source audit.
+
+| Claim / exact coordinate | Evidence and Engineering rights proposal | Required action before recipient copies / limit |
+|---|---|---|
+| Q02-R18 / `org.ow2.asm:asm:9.7` | Exact common release license plus core production grant above; `APPROVED-WITH-OBLIGATIONS` proposal, BSD-3-Clause | Supply the exact copyright, three conditions and disclaimer in documentation/materials accompanying internal binary copies. Do not imply INRIA, France Telecom or contributor endorsement. |
+| Q02-R19 / `org.ow2.asm:asm-commons:9.7` | Same exact release license plus commons production grant above; `APPROVED-WITH-OBLIGATIONS` proposal, BSD-3-Clause | Same binary-retention/no-endorsement actions; keep this coordinate's identity separate from core and tree. |
+| Q02-R20 / `org.ow2.asm:asm-tree:9.7` | Same exact release license plus tree production grant above; `APPROVED-WITH-OBLIGATIONS` proposal, BSD-3-Clause | Same binary-retention/no-endorsement actions; preserve source copyright/conditions/disclaimer if source is later copied. |
+
+Read-only SSH ZIP listings show 45, 34 and 45 entries respectively, with no standalone
+license/notice entry. No exact sources JAR exists in their targeted cache directories. Those
+observations do not negate the actual upstream grants. No source-offer, relinking, network
+copyleft or custom/noncommercial restriction was identified in these inspected BSD terms.
+Missing license delivery remains an Engineering action (`NOT-RUN`), not unknown rights.
+
+### jdependency exact wrapper and shaded-content scope
+
+Q02-R21: the [official jdependency-2.10 release](https://github.com/tcurdt/jdependency/releases/tag/jdependency-2.10)
+links to [commit 025abcded11e228f1e4b7968898fc947b74b1d82](https://github.com/tcurdt/jdependency/commit/025abcded11e228f1e4b7968898fc947b74b1d82).
+Its [LICENSE.txt](https://github.com/tcurdt/jdependency/blob/025abcded11e228f1e4b7968898fc947b74b1d82/LICENSE.txt)
+contains Apache 2.0 sections 1–9 and appendix, copyright 2010–2019 Torsten Curdt and contributors;
+the exact [Clazz.java header](https://github.com/tcurdt/jdependency/blob/025abcded11e228f1e4b7968898fc947b74b1d82/src/main/java/org/vafer/jdependency/Clazz.java)
+grants Apache 2.0 and identifies the jdependency developers, 2010–2023. Both actual grants
+were reviewed. Its [exact POM](https://github.com/tcurdt/jdependency/blob/025abcded11e228f1e4b7968898fc947b74b1d82/pom.xml)
+identifies version 2.10 and has the same SHA-256 as the POM embedded in the cached JAR.
+The separate cache POM is dependency-reduced and has a different hash; no mismatch repair
+or binary authenticity claim is made.
+
+The release's shade configuration includes Commons IO 2.15.1 and ASM 9.6 core/analysis/
+commons/util/tree, with minimization and package relocation. This is identity/content evidence,
+not a grant inferred from its license metadata. The actual cached ZIP listing confirms relocated
+`org/vafer/jdeb/shaded/commons/io` and `org/vafer/jdeb/shaded/objectweb/asm` core/commons classes.
+No relocated analysis/util/tree class appeared in the full listing; upstream build-time inputs
+are not automatically extra standalone graph admissions. The existing package is unchanged by
+IDEA even though upstream shading transformed bundled classes.
+
+| Shaded rights supplement | Actual primary evidence | Obligation / Engineering proposal |
+|---|---|---|
+| ASM 9.6, not standalone 9.7 | [Exact ASM_9_6 API](https://git.ow2.org/api/v4/projects/asm%2Fasm/repository/tags/ASM_9_6): target `87418cbf6d6aa2c935d3362e8e41c04b046d06ae`, commit `85cf1aeb0d08be8446f6efbda962817d2a9707dd`. Its actual [LICENSE.txt](https://git.ow2.org/asm/asm/-/blob/85cf1aeb0d08be8446f6efbda962817d2a9707dd/LICENSE.txt) was read in full; same BSD-3-Clause terms, same raw hash as 9.7. | Retain INRIA / France Telecom copyright, conditions and disclaimer with the shaded binary's accompanying materials; no endorsement. No ASM BSD text is embedded in this cached package, so supplement delivery is `NOT-RUN`. Equality is an observation of both exact files, not prior-version inference. |
+| Commons IO 2.15.1 | [Official release tag](https://github.com/apache/commons-io/releases/tag/rel%2Fcommons-io-2.15.1) resolves to `dc51644d5adbb0c461efb58380ec51fbca10005d`. Exact [LICENSE.txt](https://github.com/apache/commons-io/blob/dc51644d5adbb0c461efb58380ec51fbca10005d/LICENSE.txt) was reviewed in full; [NOTICE.txt](https://github.com/apache/commons-io/blob/dc51644d5adbb0c461efb58380ec51fbca10005d/NOTICE.txt) names Apache Commons IO and ASF copyright 2002–2023. Both hashes equal jdependency's embedded META-INF entries; its embedded Commons IO pom.properties says 2.15.1. | Apache-2.0: preserve embedded readable license/NOTICE, relevant attribution and patent/trademark/disclaimer terms; do not strip them. Source tag matching supports exact bundled terms, not reproducible-build proof. |
+
+Proposal for `org.vafer:jdependency:2.10`: `APPROVED-WITH-OBLIGATIONS` rights compatibility,
+**Apache-2.0 wrapper AND Apache-2.0 Commons IO AND BSD-3-Clause shaded ASM 9.6**. The wrapper's
+license is not a blanket grant for bundled ASM. Engineering must preserve embedded Commons IO
+notices, supply the wrapper's applicable copyright/license and missing ASM terms with recipient
+copies, and retain the upstream shading provenance. Source modification notices become relevant
+if modified source files are supplied; none were supplied here. No corresponding-source/copyleft
+condition was identified in these selected texts. Complete notice packaging remains `NOT-RUN`;
+admission is still `NOT_ADMITTED` until the controlled intake acts.
+
+### Raw legal/header identity hashes
+
+All listed source bytes were read from exact tag/commit text endpoints into memory. Source SHA-256
+values do not authenticate the binaries. Selected full legal texts and listed legal headers were
+reviewed; source implementation bodies are not a complete correctness/license audit.
+
+| Exact file | SHA-256 |
+|---|---|
+| ASM 9.7 LICENSE.txt; separately inspected ASM 9.6 LICENSE.txt | `293b6af371eee28b0ff16f0334ea19e20a3d5522143faa4b95b346855507879a` |
+| ASM 9.7 build.gradle | `99a3cfc608cc4dbf7281f0ddce7580f98cdf0520f71c15a632829dd577737c2e` |
+| ASM 9.7 ClassReader.java | `dd4801e41dc29b4668ff1696b27d0bfee4f6cd590b18d05f78355fe93e178226` |
+| ASM 9.7 Remapper.java | `a475cdc04fb77128b366b94004a64475e8df7e1a94c1db08041c5768544ae586` |
+| ASM 9.7 ClassNode.java | `b73520c92850d196cbe0c0b663d73668b5bf5a58ecc98297b619baaa0d9d0904` |
+| jdependency 2.10 LICENSE.txt | `3fd8fb58cebed748a895cdd5c546f7b042730a0469ce7090f9ca0040a4b19b10` |
+| jdependency 2.10 Clazz.java | `d65b41b5733961aa878fcb5c433419b8f1fdb0309e079ade3dd111eb79816339` |
+| jdependency 2.10 source POM; embedded META-INF/maven/org.vafer/jdependency/pom.xml | `366ef38550cfb2744df274ef898a1f7cde316ad7902a6b823e7c5b511ad4bf33` |
+| Commons IO 2.15.1 LICENSE.txt; jdependency embedded META-INF/LICENSE.txt | `8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac` |
+| Commons IO 2.15.1 NOTICE.txt; jdependency embedded META-INF/NOTICE.txt | `d881568c91b929923350fa3b9db693a0b1e6ae9de972087822e4e87802561c6a` |
+| JSR305 3.0.2 cached META-INF/MANIFEST.MF, identity metadata only | `9329f6c6942e128348908339b59dbf209642c148dda83f1cf55fc8516a023092` |
+
+### Exact cached pairs and remaining decision blocker
+
+These pairs are copied without change from the continuity owner's
+[effective-graph inventory](inventories/f05a-q02-effective-graphs.tsv). They bind this rights
+research to candidates; no graph is reconstructed or altered here.
+
+| Coordinate | Cached JAR SHA-256 | Cached POM SHA-256 |
+|---|---|---|
+| `org.ow2.asm:asm:9.7` | `adf46d5e34940bdf148ecdd26a9ee8eea94496a72034ff7141066b3eea5c4e9d` | `de00115f1d84f3a0b2ee3a4b6f6192d066f86d185d67b9d1522f2c80feac5f00` |
+| `org.ow2.asm:asm-commons:9.7` | `389bc247958e049fc9a0408d398c92c6d370c18035120395d4cba1d9d9304b7a` | `5acee3ee7252ed90b8074c755d022787499a95fafff98ac4a685107c4da409b4` |
+| `org.ow2.asm:asm-tree:9.7` | `62f4b3bc436045c1acb5c3ba2d8ec556ec3369093d7f5d06c747eb04b56d52b1` | `a34ea1e3e4128c01038db43c6976e88c779cf5af84b0505da266dfe6965668ec` |
+| `org.vafer:jdependency:2.10` | `1dcd8355ab9ebced687715bf1252eb2aee5d0e74497a2014fd3387cfce8df85f` | `ab53f259ab5f6483d3dbb0235469e078d4a22cfd890771ab04f87db3a5b46067` |
+| `com.google.code.findbugs:jsr305:3.0.2` | `766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7` | `19889dbdf1b254b2601a5ee645b8147a974644882297684c798afe5d63d78dfe` |
+
+Q02-R22: JSR305 was revisited without changing Q02-R17. Its exact cached manifest says
+Bundle-Version 3.0.2 and Bundle-License Apache 2.0, but supplies no grant text or release commit.
+The targeted source-cache search is empty. The POM's Google Code project, historical RI BSD
+license and current FindBugs repository do not establish a publisher-attested source mapping
+for the exact cached publication. The attempted current repository path `pom/jsr305/pom.xml`
+does not exist; it is not evidence of absent rights. Third-party redistribution notices and
+modern repackagings were not accepted as upstream grants. GitHub unauthenticated API rate
+limiting also occurred; successful raw text observations above remain valid.
+
+The missing link is **publisher-attributable exact 3.0.2 source/legal content (or an explicit
+grant covering this published binary), linked to the candidate's bytes**, sufficient to determine
+which actual terms and notices apply. This is not a finding of proven copyleft, a custom
+restriction or intrinsically unlicensable software. It is a genuine unresolved rights-evidence
+question under the current no-download boundary, not just a missing JAR LICENSE file.
+Disposition proposal remains `BLOCKED-LEGAL`, never metadata-only `APPROVED`.
+
+Engineering cannot waive that gap. The continuity owner can ask for one precise instruction:
+authorize a separately bounded inspection of publisher-published exact-version source/legal
+material not available in the cache (if company policy permits), obtain an attributable explicit
+rights clarification/Legal Review Authority decision covering these exact bytes, or separately
+authorize a graph/version change and new intake. None of these actions is performed or assumed
+here. A later source-material inspection might resolve the gap; if its provenance/grants still
+conflict, the authority decision remains necessary. Existing scope exceptions do not apply by
+analogy and no choice clears future commercial distribution.
+
+Checkpoint: exact primary legal inspection is `PASS` for the three ASM modules and jdependency's
+wrapper/bundled selected terms; JSR305 exact grant/source linkage is `BLOCKED`. Recipient notice
+package completion, binary authentication, full shaded reproducibility, all-file header audit,
+reviewer/Legal acceptance and controlled admission remain `NOT-RUN`. No Maven/Boot/build/test,
+database/TLS/port/preview/verifier, install/download/archive materialization, remote host write, graph change,
+commit/push/merge or timer action was taken. Only this informative note was amended to 0.3.

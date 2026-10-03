@@ -3,7 +3,7 @@
 | Control | Value |
 |---|---|
 | Stable ID | `IE-RES-F05A-Q02-PLEXUS-RIGHTS-20261003` |
-| Class / version / status | Bounded external-source rights research / `0.1` / `Draft` |
+| Class / version / status | Bounded external-source rights research / `0.2` / `Draft` |
 | Product normativity | `INFORMATIVE`; creates no product requirement, tooling execution authority or commercial clearance |
 | Repository process authority | `NOT-APPLICABLE`; evidence record, not an instruction guide |
 | Owner / author | Engineering intake owner, named person `UNKNOWN` / Codex bounded research worker |
@@ -13,7 +13,7 @@
 | Classification / retention | `INTERNAL`; retain with the F05 evidence baseline and any superseding intake |
 | Upstream trace | [F05 preparation freeze](2026-10-03-f05-preparation-freeze-record.md), [F05 preparation package](2026-09-28-ph1-f05-gateway-qualification.md), [external-source intake](../agents/external-source-intake.md), [authoring standard](../agents/product-document-authoring-standard.md) |
 | Downstream trace | Q02 exact-used Maven inventory and F05 intake decision; later T036 commercial inventory/SBOM qualification |
-| Change / supersession | New bounded research on branch `codex/q02-plexus-rights`; supersedes and superseded by `NOT-APPLICABLE` |
+| Change / supersession | Bounded successor on branch `codex/q02-plexus-rights`; supersedes this record's `0.1` L4 evidence-gap conclusions with section 7; superseded by `NOT-APPLICABLE` |
 | Review trigger | Artifact/hash, tag, graph, use, modification, packaging or distribution changes; resolution of the specific evidence gaps below |
 | Evidence status | `DIRECT-OBSERVATION` of existing cached bytes and exact upstream source states; dispositions are Engineering recommendations, not a Legal Review Authority decision |
 
@@ -37,6 +37,12 @@ This record supports only the twelve components assigned to this worker. Plexus 
 `3.6.0`/`4.0.2`/`4.0.3` and Plexus XML `3.0.1`, including their ExtremeLab, Javolution and
 ThoughtWorks supplements, are a separate parent-worker inquiry. Nothing here admits their terms
 or the complete Maven graph. Earlier T043/F03/F04 execution exceptions do not carry into F05.
+
+Version `0.2` adds a bounded evidence correction for Compiler API/Javac, IO and QDox and an
+exact additional-version legal observation for Utils `3.5.1`. Section 7 establishes attributable
+project-wide grants and generated-input coverage: missing per-file headers or generated files
+at a hand-written-source path alone no longer support an L4 blocker for these four coordinates.
+Known custom/EPL authority gates remain unchanged. This is an evidence resolution, not a waiver.
 
 ## 1. Exact cached artifact identity
 
@@ -162,12 +168,12 @@ reported as admitted from this subset.
 |---|---|---|
 | Codehaus Build API `1.2.0`; Sonatype Build API `0.0.7`; Plexus Java `1.5.2` | `APPROVED-WITH-OBLIGATIONS` | Actual Apache-2.0 grants in exact production headers, with root LICENSE also present for modern Build API. Engineering retains Apache license text, source attributions and applicable notice material; reviews the resolved graph separately. |
 | Compiler Manager `2.16.2` | `APPROVED-WITH-OBLIGATIONS` | All three mapped production files carry actual MIT grants. Engineering preserves Codehaus copyright, permission notice and disclaimer with copies/substantial portions. |
-| Compiler API / Javac `2.16.2` | `BLOCKED-LEGAL` for this bounded evidence record | Mixed actual MIT/Apache-2.0 headers; headerless `PlexusLoggerWrapper.java` / `InProcessCompiler.java`; no project legal-named root file found in the exact recursive tree. Engineering retains both sets of notices and obtains authoritative coverage evidence for the headerless files; Legal Review Authority resolves any remaining missing/conflicting terms. Parent Apache metadata alone does not settle this. |
+| Compiler API / Javac `2.16.2` | `APPROVED-WITH-OBLIGATIONS` recommendation, revised in `0.2` | Exact-version official module project-license pages contain complete Apache-2.0 grants and identify release `2.16.2`; retain actual MIT file grants as well. Absence of a root-tag LICENSE or individual header does not invalidate the attributable whole-module grant. See C05. |
 | Archiver `4.12.0` | `APPROVED-WITH-OBLIGATIONS` | Exact root Apache-2.0 LICENSE and 114 matching headers; 34 files have no individual header but the root project license supplies actual legal evidence. Engineering retains source notices and license, checks material distribution changes and any additional artifact separately. |
-| IO `3.6.0` | `BLOCKED-LEGAL` for this bounded evidence record | 51 actual Apache-2.0 headers and actual ASF NOTICE; four headerless mapped files and no root license-named file in the exact tree. Engineering preserves NOTICE and obtains project-wide authoritative coverage evidence; no metadata-only approval. |
+| IO `3.6.0` | `APPROVED-WITH-OBLIGATIONS` recommendation, revised in `0.2` | Exact-version official project-license page contains the complete Apache-2.0 grant and identifies release `3.6.0`; retain the exact ASF NOTICE. The root-tag LICENSE absence is an observation, not an unresolved rights conclusion. See C05. |
 | Interpolation `1.29` | `BLOCKED-LEGAL` | Exact custom/legacy Apache-1.1 headers coexist with Apache-2.0 and a headerless source. Legal Review Authority evaluates the original wording and scope; Engineering preserves all texts/attributions. |
 | Sisu Plexus `0.9.0.M4` | `BLOCKED-LEGAL` | Exact EPL-2.0 license and 138 headers. Source-disclosure/distribution obligations trigger the intake escalation rule. Legal Review Authority dispositions internal T027 use separately from future distribution; Engineering retains the original EPL terms/source identity. |
-| QDox `2.2.0` | `BLOCKED-LEGAL` for the generated-source coverage gap | Actual project Apache-2.0 LICENSE and 168 headers support ordinary Apache rights, including the parser grammar. Five generated classes were not available at production source paths; the retained exact generated-source/skeleton rights were not inspected. Engineering obtains exact generated-code rights evidence before concluding that only Apache-2.0 applies; Legal Review Authority resolves any remaining ambiguity. |
+| QDox `2.2.0` | `APPROVED-WITH-OBLIGATIONS` recommendation, revised in `0.2` | Actual root project grant, all four Apache-2.0 grammar inputs, exact JFlex version/build configuration, actual BSD-3-Clause generator grant and primary output-permission statements establish bounded coverage. Retain QDox/ASF notices and conservatively JFlex BSD-3-Clause notice material; unknown BYacc producer version is an authenticity/rebuild limitation, not proof of absent rights. See C06. |
 | ASM `9.9.1` | `APPROVED-WITH-OBLIGATIONS` | Actual BSD-3-Clause header in rehashed exact source JAR. Engineering retains the notice/conditions/disclaimer and observes no-endorsement restrictions. |
 
 Common Apache-2.0 actions (`S-BUILD` and `S-ARCH` actual license texts): Engineering maintains the
@@ -190,7 +196,8 @@ qualification of the actual future packaging/linking/distribution model.
 QDox's five absent generated Java paths are under `com/thoughtworks/qdox/parser/impl/`:
 `DefaultJavaCommentParser`, `DefaultJavaCommentLexer`, `DefaultJavaCommentParserVal`,
 `JFlexLexer`, and `Parser`. An Apache-2.0 grammar header proves the grammar's declared terms,
-not automatically every generator skeleton's terms. Their graph/build generation was not run.
+not automatically every generator skeleton's terms. Section 7 adds the generator/grant evidence
+that was missing from `0.1`. Their graph/build generation was not run.
 
 ## 6. Verification and handoff
 
@@ -200,7 +207,7 @@ not automatically every generator skeleton's terms. Their graph/build generation
 | Inspect exact primary legal texts and mapped production headers | `PASS` for performed reads; 644 of 649 mapped production paths readable, five QDox generated paths absent | Not an exhaustive resource/inner-class/multi-release rights audit; mixed/headerless cases explicitly recorded |
 | Rehash retained ASM source JAR and read complete AnnotationVisitor rights header | `PASS` | Historical rights evidence reverified, historical execution exception not inherited |
 | Exact custom-header escalation and EPL Legal Review | `BLOCKED-LEGAL` | Company/Legal Review Authority disposition required under intake sections 2–4 |
-| Resolve generated/headerless coverage gaps before admission | `BLOCKED-LEGAL` in this bounded record | Engineering evidence collection and Legal Review resolution required; no invented project-wide grant |
+| Resolve assigned L4 generated/headerless coverage gaps | `PASS` for the `0.2` Engineering evidence resolution in section 7 | Recommended dispositions only; source-to-binary authenticity and rebuild equivalence remain unqualified; no custom/EPL waiver |
 | Independent review, controlled inventory integration and final F05 execution admission | `NOT-RUN` | Parent reviewer owns the next step |
 | Maven/Boot goals, builds/tests, DB/TLS/ports, preview, timer/tracker, verifier and merge | `NOT-RUN` | Outside this rights-research assignment |
 
@@ -210,3 +217,160 @@ document/link validator was `NOT-RUN` because verifier execution is excluded fro
 The next action is for the parent worker to integrate these facts into Q02 and keep all unresolved
 Legal Review gates visible. No dependency, source implementation, third-party asset or notice
 bundle was imported; no commit or push was made.
+
+## 7. Version 0.2 — attributable whole-project grants and generated-code coverage
+
+The current parent [Q02 intake](2026-10-03-f05a-t027-q02-intake.md) and
+[rights inventory](inventories/f05a-q02-rights-dispositions.tsv) were read from the preparation
+worktree on 2026-10-03. At that observation they described 116 graph rows / 100 unique
+acquisition coordinates, Boot-plugin graph 39 / potential own realm 36, application 38,
+and 19 blocked acquisition rows. This worker has not changed those inventories or counts.
+The proposed correction below applies to exactly four current L4 coordinates; it does not
+close the later ASM `9.7`, jdependency, JSR305, custom-terms or installed-core inquiries.
+
+### C05 — exact official whole-module license text resolves Compiler and IO headerless gaps
+
+The current published sites identify newer versions (Compiler `2.17.1`, IO `3.8.0`) and were
+therefore rejected as exact-version evidence. The official repositories retain their earlier
+published-site history on `gh-pages`. Read-only GitHub history inspection located the specific
+site commits below. These are first-party published **complete project-license texts**, not
+a badge, an SPDX label or a third-party dependency summary. The page's project-version field
+and the same site's source-control page tie the grant to the exact source release.
+
+| Source ID / exact primary page | Version and source linkage | Actual reviewed legal text and decoded-text SHA-256 |
+|---|---|---|
+| `S-COMP-API-GRANT` [Compiler API project license at site commit `28244fca3a92a1248bf8e9c2eb3add4ee4bac686`](https://raw.githubusercontent.com/codehaus-plexus/plexus-compiler/28244fca3a92a1248bf8e9c2eb3add4ee4bac686/plexus-compiler-api/licenses.html) | Page title Plexus Compiler Api; version `2.16.2`; published 2026-01-25 | Complete Apache License 2.0, sections 1–9 and appendix, HTML-decoded UTF-8 SHA-256 `CFC7749B96F63BD31C3C42B5C471BF756814053E847C10F3EB003417BC523D30`; full HTML UTF-8 SHA-256 `0C30C6EB725EF5451A88F18ADB6FA656647891E7B1A7A4DBD2AD924E09FCC295` |
+| `S-COMP-JAVAC-GRANT` [Javac component project license at the same exact site commit](https://raw.githubusercontent.com/codehaus-plexus/plexus-compiler/28244fca3a92a1248bf8e9c2eb3add4ee4bac686/plexus-compilers/plexus-compiler-javac/licenses.html) | Page title Plexus Javac Component; version `2.16.2`; published 2026-01-25 | Same complete Apache-2.0 text/hash; full HTML UTF-8 SHA-256 `91AACFC5E4732405E179FFBC41EF26DB495536A26147578B5EC9BCE97F2A4F17` |
+| `S-IO-GRANT` [IO project license at site commit `3c9a3affaa9e87b21e84f72a3f3f12854773e9ba`](https://raw.githubusercontent.com/codehaus-plexus/plexus-io/3c9a3affaa9e87b21e84f72a3f3f12854773e9ba/licenses.html) | Page title Plexus IO Components; version `3.6.0`; published 2025-11-07 | Same complete Apache-2.0 text/hash; full HTML UTF-8 SHA-256 `517DCAF9956FAE15ACF9EADB5FF08BB1DFC772A14473D3BFD24C998F2CAD0E15` |
+
+The [Compiler site's source-control page](https://raw.githubusercontent.com/codehaus-plexus/plexus-compiler/28244fca3a92a1248bf8e9c2eb3add4ee4bac686/scm.html)
+identifies `plexus-compiler-2.16.2`; HTML UTF-8 SHA-256
+`49E959A3BE68B80B425179D22EBE9B4A756C20B7C9D27D55D1BE50933F6A91E1`.
+The [IO site's source-control page](https://raw.githubusercontent.com/codehaus-plexus/plexus-io/3c9a3affaa9e87b21e84f72a3f3f12854773e9ba/scm.html)
+identifies `plexus-io-3.6.0`; HTML UTF-8 SHA-256
+`46696740B39AFA95EEB07CC00BD27CB3FCEE2C6A1A00738520E34502E8EAFCBB`.
+The site's overview distinguishes the project's own licensing from dependency licenses.
+The complete legal payloads match byte-for-byte the Apache text already read in this record;
+this use of complete actual text is distinct from accepting only inherited POM metadata.
+
+Engineering interpretation: the explicit official whole-module grant covers its original
+headerless files as part of that project. No contrary individual grant was found for
+`PlexusLoggerWrapper.java` or `InProcessCompiler.java`. Existing MIT headers remain preserved
+as actual source grants/attributions; this observation does not erase or relicense them.
+For IO, the actual release NOTICE is still retained alongside its complete project grant.
+The recommended internal-use dispositions are therefore `APPROVED-WITH-OBLIGATIONS`, with
+O1/O3 in the parent intake; retention of both MIT and Apache notice material for Compiler
+and Apache/ASF NOTICE for IO. No special terms were waived to reach that evidence conclusion.
+
+### C06 — exact QDox project grant plus generator-input and output provenance
+
+The exact `qdox-2.2.0` root [LICENSE.txt](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/LICENSE.txt)
+is an actual project grant naming Joe Walnes and the QDox Project Team, applying Apache-2.0.
+Its UTF-8 SHA-256 remains `A02E970B1159212C1879FE1078FCF2CFA4F2C45885ED3D27AF805A67EEF1B912`.
+It does not exclude generated production classes. The exact release
+[README](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/README.md)
+identifies the custom parser as generated by JFlex and BYacc/J, and describes supplied bootstrap
+executables. Its UTF-8 SHA-256 is
+`1E5235696A3782244EABC65FC1AC5D94D706E2EF64900EE52ABEBFD9EEF4E097`.
+
+The exact release [build POM](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/pom.xml)
+pins `jflex-maven-plugin:1.9.1`, two lexer input definitions and the
+`target/generated-sources/parser` output directory. It specifies no custom skeleton.
+The two BYacc/J executions identify parser/comment-parser inputs and output class/package names;
+their producer is `${qdox.byaccj.executable}`, with OS-specific bootstrap executable paths.
+These first-party build instructions explain why searching only `src/main/java` misses the
+five generated files. POM UTF-8 SHA-256
+`AC30EFE4C70263EF0CB19AD1F69BFA416043626D1F80C9BEFE9C3BF3B6A2B50B`
+is a tag-source-text checksum, distinct from the cached publication POM checksum in section 1.
+
+All four exact grammar inputs were inspected and have actual Apache-2.0 grants:
+
+| Exact input / primary source link | Identified output | Input UTF-8 SHA-256 |
+|---|---|---|
+| [parser.y](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/src/grammar/parser.y) | `Parser`, BYacc/J with `-Jsemantic=Value` | `0627E89CDF501AE6FF2C45B4399554EFB2BDE2E6F77EC2437C540186480A71B4` |
+| [commentparser.y](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/src/grammar/commentparser.y) | `DefaultJavaCommentParser` and default semantic-value class `DefaultJavaCommentParserVal` | `A913E08D760403F6C405D9858CCCEDD03D6CB6298D7F8A2031EEE3308B17113F` |
+| [lexer.flex](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/src/grammar/lexer.flex) | `%class JFlexLexer` | `8829EA429BE54BEDB7ABFFB12EBB7AA045DAFC7D478342F5CBC89A1CCDA49AD4` |
+| [commentlexer.flex](https://raw.githubusercontent.com/paul-hammant/qdox/qdox-2.2.0/src/grammar/commentlexer.flex) | `%class DefaultJavaCommentLexer` | `F738EC2B05B19D79E37E14DD1E537B9D88F12B7CAE3120889944818877D3443D` |
+
+JFlex's exact [v1.9.1 LICENSE.md](https://raw.githubusercontent.com/jflex-de/jflex/v1.9.1/LICENSE.md)
+was read in full: actual BSD-3-Clause grant naming Gerwin Klein, Steve Rowe, Régis Décamps and
+Google LLC; preserve notices/conditions/disclaimer and no-endorsement terms. Its UTF-8 SHA-256
+is `6F9780D32E241518FC3421C04434D08B60F0E90676D15AAD84ABD54A71F2FE53`.
+The CC0 comment in that file applies to the license text itself, not all JFlex code.
+The exact [default skeleton](https://raw.githubusercontent.com/jflex-de/jflex/v1.9.1/jflex/src/main/resources/jflex/skeleton.default)
+is available under the same tagged project; its UTF-8 SHA-256 is
+`2F5C1590828D0C104B9075639B07E8CBB4727C3A7CED897F568745DD80BF1E54`.
+The [primary JFlex FAQ](https://jflex.de/faq.html) additionally permits use of generated code
+without restriction; it corroborates rather than replaces the exact grant. Engineering keeps
+the BSD-3-Clause notice material conservatively with the QDox rights evidence; it does not
+convert JFlex into an acquired/executed F05 tool.
+
+The [primary BYacc/J home page](https://byaccj.sourceforge.net/) identifies the Java extension
+of Berkeley Yacc, the generated parser/value-class model, no runtime library requirement, and
+the project's no-license/no-royalty position; its credits identify Berkeley Yacc as public
+domain. The [maintainer-controlled project page](https://sourceforge.net/projects/byaccj/)
+records Public Domain. These are owner statements, not a license aggregator inference.
+The QDox producer executable's exact BYacc/J version/source build remains `UNKNOWN`.
+No binary or producer archive was downloaded and no producer was executed to identify it.
+
+Engineering interpretation and limit: the actual QDox project grant includes its generated
+production classes; the exact licensed inputs and declared build mapping explain their origin;
+the identified generators' primary rights evidence exposes no conflicting output restriction.
+That is sufficient for the bounded ordinary internal-use rights recommendation. It does not
+prove that the cached binary was reproduced by those exact producer bytes, nor select a
+commercial packaging model. Unknown BYacc producer version and unobserved generated source
+publication are recorded authenticity/rebuild limitations, not evidence of absent permission.
+Recommend `APPROVED-WITH-OBLIGATIONS`: retain QDox/ASF Apache notices and license, and the
+conservative JFlex BSD-3-Clause notice material; reopen intake if contrary generated-code terms
+or a changed version/distribution/model is later found. The website documentation itself is
+reference-only and was not imported or relicensed as IDEA content.
+
+### C07 — exact Utils 3.5.1 supplemental provenance, custom gate unchanged
+
+The additional current acquisition coordinate
+`org.codehaus.plexus:plexus-utils:3.5.1` was read from its existing cached JAR at
+`/home/phuclam/.m2/repository/org/codehaus/plexus/plexus-utils/3.5.1/plexus-utils-3.5.1.jar`.
+Observed SHA-256 `86E0255D4C879C61B4833ED7F13124E8BB679DF47DEBB127326E7DB7DD49A07B`
+matches the current parent's rights inventory. The four non-Apache legal texts below were
+read in full; the Apache legal entry is byte-identical to the complete text already inspected.
+
+| Actual embedded entry | Uncompressed-byte SHA-256 / exact rights observation |
+|---|---|
+| `META-INF/LICENSE` | `CFC7749B96F63BD31C3C42B5C471BF756814053E847C10F3EB003417BC523D30`; Apache-2.0 |
+| `META-INF/NOTICE` | `D478D95476787007320DF9DAFB15C932849281E2ACE56E2AACDAC475D29470D7`; Indiana University Extreme Lab, ASF, ThoughtWorks, Javolution and Rome attributions |
+| `licenses/extreme.indiana.edu.license.TXT` | `0D01B41CFC401BCF852125959D07B1A6BD578F1A7850907C329E4A70B2874DB2`; Extreme Lab 1.1.1 custom grant and acknowledgement/name/endorsement restrictions |
+| `licenses/javolution.license.TXT` | `A7436C952FA2DC0701860CF4187D1E8E8E6DE6720DEC0AE9E0B641BC50EEBCED`; BSD-2-Clause copyright/conditions/disclaimer retention |
+| `licenses/thoughtworks.TXT` | `B2F730309348C7A19009DCADD92A5D55D75FD54E6DF4A818EBA7A388656FAED9`; ThoughtWorks/CruiseControl BSD-3-Clause retention and no endorsement |
+
+Utils `3.5.1` therefore remains `BLOCKED-LEGAL` under L1. Its exact evidence is no longer an
+additional-version proof gap, but the repository's custom-terms authority gate is not closed.
+Engineering retains all five entries, acknowledges the named organizations where the original
+terms require it and preserves the name/endorsement restrictions; Legal Review Authority owns
+the F05 disposition. This supplemental read does not replace the parent's other Utils/XML
+version records or expand this worker's inventory scope.
+
+### Actionable handoff
+
+Propose exactly these four row changes in the parent's rights inventory, retaining their
+existing hashes and graph memberships:
+
+| Coordinate | Proposed exact terms | Proposed internal unchanged T027 disposition / action |
+|---|---|---|
+| `org.codehaus.plexus:plexus-compiler-api:2.16.2` | Whole-module Apache-2.0 grant plus retained MIT file notices | `APPROVED-WITH-OBLIGATIONS`; O1 + O3; C05 and S-COMP-API-GRANT |
+| `org.codehaus.plexus:plexus-compiler-javac:2.16.2` | Whole-module Apache-2.0 grant plus retained MIT file notices | `APPROVED-WITH-OBLIGATIONS`; O1 + O3; C05 and S-COMP-JAVAC-GRANT |
+| `org.codehaus.plexus:plexus-io:3.6.0` | Whole-project Apache-2.0 grant plus exact ASF NOTICE | `APPROVED-WITH-OBLIGATIONS`; O1; C05 and S-IO-GRANT |
+| `com.thoughtworks.qdox:qdox:2.2.0` | QDox Apache-2.0 grant; conservative JFlex BSD-3-Clause notice preservation; BYacc/J owner public-domain/output evidence | `APPROVED-WITH-OBLIGATIONS`; O1 + O2 + O3; C06; unknown producer version retained as limitation |
+
+This bounded pass resolves four evidence-only L4 rows for review. The parent recomputes any
+aggregate blocked count after integrating all workers' current findings; this record does not
+publish a stale successor graph count or declare Q02 PASS. ExtremeLab, Interpolation's altered
+Apache-1.1 text and Sisu EPL-2.0 remain known-term Legal Review/company decisions. Other current
+parent blockers remain outside this worker's scope. Legal/execution acceptance, notice-bundle
+assembly, package audit, signature/authenticity and reproducible-build qualification are
+`NOT-RUN`. No package/archive download, clone/install, host write, Maven/Boot execution,
+DB/TLS/port/verifier/timer action, graph edit, commit or push occurred.
+
+| Version | Date | Change |
+|---|---|---|
+| 0.1 | 2026-10-03 | Exact twelve-component artifact and source-header evidence; conservative headerless/generated L4 gaps retained |
+| 0.2 | 2026-10-03 | Resolve four assigned evidence-only L4 rows using complete exact official project grants and attributable generator/input evidence; retain source authenticity limits; confirm Utils 3.5.1 custom supplemental gate |
