@@ -181,9 +181,14 @@ records8/8 PASS on Ubuntu/ext4,3/3 source plus manifest identity, archive identi
 19 tooling pins pre/post and independent completed-object/sentinel oracles. Owned
 filesystem-qualification-01 and private log/fixtures remain retained. Result acceptance
 is pending; this does not qualify a real Adapter, concurrency/races or power-loss durability.
-Next: result review and an exact controlled web/HTTPS listener/certificate/trust package,
-not unapproved provisioning or Gateway product code. No new package/Maven/DB/TLS/port/preview
-change was used for the filesystem prerequisite.
+The user accepted filesystem8/8 as the predecessor and authorized the exact
+[HTTPS loopback packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md)
+on 2026-10-03. Next: publish exact source/hash, offline package, generate/freeze private
+harness TLS material, publish its public identities before starting one owned
+127.0.0.1:18447 HTTPS listener, execute positive/untrusted/SAN-mismatch probes, then
+terminate it and rehash. HTTPS is NOT-RUN until its successor result exists.
+No DB/Vault/preview/global trust change, Gateway product code, timer action or merge.
+No new package/Maven/DB/TLS/port/preview change was used for the filesystem prerequisite.
 The narrowed graph is prospectively authorized
 by the explicit successor, not retroactively inserted into the historical frozen exception.
 Remaining T027 stays NOT-RUN and Q01 stays PASS. No other runtime success is inferred.

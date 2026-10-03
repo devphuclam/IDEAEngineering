@@ -246,7 +246,11 @@ and its actual 2026-10-03 [freeze record](../../docs/research/2026-10-03-f05-pre
 Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
 T027 remains unchecked / IN_PROGRESS and CODEX_ONLY. Q01 key-separation qualification is PASS;
 the [exact-source receipt](../../docs/research/2026-10-03-f05a-t027-q01-execution-package.md#7-authorized-execution--q01-only)
-records authorized execution. Remaining runtime/transport/Adapter qualification is NOT-RUN.
+records authorized execution. Root05 graph and filesystem8/8 are accepted predecessors.
+The [HTTPS packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md) is separately
+authorized for a single synthetic 127.0.0.1:18447 listener and normal dedicated-store
+trust/endpoint verification after source/TLS identity publication. Execution NOT-RUN;
+other transport/Adapter qualifications remain separate. T027 is not complete.
 The separate local Tracker timer already runs; do not restart or publish it through this PR.
 No Gateway code or inherited F04 tooling authority follows from preflight approval.
 Do not rerun against retained databases or reopen F04 design. Work Item #29 was documentation-only
