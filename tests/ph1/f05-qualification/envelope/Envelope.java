@@ -1,9 +1,17 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.security.*;
 
 // Qualification-only codec seam, not apps/gateway code.
 public final class Envelope {
+    public static byte[] seal(int kind, Map<Integer,byte[]> fields, PrivateKey key) throws Exception {
+        throw new UnsupportedOperationException("T027 signed envelope not implemented");
+    }
+    public static Map<Integer,byte[]> verify(byte[] packet, PublicKey key, int kind,
+            String issuer, String audience, String keyId, long now) throws Exception {
+        throw new UnsupportedOperationException("T027 verifier not implemented");
+    }
     public static byte[] encode(int kind, Map<Integer, byte[]> fields) throws Exception {
         int count=switch(kind) { case 1 -> 22; case 2 -> 25; default -> throw new IllegalArgumentException("KIND"); };
         if (fields.size()!=count) throw new IllegalArgumentException("FIELD_COUNT");

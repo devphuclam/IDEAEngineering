@@ -7,6 +7,8 @@ refuse() { printf 'T027_ENVELOPE=BLOCKED;reason=%s\n' "$1" >&2; exit 3; }
 case "$3" in
   red) name=envelope-red-01 ;;
   trace) name=envelope-green-01 ;;
+  sign-red) name=envelope-sign-red-01 ;;
+  sign-green) name=envelope-sign-green-01 ;;
   full) name=envelope-qualification-01 ;;
   *) refuse PHASE ;;
 esac
@@ -34,7 +36,8 @@ if [[ "$3" == full ]]; then
   "$jdk/java" -cp "$root/run/classes" Qualification sign "$root/run/vectors"
   "$jdk/java" -cp "$root/run/classes" Qualification verify "$root/run/vectors"
 else
-  "$jdk/java" -cp "$root/run/classes" Qualification trace
+  case "$3" in sign-*) command=signature ;; *) command=trace ;; esac
+  "$jdk/java" -cp "$root/run/classes" Qualification "$command"
 fi
 /usr/bin/sha256sum --check --strict "$src/inputs.sha256" || refuse FINAL_INPUT_HASH
 while IFS=$'\t' read -r path hash; do

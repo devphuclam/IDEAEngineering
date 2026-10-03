@@ -1,6 +1,7 @@
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.KeyPairGenerator;
 import java.util.*;
 
 // Public codec/CLI boundary; synthetic fixed identities, no product or private-key output.
@@ -26,11 +27,18 @@ public final class Qualification {
         if (!b) throw new AssertionError(reason);
     }
     public static void main(String[] args) throws Exception {
-        require(args.length==1 && args[0].equals("trace"), "CLI_SCOPE");
+        require(args.length==1 && Set.of("trace","signature").contains(args[0]), "CLI_SCOPE");
         byte[] a=Envelope.encode(1,grant()), b=Envelope.encode(1,grant());
         require(Arrays.equals(a,b), "DETERMINISTIC_GRANT");
         require(Arrays.equals(Arrays.copyOf(a,8),text("IEPH1ENV")), "EXACT_MAGIC");
         System.out.println("TRACER_DETERMINISTIC_GRANT=PASS;PAYLOAD_SHA256="+
             HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(a)));
+        if(args[0].equals("signature")) {
+            var pair=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+            var verified=Envelope.verify(Envelope.seal(1,grant(),pair.getPrivate()),pair.getPublic(),
+                1,"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1",T);
+            require(Arrays.equals(verified.get(5),uuid(5)),"SIGNED_GRANT_ID");
+            System.out.println("TRACER_SIGNED_GRANT=PASS");
+        }
     }
 }
