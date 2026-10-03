@@ -103,12 +103,114 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The next eligible unit is F05-A / T027, still NOT-STARTED / qualification NOT-RUN. Use
+The current unit is F05-A / T027: IN_PROGRESS; Q01/root05/filesystem8/8 accepted.
+[HTTPS attempt01](../../docs/research/2026-10-03-f05a-t027-https-results.md) STOPPED at
+the endpoint-refusal classifier; owned process terminated, no18447 listener remains.
+The user authorized a bounded classifier/diagnostic repair and fresh-root successor;
+[attempt02](../../docs/research/2026-10-03-f05a-t027-https-results02.md) is technical HTTPS PASS
+at exact source `6999287aa909400039ee504cb4300eb5ca51cd14`. Source/freeze were published
+before execution; actual positive/untrusted/hostname cases, listener scope, TLS evidence,
+cleanup and final integrity PASS. Result acceptance is pending; no listener remains.
+Next action: review this bounded result against the frozen preparation before selecting the
+next separately authorized T027 unit. Do not rerun or broaden qualification implicitly.
+Other qualification NOT-RUN. The user
+explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
+Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) initially authorized
+clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
+Successor user Q1/Q2 approval authorizes writing the minimal qualification harness, not running
+it: [Q01 source/tooling/command package](../../docs/research/2026-10-03-f05a-t027-q01-execution-package.md).
+The user subsequently approved Q01 execution; package §7 records PASS at exact source/runner
+`d01ad4a057a8a14c840320f0c664f6838d12a47e`. No blanket T027 execution approval follows.
+Before continuing Q02, read [the exact intake successor](../../docs/research/2026-10-03-f05a-t027-q02-intake.md).
+Q01 has Project Reviewer PASS. Static application/plugin/model/core graphs are reconciled;
+Eight initial rights-evidence gaps are resolved. Intake v0.3 retains eleven acquisition
+and five installed-core BLOCKED-LEGAL dispositions;89 acquisition/47 core ordinary rights
+dispositions are not execution authority.
+The [T027 process exception](../../docs/research/2026-10-03-t027-process-exception.md) is
+approved and [frozen](../../docs/research/2026-10-03-t027-process-exception-freeze.md):99 known-term
+acquisition/52 core inputs, unchanged exact versions/hashes/graph, offline internal T027 only,
+Issue37/PR38. It waives only the repository process gate; all actual terms and duties remain.
+No legal/company-license/commercial approval, extra rights, whole-F05 or other-work-item use.
+JSR305 is explicitly excluded. See [upstream v0.4](../../docs/research/2026-10-03-f05a-q02-upstream-rights.md#authorized-exact-jsr305-publication-inspection--version-04):
+official exact sources were inspected memory-only, with four CC BY2.5 grants and27 files
+without an established applicable grant. Full JSR305 rights remain BLOCKED-LEGAL.
+Historical old-graph finding stays BLOCKED-LEGAL. The user has now authorized the bounded
+[JSR305 exclusion experiment](../../docs/research/2026-10-03-t027-jsr305-experiment-authorization.md):
+publish exact standalone source/settings/runner/hashes, construct an isolated offline repository,
+run only four pinned direct Maven goals, inspect exact graph/package, then conditionally run
+the predeclared non-web Boot smoke. See its package README for exact input/STOP controls.
+No automatic replacement, original .m2 mutation, installation or further rights waiver.
+Published experiment source is `3efad42448ff6950de6dfa57f5c04f5d14871aeb`.
+The [first-party archive preflight](../../docs/research/2026-10-03-f05a-q02-jsr305-preflight-stop.md)
+STOPPED: seven exported documentation/TSV files became CRLF and failed committed LF hashes.
+Java runner/repository construction/Maven/Boot are NOT-RUN; no runtime or graph PASS.
+The user cleared the literal-only root02 retry. Source `a51ff70775480e97ceb1c19d61fdb5ae7b2c2042`
+has raw input15/15 locally/remotely, matching archive identity and preflight PASS for99JAR/242POM
+with JSR305 absent before Maven. [Retry result](../../docs/research/2026-10-03-f05a-q02-jsr305-retry-results.md)
+records Maven attempted then rejected at its first oracle; no graph/package/Boot qualification.
+SSH was temporarily lost, then restored by the user. Retained log confirms a first-party
+BootProbe import typo: SpringBootApplication belongs to boot.autoconfigure, not boot.
+Compile FAIL; jar/repackage/package oracle/Boot smoke NOT-RUN. Log hash and exact source
+are in the retry record. No JSR305 dependency requirement is shown; repair NOT-QUALIFIED.
+The user subsequently authorized the exact import correction and fresh root03 assertions.
+Source `e6ff16708a8678829f7d1b53a7f49502aced9d00` passed local/remote raw input15/15,
+archive identity and pinned preflight. [Root03 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root03-results.md)
+records Maven BUILD SUCCESS through repackage, actual115 collection rows/99unique coordinates
+and exact plugin realms matched. The first package check then STOPPED because its substring
+detector treated first-party Maven metadata `t027-jsr305-exclusion` as JSR305.
+Package oracle remains incomplete; Boot smoke and final post-smoke cache rehash NOT-RUN;
+JSR305 graph repair NOT-QUALIFIED. Preserve all three owned attempts.
+The user accepted root03 and authorized the exact outer-only metadata repair and root04.
+Source `f3e5b6aeac351f271b85f1068f1db1942dfc012a` passed15/15 local/remote inputs,
+detector self-check, pinned preflight, Maven BUILD SUCCESS and exact graph/realms.
+[Root04 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root04-results.md) records
+STOP at the final package-set equality: Boot packaged32 JARs, omitting exactly six
+metadata-only dependency-starter JARs from the38-artifact collection. Read-only diagnostics
+verified all32 nested hashes and the omitted starters' manifest types/zero class entries.
+The full frozen package oracle remains FAIL; Boot and final input rehash NOT-RUN;
+graph repair NOT-QUALIFIED. Preserve roots01–04.
+The user accepted root04 and authorized the exact38 collection /32-payload projection
+with six pinned metadata-only starter omissions and a fresh root05.
+Source `3494921bc7cf2768d0d99c26279b0d8d0e22c0e2` passed every bounded stage;
+[root05 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root05-results.md) records
+JSR305 GRAPH REPAIR = QUALIFIED. Local/remote15/15, pinned preflight, isolated99JAR/242POM,
+actual115-row graph/four realms, exact32 package/loader/provider guards, non-web Boot
+UP/CLOSED and final original-input rehash all PASS. Collection remains38; only the six
+exact approved starters are omitted from payload. Qualified JAR SHA:
+`9722b29be2395ed4a586a1597a2109fb0569c623f6e1746aa1193ba8cc327e73`.
+Public normalized graph/package receipts are linked from the result; private raw-log
+review limitation remains. Preserve roots01–05 and historical rights/STOP evidence.
+The Project Reviewer accepted this exact root05 result in conversation on 2026-10-03;
+result §6 records acceptance at review head `a3d8bde92f1f3c796a067b90f1cd274c74451104`.
+No additional remaining-T027 execution or Gateway implementation authority is inferred from it.
+The user has approved the [JDK filesystem prerequisite seam/execution contract](../../docs/research/2026-10-03-f05a-t027-filesystem-contract.md)
+and conditional execution after exact-source/hash/command/target publication on 2026-10-03.
+Source `01340f8035376c37ad3e55b51e1d11df6c9b87a6` was published before execution;
+[filesystem result](../../docs/research/2026-10-03-f05a-t027-filesystem-results.md)
+records8/8 PASS on Ubuntu/ext4,3/3 source plus manifest identity, archive identity,
+19 tooling pins pre/post and independent completed-object/sentinel oracles. Owned
+filesystem-qualification-01 and private log/fixtures remain retained. Result acceptance
+is pending; this does not qualify a real Adapter, concurrency/races or power-loss durability.
+The user accepted filesystem8/8 as the predecessor and authorized the exact
+[HTTPS loopback packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md)
+on 2026-10-03. Retained execution recipe: publish exact source/hash, offline package, generate/freeze private
+harness TLS material, publish its public identities before starting one owned
+127.0.0.1:18447 HTTPS listener, execute positive/untrusted/SAN-mismatch probes, then
+terminate it and rehash. Attempt01 STOP and attempt02 technical PASS are separately retained above;
+this historical recipe is not an instruction to run another listener.
+No DB/Vault/preview/global trust change, Gateway product code, timer action or merge.
+No new package/Maven/DB/TLS/port/preview change was used for the filesystem prerequisite.
+The narrowed graph is prospectively authorized
+by the explicit successor, not retroactively inserted into the historical frozen exception.
+Remaining T027 stays NOT-RUN and Q01 stays PASS. No other runtime success is inferred.
+Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
 Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
-Worker mode CODEX_ONLY. Preparation/path approval does not start T027 or the timer, authorize
-Gateway code, or extend F04 tooling authority to F05.
+Worker mode CODEX_ONLY. Original preflight authority alone did not authorize execution;
+the bounded successor experiment authority and result are recorded above. Gateway code,
+database/certificate/tunnel provisioning, other qualification execution and inherited F04
+tooling still require their applicable authority.
 Do not create/reuse another target, rerun the retained public database, DROP the review database
 or deploy the package for closure. Preserve private raw-log access limitation. Verifier remains
 NOT-RUN and is not an F04 acceptance blocker.

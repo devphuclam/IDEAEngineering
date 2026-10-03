@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f04-design-baseline` | **Date**: 2026-10-02 | **Spec**: [PH1 specification v0.8](spec.md)
+**Branch**: `codex/f04-design-baseline` | **Date**: 2026-10-02 | **Spec**: [PH1 specification v0.9](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -43,6 +43,10 @@ the selected Tech baseline, or the PG4 decision.
 | III. Traceability and controlled change | Tasks map to F01–F05, local FR/SC and owning DOC-04/05/06 rules. A material product change returns to its owning record. | PASS for plan. |
 | IV. Measurable quality and truthful claims | Each story has an executed-result target; planned tests and P04/P05 fixtures do not count as PH1 runtime PASS. | PASS for plan. |
 | V. Least privilege and recovery | Identity, Grant, Receipt, candidate and committed custody remain distinct; failure paths refuse false success. Development rollback is not production restore. | PASS for plan. |
+| VI. Implementation continuity and bounded delegation | Codex remains Primary Implementation Worker in `CODEX_ONLY` for F05-A/T027. Optional Gemini UI work stays on its separate branch/worktree. Worker allocation preserves product, review, intake and Tracker authority; follow [worker roles](../../docs/agents/worker-roles.md). | PASS for plan governance; no execution or qualification authority follows. |
+
+2026-10-03 clerical successor / Work Item #37 adds Principle VI and links the status-only
+spec v0.9. The original plan branch/date above, technical design and historical execution remain unchanged.
 
 Post-design check: [data model](data-model.md), [boundary contract](contracts/ph1-boundaries.md)
 and [quickstart](quickstart.md) retain the same scope and claims. No constitutional exception is
