@@ -1,7 +1,7 @@
 package com.idea.qualification;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
