@@ -283,3 +283,12 @@ path relocation after owned Gateway exit: move only fresh ROOT/vault to absent
 ROOT/relocated-vault, then compare both real files and unchanged authoritative
 Artifact/Vault/Location IDs. No production relocation/second-Vault/recovery claim.
 These qualify existing product semantics; no artificial RED or product mechanism.
+
+Final standards review found handoff removal could be skipped if a process/port
+cleanup assertion threw. Prospectively harden test-only cleanup with unconditional
+owned-file deletion, preserving the primary failure and suppressing a deletion
+failure onto it. Fresh regression-green-14 runs7 Receipt +2 handoff-cleanup cases
+(9 total), published102-input envelope, ordinary admitted offline goals and exact
+marked schema cleanup. Both cleanup tests use fresh OS-temp dirs/synthetic text
+and preserve a sentinel. No application/Gateway/migration/dependency changes.
+Actual42 positive matrix is retained, not falsely rerun after test-only hardening.

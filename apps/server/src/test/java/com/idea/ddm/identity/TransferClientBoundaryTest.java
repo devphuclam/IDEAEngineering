@@ -133,10 +133,21 @@ class TransferClientBoundaryTest {
                 System.out.println("F05_ACTUAL_CLIENT_CUSTODY=PASS; FIXTURES=2; RECEIPT_RETRY=CANONICAL; SERVER_BYTE_RELAY=0");
             }
         } finally {
-            gateway.destroy();if(!gateway.waitFor(10,TimeUnit.SECONDS)){gateway.destroyForcibly();assertTrue(gateway.waitFor(5,TimeUnit.SECONDS));}
-            assertFalse(gateway.isAlive());assertPortsFree();
-            Files.deleteIfExists(ROOT.resolve("ready.json")); // Only this newly generated credential handoff.
+            cleanupHandoff(ROOT.resolve("ready.json"),()->{
+                gateway.destroy();if(!gateway.waitFor(10,TimeUnit.SECONDS)){gateway.destroyForcibly();assertTrue(gateway.waitFor(5,TimeUnit.SECONDS));}
+                assertFalse(gateway.isAlive());assertPortsFree();return null;
+            });
             System.out.println("F05_CLIENT_LISTENER_CLEANUP=COMPLETE; PORTS=18446,18447");
+        }
+    }
+
+    static void cleanupHandoff(Path handoff,Callable<Void> cleanup) throws Exception {
+        Throwable primary=null;
+        try{cleanup.call();}catch(Exception|Error failure){primary=failure;throw failure;}
+        finally{
+            try{Files.deleteIfExists(handoff);}catch(Exception deletion){
+                if(primary!=null)primary.addSuppressed(deletion);else throw deletion;
+            }
         }
     }
 
