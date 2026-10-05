@@ -2383,7 +2383,8 @@ class HttpSessionFlowTest {
     }
 
     private java.sql.Connection migrator() throws Exception {
-        return DriverManager.getConnection(url(), "idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_PASSWORD"));
+        return DriverManager.getConnection(url() + "?currentSchema=" + schema,
+                "idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_PASSWORD"));
     }
 
     private String url() {

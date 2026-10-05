@@ -200,3 +200,23 @@ Current migration expectations move to V1–V9 without altering V1–V8 or histo
 No new dependency, tool, listener scope, product permission/API, tooling exception or cleanup target.
 T030 stays unchecked until these executions satisfy its actual obligations. T028 Receipt/custody
 obligations remain open; later execution must respect its own applicable input-use authority.
+
+### Regression execution and prospective fixture correction
+
+Migration source9ac7cc2aeedf4e2de252f540e396e67962761f4b **1/1 PASS**: V8→V9=1,
+repeat0, checksum validation/pending0, retained legacy Grant and actual permission probes.
+Schema f05_8665bab33ad34278821a424cc7222eb6 exact cleanup COMPLETE, source-owned remainder0.
+Private logd3df923f4e33f13754cfd450fbb96f5e538d445025603ed8a9ec9fce15c7eb99.
+Local/remote79/79 PASS, archiveafdb3f53425999b51bfdaa4d262a1c5b30cde12f68c1c489e505fcff8e1a2311.
+
+First affected regression at the same source: **105 run,0 failure,1 error,0 skip — FAIL**.
+The existing account-creation test's unqualified login_identity query used migrator's default
+public search path instead of the fresh owned schema. Error is relation-not-found, not an IAM
+or V9 behavior failure. Identity20 and health2 passed; HTTP83 had1 error. Exact marker-guarded
+cleanup completed, source-owned remainder0, DB retained. Private log
+3ca5f0c60e4b7228adaef452911d0ff46e5d38404f748e8613cfb8f58e4075b7.
+Keep that attempt unchanged. Repair only the test migrator connection's currentSchema;
+all queries now observe the intended owned test schema. No production/migration/graph change.
+Fresh `run-regression-green-04/source` reruns the same105. Final Grant10 still uses fresh
+`run-regression-green-03/source` after that succeeds. This is first-party fixture engineering,
+not a new approval request or an invented product RED.

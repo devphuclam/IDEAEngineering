@@ -31,7 +31,7 @@ export IDEA_F05_SOURCE_SHA="$1"
 test_selector=CustodyBoundaryTest
 case "$3" in
   regression-green-01) test_selector=F05GrantMigrationTest ;;
-  regression-green-02) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
+  regression-green-02|regression-green-04) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
     export IDEA_F03_TEST_DATABASE_NAME=idea_ddm_f05a_20261005_t028 ;;
 esac
 export IDEA_F05_TEST_SCHEMA="f05_$(tr -d '-' < /proc/sys/kernel/random/uuid)"
