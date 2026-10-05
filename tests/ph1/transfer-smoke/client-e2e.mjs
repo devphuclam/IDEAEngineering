@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-41/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-42/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -152,6 +152,13 @@ try {
     assert.equal(retry.status, 200); assert.deepEqual(gatewayProgress(retry.body, size).receipt, receipt);
     const badReceipt = Buffer.from(receipt); badReceipt[badReceipt.length - 1] ^= 1;
     assert.notEqual((await server.request('/qualification/f05/receipt', { body: badReceipt, headers: await csrf() })).status, 200);
+    if (size === 1024) {
+      stage = 'LOST_SERVER_CUSTODY_RESPONSE';
+      const lost = await server.request('/qualification/f05/receipt', {
+        body: receipt, headers: await csrf(), discardResponseBody: true });
+      assert.equal(lost.status, 200); assert.equal(lost.body, null);
+      // No acceptance body is known; resolve with the exact same Receipt/operation below.
+    }
     for (let retry = 0; retry < 2; retry++) {
       stage = 'SERVER_ACCEPT_' + size + '_' + retry;
       const accepted = await server.request('/qualification/f05/receipt', { body: receipt, headers: await csrf() });

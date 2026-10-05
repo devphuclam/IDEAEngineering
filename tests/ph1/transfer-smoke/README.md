@@ -272,3 +272,14 @@ client/two-fixture/control/refusal/resume/renewal/lost-body/custody matrix; same
 owned18446/18447 listeners,101-input/source/tooling gates. Fresh
 regression-green-13 repeats affected IAM/HTTP/health105 checks on the repaired
 source, no product changes or reuse of previous roots. Original attempts retained.
+
+Fresh42 executes sequentially after regression13 has exited:41's behavioral1/1
+passed, but its cleanup guard observed concurrently active same-source regression
+schemas and STOPPED before postflight. Do not call that overall packet PASS.
+No weakening of ownership/remainder checks; avoid overlapping same-source runs.
+42 additionally qualifies genuine lost Server acceptance body (drop socket at
+headers after commit, retry exact Receipt; one custody/Audit) and isolated private
+path relocation after owned Gateway exit: move only fresh ROOT/vault to absent
+ROOT/relocated-vault, then compare both real files and unchanged authoritative
+Artifact/Vault/Location IDs. No production relocation/second-Vault/recovery claim.
+These qualify existing product semantics; no artificial RED or product mechanism.

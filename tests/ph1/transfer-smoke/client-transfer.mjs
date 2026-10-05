@@ -32,7 +32,7 @@ export class SecureEndpoint {
     this.#origin = uri; this.#ca = ca;
   }
   async request(path, { body = Buffer.alloc(0), headers = {}, method = 'POST', limit = 8192,
-    deadline = 30000 } = {}) {
+    deadline = 30000, discardResponseBody = false } = {}) {
     const uri = new URL(path, this.#origin);
     if (uri.origin !== this.#origin.origin || uri.username || uri.password || uri.hash)
       throw new Error('CLIENT_ENDPOINT_REFUSED');
@@ -46,6 +46,11 @@ export class SecureEndpoint {
       const request = https.request(uri, { method, ca: this.#ca, rejectUnauthorized: true,
         agent: false, headers: { ...headers, ...(cookies ? { Cookie: cookies } : {}),
           'Content-Length': body.length } }, response => {
+        // Qualification fault: sever the real response after headers, retain no outcome body.
+        if (discardResponseBody) {
+          finish(null, { status: response.statusCode, body: null });
+          response.destroy(); request.destroy(); return;
+        }
         let size = 0; const chunks = [];
         response.on('data', chunk => {
           size += chunk.length;

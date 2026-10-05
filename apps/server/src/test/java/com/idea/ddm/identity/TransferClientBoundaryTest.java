@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** Actual Windows client coordination, confined to test classes and a marked schema. */
 class TransferClientBoundaryTest {
-    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-41/source/apps/server/target/client-e2e-01");
+    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-42/source/apps/server/target/client-e2e-01");
     static final Path JDK=Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path GATEWAY=Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar");
     static final UUID VAULT=UUID.randomUUID(), GATEWAY_ID=UUID.randomUUID();
@@ -113,6 +113,23 @@ class TransferClientBoundaryTest {
                         }
                     }
                 }
+                // Isolated private-path relocation, not production migration/recovery/second Vault.
+                gateway.destroy();assertTrue(gateway.waitFor(10,TimeUnit.SECONDS));
+                var original=ROOT.resolve("vault");var relocated=ROOT.resolve("relocated-vault");
+                assertEquals(original,original.toRealPath());assertFalse(Files.exists(relocated,LinkOption.NOFOLLOW_LINKS));
+                var locations=new HashMap<UUID,UUID>();
+                try(var c=app.getConnection();var q=c.prepareStatement("SELECT location_id FROM artifact_location WHERE artifact_id=? AND vault_id=?")){
+                    for(var grant:bridge.grants.values()){q.setObject(1,grant.scope().objectId());q.setObject(2,VAULT);
+                        try(var row=q.executeQuery()){assertTrue(row.next());locations.put(grant.scope().objectId(),row.getObject(1,UUID.class));assertFalse(row.next());}}
+                }
+                Files.move(original,relocated,StandardCopyOption.ATOMIC_MOVE);assertFalse(Files.exists(original));
+                try(var c=app.getConnection();var q=c.prepareStatement("SELECT location_id,adapter_key,verification_state FROM artifact_location WHERE artifact_id=? AND vault_id=?")){
+                    for(var grant:bridge.grants.values()){q.setObject(1,grant.scope().objectId());q.setObject(2,VAULT);
+                        try(var row=q.executeQuery()){assertTrue(row.next());assertEquals(locations.get(grant.scope().objectId()),row.getObject(1,UUID.class));
+                            assertEquals("VERIFIED",row.getString(3));var file=relocated.resolve("objects").resolve(row.getString(2));assertEquals(file,file.toRealPath());
+                            assertEquals(grant.scope().byteCount(),Files.size(file));assertEquals(grant.scope().digest(),hash(file));assertFalse(row.next());}}
+                }
+                System.out.println("F05_PRIVATE_PATH_RELOCATION=PASS; STABLE_ARTIFACT_VAULT_LOCATION=true; FIXTURES=2");
                 System.out.println("F05_ACTUAL_CLIENT_CUSTODY=PASS; FIXTURES=2; RECEIPT_RETRY=CANONICAL; SERVER_BYTE_RELAY=0");
             }
         } finally {
