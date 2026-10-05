@@ -136,6 +136,9 @@ public final class FilesystemVaultAdapter {
             }finally{Files.deleteIfExists(assembled);}
         }finally{Files.deleteIfExists(lock);}
     }
+    public Progress progress(UUID transferId,UUID locationId,long totalBytes,String fullDigest) throws IOException {
+        throw new UnsupportedOperationException("PROGRESS_QUERY_NOT_IMPLEMENTED");
+    }
     private Path directory(String name) throws IOException {
         Path path=root.resolve(name);
         if(!Files.exists(path,LinkOption.NOFOLLOW_LINKS))Files.createDirectory(path,

@@ -92,3 +92,9 @@ Receipt GREEN5580c4d722f07ac435dd59a28ab4159ceb1357e3:2/2, log5b459c11cf78499748
 gateway-green-03 qualifies existing refusal boundaries: signature/key/pins/Gateway/endpoint,
 unauthorized ranges, before/at/after expiry, trailing/oversized frames, partial completion and
 expiry before Receipt issuance. No manufactured RED, Boot/listener/Server custody claim.
+
+Gateway negative19/19 PASS35997c47dd25eb0fe35a161c8168d83040598d6e, private log
+e89e6a39ebbfb003d083b1894686dfa550b7dadb60cf89b287379af908b9a666.
+adapter-red-06 adds independent query of persisted verified512 bytes after Adapter recreation,
+without resubmitting bytes. Expected PROGRESS_QUERY_NOT_IMPLEMENTED. Needed by Gateway same-ID
+status after uncertain response; no new operation identity or fake completed Receipt.

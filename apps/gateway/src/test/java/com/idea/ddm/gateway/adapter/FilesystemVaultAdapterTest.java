@@ -64,6 +64,8 @@ public class FilesystemVaultAdapterTest {
         var first=adapter.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512]));
         if(first.verifiedBytes()!=512||first.completed()!=null)throw new AssertionError("Partial range became completion");
         var restarted=new FilesystemVaultAdapter(root);
+        if(!restarted.progress(rangedTransfer,rangedLocation,1024,result.digest()).equals(first))
+            throw new AssertionError("Query did not resolve persisted verified progress");
         if(!restarted.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512])).equals(first))
             throw new AssertionError("Lost-response range retry changed progress");
         byte[] changedChunk=new byte[512];changedChunk[0]=1;
