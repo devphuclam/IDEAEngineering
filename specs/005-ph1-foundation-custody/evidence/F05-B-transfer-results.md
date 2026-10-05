@@ -153,3 +153,37 @@ automatic. Historical directories/logs/candidates preserved, no broad deletion.
 T033/T034 and whole F05 remain incomplete pending actual negative/resume/renewal
 matrix and affected reconciliation. No throughput, HA/recovery, commercial,
 Desktop/Workspace or product UI claim. PR38 Draft/Open, no merge.
+
+## 5. Actual interrupted transfer / refusal / retry successor
+
+RED source7d9c1e142a2642bf14b830e98a4e984382c8c4a1, fresh receipt-red-30:
+actual Gateway retained verified1MiB after partial second-range disconnect, no
+Receipt. Client attempted offset0 rather than missing offset1048576 and failed
+the independent actual-request oracle. JUnit1 failure, schema
+f05_4c78968a412a46bfbece1605f25e4bc9 cleanup after JVM exit, database retained;
+private logbf37d9fe908b2fff1622db339007aa3c26c5481d42e4356c085fc4ff746b0028.
+Source archivef010489b53457bbb94a0e3ac88ab1f7740b52e446ad0a80612a7d26d231af445,
+manifeste5774e30a43194da26bf91ed266ec18fd55c905a9e4f8db47d3d5f355e1724fd.
+Observed file-handle GC warning was also corrected prospectively in test fixture.
+
+GREEN exact sourcef6f75b319598999d15b1e0f4b7e168fbbc44100c, fresh receipt-green-31.
+Raw101/101 local/remote PASS, archived937729277c97c1feb1d98c674004387c044831bc2bac3b3a998e2a5a6bbdc7e6,
+manifestaef70a85ffa55d28c313225dd6eb32fc9e4a38c10919bbb8cfc99d6fa9022718.
+Same unchanged admitted tools/Gateway/graph and controlled TLS/test-only bridge.
+Actual status-first client sent only63 missing ranges for64MiB, no retransmitted
+verified prefix; actual adapter/custody oracle still matched both P05 manifests.
+Missing CSRF403; changed signed Grant403 with empty body; wrong chunk digest400
+and status0/no Receipt; completed changed bytes400; unchanged range retry yields
+same Receipt; modified Receipt refuses Server acceptance. Same-operation issue
+resolves exact original Grant frame/TransferId; same Receipt acceptance twice
+retains one receipt Audit and one custody result. Real logout204 then401.
+No false custody inferred from interrupted/unverified candidates.
+
+Node CLIENT_E2E=PASS; JUnit1/1,0 failure/error/skip, independent
+F05_ACTUAL_CLIENT_CUSTODY=PASS. Source/tool/inventory/actual observations postflight
+PASS; schemaf05_9fc4f730915e44098a7319bec12fc2de exact cleanup/remainder0,
+owned listeners stopped and DB retained. Private log
+38e6f6e9eee863047feee1d54ad2aa0b1b783f0caef8997a2bd99e23917e86a1;
+preflight4a556f6000db09663952e92835c90197d593a807798517ee1d9b16db1a88e0fb;
+postflight0e773830fc726e0980c57d4429a3353bc91d3bb91e753209e0fa84f007a7170c.
+Exact expiry/renewal successor and final affected reconciliation remain open.
