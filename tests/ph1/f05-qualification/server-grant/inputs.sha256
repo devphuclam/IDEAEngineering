@@ -92,10 +92,10 @@ ca1ca366f8dd7b73c5a1e813929f61a54286f544cf9a451011954ea1702a897d  tests/ph1/f05-
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
-b1b463c77cc648db17e91b27861472e4f298e80277c65cf7f9b19d32a92df4db  tests/ph1/f05-qualification/server-grant/run-slice.sh
+9d97b9919d5033825d7bb273242f8e4677c5f53e86db39bb502cfe310485b7cc  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
 1c962a1f46cc81bda4bc6fd093fa93aec3643512c3d51b22f3b2fe9ab5fcad41  tests/ph1/transfer-smoke/client-e2e.mjs
 87720acc6402e1d6b249c6911db4a73eba9a889812eb48e22aa55886cd0ac566  tests/ph1/transfer-smoke/client-transfer.mjs
 741c59cde3c2dcf1f96b3bb573300d4016aee3ca6c484f2e558fde4e9feadbb7  tests/ph1/transfer-smoke/client-transfer.test.mjs
-5b41d2acbd2a7658d8a22d3ed949bcb2cfc7e40c20ea5a4e837ce4ae25a19741  tests/ph1/transfer-smoke/README.md
+f34986a7da545c9ad2998827b5a64beaab85b3e7f8e9383ca4e36cff9791d75f  tests/ph1/transfer-smoke/README.md
 4ebb0eae6147d7d5cd7a238b6791535478160c3623239e8b432bf31c00e34c70  tools/p05-fixtures/generate-fixtures.mjs
