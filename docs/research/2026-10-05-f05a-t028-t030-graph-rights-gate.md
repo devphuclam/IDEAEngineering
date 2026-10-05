@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-RES-F05A-T028-T030-GRAPH-RIGHTS-20261005` / execution preflight and rights reconciliation / `0.2 / Draft` |
+| Stable ID / class / version / status | `IE-RES-F05A-T028-T030-GRAPH-RIGHTS-20261005` / execution preflight and rights reconciliation / `0.3 / Draft` |
 | Normativity / repository instruction state | `INFORMATIVE / NOT-APPLICABLE`; no new product requirement or exception |
 | Owner / author / worker | Engineering / Codex / `CODEX_ONLY`; named accountable intake owner `UNKNOWN` |
 | Reviewer / acceptance authority | Project Reviewer for execution/process scope; Legal Review Authority for legal disposition; this successor review `NOT-RUN` |
@@ -17,8 +17,9 @@
 
 ## 1. Current result
 
-**Current successor state: the new T028/T030 process exception is authorized; final rights/input
-reconciliation remains IN_PROGRESS and Maven goal execution remains NOT-RUN.** See §5. The original
+**Current successor state: T028/T030 BUILD/TEST PROCESS GATE = OPEN under the new prospective
+exception and the [final input freeze](2026-10-05-f05a-t028-t030-input-freeze.md); Maven goal execution
+remains NOT-RUN.** See §5 and the freeze. The original
 pre-exception findings below are retained as history, not a request for another blanket approval.
 No Maven goal, Server test, product implementation, migration, database provisioning, listener,
 Web build, download/install, verifier, Tracker action or merge ran in this reconciliation.
@@ -234,3 +235,42 @@ execution or graph change), because the current no-new-artifact/download executi
 must not be silently reinterpreted. No archive was retrieved in this investigation.
 The process exception cannot substitute for finishing exact grant mapping. All goal execution
 remains NOT-RUN; no blanket approval or rights waiver has been requested.
+
+### 5.3 Android JSON reference-only successor — approved method executed
+
+The user subsequently authorized exactly the source-package blob named in §5.2 to be read
+**in RAM only**, without saving/importing/installing/executing it or copying it into `.m2`.
+The preceding NOT-RUN statement describes the earlier publication, not the current result.
+
+The GitHub blob response was decoded into an in-memory ZIP. Its reconstructed Git object
+identity matched `cfc785eb62a5628097185ddf69e67f4e7b5c1ea3`; archive SHA-256 was
+`54c781eea645c450cbbc4a5a1b5a474745465452cec1354cb567b781ea6622c3`.
+All **six Java source headers** explicitly attributed Android Open Source Project (2010) and
+granted Apache-2.0 use. The official publication commit/build recipe and publisher clarification
+linked in §5.2 establish the attributable publication context; this is not a POM-only inference.
+
+The exact cached Maven JAR SHA-256 remains
+`dfb7bae2f404cfe0b72b4d23944698cb716b7665171812a0a4d0f5926c0fac79`.
+Its class list comprises JSON, JSONArray, JSONException, JSONObject, JSONStringer and JSONTokener,
+plus JSONObject$1 and JSONStringer$Scope. That matches the source-package family and nested classes.
+This is source/publication attribution, **not** a reproducible byte-for-byte source-to-binary build
+claim; the recipe adds publication metadata. No extra class family was observed.
+
+Disposition for this unchanged Server test input: exact grant evidence gap **CLOSED**;
+`APPROVED-WITH-OBLIGATIONS` for bounded internal T028/T030 test use. Engineering retains publisher
+provenance, copyright/license attribution and applicable Apache notice/patent/trademark conditions;
+no commercial/distribution or legal-company approval is inferred. No source package was saved,
+executed, imported into Git/cache or used as a build input. No dependency/graph changed.
+
+### 5.4 ASM owner grant reference
+
+The selected ASM 9.7.1 JAR remains pinned in the resolved inventory. Its publisher's
+[release chronology](https://asm.ow2.io/versions.html) identifies the 9.7.1 release and tag
+`ASM_9_7_1`; the exact cached POM points to the publisher's
+[complete BSD-3-Clause grant](https://asm.ow2.io/license.html), which was read in full.
+That grant permits source/binary use and redistribution subject to copyright, conditions,
+disclaimer retention and no endorsement. This is a primary owner grant plus pinned publication
+identity, not solely a package-metadata label. The tag-specific GitLab raw file could not be read
+because of its access challenge; no bypass was attempted and no exact tag-file hash is claimed.
+Engineering retains the owner grant/reference and the exact JAR identity; commercial qualification
+and modified/redistributed-package obligations remain outside this unchanged internal test use.
