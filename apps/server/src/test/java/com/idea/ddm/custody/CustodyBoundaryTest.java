@@ -265,6 +265,8 @@ class CustodyBoundaryTest {
         assertFalse(original.validAt(java.time.Instant.ofEpochSecond(original.expiresAt())));
         assertFalse(original.validAt(java.time.Instant.ofEpochSecond(original.expiresAt()+1)));
         time.advance(300);
+        assertFalse(service.resolve(signedIn.context(),scope.operationId()).validAt(time.instant()));
+        assertThrows(IllegalStateException.class,()->service.issue(signedIn.context(),scope));
         var renewed=service.renew(signedIn.context(),scope.operationId());
         assertNotEquals(original.grantId(),renewed.grantId());
         assertEquals(original.transferId(),renewed.transferId());assertEquals(original.scope(),renewed.scope());
@@ -287,6 +289,35 @@ class CustodyBoundaryTest {
         @Override public java.time.Instant instant(){return now.get();}
         @Override public java.time.ZoneId getZone(){return java.time.ZoneOffset.UTC;}
         @Override public Clock withZone(java.time.ZoneId zone){if(!zone.equals(getZone()))throw new IllegalArgumentException("UTC test clock");return this;}
+    }
+    @Test
+    void g05RenewalRechecksCurrentSessionAndAllocationWithoutPartialReplacement() throws Exception {
+        var signedIn=fixture.signIn();var scope=syntheticScope();seedVault(scope);
+        var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();var service=service(signedIn,scope,keys.getPrivate());
+        var original=service.issue(signedIn.context(),scope);
+        fixture.signOut();assertThrows(IllegalStateException.class,()->service.renew(signedIn.context(),scope.operationId()));
+        var fresh=fixture.signIn();
+        try(var connection=F05DatabaseFixture.open("migration");var query=connection.prepareStatement(
+                "UPDATE vault_endpoint SET eligibility='INELIGIBLE' WHERE vault_id=?")) {
+            query.setObject(1,scope.vaultId());assertEquals(1,query.executeUpdate());
+        }
+        assertThrows(IllegalStateException.class,()->service.renew(fresh.context(),scope.operationId()));
+        assertOperationCounts(scope.operationId(),1,1,1,1);
+        try(var connection=F05DatabaseFixture.open("migration");var query=connection.prepareStatement(
+                "UPDATE vault_endpoint SET eligibility='ELIGIBLE' WHERE vault_id=?")) {
+            query.setObject(1,scope.vaultId());assertEquals(1,query.executeUpdate());
+        }
+        assertEquals(original.grantId(),service.resolve(fresh.context(),scope.operationId()).grantId());
+    }
+    private static void assertOperationCounts(UUID operation,int transfers,int grants,int scopes,int audit) throws Exception {
+        try(var connection=fixture.app().getConnection()) {
+            var tables=List.of("transfer_record","transfer_grant","transfer_grant_scope s JOIN transfer_grant g ON s.grant_id=g.grant_id","audit_evidence");
+            int[] counts={transfers,grants,scopes,audit};
+            for(int i=0;i<tables.size();i++)try(var query=connection.prepareStatement(
+                    "SELECT count(*) FROM "+tables.get(i)+" WHERE "+(i==2?"g.":"")+"operation_id=?")) {
+                query.setObject(1,operation);try(var row=query.executeQuery()){assertTrue(row.next());assertEquals(counts[i],row.getInt(1));}
+            }
+        }
     }
     private static Map<Integer, byte[]> verifyFrame(byte[] packet, java.security.PublicKey key) throws Exception {
         assertTrue(packet.length <= 4096 && packet.length >= 83);

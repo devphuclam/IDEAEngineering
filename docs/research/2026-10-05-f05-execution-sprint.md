@@ -146,3 +146,13 @@ Operation/Transfer/full immutable scope, supersedes old status without changing 
 inserts fresh Grant/scope/Audit and revalidates IAM/owner/allocation before shared commit. Lookup
 selects the current ISSUED generation (an expired timestamp can still be resolved as metadata but
 is not valid); no implicit extension or Gateway progress/custody claim. V9 and graph unchanged.
+
+## G05 refusal qualification
+
+Minimum GREEN c59174f967f24aa7d4b48d9863605d06de477d43:7/7 PASS, schema
+f05_bc59266efb14452f86dfe5dc43030946 exact cleanup COMPLETE, private log
+a1f4b494781ae2cc3471c432a3ea5bd9bdd58e72960e39eb8655269e3d018447.
+Fresh `run-g05-green-02/source`: expected8/8; real HTTP logout invalidates original context,
+renewal must refuse without replacing original Grant. Fresh sign-in plus ineligible configured
+Vault also refuses; no extra transfer/grant/scope/Audit, original still resolves once allocation
+restored. Expired ordinary retry explicitly refuses, never silently renews. No production change.

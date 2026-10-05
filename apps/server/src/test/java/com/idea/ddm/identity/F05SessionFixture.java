@@ -87,6 +87,14 @@ public final class F05SessionFixture implements AutoCloseable {
     private HttpResponse<String> get(HttpClient client, String path) throws Exception {
         return client.send(HttpRequest.newBuilder(uri(path)).GET().build(), HttpResponse.BodyHandlers.ofString());
     }
+    public void signOut() throws Exception {
+        var client=HttpClient.newBuilder().cookieHandler(cookies).build();
+        var csrf=get(client,"/api/v1/identity/csrf");assertEquals(200,csrf.statusCode());
+        var response=client.send(HttpRequest.newBuilder(uri("/api/v1/identity/logout"))
+                .header(field(csrf.body(),"headerName"),field(csrf.body(),"token"))
+                .POST(HttpRequest.BodyPublishers.noBody()).build(),HttpResponse.BodyHandlers.discarding());
+        assertEquals(204,response.statusCode());
+    }
     private URI uri(String path) { return URI.create("http://127.0.0.1:" + port + path); }
     private static String encode(String value) { return URLEncoder.encode(value, StandardCharsets.UTF_8); }
     private static String field(String json, String name) {
