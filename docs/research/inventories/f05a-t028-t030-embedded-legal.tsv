@@ -1,4 +1,4 @@
-coordinate	jar_path	legal_entry	legal_sha256
+coordinate_or_core_class	jar_path	legal_entry	legal_sha256
 org.springframework.boot:spring-boot-starter:4.1.1	/home/phuclam/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar	META-INF/LICENSE.txt	7200000367e0e8b47822d563a5ddd2dd3a97cc05b32bd7dbcc7b4eeb92b76628
 org.springframework.boot:spring-boot-starter:4.1.1	/home/phuclam/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar	META-INF/NOTICE.txt	64e8c092d64ccaecac2d81d324c84a4dff29fdc2cb777f3b1abd910ac2e8555d
 org.springframework.boot:spring-boot-autoconfigure:4.1.1	/home/phuclam/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar	META-INF/LICENSE.txt	7200000367e0e8b47822d563a5ddd2dd3a97cc05b32bd7dbcc7b4eeb92b76628

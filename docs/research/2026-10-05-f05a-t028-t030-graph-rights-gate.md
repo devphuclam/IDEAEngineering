@@ -135,13 +135,16 @@ but never `executeMojo`; JDK source launch compiles the first-party inspection u
 product/test code. LegalAudit rechecks JAR hashes before ZIP reads. The legal text output is
 larger than the tool display limit; entry identities were captured, but uninspected/truncated
 text is not treated as reviewed. Only explicitly read/reused rights evidence is dispositioned.
+An additional metadata-only pass against the final resolved inventory captured all 220 legal
+entry rows without display truncation. All 456 resolved-input rows have validated hash/path
+shape; the 12 core-provider rows add class origins, not additional repository acquisitions.
 
 | First-party raw-byte input | SHA-256 |
 |---|---|
 | GraphAudit.java | `274003edb8d8662e6ede0e16c126f880c88c8c139ef71d8113258bb91e8db3f2` |
 | LegalAudit.java | `96eee0eba5b298024f5189917c822992f0107bf4496514f4d917cfaee814da03` |
 | Resolved-input inventory | `036afc60a252566bcdf72c4026d160bd31c27c477645c2f626aa61588f6039ca` |
-| Embedded-legal inventory | `1302fb4762ca00eb6d5fa053813a865210b2b96625ef7bec0599c3e053f02ec2` |
+| Embedded-legal inventory | `4e333caef94b2cc42609d033aaeea5a1cfeb7685f0f7559e48c63f23f7b65ffc` |
 
 G01–G06, V9, database `idea_ddm_f05a_20261005_t028`, Maven direct goals, provider/test execution,
 all regressions and Server Grant checkpoint: **NOT-RUN**. No product source or V1–V8 changed.
