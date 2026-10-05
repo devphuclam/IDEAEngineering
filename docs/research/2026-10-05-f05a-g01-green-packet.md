@@ -79,3 +79,18 @@ may be dropped; database retained. Rehash controlled inputs and actual observed 
 paths. Keep logs private and retain only bounded result/hash/source/schema evidence.
 PR #38 Draft/Open; Issue #37 Open; T028/T030/F05-A incomplete; verifier NOT-RUN;
 no Gateway/Receipt/T032+, preview, TLS provision, timer/Tracker or merge.
+
+## Execution receipt — G01 only
+
+Executed pushed source `1b7df9233593d40cd5c1a146bdfa0209590fee51`.
+Raw local/remote inputs 76/76 PASS; transfer archive SHA-256
+`3593b9e55a80055d240ffd6da524c8c054d81348bec33fdace90ac71c97426b4`;
+manifest `107495fa6087a8ccce7997f65be929ae5cc7b2dbc311233070184be8a2538f1e`.
+Direct offline Maven BUILD SUCCESS; G01 **1/1 PASS**, no failures/errors/skips.
+Fresh schema `f05_08c91b693ac440369e191f9bc2812ceb`; V1–V9 applied there.
+Owned Server exited before exact marked schema cleanup COMPLETE; database retained.
+Source 76, inventory 456, Maven core 52 and 695 observed cached-path checks PASS after execution.
+Private Maven log SHA-256 `34f8fc4f2f228dacdf0e568809c4bc783a4efb3c09e94a0f1f654fd33197ebea`;
+preflight `423ff89a31ad8395958efd9a0304758357f387b37197efd509c0606e58837b94`;
+postflight `211ea3dbaa76592ef40fb0f0674bb8834f6e4f6852c580f7c5b87684df17cdf8`.
+This receipt closes only the first-issuance tracer; no broader slice/regression inferred.

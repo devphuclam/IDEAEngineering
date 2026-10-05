@@ -59,6 +59,7 @@ public final class F05SessionFixture implements AutoCloseable {
     public OwnerSessionEligibility eligibility() { return new OwnerSessionEligibility(server.getBean(SessionService.class)); }
 
     public SignedIn signIn() throws Exception {
+        cookies.getCookieStore().removeAll(); // Each capture starts at the real anonymous boundary.
         var client = HttpClient.newBuilder().cookieHandler(cookies).build();
         assertEquals(401, get(client, "/api/v1/identity/session").statusCode());
         assertNull(captured.get());

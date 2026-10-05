@@ -12,18 +12,22 @@ import java.time.Clock;
 import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 
-/** G01 tracer only. Missing TransferGrantService is the initial compilation RED, not a DB PASS. */
+/** Approved Server Grant qualification seam; HTTP identity and real bounded PostgreSQL. */
 class CustodyBoundaryTest {
+    private static F05SessionFixture fixture;
     @BeforeAll
-    static void freshOwnedSchema() throws Exception { F05DatabaseFixture.create(); }
+    static void freshOwnedSchema() throws Exception {
+        F05DatabaseFixture.create();
+        fixture = new F05SessionFixture(F05DatabaseFixture.url(), Clock.systemUTC());
+    }
+    @AfterAll
+    static void stopOwnedServer() { if (fixture != null) fixture.close(); }
     @Test
     void g01ServerEstablishedActorObtainsExactPersistedSignedPrivateGrant() throws Exception {
         var clock = Clock.systemUTC();
-        var schema = required("IDEA_F05_TEST_SCHEMA");
-        assertTrue(schema.matches("f05_[0-9a-f]{32}"));
-        var url = "jdbc:postgresql://127.0.0.1:5432/idea_ddm_f05a_20261005_t028?currentSchema=" + schema;
-        try (var fixture = new F05SessionFixture(url, clock)) {
+        {
             var signedIn = fixture.signIn();
             var scope = new TransferGrantService.Scope(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
                     UUID.randomUUID(), "https://127.0.0.1:18447/synthetic-transfer", 1, UUID.randomUUID(),
@@ -79,6 +83,88 @@ class CustodyBoundaryTest {
                         assertEquals(0, row.getInt(1), "Issuance is not accepted custody or an F04 event");
                     }
             }
+        }
+    }
+
+    @Test
+    void g02AnonymousDisabledRevokedStaleAndWrongOrganizationCannotLeaveIssuanceState() throws Exception {
+        var signedIn = fixture.signIn();
+        var scope = syntheticScope();
+        var key = KeyPairGenerator.getInstance("Ed25519", "SunEC").generateKeyPair();
+        var service = service(signedIn, scope, key.getPrivate());
+        refuseWithoutState(() -> service.issue(null, scope), scope.operationId());
+        try (var connection = F05DatabaseFixture.open("migration"); var sql = connection.createStatement()) {
+            try {
+                sql.executeUpdate("UPDATE idea_account SET status='DISABLED' WHERE account_id='"+signedIn.accountId()+"'");
+                refuseWithoutState(() -> service.issue(signedIn.context(),scope),scope.operationId());
+            } finally { sql.executeUpdate("UPDATE idea_account SET status='ACTIVE' WHERE account_id='"+signedIn.accountId()+"'"); }
+            sql.executeUpdate("UPDATE session_record SET revoked_at=CURRENT_TIMESTAMP WHERE actor_id='"+signedIn.actorId()+"'");
+            refuseWithoutState(() -> service.issue(signedIn.context(),scope),scope.operationId());
+            var fresh = fixture.signIn();
+            sql.executeUpdate("UPDATE idea_account SET security_version=security_version+1 WHERE account_id='"+fresh.accountId()+"'");
+            refuseWithoutState(() -> service.issue(fresh.context(),scope),scope.operationId());
+            var current = fixture.signIn();
+            // Core has one operating Organization. A foreign owner-scope requirement must refuse,
+            // not fabricate a second Organization or take Organization authority from caller input.
+            var requiredOrganization = UUID.randomUUID();
+            var wrongOrganization = new TransferGrantService(fixture.app(),fixture.eligibility(),(caller,actor,requested)->{
+                if(!requiredOrganization.equals(actor.organizationId())) throw new SecurityException("OWNER_ORGANIZATION_REFUSED");
+            },Clock.systemUTC(),key.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
+            refuseWithoutState(() -> wrongOrganization.issue(current.context(),scope),scope.operationId());
+        }
+    }
+
+    @Test
+    void g02ExactOwnerObjectAndConfiguredAllocationRefusalsLeaveNoPartialGrant() throws Exception {
+        var signedIn = fixture.signIn();
+        var expected = syntheticScope();
+        var key = KeyPairGenerator.getInstance("Ed25519", "SunEC").generateKeyPair();
+        var service = service(signedIn, expected, key.getPrivate());
+        var wrongObject = new TransferGrantService.Scope(expected.operationId(),expected.correlationId(),expected.vaultId(),
+                expected.gatewayId(),expected.endpoint(),1,UUID.randomUUID(),1024,"0".repeat(64),0,1024);
+        refuseWithoutState(() -> service.issue(signedIn.context(),wrongObject),expected.operationId());
+        // Exact owner callback accepts the scope, but the configured Vault is absent/ineligible.
+        refuseWithoutState(() -> service.issue(signedIn.context(),expected),expected.operationId());
+        try (var connection=F05DatabaseFixture.open("migration");var insert=connection.prepareStatement(
+                "INSERT INTO vault_endpoint(vault_id,adapter_kind,eligibility) VALUES (?,'F05_SYNTHETIC','INELIGIBLE')")) {
+            insert.setObject(1,expected.vaultId());assertEquals(1,insert.executeUpdate());
+        }
+        refuseWithoutState(() -> service.issue(signedIn.context(),expected),expected.operationId());
+        // No default owner bypass: even an eligible Vault cannot override a configured owner refusal.
+        try (var connection=F05DatabaseFixture.open("migration");var update=connection.prepareStatement(
+                "UPDATE vault_endpoint SET eligibility='ELIGIBLE' WHERE vault_id=?")) {
+            update.setObject(1,expected.vaultId());assertEquals(1,update.executeUpdate());
+        }
+        var unavailable = new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,scope)->{
+            throw new SecurityException("CONFIGURED_GATEWAY_UNAVAILABLE");
+        },Clock.systemUTC(),key.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
+        refuseWithoutState(() -> unavailable.issue(signedIn.context(),expected),expected.operationId());
+    }
+
+    private static TransferGrantService.Scope syntheticScope() {
+        return new TransferGrantService.Scope(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),
+                "https://127.0.0.1:18447/synthetic-transfer",1,UUID.randomUUID(),1024,"0".repeat(64),0,1024);
+    }
+    private static TransferGrantService service(F05SessionFixture.SignedIn signedIn,TransferGrantService.Scope expected,
+            java.security.PrivateKey key) {
+        return new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,requested)->{
+            if(!actor.actorId().equals(signedIn.actorId()) || !actor.organizationId().equals(signedIn.organizationId())
+                    || !expected.equals(requested)) throw new SecurityException("OWNER_ALLOCATION_REFUSED");
+        },Clock.systemUTC(),key,"idea-server-test","idea-gateway-test","server-key-test");
+    }
+    @FunctionalInterface private interface Attempt { void run() throws Exception; }
+    private static void refuseWithoutState(Attempt attempt,UUID operationId) throws Exception {
+        var refusal=assertThrows(IllegalStateException.class,attempt::run);
+        assertEquals("GRANT_NOT_COMMITTED",refusal.getMessage());
+        assertTrue(refusal.getCause() instanceof SecurityException
+                || refusal.getCause() instanceof com.idea.ddm.identity.IdentityRefusal,
+                "Storage/signing/fixture failure is not a security-refusal PASS");
+        // DB observation is an explicitly approved no-partial-state oracle, not an alternative identity seam.
+        try(var connection=fixture.app().getConnection()) {
+            for(var table:List.of("transfer_record","transfer_grant","audit_evidence"))
+                try(var query=connection.prepareStatement("SELECT count(*) FROM "+table+" WHERE operation_id=?")) {
+                    query.setObject(1,operationId);try(var row=query.executeQuery()){assertTrue(row.next());assertEquals(0,row.getInt(1));}
+                }
         }
     }
 
