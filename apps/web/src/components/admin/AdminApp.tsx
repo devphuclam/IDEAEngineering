@@ -22,6 +22,7 @@ import {
 } from "./mockAdminData";
 import { ProjectsView } from "./ProjectsView";
 import { RbacView } from "./RbacView";
+import { disableAccount, reenableAccount, CsrfProof } from "../../services/identityApi";
 import "../../styles/admin.css";
 
 export interface AdminAppProps {
@@ -30,6 +31,8 @@ export interface AdminAppProps {
   onExitAdmin: () => void;
   onLogout: () => void;
   onOpenProfile?: () => void;
+  csrf?: CsrfProof | null;
+  organizationId?: string;
 }
 
 export function AdminApp({
@@ -38,6 +41,8 @@ export function AdminApp({
   onExitAdmin,
   onLogout,
   onOpenProfile,
+  csrf,
+  organizationId,
 }: AdminAppProps) {
 
   const [activeSection, setActiveSection] = useState<AdminSection>("accounts");
@@ -89,12 +94,76 @@ export function AdminApp({
 
 
   // Toggle actor status (Active <-> Suspended)
-  const handleToggleActorStatus = (id: string) => {
+  const handleToggleActorStatus = async (id: string) => {
+    const target = actors.find((a) => a.id === id);
+    if (!target) return;
+
+    const isCurrentlyActive = target.status === "active";
+    const nextStatus = isCurrentlyActive ? "suspended" : "active";
+
+    // If connected to Backend (csrf present) and accountId exists
+    if (csrf && target.accountId) {
+      try {
+        const expectedSecurityVersion = target.securityVersion || 1;
+        const res = isCurrentlyActive
+          ? await disableAccount(
+              {
+                accountId: target.accountId,
+                expectedSecurityVersion,
+                reason: "Quản trị viên tạm khóa tài khoản qua giao diện Admin DDM",
+                organizationId,
+              },
+              csrf
+            )
+          : await reenableAccount(
+              {
+                accountId: target.accountId,
+                expectedSecurityVersion,
+                reason: "Quản trị viên kích hoạt lại tài khoản qua giao diện Admin DDM",
+                organizationId,
+              },
+              csrf
+            );
+
+        const updatedStatus: "active" | "suspended" | "pending" =
+          res.status === "ACTIVE"
+            ? "active"
+            : res.status === "DISABLED"
+            ? "suspended"
+            : "pending";
+
+        setActors((prev) =>
+          prev.map((actor) => {
+            if (actor.id === id) {
+              const updated = {
+                ...actor,
+                status: updatedStatus,
+                securityVersion: res.securityVersion,
+              };
+              if (selectedActor?.id === id) {
+                setSelectedActor(updated);
+              }
+              return updated;
+            }
+            return actor;
+          })
+        );
+        return;
+      } catch (err: unknown) {
+        alert(
+          err instanceof Error
+            ? err.message
+            : "Thao tác thay đổi trạng thái tài khoản thất bại."
+        );
+        return;
+      }
+    }
+
+    // In-memory fallback (offline / demo simulation)
     setActors((prev) =>
       prev.map((actor) => {
         if (actor.id === id) {
-          const newStatus = actor.status === "active" ? "suspended" : "active";
-          const updated = { ...actor, status: newStatus as "active" | "suspended" };
+          const updated = { ...actor, status: nextStatus as "active" | "suspended" };
           if (selectedActor?.id === id) {
             setSelectedActor(updated);
           }
@@ -340,6 +409,8 @@ export function AdminApp({
         projects={projects}
         roles={roles}
         departments={departments.map((d) => d.name)}
+        csrf={csrf}
+        organizationId={organizationId}
         onClose={() => setIsAddAccountOpen(false)}
         onSubmit={(newActor, initialAssignment) => {
           handleAddActor(newActor);

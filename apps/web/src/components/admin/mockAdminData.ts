@@ -6,6 +6,9 @@ export interface AdminActor {
   department: string;
   status: "active" | "suspended" | "pending";
   createdAt: string;
+  accountId?: string;
+  loginIdentityId?: string;
+  securityVersion?: number;
 }
 
 export interface AdminProject {

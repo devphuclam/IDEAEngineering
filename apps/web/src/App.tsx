@@ -9,7 +9,7 @@ import { UserProfileScreen } from "./components/profile/UserProfileScreen";
 import "./styles/auth.css";
 
 type CsrfProof = { headerName: string; token: string };
-type SessionView = { actorId: string; accountId: string };
+type SessionView = { actorId: string; accountId: string; organizationId?: string };
 
 async function readJson<T>(response: Response): Promise<T> {
   if (!response.ok) throw new Error("REQUEST_REFUSED");
@@ -304,6 +304,8 @@ export function App() {
           <AdminApp
             actorId={session.actorId}
             logoSrc="/logo-idea.png"
+            csrf={csrf}
+            organizationId={session.organizationId}
             onExitAdmin={() => setViewMode("session")}
             onOpenProfile={() => setViewMode("profile")}
             onLogout={() => void submitLogout()}

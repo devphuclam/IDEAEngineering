@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { generateUuid } from "../../utils/identity";
+import { createAccount, CsrfProof } from "../../services/identityApi";
 import {
   AdminActor,
   AdminProject,
@@ -12,6 +13,8 @@ export interface CreateActorDrawerProps {
   projects: AdminProject[];
   roles: AdminRole[];
   departments?: string[];
+  csrf?: CsrfProof | null;
+  organizationId?: string;
   onClose: () => void;
   onSubmit: (
     newActor: AdminActor,
@@ -51,6 +54,8 @@ export function CreateActorDrawer({
   departments,
   onClose,
   onSubmit,
+  csrf,
+  organizationId,
 }: CreateActorDrawerProps) {
   const availableDepartments = departments && departments.length > 0 ? departments : DEFAULT_DEPARTMENTS;
   const [fullName, setFullName] = useState("");
@@ -60,7 +65,8 @@ export function CreateActorDrawer({
   const [isEmailCustom, setIsEmailCustom] = useState(false);
   const [department, setDepartment] = useState(availableDepartments[0]);
   const [status, setStatus] = useState<"active" | "pending">("active");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Optional project role assignment
   const [assignProject, setAssignProject] = useState(false);
@@ -113,30 +119,73 @@ export function CreateActorDrawer({
       setDepartment(availableDepartments[0]);
       setStatus("active");
       setAssignProject(false);
+      setSubmitError(null);
+      setIsSubmitting(false);
       if (projects.length > 0) setSelectedProjectId(projects[0].id);
       if (roles.length > 0) setSelectedRoleId(roles[0].id);
     }
   }, [isOpen, projects, roles, availableDepartments]);
 
-
   if (!isOpen) return null;
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!fullName.trim() || !username.trim()) return;
+    if (!fullName.trim() || !username.trim() || isSubmitting) return;
 
-    const newActorId = generateUuid();
+    setSubmitError(null);
     const cleanFullName = fullName.trim();
     const cleanUsername = username.trim().toLowerCase();
     const cleanEmail = email.trim() || `${cleanUsername}@ideagroupvn.com`;
 
+    let generatedActorId = generateUuid();
+    let accountId: string | undefined;
+    let loginIdentityId: string | undefined;
+    let securityVersion: number | undefined;
+    let actorStatus: "active" | "suspended" | "pending" = status;
+
+    if (csrf) {
+      setIsSubmitting(true);
+      try {
+        const result = await createAccount(
+          {
+            displayName: cleanFullName,
+            login: cleanUsername,
+            organizationId,
+          },
+          csrf
+        );
+        generatedActorId = result.actorId;
+        accountId = result.accountId;
+        loginIdentityId = result.loginIdentityId;
+        securityVersion = result.securityVersion;
+        actorStatus =
+          result.status === "ACTIVE"
+            ? "active"
+            : result.status === "DISABLED"
+            ? "suspended"
+            : "pending";
+      } catch (err: unknown) {
+        setIsSubmitting(false);
+        setSubmitError(
+          err instanceof Error
+            ? err.message
+            : "Không thể tạo tài khoản trên máy chủ IDEA."
+        );
+        return;
+      }
+      setIsSubmitting(false);
+    }
+
     const newActor: AdminActor = {
-      id: newActorId,
+      id: generatedActorId,
+      accountId,
+      loginIdentityId,
+      securityVersion,
       fullName: cleanFullName,
       username: cleanUsername,
       email: cleanEmail,
       department,
-      status,
+      status: actorStatus,
       createdAt: new Date().toISOString().split("T")[0],
     };
 
@@ -149,7 +198,7 @@ export function CreateActorDrawer({
       const role = roles.find((r) => r.id === selectedRoleId);
       if (proj && role) {
         initialAssignment = {
-          principalId: newActorId,
+          principalId: generatedActorId,
           principalName: cleanFullName,
           principalType: "user",
           roleId: role.id,
@@ -482,12 +531,47 @@ export function CreateActorDrawer({
             </div>
           </div>
 
+          {submitError && (
+            <div
+              className="admin-error-box"
+              style={{
+                margin: "0 24px 16px 24px",
+                padding: "10px 14px",
+                backgroundColor: "#fef2f2",
+                border: "1px solid #fecaca",
+                borderRadius: "6px",
+                color: "#991b1b",
+                fontSize: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+              role="alert"
+            >
+              <span aria-hidden="true">⚠️</span>
+              <span>{submitError}</span>
+            </div>
+          )}
+
           <div className="admin-drawer-footer">
-            <button type="button" className="admin-btn" onClick={onClose}>
+            <button
+              type="button"
+              className="admin-btn"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Hủy
             </button>
-            <button type="submit" className="admin-btn primary">
-              {assignProject ? "Tạo tài khoản & Phân công" : "Tạo tài khoản kỹ sư"}
+            <button
+              type="submit"
+              className="admin-btn primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting
+                ? "Đang lưu máy chủ..."
+                : assignProject
+                ? "Tạo tài khoản & Phân công"
+                : "Tạo tài khoản kỹ sư"}
             </button>
           </div>
         </form>
