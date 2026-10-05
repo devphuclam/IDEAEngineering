@@ -34,3 +34,8 @@ Fresh receipt-green-02 adds V10 retained exact frame hash/Grant/Receipt/Transfer
 append-only runtime rights and one accepted evidence row per Transfer; no bearer frame retained
 in evidence table, no V1–V9 changes. Same2-test oracle, existing approved DB/fresh schema.
 Remaining migration regression/negative/atomicity/concurrency matrix is not inferred complete.
+
+Fresh receipt-green-03 qualifies existing negative behavior (no manufactured RED): signature/
+key/pin and24 signed field mutations, allocation/correlation/size/range/time, malformed frame,
+before/at/after900s and899s positive. Three JUnit methods; multiple explicit vectors within r03.
+No actual Gateway/client transfer or network-timeout claim. Same exact DB/schema/tool envelope.

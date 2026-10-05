@@ -64,6 +64,50 @@ class ReceiptBoundaryTest {
         assertEquals("RECEIPT_NOT_COMMITTED",failure.getMessage());assertInstanceOf(SecurityException.class,failure.getCause());
         assertEquals(accepted,service.accept(actor.context(),original));
     }
+    record Candidate(F05SessionFixture.SignedIn actor,TransferGrantService.Grant grant,UUID location,UUID receiptId,KeyPair gateway,TransferReceiptService service,byte[] packet) {}
+    static Candidate candidate() throws Exception {
+        var actor=fixture.signIn();UUID location=UUID.randomUUID(),receiptId=UUID.randomUUID();
+        var scope=new TransferGrantService.Scope(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),"https://127.0.0.1:18447/",1,UUID.randomUUID(),1024,"5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",0,1024);
+        try(var c=F05DatabaseFixture.open("migration");var q=c.prepareStatement("INSERT INTO vault_endpoint(vault_id,adapter_kind,eligibility) VALUES (?,'FILESYSTEM','ELIGIBLE')")){q.setObject(1,scope.vaultId());assertEquals(1,q.executeUpdate());}
+        var generator=KeyPairGenerator.getInstance("Ed25519","SunEC");var server=generator.generateKeyPair();var gateway=generator.generateKeyPair();
+        TransferGrantService.OwnerAdmission admission=(c,a,s)->{if(!a.actorId().equals(actor.actorId())||!a.organizationId().equals(actor.organizationId())||!s.equals(scope))throw new SecurityException("OWNER_REFUSED");};
+        var grant=new TransferGrantService(fixture.app(),fixture.eligibility(),admission,clock,server.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1").issue(actor.context(),scope);
+        var service=receiptService(actor,scope,location,grant,gateway.getPublic(),clock);
+        return new Candidate(actor,grant,location,receiptId,gateway,service,receipt(grant,receiptId,location,gateway.getPrivate()));
+    }
+    static TransferReceiptService receiptService(F05SessionFixture.SignedIn actor,TransferGrantService.Scope scope,UUID location,TransferGrantService.Grant grant,PublicKey key,Clock time){
+        return new TransferReceiptService(fixture.app(),fixture.eligibility(),(c,a,s,l)->{
+            if(!a.actorId().equals(actor.actorId())||!a.organizationId().equals(actor.organizationId())||!scope.equals(s)||!location.equals(l))throw new SecurityException("OWNER_ALLOCATION_REFUSED");
+            return new TransferReceiptService.Allocation(scope.vaultId(),location,grant.transferId()+"-"+location+".blob");
+        },time,key,"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1");
+    }
+    @Test void r03SignaturePinsCorrelationAllocationExpiryAndFramingRefuseWithoutCustody() throws Exception {
+        var x=candidate();
+        byte[] tampered=x.packet().clone();tampered[tampered.length-1]^=1;
+        assertRefusal(x.service(),x.actor(),tampered);
+        byte[] wrong=x.packet().clone();resign(wrong,KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair().getPrivate());assertRefusal(x.service(),x.actor(),wrong);
+        for(int tag:new int[]{1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}){
+            byte[] changed=x.packet().clone();var body=ByteBuffer.wrap(changed);body.position(17);
+            for(int i=1;i<=25;i++){int actual=Short.toUnsignedInt(body.getShort()),size=Short.toUnsignedInt(body.getShort());if(actual==tag){changed[body.position()+size-1]^=1;break;}body.position(body.position()+size);}
+            resign(changed,x.gateway().getPrivate());assertRefusal(x.service(),x.actor(),changed);
+        }
+        for(byte[] malformed:List.of(Arrays.copyOf(x.packet(),x.packet().length+1),Arrays.copyOf(x.packet(),20),new byte[4097]))assertRefusal(x.service(),x.actor(),malformed);
+        long t=clock.instant().getEpochSecond();
+        for(long time:new long[]{t-1,t+900,t+901})assertRefusal(receiptService(x.actor(),x.grant().scope(),x.location(),x.grant(),x.gateway().getPublic(),Clock.fixed(Instant.ofEpochSecond(time),ZoneOffset.UTC)),x.actor(),x.packet());
+        assertNoCustody(x);
+        assertNotNull(receiptService(x.actor(),x.grant().scope(),x.location(),x.grant(),x.gateway().getPublic(),Clock.fixed(Instant.ofEpochSecond(t+899),ZoneOffset.UTC)).accept(x.actor().context(),x.packet()));
+    }
+    static void assertRefusal(TransferReceiptService service,F05SessionFixture.SignedIn actor,byte[] packet){
+        var failure=assertThrows(IllegalStateException.class,()->service.accept(actor.context(),packet));assertEquals("RECEIPT_NOT_COMMITTED",failure.getMessage());assertInstanceOf(SecurityException.class,failure.getCause());
+    }
+    static void assertNoCustody(Candidate x) throws Exception {
+        try(var c=fixture.app().getConnection()){
+            for(String table:List.of("transfer_receipt","transfer_receipt_evidence"))try(var q=c.prepareStatement("SELECT count(*) FROM "+table+" WHERE transfer_id=?")){q.setObject(1,x.grant().transferId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals(0,r.getInt(1));}}
+            for(String table:List.of("artifact","artifact_location"))try(var q=c.prepareStatement("SELECT count(*) FROM "+table+" WHERE artifact_id=?")){q.setObject(1,x.grant().scope().objectId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals(0,r.getInt(1));}}
+            try(var q=c.prepareStatement("SELECT count(*) FROM audit_evidence WHERE operation_id=? AND action='transfer.receipt.accept'")){q.setObject(1,x.grant().operationId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals(0,r.getInt(1));}}
+            try(var q=c.prepareStatement("SELECT state FROM transfer_record WHERE transfer_id=?")){q.setObject(1,x.grant().transferId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals("PREPARING",r.getString(1));}}
+        }
+    }
     static void resign(byte[] frame,PrivateKey key) throws Exception {int size=ByteBuffer.wrap(frame).getInt();var s=Signature.getInstance("Ed25519","SunEC");s.initSign(key);s.update(frame,4,size);System.arraycopy(s.sign(),0,frame,6+size,64);}
     static byte[] receipt(TransferGrantService.Grant g,UUID receipt,UUID location,PrivateKey key) throws Exception {
         var s=g.scope();long now=clock.instant().getEpochSecond();
