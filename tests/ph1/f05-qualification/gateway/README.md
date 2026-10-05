@@ -195,3 +195,13 @@ uses Servlet non-blocking reads, at most1MiB RAM per range, independent non-rene
 60s range/30s control and30s inactivity deadlines. Partial bodies never reach the Adapter.
 No new dependency, route, signature, authority or graph; same real positive/inactivity/absolute
 oracle. Commands run-build.sh source manifest gateway-boot-08 then run-http.sh source green.
+
+Actual deadline GREEN0aefb56f4f87b337ce4cc614f51b5f96ac2e86c9: normal trustedTLSv1.3 /
+TLS_AES_256_GCM_SHA384,1024-byte completed Receipt, inactivity40830044ms,
+absolute trickle40860041ms, zero partial verified progress/Receipt. Private result
+b8ef3972b08c3908c215f3e7c95faa9c40e0fa2e435726ba0a12234009491d8a;
+cleanup84fcb7658428001336afda8960d9e45a594c79e58599974b3fb3e5e75c920b30.
+Owned JVM stopped/zero listener; controlled inputs/tool/TLS/global trust unchanged.
+Exact package c26b870e22a6ffb6ed9acbcbcd1dd20208004226c4d09a399e227983023a14e1,
+collection38/payload32, actual115/99 graph/four realms and noJSR305 PASS. Control30s is
+implemented but not independently wall-clock qualified by this range-only test.

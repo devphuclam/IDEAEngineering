@@ -182,3 +182,38 @@ Whole T032/T034 and whole F05 remain incomplete: actual Gateway→Server Receipt
 1KiB/64MiB transfers, remaining transport deadlines and final applicable regression are not
 inferred from these service-level tests. Fresh public V1–V10 remains NOT-RUN.
 PR38 Draft/Open, Issue37 Open, verifier NOT-RUN, no merge/Tracker mutation.
+
+## Successor real Gateway request-deadline execution
+
+Fresh gateway-boot-07 source6094338e19ffe5e8b100314e4c3ff327d6494d43 built with the exact
+admitted offline graph/package. Inactivity PASS30077ms; actual trusted TLS trickle upload
+showed no absolute refusal after65018ms: intended behavioral RED, not trust/tool failure.
+Private result9758f50212716e1cf95ea4c842164f5cb78125ab7478eac3cdd8650c6650df37.
+
+Fresh gateway-boot-08 source0aefb56f4f87b337ce4cc614f51b5f96ac2e86c9 qualifies the repaired
+non-blocking body boundary. Partial bodies stay in bounded<=1MiB RAM and never reach Adapter;
+independent30s inactivity timer and non-renewing60s range deadline return empty408. Actual
+positive1024-byte transfer/signed Receipt remains PASS. Inactivity30044ms, absolute60041ms,
+status zero verified bytes/noReceipt for both unfinished requests. TLSv1.3 /
+TLS_AES_256_GCM_SHA384; exact127.0.0.1:18447 listener only; no bypass or global trust change.
+Control30s implementation is not separately wall-clock-qualified by this test.
+
+Source/raw25/25 locally/remotely; archive780100530de9b3be5f9cd4a8475caddd569e211f2c0c59245d22a9cf362d00b6;
+manifestacea9fc2bfac1e96f6eaa72d9d35eb9801bf6b9c8a672bb40af0e69902a847bb.
+Actual graph115 rows/99 coordinates/242 models/four realms; selected38 collection/32 payload
+package projection and noJSR305 PASS. JARc26b870e22a6ffb6ed9acbcbcd1dd20208004226c4d09a399e227983023a14e1.
+TLS certf6c7b653a899bd55d747ab659088d3dac1527119da2b10b29939324b46c89199;
+freeze f5f324ce52878ad578893755f6dd678881005c3310d904feea16dc20baf88422.
+Result logb8ef3972b08c3908c215f3e7c95faa9c40e0fa2e435726ba0a12234009491d8a,
+cleanup84fcb7658428001336afda8960d9e45a594c79e58599974b3fb3e5e75c920b30.
+Private roots `/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-0{7,8}/source/run/`;
+both owned JVMs stopped/zero listener, original inputs/tools/TLS/trust unchanged.
+
+## Current separate intake gate
+
+T033 Windows Node candidate has an exact binary/checksum match, but bundled ICU custom-term
+process disposition is unresolved. [Exact gate and smallest decision](../../../docs/research/2026-10-05-t033-node-intake-gate.md).
+No Node/client execution, download, replacement or implicit Maven-to-Node exception expansion.
+T029–T032 evidence remains partial/current; fullT033/T0341KiB/64MiB integration is NOT-RUN.
+This is a material external-source process gate, not a request for approval of ordinary
+engineering defects. PR38 remains Draft/Open; no merge/verifier/timer action.
