@@ -46,6 +46,15 @@ verifier NOT-RUN; no merge or timer action.
 
 ## Actual end-to-end attempt01 — published execution contract
 
+Attempt25 transferred both actual P05 fixtures and accepted same-Receipt retries,
+but final logout failed CLIENT_COOKIE_REFUSED: Spring clears a cookie using an
+empty value/Max-Age0 without the positive-cookie HttpOnly attribute. Whole attempt
+remains FAIL and cleaned its exact marked schema/listeners. Fresh26 accepts only
+Secure/host-only/Path=/ empty Max-Age0 deletion of the already-known IDEA_SESSION;
+positive cookies still require Secure/HttpOnly and now explicitly SameSiteStrict.
+No product/authentication/TLS change. This is the observed client parser RED;
+rerun all actual flow on fresh26 for GREEN and independent custody/file oracles.
+
 Attempt24 identified CERT_NOT_YET_VALID: observed Windows UTC09:53:20 vs Ubuntu
 09:54:41 on2026-10-05; fresh cert NotBefore09:54:06. TLS correctly refused.
 Fresh25 recipe issues a new harness-only certificate with explicit NotBefore

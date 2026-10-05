@@ -38,10 +38,12 @@ export class SecureEndpoint {
         response.on('end', () => {
           for (const line of response.headers['set-cookie'] ?? []) {
             const first = line.split(';', 1)[0]; const equals = first.indexOf('=');
-            if (equals < 1 || !/;\s*Secure(?:;|$)/i.test(line)
-                || !/;\s*HttpOnly(?:;|$)/i.test(line) || /;\s*Domain=/i.test(line))
-              return finish('CLIENT_COOKIE_REFUSED');
             const name = first.slice(0, equals); const value = first.slice(equals + 1);
+            const deletion = equals > 0 && name === 'IDEA_SESSION' && this.#cookies.has(name)
+              && value === '' && /;\s*Max-Age=0(?:;|$)/i.test(line) && /;\s*Path=\/(?:;|$)/i.test(line);
+            if (equals < 1 || !/;\s*Secure(?:;|$)/i.test(line) || /;\s*Domain=/i.test(line)
+                || (!deletion && (!/;\s*HttpOnly(?:;|$)/i.test(line) || !/;\s*SameSite=Strict(?:;|$)/i.test(line))))
+              return finish('CLIENT_COOKIE_REFUSED');
             value ? this.#cookies.set(name, value) : this.#cookies.delete(name);
           }
           finish(null, { status: response.statusCode, body: Buffer.concat(chunks) });
