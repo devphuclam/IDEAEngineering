@@ -2,7 +2,7 @@
 set -euo pipefail
 set +x
 umask 077
-[[ $# == 4 && $3 =~ ^(g03|g04|g05|g06|regression)-(red|green)-[0-9]{2}$ && $4 =~ ^[1-9][0-9]*$ ]] || exit 2
+[[ $# == 4 && $3 =~ ^(g03|g04|g05|g06|regression|receipt)-(red|green)-[0-9]{2}$ && $4 =~ ^[1-9][0-9]*$ ]] || exit 2
 owned=/home/phuclam/idea-f05a-t028-t030-20261005-37/run-$3
 source_root="$owned/source"
 [[ $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ ]] || exit 2
@@ -30,6 +30,7 @@ preflight="$source_root/tests/ph1/f05-qualification/server-grant/ExecutionPrefli
 export IDEA_F05_SOURCE_SHA="$1"
 test_selector=CustodyBoundaryTest
 case "$3" in
+  receipt-*) test_selector=ReceiptBoundaryTest ;;
   regression-green-01) test_selector=F05GrantMigrationTest ;;
   regression-green-02|regression-green-04) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
     export IDEA_F03_TEST_DATABASE_NAME=idea_ddm_f05a_20261005_t028 ;;
