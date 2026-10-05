@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { fileRanges, gatewayProgress } from './client-transfer.mjs';
 
 test('1 KiB synthetic file becomes one exact range with independently known SHA-256', async () => {
@@ -50,4 +53,27 @@ test('Gateway acknowledgement without a Receipt remains progress, never custody 
     assert.throws(() => gatewayProgress(bad, 1024), /CLIENT_GATEWAY_RESPONSE_REFUSED/);
   const overflow = Buffer.alloc(12); overflow.writeBigInt64BE(1025n);
   assert.throws(() => gatewayProgress(overflow, 1024), /CLIENT_GATEWAY_RESPONSE_REFUSED/);
+});
+
+test('client reads both exact governing P05 manifests through the admitted runtime', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'idea-f05-client-'));
+  try {
+    const fixtures = join(root, 'p05-fixtures');
+    const generator = fileURLToPath(new URL('../../../tools/p05-fixtures/generate-fixtures.mjs', import.meta.url));
+    execFileSync(process.execPath, [generator, '--output-dir', fixtures], { stdio: 'pipe', timeout: 30000 });
+    for (const [name, size, digest, count] of [
+      ['IE-DATA-CANONICAL-001-small-1KiB.bin', 1024,
+        'c6aa2b94ca9fd4d756deb9d75500f1fd217bf04efad6d2be4de4a682ae723384', 1],
+      ['IE-DATA-CANONICAL-001-transfer-64MiB.bin', 67108864,
+        '04c5a57e3b754b5eb75de7216d33a4982b525c3a1cdfd19b9eddfd1520126eae', 64],
+    ]) {
+      const hash = createHash('sha256'); let bytes = 0; let ranges = 0;
+      for await (const range of fileRanges(join(fixtures, name))) {
+        assert.equal(range.start, bytes);
+        hash.update(range.bytes); bytes = range.end; ranges++;
+      }
+      assert.equal(bytes, size); assert.equal(ranges, count);
+      assert.equal(hash.digest('hex'), digest);
+    }
+  } finally { await rm(root, { recursive: true }); }
 });

@@ -26,6 +26,12 @@ u32 Receipt length, exact opaque Receipt bytes. Zero Receipt is progress only;
 truncated/trailing/oversized response or impossible progress must refuse. Named
 CLIENT_PROGRESS_NOT_IMPLEMENTED is the RED witness. This parser does not verify
 Receipt authority; that remains the independent Server acceptance boundary.
+The next qualification reuses the existing first-party P05 generator through the
+same admitted Node binary (never the historical server runtime). Fresh temp
+`p05-fixtures` target only, expected governing P05 literal size/hash pairs; stream
+both via the client reader and independently compare complete digests. Include
+`tools/p05-fixtures/generate-fixtures.mjs` in input hashes before/after execution.
+Previously implemented preparation may already be GREEN; do not manufacture RED.
 Cleanup removes only the exact fresh synthetic fixture in the test's `finally`.
 Hash/version drift STOP; no silent download/replacement. Retain safe test output,
 source identities and counts. No password, Grant, Receipt, cookie or CSRF capture.
