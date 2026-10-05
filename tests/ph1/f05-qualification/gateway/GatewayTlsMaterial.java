@@ -29,7 +29,7 @@ class GatewayTlsMaterial {
             require(args.length==1&&args[0].matches("[0-9a-f]{40}"),"Exact build source required");
             require(ROOT.equals(Path.of("").toAbsolutePath().normalize()),"Unexpected owned root");
             require(Runtime.version().toString().equals("25.0.4.1+1-LTS"),"JDK drift");
-            require(Files.readString(RUN.resolve("preflight.txt")).startsWith("SOURCE="+args[0]+"\\n".replace("\\\\n","\\n")),"Source mismatch");
+            require(Files.readString(RUN.resolve("preflight.txt")).startsWith("SOURCE="+args[0]+"\n"),"Source mismatch");
             preflight();prepare(args[0]);
         }catch(Exception failure){System.err.println("TLS_PREPARATION_FAILURE="+failure.getClass().getSimpleName()+":"+failure.getMessage());System.exit(2);}
     }
