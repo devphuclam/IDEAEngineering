@@ -22,6 +22,7 @@ mkdir -m 700 "$owned/classes" "$owned/vault-test"
   apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java \
   apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java \
   apps/gateway/src/main/java/com/idea/ddm/gateway/receipt/TransferReceiptSigner.java \
+  apps/gateway/src/main/java/com/idea/ddm/gateway/transfer/GatewayTransferService.java \
   apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java
 set +e
 "$jdk/bin/java" -cp "$owned/classes" com.idea.ddm.gateway.GatewayTransferTest "$owned/vault-test" > "$owned/result-private.log" 2>&1
@@ -31,7 +32,7 @@ sha256sum -c "$manifest" > "$owned/source-postflight.log"
 [[ $(sha256sum "$jdk/bin/java" | cut -d' ' -f1) == 7380ce48ed5013735d2c8414db54adb8f981e7933ff594bd36f3baccddaafba3 ]] || exit 7
 [[ $(sha256sum "$jdk/bin/javac" | cut -d' ' -f1) == 86d10cd1c73e976f364291f3c3d10bb167f0bafdd6eb4c9c6dc44bddeffcc45e ]] || exit 7
 if [[ $3 == gateway-red-* ]]; then
-  [[ $status != 0 ]] && grep -Eq 'GRANT_VERIFIER_NOT_IMPLEMENTED|RECEIPT_SIGNER_NOT_IMPLEMENTED' "$owned/result-private.log" || exit 8
+  [[ $status != 0 ]] && grep -Eq 'GRANT_VERIFIER_NOT_IMPLEMENTED|RECEIPT_SIGNER_NOT_IMPLEMENTED|GATEWAY_SERVICE_NOT_IMPLEMENTED' "$owned/result-private.log" || exit 8
   printf 'GATEWAY_RED=EXPECTED_MISSING_BEHAVIOR; SOURCE=%s\n' "$1"
 else
   [[ $status == 0 ]] && grep -q 'GATEWAY_TRACER=PASS' "$owned/result-private.log" || exit 8

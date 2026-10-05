@@ -98,3 +98,11 @@ e89e6a39ebbfb003d083b1894686dfa550b7dadb60cf89b287379af908b9a666.
 adapter-red-06 adds independent query of persisted verified512 bytes after Adapter recreation,
 without resubmitting bytes. Expected PROGRESS_QUERY_NOT_IMPLEMENTED. Needed by Gateway same-ID
 status after uncertain response; no new operation identity or fake completed Receipt.
+
+Progress RED38845b377b9300071bd7e33b6aec148f76b02ffb, private log690b242959b5bdb2ba416b92de889d161b3569ad4461a87c9a400c6466c0b879.
+Progress GREEN4c99089189ccd18448e94ef55675c29821b5e897:13/13, log2b99329d67ab6cf0ab38e7c19748ecabb92ad3630ef81050ee53e273dd91b8a2.
+gateway-red-04 enters the actual GatewayTransferService through a signed Grant, writes real bytes,
+requires signed completion and recreates service to query the exact original Receipt after lost
+response. State root is private gateway-state sibling inside owned attempt. Prior lower-level
+fixtures have distinct candidate TransferId to avoid ambiguous completed allocation reuse.
+Expected GATEWAY_SERVICE_NOT_IMPLEMENTED, no Boot/HTTP/server custody inference.
