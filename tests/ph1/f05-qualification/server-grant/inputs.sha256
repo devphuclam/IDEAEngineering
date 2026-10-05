@@ -13,7 +13,7 @@ f1f09f45c5c1fda1cf961901e1d0fe2d4b97aef12f6b62c5f26c4b41f125d7b8  apps/server/sc
 9db01a2754a7160f1c7f937f777087813f022e5a884943f8ff7b22303fa28455  apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java
 ab74624c75be477812df3db84dcf19bf8fb0f593582d6847110aee8ccf495e27  apps/server/src/main/java/com/idea/ddm/custody/GrantEnvelope.java
 c0bf3e9aeb4a84713ad9e996f142c3418b21923d963e5aa7f5d118115fa10329  apps/server/src/main/java/com/idea/ddm/custody/ReceiptEnvelope.java
-2aed2f7e0cc74c5f15c77b20b47bf920ec7c68276e4e59abfda5fcb015f5b59b  apps/server/src/main/java/com/idea/ddm/custody/TransferGrantService.java
+6fdc4b87c1dbc700fa64d82e8299490e0cba3626ee4d485770cead5f174bf3c4  apps/server/src/main/java/com/idea/ddm/custody/TransferGrantService.java
 44a59e4c7b9a1dc7201c2ca07c1e38b1970f5eac6de04f199647d0dad61ed422  apps/server/src/main/java/com/idea/ddm/custody/TransferReceiptService.java
 048f622c3f6bb0ad9728f553a8295c96f943e3f2b25f1b319abd3dec5d692927  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java
 34e13d4bcc9e0cac27c6e5f815d3e09c5009b7ba7149f340625dc7984bb42571  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentDocumentationBoundary.java
@@ -64,7 +64,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 edcbdcefa65c07fe11dc7eba7f30008a9a28598f4539754f5ba3c75830c88658  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 63dd8d1f3764bd00f136b15b4ed03a15648b08e8375aab0cbc678aaaadf4803b  apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java
-f31ae7eb16389131f5124db9854c69183708f395d989583e5693edca623e047a  apps/server/src/test/java/com/idea/ddm/identity/TransferClientBoundaryTest.java
+b9a70bd11ac1a58a2d6e3918af2df2cecc13b8a30c5852070e6aa6a691185c24  apps/server/src/test/java/com/idea/ddm/identity/TransferClientBoundaryTest.java
 2e08d303e06f4808e3a3fcb7b8a15aa51c5f008d0b0565a560d7ad94e229ff38  apps/server/src/test/java/com/idea/ddm/operation/F04PredecessorMigrationTest.java
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
@@ -92,10 +92,10 @@ ca1ca366f8dd7b73c5a1e813929f61a54286f544cf9a451011954ea1702a897d  tests/ph1/f05-
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
-ce734412cf841e4302ff9145f0edea8f9241bc85bffca021417694c987329ad1  tests/ph1/f05-qualification/server-grant/run-slice.sh
+b1b463c77cc648db17e91b27861472e4f298e80277c65cf7f9b19d32a92df4db  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
-8001c795c2982ebcbff163734b5a74beaaaca76afcd0f2ae5e496e7b23cea101  tests/ph1/transfer-smoke/client-e2e.mjs
+1c962a1f46cc81bda4bc6fd093fa93aec3643512c3d51b22f3b2fe9ab5fcad41  tests/ph1/transfer-smoke/client-e2e.mjs
 87720acc6402e1d6b249c6911db4a73eba9a889812eb48e22aa55886cd0ac566  tests/ph1/transfer-smoke/client-transfer.mjs
 741c59cde3c2dcf1f96b3bb573300d4016aee3ca6c484f2e558fde4e9feadbb7  tests/ph1/transfer-smoke/client-transfer.test.mjs
-df628d316ab1b1ac95b9652fd1bb0854606f9b578b9bdd150941aa01bf0e362a  tests/ph1/transfer-smoke/README.md
+5b41d2acbd2a7658d8a22d3ed949bcb2cfc7e40c20ea5a4e837ce4ae25a19741  tests/ph1/transfer-smoke/README.md
 4ebb0eae6147d7d5cd7a238b6791535478160c3623239e8b432bf31c00e34c70  tools/p05-fixtures/generate-fixtures.mjs
