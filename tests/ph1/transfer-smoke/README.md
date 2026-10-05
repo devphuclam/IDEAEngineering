@@ -54,6 +54,13 @@ not transfer/product/TLS failure or PASS. Preserve run-receipt-green-20 unchange
 Successor attempt02 uses fresh run-receipt-green-21 with the same contract and
 Surefire JVM -Djava.net.preferIPv4Stack=true; no application/graph/oracle change.
 client-e2e.mjs exact remote path follows21. Source/hash publication remains mandatory.
+Attempt02 client returned generic FAIL without stage detail; do not infer a
+transfer PASS. Read-only/safe scoped diagnostics established trusted HTTPS200,
+real CSRF/login/session200, actual Gateway1KiB200 and Server Receipt acceptance200,
+but these diagnostics are not the declared end-to-end PASS. Preserve attempt02.
+Successor22 adds safe fixed stage/error-code diagnostics and actual failure marker
+so the JUnit coordinator fails and cleans promptly; no sensitive error payload,
+credential or control frame is logged. Same graph/TLS/product/oracles. Fresh root22.
 
 Fresh server export/root `run-receipt-green-20/source` below the existing owned
 `/home/phuclam/idea-f05a-t028-t030-20261005-37` boundary. Require absent target,

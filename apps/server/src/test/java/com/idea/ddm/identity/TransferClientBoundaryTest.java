@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** Actual Windows client coordination, confined to test classes and a marked schema. */
 class TransferClientBoundaryTest {
-    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-21/source/apps/server/target/client-e2e-01");
+    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-22/source/apps/server/target/client-e2e-01");
     static final Path JDK=Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path GATEWAY=Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar");
     static final UUID VAULT=UUID.randomUUID(), GATEWAY_ID=UUID.randomUUID();
@@ -92,7 +92,8 @@ class TransferClientBoundaryTest {
                         +Files.readString(ROOT.resolve("certificate.pem")).replace("\r","").replace("\n","\\n")+"\"}\n");
                 System.out.println("F05_CLIENT_READY; SOURCE="+System.getenv("IDEA_F05_SOURCE_SHA")+"; READY_FILE="+ROOT.resolve("ready.json"));
                 long deadline=System.nanoTime()+TimeUnit.MINUTES.toNanos(8);
-                while(System.nanoTime()<deadline&&!Files.exists(ROOT.resolve("client-done")))Thread.sleep(200);
+                while(System.nanoTime()<deadline&&!Files.exists(ROOT.resolve("client-done"))&&!Files.exists(ROOT.resolve("client-failed")))Thread.sleep(200);
+                assertFalse(Files.exists(ROOT.resolve("client-failed")),"Actual client failed; no success inferred");
                 assertTrue(Files.exists(ROOT.resolve("client-done")),"Actual client did not finish; no transfer PASS inferred");
                 assertEquals(2,bridge.grants.size());
                 try(var c=app.getConnection();var q=c.prepareStatement("SELECT a.byte_count,a.digest_value,l.adapter_key,l.verification_state,t.state FROM artifact a JOIN artifact_location l USING(artifact_id) JOIN transfer_receipt r USING(receipt_id) JOIN transfer_record t USING(transfer_id) WHERE a.artifact_id=?")) {
