@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-F05A-GATEWAY-20261005 / verification record / 0.2 |
+| Stable ID / class / version | IE-VEV-F05A-GATEWAY-20261005 / verification record / 0.3 |
 | Status / result | IN_PROGRESS / PARTIAL; T029/T031/T032–T034 not closed |
 | Owner / author / worker | Engineering / Codex / CODEX_ONLY |
 | Authority / date / timezone | Project Reviewer continuous T028–T034 sprint + successor process exception /2026-10-05 /Asia/Ho_Chi_Minh |
@@ -127,7 +127,7 @@ No default owner policy/public product route/Permission was added. GREEN correct
 purpose to frozen RECEIPT_VERIFIED; RED skeleton had not inspected it. No wire contract changed.
 Remaining schema-level immutability/exact original evidence and failures are not inferred PASS.
 
-## Current execution STOP — network prerequisite
+## Historical execution STOP — network prerequisite
 
 Prospective receipt-red-02 source5f54951 was not executed: GitHub push failed before export/
 transfer. Later connectivity restored for push; source30a71f9603c3abf35ba396662337d3a6430c9e41
@@ -137,3 +137,48 @@ SSH192.168.137.33:22 then timed out; Windows had no192.168.137.x adapter address
 Latest attempts initiated no owned remote JVM/listener/schema. Next exact-source packet must
 be frozen/exported/checked again before execution after connectivity returns. No timer restart.
 T028/T029/T031–T034 remain unchecked; Issue37/PR38 Draft/Open, no merge/verifier.
+
+## Successor Receipt and migration execution — network restored
+
+SSH access returned after the human restored connectivity. The historical STOP above is
+preserved; it is no longer the current blocker. Fresh packets below were committed/pushed
+before export and execution, with raw local/remote source, transfer archive and tool/cache
+preflight/postflight checks. No timer action was inferred from network restoration.
+
+| Packet | Executed source | Actual result | Private Maven log SHA-256 | Exact owned schema |
+|---|---|---|---|---|
+| receipt-red-03 | 80802a18f42ec0fff3ba1800b3f33900e2447963 | 2 tests /1 intended failure: changed signed evidence was accepted for the same ReceiptId | 278c92559dfa8e06bfb2e795fa1c28b53fe0f28833ef0a154a68ac562775ec6b | f05_3fb86c75664d4b70ba38ee23a21d3781 |
+| receipt-green-02 | b868a8961791a5b3a353b3d3d3be086a80b90dad | 2/2 PASS; additive V10 pins exact signed-frame SHA-256 | c37654992fd891c2d2251d2f25ae346554c36684f908f0a4d7092649e4329349 | f05_1cd80d8ab95643a6ab90dd7eb9cce22a |
+| receipt-green-03 | c705714c267995afb020f91ec0d70364eea08863 | 3/3 PASS; signed-scope/key/framing/time negatives and zero-custody oracle | c13659772d6b7510999586afc717eafcd60affdc371d9b4b73c9a91e7f06d933 | f05_86c3729c10fd480ca568ff7560892f19 |
+| receipt-green-04 | fc4b1ab278af5806a5af1586185919cfea2af7ca | 6/6 PASS; suppressed required writes, deferred commit failure, logout-first coordination, stale refusal/fresh same Actor, concurrent exact retry | 943a6ffd9016bd865e0a594af8d871510b90a953d18b7d4bacc244595406b3b0 | f05_7ceb1f0aa3014191a8f5ebe9385eee80 |
+| regression-green-05 | 4f9e6ba2deae8005c8635055f530df92275cbf7d | 1/1 PASS; V9→V10, repeat0/checksums/ownership/real app42501 | cbbc799181d08ab8c560290d32b644f42e809dc29bdbaa44e2a49cc7c869f08c | f05_fa24a6c3d16f41f6bdee05f9710b4fa4 |
+| regression-green-06 | 4f9e6ba2deae8005c8635055f530df92275cbf7d | 1/1 PASS; retained V8→V9 target qualification | 25308fad056803f0184f205dfc515f8cbe7b34b42989b5aca52b29a1d87bdb7f | f05_91c23d6e081e494fbe395e58435ca1d3 |
+| regression-green-09 | da2fe131daaaa224b53274dd8e7536182bb9bfe2 | 105/105 PASS:83 HTTP +20 identity +2 health | 3f57adfd7732d5d20a4eae95c3bde28d4d734c3ee265ee483afc8451832ceaf4 | Individual guarded F03 fixtures; source-owned remainder0 |
+
+Private logs: `/home/phuclam/idea-f05a-t028-t030-20261005-37/run-<packet>/maven-private.log`.
+Each exact owned schema above was removed only after owned JVM exit and matching owner/source
+marker checks. The approved database `idea_ddm_f05a_20261005_t028` remains retained; no public
+schema, old database, preview, company data or Vault was adopted. Raw host logs remain private;
+hashes are file identities, not independent public inspection of their contents.
+
+The Receipt owner seam is `TransferReceiptService`, with a mandatory owner-controlled exact
+allocation callback and Server-established eligible Actor. No permissive default, public
+product route or new Permission was added. V10 retains exact Receipt/Grant/Transfer binding
+and signed-frame digest with append-only protection; V1–V9 were not changed.
+
+Regression-green-07 at63c37b7a2ea6080b67ba9e2867b294c6c0d35a14 failed104/105 because one
+current-chain assertion still expected V1–V9. This was an outdated first-party test expectation,
+not an IAM behavior failure. Successor expectation includes V10; previous evidence is unchanged.
+Regression-green-08 mistakenly exported predecessor committed source while its intended test
+repair was still uncommitted. It ran the predecessor default Grant suite, not the intended105
+tests, and failed the expected-count oracle. No105-test PASS is attributed to that packet.
+The repair was committed before the fresh09 manifest/publication.09 raw inputs95/95,
+archive18150ebb26fd1030fbf4bc8e9682b746f75c23169cee757d13588af8a1c5ac45,
+manifest817dae9b050f4b7834a4a2f3f2b026e8862b1a7318768b46309ae42f9c806abe,
+preflight548674baedcfe29e10af0b97f4ca387f42352eba60cc3409ac209eb13ef35f1e,
+postflight6e5a882b24b4155c9f661768dcf0b0b307a4815a11cb31f46180579231601e92.
+
+Whole T032/T034 and whole F05 remain incomplete: actual Gateway→Server Receipt/client matrix,
+1KiB/64MiB transfers, remaining transport deadlines and final applicable regression are not
+inferred from these service-level tests. Fresh public V1–V10 remains NOT-RUN.
+PR38 Draft/Open, Issue37 Open, verifier NOT-RUN, no merge/Tracker mutation.
