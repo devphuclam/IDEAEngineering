@@ -3,6 +3,6 @@ c08b0fe336b65979f4ec49fd654be3e0b61af98abe9b49c43a9a37ebcae9686e  apps/gateway/s
 eeba62b39474995988908d32ab85197beeca9863a983b06e4ab433cb64d1e331  apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java
 defdf7baed4cf2a90c08798c9e71f1c757309b6aff3dafcfd1d074699eb2d3fc  apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java
 845c998a6bc4afe90e25aad810a98a5afa09e71ccf858c5c5fe940f0d4dd5e80  apps/gateway/src/test/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapterTest.java
-1df67b20e4cd01b4ac258b4b0ee87e7def5c17e27d5e80698234d87b710f1941  tests/ph1/f05-qualification/gateway/README.md
+e3286508379ec6fbe911241c6fa385d5d2db687ac98e4c185ac41dd55ea13091  tests/ph1/f05-qualification/gateway/README.md
 72741ad24cf3b65e70e73bc049825a13d453ba7ee67349859a8fd7bddc919304  tests/ph1/f05-qualification/gateway/run-adapter.sh
-1099d352dbafd03d0a7f78fb009873868eb8ade547fa5cfc751aa20e27524d5a  tests/ph1/f05-qualification/gateway/run-gateway.sh
+6527fd5694f45ae5e83d718fbe6138fe25f36d19bd28eec26960b1cbf6526f08  tests/ph1/f05-qualification/gateway/run-gateway.sh
