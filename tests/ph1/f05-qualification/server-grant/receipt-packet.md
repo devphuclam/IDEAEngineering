@@ -46,3 +46,9 @@ rollback retry, real HTTP logout winning at a PostgreSQL pre-commit barrier, dis
 sessions and fresh same-Actor session, concurrent identical Receipt with one accepted Audit.
 Six JUnit methods, grouped explicit cases, fresh owned schema. Fault triggers bounded to
 this schema and removed before runner cleanup. Uncertain commit is not labelled FAILED.
+
+Next regression-green-05 executes isolated V9→V10; regression-green-06 executes V8→V9
+(explicit historical target9). Repeat0, checksums, exact migrator ownership/app forbidden DDL
+and evidence mutation SQLSTATE42501. One test per fresh owned root/schema;
+both exact source-owned schema cleanups must finish after tests. DataBaseline current fresh
+expectation10 is updated, but fresh public execution remains NOT-RUN in this packet.

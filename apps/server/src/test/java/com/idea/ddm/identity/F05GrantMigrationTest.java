@@ -19,7 +19,7 @@ class F05GrantMigrationTest {
             s.execute("INSERT INTO transfer_record(transfer_id,operation_id,actor_id,vault_id,direction,expected_byte_count,digest_algorithm,expected_digest,state) VALUES ('"+transfer+"','"+operation+"','"+actor+"','"+vault+"','UPLOAD',1024,'SHA-256','synthetic-migration-digest','PREPARING')");
             s.execute("INSERT INTO transfer_grant(grant_id,transfer_id,operation_id,vault_id,direction,expected_byte_count,digest_algorithm,expected_digest,allowed_byte_start,allowed_byte_end,issued_at,expires_at,status) VALUES ('"+grant+"','"+transfer+"','"+operation+"','"+vault+"','UPLOAD',1024,'SHA-256','synthetic-migration-digest',0,1024,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP+INTERVAL '5 minutes','ISSUED')");
         }
-        var flyway=Flyway.configure().dataSource(F05DatabaseFixture.url(),"idea_ddm_migrator",F05DatabaseFixture.password("migration"))
+        var flyway=Flyway.configure().target("9").dataSource(F05DatabaseFixture.url(),"idea_ddm_migrator",F05DatabaseFixture.password("migration"))
                 .schemas(F05DatabaseFixture.schema()).defaultSchema(F05DatabaseFixture.schema()).createSchemas(false)
                 .cleanDisabled(true).locations("classpath:db/migration").load();
         assertEquals(1,flyway.migrate().migrationsExecuted);

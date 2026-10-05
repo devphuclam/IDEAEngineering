@@ -32,6 +32,8 @@ test_selector=CustodyBoundaryTest
 case "$3" in
   receipt-*) test_selector=ReceiptBoundaryTest ;;
   regression-green-01) test_selector=F05GrantMigrationTest ;;
+  regression-green-05) test_selector=F05ReceiptMigrationTest ;;
+  regression-green-06) test_selector=F05GrantMigrationTest ;;
   regression-green-02|regression-green-04) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
     export IDEA_F03_TEST_DATABASE_NAME=idea_ddm_f05a_20261005_t028 ;;
 esac
