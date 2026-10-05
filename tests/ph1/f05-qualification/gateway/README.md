@@ -51,3 +51,11 @@ midstream IOException with no completion/staging residue, noncanonical root, sym
 staging, invalid identity. All synthetic files/symlinks are under the exact new owned target;
 symlink destination is its own outside-test sibling, not a company path. Retain privately.
 No hostile same-user race, power-loss durability, full Gateway/range/Receipt qualification claim.
+
+Guard GREEN fe4fcafd8b41e802bfb329a7b8844900915adcc7:8/8, private log
+f0fb2237d8920045cd83b47d0a723ba2b9c8cbc7d93cc67e9dffdecd74088af0.
+Next adapter-red-05 adds real persisted range seam: first512 bytes private/incomplete,
+recreate Adapter instance, identical lost-response retry resolves512, changed bytes refuse,
+final512 completes original1024/full digest. Literal chunk digest independently calculated
+with workstation .NET SHA-256; not derived using Adapter code. Expected RANGE_RESUME_NOT_IMPLEMENTED.
+Fresh adapter-green-04 follows minimum real contiguous chunk persistence/verification.

@@ -10,6 +10,7 @@ import java.util.UUID;
 /** Private byte-custody boundary; never accepts a client filesystem path or publishes custody. */
 public final class FilesystemVaultAdapter {
     public record Completed(UUID transferId, UUID locationId, long byteCount, String digest) {}
+    public record Progress(long verifiedBytes,Completed completed) {}
     private final Path root, staging, objects;
     public FilesystemVaultAdapter(Path root) throws IOException {
         this.root=root.toAbsolutePath().normalize();
@@ -49,6 +50,10 @@ public final class FilesystemVaultAdapter {
         id(completed.transferId());id(completed.locationId());digest(completed.digest());checkRoots();
         Path file=objects.resolve(key(completed));verify(file,completed);
         return Files.newInputStream(file,LinkOption.NOFOLLOW_LINKS);
+    }
+    public Progress storeRange(UUID transferId,UUID locationId,long totalBytes,String fullDigest,
+            long start,long end,String chunkDigest,InputStream input) throws IOException {
+        throw new UnsupportedOperationException("RANGE_RESUME_NOT_IMPLEMENTED");
     }
     private Path directory(String name) throws IOException {
         Path path=root.resolve(name);

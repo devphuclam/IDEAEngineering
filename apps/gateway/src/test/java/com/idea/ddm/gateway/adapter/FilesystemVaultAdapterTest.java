@@ -59,7 +59,19 @@ public class FilesystemVaultAdapterTest {
         Files.createSymbolicLink(badRoot.resolve("staging"),outside);
         refuse(()->new FilesystemVaultAdapter(badRoot));
         refuse(()->adapter.store(new UUID(0,0),UUID.randomUUID(),1024,result.digest(),new ByteArrayInputStream(bytes)));
-        System.out.println("ADAPTER_TRACER=PASS; CASES=8");
+        var rangedTransfer=UUID.randomUUID();var rangedLocation=UUID.randomUUID();
+        String chunkDigest="076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560";
+        var first=adapter.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512]));
+        if(first.verifiedBytes()!=512||first.completed()!=null)throw new AssertionError("Partial range became completion");
+        var restarted=new FilesystemVaultAdapter(root);
+        if(!restarted.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512])).equals(first))
+            throw new AssertionError("Lost-response range retry changed progress");
+        byte[] changedChunk=new byte[512];changedChunk[0]=1;
+        refuse(()->restarted.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(changedChunk)));
+        var last=restarted.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),512,1024,chunkDigest,new ByteArrayInputStream(new byte[512]));
+        if(last.verifiedBytes()!=1024||last.completed()==null)throw new AssertionError("Full coverage not verified");
+        try(var input=restarted.read(last.completed())){if(!Arrays.equals(bytes,input.readAllBytes()))throw new AssertionError("Resumed bytes differ");}
+        System.out.println("ADAPTER_TRACER=PASS; CASES=9");
     }
     @FunctionalInterface interface Checked {void run() throws Exception;}
     private static void refuse(Checked action) throws Exception {
