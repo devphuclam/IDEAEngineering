@@ -248,3 +248,11 @@ do not submit Grant, create allocation or treat timeout as transfer. Require emp
 timeout/profile change. Then rerun full two-fixture/refusal/resume/renewal/
 completed-operation retry/custody/logout matrix in same fresh owned run. Existing
 behavior may first run GREEN. Same graph/Gateway hash101-input/tool/TLS boundary.
+
+Fresh38 adds genuine lost completion body: actual1KiB HTTPS upload closes the
+incoming response/socket at headers, never consumes its Receipt body. Client
+subsequently resolves completed status and must send zero additional upload
+ranges; Server verifies returned canonical Receipt and one custody/Audit. This
+is an intentionally dropped response body, not a mocked Gateway response or a
+claim that Server commit was inferred from the lost response. Same full37 matrix,
+fresh root38/published101 inputs; application/Gateway/dependency code unchanged.

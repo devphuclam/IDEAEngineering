@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-37/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-38/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -103,6 +103,22 @@ try {
     const before = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame } });
     assert.equal(before.status, 200); assert.deepEqual(gatewayProgress(before.body, size), { verifiedBytes: 0, receipt: null });
     let sent = 0;
+    if (size === 1024) {
+      stage = 'LOST_COMPLETION_RESPONSE';
+      await new Promise((resolve, reject) => {
+        const request = https.request('https://127.0.0.1:18447/transfer/range', {
+          method: 'POST', ca: fixture.ca, rejectUnauthorized: true, agent: false,
+          headers: { ...rangeHeaders(first), 'Content-Length': first.bytes.length } }, response => {
+          const status = response.statusCode;
+          response.destroy(); request.destroy(); clearTimeout(timeout);
+          if (status !== 200) reject(new Error('CLIENT_LOST_RESPONSE_UPLOAD_REFUSED'));
+          else resolve(); // Do not consume or retain response body/Receipt.
+        });
+        const timeout = setTimeout(() => { request.destroy(); reject(new Error('CLIENT_LOST_RESPONSE_TIMEOUT')); }, 10000);
+        request.on('error', () => { clearTimeout(timeout); reject(new Error('CLIENT_LOST_RESPONSE_NETWORK')); });
+        request.end(first.bytes);
+      });
+    }
     if (size === 67108864) {
       stage = 'INTERRUPTION';
       const prefix = await gateway.request('/transfer/range', { body: first.bytes, headers: rangeHeaders(first) });
@@ -126,7 +142,7 @@ try {
       return gateway.request(path, options);
     } };
     const receipt = await uploadRanges(observed, path, grant.frame, size);
-    assert.equal(sent, size === 1024 ? 1 : 63);
+    assert.equal(sent, size === 1024 ? 0 : 63);
     stage = 'GATEWAY_STATUS_' + size;
     const status = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame }, limit: 4108 });
     assert.equal(status.status, 200); assert.deepEqual(gatewayProgress(status.body, size).receipt, receipt);
