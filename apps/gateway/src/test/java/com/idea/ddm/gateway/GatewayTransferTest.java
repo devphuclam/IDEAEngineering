@@ -17,9 +17,9 @@ public final class GatewayTransferTest {
     static final UUID GATEWAY=new UUID(0x4000,0x8000000000000010L);
     static final String ENDPOINT="https://127.0.0.1:18447/";
     static byte[] text(String text){return text.getBytes(StandardCharsets.UTF_8);}
-    static byte[] number(long n){return ByteBuffer.allocate(8).putLong(n).array();}
+    public static byte[] number(long n){return ByteBuffer.allocate(8).putLong(n).array();}
     static byte[] uuid(UUID id){return ByteBuffer.allocate(16).putLong(id.getMostSignificantBits()).putLong(id.getLeastSignificantBits()).array();}
-    static Map<Integer,byte[]> fields(){
+    public static Map<Integer,byte[]> fields(){
         var fields=new TreeMap<Integer,byte[]>();
         fields.put(1,text("PH1_SERVER"));fields.put(2,text("PH1_GATEWAY"));fields.put(3,text("GRANT_UPLOAD"));fields.put(4,text("SERVER_GRANT_1"));
         for(int i=5;i<=9;i++)fields.put(i,uuid(new UUID(0x4000,0x8000000000000000L|i)));
@@ -30,7 +30,7 @@ public final class GatewayTransferTest {
         fields.put(20,number(T));fields.put(21,number(T));fields.put(22,number(T+300));return fields;
     }
     // Does not call the Gateway codec to produce expected Server bytes.
-    static byte[] signed(Map<Integer,byte[]> fields,PrivateKey key) throws Exception {
+    public static byte[] signed(Map<Integer,byte[]> fields,PrivateKey key) throws Exception {
         var buffer=new ByteArrayOutputStream();var out=new DataOutputStream(buffer);
         out.writeBytes("IEPH1ENV");out.writeByte(1);out.writeShort(1);out.writeShort(22);
         for(int tag=1;tag<=22;tag++){byte[] value=fields.get(tag);out.writeShort(tag);out.writeShort(value.length);out.write(value);}

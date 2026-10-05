@@ -2,7 +2,7 @@
 set -euo pipefail
 set +x
 umask 077
-[[ $# == 3 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ && $3 == gateway-boot-01 ]] || exit 2
+[[ $# == 3 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ && $3 == gateway-boot-02 ]] || exit 2
 owned=/home/phuclam/idea-f05-sprint-20261005-37/$3/source
 [[ $(id -un) == phuclam && $(realpath -e "$owned") == "$owned" && ! -e "$owned/run" ]] || exit 3
 cd "$owned"

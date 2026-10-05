@@ -130,3 +130,21 @@ Java25 GatewayApplication, Boot loader manifest/classes exact hash and exact32 n
 JAR/hash projection, no JSR305 or build tool payload; actual acquisition/realm sets unchanged.
 No listener/TLS/DB is started by build. Any graph/hash/rights drift STOP; ordinary first-party
 compiler/oracle failure retained and repaired under sprint authority. HTTP is still NOT-RUN.
+
+Actual packaging3b14cddd6d6d8cb998366aaa1ddc714ad7720cda PASS; JARf1ee1c9bf00821b71781662ffa05357e93066192701ba2df4affee3c681b5bb5.
+Fullraw22/22,115/99/242 acquisition/four realms/package32 projection/no JSR305/postflight PASS.
+Next fresh gateway-boot-02/source builds the same product skeleton plus HTTP RED test. Reuse
+only admitted99/242 artifacts and exact tools, not an old application JAR. GatewayTlsMaterial
+generates fresh private two-day test TLS using keytool, exact SAN IP127.0.0.1, dedicated positive/
+negative truststores. No system/user/global trust changes. Freeze cert/keystore/truststore hashes
+before starting exactly one owned127.0.0.1:18447 Boot HTTPS process; refuse occupied/wildcard.
+GatewayHttpQualification creates fresh in-RAM Server signer, Gateway signer with only its private
+key in mode600 Gateway configuration; Gateway receives only Server public key. No DB/session
+or company key. Commands run-build.sh source manifest gateway-boot-02, then run-http.sh source red.
+HTTP seam POST/transfer/range: X-IDEA-Grant base64url<=4096 decoded bytes, half-open integer
+X-IDEA-Range-Start/End, lowerhex X-IDEA-Chunk-SHA256, raw body<=1MiB. Response exact big-endian
+i64 verified byte count/u32 Receipt length/Receipt bytes, no Receipt before full verification.
+Control lookup POST/transfer/status carries same Grant, no bytes. Current RED expects missing
+501 marker only after trusted TLS and exact loopback binding; not missing cert/tool failure.
+Finally terminate owned JVM, prove zero listener, rehash source/tools/TLS and unchanged system
+trust even when behavioral RED. Internal Gateway control contract, no Server route/RBAC change.
