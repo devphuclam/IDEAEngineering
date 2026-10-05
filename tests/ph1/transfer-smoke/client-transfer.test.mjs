@@ -22,6 +22,15 @@ test('ordinary quoted-empty logout deletion clears only an existing host-scoped 
     assert.throws(() => client.sessionCookie(bad, known), /CLIENT_COOKIE_REFUSED/);
 });
 
+test('Tomcat zero-age Expires-only deletion cannot be mistaken for a new proof', () => {
+  const known = new Map([['IDEA_SESSION', 'synthetic-proof']]);
+  const deletion = 'IDEA_SESSION=; Expires=Thu, 01 Jan 1970 00:00:10 GMT; Path=/; Secure; SameSite=Strict';
+  assert.deepEqual(client.sessionCookie(deletion, known), { name: 'IDEA_SESSION', value: '' });
+  assert.throws(() => client.sessionCookie(deletion, new Map()), /CLIENT_COOKIE_REFUSED/);
+  assert.throws(() => client.sessionCookie(deletion.replace('1970', '2099'), known), /CLIENT_COOKIE_REFUSED/);
+  assert.throws(() => client.sessionCookie(deletion + '; Max-Age=30', known), /CLIENT_COOKIE_REFUSED/);
+});
+
 test('1 KiB synthetic file becomes one exact range with independently known SHA-256', async () => {
   const root = await mkdtemp(join(tmpdir(), 'idea-f05-client-'));
   try {
