@@ -76,3 +76,7 @@ test and product verifier entrypoint. Exact22 fields must survive verification u
 expected GRANT_VERIFIER_NOT_IMPLEMENTED. Qualified first-party T027 codec is promoted without
 new external dependency. run-gateway.sh uses only pinned JDK/java/javac, no listener or Maven.
 Same raw manifest/archive/source publication procedure, private synthetic owned fixture root.
+
+gateway-red-01 at1de598e281b38d28ce7b07aa654545ff4440edc0 passed raw8/8 but runner compiled
+the Adapter class list rather than GatewayTransferTest, so main was not found. Not behavioral RED.
+Preserve attempt; gateway-red-02 only repairs the explicit javac inputs and repeats the same oracle.

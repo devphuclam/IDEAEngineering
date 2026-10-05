@@ -18,8 +18,9 @@ jdk=/opt/idea/tools/jdk-25.0.4.1+1
 unset JAVA_TOOL_OPTIONS JDK_JAVA_OPTIONS _JAVA_OPTIONS CLASSPATH
 mkdir -m 700 "$owned/classes" "$owned/vault-test"
 "$jdk/bin/javac" -d "$owned/classes" \
-  apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java \
-  apps/gateway/src/test/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapterTest.java
+  apps/gateway/src/main/java/com/idea/ddm/gateway/security/GatewayEnvelope.java \
+  apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java \
+  apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java
 set +e
 "$jdk/bin/java" -cp "$owned/classes" com.idea.ddm.gateway.GatewayTransferTest "$owned/vault-test" > "$owned/result-private.log" 2>&1
 status=$?
