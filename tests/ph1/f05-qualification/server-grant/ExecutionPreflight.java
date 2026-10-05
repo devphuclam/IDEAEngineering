@@ -42,7 +42,12 @@ class ExecutionPreflight {
         }
         if (args.length == 2) {
             var diagnostic = Files.readString(Path.of(args[1]));
-            var pathMatch = Pattern.compile("/home/phuclam/\\.m2/[^\\s\\]\\[;,\\)\\(<>\\\"']+\\.(?:jar|pom)").matcher(diagnostic);
+            var paths = Pattern.compile("/home/phuclam/\\.m2/[^:\\s\\]\\[;,\\)\\(<>\\\"']+\\.(?:jar|pom)");
+            var check = paths.matcher("/home/phuclam/.m2/a.jar:/home/phuclam/.m2/b.jar");
+            if (!check.find() || !check.group().equals("/home/phuclam/.m2/a.jar")
+                    || !check.find() || !check.group().equals("/home/phuclam/.m2/b.jar") || check.find())
+                throw new SecurityException("Classpath separator guard failure");
+            var pathMatch = paths.matcher(diagnostic);
             int witnessed = 0;
             while (pathMatch.find()) {
                 if (!permitted.contains(pathMatch.group())) throw new SecurityException("Unadmitted actual path: " + pathMatch.group());
