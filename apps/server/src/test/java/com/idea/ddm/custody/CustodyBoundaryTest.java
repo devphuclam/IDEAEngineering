@@ -28,6 +28,10 @@ class CustodyBoundaryTest {
             var scope = new TransferGrantService.Scope(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
                     UUID.randomUUID(), "https://127.0.0.1:18447/synthetic-transfer", 1, UUID.randomUUID(),
                     1024, "0".repeat(64), 0, 1024);
+            try (var connection = F05DatabaseFixture.open("migration"); var insert = connection.prepareStatement(
+                    "INSERT INTO vault_endpoint(vault_id,adapter_kind,eligibility) VALUES (?,'F05_SYNTHETIC','ELIGIBLE')")) {
+                insert.setObject(1,scope.vaultId()); assertEquals(1,insert.executeUpdate());
+            }
             var key = KeyPairGenerator.getInstance("Ed25519", "SunEC").generateKeyPair();
             var service = new TransferGrantService(fixture.app(), fixture.eligibility(), (connection, actor, requested) -> {
                 if (!actor.actorId().equals(signedIn.actorId()) || !actor.organizationId().equals(signedIn.organizationId())
@@ -41,6 +45,7 @@ class CustodyBoundaryTest {
             assertEquals(signedIn.organizationId(), stored.organizationId());
             assertEquals(300, stored.expiresAt() - stored.issuedAt());
             assertEquals(scope.operationId(), stored.operationId());
+            assertArrayEquals(issued.frame(), stored.frame());
             assertNotEquals(issued.grantId(), stored.transferId());
             assertNotEquals(stored.transferId(), stored.operationId());
             // Independent frozen-v1 decoder, not the production codec's own expected-value calculation.
