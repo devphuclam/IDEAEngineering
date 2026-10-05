@@ -114,3 +114,19 @@ the RED documentation intended that isolation but source did not yet perform it.
 or product authority changed. Fresh gateway-green-05 qualifies existing retry/changed bytes,
 signed retarget refusal, partial/no Receipt, exact expiry and explicit same-transfer renewal
 preserving verified progress. Synthetic controlled Clock, no wall-clock waiting, listener or DB.
+
+Service guard25/25 PASS0c7f0b42142f826c5fa741d0bea54e766d0b225a, private log
+38cc2c79e98da3c53698487e61a6d3f66af438c461ed78eba49d89f317118ca3.
+Next packaging boundary gateway-boot-01/source uses GatewayBuild.java and run-build.sh.
+Actual selected set is unchanged root05:115 rows/99 artifact JARs/242 models/four realms,
+52 Maven core JARs and exact toolchain.tsv. Copies only hash-matching admitted cache into
+fresh isolated run/repository, never resolves/downloads. POM changes only first-party coordinates
+and mainClass; webmvc/log4j2/exclusions/includeTools and all plugin/dependency versions unchanged.
+Exact graph: inventories/f05a-q02-jsr305-exclusion-proposed-graph.tsv; hash/pin/model/core/legal
+inventories shipped as raw input-manifest entries, no new external source. preserveLegal retains
+actual embedded notices, custom/mixed terms, Maven notices and embedded Boot loader legal bytes.
+Offline direct resources3.5.0/compile3.15.0/jar3.5.1/Boot4.1.1:repackage only. Package requires
+Java25 GatewayApplication, Boot loader manifest/classes exact hash and exact32 nested runtime
+JAR/hash projection, no JSR305 or build tool payload; actual acquisition/realm sets unchanged.
+No listener/TLS/DB is started by build. Any graph/hash/rights drift STOP; ordinary first-party
+compiler/oracle failure retained and repaired under sprint authority. HTTP is still NOT-RUN.
