@@ -46,6 +46,15 @@ verifier NOT-RUN; no merge or timer action.
 
 ## Actual end-to-end attempt01 — published execution contract
 
+Attempt01 at7d67a6f stopped before client readiness: Server used IPv4-mapped
+IPv6 loopback, violating this harness's exact IPv4-only listener oracle. Owned
+listeners stopped, marked schema f05_51af2164cbc34f0cbf0f0745bcca0b15 cleaned,
+database retained. This is a first-party JVM fixture configuration failure,
+not transfer/product/TLS failure or PASS. Preserve run-receipt-green-20 unchanged.
+Successor attempt02 uses fresh run-receipt-green-21 with the same contract and
+Surefire JVM -Djava.net.preferIPv4Stack=true; no application/graph/oracle change.
+client-e2e.mjs exact remote path follows21. Source/hash publication remains mandatory.
+
 Fresh server export/root `run-receipt-green-20/source` below the existing owned
 `/home/phuclam/idea-f05a-t028-t030-20261005-37` boundary. Require absent target,
 byte-preserving committed export/manifest/archive identity local and remote,

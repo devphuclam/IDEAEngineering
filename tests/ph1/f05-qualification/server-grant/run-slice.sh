@@ -30,7 +30,7 @@ preflight="$source_root/tests/ph1/f05-qualification/server-grant/ExecutionPrefli
 export IDEA_F05_SOURCE_SHA="$1"
 test_selector=CustodyBoundaryTest
 case "$3" in
-  receipt-green-20) test_selector=TransferClientBoundaryTest ;;
+  receipt-green-20|receipt-green-21) test_selector=TransferClientBoundaryTest ;;
   receipt-*) test_selector=ReceiptBoundaryTest ;;
   regression-green-01) test_selector=F05GrantMigrationTest ;;
   regression-green-05) test_selector=F05ReceiptMigrationTest ;;
@@ -46,7 +46,7 @@ settings="$source_root/tests/ph1/f05-qualification/server-grant/settings.xml"
 set +e
 # Credentials are read only inside the forked test from its guarded private file, never Maven env/properties.
 "$maven" -o -B -X -s "$settings" -gs "$settings" -Dmaven.repo.local=/home/phuclam/.m2/repository \
-  -Dtest="$test_selector" -DfailIfNoTests=true \
+  -Dtest="$test_selector" -DfailIfNoTests=true -DargLine=-Djava.net.preferIPv4Stack=true \
   org.apache.maven.plugins:maven-resources-plugin:3.5.0:resources \
   org.apache.maven.plugins:maven-resources-plugin:3.5.0:testResources \
   org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile \
