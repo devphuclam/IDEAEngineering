@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-34/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-37/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -46,6 +46,24 @@ try {
       headers: { ...(await csrf()), 'Content-Type': 'application/x-www-form-urlencoded' } })).status, 200);
   } finally { password.fill(0); delete fixture.password; }
   assert.equal((await server.request('/api/v1/identity/session', { method: 'GET' })).status, 200);
+  stage = 'CONTROL_ABSOLUTE_DEADLINE';
+  const started = performance.now();
+  await new Promise((resolve, reject) => {
+    const request = https.request('https://127.0.0.1:18447/transfer/status', {
+      method: 'POST', ca: fixture.ca, rejectUnauthorized: true, agent: false,
+      headers: { 'Content-Length': '1' } }, response => {
+      let bytes = 0; response.on('data', chunk => { bytes += chunk.length; });
+      response.on('end', () => { clearTimeout(timeout); request.destroy();
+        if (response.statusCode !== 408 || bytes !== 0) reject(new Error('CLIENT_CONTROL_DEADLINE_REFUSED'));
+        else resolve(); });
+    });
+    const timeout = setTimeout(() => { request.destroy(); reject(new Error('CLIENT_CONTROL_DEADLINE_TIMEOUT')); }, 40000);
+    request.on('error', () => { clearTimeout(timeout); reject(new Error('CLIENT_CONTROL_DEADLINE_NETWORK')); });
+    request.flushHeaders(); // Deliberately incomplete request, no payload/Grant/success.
+  });
+  const elapsed = performance.now() - started;
+  assert.ok(elapsed >= 28000 && elapsed < 40000);
+  console.log('CLIENT_CONTROL_DEADLINE=PASS; STATUS=408; NO_SUCCESS_BODY=true');
   assert.equal((await server.request('/qualification/f05/grant?size=1024')).status, 403);
   stage = 'P05_GENERATION';
   const fixtures = join(root, 'p05-fixtures');

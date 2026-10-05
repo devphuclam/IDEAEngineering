@@ -240,3 +240,11 @@ exists, preserved unchanged. Prospective fresh run-regression-green-12 replaces
 only that target with an explicitly added identical105-test selector. New source/
 manifest published/exported first; no application/test/dependency change. Grant10
 and Receipt6 already ran on exact34 source and remain separate receipts.
+
+Fresh37 qualifies previously implemented actual Gateway control30s deadline:
+normal HTTPS request /transfer/status headers declare one byte but withhold body;
+do not submit Grant, create allocation or treat timeout as transfer. Require empty
+408 between28s and40s with client hard40s cap. No accelerated production clock or
+timeout/profile change. Then rerun full two-fixture/refusal/resume/renewal/
+completed-operation retry/custody/logout matrix in same fresh owned run. Existing
+behavior may first run GREEN. Same graph/Gateway hash101-input/tool/TLS boundary.
