@@ -145,6 +145,42 @@ class CustodyBoundaryTest {
         return new TransferGrantService.Scope(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),
                 "https://127.0.0.1:18447/synthetic-transfer",1,UUID.randomUUID(),1024,"0".repeat(64),0,1024);
     }
+    @Test
+    void g03ProductIssuedFrameRefusesWrongKeyPurposeAudienceVersionAndAlteredClaims() throws Exception {
+        var signedIn=fixture.signIn();var scope=syntheticScope();seedVault(scope);
+        var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+        var frame=service(signedIn,scope,keys.getPrivate()).issue(signedIn.context(),scope).frame();
+        var fields=verifyFrame(frame,keys.getPublic());
+        assertEquals(scope.objectId(),uuid(fields.get(14)));
+        assertEquals(scope.operationId(),uuid(fields.get(6)));
+        assertEquals(scope.endpoint(),text(fields.get(11)));
+        assertThrows(AssertionError.class,()->verifyFrame(frame,KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair().getPublic()));
+        var altered=frame.clone();altered[40]^=1;
+        assertThrows(AssertionError.class,()->verifyFrame(altered,keys.getPublic()));
+        // Correctly signed invalid profile fixtures isolate policy from mere signature failure.
+        for(int tag:List.of(2,3)) {
+            var changed=frame.clone();var b=ByteBuffer.wrap(changed);b.position(17);
+            for(int i=1;i<=22;i++){int actual=Short.toUnsignedInt(b.getShort());int size=Short.toUnsignedInt(b.getShort());
+                if(actual==tag){changed[b.position()+size-1]^=1;break;}b.position(b.position()+size);}
+            resign(changed,keys.getPrivate());
+            assertThrows(AssertionError.class,()->verifyFrame(changed,keys.getPublic()));
+        }
+        var version=frame.clone();version[12]=2;resign(version,keys.getPrivate());
+        assertThrows(AssertionError.class,()->verifyFrame(version,keys.getPublic()));
+        assertFalse(text(fields.get(11)).contains("/home/"));
+        // The only endpoint is the approved public synthetic HTTPS target, not a private provider path.
+        assertEquals(22,fields.size());
+    }
+    private static void seedVault(TransferGrantService.Scope scope) throws Exception {
+        try(var connection=F05DatabaseFixture.open("migration");var query=connection.prepareStatement(
+                "INSERT INTO vault_endpoint(vault_id,adapter_kind,eligibility) VALUES (?,'F05_SYNTHETIC','ELIGIBLE')")) {
+            query.setObject(1,scope.vaultId());assertEquals(1,query.executeUpdate());
+        }
+    }
+    private static void resign(byte[] packet,java.security.PrivateKey key) throws Exception {
+        int length=ByteBuffer.wrap(packet).getInt();var signer=Signature.getInstance("Ed25519","SunEC");
+        signer.initSign(key);signer.update(packet,4,length);System.arraycopy(signer.sign(),0,packet,6+length,64);
+    }
     private static TransferGrantService service(F05SessionFixture.SignedIn signedIn,TransferGrantService.Scope expected,
             java.security.PrivateKey key) {
         return new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,requested)->{
@@ -192,6 +228,8 @@ class CustodyBoundaryTest {
             var bytes = new byte[size]; body.get(bytes); fields.put(tag, bytes);
         }
         assertFalse(body.hasRemaining());
+        assertEquals("idea-gateway-test",text(fields.get(2)),"Frozen audience policy");
+        assertEquals("GRANT_UPLOAD",text(fields.get(3)),"Frozen Grant purpose policy");
         return fields;
     }
     private static UUID uuid(byte[] bytes) { assertEquals(16, bytes.length); var b = ByteBuffer.wrap(bytes); return new UUID(b.getLong(), b.getLong()); }

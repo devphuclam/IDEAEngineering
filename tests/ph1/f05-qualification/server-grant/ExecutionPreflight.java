@@ -12,7 +12,8 @@ class ExecutionPreflight {
         if (!Set.of(Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-compile-red-02/source"),
                 Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-behavior-red-01/source"),
                 Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-green-01/source"),
-                Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g02-qualification-01/source")).contains(root))
+                Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g02-qualification-01/source")).contains(root)
+                && !root.toString().matches("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-(g03|g04|g05|g06|regression)-(red|green)-[0-9]{2}/source"))
             throw new SecurityException("Unapproved owned root");
         int count = 0;
         for (var line : Files.readAllLines(root.resolve("tests/ph1/f05-qualification/server-grant/inputs.sha256"))) {
