@@ -263,3 +263,6 @@ acceptance despite drift; required GREEN is RECEIPT_NOT_COMMITTED, zero custody/
 receipt/Audit, then successful stable retry of the same operation. No new owner
 protocol, permission, schema, dependency or listener. Same offline direct goals,
 101-input manifest and owned schema cleanup rules as prior Receipt packets.
+
+Successor receipt-green-40 repeats all7 Receipt cases after exact allocation tuple
+comparison at commit-time; no permissive fallback or new discovery protocol.

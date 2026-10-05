@@ -78,7 +78,8 @@ public final class TransferReceiptService {
                     require(c,"UPDATE transfer_grant SET status='CONSUMED' WHERE grant_id=? AND status='ISSUED'",grantId);
                     AuditEvidenceRepository.append(c,new AuditEvidenceRepository.Entry(UUID.randomUUID(),operation,actor.actorId(),"transfer.receipt.accept","ArtifactLocation",location.toString(),"ACCEPTED",null,scope.correlationId().toString()));
                 }
-                eligibility.coordinateCommit(c,context,actor,!original);allocation(c,actor,scope,location);
+                eligibility.coordinateCommit(c,context,actor,!original);
+                if(!allocation.equals(allocation(c,actor,scope,location)))throw new SecurityException("ALLOCATION_CHANGED_BEFORE_COMMIT");
                 // Controlled time and exact signed evidence are checked again immediately before commit.
                 ReceiptEnvelope.verify(receipt,gatewayKey,issuer,audience,keyId,clock);
                 committing=true;c.commit();return accepted;
