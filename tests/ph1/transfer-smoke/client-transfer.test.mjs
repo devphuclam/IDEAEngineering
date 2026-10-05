@@ -22,3 +22,22 @@ test('1 KiB synthetic file becomes one exact range with independently known SHA-
     await rm(root, { recursive: true });
   }
 });
+
+test('64 MiB synthetic file produces 64 contiguous 1 MiB ranges without whole-file buffering', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'idea-f05-client-'));
+  try {
+    const path = join(root, 'synthetic.bin');
+    const { open } = await import('node:fs/promises');
+    const file = await open(path, 'wx');
+    try { await file.truncate(67108864); } finally { await file.close(); }
+    let count = 0;
+    for await (const range of fileRanges(path)) {
+      assert.equal(range.start, count * 1048576);
+      assert.equal(range.end, (count + 1) * 1048576);
+      assert.equal(range.bytes.length, 1048576);
+      assert.equal(range.digest, '30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58');
+      count++;
+    }
+    assert.equal(count, 64);
+  } finally { await rm(root, { recursive: true }); }
+});

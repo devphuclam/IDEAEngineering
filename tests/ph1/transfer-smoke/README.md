@@ -18,6 +18,9 @@ Before execution commit/push source, record Git SHA and SHA-256 of both `.mjs`
 inputs, and verify the admitted binary hash/version. Rehash inputs/tool afterwards.
 RED oracle: named CLIENT_RANGE_READER_NOT_IMPLEMENTED failure, not a missing tool.
 GREEN oracle: exact half-open range, original bytes and known literal chunk digest.
+Successor qualification also reads a sparse 64MiB synthetic zero file, requiring
+64 contiguous ranges of exactly1MiB with known literal SHA-256 per range. This
+qualifies the existing bounded reader, not network transfer or throughput.
 Cleanup removes only the exact fresh synthetic fixture in the test's `finally`.
 Hash/version drift STOP; no silent download/replacement. Retain safe test output,
 source identities and counts. No password, Grant, Receipt, cookie or CSRF capture.
