@@ -177,6 +177,25 @@ class CustodyBoundaryTest {
             query.setObject(1,scope.vaultId());assertEquals(1,query.executeUpdate());
         }
     }
+    @Test
+    void g04SameOperationRetryAndLostResponseResolveTheOriginalWithoutDuplicateIssuance() throws Exception {
+        var signedIn=fixture.signIn();var scope=syntheticScope();seedVault(scope);
+        var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+        var service=service(signedIn,scope,keys.getPrivate());
+        var original=service.issue(signedIn.context(),scope);
+        // Model a lost response by resolving from the operation, not generating a new operation.
+        assertEquals(original.grantId(),service.resolve(signedIn.context(),scope.operationId()).grantId());
+        var retry=service.issue(signedIn.context(),scope);
+        assertEquals(original.grantId(),retry.grantId());
+        assertEquals(original.transferId(),retry.transferId());
+        assertArrayEquals(original.frame(),retry.frame());
+        try(var connection=fixture.app().getConnection()) {
+            for(var table:List.of("transfer_record","transfer_grant","audit_evidence"))
+                try(var query=connection.prepareStatement("SELECT count(*) FROM "+table+" WHERE operation_id=?")) {
+                    query.setObject(1,scope.operationId());try(var row=query.executeQuery()){assertTrue(row.next());assertEquals(1,row.getInt(1));}
+                }
+        }
+    }
     private static void resign(byte[] packet,java.security.PrivateKey key) throws Exception {
         int length=ByteBuffer.wrap(packet).getInt();var signer=Signature.getInstance("Ed25519","SunEC");
         signer.initSign(key);signer.update(packet,4,length);System.arraycopy(signer.sign(),0,packet,6+length,64);

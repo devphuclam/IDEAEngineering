@@ -44,3 +44,13 @@ GREEN need not manufacture a production RED. G04–G06 and later tasks remain NO
 
 No verifier, preview/trust-store action, public schema test, merge or progress action.
 PR #38 Draft/Open, Issue #37 Open. Public evidence hashes are not independent host-log review.
+
+## G04 first RED packet
+
+Fresh target `run-g04-red-01/source`, same admitted recipe, expected 5 test methods with
+G04 identical issue retry failing against the predecessor implementation. Lost-response lookup
+must first return the original. Genuine missing retry behavior is then witnessed at the second
+issue under the original OperationId (unique operation storage cannot permit a second transfer).
+Required GREEN: original Grant/Transfer/frame and one issuance Audit, no duplicate original
+state. No source/migration/dependency expansion. Concurrency/conflict follow vertically, not
+prewritten bulk speculative implementation. Original attempt preserved and no in-place repair.
