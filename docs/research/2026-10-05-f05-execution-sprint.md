@@ -71,3 +71,12 @@ transaction-scoped OperationId arbitration, resolves stored full original scope,
 immutable scope/Actor and returns original without reinsert/Audit duplication. Current IAM and
 explicit owner/allocation decision are rechecked before returning. No schema/tool/input changes.
 Concurrency and conflict coverage is not inferred until its own successor test execution.
+
+## G04 concurrent/conflict qualification packet
+
+Fresh `run-g04-green-02/source`; expected 6/6, no production changes. Two concurrent identical
+issue calls use real PostgreSQL transaction arbitration and the established session. Both must
+return one canonical Grant/Transfer/frame and one original Audit. A changed size/range under
+the same OperationId is explicitly authorized by the test-owned callback but must still conflict
+at immutable-operation comparison; original result remains unchanged. Bounded latches/future
+timeouts prevent an unbounded race test. This separately qualifies the already-added lock.

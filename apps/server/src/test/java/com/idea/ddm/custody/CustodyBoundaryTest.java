@@ -200,6 +200,36 @@ class CustodyBoundaryTest {
         int length=ByteBuffer.wrap(packet).getInt();var signer=Signature.getInstance("Ed25519","SunEC");
         signer.initSign(key);signer.update(packet,4,length);System.arraycopy(signer.sign(),0,packet,6+length,64);
     }
+    @Test
+    void g04ConcurrentSameOperationAndChangedInputHaveOneCanonicalOutcome() throws Exception {
+        var signedIn=fixture.signIn();var scope=syntheticScope();seedVault(scope);
+        var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+        var changed=new TransferGrantService.Scope(scope.operationId(),scope.correlationId(),scope.vaultId(),scope.gatewayId(),
+                scope.endpoint(),scope.objectKind(),scope.objectId(),2048,scope.digest(),0,2048);
+        var service=new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,requested)->{
+            if(!actor.actorId().equals(signedIn.actorId()) || !actor.organizationId().equals(signedIn.organizationId())
+                    || !(scope.equals(requested)||changed.equals(requested)))throw new SecurityException("OWNER_REFUSED");
+        },Clock.systemUTC(),keys.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
+        try(var workers=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
+            var ready=new java.util.concurrent.CountDownLatch(2);var start=new java.util.concurrent.CountDownLatch(1);
+            java.util.concurrent.Callable<TransferGrantService.Grant> request=()->{
+                ready.countDown();assertTrue(start.await(10,java.util.concurrent.TimeUnit.SECONDS));return service.issue(signedIn.context(),scope);
+            };
+            var first=workers.submit(request);var second=workers.submit(request);
+            assertTrue(ready.await(10,java.util.concurrent.TimeUnit.SECONDS));start.countDown();
+            var one=first.get(20,java.util.concurrent.TimeUnit.SECONDS);var two=second.get(20,java.util.concurrent.TimeUnit.SECONDS);
+            assertEquals(one.grantId(),two.grantId());assertEquals(one.transferId(),two.transferId());assertArrayEquals(one.frame(),two.frame());
+            var refusal=assertThrows(IllegalStateException.class,()->service.issue(signedIn.context(),changed));
+            assertEquals("OPERATION_SCOPE_CONFLICT",refusal.getCause().getMessage());
+            assertEquals(one.scope(),service.resolve(signedIn.context(),scope.operationId()).scope());
+        }
+        try(var connection=fixture.app().getConnection()) {
+            for(var table:List.of("transfer_record","transfer_grant","audit_evidence"))
+                try(var query=connection.prepareStatement("SELECT count(*) FROM "+table+" WHERE operation_id=?")) {
+                    query.setObject(1,scope.operationId());try(var row=query.executeQuery()){assertTrue(row.next());assertEquals(1,row.getInt(1));}
+                }
+        }
+    }
     private static TransferGrantService service(F05SessionFixture.SignedIn signedIn,TransferGrantService.Scope expected,
             java.security.PrivateKey key) {
         return new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,requested)->{
