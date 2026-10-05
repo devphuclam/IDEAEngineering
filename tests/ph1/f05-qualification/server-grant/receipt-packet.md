@@ -52,3 +52,7 @@ Next regression-green-05 executes isolated V9→V10; regression-green-06 execute
 and evidence mutation SQLSTATE42501. One test per fresh owned root/schema;
 both exact source-owned schema cleanups must finish after tests. DataBaseline current fresh
 expectation10 is updated, but fresh public execution remains NOT-RUN in this packet.
+
+Regression-green-07 runs affected IdentityFlowTest/HttpSessionFlowTest/ServerSmokeTest:
+105 expected tests, each identity/HTTP case uses a fresh marked schema in the approved F05
+database, never original F03 DB/public. Existing exact source-owner guarded cleanup remains.
