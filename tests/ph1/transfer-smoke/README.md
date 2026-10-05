@@ -46,6 +46,10 @@ verifier NOT-RUN; no merge or timer action.
 
 ## Actual end-to-end attempt01 — published execution contract
 
+Attempt22 failed at TLS_READY with safe ASSERTION before transfer; owned listeners
+and schema cleaned. Fresh23 retains the last fixed client readiness error code,
+not a generic assertion. No trust/endpoint bypass or changed oracle. Paths follow23.
+
 Attempt01 at7d67a6f stopped before client readiness: Server used IPv4-mapped
 IPv6 loopback, violating this harness's exact IPv4-only listener oracle. Owned
 listeners stopped, marked schema f05_51af2164cbc34f0cbf0f0745bcca0b15 cleaned,

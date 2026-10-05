@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-22/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-23/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -27,11 +27,15 @@ const csrf = async () => {
 let stage = 'TLS_READY';
 try {
   let ready = false;
+  let lastReadyCode = 'CLIENT_READY_UNOBSERVED';
   for (let i = 0; i < 30; i++) {
     try { assert.equal((await server.request('/health', { method: 'GET' })).status, 200); ready = true; break; }
-    catch { if (tunnel.exitCode !== null) throw new Error('CLIENT_TUNNEL_REFUSED'); await new Promise(r => setTimeout(r, 200)); }
+    catch (error) {
+      lastReadyCode = /^CLIENT_[A-Z_]+$/.test(error.message ?? '') ? error.message : 'CLIENT_HEALTH_REFUSED';
+      if (tunnel.exitCode !== null) throw new Error('CLIENT_TUNNEL_REFUSED'); await new Promise(r => setTimeout(r, 200));
+    }
   }
-  assert.equal(ready, true);
+  if (!ready) throw new Error(lastReadyCode);
   stage = 'ANONYMOUS';
   assert.equal((await server.request('/api/v1/identity/session', { method: 'GET' })).status, 401);
   const password = Buffer.from(new URLSearchParams({ username: fixture.login, password: fixture.password }).toString());
