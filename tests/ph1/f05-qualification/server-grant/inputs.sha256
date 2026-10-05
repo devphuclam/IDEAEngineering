@@ -62,7 +62,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
-bcb1dffce219d28bd26c3a2609f6687c0f377439fbe6cf413ac84fe7ac46ac71  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
+edcbdcefa65c07fe11dc7eba7f30008a9a28598f4539754f5ba3c75830c88658  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 63dd8d1f3764bd00f136b15b4ed03a15648b08e8375aab0cbc678aaaadf4803b  apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java
 2e08d303e06f4808e3a3fcb7b8a15aa51c5f008d0b0565a560d7ad94e229ff38  apps/server/src/test/java/com/idea/ddm/operation/F04PredecessorMigrationTest.java
@@ -91,5 +91,5 @@ ca1ca366f8dd7b73c5a1e813929f61a54286f544cf9a451011954ea1702a897d  tests/ph1/f05-
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
-bf52a8af00a2f1e8f8eec7e526ad2c91e58f240456160681934977997a2b2618  tests/ph1/f05-qualification/server-grant/run-slice.sh
+a6bf2f34e162f6abb09f3259a0a3a7680f6cc29be1cd28e30c33fb848dc584c5  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
