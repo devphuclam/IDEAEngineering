@@ -1,6 +1,6 @@
 # Implementation Plan: PH1 Foundation and Single-Vault Custody
 
-**Branch**: `codex/f04-design-baseline` | **Date**: 2026-10-02 | **Spec**: [PH1 specification v0.9](spec.md)
+**Branch**: `codex/f04-design-baseline` | **Date**: 2026-10-02 | **Spec**: [PH1 specification v0.10](spec.md)
 
 **Input**: PG4-authorized `IE-INC-PH1-FOUNDATION-CUSTODY-001`, Delivery Cards F01-A through F05-B (72 planned hours).
 
@@ -20,12 +20,18 @@ the selected Tech baseline, or the PG4 decision.
 
 ## Technical Context
 
+**Current-reading rule2026-10-05:** F01–F04 are accepted per their retained receipts. Sections
+describing prior F03/F04 implementation/gates preserve historical design and procedures; their
+old IN_PROGRESS/unchecked/NOT-RUN instructions do not restart accepted work. Current F05
+qualification is in [T027 closure](../../docs/research/2026-10-05-f05a-t027-closure.md).
+Only explicit later task/tooling/environment authority permits T028–T034 execution.
+
 | Concern | PH1 decision or limit |
 |---|---|
 | Languages and runtimes | Java 25/Eclipse Temurin 25 for Server; React 19.3/TypeScript 7/Vite 8.3 built with Node.js 24; WPF and per-user Workspace on .NET 10. Exact package patches and resolved graphs require intake before first use. |
 | Server framework | Spring Boot 4.1.x and Spring Modulith 2.1.x; Spring Security with ordinary server-side sessions; JDBC/JdbcClient and Boot-managed pgJDBC. Maven Wrapper and Boot BOM control the build. |
 | Storage | PostgreSQL 18 for authoritative metadata, Audit and operation state; one filesystem-backed Vault behind Artifact Custody. Flyway versioned SQL is the only schema migration authority. |
-| Gateway | Separate Artifact Gateway/Vault boundary is selected. Exact Gateway runtime, toolchain and Adapter profile remain `NOT-RUN`; F05-A must qualify and record them before its implementation. F01-A does not silently choose them. |
+| Gateway | Separate Boot4.1.1 executable on Temurin25.0.4.1+1/Maven3.9.16; accepted JSR305-free exact graph/package, HTTPS and filesystem prerequisite plus146/146 envelope qualification are reconciled in [T027 closure](../../docs/research/2026-10-05-f05a-t027-closure.md). Frozen profile/current control protection is not Gateway/Adapter implementation or whole F05 acceptance. |
 | Interfaces | Versioned HTTPS/JSON control API; a scoped Grant and authenticated Receipt cross the Gateway boundary. Client sends bytes to Gateway. Contract details for this increment are in [contracts/ph1-boundaries.md](contracts/ph1-boundaries.md). |
 | Development platforms | Ubuntu 26.04 development Server with native PostgreSQL and one Vault; Windows engineering machine for WPF/Workspace. P04 accepts this one-developer environment, not shared deployment. |
 | Testing | Build/basic checks for each F01 project; fresh-schema and bounded rollback checks; bootstrap/session denial; atomic command/Audit failure injection; 1 KiB/64 MiB size and SHA-256 plus denied, mismatch and interruption transfers. Retain exact command, source commit, environment and result. |
@@ -238,9 +244,10 @@ regression and repaired-package actual Chrome W01–W10 PASS. Next is external w
 then human acceptance; technical task markers do not record whole-card acceptance. The matrix
 pins each separate exact source, rather than combining historical test counts into one run.
 
-Keep F03-B IN_PROGRESS, Issue #24 OPEN and verifier NOT-RUN. F04 owns its future owner-command
-race; company policy/MFA, T036/commercial, deployment and merge are separate. Final matrix review
-and Project Reviewer whole-card acceptance are still required.
+Historical closure guidance kept F03-B IN_PROGRESS and Issue #24 OPEN pending final review.
+Current F03-B is accepted/closed in its closure matrix; F04's owner race is accepted in F04
+evidence. Company policy/MFA, T036/commercial, deployment and merge remain separate. Verifier
+NOT-RUN; no historical result or acceptance authority is changed by this status reconciliation.
 
 ## F04 design baseline
 
@@ -250,7 +257,8 @@ is this documentation closure, not F04 implementation acceptance. Source base:
 `7a3ebd8b6ea9c5f70976ae400f712dd5fcba0d70`. At design closure runtime was NOT-RUN.
 Implementation [#31](https://github.com/devphuclam/IDEAEngineering/issues/31) starts from merge
 `53c1e174cb0410658752ee48ee97ac1dce05ba6b`; [schema/Audit evidence](evidence/F04-outcome-results.md)
-records its bounded first checkpoint. T023–T026 stay unchecked; remaining owner runtime is NOT-RUN.
+records its bounded first checkpoint. At that checkpoint T023–T026 stayed unchecked and remaining
+owner runtime was NOT-RUN; current accepted F04 closure is in evidence §38 and tasks.md.
 
 ### Execution prerequisite
 

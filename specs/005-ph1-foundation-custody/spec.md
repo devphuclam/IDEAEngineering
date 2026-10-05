@@ -2,10 +2,10 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.9` / Principal Product Author
+**Version / owner**: `0.10` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
-**Classification / verification**: `INTERNAL` / F01–F04 accepted results belong to retained per-card evidence; F05 qualification/runtime `NOT-RUN`; whole-PH1 acceptance incomplete
+**Classification / verification**: `INTERNAL` / F01–F04 accepted results belong to retained per-card evidence; T027 prerequisites/envelope/profile have executed PASS in the [closure receipt](../../docs/research/2026-10-05-f05a-t027-closure.md); F05 product runtime/transfer and whole-PH1 acceptance remain incomplete
 **Input**: Deliver only F01–F05 of the approved roadmap (72 planned task hours): a buildable application foundation, controlled data and account foundations, attributable business outcomes, and one direct Client-to-Gateway-to-Vault transfer smoke path.
 
 **Clerical successor 2026-10-03 / Work Item #37**: v0.9 corrects current status only.
@@ -13,6 +13,10 @@ Requirements, scenarios and historical evidence are unchanged. See the
 [F03-B closure matrix](evidence/F03-B-closure-matrix.md) and
 [F04 accepted results](evidence/F04-outcome-results.md). The frozen F05 preparation
 retains its original v0.8 input at the recorded commit; this successor does not rewrite that freeze.
+
+**Clerical successor2026-10-05 / Work Item #37:** v0.10 reconciles current T027 qualification
+status only. No requirement, scenario, governing-source decision or historical execution changes.
+Real Gateway/Adapter/Grant issuance/Receipt acceptance and SC-005/006 transfer evidence remain owed.
 
 ## Authority and Scope Boundary
 

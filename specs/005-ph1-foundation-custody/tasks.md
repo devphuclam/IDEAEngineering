@@ -188,21 +188,21 @@ verified Receipt. Distinct IDs leave a future multi-Vault seam, not a second-Vau
 mismatch, interruption, lost response and duplicate/changed-input attempt produce no false
 accepted custody.
 
-**F05-A path gate:** The Gateway boundary and preparation direction are selected; exact
-runtime/toolchain/Adapter/transport qualification remains `NOT-RUN`. The 2026-10-03 frozen
-preparation baseline below refines T029/T031/T033 candidate paths only. No Gateway source,
-test execution, environment provisioning or T027 start is authorized by those filenames.
-T027 requires separate execution authority, exact F05 intake and qualification before Gateway
-implementation; reconcile actual qualified paths and rerun read-only `$speckit-analyze` then.
-This gate does not block F01-A through F04.
+**F05-A path gate, current2026-10-05:** [T027 closure evidence](../../docs/research/2026-10-05-f05a-t027-closure.md)
+reconciles accepted Q01/root05/filesystem8/8/HTTPS02 and executed envelope/profile146/146.
+All qualification prerequisites and final read-only analyze PASS; T027 is COMPLETE/PASS.
+The [preparation v1.1 successor §13](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md#13-current-t027-qualification-successor--2026-10-05)
+records exact post-T027 paths. No Gateway/Adapter product code or T028–T034 execution follows
+automatically. T027 process exception does not admit later F05 builds. This gate does not
+block the accepted F01–F04 work.
 
-- [ ] T027 [US5] Qualify exact Gateway runtime, toolchain, Adapter, transport security and package intake in `docs/research/2026-09-28-ph1-f05-gateway-qualification.md`; record exact source/test paths there, refine T029/T031/T033 in `specs/005-ph1-foundation-custody/tasks.md`, and rerun read-only `$speckit-analyze` before Gateway implementation.
+- [X] T027 [US5] COMPLETE / PASS under the authorized closure work package. [Current preparation §13](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md#13-current-t027-qualification-successor--2026-10-05) and [closure receipt](../../docs/research/2026-10-05-f05a-t027-closure.md) reconcile accepted Q01, JSR305-free graph/package, HTTPS02, filesystem8/8, executed envelope146/146 at2c7eb32397a9f033885c48e19e27e6716ed8fd64, frozen profile/control/intake and exact T029/T031/T033 paths. Final read-only analyze has0 material/open findings. This does not implement Gateway/Adapter or complete F05-A/B; T028–T034 remain unchecked. PR38 stays Draft/Open, verifier NOT-RUN, no timer/progress action or merge.
 - [ ] T028 [US5] Write failing wrong/expired/replayed Grant, mismatched Receipt, same-operation status and custody tests in `apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java`.
-- [ ] T029 [US5] Write runtime-neutral candidate, size/digest mismatch, interruption, lost-response and repeated/changed-input cases in `tests/ph1/transfer-smoke/gateway-cases.json`; after T027 qualification, bind them to candidate `apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java` and record the qualified path in `apps/gateway/README.md`. Path refinement only; no tests/code are authorized by PRE-T027 preparation.
+- [ ] T029 [US5] Write runtime-neutral candidate, size/digest mismatch, interruption, lost-response and repeated/changed-input cases in `tests/ph1/transfer-smoke/gateway-cases.json`, bound to the T027-refined `apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java`; document in `apps/gateway/README.md`. Use the qualified v1 envelope/profile, actual timers and both fixtures. Full transfer matrices remain NOT-RUN; no tests/code are authorized by T027 closure alone.
 - [ ] T030 [US5] Implement exact short-lived Grant issuance and same-OperationId lookup in `apps/server/src/main/java/com/idea/ddm/custody/TransferGrantService.java`.
-- [ ] T031 [US5] After T027 qualification and implementation authorization, use candidate entrypoint `apps/gateway/src/main/java/com/idea/ddm/gateway/GatewayApplication.java`, service `apps/gateway/src/main/java/com/idea/ddm/gateway/transfer/GatewayTransferService.java`, verifier `apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java`, signer `apps/gateway/src/main/java/com/idea/ddm/gateway/receipt/TransferReceiptSigner.java`, Adapter `apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java` and test `apps/gateway/src/test/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapterTest.java`; record the qualified paths/commands in `apps/gateway/README.md` and `specs/005-ph1-foundation-custody/evidence/F05-A-gateway-files.md`. No Gateway files are created by preparation.
+- [ ] T031 [US5] After implementation and applicable tooling/environment authorization, use T027-refined entrypoint `apps/gateway/src/main/java/com/idea/ddm/gateway/GatewayApplication.java`, service `apps/gateway/src/main/java/com/idea/ddm/gateway/transfer/GatewayTransferService.java`, verifier `apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java`, signer `apps/gateway/src/main/java/com/idea/ddm/gateway/receipt/TransferReceiptSigner.java`, Adapter `apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java` and test `apps/gateway/src/test/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapterTest.java`; record paths/commands in `apps/gateway/README.md` and `specs/005-ph1-foundation-custody/evidence/F05-A-gateway-files.md`. Enforce exact configured endpoint/Gateway/range, frozen control profile, private verified staging and completion. Prerequisite8/8 is not real Adapter PASS; product files remain NOT-STARTED.
 - [ ] T032 [US5] Implement authenticated Receipt validation and Artifact/Vault/Location metadata acceptance in `apps/server/src/main/java/com/idea/ddm/custody/ReceiptAcceptanceService.java`.
-- [ ] T033 [US5] After T027 and exact F05 Node-harness intake, add candidate `tests/ph1/transfer-smoke/client-transfer.mjs`, `tests/ph1/transfer-smoke/client-transfer.test.mjs` and `tests/ph1/transfer-smoke/README.md` for Grant-directed Client→Gateway bytes without Server payload relay. Node24.19.0 remains a test-harness candidate; this does not qualify Desktop/Workspace or authorize execution during preparation.
+- [ ] T033 [US5] After exact F05 Node-harness intake/execution authorization, add T027-refined `tests/ph1/transfer-smoke/client-transfer.mjs`, `tests/ph1/transfer-smoke/client-transfer.test.mjs` and `tests/ph1/transfer-smoke/README.md` for Grant-directed Client→Gateway bytes without Server payload relay. Exact Node24.19.0 path/hash and pending legal admission are recorded in [closure §5](../../docs/research/2026-10-05-f05a-t027-closure.md#5-control-protection--adapter--deferred-node). Node is not used/required for T027; client qualification is still NOT-RUN, not Desktop/Workspace.
 - [ ] T034 [US5] Run 1 KiB/64 MiB, refusal, mismatch, interruption, lost-response and duplicate/changed-input scenarios; retain manifest comparison, transfer route, receipt and metadata evidence in `specs/005-ph1-foundation-custody/evidence/F05-B-transfer-results.md`.
 
 ## Phase 8: Cross-cutting review
@@ -235,7 +235,13 @@ evidence before advancing the Tracker. Continue F02→F03→F04→F05 in depende
 requirements, architecture and Tech baseline remain under their controlled owners; changes to
 them are not made by editing this task list.
 
-Current next step: F05-A has been explicitly started; T027 preflight is IN_PROGRESS under
+**Current next step (2026-10-05):** T027 remaining-envelope execution146/146 and all accepted
+prerequisites are reconciled in the [closure receipt](../../docs/research/2026-10-05-f05a-t027-closure.md).
+T027 COMPLETE / PASS includes final read-only analyze. T028/T030 is the next Server test/Grant vertical
+slice after separate implementation/tooling/environment authority; then T029/T031, T032,
+T033/T034. None starts here. F05-A remains IN_PROGRESS; no timer restart/progress publication.
+
+**Retained pre-closure lineage (not current instructions):** F05-A has been explicitly started; T027 preflight is IN_PROGRESS under
 [Work Item #37](https://github.com/devphuclam/IDEAEngineering/issues/37). Review the
 [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md); obtain exact
 qualification/intake/environment authority before provisioning or running qualification.

@@ -5,6 +5,17 @@ as the only task list. Scope: PH1 F01–F05. Read this before implementing or re
 
 ## Start each work session
 
+**Current frontier,2026-10-05:** [T027 closure](../../docs/research/2026-10-05-f05a-t027-closure.md)
+records accepted Q01/root05/filesystem8/8/HTTPS02 and remaining envelope146/146 at
+`2c7eb32397a9f033885c48e19e27e6716ed8fd64`. Read preparation v1.1 §13 and exact frozen profile
+before later endpoint work; retained preflight paragraphs below are historical receipts,
+not current blockers. T027 COMPLETE / PASS includes final read-only analyze with0 open/material
+findings. Next implementation
+unit is T028/T030, subject to separate execution/tooling/environment authority. T029/T031/T033
+paths are refined; Gateway, real Adapter, client transfer and custody acceptance are NOT-STARTED.
+T027-only process exception expires at its closure and cannot be used for later F05 builds.
+PR38 remains Draft/Open; no merge or timer/progress action. F05-A/B are not complete.
+
 1. Read repository `AGENTS.md`, [Spec Kit workflow](../../docs/agents/spec-kit.md),
    [spec](spec.md), [plan](plan.md), and the current task list. Inspect branch, HEAD and dirty
    files; preserve work already present. Report the actual checkout being used.
@@ -103,7 +114,8 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The current unit is F05-A / T027: IN_PROGRESS; Q01/root05/filesystem8/8 accepted.
+**Historical qualification frontier before the current successor above:**
+The then-current unit was F05-A / T027: IN_PROGRESS; Q01/root05/filesystem8/8 accepted.
 [HTTPS attempt01](../../docs/research/2026-10-03-f05a-t027-https-results.md) STOPPED at
 the endpoint-refusal classifier; owned process terminated, no18447 listener remains.
 The user authorized a bounded classifier/diagnostic repair and fresh-root successor;

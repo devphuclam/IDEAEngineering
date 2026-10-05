@@ -4,20 +4,25 @@
 |---|---|
 | Stable artifact ID | `IE-RES-PH1-F05-GATEWAY-QUAL-001` |
 | Class / normativity | Preparation/technology research record; product `INFORMATIVE` |
-| Version / document status | `1.0 / Approved` |
-| Disposition | `APPROVED PREPARATION BASELINE`; not a qualification result |
+| Version / document status | `1.1 / Draft successor`; v1.0 approved preparation remains in its frozen Git lineage |
+| Disposition | Current qualification reconciliation in §13; §§1–12 retain historical preparation, not current NOT-RUN status |
 | Actual publication / approval date | 2026-10-03, Asia/Ho_Chi_Minh; the 2026-09-28 filename is a legacy T027 path, not the creation date |
 | Owner / author | Project Reviewer / Codex, Primary Implementation Worker |
 | Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; explicit freeze instruction in the project conversation on 2026-10-03 |
 | Worker mode | `CODEX_ONLY` |
 | Applicable baseline | `IE-INC-PH1-FOUNDATION-CUSTODY-001`; repository input `4e43bc58d94f7eae17346e02ba484e9d0fe4a678` |
-| Change record | [Work Item #35](https://github.com/devphuclam/IDEAEngineering/issues/35), PRE-T027 documentation only |
-| Freeze / exact content binding | Separate successor [freeze record](2026-10-03-f05-preparation-freeze-record.md); this file does not contain its own commit/hash |
+| Change record | Historical [#35](https://github.com/devphuclam/IDEAEngineering/issues/35) preparation; current [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) authorized T027 closure, published 2026-10-05 Asia/Ho_Chi_Minh |
+| Freeze / exact content binding | [Original v1.0 freeze](2026-10-03-f05-preparation-freeze-record.md) binds historical bytes only; [successor v1.1 freeze](2026-10-05-f05-t027-baseline-freeze.md) binds current reconciliation, and [closure §4](2026-10-05-f05a-t027-closure.md#4-exact-profile-freeze-and-usability-boundary) binds exact executed profile |
 | Repository instruction state | Preparation handoff only; no implementation/execution grant |
 | Classification / retention | `INTERNAL`; retain version, freeze record and supersession history with PH1 |
 | Supersedes / superseded by | No earlier published package found; supersedes the uncommitted preparation proposal only / `NOT-APPLICABLE` |
 | Review trigger | Authority, runtime/version, dependency graph/hash, wire/crypto direction, test target or qualified parameter changes |
-| Evidence status | Authority and bounded read-only inventory; Gateway/runtime/transport qualification `NOT-RUN` |
+| Evidence status | Accepted prerequisites +146/146 envelope/profile PASS; §13 distinguishes qualification from unimplemented product capabilities |
+
+**Current-reading rule (2026-10-05):** §§1–12 are the retained v1.0 preparation snapshot.
+Their NOT-STARTED/NOT-RUN/pending wording is historical, not a reopening of accepted execution.
+Read §13 and its linked exact receipts for current status. The old freeze still identifies
+v1.0 at source87376bba/blob72ecbbfb/SHAa14a58ce, not these v1.1 successor bytes.
 
 ## 1. Authority and scope
 
@@ -306,3 +311,34 @@ Preparation: `1.0 / APPROVED PREPARATION BASELINE`, exact-byte freeze in the sep
 T027 qualification: `NOT-RUN / NOT-STARTED`. Gateway code: `NOT-STARTED`.
 F05-A timer: `NOT-STARTED`. Tracker: unchanged. No implementation or execution is authorized.
 No production/commercial, HA/recovery, multi-Vault or Desktop/Workspace acceptance is claimed.
+
+## 13. Current T027 qualification successor — 2026-10-05
+
+Authority: explicit user A–I “Continue F05-A / T027” work package. It freezes Q01, root05,
+filesystem8/8 and HTTPS attempt02 as accepted predecessors and authorizes the remaining
+envelope/profile/control/intake reconciliation and closure when analyze has no material gap.
+No predecessor was rerun. [Current closure evidence](2026-10-05-f05a-t027-closure.md) records
+remaining execution at2c7eb32397a9f033885c48e19e27e6716ed8fd64:146/146 PASS, fresh signer/
+public-only verifier JVMs, exact deterministic bytes, negative vectors and P05 bounded hash probe.
+T027 COMPLETE / PASS; [final read-only analyze](2026-10-05-f05a-t027-analyze.md) has0 material/open findings.
+
+| Current topic | Qualified/frozen profile | Product obligation still NOT-STARTED |
+|---|---|---|
+| Runtime/package | Temurin25.0.4.1+1 /Boot4.1.1 /Maven3.9.16; actual115 rows/99 acquisitions/242 POMs/52 core; application38, payload32; JSR305-free root05 accepted | Separate Gateway executable, lifecycle/production operation |
+| Envelope | [Exact version1 binary Grant/Receipt profile](2026-10-03-f05a-t027-envelope-profile.md), qualified146/146; SunEC Ed25519, Server Grant/Gateway Receipt separate pinned keys/domains | T028/T030/T031/T032 real issuance, request-scope enforcement, replay/result/commit behavior |
+| Parameters | Grant300s, Receipt900s;1MiB chunks;4096-byte signed frames/256-byte strings; connect10s, inactivity30s, range60s, control30s; exact expiry, same-ID lookup, new-Grant renewal | T029/T034 actual request timers and both1KiB/64MiB transfers; CPU hash probe is not throughput |
+| Control protection | Client-mediated ordinary Server session/CSRF; TLS chain/endpoint + pinned signed envelopes; fresh Server IAM/owner/allocation checks at renewal/final commit; no Gateway DB/RBAC authority | T028/T030/T032/T034 implement fail-closed coordination, no accepted custody from stale scope |
+| HTTPS | Attempt02 accepted PASS, dedicated stores/no TLS bypass; owned loopback listener terminated | Product endpoint deployment/certificate custody, not production TLS qualification |
+| Filesystem/Adapter | Accepted8/8 prerequisite; profile §5 controlled private root/staging/size/full digest/promotion/immutable completion, distinct Artifact/Vault/Location | T031 real FilesystemVaultAdapter; T029/T034 full transfer/interruption/retry matrices |
+| Intake | Exact known-term T027 process scope and proven JSR305 non-use; all obligations retained, historical BLOCKED-LEGAL preserved | T027 exception expires at closure; later F05 build use requires its own applicable authority, not commercial/T036 clearance |
+| Node | Existing24.19.0 candidate/path/hash in closure §5; runtime legal admission pending for T033 only | T033 exact Node intake/client qualification, not a T027 blocker |
+
+The selected paths in §10 are now **post-T027 refined implementation paths**, not unresolved
+runtime candidates: T029 JSON scenarios + GatewayTransferTest; T031 GatewayApplication,
+GatewayTransferService, TransferGrantVerifier, TransferReceiptSigner, FilesystemVaultAdapter
+and FilesystemVaultAdapterTest; T033 client-transfer.mjs/.test.mjs and README subject to its
+own Node admission. No apps/gateway or transfer-smoke product file is created here.
+
+Preserve original freeze/STOP/raw-log limits. Gateway/Adapter/Grant service/Receipt acceptance
+remain NOT-STARTED; SC-005/006 product-transfer acceptance and whole F05-A/B are not inferred.
+Verifier NOT-RUN; no DB/TLS/port/preview changes in this envelope unit, timer action or merge.

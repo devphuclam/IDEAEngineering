@@ -3,10 +3,10 @@
 | Control | Value |
 |---|---|
 | Stable ID / class | IE-VER-T027-FILESYSTEM-20261003 / bounded qualification verification |
-| Version / status | 0.1 / Draft; Engineering PASS8/8; result acceptance pending |
+| Version / status | 0.2 / Accepted prerequisite PASS8/8 under current A–I work package; not real Adapter qualification |
 | Product normativity / instruction | INFORMATIVE / NOT-APPLICABLE |
 | Owner / author / worker | Engineering / Codex / CODEX_ONLY |
-| Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; execution authorized in conversation; result acceptance NOT-RUN |
+| Reviewer / acceptance authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm; explicit accepted predecessor in current A–I work package, not inferred from execution |
 | Date / timezone / classification | 2026-10-03 / Asia/Ho_Chi_Minh / INTERNAL |
 | Baseline / exact executed source | Issue #37 / PR #38; 01340f8035376c37ad3e55b51e1d11df6c9b87a6 |
 | Upstream | [Approved seam/source/command contract](2026-10-03-f05a-t027-filesystem-contract.md); [pre-execution publication](https://github.com/devphuclam/IDEAEngineering/pull/38#issuecomment-5967984950); accepted root05 graph prerequisite |
@@ -16,6 +16,11 @@
 | Standards tailoring | IE-STD-AUTH-001; bounded verification and configuration trace STANDARD-GUIDED; no conformity claim |
 
 ## 1. Objective, authorization and procedure
+
+Current acceptance successor2026-10-05: the user-supplied “Continue F05-A / T027” A–I package
+freezes filesystem8/8 as accepted predecessor. [T027 closure](2026-10-05-f05a-t027-closure.md)
+records this without changing historical source/oracles/results or rerunning the primitive.
+Old pending wording below is retained publication history; T031 real Adapter remains unimplemented.
 
 The user approved the filesystem prerequisite seam and execution conditional on exact
 source/hash/command/target publication in this conversation on2026-10-03. Source
