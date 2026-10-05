@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-31/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-32/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -53,9 +53,21 @@ try {
     '--output-dir', fixtures], { stdio: 'pipe', timeout: 30000 });
   for (const [size, name] of [[1024, 'IE-DATA-CANONICAL-001-small-1KiB.bin'], [67108864, 'IE-DATA-CANONICAL-001-transfer-64MiB.bin']]) {
     stage = 'GRANT_' + size;
-    const response = await server.request(`/qualification/f05/grant?size=${size}`, { headers: await csrf() });
+    const response = await server.request(`/qualification/f05/grant?size=${size}${size === 67108864 ? '&expired=true' : ''}`, { headers: await csrf() });
     assert.equal(response.status, 200);
-    const grant = JSON.parse(response.body);
+    let grant = JSON.parse(response.body);
+    if (size === 67108864) {
+      stage = 'EXPIRED_RENEWAL';
+      const expired = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame } });
+      assert.equal(expired.status, 403); assert.equal(expired.body.length, 0);
+      assert.equal((await server.request(`/qualification/f05/renew?size=${size}`)).status, 403);
+      const renewal = await server.request(`/qualification/f05/renew?size=${size}`, { headers: await csrf() });
+      assert.equal(renewal.status, 200);
+      const renewed = JSON.parse(renewal.body); assert.equal(renewed.transferId, grant.transferId);
+      assert.notEqual(renewed.frame, grant.frame);
+      const old = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame } });
+      assert.equal(old.status, 403); grant = renewed;
+    }
     const same = await server.request(`/qualification/f05/grant?size=${size}`, { headers: await csrf() });
     assert.equal(same.status, 200); assert.deepEqual(JSON.parse(same.body), grant);
     const mutated = Buffer.from(grant.frame, 'base64url'); mutated[mutated.length - 1] ^= 1;

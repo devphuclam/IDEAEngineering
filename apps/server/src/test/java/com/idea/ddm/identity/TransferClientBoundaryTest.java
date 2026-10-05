@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** Actual Windows client coordination, confined to test classes and a marked schema. */
 class TransferClientBoundaryTest {
-    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-31/source/apps/server/target/client-e2e-01");
+    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-32/source/apps/server/target/client-e2e-01");
     static final Path JDK=Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path GATEWAY=Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar");
     static final UUID VAULT=UUID.randomUUID(), GATEWAY_ID=UUID.randomUUID();
@@ -82,7 +82,9 @@ class TransferClientBoundaryTest {
                 var mapping=server.getBean(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping.class);
                 var options=mapping.getBuilderConfiguration();
                 mapping.registerMapping(org.springframework.web.servlet.mvc.method.RequestMappingInfo.paths("/qualification/f05/grant")
-                        .methods(org.springframework.web.bind.annotation.RequestMethod.POST).options(options).build(),bridge,Bridge.class.getMethod("grant",long.class));
+                        .methods(org.springframework.web.bind.annotation.RequestMethod.POST).options(options).build(),bridge,Bridge.class.getMethod("grant",long.class,boolean.class));
+                mapping.registerMapping(org.springframework.web.servlet.mvc.method.RequestMappingInfo.paths("/qualification/f05/renew")
+                        .methods(org.springframework.web.bind.annotation.RequestMethod.POST).options(options).build(),bridge,Bridge.class.getMethod("renew",long.class));
                 mapping.registerMapping(org.springframework.web.servlet.mvc.method.RequestMappingInfo.paths("/qualification/f05/receipt")
                         .methods(org.springframework.web.bind.annotation.RequestMethod.POST).options(options).build(),bridge,Bridge.class.getMethod("receipt",byte[].class));
                 long startup=System.nanoTime()+TimeUnit.SECONDS.toNanos(30);
@@ -137,14 +139,25 @@ class TransferClientBoundaryTest {
                     ||!ENDPOINT.equals(scope.endpoint())||!grants.values().stream().anyMatch(g->g.scope().equals(scope)))throw new SecurityException("TEST_OWNER_REFUSED");
         }
         @ResponseBody
-        public synchronized Map<String,String> grant(@RequestParam("size") long size){
+        public synchronized Map<String,String> grant(@RequestParam("size") long size,
+                @RequestParam(value="expired",defaultValue="false") boolean expired){
             if(size!=1024&&size!=67108864)throw new IllegalArgumentException("FIXTURE_SCOPE_REFUSED");
             var scope=grants.containsKey(size)?grants.get(size).scope():new TransferGrantService.Scope(UUID.randomUUID(),UUID.randomUUID(),VAULT,GATEWAY_ID,ENDPOINT,1,UUID.randomUUID(),size,size==1024?SMALL:LARGE,0,size);
             var service=new TransferGrantService(app,new OwnerSessionEligibility(sessions.get()),(c,a,s)->{
                 if(!actor.equals(a.actorId())||!organization.equals(a.organizationId())||!s.equals(scope))throw new SecurityException("TEST_OWNER_REFUSED");
-            },Clock.systemUTC(),grantKeys.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1");
+            },expired?Clock.fixed(java.time.Instant.now().minusSeconds(301),java.time.ZoneOffset.UTC):Clock.systemUTC(),grantKeys.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1");
             var grant=service.issue(context(),scope);grants.put(size,grant);
             return Map.of("frame",Base64.getUrlEncoder().withoutPadding().encodeToString(grant.frame()),"transferId",grant.transferId().toString());
+        }
+        @ResponseBody
+        public synchronized Map<String,String> renew(@RequestParam("size") long size){
+            var original=grants.get(size);if(original==null)throw new SecurityException("FIXTURE_SCOPE_REFUSED");
+            var service=new TransferGrantService(app,new OwnerSessionEligibility(sessions.get()),(c,a,s)->owner(a,s),
+                    Clock.systemUTC(),grantKeys.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1");
+            var renewed=service.renew(context(),original.operationId());grants.put(size,renewed);
+            assertEquals(original.operationId(),renewed.operationId());assertEquals(original.transferId(),renewed.transferId());
+            assertNotEquals(original.grantId(),renewed.grantId());assertEquals(original.scope(),renewed.scope());
+            return Map.of("frame",Base64.getUrlEncoder().withoutPadding().encodeToString(renewed.frame()),"transferId",renewed.transferId().toString());
         }
         @ResponseBody
         public Map<String,String> receipt(@RequestBody byte[] frame){

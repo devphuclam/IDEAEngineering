@@ -192,3 +192,15 @@ actual status first, resumes only contiguous missing ranges, rejects impossible
 progress and resolves existing Receipt without uploading again. Same commands,
 101-input manifest, retained DB, package/hash/tool/TLS/oracles. Close the fixture
 reader explicitly, no reliance on garbage collection. No product graph change.
+
+Fresh qualification32 adds only a test-clock issuance and manually registered
+test-only renewal bridge, never production clock/config/HTTP API. Issue64MiB
+with injected issuance Clock hostnow-301seconds; actual Gateway UTC must refuse
+expired signed Grant403 without creating bytes/Receipt. Explicit authenticated
+CSRF renewal through actual Server service retains OperationId/TransferId/scope,
+new GrantId/frame,300second validity. Old Grant stays refused, renewed transfer
+passes the same full actual interruption/resume/custody matrix. Missing CSRF
+cannot renew. No waiting300seconds or OS/Gateway clock changes. Existing behavior
+qualification may first run GREEN; no manufactured RED. Same101-input/tool/graph/
+package/target guards; fresh root32 and preserved prior attempts. This proves
+expiry+explicit renewal before transfer, not renewal mid-range or production API.
