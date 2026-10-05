@@ -163,3 +163,11 @@ owned process stopped/no listener/source tools TLS system trust unchanged. Fresh
 rebuilds minimum GREEN handler/service with same offline graph and new private harness TLS/keys.
 Commands run-build.sh source manifest gateway-boot-04 then run-http.sh source green. No DB or
 preview. Timers/full negatives and Server Receipt custody are not inferred from this tracer.
+
+Fresh gateway-boot-05 adds actual TLS socket inactivity qualification: send one byte of a
+declared 1024-byte range then stall. Server must issue 408 after 30 seconds (28–35 seconds
+wall-clock observation tolerance), with no verified progress/Receipt. Client read timeout
+35 seconds is the genuine RED witness, not a TLS bypass or accelerated policy claim.
+Commands run-build.sh source manifest gateway-boot-05 then run-http.sh source red.
+Same admitted offline graph/no DB, private fresh TLS/key fixtures, exact single
+loopback listener and owned JVM cleanup. Preserve boot04 package/tracer evidence unchanged.

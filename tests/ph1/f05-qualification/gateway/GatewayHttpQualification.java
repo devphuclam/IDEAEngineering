@@ -57,6 +57,27 @@ class GatewayHttpQualification {
                 GatewayTlsMaterial.require(frame.getShort()==64&&frame.remaining()==64,"Receipt frame");byte[] signature=new byte[64];frame.get(signature);
                 var check=Signature.getInstance("Ed25519","SunEC");check.initVerify(gateway.getPublic());check.update(payload);
                 GatewayTlsMaterial.require(check.verify(signature),"Independent Gateway Receipt signature");
+                var stalledFields=new TreeMap<Integer,byte[]>(fields);
+                for(int tag:new int[]{6,7}){UUID id=UUID.randomUUID();stalledFields.put(tag,ByteBuffer.allocate(16).putLong(id.getMostSignificantBits()).putLong(id.getLeastSignificantBits()).array());}
+                byte[] stalledGrant=com.idea.ddm.gateway.GatewayTransferTest.signed(stalledFields,server.getPrivate());
+                try(var socket=(javax.net.ssl.SSLSocket)client.sslContext().getSocketFactory().createSocket("127.0.0.1",18447)){
+                    var parameters=socket.getSSLParameters();parameters.setEndpointIdentificationAlgorithm("HTTPS");socket.setSSLParameters(parameters);socket.setSoTimeout(35000);socket.startHandshake();
+                    String headers="POST /transfer/range HTTP/1.1\r\nHost: 127.0.0.1:18447\r\nConnection: close\r\nContent-Length: 1024\r\nX-IDEA-Grant: "+Base64.getUrlEncoder().withoutPadding().encodeToString(stalledGrant)
+                            +"\r\nX-IDEA-Range-Start: 0\r\nX-IDEA-Range-End: 1024\r\nX-IDEA-Chunk-SHA256: 5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef\r\n\r\n";
+                    long started=System.nanoTime();socket.getOutputStream().write(headers.getBytes(java.nio.charset.StandardCharsets.US_ASCII));socket.getOutputStream().write(0);socket.getOutputStream().flush();
+                    try{
+                        String line=new java.io.BufferedReader(new java.io.InputStreamReader(socket.getInputStream(),java.nio.charset.StandardCharsets.US_ASCII)).readLine();
+                        long elapsed=TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started);
+                        GatewayTlsMaterial.require(line!=null&&line.startsWith("HTTP/1.1 408 ")&&elapsed>=28000&&elapsed<=35000,"Inactivity refusal not exact bounded 408");
+                        System.out.println("GATEWAY_INACTIVITY_GREEN=PASS; ELAPSED_MS="+elapsed);
+                    }catch(java.net.SocketTimeoutException expectedRed){
+                        System.out.println("GATEWAY_HTTP_RED=EXPECTED_INACTIVITY_TIMEOUT_GAP; OBSERVED_WAIT_MS="+TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started));return;
+                    }
+                }
+                var progressRequest=HttpRequest.newBuilder(URI.create("https://127.0.0.1:18447/transfer/status")).timeout(Duration.ofSeconds(5))
+                        .header("X-IDEA-Grant",Base64.getUrlEncoder().withoutPadding().encodeToString(stalledGrant)).POST(HttpRequest.BodyPublishers.noBody()).build();
+                var progress=client.send(progressRequest,HttpResponse.BodyHandlers.ofByteArray());
+                GatewayTlsMaterial.require(progress.statusCode()==200&&Arrays.equals(progress.body(),new byte[12]),"Timed-out body advanced verified bytes or Receipt");
                 System.out.println("GATEWAY_HTTP_GREEN=PASS; TLS="+response.sslSession().get().getProtocol()+"; CIPHER="+response.sslSession().get().getCipherSuite());
             }
         }finally{
