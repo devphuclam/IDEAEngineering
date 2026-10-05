@@ -68,3 +68,11 @@ Fresh adapter-green-05 adds qualification of existing range guards: changed allo
 gapped request, interrupted chunk does not advance progress and resumes, full-file digest
 mismatch never completes, concurrent streaming writer rejects a second writer without removing
 the first writer's lock. Bounded ten-second barriers; no fabricated RED for existing behavior.
+
+Range guard13/13 PASS at6ebdd09bfb906ad36feff2997f37d2286bd8527a, private log
+2b99329d67ab6cf0ab38e7c19748ecabb92ad3630ef81050ee53e273dd91b8a2.
+Next gateway-red-01 uses independent DataOutputStream Server-wire signer in the actual Gateway
+test and product verifier entrypoint. Exact22 fields must survive verification unchanged;
+expected GRANT_VERIFIER_NOT_IMPLEMENTED. Qualified first-party T027 codec is promoted without
+new external dependency. run-gateway.sh uses only pinned JDK/java/javac, no listener or Maven.
+Same raw manifest/archive/source publication procedure, private synthetic owned fixture root.
