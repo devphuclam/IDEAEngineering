@@ -81,8 +81,15 @@ export class SecureEndpoint {
 }
 
 export async function uploadRanges(gateway, path, grant, expectedSize) {
-  let progress = { verifiedBytes: 0, receipt: null };
+  const status = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant }, limit: 4108 });
+  if (status.status !== 200) throw new Error('CLIENT_STATUS_REFUSED');
+  let progress = gatewayProgress(status.body, expectedSize);
+  if (progress.receipt) return progress.receipt;
+  if (progress.verifiedBytes !== expectedSize && progress.verifiedBytes % 1048576 !== 0)
+    throw new Error('CLIENT_PROGRESS_REFUSED');
   for await (const range of fileRanges(path)) {
+    if (range.end <= progress.verifiedBytes) continue;
+    if (range.start !== progress.verifiedBytes) throw new Error('CLIENT_PROGRESS_REFUSED');
     const response = await gateway.request('/transfer/range', { body: range.bytes, deadline: 60000,
       limit: 4108, headers: { 'X-IDEA-Grant': grant,
         'X-IDEA-Range-Start': String(range.start), 'X-IDEA-Range-End': String(range.end),

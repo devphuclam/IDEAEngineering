@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-red-30/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-31/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -62,7 +62,9 @@ try {
     const invalid = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': mutated.toString('base64url') } });
     assert.equal(invalid.status, 403); assert.equal(invalid.body.length, 0);
     const path = join(fixtures, name);
-    const first = (await fileRanges(path).next()).value;
+    const firstReader = fileRanges(path);
+    let first;
+    try { first = (await firstReader.next()).value; } finally { await firstReader.return(); }
     const rangeHeaders = range => ({ 'X-IDEA-Grant': grant.frame, 'X-IDEA-Range-Start': String(range.start),
       'X-IDEA-Range-End': String(range.end), 'X-IDEA-Chunk-SHA256': range.digest });
     const badBytes = Buffer.from(first.bytes); badBytes[0] ^= 1;

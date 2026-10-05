@@ -184,3 +184,11 @@ wrong chunk digest with zero progress, unchanged completed retry/changed bytes,
 modified Receipt refusal and final canonical custody oracle. Inputs/frames remain
 RAM/private only. Disconnection uses admitted Node HTTPS, normal CA/endpoint
 verification, no intermediary/mock or Server byte relay. Other matrices stay open.
+
+Actual RED30 source7d9c1e142a2642bf14b830e98a4e984382c8c4a1 reached
+GATEWAY_UPLOAD_67108864 and refused offset0 instead of1048576 after interruption.
+JUnit1 failure, no whole-flow PASS; owned listeners stopped. Fresh GREEN31 asks
+actual status first, resumes only contiguous missing ranges, rejects impossible
+progress and resolves existing Receipt without uploading again. Same commands,
+101-input manifest, retained DB, package/hash/tool/TLS/oracles. Close the fixture
+reader explicitly, no reliance on garbage collection. No product graph change.
