@@ -137,7 +137,39 @@ public final class FilesystemVaultAdapter {
         }finally{Files.deleteIfExists(lock);}
     }
     public Progress progress(UUID transferId,UUID locationId,long totalBytes,String fullDigest) throws IOException {
-        throw new UnsupportedOperationException("PROGRESS_QUERY_NOT_IMPLEMENTED");
+        var completed=new Completed(id(transferId),id(locationId),totalBytes,digest(fullDigest));
+        if(totalBytes<=0)throw new IOException("INVALID_SIZE");checkRoots();
+        Path candidate=ranges.resolve(transferId.toString());
+        if(!Files.exists(candidate,LinkOption.NOFOLLOW_LINKS))return new Progress(0,null);
+        if(!candidate.toRealPath().equals(candidate)||!Files.isDirectory(candidate,LinkOption.NOFOLLOW_LINKS))
+            throw new IOException("UNSAFE_RANGE_DIRECTORY");
+        Path binding=candidate.resolve("identity");
+        if(!Files.isRegularFile(binding,LinkOption.NOFOLLOW_LINKS)||Files.size(binding)>256)
+            throw new IOException("RANGE_BINDING_CONFLICT");
+        try(var stream=Files.newInputStream(binding,LinkOption.NOFOLLOW_LINKS)){
+            if(!(locationId+"\n"+totalBytes+"\n"+fullDigest+"\n").equals(new String(stream.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8)))
+                throw new IOException("RANGE_BINDING_CONFLICT");
+        }
+        Path destination=objects.resolve(key(completed));
+        if(Files.exists(destination,LinkOption.NOFOLLOW_LINKS)){verify(destination,completed);return new Progress(totalBytes,completed);}
+        record Range(long start,long end,String hash,Path file){}
+        var chunks=new java.util.ArrayList<Range>();
+        try(var files=Files.list(candidate)){
+            for(Path file:files.toList()){
+                if(file.equals(binding))continue;String name=file.getFileName().toString();
+                if(!name.matches("[0-9]+-[0-9]+-[0-9a-f]{64}\\.chunk"))throw new IOException("INVALID_RANGE_STATE");
+                String[] parts=name.substring(0,name.length()-6).split("-");
+                try{chunks.add(new Range(Long.parseLong(parts[0]),Long.parseLong(parts[1]),parts[2],file));}
+                catch(NumberFormatException invalid){throw new IOException("INVALID_RANGE_STATE",invalid);}
+            }
+        }
+        chunks.sort(java.util.Comparator.comparingLong(Range::start));long coverage=0;
+        for(var chunk:chunks){
+            if(chunk.start()!=coverage||chunk.end()<=coverage||chunk.end()>totalBytes||chunk.end()-coverage>1048576)
+                throw new IOException("INVALID_RANGE_STATE");
+            verify(chunk.file(),new Completed(transferId,locationId,chunk.end()-chunk.start(),chunk.hash()));coverage=chunk.end();
+        }
+        return new Progress(coverage,null);
     }
     private Path directory(String name) throws IOException {
         Path path=root.resolve(name);
