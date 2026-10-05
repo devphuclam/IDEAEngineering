@@ -34,7 +34,7 @@ case "$3" in
   regression-green-01) test_selector=F05GrantMigrationTest ;;
   regression-green-05) test_selector=F05ReceiptMigrationTest ;;
   regression-green-06) test_selector=F05GrantMigrationTest ;;
-  regression-green-02|regression-green-04|regression-green-07|regression-green-08) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
+  regression-green-02|regression-green-04|regression-green-07|regression-green-08|regression-green-09) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
     export IDEA_F03_TEST_DATABASE_NAME=idea_ddm_f05a_20261005_t028 ;;
 esac
 export IDEA_F05_TEST_SCHEMA="f05_$(tr -d '-' < /proc/sys/kernel/random/uuid)"
