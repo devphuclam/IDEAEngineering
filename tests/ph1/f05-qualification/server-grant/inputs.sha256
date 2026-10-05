@@ -14,8 +14,9 @@ f1f09f45c5c1fda1cf961901e1d0fe2d4b97aef12f6b62c5f26c4b41f125d7b8  apps/server/sc
 e65639ed4312bbfe2bce12855ae9eaa3f5775e7fdb4d8db18923a1c127a67f75  apps/server/src/main/java/com/idea/ddm/ProcessHealthController.java
 9db01a2754a7160f1c7f937f777087813f022e5a884943f8ff7b22303fa28455  apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java
 ab74624c75be477812df3db84dcf19bf8fb0f593582d6847110aee8ccf495e27  apps/server/src/main/java/com/idea/ddm/custody/GrantEnvelope.java
+c0bf3e9aeb4a84713ad9e996f142c3418b21923d963e5aa7f5d118115fa10329  apps/server/src/main/java/com/idea/ddm/custody/ReceiptEnvelope.java
 2aed2f7e0cc74c5f15c77b20b47bf920ec7c68276e4e59abfda5fcb015f5b59b  apps/server/src/main/java/com/idea/ddm/custody/TransferGrantService.java
-cd762c1cdad9abd4f5c9270feea6acd8d0d4eb8c3f6c31dc46efe615b8a308a7  apps/server/src/main/java/com/idea/ddm/custody/TransferReceiptService.java
+e50932e86bfba96dd6a9bacfcd93223dbab0a9ff47af2de17687d942d2682655  apps/server/src/main/java/com/idea/ddm/custody/TransferReceiptService.java
 048f622c3f6bb0ad9728f553a8295c96f943e3f2b25f1b319abd3dec5d692927  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java
 34e13d4bcc9e0cac27c6e5f815d3e09c5009b7ba7149f340625dc7984bb42571  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentDocumentationBoundary.java
 1516972db473c0a0d5ee33183bf768d3cd586dc82204028af4010b4df5f06e25  apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java
@@ -55,7 +56,7 @@ c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/sr
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 82931e01c2e997ee4c3d700b7010645f853ef2f7ad44f5b7bbeac1f7b489b030  apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java
 3f2d3dd7e696355ab791110dfc116f2a7ca0138e6ea75b763136bb216fd81064  apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java
-5b5c7852d7fefa8ad36590e136fd3a1f4ffcc57bd59c9adcfc934f55790bc6e9  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
+6b836fba52716aed589dcdf17547189e507befa8af0a2e23c61036d81b7c3c47  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 5142ca313ca13971c75a961ae5975dbd93eeb5f03b9c33d8ce8aa5dd41b71afe  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
