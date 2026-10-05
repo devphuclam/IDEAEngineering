@@ -92,7 +92,28 @@ public final class GatewayTransferTest {
         var reopened=new GatewayTransferService(verifier,receiptSigner,adapter,vault,serviceRoot);
         var resolved=reopened.status(serviceWire);
         if(resolved.verifiedBytes()!=1024||!Arrays.equals(serviceResult.receipt(),resolved.receipt()))throw new AssertionError("Lost response did not resolve exact original Receipt");
-        System.out.println("GATEWAY_TRACER=PASS; CASES=20");
+        var retry=service.upload(serviceWire,0,1024,"5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",new ByteArrayInputStream(new byte[1024]));
+        if(!Arrays.equals(serviceResult.receipt(),retry.receipt()))throw new AssertionError("Identical retry duplicated Receipt");
+        byte[] changed=new byte[1024];changed[0]=1;
+        refuse(()->service.upload(serviceWire,0,1024,"5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",new ByteArrayInputStream(changed)));
+        var retargeted=new TreeMap<Integer,byte[]>(serviceFields);retargeted.put(9,uuid(UUID.randomUUID()));
+        refuse(()->service.status(signed(retargeted,keys.getPrivate())));
+        var partialFields=fields();partialFields.put(7,uuid(UUID.randomUUID()));partialFields.put(6,uuid(UUID.randomUUID()));
+        byte[] partialWire=signed(partialFields,keys.getPrivate());String halfDigest="076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560";
+        var partialResult=service.upload(partialWire,0,512,halfDigest,new ByteArrayInputStream(new byte[512]));
+        if(partialResult.verifiedBytes()!=512||partialResult.receipt()!=null||service.status(partialWire).verifiedBytes()!=512)
+            throw new AssertionError("Partial Gateway candidate wrongly completed");
+        Clock later=Clock.fixed(Instant.ofEpochSecond(T+300),ZoneOffset.UTC);
+        var laterVerifier=new TransferGrantVerifier(keys.getPublic(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1",GATEWAY,ENDPOINT,later);
+        var laterSigner=new TransferReceiptSigner(gatewayKeys.getPrivate(),"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1",later);
+        var laterService=new GatewayTransferService(laterVerifier,laterSigner,adapter,vault,serviceRoot);
+        refuse(()->laterService.status(partialWire));
+        var renewal=new TreeMap<Integer,byte[]>(partialFields);renewal.put(5,uuid(UUID.randomUUID()));renewal.put(20,number(T+300));renewal.put(21,number(T+300));renewal.put(22,number(T+600));
+        byte[] renewed=signed(renewal,keys.getPrivate());
+        if(laterService.status(renewed).verifiedBytes()!=512)throw new AssertionError("Renewal lost verified progress");
+        if(laterService.upload(renewed,512,1024,halfDigest,new ByteArrayInputStream(new byte[512])).receipt()==null)
+            throw new AssertionError("Explicit renewal cannot complete preserved candidate");
+        System.out.println("GATEWAY_TRACER=PASS; CASES=25");
     }
     @FunctionalInterface interface Checked{void run() throws Exception;}
     static void refuse(Checked action) throws Exception {

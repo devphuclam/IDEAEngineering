@@ -106,3 +106,11 @@ requires signed completion and recreates service to query the exact original Rec
 response. State root is private gateway-state sibling inside owned attempt. Prior lower-level
 fixtures have distinct candidate TransferId to avoid ambiguous completed allocation reuse.
 Expected GATEWAY_SERVICE_NOT_IMPLEMENTED, no Boot/HTTP/server custody inference.
+
+Service RED771bb9741b5ca95940667a64ac7e5275730de127, log3aa33b31d9f4d694b60b44c9d9951ccce458d74139a1c04e6aadf5f5326f0a48.
+Service GREEN77ceffc6eeaf15ba5adc5b244adb8c7ebd04ae9c:20/20, log1ddd5e1bd67a6ef113be9a291432359ada464b78de9f650839dea311b9b07364.
+GREEN fixture explicitly separated its service candidate from the earlier raw Adapter candidate;
+the RED documentation intended that isolation but source did not yet perform it. No test oracle
+or product authority changed. Fresh gateway-green-05 qualifies existing retry/changed bytes,
+signed retarget refusal, partial/no Receipt, exact expiry and explicit same-transfer renewal
+preserving verified progress. Synthetic controlled Clock, no wall-clock waiting, listener or DB.
