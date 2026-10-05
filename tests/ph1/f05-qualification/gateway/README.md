@@ -86,3 +86,9 @@ Verifier GREENcd93addab1043270c537bc9a5ef003449233c184:1/1, logfa637bb87d01f40e7
 Next gateway-red-03 connects verified independent Server Grant to actual Adapter completion and
 Gateway-owned Receipt signer. Independently parse exact25 fields and verify Ed25519 signature;
 no producer-derived expected correlation/allocation. Expected RECEIPT_SIGNER_NOT_IMPLEMENTED.
+
+Receipt REDfc5fa343a03d6362689f8a0404b8639fc000a786, log5f0b7586e96d2efb8bf9ccd50115db7c7feaaa880e99d811b85000dce04a9566.
+Receipt GREEN5580c4d722f07ac435dd59a28ab4159ceb1357e3:2/2, log5b459c11cf78499748ab1208e64cae0a66ebc7e9035e3fc5ea040bbfe9d407f7.
+gateway-green-03 qualifies existing refusal boundaries: signature/key/pins/Gateway/endpoint,
+unauthorized ranges, before/at/after expiry, trailing/oversized frames, partial completion and
+expiry before Receipt issuance. No manufactured RED, Boot/listener/Server custody claim.

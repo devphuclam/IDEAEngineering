@@ -15,7 +15,6 @@ public final class TransferReceiptSigner {
     public byte[] sign(Map<Integer,byte[]> verifiedGrant,FilesystemVaultAdapter.Completed completed,
             UUID vaultId,UUID receiptId) throws Exception {
         long now=clock.instant().getEpochSecond();
-        var codec=com.idea.ddm.gateway.security.GatewayEnvelope.class;
         if(now<com.idea.ddm.gateway.security.GatewayEnvelope.longValue(verifiedGrant.get(21))
                 ||now>=com.idea.ddm.gateway.security.GatewayEnvelope.longValue(verifiedGrant.get(22)))
             throw new SecurityException("GRANT_EXPIRED_BEFORE_RECEIPT");

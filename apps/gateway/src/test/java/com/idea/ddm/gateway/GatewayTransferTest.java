@@ -64,6 +64,30 @@ public final class GatewayTransferTest {
                 ||ByteBuffer.wrap(receipt.get(21)).getLong()!=1024||receipt.get(22)[0]!=1
                 ||ByteBuffer.wrap(receipt.get(23)).getLong()!=T+1||ByteBuffer.wrap(receipt.get(25)).getLong()!=T+901)
             throw new AssertionError("Exact verified Receipt fields");
-        System.out.println("GATEWAY_TRACER=PASS; CASES=2");
+        byte[] wire=signed(expected,keys.getPrivate());byte[] tampered=wire.clone();tampered[tampered.length-1]^=1;
+        refuse(()->verifier.verify(tampered,0,1024));
+        var wrongKey=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+        refuse(()->verifier.verify(signed(expected,wrongKey.getPrivate()),0,1024));
+        for(int tag:new int[]{1,2,4,10,11}){
+            var altered=fields();altered.put(tag,tag==10?uuid(UUID.randomUUID()):text(tag==11?"https://127.0.0.1:18448/":"WRONG_PIN"));
+            refuse(()->verifier.verify(signed(altered,keys.getPrivate()),0,1024));
+        }
+        refuse(()->verifier.verify(wire,-1,1024));refuse(()->verifier.verify(wire,0,1025));refuse(()->verifier.verify(wire,512,512));
+        for(long now:new long[]{T-1,T+300,T+301}){
+            var boundary=new TransferGrantVerifier(keys.getPublic(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1",GATEWAY,ENDPOINT,Clock.fixed(Instant.ofEpochSecond(now),ZoneOffset.UTC));
+            refuse(()->boundary.verify(wire,0,1024));
+        }
+        refuse(()->verifier.verify(Arrays.copyOf(wire,wire.length+1),0,1024));
+        refuse(()->verifier.verify(new byte[4097],0,1024));
+        var incomplete=new FilesystemVaultAdapter.Completed(completed.transferId(),completed.locationId(),512,completed.digest());
+        refuse(()->receiptSigner.sign(grant,incomplete,vault,UUID.randomUUID()));
+        var expiredSigner=new TransferReceiptSigner(gatewayKeys.getPrivate(),"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1",Clock.fixed(Instant.ofEpochSecond(T+300),ZoneOffset.UTC));
+        refuse(()->expiredSigner.sign(grant,completed,vault,UUID.randomUUID()));
+        System.out.println("GATEWAY_TRACER=PASS; CASES=19");
+    }
+    @FunctionalInterface interface Checked{void run() throws Exception;}
+    static void refuse(Checked action) throws Exception {
+        try{action.run();throw new AssertionError("Expected Gateway refusal");}
+        catch(SecurityException|IllegalArgumentException|IOException expected){}
     }
 }
