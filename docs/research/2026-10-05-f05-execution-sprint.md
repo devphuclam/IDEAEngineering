@@ -80,3 +80,41 @@ return one canonical Grant/Transfer/frame and one original Audit. A changed size
 the same OperationId is explicitly authorized by the test-owned callback but must still conflict
 at immutable-operation comparison; original result remains unchanged. Bounded latches/future
 timeouts prevent an unbounded race test. This separately qualifies the already-added lock.
+
+## Executed receipts and material network STOP
+
+| Stage | Exact source | Actual result | Owned schema / cleanup | Private Maven log SHA-256 |
+|---|---|---|---|---|
+| G03 | 4187790e9b6933e883672eb539f5d4b4445ac69e | 4/4 PASS | f05_6445de5abb7548358a40d79e6b70f873 / COMPLETE | c2a865b07a60a4d4293f91869133aa3264964ad15f90b95f46a453935515e21a |
+| G04 retry RED | aa811ef401bbc1b5062ed66517f9ac1ed601f092 | 5 tests, 1 error: duplicate original operation | f05_d30be7e5ce994aae9cfd28ff9bc456cb / COMPLETE | d06fc28d16c0d336ccc4b6d12cfee419a594633e6b487c244219eb4601906b87 |
+| G04 retry GREEN | 2309694faa6837d5d788266469b48a073159d707 | 5/5 PASS | f05_1dfe2b41584b47b48abd67a92f0bfd6b / COMPLETE | 01078c84af4b73ccf1e1800ca9c65dab4f6ebdef87a04ba29185acc2765b9822 |
+| G04 concurrent/conflict | 18758bec4678ffff9685e9ddbc1218194e749bb6 | NOT-RUN: transfer blocked by network | No test/schema creation by this runner observed; partial transfer root retained | NOT-AVAILABLE: Maven not invoked |
+
+G03 archive/manifest: `590037a9f96b78912e81fe08a757e8fd74373f5069c3f7d92d008ae85169bc4f` /
+`a6291d80038bab10e1748b9de0057d1f801f1893f90b49417c7e152672a3ad4f`.
+G04 RED: `0bd70257c90f2031d775b90038ba4a3cce185f286811799920aa350dfa81d942` /
+`50a5efe9311664cbe7ad354465f77ff8b22f0739bfea1cd8aa2dc9d439fb0330`.
+G04 GREEN: `70feef67abea474323161796db1cb47e1a26e3a2f5af1681da9589d9b3c2d935` /
+`144a67c2b62ad4eda43cbffcbb85ae18be088ad5b9ec539e16fc3cb85772b121`.
+All three executed runs: local/remote raw inputs 78/78 PASS; controlled source and admitted
+inventory/core/observed-input postflight PASS; database retained. Expected RED is not PASS.
+
+Published concurrent source local 78/78 PASS, archive
+`ad8cff9455abf36894509af28fac1a4dab0306e8c4071cdd52e8a546c523b045`, manifest
+`cad466e98a57caf6aa540b50d9492412410f75f2ca326c4dae506abd217364a0`.
+First SSH root probe timed out before creation. Subsequent SSH answered and confirmed target
+absent; continuation then stalled in SCP. Network also produced GitHub TLS handshake timeout.
+Final bounded SSH ConnectTimeout5 probe again timed out. Windows hotspot adapter existed at
+192.168.137.1; this does not prove remote server reachability. Cause beyond that is UNKNOWN.
+
+Only the stalled local SCP child matching exact archive/host/owned destination was terminated
+(PID34652); parent exited at TRANSFER guard. No remote execute command followed. Do not claim
+archive transfer identity/remote raw hashes/qualification/cleanup PASS for this attempt. Existing
+remote owned target may contain a partial archive; preserve it, do not reuse or adopt it.
+
+**Material STOP: server network unavailable/unstable.** No approval gate is reopened. After
+connectivity returns, inspect retained target read-only and use fresh `run-g04-green-03/source`
+for the same published concurrent/conflict contract (6/6 expected), with exact successor source/
+manifest/export/transfer checks before execution. Continue G05/G06 and the full authorized sprint
+automatically thereafter. No extra approval is needed for normal repairs or continuation.
+T028/T030 incomplete, later T029–T034 NOT-RUN; no merge/verifier/Gateway/preview/progress action.
