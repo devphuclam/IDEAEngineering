@@ -47,7 +47,7 @@ class ReceiptBoundaryTest {
     }
     static byte[] receipt(TransferGrantService.Grant g,UUID receipt,UUID location,PrivateKey key) throws Exception {
         var s=g.scope();long now=clock.instant().getEpochSecond();
-        var fields=List.of(text("PH1_GATEWAY"),text("PH1_SERVER"),text("RECEIPT_UPLOAD"),text("GATEWAY_RECEIPT_1"),uuid(receipt),uuid(g.grantId()),uuid(g.operationId()),uuid(g.transferId()),
+        var fields=List.of(text("PH1_GATEWAY"),text("PH1_SERVER"),text("RECEIPT_VERIFIED"),text("GATEWAY_RECEIPT_1"),uuid(receipt),uuid(g.grantId()),uuid(g.operationId()),uuid(g.transferId()),
                 uuid(g.organizationId()),uuid(g.actorId()),uuid(s.gatewayId()),text(s.endpoint()),new byte[]{1},new byte[]{(byte)s.objectKind()},uuid(s.objectId()),uuid(s.vaultId()),uuid(location),
                 number(s.byteCount()),HexFormat.of().parseHex(s.digest()),number(0),number(s.byteCount()),new byte[]{1},number(now),number(now),number(now+900));
         var buffer=new java.io.ByteArrayOutputStream();var out=new java.io.DataOutputStream(buffer);out.writeBytes("IEPH1ENV");out.writeByte(2);out.writeShort(1);out.writeShort(25);
