@@ -52,6 +52,15 @@ Publish the successor commit/hash before using it to inspect the already-retaine
 owned `diagnostic-g01-01` directory. This read-only inspection does not rerun Maven, rewrite the old
 log, execute G01 or change its exact executed source. Results are appended after inspection.
 
+Read-only successor executed from published commit `2ac1dd2315568837bf91b231c09bd325f56c7619`,
+utility SHA-256 `acaf497c9a6ac97085e4aba49bc5fcb570c3ae604de6958f465e56460941b6be`:
+original controlled source **70/70 PASS**, inventory **456/456 PASS**, distribution **52/52 PASS**,
+**479 actual cache-path observations PASS** against the frozen set; included realm-coordinate
+guard also passed. This checks observed inputs, not full provider execution (Surefire never ran).
+Original Maven log hash remained unchanged. Read-only diagnostic log SHA-256:
+`4df7280220e0223512b8617eb2af3a064839d840aae52945755e59f217a7e668`.
+No additional Maven invocation or behavioral qualification was performed.
+
 ## Next stage / boundary
 
 The approved database still requires an interactive sudo step; read-only `sudo -n` refused.
@@ -60,6 +69,12 @@ The wizard skill supplies an ephemeral one-stage script that creates only
 sets bounded grants and witnesses zero public tables. No new roles/credentials or DROP DATABASE.
 It must be run by the human at their SSH terminal; never send sudo/password values into chat.
 Actual database creation remains NOT-RUN until independently verified after that step.
+
+Ephemeral script deployed at
+`/home/phuclam/idea-f05a-t028-t030-20261005-37/diagnostic-g01-01/f05-create-database-wizard.sh`.
+Local/remote SHA-256 matched `18c247f22ce7822607694db3f2158c994a734d77e6fe90e03b40f499f908ad7c`;
+`bash -n` PASS. Preserves wizard template library verbatim; human stage only below STAGES.
+No end-to-end run by the worker. Existing DB creation approval is not being requested again.
 
 G01 behavioral RED/minimum GREEN, G02–G06 and affected regression remain NOT-RUN.
 T028/T030 and F05-A incomplete; T027 unchanged COMPLETE/PASS; PR38 Draft/Open, no merge/timer action.
