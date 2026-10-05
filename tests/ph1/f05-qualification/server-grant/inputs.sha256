@@ -47,7 +47,7 @@ fba3721249067b0351e4a04bb57d1c393569dd9fd0e3b9d19183942563899e8c  apps/server/sr
 8eded3e661e3ecf631e2b86645037dcae3dbba5c39955acee5ca26bf174a1b97  apps/server/src/main/resources/dev-access/openapi.json
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/src/main/resources/third-party/swagger-ui/LICENSE.txt
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
-fb6bb9bff88d255837083260477f41197a9c30c18c371947b8b2d063fff272da  apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java
+5d47e9b13e995d355a29c8f476cda6dff20f035c79397445a25ec0e740237afb  apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java
 4e897ff857a1f67302279e10406127fb3b55f33cd08944cd3d94c081bc3a104a  apps/server/src/test/java/com/idea/ddm/DatabasePrivilegeAssertions.java
 bfd590e4f09502d4dda3c6c8c8b16dbf40a9cd284bdc9b06adfce4833cd64de6  apps/server/src/test/java/com/idea/ddm/DatabasePrivilegeTest.java
 8bd839e324414f65f6e2d7194863354eaa542978dc69a57fa894c7dba550714c  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationHttpTest.java
@@ -59,7 +59,8 @@ cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/sr
 fb31fba335511ed72dfc59d389b2cdffa30913c0150e9c1034cfc286ba2cc207  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
-5142ca313ca13971c75a961ae5975dbd93eeb5f03b9c33d8ce8aa5dd41b71afe  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
+0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
+0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
 bcb1dffce219d28bd26c3a2609f6687c0f377439fbe6cf413ac84fe7ac46ac71  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
@@ -85,10 +86,10 @@ d79592279f9c80c2dc206252cb3307fca89f5759acc34200744547cfc9dd4f57  tests/ph1/f05-
 274003edb8d8662e6ede0e16c126f880c88c8c139ef71d8113258bb91e8db3f2  tests/ph1/f05-qualification/server-grant/GraphAudit.java
 96eee0eba5b298024f5189917c822992f0107bf4496514f4d917cfaee814da03  tests/ph1/f05-qualification/server-grant/LegalAudit.java
 f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d  tests/ph1/f05-qualification/server-grant/MaterialAudit.java
-77923c35eaa9661829d1b1931fba0e2f8475deeb55863114c890127e0b975378  tests/ph1/f05-qualification/server-grant/receipt-packet.md
+e49cf4070338e80db04cc7055be9e130a9c72e8caab2b806cb5a7602691c3367  tests/ph1/f05-qualification/server-grant/receipt-packet.md
 2040492d7fbd3e6e7149d91f736a7bfc1224531c3716d21a9516ab9cae924fe3  tests/ph1/f05-qualification/server-grant/run-behavior-red.sh
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
-d19f45343d7cae0b17768fa028d9096eea4a5dce2f896fa0ec231bc7203a942e  tests/ph1/f05-qualification/server-grant/run-slice.sh
+0e4d58dd8f4a6ecd5c727c6b85d3520ba1ad39ad79140e3e55bdd9dedec5de14  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
