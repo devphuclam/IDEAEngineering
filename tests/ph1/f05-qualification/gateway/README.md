@@ -171,3 +171,11 @@ wall-clock observation tolerance), with no verified progress/Receipt. Client rea
 Commands run-build.sh source manifest gateway-boot-05 then run-http.sh source red.
 Same admitted offline graph/no DB, private fresh TLS/key fixtures, exact single
 loopback listener and owned JVM cleanup. Preserve boot04 package/tracer evidence unchanged.
+
+Inactivity RED at678fd77f355b7ebed9a925252add9310a3b1315f: actual TLS request had no
+Server refusal after35075ms, private log3aa6871cf41f758a386877ca8e6318d5b5e5af5816595fd1f5fa657aea7237f1.
+Owned process stopped/zero listener/source/tool/TLS/trust unchanged. Fresh gateway-boot-06
+configures qualified Tomcat upload socket inactivity30000ms, maps timeout to bounded empty408,
+and reruns the same genuine network oracle. This is inactivity only, not the60s absolute
+range/control elapsed-time requirement. Commands run-build.sh source manifest gateway-boot-06,
+then run-http.sh source green. No new dependencies, TLS bypass, DB or preview changes.

@@ -12,7 +12,7 @@ import javax.net.ssl.*;
 
 /** JDK-only, single-use TLS phases. No global trust configuration or bypass. */
 class GatewayTlsMaterial {
-    static final Path ROOT = Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-05/source");
+    static final Path ROOT = Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-06/source");
     static final Path PACKAGE = ROOT.resolve("tests/ph1/f05-qualification/gateway");
     static final Path JDK = Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path RUN = ROOT.resolve("run");

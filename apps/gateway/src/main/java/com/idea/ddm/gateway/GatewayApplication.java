@@ -56,6 +56,7 @@ public class GatewayApplication {
     }
     private static ResponseEntity<byte[]> refusal(Exception failure){
         int status=failure instanceof SecurityException?403:failure instanceof IllegalArgumentException?400:503;
+        for(Throwable cause=failure;cause!=null;cause=cause.getCause())if(cause instanceof java.net.SocketTimeoutException)status=408;
         if(failure instanceof IOException){
             if(Set.of("SIZE_MISMATCH","DIGEST_MISMATCH","INVALID_DIGEST","INVALID_RANGE").contains(String.valueOf(failure.getMessage())))status=400;
             else if(Set.of("TRANSFER_BUSY","RANGE_CONFLICT","RANGE_BINDING_CONFLICT","COMPLETION_CONFLICT").contains(String.valueOf(failure.getMessage())))status=409;
@@ -76,6 +77,15 @@ public class GatewayApplication {
     }
     @org.springframework.context.annotation.Configuration(proxyBeanMethods=false)
     static class Configuration {
+        @Bean org.springframework.boot.web.server.WebServerFactoryCustomizer<org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory> uploadInactivityBoundary(){
+            return factory->factory.addConnectorCustomizers(connector->{
+                if(!(connector.getProtocolHandler() instanceof org.apache.coyote.http11.AbstractHttp11Protocol<?> protocol))
+                    throw new IllegalStateException("QUALIFIED_HTTP_PROTOCOL_REQUIRED");
+                protocol.setConnectionTimeout(30000);
+                protocol.setDisableUploadTimeout(false);
+                protocol.setConnectionUploadTimeout(30000);
+            });
+        }
         @Bean GatewayTransferService transferService(Environment env) throws Exception {
             var factory=KeyFactory.getInstance("Ed25519","SunEC");
             var server=factory.generatePublic(new X509EncodedKeySpec(keyFile(env,"idea.gateway.server-public-key")));

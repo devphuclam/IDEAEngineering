@@ -3,7 +3,7 @@ set -euo pipefail
 set +x
 umask 077
 [[ $# == 2 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^(red|green)$ ]] || exit 2
-owned=/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-05/source
+owned=/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-06/source
 [[ $(id -un) == phuclam && $(realpath -e "$owned") == "$owned" && ! -e "$owned/run/harness" ]] || exit 3
 cd "$owned"
 sha256sum -c tests/ph1/f05-qualification/gateway/inputs.sha256 > run/http-source-preflight.log
