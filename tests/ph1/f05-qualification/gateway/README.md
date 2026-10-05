@@ -148,3 +148,9 @@ Control lookup POST/transfer/status carries same Grant, no bytes. Current RED ex
 501 marker only after trusted TLS and exact loopback binding; not missing cert/tool failure.
 Finally terminate owned JVM, prove zero listener, rehash source/tools/TLS and unchanged system
 trust even when behavioral RED. Internal Gateway control contract, no Server route/RBAC change.
+
+gateway-boot-02 source27cb904ee1bd8023f7922e27f46f2d195950f046 local25/25 exported,
+but publication polling yielded before local export metadata was read; no remote transfer/build/
+TLS/listener ran. Before execution review caught literal backslash-n source-prefix defect in
+TLS helper. Repair published prospectively and fresh gateway-boot-03 uses the same packet/oracles,
+not normalized input, changed graph or reused source/target. Keep local02 export unchanged.

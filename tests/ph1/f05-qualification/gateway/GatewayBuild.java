@@ -12,7 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 /** Exact, single-use offline qualification runner. No third-party Java dependency. */
 class GatewayBuild {
-    static final Path ROOT = Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-02/source");
+    static final Path ROOT = Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-03/source");
     static final Path PACKAGE = ROOT.resolve("tests/ph1/f05-qualification/gateway");
     static final Path CACHE = Path.of("/home/phuclam/.m2/repository");
     static final Path JDK = Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
