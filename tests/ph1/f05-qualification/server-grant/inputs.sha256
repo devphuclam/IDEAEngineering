@@ -47,7 +47,7 @@ c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/sr
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 5142ca313ca13971c75a961ae5975dbd93eeb5f03b9c33d8ce8aa5dd41b71afe  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
-f4bd8b7a74f402251558ab894de661ef60fe9f73ca0813cef8e71b87675c743a  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
+bcb1dffce219d28bd26c3a2609f6687c0f377439fbe6cf413ac84fe7ac46ac71  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 63dd8d1f3764bd00f136b15b4ed03a15648b08e8375aab0cbc678aaaadf4803b  apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java
 2e08d303e06f4808e3a3fcb7b8a15aa51c5f008d0b0565a560d7ad94e229ff38  apps/server/src/test/java/com/idea/ddm/operation/F04PredecessorMigrationTest.java
@@ -75,5 +75,5 @@ f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d  tests/ph1/f05-
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
-56ae73c092e907c46cd3705c38d7762548a178ca9681b9991aebb682a524b665  tests/ph1/f05-qualification/server-grant/run-slice.sh
+ec611aeecf2746f06a20e0c431353b7feb316340583068cbe6ad33bf1ecafd78  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
