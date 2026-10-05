@@ -220,3 +220,50 @@ all queries now observe the intended owned test schema. No production/migration/
 Fresh `run-regression-green-04/source` reruns the same105. Final Grant10 still uses fresh
 `run-regression-green-03/source` after that succeeds. This is first-party fixture engineering,
 not a new approval request or an invented product RED.
+
+## Final Server Grant closure receipt
+
+Final exact executed source **0a728d041a66f1fcbae14fbbf18c77cb82212ab0**:
+
+| Execution | Actual result | Private Maven log SHA-256 |
+|---|---|---|
+| regression-green-04; HTTP83 + Identity20 + health2 | 105/105 PASS,0 failure/error/skip | ab8d89ada3e777ec237f82ddfa7465a40526a1d920c3f0b923e895809ceaf852 |
+| regression-green-03; Grant G01–G06 | 10/10 PASS,0 failure/error/skip | 00d98128d32ec0c5b4ec38fd9c66c27cb67112c67b9dd8c73a13f36f9b5f1c36 |
+
+Both fresh exports verified raw79/79 locally/remotely; archive
+5fe69c4d5a1a2287b793a7543a736311c608dd7a6861bf399d798fcde1314255,
+manifest6f73205a04f63b44b7fc99b4a74ee1b111ab9a6bc582d318a845b1e35bf73f57.
+Input preflight log7d49fb0ae1461e19f6f445c87add7ab34e0753aa9732c391c0bc3e43d3a44b16;
+postflight regression04 d570bd6435bd33f792b0cd1e982b57d44bf898560293450dcddaca19877d6dfc,
+Grant03 47c3a09e3c5bc77da5d72263eee196e2d5daed5eabc0dd94f2af28763fc463d4.
+456 inventory rows/52 core pins/original source and actual selected cache-path/realm checks PASS.
+
+Regression04 used103 fresh independently marked schemas (83 HTTP +20 identity); each Server
+closed before its guarded cleanup, all103 cleanup receipts COMPLETE. Ordered cleanup-receipt
+lines SHA-256 b0f2de9f4291ce2193f1e334010f8a14d883d806ae53692444e842ec53c1cef8.
+Runner's preallocated schema f05_84b3827f85884830a44a177e2f21de54 was not created: no cleanup
+adopted for that name. Source-owned regression schema remainder0.
+Final Grant schema f05_7b0e7e4d0ac64858b61123be2ec9e2b5 exact cleanup COMPLETE after JVM exit,
+source-owned remainder0. Only approved DB idea_ddm_f05a_20261005_t028, retained; no public
+migration/old DB/preview/company/Vault change. Raw private logs retain actual schema identities
+and results; GitHub readers cannot independently inspect them merely from these hashes.
+
+Migration1/1 stays the independently executed9ac7cc2 receipt above. From9ac7cc2 to0a728d0,
+only HTTP fixture observer search-path, runner selector and evidence/input manifest changed;
+TransferGrantService, GrantEnvelope, V1–V9 and F05GrantMigrationTest are byte-identical. Do not
+claim migration reran on0a728d0. V1–V8 remain immutable. The current DataBaseline expectation
+is9 but public DataBaselineTest was NOT-RUN here; isolated successor evidence is not fresh-public.
+
+**T028/T030 SERVER GRANT SLICE = PASS; T030 = Engineering COMPLETE / PASS.** T028 remains
+open for mismatched/replayed Receipt and authoritative custody/final integration tests.
+No Gateway-verifier, byte-transfer, Artifact/location acceptance or whole-F05 success claim.
+Historical first-party fixture failure remains FAIL, not rewritten as RED or PASS.
+
+Continuous product sprint authority remains active; the next executable product unit is
+T029/T031. A material process-use boundary prevents actual successor tooling execution:
+[exact finding and smallest repair](2026-10-05-f05-sprint-tooling-scope-gate.md).
+The expired T027 and now-completed T028/T030 process exceptions explicitly exclude that use.
+This is not a routine request to approve G06 or another product-design checkpoint. Needed:
+prospective bounded successor process scope for already rights-inspected cached inputs,
+then exact stage input/subset/use freeze and uninterrupted continuation toward T034.
+PR38 remains Draft/Open, Issue37 Open, F05 incomplete; no merge/verifier/timer/Tracker action.

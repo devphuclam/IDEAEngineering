@@ -425,6 +425,28 @@ on this Grant slice. PR #38 Draft/Open, Issue #37 Open, F05-A incomplete, verifi
 No timer restart/Tracker action, merge or new human approval is required merely to continue
 within the existing exact authorization. Historical failure/intake records remain unchanged.
 
+### Current Server Grant closure and successor execution gate — 2026-10-05
+
+This receipt supersedes earlier "next G03" current wording, not historical execution.
+CODEX_ONLY continues the same Issue37/PR38 sprint. G01–G06 and affected regressions now pass;
+T030 Engineering COMPLETE/PASS. Final source0a728d041a66f1fcbae14fbbf18c77cb82212ab0:
+Grant10/10 and IAM/HTTP/health105/105. Migration1/1 source9ac7cc2 is separately retained;
+its production/migration/test bytes did not change through final source. See
+[sprint exact receipts](../../docs/research/2026-10-05-f05-execution-sprint.md#final-server-grant-closure-receipt).
+All marked-schema cleanup complete after owned JVM exit; source-owned remainder0, DB retained.
+Keep the first105-run fixture error as FAIL; successor current-schema repair passed105/105.
+
+T028 Receipt/custody obligations remain unchecked. Next is T029/T031, then T032→T033→T034,
+without another product-design/checkpoint approval. However actual tooling-use authority must
+respect the [material successor process gate](../../docs/research/2026-10-05-f05-sprint-tooling-scope-gate.md):
+T027 exception expired and T028/T030 exception expressly excludes T029–T034, expiring at this
+checkpoint closure. Do not silently carry either forward. Ask only for the bounded prospective
+successor process scope, reuse exact retained rights evidence/hash inventories, freeze actual
+stage inputs/roles/commands/targets before execution, and continue automatically once cleared.
+No new/missing rights waived; no graph/cache/version substitution. NodeT033 admission remains
+its own prerequisite. Gateway/Adapter/Receipt/client/full-transfer still NOT-RUN.
+PR38 Draft/Open, Issue37 Open, verifier NOT-RUN, no merge/Tracker/timer action.
+
 Follow [quickstart](quickstart.md) for evidence: exact source revision (plus dirty-state disclosure),
 environment, command, expected/actual result and output. Record tests failing for the intended
 missing behavior before implementation, then passing afterward. Name remaining tasks and next action.
