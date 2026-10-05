@@ -141,3 +141,15 @@ only the newly generated ready.json credential handoff; keep historical roots.
 Unexpected hashes/graph/target/TLS STOP, ordinary first-party defects repaired in
 prospective fresh sources/roots preserving failed attempts. Other T034 matrices
 remain open; this first qualification does not close all F05.
+
+### Prospective retry27
+
+Attempt26 again transferred both P05 fixtures and accepted identical Receipt
+retries, but stopped at the client logout cookie parser. Independent final
+custody oracle remained NOT-RUN. Preserve that failure, not an end-to-end PASS.
+The successor client parser accepts the exact quoted-empty deletion form only
+for an existing IDEA_SESSION, host-only Secure Path=/ Max-Age=0; positive proof
+still requires Secure/HttpOnly/SameSite=Strict. Synthetic guard RED at531a190
+was4 PASS/1 FAIL; GREEN at3c9ecaa was5/5. No credential/cookie value captured.
+Fresh run-receipt-green-27, same published commands, source101-input manifest,
+TLS recipe, package hash, scopes, graph, retained DB and final oracles above.
