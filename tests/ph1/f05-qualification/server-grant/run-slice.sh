@@ -28,6 +28,12 @@ maven=/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn
 preflight="$source_root/tests/ph1/f05-qualification/server-grant/ExecutionPreflight.java"
 "$JAVA_HOME/bin/java" "$preflight" "$source_root" > "$owned/input-preflight.log"
 export IDEA_F05_SOURCE_SHA="$1"
+test_selector=CustodyBoundaryTest
+case "$3" in
+  regression-green-01) test_selector=F05GrantMigrationTest ;;
+  regression-green-02) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
+    export IDEA_F03_TEST_DATABASE_NAME=idea_ddm_f05a_20261005_t028 ;;
+esac
 export IDEA_F05_TEST_SCHEMA="f05_$(tr -d '-' < /proc/sys/kernel/random/uuid)"
 [[ $IDEA_F05_TEST_SCHEMA =~ ^f05_[0-9a-f]{32}$ ]] || exit 9
 printf 'SOURCE=%s; DATABASE=idea_ddm_f05a_20261005_t028; SCHEMA=%s\n' "$1" "$IDEA_F05_TEST_SCHEMA" > "$owned/run-identity.txt"
@@ -36,7 +42,7 @@ settings="$source_root/tests/ph1/f05-qualification/server-grant/settings.xml"
 set +e
 # Credentials are read only inside the forked test from its guarded private file, never Maven env/properties.
 "$maven" -o -B -X -s "$settings" -gs "$settings" -Dmaven.repo.local=/home/phuclam/.m2/repository \
-  -Dtest=CustodyBoundaryTest -DfailIfNoTests=true \
+  -Dtest="$test_selector" -DfailIfNoTests=true \
   org.apache.maven.plugins:maven-resources-plugin:3.5.0:resources \
   org.apache.maven.plugins:maven-resources-plugin:3.5.0:testResources \
   org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile \
@@ -64,6 +70,10 @@ if [[ -n $actual ]]; then
 else
   printf 'F05_SCHEMA_CREATION=NOT_OBSERVED; NO_CLEANUP_ADOPTED\n'
 fi
+residual=$(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc \
+  "SELECT count(*) FROM pg_namespace WHERE nspname ~ '^f05_[0-9a-f]{32}$' AND obj_description(oid,'pg_namespace') LIKE 'IDEA_F05_RUN:$1:%'")
+[[ $residual == 0 ]] || { printf 'STOP=OWNED_REGRESSION_SCHEMA_REMAINS\n'; exit 12; }
+printf 'F05_SOURCE_OWNED_SCHEMA_REMAINDER=0\n'
 unset PGPASSWORD IDEA_DATABASE_APP_PASSWORD IDEA_DATABASE_MIGRATION_PASSWORD
 "$JAVA_HOME/bin/java" "$preflight" "$source_root" "$owned/maven-private.log" > "$owned/postflight.log"
 if [[ $3 == *-red-* ]]; then

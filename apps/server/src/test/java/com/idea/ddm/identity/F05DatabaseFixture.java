@@ -8,12 +8,13 @@ import java.sql.*;
 import java.util.*;
 import org.flywaydb.core.Flyway;
 
-/** Exact new-DB/run-schema boundary. No cleanup or public migration in this fixture. */
+/** Exact new-DB/run-schema boundary; regression cleanup checks exact owner/source markers. No public migration. */
 public final class F05DatabaseFixture {
     public static final String DATABASE = "idea_ddm_f05a_20261005_t028";
+    private static final ThreadLocal<String> regressionSchema=new ThreadLocal<>();
     private F05DatabaseFixture() {}
     public static String schema() {
-        var schema = System.getenv("IDEA_F05_TEST_SCHEMA");
+        var schema = regressionSchema.get()!=null?regressionSchema.get():System.getenv("IDEA_F05_TEST_SCHEMA");
         if (schema == null || !schema.matches("f05_[0-9a-f]{32}")) throw new IllegalStateException("Unapproved schema");
         return schema;
     }
@@ -47,6 +48,9 @@ public final class F05DatabaseFixture {
         return DriverManager.getConnection(url(), role.equals("app") ? "idea_ddm_app" : "idea_ddm_migrator", password(role));
     }
     public static void create() throws Exception {
+        create(null);
+    }
+    public static void create(String target) throws Exception {
         var source = System.getenv("IDEA_F05_SOURCE_SHA");
         assertNotNull(source); assertTrue(source.matches("[0-9a-f]{40}"));
         try (var connection = open("migration"); var statement = connection.createStatement()) {
@@ -60,9 +64,11 @@ public final class F05DatabaseFixture {
             connection.commit();
         }
         System.out.println("F05_SCHEMA_CREATED=" + schema() + "; SOURCE=" + source);
-        var result = Flyway.configure().dataSource(url(), "idea_ddm_migrator", password("migration"))
+        var configuration = Flyway.configure().dataSource(url(), "idea_ddm_migrator", password("migration"))
                 .schemas(schema()).defaultSchema(schema()).createSchemas(false).cleanDisabled(true)
-                .locations("classpath:db/migration").load().migrate();
+                .locations("classpath:db/migration");
+        if(target!=null)configuration.target(target);
+        var result=configuration.load().migrate();
         try (var connection = open("migration"); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema() + " TO idea_ddm_app");
             statement.execute("REVOKE INSERT,UPDATE,DELETE,TRUNCATE ON " + schema() + ".flyway_schema_history FROM idea_ddm_app");
@@ -73,5 +79,34 @@ public final class F05DatabaseFixture {
             assertTrue(row.next()); assertEquals("idea_ddm_app", row.getString(1)); assertFalse(row.getBoolean(2)); assertFalse(row.getBoolean(3));
         }
         System.out.println("F05_SCHEMA_READY=" + schema() + "; MIGRATIONS_APPLIED=" + result.migrationsExecuted);
+    }
+    public static String createRegressionSchema() throws Exception {
+        regressionSchema.set("f05_"+UUID.randomUUID().toString().replace("-",""));create();return schema();
+    }
+    public static void removeRegressionSchema(String exact) throws Exception {
+        if(!schema().equals(exact))throw new SecurityException("Not this regression schema");
+        try(var connection=open("migration");var query=connection.prepareStatement(
+                "SELECT pg_get_userbyid(nspowner),obj_description(oid,'pg_namespace') FROM pg_namespace WHERE nspname=?")) {
+            query.setString(1,exact);try(var row=query.executeQuery()) {
+                if(!row.next() || !row.getString(1).equals("idea_ddm_migrator")
+                        || !row.getString(2).equals("IDEA_F05_RUN:"+System.getenv("IDEA_F05_SOURCE_SHA")+":"+exact))
+                    throw new SecurityException("Regression marker/owner mismatch");
+            }
+            try(var statement=connection.createStatement()){statement.execute("DROP SCHEMA "+exact+" CASCADE");}
+        }
+        regressionSchema.remove();System.out.println("F05_REGRESSION_SCHEMA_CLEANED="+exact);
+    }
+    public static String regressionEnvironment(String name) {
+        if(System.getenv("IDEA_F05_SOURCE_SHA")==null)throw new SecurityException("No F05 regression authority");
+        return switch(name) {
+            case "IDEA_DATABASE_HOST"->"127.0.0.1";case "IDEA_DATABASE_PORT"->"5432";
+            case "IDEA_DATABASE_APP_USER"->"idea_ddm_app";case "IDEA_DATABASE_MIGRATION_USER"->"idea_ddm_migrator";
+            case "IDEA_F03_TEST_DATABASE_NAME","IDEA_F03B_TEST_DATABASE_NAME"->DATABASE;
+            case "IDEA_DATABASE_APP_PASSWORD","IDEA_DATABASE_MIGRATION_PASSWORD"->{
+                try{yield password(name.equals("IDEA_DATABASE_APP_PASSWORD")?"app":"migration");}
+                catch(Exception failure){throw new IllegalStateException("Guarded private regression input unavailable",failure);}
+            }
+            default->throw new SecurityException("Unexpected regression input");
+        };
     }
 }

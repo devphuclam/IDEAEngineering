@@ -172,3 +172,31 @@ confirms zero committed state for that controlled failure, not a general lost-re
 Owned trigger/function guards use only current test schema, are removed after each case; no public
 schema/role/old DB change. No test-only production hook, permission, HTTP Grant route or F04 event.
 No manufactured RED where existing guards already pass; ordinary failures are fixed prospectively.
+
+## G06 execution receipt and affected regression packet
+
+Executed source7022857426d7f00655978f567b326aaaaf1575b7: **10/10 PASS**, no failure/error/skip.
+Raw local/remote78/78 PASS; archive5afbb7de8c965288718b83ccba684d31eb420581330daf8191fdcc8c3d316877.
+Schema f05_0109dd80378e492e9fcab6ac728eb040 exact cleanup COMPLETE, database retained.
+Private Maven logb2ebbcd87c3a19a6be0f07162a661d8f7915fb108280bd72a353cd67059d42a3.
+Actual cached-input and source pre/post hash guards PASS. Raw host logs remain privately retained,
+not independently inspectable through GitHub; these hashes do not substitute for such access.
+
+Next execution uses the same admitted five offline direct goals and exact test DB, not public:
+
+- `run-regression-green-01/source`: F05GrantMigrationTest, expected1/1. Fresh marked schema
+  initially migrates V1–V8; synthetic legacy Grant survives additive V9, missing historical scope
+  stays absent. V9 apply1/repeat0, nine history checksums/validate/pending0, migrator ownership,
+  actual app DDL/scope mutation refusal and immutable legacy claims/status-only transition.
+- `run-regression-green-02/source`: IdentityFlowTest20 + HttpSessionFlowTest83 + ServerSmokeTest2,
+  expected105/105. Existing service/real-HTTP tests unchanged in behavior; each regression gets
+  a fresh source-marked f05 UUID schema in the same approved database. Private role inputs remain
+  inside the forked JVM, never Maven properties/environment. Stop Server before guarded exact
+  schema cleanup. Source-owned remainder must be zero; database remains retained.
+- Final Grant qualification `run-regression-green-03/source`: CustodyBoundaryTest10, expected10/10.
+
+This is affected regression/qualification, not a manufactured RED or fresh-public claim.
+Current migration expectations move to V1–V9 without altering V1–V8 or historical execution.
+No new dependency, tool, listener scope, product permission/API, tooling exception or cleanup target.
+T030 stays unchecked until these executions satisfy its actual obligations. T028 Receipt/custody
+obligations remain open; later execution must respect its own applicable input-use authority.
