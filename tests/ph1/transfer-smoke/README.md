@@ -234,3 +234,9 @@ No TransferClientBoundaryTest invocation or additional listener fixture in these
 selectors. No public schema, package rebuild, dependency/network/trust changes.
 Same archive hash before extraction;101/101 raw preflight; exact cleanup after
 JVMs exit; recorded results/log hashes/postflight. Any existing target STOP.
+
+The target09 guard stopped before copying/executing: historical directory already
+exists, preserved unchanged. Prospective fresh run-regression-green-12 replaces
+only that target with an explicitly added identical105-test selector. New source/
+manifest published/exported first; no application/test/dependency change. Grant10
+and Receipt6 already ran on exact34 source and remain separate receipts.
