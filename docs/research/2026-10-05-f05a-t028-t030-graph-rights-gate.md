@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-RES-F05A-T028-T030-GRAPH-RIGHTS-20261005` / execution preflight and rights reconciliation / `0.1 / Draft` |
+| Stable ID / class / version / status | `IE-RES-F05A-T028-T030-GRAPH-RIGHTS-20261005` / execution preflight and rights reconciliation / `0.2 / Draft` |
 | Normativity / repository instruction state | `INFORMATIVE / NOT-APPLICABLE`; no new product requirement or exception |
 | Owner / author / worker | Engineering / Codex / `CODEX_ONLY`; named accountable intake owner `UNKNOWN` |
 | Reviewer / acceptance authority | Project Reviewer for execution/process scope; Legal Review Authority for legal disposition; this successor review `NOT-RUN` |
@@ -17,7 +17,9 @@
 
 ## 1. Current result
 
-**Read-only cached resolution succeeds; T028/T030 goal execution remains BLOCKED-LEGAL.**
+**Current successor state: the new T028/T030 process exception is authorized; final rights/input
+reconciliation remains IN_PROGRESS and Maven goal execution remains NOT-RUN.** See §5. The original
+pre-exception findings below are retained as history, not a request for another blanket approval.
 No Maven goal, Server test, product implementation, migration, database provisioning, listener,
 Web build, download/install, verifier, Tracker action or merge ran in this reconciliation.
 T027 remains COMPLETE/PASS, not reopened. PR #38 remains Draft/Open.
@@ -150,3 +152,85 @@ G01–G06, V9, database `idea_ddm_f05a_20261005_t028`, Maven direct goals, provi
 all regressions and Server Grant checkpoint: **NOT-RUN**. No product source or V1–V8 changed.
 No safe-environment claim relies on actually provisioning the DB; that remains the next bounded
 step only after execution gate closure. The user's existing UI worktree was not modified.
+
+## 5. Prospective process-authority successor — 2026-10-05
+
+The Project Reviewer accepted the graph at `f196be9b9eea6b674e500970a17373864c97f032` and explicitly
+approved the new [T028/T030 process exception](2026-10-05-t028-t030-process-exception.md).
+This supersedes §3's outstanding **process-scope decision**, not the historical legal findings,
+expired T027 exception, grants or commercial limits. No additional approval is needed merely to
+cross an already-covered known-term process gate after reconciliation. A truly missing/unusable
+grant or unsatisfiable obligation still stops execution.
+
+The first-party `MaterialAudit.java` read-only utility rehashed all **139 unique selected paths**
+(135 non-core plus four imported core origins), matched every recorded JAR hash, and found no
+direct `javax.annotation.Nullable`, `Nonnull` or `javax.annotation.meta.*` provider class. This
+is a specifically bounded provider scan, not proof against every possible renamed/shaded class.
+No JSR305 selected coordinate/path occurs in the effective graph. Shared Utils' embedded historical
+POM has a `provided` JSR305 declaration; that metadata is neither a selected provider nor permission
+to acquire it. Future actual acquisition/provider appearance remains STOP.
+
+The exact Shared Utils 3.5.6 shaded namespaces observed are `codec=115`, `compress=589`, `io=428`,
+`lang3=421`, `utils=79` class entries. Embedded metadata pins Codec **1.19.0**, Compress **1.28.0**,
+IO **2.22.0**, Lang **3.20.0** and Maven Shared Utils **3.3.4**. These are contained material, not
+independent selected JAR acquisitions. The §2 statement that Commons Lang/Shared Utils are not
+selected inputs means no separately acquired JAR: it does not mean their shaded code is absent.
+The inherited `META-INF/DEPENDENCIES` listing IO 2.6/Jansi 2.2.0 is not the actual shaded-version
+oracle and does not add JARs to this execution envelope.
+
+Final per-input mapping and its freeze remain to be published before the first goal. No hard
+missing-grant finding has been established by this successor. `BUILD/TEST PROCESS GATE = OPEN`
+is **not yet claimed**; G01–G06, Maven goals and DB provisioning remain NOT-RUN.
+
+### 5.1 Completed tool-material map and read-only successor witness
+
+The [tool/core rights map](inventories/f05a-t028-t030-tool-rights.tsv) maps **95 paths**:
+43 unique cached plugin/provider/acquisition/alignment JARs and 52 Maven distribution JARs.
+SHA-256 `94b2490d958c56c0f0b5e9368bc18464bb8c3a2241d2191513759ee4f55b03a6`.
+Its rights-evidence, actual-role, notice/hash, historical-disposition and **new process-scope**
+fields are separate. A retained historical BLOCKED-LEGAL row is not overwritten as legal approval.
+O/L obligation identifiers reuse their definitions in the referenced Q02 records; core sets reuse
+§9–10 of the Maven realm record. No unmatched path is silently labeled Apache.
+Whole-envelope admission is still pending the remaining Server material reconciliation.
+
+The [Shared Utils rights successor](2026-10-05-f05a-t028-t030-shared-utils-rights.md) closes that
+specific five-component grant/NOTICE evidence gap. It does not independently qualify Maven goals.
+The source grants were inspected reference-only; no archive/package was installed or imported.
+
+Latest read-only utility source `MaterialAudit.java` SHA-256:
+`f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d`.
+The command adds an optional coordinate filter for complete legal-text display, still rehashes
+all selected paths first, opens ZIP entries only, and invokes no Maven goal. It ran through the
+existing JDK on the same read-only scratch root and exited 0. No credential/settings output.
+
+Additional exact cached legal texts read in full:
+
+| Material | Actual terms / correction / obligation |
+|---|---|
+| pgJDBC 42.7.13 with SCRAM 3.2 and Stringprep 2.2 contained libraries | Main and all four OnGres contained grants are **BSD-2-Clause**, not an inferred Apache grant. Preserve each copyright, conditions and disclaimer. Entry hashes remain in the legal inventory. |
+| Checker Qual 3.55.1 | Exact embedded MIT grant; retain permission/copyright text in copies/substantial portions. Do not generalize the whole Checker Framework's license to its qualifier artifact. |
+| Jakarta Activation 2.1.4 | Embedded LICENSE is EDL1/BSD3, NOTICE also declares EPL2/EDL1 and conditional GPL+Classpath alternatives. Retain both; no legal branch election or uniformly-permissive label. Project-wide NOTICE mentions other tools; those names do not by themselves add execution artifacts. |
+| Jakarta XML Binding 4.0.5 | Exact embedded LICENSE and NOTICE establish EDL1/BSD3; retain Oracle/Eclipse attribution and no-endorsement condition. |
+| Mockito core/Jupiter 5.23.0 | Exact embedded MIT text in both JARs; preserve copyright and permission notice. |
+| Hamcrest 3.0 | Exact embedded BSD3 grant; preserve notice/disclaimer and no endorsement. |
+
+### 5.2 Exact Android JSON evidence method — unresolved
+
+`com.vaadin.external.google:android-json:0.0.20131108.vaadin1` is a selected Server **test** input,
+not a new dependency. No embedded license entry or cached source JAR was found. Its POM's Apache
+label alone is not used as the final grant. Reference-only investigation found the official
+[Vaadin publication commit](https://github.com/vaadin/vaadin-deps/tree/418f904d512d3e2ac6c709f87e0dd1d6931341f8/shared/json),
+source-package blob `cfc785eb62a5628097185ddf69e67f4e7b5c1ea3`, binary blob
+`fb083ff54403525b1130eaa908ec330b9c73e0df`, and the
+[publisher's licensing clarification](https://vaadin.com/forum/t/vaadin-7-2-json-android-license/148611).
+The [exact build recipe](https://raw.githubusercontent.com/vaadin/vaadin-deps/418f904d512d3e2ac6c709f87e0dd1d6931341f8/shared/json/build.xml)
+adds OSGi/manifest metadata for publication; do not claim the original repository binary and
+cached Maven binary necessarily have equal hashes.
+
+This is positive attributable publisher evidence, **not a finding that no license exists**.
+Direct matching source-header inspection is NOT-RUN. Engineering requested only a bounded
+REFERENCE-ONLY, in-memory method for that exact source blob (no disk import/cache/install/
+execution or graph change), because the current no-new-artifact/download execution boundary
+must not be silently reinterpreted. No archive was retrieved in this investigation.
+The process exception cannot substitute for finishing exact grant mapping. All goal execution
+remains NOT-RUN; no blanket approval or rights waiver has been requested.
