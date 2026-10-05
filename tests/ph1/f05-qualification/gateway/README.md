@@ -18,3 +18,9 @@ Published runner compiles only actual Adapter and boundary test, then invokes it
 Fresh owned canonical root, no symlink/reuse. Retain private result/byte fixtures, source hashes,
 tool pre/post hashes; no automatic cleanup of a real Vault. Ordinary defects repaired in fresh
 attempts, missing/drifting tool/input/rights/unsafe target STOP. No merge/verifier/progress action.
+
+Prospective setup retry: adapter-red-01 source032919e was published/raw4/4 local PASS, but
+PowerShell expanded a remote realpath substitution before SSH; empty owned remote directory
+may exist. No transfer/Java/Adapter execution followed. Retain it. Fresh adapter-red-03 uses
+the same test/oracle, command passed literally to SSH. Local adapter-red-02 export-only diagnostic
+also retains identical raw inputs; no remote execution. These are setup defects, not behavioral RED.
