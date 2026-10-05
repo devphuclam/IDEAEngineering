@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { fileRanges } from './client-transfer.mjs';
+import { fileRanges, gatewayProgress } from './client-transfer.mjs';
 
 test('1 KiB synthetic file becomes one exact range with independently known SHA-256', async () => {
   const root = await mkdtemp(join(tmpdir(), 'idea-f05-client-'));
@@ -40,4 +40,14 @@ test('64 MiB synthetic file produces 64 contiguous 1 MiB ranges without whole-fi
     }
     assert.equal(count, 64);
   } finally { await rm(root, { recursive: true }); }
+});
+
+test('Gateway acknowledgement without a Receipt remains progress, never custody success', () => {
+  const body = Buffer.alloc(12);
+  body.writeBigInt64BE(1024n);
+  assert.deepEqual(gatewayProgress(body, 1024), { verifiedBytes: 1024, receipt: null });
+  for (const bad of [Buffer.alloc(11), Buffer.alloc(13), Buffer.alloc(4109)])
+    assert.throws(() => gatewayProgress(bad, 1024), /CLIENT_GATEWAY_RESPONSE_REFUSED/);
+  const overflow = Buffer.alloc(12); overflow.writeBigInt64BE(1025n);
+  assert.throws(() => gatewayProgress(overflow, 1024), /CLIENT_GATEWAY_RESPONSE_REFUSED/);
 });

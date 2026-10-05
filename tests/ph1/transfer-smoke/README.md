@@ -21,6 +21,11 @@ GREEN oracle: exact half-open range, original bytes and known literal chunk dige
 Successor qualification also reads a sparse 64MiB synthetic zero file, requiring
 64 contiguous ranges of exactly1MiB with known literal SHA-256 per range. This
 qualifies the existing bounded reader, not network transfer or throughput.
+Next tracer tests the frozen Gateway response interface: i64 verified bytes,
+u32 Receipt length, exact opaque Receipt bytes. Zero Receipt is progress only;
+truncated/trailing/oversized response or impossible progress must refuse. Named
+CLIENT_PROGRESS_NOT_IMPLEMENTED is the RED witness. This parser does not verify
+Receipt authority; that remains the independent Server acceptance boundary.
 Cleanup removes only the exact fresh synthetic fixture in the test's `finally`.
 Hash/version drift STOP; no silent download/replacement. Retain safe test output,
 source identities and counts. No password, Grant, Receipt, cookie or CSRF capture.

@@ -2,6 +2,10 @@
 import { open, constants } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 
+export function gatewayProgress(body, expectedSize) {
+  throw new Error('CLIENT_PROGRESS_NOT_IMPLEMENTED');
+}
+
 export async function* fileRanges(path) {
   const file = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
   try {
