@@ -221,3 +221,16 @@ remain; no second transfer/issuance Audit and no consumed→ISSUED mutation.
 Renewal still requires an ISSUED update (consumed renewal fails/rolls back).
 Same full actual matrix, published source101 inputs before execution; no schema/
 dependency/package/tool drift. Run affected Grant/Receipt/IAM regressions afterward.
+
+### Affected regression packet after34
+
+Reuse exact source/archive/101-input manifest of pushed GREEN34 without changes,
+export/extract separately into absent owned targets below the same controlled
+parent: run-regression-green-11 (CustodyBoundaryTest,10),
+run-receipt-green-35 (ReceiptBoundaryTest,6), run-regression-green-09
+(Identity20+HTTP83+health2,105). Same run-slice.sh direct offline goals,
+source/hash guards, approved retained DB/fresh owner/source-marked schemas.
+No TransferClientBoundaryTest invocation or additional listener fixture in these
+selectors. No public schema, package rebuild, dependency/network/trust changes.
+Same archive hash before extraction;101/101 raw preflight; exact cleanup after
+JVMs exit; recorded results/log hashes/postflight. Any existing target STOP.
