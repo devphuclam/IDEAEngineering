@@ -1,5 +1,5 @@
 5f173209dcbfc5ffe9d3c00ab9adb1afca66b6371bd45f7e8b997230f5487214  apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java
-e178e36ce1704fa2980cf0d2df65eacfb2f51499776f3a9421f3bd9040931607  apps/gateway/src/main/java/com/idea/ddm/gateway/receipt/TransferReceiptSigner.java
+7081e2fac8f9a8d9996eaae45ae5d0c5b6f0da0ee02a77c876e04edcd1e0d541  apps/gateway/src/main/java/com/idea/ddm/gateway/receipt/TransferReceiptSigner.java
 c08b0fe336b65979f4ec49fd654be3e0b61af98abe9b49c43a9a37ebcae9686e  apps/gateway/src/main/java/com/idea/ddm/gateway/security/GatewayEnvelope.java
 a705d49b31a04b0819d04bce761f6899b38cd1faa6c7ecda53d37e90e02763cd  apps/gateway/src/main/java/com/idea/ddm/gateway/security/TransferGrantVerifier.java
 8fa8f04aac5638eba34d107011fc2b3974bafde92afa607ccf885e3ae9903431  apps/gateway/src/test/java/com/idea/ddm/gateway/GatewayTransferTest.java
