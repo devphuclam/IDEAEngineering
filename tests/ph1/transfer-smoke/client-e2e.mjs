@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-32/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-red-33/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -124,6 +124,9 @@ try {
       assert.equal(accepted.status, 200);
       const result = JSON.parse(accepted.body); assert.equal(result.transferId, grant.transferId);
     }
+    stage = 'COMPLETED_OPERATION_RETRY_' + size;
+    const completed = await server.request(`/qualification/f05/grant?size=${size}`, { headers: await csrf() });
+    assert.equal(completed.status, 200); assert.deepEqual(JSON.parse(completed.body), grant);
     console.log(`CLIENT_ACTUAL_TRANSFER=PASS; BYTES=${size}; SAME_RECEIPT_RETRY=PASS`);
   }
   stage = 'LOGOUT';

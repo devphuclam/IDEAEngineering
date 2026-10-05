@@ -204,3 +204,11 @@ cannot renew. No waiting300seconds or OS/Gateway clock changes. Existing behavio
 qualification may first run GREEN; no manufactured RED. Same101-input/tool/graph/
 package/target guards; fresh root32 and preserved prior attempts. This proves
 expiry+explicit renewal before transfer, not renewal mid-range or production API.
+
+Fresh33 tests lost completed-operation response after custody consumption:
+unchanged same OperationId issue while still within original Grant lifetime must
+resolve its canonical original frame/TransferId, not try inserting a second
+transfer. Actual client expects200/same result after Receipt accepts, before
+logout. Current find filters ISSUED only, so expected genuine RED at that seam.
+Same exact recipe/owned fresh target/schema/tool/graph/TLS/package; no production
+change yet. This does not authorize reusing consumed Grants for another operation.

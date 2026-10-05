@@ -30,7 +30,7 @@ preflight="$source_root/tests/ph1/f05-qualification/server-grant/ExecutionPrefli
 export IDEA_F05_SOURCE_SHA="$1"
 test_selector=CustodyBoundaryTest
 case "$3" in
-  receipt-green-20|receipt-green-21|receipt-green-22|receipt-green-23|receipt-green-24|receipt-green-25|receipt-green-26|receipt-green-27|receipt-green-28|receipt-green-29|receipt-red-30|receipt-green-31|receipt-green-32) test_selector=TransferClientBoundaryTest ;;
+  receipt-green-20|receipt-green-21|receipt-green-22|receipt-green-23|receipt-green-24|receipt-green-25|receipt-green-26|receipt-green-27|receipt-green-28|receipt-green-29|receipt-red-30|receipt-green-31|receipt-green-32|receipt-red-33) test_selector=TransferClientBoundaryTest ;;
   receipt-*) test_selector=ReceiptBoundaryTest ;;
   regression-green-01) test_selector=F05GrantMigrationTest ;;
   regression-green-05) test_selector=F05ReceiptMigrationTest ;;
