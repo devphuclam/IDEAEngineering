@@ -30,12 +30,12 @@ preflight="$source_root/tests/ph1/f05-qualification/server-grant/ExecutionPrefli
 export IDEA_F05_SOURCE_SHA="$1"
 test_selector=CustodyBoundaryTest
 case "$3" in
-  receipt-green-20|receipt-green-21|receipt-green-22|receipt-green-23|receipt-green-24|receipt-green-25|receipt-green-26|receipt-green-27|receipt-green-28|receipt-green-29|receipt-red-30|receipt-green-31|receipt-green-32|receipt-red-33|receipt-green-34|receipt-green-37|receipt-green-38) test_selector=TransferClientBoundaryTest ;;
+  receipt-green-20|receipt-green-21|receipt-green-22|receipt-green-23|receipt-green-24|receipt-green-25|receipt-green-26|receipt-green-27|receipt-green-28|receipt-green-29|receipt-red-30|receipt-green-31|receipt-green-32|receipt-red-33|receipt-green-34|receipt-green-37|receipt-green-38|receipt-green-41) test_selector=TransferClientBoundaryTest ;;
   receipt-*) test_selector=ReceiptBoundaryTest ;;
   regression-green-01) test_selector=F05GrantMigrationTest ;;
   regression-green-05) test_selector=F05ReceiptMigrationTest ;;
   regression-green-06) test_selector=F05GrantMigrationTest ;;
-  regression-green-02|regression-green-04|regression-green-07|regression-green-08|regression-green-09|regression-green-12) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
+  regression-green-02|regression-green-04|regression-green-07|regression-green-08|regression-green-09|regression-green-12|regression-green-13) test_selector=IdentityFlowTest,HttpSessionFlowTest,ServerSmokeTest
     export IDEA_F03_TEST_DATABASE_NAME=idea_ddm_f05a_20261005_t028 ;;
 esac
 export IDEA_F05_TEST_SCHEMA="f05_$(tr -d '-' < /proc/sys/kernel/random/uuid)"

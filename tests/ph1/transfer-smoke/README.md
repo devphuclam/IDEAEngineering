@@ -266,3 +266,9 @@ protocol, permission, schema, dependency or listener. Same offline direct goals,
 
 Successor receipt-green-40 repeats all7 Receipt cases after exact allocation tuple
 comparison at commit-time; no permissive fallback or new discovery protocol.
+
+After allocation repair, fresh receipt-green-41 repeats the complete actual38
+client/two-fixture/control/refusal/resume/renewal/lost-body/custody matrix; same
+owned18446/18447 listeners,101-input/source/tooling gates. Fresh
+regression-green-13 repeats affected IAM/HTTP/health105 checks on the repaired
+source, no product changes or reuse of previous roots. Original attempts retained.
