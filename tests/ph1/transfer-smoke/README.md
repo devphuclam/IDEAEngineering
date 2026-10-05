@@ -153,3 +153,10 @@ still requires Secure/HttpOnly/SameSite=Strict. Synthetic guard RED at531a190
 was4 PASS/1 FAIL; GREEN at3c9ecaa was5/5. No credential/cookie value captured.
 Fresh run-receipt-green-27, same published commands, source101-input manifest,
 TLS recipe, package hash, scopes, graph, retained DB and final oracles above.
+
+Retry27 still refused logout. Fresh28 retains the same detector and emits only
+nine Boolean attribute flags on refusal: expected name, known name, empty value,
+Max-Age0, Path=/, Secure, Domain present, HttpOnly, SameSiteStrict. No cookie value
+or header is output. This prospectively published diagnostic distinguishes the
+exact ordinary deletion attributes before any further parser change. Same full
+flow/oracles, fresh root28; no historical PASS inferred and no product changes.

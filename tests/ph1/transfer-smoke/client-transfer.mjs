@@ -12,7 +12,10 @@ export function sessionCookie(line, known) {
   if (equals < 1 || name !== 'IDEA_SESSION' || !/;\s*Secure(?:;|$)/i.test(line)
       || /;\s*Domain=/i.test(line)
       || (!deletion && (empty || !/;\s*HttpOnly(?:;|$)/i.test(line)
-        || !/;\s*SameSite=Strict(?:;|$)/i.test(line)))) throw new Error('CLIENT_COOKIE_REFUSED');
+        || !/;\s*SameSite=Strict(?:;|$)/i.test(line)))) throw new Error('CLIENT_COOKIE_REFUSED_' +
+          [name === 'IDEA_SESSION', known.has(name), empty, /;\s*Max-Age=0(?:;|$)/i.test(line),
+            /;\s*Path=\/(?:;|$)/i.test(line), /;\s*Secure(?:;|$)/i.test(line), /;\s*Domain=/i.test(line),
+            /;\s*HttpOnly(?:;|$)/i.test(line), /;\s*SameSite=Strict(?:;|$)/i.test(line)].map(Number).join('_'));
   return { name, value: deletion ? '' : raw };
 }
 
@@ -52,7 +55,7 @@ export class SecureEndpoint {
           for (const line of response.headers['set-cookie'] ?? []) {
             let parsed;
             try { parsed = sessionCookie(line, this.#cookies); }
-            catch { return finish('CLIENT_COOKIE_REFUSED'); }
+            catch (error) { return finish(error.message); }
             const { name, value } = parsed;
             value ? this.#cookies.set(name, value) : this.#cookies.delete(name);
           }
