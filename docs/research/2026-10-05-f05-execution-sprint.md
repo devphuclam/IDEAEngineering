@@ -156,3 +156,19 @@ Fresh `run-g05-green-02/source`: expected8/8; real HTTP logout invalidates origi
 renewal must refuse without replacing original Grant. Fresh sign-in plus ineligible configured
 Vault also refuses; no extra transfer/grant/scope/Audit, original still resolves once allocation
 restored. Expired ordinary retry explicitly refuses, never silently renews. No production change.
+
+## G06 existing transaction qualification packet
+
+G05 refusal source843fd9f20a2e9bac78add88fe98a2912dece99f7 **8/8 PASS**, schema
+f05_0bf9b64f4178455cab0190b1a216623d exact cleanup COMPLETE; log
+a9845ec88e79cfcb6fa0a68e77cd2a3dddcd31fdeabe47326e143b2f5eb70771.
+Fresh `run-g06-green-01/source`, expected10/10. Qualification tests existing transaction guards:
+suppressed required transfer/grant/scope/Audit insert, unusable signing key, deferred PostgreSQL
+commit failure, renewal Audit failure and real HTTP logout winning before both issuance/renewal
+commit. Real marked-schema PostgreSQL trigger barrier waits before IAM commit coordination;
+logout commits, barrier releases, owner must roll back pending writes. Original renewal result
+survives unchanged. Deferred failure remains labeled uncertain by caller; independent DB observer
+confirms zero committed state for that controlled failure, not a general lost-response claim.
+Owned trigger/function guards use only current test schema, are removed after each case; no public
+schema/role/old DB change. No test-only production hook, permission, HTTP Grant route or F04 event.
+No manufactured RED where existing guards already pass; ordinary failures are fixed prospectively.

@@ -319,6 +319,84 @@ class CustodyBoundaryTest {
             }
         }
     }
+    @Test
+    void g06PersistenceAuditSigningAndCommitFaultsCannotLeavePartialIssuedState() throws Exception {
+        var signedIn=fixture.signIn();
+        var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+        for(var target:List.of("transfer_record","transfer_grant","transfer_grant_scope","audit_evidence","deferred")) {
+            var scope=syntheticScope();seedVault(scope);var service=service(signedIn,scope,keys.getPrivate());
+            try(var fault=installFault(target,scope.operationId())) {
+                var failure=assertThrows(IllegalStateException.class,()->service.issue(signedIn.context(),scope));
+                assertEquals(target.equals("deferred")?"GRANT_COMMIT_OUTCOME_UNCERTAIN":"GRANT_NOT_COMMITTED",failure.getMessage());
+                assertOperationCounts(scope.operationId(),0,0,0,0);
+            }
+        }
+        var scope=syntheticScope();seedVault(scope);
+        java.security.PrivateKey unusable=new java.security.PrivateKey() {
+            public String getAlgorithm(){return "Unusable";}public String getFormat(){return null;}public byte[] getEncoded(){return null;}
+        };
+        assertThrows(IllegalStateException.class,()->service(signedIn,scope,unusable).issue(signedIn.context(),scope));
+        assertOperationCounts(scope.operationId(),0,0,0,0);
+        var renewable=syntheticScope();seedVault(renewable);var service=service(signedIn,renewable,keys.getPrivate());
+        var original=service.issue(signedIn.context(),renewable);
+        try(var fault=installFault("audit_evidence",renewable.operationId())) {
+            assertThrows(IllegalStateException.class,()->service.renew(signedIn.context(),renewable.operationId()));
+            assertOperationCounts(renewable.operationId(),1,1,1,1);
+        }
+        assertEquals(original.grantId(),service.resolve(signedIn.context(),renewable.operationId()).grantId());
+    }
+    private static AutoCloseable installFault(String target,UUID operation) throws Exception {
+        var table=target.equals("deferred")?"audit_evidence":target;
+        if(!List.of("transfer_record","transfer_grant","transfer_grant_scope","audit_evidence").contains(table))throw new SecurityException("Fault table");
+        var condition=table.equals("transfer_grant_scope")?"TRUE":"NEW.operation_id='"+operation+"'";
+        var body=target.equals("deferred")?"RAISE EXCEPTION 'Controlled F05 commit failure' USING ERRCODE='23514';":"RETURN NULL;";
+        try(var connection=F05DatabaseFixture.open("migration");var sql=connection.createStatement()) {
+            sql.execute("CREATE FUNCTION f05_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF "+condition+" THEN "+body+" END IF; RETURN NEW; END; $$");
+            sql.execute((target.equals("deferred")?"CREATE CONSTRAINT TRIGGER f05_fault AFTER INSERT ON ":"CREATE TRIGGER f05_fault BEFORE INSERT ON ")
+                    +table+(target.equals("deferred")?" DEFERRABLE INITIALLY DEFERRED":"")+" FOR EACH ROW EXECUTE FUNCTION f05_fault()");
+        }
+        return ()->{try(var connection=F05DatabaseFixture.open("migration");var sql=connection.createStatement()){
+            sql.execute("DROP TRIGGER f05_fault ON "+table);sql.execute("DROP FUNCTION f05_fault()");
+        }};
+    }
+    @Test
+    void g06RealLogoutWinsBeforeIssuanceAndRenewalCommitWithoutPartialState() throws Exception {
+        for(boolean renewal:List.of(false,true)) {
+            var signedIn=fixture.signIn();var scope=syntheticScope();seedVault(scope);
+            var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();var service=service(signedIn,scope,keys.getPrivate());
+            if(renewal)service.issue(signedIn.context(),scope);
+            int barrier=100000+java.util.concurrent.ThreadLocalRandom.current().nextInt(1000000);
+            try(var hold=F05DatabaseFixture.open("migration");var workers=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
+                hold.setAutoCommit(false);
+                try(var query=hold.prepareStatement("SELECT pg_advisory_xact_lock(?)")){query.setLong(1,barrier);query.execute();}
+                try(var connection=F05DatabaseFixture.open("migration");var sql=connection.createStatement()) {
+                    sql.execute("CREATE FUNCTION f05_gate() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_advisory_xact_lock("+barrier+"::bigint); RETURN NEW; END; $$");
+                    sql.execute("CREATE TRIGGER f05_gate BEFORE INSERT ON transfer_grant_scope FOR EACH ROW EXECUTE FUNCTION f05_gate()");
+                }
+                try {
+                    var future=workers.submit(()->renewal?service.renew(signedIn.context(),scope.operationId()):service.issue(signedIn.context(),scope));
+                    boolean waiting=false;long deadline=System.nanoTime()+java.time.Duration.ofSeconds(10).toNanos();
+                    try(var connection=F05DatabaseFixture.open("migration");var query=connection.prepareStatement(
+                            "SELECT count(*) FROM pg_locks WHERE locktype='advisory' AND NOT granted AND classid=0 AND objid=?")) {
+                        query.setLong(1,barrier);
+                        while(System.nanoTime()<deadline){try(var row=query.executeQuery()){assertTrue(row.next());waiting=row.getInt(1)==1;}if(waiting)break;Thread.sleep(10);}
+                    }
+                    assertTrue(waiting,"Owner reached controlled DB barrier before IAM commit coordination");
+                    fixture.signOut(); // Actual HTTP logout commits under the existing IAM coordination lock.
+                    hold.commit();
+                    var refused=assertThrows(java.util.concurrent.ExecutionException.class,()->future.get(20,java.util.concurrent.TimeUnit.SECONDS));
+                    assertInstanceOf(IllegalStateException.class,refused.getCause());
+                    assertEquals("GRANT_NOT_COMMITTED",refused.getCause().getMessage());
+                    assertOperationCounts(scope.operationId(),renewal?1:0,renewal?1:0,renewal?1:0,renewal?1:0);
+                } finally {
+                    hold.rollback();
+                    try(var connection=F05DatabaseFixture.open("migration");var sql=connection.createStatement()){
+                        sql.execute("DROP TRIGGER f05_gate ON transfer_grant_scope");sql.execute("DROP FUNCTION f05_gate()");
+                    }
+                }
+            }
+        }
+    }
     private static Map<Integer, byte[]> verifyFrame(byte[] packet, java.security.PublicKey key) throws Exception {
         assertTrue(packet.length <= 4096 && packet.length >= 83);
         var input = ByteBuffer.wrap(packet);
