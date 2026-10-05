@@ -46,6 +46,14 @@ verifier NOT-RUN; no merge or timer action.
 
 ## Actual end-to-end attempt01 — published execution contract
 
+Attempt24 identified CERT_NOT_YET_VALID: observed Windows UTC09:53:20 vs Ubuntu
+09:54:41 on2026-10-05; fresh cert NotBefore09:54:06. TLS correctly refused.
+Fresh25 recipe issues a new harness-only certificate with explicit NotBefore
+host-local now minus5 minutes and unchanged2-day certificate lifetime. This
+accommodates observed clock difference in certificate issuance, not TLS bypass,
+Grant/Receipt validity grace, system-clock change or system trust modification.
+Freeze actual interval/fingerprint as before. All prior failed roots retained.
+
 Attempt23 failed at TLS_READY/CLIENT_NETWORK_REFUSED and cleaned owned listeners/
 marked schema. Standalone owned SSH-forward TCP connection succeeds. Fresh24 adds
 only bounded OS/TLS error code (uppercase/digits/underscore max64, no message or

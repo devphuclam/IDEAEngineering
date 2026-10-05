@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** Actual Windows client coordination, confined to test classes and a marked schema. */
 class TransferClientBoundaryTest {
-    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-24/source/apps/server/target/client-e2e-01");
+    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-25/source/apps/server/target/client-e2e-01");
     static final Path JDK=Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path GATEWAY=Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar");
     static final UUID VAULT=UUID.randomUUID(), GATEWAY_ID=UUID.randomUUID();
@@ -40,7 +40,9 @@ class TransferClientBoundaryTest {
         keytool("generate", "-genkeypair","-alias","listener","-keystore",ROOT.resolve("listener.p12").toString(),
                 "-storetype","PKCS12","-storepass:file",ROOT.resolve("tls.password").toString(),
                 "-keypass:file",ROOT.resolve("tls.password").toString(),"-keyalg","EC","-groupname","secp256r1",
-                "-dname","CN=IDEA F05 synthetic client test","-validity","2","-ext","SAN=ip:127.0.0.1","-ext","EKU=serverAuth");
+                "-dname","CN=IDEA F05 synthetic client test","-startdate",java.time.LocalDateTime.now().minusMinutes(5)
+                    .format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")),
+                "-validity","2","-ext","SAN=ip:127.0.0.1","-ext","EKU=serverAuth");
         keytool("export","-exportcert","-rfc","-alias","listener","-keystore",ROOT.resolve("listener.p12").toString(),
                 "-storepass:file",ROOT.resolve("tls.password").toString(),"-file",ROOT.resolve("certificate.pem").toString());
         var certificate=(java.security.cert.X509Certificate)java.security.cert.CertificateFactory.getInstance("X.509")
