@@ -1,5 +1,10 @@
 # T033 Windows Node candidate — exact intake gate
 
+> Historical record: its BLOCKED-LEGAL disposition and proposed T033/T034-only process
+> exception are superseded by the2026-10-05 human project-wide
+> [APPROVED-WITH-OBLIGATIONS decision](2026-10-05-node24190-project-admission.md).
+> The original observations/request below remain historical, not the current execution gate.
+
 | Control | Value |
 |---|---|
 | Stable ID / class / version | IE-RES-T033-NODE-INTAKE-20261005 / external-source intake /0.1 |

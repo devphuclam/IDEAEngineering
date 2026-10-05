@@ -209,7 +209,7 @@ cleanup84fcb7658428001336afda8960d9e45a594c79e58599974b3fb3e5e75c920b30.
 Private roots `/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-0{7,8}/source/run/`;
 both owned JVMs stopped/zero listener, original inputs/tools/TLS/trust unchanged.
 
-## Current separate intake gate
+## Historical separate intake gate — superseded
 
 T033 Windows Node candidate has an exact binary/checksum match, but bundled ICU custom-term
 process disposition is unresolved. [Exact gate and smallest decision](../../../docs/research/2026-10-05-t033-node-intake-gate.md).
@@ -217,3 +217,13 @@ No Node/client execution, download, replacement or implicit Maven-to-Node except
 T029–T032 evidence remains partial/current; fullT033/T0341KiB/64MiB integration is NOT-RUN.
 This is a material external-source process gate, not a request for approval of ordinary
 engineering defects. PR38 remains Draft/Open; no merge/verifier/timer action.
+
+## Current Node disposition — project-wide approval
+
+The human successor decision2026-10-05 admits exact Node24.19.0 Windows x64 hash
+3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237 as
+APPROVED-WITH-OBLIGATIONS for normal IDEAEngineering tooling/runtime, not a T033/T034-only
+process exception. [Authoritative successor record](../../../docs/research/2026-10-05-node24190-project-admission.md)
+and exact runtime/notice inventory retain applicable notices and material-change review triggers.
+The historical gate above is no longer a blocker. This approval does not by itself qualify
+the client or close T033/T034. PR38 remains Draft/Open; no merge/verifier/timer action.

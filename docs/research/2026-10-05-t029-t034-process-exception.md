@@ -1,5 +1,10 @@
 # T029–T034 bounded successor internal engineering process exception
 
+> Successor Node clarification2026-10-05: [Node24.19.0 project admission](2026-10-05-node24190-project-admission.md)
+> now governs Node use independently of this sprint-limited Maven/JDK exception. The historical
+> Node candidate paragraph below is not a current BLOCKED-LEGAL finding. Other exact artifact/
+> graph/tooling and sprint boundaries remain unchanged.
+
 | Control | Value |
 |---|---|
 | Stable ID / class / version / status | IE-RES-T029-T034-PROCESS-EXCEPTION-20261005 / prospective execution-control record / 1.0 / Approved for exact bounded scope |
