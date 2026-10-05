@@ -71,7 +71,41 @@ public class FilesystemVaultAdapterTest {
         var last=restarted.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),512,1024,chunkDigest,new ByteArrayInputStream(new byte[512]));
         if(last.verifiedBytes()!=1024||last.completed()==null)throw new AssertionError("Full coverage not verified");
         try(var input=restarted.read(last.completed())){if(!Arrays.equals(bytes,input.readAllBytes()))throw new AssertionError("Resumed bytes differ");}
-        System.out.println("ADAPTER_TRACER=PASS; CASES=9");
+        // Exact candidate binding and contiguous progress survive refused retries.
+        refuse(()->restarted.storeRange(rangedTransfer,UUID.randomUUID(),1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512])));
+        refuse(()->restarted.storeRange(rangedTransfer,rangedLocation,1024,result.digest(),0,513,chunkDigest,new ByteArrayInputStream(new byte[513])));
+        UUID partial=UUID.randomUUID(),partialLocation=UUID.randomUUID();
+        refuse(()->adapter.storeRange(partial,partialLocation,1024,result.digest(),512,1024,chunkDigest,new ByteArrayInputStream(new byte[512])));
+        adapter.storeRange(partial,partialLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512]));
+        refuse(()->adapter.storeRange(partial,partialLocation,1024,result.digest(),512,1024,chunkDigest,new InputStream(){
+            @Override public int read() throws IOException {throw new IOException("SYNTHETIC_RANGE_INTERRUPTION");}
+        }));
+        if(adapter.storeRange(partial,partialLocation,1024,result.digest(),0,512,chunkDigest,new ByteArrayInputStream(new byte[512])).verifiedBytes()!=512)
+            throw new AssertionError("Interrupted range advanced progress");
+        if(adapter.storeRange(partial,partialLocation,1024,result.digest(),512,1024,chunkDigest,new ByteArrayInputStream(new byte[512])).completed()==null)
+            throw new AssertionError("Interrupted candidate cannot resume");
+        UUID mismatch=UUID.randomUUID(),mismatchLocation=UUID.randomUUID();String wrongFull="0".repeat(64);
+        refuse(()->adapter.storeRange(mismatch,mismatchLocation,512,wrongFull,0,512,chunkDigest,new ByteArrayInputStream(new byte[512])));
+        refuse(()->adapter.read(new FilesystemVaultAdapter.Completed(mismatch,mismatchLocation,512,wrongFull)));
+        // Hold a real request inside streaming input; another Adapter must not overwrite its lock.
+        UUID busy=UUID.randomUUID(),busyLocation=UUID.randomUUID();
+        var entered=new java.util.concurrent.CountDownLatch(1);var release=new java.util.concurrent.CountDownLatch(1);
+        try(var executor=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+            var writer=executor.submit(()->adapter.storeRange(busy,busyLocation,512,chunkDigest,0,512,chunkDigest,new ByteArrayInputStream(new byte[512]){
+                boolean held;
+                @Override public synchronized int read(byte[] b,int off,int len){
+                    if(!held){held=true;entered.countDown();try{if(!release.await(10,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("Concurrency barrier timeout");}
+                        catch(InterruptedException error){Thread.currentThread().interrupt();throw new AssertionError(error);}}
+                    return super.read(b,off,len);
+                }
+            }));
+            try{
+                if(!entered.await(10,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("Writer not entered");
+                refuse(()->restarted.storeRange(busy,busyLocation,512,chunkDigest,0,512,chunkDigest,new ByteArrayInputStream(new byte[512])));
+            }finally{release.countDown();}
+            if(writer.get(10,java.util.concurrent.TimeUnit.SECONDS).completed()==null)throw new AssertionError("Concurrent writer lost completion");
+        }
+        System.out.println("ADAPTER_TRACER=PASS; CASES=13");
     }
     @FunctionalInterface interface Checked {void run() throws Exception;}
     private static void refuse(Checked action) throws Exception {

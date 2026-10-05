@@ -59,3 +59,12 @@ recreate Adapter instance, identical lost-response retry resolves512, changed by
 final512 completes original1024/full digest. Literal chunk digest independently calculated
 with workstation .NET SHA-256; not derived using Adapter code. Expected RANGE_RESUME_NOT_IMPLEMENTED.
 Fresh adapter-green-04 follows minimum real contiguous chunk persistence/verification.
+
+Range RED7093f1f0858f1f4a19c896871bfd5648588f2341 reached RANGE_RESUME_NOT_IMPLEMENTED;
+private log843d1d5ef6865c7dd0ffbf30fd6388a4c167be1381282843f8293c4d123c0da5.
+Range GREEN d13482741a62a4b2b9f4555f9f6f74bb59816fd4:9/9, private log
+8a7046e21b54886696ffcc6f7f6376ade156aff83ef287f09e7112dfdc820f0b.
+Fresh adapter-green-05 adds qualification of existing range guards: changed allocation/range,
+gapped request, interrupted chunk does not advance progress and resumes, full-file digest
+mismatch never completes, concurrent streaming writer rejects a second writer without removing
+the first writer's lock. Bounded ten-second barriers; no fabricated RED for existing behavior.
