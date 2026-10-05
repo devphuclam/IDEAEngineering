@@ -56,7 +56,7 @@ c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/sr
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 82931e01c2e997ee4c3d700b7010645f853ef2f7ad44f5b7bbeac1f7b489b030  apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java
 3f2d3dd7e696355ab791110dfc116f2a7ca0138e6ea75b763136bb216fd81064  apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java
-b05f0d42dfbc13bc0dd9733e14fb8f249513d2ff1d5f6270fb6e291cc9d4ed04  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
+d6d993738f1de63767bc58e53b29f37098ce21e09ac37f23f35ae2acd9c6fe3b  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 5142ca313ca13971c75a961ae5975dbd93eeb5f03b9c33d8ce8aa5dd41b71afe  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
@@ -84,7 +84,7 @@ d79592279f9c80c2dc206252cb3307fca89f5759acc34200744547cfc9dd4f57  tests/ph1/f05-
 274003edb8d8662e6ede0e16c126f880c88c8c139ef71d8113258bb91e8db3f2  tests/ph1/f05-qualification/server-grant/GraphAudit.java
 96eee0eba5b298024f5189917c822992f0107bf4496514f4d917cfaee814da03  tests/ph1/f05-qualification/server-grant/LegalAudit.java
 f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d  tests/ph1/f05-qualification/server-grant/MaterialAudit.java
-6379c8c07af961bb895bdc1081c41ccdb4512713d27ee6e6cd4141a9b3bc1ec9  tests/ph1/f05-qualification/server-grant/receipt-packet.md
+de82db3a6e671b6209e301405c9ce3c5274d2aa0b36277b7cca6cbd6c41cb009  tests/ph1/f05-qualification/server-grant/receipt-packet.md
 2040492d7fbd3e6e7149d91f736a7bfc1224531c3716d21a9516ab9cae924fe3  tests/ph1/f05-qualification/server-grant/run-behavior-red.sh
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
