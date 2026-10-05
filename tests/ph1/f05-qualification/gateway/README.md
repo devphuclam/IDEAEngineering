@@ -154,3 +154,12 @@ but publication polling yielded before local export metadata was read; no remote
 TLS/listener ran. Before execution review caught literal backslash-n source-prefix defect in
 TLS helper. Repair published prospectively and fresh gateway-boot-03 uses the same packet/oracles,
 not normalized input, changed graph or reused source/target. Keep local02 export unchanged.
+
+Actual HTTP RED847c8e2d36ab7f99f6f52ba18aa7f033bd747765: trusted TLS/exact loopback PASS,
+501 GATEWAY_HTTP_NOT_IMPLEMENTED after POST real1024-byte request. Private result log
+1898275d7e618f2dd2b1004a33162f2a7e5a37fe45aab6cc2d2cc2eecf9b16ed;
+cleanup84fcb7658428001336afda8960d9e45a594c79e58599974b3fb3e5e75c920b30,
+owned process stopped/no listener/source tools TLS system trust unchanged. Fresh gateway-boot-04
+rebuilds minimum GREEN handler/service with same offline graph and new private harness TLS/keys.
+Commands run-build.sh source manifest gateway-boot-04 then run-http.sh source green. No DB or
+preview. Timers/full negatives and Server Receipt custody are not inferred from this tracer.
