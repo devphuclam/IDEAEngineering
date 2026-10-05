@@ -80,3 +80,9 @@ Same raw manifest/archive/source publication procedure, private synthetic owned 
 gateway-red-01 at1de598e281b38d28ce7b07aa654545ff4440edc0 passed raw8/8 but runner compiled
 the Adapter class list rather than GatewayTransferTest, so main was not found. Not behavioral RED.
 Preserve attempt; gateway-red-02 only repairs the explicit javac inputs and repeats the same oracle.
+
+Verifier REDa4ee40d72d4014a66e622cf019f427e683ccedd9, logc9b40f30be43574390e7578000a47f9c132bb43f4ff938a87d1a3e4a3785ff5c.
+Verifier GREENcd93addab1043270c537bc9a5ef003449233c184:1/1, logfa637bb87d01f40e7c634cca928e3599b3e30ae12c0952c7d579138439ea9440.
+Next gateway-red-03 connects verified independent Server Grant to actual Adapter completion and
+Gateway-owned Receipt signer. Independently parse exact25 fields and verify Ed25519 signature;
+no producer-derived expected correlation/allocation. Expected RECEIPT_SIGNER_NOT_IMPLEMENTED.
