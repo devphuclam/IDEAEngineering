@@ -7,8 +7,11 @@ export function sessionCookie(line, known) {
   const first = line.split(';', 1)[0]; const equals = first.indexOf('=');
   const name = first.slice(0, equals); const raw = first.slice(equals + 1);
   const empty = raw === '' || raw === '""';
+  const expired = /;\s*Max-Age=0(?:;|$)/i.test(line)
+    || (!/;\s*Max-Age=/i.test(line)
+      && /;\s*Expires=Thu, 01 Jan 1970 00:00:10 GMT(?:;|$)/i.test(line));
   const deletion = equals > 0 && name === 'IDEA_SESSION' && known.has(name) && empty
-    && /;\s*Max-Age=0(?:;|$)/i.test(line) && /;\s*Path=\/(?:;|$)/i.test(line);
+    && expired && /;\s*Path=\/(?:;|$)/i.test(line);
   if (equals < 1 || name !== 'IDEA_SESSION' || !/;\s*Secure(?:;|$)/i.test(line)
       || /;\s*Domain=/i.test(line)
       || (!deletion && (empty || !/;\s*HttpOnly(?:;|$)/i.test(line)
