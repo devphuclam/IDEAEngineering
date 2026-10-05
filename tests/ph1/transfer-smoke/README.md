@@ -212,3 +212,12 @@ transfer. Actual client expects200/same result after Receipt accepts, before
 logout. Current find filters ISSUED only, so expected genuine RED at that seam.
 Same exact recipe/owned fresh target/schema/tool/graph/TLS/package; no production
 change yet. This does not authorize reusing consumed Grants for another operation.
+
+RED33 reached COMPLETED_OPERATION_RETRY_1024 after custody and failed canonical
+response at source0ce01b52b2d5d65ff73ad808d8deff8c3a49295c. Fresh GREEN34 changes
+only the Server stored-result selection to include CONSUMED along with ISSUED.
+Current eligible Actor/Organization/owner/allocation/full immutable input checks
+remain; no second transfer/issuance Audit and no consumed→ISSUED mutation.
+Renewal still requires an ISSUED update (consumed renewal fails/rolls back).
+Same full actual matrix, published source101 inputs before execution; no schema/
+dependency/package/tool drift. Run affected Grant/Receipt/IAM regressions afterward.

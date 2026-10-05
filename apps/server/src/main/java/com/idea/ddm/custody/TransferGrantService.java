@@ -130,7 +130,7 @@ public final class TransferGrantService {
         }catch(SQLException failure){throw new IllegalStateException("GRANT_STORAGE_UNAVAILABLE",failure);}
     }
     private Grant find(Connection connection,OwnerSessionEligibility.EligibleActor actor,UUID operationId) throws Exception {
-        try(var query=connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? AND g.status='ISSUED' ORDER BY g.issued_at DESC,g.grant_id DESC LIMIT 1")) {
+try(var query=connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? AND g.status IN ('ISSUED','CONSUMED') ORDER BY g.issued_at DESC,g.grant_id DESC LIMIT 1")) {
             query.setObject(1,operationId);try(var row=query.executeQuery()) {
                 if(!row.next())return null;
                 if(!actor.organizationId().equals(row.getObject(11,UUID.class)))throw new SecurityException("RESULT_UNAVAILABLE");
