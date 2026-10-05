@@ -1,3 +1,4 @@
+00ae535120efd462a3634291f3203468d7c69c4f696117a0a0b507fb421b09c5  apps/server/.mvn/wrapper/maven-wrapper.properties
 7916b7d5542c9c180ee64c81111c368826aa36a279dedc6faf11d3ffd0777fb0  apps/server/pom.xml
 9db01a2754a7160f1c7f937f777087813f022e5a884943f8ff7b22303fa28455  apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java
 048f622c3f6bb0ad9728f553a8295c96f943e3f2b25f1b319abd3dec5d692927  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java
@@ -61,9 +62,9 @@ e48fb8c27607ac29db99a168e6b3097b0de6afde3d5a3ef2fd4de2406d572eeb  docs/research/
 036afc60a252566bcdf72c4026d160bd31c27c477645c2f626aa61588f6039ca  docs/research/inventories/f05a-t028-t030-resolved-inputs.tsv
 07403aaa07995d08354d70bdc108d535c781508ba24ddf36f57d4257a17c3f03  docs/research/inventories/f05a-t028-t030-server-rights.tsv
 94b2490d958c56c0f0b5e9368bc18464bb8c3a2241d2191513759ee4f55b03a6  docs/research/inventories/f05a-t028-t030-tool-rights.tsv
-7b223a5fce8f6af54f85dffa70cc96a8b16d32fbf7c789d9928a8ba256c50f37  tests/ph1/f05-qualification/server-grant/ExecutionPreflight.java
+866e8e12e9e9e6db7e9ff0573bb390e94bb5b4ccbd853b00de7fbffa2a57f1c9  tests/ph1/f05-qualification/server-grant/ExecutionPreflight.java
 274003edb8d8662e6ede0e16c126f880c88c8c139ef71d8113258bb91e8db3f2  tests/ph1/f05-qualification/server-grant/GraphAudit.java
 96eee0eba5b298024f5189917c822992f0107bf4496514f4d917cfaee814da03  tests/ph1/f05-qualification/server-grant/LegalAudit.java
 f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d  tests/ph1/f05-qualification/server-grant/MaterialAudit.java
-eb0071d78b70c6769c3595a4b9e9fe5dc8023d5992b70f7e8f56c24e37c6c63c  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
+df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
