@@ -55,3 +55,16 @@ license approval gate. Packages/npm/other runtimes are not admitted by implicati
 Other F05 implementation/qualification obligations, PR38 Draft/Open, no merge/verifier and
 Delivery Card/timer rules remain unchanged. The old gate record stays historical with a
 successor pointer rather than rewriting the earlier observations as prior approval.
+
+## Admission/retention preflight — actual result
+
+After publishing the admission atc021fed1c066ff35814e73c6577962d591de9dd9,
+the approved executable returned `v24.19.0`; before/after binary hash matched the approved pin.
+Observed OpenSSL3.5.7 /ICU78.3; built-in module availability for `node:https`, `node:crypto`,
+`node:fs`, `node:assert/strict` PASS. No package lookup/npm/corepack/install/download or
+application listener was required. This is tooling preflight, not client transfer qualification.
+Retained LICENSE size157606 bytes/hash matches exact pinned text. The
+[44-section bundled notice index](inventories/node-24.19.0-bundled-notices.tsv) points to
+exact component/subtree/legal-section locations, without declaring source-only tools packaged.
+Nested Unicode/legacy ICU/NAIST–ICOT conditions remain in the complete ICU section, not omitted
+or flattened into MIT. Future release SBOM must map actual redistributed components.
