@@ -187,3 +187,11 @@ progress/Receipt.65s client read timeout is RED, never PASS. Sender is owned and
 Existing positive/inactivity cases run first; same admitted offline graph, fresh private TLS,
 single loopback18447 and exact cleanup/postflight. Commands run-build.sh source manifest
 gateway-boot-07 then run-http.sh source red. No accelerated Clock for real socket deadline.
+
+Actual absolute RED6094338e19ffe5e8b100314e4c3ff327d6494d43: inactivity PASS30077ms,
+but trickle request still lacked refusal65018ms; private log9758f50212716e1cf95ea4c842164f5cb78125ab7478eac3cdd8650c6650df37.
+Owned process stopped/zero listeners/source/tools/TLS/trust unchanged. Fresh gateway-boot-08
+uses Servlet non-blocking reads, at most1MiB RAM per range, independent non-renewing absolute
+60s range/30s control and30s inactivity deadlines. Partial bodies never reach the Adapter.
+No new dependency, route, signature, authority or graph; same real positive/inactivity/absolute
+oracle. Commands run-build.sh source manifest gateway-boot-08 then run-http.sh source green.

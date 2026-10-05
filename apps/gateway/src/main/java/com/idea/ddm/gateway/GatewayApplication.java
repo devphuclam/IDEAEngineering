@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
 import com.idea.ddm.gateway.transfer.GatewayTransferService;
 import com.idea.ddm.gateway.adapter.FilesystemVaultAdapter;
 import com.idea.ddm.gateway.security.TransferGrantVerifier;
@@ -23,7 +25,8 @@ import java.io.*;
 @RestController
 public class GatewayApplication {
     private final GatewayTransferService service;
-    public GatewayApplication(GatewayTransferService service){this.service=service;}
+    private final java.util.concurrent.ScheduledThreadPoolExecutor requestTimers;
+    public GatewayApplication(GatewayTransferService service,java.util.concurrent.ScheduledThreadPoolExecutor requestTimers){this.service=service;this.requestTimers=requestTimers;}
     public static void main(String[] args){
         var app=new SpringApplication(GatewayApplication.class);
         app.addInitializers(context->{
@@ -33,21 +36,69 @@ public class GatewayApplication {
         app.run(args);
     }
     @PostMapping("/transfer/range")
-    public ResponseEntity<byte[]> upload(HttpServletRequest request){
-        try{
+    public void upload(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        receive(request,response,60000,1048576,body->{
             if(!request.isSecure())throw new SecurityException("HTTPS_REQUIRED");
             byte[] grant=grant(request);long start=offset(request,"X-IDEA-Range-Start"),end=offset(request,"X-IDEA-Range-End");
             if(end<=start||end-start>1048576||request.getContentLengthLong()>1048576)throw new IllegalArgumentException("BODY_LIMIT");
-            return success(service.upload(grant,start,end,header(request,"X-IDEA-Chunk-SHA256"),request.getInputStream()));
-        }catch(Exception failure){return refusal(failure);}
+            return success(service.upload(grant,start,end,header(request,"X-IDEA-Chunk-SHA256"),new ByteArrayInputStream(body)));
+        });
     }
     @PostMapping("/transfer/status")
-    public ResponseEntity<byte[]> status(HttpServletRequest request){
-        try{
+    public void status(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        receive(request,response,30000,0,body->{
             if(!request.isSecure())throw new SecurityException("HTTPS_REQUIRED");
-            if(request.getInputStream().read()!=-1)throw new IllegalArgumentException("CONTROL_BODY_FORBIDDEN");
+            if(body.length!=0)throw new IllegalArgumentException("CONTROL_BODY_FORBIDDEN");
             return success(service.status(grant(request)));
-        }catch(Exception failure){return refusal(failure);}
+        });
+    }
+    @FunctionalInterface private interface RequestWork {ResponseEntity<byte[]> run(byte[] body) throws Exception;}
+    /** Non-blocking, at most one bounded chunk in RAM. A trickle cannot renew the absolute timer. */
+    private void receive(HttpServletRequest request,HttpServletResponse response,long timeout,int maximum,RequestWork work) throws IOException {
+        var context=request.startAsync();context.setTimeout(timeout);
+        var terminal=new java.util.concurrent.atomic.AtomicBoolean();
+        var timers=new java.util.concurrent.CopyOnWriteArrayList<java.util.concurrent.ScheduledFuture<?>>();
+        var inactive=new java.util.concurrent.atomic.AtomicReference<java.util.concurrent.ScheduledFuture<?>>();
+        long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(timeout);
+        java.util.function.Consumer<ResponseEntity<byte[]>> finish=result->{
+            if(!terminal.compareAndSet(false,true))return;
+            try{response.setStatus(result.getStatusCode().value());result.getHeaders().forEach((name,values)->values.forEach(value->response.addHeader(name,value)));
+                response.getOutputStream().write(result.getBody());}
+            catch(IOException disconnected){/* No successful response is inferred from a lost connection. */}
+            finally{for(var timer:timers)timer.cancel(false);var timer=inactive.get();if(timer!=null)timer.cancel(false);context.complete();}
+        };
+        Runnable expired=()->finish.accept(ResponseEntity.status(408).header("Cache-Control","no-store").body(new byte[0]));
+        timers.add(requestTimers.schedule(expired,timeout,java.util.concurrent.TimeUnit.MILLISECONDS));
+        Runnable activity=()->{
+            var next=requestTimers.schedule(expired,30000,java.util.concurrent.TimeUnit.MILLISECONDS);
+            var previous=inactive.getAndSet(next);if(previous!=null)previous.cancel(false);
+            if(terminal.get())next.cancel(false);
+        };
+        activity.run();
+        context.addListener(new AsyncListener(){
+            public void onTimeout(AsyncEvent event){finish.accept(ResponseEntity.status(408).header("Cache-Control","no-store").body(new byte[0]));}
+            public void onError(AsyncEvent event){finish.accept(ResponseEntity.status(503).header("Cache-Control","no-store").body(new byte[0]));}
+            public void onComplete(AsyncEvent event){}
+            public void onStartAsync(AsyncEvent event){}
+        });
+        var input=request.getInputStream();var bytes=new ByteArrayOutputStream(Math.min(maximum,65536));
+        input.setReadListener(new ReadListener(){
+            public void onDataAvailable() throws IOException {
+                byte[] buffer=new byte[65536];
+                while(!terminal.get()&&input.isReady()&&!input.isFinished()){
+                    if(System.nanoTime()>=deadline){finish.accept(ResponseEntity.status(408).header("Cache-Control","no-store").body(new byte[0]));return;}
+                    int read=input.read(buffer);if(read<0)break;
+                    if(read>maximum-bytes.size()){finish.accept(refusal(new IllegalArgumentException("BODY_LIMIT")));return;}
+                    bytes.write(buffer,0,read);if(read>0)activity.run();
+                }
+            }
+            public void onAllDataRead(){
+                if(terminal.get())return;
+                if(System.nanoTime()>=deadline){finish.accept(ResponseEntity.status(408).header("Cache-Control","no-store").body(new byte[0]));return;}
+                try{finish.accept(work.run(bytes.toByteArray()));}catch(Exception failure){finish.accept(refusal(failure));}
+            }
+            public void onError(Throwable failure){finish.accept(refusal(failure instanceof Exception exception?exception:new IOException("REQUEST_READ_FAILED")));}
+        });
     }
     private static ResponseEntity<byte[]> success(GatewayTransferService.Result result){
         byte[] receipt=result.receipt();int size=receipt==null?0:receipt.length;
@@ -77,6 +128,10 @@ public class GatewayApplication {
     }
     @org.springframework.context.annotation.Configuration(proxyBeanMethods=false)
     static class Configuration {
+        @Bean(destroyMethod="shutdown") java.util.concurrent.ScheduledThreadPoolExecutor requestTimers(){
+            var timers=new java.util.concurrent.ScheduledThreadPoolExecutor(1,runnable->{var thread=new Thread(runnable,"gateway-request-deadlines");thread.setDaemon(true);return thread;});
+            timers.setRemoveOnCancelPolicy(true);return timers;
+        }
         @Bean org.springframework.boot.web.server.WebServerFactoryCustomizer<org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory> uploadInactivityBoundary(){
             return factory->factory.addConnectorCustomizers(connector->{
                 if(!(connector.getProtocolHandler() instanceof org.apache.coyote.http11.AbstractHttp11Protocol<?> protocol))
