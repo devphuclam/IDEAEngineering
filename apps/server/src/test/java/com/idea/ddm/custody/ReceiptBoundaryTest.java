@@ -152,6 +152,19 @@ class ReceiptBoundaryTest {
             try(var q=c.prepareStatement("SELECT count(*) FROM audit_evidence WHERE operation_id=? AND action='transfer.receipt.accept'")){q.setObject(1,x.grant().operationId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals(1,r.getInt(1));}}
         }
     }
+    @Test void r07ChangedOwnerAllocationBeforeCommitCannotPublishStaleCustody() throws Exception {
+        var x=candidate();
+        // Owner-boundary fixture changes its authoritative physical allocation, not signed identity.
+        var current=new java.util.concurrent.atomic.AtomicReference<>("original.blob");
+        var service=new TransferReceiptService(fixture.app(),fixture.eligibility(),(c,a,s,l)->{
+            if(!a.actorId().equals(x.actor().actorId())||!a.organizationId().equals(x.actor().organizationId())
+                    ||!s.equals(x.grant().scope())||!l.equals(x.location()))throw new SecurityException("OWNER_ALLOCATION_REFUSED");
+            return new TransferReceiptService.Allocation(s.vaultId(),l,current.getAndSet("replacement.blob"));
+        },clock,x.gateway().getPublic(),"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1");
+        assertRefusal(service,x.actor(),x.packet());
+        assertNoCustody(x);
+        assertNotNull(x.service().accept(x.actor().context(),x.packet()),"Stable retry after confirmed rollback");
+    }
     static void assertRefusal(TransferReceiptService service,F05SessionFixture.SignedIn actor,byte[] packet){
         var failure=assertThrows(IllegalStateException.class,()->service.accept(actor.context(),packet));assertEquals("RECEIPT_NOT_COMMITTED",failure.getMessage());assertInstanceOf(SecurityException.class,failure.getCause());
     }
