@@ -9,7 +9,8 @@ class ExecutionPreflight {
         if (!Runtime.version().toString().equals("25.0.4.1+1-LTS") || args.length < 1)
             throw new IllegalArgumentException("Exact JDK/source root required");
         var root = Path.of(args[0]).toRealPath();
-        if (!root.equals(Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-compile-red-02/source")))
+        if (!Set.of(Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-compile-red-02/source"),
+                Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-behavior-red-01/source")).contains(root))
             throw new SecurityException("Unapproved owned root");
         int count = 0;
         for (var line : Files.readAllLines(root.resolve("tests/ph1/f05-qualification/server-grant/inputs.sha256"))) {

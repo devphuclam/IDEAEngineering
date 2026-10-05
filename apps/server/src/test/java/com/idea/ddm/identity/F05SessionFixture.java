@@ -36,14 +36,15 @@ public final class F05SessionFixture implements AutoCloseable {
     private final String credential = UUID.randomUUID().toString();
     private final int port;
 
-    public F05SessionFixture(String url, Clock clock) {
+    public F05SessionFixture(String url, Clock clock) throws Exception {
         if (!url.matches("jdbc:postgresql://127\\.0\\.0\\.1:5432/idea_ddm_f05a_20261005_t028\\?currentSchema=f05_[0-9a-f]{32}"))
             throw new IllegalArgumentException("Unapproved F05 test target");
-        app = new DriverManagerDataSource(url, "idea_ddm_app", System.getenv("IDEA_DATABASE_APP_PASSWORD"));
+        app = new DriverManagerDataSource(url, "idea_ddm_app", F05DatabaseFixture.password("app"));
         identity = new AdministratorBootstrap(app).initialize(organizationId, "F05 Synthetic Organization",
                 "F05 Synthetic Actor", login, credential);
         assertEquals(AdministratorBootstrap.State.INITIALIZED, identity.state());
         server = new SpringApplicationBuilder(IdeaServerApplication.class).initializers(context -> {
+            context.getBeanFactory().registerSingleton("dataSource", app);
             context.getBeanFactory().registerSingleton("f05Clock", clock);
             context.getBeanFactory().registerSingleton("f05PrincipalCapture",
                     new Capture(captured, () -> context.getBean(SessionService.class)));

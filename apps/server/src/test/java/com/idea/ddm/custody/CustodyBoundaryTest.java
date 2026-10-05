@@ -3,6 +3,7 @@ package com.idea.ddm.custody;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.identity.F05SessionFixture;
+import com.idea.ddm.identity.F05DatabaseFixture;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPairGenerator;
@@ -10,9 +11,12 @@ import java.security.Signature;
 import java.time.Clock;
 import java.util.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
 
 /** G01 tracer only. Missing TransferGrantService is the initial compilation RED, not a DB PASS. */
 class CustodyBoundaryTest {
+    @BeforeAll
+    static void freshOwnedSchema() throws Exception { F05DatabaseFixture.create(); }
     @Test
     void g01ServerEstablishedActorObtainsExactPersistedSignedPrivateGrant() throws Exception {
         var clock = Clock.systemUTC();
