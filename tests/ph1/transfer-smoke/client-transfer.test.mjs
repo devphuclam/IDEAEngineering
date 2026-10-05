@@ -7,6 +7,20 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { fileRanges, gatewayProgress } from './client-transfer.mjs';
+import * as client from './client-transfer.mjs';
+
+test('ordinary quoted-empty logout deletion clears only an existing host-scoped session', () => {
+  assert.equal(typeof client.sessionCookie, 'function');
+  const known = new Map([['IDEA_SESSION', 'synthetic-proof']]);
+  assert.deepEqual(client.sessionCookie('IDEA_SESSION=""; Path=/; Max-Age=0; Secure', known),
+    { name: 'IDEA_SESSION', value: '' });
+  for (const bad of ['IDEA_SESSION=""; Path=/; Secure',
+    'IDEA_SESSION=""; Path=/; Max-Age=0',
+    'IDEA_SESSION=""; Path=/; Max-Age=0; Secure; Domain=localhost',
+    'OTHER=""; Path=/; Max-Age=0; Secure',
+    'IDEA_SESSION=synthetic-proof; Path=/; Secure'])
+    assert.throws(() => client.sessionCookie(bad, known), /CLIENT_COOKIE_REFUSED/);
+});
 
 test('1 KiB synthetic file becomes one exact range with independently known SHA-256', async () => {
   const root = await mkdtemp(join(tmpdir(), 'idea-f05-client-'));
