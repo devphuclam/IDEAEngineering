@@ -43,3 +43,59 @@ bytes, normal TLS verification and independent Server custody acceptance.
 Private storage paths are never client-selected; no permission-free product route
 or manufactured Receipt is introduced by this local slice. PR38 Draft/Open;
 verifier NOT-RUN; no merge or timer action.
+
+## Actual end-to-end attempt01 — published execution contract
+
+Fresh server export/root `run-receipt-green-20/source` below the existing owned
+`/home/phuclam/idea-f05a-t028-t030-20261005-37` boundary. Require absent target,
+byte-preserving committed export/manifest/archive identity local and remote,
+unchanged existing Server admitted inventory/offline Maven direct resources,
+testResources, compile, testCompile, Surefire goals through `run-slice.sh`.
+Selector TransferClientBoundaryTest, expected1 test,8-minute actual-client limit.
+Same retained approved database; fresh marked `f05_<32hex>` schema only.
+No public migration, old DB/preview/company/Vault data. Existing V1–V10 immutable.
+
+Reuse exact previously qualified Gateway package, no rebuild/new graph:
+`/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar`
+SHA-256c26b870e22a6ffb6ed9acbcbcd1dd20208004226c4d09a399e227983023a14e1.
+Same JDK25.0.4.1+1; keytool SHA-256
+e5e8b3a330267b3fd2b14e5e9f36eceafab0e45fb6e497dfeea59a33f1eb928e.
+No dependency or tool installation. Fresh private TLS/key/config under
+`apps/server/target/client-e2e-01` of that exact new export. JDK keytool creates
+test-only EC PKCS12,2-day SAN IP127.0.0.1 certificate; hash/subject/SAN/serial/
+validity freeze before either listener. No global/user/system trust changes.
+Server127.0.0.1:18446 + Gateway127.0.0.1:18447 only, refuse occupied ports.
+Node trusts only captured test CA and verifies endpoint normally; no bypass.
+
+Run Windows admitted Node `tests/ph1/transfer-smoke/client-e2e.mjs` only after
+safe F05_CLIENT_READY marker. Source/hash/node checks before/after. It owns one
+SSH loopback tunnel for both exact ports, using existing pinned SSH key/host.
+Private ready.json is read via SSH into RAM, never printed; synthetic credential
+submission/cookies/CSRF and Grant/Receipt stay out of retained output. Generated
+P05 fixtures are new Windows temp only, exact literal manifests, no user files.
+
+Qualification-only HTTP bridge is registered manually by the test, not scanned
+or included in production package; ordinary Server SecurityFilterChain/CSRF/
+SessionService establish context. It invokes actual TransferGrantService and
+TransferReceiptService, no raw/client ActorId, product role or product API added.
+Owner fixture limits exact Actor/Organization/fixture/Vault/Gateway/scope.
+The allocation oracle reads the exact newly owned Gateway private binding file,
+then compares its allocated LocationId with independently verified Receipt.
+This is explicitly a same-host **test-controlled allocation**, not qualification
+of a production distributed allocation-discovery protocol or Server Vault access.
+No permissive owner default and no client-selected storage path.
+
+Node sends actual P05 bytes directly over Gateway HTTPS; Server receives only
+metadata/control/Receipt. Both sizes must yield real signed Receipt and exact
+Server relational custody + stored full size/digest. Lost status response/retry
+resolves identical Receipt; repeated Server accept must retain one Audit/outcome.
+Ordinary login/logout and post-logout401 required. JUnit independently verifies
+Adapter files and relational companions before claiming PASS. No success from
+client preparation or status alone.
+
+On success/failure terminate only owned Gateway/Server/tunnel before exact marked
+schema cleanup; retain DB/private run evidence/candidate bytes for review. Remove
+only the newly generated ready.json credential handoff; keep historical roots.
+Unexpected hashes/graph/target/TLS STOP, ordinary first-party defects repaired in
+prospective fresh sources/roots preserving failed attempts. Other T034 matrices
+remain open; this first qualification does not close all F05.
