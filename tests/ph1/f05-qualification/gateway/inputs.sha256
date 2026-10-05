@@ -1,0 +1,4 @@
+cf25ca400feb53b74b0c9f3729690b6fa14b62dceea03567062dab950372c602  apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java
+4e83134f35e36b31681184d40958015cdabd3b241cf21c72a24a58b93c7f2c3b  apps/gateway/src/test/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapterTest.java
+f5a1a39889dba34620b787d170b693a673684353ee2d5681749027128b6d8052  tests/ph1/f05-qualification/gateway/README.md
+cbf77365b91cd6d2fc2c774b1e0a818d92b810010aa850bb78c9bac8dc8c72cd  tests/ph1/f05-qualification/gateway/run-adapter.sh
