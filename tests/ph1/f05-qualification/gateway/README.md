@@ -42,3 +42,12 @@ Retry RED3dfad5448645c09df1332da27a2338aa294d3247 reached CHANGED_RETRY_FALSE_SU
 private loge0c9719bc438edf265bbccdb392ad83bc496fe64dff46125b00c194d43814077.
 Fresh adapter-green-02 checks supplied retry bytes against immutable size/digest even when a
 completed object exists. Discard input verification output, never overwrite completed bytes.
+
+Retry GREEN a441213ac765af9c2f6d3dbde5e76424d77a5988:2/2, private log
+0e8ddffb02b89e983c164b9f9b57a5d87933590b47775e5ef90c78eccee13c18.
+Fresh adapter-green-03 qualifies existing guard behavior (no manufactured RED): eight grouped
+cases covering read/completion, retry/changed input, short/extra size, digest mismatch,
+midstream IOException with no completion/staging residue, noncanonical root, symlinked root/
+staging, invalid identity. All synthetic files/symlinks are under the exact new owned target;
+symlink destination is its own outside-test sibling, not a company path. Retain privately.
+No hostile same-user race, power-loss durability, full Gateway/range/Receipt qualification claim.

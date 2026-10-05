@@ -29,6 +29,41 @@ public class FilesystemVaultAdapterTest {
         try(var input=adapter.read(result)) {
             if(!Arrays.equals(bytes,input.readAllBytes()))throw new AssertionError("Retry rewrote immutable bytes");
         }
-        System.out.println("ADAPTER_TRACER=PASS; CASES=2");
+        // Size/digest refusal must never make a completed object readable.
+        UUID shortId=UUID.randomUUID(),shortLocation=UUID.randomUUID();
+        refuse(()->adapter.store(shortId,shortLocation,1024,result.digest(),new ByteArrayInputStream(new byte[1023])));
+        refuse(()->adapter.read(new FilesystemVaultAdapter.Completed(shortId,shortLocation,1024,result.digest())));
+        refuse(()->adapter.store(UUID.randomUUID(),UUID.randomUUID(),1024,result.digest(),new ByteArrayInputStream(new byte[1025])));
+        UUID wrongId=UUID.randomUUID(),wrongLocation=UUID.randomUUID();
+        refuse(()->adapter.store(wrongId,wrongLocation,1024,result.digest(),new ByteArrayInputStream(changed)));
+        refuse(()->adapter.read(new FilesystemVaultAdapter.Completed(wrongId,wrongLocation,1024,result.digest())));
+        UUID interrupted=UUID.randomUUID(),interruptedLocation=UUID.randomUUID();
+        refuse(()->adapter.store(interrupted,interruptedLocation,1024,result.digest(),new InputStream(){
+            boolean first=true;
+            @Override public int read() throws IOException {throw new IOException("SYNTHETIC_INTERRUPTION");}
+            @Override public int read(byte[] b,int off,int len) throws IOException {
+                if(!first)throw new IOException("SYNTHETIC_INTERRUPTION");first=false;
+                Arrays.fill(b,off,off+128,(byte)0);return 128;
+            }
+        }));
+        refuse(()->adapter.read(new FilesystemVaultAdapter.Completed(interrupted,interruptedLocation,1024,result.digest())));
+        try(var files=Files.list(root.resolve("staging"))) {
+            if(files.findAny().isPresent())throw new AssertionError("Failure left staging/lock residue");
+        }
+        // Typed identity prevents traversal; reject noncanonical and symlinked configured paths.
+        refuse(()->new FilesystemVaultAdapter(root.resolve("objects/../")));
+        Path outside=Files.createDirectory(root.getParent().resolve("outside-test"));
+        Path link=root.getParent().resolve("vault-link");Files.createSymbolicLink(link,outside);
+        refuse(()->new FilesystemVaultAdapter(link));
+        Path badRoot=Files.createDirectory(root.getParent().resolve("symlink-directory-test"));
+        Files.createSymbolicLink(badRoot.resolve("staging"),outside);
+        refuse(()->new FilesystemVaultAdapter(badRoot));
+        refuse(()->adapter.store(new UUID(0,0),UUID.randomUUID(),1024,result.digest(),new ByteArrayInputStream(bytes)));
+        System.out.println("ADAPTER_TRACER=PASS; CASES=8");
+    }
+    @FunctionalInterface interface Checked {void run() throws Exception;}
+    private static void refuse(Checked action) throws Exception {
+        try{action.run();throw new AssertionError("Expected fail-closed Adapter refusal");}
+        catch(IOException expected) { }
     }
 }
