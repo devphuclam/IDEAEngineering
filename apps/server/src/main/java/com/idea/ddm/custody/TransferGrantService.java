@@ -52,6 +52,15 @@ public final class TransferGrantService {
             try {
                 var actor = eligibility.admit(connection, context);
                 owner.require(connection, actor, scope); allocation(connection, scope);
+                operationLock(connection,scope.operationId());
+                var original=find(connection,actor,scope.operationId());
+                if(original!=null) {
+                    if(!original.scope().equals(scope) || !original.actorId().equals(actor.actorId()))
+                        throw new SecurityException("OPERATION_SCOPE_CONFLICT");
+                    eligibility.coordinateCommit(connection,context,actor,false);
+                    owner.require(connection,actor,scope);allocation(connection,scope);
+                    committing=true;connection.commit();return original;
+                }
                 long issued = clock.instant().getEpochSecond();
                 var grant = signed(new Grant(UUID.randomUUID(), UUID.randomUUID(), scope.operationId(), actor.actorId(),
                         actor.organizationId(), scope, issued, Math.addExact(issued,300), new byte[0]), issuer, audience, keyId);
@@ -79,20 +88,30 @@ public final class TransferGrantService {
             connection.setAutoCommit(false);
             try {
                 var actor = eligibility.admit(connection,context);
-                try (var query = connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? ORDER BY g.issued_at DESC,g.grant_id")) {
-                    query.setObject(1,operationId);
-                    try (var row = query.executeQuery()) {
-                        if (!row.next() || !actor.organizationId().equals(row.getObject(11,UUID.class))) throw new SecurityException("RESULT_UNAVAILABLE");
-                        var scope = new Scope(operationId,row.getObject(12,UUID.class),row.getObject(3,UUID.class),row.getObject(13,UUID.class),row.getString(14),row.getInt(15),row.getObject(16,UUID.class),row.getLong(4),row.getString(5),row.getLong(6),row.getLong(7));
-                        owner.require(connection,actor,scope); allocation(connection,scope);
-                        if (!issuer.equals(row.getString(17)) || !audience.equals(row.getString(18)) || !keyId.equals(row.getString(19))) throw new SecurityException("SIGNING_IDENTITY_UNAVAILABLE");
-                        var grant = signed(new Grant(row.getObject(1,UUID.class),row.getObject(2,UUID.class),operationId,row.getObject(10,UUID.class),row.getObject(11,UUID.class),scope,row.getTimestamp(8).toInstant().getEpochSecond(),row.getTimestamp(9).toInstant().getEpochSecond(),new byte[0]),issuer,audience,keyId);
-                        eligibility.coordinateCommit(connection,context,actor,false); owner.require(connection,actor,scope);
-                        connection.commit(); return grant;
-                    }
-                }
+                var grant=find(connection,actor,operationId);
+                if(grant==null)throw new SecurityException("RESULT_UNAVAILABLE");
+                eligibility.coordinateCommit(connection,context,actor,false);
+                owner.require(connection,actor,grant.scope());allocation(connection,grant.scope());
+                connection.commit();return grant;
             } catch (Exception failure) { connection.rollback(); throw new IllegalStateException("RESULT_UNAVAILABLE",failure); }
         } catch (SQLException failure) { throw new IllegalStateException("RESULT_STORAGE_UNAVAILABLE",failure); }
+    }
+    private Grant find(Connection connection,OwnerSessionEligibility.EligibleActor actor,UUID operationId) throws Exception {
+        try(var query=connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? ORDER BY g.issued_at DESC,g.grant_id DESC LIMIT 1")) {
+            query.setObject(1,operationId);try(var row=query.executeQuery()) {
+                if(!row.next())return null;
+                if(!actor.organizationId().equals(row.getObject(11,UUID.class)))throw new SecurityException("RESULT_UNAVAILABLE");
+                var scope=new Scope(operationId,row.getObject(12,UUID.class),row.getObject(3,UUID.class),row.getObject(13,UUID.class),row.getString(14),row.getInt(15),row.getObject(16,UUID.class),row.getLong(4),row.getString(5),row.getLong(6),row.getLong(7));
+                owner.require(connection,actor,scope);allocation(connection,scope);
+                if(!issuer.equals(row.getString(17)) || !audience.equals(row.getString(18)) || !keyId.equals(row.getString(19)))throw new SecurityException("SIGNING_IDENTITY_UNAVAILABLE");
+                return signed(new Grant(row.getObject(1,UUID.class),row.getObject(2,UUID.class),operationId,row.getObject(10,UUID.class),row.getObject(11,UUID.class),scope,row.getTimestamp(8).toInstant().getEpochSecond(),row.getTimestamp(9).toInstant().getEpochSecond(),new byte[0]),issuer,audience,keyId);
+            }
+        }
+    }
+    private static void operationLock(Connection connection,UUID operationId) throws SQLException {
+        try(var query=connection.prepareStatement("SELECT pg_advisory_xact_lock(?)")) {
+            query.setLong(1,operationId.getMostSignificantBits()^operationId.getLeastSignificantBits());query.execute();
+        }
     }
     private Grant signed(Grant grant, String issuer, String audience, String keyId) throws Exception {
         return new Grant(grant.grantId(),grant.transferId(),grant.operationId(),grant.actorId(),grant.organizationId(),grant.scope(),grant.issuedAt(),grant.expiresAt(),GrantEnvelope.sign(grant,key,issuer,audience,keyId));

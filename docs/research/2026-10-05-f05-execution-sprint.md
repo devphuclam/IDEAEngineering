@@ -54,3 +54,20 @@ issue under the original OperationId (unique operation storage cannot permit a s
 Required GREEN: original Grant/Transfer/frame and one issuance Audit, no duplicate original
 state. No source/migration/dependency expansion. Concurrency/conflict follow vertically, not
 prewritten bulk speculative implementation. Original attempt preserved and no in-place repair.
+
+## G04 retry GREEN packet
+
+G04 genuine RED at `aa811ef401bbc1b5062ed66517f9ac1ed601f092`: 5 tests / 1 error,
+duplicate `transfer_record_operation_id_key` on identical retry, after lost-response lookup
+succeeded. Schema `f05_d30be7e5ce994aae9cfd28ff9bc456cb` exact cleanup COMPLETE.
+Private log hash `d06fc28d16c0d336ccc4b6d12cfee419a594633e6b487c244219eb4601906b87`.
+G03 preceding source `4187790e9b6933e883672eb539f5d4b4445ac69e` 4/4 PASS,
+schema `f05_6445de5abb7548358a40d79e6b70f873`, exact cleanup COMPLETE; log
+`c2a865b07a60a4d4293f91869133aa3264964ad15f90b95f46a453935515e21a`.
+Both full raw local/remote source and admitted postflight hashes PASS, DB retained.
+
+Fresh G04 GREEN target `run-g04-green-01/source`, expected 5/5. Minimum service acquires
+transaction-scoped OperationId arbitration, resolves stored full original scope, refuses changed
+immutable scope/Actor and returns original without reinsert/Audit duplication. Current IAM and
+explicit owner/allocation decision are rechecked before returning. No schema/tool/input changes.
+Concurrency and conflict coverage is not inferred until its own successor test execution.
