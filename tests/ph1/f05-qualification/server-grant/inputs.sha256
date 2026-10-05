@@ -56,7 +56,7 @@ c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/sr
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 82931e01c2e997ee4c3d700b7010645f853ef2f7ad44f5b7bbeac1f7b489b030  apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java
 3f2d3dd7e696355ab791110dfc116f2a7ca0138e6ea75b763136bb216fd81064  apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java
-6b836fba52716aed589dcdf17547189e507befa8af0a2e23c61036d81b7c3c47  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
+b05f0d42dfbc13bc0dd9733e14fb8f249513d2ff1d5f6270fb6e291cc9d4ed04  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 5142ca313ca13971c75a961ae5975dbd93eeb5f03b9c33d8ce8aa5dd41b71afe  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
