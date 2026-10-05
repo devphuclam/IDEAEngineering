@@ -64,7 +64,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 edcbdcefa65c07fe11dc7eba7f30008a9a28598f4539754f5ba3c75830c88658  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 63dd8d1f3764bd00f136b15b4ed03a15648b08e8375aab0cbc678aaaadf4803b  apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java
-ffa4f61c548965bb745756bc29b7fce1e16b4f4065142bf84510b839d34ea237  apps/server/src/test/java/com/idea/ddm/identity/TransferClientBoundaryTest.java
+8616664485d72af5eb7a4e19f85f1fe53b4981f40e9a34c53ec322b4e94225ec  apps/server/src/test/java/com/idea/ddm/identity/TransferClientBoundaryTest.java
 2e08d303e06f4808e3a3fcb7b8a15aa51c5f008d0b0565a560d7ad94e229ff38  apps/server/src/test/java/com/idea/ddm/operation/F04PredecessorMigrationTest.java
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
@@ -92,10 +92,10 @@ ca1ca366f8dd7b73c5a1e813929f61a54286f544cf9a451011954ea1702a897d  tests/ph1/f05-
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
-379e9469b187b6b6bad0a39c38625f3c09f2d9a0fa09cc5e81eef0fe1e3598ed  tests/ph1/f05-qualification/server-grant/run-slice.sh
+a884927930da40437c8a873bfa89af2850383325c7d87c678adb175f823f22cb  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
-c8cd52ab36221bc37303adf2788d375244d9273bf86db1c4b4d9aa725c772656  tests/ph1/transfer-smoke/client-e2e.mjs
+2bdac7a4a7b896820f0622c7d4cd5ff078c3d034571307b555f44472df2b08dc  tests/ph1/transfer-smoke/client-e2e.mjs
 3a089fde81155af15dda117b49150bf5f7997607b2b682b65d7e3881c24599d5  tests/ph1/transfer-smoke/client-transfer.mjs
 741c59cde3c2dcf1f96b3bb573300d4016aee3ca6c484f2e558fde4e9feadbb7  tests/ph1/transfer-smoke/client-transfer.test.mjs
-bf1a0c8b6ad4c60feed9a623f6a90192444bfbda6fc44e758c5fe2249d0f8a4a  tests/ph1/transfer-smoke/README.md
+58f30614f5aee734fb8c365f821318691a95b7ae1863cc145ddb3bf3c75c8de9  tests/ph1/transfer-smoke/README.md
 4ebb0eae6147d7d5cd7a238b6791535478160c3623239e8b432bf31c00e34c70  tools/p05-fixtures/generate-fixtures.mjs
