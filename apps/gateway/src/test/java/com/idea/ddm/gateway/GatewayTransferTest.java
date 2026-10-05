@@ -85,11 +85,12 @@ public final class GatewayTransferTest {
         var expiredSigner=new TransferReceiptSigner(gatewayKeys.getPrivate(),"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1",Clock.fixed(Instant.ofEpochSecond(T+300),ZoneOffset.UTC));
         refuse(()->expiredSigner.sign(grant,completed,vault,UUID.randomUUID()));
         var serviceRoot=java.nio.file.Files.createDirectory(java.nio.file.Path.of(args[0]).getParent().resolve("gateway-state"));
+        var serviceFields=fields();serviceFields.put(7,uuid(UUID.randomUUID()));byte[] serviceWire=signed(serviceFields,keys.getPrivate());
         var service=new GatewayTransferService(verifier,receiptSigner,adapter,vault,serviceRoot);
-        var serviceResult=service.upload(wire,0,1024,"5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",new ByteArrayInputStream(new byte[1024]));
+        var serviceResult=service.upload(serviceWire,0,1024,"5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",new ByteArrayInputStream(new byte[1024]));
         if(serviceResult.verifiedBytes()!=1024||serviceResult.receipt()==null)throw new AssertionError("Gateway did not complete verified bytes");
         var reopened=new GatewayTransferService(verifier,receiptSigner,adapter,vault,serviceRoot);
-        var resolved=reopened.status(wire);
+        var resolved=reopened.status(serviceWire);
         if(resolved.verifiedBytes()!=1024||!Arrays.equals(serviceResult.receipt(),resolved.receipt()))throw new AssertionError("Lost response did not resolve exact original Receipt");
         System.out.println("GATEWAY_TRACER=PASS; CASES=20");
     }
