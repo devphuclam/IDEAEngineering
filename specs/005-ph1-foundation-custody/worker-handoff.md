@@ -398,6 +398,33 @@ Document Check-in/Generation publication, a second Vault, replication and failov
 
 ## End each work session
 
+### Current T028/T030 continuation — 2026-10-05
+
+This dated current receipt supersedes older current-state handoff wording for this slice only.
+T027 remains COMPLETE/PASS. Exact Server graph/rights/input gate is OPEN under the bounded
+T028/T030 process authority, not the historical T027 exception. Database creation was completed
+by the human and independently checked: `idea_ddm_f05a_20261005_t028`, migrator owner, empty
+public schema, app without database/public CREATE. No role/credential creation or old DB reuse.
+
+G01 genuine behavioral RED source `6fa424aec8bd0aa58648c5c26320d348af97fdc7` reached
+`GRANT_ISSUANCE_NOT_IMPLEMENTED` after real HTTP sign-in and V1–V8. Minimum G01 GREEN source
+`1b7df9233593d40cd5c1a146bdfa0209590fee51` passed 1/1, with additive immutable typed V9 Grant
+scope. [G01 packet/receipt](../../docs/research/2026-10-05-f05a-g01-green-packet.md).
+
+G01+G02 executed source `b0acf19f18458e0baaa1c99b31fc8aa2f87741bc`: 3/3 PASS, zero failures/
+errors/skips. G02 qualifies existing guards; it does not manufacture a missing-behavior RED.
+[G02 packet/receipt](../../docs/research/2026-10-05-f05a-g02-qualification-packet.md) retains
+exact source/hash/command/schema/log/cleanup and scope limitations. Owned Servers stopped and
+only their exact marked schemas were removed; database retained. No preview/Gateway action.
+
+Next: G03 product-issued codec negatives, then G04 same-operation arbitration/conflict, G05
+controlled expiry/explicit renewal, G06 authoritative-commit/failure and affected migration/IAM
+regressions. Publish exact fresh-source manifest/target before each execution. Keep T028/T030
+unchecked until their evidence is sufficient; Receipt residual means whole T028 cannot close
+on this Grant slice. PR #38 Draft/Open, Issue #37 Open, F05-A incomplete, verifier NOT-RUN.
+No timer restart/Tracker action, merge or new human approval is required merely to continue
+within the existing exact authorization. Historical failure/intake records remain unchanged.
+
 Follow [quickstart](quickstart.md) for evidence: exact source revision (plus dirty-state disclosure),
 environment, command, expected/actual result and output. Record tests failing for the intended
 missing behavior before implementation, then passing afterward. Name remaining tasks and next action.

@@ -51,3 +51,30 @@ Server before exact schema marker/owner cleanup; retain DB and all prior attempt
 STOP unexpected failures/drift/targets, preserve raw result and do not dynamically repair.
 No public migration, Gateway/T029/T031/Receipt/T032+, preview/TLS, download/install, verifier,
 timer/Tracker or merge; PR #38 Draft/Open; T028/T030/F05-A incomplete.
+
+## Executed result — existing guard qualification PASS
+
+Pushed/executed source `b0acf19f18458e0baaa1c99b31fc8aa2f87741bc`.
+Local/remote raw manifest **77/77 PASS**; identical archive SHA-256
+`5a9e39d2b657267e63f881b857b5a3fe0465dd1ca985a8aa36ccdb7dafb73434`;
+manifest `c5561cee5593f5548d3b9ba702bc1aedb91d4983bf4ac2c1181425d8c98616a4`.
+Direct offline Maven BUILD SUCCESS: **3 tests / 0 failures / 0 errors / 0 skipped**.
+G01 remains PASS, both G02 methods PASS on first qualification; no production change was
+needed or manufactured. These are not a new RED→GREEN claim for the already-present guards.
+
+Actual fresh schema `f05_9e32a75b94ae42f79c6c6032a66ef0b4`; migration count **9**.
+Server JVM exited; exact marked schema cleanup COMPLETE; approved database retained.
+After run: controlled source 77, inventory 456, Maven core 52 and 695 observed cached paths
+PASS. No graph drift/download, provider substitution or lifecycle/Web execution was observed.
+This observed-path check does not claim comprehensive class-level tracing of every load.
+
+Host-private Maven log SHA-256
+`ff4150dca33ed216b7bc99cad3e5b846f59b3bc7b0b95eab6b42b614e4d53e96`;
+preflight `237209a55e494353cc87a6318778ad464401a766b43425b14a1d2e10a9419166`;
+postflight `8f12422d344f14cda835c0b11c425df3adb65d42ad73a40d2244e483d0785e5a`.
+Retained logs are under the exact owned target parent. Independent raw-log access remains
+limited; public hashes identify files and do not substitute for their independent review.
+
+Next executable unit: **G03** product-issued frozen codec integration negative cases, followed
+vertically by G04 idempotency/concurrency, G05 controlled expiry/explicit renewal, G06 commit/
+failure and affected migration/IAM regressions. Whole T028/T030/F05-A remains incomplete.
