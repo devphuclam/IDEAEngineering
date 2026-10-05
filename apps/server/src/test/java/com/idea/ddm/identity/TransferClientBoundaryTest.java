@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 /** Actual Windows client coordination, confined to test classes and a marked schema. */
 class TransferClientBoundaryTest {
-    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-28/source/apps/server/target/client-e2e-01");
+    static final Path ROOT=Path.of("/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-29/source/apps/server/target/client-e2e-01");
     static final Path JDK=Path.of("/opt/idea/tools/jdk-25.0.4.1+1");
     static final Path GATEWAY=Path.of("/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar");
     static final UUID VAULT=UUID.randomUUID(), GATEWAY_ID=UUID.randomUUID();

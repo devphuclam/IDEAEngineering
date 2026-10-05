@@ -160,3 +160,12 @@ Max-Age0, Path=/, Secure, Domain present, HttpOnly, SameSiteStrict. No cookie va
 or header is output. This prospectively published diagnostic distinguishes the
 exact ordinary deletion attributes before any further parser change. Same full
 flow/oracles, fresh root28; no historical PASS inferred and no product changes.
+
+Fresh29 repairs the now-explained deletion: cached Tomcat11.0.24 bytecode
+Rfc6265CookieProcessor emits ANCIENT_DATE for MaxAge0 without a Max-Age attribute;
+CookieProcessorBase defines that date as Thu,01Jan1970 00:00:10GMT. Client accepts
+that exact Expires form only when no competing Max-Age is present and all existing
+known-empty-host-only-Secure-Path=/ deletion guards hold. It never creates a proof.
+Safe observed flags at28 were1_1_1_0_1_1_0_0_1, matching synthetic regression RED
+bc98ca0 (5 PASS/1 FAIL), GREEN1ac6997 (6/6). Same published full flow, fresh29,
+same101-input preflight and all package/TLS/bytes/custody/shutdown oracles.
