@@ -27,3 +27,10 @@ the original Grant window. It must refuse replacement of exact committed evidenc
 the original packet remains resolvable. Expected assertion RECEIPT_EVIDENCE_REPLACEMENT_ACCEPTED.
 Green-011/1 is minimum tracer evidence, not full T032. Source/manifest re-publication is
 required before the successor run. No migration/code dynamically changed during execution.
+
+Actual receipt-red-03 source80802a18f42ec0fff3ba1800b3f33900e2447963 reached the changed
+evidence acceptance assertion;2 tests/1 failure. Private log278c92559dfa8e06bfb2e795fa1c28b53fe0f28833ef0a154a68ac562775ec6b.
+Fresh receipt-green-02 adds V10 retained exact frame hash/Grant/Receipt/Transfer binding,
+append-only runtime rights and one accepted evidence row per Transfer; no bearer frame retained
+in evidence table, no V1–V9 changes. Same2-test oracle, existing approved DB/fresh schema.
+Remaining migration regression/negative/atomicity/concurrency matrix is not inferred complete.

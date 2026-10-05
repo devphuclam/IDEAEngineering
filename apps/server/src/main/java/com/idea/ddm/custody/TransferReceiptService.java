@@ -26,12 +26,14 @@ public final class TransferReceiptService {
         this.clock=Objects.requireNonNull(clock);this.gatewayKey=Objects.requireNonNull(gatewayKey);this.issuer=Objects.requireNonNull(issuer);this.audience=Objects.requireNonNull(audience);this.keyId=Objects.requireNonNull(keyId);
     }
     public Accepted accept(ActorContext context,byte[] receipt) {
+        receipt=Objects.requireNonNull(receipt).clone();
         boolean committing=false;
         try(var c=source.getConnection()){
             c.setAutoCommit(false);
             try{
                 var actor=eligibility.admit(c,context);
                 var f=ReceiptEnvelope.verify(receipt,gatewayKey,issuer,audience,keyId,clock);
+                String frameHash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(receipt));
                 UUID operation=ReceiptEnvelope.uuid(f.get(7)),grantId=ReceiptEnvelope.uuid(f.get(6)),receiptId=ReceiptEnvelope.uuid(f.get(5));
                 try(var lock=c.prepareStatement("SELECT pg_advisory_xact_lock(?)")){lock.setLong(1,operation.getMostSignificantBits()^operation.getLeastSignificantBits());lock.execute();}
                 TransferGrantService.Scope scope;UUID transfer;long issued,expires;String grantState;
@@ -52,10 +54,11 @@ public final class TransferReceiptService {
                 var allocation=allocation(c,actor,scope,location);
                 var accepted=new Accepted(operation,transfer,receiptId,scope.objectId(),scope.vaultId(),location);
                 boolean original=false;
-                try(var q=c.prepareStatement("SELECT r.receipt_id,l.location_id,l.artifact_id,l.adapter_key FROM transfer_receipt r JOIN artifact_location l USING(receipt_id) WHERE r.transfer_id=?")){
+                try(var q=c.prepareStatement("SELECT r.receipt_id,l.location_id,l.artifact_id,l.adapter_key,e.signed_frame_sha256,e.grant_id FROM transfer_receipt r JOIN artifact_location l USING(receipt_id) JOIN transfer_receipt_evidence e USING(receipt_id) WHERE r.transfer_id=?")){
                     q.setObject(1,transfer);try(var r=q.executeQuery()){
                         if(r.next()){
-                            if(!receiptId.equals(r.getObject(1,UUID.class))||!location.equals(r.getObject(2,UUID.class))||!scope.objectId().equals(r.getObject(3,UUID.class))||!allocation.adapterKey().equals(r.getString(4))||r.next())throw new SecurityException("RECEIPT_RESULT_CONFLICT");
+                            if(!receiptId.equals(r.getObject(1,UUID.class))||!location.equals(r.getObject(2,UUID.class))||!scope.objectId().equals(r.getObject(3,UUID.class))||!allocation.adapterKey().equals(r.getString(4))
+                                    ||!frameHash.equals(r.getString(5))||!grantId.equals(r.getObject(6,UUID.class))||r.next())throw new SecurityException("RECEIPT_RESULT_CONFLICT");
                             original=true;
                         }
                     }
@@ -63,6 +66,7 @@ public final class TransferReceiptService {
                 if(!original){
                     if(!"ISSUED".equals(grantState))throw new SecurityException("GRANT_NOT_ELIGIBLE_FOR_CUSTODY");
                     require(c,"INSERT INTO transfer_receipt(receipt_id,transfer_id,operation_id,vault_id,direction,accepted_byte_count,digest_algorithm,accepted_digest,verification_status) VALUES (?,?,?,?,'UPLOAD',?,'SHA-256',?,'VERIFIED')",receiptId,transfer,operation,scope.vaultId(),scope.byteCount(),scope.digest());
+                    require(c,"INSERT INTO transfer_receipt_evidence(receipt_id,transfer_id,grant_id,signed_frame_sha256,contract_version) VALUES (?,?,?,?,1)",receiptId,transfer,grantId,frameHash);
                     try(var q=c.prepareStatement("SELECT byte_count,digest_value,digest_algorithm FROM artifact WHERE artifact_id=?")){
                         q.setObject(1,scope.objectId());try(var r=q.executeQuery()){
                             if(r.next()){if(r.getLong(1)!=scope.byteCount()||!scope.digest().equals(r.getString(2))||!"SHA-256".equals(r.getString(3)))throw new SecurityException("ARTIFACT_IMMUTABLE_CONFLICT");}
