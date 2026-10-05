@@ -51,7 +51,8 @@ class ReceiptBoundaryTest {
         try(var c=F05DatabaseFixture.open("migration");var q=c.prepareStatement("INSERT INTO vault_endpoint(vault_id,adapter_kind,eligibility) VALUES (?,'FILESYSTEM','ELIGIBLE')")){q.setObject(1,scope.vaultId());assertEquals(1,q.executeUpdate());}
         var generator=KeyPairGenerator.getInstance("Ed25519","SunEC");var server=generator.generateKeyPair();var gateway=generator.generateKeyPair();
         TransferGrantService.OwnerAdmission admission=(c,a,s)->{if(!a.actorId().equals(actor.actorId())||!a.organizationId().equals(actor.organizationId())||!s.equals(scope))throw new SecurityException("OWNER_REFUSED");};
-        var grant=new TransferGrantService(fixture.app(),fixture.eligibility(),admission,clock,server.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1").issue(actor.context(),scope);
+        var issueClock=Clock.fixed(clock.instant().minusSeconds(1),ZoneOffset.UTC);
+        var grant=new TransferGrantService(fixture.app(),fixture.eligibility(),admission,issueClock,server.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1").issue(actor.context(),scope);
         var service=new TransferReceiptService(fixture.app(),fixture.eligibility(),(c,a,s,l)->{
             admission.require(c,a,s);if(!location.equals(l))throw new SecurityException("ALLOCATION_REFUSED");return new TransferReceiptService.Allocation(scope.vaultId(),location,grant.transferId()+"-"+location+".blob");
         },clock,gateway.getPublic(),"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1");
