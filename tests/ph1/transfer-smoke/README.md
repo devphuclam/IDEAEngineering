@@ -256,3 +256,10 @@ ranges; Server verifies returned canonical Receipt and one custody/Audit. This
 is an intentionally dropped response body, not a mocked Gateway response or a
 claim that Server commit was inferred from the lost response. Same full37 matrix,
 fresh root38/published101 inputs; application/Gateway/dependency code unchanged.
+
+Fresh receipt-red-39 runs ReceiptBoundaryTest (7 cases): an owner-boundary fixture
+replaces its physical allocation between admission and commit. Expected RED is
+acceptance despite drift; required GREEN is RECEIPT_NOT_COMMITTED, zero custody/
+receipt/Audit, then successful stable retry of the same operation. No new owner
+protocol, permission, schema, dependency or listener. Same offline direct goals,
+101-input manifest and owned schema cleanup rules as prior Receipt packets.
