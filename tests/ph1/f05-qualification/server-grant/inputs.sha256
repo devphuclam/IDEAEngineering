@@ -36,7 +36,7 @@ fba3721249067b0351e4a04bb57d1c393569dd9fd0e3b9d19183942563899e8c  apps/server/sr
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/src/main/resources/third-party/swagger-ui/LICENSE.txt
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
 82931e01c2e997ee4c3d700b7010645f853ef2f7ad44f5b7bbeac1f7b489b030  apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java
-5594a89938ea921c2597b44c32c104d3e9b5aa491f914042dafcf4138be46d70  apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java
+bfcab15194c0582c41057ba53862cbaf99ce05a406f03bd4f806fb20d4bf9b1c  apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java
 55dab9a9c71c7f22ed83b421b9b763aed5e88ee6fbfee9e2bb64352b24c62725  apps/server/src/test/java/com/idea/ddm/DataBaselineTest.java
 4e897ff857a1f67302279e10406127fb3b55f33cd08944cd3d94c081bc3a104a  apps/server/src/test/java/com/idea/ddm/DatabasePrivilegeAssertions.java
 bfd590e4f09502d4dda3c6c8c8b16dbf40a9cd284bdc9b06adfce4833cd64de6  apps/server/src/test/java/com/idea/ddm/DatabasePrivilegeTest.java
@@ -66,7 +66,7 @@ e48fb8c27607ac29db99a168e6b3097b0de6afde3d5a3ef2fd4de2406d572eeb  docs/research/
 036afc60a252566bcdf72c4026d160bd31c27c477645c2f626aa61588f6039ca  docs/research/inventories/f05a-t028-t030-resolved-inputs.tsv
 07403aaa07995d08354d70bdc108d535c781508ba24ddf36f57d4257a17c3f03  docs/research/inventories/f05a-t028-t030-server-rights.tsv
 94b2490d958c56c0f0b5e9368bc18464bb8c3a2241d2191513759ee4f55b03a6  docs/research/inventories/f05a-t028-t030-tool-rights.tsv
-34cede5d6573e5f9b47c6e1635358464623ad450ccf5fd6535a1d5fbd67f5377  tests/ph1/f05-qualification/server-grant/ExecutionPreflight.java
+9e29b8be27b614a7bbaef16477dbeaa6019c541842b3502b961d58249c9d8219  tests/ph1/f05-qualification/server-grant/ExecutionPreflight.java
 274003edb8d8662e6ede0e16c126f880c88c8c139ef71d8113258bb91e8db3f2  tests/ph1/f05-qualification/server-grant/GraphAudit.java
 96eee0eba5b298024f5189917c822992f0107bf4496514f4d917cfaee814da03  tests/ph1/f05-qualification/server-grant/LegalAudit.java
 f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d  tests/ph1/f05-qualification/server-grant/MaterialAudit.java
@@ -74,4 +74,5 @@ f3fa08bd8015276191bf3b9ac3b93c17140024c97eac00678bc59e12aae7914d  tests/ph1/f05-
 df19058c686a2969e87851e8882be144ec473259026e2efa5edddc44eaccf768  tests/ph1/f05-qualification/server-grant/run-compile-red.sh
 c67d0a5c6623b398d4d14c6f9191e52e0b584386e1a8f652da303c102c5eb751  tests/ph1/f05-qualification/server-grant/run-g01-green.sh
 21603d782ea7b0aa80ff5ea38373eb463a76e1978361fd9121d5cd304ee37dd8  tests/ph1/f05-qualification/server-grant/run-g02-qualification.sh
+e4cd6d65b8a600ccd137157e16d537feb4ed281a1c1a2c33b03e2dff353cc075  tests/ph1/f05-qualification/server-grant/run-slice.sh
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
