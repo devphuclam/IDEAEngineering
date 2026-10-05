@@ -28,7 +28,9 @@ public final class TransferGrantService {
         public Grant { frame = frame.clone(); }
         @Override public byte[] frame() { return frame.clone(); }
         @Override public String toString() { return "TransferGrant[redacted]"; }
-        public boolean validAt(Instant instant) { throw new UnsupportedOperationException("GRANT_VALIDITY_NOT_IMPLEMENTED"); }
+        public boolean validAt(Instant instant) {
+            long now=Objects.requireNonNull(instant).getEpochSecond();return now>=issuedAt && now<expiresAt;
+        }
     }
     @FunctionalInterface
     public interface OwnerAdmission {
@@ -58,6 +60,7 @@ public final class TransferGrantService {
                 if(original!=null) {
                     if(!original.scope().equals(scope) || !original.actorId().equals(actor.actorId()))
                         throw new SecurityException("OPERATION_SCOPE_CONFLICT");
+                    if(!original.validAt(clock.instant()))throw new SecurityException("GRANT_EXPIRED_EXPLICIT_RENEWAL_REQUIRED");
                     eligibility.coordinateCommit(connection,context,actor,false);
                     owner.require(connection,actor,scope);allocation(connection,scope);
                     committing=true;connection.commit();return original;
@@ -98,10 +101,36 @@ public final class TransferGrantService {
         } catch (SQLException failure) { throw new IllegalStateException("RESULT_STORAGE_UNAVAILABLE",failure); }
     }
     public Grant renew(ActorContext context,UUID operationId) {
-        throw new UnsupportedOperationException("GRANT_RENEWAL_NOT_IMPLEMENTED");
+        boolean committing=false;
+        try(var connection=source.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                var actor=eligibility.admit(connection,context);operationLock(connection,operationId);
+                var original=find(connection,actor,operationId);
+                if(original==null || !original.actorId().equals(actor.actorId()))throw new SecurityException("RESULT_UNAVAILABLE");
+                var scope=original.scope();owner.require(connection,actor,scope);allocation(connection,scope);
+                long issued=clock.instant().getEpochSecond();
+                var renewed=signed(new Grant(UUID.randomUUID(),original.transferId(),operationId,original.actorId(),original.organizationId(),
+                        scope,issued,Math.addExact(issued,300),new byte[0]),issuer,audience,keyId);
+                insert(connection,"UPDATE transfer_grant SET status=? WHERE grant_id=? AND status='ISSUED'",
+                        original.validAt(clock.instant())?"REVOKED":"EXPIRED",original.grantId());
+                insert(connection,"INSERT INTO transfer_grant(grant_id,transfer_id,operation_id,vault_id,direction,expected_byte_count,digest_algorithm,expected_digest,allowed_byte_start,allowed_byte_end,issued_at,expires_at,status) VALUES (?,?,?,?,'UPLOAD',?,'SHA-256',?,?,?,?,?,'ISSUED')",
+                        renewed.grantId(),renewed.transferId(),operationId,scope.vaultId(),scope.byteCount(),scope.digest(),scope.rangeStart(),scope.rangeEnd(),
+                        Timestamp.from(Instant.ofEpochSecond(issued)),Timestamp.from(Instant.ofEpochSecond(renewed.expiresAt())));
+                insert(connection,"INSERT INTO transfer_grant_scope(grant_id,transfer_id,actor_id,organization_id,correlation_id,gateway_id,endpoint,object_kind,object_id,issuer,audience,signing_key_id,contract_version) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,1)",
+                        renewed.grantId(),renewed.transferId(),actor.actorId(),actor.organizationId(),scope.correlationId(),scope.gatewayId(),scope.endpoint(),scope.objectKind(),scope.objectId(),issuer,audience,keyId);
+                AuditEvidenceRepository.append(connection,new AuditEvidenceRepository.Entry(UUID.randomUUID(),operationId,actor.actorId(),
+                        "transfer.grant.renew","TransferGrant",renewed.grantId().toString(),"ACCEPTED",null,scope.correlationId().toString()));
+                eligibility.coordinateCommit(connection,context,actor,true);owner.require(connection,actor,scope);allocation(connection,scope);
+                committing=true;connection.commit();return renewed;
+            } catch(Exception failure) {
+                try{connection.rollback();}catch(SQLException rollback){failure.addSuppressed(rollback);}
+                throw new IllegalStateException(committing?"GRANT_COMMIT_OUTCOME_UNCERTAIN":"GRANT_NOT_COMMITTED",failure);
+            }
+        }catch(SQLException failure){throw new IllegalStateException("GRANT_STORAGE_UNAVAILABLE",failure);}
     }
     private Grant find(Connection connection,OwnerSessionEligibility.EligibleActor actor,UUID operationId) throws Exception {
-        try(var query=connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? ORDER BY g.issued_at DESC,g.grant_id DESC LIMIT 1")) {
+        try(var query=connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? AND g.status='ISSUED' ORDER BY g.issued_at DESC,g.grant_id DESC LIMIT 1")) {
             query.setObject(1,operationId);try(var row=query.executeQuery()) {
                 if(!row.next())return null;
                 if(!actor.organizationId().equals(row.getObject(11,UUID.class)))throw new SecurityException("RESULT_UNAVAILABLE");

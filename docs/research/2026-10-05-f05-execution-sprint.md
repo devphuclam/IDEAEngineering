@@ -134,3 +134,15 @@ new GrantId/same original operation/transfer/scope are observed, old validity mu
 No host time change, no waiting 300 seconds, no schema/dependency/tool change. Run existing
 published five direct offline goals and full input/target/schema guards. Minimum GREEN only
 after observed RED; then fresh-eligibility/allocation renewal refusals and G06 follow vertically.
+
+## G05 minimum GREEN packet
+
+Observed RED source7b5339d728c91ad631c252f7f01eb5249adcc6d0, 7 tests/1 error at
+GRANT_VALIDITY_NOT_IMPLEMENTED; schema f05_7d9de25d448f4f91a4e8c353d2c4f2c0 exact cleanup
+COMPLETE; log7b449e878db952297e50515264dc28610e1cffe4e9da661a4806cf23deff9a65.
+Fresh `run-g05-green-01/source`, expected7/7. Grant validity is issued-inclusive/expiry-exclusive;
+ordinary retry after expiry refuses with explicit renewal required. Explicit renew retains original
+Operation/Transfer/full immutable scope, supersedes old status without changing old signed bytes,
+inserts fresh Grant/scope/Audit and revalidates IAM/owner/allocation before shared commit. Lookup
+selects the current ISSUED generation (an expired timestamp can still be resolved as metadata but
+is not valid); no implicit extension or Gateway progress/custody claim. V9 and graph unchanged.
