@@ -31,3 +31,9 @@ after raw4/4 local/remote PASS and successful javac. Private log SHA-256
 Archivead6a92bb733973734fb0c0580f8eec343e2182bf405e2bcc34449c8f60e05c3b.
 Fresh adapter-green-01 executes the minimum streaming/size/digest/private atomic-promotion
 implementation and same single completed-read tracer; no Gateway or custody PASS yet.
+
+Minimum1/1 GREEN a66054e4303c9618e06443ebb7c735f62b338da9, private log
+750513255e1bdd2202175e18db7721abf3695bc32a1047884c00d710b9579a4f; raw4/4 local/remote PASS.
+Next fresh adapter-red-04 adds immutable retry: identical request returns same identity/bytes,
+changed byte with same claimed digest must refuse and preserve original. Expected missing behavior
+CHANGED_RETRY_FALSE_SUCCESS; prior constructor skeleton witness remains accepted by runner.

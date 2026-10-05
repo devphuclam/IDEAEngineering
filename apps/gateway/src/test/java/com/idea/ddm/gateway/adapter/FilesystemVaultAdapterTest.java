@@ -19,6 +19,16 @@ public class FilesystemVaultAdapterTest {
         try(var input=adapter.read(result)) {
             if(!Arrays.equals(bytes,input.readAllBytes()))throw new AssertionError("Completed bytes differ");
         }
-        System.out.println("ADAPTER_TRACER=PASS; CASES=1");
+        if(!adapter.store(transfer,location,1024,result.digest(),new ByteArrayInputStream(bytes)).equals(result))
+            throw new AssertionError("Retry changed completed identity");
+        byte[] changed=bytes.clone();changed[0]=1;
+        try {
+            adapter.store(transfer,location,1024,result.digest(),new ByteArrayInputStream(changed));
+            throw new AssertionError("CHANGED_RETRY_FALSE_SUCCESS");
+        }catch(IOException expected) { /* Refusal must not rewrite the original bytes. */ }
+        try(var input=adapter.read(result)) {
+            if(!Arrays.equals(bytes,input.readAllBytes()))throw new AssertionError("Retry rewrote immutable bytes");
+        }
+        System.out.println("ADAPTER_TRACER=PASS; CASES=2");
     }
 }
