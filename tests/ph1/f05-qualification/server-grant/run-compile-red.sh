@@ -2,13 +2,18 @@
 set -euo pipefail
 set +x
 umask 077
-owned=/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-compile-red-01
+owned=/home/phuclam/idea-f05a-t028-t030-20261005-37/run-g01-compile-red-02
 source_root="$owned/source"
 [[ $# == 2 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ ]] || exit 2
 [[ $(id -un) == phuclam && $(realpath -e "$owned") == "$owned" ]] || exit 3
 [[ $(realpath -e "$source_root") == "$source_root" && ! -e "$owned/maven-private.log" ]] || exit 4
 [[ -z $(find "$source_root" -type l -print -quit) ]] || exit 5
-[[ ! -e "$source_root/apps/server/target" && ! -e "$source_root/apps/server/.mvn" && ! -e "$source_root/.mvn" ]] || exit 6
+[[ ! -e "$source_root/apps/server/target" ]] || exit 6
+for base in "$source_root" "$source_root/apps/server"; do
+  for configuration in maven.config jvm.config extensions.xml; do
+    [[ ! -e "$base/.mvn/$configuration" ]] || { printf 'STOP=UNAPPROVED_MAVEN_CONFIGURATION\n'; exit 6; }
+  done
+done
 manifest="$source_root/tests/ph1/f05-qualification/server-grant/inputs.sha256"
 [[ $(sha256sum "$manifest" | cut -d' ' -f1) == "$2" ]] || exit 7
 cd "$source_root"
