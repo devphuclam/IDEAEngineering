@@ -169,3 +169,18 @@ known-empty-host-only-Secure-Path=/ deletion guards hold. It never creates a pro
 Safe observed flags at28 were1_1_1_0_1_1_0_0_1, matching synthetic regression RED
 bc98ca0 (5 PASS/1 FAIL), GREEN1ac6997 (6/6). Same published full flow, fresh29,
 same101-input preflight and all package/TLS/bytes/custody/shutdown oracles.
+
+### Actual refusal/interruption/resume tracer30
+
+Fresh run-receipt-red-30; same preflight/tooling/DB/package/TLS/loopback/cleanup
+contract and source publication before execution. Expected client RED: after
+one verified1MiB prefix and deliberately disconnected partial second request,
+status must retain only that prefix with no Receipt. Existing uploadRanges sends
+range0 again, violating resume-only-missing verified ranges. Observe actual HTTPS
+request offsets/count, not a fake Gateway: next offset1048576,63 remaining ranges.
+No product implementation change yet. Test also qualifies existing actual
+missing-CSRF refusal, same-operation Grant response, modified signature refusal,
+wrong chunk digest with zero progress, unchanged completed retry/changed bytes,
+modified Receipt refusal and final canonical custody oracle. Inputs/frames remain
+RAM/private only. Disconnection uses admitted Node HTTPS, normal CA/endpoint
+verification, no intermediary/mock or Server byte relay. Other matrices stay open.

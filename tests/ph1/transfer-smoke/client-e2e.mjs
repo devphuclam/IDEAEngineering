@@ -1,4 +1,5 @@
-import { SecureEndpoint, uploadRanges, gatewayProgress } from './client-transfer.mjs';
+import { SecureEndpoint, uploadRanges, gatewayProgress, fileRanges } from './client-transfer.mjs';
+import https from 'node:https';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -7,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-29/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-red-30/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -45,6 +46,7 @@ try {
       headers: { ...(await csrf()), 'Content-Type': 'application/x-www-form-urlencoded' } })).status, 200);
   } finally { password.fill(0); delete fixture.password; }
   assert.equal((await server.request('/api/v1/identity/session', { method: 'GET' })).status, 200);
+  assert.equal((await server.request('/qualification/f05/grant?size=1024')).status, 403);
   stage = 'P05_GENERATION';
   const fixtures = join(root, 'p05-fixtures');
   execFileSync(process.execPath, [fileURLToPath(new URL('../../../tools/p05-fixtures/generate-fixtures.mjs', import.meta.url)),
@@ -54,11 +56,54 @@ try {
     const response = await server.request(`/qualification/f05/grant?size=${size}`, { headers: await csrf() });
     assert.equal(response.status, 200);
     const grant = JSON.parse(response.body);
+    const same = await server.request(`/qualification/f05/grant?size=${size}`, { headers: await csrf() });
+    assert.equal(same.status, 200); assert.deepEqual(JSON.parse(same.body), grant);
+    const mutated = Buffer.from(grant.frame, 'base64url'); mutated[mutated.length - 1] ^= 1;
+    const invalid = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': mutated.toString('base64url') } });
+    assert.equal(invalid.status, 403); assert.equal(invalid.body.length, 0);
+    const path = join(fixtures, name);
+    const first = (await fileRanges(path).next()).value;
+    const rangeHeaders = range => ({ 'X-IDEA-Grant': grant.frame, 'X-IDEA-Range-Start': String(range.start),
+      'X-IDEA-Range-End': String(range.end), 'X-IDEA-Chunk-SHA256': range.digest });
+    const badBytes = Buffer.from(first.bytes); badBytes[0] ^= 1;
+    const mismatch = await gateway.request('/transfer/range', { body: badBytes, headers: rangeHeaders(first) });
+    assert.equal(mismatch.status, 400); assert.equal(mismatch.body.length, 0);
+    const before = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame } });
+    assert.equal(before.status, 200); assert.deepEqual(gatewayProgress(before.body, size), { verifiedBytes: 0, receipt: null });
+    let sent = 0;
+    if (size === 67108864) {
+      stage = 'INTERRUPTION';
+      const prefix = await gateway.request('/transfer/range', { body: first.bytes, headers: rangeHeaders(first) });
+      assert.equal(prefix.status, 200); assert.deepEqual(gatewayProgress(prefix.body, size), { verifiedBytes: 1048576, receipt: null });
+      const ranges = fileRanges(path); await ranges.next(); const second = (await ranges.next()).value; await ranges.return();
+      await new Promise((resolve, reject) => {
+        const request = https.request('https://127.0.0.1:18447/transfer/range', {
+          method: 'POST', ca: fixture.ca, rejectUnauthorized: true, agent: false,
+          headers: { ...rangeHeaders(second), 'Content-Length': second.bytes.length } });
+        const timeout = setTimeout(() => { request.destroy(); reject(new Error('CLIENT_INTERRUPT_TIMEOUT')); }, 10000);
+        request.on('error', () => {}); request.on('close', () => { clearTimeout(timeout); resolve(); });
+        request.write(second.bytes.subarray(0, 131072), () => setTimeout(() => request.destroy(), 200));
+      });
+      const progress = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame } });
+      assert.equal(progress.status, 200); assert.deepEqual(gatewayProgress(progress.body, size), { verifiedBytes: 1048576, receipt: null });
+    }
     stage = 'GATEWAY_UPLOAD_' + size;
-    const receipt = await uploadRanges(gateway, join(fixtures, name), grant.frame, size);
+    const observed = { request: async (path, options) => {
+      if (path === '/transfer/range') { sent++; if (size === 67108864 && sent === 1)
+        assert.equal(options.headers['X-IDEA-Range-Start'], '1048576'); }
+      return gateway.request(path, options);
+    } };
+    const receipt = await uploadRanges(observed, path, grant.frame, size);
+    assert.equal(sent, size === 1024 ? 1 : 63);
     stage = 'GATEWAY_STATUS_' + size;
     const status = await gateway.request('/transfer/status', { headers: { 'X-IDEA-Grant': grant.frame }, limit: 4108 });
     assert.equal(status.status, 200); assert.deepEqual(gatewayProgress(status.body, size).receipt, receipt);
+    const changed = await gateway.request('/transfer/range', { body: badBytes, headers: rangeHeaders(first) });
+    assert.equal(changed.status, 400);
+    const retry = await gateway.request('/transfer/range', { body: first.bytes, headers: rangeHeaders(first) });
+    assert.equal(retry.status, 200); assert.deepEqual(gatewayProgress(retry.body, size).receipt, receipt);
+    const badReceipt = Buffer.from(receipt); badReceipt[badReceipt.length - 1] ^= 1;
+    assert.notEqual((await server.request('/qualification/f05/receipt', { body: badReceipt, headers: await csrf() })).status, 200);
     for (let retry = 0; retry < 2; retry++) {
       stage = 'SERVER_ACCEPT_' + size + '_' + retry;
       const accepted = await server.request('/qualification/f05/receipt', { body: receipt, headers: await csrf() });
