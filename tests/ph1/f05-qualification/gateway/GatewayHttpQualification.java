@@ -78,6 +78,30 @@ class GatewayHttpQualification {
                         .header("X-IDEA-Grant",Base64.getUrlEncoder().withoutPadding().encodeToString(stalledGrant)).POST(HttpRequest.BodyPublishers.noBody()).build();
                 var progress=client.send(progressRequest,HttpResponse.BodyHandlers.ofByteArray());
                 GatewayTlsMaterial.require(progress.statusCode()==200&&Arrays.equals(progress.body(),new byte[12]),"Timed-out body advanced verified bytes or Receipt");
+                var trickleFields=new TreeMap<Integer,byte[]>(fields);
+                for(int tag:new int[]{6,7}){UUID id=UUID.randomUUID();trickleFields.put(tag,ByteBuffer.allocate(16).putLong(id.getMostSignificantBits()).putLong(id.getLeastSignificantBits()).array());}
+                byte[] trickleGrant=com.idea.ddm.gateway.GatewayTransferTest.signed(trickleFields,server.getPrivate());
+                try(var socket=(javax.net.ssl.SSLSocket)client.sslContext().getSocketFactory().createSocket("127.0.0.1",18447)){
+                    var parameters=socket.getSSLParameters();parameters.setEndpointIdentificationAlgorithm("HTTPS");socket.setSSLParameters(parameters);socket.setSoTimeout(65000);socket.startHandshake();
+                    String headers="POST /transfer/range HTTP/1.1\r\nHost: 127.0.0.1:18447\r\nConnection: close\r\nContent-Length: 1024\r\nX-IDEA-Grant: "+Base64.getUrlEncoder().withoutPadding().encodeToString(trickleGrant)
+                            +"\r\nX-IDEA-Range-Start: 0\r\nX-IDEA-Range-End: 1024\r\nX-IDEA-Chunk-SHA256: 5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef\r\n\r\n";
+                    long started=System.nanoTime();socket.getOutputStream().write(headers.getBytes(java.nio.charset.StandardCharsets.US_ASCII));socket.getOutputStream().write(0);socket.getOutputStream().flush();
+                    Thread sender=Thread.ofVirtual().start(()->{
+                        try{while(!Thread.currentThread().isInterrupted()){Thread.sleep(5000);socket.getOutputStream().write(0);socket.getOutputStream().flush();}}
+                        catch(Exception stopped){/* Owned synthetic writer ends on interrupt or socket close. */}
+                    });
+                    try{
+                        String line=new java.io.BufferedReader(new java.io.InputStreamReader(socket.getInputStream(),java.nio.charset.StandardCharsets.US_ASCII)).readLine();
+                        long elapsed=TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started);
+                        GatewayTlsMaterial.require(line!=null&&line.startsWith("HTTP/1.1 408 ")&&elapsed>=58000&&elapsed<=65000,"Absolute refusal not bounded 408");
+                        System.out.println("GATEWAY_ABSOLUTE_GREEN=PASS; ELAPSED_MS="+elapsed);
+                    }catch(java.net.SocketTimeoutException expectedRed){
+                        System.out.println("GATEWAY_HTTP_RED=EXPECTED_ABSOLUTE_TIMEOUT_GAP; OBSERVED_WAIT_MS="+TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started));return;
+                    }finally{sender.interrupt();sender.join(1000);GatewayTlsMaterial.require(!sender.isAlive(),"Owned trickle writer survived");}
+                }
+                var trickleProgress=client.send(HttpRequest.newBuilder(URI.create("https://127.0.0.1:18447/transfer/status")).timeout(Duration.ofSeconds(5))
+                        .header("X-IDEA-Grant",Base64.getUrlEncoder().withoutPadding().encodeToString(trickleGrant)).POST(HttpRequest.BodyPublishers.noBody()).build(),HttpResponse.BodyHandlers.ofByteArray());
+                GatewayTlsMaterial.require(trickleProgress.statusCode()==200&&Arrays.equals(trickleProgress.body(),new byte[12]),"Absolute timeout published progress/Receipt");
                 System.out.println("GATEWAY_HTTP_GREEN=PASS; TLS="+response.sslSession().get().getProtocol()+"; CIPHER="+response.sslSession().get().getCipherSuite());
             }
         }finally{

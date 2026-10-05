@@ -179,3 +179,11 @@ configures qualified Tomcat upload socket inactivity30000ms, maps timeout to bou
 and reruns the same genuine network oracle. This is inactivity only, not the60s absolute
 range/control elapsed-time requirement. Commands run-build.sh source manifest gateway-boot-06,
 then run-http.sh source green. No new dependencies, TLS bypass, DB or preview changes.
+
+Fresh gateway-boot-07 adds the absolute range deadline oracle: authenticated signed synthetic
+Grant, normal verified TLS, one byte every five seconds (below inactivity limit), declared1024
+bytes. Server must return empty408 at60s (58–65s observation tolerance), with no verified
+progress/Receipt.65s client read timeout is RED, never PASS. Sender is owned and terminated.
+Existing positive/inactivity cases run first; same admitted offline graph, fresh private TLS,
+single loopback18447 and exact cleanup/postflight. Commands run-build.sh source manifest
+gateway-boot-07 then run-http.sh source red. No accelerated Clock for real socket deadline.

@@ -3,7 +3,7 @@ set -euo pipefail
 set +x
 umask 077
 [[ $# == 2 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^(red|green)$ ]] || exit 2
-owned=/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-06/source
+owned=/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-07/source
 [[ $(id -un) == phuclam && $(realpath -e "$owned") == "$owned" && ! -e "$owned/run/harness" ]] || exit 3
 cd "$owned"
 sha256sum -c tests/ph1/f05-qualification/gateway/inputs.sha256 > run/http-source-preflight.log
@@ -18,7 +18,7 @@ mkdir -m 700 run/harness
 cat run/tls-preparation.log
 freeze=$(sha256sum run/tls-freeze.txt | cut -d' ' -f1)
 "$jdk/bin/java" -Djava.net.preferIPv4Stack=true -cp run/harness:run/application/target/classes GatewayHttpQualification "$1" "$freeze" > run/http-result-private.log 2>&1
-if [[ $2 == red ]]; then grep -q GATEWAY_HTTP_RED=EXPECTED_INACTIVITY_TIMEOUT_GAP run/http-result-private.log
+if [[ $2 == red ]]; then grep -q GATEWAY_HTTP_RED=EXPECTED_ABSOLUTE_TIMEOUT_GAP run/http-result-private.log
 else grep -q GATEWAY_HTTP_GREEN=PASS run/http-result-private.log; fi
 cat run/http-result-private.log
 sha256sum run/http-result-private.log run/http-cleanup.txt
