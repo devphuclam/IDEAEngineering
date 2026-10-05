@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 // All readiness material is captured in RAM; never echo identity credentials or bearer frames.
-const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-23/source/apps/server/target/client-e2e-01';
+const remote = '/home/phuclam/idea-f05a-t028-t030-20261005-37/run-receipt-green-24/source/apps/server/target/client-e2e-01';
 const sshArgs = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes',
   '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=5'];
 const read = command => execFileSync('ssh', [...sshArgs, 'phuclam@192.168.137.33', command],
@@ -31,7 +31,7 @@ try {
   for (let i = 0; i < 30; i++) {
     try { assert.equal((await server.request('/health', { method: 'GET' })).status, 200); ready = true; break; }
     catch (error) {
-      lastReadyCode = /^CLIENT_[A-Z_]+$/.test(error.message ?? '') ? error.message : 'CLIENT_HEALTH_REFUSED';
+      lastReadyCode = /^CLIENT_[A-Z0-9_]+$/.test(error.message ?? '') ? error.message : 'CLIENT_HEALTH_REFUSED';
       if (tunnel.exitCode !== null) throw new Error('CLIENT_TUNNEL_REFUSED'); await new Promise(r => setTimeout(r, 200));
     }
   }
@@ -74,7 +74,7 @@ try {
   console.log('CLIENT_E2E=PASS; TLS_BYPASS=false; SERVER_BYTE_RELAY=false');
 } catch (error) {
   const code = error.code === 'ERR_ASSERTION' ? 'ASSERTION' :
-    /^CLIENT_[A-Z_]+$/.test(error.message ?? '') ? error.message : 'HARNESS_FAILURE';
+    /^CLIENT_[A-Z0-9_]+$/.test(error.message ?? '') ? error.message : 'HARNESS_FAILURE';
   console.error('CLIENT_E2E=FAIL; STAGE=' + stage + '; CODE=' + code);
   try { read(`test ! -e ${remote}/client-failed && touch ${remote}/client-failed`); } catch { /* No success inferred. */ }
   process.exitCode = 1;

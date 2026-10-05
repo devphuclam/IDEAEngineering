@@ -54,7 +54,8 @@ export class SecureEndpoint {
         socket.once('secureConnect', () => clearTimeout(connect));
         socket.once('close', () => clearTimeout(connect));
       });
-      request.on('error', () => finish('CLIENT_NETWORK_REFUSED'));
+      request.on('error', error => finish('CLIENT_NETWORK_REFUSED_' +
+        (/^[A-Z0-9_]{1,64}$/.test(error.code ?? '') ? error.code : 'UNKNOWN')));
       request.end(body);
     });
   }

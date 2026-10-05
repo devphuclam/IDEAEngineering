@@ -46,6 +46,11 @@ verifier NOT-RUN; no merge or timer action.
 
 ## Actual end-to-end attempt01 — published execution contract
 
+Attempt23 failed at TLS_READY/CLIENT_NETWORK_REFUSED and cleaned owned listeners/
+marked schema. Standalone owned SSH-forward TCP connection succeeds. Fresh24 adds
+only bounded OS/TLS error code (uppercase/digits/underscore max64, no message or
+proof) to distinguish network from trust refusal. No TLS validation weakened.
+
 Attempt22 failed at TLS_READY with safe ASSERTION before transfer; owned listeners
 and schema cleaned. Fresh23 retains the last fixed client readiness error code,
 not a generic assertion. No trust/endpoint bypass or changed oracle. Paths follow23.
