@@ -29,21 +29,15 @@ public final class FilesystemVaultAdapter {
                 PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));}
         catch(FileAlreadyExistsException busy){throw new IOException("TRANSFER_BUSY",busy);}
         try(var ignored=acquired) {
-            if(Files.exists(destination,LinkOption.NOFOLLOW_LINKS)){verify(destination,result);return result;}
+            if(Files.exists(destination,LinkOption.NOFOLLOW_LINKS)){
+                verify(destination,result);verifyInput(input,OutputStream.nullOutputStream(),result);return result;
+            }
             Path temporary=Files.createTempFile(staging,"candidate-",".part",
                     PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
             try {
-                var hash=sha();long count=0;byte[] buffer=new byte[65536];
                 try(var output=Files.newOutputStream(temporary,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS)) {
-                    while(count<expectedBytes) {
-                        int read=input.read(buffer,0,(int)Math.min(buffer.length,expectedBytes-count));
-                        if(read<0)throw new IOException("SIZE_MISMATCH");
-                        if(read==0)continue;
-                        output.write(buffer,0,read);hash.update(buffer,0,read);count+=read;
-                    }
-                    if(input.read()!=-1)throw new IOException("SIZE_MISMATCH");
+                    verifyInput(input,output,result);
                 }
-                if(!HexFormat.of().formatHex(hash.digest()).equals(result.digest()))throw new IOException("DIGEST_MISMATCH");
                 checkRoots();
                 if(Files.exists(destination,LinkOption.NOFOLLOW_LINKS))throw new IOException("COMPLETION_CONFLICT");
                 Files.move(temporary,destination,StandardCopyOption.ATOMIC_MOVE);
@@ -83,5 +77,16 @@ public final class FilesystemVaultAdapter {
             byte[] buffer=new byte[65536];int read;while((read=input.read(buffer))!=-1)hash.update(buffer,0,read);
         }
         if(!HexFormat.of().formatHex(hash.digest()).equals(expected.digest()))throw new IOException("COMPLETION_CONFLICT");
+    }
+    private static void verifyInput(InputStream input,OutputStream output,Completed expected) throws IOException {
+        var hash=sha();long count=0;byte[] buffer=new byte[65536];
+        while(count<expected.byteCount()) {
+            int read=input.read(buffer,0,(int)Math.min(buffer.length,expected.byteCount()-count));
+            if(read<0)throw new IOException("SIZE_MISMATCH");
+            if(read==0)continue;
+            output.write(buffer,0,read);hash.update(buffer,0,read);count+=read;
+        }
+        if(input.read()!=-1)throw new IOException("SIZE_MISMATCH");
+        if(!HexFormat.of().formatHex(hash.digest()).equals(expected.digest()))throw new IOException("DIGEST_MISMATCH");
     }
 }

@@ -37,3 +37,8 @@ Minimum1/1 GREEN a66054e4303c9618e06443ebb7c735f62b338da9, private log
 Next fresh adapter-red-04 adds immutable retry: identical request returns same identity/bytes,
 changed byte with same claimed digest must refuse and preserve original. Expected missing behavior
 CHANGED_RETRY_FALSE_SUCCESS; prior constructor skeleton witness remains accepted by runner.
+
+Retry RED3dfad5448645c09df1332da27a2338aa294d3247 reached CHANGED_RETRY_FALSE_SUCCESS,
+private loge0c9719bc438edf265bbccdb392ad83bc496fe64dff46125b00c194d43814077.
+Fresh adapter-green-02 checks supplied retry bytes against immutable size/digest even when a
+completed object exists. Discard input verification output, never overwrite completed bytes.
