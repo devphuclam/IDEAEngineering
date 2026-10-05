@@ -26,11 +26,14 @@ fixtures in `finally`. Source is committed/pushed before every execution.
 | f6d05b046be6b51a6d91bc1169f06ee43df857ee | PASS2/2: existing reader qualified additionally on64MiB,64 contiguous1MiB ranges |
 | 6df8ffbd1d92b03723a63a6efbabf83b0fa86269 | RED:2 PASS/1 FAIL, CLIENT_PROGRESS_NOT_IMPLEMENTED |
 | 044f896109ac464cb6c86711af899e2c85f35132 | GREEN3/3,0 failures/skips: zero Receipt remains progress; malformed/trailing/oversized/impossible progress refuses |
+| 9c655360ea3967e59d22b16626c1923f3ae248f3 | PASS4/4,0 failures/skips: existing P05 generator on admitted Node, both literal governing size/full-digest manifests match through client ranges |
 
 Final executed raw source hashes, unchanged before/after run:
 
 - client-transfer.mjs: e939a26b02ad5913601c0d6e31dc19f6c1bf9cb0a4e0f20723807adbac299460
-- client-transfer.test.mjs:919f259067cac30ffb6562c1081c40fa1452dc1fb90de8df175718e1cbb610fc
+- client-transfer.test.mjs at044f896:919f259067cac30ffb6562c1081c40fa1452dc1fb90de8df175718e1cbb610fc
+- successor client-transfer.test.mjs at9c65536:96a986768eceae9231982e3e42e76a59bd9f624389a9854d625d04903b05fca6
+- actual executed P05 generator raw input:ba4918c8d5041d5262588900721bb968f22d294ae63638606b722cbb5b682a26
 - admitted executable unchanged before/after; version v24.19.0.
 
 First reader RED source hashd8098ccb1df0a653841d64e44fe17671901c4418d9fa1aec357970718d5c81b5;
@@ -40,8 +43,15 @@ Response RED source hashab6111c0eafadf40623b2a134ac00e2f823ca47068a23aa13694bfd9
 Safe test output retained in this task's command outputs; no independent raw-file
 log hash is invented. No credential, cookie, CSRF, Grant or Receipt was captured.
 
-The64MiB test uses synthetic zero bytes solely for range preparation; it does not
-replace the governing actual transfer fixture/manifest or establish throughput.
+The original64MiB test uses synthetic zero bytes solely for range preparation.
+The9c65536 successor additionally generates and reads the exact governing P05
+fixtures:1KiB c6aa2b94ca9fd4d756deb9d75500f1fd217bf04efad6d2be4de4a682ae723384;
+64MiB04c5a57e3b754b5eb75de7216d33a4982b525c3a1cdfd19b9eddfd1520126eae.
+This reuses existing first-party generator code unchanged, not the historical
+server Node runtime. Both source/raw generator hashes were unchanged before/after.
+The actual executed raw generator hash above is not the historical P05 LF source
+hash; retained historical evidence is not rewritten. Neither test is a network
+transfer or establishes throughput.
 Opaque Receipt handling is not signature acceptance; Server remains authoritative.
 
 ## 2. Remaining actual qualification
@@ -50,7 +60,7 @@ T033/T034 remain unchecked: ordinary Server HTTP session/CSRF control, direct
 actual HTTPS Gateway bytes, actual FilesystemVaultAdapter, signed Gateway Receipt,
 Server current IAM/controlled-allocation acceptance and committed metadata,
 1KiB/64MiB manifest comparisons and affected refusal/retry/renewal/interruption
-matrix. Real transfer remains NOT-RUN in this record, not inferred from local3/3.
+matrix. Real transfer remains NOT-RUN in this record, not inferred from local4/4.
 
 SSH read-only preflight succeeded; retained qualified Gateway package is present.
 Node is not a blocker. No new rights exception is required for unchanged admitted
