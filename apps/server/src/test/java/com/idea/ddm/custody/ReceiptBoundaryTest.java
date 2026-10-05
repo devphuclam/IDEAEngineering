@@ -45,6 +45,25 @@ class ReceiptBoundaryTest {
             }
         }
     }
+    @Test void r02SameReceiptIdentityCannotReplaceItsOriginalSignedEvidence() throws Exception {
+        var actor=fixture.signIn();UUID location=UUID.randomUUID(),receiptId=UUID.randomUUID();
+        var scope=new TransferGrantService.Scope(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),"https://127.0.0.1:18447/",1,UUID.randomUUID(),1024,"5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",0,1024);
+        try(var c=F05DatabaseFixture.open("migration");var q=c.prepareStatement("INSERT INTO vault_endpoint(vault_id,adapter_kind,eligibility) VALUES (?,'FILESYSTEM','ELIGIBLE')")){q.setObject(1,scope.vaultId());assertEquals(1,q.executeUpdate());}
+        var generator=KeyPairGenerator.getInstance("Ed25519","SunEC");var server=generator.generateKeyPair();var gateway=generator.generateKeyPair();
+        TransferGrantService.OwnerAdmission admission=(c,a,s)->{if(!a.actorId().equals(actor.actorId())||!a.organizationId().equals(actor.organizationId())||!s.equals(scope))throw new SecurityException("OWNER_REFUSED");};
+        var grant=new TransferGrantService(fixture.app(),fixture.eligibility(),admission,clock,server.getPrivate(),"PH1_SERVER","PH1_GATEWAY","SERVER_GRANT_1").issue(actor.context(),scope);
+        var service=new TransferReceiptService(fixture.app(),fixture.eligibility(),(c,a,s,l)->{
+            admission.require(c,a,s);if(!location.equals(l))throw new SecurityException("ALLOCATION_REFUSED");return new TransferReceiptService.Allocation(scope.vaultId(),location,grant.transferId()+"-"+location+".blob");
+        },clock,gateway.getPublic(),"PH1_GATEWAY","PH1_SERVER","GATEWAY_RECEIPT_1");
+        byte[] original=receipt(grant,receiptId,location,gateway.getPrivate());var accepted=service.accept(actor.context(),original);
+        var changed=original.clone();var body=ByteBuffer.wrap(changed);body.position(17);
+        for(int tag=1;tag<=25;tag++){int actual=Short.toUnsignedInt(body.getShort()),size=Short.toUnsignedInt(body.getShort());if(actual==23||actual==24||actual==25)body.putLong(body.position(),body.getLong(body.position())-1);body.position(body.position()+size);}
+        resign(changed,gateway.getPrivate());
+        var failure=assertThrows(IllegalStateException.class,()->service.accept(actor.context(),changed),"RECEIPT_EVIDENCE_REPLACEMENT_ACCEPTED");
+        assertEquals("RECEIPT_NOT_COMMITTED",failure.getMessage());assertInstanceOf(SecurityException.class,failure.getCause());
+        assertEquals(accepted,service.accept(actor.context(),original));
+    }
+    static void resign(byte[] frame,PrivateKey key) throws Exception {int size=ByteBuffer.wrap(frame).getInt();var s=Signature.getInstance("Ed25519","SunEC");s.initSign(key);s.update(frame,4,size);System.arraycopy(s.sign(),0,frame,6+size,64);}
     static byte[] receipt(TransferGrantService.Grant g,UUID receipt,UUID location,PrivateKey key) throws Exception {
         var s=g.scope();long now=clock.instant().getEpochSecond();
         var fields=List.of(text("PH1_GATEWAY"),text("PH1_SERVER"),text("RECEIPT_VERIFIED"),text("GATEWAY_RECEIPT_1"),uuid(receipt),uuid(g.grantId()),uuid(g.operationId()),uuid(g.transferId()),
