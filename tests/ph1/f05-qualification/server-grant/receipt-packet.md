@@ -20,3 +20,10 @@ actual used graph/cache/tool checks before/after. RED must reach
 RECEIPT_ACCEPTANCE_NOT_IMPLEMENTED, not compile/tool/DB error. Retain private raw logs/hashes.
 Owned JVMs must exit before exact owner+source-marker guarded schema cleanup; database retained.
 No verifier, merge or timer/Tracker action. Ordinary defects repair prospectively under sprint.
+
+Successor receipt-red-03 (fresh; red-02 not transferred/executed because publication failed)
+adds correctly signed changed issuance timestamps under the same ReceiptId, still within
+the original Grant window. It must refuse replacement of exact committed evidence while
+the original packet remains resolvable. Expected assertion RECEIPT_EVIDENCE_REPLACEMENT_ACCEPTED.
+Green-011/1 is minimum tracer evidence, not full T032. Source/manifest re-publication is
+required before the successor run. No migration/code dynamically changed during execution.
