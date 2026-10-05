@@ -39,3 +39,10 @@ Fresh receipt-green-03 qualifies existing negative behavior (no manufactured RED
 key/pin and24 signed field mutations, allocation/correlation/size/range/time, malformed frame,
 before/at/after900s and899s positive. Three JUnit methods; multiple explicit vectors within r03.
 No actual Gateway/client transfer or network-timeout claim. Same exact DB/schema/tool envelope.
+
+Fresh receipt-green-04 qualifies existing transaction fate: suppressed required Receipt/
+evidence/Artifact/Location/Audit inserts, deferred commit failure, same-operation confirmed
+rollback retry, real HTTP logout winning at a PostgreSQL pre-commit barrier, disabled/stale
+sessions and fresh same-Actor session, concurrent identical Receipt with one accepted Audit.
+Six JUnit methods, grouped explicit cases, fresh owned schema. Fault triggers bounded to
+this schema and removed before runner cleanup. Uncertain commit is not labelled FAILED.

@@ -97,6 +97,61 @@ class ReceiptBoundaryTest {
         assertNoCustody(x);
         assertNotNull(receiptService(x.actor(),x.grant().scope(),x.location(),x.grant(),x.gateway().getPublic(),Clock.fixed(Instant.ofEpochSecond(t+899),ZoneOffset.UTC)).accept(x.actor().context(),x.packet()));
     }
+    @Test void r04RequiredWriteAndDeferredCommitFailuresLeaveNoPartialCustody() throws Exception {
+        for(String target:List.of("transfer_receipt","transfer_receipt_evidence","artifact","artifact_location","audit_evidence","deferred")){
+            var x=candidate();String table=target.equals("deferred")?"audit_evidence":target;
+            String condition=table.equals("audit_evidence")?"NEW.action='transfer.receipt.accept'":"TRUE";
+            try(var c=F05DatabaseFixture.open("migration");var q=c.createStatement()){
+                q.execute("CREATE FUNCTION f05_receipt_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF "+condition+" THEN "+(target.equals("deferred")?"RAISE EXCEPTION 'Controlled custody commit failure' USING ERRCODE='23514';":"RETURN NULL;")+" END IF; RETURN NEW; END; $$");
+                q.execute((target.equals("deferred")?"CREATE CONSTRAINT TRIGGER f05_receipt_fault AFTER INSERT ON ":"CREATE TRIGGER f05_receipt_fault BEFORE INSERT ON ")+table+(target.equals("deferred")?" DEFERRABLE INITIALLY DEFERRED":"")+" FOR EACH ROW EXECUTE FUNCTION f05_receipt_fault()");
+            }
+            try{
+                var failure=assertThrows(IllegalStateException.class,()->x.service().accept(x.actor().context(),x.packet()));
+                assertEquals(target.equals("deferred")?"RECEIPT_COMMIT_OUTCOME_UNCERTAIN":"RECEIPT_NOT_COMMITTED",failure.getMessage());
+                assertNoCustody(x); // Known injected DB rollback is observed, not inferred from lost response.
+            }finally{try(var c=F05DatabaseFixture.open("migration");var q=c.createStatement()){q.execute("DROP TRIGGER f05_receipt_fault ON "+table);q.execute("DROP FUNCTION f05_receipt_fault()");}}
+            assertNotNull(x.service().accept(x.actor().context(),x.packet()),"Same operation can retry confirmed rollback");
+        }
+    }
+    @Test void r05LogoutWinsBeforeCustodyCommitAndDisabledOrStaleSessionsRefuse() throws Exception {
+        var x=candidate();int barrier=2000000+java.util.concurrent.ThreadLocalRandom.current().nextInt(1000000);
+        try(var hold=F05DatabaseFixture.open("migration");var workers=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+            hold.setAutoCommit(false);try(var q=hold.prepareStatement("SELECT pg_advisory_xact_lock(?)")){q.setLong(1,barrier);q.execute();}
+            try(var c=F05DatabaseFixture.open("migration");var q=c.createStatement()){
+                q.execute("CREATE FUNCTION f05_receipt_gate() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM pg_advisory_xact_lock("+barrier+"::bigint); RETURN NEW; END; $$");
+                q.execute("CREATE TRIGGER f05_receipt_gate BEFORE INSERT ON transfer_receipt_evidence FOR EACH ROW EXECUTE FUNCTION f05_receipt_gate()");
+            }
+            try{
+                var future=workers.submit(()->x.service().accept(x.actor().context(),x.packet()));boolean waiting=false;long deadline=System.nanoTime()+Duration.ofSeconds(10).toNanos();
+                try(var c=F05DatabaseFixture.open("migration");var q=c.prepareStatement("SELECT count(*) FROM pg_locks WHERE locktype='advisory' AND NOT granted AND classid=0 AND objid=?")){
+                    q.setLong(1,barrier);while(System.nanoTime()<deadline){try(var r=q.executeQuery()){assertTrue(r.next());waiting=r.getInt(1)==1;}if(waiting)break;Thread.sleep(10);}
+                }
+                assertTrue(waiting,"Custody reached controlled pre-commit barrier");fixture.signOut();hold.commit();
+                var refusal=assertThrows(java.util.concurrent.ExecutionException.class,()->future.get(20,java.util.concurrent.TimeUnit.SECONDS));
+                assertInstanceOf(IllegalStateException.class,refusal.getCause());assertEquals("RECEIPT_NOT_COMMITTED",refusal.getCause().getMessage());assertNoCustody(x);
+            }finally{hold.rollback();try(var c=F05DatabaseFixture.open("migration");var q=c.createStatement()){q.execute("DROP TRIGGER f05_receipt_gate ON transfer_receipt_evidence");q.execute("DROP FUNCTION f05_receipt_gate()");}}
+        }
+        var y=candidate();
+        try(var c=F05DatabaseFixture.open("migration");var q=c.createStatement()){
+            try{q.executeUpdate("UPDATE idea_account SET status='DISABLED' WHERE account_id='"+y.actor().accountId()+"'");assertThrows(IllegalStateException.class,()->y.service().accept(y.actor().context(),y.packet()));assertNoCustody(y);}
+            finally{q.executeUpdate("UPDATE idea_account SET status='ACTIVE' WHERE account_id='"+y.actor().accountId()+"'");}
+            q.executeUpdate("UPDATE idea_account SET security_version=security_version+1 WHERE account_id='"+y.actor().accountId()+"'");
+            assertThrows(IllegalStateException.class,()->y.service().accept(y.actor().context(),y.packet()));assertNoCustody(y);
+        }
+        var fresh=fixture.signIn();assertNotNull(y.service().accept(fresh.context(),y.packet()));
+    }
+    @Test void r06ConcurrentIdenticalReceiptHasOneCustodyAndAudit() throws Exception {
+        var x=candidate();try(var workers=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+            var ready=new java.util.concurrent.CountDownLatch(2);var start=new java.util.concurrent.CountDownLatch(1);
+            java.util.concurrent.Callable<TransferReceiptService.Accepted> work=()->{ready.countDown();assertTrue(start.await(10,java.util.concurrent.TimeUnit.SECONDS));return x.service().accept(x.actor().context(),x.packet());};
+            var first=workers.submit(work);var second=workers.submit(work);assertTrue(ready.await(10,java.util.concurrent.TimeUnit.SECONDS));start.countDown();
+            assertEquals(first.get(20,java.util.concurrent.TimeUnit.SECONDS),second.get(20,java.util.concurrent.TimeUnit.SECONDS));
+        }
+        try(var c=fixture.app().getConnection()){
+            for(String table:List.of("transfer_receipt","transfer_receipt_evidence"))try(var q=c.prepareStatement("SELECT count(*) FROM "+table+" WHERE transfer_id=?")){q.setObject(1,x.grant().transferId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals(1,r.getInt(1));}}
+            try(var q=c.prepareStatement("SELECT count(*) FROM audit_evidence WHERE operation_id=? AND action='transfer.receipt.accept'")){q.setObject(1,x.grant().operationId());try(var r=q.executeQuery()){assertTrue(r.next());assertEquals(1,r.getInt(1));}}
+        }
+    }
     static void assertRefusal(TransferReceiptService service,F05SessionFixture.SignedIn actor,byte[] packet){
         var failure=assertThrows(IllegalStateException.class,()->service.accept(actor.context(),packet));assertEquals("RECEIPT_NOT_COMMITTED",failure.getMessage());assertInstanceOf(SecurityException.class,failure.getCause());
     }
