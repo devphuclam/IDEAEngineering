@@ -15,18 +15,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 
 /** Approved Server Grant qualification seam; HTTP identity and real bounded PostgreSQL. */
+@org.junit.jupiter.api.TestMethodOrder(org.junit.jupiter.api.MethodOrderer.MethodName.class)
 class CustodyBoundaryTest {
+    private static final ControlledClock time=new ControlledClock();
     private static F05SessionFixture fixture;
     @BeforeAll
     static void freshOwnedSchema() throws Exception {
         F05DatabaseFixture.create();
-        fixture = new F05SessionFixture(F05DatabaseFixture.url(), Clock.systemUTC());
+        fixture = new F05SessionFixture(F05DatabaseFixture.url(), time);
     }
     @AfterAll
     static void stopOwnedServer() { if (fixture != null) fixture.close(); }
     @Test
     void g01ServerEstablishedActorObtainsExactPersistedSignedPrivateGrant() throws Exception {
-        var clock = Clock.systemUTC();
+        var clock = time;
         {
             var signedIn = fixture.signIn();
             var scope = new TransferGrantService.Scope(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(),
@@ -109,7 +111,7 @@ class CustodyBoundaryTest {
             var requiredOrganization = UUID.randomUUID();
             var wrongOrganization = new TransferGrantService(fixture.app(),fixture.eligibility(),(caller,actor,requested)->{
                 if(!requiredOrganization.equals(actor.organizationId())) throw new SecurityException("OWNER_ORGANIZATION_REFUSED");
-            },Clock.systemUTC(),key.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
+            },time,key.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
             refuseWithoutState(() -> wrongOrganization.issue(current.context(),scope),scope.operationId());
         }
     }
@@ -137,7 +139,7 @@ class CustodyBoundaryTest {
         }
         var unavailable = new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,scope)->{
             throw new SecurityException("CONFIGURED_GATEWAY_UNAVAILABLE");
-        },Clock.systemUTC(),key.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
+        },time,key.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
         refuseWithoutState(() -> unavailable.issue(signedIn.context(),expected),expected.operationId());
     }
 
@@ -209,7 +211,7 @@ class CustodyBoundaryTest {
         var service=new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,requested)->{
             if(!actor.actorId().equals(signedIn.actorId()) || !actor.organizationId().equals(signedIn.organizationId())
                     || !(scope.equals(requested)||changed.equals(requested)))throw new SecurityException("OWNER_REFUSED");
-        },Clock.systemUTC(),keys.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
+        },time,keys.getPrivate(),"idea-server-test","idea-gateway-test","server-key-test");
         try(var workers=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
             var ready=new java.util.concurrent.CountDownLatch(2);var start=new java.util.concurrent.CountDownLatch(1);
             java.util.concurrent.Callable<TransferGrantService.Grant> request=()->{
@@ -235,7 +237,7 @@ class CustodyBoundaryTest {
         return new TransferGrantService(fixture.app(),fixture.eligibility(),(connection,actor,requested)->{
             if(!actor.actorId().equals(signedIn.actorId()) || !actor.organizationId().equals(signedIn.organizationId())
                     || !expected.equals(requested)) throw new SecurityException("OWNER_ALLOCATION_REFUSED");
-        },Clock.systemUTC(),key,"idea-server-test","idea-gateway-test","server-key-test");
+        },time,key,"idea-server-test","idea-gateway-test","server-key-test");
     }
     @FunctionalInterface private interface Attempt { void run() throws Exception; }
     private static void refuseWithoutState(Attempt attempt,UUID operationId) throws Exception {
@@ -253,6 +255,39 @@ class CustodyBoundaryTest {
         }
     }
 
+    @Test
+    void g05ExpiryEqualityAndExplicitRenewalPreserveOperationWithoutExtendingOriginal() throws Exception {
+        var signedIn=fixture.signIn();var scope=syntheticScope();seedVault(scope);
+        var keys=KeyPairGenerator.getInstance("Ed25519","SunEC").generateKeyPair();
+        var service=service(signedIn,scope,keys.getPrivate());
+        var original=service.issue(signedIn.context(),scope);
+        assertTrue(original.validAt(java.time.Instant.ofEpochSecond(original.expiresAt()-1)));
+        assertFalse(original.validAt(java.time.Instant.ofEpochSecond(original.expiresAt())));
+        assertFalse(original.validAt(java.time.Instant.ofEpochSecond(original.expiresAt()+1)));
+        time.advance(300);
+        var renewed=service.renew(signedIn.context(),scope.operationId());
+        assertNotEquals(original.grantId(),renewed.grantId());
+        assertEquals(original.transferId(),renewed.transferId());assertEquals(original.scope(),renewed.scope());
+        assertEquals(original.operationId(),renewed.operationId());
+        assertEquals(original.expiresAt(),renewed.issuedAt());
+        assertEquals(300,renewed.expiresAt()-renewed.issuedAt());
+        assertTrue(renewed.validAt(time.instant()));assertFalse(original.validAt(time.instant()));
+        assertEquals(renewed.grantId(),service.resolve(signedIn.context(),scope.operationId()).grantId());
+        assertEquals(renewed.grantId(),service.issue(signedIn.context(),scope).grantId());
+        try(var connection=fixture.app().getConnection();var query=connection.prepareStatement(
+                "SELECT expires_at,status FROM transfer_grant WHERE grant_id=?")) {
+            query.setObject(1,original.grantId());try(var row=query.executeQuery()){assertTrue(row.next());
+                assertEquals(original.expiresAt(),row.getTimestamp(1).toInstant().getEpochSecond());assertEquals("EXPIRED",row.getString(2));}
+        }
+    }
+    private static final class ControlledClock extends Clock {
+        private final java.util.concurrent.atomic.AtomicReference<java.time.Instant> now=
+                new java.util.concurrent.atomic.AtomicReference<>(java.time.Instant.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS));
+        void advance(long seconds){now.updateAndGet(value->value.plusSeconds(seconds));}
+        @Override public java.time.Instant instant(){return now.get();}
+        @Override public java.time.ZoneId getZone(){return java.time.ZoneOffset.UTC;}
+        @Override public Clock withZone(java.time.ZoneId zone){if(!zone.equals(getZone()))throw new IllegalArgumentException("UTC test clock");return this;}
+    }
     private static Map<Integer, byte[]> verifyFrame(byte[] packet, java.security.PublicKey key) throws Exception {
         assertTrue(packet.length <= 4096 && packet.length >= 83);
         var input = ByteBuffer.wrap(packet);

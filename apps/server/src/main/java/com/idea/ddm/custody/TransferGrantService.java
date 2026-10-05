@@ -28,6 +28,7 @@ public final class TransferGrantService {
         public Grant { frame = frame.clone(); }
         @Override public byte[] frame() { return frame.clone(); }
         @Override public String toString() { return "TransferGrant[redacted]"; }
+        public boolean validAt(Instant instant) { throw new UnsupportedOperationException("GRANT_VALIDITY_NOT_IMPLEMENTED"); }
     }
     @FunctionalInterface
     public interface OwnerAdmission {
@@ -95,6 +96,9 @@ public final class TransferGrantService {
                 connection.commit();return grant;
             } catch (Exception failure) { connection.rollback(); throw new IllegalStateException("RESULT_UNAVAILABLE",failure); }
         } catch (SQLException failure) { throw new IllegalStateException("RESULT_STORAGE_UNAVAILABLE",failure); }
+    }
+    public Grant renew(ActorContext context,UUID operationId) {
+        throw new UnsupportedOperationException("GRANT_RENEWAL_NOT_IMPLEMENTED");
     }
     private Grant find(Connection connection,OwnerSessionEligibility.EligibleActor actor,UUID operationId) throws Exception {
         try(var query=connection.prepareStatement("SELECT g.grant_id,g.transfer_id,g.vault_id,g.expected_byte_count,g.expected_digest,g.allowed_byte_start,g.allowed_byte_end,g.issued_at,g.expires_at,s.actor_id,s.organization_id,s.correlation_id,s.gateway_id,s.endpoint,s.object_kind,s.object_id,s.issuer,s.audience,s.signing_key_id FROM transfer_grant g JOIN transfer_grant_scope s ON s.grant_id=g.grant_id WHERE g.operation_id=? ORDER BY g.issued_at DESC,g.grant_id DESC LIMIT 1")) {

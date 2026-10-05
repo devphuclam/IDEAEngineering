@@ -118,3 +118,19 @@ for the same published concurrent/conflict contract (6/6 expected), with exact s
 manifest/export/transfer checks before execution. Continue G05/G06 and the full authorized sprint
 automatically thereafter. No extra approval is needed for normal repairs or continuation.
 T028/T030 incomplete, later T029–T034 NOT-RUN; no merge/verifier/Gateway/preview/progress action.
+
+## Restored network / G05 RED packet
+
+Connectivity restored; partial root02 archive retained unchanged. Fresh root03 executed
+source19b49b8cf60bf111fbcb2c0866b639c2dad9b47f, **6/6 PASS** including real concurrent identical
+retry and authorized changed-input conflict. Schema f05_35882bd498fb403fa36478e215ee5ce3 cleanup
+COMPLETE; private log7b7a6a530fed2a2df4a48f1c0979cc6cedc0bba6906f6dcf6918f8385075e43f.
+Raw78/78 and admitted-input pre/post hashes PASS; database retained.
+
+Next fresh `run-g05-red-01/source`: 7 test methods, G05 new expiry/renewal tracer is expected
+to fail at explicit GRANT_VALIDITY_NOT_IMPLEMENTED skeleton. Authoritative test Clock is UTC,
+monotonic/in-memory; actual Server and Grant service share it. Before/at/after expiry and explicit
+new GrantId/same original operation/transfer/scope are observed, old validity must not change.
+No host time change, no waiting 300 seconds, no schema/dependency/tool change. Run existing
+published five direct offline goals and full input/target/schema guards. Minimum GREEN only
+after observed RED; then fresh-eligibility/allocation renewal refusals and G06 follow vertically.
