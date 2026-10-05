@@ -24,3 +24,10 @@ PowerShell expanded a remote realpath substitution before SSH; empty owned remot
 may exist. No transfer/Java/Adapter execution followed. Retain it. Fresh adapter-red-03 uses
 the same test/oracle, command passed literally to SSH. Local adapter-red-02 export-only diagnostic
 also retains identical raw inputs; no remote execution. These are setup defects, not behavioral RED.
+
+Behavioral RED at84954404c7cc512d1c95ddf252c159a637925ee6 reached ADAPTER_NOT_IMPLEMENTED
+after raw4/4 local/remote PASS and successful javac. Private log SHA-256
+04b8d157860c4009fb1efa9dd2495a92085539c4b8c8fb44b3a30af2edf0ef50.
+Archivead6a92bb733973734fb0c0580f8eec343e2182bf405e2bcc34449c8f60e05c3b.
+Fresh adapter-green-01 executes the minimum streaming/size/digest/private atomic-promotion
+implementation and same single completed-read tracer; no Gateway or custody PASS yet.
