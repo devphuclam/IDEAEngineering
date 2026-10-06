@@ -1,8 +1,5 @@
 package com.idea.ddm.identity;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -11,7 +8,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.HexFormat;
 import java.util.UUID;
 import javax.sql.DataSource;
 
@@ -61,7 +57,8 @@ final class CredentialSetupService {
                             AdministratorBootstrap.insert(connection, "INSERT INTO credential_setup_proof "
                                     + "(proof_id,account_id,login_identity_id,purpose,security_version,proof_digest,issued_by,"
                                     + "issue_operation_id,reason,issued_at,expires_at) VALUES (?,?,?,'FIRST_SETUP',?,?,?,?,?,?,?)",
-                                    UUID.randomUUID(), target, loginId, expectedVersion, digest(proof), issuer.actorId(),
+                                    UUID.randomUUID(), target, loginId, expectedVersion,
+                                    CredentialProofDigest.sha256AsciiToHex(proof), issuer.actorId(),
                                     operation, reason, Timestamp.from(issued), Timestamp.from(expires));
                             return new IssuedProof(proof, expires);
                         }
@@ -89,7 +86,7 @@ final class CredentialSetupService {
                         + "AND f.consumed_at IS NULL AND f.issued_at<=? AND f.expires_at>? "
                         + "AND a.status='PENDING' AND a.security_version=f.security_version "
                         + "AND p.disabled_at IS NULL AND l.password_verifier IS NULL")) {
-                    query.setString(1, digest(proof));
+                    query.setString(1, CredentialProofDigest.sha256AsciiToHex(proof));
                     query.setObject(2, target);
                     query.setTimestamp(3, at);
                     query.setTimestamp(4, at);
@@ -123,9 +120,4 @@ final class CredentialSetupService {
 
     private Instant now() { return clock.instant().truncatedTo(ChronoUnit.MICROS); }
 
-    private static String digest(String proof) {
-        try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                .digest(proof.getBytes(StandardCharsets.US_ASCII))); }
-        catch (NoSuchAlgorithmException exception) { throw new IllegalStateException("Required digest unavailable"); }
-    }
 }

@@ -1,8 +1,5 @@
 package com.idea.ddm.identity;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -11,7 +8,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.HexFormat;
 import java.util.UUID;
 import javax.sql.DataSource;
 
@@ -58,7 +54,8 @@ final class CredentialResetService {
                             AdministratorBootstrap.insert(connection, "INSERT INTO credential_reset_proof "
                                     + "(proof_id,account_id,login_identity_id,purpose,security_version,proof_digest,issued_by,"
                                     + "issue_operation_id,reason,issued_at,expires_at) VALUES (?,?,?,'RESET',?,?,?,?,?,?,?)",
-                                    UUID.randomUUID(), target, targetLoginIdentity, expectedVersion, digest(proof),
+                                    UUID.randomUUID(), target, targetLoginIdentity, expectedVersion,
+                                    CredentialProofDigest.sha256AsciiToHex(proof),
                                     issuer.actorId(), operation, reason, Timestamp.from(issued), Timestamp.from(expires));
                             return new CredentialSetupService.IssuedProof(proof, expires);
                         }
@@ -87,7 +84,7 @@ final class CredentialResetService {
                         + "AND a.security_version=f.security_version AND l.password_verifier IS NOT NULL "
                         + "AND ((a.status='ACTIVE' AND p.disabled_at IS NULL) "
                         + "OR (a.status='DISABLED' AND p.disabled_at IS NOT NULL))")) {
-                    query.setString(1, digest(proof));
+                    query.setString(1, CredentialProofDigest.sha256AsciiToHex(proof));
                     query.setObject(2, target);
                     query.setTimestamp(3, at);
                     query.setTimestamp(4, at);
@@ -134,9 +131,4 @@ final class CredentialResetService {
 
     private Instant now() { return clock.instant().truncatedTo(ChronoUnit.MICROS); }
 
-    private static String digest(String proof) {
-        try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                .digest(proof.getBytes(StandardCharsets.US_ASCII))); }
-        catch (NoSuchAlgorithmException exception) { throw new IllegalStateException("Required digest unavailable"); }
-    }
 }
