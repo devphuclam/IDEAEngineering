@@ -52,8 +52,10 @@ scheme, generators, validators and a generic API framework are **not adopted** h
 | `DEFERRED` | A separately governed successor, not part of the current adapter contract. |
 
 Rows are operation **families**, not invented endpoints or new permission codes. The local index
-does not replace `REQ-*`, `IF-*` or an OpenAPI `operationId`. A `DESIGN` row's exact URL, payload,
-errors and wire retry behavior remain `UNKNOWN` until the owning increment refines them.
+also includes cross-surface semantic interactions, such as locale preference, when they affect
+the contract even if no HTTP adapter is selected yet. It does not replace `REQ-*`, `IF-*` or an
+OpenAPI `operationId`. A `DESIGN` row's exact URL, payload, errors and wire retry behavior remain
+`UNKNOWN` until the owning increment refines them.
 
 ## 2. Domain and operation families
 
@@ -71,6 +73,7 @@ errors and wire retry behavior remain `UNKNOWN` until the owning increment refin
 | PRJ-1 | Project Governance: maintain Project Membership, Business Groups and direct Actor membership | `REQ-AUTH-003/005/009/010`; `IF-PROJECT-ACCESS-ADMIN` | `DESIGN`; account creation grants none of these; nested Groups are not supported by Core design. |
 | CPD-1 | Controlled Product Data: New / Store Existing; inspect duplicate candidates; confirm new identity | `REQ-ID-001…006`; `IF-PRODUCT-COMMAND` | `DESIGN`; stable DocumentId, no silent merge and no empty published Generation. |
 | CPD-2 | Controlled Product Data: query exact document/head/history and authorized placement navigation | `REQ-ID-001/002/007`, `REQ-GOV-001/002`; `IF-PRODUCT-QUERY` | `DESIGN`; name/path is not identity; exact historical pins do not mean floating latest. |
+| DSC-1 | Discovery: basic find/browse exact controlled Product Data | `REQ-UX-002/003`, `SPEC-OPEN-02`; `IF-PRODUCT-QUERY`; DOC-06 Discovery Projection | `DESIGN`; permission-filtered, rebuildable projection and never write authority. Searchable fields, scope, ordering and paging remain `UNKNOWN`; advanced/saved search is deferred. No URL or search syntax is invented. |
 | CPD-3 | Controlled Product Data: move/link/unlink placement; alias rename; controlled-name change; Create Copy | `REQ-ID-007…009`; `IF-PRODUCT-COMMAND` | `DESIGN`; alias-only change differs from controlled content; Copy creates new identity without inherited entitlement. |
 | CPD-4 | Controlled Product Data: confirm Checkout/Reference scope; acquire/renew/end/recover Reservation | `REQ-WS-001…003/013/014`; `IF-PRODUCT-COMMAND` | `DESIGN`; exact Actor/Workspace/Generation binding, no hidden cascade. Lease duration remains the upstream policy open item. |
 | CPD-5 | Controlled Product Data: prepare/confirm Check-in; commit changed or No Change; resolve/retry outcome | `REQ-WS-006…012`; `IF-PRODUCT-COMMAND` | `DESIGN`; all-or-none publication and operation-specific identical-input retry. Custody completion is not Check-in success. |
@@ -89,6 +92,7 @@ errors and wire retry behavior remain `UNKNOWN` until the owning increment refin
 | FMT-1 | Format Intelligence: declare Capability Profile; request isolated format job; accept manual/produced derivative | `REQ-FMT-001…005`, `REQ-SEC-004`; `IF-FORMAT-JOB` | `DESIGN`; exact source/output pins and producer provenance; no IDEA code inside computer-aided design (CAD)/Office applications and no floating-latest derivative. |
 | AUD-1 | Audit: retain attributable evidence; authorized Audit query; committed projection/notification | `REQ-AUD-001/002`, `REQ-OPS-002`; `IF-COMMITTED-EVENT`, `IF-PRODUCT-QUERY` | `INTERNAL` evidence writes exist. Audit query/dispatcher/product projections are `DESIGN`; no editable Audit or consumer-owned business success. |
 | EVT-1 | Owner Modules: append committed event with owner outcome and Audit | `REQ-AUD-001`, `REQ-OPS-002`; `IF-COMMITTED-EVENT` | `INTERNAL` foundation qualified by F04. Synthetic sample result/replay access is `QUALIFICATION`, not a universal product result-access rule. |
+| LOC-1 | Localization: read and persist per-user locale preference shared by Web and Desktop | `REQ-LOC-001/002`; `REQ-UX-001` | `DESIGN`; `en`, `vi` and `ja` resources with English fallback are required by the source, but the owner, wire shape and exact storage/operation remain `UNKNOWN`. Changing locale must not change identity, policy or authorization. |
 | DSK-1 | Desktop: allowlisted Web/native intent bridge; Workspace binding and per-user protected custody | `REQ-SEC-003`; `IF-DESKTOP-BRIDGE`, `IF-WORKSPACE-IPC` | `DESIGN` / separate successor qualification. Accepted PH1 Web evidence does not qualify Desktop. |
 | OPS-1 | Operations: controlled backup/restore drill; capacity and availability qualification | `REQ-OPS-003…005` | `DESIGN` operational work, not an invented public API; PH1 does not establish production readiness. |
 | EXT-1 | Future company login / external business integration | `IF-COMPANY-IDENTITY`; DOC-05 scope boundary | `DEFERRED`; no provider, auto-link-by-email, external business write-back or public-integration promise. |
