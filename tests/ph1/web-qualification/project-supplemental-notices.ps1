@@ -18,16 +18,28 @@ if ($Profile -eq 'Server') {
 }
 if ((Get-FileHash -LiteralPath $input -Algorithm SHA256).Hash.ToLowerInvariant() -cne $pin) { throw 'RETAINED_INPUT_HASH_DRIFT' }
 New-Item -ItemType Directory -Path $root -Force | Out-Null
-[System.IO.File]::Copy($input, $output, $false)
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-$zip = [System.IO.Compression.ZipFile]::Open($output, [System.IO.Compression.ZipArchiveMode]::Update)
+$original = [System.IO.Compression.ZipFile]::OpenRead($input)
+$outputStream = [System.IO.File]::Open($output, [System.IO.FileMode]::CreateNew)
+$zip = [System.IO.Compression.ZipArchive]::new($outputStream, [System.IO.Compression.ZipArchiveMode]::Create)
 try {
+    # Update produced invalid retained-entry local headers in the first projection.
+    # Copy all original uncompressed bytes into a fresh archive; never change the input.
+    # Boot nested libraries remain STORED, not compressed nested archives.
+    foreach ($oldEntry in $original.Entries) {
+        $newEntry = $zip.CreateEntry($oldEntry.FullName, [System.IO.Compression.CompressionLevel]::NoCompression)
+        $newEntry.LastWriteTime = $oldEntry.LastWriteTime
+        $sourceStream = $oldEntry.Open()
+        $targetStream = $newEntry.Open()
+        try { $sourceStream.CopyTo($targetStream) }
+        finally { $sourceStream.Dispose(); $targetStream.Dispose() }
+    }
     foreach ($file in (Get-ChildItem -LiteralPath $resources -File -Filter '*.txt' | Sort-Object Name)) {
         $entryName = 'BOOT-INF/classes/third-party/ph1-runtime/' + $file.Name
-        if ($zip.GetEntry($entryName)) { throw 'SUPPLEMENTAL_ENTRY_ALREADY_EXISTS' }
+        if ($original.GetEntry($entryName)) { throw 'SUPPLEMENTAL_ENTRY_ALREADY_EXISTS' }
         [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $file.FullName, $entryName) | Out-Null
     }
-} finally { $zip.Dispose() }
+} finally { $zip.Dispose(); $outputStream.Dispose(); $original.Dispose() }
 & (Join-Path $PSScriptRoot 'check-supplemental-notices.ps1') -Artifact $output -Profile $Profile -BaselineArtifact $input
 if ((Get-FileHash -LiteralPath $input -Algorithm SHA256).Hash.ToLowerInvariant() -cne $pin) { throw 'RETAINED_INPUT_CHANGED' }
 'PROJECTION_SHA256=' + (Get-FileHash -LiteralPath $output -Algorithm SHA256).Hash.ToLowerInvariant()
