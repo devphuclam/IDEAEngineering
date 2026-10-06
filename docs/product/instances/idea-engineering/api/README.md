@@ -104,7 +104,7 @@ all Core requirements or adapters have passed qualification.
 
 | DOC-05 interface | Catalogue families |
 |---|---|
-| `IF-PRODUCT-QUERY` | CPD-2, STR-1, LC-2, CFG-2, AUD-1 |
+| `IF-PRODUCT-QUERY` | CPD-2, DSC-1, STR-1, LC-2, CFG-2, AUD-1 |
 | `IF-PRODUCT-COMMAND` | CPD-1…5, LC-1…3, CFG-2 |
 | `IF-ARTIFACT-CUSTODY` | CUS-1, CUS-3 |
 | `IF-ARTIFACT-TRANSFER` | CUS-2 |
