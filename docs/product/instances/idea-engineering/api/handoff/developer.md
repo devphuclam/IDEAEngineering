@@ -5,6 +5,14 @@ change record and review state inherit the [hub envelope](README.md).
 
 ## Delivered materials
 
+For the proposed v0.2 PH2 increment, read [CPD semantic cards](../controlled-product-data.md),
+[CPD guide](../cpd-guide.vi.md), [semantic examples](../cpd-examples.json) and
+[OpenAPI decision boundary](../cpd-openapi.json). Main source baseline:
+`1fb3f7756ad566c527c1247040054f5e9c719953`. Acceptance NOT-RUN under Issue #44.
+These DESIGN contracts do not supply implementation-ready unknown DTOs or endpoints.
+Use the current register in the hub to distinguish this successor from the historical Identity
+handoff below; pin the actual reviewed successor revision when receiving it.
+
 - [Detailed Identity/Session contract](../identity-session.md): inputs, outputs, permissions,
   state transitions, validation, failures, retry and source/test pointers for nine routes.
 - [Vietnamese user flow](../guide.vi.md): readable sequence for login and account lifecycle.

@@ -6,26 +6,31 @@ caller can use it. HTTP means Hypertext Transfer Protocol; QA means quality assu
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-API-CATALOGUE-001` / supporting interface catalogue |
-| Version / status | `0.1` / `Draft` |
+| Version / status | `0.2` / `Draft`; PH2 CPD refinement proposed |
 | Product normativity | `INFORMATIVE`; describes and indexes existing authority, not a new source of requirements |
 | Repository instruction state | `NOT-APPLICABLE` |
 | Owner / author | Principal Product Author / Codex |
 | Reviewer / acceptance authority | Project Reviewer / Product Decision Authority; this package's review and acceptance `NOT-RUN` |
-| Applicable baseline | IDEA Core v0; repository `9dab479db929bce88f101cdcbeee91dec50bc25a` |
+| Applicable baseline | IDEA Core v0; repository `1fb3f7756ad566c527c1247040054f5e9c719953`; Identity v0.1 retains its own inspected baseline |
 | Evidence date / effective date | 2026-10-06, `Asia/Ho_Chi_Minh` / `NOT-APPLICABLE` until accepted |
 | Classification / retention | `INTERNAL` / retain in Git with supersession history |
 | Upstream trace | `IE-PROD-SREQ-001` DOC-04@0.15; DOC-05@0.26; DOC-06@0.18; source and evidence below |
 | Downstream trace | Backend, Web/Desktop and QA wayfinding; [Identity/Session example](identity-session.md); [Vietnamese guide](guide.vi.md) |
-| Change record / worker mode | [Work Item #40](https://github.com/devphuclam/IDEAEngineering/issues/40) / `CODEX_ONLY`; initial documentation-only edition |
-| Supersedes / superseded by | `NOT-APPLICABLE` / `NOT-APPLICABLE` |
+| Change record / worker mode | [Work Item #44](https://github.com/devphuclam/IDEAEngineering/issues/44) / `CODEX_ONLY`; documentation-only CPD detail, no runtime changes |
+| Supersedes / superseded by | Catalogue v0.1 accepted through PR #41, retained in Git; Identity contract v0.1 unchanged / `NOT-APPLICABLE` |
 | Review trigger | Owner contract, route, security behavior or source baseline changes; detailing another operation family |
 | Evidence status | Source-inspected description plus referenced historical qualification; no new runtime execution or standards-conformity claim |
 
 ## 1. Read this package
 
+Version 0.2 adds [PH2 CPD-1/CPD-2 semantic contracts](controlled-product-data.md),
+[synthetic semantic JSON](cpd-examples.json), [CPD Vietnamese flow](cpd-guide.vi.md)
+and a [decision-bounded OpenAPI 3.0.3 document](cpd-openapi.json).
+CPD operations are DESIGN; wire details remain UNKNOWN. v0.2 acceptance is NOT-RUN.
+
 For cross-team delivery, management reading and partner assessment drafts, use the
-[API contract handoff hub](handoff/README.md). It adds a proposed handoff arrangement without
-changing this accepted v0.1 contract's operation semantics.
+[API contract handoff hub](handoff/README.md). The arrangement was accepted through PR #43;
+this v0.2 extension does not alter the accepted Identity/Session v0.1 operation semantics.
 
 Start with the [Vietnamese flow guide](guide.vi.md) for the user journey. Use this catalogue to find
 the owning domain and its interface. Use [Identity/Session](identity-session.md) for the detailed
@@ -75,8 +80,8 @@ OpenAPI `operationId`. A `DESIGN` row's exact URL, payload, errors and wire retr
 | ACC-2 | Access Policy: validate/activate Custom Role successor; preview/replace/revoke assignments | `REQ-AUTH-001/002/004/010`, `REQ-GOV-005`; `IF-RBAC-ADMIN` | `DESIGN` for the complete governed administration family; no implicit retargeting or administrator content bypass. |
 | ACC-3 | Access Policy: evaluate and explain a current scoped authorization decision | `REQ-AUTH-003…008`, `REQ-GOV-002`; `IF-AUTHORIZATION-DECISION` | `INTERNAL` IAM/custody subsets; complete Core product resource coverage is `DESIGN`. Permission does not bypass owner business gates. |
 | PRJ-1 | Project Governance: maintain Project Membership, Business Groups and direct Actor membership | `REQ-AUTH-003/005/009/010`; `IF-PROJECT-ACCESS-ADMIN` | `DESIGN`; account creation grants none of these; nested Groups are not supported by Core design. |
-| CPD-1 | Controlled Product Data: New / Store Existing; inspect duplicate candidates; confirm new identity | `REQ-ID-001…006`; `IF-PRODUCT-COMMAND` | `DESIGN`; stable DocumentId, no silent merge and no empty published Generation. |
-| CPD-2 | Controlled Product Data: query exact document/head/history and authorized placement navigation | `REQ-ID-001/002/007`, `REQ-GOV-001/002`; `IF-PRODUCT-QUERY` | `DESIGN`; name/path is not identity; exact historical pins do not mean floating latest. |
+| CPD-1 | Controlled Product Data: New / Store Existing; inspect duplicate candidates; confirm new identity | `REQ-ID-001…006`; `IF-PRODUCT-COMMAND` | `DESIGN`; [CPD-1.1…1.4 and first-publication dependency](controlled-product-data.md); stable identity, no silent merge/empty published Generation. |
+| CPD-2 | Controlled Product Data: exact Document, Revision, Version, Generation, history and authorized placement navigation | `REQ-ID-001/002/007`, `REQ-GOV-001/002`; `IF-PRODUCT-QUERY` | `DESIGN`; [CPD-2.1…2.4](controlled-product-data.md); exact historical pins, no latest substitution. |
 | DSC-1 | Discovery: basic find/browse exact controlled Product Data | `REQ-UX-002/003`, `SPEC-OPEN-02`; `IF-PRODUCT-QUERY`; DOC-06 Discovery Projection | `DESIGN`; permission-filtered, rebuildable projection and never write authority. Searchable fields, scope, ordering and paging remain `UNKNOWN`; advanced/saved search is deferred. No URL or search syntax is invented. |
 | CPD-3 | Controlled Product Data: move/link/unlink placement; alias rename; controlled-name change; Create Copy | `REQ-ID-007…009`; `IF-PRODUCT-COMMAND` | `DESIGN`; alias-only change differs from controlled content; Copy creates new identity without inherited entitlement. |
 | CPD-4 | Controlled Product Data: confirm Checkout/Reference scope; acquire/renew/end/recover Reservation | `REQ-WS-001…003/013/014`; `IF-PRODUCT-COMMAND` | `DESIGN`; exact Actor/Workspace/Generation binding, no hidden cascade. Lease duration remains the upstream policy open item. |

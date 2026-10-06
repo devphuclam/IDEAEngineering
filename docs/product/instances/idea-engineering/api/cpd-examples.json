@@ -1,0 +1,62 @@
+{
+  "documentId": "IE-API-CPD-EXAMPLES-001",
+  "version": "0.2",
+  "status": "Draft",
+  "controlEnvelope": "controlled-product-data.md",
+  "exampleKind": "SYNTHETIC SEMANTIC ILLUSTRATION — NOT REQUEST/RESPONSE DTO",
+  "limits": "Keys, short symbolic IDs, decision words and nulls are explanatory only. They do not select serialization, enum codes or a HTTP schema. No credential, token, private path or real person is included.",
+  "duplicatePreview": {
+    "candidate": "synthetic-source-1",
+    "evidenceDimensions": ["metadata", "path/name", "content digest"],
+    "authorizedCandidatesOnly": [
+      {"logicalDocument": "D1", "observation": "same content digest does not prove same logical identity"}
+    ],
+    "decision": "explicit create / link / cancel; never silent merge",
+    "unresolved": ["link meaning U01", "matching and normalization U02", "wire U06"]
+  },
+  "registrationWithoutPublication": {
+    "logicalDocument": "D2",
+    "governingProject": "P1",
+    "stateMeaning": "Start — identity registered, no published baseline",
+    "generation": null,
+    "workingHead": null,
+    "reviewOrReleaseEligible": false
+  },
+  "firstPublishedBaseline": {
+    "logicalDocument": "D2",
+    "businessRevisionIdentity": "R1",
+    "businessRevisionLabel": "A",
+    "versionWithinRevision": 1,
+    "generationIdentity": "G1",
+    "workingHead": "G1",
+    "stateMeaning": "In Work",
+    "manifestMeaning": {
+      "metadataDefinition": "an exact retained definition version",
+      "artifactReference": "exact verified Artifact identity + digest + declared role",
+      "structureAndProvenance": "exact applicable pins, not floating latest"
+    },
+    "atomicCompanions": ["owner result", "required Audit", "applicable outbox"]
+  },
+  "laterHistory": [
+    {"document": "D2", "revisionIdentity": "R1", "revisionLabel": "A", "version": 1, "generation": "G1"},
+    {"document": "D2", "revisionIdentity": "R1", "revisionLabel": "A", "version": 2, "generation": "G2"},
+    {"document": "D2", "revisionIdentity": "R2", "revisionLabel": "B", "version": 1, "generation": "G3"}
+  ],
+  "historyLimit": "Illustrates changed Check-in and new Revision semantics, not extra operations delivered by this edition. Revision policy controls labels. No Change adds no Generation.",
+  "historicalPlacement": {
+    "placement": "L1",
+    "folder": "F1",
+    "targetDocument": "D2",
+    "exactRevision": "R1",
+    "exactGeneration": "G1",
+    "afterHeadAdvances": "still G1, never silently G3",
+    "authority": "placement is not a grant to read target content"
+  },
+  "uncertainResponse": {
+    "operation": "O1",
+    "observation": "response lost; commit not yet established",
+    "safeMeaning": "resolve/resume the same logical operation under current authority",
+    "notAllowedInference": "FAILED, rolled back, or successful new operation",
+    "statusWire": "UNKNOWN U05"
+  }
+}

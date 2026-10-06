@@ -24,6 +24,10 @@ and are not edited as product content.
 
 ## API contract reading package
 
+The proposed [API Contract v0.2 CPD detail](api/controlled-product-data.md) refines PH2 CPD-1/CPD-2
+without changing requirements or runtime. Use the [current handoff register](api/handoff/README.md)
+for accepted predecessors versus the review-pending successor. CPD wire details remain UNKNOWN.
+
 The [Core v0 API catalogue](api/README.md), [Identity/Session HTTP example](api/identity-session.md)
 and [Vietnamese flow guide](api/guide.vi.md) form a supporting Draft 0.1 reading package. It
 distinguishes implemented adapters, internal/qualification seams and future design; it creates
