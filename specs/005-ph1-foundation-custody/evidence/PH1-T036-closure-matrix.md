@@ -2,8 +2,8 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-T036-CLOSURE / review packet / 0.3 |
-| Status / result | T036 COMPLETED / PASS WITH NOTES for bounded PH1 current use; exhaustive native coverage remains UNKNOWN |
+| Stable ID / class / version | IE-VEV-PH1-T036-CLOSURE / review packet / 0.4 |
+| Status / result | T036 COMPLETED / PASS for bounded PH1 current use; exhaustive native coverage UNKNOWN is a separate residual limitation |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review Authority separate |
 | Baseline / evidence date | PR38 reviewed head 8af0a6a05d19106960c9f2674aa1fd9e49231dde; 2026-10-06 Asia/Ho_Chi_Minh |
 | Scope / normativity | INFORMATIVE; retained-artifact and reference-only rights review; no new runtime, build, import, deployment or use authorization |
@@ -12,6 +12,10 @@
 | Change / trigger / tailoring | Successor reconciliation after R36-04 acceptance; graph/version/packaging/use drift reopens affected row; STANDARD-GUIDED under IE-STD-AUTH-001 |
 
 ## 1. Review result and completion oracle
+
+**Current reading rule, v0.4:** section 8 is the Project Reviewer's explicit PASS disposition
+after reading ba61e4d. Section 7's PASS WITH NOTES is the prior publication label, retained
+as history. The residual UNKNOWN is not an unmet T036 acceptance requirement.
 
 **Current reading rule, v0.3:** section 7 records the human-directed bounded current-use
 closure after disclosure of the native coverage limit. NOT-CLOSED/IN_PROGRESS in sections
@@ -192,3 +196,21 @@ not a universal MIT/MPL grant or exhaustive SBOM claim. Known terms remain
 APPROVED-WITH-OBLIGATIONS; actual missing/incompatible rights would reopen intake.
 T036 = COMPLETED / PASS WITH NOTES. Independent successor packet review, PH1 gate acceptance,
 Issue37 closure and merge remain separate. PR38 Draft/Open; verifier NOT-RUN; preview unchanged.
+
+## 8. Project Reviewer acceptance — current PASS label
+
+On 2026-10-06 the Project Reviewer reported reading head
+ba61e4d123083d3ed8d81d68beb41b92633ae336 and explicitly decided T036 = COMPLETED / PASS.
+Current PH1 dependency/license/provenance acceptance criteria are satisfied; exhaustive
+independent compiled-native mapping is outside the mandatory acceptance criterion for this
+bounded current use. It remains a residual evidence limitation, not a failed requirement.
+
+Residual note: exhaustive independent mapping of the compiled Rolldown/Rust transitive subset
+was not established. No missing or incompatible right was identified. Reopen intake if version,
+native graph, packaging or distribution scope changes. Applicable obligations remain binding;
+no exhaustive SBOM, counsel opinion or future universal distribution clearance is claimed.
+
+This successor changes only the status label and acceptance record, not license texts, hashes,
+execution evidence, native coverage or product behavior. PH1 still needs separate whole-increment
+final review/acceptance. PR38 stays Draft/Open, Issue37 stays open; no merge, verifier or preview
+deployment is authorized. Conversation acceptance is not fabricated as a GitHub review event.

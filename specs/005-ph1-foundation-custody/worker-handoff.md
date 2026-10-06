@@ -16,9 +16,9 @@ Retained T027/T028 continuation
 paragraphs below are historical receipts, not today's execution frontier.
 No timer/progress action, verifier or merge is inferred.
 
-**Current closure successor:** T036 COMPLETED / PASS WITH NOTES under the human-directed
-bounded current-use disposition. Read [closure receipt](../../docs/research/2026-10-06-t036-bounded-closure.md)
-and [matrix section 7](evidence/PH1-T036-closure-matrix.md#7-bounded-closure-publication).
+**Current closure successor:** T036 COMPLETED / PASS under the Project Reviewer's explicit
+decision after reading ba61e4d. Read [closure receipt](../../docs/research/2026-10-06-t036-bounded-closure.md)
+and [matrix section 8](evidence/PH1-T036-closure-matrix.md#8-project-reviewer-acceptance--current-pass-label).
 Earlier T036 IN_PROGRESS/unchecked paragraphs below are historical. Full independent compiled
 Rust coverage remains UNKNOWN as an owned residual, not an asserted blanket grant; reopen on
 actual right conflict or changed use/distribution. No PH1 gate/Issue closure or merge inferred.

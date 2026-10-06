@@ -2,10 +2,10 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-T036-CURRENT-USE-CLOSURE-20261006 / verification disposition / 0.1 |
-| Status / result | COMPLETED / PASS WITH NOTES for bounded PH1 current use |
+| Stable ID / class / version | IE-VEV-T036-CURRENT-USE-CLOSURE-20261006 / verification disposition / 0.2 |
+| Status / result | COMPLETED / PASS for bounded PH1 current use; residual evidence limitation separate |
 | Authority / owner / author | Human T036 comply-and-use decision and subsequent instruction to achieve/close T036 after the disclosed residual-limit proposal / Engineering intake / Codex CODEX_ONLY |
-| Review / acceptance distinction | Human scope and closure direction in conversation; engineering disposition recorded here; independent review of this successor packet NOT-RUN; no GitHub approval event inferred |
+| Review / acceptance distinction | Project Reviewer explicitly reviewed head ba61e4d and accepted T036 COMPLETED / PASS in conversation on 2026-10-06; no GitHub approval event inferred; PH1 acceptance separate |
 | Baseline / date / classification | PR38, predecessor 7fc7bd4367a431d12a05e1aeffcee2dab1535e3c / 2026-10-06 Asia/Ho_Chi_Minh / INTERNAL |
 | Normativity / tailoring | INFORMATIVE product; bounded task disposition; STD-INFO-001 STANDARD-GUIDED |
 | Upstream / downstream | [Current rights](2026-10-06-t036-current-use-rights.md), [performed notices](2026-10-06-t036-comply-and-use.md), human scope decision / [matrix](../../specs/005-ph1-foundation-custody/evidence/PH1-T036-closure-matrix.md), [T036](../../specs/005-ph1-foundation-custody/tasks.md) |
@@ -37,7 +37,7 @@ Any actual absent/incompatible grant discovered later reopens the affected compo
 | R36-02 native identity/source/current-use grants | Six exact cache/lock/binary bridges; publisher source/grant/notice correspondence for Rolldown, LightningCSS and TypeScript; conservative component studies below | SATISFIED WITH RESIDUAL COVERAGE NOTE under approved bounded scope; complete compiled transitive coverage UNKNOWN |
 | R36-03 identified special/custom/reciprocal terms | Component-specific current-use rights and concrete retained obligations, including Jakarta EPL source location, Tomcat covered schemas, Plexus supplemental notices, Interpolation attached distributor grant, Sisu, JDOM, Maven annotations | APPROVED-WITH-OBLIGATIONS; no classification-only legal blocker |
 | R36-04 Web notices | Earlier human-accepted real/repeat Web packaging evidence unchanged | SATISFIED, not reopened |
-| T036 current PH1 dependency/license/clean-room review | Exact identities/use, attributable grants, actual retention and explicit residual treatment | COMPLETED / PASS WITH NOTES; independent final packet review separate |
+| T036 current PH1 dependency/license/clean-room review | Exact identities/use, attributable grants, actual retention and explicit residual treatment | COMPLETED / PASS; Project Reviewer accepted scope/disposition at ba61e4d |
 
 JSR305 historical missing-right finding remains preserved and excluded from the qualified
 Gateway graph/inspected application packages. No right is created for that excluded artifact.
@@ -78,6 +78,16 @@ No further unapproved runtime execution is authorized by this receipt. The packa
 closure basis predates this auxiliary probe; no whole-native PASS rests on it.
 
 ## 4. Residual register and stop conditions
+
+Project Reviewer disposition after reviewing ba61e4d: the current T036 acceptance criteria
+are satisfied. The exhaustive native-map UNKNOWN is a residual evidence limitation, not an
+unmet requirement or acceptance blocker. Initial publication at ba61e4d used PASS WITH NOTES;
+this v0.2 records the explicit successor COMPLETED / PASS decision without changing evidence.
+
+Residual note: exhaustive independent mapping of the compiled Rolldown/Rust transitive subset
+was not established. No missing or incompatible right was identified. Reopen intake if version,
+native graph, packaging or distribution scope changes. Parent grants are still not claimed
+to establish every unidentified external crate's rights; no exhaustive SBOM is asserted.
 
 | Residual | Owner / due condition | Treatment |
 |---|---|---|

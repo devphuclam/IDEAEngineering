@@ -2,8 +2,8 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.7 |
-| Status / disposition | T036 COMPLETED / PASS WITH NOTES for bounded current PH1 use; exhaustive native transitive coverage UNKNOWN, future delivery separate |
+| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.8 |
+| Status / disposition | T036 COMPLETED / PASS for bounded current PH1 use; exhaustive native coverage UNKNOWN is residual, future delivery separate |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review remains separate |
 | Baseline / date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; 2026-10-06 Asia/Ho_Chi_Minh |
 | Authority / normativity | Authorized T036 evidence review only; INFORMATIVE; no new execution/import/license right |
@@ -13,6 +13,12 @@
 | Tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; inspection of retained source/evidence, not an independent legal opinion, signature audit or third-party reproducible build |
 
 ## 1. Actual review and exact inventory identity
+
+**Current reading rule, v0.8:** Project Reviewer reviewed ba61e4d and explicitly accepted
+T036 COMPLETED / PASS; see [matrix section 8](PH1-T036-closure-matrix.md#8-project-reviewer-acceptance--current-pass-label).
+Earlier PASS WITH NOTES publication is retained below as history. Exhaustive independent
+native transitive coverage remains UNKNOWN, but is not a mandatory unmet criterion for this
+current-use acceptance. No evidence/hash/test changes; PH1 final acceptance remains separate.
 
 **Current reading rule, v0.7:** [bounded closure](../../../docs/research/2026-10-06-t036-bounded-closure.md)
 and [matrix section 7](PH1-T036-closure-matrix.md#7-bounded-closure-publication) supersede the
