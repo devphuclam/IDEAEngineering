@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version / status | IE-RES-T036-NOTICE-PACKAGING-20261006 / prospective process exception and execution packet / 0.1 / Approved for bounded scope |
+| Stable ID / class / version / status | IE-RES-T036-NOTICE-PACKAGING-20261006 / process exception and execution receipt / 0.2 / Approved for bounded scope; focused packaging qualification PASS |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm, explicit conversation approval “Được” after the narrow proposal |
 | Applicability / date | Issue37 / PR38, R36-04 Web runtime notices only / 2026-10-06 Asia/Ho_Chi_Minh |
 | Normativity / authority | INFORMATIVE product; prospective internal/offline build/test process exception only; no legal/company/commercial clearance or new rights |
@@ -76,3 +76,52 @@ copied Server package, transfer identity and unchanged non-static entries. It cl
 no all-T036/PH1/production/commercial acceptance. STOP on missing cache, input/hash/version drift,
 unexpected graph/network/DB/listener need or mutation outside owned targets. First-party defects
 can be repaired prospectively with failed attempts retained. No verifier, timer action or merge.
+
+## Actual execution receipt — 2026-10-06
+
+Authorization/test publication: 11bd379b3cde01c0986e4795bd6b9a73c6ff8d5a, pushed before RED.
+Implementation source: b2d361a01ab523e53786f0dd741c7e68cba16b04, pushed before real build.
+Successor checker/source: fa4cb5c852d5993916b3bc4997c39631a73441c5, pushed before non-static
+comparison and final real Web build; only the checker changed since b2d361a.
+
+| Actual command / independent oracle | Result |
+|---|---|
+| `pwsh -NoProfile -File tests/ph1/web-qualification/check-runtime-notices.ps1 -Artifact .tmp/t036-notices-20261006-01/predecessor.jar` | Genuine RED: `RUNTIME_NOTICE_MISSING_OR_DUPLICATE=assets/licenses/react.txt`; predecessor hash matches 7f0a628d…53c. Input retained unchanged |
+| Admitted Windows Node directly executes `apps/server/scripts/build-web-static.mjs <worktree>/apps/server/target/t036-notice-01` | Real TypeScript noEmit + Vite8.3.1 build PASS,15 modules. Admitted Node-only distribution has no npm CLI, so the published fallback runs existing `typescript/bin/tsc` and `vite/bin/vite.js` directly. No npm/package acquisition or plugin used |
+| Notice checker against generated directory, including repeat and final-source build | PASS on each run:3 exact SHA-256 notices +3 index links. Vite empties the generated output on repeat; notices are regenerated, not stale leftovers |
+| Local/remote raw generated transfer checks | 5/5 PASS before JDK jar update: index, unchanged compiled JS,3 notice files |
+| Installed JDK `jar --update --file <fresh-owned-copy.jar> -C <owned-root> BOOT-INF/classes/static` | PASS, repeat PASS. Existing accepted preview JAR and all old evidence preserved; no preview deployment/start/stop |
+| Checker against updated JAR with `-BaselineArtifact <predecessor.jar>` | PASS twice:3 exact notices,3 links,261 non-static entry names/content hashes unchanged. No class, SQL, loader, manifest or nested library change |
+| Final source/tool/lock/input rehash | Node/JDK pins and predecessor JAR unchanged; copied cache reconciled1602/1602 files to unchanged primary cache before final-source build. No graph/version/installed-package change |
+
+Output package projection SHA-256:
+`dde3f36b1ad015d46c46585b78d77b660f7a62037e7ca7215574ec7186bcc151`,
+same after repeat jar update and transfer back. This is **not** a newly compiled final-F05 Server
+release artifact and is not deployed/reviewer-accepted. Generated Web index SHA-256
+`6adc2b6e92446ff413854c9c5958b44f5d0c7cc88f9001a381988c5489da36c2`;
+compiled JS SHA-256 remains `a34548822cf5cadf32e485f6b302052105407894dfacbe77a9717a3a12bb6552`,
+identical to predecessor. Each runtime notice remains the admitted `da6d3703…a58e93` bytes.
+
+Final first-party raw working-file hashes (not a claim that every Windows byte has Git LF layout):
+
+| File | SHA-256 |
+|---|---|
+| apps/server/scripts/build-web-static.mjs | 859634a3151e52e354fe57d7335ea73b047a40104debc0e61acd09213c11239d |
+| apps/web/index.html | 4726dcbd221aa4da02b07199c556215c3e5890b6f09fdec99b5919bbd6d0baf9 |
+| tests/ph1/web-qualification/check-runtime-notices.ps1 | 9cbd34ed1338da0a21166eb54238c51f3552ed832f37d9881983873e4d900d69 |
+
+Cache reconciliation aggregate:1602 records, sorted by source full path, each relative
+slash-normalized path + TAB + SHA-256, joined LF with final LF; UTF-8 SHA-256
+`5e38eec0c9a9eaf9b258670164d731606e7f5bf71506e2b954a9d73669a3d70e`.
+This full-file comparison occurred after initial copy/build and before final-source rerun;
+it is not falsely described as before the first build. Initial execution used existing reviewed
+exact-version cache; production notice-copy checks pin versions/legal hashes on every build.
+No publisher archive attestation or independent upstream rebuild is implied.
+
+Retained evidence: controlled source/checker and this command/result record, original copied JAR,
+generated output and two projection copies under the owned local root; remote static/projection
+under the owned remote root. No new durable raw-log file was created: the actual RED/GREEN command
+outputs are retained in the task transcript. Exact hashes identify retained files, not independent
+review of a private log. Primary cache, preview and database were unchanged. No cleanup of retained
+roots or other worktrees. Focused R36-04 engineering repair = PASS; external review remains separate.
+Maven/full executable build, HTTP/browser/application suites, verifier and all-T036 closure NOT-RUN.

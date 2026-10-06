@@ -2,14 +2,14 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.3 |
+| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.4 |
 | Status / disposition | Draft / T036 IN_PROGRESS; substantive local review performed, remaining provenance/notice and authority gaps explicit; not legal or commercial clearance |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review remains separate |
 | Baseline / date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; 2026-10-06 Asia/Ho_Chi_Minh |
 | Authority / normativity | Authorized T036 evidence review only; INFORMATIVE; no new execution/import/license right |
 | Classification / retention | INTERNAL; preserve historical rights decisions, exceptions, failures and exact inventories |
 | Upstream / downstream | [External intake](../../../docs/agents/external-source-intake.md), FR-012 / [tasks](../tasks.md), separate integration/Legal Review |
-| Change / supersession / trigger | v0.3 adds authenticated read-only retained-package inspection and Web runtime notice finding; v0.2 local/source review and initial access failure remain historical; version/hash/graph/use or distribution change reopens applicable intake |
+| Change / supersession / trigger | v0.4 adds approved R36-04 repair and focused execution receipt; v0.3 finding and predecessors preserved; version/hash/graph/use or distribution change reopens applicable intake |
 | Tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; inspection of retained source/evidence, not an independent legal opinion, signature audit or third-party reproducible build |
 
 ## 1. Actual review and exact inventory identity
@@ -191,3 +191,30 @@ Current remaining work: R36-01 package notice closure (access restored, not all 
 reinspected), R36-02 native provenance/transitive notices, R36-03 accountable special-term
 dispositions, and R36-04 the actual Web notice packaging repair. No T036/PH1 completion,
 new application qualification or commercial clearance is claimed.
+
+## 9. R36-04 successor notice-retention repair — v0.4
+
+The human approved the narrow T036 internal/offline repair before execution.
+[Controlled successor scope and exact receipt](../../../docs/research/2026-10-06-t036-notice-packaging-exception.md)
+records approval, admitted inputs, commands, owned roots, RED/GREEN and qualification limits.
+Historical R36-04 finding in §8 remains unchanged.
+
+The real build script now verifies admitted runtime names/versions and LICENSE hashes, copies
+their unchanged bytes to generated `assets/licenses/{react,react-dom,scheduler}.txt`, and the Web
+index links them. Existing public assets policy is unchanged; no Java/HTTP/authentication/API
+change. The admitted Node-only tool layout uses the same locked TypeScript/Vite CLIs without
+installing npm; normal available-npm execution remains supported and offline-configured.
+
+Genuine RED on retained accepted Server JAR → actual real Web build GREEN → repeat build GREEN
+→ copied JAR packaging projection GREEN. All3 notice hashes/3 links pass;261 non-static entries
+remain byte-identical. Final checked source fa4cb5c852d5993916b3bc4997c39631a73441c5; production
+implementation b2d361a01ab523e53786f0dd741c7e68cba16b04 unchanged by the successor test commit.
+Projection JAR dde3f36b1ad015d46c46585b78d77b660f7a62037e7ca7215574ec7186bcc151 is retained
+for review only. It is not a fresh full-F05 Server build, accepted/deployed package or browser
+execution. Preview remains on its accepted 7f0a628d…53c predecessor; no rollout occurred.
+
+R36-04 = engineering repair/packaging projection PASS, external disposition pending. This closes
+the identified three-library runtime notice retention gap at the qualified packaging seam,
+not an exhaustive compiled-dependency license conclusion. T036 remains IN_PROGRESS for R36-01
+full actual notice mapping, R36-02 native correspondence/transitive notices and R36-03 accountable
+supplemental/custom-term dispositions. No blanket legal/commercial clearance or PH1 acceptance.
