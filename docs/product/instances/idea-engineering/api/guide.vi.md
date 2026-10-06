@@ -70,7 +70,7 @@ Hiện có HTTP account commands nhưng **chưa có Account Management UI hoặc
 | Thao tác | Ý nghĩa |
 |---|---|
 | Cấp first-setup proof | Account Administrator **v2** có quyền setup riêng; target phù hợp ở `PENDING`, chưa có credential. |
-| Redeem first-setup proof | Người giữ proof đúng target dùng I09 để đặt mật khẩu đầu tiên; Account thành `ACTIVE`, nhưng chưa tự đăng nhập. |
+| Redeem first-setup proof | Người giữ proof đúng target dùng I09 để đặt mật khẩu đầu tiên; Account thành `ACTIVE`, `securityVersion` tăng 1, nhưng chưa tự đăng nhập. Thao tác có kiểm version sau đó phải dùng version mới. |
 | Cấp reset proof | Cần quyền reset riêng của v2 và **LoginIdentityId chính xác**; không đoán login đầu tiên trong Account. |
 | Redeem reset proof | Chỉ đổi credential của login đã pin; tăng Account security version và vô hiệu hóa mọi session cũ. |
 | Reset account đang `DISABLED` | Vẫn `DISABLED`; Actor vẫn bị khóa. Phải re-enable riêng, rồi đăng nhập mới. |
