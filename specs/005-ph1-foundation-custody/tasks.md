@@ -208,7 +208,7 @@ block the accepted F01–F04 work.
 ## Phase 8: Cross-cutting review
 
 - [X] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); [coverage review](evidence/PH1-coverage-review.md) records one row per FR/SC/CHK, accepted execution lineage and residual `NOT-RUN`/limited claims. Review performed on 2026-10-06; no new execution or whole-PH1 acceptance is implied.
-- [ ] T036 IN_PROGRESS: [license review v0.4](evidence/PH1-license-review.md) records substantive terms/source evidence, authenticated retained packages and approved R36-04 repair. Real Web/repeat builds + copied-JAR notice projection PASS;261 non-static entries unchanged. No fresh full Server build or preview deployment. R36-01 full notice mapping and R36-02/03 native correspondence/accountable special-term dispositions remain; no blanket clearance or PH1 acceptance.
+- [ ] T036 IN_PROGRESS: [license review v0.5](evidence/PH1-license-review.md) and [whole T036 matrix](evidence/PH1-T036-closure-matrix.md) record accepted R36-04, 89 nested-JAR notice observations, 191 input-role dispositions and all 88 Web platform entries. Native archive/binary identity is reconciled; Rolldown Rust notice coverage and named supplemental JAR delivery gaps remain. Special terms distinguish historical authorized build/test, actual runtime and prospective Legal Review; no new legal approval, build/deployment, blanket clearance or PH1 acceptance.
 
 ## Dependencies and execution order
 

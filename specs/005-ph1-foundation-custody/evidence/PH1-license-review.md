@@ -2,17 +2,24 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.4 |
+| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.5 |
 | Status / disposition | Draft / T036 IN_PROGRESS; substantive local review performed, remaining provenance/notice and authority gaps explicit; not legal or commercial clearance |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review remains separate |
 | Baseline / date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; 2026-10-06 Asia/Ho_Chi_Minh |
 | Authority / normativity | Authorized T036 evidence review only; INFORMATIVE; no new execution/import/license right |
 | Classification / retention | INTERNAL; preserve historical rights decisions, exceptions, failures and exact inventories |
 | Upstream / downstream | [External intake](../../../docs/agents/external-source-intake.md), FR-012 / [tasks](../tasks.md), separate integration/Legal Review |
-| Change / supersession / trigger | v0.4 adds approved R36-04 repair and focused execution receipt; v0.3 finding and predecessors preserved; version/hash/graph/use or distribution change reopens applicable intake |
+| Change / supersession / trigger | v0.5 records R36-04 human acceptance and actual package/native/special-term closure matrix; v0.4 and historical findings preserved; version/hash/graph/use or distribution change reopens applicable intake |
 | Tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; inspection of retained source/evidence, not an independent legal opinion, signature audit or third-party reproducible build |
 
 ## 1. Actual review and exact inventory identity
+
+**Current reading rule, v0.5:** R36-04 was accepted at engineering level by the Project Reviewer
+against head 8af0a6a05d19106960c9f2674aa1fd9e49231dde on 2026-10-06. The older OPEN/access/
+pending paragraphs below retain their historical observation states. For the current R36-01–03
+frontier and exact remaining action, read the [whole T036 matrix](PH1-T036-closure-matrix.md)
+and [native correspondence](../../../docs/research/2026-10-06-t036-native-correspondence.md).
+No historical finding has been rewritten as PASS; no T036/PH1 acceptance is inferred.
 
 No restore, install, download, Maven execution, application test, database change or verifier was
 performed for this review. Historical execution authority is not extended to a new build.

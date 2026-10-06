@@ -10,7 +10,7 @@ are complete under the separate continuous sprint. For review or continuation, r
 [F05 closure matrix](evidence/F05-closure-matrix.md) first: current requirements,
 actual sources/executions and acceptance limits. Whole F05-A/B is human ACCEPTED / PASS WITH NOTES
 at `874088695d0b65e6d71b40078d6f55e623087b0a`. T035 review is performed; next resolve the
-specific T036 R36-01–04 dispositions in [PH1 license review v0.4](evidence/PH1-license-review.md), not another feature
+specific T036 R36-01–03 actions in [whole T036 matrix](evidence/PH1-T036-closure-matrix.md), not another feature
 slice. PR38 stays Draft/Open; card/Issue closure and actual-effort publication remain separate.
 Retained T027/T028 continuation
 paragraphs below are historical receipts, not today's execution frontier.
@@ -23,8 +23,11 @@ output lacks React/ReactDOM/scheduler notices. The approved successor repair now
 notices in real/repeat Web builds and a copied-JAR packaging projection;261 non-static entries
 unchanged. Read [exact bounded scope/result](../../docs/research/2026-10-06-t036-notice-packaging-exception.md)
 before reuse: no fresh full Server build or preview rollout; exception is not general future authority.
-Next review this focused repair, finish actual notice/native provenance mapping and accountable
-special-term dispositions. No credentials in chat; T036 remains unchecked and PH1 not accepted.
+The Project Reviewer accepted R36-04 against 8af0a6a on 2026-10-06; keep it closed absent drift.
+Current package mapping identifies named supplemental JAR delivery gaps; native package integrity
+is reconciled, while Rolldown compiled Rust notice coverage remains open. Read the whole T036
+matrix before a packaging repair or Legal Review request; do not infer new execution authority
+from the historical exceptions. No credentials in chat; T036 remains unchecked and PH1 not accepted.
 
 1. Read repository `AGENTS.md`, [Spec Kit workflow](../../docs/agents/spec-kit.md),
    [spec](spec.md), [plan](plan.md), and the current task list. Inspect branch, HEAD and dirty
