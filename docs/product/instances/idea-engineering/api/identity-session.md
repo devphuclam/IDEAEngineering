@@ -34,7 +34,7 @@ the other refusal statuses below assume a valid CSRF submission and a syntactica
 | Session eligibility | Active account, enabled Actor, matching security version, unrevoked database record, current runtime instance and current deadlines. |
 | Lifetime | Idle 2 hours and absolute 8 hours; exactly at either deadline the session is ineligible. Servlet retention is 8 hours, not the eligibility authority. |
 | Restart | Old runtime proof cannot be adopted; retained DB session metadata does not recreate authentication. Fresh sign-in is required. |
-| Administration | A real applicable `account-administrator@1` or `@2` assignment pins Organization Scope. Authentication alone and Super Administrator status alone grant no account CRUD. |
+| Administration | A real applicable `account-administrator@1` or `@2` assignment pins Organization Scope. Authentication alone and Super Administrator status alone grant no account administration operations. |
 | Proof issuance | Only explicit `account-administrator@2` includes the separate setup/reset issuance permissions. v1 is not silently upgraded. |
 
 Successful eligible activity can refresh idle eligibility; it cannot extend absolute lifetime.
