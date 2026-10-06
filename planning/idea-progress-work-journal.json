@@ -287,6 +287,28 @@
       "reason": "Người dùng xác nhận ước lượng hồi tố F04 6 giờ 50 phút (410 phút), chỉ các khoảng 02/10 10:55–12:00, 13:00–17:00 và 03/10 08:00–09:45. Đã giữ phiên timer gốc và dấu vết hiệu chỉnh trong Work Journal; loại giờ nghỉ/qua đêm và phần governance AI. Không dùng giờ kế hoạch làm actual.",
       "recordedAt": "2026-10-03T10:12:08.3625702+07:00",
       "recordedBy": "LEAD"
+    },
+    {
+      "correctionId": "CORRECTION-d0ba51d0f5884a1fa28bc21aee53b470",
+      "deliveryCardId": "F05-A",
+      "previousActualEffortHours": null,
+      "newActualEffortHours": 3.0,
+      "previousRemainingEffortHours": null,
+      "newRemainingEffortHours": 0.0,
+      "reason": "Người dùng xác nhận ước lượng hồi tố F05-A là 3 giờ và yêu cầu hoàn thành card. Gắn bằng chứng whole-PH1 Project Reviewer ACCEPTED/PASS đã merge.",
+      "recordedAt": "2026-10-06T11:29:03.42086+07:00",
+      "recordedBy": "LEAD"
+    },
+    {
+      "correctionId": "CORRECTION-f80322f967224e8092a2631a2acf25eb",
+      "deliveryCardId": "F05-B",
+      "previousActualEffortHours": null,
+      "newActualEffortHours": 5.0,
+      "previousRemainingEffortHours": null,
+      "newRemainingEffortHours": 0.0,
+      "reason": "Người dùng xác nhận ước lượng hồi tố F05-B là 5 giờ và yêu cầu hoàn thành card. Gắn bằng chứng whole-PH1 Project Reviewer ACCEPTED/PASS đã merge.",
+      "recordedAt": "2026-10-06T11:29:39.2311611+07:00",
+      "recordedBy": "LEAD"
     }
   ]
 }

@@ -1,11 +1,11 @@
 {
   "contractVersion": "0.1.0",
   "registerId": "IE-PMC-EXECUTION-REGISTER-001",
-  "registerRevision": 35,
+  "registerRevision": 37,
   "status": "CURRENT",
   "projectId": "IDEA-ENGINEERING",
   "baselineId": "IE-PLAN-DEC2026-003@0.2",
-  "statusDate": "2026-10-03",
+  "statusDate": "2026-10-06",
   "timeZone": "Asia/Ho_Chi_Minh",
   "defaults": {
     "priority": "NORMAL",
@@ -802,28 +802,96 @@
         "kind": "DeliveryCard",
         "id": "F05-A"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 14,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F05-A-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": "specs/005-ph1-foundation-custody/evidence/PH1-acceptance.md",
+          "commit": "11115dff5251cf5a132ef3198edb454e98e45dc2",
+          "sha256": null,
+          "externalUri": null,
+          "description": "Project Reviewer whole-PH1 ACCEPTED/PASS includes F05-A/T027–T034; acceptance record merged with PR #38. User-confirmed retrospective effort estimate: 3 hours.",
+          "result": "PASS",
+          "recordedAt": "2026-10-06T11:29:03.42086+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F05-A-EVENT-1",
+          "effectiveAt": "2026-10-06T11:29:03.42086+07:00",
+          "recordedAt": "2026-10-06T11:29:03.42086+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng xác nhận ước lượng hồi tố F05-A là 3 giờ và yêu cầu hoàn thành card. Gắn bằng chứng whole-PH1 Project Reviewer ACCEPTED/PASS đã merge."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
+      "actualStart": null,
+      "actualFinish": "2026-10-06T11:29:03.42086+07:00",
+      "actualEffortHours": 3.0,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-10-06T11:29:03.42086+07:00",
+      "remainingReviewedAt": "2026-10-06T11:29:03.42086+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
         "kind": "DeliveryCard",
         "id": "F05-B"
       },
-      "recordingState": "NOT_RECORDED",
+      "recordingState": "RECORDED",
       "priority": "NORMAL",
       "forecastPlannedOrder": 15,
       "disposition": "ACTIVE",
-      "evidence": [],
+      "evidence": [
+        {
+          "evidenceId": "F05-B-EVIDENCE-1",
+          "type": "COMMIT",
+          "repoPath": "specs/005-ph1-foundation-custody/evidence/PH1-acceptance.md",
+          "commit": "11115dff5251cf5a132ef3198edb454e98e45dc2",
+          "sha256": null,
+          "externalUri": null,
+          "description": "Project Reviewer whole-PH1 ACCEPTED/PASS includes F05-B/T027–T034 and the 1 KiB/64 MiB transfer acceptance; acceptance record merged with PR #38. User-confirmed retrospective effort estimate: 5 hours.",
+          "result": "PASS",
+          "recordedAt": "2026-10-06T11:29:39.2311611+07:00",
+          "recordedBy": "LEAD"
+        }
+      ],
       "blockers": [],
-      "events": [],
-      "successorRefs": []
+      "events": [
+        {
+          "eventId": "F05-B-EVENT-1",
+          "effectiveAt": "2026-10-06T11:29:39.2311611+07:00",
+          "recordedAt": "2026-10-06T11:29:39.2311611+07:00",
+          "recordedBy": "LEAD",
+          "kind": "STATE_CHANGE",
+          "reason": "Người dùng xác nhận ước lượng hồi tố F05-B là 5 giờ và yêu cầu hoàn thành card. Gắn bằng chứng whole-PH1 Project Reviewer ACCEPTED/PASS đã merge."
+        }
+      ],
+      "successorRefs": [],
+      "executionState": "COMPLETED",
+      "resultState": "PASS",
+      "actualStart": null,
+      "actualFinish": "2026-10-06T11:29:39.2311611+07:00",
+      "actualEffortHours": 5.0,
+      "remainingEffortHours": 0.0,
+      "forecastFinish": null,
+      "lastUpdatedAt": "2026-10-06T11:29:39.2311611+07:00",
+      "remainingReviewedAt": "2026-10-06T11:29:39.2311611+07:00",
+      "recordedBy": "LEAD",
+      "unplannedWorkType": null,
+      "reserveUsedHours": 0
     },
     {
       "entity": {
@@ -1603,6 +1671,20 @@
       "recordedBy": "LEAD",
       "reason": "Hoàn thành F04 theo yêu cầu người dùng và Project Reviewer acceptance ngày 03/10/2026. Giờ thực tế đã hiệu chỉnh theo xác nhận 6 giờ 50 phút; mốc kết thúc phần làm F04 là 09:45, actualFinish là thời điểm ghi hoàn thành card.",
       "sourceEvidence": "Local progress tracker: F04"
+    },
+    {
+      "revision": 36,
+      "recordedAt": "2026-10-06T11:29:03.42086+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng xác nhận ước lượng hồi tố F05-A là 3 giờ và yêu cầu hoàn thành card. Gắn bằng chứng whole-PH1 Project Reviewer ACCEPTED/PASS đã merge.",
+      "sourceEvidence": "Local progress tracker: F05-A"
+    },
+    {
+      "revision": 37,
+      "recordedAt": "2026-10-06T11:29:39.2311611+07:00",
+      "recordedBy": "LEAD",
+      "reason": "Người dùng xác nhận ước lượng hồi tố F05-B là 5 giờ và yêu cầu hoàn thành card. Gắn bằng chứng whole-PH1 Project Reviewer ACCEPTED/PASS đã merge.",
+      "sourceEvidence": "Local progress tracker: F05-B"
     }
   ]
 }
