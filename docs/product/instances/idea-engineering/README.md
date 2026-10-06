@@ -22,6 +22,13 @@ and are not edited as product content.
 | Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy correction is `APPROVED` on 19-09-2026, Node.js 24 LTS is `APPROVED` for Web build on 23-09-2026, and the three Check-in scope-policy branches are `APPROVED` on 25-09-2026 under [`IE-CHG-PDA-APPROVAL-003`](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). Exact Web build and remaining successor runtime evidence remain `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
+## API contract reading package
+
+The [Core v0 API catalogue](api/README.md), [Identity/Session HTTP example](api/identity-session.md)
+and [Vietnamese flow guide](api/guide.vi.md) form a supporting Draft 0.1 reading package. It
+distinguishes implemented adapters, internal/qualification seams and future design; it creates
+no new product requirement or endpoint and does not replace DOC-04/05/06.
+
 ## Architecture diagram package
 
 For PH1 implementation, start with the [PH1 diagram guide](ph1-diagram-guide.md).
