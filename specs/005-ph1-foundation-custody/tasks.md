@@ -208,7 +208,7 @@ block the accepted F01–F04 work.
 ## Phase 8: Cross-cutting review
 
 - [X] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); [coverage review](evidence/PH1-coverage-review.md) records one row per FR/SC/CHK, accepted execution lineage and residual `NOT-RUN`/limited claims. Review performed on 2026-10-06; no new execution or whole-PH1 acceptance is implied.
-- [ ] T036 IN_PROGRESS: [license review](evidence/PH1-license-review.md) reconciles current exact inventories, bounded process authority, Node admission and clean-room provenance. Full exact Web transitive legal evidence, integration-bundle notice mapping and required open rights dispositions remain incomplete; no blanket legal/commercial clearance.
+- [ ] T036 IN_PROGRESS: [license review v0.2](evidence/PH1-license-review.md) completes substantive local legal-text review and exact upstream native-source/Go patent evidence; separates actual runtime from tooling and Windows platform exclusions. Remaining R36-01–03 are exact retained-package/native notice correspondence (read-only SSH authentication unavailable) and accountable supplemental/custom-term dispositions. No new build, blanket legal/commercial clearance or PH1 acceptance.
 
 ## Dependencies and execution order
 

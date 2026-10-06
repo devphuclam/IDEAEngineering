@@ -10,11 +10,18 @@ are complete under the separate continuous sprint. For review or continuation, r
 [F05 closure matrix](evidence/F05-closure-matrix.md) first: current requirements,
 actual sources/executions and acceptance limits. Whole F05-A/B is human ACCEPTED / PASS WITH NOTES
 at `874088695d0b65e6d71b40078d6f55e623087b0a`. T035 review is performed; next resolve the
-specific T036 gaps in [PH1 license review](evidence/PH1-license-review.md), not another feature
+specific T036 R36-01–03 gaps in [PH1 license review v0.2](evidence/PH1-license-review.md), not another feature
 slice. PR38 stays Draft/Open; card/Issue closure and actual-effort publication remain separate.
 Retained T027/T028 continuation
 paragraphs below are historical receipts, not today's execution frontier.
 No timer/progress action, verifier or merge is inferred.
+
+T036 local substantive text review is performed; exact Rolldown source grant and Go patent terms
+are now reference-evidenced. Next restore authenticated read-only access to retained qualified
+package/Linux input/notice evidence, correlate native notices/provenance, and obtain accountable
+dispositions for known supplemental/custom terms. No credentials in chat, fresh build, new feature
+or silent exception extension is needed merely to read retained artifacts. See review §7 for owners
+and exact closure oracles; T036 remains unchecked and PH1 has no whole-phase acceptance.
 
 1. Read repository `AGENTS.md`, [Spec Kit workflow](../../docs/agents/spec-kit.md),
    [spec](spec.md), [plan](plan.md), and the current task list. Inspect branch, HEAD and dirty
