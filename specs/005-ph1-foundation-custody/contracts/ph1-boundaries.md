@@ -4,7 +4,9 @@
 build and test; they do not amend controlled Product Documents. The selected
 [architecture](../../../docs/product/instances/idea-engineering/DOC-05-architecture-description.md)
 and [data contract](../../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md)
-take precedence. The exact Gateway runtime/toolchain and wire profile remain `NOT-RUN` until F05-A.
+take precedence. The historical preparation's NOT-RUN profile is superseded for qualification
+by [T027 closure](../../../docs/research/2026-10-05-f05a-t027-closure.md) and its frozen exact
+envelope/control/Adapter profile. Product Gateway/transfer/custody behavior remains NOT-STARTED.
 
 ## Trust and ownership
 

@@ -9,3 +9,6 @@ tests/*.sh text eol=lf
 .agents/skills/ui-styling/canvas-fonts/*-OFL.txt -whitespace
 # Preserve the admitted upstream license/notice bytes and their recorded checksums.
 apps/server/src/main/resources/third-party/swagger-ui/*.txt -text
+# Exact legal-copy hashes remain stable across Windows/Ubuntu checkout.
+apps/server/src/main/resources/third-party/ph1-runtime/*.txt text eol=lf
+apps/gateway/src/main/resources/third-party/ph1-runtime/*.txt text eol=lf

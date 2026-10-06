@@ -43,7 +43,9 @@ class HttpSessionFlowTest {
     void startServerWithOnlyThisTestsMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
-        if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
+            schema=F05DatabaseFixture.createRegressionSchema();
+        } else if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             schema = F04SchemaTest.createRegressionSchema();
         } else {
         schema = "f03b_" + UUID.randomUUID().toString().replace("-", "");
@@ -68,6 +70,7 @@ class HttpSessionFlowTest {
         if (syntheticDelivery) arguments.add("--idea.identity.synthetic-credential-delivery.enabled=true");
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
                 .initializers(context -> {
+                    if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)context.getBeanFactory().registerSingleton("dataSource",appDataSource());
                     context.getBeanFactory().registerSingleton("testIdentityClock", clock);
                     context.getBeanFactory().registerSingleton("testContextRepository", bindingRepository);
                     context.getBeanFactory().registerSingleton("testSessionBudgetListener", new HttpSessionListener() {
@@ -82,6 +85,7 @@ class HttpSessionFlowTest {
     @AfterEach
     void closeServerAndRemoveOnlyOwnedUuidSchema() throws Exception {
         if (server != null) server.close();
+        if(schema!=null && System.getenv("IDEA_F05_SOURCE_SHA")!=null){F05DatabaseFixture.removeRegressionSchema(schema);return;}
         if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             F04SchemaTest.removeRegressionSchema(schema);
             return;
@@ -1668,8 +1672,8 @@ class HttpSessionFlowTest {
         var fixture = fixture();
         var flyway = Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"), env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
-        // Current chain includes additive F04 V8; retained F03 execution stays V1–V7.
-        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8"), java.util.Arrays.stream(flyway.info().applied())
+        // Current chain includes additive F05 V9/V10; retained F03/F04 evidence keeps its original chain.
+        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), java.util.Arrays.stream(flyway.info().applied())
                 .filter(migration -> migration.getVersion() != null).map(migration -> migration.getVersion().toString()).toList());
         assertEquals(0, flyway.migrate().migrationsExecuted);
         var loginId = new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).loginIdentityId();
@@ -2379,10 +2383,12 @@ class HttpSessionFlowTest {
     }
 
     private java.sql.Connection migrator() throws Exception {
-        return DriverManager.getConnection(url(), "idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_PASSWORD"));
+        return DriverManager.getConnection(url() + "?currentSchema=" + schema,
+                "idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_PASSWORD"));
     }
 
     private String url() {
+        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)return "jdbc:postgresql://127.0.0.1:5432/"+F05DatabaseFixture.DATABASE;
         var database = env("IDEA_F03B_TEST_DATABASE_NAME");
         if (!database.equals("idea_ddm_f03a_20260930_c91e7a42")) {
             throw new IllegalStateException("Only the authorized F03-B test database is allowed");
@@ -2391,6 +2397,7 @@ class HttpSessionFlowTest {
     }
 
     private static String env(String name) {
+        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)return F05DatabaseFixture.regressionEnvironment(name);
         var value = System.getenv(name);
         if (value == null || value.isBlank()) throw new IllegalStateException("Missing test prerequisite: " + name);
         return value;

@@ -1,8 +1,15 @@
 # PH1 validation guide
 
-**Procedure updated 2026-10-02:** This guide is not a progress register or test result.
+**Procedure updated 2026-10-05:** This guide is not a progress register or test result.
 Per-card evidence and the Execution Register own actual status. F03-A acceptance does not
 pre-accept F03-B HTTP/session work; retain each executed red/green result separately.
+
+**Current F05 frontier:** [T027 closure receipt](../../docs/research/2026-10-05-f05a-t027-closure.md)
+reconciles accepted prerequisites and146/146 envelope/profile checks. The historical F04-to-F05
+NOT-STARTED guidance below describes its original publication only. Current preparation is v1.1
+with frozen executed profile; no product Gateway/Adapter/transfer has been implemented.
+T028/T030 is next after separate implementation/tooling/environment authority. The T027-only
+exception cannot admit later builds. No rerun/DB provisioning, timer/progress action or merge.
 
 ## Before running
 

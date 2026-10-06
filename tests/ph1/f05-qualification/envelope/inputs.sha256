@@ -1,0 +1,5 @@
+36ef23f15c585ec41f3d61bd0c5828d1db6ba09d427d80a2b60663fceb355672  tests/ph1/f05-qualification/envelope/Envelope.java
+a1b63895a2a77b02e7e4bcb6ce24438f7eaa673be7fb52c0f84fcaaee5f5ff39  tests/ph1/f05-qualification/envelope/Qualification.java
+ccdbaf41c4bc8aeb9ee0bdc9b96c69a09be0c3f9b68960062ad08392bd3a56d5  tests/ph1/f05-qualification/envelope/run.sh
+9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
+0d1adb6633b28ddf7114c8e730eef953076725b0918c04d85bcf8e846859c1ff  docs/research/2026-10-03-f05a-t027-envelope-profile.md

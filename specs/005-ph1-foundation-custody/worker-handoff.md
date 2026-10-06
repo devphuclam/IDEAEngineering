@@ -5,6 +5,44 @@ as the only task list. Scope: PH1 F01–F05. Read this before implementing or re
 
 ## Start each work session
 
+**Current frontier,2026-10-06:** T027–T034 engineering delivery and bounded qualification
+are complete under the separate continuous sprint. For review or continuation, read the
+[F05 closure matrix](evidence/F05-closure-matrix.md) first: current requirements,
+actual sources/executions and acceptance limits. Whole F05-A/B is human ACCEPTED / PASS WITH NOTES
+at `874088695d0b65e6d71b40078d6f55e623087b0a`. T035/T036 are satisfied and whole PH1 is
+ACCEPTED / PASS at reviewed `f6cbe7ddfc7e0978ed5f50751f93a123cdceb1e4`; read
+[whole-PH1 acceptance](evidence/PH1-acceptance.md). Current action is acceptance publication
+and clerical reconciliation only, not another feature slice. PR38 stays Draft/Open;
+Ready/Merge, Issue37 closure and actual-effort publication remain separate.
+Retained T027/T028 continuation
+paragraphs below are historical receipts, not today's execution frontier.
+No timer/progress action, verifier or merge is inferred.
+
+**Current closure successor:** T036 COMPLETED / PASS under the Project Reviewer's explicit
+decision after reading ba61e4d. Read [closure receipt](../../docs/research/2026-10-06-t036-bounded-closure.md)
+and [matrix section 8](evidence/PH1-T036-closure-matrix.md#8-project-reviewer-acceptance--current-pass-label).
+Earlier T036 IN_PROGRESS/unchecked paragraphs below are historical. Full independent compiled
+Rust coverage remains UNKNOWN as an owned residual, not an asserted blanket grant; reopen on
+actual right conflict or changed use/distribution. No PH1 gate/Issue closure or merge inferred.
+
+T036 local substantive text review is performed; exact Rolldown source grant and Go patent terms
+are reference-evidenced. Explicit existing named SSH key restored read-only access; retained JAR
+hashes and Linux native selection are verified. Current review §8 identifies R36-04: actual Web
+output lacks React/ReactDOM/scheduler notices. The approved successor repair now qualifies those
+notices in real/repeat Web builds and a copied-JAR packaging projection;261 non-static entries
+unchanged. Read [exact bounded scope/result](../../docs/research/2026-10-06-t036-notice-packaging-exception.md)
+before reuse: no fresh full Server build or preview rollout; exception is not general future authority.
+The Project Reviewer accepted R36-04 against 8af0a6a on 2026-10-06; keep it closed absent drift.
+Current successor: the human comply-and-use decision removes classification-only legal gates.
+R36-01 supplemental notices passed actual copied-package positive/repeat/wrong-notice checks;
+269 Server / 186 Gateway old entries remain byte-identical. R36-03 known-term current use is
+APPROVED-WITH-OBLIGATIONS, including Plexus/Interpolation/Sisu/JDOM and Jakarta/Tomcat routes.
+Read [matrix section 6](evidence/PH1-T036-closure-matrix.md#6-final-current-use-disposition-after-comply-and-use-decision)
+and the performed receipt. The only remaining frontier is R36-02 external native Rust coverage
+UNKNOWN, not an observed commercial-use ban or a reason to replace the stack. T036 remains
+unchecked/NOT-CLOSED; no blanket exhaustive native grant PASS or new human acceptance inferred.
+No credentials in chat, product work, preview rollout, verifier, merge or timer action.
+
 1. Read repository `AGENTS.md`, [Spec Kit workflow](../../docs/agents/spec-kit.md),
    [spec](spec.md), [plan](plan.md), and the current task list. Inspect branch, HEAD and dirty
    files; preserve work already present. Report the actual checkout being used.
@@ -103,12 +141,115 @@ record 8/8, first8/repeat0, offline package and two direct packaged repeat0 from
 Only new `idea_ddm_f02_f03b_closure_f04_20261003_t026` was used and remains retained for review.
 Whole-card acceptance is now recorded in §38; no technical checkpoint remains inside F04.
 PR #32 is merged and Issue #31 is completed; consult their provider records for integration.
-The next eligible unit is F05-A / T027, still NOT-STARTED / qualification NOT-RUN. Use
+**Historical qualification frontier before the current successor above:**
+The then-current unit was F05-A / T027: IN_PROGRESS; Q01/root05/filesystem8/8 accepted.
+[HTTPS attempt01](../../docs/research/2026-10-03-f05a-t027-https-results.md) STOPPED at
+the endpoint-refusal classifier; owned process terminated, no18447 listener remains.
+The user authorized a bounded classifier/diagnostic repair and fresh-root successor;
+[attempt02](../../docs/research/2026-10-03-f05a-t027-https-results02.md) is technical HTTPS PASS
+at exact source `6999287aa909400039ee504cb4300eb5ca51cd14`. Source/freeze were published
+before execution; actual positive/untrusted/hostname cases, listener scope, TLS evidence,
+cleanup and final integrity PASS. Result acceptance is pending; no listener remains.
+Next action: review this bounded result against the frozen preparation before selecting the
+next separately authorized T027 unit. Do not rerun or broaden qualification implicitly.
+Other qualification NOT-RUN. The user
+explicitly started F05-A on 2026-10-03; its local Tracker timer is separate from this PR.
+Work Item [#37](https://github.com/devphuclam/IDEAEngineering/issues/37) initially authorized
+clerical cleanup, read-only inventory and [execution proposal](../../docs/research/2026-10-03-f05a-t027-preflight.md).
+Successor user Q1/Q2 approval authorizes writing the minimal qualification harness, not running
+it: [Q01 source/tooling/command package](../../docs/research/2026-10-03-f05a-t027-q01-execution-package.md).
+The user subsequently approved Q01 execution; package §7 records PASS at exact source/runner
+`d01ad4a057a8a14c840320f0c664f6838d12a47e`. No blanket T027 execution approval follows.
+Before continuing Q02, read [the exact intake successor](../../docs/research/2026-10-03-f05a-t027-q02-intake.md).
+Q01 has Project Reviewer PASS. Static application/plugin/model/core graphs are reconciled;
+Eight initial rights-evidence gaps are resolved. Intake v0.3 retains eleven acquisition
+and five installed-core BLOCKED-LEGAL dispositions;89 acquisition/47 core ordinary rights
+dispositions are not execution authority.
+The [T027 process exception](../../docs/research/2026-10-03-t027-process-exception.md) is
+approved and [frozen](../../docs/research/2026-10-03-t027-process-exception-freeze.md):99 known-term
+acquisition/52 core inputs, unchanged exact versions/hashes/graph, offline internal T027 only,
+Issue37/PR38. It waives only the repository process gate; all actual terms and duties remain.
+No legal/company-license/commercial approval, extra rights, whole-F05 or other-work-item use.
+JSR305 is explicitly excluded. See [upstream v0.4](../../docs/research/2026-10-03-f05a-q02-upstream-rights.md#authorized-exact-jsr305-publication-inspection--version-04):
+official exact sources were inspected memory-only, with four CC BY2.5 grants and27 files
+without an established applicable grant. Full JSR305 rights remain BLOCKED-LEGAL.
+Historical old-graph finding stays BLOCKED-LEGAL. The user has now authorized the bounded
+[JSR305 exclusion experiment](../../docs/research/2026-10-03-t027-jsr305-experiment-authorization.md):
+publish exact standalone source/settings/runner/hashes, construct an isolated offline repository,
+run only four pinned direct Maven goals, inspect exact graph/package, then conditionally run
+the predeclared non-web Boot smoke. See its package README for exact input/STOP controls.
+No automatic replacement, original .m2 mutation, installation or further rights waiver.
+Published experiment source is `3efad42448ff6950de6dfa57f5c04f5d14871aeb`.
+The [first-party archive preflight](../../docs/research/2026-10-03-f05a-q02-jsr305-preflight-stop.md)
+STOPPED: seven exported documentation/TSV files became CRLF and failed committed LF hashes.
+Java runner/repository construction/Maven/Boot are NOT-RUN; no runtime or graph PASS.
+The user cleared the literal-only root02 retry. Source `a51ff70775480e97ceb1c19d61fdb5ae7b2c2042`
+has raw input15/15 locally/remotely, matching archive identity and preflight PASS for99JAR/242POM
+with JSR305 absent before Maven. [Retry result](../../docs/research/2026-10-03-f05a-q02-jsr305-retry-results.md)
+records Maven attempted then rejected at its first oracle; no graph/package/Boot qualification.
+SSH was temporarily lost, then restored by the user. Retained log confirms a first-party
+BootProbe import typo: SpringBootApplication belongs to boot.autoconfigure, not boot.
+Compile FAIL; jar/repackage/package oracle/Boot smoke NOT-RUN. Log hash and exact source
+are in the retry record. No JSR305 dependency requirement is shown; repair NOT-QUALIFIED.
+The user subsequently authorized the exact import correction and fresh root03 assertions.
+Source `e6ff16708a8678829f7d1b53a7f49502aced9d00` passed local/remote raw input15/15,
+archive identity and pinned preflight. [Root03 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root03-results.md)
+records Maven BUILD SUCCESS through repackage, actual115 collection rows/99unique coordinates
+and exact plugin realms matched. The first package check then STOPPED because its substring
+detector treated first-party Maven metadata `t027-jsr305-exclusion` as JSR305.
+Package oracle remains incomplete; Boot smoke and final post-smoke cache rehash NOT-RUN;
+JSR305 graph repair NOT-QUALIFIED. Preserve all three owned attempts.
+The user accepted root03 and authorized the exact outer-only metadata repair and root04.
+Source `f3e5b6aeac351f271b85f1068f1db1942dfc012a` passed15/15 local/remote inputs,
+detector self-check, pinned preflight, Maven BUILD SUCCESS and exact graph/realms.
+[Root04 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root04-results.md) records
+STOP at the final package-set equality: Boot packaged32 JARs, omitting exactly six
+metadata-only dependency-starter JARs from the38-artifact collection. Read-only diagnostics
+verified all32 nested hashes and the omitted starters' manifest types/zero class entries.
+The full frozen package oracle remains FAIL; Boot and final input rehash NOT-RUN;
+graph repair NOT-QUALIFIED. Preserve roots01–04.
+The user accepted root04 and authorized the exact38 collection /32-payload projection
+with six pinned metadata-only starter omissions and a fresh root05.
+Source `3494921bc7cf2768d0d99c26279b0d8d0e22c0e2` passed every bounded stage;
+[root05 result](../../docs/research/2026-10-03-f05a-q02-jsr305-root05-results.md) records
+JSR305 GRAPH REPAIR = QUALIFIED. Local/remote15/15, pinned preflight, isolated99JAR/242POM,
+actual115-row graph/four realms, exact32 package/loader/provider guards, non-web Boot
+UP/CLOSED and final original-input rehash all PASS. Collection remains38; only the six
+exact approved starters are omitted from payload. Qualified JAR SHA:
+`9722b29be2395ed4a586a1597a2109fb0569c623f6e1746aa1193ba8cc327e73`.
+Public normalized graph/package receipts are linked from the result; private raw-log
+review limitation remains. Preserve roots01–05 and historical rights/STOP evidence.
+The Project Reviewer accepted this exact root05 result in conversation on 2026-10-03;
+result §6 records acceptance at review head `a3d8bde92f1f3c796a067b90f1cd274c74451104`.
+No additional remaining-T027 execution or Gateway implementation authority is inferred from it.
+The user has approved the [JDK filesystem prerequisite seam/execution contract](../../docs/research/2026-10-03-f05a-t027-filesystem-contract.md)
+and conditional execution after exact-source/hash/command/target publication on 2026-10-03.
+Source `01340f8035376c37ad3e55b51e1d11df6c9b87a6` was published before execution;
+[filesystem result](../../docs/research/2026-10-03-f05a-t027-filesystem-results.md)
+records8/8 PASS on Ubuntu/ext4,3/3 source plus manifest identity, archive identity,
+19 tooling pins pre/post and independent completed-object/sentinel oracles. Owned
+filesystem-qualification-01 and private log/fixtures remain retained. Result acceptance
+is pending; this does not qualify a real Adapter, concurrency/races or power-loss durability.
+The user accepted filesystem8/8 as the predecessor and authorized the exact
+[HTTPS loopback packet](../../docs/research/2026-10-03-f05a-t027-https-contract.md)
+on 2026-10-03. Retained execution recipe: publish exact source/hash, offline package, generate/freeze private
+harness TLS material, publish its public identities before starting one owned
+127.0.0.1:18447 HTTPS listener, execute positive/untrusted/SAN-mismatch probes, then
+terminate it and rehash. Attempt01 STOP and attempt02 technical PASS are separately retained above;
+this historical recipe is not an instruction to run another listener.
+No DB/Vault/preview/global trust change, Gateway product code, timer action or merge.
+No new package/Maven/DB/TLS/port/preview change was used for the filesystem prerequisite.
+The narrowed graph is prospectively authorized
+by the explicit successor, not retroactively inserted into the historical frozen exception.
+Remaining T027 stays NOT-RUN and Q01 stays PASS. No other runtime success is inferred.
+Do not restart the timer or infer qualification/provisioning authority. Use
 [IE-RES-PH1-F05-GATEWAY-QUAL-001@1.0](../../docs/research/2026-09-28-ph1-f05-gateway-qualification.md),
 first frozen on 2026-10-03, with its [freeze record](../../docs/research/2026-10-03-f05-preparation-freeze-record.md).
 Content SHA-256: `a14a58ce17549d39097ed192e0a6195cadc3ee820eae2b736743f26b13544cef`.
-Worker mode CODEX_ONLY. Preparation/path approval does not start T027 or the timer, authorize
-Gateway code, or extend F04 tooling authority to F05.
+Worker mode CODEX_ONLY. Original preflight authority alone did not authorize execution;
+the bounded successor experiment authority and result are recorded above. Gateway code,
+database/certificate/tunnel provisioning, other qualification execution and inherited F04
+tooling still require their applicable authority.
 Do not create/reuse another target, rerun the retained public database, DROP the review database
 or deploy the package for closure. Preserve private raw-log access limitation. Verifier remains
 NOT-RUN and is not an F04 acceptance blocker.
@@ -283,6 +424,55 @@ Document Check-in/Generation publication, a second Vault, replication and failov
   corresponding task/card incomplete. Ask before changing approved scope to avoid a failed check.
 
 ## End each work session
+
+### Historical T028/T030 continuation — 2026-10-05
+
+This dated current receipt supersedes older current-state handoff wording for this slice only.
+T027 remains COMPLETE/PASS. Exact Server graph/rights/input gate is OPEN under the bounded
+T028/T030 process authority, not the historical T027 exception. Database creation was completed
+by the human and independently checked: `idea_ddm_f05a_20261005_t028`, migrator owner, empty
+public schema, app without database/public CREATE. No role/credential creation or old DB reuse.
+
+G01 genuine behavioral RED source `6fa424aec8bd0aa58648c5c26320d348af97fdc7` reached
+`GRANT_ISSUANCE_NOT_IMPLEMENTED` after real HTTP sign-in and V1–V8. Minimum G01 GREEN source
+`1b7df9233593d40cd5c1a146bdfa0209590fee51` passed 1/1, with additive immutable typed V9 Grant
+scope. [G01 packet/receipt](../../docs/research/2026-10-05-f05a-g01-green-packet.md).
+
+G01+G02 executed source `b0acf19f18458e0baaa1c99b31fc8aa2f87741bc`: 3/3 PASS, zero failures/
+errors/skips. G02 qualifies existing guards; it does not manufacture a missing-behavior RED.
+[G02 packet/receipt](../../docs/research/2026-10-05-f05a-g02-qualification-packet.md) retains
+exact source/hash/command/schema/log/cleanup and scope limitations. Owned Servers stopped and
+only their exact marked schemas were removed; database retained. No preview/Gateway action.
+
+Next: G03 product-issued codec negatives, then G04 same-operation arbitration/conflict, G05
+controlled expiry/explicit renewal, G06 authoritative-commit/failure and affected migration/IAM
+regressions. Publish exact fresh-source manifest/target before each execution. Keep T028/T030
+unchecked until their evidence is sufficient; Receipt residual means whole T028 cannot close
+on this Grant slice. PR #38 Draft/Open, Issue #37 Open, F05-A incomplete, verifier NOT-RUN.
+No timer restart/Tracker action, merge or new human approval is required merely to continue
+within the existing exact authorization. Historical failure/intake records remain unchanged.
+
+### Current Server Grant closure and successor execution gate — 2026-10-05
+
+This receipt supersedes earlier "next G03" current wording, not historical execution.
+CODEX_ONLY continues the same Issue37/PR38 sprint. G01–G06 and affected regressions now pass;
+T030 Engineering COMPLETE/PASS. Final source0a728d041a66f1fcbae14fbbf18c77cb82212ab0:
+Grant10/10 and IAM/HTTP/health105/105. Migration1/1 source9ac7cc2 is separately retained;
+its production/migration/test bytes did not change through final source. See
+[sprint exact receipts](../../docs/research/2026-10-05-f05-execution-sprint.md#final-server-grant-closure-receipt).
+All marked-schema cleanup complete after owned JVM exit; source-owned remainder0, DB retained.
+Keep the first105-run fixture error as FAIL; successor current-schema repair passed105/105.
+
+T028 Receipt/custody obligations remain unchecked. Next is T029/T031, then T032→T033→T034,
+without another product-design/checkpoint approval. However actual tooling-use authority must
+respect the [material successor process gate](../../docs/research/2026-10-05-f05-sprint-tooling-scope-gate.md):
+T027 exception expired and T028/T030 exception expressly excludes T029–T034, expiring at this
+checkpoint closure. Do not silently carry either forward. Ask only for the bounded prospective
+successor process scope, reuse exact retained rights evidence/hash inventories, freeze actual
+stage inputs/roles/commands/targets before execution, and continue automatically once cleared.
+No new/missing rights waived; no graph/cache/version substitution. NodeT033 admission remains
+its own prerequisite. Gateway/Adapter/Receipt/client/full-transfer still NOT-RUN.
+PR38 Draft/Open, Issue37 Open, verifier NOT-RUN, no merge/Tracker/timer action.
 
 Follow [quickstart](quickstart.md) for evidence: exact source revision (plus dirty-state disclosure),
 environment, command, expected/actual result and output. Record tests failing for the intended

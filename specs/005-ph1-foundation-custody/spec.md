@@ -2,13 +2,32 @@
 
 **Feature Branch**: `codex/ph1-foundation-f01`
 **Created**: 2026-09-25
-**Version / owner**: `0.8` / Principal Product Author
+**Version / owner**: `0.12` / Principal Product Author
 **Status**: Draft — delivery specification for the PG4-authorized PH1 increment, not a new Product Decision Authority approval
 **Increment**: `IE-INC-PH1-FOUNDATION-CUSTODY-001`
-**Classification / verification**: `INTERNAL` / F01–F03 results belong to retained per-card evidence; F04/F05 runtime `NOT-RUN`; whole-PH1 acceptance incomplete
+**Classification / verification**: `INTERNAL` / F01–F05 and T035/T036 are satisfied within PH1; Project Reviewer accepted whole PH1 = ACCEPTED / PASS at `f6cbe7ddfc7e0978ed5f50751f93a123cdceb1e4`; see [acceptance receipt](evidence/PH1-acceptance.md). Historical execution/qualification limits preserved; integration and actual-effort publication separate
 **Input**: Deliver only F01–F05 of the approved roadmap (72 planned task hours): a buildable application foundation, controlled data and account foundations, attributable business outcomes, and one direct Client-to-Gateway-to-Vault transfer smoke path.
 
+**Clerical successor 2026-10-03 / Work Item #37**: v0.9 corrects current status only.
+Requirements, scenarios and historical evidence are unchanged. See the
+[F03-B closure matrix](evidence/F03-B-closure-matrix.md) and
+[F04 accepted results](evidence/F04-outcome-results.md). The frozen F05 preparation
+retains its original v0.8 input at the recorded commit; this successor does not rewrite that freeze.
+
+**Clerical successor2026-10-05 / Work Item #37:** v0.10 reconciles current T027 qualification
+status only. No requirement, scenario, governing-source decision or historical execution changes.
+Real Gateway/Adapter/Grant issuance/Receipt acceptance and SC-005/006 transfer evidence remain owed.
+
+**Clerical successor2026-10-06 / Work Item #37:** v0.11 reconciles current
+engineering qualification and pending external acceptance only. The v0.10 paragraph
+above retains its historical frontier. Requirements, scenarios, governing-source
+decisions and frozen preparation inputs are unchanged.
+
 ## Authority and Scope Boundary
+
+Clerical successor 2026-10-06 / Work Item37: v0.12 records the received whole-PH1 acceptance
+only. Earlier pending paragraphs describe their historical frontier. Requirements, scenarios,
+technical decisions and frozen preparation inputs are unchanged; no new increment is approved.
 
 The [PG4 decision](../004-technical-pilot-readiness/pg4-gate-record.md) authorizes this exact PH1 increment. The [frozen PH0 manifest](../004-technical-pilot-readiness/baseline-manifest.md) and [PG2/PG3 approval report](../../docs/product/instances/idea-engineering/registers/CHG-2026-09-25-pg2-pg3-approval.md) identify the controlling product sources. This Spec Kit file organizes delivery and acceptance of their F01–F05 subset; it does not introduce a new Feature, alter a `REQ-*` obligation, select another Tech Stack, or approve the wider Core v0 scope. If a statement here conflicts with a controlled product requirement or architecture decision, stop and resolve the conflict through the owning source.
 

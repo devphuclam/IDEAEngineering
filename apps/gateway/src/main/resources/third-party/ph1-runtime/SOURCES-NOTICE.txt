@@ -1,0 +1,30 @@
+PH1 supplemental legal material — current internal integration
+This file is an IDEA-authored provenance/attribution index, not an upstream license.
+The accompanying texts and original embedded legal material retain their terms.
+No endorsement or upstream warranty is claimed. Dependency bytes are unmodified.
+
+SnakeYAML 2.6
+Source: https://codeberg.org/snakeyaml/snakeyaml/src/commit/9f02cc56e5afb989ca5baac1e0052c3f006cdbec
+License: snakeyaml-2.6-LICENSE.txt (Apache-2.0).
+Copyright SnakeYAML contributors; the exact source Yaml.java/module-info.java headers identify SnakeYAML.
+Bundled Escaper.java, PercentEscaper.java and UnicodeEscaper.java attribution:
+Google Inc., 2008 (Apache-2.0).
+Source: src/main/java/org/yaml/snakeyaml/external/com/google/gdata/util/common/base/
+No upstream code was changed; no root NOTICE was observed in the exact intake.
+
+JSpecify 1.0.1
+Source: https://github.com/jspecify/jspecify/tree/ce9bec0b8895f424d999d31e3a1bd33694ee4c0c
+License: jspecify-1.0.1-LICENSE.txt (Apache-2.0).
+Copyright The JSpecify Authors; exact AUTHORS is retained in jspecify-1.0.1-AUTHORS.txt.
+
+SOURCE AVAILABILITY — covered third-party components only
+Jakarta Annotation API 3.0.0: EPL-2.0 option for the current unchanged component.
+Exact source: https://github.com/jakartaee/common-annotations-api/tree/3.0.0
+The nested API JAR retains its original LICENSE/NOTICE and alternative terms; they are not removed.
+Tomcat 11.0.24: retain the complete nested LICENSE/NOTICE, including applicable schema terms.
+Exact source: https://github.com/apache/tomcat/tree/11.0.24
+These public source locations identify the corresponding unchanged releases. Any future
+modified covered component must include its actual modified corresponding source and notices.
+Source-availability duties apply to the covered component/material, not unrelated IDEA files.
+No IDEA application source is offered or relicensed by this index.
+This does not qualify an external commercial distribution or new packaging model.

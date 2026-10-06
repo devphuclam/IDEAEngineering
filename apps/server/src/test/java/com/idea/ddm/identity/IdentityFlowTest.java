@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /** Agreed F03-A seam: Server identity services + real PostgreSQL. Not an HTTP/session test. */
 @EnabledIfEnvironmentVariable(named = "IDEA_F03_TEST_DATABASE_NAME",
-        matches = "idea_ddm_f02_20260929_a52f44f6|idea_ddm_f03a_20260930_c91e7a42")
+        matches = "idea_ddm_f02_20260929_a52f44f6|idea_ddm_f03a_20260930_c91e7a42|idea_ddm_f05a_20261005_t028")
 class IdentityFlowTest {
     private String schema;
     private DriverManagerDataSource app;
@@ -25,7 +25,9 @@ class IdentityFlowTest {
     void isolatedMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
-        if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
+        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
+            schema=F05DatabaseFixture.createRegressionSchema();
+        } else if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             schema = F04SchemaTest.createRegressionSchema();
         } else {
         schema = "f03a_" + UUID.randomUUID().toString().replace("-", "");
@@ -44,6 +46,7 @@ class IdentityFlowTest {
 
     @AfterEach
     void removeOnlyThisTestsUuidSchema() throws Exception {
+        if(schema!=null && System.getenv("IDEA_F05_SOURCE_SHA")!=null){F05DatabaseFixture.removeRegressionSchema(schema);return;}
         if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             F04SchemaTest.removeRegressionSchema(schema);
             return;
@@ -478,6 +481,7 @@ class IdentityFlowTest {
     }
 
     private static String env(String key) {
+        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)return F05DatabaseFixture.regressionEnvironment(key);
         var value = System.getenv(key);
         if (value == null || value.isBlank()) throw new IllegalStateException("Missing test variable: " + key);
         return value;
