@@ -1,0 +1,30 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "IDEAEngineering PH2 Controlled Product Data — undecided wire boundary",
+    "version": "0.2",
+    "description": "Draft supporting IE-API-CPD-001 at main 1fb3f7756ad566c527c1247040054f5e9c719953. CPD-1 and CPD-2 are DESIGN, not IMPLEMENTED. No CPD HTTP method/path/request/response schema/status has sufficient decision evidence at this baseline. Empty paths deliberately expose no executable API. See controlled-product-data.md for semantic contracts and U01-U09. This file is not installed in the Server Swagger asset."
+  },
+  "paths": {},
+  "x-document-id": "IE-API-CPD-OAS-001",
+  "x-status": "Draft",
+  "x-product-normativity": "INFORMATIVE",
+  "x-control-envelope": "controlled-product-data.md",
+  "x-acceptance": "NOT-RUN",
+  "x-implementation-status": "DESIGN",
+  "x-wire-readiness": "UNKNOWN",
+  "x-decision-register": [
+    "U01", "U02", "U03", "U04", "U05", "U06", "U07", "U08", "U09"
+  ],
+  "x-wire-fields-not-decided": [
+    "HTTP method and path",
+    "operationId",
+    "request and response schemas",
+    "identifiers, nullability, bounds and enum encoding",
+    "security scheme binding for the new adapter",
+    "HTTP statuses, error body and precedence",
+    "precondition, idempotency and status-query wire",
+    "collection ordering, filtering, counts and pagination"
+  ],
+  "x-runtime-tests": "NOT-RUN"
+}

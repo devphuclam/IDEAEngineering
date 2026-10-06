@@ -5,6 +5,13 @@
 
 ## Chúng ta đang có gì?
 
+**Bổ sung v0.2 đang chờ review:** [CPD-1/CPD-2](../controlled-product-data.md) có catalogue
+và chín operation card chi tiết về tiếp nhận/tạo identity, đọc đúng baseline/lịch sử và
+navigation theo quyền. [Hướng dẫn tiếng Việt](../cpd-guide.vi.md) giải thích luồng.
+Đây là DESIGN, không phải tính năng đã triển khai; chưa có URL/payload CPD được chốt.
+Bộ khung bàn giao v0.1 đã được chấp nhận qua PR #43; phần nội dung gốc bên dưới giữ theo
+publication v0.1. Nội dung CPD mới chờ acceptance theo Issue #44.
+
 API contract là thỏa thuận về cách các thành phần trao đổi: gửi gì, nhận gì, ai có quyền,
 điều kiện thực hiện và phải xử lý thế nào khi lỗi hoặc mất phản hồi.
 

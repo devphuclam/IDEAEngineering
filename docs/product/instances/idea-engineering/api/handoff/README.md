@@ -31,6 +31,29 @@ No documentation website, generator, new dependency or runtime is introduced.
 
 ## Current baseline register
 
+### v0.2 CPD successor — review pending
+
+The handoff arrangement itself was accepted through
+[PR #43](https://github.com/devphuclam/IDEAEngineering/pull/43#issuecomment-6012402113),
+reviewed at `905ff6b6d783d29542c638bdb4a753b7296f1c29` and integrated at
+`1fb3f7756ad566c527c1247040054f5e9c719953`.
+The v0.1 envelope and register below retain their publication-time states as history.
+This current extension is governed by [Issue #44](https://github.com/devphuclam/IDEAEngineering/issues/44):
+version 0.2 Draft, INFORMATIVE, acceptance NOT-RUN, dated 2026-10-06 Asia/Ho_Chi_Minh,
+baseline main `1fb3f7756ad566c527c1247040054f5e9c719953`; other envelope fields inherit above.
+
+| New delivery item | Disposition / readiness |
+|---|---|
+| [CPD detailed semantic catalogue/cards](../controlled-product-data.md) | CPD-1/CPD-2 DESIGN, no IMPLEMENTED product API claimed; useful for domain/wire review |
+| [CPD OpenAPI](../cpd-openapi.json) | 3.0.3, empty paths; decided CPD wire endpoints: zero; U01–U09 unresolved |
+| [Synthetic semantic examples](../cpd-examples.json) and [Vietnamese flow](../cpd-guide.vi.md) | Illustrative only, not executable request/response DTOs |
+| Identity/Session v0.1 | Accepted predecessor unchanged |
+
+Receiving teams must resolve affected UNKNOWNs before implementing a CPD wire adapter.
+No new handoff framework, environment, delivery receipt or partner-sharing authorization is added.
+
+### Historical v0.1 register at publication
+
 | Package / coverage | Contract disposition | Implementation / qualification | Handoff readiness |
 |---|---|---|---|
 | Core catalogue v0.1 | Accepted through PR #41; all 17 semantic interfaces indexed | Mixed HTTP, internal, qualification, design and deferred families | Suitable for scope discussion, not full Core implementation handoff |
