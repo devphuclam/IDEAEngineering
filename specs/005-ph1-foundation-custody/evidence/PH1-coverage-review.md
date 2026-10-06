@@ -2,9 +2,9 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-COVERAGE-REVIEW / verification review / 0.1 |
-| Status / disposition | Proposed; T035 review performed, PASS WITH NOTES for functional coverage; PH1 acceptance remains separate |
-| Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; this cross-cutting review awaits disposition |
+| Stable ID / class / version | IE-VEV-PH1-COVERAGE-REVIEW / verification review / 0.2 |
+| Status / disposition | T035 satisfied; whole PH1 ACCEPTED / PASS per reviewed f6cbe7d receipt |
+| Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; whole-PH1 disposition received in conversation |
 | Baseline / evidence date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; spec v0.11; 2026-10-06 Asia/Ho_Chi_Minh |
 | Authority | User authorization to perform T035/T036; no new execution, progress publication or integration authority |
 | Normativity / classification / retention | INFORMATIVE; INTERNAL; retain exact historical execution and acceptance lineage |
@@ -13,6 +13,11 @@
 | Standards tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; source/evidence review, not a fresh test execution or certification |
 
 ## 1. Review method and acceptance lineage
+
+Current successor: [whole-PH1 acceptance](PH1-acceptance.md) records Project Reviewer
+ACCEPTED / PASS at f6cbe7ddfc7e0978ed5f50751f93a123cdceb1e4 on 2026-10-06.
+Earlier acceptance-pending statements retain historical review time, not today's gate.
+Exact execution evidence and retained qualification limits are unchanged.
 
 Compare the current first-party implementation and contract with each FR, SC and CHK below.
 Resolve results through the existing exact-source records; do not combine counts from different
@@ -47,7 +52,7 @@ remain separate; PR38 stays Draft/Open.
 | FR-009 | TransferReceiptService, ReceiptBoundaryTest, PostgreSQL custody commit | F: matching signed Receipt/current IAM/allocation precede atomic Artifact/Vault/Location metadata; private candidate does not equal accepted custody |
 | FR-010 | Artifact/Vault/Location identities, FilesystemVaultAdapter private allocation/path seam | F: stable logical identity and relocation witness; one actual Gateway/Vault, not multi-Vault runtime |
 | FR-011 | Grant/Receipt/Gateway tests and actual client transfer matrix | F: refusal, retry, interruption/resume, expiry/explicit renewal, lost Gateway/Server response and changed-input refusal; layered cases are not all claimed executed on both file sizes |
-| FR-012 | Exact intake inventories, bounded process records, Node admission, clean-room register | [T036 review](PH1-license-review.md): reviewed with explicit historical timing exceptions and unresolved Web/bundle/legal evidence; NOT an unqualified before-first-use compliance PASS |
+| FR-012 | Exact intake inventories, bounded process records, Node admission, clean-room register | [T036 review](PH1-license-review.md) and [accepted disposition](PH1-T036-closure-matrix.md#8-project-reviewer-acceptance--current-pass-label): COMPLETED / PASS for current use; notices repaired, grants/obligations retained. Historical timing exceptions remain attributable, not retrospectively compliant before-first-use; exhaustive native coverage is accepted residual |
 | FR-013 | RoleAssignmentAdministration, IdentityAdministration, IdentityAccessPolicy and IdentityFlowTest | D: independent exact role version/Organization assignment, assigned_by/reason/outcome/Audit; no implicit Super CRUD; stable identity and atomic failures |
 | FR-014 | Credential setup/reset proof services and real HTTP flow tests | D: target-bound one-use expiring proofs, exact Login Identity reset, pending refusal, rolling block and equivalent password work; unknown-login spray creates no durable rows |
 
@@ -77,13 +82,14 @@ remain separate; PR38 stays Draft/Open.
 | CHK009 | FR-011; F | Actual interruption, renewal, lost response and canonical retry witnesses; component-level limits retained |
 | CHK010 | FR-010; F | Logical identity/private-path seam qualified; future multi-Vault remains additive/deferred |
 | CHK011 | SC-001–006 rows above | All six criteria indexed with platform/source and residual limits |
-| CHK012 | FR-012; T002/T027/T036 and exact inventory review | Partial; before-use deviations remain attributable and T036 remains open |
+| CHK012 | FR-012; T002/T027/T036 and exact inventory review | SATISFIED in accepted PH1 scope; T036 COMPLETED / PASS; before-use deviations and residual evidence limits remain attributable |
 
 ## 5. Residual disposition
 
-T035's coverage review is complete; this does not accept all PH1 or close T036. No additional
-functional implementation defect is identified by this review inside the accepted F01–F05 seams.
-License/provenance completion is separately tracked in [PH1-license-review.md](PH1-license-review.md).
+T035's coverage review and T036 are complete. The Project Reviewer accepted whole PH1 as
+ACCEPTED / PASS at f6cbe7d; see [acceptance receipt](PH1-acceptance.md). No additional
+functional implementation defect is identified inside the accepted F01–F05 seams.
+License/provenance disposition is recorded in [PH1-license-review.md](PH1-license-review.md).
 Fresh public V1–V10, verifier and private raw-log independent inspection remain NOT-RUN/limited
 exactly as accepted for F05. Desktop/WebView2/Workspace binding is a separate successor, not a
 F03-B/F05 blocker. Production, commercial redistribution, HA/recovery and future increments are

@@ -239,9 +239,11 @@ them are not made by editing this task list.
 complete under the separately authorized continuous sprint, not T027 authority alone.
 The Project Reviewer accepted whole F05-A/B at `874088695d0b65e6d71b40078d6f55e623087b0a`
 as ACCEPTED / PASS WITH NOTES; see the [F05 closure matrix](evidence/F05-closure-matrix.md).
-T035 review is performed; next resolve the explicit T036 gaps in the
-[license review](evidence/PH1-license-review.md), then obtain separate whole-PH1 disposition.
-PR38 stays Draft/Open; actual effort publication, card/Issue closure and merge remain separate.
+T035 and T036 are satisfied. The Project Reviewer reviewed exact head
+`f6cbe7ddfc7e0978ed5f50751f93a123cdceb1e4` and accepted whole PH1 = ACCEPTED / PASS;
+see [whole-PH1 acceptance receipt](evidence/PH1-acceptance.md). Publish acceptance/status
+reconciliation only; PR38 Ready/Merge, Issue37 closure and Tracker actual effort remain
+separate actions. PR38 stays Draft/Open until separately authorized.
 No timer restart/progress publication or verifier execution. Earlier T028–T034 row wording
 that says external acceptance pending describes publication before this received decision.
 

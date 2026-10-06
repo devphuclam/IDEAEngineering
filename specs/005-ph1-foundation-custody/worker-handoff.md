@@ -9,9 +9,11 @@ as the only task list. Scope: PH1 F01–F05. Read this before implementing or re
 are complete under the separate continuous sprint. For review or continuation, read the
 [F05 closure matrix](evidence/F05-closure-matrix.md) first: current requirements,
 actual sources/executions and acceptance limits. Whole F05-A/B is human ACCEPTED / PASS WITH NOTES
-at `874088695d0b65e6d71b40078d6f55e623087b0a`. T035 review is performed; next resolve the
-specific T036 R36-01–03 actions in [whole T036 matrix](evidence/PH1-T036-closure-matrix.md), not another feature
-slice. PR38 stays Draft/Open; card/Issue closure and actual-effort publication remain separate.
+at `874088695d0b65e6d71b40078d6f55e623087b0a`. T035/T036 are satisfied and whole PH1 is
+ACCEPTED / PASS at reviewed `f6cbe7ddfc7e0978ed5f50751f93a123cdceb1e4`; read
+[whole-PH1 acceptance](evidence/PH1-acceptance.md). Current action is acceptance publication
+and clerical reconciliation only, not another feature slice. PR38 stays Draft/Open;
+Ready/Merge, Issue37 closure and actual-effort publication remain separate.
 Retained T027/T028 continuation
 paragraphs below are historical receipts, not today's execution frontier.
 No timer/progress action, verifier or merge is inferred.
