@@ -5,16 +5,14 @@ as the only task list. Scope: PH1 F01–F05. Read this before implementing or re
 
 ## Start each work session
 
-**Current frontier,2026-10-05:** [T027 closure](../../docs/research/2026-10-05-f05a-t027-closure.md)
-records accepted Q01/root05/filesystem8/8/HTTPS02 and remaining envelope146/146 at
-`2c7eb32397a9f033885c48e19e27e6716ed8fd64`. Read preparation v1.1 §13 and exact frozen profile
-before later endpoint work; retained preflight paragraphs below are historical receipts,
-not current blockers. T027 COMPLETE / PASS includes final read-only analyze with0 open/material
-findings. Next implementation
-unit is T028/T030, subject to separate execution/tooling/environment authority. T029/T031/T033
-paths are refined; Gateway, real Adapter, client transfer and custody acceptance are NOT-STARTED.
-T027-only process exception expires at its closure and cannot be used for later F05 builds.
-PR38 remains Draft/Open; no merge or timer/progress action. F05-A/B are not complete.
+**Current frontier,2026-10-06:** T027–T034 engineering delivery and bounded qualification
+are complete under the separate continuous sprint. For review or continuation, read the
+[F05 closure matrix](evidence/F05-closure-matrix.md) first: current requirements,
+actual sources/executions and acceptance limits. Next action is external whole-F05 review,
+not another feature slice. PR38 stays Draft/Open; F05-A/B human acceptance/card closure
+and actual-effort publication remain pending/separate. Retained T027/T028 continuation
+paragraphs below are historical receipts, not today's execution frontier.
+No timer/progress action, verifier or merge is inferred.
 
 1. Read repository `AGENTS.md`, [Spec Kit workflow](../../docs/agents/spec-kit.md),
    [spec](spec.md), [plan](plan.md), and the current task list. Inspect branch, HEAD and dirty
@@ -398,7 +396,7 @@ Document Check-in/Generation publication, a second Vault, replication and failov
 
 ## End each work session
 
-### Current T028/T030 continuation — 2026-10-05
+### Historical T028/T030 continuation — 2026-10-05
 
 This dated current receipt supersedes older current-state handoff wording for this slice only.
 T027 remains COMPLETE/PASS. Exact Server graph/rights/input gate is OPEN under the bounded

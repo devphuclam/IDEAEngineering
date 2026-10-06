@@ -1,9 +1,9 @@
-# F05-A Gateway implementation — partial executed evidence
+# F05-A Gateway implementation — retained component and integration evidence
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-F05A-GATEWAY-20261005 / verification record / 0.3 |
-| Status / result | IN_PROGRESS / PARTIAL; T029/T031/T032–T034 not closed |
+| Stable ID / class / version | IE-VEV-F05A-GATEWAY-20261005 / verification record / 0.4 |
+| Status / result | Component and actual transfer PASS; final successor/review reconciliation in F05-B record; whole-card acceptance pending |
 | Owner / author / worker | Engineering / Codex / CODEX_ONLY |
 | Authority / date / timezone | Project Reviewer continuous T028–T034 sprint + successor process exception /2026-10-05 /Asia/Ho_Chi_Minh |
 | Normativity / repository instruction | INFORMATIVE / NOT-APPLICABLE |
@@ -227,3 +227,33 @@ process exception. [Authoritative successor record](../../../docs/research/2026-
 and exact runtime/notice inventory retain applicable notices and material-change review triggers.
 The historical gate above is no longer a blocker. This approval does not by itself qualify
 the client or close T033/T034. PR38 remains Draft/Open; no merge/verifier/timer action.
+
+## Current actual-client integration successor — publication2026-10-06
+
+The partial/pending wording in prior sections retains those execution checkpoints;
+it is not the current transfer disposition. [F05-B results §§3–8](F05-B-transfer-results.md)
+record actual admitted Windows Node→Server control/session/CSRF→HTTPS Gateway
+bytes→FilesystemVaultAdapter→signed Receipt→Server current IAM/owner allocation→
+atomic PostgreSQL custody for both governing P05 fixtures. Normal trust/endpoint
+verification, no byte relay or new public product Server route.
+
+Interrupted64MiB upload resumes63 missing1MiB ranges. Altered/expired Grant,
+wrong chunk digest, malformed progress, changed completed range and altered
+Receipt refuse; explicit renewal retains operation/transfer; exact retry resolves
+original Receipt/custody/Audit. Genuine lost completion body is recovered through
+status, without another upload. The control30s elapsed-time case now has actual
+empty408 evidence at source8bc6c07058f97151024f57b5a1c76e3b67f8268a,
+successor to (not a rewrite of) gateway-boot-08's NOT-RUN control case.
+
+The retained packaged Gateway source0aefb56f4f87b337ce4cc614f51b5f96ac2e86c9
+and JARc26b870e22a6ffb6ed9acbcbcd1dd20208004226c4d09a399e227983023a14e1
+are unchanged during client integration. V8→V9 and V9→V10 migration/privilege
+tests above remain applicable to unchanged migration bytes, not rerun claims.
+Fresh public V1–V10 stays NOT-RUN; only fresh controlled test schemas were used.
+Final allocation-drift successor and exact final execution lineage belong in
+F05-B §9; final test-handoff cleanup and Receipt7+cleanup2 qualification at
+e5428846b59c2ec79a72647f71045ecaae0f582f are in §10. The
+[closure matrix](F05-closure-matrix.md) is the current review index.
+Raw logs remain private; external whole-F05 review/acceptance is separate.
+No Desktop/Workspace, throughput, HA/recovery, production, commercial/T036 or
+whole-PH1 acceptance; verifier NOT-RUN; no preview/Tracker/timer/merge action.

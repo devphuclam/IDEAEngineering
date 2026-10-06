@@ -13,9 +13,12 @@ Public-boundary tests: GatewayTransferTest and adapter/FilesystemVaultAdapterTes
 Current executed component evidence is in tests/ph1/f05-qualification/gateway/README.md.
 Component25-case Gateway and13-case Adapter qualifications are not HTTP/end-to-end PASS.
 GatewayApplication now serves HTTPS range/status handlers through the qualified service.
-Actual1KiB HTTP tracer and30s stalled-upload refusal passed. Whole-range/control elapsed
-deadlines, full negative matrix and Server/client end-to-end qualification remain outstanding.
-Never treat this intermediate checkpoint as complete F05/product deployment qualification.
+Historical1KiB HTTP tracer was followed by actual30s inactivity/60s range deadline
+qualification. Actual Windows Node/HTTPS integration now transfers governing1KiB
+and64MiB fixtures, with control30s/refusal/resume/renewal/lost-response and Server
+custody evidence in `specs/005-ph1-foundation-custody/evidence/F05-B-transfer-results.md`.
+Component tests alone are not end-to-end evidence; whole-F05 acceptance and product
+deployment qualification remain separate.
 
 POM derives the already qualified exact38-collection/32-payload runtime and four offline
 plugins. No JSR305, JDBC/Flyway/Server, Web assets, security provider or new dependency added.

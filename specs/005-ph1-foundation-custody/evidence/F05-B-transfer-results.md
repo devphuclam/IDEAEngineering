@@ -2,10 +2,10 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-RES-PH1-F05B-TRANSFER-RESULTS / verification record /0.2 |
-| Status / disposition | In progress; positive actual two-fixture end-to-end PASS (§3); refusal/resume/renewal qualification remains open |
+| Stable ID / class / version | IE-RES-PH1-F05B-TRANSFER-RESULTS / verification record /0.3 |
+| Status / disposition | Engineering transfer qualification PASS (§9); final focused hygiene/regression PASS (§10); external whole-F05 review/acceptance pending |
 | Owner / author / authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm /Codex CODEX_ONLY /continuous T028–T034 sprint authorization |
-| Baseline / date | Issue37/PR38, frozen T027 v1 envelope/profile;2026-10-05 Asia/Ho_Chi_Minh |
+| Baseline / date | Issue37/PR38, frozen T027 v1 envelope/profile; execution lineage2026-10-05, current publication2026-10-06 Asia/Ho_Chi_Minh |
 | Normativity / retention | INFORMATIVE, no new product obligation; INTERNAL, preserve execution lineage |
 | Upstream | [Sprint](../../../docs/research/2026-10-05-f05-execution-sprint.md), [Node admission](../../../docs/research/2026-10-05-node24190-project-admission.md), T033/T034 |
 | Review / limitation | External review pending; local preparation tests are not network transfer, Server or custody acceptance |
@@ -187,3 +187,189 @@ owned listeners stopped and DB retained. Private log
 preflight4a556f6000db09663952e92835c90197d593a807798517ee1d9b16db1a88e0fb;
 postflight0e773830fc726e0980c57d4429a3353bc91d3bb91e753209e0fa84f007a7170c.
 Exact expiry/renewal successor and final affected reconciliation remain open.
+
+## 6. Explicit renewal and canonical completed-operation repair
+
+This successor closes the earlier pending expiry/renewal matrix, not by rewriting
+§2/§4/§5. All packets used the same admitted Node/JDK/Maven/cache, unchanged
+Gateway JAR, dedicated TLS and approved database with fresh owned UUID schemas.
+Raw inputs101/101 passed before transfer and after extraction; archives matched.
+
+| Packet / exact executed source | Actual outcome | Private Maven log SHA-256 |
+|---|---|---|
+| receipt-green-32 /8baa0140c13c37415add0075a82f0f2dd9be967c |1/1 + Node PASS; actual expired Grant403, explicit eligible renewal retains OperationId/TransferId/scope with new GrantId, old Grant still403; both fixture/custody/resume/refusal matrices PASS |896f61cabe87199ae409cf037cd521fefd301b573cf921411bc6c55ad4e65916|
+| receipt-red-33 /0ce01b52b2d5d65ff73ad808d8deff8c3a49295c |Genuine RED after first custody: COMPLETED_OPERATION_RETRY_1024; Server lookup filtered out CONSUMED Grant |19e3dad4e6959b11d8823a58a5834c2b4bdc18fdceaa6dc57adcace141f9e9c1|
+| receipt-green-34 /8d6c26d3872630130cb4a7d5dd333f5676c77b2e |1/1 + Node PASS; canonical issue retry after custody returns original signed Grant/Transfer rather than inserting again; full matrix remains PASS |9e7e7b3317a210d1569a8a2a59c8411f70768cc725d7c6349d419decd60e0175|
+
+Production repair commit363f6d3 expands exact Grant lookup from ISSUED to
+ISSUED/CONSUMED; it does not reactivate consumed state or bypass current Actor,
+Organization, owner/allocation, immutable scope or expiry checks. Renewal remains
+ISSUED-only. This is not an indefinitely valid post-expiry issue API claim.
+
+| Packet | Archive SHA-256 | Input manifest SHA-256 | Cleaned exact schema |
+|---|---|---|---|
+|32|a3cf0d55171785bfe2665e0c316d52afdbc633398a5d335440be90990fa20c16|90f787d168337f0c3a6ae6910a6af4f7b2d78ed10bdd3585986359510f797873|f05_e5da270c06a34453a77b47bcae6a6a55|
+|33|4d49f12a547201db0294c833713009efb8e0d929cd8e70d1254499a9c1c93cb1|a51541b355c3e3c21b0c35356d514201f256b7a8d5c84b62e42dec31a1b0d4be|f05_b77583021ccf40798e512304c9b1525b|
+|34|a0915c96b7f058b306b82c7370354bf4242eff3c838c250702756aaf239b27af|368496cbf3afd9daad085d607d9e632bf8f2c2dae26ed3db4da9f9d45674d762|f05_1c554723932043ebb3acd055fa7b7303|
+
+## 7. Affected regression after canonical-result repair
+
+Separate execution receipts, not one aggregated run:
+
+| Packet / exact source | Actual result | Private Maven log SHA-256 |
+|---|---|---|
+|regression-green-11 /8d6c26d3872630130cb4a7d5dd333f5676c77b2e|Grant10/10,0 failure/error/skip|753a9125e5bedae40ddf3766ae31019a54efee90cf293ead6b8519f6292f1029|
+|receipt-green-35 /8d6c26d3872630130cb4a7d5dd333f5676c77b2e|Receipt6/6,0 failure/error/skip|b661271f7691b0f35794c1f093f6547a66e13d3cd014377e084bde1f5dff808c|
+|regression-green-12 /804335807c33a42e46ffd9dd374ca7e7e87a9113|IAM/HTTP/health105/105 =83 HTTP+20 identity+2 health,0 failure/error/skip|af5decbd8a59c58ae6a64fc937368fc68e0b5ed32dff98222c27ccbff0c19381|
+
+34→8043358 only runner/recipe/manifest changes; application/tests/migrations
+unchanged. Local client preparation/parser guards6/6 on8043358; admitted Node
+binary unchanged. Regression12 archive7c74bbcd52203670d2c8907cd722c343db273d9700fb4f0da7a9f279632672d3,
+manifest85caae479a9a8e8e70b86b862129c76bd05084d2686ec09655381fa4a54fe3f0.
+103 individually marked IAM schemas cleaned; runner preallocated
+f05_ef5df2784f2342248438596f024b9a12 was not created, so no cleanup adopted for it.
+Source-owned remainder0. Grant11 schemaf05_e379296e0c014c7284128ddc4b16372b;
+Receipt35 schemaf05_32e481e8312f424cb61f344b2e006370; both cleaned after JVM exit.
+An attempted reuse of historical regression09 target stopped before copying/build;
+that directory/evidence remained unchanged. Fresh12 was published prospectively.
+
+## 8. Actual control deadline and lost upload response qualification
+
+| Packet / exact source | Actual result | Private Maven log SHA-256 |
+|---|---|---|
+|receipt-green-37 /8bc6c07058f97151024f57b5a1c76e3b67f8268a|1/1 + Node PASS; real HTTPS control body withheld, empty408 within28–40s (30s profile), then complete two-fixture matrix|17c417c037bd9d639af5d0f9cdf0e7ee1c36f1186acd585e6d8beec3091a4fa5|
+|receipt-green-38 /8a8ea3a5c3cae2d9348c9ccf44c59637109cfc32|1/1 + Node PASS; actual1KiB completion response body dropped at headers, status resolves canonical Receipt, zero additional range POST; all37 cases plus independent custody PASS|d8c7de44bc6e554f80663d1ad832f012aba49ab17cc2c44ee08b431de4dbbefd|
+
+No production timer change or accelerated host clock. Source37/38 only add test
+qualification/recipe/manifest, not Gateway/Server behavior. Lost body is an actual
+HTTPS socket close, not a mocked response; custody is independently observed only
+after Server Receipt acceptance. Both fixture manifests in §1/§3 still match real
+Adapter files and authoritative Artifact/Location/Transfer.64MiB resumes63 missing
+1MiB ranges after partial second-range interruption; no false complete Receipt
+from the unverified fragment. No throughput or network-latency target is claimed.
+
+37 archive32676b8c59c0483a186f7d79d5058f78aadbaf2d88f7a2b077bedc762c352332,
+manifesta8da4cd1e8ba25d6ff555c9f88ee2ec84d7f8d88b5aa94fafa13224fd5652815,
+schemaf05_df5f9ed9995b4b608d48904e8b6c5b0b.
+38 archive35112cf7395e20f74ef97f145be07281462a15354021d9372c566a11e8d8eae5,
+manifestc6f1ec463ed663c393d8f644f6885e1146ffafd3707b22809629396c339ea94b,
+schemaf05_8a4787428ac449a4a7d5eea64b175dc0.
+Both exact schemas cleaned, source-owned remainder0; retained database unchanged,
+owned Server/Gateway JVMs stopped and18446/18447 have no listener after execution.
+
+For32–38 preflight hash4a556f6000db09663952e92835c90197d593a807798517ee1d9b16db1a88e0fb;
+postflight0e773830fc726e0980c57d4429a3353bc91d3bb91e753209e0fa84f007a7170c
+except regression12 postflight9afcdfe3b014753b0471c46253d7580f91aba9c3f54d7d29b1221143a1413761.
+Logs under approved parent/run-<packet>; raw-log access limitation remains.
+Fresh public V1–V10 NOT-RUN; these are isolated real-PostgreSQL schemas. No
+Desktop/Workspace, production/HA/recovery, commercial/T036, full PH1 acceptance,
+verifier, timer/Tracker publication, merge or Issue closure is inferred.
+
+## 9. Final allocation repair and sequential exact-source qualification
+
+Read-only final inspection found commit-time owner allocation was re-evaluated but
+its adapter key was not compared with the tuple used for tentative metadata.
+This was a real first-party consistency gap, not a new product policy.
+
+| Packet / exact source | Actual result | Private Maven log SHA-256 |
+|---|---|---|
+|receipt-red-39 /ef678d851ebf10c04b03aa3fbdb9a5489b136ad1|7 tests,6 PASS/1 FAIL: changed owner allocation was accepted, expected IllegalStateException not thrown|a4d3b740be886c9eecd4258277caf9715bed44c0c2ff9a2741a821a6f334fbd7|
+|receipt-green-40 /947c60d050e371ea1ed81969471d7368836b15fd|7/7 PASS: exact allocation equality required before commit, zero partial custody/Receipt/Audit after drift; stable same-operation retry works|294a339a6be7b5941eadd9e73b4b66120f9567de794e5aa7d878757aaf47a80f|
+|receipt-green-41 /55b186541120f72ad77a5df53d69d14e0b1464dd|Behavioral1/1 + Node PASS, but runner STOP=OWNED_REGRESSION_SCHEMA_REMAINS before postflight; overall packet NOT-PASS|4c90cdc727261b6b5dd09715dca0a0c2879f56e8a66af6823dedb898c251127a|
+|regression-green-13 /55b186541120f72ad77a5df53d69d14e0b1464dd|105/105 PASS,0 failure/error/skip; all103 actual IAM schema fixtures cleaned, source-owned remainder0|9caecbe1440bfab30a0f1a72d33bc9dda307a077337438b6253d42adf911f9f5|
+|receipt-green-42 /e542b46184b1e2792c7d5f0fcdcf38c0d7d7cd34|Final1/1 + actual Windows Node PASS; full matrix, lost Server acceptance body and stable private-path relocation, independent custody oracle, complete source/tool postflight|44be5f51b02c07b966fc738e95d232ab57264b98650785bab5a3279ceb126fad|
+
+Production repaira49d5fc compares the complete current Allocation record after
+IAM commit coordination. No new permission, owner protocol, migration, dependency
+or Gateway change.39 schemaf05_7155cd068ede49de8a322bffd0bb537e and40
+schemaf05_72b87f5231e642bbaf0e6e9792f7d462 cleaned after owned JVM exit.
+39 archive380b4d796d6f2e0ba8075f6142f37fe17862827776db982b045638c43f1655d6,
+manifest6de1a2a873c36e98a6d49c7cda50f8269af0fa8e53aa4552d660ff866db0f38d;
+40 archive891fdfb435f248204eaae663d528a68b636b7597d1e70dc8968bbac23b732ece,
+manifest2e1c5fdb67ed1e79ec46b8758b6e86e7f7be22eac513824518f28f2a62b9202c.
+
+41's residuals were concurrently active regression13 schemas with the same source
+SHA, not leaked client schema: exact client schemaf05_d00952643809414080c65ce7758d9952
+was already removed. Both behavior logs remain retained, but no41 postflight PASS
+is invented.13 finished and cleaned its fixtures. Fresh42 then ran sequentially,
+with unchanged guard semantics and source-owned remainder0.13 runner preallocated
+f05_38be476aac904cfc87b57764a1cad30d was not created; no cleanup adopted for it.
+41/13 archive547324c4376dac38b471eec959bc2627212b6073973b0f1bfb4846623817a301,
+manifestc7c2db5ab9bb87204c4a6b78eca82a40509165f88a858cb7ab355bfbfabbf785.
+
+Final42 archiveb2638163668c30bf9f4e76d9b44bd5f23e1937ce3d9cb2f3d950d519d54d922d,
+manifest4e88f8b4ebde21a3004c3ceee9461583da5ee7325e4b0238495c46e5049a1df1.
+Raw101/101 local and remote, archive transfer identity and offline input/tool/
+realm postflight PASS. Exact final schemaf05_f769feed824d4dc5af0b27eaf07b04d0
+cleaned after JVMs exited; source-owned remainder0, approved database retained.
+No concurrent same-source test packet ran during42. Gateway package remains
+c26b870e22a6ffb6ed9acbcbcd1dd20208004226c4d09a399e227983023a14e1.
+
+42 genuinely discards the Server Receipt-acceptance response body at HTTP headers,
+after the bridge's service commit, then retries the exact Receipt/operation. It
+observes the original TransferId and independent single acceptance Audit/custody,
+not a fabricated rollback or new operation. Both P05 real files then move only
+from this owned ROOT/vault to absent ROOT/relocated-vault after Gateway exit.
+Read-only PostgreSQL queries confirm unchanged Artifact/Vault/Location identities,
+VERIFIED state, and both moved files' exact byte counts/full SHA-256. This is
+isolated private-path independence, not a Gateway relocation runbook, production
+data migration, second-Vault or power-loss/recovery qualification.
+
+40→42 changes only qualification test/driver/recipe/runner/manifest; production
+code, migrations and dependency bytes do not change. Thus7/7 Receipt at40 and
+105/105 IAM at13 apply to final production source without claiming a rerun at42.
+Grant10/10 at34 remains applicable because the Receipt-only production repair
+does not alter Grant source/fixture; V8→V9 and V9→V10 retained migration checks
+likewise apply to unchanged SQL/migration tests. Local Node6/6 rerun on42,
+admitted binary SHA unchanged. Counts are separate commands, not an invented
+single129-test run.
+
+All final Server packets use preflight4a556f6000db09663952e92835c90197d593a807798517ee1d9b16db1a88e0fb
+and postflight0e773830fc726e0980c57d4429a3353bc91d3bb91e753209e0fa84f007a7170c,
+except13 postflight9afcdfe3b014753b0471c46253d7580f91aba9c3f54d7d29b1221143a1413761;
+41 postflight NOT-RUN. Private retained logs remain under run-<packet> in the
+approved parent. Public evidence is a summary/hash record, not independent raw-log access.
+
+The tracked-secret detector reports two credential-assignment findings in generated
+TLS configuration source (TransferClientBoundaryTest/GatewayHttpQualification).
+Manual source inspection finds runtime-generated/private-file-read values, not
+committed credentials; detector command is NOT-PASS and is not rewritten as PASS.
+No bypass/allowlist or source rename to evade detection was introduced. No credential
+value, cookie, CSRF, private key, Grant or Receipt is recorded in this evidence.
+
+Current engineering completion mapping is [F05 closure matrix](F05-closure-matrix.md).
+Project Reviewer acceptance, F05 card/Issue closure and merge remain pending/separate.
+Fresh public V1–V10, verifier, production/commercial/T036, Desktop/Workspace,
+HA/recovery/throughput and later document workflow remain unclaimed.
+
+## 10. Final handoff cleanup qualification and publication
+
+Standards-axis source review identified that a failed process-shutdown assertion
+could skip deletion of the private `ready.json` handoff. Repair `cd60602` changes
+only the test helper: deletion runs in `finally`, preserves the primary exception
+and attaches a deletion failure as suppressed. Two focused synthetic-file cases
+prove successful and exceptional cleanup while preserving an unrelated sentinel.
+There is no retained pre-repair RED execution for this hygiene fix; it is a
+source-review repair with successor qualification, not a fabricated RED/GREEN pair.
+
+Exact executed source: `e5428846b59c2ec79a72647f71045ecaae0f582f`.
+Packet `regression-green-14`: Receipt7 + OwnedHandoffCleanup2 = **9/9 PASS**,
+0 failures/errors/skips; offline BUILD SUCCESS. Production, migrations, Gateway
+package and client driver are unchanged from the final actual-transfer run42.
+The cleanup helper is the only changed test behavior; no transfer rerun is claimed.
+
+- Raw102/102 local/remote and archive identity PASS.
+- Archive SHA-256: `3359f71379390a592aa24e67d7a896cf2ea709703da55836d34a3e1e9504a51d`.
+- Manifest SHA-256: `07742d3ad92f30ba960e1b085446d99a69ae8abe12f1c07539c9341c89875e60`.
+- Exact owned schema: `f05_27b4aec930164ce4afa54882779fe9a4`; guarded cleanup after JVM exit, source-owned remainder0; approved database retained.
+- Input observations:456 inventory rows,52 Maven-core rows,695 actual-used observations PASS.
+- Private Maven log SHA-256: `afdf58c11ee64eeef671cd3d7a876abb59d956f2aba1fdecef835a3b34dfcac2`.
+- Private postflight SHA-256: `d4b4f4a7d23c595b3e5a78ca5bba6199b6aa413ce6a15f20f043a380d49a267e`.
+- Retention: `/home/phuclam/idea-f05a-t028-t030-20261005-37/run-regression-green-14/`; raw logs remain private, hashes do not substitute for independent log access.
+
+Publication on2026-10-06 follows interruption, not a backdated execution or a new
+qualification run. Standards review's cleanup finding is repaired and qualified;
+Spec-axis review identified no actionable scope/behavior finding. These are
+engineering reviews, not Project Reviewer whole-card acceptance. The automated
+secret-detector disposition in §9 remains NOT-PASS with manual generated-value
+analysis; no detector bypass or credential literal was introduced.
