@@ -1,5 +1,8 @@
 # Đọc API contract Core v0 — hướng dẫn theo luồng
 
+API là Application Programming Interface — giao diện lập trình ứng dụng. Bản hướng dẫn này giải
+thích cách đọc hợp đồng và dùng đúng luồng hiện có, không tạo yêu cầu sản phẩm mới.
+
 | Trường kiểm soát | Giá trị |
 |---|---|
 | ID / loại | `IE-API-GUIDE-VI-001` / hướng dẫn đọc, không phải nguồn yêu cầu sản phẩm |
@@ -25,9 +28,13 @@ Bản v0.1 dùng Identity/Session đang có làm mẫu cụ thể. Những nghi�
 
 ## 2. Luồng đăng nhập → dùng phiên → đăng xuất
 
+HTTP là Hypertext Transfer Protocol; HTTPS là HTTP qua kết nối TLS (Transport Layer Security).
+CSRF (Cross-Site Request Forgery) là kiểu giả mạo request từ một trang khác; token/header CSRF
+giúp Server kiểm tra request thay đổi trạng thái. Token này không phải quyền quản trị.
+
 ```text
 Trang IDEA cùng HTTPS origin
-  → I01: lấy CSRF, giữ tạm trong RAM
+  → I01: lấy CSRF, giữ tạm trong bộ nhớ
   → I02: gửi username/password dạng form + CSRF
   → 200: Server tạo/đổi session cookie; lấy lại CSRF
   → I03: lấy ActorId/AccountId do Server xác định
@@ -37,7 +44,7 @@ Trang IDEA cùng HTTPS origin
   → I03 với phiên cũ: 401
 ```
 
-Cookie HttpOnly do browser giữ và gửi; JavaScript không đọc nó. Không tạo JWT hay lưu bearer vào
+Cookie HttpOnly do browser giữ và gửi; JavaScript không đọc nó. Không tạo JSON Web Token (JWT) hay lưu bearer vào
 localStorage để thay cơ chế này. ActorId nhận về dùng để hiển thị; gửi ActorId khác không cho phép
 mạo danh. Đăng nhập thành công cũng **không** tự cấp quyền quản lý account hay quyền tài liệu.
 
@@ -49,6 +56,9 @@ Không ghi password, cookie, CSRF hay proof thật vào tài liệu/screenshot/l
 tạm trong password control và gửi request, rồi xóa khỏi state hiển thị sau submit/unmount.
 
 ## 3. Ví dụ tạo và quản lý account
+
+JSON (JavaScript Object Notation) là dạng body của các account commands; UUID (Universally Unique
+Identifier) là kiểu mã định danh, không phải quyền truy cập.
 
 Một người **có assignment Account Administrator đúng Organization Scope** gọi I05. Request gồm
 `operationId`, `organizationId`, `displayName`, `login`. Kết quả `201` trả ActorId, AccountId,

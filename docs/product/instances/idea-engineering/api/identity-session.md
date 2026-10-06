@@ -1,5 +1,8 @@
 # Identity and Session HTTP contract — observed baseline
 
+This application programming interface (API) description uses Hypertext Transfer Protocol (HTTP),
+JavaScript Object Notation (JSON) bodies and universally unique identifiers (UUIDs).
+
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-API-IAM-001` / supporting HTTP contract description |
@@ -17,17 +20,18 @@ This edition describes the current Server routes, not the full future Account Ma
 directory feature set. The [existing OpenAPI asset](../../../../../apps/server/src/main/resources/dev-access/openapi.json)
 remains unchanged at OpenAPI `3.0.3`, document version `dev-access-0.1`.
 
-All paths below use prefix `/api/v1/identity`. Relative paths assume the same trusted HTTPS origin
+All paths below use prefix `/api/v1/identity`. HTTPS means HTTP over Transport Layer Security (TLS).
+Relative paths assume the same trusted HTTPS origin
 as the IDEA Web application; the development launcher's URL is not a fixed production server URL.
-Mutations use the session-backed CSRF header returned by `/csrf`, including anonymous login and
+Mutations use the session-backed cross-site request forgery (CSRF) protection header returned by `/csrf`, including anonymous login and
 credential redemption. Missing/bad CSRF can return `403` before controller validation or authentication;
 the other refusal statuses below assume a valid CSRF submission and a syntactically bound request.
 
 | Authority fact | Current meaning |
 |---|---|
 | Actor | Derived by the Server from its authenticated session, never an authoritative client `ActorId`. |
-| Session cookie | `IDEA_SESSION`, Secure, HttpOnly, SameSite=Strict, host-only. Browser attaches it; JavaScript does not read it. No JWT / localStorage bearer. |
-| Session eligibility | Active account, enabled Actor, matching security version, unrevoked DB record, current runtime instance and current deadlines. |
+| Session cookie | `IDEA_SESSION`, Secure, HttpOnly, SameSite=Strict, host-only. Browser attaches it; JavaScript does not read it. No JSON Web Token (JWT) / localStorage bearer. |
+| Session eligibility | Active account, enabled Actor, matching security version, unrevoked database record, current runtime instance and current deadlines. |
 | Lifetime | Idle 2 hours and absolute 8 hours; exactly at either deadline the session is ineligible. Servlet retention is 8 hours, not the eligibility authority. |
 | Restart | Old runtime proof cannot be adopted; retained DB session metadata does not recreate authentication. Fresh sign-in is required. |
 | Administration | A real applicable `account-administrator@1` or `@2` assignment pins Organization Scope. Authentication alone and Super Administrator status alone grant no account CRUD. |
@@ -154,7 +158,7 @@ the response nor this document promises a constant-time implementation or a glob
 
 ## 5. Client flow, failures and retry
 
-1. Fetch I01 on the actual origin with cookies enabled. Keep the returned header name/token in RAM.
+1. Fetch I01 on the actual origin with cookies enabled. Keep the returned header name/token in memory.
 2. Submit I02 as form data with that header. After `200`, obtain a fresh CSRF token and inspect I03.
 3. Treat I03's identity as Server-observed display data, not client authorization to act as that Actor.
 4. For an authorized administration request, use the exact target, Organization and current version.
@@ -186,7 +190,7 @@ canonical result for replay. Reusing it is **not** a promised idempotent success
 
 Passwords may exist transiently in a password control and request submission; they are not copied
 to URL, storage, logs, DOM text or retained evidence. Clear them after submit/unmount. CSRF stays in
-RAM; HttpOnly session cookies stay outside JavaScript. The dev Swagger disables Try out for
+memory; HttpOnly session cookies stay outside JavaScript. The dev Swagger disables Try out for
 credential/proof inputs; it is not a secret-entry UI.
 
 ## 6. Trace to source and existing qualification

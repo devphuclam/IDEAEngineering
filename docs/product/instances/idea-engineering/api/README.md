@@ -1,5 +1,8 @@
 # Core v0 API domain and operation catalogue
 
+An application programming interface (API) contract explains what an operation means and how a
+caller can use it. HTTP means Hypertext Transfer Protocol; QA means quality assurance.
+
 | Control field | Value |
 |---|---|
 | Stable ID / class | `IE-API-CATALOGUE-001` / supporting interface catalogue |
@@ -56,7 +59,7 @@ errors and wire retry behavior remain `UNKNOWN` until the owning increment refin
 
 | Index | Owner and operations | Authority / interface | Current surface and important boundary |
 |---|---|---|---|
-| IAM-1 | Identity and Accounts: obtain CSRF, sign in, inspect current session, sign out | `REQ-IAM-001/004/006`; `IF-ACCOUNT-SESSION` | `HTTP`; detailed below. The Server establishes Actor identity. |
+| IAM-1 | Identity and Accounts: obtain cross-site request forgery (CSRF) protection token, sign in, inspect current session, sign out | `REQ-IAM-001/004/006`; `IF-ACCOUNT-SESSION` | `HTTP`; detailed below. The Server establishes Actor identity. |
 | IAM-2 | Identity and Accounts: create account; disable; re-enable | `REQ-IAM-002/005/006`; `IF-DIRECTORY-ADMIN` | `HTTP`; scoped Account Administrator assignment required; no product access is created. |
 | IAM-3 | Identity and Accounts: issue first-credential or reset proof; redeem proof | `REQ-IAM-003`; `IF-ACCOUNT-SESSION`, `IF-DIRECTORY-ADMIN` | `HTTP`; issuance has synthetic delivery opt-in only. Setup and reset have different permissions and state effects. |
 | IAM-4 | Identity and Accounts: one-time Super Administrator bootstrap | `REQ-IAM-007` | `INTERNAL` operator console command; no HTTP signup/bootstrap route or startup auto-bootstrap. |
@@ -71,24 +74,24 @@ errors and wire retry behavior remain `UNKNOWN` until the owning increment refin
 | CPD-3 | Controlled Product Data: move/link/unlink placement; alias rename; controlled-name change; Create Copy | `REQ-ID-007…009`; `IF-PRODUCT-COMMAND` | `DESIGN`; alias-only change differs from controlled content; Copy creates new identity without inherited entitlement. |
 | CPD-4 | Controlled Product Data: confirm Checkout/Reference scope; acquire/renew/end/recover Reservation | `REQ-WS-001…003/013/014`; `IF-PRODUCT-COMMAND` | `DESIGN`; exact Actor/Workspace/Generation binding, no hidden cascade. Lease duration remains the upstream policy open item. |
 | CPD-5 | Controlled Product Data: prepare/confirm Check-in; commit changed or No Change; resolve/retry outcome | `REQ-WS-006…012`; `IF-PRODUCT-COMMAND` | `DESIGN`; all-or-none publication and operation-specific identical-input retry. Custody completion is not Check-in success. |
-| WS-1 | Managed Workspace: materialize/verify; open via OS association; scan local changes; retain/recover candidates | `REQ-WS-004/005/010/011/014/015`; `IF-WORKSPACE-IPC` | `DESIGN`; local state is not Server publication; loss of a session does not authorize deletion of local work. |
+| WS-1 | Managed Workspace: materialize/verify; open via operating-system (OS) association; scan local changes; retain/recover candidates | `REQ-WS-004/005/010/011/014/015`; `IF-WORKSPACE-IPC` | `DESIGN`; local state is not Server publication; loss of a session does not authorize deletion of local work. |
 | CUS-1 | Artifact Custody: allocate transfer; issue/resolve/renew signed Grant; accept signed Receipt | `REQ-WS-016`, `REQ-SEC-001/002`, `REQ-OPS-001/006/007`; `IF-ARTIFACT-CUSTODY` | `INTERNAL` Server services qualified in PH1. Server HTTP grant/renew/receipt routes in the end-to-end fixture are `QUALIFICATION`, not deployed product adapters. |
 | CUS-2 | Gateway / FilesystemVaultAdapter: transfer a range; resolve transfer status | `REQ-WS-015/016`, `REQ-SEC-002`; `IF-ARTIFACT-TRANSFER` | `HTTP` Gateway `/transfer/range` and `/transfer/status`; signed Grant authority, not ordinary Server session authority. Separate byte plane. |
 | CUS-3 | Artifact Custody: private-candidate reconciliation; location selection; replicate/repair/retire locations | `REQ-OPS-001/006…008`; `IF-ARTIFACT-CUSTODY` | `DESIGN` beyond the PH1 bounded one-Vault thread; no multi-Vault/runtime/backup claim. |
 | STR-1 | Product Structure: resolve immutable Structure Snapshot; explicitly adopt changed components | `REQ-STR-001/002`; `IF-STRUCTURE-BOM`, `IF-PRODUCT-QUERY` | `DESIGN`; stable occurrences and exact Generation pins; child change cannot rewrite parent history. |
-| STR-2 | Product Structure: query versioned BOM view; export/retain pinned BOM Representation | `REQ-STR-004/005`; `IF-STRUCTURE-BOM` | `DESIGN`; spreadsheet bytes are not structure authority; old output remains historical / Needs update. |
+| STR-2 | Product Structure: query versioned bill-of-materials (BOM) view; export/retain pinned BOM Representation | `REQ-STR-004/005`; `IF-STRUCTURE-BOM` | `DESIGN`; spreadsheet bytes are not structure authority; old output remains historical / Needs update. |
 | STR-3 | Named BOM Import coordinator: validate candidate; show diff; confirm atomic snapshot + Generation | `REQ-STR-006`; `IF-STRUCTURE-BOM` | `DESIGN`; Product Structure and Controlled Product Data retain ownership in one coordinated unit of work. |
 | LC-1 | Lifecycle Governance: submit exact review scope; withdraw; approve; reject | `REQ-LC-002…005`; `IF-PRODUCT-COMMAND` | `DESIGN`; pinned scope/policy and independent-approver default; Approval is not Release permission. |
 | LC-2 | Lifecycle Governance: preview/confirm Release; resolve immutable Release Record; create exact Release Package | `REQ-LC-006…008`, `REQ-STR-003/005`; `IF-PRODUCT-COMMAND`, `IF-PRODUCT-QUERY` | `DESIGN`; revalidate all required pins at commit; no unconfirmed tree cascade. |
 | LC-3 | Lifecycle Governance / Controlled Product Data: Create Revision | `REQ-LC-009`, `REQ-ID-002`; `IF-PRODUCT-COMMAND` | `DESIGN`; old Release remains immutable; new Revision has its own Version 1 baseline. |
 | CFG-1 | Lifecycle Governance: validate/activate Workflow Definition and Approval Policy versions | `REQ-LC-001/003/005`, `REQ-GOV-005`; `IF-WORKFLOW-ADMIN` | `DESIGN`; running instances retain their pins; configuration cannot create personnel or role authority. |
-| CFG-2 | Information Model: govern metadata/classification/validation/numbering definitions; allocate Business Number | `REQ-GOV-003…005`; `IF-PRODUCT-COMMAND`, `IF-PRODUCT-QUERY` | `DESIGN`; versioned candidate/preview/activation; Business Number differs from DocumentId. Stored operational reference data does not create an ERP transaction. |
-| FMT-1 | Format Intelligence: declare Capability Profile; request isolated format job; accept manual/produced derivative | `REQ-FMT-001…005`, `REQ-SEC-004`; `IF-FORMAT-JOB` | `DESIGN`; exact source/output pins and producer provenance; no IDEA code inside CAD/Office and no floating-latest derivative. |
+| CFG-2 | Information Model: govern metadata/classification/validation/numbering definitions; allocate Business Number | `REQ-GOV-003…005`; `IF-PRODUCT-COMMAND`, `IF-PRODUCT-QUERY` | `DESIGN`; versioned candidate/preview/activation; Business Number differs from DocumentId. Stored operational reference data does not create an external business transaction. |
+| FMT-1 | Format Intelligence: declare Capability Profile; request isolated format job; accept manual/produced derivative | `REQ-FMT-001…005`, `REQ-SEC-004`; `IF-FORMAT-JOB` | `DESIGN`; exact source/output pins and producer provenance; no IDEA code inside computer-aided design (CAD)/Office applications and no floating-latest derivative. |
 | AUD-1 | Audit: retain attributable evidence; authorized Audit query; committed projection/notification | `REQ-AUD-001/002`, `REQ-OPS-002`; `IF-COMMITTED-EVENT`, `IF-PRODUCT-QUERY` | `INTERNAL` evidence writes exist. Audit query/dispatcher/product projections are `DESIGN`; no editable Audit or consumer-owned business success. |
 | EVT-1 | Owner Modules: append committed event with owner outcome and Audit | `REQ-AUD-001`, `REQ-OPS-002`; `IF-COMMITTED-EVENT` | `INTERNAL` foundation qualified by F04. Synthetic sample result/replay access is `QUALIFICATION`, not a universal product result-access rule. |
 | DSK-1 | Desktop: allowlisted Web/native intent bridge; Workspace binding and per-user protected custody | `REQ-SEC-003`; `IF-DESKTOP-BRIDGE`, `IF-WORKSPACE-IPC` | `DESIGN` / separate successor qualification. Accepted PH1 Web evidence does not qualify Desktop. |
 | OPS-1 | Operations: controlled backup/restore drill; capacity and availability qualification | `REQ-OPS-003…005` | `DESIGN` operational work, not an invented public API; PH1 does not establish production readiness. |
-| EXT-1 | Future company login / external business integration | `IF-COMPANY-IDENTITY`; DOC-05 scope boundary | `DEFERRED`; no provider, auto-link-by-email, ERP write-back or public-integration promise. |
+| EXT-1 | Future company login / external business integration | `IF-COMPANY-IDENTITY`; DOC-05 scope boundary | `DEFERRED`; no provider, auto-link-by-email, external business write-back or public-integration promise. |
 
 ## 3. Semantic interface coverage
 
@@ -122,8 +125,9 @@ describes 11 paths: nine Identity paths and two health paths. This package suppl
 human-readable semantics; it does not replace or modify the runtime asset. Its schemas do not
 fully express the validation/conditional fields described in the Identity example.
 
-- Existing `/api/v1` paths remain unchanged. No date header, new URI version or compatibility
-  policy is selected. An OpenAPI operation name is not a request's UUID `operationId`.
+- Existing `/api/v1` paths remain unchanged. No date header, new Uniform Resource Identifier (URI)
+  version or compatibility policy is selected. An OpenAPI operation name is not a request's
+  universally unique identifier (UUID) `operationId`.
 - Server-established Actor context and current authorization precede owner business checks.
   A session is not a product Permission. Gateway Grant authentication is a different boundary.
 - Concurrency uses the owner-specific expected state; Identity currently uses
@@ -135,6 +139,7 @@ fully express the validation/conditional fields described in the Identity exampl
   treat uncertain response loss separately from a proven rollback. They do not turn a refusal
   into success or expose credentials, session cookies or proofs in diagnostics.
 
+JSON means JavaScript Object Notation, the representation used for these response bodies.
 Health is operational, not identity authority: `GET /health` returns `200 {"status":"UP"}`;
 `GET /health/database` returns `200 {"status":"UP"}` or `503 {"status":"DOWN"}`. Both are
 public in the current Server filter chain. Neither grants access or proves an operation committed.

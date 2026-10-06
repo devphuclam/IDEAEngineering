@@ -1,5 +1,7 @@
 # API contract specification: primary-source practice and an IDEA document package
 
+API means application programming interface; HTTP means Hypertext Transfer Protocol.
+
 | Control field | Value |
 |---|---|
 | Stable Research ID | `IE-RES-API-CONTRACT-001` |
@@ -51,7 +53,10 @@ integration scope or a new runtime qualification result.
 
 ## 2. Primary-source register
 
-All sources were accessed on `2026-10-06`. OAS and RFC editions below are fixed publications.
+All sources were accessed on `2026-10-06`. OpenAPI Specification (OAS) and Request for Comments (RFC)
+editions below are fixed publications. IETF is the Internet Engineering Task Force; JSON is
+JavaScript Object Notation; AIP is Google's API Improvement Proposal series. Long-running
+operation (LRO) denotes an asynchronous operation with an observable completion outcome.
 Google and Microsoft guidance is living organizational policy, with source snapshots pinned where
 available. A page's old “Updated” field is not treated as its latest revision when its changelog
 contains later entries.
@@ -62,7 +67,7 @@ contains later entries.
 | `API-S02` | IETF, [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html), June 2022, `STD 97` | HTTP semantics; not a domain model or a complete application retry policy |
 | `API-S03` | IETF, [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259.html), December 2017, [Internet Standard / STD 90](https://www.rfc-editor.org/info/rfc8259/) | JSON interchange; not a schema or business validation language |
 | `API-S04` | IETF, [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html), July 2023, [Proposed Standard](https://www.rfc-editor.org/info/rfc9457/), obsoletes RFC 7807 | Optional problem-detail format; adopting it is separate from documenting existing errors |
-| `API-S05` | Google, [AIP-121](https://google.aip.dev/121), Approved; created 2019-01-26, latest listed change 2024-07-08 | Resource-oriented design; Google RPC/resource conventions |
+| `API-S05` | Google, [AIP-121](https://google.aip.dev/121), Approved; created 2019-01-26, latest listed change 2024-07-08 | Resource-oriented design; Google remote-procedure-call (RPC)/resource conventions |
 | `API-S06` | Google, [AIP-123](https://google.aip.dev/123), Approved; created 2019-05-12, latest listed change 2025-01-09 | Resource-type identity/naming; its naming scheme is not an IDEA decision |
 | `API-S07` | Google, [AIP-158](https://google.aip.dev/158), Approved; created 2019-02-18, latest listed change 2025-07-08 | Pagination and behavioral compatibility |
 | `API-S08` | Google, [AIP-180](https://google.aip.dev/180), Approved; created 2019-07-23, latest listed change 2025-10-21 | Source, wire and semantic compatibility; chiefly protobuf/JSON consumer context |
