@@ -14,7 +14,8 @@ if ($Profile -eq 'Server') {
     $expected['HikariCP-7.0.2-LICENSE.txt'] = '73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68'
     $expected['jmolecules-2.0.1-LICENSE.txt'] = 'c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4'
     $expected['archunit-1.4.2-LICENSE.txt'] = 'cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30'
-    $expected['archunit-1.4.2-NOTICE.txt'] = '60a54e77051d8d8fc6099934b335751254ea19f0ee3069fc090a263884a17c6f'
+    # Upstream CRLF is retained as wording-preserving LF; raw-source hash is in the intake receipt.
+    $expected['archunit-1.4.2-NOTICE.txt'] = 'dc30acf8d923ab6d9dc86090d35efe43eb9ec02f233fc53a62f5cd5012e58117'
     $expected['guava-33.5.0-LICENSE.txt'] = 'cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30'
     $expected['flyway-12.4.0-LICENSE.txt'] = '6707b7b3ba3220ab64a81a5ab869ffecc3a6a023e9488ea08b897471b069c078'
 }
