@@ -97,3 +97,50 @@ Jakarta/Tomcat source availability. EPL-2.0 is the applicable Jakarta route for 
 use under the human disposition; alternative upstream text is retained, not erased. The exact
 component source locations accompany current internal copies. No unrelated IDEA-source license
 or future external offering is inferred. Maven/build tools remain absent from application payload.
+
+## Performed successor execution
+
+On 2026-10-06, checker source 4005ef19f0694a10a6e2dfd50cf22cb997def741 was committed/pushed
+before RED. Both retained packages failed `SUPPLEMENTAL_NOTICE_MISSING=snakeyaml-2.6-LICENSE.txt`.
+Legal resources/projection were published at e0477bebb0064a5efe95ab503415516ccffb834e before use.
+The initial `.NET ZipArchiveMode.Update` projection produced corrupt old local ZIP headers;
+`server-green-01.jar` / `gateway-green-01.jar` are retained as FAILED, not a package PASS.
+Original inputs remained readable and hash-identical. The repair was published at
+527c49f27de824a4e8151680425b37575b574890 before executing fresh `*-green-02.jar` outputs:
+create a new ZIP, copy every original uncompressed entry, add only legal resources.
+
+Final detector/negative harness source f4937a77448edcd41d675f7e78425e50545052e3 was published
+before repeat/negative checks. All outputs remain in `.tmp/t036-supplemental-20261006-01`.
+
+| Actual artifact / oracle | Result / exact SHA-256 |
+|---|---|
+| Server green-02 and independently checked repeat-03 | PASS; 269 original entries byte-identical, 10 supplemental legal entries only; 5a31ecd4ce54e5862ec4e9fa4040ec24c94361d0c00abd11e4e4a6966eb965d8 |
+| Gateway green-02 and independently checked repeat-03 | PASS; 186 original entries byte-identical, 4 supplemental legal entries only; d2198eef968f0462462c9f1a4bde7dc0815360888f48a4d1d0094471a33adc7a |
+| Server/Gateway negative-01 with only SnakeYAML legal bytes damaged | Both correctly refused: SUPPLEMENTAL_NOTICE_HASH_MISMATCH=snakeyaml-2.6-LICENSE.txt |
+| Original Server/Gateway rehash | PASS; dde3f36b…bcc151 / c26b870e…a14e1 unchanged |
+
+Commands use existing PowerShell/.NET, from repository root:
+
+```powershell
+pwsh -NoProfile -File tests/ph1/web-qualification/project-supplemental-notices.ps1 -Profile Server -OutputName server-green-02.jar
+pwsh -NoProfile -File tests/ph1/web-qualification/project-supplemental-notices.ps1 -Profile Gateway -OutputName gateway-green-02.jar
+# Same commands with server-repeat-03.jar / gateway-repeat-03.jar, on final harness source.
+pwsh -NoProfile -File tests/ph1/web-qualification/check-supplemental-negative.ps1 -Profile Server
+pwsh -NoProfile -File tests/ph1/web-qualification/check-supplemental-negative.ps1 -Profile Gateway
+```
+
+The positive checker reads each expected legal entry and its exact hash and compares original
+entry names/uncompressed bytes. Negative fixtures never modify original inputs or checked-in
+legal resources. After an interrupted tool response, repeated artifacts and both negative
+fixtures were independently reopened/rechecked; no completion was inferred from an interrupted
+call alone. Console results are retained in the task transcript, not claimed as new host logs.
+
+This proves notice projection/retention only. No JAR was launched; a fresh complete F05 Server
+package, executable-launch qualification or deployment is not inferred. Nested library bytes,
+Java classes, migrations and static application bytes were unchanged. No Maven/npm execution,
+new binary/tool acquisition, graph change, database, TLS/listener, verifier, preview or merge.
+
+Current known-term disposition is APPROVED-WITH-OBLIGATIONS in the successor rights map.
+Full external native Rust component/grant coverage remains UNKNOWN in R36-02; whole T036
+NOT-CLOSED is explicit in the current matrix. Historical exceptions and missing-right findings
+are preserved, not rewritten as previously approved.

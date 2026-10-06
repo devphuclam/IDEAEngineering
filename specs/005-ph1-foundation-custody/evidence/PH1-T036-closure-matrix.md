@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-T036-CLOSURE / review packet / 0.1 |
+| Stable ID / class / version | IE-VEV-PH1-T036-CLOSURE / review packet / 0.2 |
 | Status / result | Draft; engineering reconciliation performed; T036 IN_PROGRESS, not whole-task PASS |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review Authority separate |
 | Baseline / evidence date | PR38 reviewed head 8af0a6a05d19106960c9f2674aa1fd9e49231dde; 2026-10-06 Asia/Ho_Chi_Minh |
@@ -12,6 +12,10 @@
 | Change / trigger / tailoring | Successor reconciliation after R36-04 acceptance; graph/version/packaging/use drift reopens affected row; STANDARD-GUIDED under IE-STD-AUTH-001 |
 
 ## 1. Review result and completion oracle
+
+**Current reading rule, v0.2:** sections 1–5 below preserve the predecessor review before
+the 2026-10-06 comply-and-use decision and supplemental repair. Their OPEN/classification-only
+Legal Review wording is historical, not the current gate. Section 6 is the current disposition.
 
 R36-04 is accepted at engineering level by the Project Reviewer in the conversation, against
 8af0a6a… on 2026-10-06. It is not reopened. The review confirmed genuine RED, real/repeat Web
@@ -134,3 +138,38 @@ while Engineering continues the actual selected Rolldown Rust notice map. If Leg
 must extend beyond the historical internal exceptions, name that scope explicitly rather than
 silently expanding it. Keep T036 unchecked and PR38 Draft/Open until required actions or an
 explicit bounded acceptance disposition are recorded. No new feature work is needed.
+
+## 6. Final current-use disposition after comply-and-use decision
+
+Authority is the user's explicit 2026-10-06 T036 decision, not a new process exception or
+counsel opinion. Known commercially usable grants are APPROVED-WITH-OBLIGATIONS. Supplemental,
+reciprocal, patent, source-availability or acknowledgement duties are not automatic legal blocks.
+Exact source/version/hash/use records remain unchanged in the historical inventories.
+
+| Frontier | Current result | Performed evidence / remaining boundary |
+|---|---|---|
+| R36-01 | CLOSED at engineering level for inspected PH1 artifacts | 89 nested JAR / 191 input-role / 88 Web platform mapping retained. Missing applicable runtime texts now accompany Server/Gateway copied artifacts; positive, repeat and wrong-notice oracles executed. 269 Server / 186 Gateway original entries preserve exact uncompressed bytes; only 10 / 4 legal entries added. Not a fresh final-F05 build or preview deployment |
+| R36-02 | PARTIAL; compiled external Rust coverage UNKNOWN | Six native archive/binary/source bridges retained; identified Rolldown MIT, LightningCSS MPL and TypeScript Apache/supplemental rights are APPROVED-WITH-OBLIGATIONS. Full target/feature-selected external-crate grant coverage is not established. No identified prohibition or blanket BLOCKED-LEGAL follows; neither parent MIT/MPL nor missing SBOM proves all external grants |
+| R36-03 | CLOSED for identified current-use components | [Current rights analysis](../../../docs/research/2026-10-06-t036-current-use-rights.md) and [191-row successor map](../../../docs/research/inventories/ph1-current-use-dispositions-20261006.tsv) record APPROVED-WITH-OBLIGATIONS and retained exact terms. Jakarta uses EPL-2.0 with source location; Tomcat covered schema source locations retained. Plexus, Sisu, Interpolation, JDOM and Maven annotation tooling remain build/core-only, absent inspected application payload. Historical JSR305 missing grant remains excluded, not approved |
+| R36-04 | CLOSED, unchanged | Existing human-accepted React/ReactDOM/scheduler qualification is not reopened |
+| Whole T036 | NOT-CLOSED; IN_PROGRESS | Only remaining engineering frontier is R36-02 external native coverage. No known-term classification-only legal gate remains. Do not mark whole-task PASS from package-level root grants |
+
+[Performed notice receipt](../../../docs/research/2026-10-06-t036-comply-and-use.md#performed-successor-execution)
+records publication/execution lineage, preserved failed projection, exact hashes and limits.
+[Native current-use note](../../../docs/research/2026-10-06-t036-native-current-use.md)
+distinguishes established rights from coverage UNKNOWN; [delivery-scope research](../../../docs/research/2026-10-06-t036-native-delivery-scope.md)
+identifies exact build roots/features, not a purported compiled SBOM.
+
+The smallest remaining resolution is exact publisher component/legal evidence for the selected
+Windows/Linux native binaries, or a conservative exact-lock grant inventory labelled as a
+superset (not a compiled SBOM), with target/feature correspondence where available. Examples
+whose selected-subset correspondence is not yet exhaustive include cssparser 0.37.0,
+parcel_sourcemap 2.1.1, rayon 1.10.0 and napi 2.16.13. This is not evidence those licenses are
+unusable; it is an incomplete component-to-grant proof. No replacement stack or license purchase
+is justified by current evidence. A human acceptance of the disclosed package-level coverage
+limit would be separate and must not be restated as exhaustive component review.
+
+PR38 stays Draft/Open; T036 remains unchecked, PH1 not closed. No new feature, verifier,
+deployment, merge, database action or timer change. Private raw-log access limitation remains;
+retained hashes are not independent log-content review. This is current-use assessment, not
+all future commercial distribution readiness.

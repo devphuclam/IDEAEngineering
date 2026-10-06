@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.5 |
+| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.6 |
 | Status / disposition | Draft / T036 IN_PROGRESS; substantive local review performed, remaining provenance/notice and authority gaps explicit; not legal or commercial clearance |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review remains separate |
 | Baseline / date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; 2026-10-06 Asia/Ho_Chi_Minh |
@@ -13,6 +13,16 @@
 | Tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; inspection of retained source/evidence, not an independent legal opinion, signature audit or third-party reproducible build |
 
 ## 1. Actual review and exact inventory identity
+
+**Current reading rule, v0.6:** the 2026-10-06 human comply-and-use decision supersedes
+classification-only legal gates for known grants. R36-01 supplemental runtime notices passed
+positive/repeat/negative copied-artifact qualification; R36-03 identified current-use components
+are APPROVED-WITH-OBLIGATIONS with exact obligations, including reciprocal/custom terms.
+The [matrix section 6](PH1-T036-closure-matrix.md#6-final-current-use-disposition-after-comply-and-use-decision)
+is the current disposition: R36-02 full external native Rust grant coverage UNKNOWN; whole
+T036 NOT-CLOSED. Historical tables/statuses below remain observations at their original date,
+not current blanket BLOCKED-LEGAL or proof of prior authorization. See [performed receipt](../../../docs/research/2026-10-06-t036-comply-and-use.md)
+and [current rights](../../../docs/research/2026-10-06-t036-current-use-rights.md).
 
 **Current reading rule, v0.5:** R36-04 was accepted at engineering level by the Project Reviewer
 against head 8af0a6a05d19106960c9f2674aa1fd9e49231dde on 2026-10-06. The older OPEN/access/

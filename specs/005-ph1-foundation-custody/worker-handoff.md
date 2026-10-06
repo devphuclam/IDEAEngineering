@@ -24,10 +24,15 @@ notices in real/repeat Web builds and a copied-JAR packaging projection;261 non-
 unchanged. Read [exact bounded scope/result](../../docs/research/2026-10-06-t036-notice-packaging-exception.md)
 before reuse: no fresh full Server build or preview rollout; exception is not general future authority.
 The Project Reviewer accepted R36-04 against 8af0a6a on 2026-10-06; keep it closed absent drift.
-Current package mapping identifies named supplemental JAR delivery gaps; native package integrity
-is reconciled, while Rolldown compiled Rust notice coverage remains open. Read the whole T036
-matrix before a packaging repair or Legal Review request; do not infer new execution authority
-from the historical exceptions. No credentials in chat; T036 remains unchecked and PH1 not accepted.
+Current successor: the human comply-and-use decision removes classification-only legal gates.
+R36-01 supplemental notices passed actual copied-package positive/repeat/wrong-notice checks;
+269 Server / 186 Gateway old entries remain byte-identical. R36-03 known-term current use is
+APPROVED-WITH-OBLIGATIONS, including Plexus/Interpolation/Sisu/JDOM and Jakarta/Tomcat routes.
+Read [matrix section 6](evidence/PH1-T036-closure-matrix.md#6-final-current-use-disposition-after-comply-and-use-decision)
+and the performed receipt. The only remaining frontier is R36-02 external native Rust coverage
+UNKNOWN, not an observed commercial-use ban or a reason to replace the stack. T036 remains
+unchecked/NOT-CLOSED; no blanket exhaustive native grant PASS or new human acceptance inferred.
+No credentials in chat, product work, preview rollout, verifier, merge or timer action.
 
 1. Read repository `AGENTS.md`, [Spec Kit workflow](../../docs/agents/spec-kit.md),
    [spec](spec.md), [plan](plan.md), and the current task list. Inspect branch, HEAD and dirty

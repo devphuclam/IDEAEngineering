@@ -208,7 +208,7 @@ block the accepted F01–F04 work.
 ## Phase 8: Cross-cutting review
 
 - [X] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); [coverage review](evidence/PH1-coverage-review.md) records one row per FR/SC/CHK, accepted execution lineage and residual `NOT-RUN`/limited claims. Review performed on 2026-10-06; no new execution or whole-PH1 acceptance is implied.
-- [ ] T036 IN_PROGRESS: [license review v0.5](evidence/PH1-license-review.md) and [whole T036 matrix](evidence/PH1-T036-closure-matrix.md) record accepted R36-04, 89 nested-JAR notice observations, 191 input-role dispositions and all 88 Web platform entries. Native archive/binary identity is reconciled; Rolldown Rust notice coverage and named supplemental JAR delivery gaps remain. Special terms distinguish historical authorized build/test, actual runtime and prospective Legal Review; no new legal approval, build/deployment, blanket clearance or PH1 acceptance.
+- [ ] T036 IN_PROGRESS / NOT-CLOSED: [license review v0.6](evidence/PH1-license-review.md) and [matrix v0.2 section 6](evidence/PH1-T036-closure-matrix.md#6-final-current-use-disposition-after-comply-and-use-decision) apply the human comply-and-use decision. R36-01 supplemental notice qualification and R36-03 identified current-use rights are complete; known reciprocal/custom terms are APPROVED-WITH-OBLIGATIONS, not classification-only BLOCKED-LEGAL. R36-04 stays accepted. R36-02 full external native Rust component/grant coverage remains UNKNOWN, despite exact native package/source correspondence; no whole-task PASS is inferred. Historical grants/exceptions/FAIL evidence preserved; no feature work, verifier, preview, merge or PH1 acceptance.
 
 ## Dependencies and execution order
 
