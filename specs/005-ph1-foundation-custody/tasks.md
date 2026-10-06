@@ -207,8 +207,8 @@ block the accepted F01–F04 work.
 
 ## Phase 8: Cross-cutting review
 
-- [ ] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); record residual `NOT-RUN`/`BLOCKED` claims in `specs/005-ph1-foundation-custody/evidence/PH1-coverage-review.md`.
-- [ ] T036 Review exact dependency/license evidence and clean-room provenance before integration in `specs/005-ph1-foundation-custody/evidence/PH1-license-review.md`.
+- [X] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); [coverage review](evidence/PH1-coverage-review.md) records one row per FR/SC/CHK, accepted execution lineage and residual `NOT-RUN`/limited claims. Review performed on 2026-10-06; no new execution or whole-PH1 acceptance is implied.
+- [ ] T036 IN_PROGRESS: [license review](evidence/PH1-license-review.md) reconciles current exact inventories, bounded process authority, Node admission and clean-room provenance. Full exact Web transitive legal evidence, integration-bundle notice mapping and required open rights dispositions remain incomplete; no blanket legal/commercial clearance.
 
 ## Dependencies and execution order
 
@@ -237,9 +237,13 @@ them are not made by editing this task list.
 
 **Current next step (2026-10-06):** T027–T034 engineering delivery/qualification is
 complete under the separately authorized continuous sprint, not T027 authority alone.
-Use the [F05 closure matrix](evidence/F05-closure-matrix.md) for whole-F05 external review.
-PR38 stays Draft/Open; card acceptance, actual effort publication, Issue closure and merge
-remain separate. No timer restart/progress publication or verifier execution.
+The Project Reviewer accepted whole F05-A/B at `874088695d0b65e6d71b40078d6f55e623087b0a`
+as ACCEPTED / PASS WITH NOTES; see the [F05 closure matrix](evidence/F05-closure-matrix.md).
+T035 review is performed; next resolve the explicit T036 gaps in the
+[license review](evidence/PH1-license-review.md), then obtain separate whole-PH1 disposition.
+PR38 stays Draft/Open; actual effort publication, card/Issue closure and merge remain separate.
+No timer restart/progress publication or verifier execution. Earlier T028–T034 row wording
+that says external acceptance pending describes publication before this received decision.
 
 **Retained pre-closure lineage (not current instructions):** F05-A has been explicitly started; T027 preflight is IN_PROGRESS under
 [Work Item #37](https://github.com/devphuclam/IDEAEngineering/issues/37). Review the

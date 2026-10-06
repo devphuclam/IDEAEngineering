@@ -2,9 +2,9 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-F05-CLOSURE-MATRIX / verification record /0.1 |
-| Status / engineering disposition | Proposed / T028–T034 engineering delivery and bounded qualification complete; external whole-F05 acceptance PENDING |
-| Owner / author / reviewer | Engineering /Codex CODEX_ONLY /Project Reviewer Nguyễn Huỳnh Phúc Lâm, current whole-card review NOT-RUN |
+| Stable ID / class / version | IE-VEV-PH1-F05-CLOSURE-MATRIX / verification record /0.2 |
+| Status / engineering disposition | Approved for bounded F05 technical acceptance / ACCEPTED, PASS WITH NOTES; PH1 acceptance/integration separate |
+| Owner / author / reviewer | Engineering /Codex CODEX_ONLY /Project Reviewer Nguyễn Huỳnh Phúc Lâm, received whole-F05 decision at 874088695d0b65e6d71b40078d6f55e623087b0a |
 | Authority / applicability | Issue37/PR38; continuous T028–T034 sprint and bounded successor tooling authority; frozen T027 v1 envelope/profile |
 | Publication / normativity | 2026-10-06 Asia/Ho_Chi_Minh /INFORMATIVE; repository instruction NOT-APPLICABLE |
 | Classification / retention | INTERNAL; retain original failures, exact execution lineage and private-log access limitation |
@@ -84,11 +84,28 @@ Private host-log hashes identify files; independent raw-log access remains limit
 ## 4. Completion boundary and next action
 
 T027–T034 engineering obligations are satisfied by the mapped evidence. Task
-markers do not close F05-A/B cards or Issue37. **PR38 stays Draft/Open**; request
-whole-F05 external review on the exact successor documentation head. Human
-acceptance, actual-effort publication and merge are separate authorized actions.
+markers do not close F05-A/B cards or Issue37. **PR38 stays Draft/Open**;
+whole-F05 external review was subsequently received on the exact accepted head (§5).
+Actual-effort publication, card/Issue closure and merge remain separate authorized actions.
 
 T035/T036 PH1-wide coverage/license review are not silently completed by this
 packet. Fresh public V1–V10 and verifier remain NOT-RUN. No Desktop/Workspace,
 client management UI, future Document/Generation workflow, second Vault,
 production policy/PKI, HA/recovery, throughput or commercial readiness is claimed.
+
+## 5. Received Project Reviewer acceptance — 2026-10-06
+
+The Project Reviewer reviewed head `874088695d0b65e6d71b40078d6f55e623087b0a` and
+accepted F05-A/B as **ACCEPTED / PASS WITH NOTES**: T027–T034 engineering obligations,
+the actual session/CSRF/Grant → direct HTTPS Gateway/Adapter bytes → signed Receipt →
+current IAM/allocation → atomic custody flow, both 1 KiB/64 MiB sizes/hashes, refusal,
+interruption/resume, renewal, lost responses and canonical/changed-input retry are accepted.
+SC-005 and bounded PH1 SC-006 are accepted. No material technical F05 blocker remains.
+
+Preserve detector NOT-PASS/manual disposition, fresh public V1–V10 NOT-RUN, verifier
+NOT-RUN and private raw-log access limitation. T035/T036 are separate PH1-wide reviews.
+The reviewer reported a GitHub connector 403: no GitHub acceptance comment/review was
+created. This section records the conversation decision, not a fabricated GitHub event.
+Earlier pending wording/row dispositions describe the pre-acceptance publication.
+No application, test, migration, dependency or execution evidence changes accompany this
+record. PR38 remains Draft/Open, no merge; PH1 and actual-progress publication remain separate.

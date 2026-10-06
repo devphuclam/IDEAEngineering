@@ -2,13 +2,13 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-RES-PH1-F05B-TRANSFER-RESULTS / verification record /0.3 |
-| Status / disposition | Engineering transfer qualification PASS (§9); final focused hygiene/regression PASS (§10); external whole-F05 review/acceptance pending |
+| Stable ID / class / version | IE-RES-PH1-F05B-TRANSFER-RESULTS / verification record /0.4 |
+| Status / disposition | Engineering transfer qualification PASS (§9); final focused hygiene/regression PASS (§10); whole F05-A/B ACCEPTED / PASS WITH NOTES at 874088695d0b65e6d71b40078d6f55e623087b0a |
 | Owner / author / authority | Project Reviewer Nguyễn Huỳnh Phúc Lâm /Codex CODEX_ONLY /continuous T028–T034 sprint authorization |
 | Baseline / date | Issue37/PR38, frozen T027 v1 envelope/profile; execution lineage2026-10-05, current publication2026-10-06 Asia/Ho_Chi_Minh |
 | Normativity / retention | INFORMATIVE, no new product obligation; INTERNAL, preserve execution lineage |
 | Upstream | [Sprint](../../../docs/research/2026-10-05-f05-execution-sprint.md), [Node admission](../../../docs/research/2026-10-05-node24190-project-admission.md), T033/T034 |
-| Review / limitation | External review pending; local preparation tests are not network transfer, Server or custody acceptance |
+| Review / limitation | Received Project Reviewer decision recorded in F05-closure-matrix.md §5; historical execution unchanged; local preparation tests alone are not network transfer, Server or custody acceptance |
 
 ## 1. Client preparation — executed RED/GREEN
 

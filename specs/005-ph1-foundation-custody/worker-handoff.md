@@ -8,9 +8,11 @@ as the only task list. Scope: PH1 F01–F05. Read this before implementing or re
 **Current frontier,2026-10-06:** T027–T034 engineering delivery and bounded qualification
 are complete under the separate continuous sprint. For review or continuation, read the
 [F05 closure matrix](evidence/F05-closure-matrix.md) first: current requirements,
-actual sources/executions and acceptance limits. Next action is external whole-F05 review,
-not another feature slice. PR38 stays Draft/Open; F05-A/B human acceptance/card closure
-and actual-effort publication remain pending/separate. Retained T027/T028 continuation
+actual sources/executions and acceptance limits. Whole F05-A/B is human ACCEPTED / PASS WITH NOTES
+at `874088695d0b65e6d71b40078d6f55e623087b0a`. T035 review is performed; next resolve the
+specific T036 gaps in [PH1 license review](evidence/PH1-license-review.md), not another feature
+slice. PR38 stays Draft/Open; card/Issue closure and actual-effort publication remain separate.
+Retained T027/T028 continuation
 paragraphs below are historical receipts, not today's execution frontier.
 No timer/progress action, verifier or merge is inferred.
 
