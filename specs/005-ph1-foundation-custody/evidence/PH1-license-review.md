@@ -2,8 +2,8 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.6 |
-| Status / disposition | Draft / T036 IN_PROGRESS; substantive local review performed, remaining provenance/notice and authority gaps explicit; not legal or commercial clearance |
+| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.7 |
+| Status / disposition | T036 COMPLETED / PASS WITH NOTES for bounded current PH1 use; exhaustive native transitive coverage UNKNOWN, future delivery separate |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review remains separate |
 | Baseline / date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; 2026-10-06 Asia/Ho_Chi_Minh |
 | Authority / normativity | Authorized T036 evidence review only; INFORMATIVE; no new execution/import/license right |
@@ -13,6 +13,13 @@
 | Tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; inspection of retained source/evidence, not an independent legal opinion, signature audit or third-party reproducible build |
 
 ## 1. Actual review and exact inventory identity
+
+**Current reading rule, v0.7:** [bounded closure](../../../docs/research/2026-10-06-t036-bounded-closure.md)
+and [matrix section 7](PH1-T036-closure-matrix.md#7-bounded-closure-publication) supersede the
+current NOT-CLOSED gate under the user's closure instruction after disclosure of residual scope.
+T036 is COMPLETED / PASS WITH NOTES; independent full native Rust coverage remains UNKNOWN.
+Earlier IN_PROGRESS/classification-only blocked states and exact historical execution remain
+unchanged as history. No universal commercial clearance, counsel opinion, PH1 gate or merge.
 
 **Current reading rule, v0.6:** the 2026-10-06 human comply-and-use decision supersedes
 classification-only legal gates for known grants. R36-01 supplemental runtime notices passed

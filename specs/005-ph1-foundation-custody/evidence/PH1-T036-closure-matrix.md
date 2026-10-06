@@ -2,8 +2,8 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-T036-CLOSURE / review packet / 0.2 |
-| Status / result | Draft; engineering reconciliation performed; T036 IN_PROGRESS, not whole-task PASS |
+| Stable ID / class / version | IE-VEV-PH1-T036-CLOSURE / review packet / 0.3 |
+| Status / result | T036 COMPLETED / PASS WITH NOTES for bounded PH1 current use; exhaustive native coverage remains UNKNOWN |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review Authority separate |
 | Baseline / evidence date | PR38 reviewed head 8af0a6a05d19106960c9f2674aa1fd9e49231dde; 2026-10-06 Asia/Ho_Chi_Minh |
 | Scope / normativity | INFORMATIVE; retained-artifact and reference-only rights review; no new runtime, build, import, deployment or use authorization |
@@ -12,6 +12,10 @@
 | Change / trigger / tailoring | Successor reconciliation after R36-04 acceptance; graph/version/packaging/use drift reopens affected row; STANDARD-GUIDED under IE-STD-AUTH-001 |
 
 ## 1. Review result and completion oracle
+
+**Current reading rule, v0.3:** section 7 records the human-directed bounded current-use
+closure after disclosure of the native coverage limit. NOT-CLOSED/IN_PROGRESS in sections
+1–6 is historical, not the current task state. No historical UNKNOWN changes to complete PASS.
 
 **Current reading rule, v0.2:** sections 1–5 below preserve the predecessor review before
 the 2026-10-06 comply-and-use decision and supplemental repair. Their OPEN/classification-only
@@ -173,3 +177,18 @@ PR38 stays Draft/Open; T036 remains unchecked, PH1 not closed. No new feature, v
 deployment, merge, database action or timer change. Private raw-log access limitation remains;
 retained hashes are not independent log-content review. This is current-use assessment, not
 all future commercial distribution readiness.
+
+## 7. Bounded closure publication
+
+The user instructed achieving/closing T036 after the explicit proposal to accept current
+exact package/source grants and notices with incomplete independent native coverage retained.
+[Final closure receipt](../../../docs/research/2026-10-06-t036-bounded-closure.md)
+records that scope, requirement-to-disposition mapping, actual component-study counts,
+tool-selection deviation, residual owner/due conditions and reopening triggers.
+
+R36-01/03/04 are satisfied. R36-02 is satisfied for the bounded package-level current-use
+assessment WITH RESIDUAL NOTE; complete compiled external Rust rights coverage remains UNKNOWN,
+not a universal MIT/MPL grant or exhaustive SBOM claim. Known terms remain
+APPROVED-WITH-OBLIGATIONS; actual missing/incompatible rights would reopen intake.
+T036 = COMPLETED / PASS WITH NOTES. Independent successor packet review, PH1 gate acceptance,
+Issue37 closure and merge remain separate. PR38 Draft/Open; verifier NOT-RUN; preview unchanged.

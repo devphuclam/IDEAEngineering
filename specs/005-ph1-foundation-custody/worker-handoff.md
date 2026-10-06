@@ -16,6 +16,13 @@ Retained T027/T028 continuation
 paragraphs below are historical receipts, not today's execution frontier.
 No timer/progress action, verifier or merge is inferred.
 
+**Current closure successor:** T036 COMPLETED / PASS WITH NOTES under the human-directed
+bounded current-use disposition. Read [closure receipt](../../docs/research/2026-10-06-t036-bounded-closure.md)
+and [matrix section 7](evidence/PH1-T036-closure-matrix.md#7-bounded-closure-publication).
+Earlier T036 IN_PROGRESS/unchecked paragraphs below are historical. Full independent compiled
+Rust coverage remains UNKNOWN as an owned residual, not an asserted blanket grant; reopen on
+actual right conflict or changed use/distribution. No PH1 gate/Issue closure or merge inferred.
+
 T036 local substantive text review is performed; exact Rolldown source grant and Go patent terms
 are reference-evidenced. Explicit existing named SSH key restored read-only access; retained JAR
 hashes and Linux native selection are verified. Current review §8 identifies R36-04: actual Web
