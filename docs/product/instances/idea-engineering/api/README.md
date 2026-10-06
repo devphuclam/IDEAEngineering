@@ -23,6 +23,10 @@ caller can use it. HTTP means Hypertext Transfer Protocol; QA means quality assu
 
 ## 1. Read this package
 
+For cross-team delivery, management reading and partner assessment drafts, use the
+[API contract handoff hub](handoff/README.md). It adds a proposed handoff arrangement without
+changing this accepted v0.1 contract's operation semantics.
+
 Start with the [Vietnamese flow guide](guide.vi.md) for the user journey. Use this catalogue to find
 the owning domain and its interface. Use [Identity/Session](identity-session.md) for the detailed
 request, response, authority, state effects and retry example.
