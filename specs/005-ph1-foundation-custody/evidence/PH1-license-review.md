@@ -2,14 +2,14 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.2 |
+| Stable ID / class / version | IE-VEV-PH1-LICENSE-REVIEW / intake reconciliation review / 0.3 |
 | Status / disposition | Draft / T036 IN_PROGRESS; substantive local review performed, remaining provenance/notice and authority gaps explicit; not legal or commercial clearance |
 | Owner / author / reviewer | Engineering / Codex CODEX_ONLY / Project Reviewer Nguyễn Huỳnh Phúc Lâm; Legal Review remains separate |
 | Baseline / date | PR38 at 874088695d0b65e6d71b40078d6f55e623087b0a; 2026-10-06 Asia/Ho_Chi_Minh |
 | Authority / normativity | Authorized T036 evidence review only; INFORMATIVE; no new execution/import/license right |
 | Classification / retention | INTERNAL; preserve historical rights decisions, exceptions, failures and exact inventories |
 | Upstream / downstream | [External intake](../../../docs/agents/external-source-intake.md), FR-012 / [tasks](../tasks.md), separate integration/Legal Review |
-| Change / supersession / trigger | v0.2 adds substantive Web terms, exact upstream native-source evidence and package/use mapping; v0.1 inventory observation remains historical; version/hash/graph/use or distribution change reopens applicable intake |
+| Change / supersession / trigger | v0.3 adds authenticated read-only retained-package inspection and Web runtime notice finding; v0.2 local/source review and initial access failure remain historical; version/hash/graph/use or distribution change reopens applicable intake |
 | Tailoring | STANDARD-GUIDED under IE-STD-AUTH-001; inspection of retained source/evidence, not an independent legal opinion, signature audit or third-party reproducible build |
 
 ## 1. Actual review and exact inventory identity
@@ -147,3 +147,47 @@ above required integration/notice and accountable dispositions are unresolved. T
 claim that the components prohibit commercial use, nor a reason to repeat F05 engineering tests.
 No change to F05 acceptance, T035, application code, migrations, dependencies, runtime, timer,
 verifier or PR Draft/Open state is made. Whole-PH1 acceptance and merge remain separate.
+
+## 8. Authenticated retained-package inspection — v0.3 successor
+
+The v0.2 access failure is resolved, not erased. Windows OpenSSH default identity selection did
+not include the existing named key. Explicit `-i C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519`
+with `IdentitiesOnly=yes`, `BatchMode=yes` authenticated phuclam@192.168.137.33. No private-key
+content was read, no password was supplied, and no SSH/global security configuration changed.
+
+Procedure on 2026-10-06: bounded `find`, `sha256sum`, package-manifest reading, and installed JDK
+`jar tf` only. The JAR tool is `/opt/idea/tools/jdk-25.0.4.1+1/bin/jar`, SHA-256
+033a730b1e74f26f7345ec4754bd6fa8a0d075973475d18695b386da516738b2.
+No Maven, restore, package/build, application launch, listener, database operation or extraction
+was performed. R36-01 is no longer BLOCKED-ACCESS; actual notice verification has a finding.
+
+| Exact retained target / observation | Actual result / limitation |
+|---|---|
+| `/home/phuclam/idea-f05-sprint-20261005-37/gateway-boot-08/source/run/application/target/idea-gateway-0.1.0.jar` | SHA-256 c26b870e22a6ffb6ed9acbcbcd1dd20208004226c4d09a399e227983023a14e1 matches retained qualification. Outer JAR listing confirms 32 runtime JAR entries, no JSR305/build-tool entries. This listing does not independently open nested legal text |
+| `/home/phuclam/idea-t043-package-green-2fe89d4/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar` | SHA-256 733f93d6ae4a5d9db42e79ec6e4f60812c89855fd2bb3508eeef815f98230c22 matches historical T043 package |
+| `/home/phuclam/.local/share/idea/dev-preview-26/server.jar` | SHA-256 7f0a628d2efd94405ba5f083295c23e6faf0246da86c8dd019f669f69482d53c matches accepted development generation. Static entries are index.html and assets/index-DJQKxs3r.js. Outer legal entries identify Swagger LICENSE.txt/NOTICE.txt; no React/ReactDOM/scheduler legal entry is present |
+| T043 generated `assets/index-DJQKxs3r.js` | SHA-256 a34548822cf5cadf32e485f6b302052105407894dfacbe77a9717a3a12bb6552. Zero matches for @license, Copyright, permission notice or THE SOFTWARE IS PROVIDED; no separate generated runtime notice file. Marker search is corroboration, not a general semantic license detector |
+| Exact Ubuntu native inputs | Installed package manifests identify `@rolldown/binding-linux-x64-gnu@1.2.11`, `@typescript/typescript-linux-x64@7.0.2`, `lightningcss-linux-x64-gnu@1.33.0`, not musl targets. These are build tools, not automatically runtime Web payload |
+| TypeScript Linux legal files | LICENSE a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47 and NOTICE f5c708b59114507b8b27b48181b6883d106bbca0c1634bbee45b5e344237b66b match the substantively reviewed Windows/parent texts |
+| LightningCSS Linux legal file | LICENSE 5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e matches retained MPL text identity |
+| Rolldown Linux native binary | SHA-256 34e3f5cc135d0fec7f0d9837e30413f1a151037b1568911f074048bf941d68e5; native package has no separate legal file. Source grant is established in §5; compiled transitive notice/provenance disposition remains R36-02 |
+
+**R36-04 — Web runtime notice packaging: OPEN finding.** The retained generated Web output
+and reviewed Server outer entries do not retain the React/ReactDOM/scheduler copyright/permission
+text identified in §5. Swagger-specific legal files do not satisfy unrelated runtime-library notices.
+This is a bounded packaging evidence/compliance gap; it is not an authentication defect, absence
+of an MIT grant, or a claim that all dependencies forbid commercial use.
+
+Smallest proposed repair: retain the exact admitted React/ReactDOM/scheduler notices with the real
+generated Web/Server package and make that notice material available with delivered Web copies.
+Check repeat packaging and the final exact JAR/static output for notice retention. No new package,
+framework, version or business API is required. Before new package execution, obtain the bounded
+T036 tooling authority needed for the existing Maven/Web lifecycle; expired T029–T034 exceptions
+do not authorize this successor build. Do not rebuild/redeploy preview merely during this audit.
+Engineering owns notice integration; Project Reviewer owns the bounded execution decision and
+disposition; Legal Review remains separate for identified supplemental/custom terms.
+
+Current remaining work: R36-01 package notice closure (access restored, not all nested notices
+reinspected), R36-02 native provenance/transitive notices, R36-03 accountable special-term
+dispositions, and R36-04 the actual Web notice packaging repair. No T036/PH1 completion,
+new application qualification or commercial clearance is claimed.

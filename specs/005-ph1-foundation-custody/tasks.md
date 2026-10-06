@@ -208,7 +208,7 @@ block the accepted F01–F04 work.
 ## Phase 8: Cross-cutting review
 
 - [X] T035 Review implementation against FR-001–014, SC-001–006 and [PH1 contract](contracts/ph1-boundaries.md); [coverage review](evidence/PH1-coverage-review.md) records one row per FR/SC/CHK, accepted execution lineage and residual `NOT-RUN`/limited claims. Review performed on 2026-10-06; no new execution or whole-PH1 acceptance is implied.
-- [ ] T036 IN_PROGRESS: [license review v0.2](evidence/PH1-license-review.md) completes substantive local legal-text review and exact upstream native-source/Go patent evidence; separates actual runtime from tooling and Windows platform exclusions. Remaining R36-01–03 are exact retained-package/native notice correspondence (read-only SSH authentication unavailable) and accountable supplemental/custom-term dispositions. No new build, blanket legal/commercial clearance or PH1 acceptance.
+- [ ] T036 IN_PROGRESS: [license review v0.3](evidence/PH1-license-review.md) completes substantive local terms and exact upstream source evidence; authenticated retained-JAR hashes and Ubuntu native selection now verified. R36-01 access restored; R36-02/03 native notice/provenance and accountable special-term dispositions remain. R36-04 identifies missing Web runtime notice retention in actual generated/Server output; proposed bounded packaging repair needs successor build authority. No new build, blanket clearance or PH1 acceptance.
 
 ## Dependencies and execution order
 
