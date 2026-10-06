@@ -16,7 +16,7 @@ Methodology: **Spec Kit** + **Matt Pocock Skills** (`grilling`, `prototype`, `td
 
 ## Phase 3: Environment & Feature Branch
 
-- [x] T006 Create isolated working branch `gemini/f03b-login-session-ui` from latest `main`.
+- [x] T006 Create isolated working branch `feat/f03b-login-session-ui` from latest `main`.
 - [x] T007 Add missing `"dev": "vite"` and `"preview": "vite preview"` scripts to `apps/web/package.json`.
 
 ## Phase 4: Presentational Components (TDD & Anti-Slop)

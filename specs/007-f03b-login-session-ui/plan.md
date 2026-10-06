@@ -1,6 +1,6 @@
 # Implementation Plan: Authentication & Session UI (F03-B Alignment)
 
-**Branch**: `gemini/f03b-login-session-ui` | **Date**: 2026-10-03 | **Spec**: [spec.md](spec.md)
+**Branch**: `feat/f03b-login-session-ui` | **Date**: 2026-10-03 | **Spec**: [spec.md](spec.md)
 
 ## Summary
 

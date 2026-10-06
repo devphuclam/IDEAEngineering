@@ -1,6 +1,6 @@
 # Feature Specification: Administration Console & Role-Based Access Control (IAM & RBAC UI - F04 Alignment)
 
-**Feature Branch**: `gemini/f04-admin-iam-ui`  
+**Feature Branch**: `feat/f04-admin-iam-ui`  
 **Created**: 2026-10-03  
 **Status**: In Implementation  
 **Standards**: Spec Kit 1.0.7 + Matt Pocock `$tdd` + Taste Skill (Anti-Slop v2)  
