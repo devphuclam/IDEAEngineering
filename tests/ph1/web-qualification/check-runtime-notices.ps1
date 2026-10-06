@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$Artifact)
+param([Parameter(Mandatory)][string]$Artifact, [string]$BaselineArtifact)
 $ErrorActionPreference = 'Stop'
 $expectedHash = 'da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93'
 $archive = $null
@@ -29,4 +29,25 @@ try {
         }
     }
     'RUNTIME_NOTICES=PASS; exact_notice_hashes=3; index_links=3'
+    if ($BaselineArtifact) {
+        if (-not $archive) { throw 'BASELINE_COMPARISON_REQUIRES_JAR' }
+        $baseline = [System.IO.Compression.ZipFile]::OpenRead((Resolve-Path -LiteralPath $BaselineArtifact).Path)
+        try {
+            $oldEntries = @($baseline.Entries | Where-Object { -not $_.FullName.StartsWith('BOOT-INF/classes/static/', [StringComparison]::Ordinal) })
+            $newEntries = @($archive.Entries | Where-Object { -not $_.FullName.StartsWith('BOOT-INF/classes/static/', [StringComparison]::Ordinal) })
+            if ($oldEntries.Count -ne $newEntries.Count) { throw 'NON_STATIC_ENTRY_SET_CHANGED' }
+            foreach ($oldEntry in $oldEntries) {
+                $matching = @($newEntries | Where-Object { $_.FullName -ceq $oldEntry.FullName })
+                if ($matching.Count -ne 1) { throw 'NON_STATIC_ENTRY_MISSING_OR_DUPLICATE' }
+                $oldStream = $oldEntry.Open()
+                $newStream = $matching[0].Open()
+                try {
+                    $oldHash = [Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData($oldStream))
+                    $newHash = [Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData($newStream))
+                    if ($oldHash -ne $newHash) { throw "NON_STATIC_BYTES_CHANGED=$($oldEntry.FullName)" }
+                } finally { $oldStream.Dispose(); $newStream.Dispose() }
+            }
+            "NON_STATIC_CONTENT=PASS; entries=$($oldEntries.Count)"
+        } finally { $baseline.Dispose() }
+    }
 } finally { if ($archive) { $archive.Dispose() } }
