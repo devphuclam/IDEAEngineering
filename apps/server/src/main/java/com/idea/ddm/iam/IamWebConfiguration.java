@@ -4,7 +4,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.UUID;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /** New reviewed IAM adapters opt in; the accepted Identity wire contract is not retrofitted. */
 @Configuration(proxyBeanMethods = false)
@@ -26,5 +30,22 @@ public class IamWebConfiguration {
         }
         public RefusalReason reason() { return reason; }
     }
-    // T020 tracer: no mapping exists yet. The actual HTTP test must demonstrate the gap.
+    public record SafeRefusal(String reasonCode, UUID correlationId) {}
+
+    @RestControllerAdvice(annotations = Boundary.class)
+    static class Responses {
+        @ExceptionHandler(Refusal.class)
+        ResponseEntity<SafeRefusal> refused(Refusal refusal) {
+            var status = switch (refusal.reason()) {
+                case INVALID_INPUT -> 400;
+                case INELIGIBLE_SESSION -> 401;
+                case AUTHORITY_REFUSED -> 403;
+                case TARGET_NOT_AVAILABLE -> 404;
+                case STATE_CONFLICT -> 409;
+                case UNAVAILABLE -> 503;
+            };
+            // Correlation is Server-owned, never a caller's header or exception diagnostic.
+            return ResponseEntity.status(status).body(new SafeRefusal(refusal.reason().name(), UUID.randomUUID()));
+        }
+    }
 }
