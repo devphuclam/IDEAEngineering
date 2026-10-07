@@ -37,7 +37,8 @@ foreach($path in $lock.packages.Keys){
     if(!(Test-Path -LiteralPath $installed)){continue} # Optional non-Windows artifacts are not selected.
     $package=$lock.packages[$path]
     $actual=Get-Content -LiteralPath ($installed+'/package.json') -Raw | ConvertFrom-Json
-    if($actual.version -ne $package.version){throw ('Locked version drift: '+$path)}
+    if($actual.version -ne $package.version -or $actual.name -ne $path.Substring(13)){throw ('Locked package identity drift: '+$path)}
+    $prefix=if($path.StartsWith('node_modules/@types/')){$actual.name.Substring(7)+'/'}else{'package/'}
     if($package.integrity -notmatch '^sha512-([A-Za-z0-9+/=]+)$'){throw 'Unpinned archive'}
     $hex=[Convert]::ToHexString([Convert]::FromBase64String($Matches[1])).ToLowerInvariant()
     $archive='C:/Users/TD-999/AppData/Local/npm-cache/_cacache/content-v2/sha512/'+$hex.Substring(0,2)+'/'+$hex.Substring(2,2)+'/'+$hex.Substring(4)
@@ -48,8 +49,8 @@ foreach($path in $lock.packages.Keys){
     try {
         while($entry=$tar.GetNextEntry()){
             if(!$entry.DataStream){continue}
-            if(!$entry.Name.StartsWith('package/') -or $entry.Name.Contains('..')){throw 'Unexpected archive member'}
-            $relative=$entry.Name.Substring(8)
+            if(!$entry.Name.StartsWith($prefix) -or $entry.Name.Contains('..')){throw 'Unexpected archive member'}
+            $relative=$entry.Name.Substring($prefix.Length)
             $member=[IO.Path]::GetFullPath($installed+'/'+$relative)
             if(!$member.StartsWith([IO.Path]::GetFullPath($installed)+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'Archive escape'}
             $hash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($entry.DataStream)).ToLowerInvariant()
