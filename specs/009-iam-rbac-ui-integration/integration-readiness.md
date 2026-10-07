@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.9` / Draft partial foundational execution result record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.10` / Draft partial foundational execution result record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 13; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 14; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, section 12 identity/UoW predecessor, section 13 schema/fixture and final focused reruns; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–13 foundation predecessors, section 14 current Project/evaluator and affected focused reruns; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -753,3 +753,118 @@ single evaluator**, then remaining foundation/client tasks before owner stories.
 or spec/Q14/Q15 reopening is required merely to continue these already-authorized tasks. New
 scope/tool/graph/target drift still STOP. No actual UI/domain acceptance, live adoption, company
 data, preview/deploy, timer, verifier or merge. PR #47 remains Draft/Open; Issue #46 OPEN.
+
+## 14. Project read facts and one all-path evaluator — 2026-10-07
+
+Current partial implementation status: **T001–T019 COMPLETE (19/93)**; T020–T093 incomplete.
+PG2/PG3/PG4 remain PASS. Final exact executed application/test/runner source:
+`ee48c94a2ea91343f96080baa681a998d71b57ee`. This section supersedes the current next-step
+status of §13, not its historical source/counts/evidence. Final focused result **70/70 PASS**:
+22 Access Policy + 11 Project facts + 11 owner transaction + 10 IAM eligibility + 16 schema.
+No failures, errors or skips. Independent implementation acceptance remains NOT-RUN.
+
+### 14.1 Implemented seams and preserved boundaries
+
+[ProjectGovernanceQueries](../../apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceQueries.java)
+returns current Project identity/version and named Project/Group membership facts on the caller's
+connection. One statement filters exact Organization, Project, Actor, canonical termination and
+half-open periods. Current Group paths require matching current Project Membership. Missing or
+wrong-Organization Project is non-disclosing; absent facts are not an authorized product query.
+No second evaluator, mutation, IAM re-entry, activity refresh, transaction ownership or security
+lock acquisition. The 11-case read-only app suite qualifies this internal read port, not UI-P01–P13.
+
+[AuthorizationDecisionService](../../apps/server/src/main/java/com/idea/ddm/access/AuthorizationDecisionService.java)
+is the one current Access Policy evaluator. It derives eligible Actor/Organization from the
+existing actual IAM/session port, resolves every applicable exact assignment/version, and returns
+an immutable positive-union decision/path list. Paths retain exact assignment, role version/code/
+number, assigned scope, and applicable Group/Project Membership identities. No role-name/admin
+bypass, implicit account/Project rights or general deny. Permission/principal/scope profiles are
+read from sealed registered content. RBAC_GRANTED is eligibility to attempt the owner action,
+**not** owner business success or a reusable client capability.
+
+Organization inheritance applies only to declared descendant actions. Project assignments cannot
+become Organization or another Project authority. PA administration does not require personal
+membership; participant action and every Group-derived path do. Group paths are initial business
+content only. The independent literal oracle checks all **8 built-in versions × 25 Permissions ×
+2 action scopes (400 evaluations)** without replacing exact-version content with role names.
+Synthetic participant-role/assignment rows are prerequisites, not implemented Custom activation,
+delegation, assignment APIs or adoption. Source/test factories never grant product authority by
+persona label or disclose credentials.
+
+Multi-owner advisory evaluation requires caller-owned REPEATABLE READ/SERIALIZABLE state, or a
+READ COMMITTED owner transaction already holding installation lock 73003002. The evaluator only
+checks the held lock; it does not acquire it or change transaction isolation. The existing owner
+UoW holds that lock and revalidates current IAM/owner state before commit. A snapshot remains
+advisory: a concurrent revocation may remain visible as the old snapshot, but the next request
+refuses and no decision may be presented as durable command authority.
+
+The historical [IdentityAccessPolicy adapter](../../apps/server/src/main/java/com/idea/ddm/identity/IdentityAccessPolicy.java)
+retains existing Account/Actor checks; HTTP callers still use actual session eligibility. Its grant
+resolution now delegates to the same exact model, respecting successor intervals instead of a
+parallel LIMIT-1 policy. Its retained evidence shape still projects the first deterministic path;
+historical decisions are not rewritten into new all-path records. The compatibility port is an
+internal Server read after IAM eligibility, not a new authentication/HTTP boundary. Legacy time
+recheck uses current PostgreSQL `clock_timestamp()`, not frozen transaction-start time. No API,
+wire response, cookie, CSRF, account lifecycle, permission content, dependency or V1–V11 migration
+change in this successor. Existing account create/disable/re-enable/atomicity regression is rerun.
+
+### 14.2 Vertical RED → GREEN
+
+| Behavior | Exact RED / observed witness | Minimum GREEN |
+|---|---|---|
+| Project-owned current facts | b314bf54ac73c444332cf384831d9faaa35ffe5e: executed unimplemented new port, 1 error | 0ec7a386dbfeebadfba6f1df6f1347f4f232fef9, 1/1; later a232742 11/11 |
+| All direct positive grant paths | 6b60a4aa0b3e896a304f04d7aedfee8dcd10c4e5: executed unimplemented new evaluator, 1 error | 598170a11b2dcf27bb2d57d36410c8cd775c3fc8, 1/1 |
+| Declared Org→Project administration | 767cec0e4ba94f9b9af1b2991471602d692fb656: expected child grant absent, 1 fail / 2 | 7d747b4f67385b8ace7e3caf39e5f2e7a683c31f, 2/2 |
+| Direct + two matching Group paths | a45e04db97099e0a899ceedc6cb070abfcacde82: participant/group grant absent, 1 fail / 3 | 4b38ee198d9a596e2c94d6cae9bcb1b1fde36423, 3/3 |
+| Consistent multi-owner read state | f2e4b0164e9a6075082f0679d5b61bfcbf09fb9f: uncoordinated READ COMMITTED incorrectly accepted, 1 fail / 4 | 62ef63affc0949c2cdb51a3be000b8a0892d43d5, 4/4 |
+| Single model for old Identity callers | b07194e3fb64ab7a9be1cd250376b71a1516425c: old adapter created account through future assignment, 1 fail / 18 | 936da113327e96a4c765afbf9eaaf31db0e98ca8, 18/18 |
+| Current recheck time | 40b5b3b9f522ab2c1e2e77fac9643ee8fffa661c: frozen transaction time missed currently effective grant, 1 fail / 19 | 9e00a07115895ce587fe696860b66c9184bd70c6, 19/19 |
+
+The two initial errors are executed tests of new intentionally unimplemented public seams, not
+compiler or sabotaged predecessor behavior. Matrix/negative cases that already passed were
+qualified truthfully (17/17 at c7334bb); no manufactured RED. Local patch application ordering
+needed one correction before source publication; it changed no files/execution input. All failed
+attempts/source/exports/logs remain retained. No tool/dependency/hash/target or design drift.
+
+### 14.3 Final exact-source reruns and cleanup
+
+All five executions below use source `ee48c94a2ea91343f96080baa681a998d71b57ee`, raw local/remote
+inputs **111/111 PASS**, manifest SHA-256
+`d98e4e1818f76e9d704cb7aec3399a184cf58db5c6f3210e47fcc178fe845f38`, byte-preserving archive
+SHA-256 `206e94f4a093ad319826e8c79dc7182addd639b8e2e6aa6328c1cdfb54aa080e` (identical after
+transfer). No uncommitted source, dynamic execution repair, lifecycle build, install or download.
+
+| Label / selector / count | Duration | Exact removed schema | Private Maven-log SHA-256 |
+|---|---|---|---|
+| authorization-qualification-02 / AuthorizationDecisionTest / 22 PASS | 12.11s | iam_ui_ca15eef03c7d4b09b58d958b72db977f | 37c9c3cb3948e2c7339f9503a722495008e16a7dca18e97ceaa5e497642983ac |
+| project-read-qualification-02 / ProjectAuthorizationReadTest / 11 PASS | 6.605s | iam_ui_dc6783cc51ac473a90c6451687bca8b9 | eff94bd163f5039b25b5e3e4d1b89917882c0ee6ff069f9956bfa8ce79db44ca |
+| transaction-qualification-02 / IdentityTransactionsTest / 11 PASS | 7.183s | iam_ui_6fd89ee806d5420b8db7e0e1bc2340af | 5634248580646eb31ad3fbdaa6abf9f4f97d6d575235a5a630c1dae75a9f438b |
+| owner-qualification-05 / OwnerSessionEligibilityTest / 10 PASS | 6.092s | iam_ui_39f47949bfee436ea9f999d1c06a4471 | 9c1408a55d67bec9b3b19dc0100dbe497b0777197802bfa46ccebd90afbc0e75 |
+| schema-qualification-03 / IamSchemaPrivilegeTest / 16 PASS | 2.416s | iam_ui_0ad8f3b80eca493998402c0e866a1756 | 07f2060f6b415ade0a35c70d5da27ab30ed3a0f719d27d3e6650693de314c57d |
+
+Exact command for each row is:
+
+```bash
+bash /home/phuclam/idea-iam-ui-20261007-46/run-<label>/source/tests/iam-ui-46/run-owner-tests.sh ee48c94a2ea91343f96080baa681a998d71b57ee d98e4e1818f76e9d704cb7aec3399a184cf58db5c6f3210e47fcc178fe845f38 <label> <selector> <count> PASS
+```
+
+The [41-run ledger](evidence/foundation-runs.tsv) retains the prior 20 rows unchanged and these
+21 successors, with every exact source/hash/count/schema. Read-only Project period/termination,
+scope, no-side-effect/unavailable cases and evaluator profile/union/period/current security-state,
+Group/direct membership, immutable path, unavailable/anonymous/idle/absolute cases all pass.
+The per-role matrix uses declared literal expected sets, not database-returned permission sets as
+its oracle. RBAC-only evaluator never attempts an owner business mutation. Existing owner/UoW,
+real eligibility and unchanged schema suites remain PASS on the same final source.
+
+Every test used only `idea_ddm_iam_ui_20261007_46`, separate real migrator/app roles and fresh
+source-marked owned schema. JVM exit preceded exact marker/owner cleanup; zero exact remainder,
+public still **0 tables**, DB retained, no DROP DATABASE. The same admitted 82 tools / 544 selected
+inputs rehash PASS before/after; final source pre/postflight log SHA-256 is identical:
+`1382583efc8f17dd38368f6bad0b063d0686f12756e8b9374f5561788bde4ee4`.
+Mode-600 private raw logs are retained; hashes do not mean independent raw-log access via GitHub.
+No company data, live adoption, preview, deployment, timer, verifier or merge.
+
+**Next authorized: T020 shared HTTP/error contract → T021–T023 actual Web adapter/state → T024
+full foundation qualification**, then synthetic Q15/account slices in task order. T024 is not
+complete from these backend-only results. No actual UI/owner API/whole 009 acceptance is claimed;
+PR #47 remains Draft/Open, Issue #46 OPEN. No new approval needed merely to continue authorized tasks.

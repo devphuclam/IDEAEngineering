@@ -6,7 +6,7 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.5 / Draft readiness PASS metadata successor; technical design unchanged |
+| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.6 / Draft partial execution metadata successor; accepted technical design unchanged |
 | Authority / owner / author | INFORMATIVE candidate design / Project user / Codex, CODEX_ONLY |
 | Baseline | Main 4e5244430ea89ffe878819e1279f6e05c60d610a; spec review PASS at e227cb1df60e70a1294628b4f153ad50d8f034c6 |
 | Reviewer / acceptance | Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07, supplied through human conversation / explicit human PG2/PG3 PASS for 5b2fb9f; conditional human PG4 now PASS with actual HTTPS/Chrome/cleanup results, see execution-envelope.md section 6; not inferred from design review |
@@ -17,11 +17,12 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 
 ## Summary
 
-Current readiness metadata: [controlled envelope](execution-envelope.md) and
-[handoff section 11](integration-readiness.md#11-current-readiness-pass--2026-10-07)
-supersede the historical NOT-RUN environment/gate observations below. Accepted technical design
-is unchanged; no T008+ implementation has started. The only source adjustment is the separately
-authorized build-tool JSR305 exclusion proven necessary by the actual offline acquisition graph.
+Current execution metadata: [controlled envelope](execution-envelope.md) and
+[handoff section 14](integration-readiness.md#14-project-read-facts-and-one-all-path-evaluator--2026-10-07)
+supersede the historical NOT-RUN environment/gate and NOT-STARTED observations below. Accepted
+technical design is unchanged. T001–T019 are complete, with 70/70 focused backend tests at exact
+source ee48c94; T020–T093, actual Web/owner APIs and whole-feature acceptance remain incomplete.
+The historical readiness build-tool JSR305 exclusion is unchanged; no further graph/version change.
 
 Connect the useful existing presentation to Identity and Accounts, Project Governance and Access
 Policy. Reuse ordinary session/CSRF and qualified account commands. Add missing owner queries,
@@ -61,14 +62,16 @@ Author design assessment, not a PG2/PG3/PG4 PASS; assessed before research and a
 | V — least privilege/recovery | Exact delegation, membership applicability, private handoff, narrow owner writes, atomic evidence and last-recovery protection. |
 | VI — continuity | CODEX_ONLY, no specialist prerequisite/competing workflow/timer restart. |
 
-No Constitution exception proposed. Implementation gate remains NOT-RUN.
+No Constitution exception proposed. Gate was NOT-RUN in the written design; the controlled
+execution envelope now records explicit PG2/PG3/PG4 PASS, not inferred from author assessment.
 
 ## Project Structure and deep module seams
 
 Feature directory contains spec, readiness, plan, research, data-model, contracts and quickstart.
 The reviewer-owned design checklist records the accepted-source quality assessment separately from
 runtime results. The [93-task worklist](tasks.md) is generated and repaired through Spec Kit;
-its old-to-new ID crosswalk preserves predecessor trace. No implementation task is complete.
+its old-to-new ID crosswalk preserves predecessor trace. Original all-unchecked decomposition
+is historical; current partial completion/results are recorded in that worklist and handoff §14.
 
 | Source home | Interface and implementation locality |
 |---|---|
