@@ -37,9 +37,9 @@ public final class IamSessionFixture implements AutoCloseable {
     private final ConfigurableApplicationContext server;
     private final int port;
 
-    public IamSessionFixture(IamIntegrationFixtures fixtures) {
+    public IamSessionFixture(IamIntegrationFixtures fixtures, Class<?>... qualificationSources) {
         this.fixtures = fixtures;
-        server = new SpringApplicationBuilder(IdeaServerApplication.class).initializers(context -> {
+        server = new SpringApplicationBuilder(IdeaServerApplication.class).sources(qualificationSources).initializers(context -> {
             context.getBeanFactory().registerSingleton("iamFixtureClock", clock);
             context.getBeanFactory().registerSingleton("dataSource", fixtures.appDataSource());
             context.getBeanFactory().registerSingleton("iamPrincipalCapture", new PrincipalCapture());
@@ -52,6 +52,16 @@ public final class IamSessionFixture implements AutoCloseable {
     @Override public void close() { server.close(); captured.set(null); }
 
     public ActorContext signIn(IamIntegrationFixtures.Identity identity) throws Exception {
+        return withSignedInClient(identity, (client, context) -> context);
+    }
+
+    @FunctionalInterface
+    public interface AuthenticatedHttpWork<T> {
+        T run(HttpClient client, ActorContext context) throws Exception;
+    }
+
+    /** Cookie custody exists only for this callback, then is cleared; never exposed in evidence. */
+    public <T> T withSignedInClient(IamIntegrationFixtures.Identity identity, AuthenticatedHttpWork<T> work) throws Exception {
         var credential = UUID.randomUUID().toString(); // Private test memory, never a retained fixture value.
         try (var connection = fixtures.migrator()) {
             connection.setAutoCommit(false);
@@ -85,14 +95,14 @@ public final class IamSessionFixture implements AutoCloseable {
             assertEquals(identity.actorId(), context.actorId());
             assertNotEquals(forged, context.actorId());
             assertNotNull(context.sessionId());
-            return context;
+            return work.run(client, context);
         } finally { cookies.getCookieStore().removeAll(); }
     }
 
     private HttpResponse<String> get(HttpClient client, String path) throws Exception {
         return client.send(HttpRequest.newBuilder(uri(path)).GET().build(), HttpResponse.BodyHandlers.ofString());
     }
-    private URI uri(String path) { return URI.create("http://127.0.0.1:" + port + path); }
+    public URI uri(String path) { return URI.create("http://127.0.0.1:" + port + path); }
     private static String encode(String value) { return URLEncoder.encode(value, StandardCharsets.UTF_8); }
     private static String field(String json, String name) {
         var matcher = java.util.regex.Pattern.compile("\\\"" + name + "\\\":\\\"([^\\\"]+)\\\"").matcher(json);

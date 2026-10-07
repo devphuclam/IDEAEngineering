@@ -20,6 +20,7 @@ c0bf3e9aeb4a84713ad9e996f142c3418b21923d963e5aa7f5d118115fa10329  apps/server/sr
 34e13d4bcc9e0cac27c6e5f815d3e09c5009b7ba7149f340625dc7984bb42571  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentDocumentationBoundary.java
 1516972db473c0a0d5ee33183bf768d3cd586dc82204028af4010b4df5f06e25  apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java
 edecd78184eca31896713c5a3eeffd4537793602d117993fe70de871e587d99d  apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java
+b06442d2428c36940578713fdafe665432e1c7148fa9fcde769265103985df4d  apps/server/src/main/java/com/idea/ddm/iam/IamWebConfiguration.java
 231ee35dcc1c0a498f740a060ac7cffb34e6c9c84dc260e5d26e6c06cc94d4c8  apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java
 11421d4dd0e8819f06a1fce9c2030105301cbd48a5022e62237fec3ff93319af  apps/server/src/main/java/com/idea/ddm/identity/ActorContext.java
 1d0c0a62c492d7ade5fdaac6dc99159ee115e6ff5a92fafbf5b08792ca496203  apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java
@@ -71,6 +72,7 @@ bfd590e4f09502d4dda3c6c8c8b16dbf40a9cd284bdc9b06adfce4833cd64de6  apps/server/sr
 8bd839e324414f65f6e2d7194863354eaa542978dc69a57fa894c7dba550714c  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationHttpTest.java
 0c39dd6f2f469ebb30dd4444e00d104c9964222ba306e62951da6386cfd9742e  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationTest.java
 c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/src/test/java/com/idea/ddm/F03BPublicMigrationTest.java
+6dd06edc5806390af3c63636ce750bd64d8dc6a72bf2222adc610aeb7626a13a  apps/server/src/test/java/com/idea/ddm/iam/IamHttpContractTest.java
 0f29ea9f531ca6d0af175504dfb7859eac33295c625460eadc2b6a68f847a2c7  apps/server/src/test/java/com/idea/ddm/iam/IamIntegrationFixtures.java
 c874c6742cf907bf6e5749837576d6577f8ffda001bd0b5554f6de691155c860  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java
@@ -80,7 +82,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
 edcbdcefa65c07fe11dc7eba7f30008a9a28598f4539754f5ba3c75830c88658  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
-6ad127af897e5f6f2630db3a79076bb0d27cd816dd5e700761b4ea0ac48bbdea  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
+d25ada93bec1bc5a919a5f90ddfe52baf9a85b0b251ada687be2e0dacc387e48  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/src/test/java/com/idea/ddm/identity/IdentityTransactionsTest.java
 276fe48a6d07d34d6ed19eb06eaab215c8f02e72e40a06f7911b2e07cb3888bd  apps/server/src/test/java/com/idea/ddm/identity/OwnedHandoffCleanupTest.java
@@ -105,7 +107,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 1ecd0ef59327bcfff1a9d3eb87aa4a1f67221564d4c58a4e9df64cac9d0d5272  database/migrations/V8__owner_committed_event_foundation.sql
 1479e8ebd18969ec6102b92b81a3192e8392fa966bb369bfad7c43a8740144ed  database/migrations/V9__exact_transfer_grant_scope.sql
 5368d16c9a6baa11eab4ee7c0731578971c17284ded80979639b9dfd45ee08a9  docs/research/inventories/iam-ui-46-resolved-inputs.tsv
-47e0e4af80425b6ab1d4466acfea739e9b0f61abd02a102533cd0a55fddbbef1  tests/iam-ui-46/README.md
-d23541d24cf33024ebc2e9a1340ab1f3054e34aa53e95f6561afbe1284b95609  tests/iam-ui-46/run-owner-tests.sh
+1ef61defb2c755c68d869d1ca7d7860762b6cd5f6263a3bd87190bb2cb3f89f0  tests/iam-ui-46/README.md
+8d5155b09a62030234a740b7ffbb5148875cef61d377ed389a94031e2a6a824e  tests/iam-ui-46/run-owner-tests.sh
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml

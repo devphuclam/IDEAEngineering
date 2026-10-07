@@ -79,6 +79,16 @@ ActorContext constructor, automatic grant, schema cleanup or new production abst
 
 ## Database and cleanup
 
+T020 HTTP mapping tracer is `http-contract-red-01 IamHttpContractTest 1 RED`.
+The explicit test-only adapter lives solely in test source and is excluded from product scanning;
+it is not a new product API or implementation of any UI-I/P/R operation. It enters through real
+HTTP sign-in and ordinary security/CSRF. New reviewed adapters opt into bounded safe reason /
+Server-generated correlation bodies; legacy Identity statuses/empty bodies and security-filter
+refusals remain unchanged. First RED expects 400 rather than the unmapped 500. Later mapping,
+shape/privacy/correlation and legacy compatibility cases precede minimum GREEN repairs. The
+callback retains session cookies only in private test memory and clears them on exit. Real
+PostgreSQL target, immutable migrations, direct offline goals and cleanup guards are unchanged.
+
 T018 first evaluator RED is `authorization-red-01 AuthorizationDecisionTest 1 RED`.
 It enters through the actual Server-established context, uses current read-only IAM eligibility
 and resolves all applicable exact assignment/version paths on the same app transaction.
