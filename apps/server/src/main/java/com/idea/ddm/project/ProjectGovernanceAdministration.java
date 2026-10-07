@@ -48,6 +48,100 @@ public final class ProjectGovernanceAdministration {
             return queries.projectRow(c,actor.organizationId(),id);
         });
     }
+    public ProjectGovernanceQueries.Page<ProjectGovernanceQueries.Project> projects(ActorContext context,UUID organization,String filter,int offset,int limit){
+        pageInput(filter,offset,limit);
+        return read(context,(c,actor)->{
+            var org=organization==null?actor.organizationId():organization;
+            if(!actor.organizationId().equals(org))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
+            boolean granted=authorization.evaluate(c,context,"project.admin.read",Scope.organization(org)).rbacGranted();
+            var authorized=new ArrayList<ProjectGovernanceQueries.Project>();
+            try(var q=c.prepareStatement("SELECT project_id FROM project WHERE organization_id=? ORDER BY project_id")){
+                q.setObject(1,org);try(var r=q.executeQuery()){while(r.next()){
+                    var id=r.getObject(1,UUID.class);
+                    if(!authorization.evaluate(c,context,"project.admin.read",Scope.project(org,id)).rbacGranted())continue;
+                    granted=true;var project=queries.projectRow(c,org,id);
+                    if(project.name().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT)))authorized.add(project);
+                }}
+            }
+            if(!granted)throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
+            int start=Math.min(offset,authorized.size()),end=Math.min(start+limit,authorized.size());
+            return new ProjectGovernanceQueries.Page<>(authorized.subList(start,end),offset,limit,end<authorized.size());
+        });
+    }
+    public ProjectGovernanceQueries.Page<ProjectGovernanceQueries.Group> groups(ActorContext context,UUID organization,UUID project,String filter,int offset,int limit){
+        pageInput(filter,offset,limit);
+        return read(context,(c,actor)->{
+            var org=organization==null?actor.organizationId():organization;
+            require(authorization.evaluate(c,context,"project.admin.read",Scope.project(org,project)));
+            queries.projectRow(c,org,project);var items=new ArrayList<ProjectGovernanceQueries.Group>();
+            try(var q=c.prepareStatement("SELECT group_id FROM business_group WHERE project_id=? AND organization_id=? AND strpos(lower(display_name),lower(?))>0 ORDER BY group_id OFFSET ? LIMIT ?")){
+                q.setObject(1,project);q.setObject(2,org);q.setString(3,filter);q.setInt(4,offset);q.setInt(5,limit+1);
+                try(var r=q.executeQuery()){while(r.next())items.add(queries.groupRow(c,org,r.getObject(1,UUID.class)));}
+            }
+            boolean more=items.size()>limit;if(more)items.remove(items.size()-1);
+            return new ProjectGovernanceQueries.Page<>(items,offset,limit,more);
+        });
+    }
+    public ProjectGovernanceQueries.Group group(ActorContext context,UUID organization,UUID id){
+        return read(context,(c,actor)->{
+            var org=organization==null?actor.organizationId():organization;
+            var target=groupScope(c,context,org,id,"project.admin.read");
+            require(authorization.evaluate(c,context,"project.admin.read",target));return queries.groupRow(c,org,id);
+        });
+    }
+    public ProjectGovernanceQueries.ParticipationPage members(ActorContext context,UUID organization,UUID id,boolean group,String filter,int offset,int limit){
+        pageInput(filter,offset,limit);
+        return read(context,(c,actor)->{
+            var org=organization==null?actor.organizationId():organization;
+            var target=group?groupScope(c,context,org,id,"project.admin.read"):Scope.project(org,id);
+            require(authorization.evaluate(c,context,"project.admin.read",target));
+            return queries.members(c,org,target.projectId(),group?id:null,filter,offset,limit,clock.instant());
+        });
+    }
+    private Scope groupScope(Connection c,ActorContext context,UUID org,UUID id,String permission)throws SQLException{
+        if(!eligibility.admit(c,context).organizationId().equals(org))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
+        // Only the parent ID is resolved internally; no metadata is returned before its exact authorization.
+        UUID project;
+        try(var q=c.prepareStatement("SELECT project_id FROM business_group WHERE group_id=? AND organization_id=?")){
+            q.setObject(1,id);q.setObject(2,org);try(var r=q.executeQuery()){
+                if(!r.next()){
+                    require(authorization.evaluate(c,context,permission,Scope.organization(org)));
+                    throw new Refusal(RefusalReason.TARGET_NOT_AVAILABLE);
+                }project=r.getObject(1,UUID.class);
+            }
+        }
+        return Scope.project(org,project);
+    }
+    public JsonNode rename(ActorContext context,UUID operation,Scope scope,UUID id,boolean group,String name,long expected,String reason){
+        if(scope==null || id==null)throw new Refusal(RefusalReason.INVALID_INPUT);
+        var normalizedName=text(name,200);var normalizedReason=text(reason,500);positive(expected);
+        var action=group?"project.group.update":"project.update";
+        return command(context,operation,scope,action,digest(List.of(action,id.toString(),scope,normalizedName,expected,normalizedReason)),(c,actor)->{
+            UUID project=group?queries.groupRow(c,actor.organizationId(),id).projectId():queries.projectRow(c,actor.organizationId(),id).projectId();
+            matches(scope,actor.organizationId(),project);
+            changed(c,group?"SELECT project_group_change(?,?,?,?)":"SELECT project_change(?,?,?,?)",id,actor.organizationId(),expected,normalizedName);
+            return json.valueToTree(group?queries.groupRow(c,actor.organizationId(),id):queries.projectRow(c,actor.organizationId(),id));
+        });
+    }
+    public JsonNode createGroup(ActorContext context,UUID operation,Scope scope,UUID project,String name,long expectedProjectVersion,String reason){
+        if(scope==null || project==null)throw new Refusal(RefusalReason.INVALID_INPUT);
+        var normalizedName=text(name,200);var normalizedReason=text(reason,500);positive(expectedProjectVersion);
+        return command(context,operation,scope,"project.group.create",digest(List.of("project.group.create",scope,project,normalizedName,expectedProjectVersion,normalizedReason)),(c,actor)->{
+            queries.projectRow(c,actor.organizationId(),project);matches(scope,actor.organizationId(),project);
+            changed(c,"SELECT project_change(?,?,?,?)",project,actor.organizationId(),expectedProjectVersion,null);
+            var id=UUID.randomUUID();insert(c,"INSERT INTO business_group(group_id,project_id,organization_id,display_name,created_by,created_at) VALUES (?,?,?,?,?,?)",id,project,actor.organizationId(),normalizedName,actor.actorId(),Timestamp.from(clock.instant()));
+            return json.valueToTree(queries.groupRow(c,actor.organizationId(),id));
+        });
+    }
+    static void matches(Scope scope,UUID org,UUID project){if(!org.equals(scope.organizationId()) || (scope.projectId()!=null&&!project.equals(scope.projectId())))throw new Refusal(RefusalReason.TARGET_NOT_AVAILABLE);}
+    static void positive(long version){if(version<1)throw new Refusal(RefusalReason.INVALID_INPUT);}
+    static void changed(Connection c,String sql,Object...args)throws SQLException{
+        try(var q=c.prepareStatement(sql)){for(int i=0;i<args.length;i++)q.setObject(i+1,args[i]);try(var r=q.executeQuery()){if(!r.next()||!r.getBoolean(1))throw new Refusal(RefusalReason.STATE_CONFLICT);}}
+    }
+    static void pageInput(String filter,int offset,int limit){if(filter==null||filter.length()>200||filter.codePoints().anyMatch(Character::isISOControl)||offset<0||limit<1||limit>100)throw new Refusal(RefusalReason.INVALID_INPUT);}
+    Clock clock(){return clock;}
+    ProjectGovernanceQueries queries(){return queries;}
+    JsonNode result(Object value){return json.valueToTree(value);}
     @FunctionalInterface interface Mutation { JsonNode apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException; }
     private record Reply(JsonNode value,RefusalReason refusal){}
     JsonNode command(ActorContext context,UUID operation,Scope scope,String action,String digest,Mutation mutation) {
@@ -86,7 +180,8 @@ public final class ProjectGovernanceAdministration {
                     try { result=mutation.apply(c,actor); }
                     catch(Refusal business){c.rollback(savepoint);refused=business.reason();result=json.createObjectNode();}
                     finally { c.releaseSavepoint(savepoint); }
-                    var target=result.has("projectId")?UUID.fromString(result.path("projectId").asString()):scope.projectId();
+                    String targetField=result.has("membershipId")?"membershipId":result.has("groupId")?"groupId":"projectId";
+                    var target=result.has(targetField)?UUID.fromString(result.path(targetField).asString()):scope.projectId();
                     if(target==null)target=scope.organizationId();
                     var outcome=refused==null?"ACCEPTED":"REFUSED";
                     insert(c,"INSERT INTO project_owner_outcome(operation_id,actor_id,organization_id,action,input_digest,target_id,outcome,reason_code,correlation_id,result) VALUES (?,?,?,?,?,?,?,?,?,?::jsonb)",
