@@ -87,6 +87,12 @@ no account type, role-name bypass, LIMIT-1 result, owner business success or cli
 Later direct/Group/scope/period/unavailable cases precede any necessary repair. Supported legacy
 callers must delegate to the same resolution logic without rewriting historical one-path evidence.
 
+Multi-owner advisory reads use a caller-owned REPEATABLE READ/SERIALIZABLE snapshot. Authoritative
+owner commands use the already-qualified READ COMMITTED transaction under lock 73003002 so a
+blocked security writer is observed after acquisition. The evaluator never changes isolation or
+acquires this lock itself; uncoordinated READ COMMITTED evaluation is refused. It does not turn a
+snapshot/Decision into a capability or replace final current owner/IAM revalidation.
+
 T016/T017 use `project-read-red-01 ProjectAuthorizationReadTest 1 RED` and its GREEN successor.
 The Project-owned query reads current exact Project, Project Membership and Group Membership
 facts in the caller's connection, filtered to the Server-established Organization and Actor.

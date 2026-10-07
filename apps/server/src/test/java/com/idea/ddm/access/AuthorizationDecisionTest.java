@@ -9,6 +9,8 @@ import com.idea.ddm.project.ProjectPrerequisiteFixture;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterAll;
@@ -38,6 +40,7 @@ class AuthorizationDecisionTest {
         var first = roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V1, scope, NOW.minusSeconds(1), null);
         var second = roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V2, scope, NOW.minusSeconds(1), null);
         try (var connection = fixtures.app()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             connection.setReadOnly(true);
             connection.setAutoCommit(false);
             var result = policy.evaluate(connection, actor.context(), "account.create", scope);
@@ -63,6 +66,7 @@ class AuthorizationDecisionTest {
         var assignment = roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.PA_V1, organization, NOW.minusSeconds(1), null);
         var scope = AuthorizationDecisionService.Scope.project(project.organizationId(), project.projectId());
         try (var connection = fixtures.app()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             connection.setReadOnly(true);
             connection.setAutoCommit(false);
             var result = policy.evaluate(connection, actor.context(), "project.admin.read", scope);
@@ -94,6 +98,7 @@ class AuthorizationDecisionTest {
         var groupOne = roles.groupAssignment(actor.identity(), role, first, NOW.minusSeconds(1), null);
         var groupTwo = roles.groupAssignment(actor.identity(), role, second, NOW.minusSeconds(1), null);
         try (var connection = fixtures.app()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             connection.setReadOnly(true);
             connection.setAutoCommit(false);
             var result = policy.evaluate(connection, actor.context(), "project.read", scope);
@@ -106,6 +111,19 @@ class AuthorizationDecisionTest {
                     .filter(java.util.Objects::nonNull).collect(Collectors.toSet()));
             assertEquals(Set.of(role), result.paths().stream().map(AuthorizationDecisionService.GrantPath::roleVersionId).collect(Collectors.toSet()));
             assertFalse(policy.evaluate(connection, actor.context(), "account.create", organization).rbacGranted());
+            connection.rollback();
+        }
+    }
+
+    @Test void multiOwnerReadRefusesUncoordinatedStatementSnapshotsInsteadOfReturningAGrant() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
+        var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V1, scope, NOW.minusSeconds(1), null);
+        try (var connection = fixtures.app()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setReadOnly(true);
+            connection.setAutoCommit(false);
+            assertThrows(SQLException.class, () -> policy.evaluate(connection, actor.context(), "account.create", scope));
             connection.rollback();
         }
     }
