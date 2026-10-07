@@ -9,5 +9,5 @@ export type IamState<T> =
   | { kind: "unresolved" };
 
 export function initialIamState<T>(): IamState<T> {
-  throw new Error("IAM view state not implemented");
+  return { kind: "loading" };
 }
