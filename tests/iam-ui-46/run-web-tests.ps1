@@ -70,10 +70,15 @@ foreach($member in $projection){
 }
 $report=$owned+'/web-result.json'
 $log=$owned+'/web-private.log'
+$typecheck='NOT-RUN'
 Push-Location $web
 try {
     & $node ($web+'/node_modules/vitest/vitest.mjs') run --config ($SourceRoot+'/tests/iam-ui-46/vitest.config.mjs') --configLoader native --reporter=json --outputFile $report --no-color *> $log
     $status=$LASTEXITCODE
+    if($Oracle -eq 'PASS' -and $status -eq 0){
+        & $node ($web+'/node_modules/typescript/bin/tsc') -p ($web+'/tsconfig.json') --noEmit *>> $log
+        $typecheck=if($LASTEXITCODE -eq 0){'PASS'}else{'FAIL'}
+    }
 } finally { Pop-Location }
 foreach($member in $projection){
     if((Get-FileHash -LiteralPath $member.source).Hash.ToLowerInvariant() -ne $member.hash){throw 'Shared input mutated'}
@@ -86,7 +91,7 @@ $result=Get-Content -LiteralPath $report -Raw | ConvertFrom-Json
 if($result.numTotalTests -ne $ExpectedCount){throw 'Executed count differs'}
 if($Oracle -eq 'RED'){
     if($status -eq 0 -or $result.numFailedTests -lt 1){throw 'Expected genuine RED missing'}
-} elseif($status -ne 0 -or $result.numPassedTests -ne $ExpectedCount -or $result.numFailedTests -ne 0 -or $result.numPendingTests -ne 0){throw 'Web qualification failure'}
+} elseif($status -ne 0 -or $result.numPassedTests -ne $ExpectedCount -or $result.numFailedTests -ne 0 -or $result.numPendingTests -ne 0 -or $typecheck -ne 'PASS'){throw 'Web qualification/typecheck failure'}
 @{source=$SourceSha;oracle=$Oracle;tests=$result.numTotalTests;passed=$result.numPassedTests;failed=$result.numFailedTests;
-  inputs=$inputCount;packages=$packages;archives=$archives;packageFiles=$projection.Count;postflight='PASS';
+  inputs=$inputCount;packages=$packages;archives=$archives;packageFiles=$projection.Count;postflight='PASS';typecheck=$typecheck;
   logHash=(Get-FileHash -LiteralPath $log).Hash.ToLowerInvariant();reportHash=(Get-FileHash -LiteralPath $report).Hash.ToLowerInvariant()} | ConvertTo-Json -Compress

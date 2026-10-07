@@ -69,7 +69,7 @@ class IamHttpContractTest {
 
     @Test void malformedNewRequestHasSafe400RatherThanExceptionOrRawJacksonDetails() throws Exception {
         http.withSignedInClient(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY), (client, context) -> {
-            assertMapped(postWithCsrf(client, "/__iam_http_contract/shape", "{\"targetId\":\"PRIVATE_INPUT_SENTINEL\"}"),
+            assertMapped(postWithCsrf(client, "/__iam_http_contract/shape", "{\"targetId\":\"not-a-uuid\"}"),
                     400, "INVALID_INPUT");
             return null;
         });

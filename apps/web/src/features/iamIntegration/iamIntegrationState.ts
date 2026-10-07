@@ -15,5 +15,11 @@ export function initialIamState<T>(): IamState<T> {
 }
 
 export function settledIamState<T>(result: IamResult<T>, isEmpty: (value: T) => boolean = () => false): IamState<T> {
-  throw new Error("IAM settled view state not implemented");
+  switch (result.kind) {
+    case "confirmed": return isEmpty(result.value) ? { kind: "empty" } : { kind: "ready", value: result.value };
+    case "refused": return { kind: "refused", status: result.status };
+    case "stale": return { kind: "stale" };
+    case "unavailable": return { kind: "unavailable" };
+    case "unresolved": return { kind: "unresolved" };
+  }
 }
