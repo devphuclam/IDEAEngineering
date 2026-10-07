@@ -192,3 +192,57 @@ REVOKE ALL ON permission_registry,identity_role_definition,identity_role_version
     identity_role_candidate,identity_role_candidate_permission FROM idea_ddm_app;
 GRANT SELECT ON permission_registry,identity_role_definition,identity_role_version_profile,
     identity_role_candidate,identity_role_candidate_permission TO idea_ddm_app;
+
+-- Exact accepted built-in successor manifest. No assignment/bootstrap/adoption mutation.
+INSERT INTO identity_role_version(role_version_id,role_code,version) VALUES
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a004','account-administrator',3),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a005','super-administrator',2),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','privileged-role-administrator',1),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project-administrator',1),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a008','audit-reader',1);
+INSERT INTO identity_role_permission(role_version_id,permission_code)
+    SELECT '9d80f77e-85a6-4c12-a72d-8ef6b7e0a004'::UUID,permission_code FROM identity_role_permission
+    WHERE role_version_id='9d80f77e-85a6-4c12-a72d-8ef6b7e0a003';
+INSERT INTO identity_role_permission(role_version_id,permission_code) VALUES
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a004','account.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a005','role.catalogue.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a005','role.assignment.manage.administration'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a005','role.assignment.manage.highest'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a005','access.inspect'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a005','audit.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','role.catalogue.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','role.definition.prepare'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','role.definition.activate'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','role.assignment.manage.business'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','role.assignment.manage.administration'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','access.inspect'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a006','audit.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.create'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.admin.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.update'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.membership.assign'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.membership.remove'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.group.create'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.group.update'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.group.membership.assign'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','project.group.membership.remove'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','role.catalogue.read'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','role.assignment.manage.business'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a007','access.inspect'),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a008','audit.read');
+
+-- Sealed profile is also the append-completion marker: insert permissions, then profile.
+-- Digest v1: roleCode|version|classification|comma-scopes|comma-principals|sorted-comma-permissions.
+INSERT INTO identity_role_version_profile(role_version_id,definition_id,role_code,classification,
+        scope_kinds,principal_kinds,content_digest)
+    SELECT v.role_version_id,d.definition_id,v.role_code,
+        CASE WHEN v.role_code IN ('super-administrator','privileged-role-administrator') THEN 'HIGHEST' ELSE 'ADMINISTRATION' END,
+        CASE WHEN v.role_code IN ('account-administrator','super-administrator') THEN ARRAY['ORGANIZATION'] ELSE ARRAY['ORGANIZATION','PROJECT'] END,
+        ARRAY['ACTOR'],
+        encode(sha256(convert_to(v.role_code||'|'||v.version||'|'
+            ||CASE WHEN v.role_code IN ('super-administrator','privileged-role-administrator') THEN 'HIGHEST' ELSE 'ADMINISTRATION' END||'|'
+            ||CASE WHEN v.role_code IN ('account-administrator','super-administrator') THEN 'ORGANIZATION' ELSE 'ORGANIZATION,PROJECT' END
+            ||'|ACTOR|'||string_agg(p.permission_code,',' ORDER BY p.permission_code),'UTF8')),'hex')
+    FROM identity_role_version v JOIN identity_role_definition d USING(role_code)
+        JOIN identity_role_permission p USING(role_version_id)
+    GROUP BY v.role_version_id,d.definition_id,v.role_code,v.version;
