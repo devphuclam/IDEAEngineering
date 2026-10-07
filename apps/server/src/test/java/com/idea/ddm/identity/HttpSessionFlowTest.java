@@ -1675,8 +1675,11 @@ class HttpSessionFlowTest {
         var fixture = fixture();
         var flyway = Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"), env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
-        // Current chain includes additive F05 V9/V10; retained F03/F04 evidence keeps its original chain.
-        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), java.util.Arrays.stream(flyway.info().applied())
+        // 009 adds V11/V12; predecessor execution evidence keeps its original chain.
+        var expected = System.getenv("IDEA_IAM_SOURCE_SHA") != null
+                ? java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
+                : java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        assertEquals(expected, java.util.Arrays.stream(flyway.info().applied())
                 .filter(migration -> migration.getVersion() != null).map(migration -> migration.getVersion().toString()).toList());
         assertEquals(0, flyway.migrate().migrationsExecuted);
         var loginId = new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).loginIdentityId();

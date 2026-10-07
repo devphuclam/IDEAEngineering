@@ -93,7 +93,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
-c849c76c2a257b0c46b43c0edac860315914e841106c5224a63c4f959785cdfc  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
+2e5ad41cdc755b259af375916d9124cbb8d05f85603d415228ebf847fd96b0ed  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 fcc86b2b95f3e2f13a1940a74d3e3d9e06b67a08979c2d99681af19c38c345f3  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
 cdad6ad89637a329ebf984beb727556f9291d9c6cd8789db663206c756d90479  apps/server/src/test/java/com/idea/ddm/identity/IdentityAccountUiContractTest.java
 a38581d0a75a4e0c37296cd66ccd71b34b4a9697472fe42f87ceb807d82b28a2  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
