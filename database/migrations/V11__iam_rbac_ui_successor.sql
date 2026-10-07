@@ -325,3 +325,32 @@ CREATE UNIQUE INDEX assignment_unended_actor_project ON identity_role_assignment
     WHERE revoked_at IS NULL AND scope_kind='PROJECT' AND principal_actor_id IS NOT NULL;
 CREATE UNIQUE INDEX assignment_unended_group_project ON identity_role_assignment(principal_group_id,role_version_id,project_id)
     WHERE revoked_at IS NULL AND principal_group_id IS NOT NULL;
+
+-- Storage shape/profile validation, not a replacement for owner authorization/delegation.
+DO $migration$
+BEGIN
+    EXECUTE format($ddl$
+        CREATE FUNCTION %1$I.validate_assignment_profile() RETURNS TRIGGER
+        LANGUAGE plpgsql SET search_path=pg_catalog,%1$I AS $body$
+        DECLARE profile RECORD;
+        BEGIN
+            SELECT p.scope_kinds,p.principal_kinds,d.built_in,d.management_organization_id,d.management_project_id
+                INTO profile FROM %1$I.identity_role_version_profile p
+                JOIN %1$I.identity_role_definition d USING(definition_id)
+                WHERE p.role_version_id=NEW.role_version_id;
+            IF NOT FOUND THEN RAISE EXCEPTION 'Unknown exact role profile' USING ERRCODE='23503'; END IF;
+            IF NOT NEW.scope_kind=ANY(profile.scope_kinds)
+                OR NOT (CASE WHEN NEW.principal_group_id IS NULL THEN 'ACTOR' ELSE 'PROJECT_GROUP' END)=ANY(profile.principal_kinds)
+                OR (NOT profile.built_in AND (NEW.organization_id<>profile.management_organization_id
+                    OR (profile.management_project_id IS NOT NULL AND NEW.project_id IS DISTINCT FROM profile.management_project_id))) THEN
+                RAISE EXCEPTION 'Assignment is outside exact role profile' USING ERRCODE='23514';
+            END IF;
+            RETURN NEW;
+        END;
+        $body$
+    $ddl$,current_schema());
+END;
+$migration$;
+REVOKE ALL ON FUNCTION validate_assignment_profile() FROM PUBLIC;
+CREATE TRIGGER assignment_exact_profile BEFORE INSERT ON identity_role_assignment
+    FOR EACH ROW EXECUTE FUNCTION validate_assignment_profile();
