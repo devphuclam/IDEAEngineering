@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.8` / Draft foundational execution result record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.9` / Draft partial foundational execution result record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 12; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 13; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, section 12 focused identity/UoW results; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, section 12 identity/UoW predecessor, section 13 schema/fixture and final focused reruns; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -635,3 +635,121 @@ log SHA-256 is byte-identical
 Prior failed exports/runs/logs remain retained; no broad cleanup, preview/company data or DB drop.
 
 PR #47 stays Draft/Open, Issue #46 OPEN. No timer action, verifier, merge or deployment.
+
+## 13. Schema successor and named story fixture execution — 2026-10-07
+
+**Engineering disposition: T013–T015 COMPLETE; T001–T015 now 15/93 complete.** Section 12 is
+the retained predecessor checkpoint. Exact final executed source:
+`64ee5bb731ea6d95b85ed514a7840a1d0f4eaeb2`. **37/37 PASS**, 0 failure/error/skip across three
+separately owned runs on that same source. Independent implementation review/whole-feature
+acceptance NOT-RUN. This is partial foundation, not completed IAM/RBAC UI integration.
+
+### 13.1 Schema and first-party implementation
+
+[V11](../../database/migrations/V11__iam_rbac_ui_successor.sql) adds Project, Project Membership,
+Business Group, Group Membership, product-owned permission registry, stable Role Definition,
+sealed exact Role Version profile and separate candidate/permission staging. Structural profiles
+extend the existing exact role model and original permission table; they are not a mirror evaluator.
+Profile digests use declared v1 content and C-collation sorted permission codes, independent of
+database locale. Existing `identity_role_version` content/triggers are not updated or bypassed.
+Late permission insertion into a sealed version refuses; incomplete unsealed versions cannot commit.
+
+Existing assignment is extended with typed Organization/Project scope, exact Actor/Group principal,
+half-open period fields, version and attributable end metadata. `revoked_at` remains canonical;
+legacy `effective_from` is exactly `assigned_at`, and unknown historical revoker is not fabricated.
+One-unended-tuple indexes allow a new-ID explicit regrant without deleting or resurrecting the old
+revoked row. Composite FKs retain Actor/Org and Group/Project/Org boundaries; exact sealed profiles
+reject unsupported scope/principal shape. These are storage invariants, **not** delegation/owner
+authorization or current Project Membership qualification; those remain T016–T019/story work.
+
+The exact accepted **25 Permission / 8 built-in role-version manifest** is seeded without
+assignments, bootstrap/adoption or old-content updates. Legacy Super@1 / AA@1 / AA@2 retain exact
+IDs/content. AA@3 / Super@2 / PRA@1 / PA@1 / Audit Reader@1 are non-granting successor definitions.
+Their new owner actions are not claimed executable/qualified merely because registry rows exist.
+Candidate staging is distinct from immutable activated content; actual prepare/activate lifecycle
+and narrow protected owner-write functions still require their planned behavior tests/implementation.
+No blanket UPDATE/DELETE/TRUNCATE grant to app, PUBLIC executable guard, new role/credential,
+database or dependency. Validation guards are invoker triggers with fixed schema-qualified SQL and
+trusted search_path; they are not SECURITY DEFINER product authorization shortcuts.
+
+[IamTestFixture](../../apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java) supplies a
+named `SignedInActor`, read-only eligibility and owner transaction helpers across test packages.
+It wraps the same actual HTTP fixture and existing Server session contract; no raw ActorContext
+constructor, UUID-array indexing, password/cookie/proof in fixture records or implicit grants.
+The final accepted owner test exercises this named bridge. This is test infrastructure only.
+
+### 13.2 Executed RED/GREEN and retained diagnostics
+
+The machine-readable [20-run ledger](evidence/foundation-runs.tsv) freezes every schema RED/GREEN,
+qualification and final affected rerun: exact SHA, test counts/failure/error/skip, owned schema,
+raw input count, manifest/archive and private Maven-log hashes. Published runner commands are
+fully determined by its label/source/manifest/test/count and RED/PASS disposition; no uncommitted
+source or dynamic repair inside execution.
+
+| Vertical behavior | Executed RED source / witness | GREEN source / count |
+|---|---|---|
+| Project/Group relational foundation | 8014b4e43d32200758ae3d1cc21d5e237abde8a8: missing 4 tables, 1 failure | 2c811d357e22bc39eff1e4afaa561b3ce06a804d: 1/1 |
+| Separate role profile / candidate staging | 9b366fd9189afa5cb64f0cf30e6a51c17bdf4be4: missing 5 tables, 1 failure of 2 | 329fe9b66cf27f0c6cd33e4241e052b493a20d9c: 2/2 |
+| Exact successor role content without grants | a422df9e614f0466b87dad69fc7904c185747b92: missing successor content, 1 failure of 3 | 48b7c3d2d58488c5a6c8cf2831bfa5662ab34e16: 4/4, also sealed-content case |
+| No permission addition after activation | 82bcfadfcbc9b741b2bcd261ccf7a8335ee0706e: insert wrongly succeeded, 1 failure of 4 | 48b7c3d2d58488c5a6c8cf2831bfa5662ab34e16: 4/4 |
+| Typed exact assignment / retained revocation | ded9a86efb4313c9bd060728bd00dc91c6217b73: missing 8 structural columns, 1 failure of 5 | 80372d8dce44080b6ba633b774ec6238d49a8514: 5/5 |
+| Reject Org-only role at Project scope | 5e08fae31b00e58d416c0a3702a64225e7900771: invalid assignment insert succeeded, 1 failure of 6 | 03b0581cee9d6a5f25827cd08933d2eb53c3ae6a: 6/6 |
+| Required membership-end reason | 2bc84416eaaba1c6ca777035e2818529a32e1d2a: NULL reason passed SQL CHECK, 1 failure of 15 | 5b70e9bf0731739df045a9018ade18bb5f53ec71: 15/15, both membership tables |
+| Explicit Custom management scope | 2e8e4304cdcd88c2a3438028420aff643c1bfc20: NULL kind passed SQL CHECK, 1 failure of 16 | 6c054a15676a7ffa1bf7d77a7ce80ccc149f3003: 16/16 |
+
+`schema-green-03` at 471e65d0bcd9b4f62404a80861f3321b3fba525e was **2 PASS / 1 FAIL**, not
+GREEN. PostgreSQL default locale ordered `account.read` versus `account.re-enable` differently
+from the oracle. Exact sets were present, but canonical ordering was not explicit. Successor
+82bcfad pins C-collation in both content projection and digest. Failed log/archive retained;
+the later 4/4 run independently demonstrates the content fix. It is not a rights/tooling failure.
+
+Broader schema qualification was 14/14 at 02d5b1d05f9be38c8e17964f63e76e65025415d0 before the
+two NULL-boundary additions. Later 16/16 and final exact-source rerun supersede that limited set
+without rewriting it. V11 evolved only on unpublished-to-product owned test schemas through
+these controlled source commits; each prior SQL blob/log/checksum remains retained in Git/evidence.
+V1–V10 never changed. No installed company/preview/review database was upgraded or reused.
+
+### 13.3 Final exact-source commands and results
+
+All three commands below ran at source `64ee5bb731ea6d95b85ed514a7840a1d0f4eaeb2`, with raw
+local/remote inputs **105/105 PASS**, identical transferred archive SHA-256
+`f92458d94d03ac96eaffee35e65363cdb6d2d9e5fcbd88cf20f3b34042cdb238` and manifest SHA-256
+`24596c17a2179bf7126b9210dfbfdb4d651a24f63b526ad6c0cac56d6b4fc885`.
+
+```bash
+bash /home/phuclam/idea-iam-ui-20261007-46/run-transaction-qualification-01/source/tests/iam-ui-46/run-owner-tests.sh 64ee5bb731ea6d95b85ed514a7840a1d0f4eaeb2 24596c17a2179bf7126b9210dfbfdb4d651a24f63b526ad6c0cac56d6b4fc885 transaction-qualification-01 IdentityTransactionsTest 11 PASS
+bash /home/phuclam/idea-iam-ui-20261007-46/run-schema-qualification-02/source/tests/iam-ui-46/run-owner-tests.sh 64ee5bb731ea6d95b85ed514a7840a1d0f4eaeb2 24596c17a2179bf7126b9210dfbfdb4d651a24f63b526ad6c0cac56d6b4fc885 schema-qualification-02 IamSchemaPrivilegeTest 16 PASS
+bash /home/phuclam/idea-iam-ui-20261007-46/run-owner-qualification-04/source/tests/iam-ui-46/run-owner-tests.sh 64ee5bb731ea6d95b85ed514a7840a1d0f4eaeb2 24596c17a2179bf7126b9210dfbfdb4d651a24f63b526ad6c0cac56d6b4fc885 owner-qualification-04 OwnerSessionEligibilityTest 10 PASS
+```
+
+| Actual run | PASS / duration | Exact schema (now removed) | Private raw Maven log SHA-256 |
+|---|---|---|---|
+| transaction-qualification-01 | 11/11, 7.165s | iam_ui_b674d8942199480a98a8d357c508bacc | e5851715a5a14a3c4fb14eabfbaee487c03c8b93211c8bbf42bfe60c07b87cb2 |
+| schema-qualification-02 | 16/16, 2.425s | iam_ui_c05ed11855fd4ff587aa5467ba112cb3 | f0c1027122499fac0defbaa8fbb1968870d2597f8e099f8dfcdc979c06aa3bea |
+| owner-qualification-04 | 10/10, 6.031s | iam_ui_c37ceb868c3043aaa3c30c61641ac6c8 | 3ad2bbaef15146e16f36a8cf3d91aa066dd98b05df517446121d22c72372f1cd |
+
+Schema oracle includes actual app UPDATE/DELETE/TRUNCATE and SET ROLE refusal SQLSTATE 42501;
+migrator ownership; raw accepted V1–V10 SHA-256; unchanged predecessor Flyway checksums; V11
+upgrade/history and repeat **0**; exact non-granting content; immutable/sealed profiles;
+unsealed commit refusal; scoped FK and duplicate-unended refusal; revoked history and new-ID
+regrant; NULL required-field edges. These storage tests do not claim product administration
+authorization, a fresh public-schema successor run or actual Custom-role activation workflow.
+
+Final owner and eligibility suites use a fresh full V1–V11 schema each, repeat all prior focused
+behavior after migration and exercise the named story fixture. One legacy account lifecycle
+regression remains one test, **not** all F03/PH1 regression. Full foundation T024 and later T089
+affected regression are still incomplete, as are T016–T093.
+
+Every run used the existing named DB/real separate roles, admitted offline direct goals and
+unchanged 82 toolchain / 544 resolved input pins. Owned JVMs exited before exact marker/owner
+cleanup; all created run schemas removed, exact remainder 0, **public tables 0, DB retained**.
+Final source pre/postflight logs have identical SHA-256
+`867aceb623851ced8251097625e3806fda1943fad8293eeae37b76e32c99f866`.
+Mode-600 raw logs and all previous failed roots/exports are retained, no broad cleanup or secret
+disclosure. Log hashes identify files, not independent raw-log inspection through GitHub.
+
+**Next authorized unit: T016 Project-owned read-state RED → T017 read-only facts → T018/T019
+single evaluator**, then remaining foundation/client tasks before owner stories. No new approval
+or spec/Q14/Q15 reopening is required merely to continue these already-authorized tasks. New
+scope/tool/graph/target drift still STOP. No actual UI/domain acceptance, live adoption, company
+data, preview/deploy, timer, verifier or merge. PR #47 remains Draft/Open; Issue #46 OPEN.
