@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.7` / Draft readiness result record; PG2/PG3/PG4 PASS; actual trusted Chrome HTTPS PASS 2/2 |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.8` / Draft foundational execution result record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action with actual results / current section 11 / 2026-10-07 for this readiness disposition only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 12; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–10 predecessor states, current readiness PASS section 11; 009 behavior qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, section 12 focused identity/UoW results; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -531,3 +531,107 @@ by T009 RED before T010 GREEN. T008–T093 are still NOT-STARTED here.
 This is not actual IDEA Web/identity acceptance, a new product baseline, PG5, deployment or merge.
 No application/test/migration/dependency source changed; no feature suite/Maven/package rerun
 was needed for this environment-only check. Verifier NOT-RUN; PR #47 Draft/Open; Issue #46 OPEN.
+
+## 12. Foundational identity and owner transaction execution — 2026-10-07
+
+Engineering disposition: **T008–T012 COMPLETE, focused foundation PASS**. Independent review of
+this implementation is NOT-RUN. Current exact executed application/test source is
+`91667fa0d00d25945f54a43d026b8d9dda5ed056`; later status-only publication does not change it.
+Readiness gates from section 11 remain PASS. No new requirement, product route, Permission,
+dependency, schema migration, live adoption or UI behavior was added in this unit.
+
+### 12.1 Published seam, source and command
+
+[Named fixture](../../apps/server/src/test/java/com/idea/ddm/iam/IamIntegrationFixtures.java)
+creates no implicit authority. [Real HTTP fixture](../../apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java)
+signs in using the existing session/CSRF contract and captures the Server principal on the
+existing protected session route; forged caller ActorId query/header is ignored. The password
+and cookie stay in private memory, not retained logs. Only the isolated ephemeral loopback HTTP
+fixture overrides cookie Secure; no production cookie/TLS change or HTTPS/Web claim.
+
+The existing read-only `OwnerSessionEligibility` port was already correct. T009/T010 therefore
+qualify previously implemented behavior GREEN, not sabotage it for RED. The new public
+`IdentityTransactions.executeOwner` seam derives Actor/Organization from that port, coordinates
+under lock 73003002 and calls owner-specific authority/state checks both before mutation and
+before commit. Mutation and required owner outcome/authorization/Audit use the same JDBC
+transaction; final accepted activity refresh shares its fate. SQL/commit errors do not claim
+confirmed rollback or authorize blind retry. Legacy mutation logic is unchanged; the new port
+does not implement a second evaluator or generic owner evidence framework.
+
+Published [runner and contract](../../tests/iam-ui-46/README.md) freezes source/hash before each
+execution. Byte-preserving command-local Git archive, local raw manifest check, archive transfer
+identity and remote raw check all precede Maven. Final source exports **102/102 PASS** both
+locally and remotely. Both final runs use archive SHA-256
+`1e5e540e2e204fbd10ebfda2300dc3e6a9b4c750b6189c29812c26274d5f6666` and manifest SHA-256
+`0a23d78c45db290432ce55936526b631ca969c0d639b1d3942227fc015b7f748`.
+
+Exact commands (each after transfer/preflight, not on an uncommitted worktree):
+
+```bash
+bash /home/phuclam/idea-iam-ui-20261007-46/run-transaction-green-03/source/tests/iam-ui-46/run-owner-tests.sh 91667fa0d00d25945f54a43d026b8d9dda5ed056 0a23d78c45db290432ce55936526b631ca969c0d639b1d3942227fc015b7f748 transaction-green-03 IdentityTransactionsTest 11 PASS
+bash /home/phuclam/idea-iam-ui-20261007-46/run-owner-qualification-03/source/tests/iam-ui-46/run-owner-tests.sh 91667fa0d00d25945f54a43d026b8d9dda5ed056 0a23d78c45db290432ce55936526b631ca969c0d639b1d3942227fc015b7f748 owner-qualification-03 OwnerSessionEligibilityTest 10 PASS
+```
+
+Installed JDK 25.0.4.1+1 / Maven 3.9.16, exact 82 toolchain and 544 resolved-input pins pass
+pre/postflight. Only offline direct resources/testResources/compile/testCompile/Surefire goals;
+no clean, lifecycle Web exec, package, Node, download or installation. PostgreSQL database is
+only `idea_ddm_iam_ui_20261007_46`, separate real `idea_ddm_migrator` / `idea_ddm_app` roles,
+fresh source-marked `iam_ui_<UUIDhex>` schema per class/run. No public-schema migration.
+
+### 12.2 Truthful execution lineage
+
+| Run | Exact source | Actual result / retained interpretation |
+|---|---|---|
+| export diagnostic | 6601c508dc090618e0d3d46fb8b49b946b96be1a | Three Git CRLF warning lines contaminated the first manifest generation; stopped at local raw check. No transfer/Maven/DB. Preserved local export; not runtime RED. |
+| owner-qualification-01 | 98df712c24987d60688cbe963737f96de0f248ae | 1/1 PASS, 3.732s; exact Server-derived Actor/Org, read-only app transaction. |
+| owner-qualification-02 | bf005bf80947f98e9db363bbfa817121ec463b21 | 10/10 PASS, 5.935s; no production eligibility change. |
+| transaction-red-01 | 8b54b7cb29745ccaa381dc52ed98e9698ec8cfe2 | Compile diagnostic: fixture extraction left a stale clock identifier. Tests NOT-RUN; no schema created; not genuine RED. |
+| transaction-red-02 | d5b670eb479eb14d93015cf81bb341a706bbece6 | Genuine executed RED: 1 test / 1 error, `UnsupportedOperationException: Owner transaction seam not yet implemented`. Existing F03 logic not sabotaged. |
+| transaction-green-01 | 29804c2b9275dbccf26f1a24c85556f061ccfd6b | 1/1 PASS, 3.747s after minimum new owner transaction implementation. |
+| transaction-green-02 | 747361d7f075385716f2ac93fec9ebaea3541293 | 10 tests: 7 PASS / 3 FAIL, 0 error/skip, 26.42s. Two lock-observation assertions used a cached transaction statistics snapshot; expected-owner-state test incorrectly changed the caller's security version and correctly got IAM refusal first. Preserved failed run; no production defect inferred. |
+| transaction-green-03 | 91667fa0d00d25945f54a43d026b8d9dda5ed056 | **11/11 PASS**, 0 failure/error/skip, 7.077s. Separate autocommit lock observer, separate owner-state target, added affected legacy lifecycle regression; production bytes unchanged from green-02. |
+| owner-qualification-03 | 91667fa0d00d25945f54a43d026b8d9dda5ed056 | **10/10 PASS**, 0 failure/error/skip, 5.959s on the same final source after shared-fixture/UoW changes. |
+
+Eligibility covers real principal/forged Actor refusal, no-session raw Actor refusal, revoked,
+stale security version, disabled Account/Actor, half-open idle 2h and absolute 8h boundaries,
+different runtime instance and required caller-owned transaction. The runtime case uses a second
+SessionService instance, not a claim of full process restart/recovery qualification.
+
+Owner tests cover ACCEPTED mutation + one owner outcome + two authorization rows + Audit;
+no-assignment refusal; expiry during work; suppressed required outcome/authorization/Audit;
+deferred commit failure including activity rollback; real PostgreSQL wait then security-version
+change/assignment revocation; final expected-state refusal. Existing authenticated account
+create/disable/re-enable retains Actor/Account/Login IDs, PENDING semantics, zero implicit roles,
+history and accepted evidence. This one affected regression is not the complete F03 83-test suite.
+
+T012 supplies shared current-owner callbacks; new Project membership/delegation semantics are
+still T016–T019 and owner-story work, not qualified by legacy AA fixture authority. No actual
+new RBAC/Project/Group/API/UI/adoption behavior, full foundation T024 or whole-feature acceptance
+is inferred. Next is **T013 schema/privilege RED → T014 additive successor**.
+
+### 12.3 Database cleanup and retained log identity
+
+| Run | Exact owned schema | Raw Maven log SHA-256 |
+|---|---|---|
+| owner-qualification-01 | iam_ui_f7871d152b6a4a878ce8923c0cd283a4 | daca393b989037a10a1f74f9c1a783c896add070d8c90650c13dcb4c956912dc |
+| owner-qualification-02 | iam_ui_3357bf2a78b6404b9eabd8dd5b669600 | 62cccd830e63e5e48a8a2a2bf80fb3bf8979c698b3d19d6cd01b3339cc737f73 |
+| transaction-red-02 | iam_ui_69acca16092c4453b840d31df786db14 | 7f401aac071598784d096cbb041671541a6a9b21234ec39aaa1f0e888dfc09d4 |
+| transaction-green-01 | iam_ui_8a6bf5d9c48b44bcac62bf2718e497f4 | 5de3207030fc11471f98840e0b7521d5402de25d508553bbec09cfac610f9b3b |
+| transaction-green-02 | iam_ui_82ad1bc9f89449c0bf20756d3b1c0190 | d5ae87f0c20f3d3c61b3eb7191f9802773e7cb6567f46e3c687df508271314c3 |
+| transaction-green-03 | iam_ui_c87242f831894b2fa9b232a5e7a55879 | a473a08804a1413b3a7307e7f3333bd68f0cc38460a2a182032c7465ac5a27b8 |
+| owner-qualification-03 | iam_ui_95ea5e00c3424e44a3d062791908119e | 14fe401399cbeec555beab25f647b27aae171b43a8687b36b35a5d5f6ffb9488 |
+
+Private logs are `/home/phuclam/idea-iam-ui-20261007-46/run-<label>/maven-private.log`, mode 600.
+The compile diagnostic log is SHA-256
+`91a9ee631992902b9d435594c97795169ac619209a3cb1ceb1152a2b2595f6c3`.
+Hashes identify retained files; raw-host independent inspection via GitHub remains unavailable.
+No password/cookie/proof is reproduced here.
+
+Every created schema above was dropped only after the owned Boot/test JVM exited and the exact
+DB/schema owner/source marker was rechecked. All postflights report **exact schema remainder 0,
+public tables 0, database retained**, source/tool hashes unchanged. Final source pre/postflight
+log SHA-256 is byte-identical
+`b82d566744985309932caa20a3b29ad35211ea7a7da0d112c84e8a5942cbe9a4`.
+Prior failed exports/runs/logs remain retained; no broad cleanup, preview/company data or DB drop.
+
+PR #47 stays Draft/Open, Issue #46 OPEN. No timer action, verifier, merge or deployment.
