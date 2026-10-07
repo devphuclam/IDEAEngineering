@@ -1,0 +1,14 @@
+{
+  "name": "@idea-ddm/contract-exporter",
+  "version": "0.1.0",
+  "description": "API Contract Document & Spreadsheet Exporter for IDEA Engineering",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export": "node export.mjs"
+  },
+  "dependencies": {
+    "docx": "^9.2.0",
+    "exceljs": "^4.4.0"
+  }
+}
