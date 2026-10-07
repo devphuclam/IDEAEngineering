@@ -27,7 +27,30 @@ public final class IdentityTransactions {
     }
 
     public <T> T executeOwner(ActorContext context, OwnerCommand<T> command) {
-        throw new UnsupportedOperationException("Owner transaction seam not yet implemented");
+        java.util.Objects.requireNonNull(command);
+        if (ownerEligibility == null) throw new IllegalStateException("Current owner eligibility is required");
+        try (var connection = dataSource.getConnection()) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            try {
+                var actor = ownerEligibility.admit(connection, context);
+                ownerEligibility.coordinateCommit(connection, context, actor, false);
+                command.revalidate(connection, actor);
+                var value = command.apply(connection, actor);
+                // Owner authority/expected state and IAM are current, not an admission snapshot.
+                command.revalidate(connection, actor);
+                ownerEligibility.coordinateCommit(connection, context, actor, true);
+                connection.commit();
+                return value;
+            } catch (SQLException | RuntimeException exception) {
+                try { connection.rollback(); }
+                catch (SQLException rollback) { exception.addSuppressed(rollback); }
+                throw exception;
+            }
+        } catch (SQLException exception) {
+            // A commit exception never means confirmed rollback or permission to blindly retry.
+            throw new IllegalStateException("Owner command unavailable; commit outcome must be resolved", exception);
+        }
     }
 
     IdentityTransactions(DataSource dataSource) { this(dataSource, (connection, context) -> {}); }
