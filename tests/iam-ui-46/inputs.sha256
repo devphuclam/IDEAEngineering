@@ -133,7 +133,7 @@ d92fb3d3e7f30eac08c442cd29eb7f2f4f0b2bdb32c8770e556cf16f6eb76e86  apps/web/src/f
 efbbdfb5c12622fcbe79d55061ec0501c96645c062a2d95add52f66854f1a949  apps/web/src/features/iamIntegration/IamStatus.tsx
 e6151002ca3806a1fbe8b021baf1a5182a2cc48f1fe1ff08157e9bf6c7808c05  apps/web/src/main.tsx
 799a688fee17d018542722c0fbc5af4249b0fff0080ebb1d35795d0c5b2d27f3  apps/web/src/styles/admin.css
-7b9a274eee5478d0749a2bd509e9dd16b6bbf05cc44852cc2257e2d3e4dcfbad  apps/web/src/styles/auth.css
+ab81312f6d4c65f5a2b404648ef36736a781ca69ec2dd869537515879b961acc  apps/web/src/styles/auth.css
 25f61fde18d0e4a116b108c76a07ff98e410c398d6d3866026d27479bd8a9532  apps/web/src/utils/identity.ts
 65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5  apps/web/src/vite-env.d.ts
 d16dc856244c5bdf87fc266e9c866f5ce04edc7499df6c827c8c3dec7fc887cb  apps/web/tsconfig.json
