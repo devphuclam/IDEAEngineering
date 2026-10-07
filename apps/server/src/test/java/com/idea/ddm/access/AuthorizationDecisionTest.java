@@ -280,6 +280,30 @@ class AuthorizationDecisionTest {
         refuseAfterSecurityChange("UPDATE actor SET disabled_at=? WHERE actor_id=?", false);
     }
 
+    @Test void exactIdleExpiryStillRefusesEvenWithApplicableRoleContent() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
+        var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V1, scope, NOW.minusSeconds(1), null);
+        projects.insert("UPDATE session_record SET issued_at=?,last_eligible_activity_at=?,expires_at=? WHERE actor_id=?",
+                NOW.minusSeconds(10800), NOW.minusSeconds(7200), NOW.plusSeconds(18000), actor.identity().actorId());
+        var result = decide(actor, "account.create", scope, NOW);
+        assertFalse(result.eligible());
+        assertFalse(result.rbacGranted());
+        assertTrue(result.paths().isEmpty());
+    }
+
+    @Test void exactAbsoluteExpiryStillRefusesEvenWithRecentActivityAndApplicableRoleContent() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
+        var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V1, scope, NOW.minusSeconds(1), null);
+        projects.insert("UPDATE session_record SET issued_at=?,last_eligible_activity_at=?,expires_at=? WHERE actor_id=?",
+                NOW.minusSeconds(28800), NOW, NOW, actor.identity().actorId());
+        var result = decide(actor, "account.create", scope, NOW);
+        assertFalse(result.eligible());
+        assertFalse(result.rbacGranted());
+        assertTrue(result.paths().isEmpty());
+    }
+
     @Test void missingAuthenticatedContextAndUnavailableEvidenceCannotProduceAUsableGrant() throws Exception {
         var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
         var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
@@ -348,6 +372,34 @@ class AuthorizationDecisionTest {
             assertEquals(Set.of(assignment), AuthorizationDecisionService.organizationGrants(connection, eligible, "account.create").stream()
                     .map(AuthorizationDecisionService.GrantPath::assignmentId).collect(Collectors.toSet()));
             connection.rollback();
+        }
+    }
+
+    @Test void evaluatorReadsDoNotRefreshSessionRecordEvidenceOrAcquireTheSecurityWriteLock() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.PA_ORGANIZATION);
+        var project = projects.project(actor.identity());
+        var organization = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.PA_V1, organization, NOW.minusSeconds(1), null);
+        try (var connection = readTransaction()) {
+            var before = snapshot(connection);
+            assertTrue(policy.evaluate(connection, actor.context(), "project.update",
+                    AuthorizationDecisionService.Scope.project(project.organizationId(), project.projectId())).rbacGranted());
+            assertEquals(before, snapshot(connection));
+            try (var statement = connection.createStatement(); var row = statement.executeQuery(
+                    "SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND locktype='advisory'")) {
+                assertTrue(row.next());
+                assertEquals(0, row.getLong(1));
+            }
+            connection.rollback();
+        }
+    }
+
+    private String snapshot(Connection connection) throws SQLException {
+        try (var statement = connection.createStatement(); var row = statement.executeQuery(
+                "SELECT (SELECT count(*) FROM iam_owner_outcome)||'|'||(SELECT count(*) FROM identity_authorization_decision)"
+                + "||'|'||(SELECT count(*) FROM audit_evidence)||'|'||(SELECT max(last_eligible_activity_at) FROM session_record)")) {
+            assertTrue(row.next());
+            return row.getString(1);
         }
     }
 
