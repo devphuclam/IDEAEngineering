@@ -81,7 +81,10 @@ else
 fi
 [[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_namespace WHERE nspname='$schema'") == 0 ]] || exit 8
 [[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_tables WHERE schemaname='public'") == 0 ]] || exit 8
-[[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_namespace WHERE obj_description(oid,'pg_namespace') LIKE 'IDEA_IAM_UI_RUN:$1:%'") == 0 ]] || exit 8
+while read -r regression_schema; do
+  [[ $regression_schema =~ ^iam_ui_[0-9a-f]{32}$ ]] || exit 8
+  [[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_namespace WHERE nspname='$regression_schema'") == 0 ]] || exit 8
+done < <(grep -oE 'IAM_REGRESSION_SCHEMA_READY=iam_ui_[0-9a-f]{32}' "$owned/maven-private.log" | cut -d= -f2 | sort -u)
 unset PGPASSWORD IDEA_DATABASE_APP_PASSWORD IDEA_DATABASE_MIGRATION_PASSWORD
 cd "$source_root"
 verify_tools

@@ -62,7 +62,7 @@ if [[ $4 == start ]]; then
   tls=/home/phuclam/idea-iam-ui-20261007-46/tls-01
   [[ $(sha256sum "$tls/fixture.p12" | cut -d' ' -f1) == cb9c804289e7d3e6b4d7e6c9f665a61194b42eac7b55146f5eecd023ef8cab2f ]] || exit 4
   [[ $(stat -c '%U:%a' "$tls/password.private") == phuclam:600 ]] || exit 4
-  export IDEA_DATABASE_SCHEMA="$IDEA_IAM_TEST_SCHEMA" IDEA_SERVER_TLS_ENABLED=true IDEA_SERVER_TLS_KEY_STORE="$tls/fixture.p12"
+  export IDEA_DATABASE_SCHEMA="$IDEA_IAM_TEST_SCHEMA" IDEA_SERVER_TLS_ENABLED=true IDEA_SERVER_TLS_KEY_STORE="$tls/fixture.p12" IDEA_SERVER_TLS_KEY_ALIAS=iam-ui-46
   export IDEA_SERVER_TLS_KEY_STORE_PASSWORD="$(cat "$tls/password.private")"
   nohup "$JAVA_HOME/bin/java" -Djava.net.preferIPv4Stack=true -jar "$jar" --server.address=127.0.0.1 --server.port=18446 --spring.flyway.enabled=false --idea.identity.manual-credential-delivery.enabled=true --idea.dev-api.enabled=false > "$owned/server-private.log" 2>&1 < /dev/null &
   printf '%s\n' "$!" > "$owned/server.pid"
