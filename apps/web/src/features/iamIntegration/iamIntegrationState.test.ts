@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { initialIamState } from "./iamIntegrationState";
-import { createIamClient } from "../../api/iamClient";
+import { initialIamState, settledIamState } from "./iamIntegrationState";
+import { createIamClient, type IamResult } from "../../api/iamClient";
 
 describe("Shared IAM view state", () => {
   it("starts loading with no fabricated Actor, Organization, role or successful result", () => {
@@ -124,6 +124,56 @@ describe("Shared IAM view state", () => {
       const client = createIamClient(async (path) => path === "/api/v1/identity/csrf"
         ? Response.json({ headerName: "X-CSRF-TOKEN", token: "test-csrf" }) : new Response("PRIVATE_RESPONSE_SENTINEL", { status }));
       expect(await client.signIn("synthetic.login", "test-only-credential")).toEqual({ kind: "refused", status });
+    }
+  });
+
+  it("keeps loading, authorized empty, refusal, stale, unavailable and unresolved distinct without stale authority", () => {
+    expect(initialIamState()).toEqual({ kind: "loading" });
+    const empty: IamResult<string[]> = { kind: "confirmed", value: [] };
+    expect(settledIamState(empty, (items) => items.length === 0)).toEqual({ kind: "empty" });
+    const nonempty: IamResult<string[]> = { kind: "confirmed", value: ["authorized-server-result"] };
+    expect(settledIamState(nonempty)).toEqual({ kind: "ready", value: ["authorized-server-result"] });
+    for (const result of [{ kind: "refused", status: 401 }, { kind: "refused", status: 403 },
+      { kind: "stale" }, { kind: "unavailable" }, { kind: "unresolved" }] as const) {
+      const state = settledIamState(result, () => true);
+      expect(state).toEqual(result);
+      expect(state).not.toHaveProperty("value");
+    }
+  });
+
+  it("acquires CSRF anew for every login/logout instead of retaining a proof across security transitions", async () => {
+    let acquired = 0;
+    const client = createIamClient(async (path, init) => {
+      if (path === "/api/v1/identity/csrf") return Response.json({ headerName: "X-CSRF-TOKEN", token: `fresh-test-proof-${++acquired}` });
+      expect(new Headers(init.headers).get("X-CSRF-TOKEN")).toBe(`fresh-test-proof-${acquired}`);
+      return path.endsWith("/logout") ? new Response(null, { status: 204 })
+        : Response.json({ actorId: "00000000-0000-4000-8000-000000000103" });
+    });
+    expect((await client.signIn("synthetic.login", "test-only-credential")).kind).toBe("confirmed");
+    expect((await client.signOut()).kind).toBe("confirmed");
+    expect((await client.signIn("synthetic.login", "test-only-credential")).kind).toBe("confirmed");
+    expect(acquired).toBe(3);
+  });
+
+  it("lost logout response and technical refusal remain unresolved and are not automatically retried", async () => {
+    for (const status of [null, 503]) {
+      let posts = 0;
+      const client = createIamClient(async (path) => {
+        if (path === "/api/v1/identity/csrf") return Response.json({ headerName: "X-CSRF-TOKEN", token: "test-csrf" });
+        posts++;
+        if (status === null) throw new Error("PRIVATE_DIAGNOSTIC_SENTINEL");
+        return new Response("PRIVATE_RESPONSE_SENTINEL", { status });
+      });
+      expect(await client.signOut()).toEqual({ kind: "unresolved" });
+      expect(posts).toBe(1);
+    }
+  });
+
+  it("truncated or impossible successful login response is unresolved, never fabricated authentication", async () => {
+    for (const body of ["{", "{}", '{"actorId":"not-a-uuid"}']) {
+      const client = createIamClient(async (path) => path === "/api/v1/identity/csrf"
+        ? Response.json({ headerName: "X-CSRF-TOKEN", token: "test-csrf" }) : new Response(body, { status: 200 }));
+      expect(await client.signIn("synthetic.login", "test-only-credential")).toEqual({ kind: "unresolved" });
     }
   });
 });
