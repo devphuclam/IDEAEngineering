@@ -13,6 +13,15 @@ import java.util.UUID;
 
 /** Project-owned read facts in the caller's transaction, not an authorization evaluator. */
 public final class ProjectGovernanceQueries {
+    public record Project(UUID projectId, UUID organizationId, String name, long version) {}
+    Project projectRow(Connection connection, UUID organization, UUID id) throws SQLException {
+        try(var q=connection.prepareStatement("SELECT display_name,version FROM project WHERE project_id=? AND organization_id=?")){
+            q.setObject(1,id);q.setObject(2,organization);try(var row=q.executeQuery()){
+                if(!row.next())throw new com.idea.ddm.iam.IamWebConfiguration.Refusal(com.idea.ddm.iam.IamWebConfiguration.RefusalReason.TARGET_NOT_AVAILABLE);
+                return new Project(id,organization,row.getString(1),row.getLong(2));
+            }
+        }
+    }
     public record Membership(UUID membershipId, Instant effectiveFrom, Instant effectiveUntil, long version) {}
     public record GroupPath(UUID groupId, Membership membership) {}
     public record ProjectFacts(UUID projectId, UUID organizationId, long version,
