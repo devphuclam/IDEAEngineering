@@ -30,8 +30,10 @@ e24273893e731da89a084d2cea4739701fafa47df28cca68ccf2c6e6710bd852  apps/server/sr
 19f564c5e33b44a8419ecdd07e21ce5aab37cff9987b129c7e46d92433fc6a03  apps/server/src/main/java/com/idea/ddm/identity/CredentialResetService.java
 28618dc17a09c89744e408ab6e32396039dde7ef5ca2fe0a4fca65db063223a3  apps/server/src/main/java/com/idea/ddm/identity/CredentialSetupService.java
 d60ccda7e9e9a7b9a3305aa57cc5afe9ab117969af7c7b52bdc5f7196cd4c1e8  apps/server/src/main/java/com/idea/ddm/identity/IdentityAccessPolicy.java
-56aa80d91d76e63d5279e5adc4008dfede4c28198b61ea6ec0de18d07316c954  apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java
+9091db0bccdc6304df7d415fcc0c2e9db228f7af8a25c1d14709b4fe1b180192  apps/server/src/main/java/com/idea/ddm/identity/IdentityAccountAdministration.java
+b591dd7317409b96ad12324469e81923869a1c2f6d86259ac0ffaf77f732a1e5  apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java
 8819a7663dfd9998e76721ee3083e6dfde02bc8a92bbfcd85a12b5d94084508e  apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java
+f4c62cb0093f1a42b9e38f955ee1e8e85842be91dac16241f883cce4db7b0027  apps/server/src/main/java/com/idea/ddm/identity/IdentityDirectoryQueries.java
 0747b07ca033165d2bb3eec0b04bd4ba2aea163fcd4d3c8d0a5484e2e224270c  apps/server/src/main/java/com/idea/ddm/identity/IdentityHttpSecurity.java
 5ec3927382b1a29b838a50d91cb9d40001cc6dfcf3eaea0f6866cf2a2dc140f7  apps/server/src/main/java/com/idea/ddm/identity/IdentityRefusal.java
 c91285a76d86e0ba4b6b2bd806b3ea5c397bfbf86615c03ea5cf37ecf741817d  apps/server/src/main/java/com/idea/ddm/identity/IdentityTransactions.java
@@ -81,6 +83,7 @@ c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/sr
 0f29ea9f531ca6d0af175504dfb7859eac33295c625460eadc2b6a68f847a2c7  apps/server/src/test/java/com/idea/ddm/iam/IamIntegrationFixtures.java
 c874c6742cf907bf6e5749837576d6577f8ffda001bd0b5554f6de691155c860  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java
+cd1631a044b989be95be19bb3c8a873867ef1b6ebece7f2fbc280696849a09da  apps/server/src/test/java/com/idea/ddm/identity/CredentialProofReissueTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
