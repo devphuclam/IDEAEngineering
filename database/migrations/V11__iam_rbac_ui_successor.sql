@@ -278,3 +278,50 @@ CREATE TRIGGER permission_registry_immutable BEFORE UPDATE OR DELETE OR TRUNCATE
     ON permission_registry FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
 CREATE TRIGGER identity_role_definition_immutable BEFORE UPDATE OR DELETE OR TRUNCATE
     ON identity_role_definition FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
+
+-- Extend the sole assignment model. revoked_at is still the only canonical termination flag.
+ALTER TABLE identity_role_assignment ALTER COLUMN principal_actor_id DROP NOT NULL;
+ALTER TABLE identity_role_assignment
+    ADD COLUMN principal_group_id UUID,
+    ADD COLUMN scope_kind VARCHAR(16) NOT NULL DEFAULT 'ORGANIZATION',
+    ADD COLUMN project_id UUID,
+    ADD COLUMN effective_from TIMESTAMPTZ,
+    ADD COLUMN effective_until TIMESTAMPTZ,
+    ADD COLUMN ended_by UUID,
+    ADD COLUMN end_reason VARCHAR(500),
+    ADD COLUMN version BIGINT NOT NULL DEFAULT 1 CHECK(version>0);
+UPDATE identity_role_assignment SET effective_from=assigned_at;
+ALTER TABLE identity_role_assignment ALTER COLUMN effective_from SET NOT NULL;
+ALTER TABLE identity_role_assignment ALTER COLUMN effective_from SET DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE identity_role_assignment
+    ADD CONSTRAINT assignment_one_principal CHECK ((principal_actor_id IS NOT NULL) <> (principal_group_id IS NOT NULL)),
+    ADD CONSTRAINT assignment_typed_scope CHECK ((scope_kind='ORGANIZATION' AND project_id IS NULL AND principal_group_id IS NULL)
+        OR (scope_kind='PROJECT' AND project_id IS NOT NULL)),
+    ADD CONSTRAINT assignment_period CHECK(effective_until IS NULL OR effective_until>effective_from),
+    ADD CONSTRAINT assignment_canonical_end CHECK(revoked_at IS NOT NULL OR (ended_by IS NULL AND end_reason IS NULL)),
+    ADD CONSTRAINT assignment_project_organization FOREIGN KEY(project_id,organization_id) REFERENCES project(project_id,organization_id),
+    ADD CONSTRAINT assignment_actor_organization FOREIGN KEY(principal_actor_id,organization_id) REFERENCES idea_account(actor_id,organization_id),
+    ADD CONSTRAINT assignment_group_project_organization FOREIGN KEY(principal_group_id,project_id,organization_id)
+        REFERENCES business_group(group_id,project_id,organization_id),
+    ADD CONSTRAINT assignment_assigner_organization FOREIGN KEY(assigned_by,organization_id) REFERENCES idea_account(actor_id,organization_id),
+    ADD CONSTRAINT assignment_ender_organization FOREIGN KEY(ended_by,organization_id) REFERENCES idea_account(actor_id,organization_id);
+
+-- Locate exactly the predecessor tuple constraint; do not guess its truncated generated name.
+DO $migration$
+DECLARE predecessor_name TEXT;
+BEGIN
+    SELECT c.conname INTO STRICT predecessor_name FROM pg_constraint c
+        WHERE c.conrelid='identity_role_assignment'::regclass AND c.contype='u'
+        AND (SELECT array_agg(a.attname::TEXT ORDER BY key.ordinality)
+            FROM unnest(c.conkey) WITH ORDINALITY AS key(attnum,ordinality)
+                JOIN pg_attribute a ON a.attrelid=c.conrelid AND a.attnum=key.attnum)
+            =ARRAY['principal_actor_id','role_version_id','organization_id']::TEXT[];
+    EXECUTE format('ALTER TABLE %I.identity_role_assignment DROP CONSTRAINT %I',current_schema(),predecessor_name);
+END;
+$migration$;
+CREATE UNIQUE INDEX assignment_unended_actor_organization ON identity_role_assignment(principal_actor_id,role_version_id,organization_id)
+    WHERE revoked_at IS NULL AND scope_kind='ORGANIZATION';
+CREATE UNIQUE INDEX assignment_unended_actor_project ON identity_role_assignment(principal_actor_id,role_version_id,project_id)
+    WHERE revoked_at IS NULL AND scope_kind='PROJECT' AND principal_actor_id IS NOT NULL;
+CREATE UNIQUE INDEX assignment_unended_group_project ON identity_role_assignment(principal_group_id,role_version_id,project_id)
+    WHERE revoked_at IS NULL AND principal_group_id IS NOT NULL;
