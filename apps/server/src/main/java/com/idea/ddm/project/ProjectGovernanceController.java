@@ -26,8 +26,7 @@ public final class ProjectGovernanceController {
     @GetMapping("/api/v1/projects/{id}")
     ResponseEntity<?> participant(Authentication auth,@PathVariable UUID id){return safe(200,owner.project(context(auth),null,id,true));}
     private ActorContext context(Authentication auth){
-        if(auth==null || !(auth.getPrincipal() instanceof SessionService.Identity identity))throw new IamWebConfiguration.Refusal(IamWebConfiguration.RefusalReason.INELIGIBLE_SESSION);
-        try{sessions.current(identity);return sessions.context(identity);}
+        try{return sessions.currentContext(auth);}
         catch(org.springframework.security.core.AuthenticationException refused){throw new IamWebConfiguration.Refusal(IamWebConfiguration.RefusalReason.INELIGIBLE_SESSION);}
     }
     static ResponseEntity<?> safe(int status,Object value){return ResponseEntity.status(status).cacheControl(CacheControl.noStore()).body(value);}
