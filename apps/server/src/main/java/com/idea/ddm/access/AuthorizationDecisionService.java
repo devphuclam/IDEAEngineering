@@ -81,6 +81,18 @@ public final class AuthorizationDecisionService {
         throw new SQLException("Consistent read snapshot or coordinated owner write required");
     }
 
+    /** Internal F03 compatibility: IAM already checked Account/Actor; HTTP also checked session.
+     *  Resolves the same exact grant model, not an alternate evaluator or a public auth boundary. */
+    public static List<GrantPath> organizationGrants(Connection connection, OwnerSessionEligibility.EligibleActor actor,
+            String permission) throws SQLException {
+        final Instant now;
+        try (var query = connection.createStatement(); var row = query.executeQuery("SELECT CURRENT_TIMESTAMP")) {
+            if (!row.next()) throw new SQLException("Current authorization time unavailable");
+            now = row.getTimestamp(1).toInstant();
+        }
+        return applicableAssignments(connection, actor.actorId(), permission, Scope.organization(actor.organizationId()), now, Optional.empty());
+    }
+
     private static List<GrantPath> applicableAssignments(Connection connection, UUID actorId, String permission,
             Scope scope, Instant now, Optional<ProjectGovernanceQueries.ProjectFacts> facts) throws SQLException {
         var paths = new ArrayList<GrantPath>();

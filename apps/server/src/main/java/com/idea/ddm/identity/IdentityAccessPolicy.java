@@ -1,5 +1,6 @@
 package com.idea.ddm.identity;
 
+import com.idea.ddm.access.AuthorizationDecisionService;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -26,17 +27,12 @@ final class IdentityAccessPolicy {
                 }
             }
         }
-        try (var statement = connection.prepareStatement("SELECT a.assignment_id,a.role_version_id "
-                + "FROM identity_role_assignment a JOIN identity_role_permission p USING(role_version_id) "
-                + "WHERE a.principal_actor_id=? AND a.organization_id=? AND a.revoked_at IS NULL "
-                + "AND a.assigned_at<=CURRENT_TIMESTAMP AND p.permission_code=? ORDER BY a.assignment_id LIMIT 1")) {
-            statement.setObject(1, context.actorId());
-            statement.setObject(2, organization);
-            statement.setString(3, permission);
-            try (var row = statement.executeQuery()) {
-                if (row.next()) return new Decision(context, organization, permission, true,
-                        row.getObject(1, UUID.class), row.getObject(2, UUID.class), null);
-            }
+        var paths = AuthorizationDecisionService.organizationGrants(connection,
+                new OwnerSessionEligibility.EligibleActor(context.actorId(), organization), permission);
+        if (!paths.isEmpty()) {
+            // Preserve F03's historical one-path evidence shape; do not rewrite retained decisions.
+            var first = paths.getFirst();
+            return new Decision(context, organization, permission, true, first.assignmentId(), first.roleVersionId(), null);
         }
         return new Decision(context, organization, permission, true, null, null, "NO_APPLICABLE_ASSIGNMENT");
     }
