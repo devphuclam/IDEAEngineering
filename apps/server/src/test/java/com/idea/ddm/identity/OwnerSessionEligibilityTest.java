@@ -107,7 +107,7 @@ class OwnerSessionEligibilityTest {
     @Test void newRuntimeCannotAdoptPersistedSessionMetadata() throws Exception {
         var context = signIn(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY));
         assertAdmitted(context);
-        var newRuntime = new SessionService(fixtures.appDataSource(), clock);
+        var newRuntime = new SessionService(fixtures.appDataSource(), http.clock);
         assertRefused(new OwnerSessionEligibility(newRuntime), context);
     }
 
