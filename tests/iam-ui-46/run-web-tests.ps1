@@ -27,16 +27,15 @@ function Check-Source {
 }
 $inputCount=Check-Source
 $cacheRoot='C:/Users/TD-999/Research/Projects/IDEA/IDEAEngineering/apps/web'
-$lock=Get-Content -LiteralPath ($web+'/package-lock.json') -Raw | ConvertFrom-Json
+$lock=Get-Content -LiteralPath ($web+'/package-lock.json') -Raw | ConvertFrom-Json -AsHashtable
 $projection=[Collections.Generic.List[object]]::new()
 $packages=0
 $archives=0
-foreach($property in $lock.packages.PSObject.Properties){
-    $path=$property.Name
+foreach($path in $lock.packages.Keys){
     if(!$path.StartsWith('node_modules/')){continue}
     $installed=$cacheRoot+'/'+$path
     if(!(Test-Path -LiteralPath $installed)){continue} # Optional non-Windows artifacts are not selected.
-    $package=$property.Value
+    $package=$lock.packages[$path]
     $actual=Get-Content -LiteralPath ($installed+'/package.json') -Raw | ConvertFrom-Json
     if($actual.version -ne $package.version){throw ('Locked version drift: '+$path)}
     if($package.integrity -notmatch '^sha512-([A-Za-z0-9+/=]+)$'){throw 'Unpinned archive'}

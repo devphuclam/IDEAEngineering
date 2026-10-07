@@ -53,5 +53,12 @@ public class IamWebConfiguration {
             // Never serialize/log exception text, SQL, request fields, credentials or causes.
             return refused(new Refusal(RefusalReason.UNAVAILABLE));
         }
+
+        @ExceptionHandler({org.springframework.http.converter.HttpMessageNotReadableException.class,
+                org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class,
+                org.springframework.web.bind.MissingServletRequestParameterException.class})
+        ResponseEntity<SafeRefusal> invalidShape(Exception ignored) {
+            return refused(new Refusal(RefusalReason.INVALID_INPUT));
+        }
     }
 }
