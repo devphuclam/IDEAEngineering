@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { createIamClient, type AccountPage, type AccountView, type AdministrationContext, type IamResult, type PrivateProof, type ProofPurpose } from "../../api/iamClient";
 import { CredentialProofHandoff } from "../credentials/CredentialProofHandoff";
 import { outcomeMessage } from "../iamIntegration/IamStatus";
+import { AccountsView } from "../../components/admin/AccountsView";
 
 const client = createIamClient();
 type Delivery = PrivateProof & { accountId: string; loginIdentityId: string; purpose: ProofPurpose };
@@ -17,6 +18,8 @@ export function AccountAdministrationPage({ context, onInvalidated }: { context:
   const [delivery, setDelivery] = useState<Delivery | null>(null);
   const [unresolved, setUnresolved] = useState(false);
   const [lastOperation, setLastOperation] = useState("");
+  const [showCreate, setShowCreate] = useState(false);
+  const createName = useRef<HTMLInputElement>(null);
   const epoch = useRef(0);
   const heading = useRef<HTMLHeadingElement>(null);
   const messageRef = useRef<HTMLParagraphElement>(null);
@@ -48,7 +51,7 @@ export function AccountAdministrationPage({ context, onInvalidated }: { context:
     try {
       const result = await client.createAccount({ operationId, organizationId: context.organizationId, displayName: String(data.get("displayName")), login: String(data.get("login")) });
       setUnresolved(result.kind === "unresolved");
-      if (result.kind === "confirmed") { form.reset(); await load(); await select(result.value.accountId); setMessage("Account PENDING đã tạo. Chưa có credential, membership hoặc Role Assignment tự động."); }
+      if (result.kind === "confirmed") { form.reset(); setShowCreate(false); await load(); await select(result.value.accountId); setMessage("Account PENDING đã tạo. Chưa có credential, membership hoặc Role Assignment tự động."); }
       else refuse(result);
     } finally { setBusy(false); requestAnimationFrame(() => messageRef.current?.focus()); }
   }
@@ -74,25 +77,19 @@ export function AccountAdministrationPage({ context, onInvalidated }: { context:
     } finally { setBusy(false); requestAnimationFrame(() => messageRef.current?.focus()); }
   }
   return <div className="account-layout">
-    <section className="account-list" aria-labelledby="accounts-title">
-      <div className="section-heading"><div><p className="eyebrow">Identity administration</p><h1 id="accounts-title">Tài khoản IDEA</h1></div><span className="scope-badge">Organization</span></div>
-      <p>Quản trị Account và credential. Không cấp quyền Project hoặc dữ liệu kỹ thuật ngầm.</p>
-      <p ref={messageRef} tabIndex={-1} role="status" className="status-message" aria-live="polite" data-testid="account-status">{message}</p>
-      {lastOperation && <p className="hint">Operation: <code>{lastOperation}</code></p>}
-      {can("account.read") && <form className="filter-row" onSubmit={event => { event.preventDefault(); void load(); }}>
-        <label>Tìm tên hoặc login<input value={filter} onChange={event => setFilter(event.target.value)} maxLength={200} disabled={busy} /></label>
-        <button disabled={busy}>Tìm</button><button type="button" disabled={busy} onClick={() => void load(page?.offset ?? 0)}>Tải lại</button>
-      </form>}
-      {loading && <p>Đang đọc danh sách từ Server…</p>}
-      {page && <><div className="table-scroll"><table><caption className="sr-only">Account hiện tại trong phạm vi được phép</caption><thead><tr><th>Tên</th><th>Login</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>
-        {page.items.map(account => <tr key={account.accountId}><td>{account.displayName}</td><td>{account.loginIdentities.map(login => login.normalizedLogin).join(", ") || "Chưa có Login Identity"}</td><td><span className={`state ${account.status.toLowerCase()}`}>{account.status}</span></td>
-          <td><button type="button" disabled={busy} onClick={() => void select(account.accountId)} aria-label={`Xem ${account.displayName}`}>Chi tiết</button></td></tr>)}
-      </tbody></table></div><div className="actions"><button type="button" disabled={busy || page.offset === 0} onClick={() => void load(Math.max(0, page.offset - page.limit))}>Trang trước</button><button type="button" disabled={busy || !page.hasMore} onClick={() => void load(page.offset + page.limit)}>Trang sau</button></div></>}
-      {can("account.create") && <form onSubmit={event => void create(event)} className="form-card" aria-label="Tạo Account PENDING"><fieldset disabled={busy || unresolved}><legend>Tạo Account PENDING</legend>
-        <label>Tên hiển thị<input name="displayName" maxLength={160} required /></label><label>Login<input name="login" maxLength={254} autoComplete="off" required /></label>
-        <p className="hint">Không tạo mật khẩu tạm. Người nhận tự thiết lập credential qua proof riêng.</p><button type="submit" className="primary">Tạo PENDING</button></fieldset></form>}
-    </section>
-    <aside className="account-detail" aria-label="Chi tiết Account">
+    <AccountsView accounts={page?.items ?? null} selectedAccountId={detail?.accountId} filter={filter} busy={busy} loading={loading}
+      canRead={can("account.read")} canCreate={can("account.create") && !unresolved} onFilterChange={setFilter}
+      onSearch={event => { event.preventDefault(); void load(); }} onReload={() => void load(page?.offset ?? 0)}
+      onSelectAccount={account => void select(account.accountId)}
+      onOpenCreate={() => { setShowCreate(true); requestAnimationFrame(() => createName.current?.focus()); }}
+      status={<><p ref={messageRef} tabIndex={-1} role="status" className="status-message" aria-live="polite" data-testid="account-status">{message}</p>
+        {lastOperation && <p className="hint">Operation: <code>{lastOperation}</code></p>}</>}>
+      {page && <div className="actions"><button type="button" className="admin-btn" disabled={busy || page.offset === 0} onClick={() => void load(Math.max(0, page.offset - page.limit))}>Trang trước</button><button type="button" className="admin-btn" disabled={busy || !page.hasMore} onClick={() => void load(page.offset + page.limit)}>Trang sau</button></div>}
+      {showCreate && can("account.create") && <form onSubmit={event => void create(event)} className="form-card" aria-label="Tạo Account PENDING"><fieldset disabled={busy || unresolved}><legend>Tạo Account PENDING</legend>
+        <label>Tên hiển thị<input ref={createName} name="displayName" maxLength={160} required /></label><label>Login<input name="login" maxLength={254} autoComplete="off" required /></label>
+        <p className="hint">Không tạo mật khẩu tạm. Người nhận tự thiết lập credential qua proof riêng.</p><div className="actions"><button type="submit" className="admin-btn primary">Tạo PENDING</button><button type="button" className="admin-btn" onClick={() => setShowCreate(false)}>Hủy</button></div></fieldset></form>}
+    </AccountsView>
+    <aside className="admin-inspector" aria-label="Chi tiết Account"><div className="admin-inspector-body">
       {!detail ? <p>Chọn Account để xem dữ liệu thực tế và thao tác được phép.</p> : <>
         <h2 ref={heading} tabIndex={-1}>{detail.displayName}</h2><span className={`state ${detail.status.toLowerCase()}`}>{detail.status}</span>
         <dl><dt>Actor</dt><dd>{detail.actorId}</dd><dt>Account</dt><dd>{detail.accountId}</dd><dt>Security version</dt><dd>{detail.securityVersion}</dd></dl>
@@ -111,6 +108,6 @@ export function AccountAdministrationPage({ context, onInvalidated }: { context:
       </>}
       {unresolved && <p role="alert">Kết quả chưa rõ: các mutation đang bị khóa, không tự retry. Tải lại để xem trạng thái; quyết định thao tác mới chỉ sau khi đối chiếu Operation ở trên.</p>}
       {unresolved && <button type="button" disabled={busy} onClick={async () => { if (await load()) setUnresolved(false); }}>Đối chiếu lại trước thao tác mới</button>}
-    </aside>
+    </div></aside>
   </div>;
 }
