@@ -50,7 +50,7 @@ b2eee357bcc6741091c2a72f9004be862c58496668b30b7b0f2a041da4e6d578  apps/server/sr
 1998d773f0bd3f7150e789ef26672411e35efb970cd6f107f04bd05e61d21c42  apps/server/src/main/java/com/idea/ddm/migration/DatabaseMigrationCommand.java
 292e73ea96a89e795b15400781953eb7a7eda71d0e9bb89e9c0f886bcbda22e9  apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java
 e65639ed4312bbfe2bce12855ae9eaa3f5775e7fdb4d8db18923a1c127a67f75  apps/server/src/main/java/com/idea/ddm/ProcessHealthController.java
-94cc03840eb2aa75ed282467d76fb154b9e989d6dd4bb39e7d6fe8b946048b0c  apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceAdministration.java
+5ac8405bcedd292eed3c615a5a60fe1e82a208e24ffdd16ae7164e404c3f647c  apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceAdministration.java
 6b9cdc9970b79e987bbf31bfda8e8cbd9efedc9b1f7dec4114e0b1aeeed3904e  apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceController.java
 732cd18a72cf2aedfa8d3bb7c1fb8f40c7ef775a6b5b99f333505714acda620a  apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceQueries.java
 a8a7e1c62218959aa1f2dc33891f1a12c669eb19fe8383e22c4825ebd50458ad  apps/server/src/main/java/com/idea/ddm/project/ProjectParticipationAdministration.java
@@ -109,7 +109,7 @@ a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/sr
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
-99c631f2737e765f511db37ff0184b22832d835debc1126cb581c3ab4fdf254c  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
+3337b0744383052b9c4d309c19a4fd0ebb17cf900cffaa32bce7aaf6305bf2f3  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
 3c2d2056b7f76444f2ca11cfa44e3cd9ca02f2d694599b37c0b320913cb5e819  apps/server/src/test/java/com/idea/ddm/project/ProjectPrerequisiteFixture.java
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 22c5ae230a253b3a896cb3d7382a8d80b0acd57060334e65b78a19f4c33b0600  apps/web/index.html

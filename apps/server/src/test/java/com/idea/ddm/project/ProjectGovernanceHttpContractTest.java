@@ -128,7 +128,7 @@ class ProjectGovernanceHttpContractTest {
             var op=UUID.randomUUID();var input=Map.of("operationId",op,"organizationId",admin.organizationId(),"name","Exact retry Project","reason","Same committed intent");
             var first=post(client,"/api/v1/administration/projects",input);assertEquals(201,first.statusCode());
             var auditBefore=count("SELECT count(*) FROM audit_evidence WHERE operation_id='"+op+"'");var decisionBefore=count("SELECT count(*) FROM project_authorization_evidence WHERE operation_id='"+op+"'");
-            var replay=post(client,"/api/v1/administration/projects",input);assertEquals(201,replay.statusCode());assertEquals(first.body(),replay.body());
+            var replay=post(client,"/api/v1/administration/projects",input);assertEquals(201,replay.statusCode());assertEquals(json.readTree(first.body()),json.readTree(replay.body()),"JSON object ordering is not a wire contract");
             assertEquals(409,post(client,"/api/v1/administration/projects",Map.of("operationId",op,"organizationId",admin.organizationId(),"name","Changed Project","reason","Same committed intent")).statusCode());
             var refused=post(other,"/api/v1/administration/projects",input);assertEquals(403,refused.statusCode());assertFalse(refused.body().contains("Exact retry Project"));
             assertEquals(1,count("SELECT count(*) FROM project_owner_outcome WHERE operation_id='"+op+"'"));

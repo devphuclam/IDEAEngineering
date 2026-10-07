@@ -156,11 +156,12 @@ public final class ProjectGovernanceAdministration {
                     var current=authorization.evaluate(c,context,action,scope);
                     if(request==null){request=current;return;}
                     if(request.rbacGranted())require(current);
-                    if(!replay)retain(c,attempt,operation,"COMMIT",current);
+                    if(replay)require(authorization.evaluate(c,context,"project.admin.read",scope));
+                    else retain(c,attempt,operation,"COMMIT",current,actor.organizationId());
                 }
                 @Override public Reply apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException {
                     if(!request.rbacGranted()){
-                        retain(c,attempt,operation,"REQUEST",request);
+                        retain(c,attempt,operation,"REQUEST",request,actor.organizationId());
                         audit(c,operation,actor.actorId(),"project.authorization.refused",scope.organizationId(),"REFUSED","AUTHORITY_REFUSED");
                         return new Reply(null,RefusalReason.AUTHORITY_REFUSED);
                     }
@@ -174,7 +175,7 @@ public final class ProjectGovernanceAdministration {
                             }
                         }
                     }
-                    retain(c,attempt,operation,"REQUEST",request);
+                    retain(c,attempt,operation,"REQUEST",request,actor.organizationId());
                     JsonNode result; RefusalReason refused=null;
                     var savepoint=c.setSavepoint();
                     try { result=mutation.apply(c,actor); }
@@ -194,9 +195,9 @@ public final class ProjectGovernanceAdministration {
         if(reply.refusal()!=null)throw new Refusal(reply.refusal());
         return reply.value();
     }
-    private void retain(Connection c,UUID attempt,UUID operation,String stage,AuthorizationDecisionService.Decision d)throws SQLException {
+    private void retain(Connection c,UUID attempt,UUID operation,String stage,AuthorizationDecisionService.Decision d,UUID originatingOrganization)throws SQLException {
         insert(c,"INSERT INTO project_authorization_evidence(evidence_id,attempt_id,operation_id,stage,actor_id,organization_id,project_id,permission_code,evaluated_at,eligible,granted,paths,reason_code) VALUES (?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?)",
-                UUID.randomUUID(),attempt,operation,stage,d.actorId(),d.scope().organizationId(),d.scope().projectId(),d.permission(),Timestamp.from(d.evaluatedAt()),d.eligible(),d.rbacGranted(),json.writeValueAsString(d.paths()),d.refusal());
+                UUID.randomUUID(),attempt,operation,stage,d.actorId(),originatingOrganization,d.scope().projectId(),d.permission(),Timestamp.from(d.evaluatedAt()),d.eligible(),d.rbacGranted(),json.writeValueAsString(Map.of("requestedScope",d.scope(),"grantPaths",d.paths())),d.refusal());
     }
     private static void audit(Connection c,UUID operation,UUID actor,String action,UUID target,String outcome,String reason)throws SQLException {
         insert(c,"INSERT INTO audit_evidence(evidence_id,operation_id,actor_id,action,target_type,target_id,outcome,reason_code) VALUES (?,?,?,?,?,?,?,?)",
