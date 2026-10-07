@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 UI/UX and Interaction Specification
 
-> **Instance state**: controlled `Draft 0.13`. This document defines proposed user journeys,
+> **Instance state**: controlled `Draft 0.14`. This document defines proposed user journeys,
 > information architecture, interaction states, accessibility and localization obligations. The
 > accepted HTML prototype is design evidence only; it is not a production UI or conformance result.
 
@@ -13,15 +13,16 @@
 | Title | IDEA Engineering Core v0 UI/UX and Interaction Specification |
 | Owner | `Principal Product Author`; named product/design owner is `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.13` |
-| Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; `IE-SPEC-CORE-V0-001@0.14` |
+| Document Version | `0.14` |
+| Current IAM refinement review | 0.14 is a Draft successor under [IE-CHG-IAM-UI-001](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), reviewed spec e227cb1d; Core/design acceptance NOT-RUN. Historical approved source/hash records are not changed or inherited. |
+| Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001`; historical Spec brief `IE-SPEC-CORE-V0-001@0.14` retained; current IAM requirements input `IE-PROD-SREQ-001@0.16` is review-pending, not an approved replacement. |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors / Reviewers | Principal Product Author (assistant prepares) / project user (internal document review); required HCD, accessibility, Vietnamese and Japanese reviewers are not assigned |
-| Approvers | Product Decision Authority approved the exact predecessor Spec/Tech baseline on 17-09-2026; approval of this 0.13 successor interaction update is `NOT-RUN` |
+| Approvers | Product Decision Authority approved the exact predecessor Spec/Tech baseline on 17-09-2026; approval of the 0.13 predecessor interaction update and this 0.14 IAM successor remains `NOT-RUN`. Historical approval-record pins are unchanged. |
 | Source Links | [DOC-03](DOC-03-business-requirements.md), [DOC-04](DOC-04-software-requirements-specification.md), [current IDEA DDM workbench prototype](../../../../prototypes/idea-ddm-workbench.html), [administration prototype](../../../../prototypes/idea-ddm-administration.html), [retained earlier prototype](../../../../prototypes/controlled-document-workspace.html), [DDM/Aras workspace comparison](../../../research/2026-09-10-ddm-aras-checkout-reference-checkin-comparison.md), [standards register](../../../governance/standards-register.md) |
 | Downstream Links | [DOC-05](DOC-05-architecture-description.md), [DOC-06](DOC-06-data-integration-and-migration-specification.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md), future UI implementation/VEV |
 | Evidence / Claim Status | User-reviewed prototype direction; requirements/design are `Draft`; usability/accessibility/locale execution `NOT-RUN` |
-| Change History | 0.13: distinguish Server control status from direct Artifact Gateway byte progress; add useful visible location-selection, verification and durability-policy states without exposing provider secrets; upload/replication success remains separate from Check-in/Release success; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.12: distinguish BOM export candidate/private custody from a retained/Current BOM Representation; [IE-CHG-ARCH-CORR-003](registers/CHG-2026-09-12-architecture-consistency-correction-003.md). Earlier history remains in controlled change records. |
+| Change History | 0.14: Clarify administrative scope versus participation and exact-version/multi-role UI confirmation; no runtime qualification. [IE-CHG-IAM-UI-001](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md). 0.13: distinguish Server control status from direct Artifact Gateway byte progress; add useful visible location-selection, verification and durability-policy states without exposing provider secrets; upload/replication success remains separate from Check-in/Release success; [IE-CHG-VAULT-XFER-001](registers/CHG-2026-09-17-multi-location-vault-transfer-architecture.md). 0.12: distinguish BOM export candidate/private custody from a retained/Current BOM Representation; [IE-CHG-ARCH-CORR-003](registers/CHG-2026-09-12-architecture-consistency-correction-003.md). Earlier history remains in controlled change records. |
 | Access Classification | `INTERNAL`; prototype uses synthetic data only |
 | Retention Rule | Retain with the requirements/design baseline; exact organizational period `UNKNOWN`, owner Product Decision Authority, trigger before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit user-population and specialist-review gaps |
@@ -36,7 +37,7 @@
 | Reviewer / Approver | See exact Revision/Generation/Structure, inspect files/evidence, approve or reject with reason. | Primarily Web; possible Web-rendered Desktop. | Dense but readable evidence, keyboard navigation, no ambiguous action state. | Role accepted; eligible independent participant `BLOCKED`. |
 | Release Authority | Confirm complete exact Release Scope and respond to blockers. | Web/Desktop according to policy. | Clear scope differences, blocking reason and irreversible-action confirmation. | Named authority `UNKNOWN`. |
 | Account Administrator | Create, activate, suspend and recover Actors, IDEA Accounts and Login Identities; normally assigned to System Management personnel. | Account Administration Web work area. | Plain account status and consequences; no password display; clearly state that an account grants no Project or product access. | Project user may hold temporary bootstrap capability during development; production assignee, security policy and usability evidence remain unqualified. |
-| Project Administrator | Manage membership, direct Groups and approved Role Assignments inside an explicitly assigned Project. | Project Administration Web work area; Project selector is fixed to allowed Scopes. | Always show which Project is being changed; do not imply that another Project or account administration is included. | Initial holder/delegation limits and representative-usability evidence `UNKNOWN`. |
+| Project Administrator | Manage membership, direct Groups and approved Role Assignments inside explicitly covered Projects; creation needs explicit Organization-scoped authority. | Project Administration Web work area; Project selector is fixed to allowed Scopes. | Always show which Project is being changed; show Organization-wide breadth only when supported; no implicit creator participation/content. Administration does not require personal engineering membership. | Initial holder/delegation limits and representative-usability evidence `UNKNOWN`. |
 | Privileged Role Administrator | Maintain permitted Role Definitions and administrative Role Assignments under constrained delegation. | Role Administration Web work area, separated from routine Project membership. | Preview permissions, principal, Scope, effective period and consequence; highlight direct Actor and administrative assignments. | Security specialist review and production assignee `BLOCKED`. |
 | Product Configuration Administrator | Configure document classes, metadata, numbering, Workflow, locale and format profiles. | Product Configuration Web work area. | See Draft/active versions, affected product behavior and difference before activation; no account or RBAC control by implication. | Representative administrator and usability evidence `UNKNOWN`. |
 | Super Administrator | Bootstrap or recover the highest administration authority; not a routine operating role. | Protected Role Assignment recovery flow only. | Warn when the last effective recovery path is affected; never mix the role into normal engineering menus. | Development holder may be the project user; production recovery arrangement `UNKNOWN`. |
@@ -178,7 +179,7 @@ codes serve all surfaces; translations are resources, not business rules.
 | Locale Selector | Choose product UI locale. | `en`/`vi`/`ja`; persisted preference. | English fallback; no domain-state change. | `REQ-LOC-001/002/003` | `Draft` |
 | Account Session | Sign in/out, setup/recovery and reauthentication on each applicable surface. | Native-account/session result; never expose passwords or native tokens to rendered JavaScript. | Ready/loading/error/expired/disabled; preserve local candidates and distinguish account from document rights. | `REQ-IAM-001/003/004/006`; `UX-JRN-010` | `Draft` |
 | Account Administration | List/detail and controlled operations for Actors, IDEA Accounts and Login Identities. | Stable target/Scope, expected version, permitted account action and explicit confirmation. | No open signup, password read-back, Project/Group editing, Role Assignment or hidden product grant. | `REQ-IAM-002/003/005/007`; `REQ-AUTH-009`; `UX-JRN-009` | `Draft` |
-| Project Administration | List/detail and controlled operations for Project Memberships, Project Groups, direct Group Membership and permitted Project Role Assignments. | Project Scope, principal/group, expected version, allowed Role Definition and explicit confirmation. | Cannot create accounts, nest Groups, operate another Project, edit Role Definitions or grant disallowed/admin roles. | `REQ-AUTH-003…006/009/010`; `UX-JRN-014` | `Draft` |
+| Project Administration | Explicitly authorized Project creation/update plus list/detail operations for Project Memberships, Project Groups, direct Group Membership and permitted Project Role Assignments. | Project Scope, principal/group, expected version, allowed Role Definition and explicit confirmation; administrative applicability versus technical participation is visible. | Cannot create accounts, nest Groups, operate an uncovered Project, edit Role Definitions or grant disallowed/admin roles. | `REQ-AUTH-003…006/009…013`; `UX-JRN-014` | `Draft` |
 | Role Definition Administration | Prepare, validate, compare and activate Custom Role Definition successors from supported Permissions. | Built-in/custom status, base/successor version, Permission difference and assignment compatibility. | Built-in read-only; invalid/stale/self-authorizing candidate has no effect; prior assignments stay pinned and attributable. | `REQ-AUTH-001/002/009/010`; `UX-JRN-015`; RBAC-01/03 | `Draft` |
 | Role Assignment Administration | Create/end a constrained link among one Actor or Group, Role Definition version and Authorization Scope. | Principal, role, Scope, effective period, supported condition, reason, assigning Actor and expected version. | Direct Actor assignment is explicit; no cross-scope delegation, self-broadening or last-Super recovery removal; no general deny control. | `REQ-AUTH-003…007/009/010`; `UX-JRN-014/015`; RBAC-02/04…08 | `Draft` |
 | Effective Access Inspector | Explain a selected Actor/action/resource result without impersonation. | Server-established ActorContext, account status, Project/Group memberships, assignment/role-version/Scope path, immutable Authorization Decision and separately correlated owner Command Outcome/business-gate result. | Read-only, safely redacted, no “login as user” or client-supplied ActorId trust; missing evidence fails closed. | `REQ-AUTH-006…008`; `REQ-AUD-001/002`; `UX-JRN-015`; RBAC-09/10 | `Draft` |
@@ -263,6 +264,26 @@ retained results are required before any accessibility or usability PASS.
 | `VERIFICATION` | VVP/VEV identity, Workspace/Reference/transfer, RBAC/delegation, administration comprehension, item-organization, BOM, manual, assistive, Unicode and cross-locale task evidence | Candidate `IE-VVP-CORE-001@0.17`; all product execution `NOT-RUN` |
 | `RELEASE` | Future REL baseline and approved UI/locale claim scope | `NOT APPLICABLE` to this Draft |
 | `RENDITION` | Source-pinned DOCX/PDF identity/status | No rendition generated |
+
+### IAM integration interaction refinement — Draft 0.14
+
+Review-pending D09/D10/D11/Q15 under
+[IE-CHG-IAM-UI-001](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md)
+traces REQ-AUTH-001…014 and UX-JRN-009/010/014/015; no actual UI/usability qualification is claimed.
+
+Project creation explicitly distinguishes Organization authority from Project-only administration,
+and shows that membership/grants are separate. Administrative scope does not imply engineering
+participation. Group membership targets still need eligible same-Project participation.
+
+The assignment journey is Scope → person using Group filter OR explicit Group principal →
+exact Role/version → consequence/reason/confirm. Multi-role display retains independent assignment
+identities and applicable paths. Active Custom successors do not retarget assignments; replacement
+has a separately reviewed difference and expected state. PRA/Super are not administrator ranks.
+
+Use [the Web interaction contract](../../../../specs/009-iam-rbac-ui-integration/contracts/web-flow.md)
+for actual-data state, no fake fallback success, safe temporary proof handoff, refused/stale/
+unavailable/unresolved results and keyboard/focus. Passwords are not available to administrators.
+Console adoption is not a Web superuser button. Desktop and company identity remain separate work.
 
 <!-- AUTHOR CONTENT END -->
 

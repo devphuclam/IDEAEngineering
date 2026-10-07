@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.1` / Draft |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.2` / Draft planning successor |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer / applicable Product Decision Authority; NOT-RUN / NOT-APPLICABLE |
+| Reviewer / acceptance / effective date | Project Reviewer spec PASS at e227cb1d; Core/design review NOT-RUN / applicable Product Decision Authority / NOT-APPLICABLE |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
 | Supersession / evidence | No accepted predecessor replaced / read-only source inspection, no new execution/approval |
@@ -87,9 +87,33 @@ Product Configuration operations remain DESIGN. Group business-grant qualificati
 | Primary checkout preservation | PASS: main remains 876689d; user package.json change remains outside this worktree |
 | Application/build/browser/PostgreSQL tests; verifier | NOT-RUN: no implementation/environment change in this preparation |
 
-Grilling/shared understanding: confirmed, including Q14. Written spec: review pending. Preparation checks are document/source checks only, not independent acceptance. `$speckit-plan`, reviewer checklist, tasks and analyze have not run at this stage. New runtime/browser/PostgreSQL tests and verifier: NOT-RUN.
+Historical preparation at e227cb1d retained the table above. Project Reviewer subsequently reported SPEC REVIEW PASS for that exact head on 2026-10-07 and accepted planning, not implementation.
 
-After written-spec review, use this same feature directory for `$speckit-plan` and Matt Pocock `codebase-design`. Produce exact Permission/delegation catalogue and operation contracts before tasks, then read-only analyze. Do not create another generic framework or a competing spec.
+Current planning successor: [plan](plan.md), [research](research.md), [data](data-model.md),
+[exact Permission/delegation](contracts/permission-delegation.md), [operations](contracts/operations.md),
+[Web interaction](contracts/web-flow.md), [validation design](quickstart.md) and
+[reviewer-owned checklist](checklists/design-review.md). Q15 console adoption design is confirmed
+for inclusion, not execution. D09/D10/D11 are recorded in Draft owning Core successors;
+acceptance remains pending. New runtime/browser/PostgreSQL tests/verifier NOT-RUN.
+
+### Planning-successor author checks — 2026-10-07
+
+These checks concern document quality, not independent design approval or implementation.
+
+| Check | Actual result / limit |
+|---|---|
+| Changed publication scope | PASS: 21 Markdown documents only; no application/test/SQL/dependency/runtime/tooling file changed |
+| Local Markdown targets | PASS: 442 relative local file links resolve, zero missing; remote URL and runtime qualification not tested |
+| Accepted spec semantics | PASS: all 30 FR and 9 SC definition texts match e227cb1d ignoring line endings; only metadata/trace pointers updated |
+| Candidate identities | PASS: 25 unique Permission codes, 8 exact built-in versions, 32 unique operation IDs; 20 reviewer criteria all unchecked |
+| Core identity/version alignment | PASS: DOC-03@0.8, DOC-04@0.16 with 94 unique requirement IDs, DOC-05@0.27, DOC-06@0.19, DOC-08@0.14; historical approval records untouched |
+| Active-feature/template/hook checks | PASS: PathsOnly resolves 009; no unresolved case-sensitive authoring marker; no extension hooks registered; tasks.md not created |
+| Bounded factual review | Two read-only research workers identified and author repaired compatibility clarifications: exact AA/PA composition limits, Q15 exception, predecessor source pins, canonical revoked state, separate immutable-version staging and console throttle fate. This is not human acceptance. |
+| Whitespace/preservation | PASS: git diff --check; primary user package.json remains BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE and outside publication |
+| Runtime tests/browser/DB/build/verifier; tasks/Analyze | NOT-RUN / not started in this documentation stage |
+
+Next: review exact Core/design/contract packet and 20 unchecked checklist criteria. Then
+speckit-tasks → read-only speckit-analyze → explicit gated TDD. No tasks or competing spec generated here.
 
 First proposed implementation slice after readiness: actual session + authorized account directory/detail + account UI using qualified commands. Project/Group, assignment/delegation, Custom Role and access inspection follow in testable vertical slices. This is ordering, not execution approval.
 

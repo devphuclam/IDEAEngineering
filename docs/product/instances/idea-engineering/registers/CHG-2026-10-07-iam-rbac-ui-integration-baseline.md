@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.1` / Draft |
+| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.2` / Draft planning successor |
 | Product normativity / process state | INFORMATIVE record of confirmed intent and required baseline refinement / NOT-APPLICABLE |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / CODEX_ONLY |
-| Reviewer / acceptance authority | Project Reviewer / applicable Product Decision Authority; written-spec and Core/interface approval NOT-RUN |
+| Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d; Core/design review NOT-RUN / applicable Product Decision Authority; execution readiness NOT-RUN |
 | Baseline / publication / effective date | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / NOT-APPLICABLE until applicable approval |
 | Classification / retention | INTERNAL / retain decisions, predecessor sources and supersession history in Git |
 | Upstream | [DOC-04](../DOC-04-software-requirements-specification.md), [DOC-05](../DOC-05-architecture-description.md), [DOC-06](../DOC-06-data-integration-and-migration-specification.md), [DOC-08](../DOC-08-ui-ux-and-interaction-specification.md), [ADR-0012](../../../../adr/0012-use-principal-role-scope-rbac.md), [domain language](../../../../../CONTEXT.md) |
@@ -19,7 +19,7 @@
 
 The user wants the existing account/permission UI connected to actual native IDEA identity, scoped RBAC and Project/Group state. They do not want a standalone mock or only account CRUD. The confirmed presentation is retained where practical.
 
-The user approved the recommended design choices and confirmed Q14 on 2026-10-07. This is shared-understanding and documentation-preparation authorization. It is not evidence that the boss has accepted a successor PG2/PG3 baseline, that Project Reviewer has reviewed the written specification, or that implementation/readiness/runtime tests have passed.
+The user confirmed Q14 on 2026-10-07. At original spec head e227cb1df60e70a1294628b4f153ad50d8f034c6 this recorded preparation, not independent written review. Subsequently the Project Reviewer reported SPEC REVIEW PASS for that exact head and accepted planning, not implementation. Q15 separately confirms inclusion of a narrow console successor-adoption design. No successor PG2/PG3/PG4 or runtime/rollout PASS is inferred.
 
 The request does not restart F03/F04/PH1, start a Delivery Card or modify its timer. No new production authority is inferred from an old UI branch/spec labelled F04.
 
@@ -39,6 +39,7 @@ The request does not restart F03/F04/PH1, start a Delivery Card or modify its ti
 | D10 | Q11/Q13: bounded privileged delegation profile | Administrative built-ins are direct-to-Actor in this initial profile; Groups carry business roles. PRA may manage AA/PA/Audit Reader only within delegated limits; effective Super manages Super/PRA with declared permissions. No group/custom-role privilege-equivalence loophole or self-broadening. This is not a universal schema ban on Group principals. |
 | D11 | Q14: administrative authority is separate from Project participation | Applicable Project/Group administration does not require the administrator personally to be a Project Member. Engineering participation and Group-derived authority still require applicable membership, permission and owner gates. Creation cannot require membership in a nonexistent Project. |
 | D12 | Q8: supported account/RBAC/Project-Group permissions only | Exact catalogue/delegation codes are a next-stage written contract. Unsupported engineering operations and Product Configuration administration remain DESIGN; no fake Checkout/Approval/Release or sample permission is made executable just for a demo. |
+| D13 | Q15: narrow console adoption DESIGN | Current effective Super reauthenticates; exact same Actor/Organization receives separate supported Super successor assignment with reason, Access Policy outcome/evidence and Audit. No old-version/grant rewrite, startup/HTTP grant or bootstrap reuse. Approved for inclusion in plan, not execution. |
 
 Q14 was asked because sources establish participation/Project Group membership gates, but not universal membership for every administrator action. No implementation preference was silently turned into that policy.
 
@@ -56,7 +57,12 @@ Three refinements need their owning baseline/interface recorded before execution
 | D10 delegation/principal profile | REQ-AUTH-010/PRA definition authorize constrained non-Super administration; exact initial allowlist/principal/scope configuration is SPEC-OPEN-03. | Pin supported exact versions/permissions and the AA/PA/Audit versus Super/PRA split; keep original versions immutable, Custom Role equivalence checks and effective recovery. Do not create an administrator rank hierarchy. |
 | D11 membership applicability | DATA-REL-016/025 distinguish Project participation and active-member Project Groups; every admin action's own membership gate was unspecified. | Record action-specific administrative applicability separately from engineering/Group participation in DOC-05/06/08 and the reviewed Permission/interface catalogue; no general membership bypass for product operations. |
 
-This publication leaves the current Core document bytes and accepted historical approvals unchanged. The written spec makes the pending incorporation visible; no new Core REQ is invented in a delivery spec. If incorporation creates an independent obligation, assign its stable REQ in DOC-04 through controlled review rather than hiding it here.
+The original e227cb1d publication left Core bytes unchanged. This planning successor incorporates
+the refinements into DOC-03@0.8, DOC-04@0.16, DOC-05@0.27, DOC-06@0.19 and DOC-08@0.14,
+with corresponding terminology/catalogue changes. Separately verifiable candidate REQ-AUTH-011…014
+are owned by DOC-04; original 30 delivery FR/9 SC semantics are unchanged. Exact historical
+approval records and their hashes are preserved, not relabelled as approval of these Draft successors.
+Design/Core review is pending.
 
 SPEC-OPEN-03/06 remain partially clarified. Document Class, Workflow, Reservation, company/MFA policy, deployment, full product configuration and unrelated support decisions remain outside this resolution.
 
@@ -86,6 +92,16 @@ Hard-to-change foundations: stable Actor/principal/scope identity, exact immutab
 
 ## 6. Next controlled stage
 
-Review [the written specification](../../../../../specs/009-iam-rbac-ui-integration/spec.md). Then prepare one Spec Kit plan, exact Permission/delegation catalogue and operation contracts with owner, state, atomicity, concurrency and retry semantics. Only after that design is reviewed should tasks, read-only analysis and authorized TDD implementation follow.
+The written spec is accepted for planning at e227cb1d. Review the
+[plan](../../../../../specs/009-iam-rbac-ui-integration/plan.md),
+[exact catalogue](../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md),
+[operations](../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md) and
+[20-item reviewer checklist](../../../../../specs/009-iam-rbac-ui-integration/checklists/design-review.md).
+Then generate tasks, run read-only Analyze and obtain explicit execution readiness before TDD.
 
-The preparation item is not complete merely because scope was discussed; it delivers a reviewable draft. Product acceptance, runtime/browser/PostgreSQL tests and verifier remain NOT-RUN. No merge or execution is performed by this record.
+Planning source version 0.2 supersedes the current-reading status of 0.1; Git retains original
+spec/preparation history. New package source/definition/assignment authority must be accepted,
+not assumed from prior PH1 completion. Named owner/security/gate attribution is resolved before
+approval/execution. Existing briefs/renditions tied to old Core hashes are stale for these specific
+refinements, not rewritten. Runtime/browser/PostgreSQL tests and verifier NOT-RUN; no merge,
+execution, deployment or timer action.

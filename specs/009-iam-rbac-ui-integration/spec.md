@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft — written specification awaiting review; implementation NOT-STARTED
+**Status**: Draft — written spec accepted for planning at e227cb1df60e70a1294628b4f153ad50d8f034c6; successor design review pending; implementation NOT-STARTED
 
 **Input**: User-confirmed native account, Project/Group and RBAC journeys: explicit scopes, two principal modes, independent multiple roles, immutable role versions, constrained delegation and separation of administration from engineering participation.
 
@@ -15,12 +15,12 @@
 | Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.1` |
 | Product normativity | INFORMATIVE relative to the Core baseline; FRs are candidate delivery obligations. DOC-04 remains the sole product SRS; no Core obligation or gate is independently approved here. |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / `CODEX_ONLY` |
-| Reviewer / acceptance authority | Project Reviewer / applicable Product Decision Authority; written-spec review and increment gate disposition `NOT-RUN` |
+| Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d on 2026-10-07 / applicable Product Decision Authority; successor Core/design and increment readiness NOT-RUN |
 | Applicable baseline | Integrated main `4e5244430ea89ffe878819e1279f6e05c60d610a`; accepted PH1 and API predecessors retained |
 | Date / effective date | 2026-10-07, `Asia/Ho_Chi_Minh` / `NOT-APPLICABLE` until applicable approval |
 | Classification / retention | `INTERNAL`; retain specification and supersession history in Git |
 | Upstream / change | [Decision and impact record](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), [Work Item #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
-| Downstream | Reviewed plan, Permission/delegation catalogue, operation contracts, tasks and exact-source qualification; not yet generated |
+| Downstream | [Candidate plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md); tasks and execution not generated/run |
 | Supersession | Does not supersede PH1, accepted ADR-0012 or existing API contracts. UI branches are presentation lineage. |
 | Review trigger / evidence | Scope, permission, role-version, delegation, credential channel or owner-interface change / source inspection and user decisions only; runtime tests and verifier `NOT-RUN` |
 | Standards tailoring | `IE-STD-AUTH-001`: clarity/trace guided by STD-REQ-001, record identity by STD-INFO-001, acceptance design by STD-TEST-001…004. No conformity claim. |
@@ -206,13 +206,15 @@ Local FR identities are delivery acceptance obligations, not new Core REQ identi
 |---|---|---|
 | FR-001–005, FR-030 | REQ-IAM-001/002/004/006; IF-ACCOUNT-SESSION, IF-DIRECTORY-ADMIN; D01/D03 | US1, US6 |
 | FR-006–009 | REQ-IAM-003/004/005; DATA-REL-014/015; D04 | US1.2–4, login/proof edges |
-| FR-010–013 | REQ-AUTH-003/005/009; DATA-REL-016/025; IF-PROJECT-ACCESS-ADMIN; D09/D11 | US2 |
+| FR-010–013 | REQ-AUTH-003/005/009; candidate Core REQ-AUTH-011…013; DATA-REL-016/025; IF-PROJECT-ACCESS-ADMIN; D09/D11 | US2 |
 | FR-014–017 | REQ-AUTH-001/003…006; DATA-REL-027/032; D02/D05/D06/D08 | US3.1–3/6, US5 |
 | FR-018–021, FR-029 | REQ-AUTH-002/009/010, REQ-GOV-005; IF-RBAC-ADMIN; D07/D10/D12 | US3.4–5, US4, recovery/regrant |
 | FR-022–025 | REQ-AUTH-006…008, REQ-IAM-004, REQ-AUD-001/002; IF-AUTHORIZATION-DECISION; D03 | US5, US6.3–5 |
 | FR-026–028 | REQ-UX-003/004/006; UX-JRN-009/010/014/015; D02/D03 | US6.1–2, US5.4 |
 
-D01–D12 are owned by the linked change record. Verification methods: positive/negative controlled flow, state/history inspection, concurrent-state/forced-failure qualification and actual keyboard/browser inspection. Actual results are NOT-RUN.
+D01–D12 are owned by the linked change record. The later Q15/D13 adoption plan traces candidate
+Core REQ-AUTH-014 and existing FR-019/029/030; it adds no delivery FR or implementation result.
+Verification methods: positive/negative controlled flow, state/history inspection, concurrent-state/forced-failure qualification and actual keyboard/browser inspection. Actual results are NOT-RUN.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -250,8 +252,8 @@ D01–D12 are owned by the linked change record. Verification methods: positive/
 
 ## Review and lifecycle disposition
 
-Conversational decisions including Q14 are confirmed. Written-spec and affected Core/interface refinement review remain pending. SPEC-OPEN-03 and SPEC-OPEN-06 remain partially clarified; unrelated company/configuration/deployment decisions are not closed.
+Conversational decisions including Q14 are confirmed. Project Reviewer reported written-spec PASS at exact e227cb1df60e70a1294628b4f153ad50d8f034c6 on 2026-10-07 and authorized planning only. The original 30 FR/9 SC semantics are unchanged. Q15 separately authorizes preparing a narrow console adoption design, recorded as D13, not running it. Successor Core/design review remains pending; SPEC-OPEN-03/06 are only partially clarified.
 
-Next: written-spec review → controlled Core/interface refinement → `$speckit-plan` with Matt Pocock `codebase-design` → reviewer-owned checklist → `$speckit-tasks` → read-only `$speckit-analyze` → authorized TDD vertical slices → standards/spec review and convergence.
+Current next step: review the Core/interface successors, plan and exact contracts with the reviewer-owned checklist → speckit-tasks → read-only speckit-analyze → explicitly authorized TDD vertical slices → standards/spec review and convergence.
 
 No plan/tasks are fabricated before their lifecycle stage. Publication of this Draft does not authorize implementation, runtime testing, product-gate approval, timer action, merge or deployment.

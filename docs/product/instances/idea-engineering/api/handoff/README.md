@@ -31,6 +31,18 @@ No documentation website, generator, new dependency or runtime is introduced.
 
 ## Current baseline register
 
+### IAM integration planning successor — not implemented
+
+Under [Issue #46 / Draft PR #47](https://github.com/devphuclam/IDEAEngineering/pull/47),
+spec e227cb1df60e70a1294628b4f153ad50d8f034c6 has reported SPEC REVIEW PASS for planning.
+Candidate [plan](../../../../../../specs/009-iam-rbac-ui-integration/plan.md),
+[Permission/delegation](../../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
+and [operations](../../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md)
+are DESIGN and review-pending with Core successors DOC-03@0.8/04@0.16/05@0.27/06@0.19/08@0.14.
+Existing Identity wire/retry behavior is the accepted predecessor, not automatically replaced
+by new route/proof-handoff proposals. No new OpenAPI/runtime/deployment or team handoff acceptance
+is claimed. After design review, tasks/Analyze precede explicit TDD execution readiness.
+
 ### v0.2 CPD successor — review pending
 
 The handoff arrangement itself was accepted through

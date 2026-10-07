@@ -18,7 +18,7 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.7`; DOC-04 at `Draft 0.15`; DOC-05 at `Draft 0.26`; DOC-06 at `Draft 0.18`; DOC-07 at `Draft 0.17`; DOC-08 at `Draft 0.13`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.19`; CHG records at their catalogue versions |
+| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.8`; DOC-04 at `Draft 0.16`; DOC-05 at `Draft 0.27`; DOC-06 at `Draft 0.19`; DOC-07 at `Draft 0.17`; DOC-08 at `Draft 0.14`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.19`; CHG records at their catalogue versions. IAM refinement successors are review-pending under IE-CHG-IAM-UI-001@0.2; historical approvals do not automatically cover them. |
 | Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy correction is `APPROVED` on 19-09-2026, Node.js 24 LTS is `APPROVED` for Web build on 23-09-2026, and the three Check-in scope-policy branches are `APPROVED` on 25-09-2026 under [`IE-CHG-PDA-APPROVAL-003`](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). Exact Web build and remaining successor runtime evidence remain `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
@@ -27,8 +27,9 @@ and are not edited as product content.
 The [native Account / Project / Group / RBAC UI integration specification](../../../../specs/009-iam-rbac-ui-integration/spec.md)
 is a separate Draft delivery refinement under [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46).
 Its [confirmed-intent and impact record](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md)
-retains the user decisions and required Core/interface incorporation. Written-spec review is pending;
-no new API contract, implementation, product-gate result or timer action is claimed.
+retains the decisions and Core/interface incorporation. Written-spec PASS is reported at exact
+e227cb1df60e70a1294628b4f153ad50d8f034c6; the [plan and contracts](../../../../specs/009-iam-rbac-ui-integration/plan.md)
+are review-pending DESIGN. No implementation, successor product-gate result or timer action is claimed.
 
 The proposed [API Contract v0.2 CPD detail](api/controlled-product-data.md) refines PH2 CPD-1/CPD-2
 without changing requirements or runtime. Use the [current handoff register](api/handoff/README.md)
@@ -416,12 +417,12 @@ while its topology, thresholds, runtime/provider qualification and remaining suc
 |---|---|---|---|
 | `DOC-01` | `IE-PROD-VISION-001` | [Product Vision and Scope](DOC-01-product-vision-and-scope.md) | `Draft 0.7`; internal-first purpose retained and several-years-away commercial trajectory recorded without adding current commercial scope |
 | `DOC-02` | `IE-PROD-FEAS-001` | [Feasibility and Options Assessment](DOC-02-feasibility-and-options-assessment.md) | `Draft 0.2` |
-| `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.7`; principal–role–scope RBAC and separate administrator responsibilities defined |
-| `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.15`; sole normative SRS; 90 requirements including policy-controlled self-approval, `REQ-WS-016`, `REQ-OPS-007/008`, `QRS-013/014`; exact successor PDA approval and verification `NOT-RUN` |
-| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.26`; separates Modified Reference Create Copy from confirmed local discard and clarifies Review change blocking. The three-branch Check-in scope policy remains approved under `IE-CHG-PDA-APPROVAL-003`; the architecture view itself remains Draft. |
-| `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.18`; adds Vault Endpoint, Transfer Grant/Receipt, Replication Task and versioned Storage/Durability Policy while retaining the pinned Approval Policy Version and self-approval outcome |
+| `DOC-03` | `IE-PROD-BREQ-001` | [Business Requirements](DOC-03-business-requirements.md) | `Draft 0.8`; scoped administrative responsibilities distinguish Project creation/administration from engineering participation; IAM refinement review pending |
+| `DOC-04` | `IE-PROD-SREQ-001` | [Software Requirements Specification](DOC-04-software-requirements-specification.md) | `Draft 0.16`; sole normative SRS; 94 requirements including candidate `REQ-AUTH-011…014`; historical approvals preserved, IAM successor approval/verification `NOT-RUN` |
+| `DOC-05` | `IE-PROD-ARCH-001` | [Architecture Description](DOC-05-architecture-description.md) | `Draft 0.27`; existing owner interfaces refined for D09/D10/D11 and Q15; no new platform architecture. Historical Check-in scope approval is preserved, not inherited by this IAM successor; design review pending. |
+| `DOC-06` | `IE-PROD-DATA-001` | [Data, Integration and Migration Specification](DOC-06-data-integration-and-migration-specification.md) | `Draft 0.19`; candidate IAM/Project/Access Policy data and interface refinements; existing Vault/transfer/Approval semantics retained, no migration execution |
 | `DOC-07` | `IE-PROD-ROADMAP-001` | [MVP Roadmap and Delivery Plan](DOC-07-mvp-roadmap-and-delivery-plan.md) | `Draft 0.17`; selected six-phase Core v0 plan uses 512 task hours, 88 technical-reserve hours and 32 operational-buffer hours from 23-09 through 31-12; `PLN01`–`PLN03` record 12 completed planning hours without implying product code; one Vault is in Core v0 and the future multi-vault seam is retained; `PG4` remains evidence-driven; Q-15 unchanged |
-| `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.13`; separates selecting location, transferring, verifying, policy-required protection and final Check-in; transfer/replication completion alone is not success and storage secrets remain hidden |
+| `DOC-08` | `IE-PROD-UX-001` | [UI/UX and Interaction Specification](DOC-08-ui-ux-and-interaction-specification.md) | `Draft 0.14`; candidate actual account/scoped RBAC journey, independent assignments and administrative versus participation boundary; existing transfer/custody journey retained, runtime qualification `NOT-RUN` |
 
 ## Supporting instance catalogue
 

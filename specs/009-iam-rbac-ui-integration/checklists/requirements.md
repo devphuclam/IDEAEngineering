@@ -32,6 +32,6 @@
 
 ## Notes
 
-Author checklist validation is not Project Reviewer acceptance. Written-spec review remains NOT-RUN. Exact wire, data, Permission/delegation and retry design is the next Spec Kit plan/contract stage, not an unresolved user-flow placeholder. Core/interface incorporation and increment readiness remain required before implementation.
+Author checklist validation is not Project Reviewer acceptance. Separately, the reviewer reported SPEC REVIEW PASS at e227cb1df60e70a1294628b4f153ad50d8f034c6 on 2026-10-07. The plan/contract successor is review-pending; Core/interface acceptance and increment readiness remain required before implementation.
 
-No separate reviewer-owned security/UX checklist has been generated or checked at this stage. Runtime tests and verifier are NOT-RUN.
+The planning successor generated [design-review.md](design-review.md), a separate reviewer-owned quality checklist with all new items unchecked. This does not change author checklist marker semantics. Runtime tests and verifier are NOT-RUN.

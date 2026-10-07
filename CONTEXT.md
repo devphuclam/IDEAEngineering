@@ -113,7 +113,7 @@ The protected built-in Role Definition used only for initial bootstrap and gover
 _Avoid_: daily account, shared root password, invisible bypass, automatic document authority
 
 **Privileged Role Administrator**:
-The built-in Role Definition that manages non-Super-Administrator Role Definitions and administrative Role Assignments within its Scope. It cannot grant or revoke Super Administrator, cannot make a candidate policy authorize its own activation and receives no product-data authority merely by managing roles.
+The built-in Role Definition that manages permitted non-Super Role Definitions and administrative Role Assignments within declared delegation limits. The review-pending IAM integration profile allows AA, PA and Audit Reader targets but reserves Super/PRA assignment changes to effective Super with explicit authority. Delegable authority is distinct from personally exercisable product actions; a candidate never authorizes its own activation. No product-data authority is implied.
 _Avoid_: Super Administrator, Account Administrator, project member manager, self-authorizing policy
 
 **Product Configuration Administrator**:
@@ -121,7 +121,7 @@ The built-in Role Definition that prepares and, where separately authorized, act
 _Avoid_: PDM superuser, Account Administrator, Project Administrator, automatic approver
 
 **Project Administrator**:
-The built-in Role Definition that manages Project Membership, Project Groups and permitted product Role Assignments inside the assigned Project. It may assign only approved Role Definitions that are assignable at that Scope and cannot create accounts, change system-wide Role Definitions, grant Super Administrator or operate another Project.
+The built-in Role Definition that manages Project Membership, Project Groups and permitted business Role Assignments within its declared Scope. The review-pending IAM integration refinement permits Project creation only through an explicit Organization-scoped create Permission; a Project-only assignment cannot create or administer another Project. Administrative authority does not require the administrator personally to participate in engineering, and creation adds no implicit creator membership or Role Assignment. It cannot create accounts, change system-wide Role Definitions or grant privileged administrative roles.
 _Avoid_: Account Administrator, global role administrator, project owner with unrestricted data access
 
 **Audit Reader**:

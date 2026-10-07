@@ -23,6 +23,14 @@ caller can use it. HTTP means Hypertext Transfer Protocol; QA means quality assu
 
 ## 1. Read this package
 
+Native Account/Project/Group/RBAC integration is a separate review-pending design under Issue #46:
+[plan](../../../../../specs/009-iam-rbac-ui-integration/plan.md),
+[exact Permission/delegation](../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
+and [operation contracts](../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md).
+The accepted Identity v0.1 predecessor remains unchanged unless an explicitly accepted successor
+applies. Proposed new routes/manual handoff/console adoption are DESIGN, not a deployed API.
+Current Core successors are registered in the instance catalogue; old approval hashes stay historical.
+
 Version 0.2 adds [PH2 CPD-1/CPD-2 semantic contracts](controlled-product-data.md),
 [synthetic semantic JSON](cpd-examples.json), [CPD Vietnamese flow](cpd-guide.vi.md)
 and a [decision-bounded OpenAPI 3.0.3 document](cpd-openapi.json).
@@ -79,7 +87,7 @@ OpenAPI `operationId`. A `DESIGN` row's exact URL, payload, errors and wire retr
 | ACC-1 | Access Policy: assign exact Account Administrator role version and Organization Scope | `REQ-AUTH-004/009/010`; `IF-RBAC-ADMIN` | `INTERNAL` implemented subset; v1 and v2 remain distinct. No production role-assignment HTTP adapter is claimed. |
 | ACC-2 | Access Policy: validate/activate Custom Role successor; preview/replace/revoke assignments | `REQ-AUTH-001/002/004/010`, `REQ-GOV-005`; `IF-RBAC-ADMIN` | `DESIGN` for the complete governed administration family; no implicit retargeting or administrator content bypass. |
 | ACC-3 | Access Policy: evaluate and explain a current scoped authorization decision | `REQ-AUTH-003…008`, `REQ-GOV-002`; `IF-AUTHORIZATION-DECISION` | `INTERNAL` IAM/custody subsets; complete Core product resource coverage is `DESIGN`. Permission does not bypass owner business gates. |
-| PRJ-1 | Project Governance: maintain Project Membership, Business Groups and direct Actor membership | `REQ-AUTH-003/005/009/010`; `IF-PROJECT-ACCESS-ADMIN` | `DESIGN`; account creation grants none of these; nested Groups are not supported by Core design. |
+| PRJ-1 | Project Governance: explicitly authorized Project creation/update, participation, Business Groups and direct Actor membership | REQ-AUTH-003/005/009…013; IF-PROJECT-ACCESS-ADMIN | DESIGN; pending IAM refinement distinguishes Org-create/covered-Project administration from engineering participation. Creation grants no implicit membership/role; nesting unsupported. |
 | CPD-1 | Controlled Product Data: New / Store Existing; inspect duplicate candidates; confirm new identity | `REQ-ID-001…006`; `IF-PRODUCT-COMMAND` | `DESIGN`; [CPD-1.1…1.4 and first-publication dependency](controlled-product-data.md); stable identity, no silent merge/empty published Generation. |
 | CPD-2 | Controlled Product Data: exact Document, Revision, Version, Generation, history and authorized placement navigation | `REQ-ID-001/002/007`, `REQ-GOV-001/002`; `IF-PRODUCT-QUERY` | `DESIGN`; [CPD-2.1…2.4](controlled-product-data.md); exact historical pins, no latest substitution. |
 | DSC-1 | Discovery: basic find/browse exact controlled Product Data | `REQ-UX-002/003`, `SPEC-OPEN-02`; `IF-PRODUCT-QUERY`; DOC-06 Discovery Projection | `DESIGN`; permission-filtered, rebuildable projection and never write authority. Searchable fields, scope, ordering and paging remain `UNKNOWN`; advanced/saved search is deferred. No URL or search syntax is invented. |
