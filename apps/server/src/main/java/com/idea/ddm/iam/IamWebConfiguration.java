@@ -5,6 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.UUID;
+import java.time.Clock;
+import javax.sql.DataSource;
+import com.idea.ddm.access.AuthorizationDecisionService;
+import com.idea.ddm.identity.IdentityTransactions;
+import com.idea.ddm.identity.OwnerSessionEligibility;
+import com.idea.ddm.identity.SessionService;
+import com.idea.ddm.project.ProjectGovernanceQueries;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +21,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /** New reviewed IAM adapters opt in; the accepted Identity wire contract is not retrofitted. */
 @Configuration(proxyBeanMethods = false)
 public class IamWebConfiguration {
+    @Bean
+    OwnerSessionEligibility ownerEligibility(SessionService sessions) { return new OwnerSessionEligibility(sessions); }
+    @Bean
+    IdentityTransactions ownerTransactions(DataSource dataSource, OwnerSessionEligibility eligibility) {
+        return new IdentityTransactions(dataSource, eligibility);
+    }
+    @Bean
+    ProjectGovernanceQueries projectAuthorizationFacts() { return new ProjectGovernanceQueries(); }
+    @Bean
+    AuthorizationDecisionService authorizationDecisions(OwnerSessionEligibility eligibility,
+            ProjectGovernanceQueries projects, Clock clock) {
+        return new AuthorizationDecisionService(eligibility, projects, clock);
+    }
+
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Boundary {}

@@ -20,7 +20,7 @@ c0bf3e9aeb4a84713ad9e996f142c3418b21923d963e5aa7f5d118115fa10329  apps/server/sr
 34e13d4bcc9e0cac27c6e5f815d3e09c5009b7ba7149f340625dc7984bb42571  apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentDocumentationBoundary.java
 1516972db473c0a0d5ee33183bf768d3cd586dc82204028af4010b4df5f06e25  apps/server/src/main/java/com/idea/ddm/event/CommittedEventStore.java
 edecd78184eca31896713c5a3eeffd4537793602d117993fe70de871e587d99d  apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java
-a952d554a9b2537e577d90ebd3049267cf43da188b21419bf555a6fca3aa7a11  apps/server/src/main/java/com/idea/ddm/iam/IamWebConfiguration.java
+e24273893e731da89a084d2cea4739701fafa47df28cca68ccf2c6e6710bd852  apps/server/src/main/java/com/idea/ddm/iam/IamWebConfiguration.java
 231ee35dcc1c0a498f740a060ac7cffb34e6c9c84dc260e5d26e6c06cc94d4c8  apps/server/src/main/java/com/idea/ddm/IdeaServerApplication.java
 11421d4dd0e8819f06a1fce9c2030105301cbd48a5022e62237fec3ff93319af  apps/server/src/main/java/com/idea/ddm/identity/ActorContext.java
 1d0c0a62c492d7ade5fdaac6dc99159ee115e6ff5a92fafbf5b08792ca496203  apps/server/src/main/java/com/idea/ddm/identity/AdministratorBootstrap.java
