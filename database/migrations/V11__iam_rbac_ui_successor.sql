@@ -81,3 +81,114 @@ CREATE UNIQUE INDEX group_membership_unended_once ON group_membership(group_id, 
 REVOKE ALL ON project, project_membership, business_group, group_membership FROM idea_ddm_app;
 GRANT SELECT, INSERT ON project, project_membership, business_group, group_membership TO idea_ddm_app;
 -- Narrow state-write storage interfaces follow with their owner behavior tests. No blanket DML.
+
+-- Registered actions are product-owned, never administrator-authored permission codes.
+CREATE TABLE permission_registry (
+    permission_code VARCHAR(120) PRIMARY KEY,
+    owner_name VARCHAR(120) NOT NULL,
+    scope_kinds TEXT[] NOT NULL,
+    principal_kinds TEXT[] NOT NULL,
+    participant_membership_required BOOLEAN NOT NULL DEFAULT FALSE,
+    CHECK (cardinality(scope_kinds) > 0 AND scope_kinds <@ ARRAY['ORGANIZATION','PROJECT']::TEXT[]
+        AND array_position(scope_kinds, NULL) IS NULL),
+    CHECK (cardinality(principal_kinds) > 0 AND principal_kinds <@ ARRAY['ACTOR','PROJECT_GROUP']::TEXT[]
+        AND array_position(principal_kinds, NULL) IS NULL)
+);
+INSERT INTO permission_registry(permission_code,owner_name,scope_kinds,principal_kinds,participant_membership_required) VALUES
+    ('account.read','IAM',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('account.create','IAM',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('account.disable','IAM',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('account.re-enable','IAM',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('account.credential.setup.issue','IAM',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('account.credential.reset.issue','IAM',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('project.create','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('project.admin.read','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.update','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.membership.assign','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.membership.remove','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.group.create','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.group.update','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.group.membership.assign','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.group.membership.remove','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('project.read','PROJECT_GOVERNANCE',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR','PROJECT_GROUP'],TRUE),
+    ('role.catalogue.read','ACCESS_POLICY',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('role.definition.prepare','ACCESS_POLICY',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('role.definition.activate','ACCESS_POLICY',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('role.assignment.manage.business','ACCESS_POLICY',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('role.assignment.manage.administration','ACCESS_POLICY',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('role.assignment.manage.highest','ACCESS_POLICY',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE),
+    ('access.inspect','ACCESS_POLICY',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('audit.read','AUDIT',ARRAY['ORGANIZATION','PROJECT'],ARRAY['ACTOR'],FALSE),
+    ('role.assign.account-administrator','ACCESS_POLICY',ARRAY['ORGANIZATION'],ARRAY['ACTOR'],FALSE);
+
+CREATE TABLE identity_role_definition (
+    definition_id UUID PRIMARY KEY,
+    role_code VARCHAR(120) NOT NULL UNIQUE CHECK (BTRIM(role_code) <> ''),
+    display_name VARCHAR(200) NOT NULL CHECK (BTRIM(display_name) <> ''),
+    built_in BOOLEAN NOT NULL,
+    management_scope_kind VARCHAR(16),
+    management_organization_id UUID REFERENCES operating_organization(organization_id),
+    management_project_id UUID,
+    UNIQUE (definition_id,role_code),
+    FOREIGN KEY (management_project_id,management_organization_id) REFERENCES project(project_id,organization_id),
+    CHECK ((built_in AND management_scope_kind IS NULL AND management_organization_id IS NULL AND management_project_id IS NULL)
+        OR (NOT built_in AND management_organization_id IS NOT NULL AND
+            ((management_scope_kind='ORGANIZATION' AND management_project_id IS NULL)
+            OR (management_scope_kind='PROJECT' AND management_project_id IS NOT NULL))))
+);
+INSERT INTO identity_role_definition(definition_id,role_code,display_name,built_in) VALUES
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0b001','super-administrator','Super Administrator',TRUE),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0b002','account-administrator','Account Administrator',TRUE),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0b003','privileged-role-administrator','Privileged Role Administrator',TRUE),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0b004','project-administrator','Project Administrator',TRUE),
+    ('9d80f77e-85a6-4c12-a72d-8ef6b7e0b005','audit-reader','Audit Reader',TRUE);
+
+-- Separate structural/sealed profile extends the original exact-version model. No mirror evaluator.
+ALTER TABLE identity_role_version ADD CONSTRAINT identity_role_version_id_code_pair UNIQUE(role_version_id,role_code);
+CREATE TABLE identity_role_version_profile (
+    role_version_id UUID PRIMARY KEY,
+    definition_id UUID NOT NULL,
+    role_code VARCHAR(120) NOT NULL,
+    classification VARCHAR(16) NOT NULL CHECK (classification IN ('HIGHEST','ADMINISTRATION','BUSINESS')),
+    scope_kinds TEXT[] NOT NULL,
+    principal_kinds TEXT[] NOT NULL,
+    content_digest CHAR(64) NOT NULL CHECK (content_digest ~ '^[0-9a-f]{64}$'),
+    sealed_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(role_version_id,role_code) REFERENCES identity_role_version(role_version_id,role_code),
+    FOREIGN KEY(definition_id,role_code) REFERENCES identity_role_definition(definition_id,role_code),
+    CHECK (cardinality(scope_kinds)>0 AND scope_kinds <@ ARRAY['ORGANIZATION','PROJECT']::TEXT[]
+        AND array_position(scope_kinds,NULL) IS NULL),
+    CHECK (cardinality(principal_kinds)>0 AND principal_kinds <@ ARRAY['ACTOR','PROJECT_GROUP']::TEXT[]
+        AND array_position(principal_kinds,NULL) IS NULL),
+    CHECK (classification='BUSINESS' OR principal_kinds=ARRAY['ACTOR']::TEXT[])
+);
+
+CREATE TABLE identity_role_candidate (
+    candidate_id UUID PRIMARY KEY,
+    definition_id UUID NOT NULL REFERENCES identity_role_definition(definition_id),
+    base_version_id UUID REFERENCES identity_role_version(role_version_id),
+    classification VARCHAR(16) NOT NULL CHECK (classification IN ('ADMINISTRATION','BUSINESS')),
+    scope_kinds TEXT[] NOT NULL,
+    principal_kinds TEXT[] NOT NULL,
+    content_digest CHAR(64) NOT NULL CHECK (content_digest ~ '^[0-9a-f]{64}$'),
+    prepared_by UUID NOT NULL REFERENCES actor(actor_id),
+    reason VARCHAR(500) NOT NULL CHECK (BTRIM(reason) <> ''),
+    version BIGINT NOT NULL DEFAULT 1 CHECK (version>0),
+    prepared_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    activated_version_id UUID REFERENCES identity_role_version(role_version_id),
+    CHECK (cardinality(scope_kinds)>0 AND scope_kinds <@ ARRAY['ORGANIZATION','PROJECT']::TEXT[]
+        AND array_position(scope_kinds,NULL) IS NULL),
+    CHECK (cardinality(principal_kinds)>0 AND principal_kinds <@ ARRAY['ACTOR','PROJECT_GROUP']::TEXT[]
+        AND array_position(principal_kinds,NULL) IS NULL),
+    CHECK (classification='BUSINESS' OR principal_kinds=ARRAY['ACTOR']::TEXT[])
+);
+CREATE TABLE identity_role_candidate_permission (
+    candidate_id UUID NOT NULL REFERENCES identity_role_candidate(candidate_id),
+    permission_code VARCHAR(120) NOT NULL REFERENCES permission_registry(permission_code),
+    PRIMARY KEY(candidate_id,permission_code)
+);
+
+REVOKE ALL ON permission_registry,identity_role_definition,identity_role_version_profile,
+    identity_role_candidate,identity_role_candidate_permission FROM idea_ddm_app;
+GRANT SELECT ON permission_registry,identity_role_definition,identity_role_version_profile,
+    identity_role_candidate,identity_role_candidate_permission TO idea_ddm_app;
