@@ -106,6 +106,7 @@ a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/sr
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
+e2e2eb813f2c14cb57a77cd4af1b897fb9e30ddae3e084b5e3648f9e1d425443  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
 3c2d2056b7f76444f2ca11cfa44e3cd9ca02f2d694599b37c0b320913cb5e819  apps/server/src/test/java/com/idea/ddm/project/ProjectPrerequisiteFixture.java
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 22c5ae230a253b3a896cb3d7382a8d80b0acd57060334e65b78a19f4c33b0600  apps/web/index.html
@@ -158,7 +159,7 @@ f4dde1be1c251665f5304e6b6d0a89c6f9aec62bc30e7368856374d89f8e51da  docs/research/
 fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-46/account-browser.mjs
 520893c7de617ad79a3049c4a7620762baf30757db15aaeebbc769f6aae0e498  tests/iam-ui-46/account-browser.sh
 86d07bdacafd2a2b143f8650e5e53a50dd02d9fdb67b499ade77a989ef773869  tests/iam-ui-46/README.md
-ba9a3390174c75445c098ef1938bbdc5dfc3dd455338a146dc233325ba95ee2a  tests/iam-ui-46/run-owner-tests.sh
+c8e5118e5e0c1a3a32c2b4edd8bfbaef172ffb6392e071249a1a67e5fd3ab62b  tests/iam-ui-46/run-owner-tests.sh
 f95df2ba5d00d462f2a322dd27a35cc1a965c2906f8d78a299e33b891293ae40  tests/iam-ui-46/run-web-tests.ps1
 a6309e7e5256ff8df9662a9edea97554f9079ae064acb97ad67d89d90f811643  tests/iam-ui-46/vitest.config.mjs
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
