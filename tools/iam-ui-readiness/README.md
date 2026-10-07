@@ -3,7 +3,11 @@
 These are environment/build preflight utilities, not T008 fixtures or product implementation.
 Authority: the human's 2026-10-07 continuation of readiness at
 `5b2fb9fbeec9e2edc23532de7b2a81d84289a664`, plus explicit PG2/PG3 PASS in this conversation.
-PG4 stays BLOCKED until the following actual checks are complete. No T008+ execution is implied.
+Historical publication at 4c98f226 kept PG4 BLOCKED until these actual checks completed.
+The later human Backend-first disposition is recorded in
+[envelope section 5](../../specs/009-iam-rbac-ui-integration/execution-envelope.md#5-human-backend-first-gate-disposition--2026-10-07):
+PG4 PASS-WITH-ACTIONS, HTTPS/Chrome NOT-RUN and due before actual Web qualification. These
+utilities alone grant no T008+ authority and still require normal TLS verification when executed.
 
 ## Controlled inputs and commands
 

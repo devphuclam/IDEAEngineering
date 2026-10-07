@@ -2,11 +2,11 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version / status | IE-EXE-IAM-UI-46-20261007 / readiness configuration and gate record / 0.2 / Draft; PG2/PG3 PASS; PG4 BLOCKED only on pending certificate trust / actual Chrome HTTPS |
+| Stable ID / class / version / status | IE-EXE-IAM-UI-46-20261007 / readiness configuration and gate record / 0.3 / Draft record; PG2/PG3 PASS; PG4 PASS-WITH-ACTIONS for Backend-first development, section 5; actual Chrome HTTPS NOT-RUN |
 | Scope / authority / date | Issue #46 / PR #47, feature 009; explicit human readiness continuation at 5b2fb9f; 2026-10-07 Asia/Ho_Chi_Minh |
 | Owner / author / reviewer | Project user / Codex CODEX_ONLY / Project Reviewer; technical spec/design acceptance retained, formal PG2/PG3 supplied separately below |
 | Normativity / classification / retention | INFORMATIVE product semantics; controlled execution instruction for this increment / INTERNAL / retain historical attempts and exact-source results |
-| Upstream / downstream | [Handoff](integration-readiness.md), [plan](plan.md), [tasks](tasks.md) / T007 only now; T008+ after explicit final PASS |
+| Upstream / downstream | [Handoff](integration-readiness.md), [plan](plan.md), [tasks](tasks.md) / T007 disposition complete; T008 then T009 RED authorized inside section 5 boundaries |
 | Change / trigger / tailoring | Resolves the four accepted blockers; source/tool/hash/graph/target/scope drift reopens preflight; STANDARD-GUIDED IE-STD-AUTH-001 |
 | Limit | No PG5, implemented IAM UI, production/partner/commercial qualification, deploy or merge claim |
 
@@ -18,10 +18,12 @@ disposition of the requirements/design already independently reviewed, not a ret
 conversion of SPEC/DESIGN REVIEW PASS. Accepted spec, Q14/Q15, Core refinements and contracts
 are unchanged. Scope is 009 only, not universal Core/production/release gate approval.
 
-PG4 is to be disposed only after DB, offline build/package and trusted browser environment
-conditions below are met. The latest human instruction specifically authorizes **readiness
+At the historical readiness authority through 4e20db2, PG4 was to be disposed only after DB,
+offline build/package and trusted browser environment conditions below were met. That instruction authorized **readiness
 environment/build preparation before PG4**, but not T008+ product/test implementation.
 This is the explicit bounded successor to the old preflight's no-setup-before-gate wording.
+The subsequent human development-gate decision is recorded separately in section 5; the actual
+unexecuted HTTPS/browser result is not changed to PASS.
 
 The operator completed the published one-stage wizard (SHA-256
 `09753c6bbd7c2b8060a4616027fa022b0270f720dafe138c59eb0f33221623e4`).
@@ -175,7 +177,7 @@ access; repository evidence records identities/results, not independent public a
 | `maven-package.log` | `a7ee38b3b08766fe2b8b3318a081bf08dd20cb4add8427a9c183d9eb95993ea8` |
 | `tls-preparation.log` | `d76baad07825979a1049a1573836c30267f8e01e02b64e167ca6fcb5c90acacb` |
 
-### Current gate disposition
+### Historical gate disposition at 4e20db2
 
 | Gate / task | Current disposition and authority |
 |---|---|
@@ -188,3 +190,37 @@ access; repository evidence records identities/results, not independent public a
 The human authorizes an explicit PG4 readiness disposition only **after all** the listed
 environment/build blockers are closed. This conditional authority is retained; it is not used
 to certify the still-unexecuted browser boundary. PR #47 remains Draft/Open, Issue #46 OPEN.
+
+## 5. Human Backend-first gate disposition — 2026-10-07
+
+**Current PG4 = PASS-WITH-ACTIONS; T007 = COMPLETE.** After the assistant proposed separating
+Backend readiness from the not-yet-executed Web/HTTPS prerequisite, the human answered
+**“Pass luôn có sao đâu”**. Record this as human authorization to proceed with Backend-first
+development, not as evidence that the HTTPS or Chrome check ran. It is a successor disposition
+to 4e20db2, not a rewrite of its BLOCKED result or a GitHub approval-review event.
+
+The controlled outcome uses Constitution II's `PASS-WITH-ACTIONS` because a verification action
+remains. PG2/PG3 remain explicitly PASS. DB, offline tool/cache/rights/graph and predecessor
+package results retain their actual PASS evidence; **certificate trust / actual Chrome HTTPS
+remain NOT-RUN**. The previously pending Windows import completed with cancellation
+`0x800704C7`; the certificate is absent from CurrentUser Root. No retry, trust modification,
+listener, tunnel, TLS bypass or browser run was performed for this disposition.
+
+| Action control | Bounded obligation |
+|---|---|
+| Stable action / owner / approver | `IAM-46-A01` / Codex implements and retains evidence; project user confirms exact CurrentUser import if required / project user, the conversation instruction above |
+| Affected baseline / scope | 009 at 4e20db2 and this documentation-only successor; Backend/source/real PostgreSQL preparation first. No deploy, merge, company data, live Q15 adoption or product acceptance |
+| Due condition | Before the first actual Web/HTTPS integration/qualification run and before any PG5 whole-feature acceptance or release claim. This does not require running Chrome before named Backend fixtures / eligible-context TDD |
+| Required completion evidence | Normally trusted exact test certificate; published headed Chrome probe passes both SAN names; owned process/tunnel cleanup; source/tool/certificate pins checked. Later actual IDEA Web qualification remains separately required by accepted tasks |
+| Certificate expiry / reopen | Current TLS material expires `2026-10-14T05:19:50Z`; do not reuse after expiry. Prepare/freeze/trust a fresh bounded replacement before Web execution if needed; tool/source/graph/target drift reopens the relevant preflight |
+| Escalation / STOP | If trust or normal endpoint validation is unavailable, STOP the affected Web/browser execution and report to the project user; never bypass TLS or describe it as PASS. No unconditional PG5/PG6, deployment or merge approval |
+
+Risk and rationale: normal browser trust and endpoint compatibility are still unknown. They do
+not alter the accepted IAM/RBAC rules, Backend test design or DB isolation; postponing this
+environment proof permits the first Backend vertical slice without changing product security.
+The exact required Web tests are retained, not waived. Migration immutability, least privilege,
+rollback/forward-repair rules, source pinning and all other STOP boundaries still apply.
+
+T008 is now the next authorized task, followed by T009 RED before T010 minimum GREEN. None
+has started in this publication. Only gate/status documentation changed; no Java, test,
+migration, dependency, tool, certificate or application result changed, and no tests reran.

@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.5` / Draft readiness successor; PG2/PG3 PASS, execution BLOCKED only on pending trusted Chrome HTTPS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.6` / Draft Backend-first readiness successor; PG2/PG3 PASS; PG4 PASS-WITH-ACTIONS, actual Chrome HTTPS NOT-RUN |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; 93-task/zero-finding Analyze accepted at aaa5596a; explicit human PG2/PG3 PASS for 5b2fb9f; PG4 conditional on all readiness results / current section 9 / NOT-APPLICABLE |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; 93-task/zero-finding Analyze accepted at aaa5596a; explicit human PG2/PG3 PASS for 5b2fb9f; subsequent human Backend-first PG4 PASS-WITH-ACTIONS / current section 10 / 2026-10-07 for this execution disposition only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / read-only predecessor in section 8, authorized environment/package successor in section 9; 009 behavior qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–9 actual predecessor results, current gate section 10; 009 behavior qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -447,6 +447,8 @@ listener/setup, verifier, deployment, timer actions, merge and issue closure: **
 
 ## 9. Authorized readiness successor — 2026-10-07
 
+Historical disposition at 4e20db2; the later Backend-first gate is recorded in section 10.
+
 Section 8 is the frozen read-only predecessor, not the current execution state. The human next
 authorized exactly four blocker repairs at `5b2fb9fbeec9e2edc23532de7b2a81d84289a664`, and
 explicitly confirmed **PG2 = PASS, PG3 = PASS**. Spec/design/Q14/Q15 and the 93-task package were
@@ -485,3 +487,22 @@ post-hook is registered. Primary main independently advanced to
 `59515d2f39291ba991694e35c05d5f29cc1cec5c` with a separate contract-exporter commit; no such
 changes were reset, staged or substituted into this execution. Its package.json retains
 SHA-256 `BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE`.
+
+## 10. Current Backend-first execution gate — 2026-10-07
+
+The human's subsequent **“Pass luôn có sao đâu”**, in reply to separating Backend readiness
+from the unexecuted browser prerequisite, authorizes development to proceed. The controlled
+disposition is **PG4 = PASS-WITH-ACTIONS / T007 = COMPLETE**, not a fabricated test PASS.
+PG2/PG3 retain the earlier explicit PASS decisions. Current action `IAM-46-A01` and its owner,
+due condition, certificate expiry, risk and escalation are authoritative in
+[envelope section 5](execution-envelope.md#5-human-backend-first-gate-disposition--2026-10-07).
+
+HTTPS/Chrome remains **NOT-RUN**; Windows import was canceled and the certificate remains
+untrusted. Complete the normal-trust environment check before actual Web/HTTPS qualification
+and before whole-feature acceptance. No product security requirement, accepted design,
+browser test or TLS verification method is removed; no deploy/merge authority is added.
+
+Seven readiness tasks T001–T007 are now complete by recorded evidence plus human gate decision.
+**Next authorized task: T008 named synthetic fixtures, then T009 real eligible-context RED.**
+T008–T093 remain NOT-STARTED in this documentation-only publication. No test/build/DB mutation,
+trust retry, listener, timer, verifier, deployment or merge performed in this successor.
