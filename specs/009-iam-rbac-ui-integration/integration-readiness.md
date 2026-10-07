@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.10` / Draft partial foundational execution result record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.11` / Draft partial foundational execution result record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 14; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 15; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–13 foundation predecessors, section 14 current Project/evaluator and affected focused reruns; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, section 15 current shared HTTP/Web adapter/state; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -868,3 +868,96 @@ No company data, live adoption, preview, deployment, timer, verifier or merge.
 full foundation qualification**, then synthetic Q15/account slices in task order. T024 is not
 complete from these backend-only results. No actual UI/owner API/whole 009 acceptance is claimed;
 PR #47 remains Draft/Open, Issue #46 OPEN. No new approval needed merely to continue authorized tasks.
+
+## 15. Shared HTTP and Web state checkpoint — 2026-10-07
+
+**Current engineering state: T001–T023 complete (23/93).** Exact final source is
+`2f4424e2d8d815e14d41fd305048d4a9bf672036`: actual HTTP/PostgreSQL **9/9 PASS**, Web adapter/state
+**14/14 PASS**, existing TypeScript **no-emit PASS**. T024 remains incomplete; the 70/70 backend
+foundation tests in section 14 were not rerun on this successor. No actual Account screen,
+directory API, Project/Group administration, assignment API, Q15 adoption or whole 009 acceptance
+is claimed. New shared mapping is opt-in for reviewed successor adapters; existing Identity
+contracts and security-filter refusals retain their status/empty-body behavior.
+
+### 15.1 Scope and observed RED → GREEN
+
+`IamWebConfiguration` wires the qualified existing eligibility/UoW/Project-read/evaluator beans
+and supplies bounded reason/server-generated correlation responses only to `@Boundary` adapters.
+Unexpected exceptions do not expose SQL, cause, request fields or diagnostic text. The synthetic
+HTTP adapter exists exclusively in test source: there is no new product route or Swagger operation.
+It enters through real ordinary HTTP sign-in/session/CSRF and real separate PostgreSQL roles.
+
+| Behavior | Executed RED witness | Minimum GREEN |
+|---|---|---|
+| Bounded input refusal | d62905f: expected 400, actual 500, 1 fail | 1c5dbaa: 1/1 |
+| Unexpected SQL failure redaction | da37e92: expected 503, actual 500, 1 fail / 3 | 20be1be: 3/3 |
+| Broken JSON is input refusal | 1d47080: expected 400, actual 503, 1 fail / 8 | 948139a: 8/8 |
+| Existing foundation bean wiring | 218f156: missing IdentityTransactions bean, 1 error / 9 | fd580a6: 9/9 |
+| Initial UI state | 30ea5d5: public state seam unimplemented, 1 fail | 2b02fac: 1/1 |
+| Existing session adapter | e4805c1: public client seam unimplemented, 1 fail / 2 | 8b64af5: 2/2 |
+| Session + fresh-CSRF sign-in | 7f2913b: public sign-in seam unimplemented, 1 fail / 3 | 351026f: 3/3 |
+| Logout and uncertain response | bc7a501: logout unimplemented and unexpected status mislabeled, 2 fails / 10 | f3bb2b3: 10/10 |
+| Distinct settled view states | 944ccf3: public state transition unimplemented, 1 fail / 14 | 2f4424e: 14/14 |
+
+HTTP attempt `http-contract-red-03` at `8cd4a17` unexpectedly passed 7/7. This is retained as
+**UNEXPECTED GREEN, not genuine RED**. Existing mappings were already correct, and the old
+22-character UUID sentinel did not deterministically force UUID parsing failure. Final source
+uses `not-a-uuid`; final 9/9 verifies safe 400 for invalid UUID and broken JSON independently.
+Two Web runner preflight failures at 0cf452c/948139a (JSON root-key handling and DefinitelyTyped
+archive prefix) ran **zero Web tests**; they are runner defects, not product RED. Their owned
+targets/source are preserved. No existing behavior was sabotaged to manufacture RED.
+
+The Web client calls only existing relative session/CSRF/login/logout routes with ordinary
+same-origin credentials, no-store and no redirect. Each mutation obtains fresh CSRF; no token
+cache, JWT/storage bearer, client-authored ActorId, default Organization or synthetic grants.
+It copies only accepted redacted response fields. A missing/malformed/unexpected submitted
+mutation response is **unresolved**, not proof of rollback/success and not an automatic retry.
+Read unavailability, refusal, stale state, authorized empty and loading are distinct. Credentials
+are temporary request arguments, not retained client fields; actual input-control clearing and
+unmount behavior await the actual Account/recipient story. This adapter is not yet wired to App.
+
+Web tests mock only the external fetch boundary and use synthetic literals, not server secrets.
+They are **not actual browser/HTTPS qualification**; real-client evidence remains pending in
+the approved story sequence. The readiness certificate/browser checks are not Account UI PASS.
+
+### 15.2 Exact final execution and retained evidence
+
+Local raw inputs **126/126 PASS**, remote raw inputs **126/126 PASS** for the HTTP run. Shared
+manifest SHA-256 `98dbb7004d313b403da3eea58d7631154fd470b7a37ac29298b863d56a0224ed`;
+byte-preserving archive SHA-256 `6defa315c2196e1441575c55d37aad5a31b7d6876270131acb0b6830b494f924`
+identical after transfer. Source was committed/pushed before execution, with no dynamic repair.
+
+| Check | Exact command / retained private evidence | Result |
+|---|---|---|
+| HTTP / PostgreSQL | `bash /home/phuclam/idea-iam-ui-20261007-46/run-http-contract-qualification-01/source/tests/iam-ui-46/run-owner-tests.sh 2f4424e2d8d815e14d41fd305048d4a9bf672036 98dbb7004d313b403da3eea58d7631154fd470b7a37ac29298b863d56a0224ed http-contract-qualification-01 IamHttpContractTest 9 PASS` | 9/9, 0 failures/errors/skips; 5.420s |
+| Web + typecheck | `pwsh -NoProfile -File C:/Users/TD-999/.codex/iam-ui-46/export-web-green-2f4424e-05/source/tests/iam-ui-46/run-web-tests.ps1 -SourceRoot C:/Users/TD-999/.codex/iam-ui-46/export-web-green-2f4424e-05/source -SourceSha 2f4424e2d8d815e14d41fd305048d4a9bf672036 -Oracle PASS -ExpectedCount 14` | 14/14, 0 failures/pending; TypeScript no-emit PASS |
+
+HTTP Maven-log SHA-256: `bfadfc15de85bfe24a78fc05e741fc2dbedefd56fa1fb5204ed4a847b7ea7bfa`.
+HTTP controlled-source pre/postflight log hashes identical:
+`2d8811ea354c91cb292a15400bec134dfc1d80d729f5db7e57308fdad1a9fd3d`.
+Private Web-log SHA-256: `b1623657a0701093abe0baff22ed4ccd1fb945bf8596cd6d01fd6311f8832d1d`;
+private Web-result SHA-256: `121c2d760e5771b8a751d482645295faf4afc6f2a6cc9ed000407503e2b5b4ee`.
+The [51-row HTTP/backend ledger](evidence/foundation-runs.tsv) preserves the previous 41 rows
+unchanged. The [Web ledger](evidence/web-foundation-runs.tsv) retains all 12 attempts, including
+the two NOT-RUN preflight failures, genuine REDs and final GREEN. Hashes are file identities,
+not proof of independent access to private raw logs via GitHub.
+
+HTTP used only DB `idea_ddm_iam_ui_20261007_46`, fresh schema
+`iam_ui_8df22dcf611c4473a46d1f8da09d7292` and existing separate migrator/app roles. Owned JVM exited
+before source-marker/owner-checked exact cleanup: zero exact remainder, public **0 tables**, DB
+retained. The admitted 82 tools/544 selected inputs rehash unchanged; no new dependency/graph,
+POM or migration. V1–V11 unchanged in this checkpoint. Web used admitted Windows Node 24.19.0,
+44 exact locked cached packages/44 archive integrity checks and 1,255 byte-matched members copied
+to a fresh owned export. Original/shared/projected input and Node postflight PASS; no install,
+download, npm lifecycle build, shared-cache write, live data or browser-secret evidence.
+
+### 15.3 Delivery priority and next task
+
+The many small publication/export/runner cycles caused disproportionate delivery overhead;
+they must not be mistaken for visible UI progress. The user requested a usable account flow
+and challenged this delay. Close the current foundations with only necessary affected T024
+regression, qualify the accepted separate synthetic Q15 prerequisite, then prioritize **US1
+Account UI MVP** before Project/Group/Custom/inspection. This follows the existing accepted plan,
+does not waive security evidence or reopen product design, and adds no framework/research loop.
+PR #47 remains Draft/Open; Issue #46 remains OPEN. Independent implementation review, actual
+Account UI/browser qualification, deployment, verifier and merge remain NOT-RUN. No timer action.
