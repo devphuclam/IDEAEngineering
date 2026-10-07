@@ -152,7 +152,7 @@ Commands, all against one exact committed/exported/hash-verified source:
     bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 build
     pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical-transferred-JAR> -RepositoryRoot <verified-export>
     bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 start
-    <approved-Windows-Node> --use-system-ca tests/iam-ui-46/account-browser.mjs <source> <manifest> account-qualification-04
+    <approved-Windows-Node> tests/iam-ui-46/account-browser.mjs <source> <manifest> account-qualification-04
     bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 verify
     bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 stop
 
@@ -160,8 +160,8 @@ Fresh root: `/home/phuclam/idea-iam-ui-20261007-46/run-account-qualification-04`
 Actual packaged Server binds only `127.0.0.1:18446`; an owned Windows SSH loopback forward exposes
 `https://localhost:18446/` to installed headed Chrome 154.0.8037.98 / admitted Playwright 1.62.1.
 Normal CurrentUser-root trust and SAN verification; no TLS bypass. Existing preview 18444 is untouched.
-Node's intercepted-response-loss proxy uses command-local `--use-system-ca` for normal Windows
-certificate verification too; this neither modifies trust stores nor disables endpoint checks.
+Committed-response loss intercepts the actual Chrome response at its CDP response boundary;
+it never substitutes a Node HTTP proxy/trust context for the actual browser request.
 Build uses admitted Node 24.21.0 Linux and direct offline resources/testResources/compile/testCompile/
 jar/Boot-repackage goals only. Package oracle requires exact 57 runtime JAR hashes, zero JSR305/
 build-tool provider leakage, actual Web, three notices and byte-identical controlled migrations.

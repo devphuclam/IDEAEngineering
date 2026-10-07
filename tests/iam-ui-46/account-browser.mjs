@@ -107,7 +107,6 @@ async function privateBoundary(page) {
 
 try {
   assert.equal(process.version, "v24.19.0");
-  assert.ok(process.execArgv.includes("--use-system-ca")); // Node route.fetch uses normal Windows trust, never ignore TLS.
   assert.equal(sha(await readFile(process.execPath)), "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237");
   assert.equal(sha(await readFile("C:/Program Files/Google/Chrome/Application/chrome.exe")), "6849d2982038de9f9489a7b3858f3b785b7fec06a842c93c517281d21995c8ca");
   const base = "C:/Users/TD-999/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/";
@@ -182,16 +181,22 @@ try {
   assert.equal(await ordinary.getByRole("button", { name: "Tạo tài khoản", exact: true }).count(), 0);
   await page.reload(); await page.getByRole("heading", { name: "Tài Khoản & Định Danh" }).waitFor(); pass("W06_ORDINARY_REFUSAL_RELOAD_SERVER_AUTHORITY");
   stage = "committed-response-loss";
-  await page.route("**/api/v1/identity/accounts", async route => {
-    if (route.request().method() !== "POST") return route.continue();
-    const result = await route.fetch(); assert.equal(result.status(), 201); await route.abort("failed");
+  // Intercept Chrome's actual response, not a Node HTTP proxy with a different trust context.
+  const responseLoss = await adminContext.newCDPSession(page); let committedStatus;
+  await responseLoss.send("Fetch.enable", { patterns: [{ urlPattern: "*/api/v1/identity/accounts", requestStage: "Response" }] });
+  responseLoss.on("Fetch.requestPaused", async event => {
+    if (event.request.method !== "POST") return responseLoss.send("Fetch.continueResponse", { requestId: event.requestId });
+    committedStatus = event.responseStatusCode;
+    await responseLoss.send("Fetch.failRequest", { requestId: event.requestId, errorReason: "Failed" });
   });
   await page.getByRole("button", { name: "Tạo tài khoản", exact: true }).click();
   await create.locator('[name="displayName"]').fill("Synthetic lost response"); await create.locator('[name="login"]').fill("lost-" + randomUUID());
   await create.getByRole("button", { name: "Tạo PENDING" }).click();
+  stage = "committed-response-loss-ui";
   await page.getByTestId("account-status").filter({ hasText: "Chưa xác định được kết quả" }).waitFor();
+  assert.equal(committedStatus, 201);
   assert.equal(await create.locator("fieldset").isDisabled(), true);
-  await page.unroute("**/api/v1/identity/accounts"); pass("W07_LOST_RESPONSE_NO_FALSE_SUCCESS_NO_AUTO_RETRY");
+  await responseLoss.send("Fetch.disable"); await responseLoss.detach(); pass("W07_LOST_RESPONSE_NO_FALSE_SUCCESS_NO_AUTO_RETRY");
   stage = "keyboard-responsive-privacy";
   await page.setViewportSize({ width: 780, height: 900 }); await page.keyboard.press("Tab");
   assert.equal(await page.evaluate(() => document.activeElement !== document.body), true);
