@@ -6,18 +6,36 @@ import java.util.UUID;
 import javax.sql.DataSource;
 
 /** Security writes serialize at this installation lock; account/assignment changes recheck before mutation. */
-final class IdentityTransactions {
+public final class IdentityTransactions {
     enum Owner { IAM, ACCESS_POLICY }
     @FunctionalInterface interface Mutation<T> { T apply(Connection connection) throws SQLException; }
     @FunctionalInterface interface Eligibility { void check(Connection connection, ActorContext context) throws SQLException; }
     private final DataSource dataSource;
     private final Eligibility eligibility;
+    private final OwnerSessionEligibility ownerEligibility;
+
+    /** New owner seam: validation and evidence run on the same caller-owned JDBC transaction. */
+    public interface OwnerCommand<T> {
+        void revalidate(Connection connection, OwnerSessionEligibility.EligibleActor actor) throws SQLException;
+        T apply(Connection connection, OwnerSessionEligibility.EligibleActor actor) throws SQLException;
+    }
+
+    public IdentityTransactions(DataSource dataSource, OwnerSessionEligibility ownerEligibility) {
+        this.dataSource = java.util.Objects.requireNonNull(dataSource);
+        this.ownerEligibility = java.util.Objects.requireNonNull(ownerEligibility);
+        this.eligibility = (connection, context) -> ownerEligibility.admit(connection, context);
+    }
+
+    public <T> T executeOwner(ActorContext context, OwnerCommand<T> command) {
+        throw new UnsupportedOperationException("Owner transaction seam not yet implemented");
+    }
 
     IdentityTransactions(DataSource dataSource) { this(dataSource, (connection, context) -> {}); }
 
     IdentityTransactions(DataSource dataSource, Eligibility eligibility) {
         this.dataSource = java.util.Objects.requireNonNull(dataSource);
         this.eligibility = java.util.Objects.requireNonNull(eligibility);
+        this.ownerEligibility = null;
     }
 
     <T> T mutate(ActorContext context, UUID operation, UUID organization, String permission,

@@ -31,7 +31,7 @@ edecd78184eca31896713c5a3eeffd4537793602d117993fe70de871e587d99d  apps/server/sr
 8819a7663dfd9998e76721ee3083e6dfde02bc8a92bbfcd85a12b5d94084508e  apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java
 0747b07ca033165d2bb3eec0b04bd4ba2aea163fcd4d3c8d0a5484e2e224270c  apps/server/src/main/java/com/idea/ddm/identity/IdentityHttpSecurity.java
 5ec3927382b1a29b838a50d91cb9d40001cc6dfcf3eaea0f6866cf2a2dc140f7  apps/server/src/main/java/com/idea/ddm/identity/IdentityRefusal.java
-5fe1cdb53012f7aca0a89af57f677c90aecb7be4a5bb5b9d1898e347c0a483c3  apps/server/src/main/java/com/idea/ddm/identity/IdentityTransactions.java
+3dbdbdf0856d5a05706db8eabeb35f052b496f942144d6c8ffb639220901b5cb  apps/server/src/main/java/com/idea/ddm/identity/IdentityTransactions.java
 820111e642f133f136a8cd9e2582b89ad4fd203f31ca0f70e67a92237556683b  apps/server/src/main/java/com/idea/ddm/identity/LoginFailures.java
 14cf02e3f9c9ba675477c49199e644a7aa131d314cf7c3b77115f4af730cb47c  apps/server/src/main/java/com/idea/ddm/identity/LogoutBoundary.java
 4fdcb39c19822598adc8f15ceab0b3f79096faca54df94895c30f17a85d94a7f  apps/server/src/main/java/com/idea/ddm/identity/NativePasswordVerifier.java
@@ -74,9 +74,11 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
 edcbdcefa65c07fe11dc7eba7f30008a9a28598f4539754f5ba3c75830c88658  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
+13d32520aeebf7cee50ff4af3c359daa8b4b500db0fdf09f616656e7883ce409  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
+001ffd2599a20fccc7bb2f2df95462663b6f5870fef8f23b6a077cba0bbbbfea  apps/server/src/test/java/com/idea/ddm/identity/IdentityTransactionsTest.java
 276fe48a6d07d34d6ed19eb06eaab215c8f02e72e40a06f7911b2e07cb3888bd  apps/server/src/test/java/com/idea/ddm/identity/OwnedHandoffCleanupTest.java
-575f9932e11007ed7630c34e57e0aecb05d437f425bd4fe8894f29e08e848a90  apps/server/src/test/java/com/idea/ddm/identity/OwnerSessionEligibilityTest.java
+45ccca0e5b5664bbb77584683e3c5a8bdbaf9a99ab92646f7790e47f93f753ce  apps/server/src/test/java/com/idea/ddm/identity/OwnerSessionEligibilityTest.java
 63dd8d1f3764bd00f136b15b4ed03a15648b08e8375aab0cbc678aaaadf4803b  apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java
 466a43ab985e0ba55c5204e63255bb605608761e062d47e267eeb3b9a2789cc3  apps/server/src/test/java/com/idea/ddm/identity/TransferClientBoundaryTest.java
 2e08d303e06f4808e3a3fcb7b8a15aa51c5f008d0b0565a560d7ad94e229ff38  apps/server/src/test/java/com/idea/ddm/operation/F04PredecessorMigrationTest.java
@@ -94,7 +96,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 1ecd0ef59327bcfff1a9d3eb87aa4a1f67221564d4c58a4e9df64cac9d0d5272  database/migrations/V8__owner_committed_event_foundation.sql
 1479e8ebd18969ec6102b92b81a3192e8392fa966bb369bfad7c43a8740144ed  database/migrations/V9__exact_transfer_grant_scope.sql
 5368d16c9a6baa11eab4ee7c0731578971c17284ded80979639b9dfd45ee08a9  docs/research/inventories/iam-ui-46-resolved-inputs.tsv
-760a423c31e13bfde2596fd44362744569aeab465f6034fcaefa0ab659be111e  tests/iam-ui-46/README.md
+11acf694919b145b4d45c310dcfbf58e44536c88c64abd1e79a8c8ef7c50c79f  tests/iam-ui-46/README.md
 640c9be94c93ec2bfc8e887b1541ef6aeed3908240e118cb33e37947c69ba691  tests/iam-ui-46/run-owner-tests.sh
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml

@@ -50,6 +50,14 @@ is controlled at one microsecond before/exactly expiry, no wall-clock waiting. T
 case qualifies the adapter's runtime binding with a second SessionService instance, not full
 process restart/recovery. All cases still enter through the actual HTTP sign-in seam first.
 
+T011 first vertical RED: `transaction-red-01 IdentityTransactionsTest 1 RED`. The new owner
+transaction method is an explicit unimplemented seam, not sabotage of the existing F03 paths.
+The first owner test expects one synthetic state change plus required owner outcome, two
+authorization records and Audit to commit together. New callbacks must revalidate current owner
+authority at coordinated admission and finalization; the shared seam derives Actor/Organization
+from IAM, holds lock 73003002, and owns commit/rollback. It does not invent Project/RBAC rules,
+an HTTP route, Permission, generic CRUD coordinator or owner evidence schema.
+
 ## Database and cleanup
 
 Only `idea_ddm_iam_ui_20261007_46`, existing migrator/app roles, and one fresh
