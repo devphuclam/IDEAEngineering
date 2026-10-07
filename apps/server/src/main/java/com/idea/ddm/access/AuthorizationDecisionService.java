@@ -86,7 +86,7 @@ public final class AuthorizationDecisionService {
     public static List<GrantPath> organizationGrants(Connection connection, OwnerSessionEligibility.EligibleActor actor,
             String permission) throws SQLException {
         final Instant now;
-        try (var query = connection.createStatement(); var row = query.executeQuery("SELECT CURRENT_TIMESTAMP")) {
+        try (var query = connection.createStatement(); var row = query.executeQuery("SELECT clock_timestamp()")) {
             if (!row.next()) throw new SQLException("Current authorization time unavailable");
             now = row.getTimestamp(1).toInstant();
         }
