@@ -30,14 +30,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /** Named real-HTTP fixture shared by IAM owner qualifications; no new route or raw caller identity. */
-final class IamSessionFixture implements AutoCloseable {
+public final class IamSessionFixture implements AutoCloseable {
     private final IamIntegrationFixtures fixtures;
     final ControlledClock clock = new ControlledClock();
     private final AtomicReference<ActorContext> captured = new AtomicReference<>();
     private final ConfigurableApplicationContext server;
     private final int port;
 
-    IamSessionFixture(IamIntegrationFixtures fixtures) {
+    public IamSessionFixture(IamIntegrationFixtures fixtures) {
         this.fixtures = fixtures;
         server = new SpringApplicationBuilder(IdeaServerApplication.class).initializers(context -> {
             context.getBeanFactory().registerSingleton("iamFixtureClock", clock);
@@ -48,10 +48,10 @@ final class IamSessionFixture implements AutoCloseable {
         port = ((WebServerApplicationContext) server).getWebServer().getPort();
     }
 
-    SessionService sessions() { return server.getBean(SessionService.class); }
+    public SessionService sessions() { return server.getBean(SessionService.class); }
     @Override public void close() { server.close(); captured.set(null); }
 
-    ActorContext signIn(IamIntegrationFixtures.Identity identity) throws Exception {
+    public ActorContext signIn(IamIntegrationFixtures.Identity identity) throws Exception {
         var credential = UUID.randomUUID().toString(); // Private test memory, never a retained fixture value.
         try (var connection = fixtures.migrator()) {
             connection.setAutoCommit(false);

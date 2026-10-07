@@ -3,6 +3,7 @@ package com.idea.ddm.identity;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.iam.IamIntegrationFixtures;
+import com.idea.ddm.iam.IamTestFixture;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -16,16 +17,18 @@ import org.junit.jupiter.api.TestInstance;
 class IdentityTransactionsTest {
     private final IamIntegrationFixtures fixtures = new IamIntegrationFixtures();
     private IamSessionFixture http;
+    private IamTestFixture named;
 
-    @BeforeAll void startOwnedServer() throws Exception { fixtures.createSchema(); http = new IamSessionFixture(fixtures); }
-    @AfterAll void stopOwnedServer() { if (http != null) http.close(); }
+    @BeforeAll void startOwnedServer() throws Exception { fixtures.createSchema(); named = new IamTestFixture(fixtures); http = named.http(); }
+    @AfterAll void stopOwnedServer() { if (named != null) named.close(); }
 
     @Test void acceptedOwnerStateAndRequiredOutcomeAuthorizationAndAuditCommitTogether() throws Exception {
-        var identity = fixtures.identity(IamIntegrationFixtures.Persona.AA_V1);
-        var context = http.signIn(identity);
+        var signedIn = named.signIn(IamIntegrationFixtures.Persona.AA_V1);
+        var identity = signedIn.identity();
+        var context = signedIn.context();
         assignFixtureAuthority(identity);
         var operation = UUID.randomUUID();
-        var transactions = new IdentityTransactions(fixtures.appDataSource(), new OwnerSessionEligibility(http.sessions()));
+        var transactions = named.ownerTransactions();
         var result = transactions.executeOwner(context, command(identity, context, operation));
         assertEquals("Synthetic owner committed", result);
         assertEquals(new State("Synthetic owner committed", 1, 2, 1), state(identity, operation));

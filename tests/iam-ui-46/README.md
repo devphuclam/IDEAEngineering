@@ -1,6 +1,6 @@
 # IAM UI 46 owner qualification packet
 
-Control: IE-VVP-IAM-46-OWNER-20261007 / first-party execution procedure / v0.1 Draft;
+Control: IE-VVP-IAM-46-OWNER-20261007 / first-party execution procedure / v0.2 Draft;
 Issue #46 / PR #47, CODEX_ONLY; 2026-10-07 Asia/Ho_Chi_Minh; INTERNAL, Git plus private
 mode-600 raw logs. PG2/PG3/PG4 PASS authority is recorded in
 [the execution envelope](../../specs/009-iam-rbac-ui-integration/execution-envelope.md).
@@ -66,11 +66,22 @@ qualify retained predecessor revocation, immutable role/version content, separat
 staging, same-Org/Project constraints and direct app protected-DML/SET ROLE refusal. The schema
 is still discarded only through the published exact-marker runner after the test JVM exits.
 
+Current successor adds V11 only inside fresh test schemas. The schema suite migrates V1–V10,
+retains a synthetic revoked predecessor assignment and checks V11 upgrade/repeat, exact 8-role /
+25-permission content without automatic grants, sealed content, app privilege denial and relational
+scope constraints. Normal owner/eligibility fixtures also migrate V11 fresh. Raw V1–V10 hashes
+remain pinned to the accepted predecessor. This does not qualify an actual Project/assignment/
+Custom-role HTTP workflow or deploy the successor to a retained/public/preview database.
+
+T015's `IamTestFixture` gives stories a named `SignedInActor` and the qualified owner transaction
+port. It wraps the same real HTTP fixture; no password/cookie/proof in the value object, no raw
+ActorContext constructor, automatic grant, schema cleanup or new production abstraction.
+
 ## Database and cleanup
 
 Only `idea_ddm_iam_ui_20261007_46`, existing migrator/app roles, and one fresh
 `iam_ui_<32 lowercase hex>` schema per run. Java verifies DB/owner/role and creates an exact
-`IDEA_IAM_UI_RUN:<source>:<schema>` marker before migrating immutable V1–V10 in that schema.
+`IDEA_IAM_UI_RUN:<source>:<schema>` marker before migrating immutable V1–V10 plus candidate V11 in that schema.
 Named synthetic fixtures confer no new role or membership. No public migration, preview,
 company data, Vault, live adoption or DB drop.
 
