@@ -68,7 +68,7 @@ bfd590e4f09502d4dda3c6c8c8b16dbf40a9cd284bdc9b06adfce4833cd64de6  apps/server/sr
 0c39dd6f2f469ebb30dd4444e00d104c9964222ba306e62951da6386cfd9742e  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationTest.java
 c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/src/test/java/com/idea/ddm/F03BPublicMigrationTest.java
 0f29ea9f531ca6d0af175504dfb7859eac33295c625460eadc2b6a68f847a2c7  apps/server/src/test/java/com/idea/ddm/iam/IamIntegrationFixtures.java
-a4b3aa0acb608bf531ed985e8d0de3470a00827ad4c9779a3ed6577515f1078e  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
+01f95e687257365c319dd4027df9b224e22926c057f7fb6abb18f92763a2b1cd  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java

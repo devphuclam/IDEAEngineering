@@ -111,6 +111,22 @@ class IamSchemaPrivilegeTest {
             try(var row=query.executeQuery()) { assertTrue(row.next()); return row.getString(1); }
         }
     }
+
+    @Test void anOrganizationOnlyRoleCannotBeStoredAsAProjectAssignment() throws Exception {
+        try(var connection=fixtures.migrator()) {
+            connection.setAutoCommit(false);
+            try {
+                var project=java.util.UUID.randomUUID();
+                execute(connection,"INSERT INTO project(project_id,organization_id,display_name,created_by) VALUES (?,?,'Synthetic profile target',?)",
+                        project,legacy.organizationId(),legacy.actorId());
+                var failure=assertThrows(java.sql.SQLException.class,()->execute(connection,
+                        "INSERT INTO identity_role_assignment(assignment_id,principal_actor_id,role_version_id,organization_id,assigned_by,reason,scope_kind,project_id) "
+                        + "VALUES (?,?,'9d80f77e-85a6-4c12-a72d-8ef6b7e0a002',?,?,'Synthetic invalid profile','PROJECT',?)",
+                        java.util.UUID.randomUUID(),legacy.actorId(),legacy.organizationId(),legacy.actorId(),project));
+                assertEquals("23514",failure.getSQLState());
+            } finally { connection.rollback(); }
+        }
+    }
     private static void execute(java.sql.Connection connection,String sql,Object... values) throws Exception {
         try(var statement=connection.prepareStatement(sql)) {
             for(int i=0;i<values.length;i++) statement.setObject(i+1,values[i]);
