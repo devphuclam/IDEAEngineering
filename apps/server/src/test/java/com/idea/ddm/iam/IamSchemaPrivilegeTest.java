@@ -266,6 +266,28 @@ class IamSchemaPrivilegeTest {
             assertEquals("42501",failure.getSQLState(),sql);
         }
     }
+
+    @Test void membershipTerminationCannotOmitItsRequiredReason() throws Exception {
+        for(var table:java.util.List.of("project_membership","group_membership")) {
+            try(var connection=fixtures.migrator()) {
+                connection.setAutoCommit(false);
+                try {
+                    var project=java.util.UUID.randomUUID(); var group=java.util.UUID.randomUUID();
+                    execute(connection,"INSERT INTO project(project_id,organization_id,display_name,created_by) VALUES (?,?,'Synthetic end metadata target',?)",
+                            project,legacy.organizationId(),legacy.actorId());
+                    execute(connection,"INSERT INTO business_group(group_id,project_id,organization_id,display_name,created_by) VALUES (?,?,?,'Synthetic end Group',?)",
+                            group,project,legacy.organizationId(),legacy.actorId());
+                    var sql="INSERT INTO "+table+"(membership_id,project_id,organization_id,actor_id,effective_from,reason,created_by,ended_at,ended_by"
+                            +(table.equals("group_membership")?",group_id":"")+") VALUES (?,?,?,?,CURRENT_TIMESTAMP,'Synthetic original reason',?,CURRENT_TIMESTAMP,?"
+                            +(table.equals("group_membership")?",?":"")+")";
+                    var values=new java.util.ArrayList<Object>(java.util.List.of(java.util.UUID.randomUUID(),project,legacy.organizationId(),legacy.actorId(),legacy.actorId(),legacy.actorId()));
+                    if(table.equals("group_membership")) values.add(group);
+                    var failure=assertThrows(java.sql.SQLException.class,()->execute(connection,sql,values.toArray()));
+                    assertEquals("23514",failure.getSQLState());
+                } finally { connection.rollback(); }
+            }
+        }
+    }
     private Map<String,Integer> migrationChecksums() throws Exception {
         var checksums=new TreeMap<String,Integer>();
         try(var connection=fixtures.app(); var statement=connection.createStatement(); var rows=statement.executeQuery(
