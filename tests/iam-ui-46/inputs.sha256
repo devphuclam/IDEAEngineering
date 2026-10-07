@@ -11,6 +11,7 @@ b6caecfff4e8482e328f7796f2c8680a0e3200d343be34fc02d658943ce50028  apps/server/sc
 f1f09f45c5c1fda1cf961901e1d0fe2d4b97aef12f6b62c5f26c4b41f125d7b8  apps/server/scripts/run-f03b-postgresql-checks.sh
 86b4912a18bd084afd58c41855131088f337d5be7725f77c14e1b10fede7f9e9  apps/server/scripts/run-f04-postgresql-checks.sh
 7d7ce17876dc763f8f26fab14af5bc7b91b7379aa7a55c583c9bcd079924f5b8  apps/server/src/main/java/com/idea/ddm/access/AuthorizationDecisionService.java
+b8663ced06ca64dc4f49b913a4e8d5e5a181844ecc32a067f72d4b31c69b6cbf  apps/server/src/main/java/com/idea/ddm/access/SuperSuccessorAdoptionService.java
 9db01a2754a7160f1c7f937f777087813f022e5a884943f8ff7b22303fa28455  apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java
 ab74624c75be477812df3db84dcf19bf8fb0f593582d6847110aee8ccf495e27  apps/server/src/main/java/com/idea/ddm/custody/GrantEnvelope.java
 c0bf3e9aeb4a84713ad9e996f142c3418b21923d963e5aa7f5d118115fa10329  apps/server/src/main/java/com/idea/ddm/custody/ReceiptEnvelope.java
@@ -63,6 +64,7 @@ cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/sr
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
+6e75e012283ee45f618b6cb38082df20a7efa6385b774ef8e1dfdb0458774244  apps/server/src/test/java/com/idea/ddm/access/SuperSuccessorAdoptionTest.java
 82931e01c2e997ee4c3d700b7010645f853ef2f7ad44f5b7bbeac1f7b489b030  apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java
 3f2d3dd7e696355ab791110dfc116f2a7ca0138e6ea75b763136bb216fd81064  apps/server/src/test/java/com/idea/ddm/custody/CustodyBoundaryTest.java
 2db3484f5e11321bebb2d7d0f5c6e625388d15fccaa0eeb898bc0e038636565a  apps/server/src/test/java/com/idea/ddm/custody/ReceiptBoundaryTest.java
@@ -119,7 +121,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 1479e8ebd18969ec6102b92b81a3192e8392fa966bb369bfad7c43a8740144ed  database/migrations/V9__exact_transfer_grant_scope.sql
 5368d16c9a6baa11eab4ee7c0731578971c17284ded80979639b9dfd45ee08a9  docs/research/inventories/iam-ui-46-resolved-inputs.tsv
 8f7959417be7cf91b502cac53ac514192e5bc0904052a41d0ff31634809443ac  tests/iam-ui-46/README.md
-8d5155b09a62030234a740b7ffbb5148875cef61d377ed389a94031e2a6a824e  tests/iam-ui-46/run-owner-tests.sh
+ace046e389bce5aab527b0522431c4c05b81a50cb2313472890e9e865b0b403f  tests/iam-ui-46/run-owner-tests.sh
 f95df2ba5d00d462f2a322dd27a35cc1a965c2906f8d78a299e33b891293ae40  tests/iam-ui-46/run-web-tests.ps1
 e812687c818b4d96fcfd529e7bd1cfd7df51482bf82cd769b3691b00b51e173b  tests/iam-ui-46/vitest.config.mjs
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv

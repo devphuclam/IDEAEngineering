@@ -3,8 +3,8 @@ set -euo pipefail
 set +x
 umask 077
 [[ $# == 6 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ ]] || exit 2
-[[ $3 =~ ^(owner|transaction|schema|project-read|authorization|http-contract)-(qualification|red|green)-[0-9]{2}$ && $5 =~ ^[1-9][0-9]*$ ]] || exit 2
-[[ $4 == OwnerSessionEligibilityTest || $4 == IdentityTransactionsTest || $4 == IamSchemaPrivilegeTest || $4 == ProjectAuthorizationReadTest || $4 == AuthorizationDecisionTest || $4 == IamHttpContractTest ]] || exit 2
+[[ $3 =~ ^(owner|transaction|schema|project-read|authorization|http-contract|adoption)-(qualification|red|green)-[0-9]{2}$ && $5 =~ ^[1-9][0-9]*$ ]] || exit 2
+[[ $4 == OwnerSessionEligibilityTest || $4 == IdentityTransactionsTest || $4 == IamSchemaPrivilegeTest || $4 == ProjectAuthorizationReadTest || $4 == AuthorizationDecisionTest || $4 == IamHttpContractTest || $4 == SuperSuccessorAdoptionTest || $4 == SuperSuccessorAdoptionNegativeTest ]] || exit 2
 [[ $6 == PASS || $6 == RED ]] || exit 2
 owned=/home/phuclam/idea-iam-ui-20261007-46/run-$3
 source_root="$owned/source"
