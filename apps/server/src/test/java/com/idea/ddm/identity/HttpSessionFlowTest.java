@@ -43,7 +43,9 @@ class HttpSessionFlowTest {
     void startServerWithOnlyThisTestsMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
-        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
+        if(System.getenv("IDEA_IAM_SOURCE_SHA")!=null) {
+            schema=com.idea.ddm.iam.IamRegressionSchemas.create();
+        } else if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
             schema=F05DatabaseFixture.createRegressionSchema();
         } else if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             schema = F04SchemaTest.createRegressionSchema();
@@ -70,7 +72,7 @@ class HttpSessionFlowTest {
         if (syntheticDelivery) arguments.add("--idea.identity.synthetic-credential-delivery.enabled=true");
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
                 .initializers(context -> {
-                    if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)context.getBeanFactory().registerSingleton("dataSource",appDataSource());
+                    if(System.getenv("IDEA_F05_SOURCE_SHA")!=null || System.getenv("IDEA_IAM_SOURCE_SHA")!=null)context.getBeanFactory().registerSingleton("dataSource",appDataSource());
                     context.getBeanFactory().registerSingleton("testIdentityClock", clock);
                     context.getBeanFactory().registerSingleton("testContextRepository", bindingRepository);
                     context.getBeanFactory().registerSingleton("testSessionBudgetListener", new HttpSessionListener() {
@@ -85,6 +87,7 @@ class HttpSessionFlowTest {
     @AfterEach
     void closeServerAndRemoveOnlyOwnedUuidSchema() throws Exception {
         if (server != null) server.close();
+        if(schema!=null && System.getenv("IDEA_IAM_SOURCE_SHA")!=null){com.idea.ddm.iam.IamRegressionSchemas.remove(schema);return;}
         if(schema!=null && System.getenv("IDEA_F05_SOURCE_SHA")!=null){F05DatabaseFixture.removeRegressionSchema(schema);return;}
         if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             F04SchemaTest.removeRegressionSchema(schema);
@@ -2388,6 +2391,7 @@ class HttpSessionFlowTest {
     }
 
     private String url() {
+        if(System.getenv("IDEA_IAM_SOURCE_SHA")!=null)return com.idea.ddm.iam.IamRegressionSchemas.url();
         if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)return "jdbc:postgresql://127.0.0.1:5432/"+F05DatabaseFixture.DATABASE;
         var database = env("IDEA_F03B_TEST_DATABASE_NAME");
         if (!database.equals("idea_ddm_f03a_20260930_c91e7a42")) {

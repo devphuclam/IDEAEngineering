@@ -50,7 +50,8 @@ try {
         finally {$stream.Dispose()}
         if($sha -ne 'da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93'){throw 'Notice hash differs'}
     }
-    Get-ChildItem "$RepositoryRoot/database/migrations/*.sql" | ForEach-Object {
+    $migrations=@(Get-ChildItem "$RepositoryRoot/database/migrations/*.sql")
+    $migrations | ForEach-Object {
         $entry=$zip.GetEntry("BOOT-INF/classes/db/migration/$($_.Name)")
         if(!$entry){throw "Migration absent: $($_.Name)"}
         $stream=$entry.Open()
@@ -58,5 +59,5 @@ try {
         finally {$stream.Dispose()}
         if($sha -ne (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()){throw 'Migration bytes differ'}
     }
-    "PACKAGE_CONTENT=PASS;NESTED_JARS=57;JSR305_PROVIDERS=0;BUILD_TOOL_LEAK=0;NOTICES=3/3;MIGRATIONS=10/10"
+    "PACKAGE_CONTENT=PASS;NESTED_JARS=57;JSR305_PROVIDERS=0;BUILD_TOOL_LEAK=0;NOTICES=3/3;MIGRATIONS=$($migrations.Count)/$($migrations.Count)"
 } finally {$zip.Dispose()}

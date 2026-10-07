@@ -9,7 +9,9 @@ Independent runtime acceptance is NOT-RUN; verifier, deployment and merge are NO
 
 ## Exact source and commands
 
-Commit and push source before each run. Export that exact commit with command-local
+FAST DELIVERY successor: commit exact source before each run; push the coherent vertical slice
+at its milestone, not every microtask. Earlier pushed-before-run checkpoints remain historical.
+Export that exact commit with command-local
 `git -c core.autocrlf=false archive`, restricted to `apps/server`, `database/migrations`,
 `tests/iam-ui-46`, the existing Server Grant settings, pinned toolchain and resolved-input
 inventory. Verify every raw exported file against `inputs.sha256` locally and after extraction;
@@ -136,3 +138,53 @@ private logs. Oracle: zero exact schema remainder, public still empty, controlle
 unchanged. Failures retain diagnostics and attempt identity; missing/drift tool/input, unexpected
 target/role/marker or remaining JVM stops cleanup/execution. A normal first-party test/compile
 defect is engineering work, not missing dependency or permission evidence.
+
+## Account MVP consolidated qualification (successor, pre-execution)
+
+Existing execution envelope, tool identities, approved synthetic database and trusted certificate
+are reused. This is not deployment or live adoption. V1–V11 bytes remain unchanged; additive V12
+qualifies exact-purpose/login proof supersession. Original authored UI presentation is reused from
+`feat/f04-admin-iam-ui@9160ec27dec2b80b96c36adf94460864fd265099`; actual state/authority comes
+from the Server, never from its former mock collections or demo sign-in. Future screens stay disabled.
+
+Commands, all against one exact committed/exported/hash-verified source:
+
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 build
+    pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical-transferred-JAR> -RepositoryRoot <verified-export>
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 start
+    <approved-Windows-Node> tests/iam-ui-46/account-browser.mjs <source> <manifest> account-qualification-04
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 verify
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> account-qualification-04 stop
+
+Fresh root: `/home/phuclam/idea-iam-ui-20261007-46/run-account-qualification-04`.
+Actual packaged Server binds only `127.0.0.1:18446`; an owned Windows SSH loopback forward exposes
+`https://localhost:18446/` to installed headed Chrome 154.0.8037.98 / admitted Playwright 1.62.1.
+Normal CurrentUser-root trust and SAN verification; no TLS bypass. Existing preview 18444 is untouched.
+Build uses admitted Node 24.21.0 Linux and direct offline resources/testResources/compile/testCompile/
+jar/Boot-repackage goals only. Package oracle requires exact 57 runtime JAR hashes, zero JSR305/
+build-tool provider leakage, actual Web, three notices and byte-identical controlled migrations.
+
+Oracle: synthetic actual interactive Q15 adoption and repeat (one new Super@2 assignment, preserved
+Super@1/bootstrap and zero console sessions), then branded real login/context, list/detail/create
+PENDING, private exact-login setup reissue, refused old proof, recipient credential redemption and
+fresh login, disable/old-session refusal, DISABLED reset without re-enable, separate re-enable with
+stable identities and new-password login, ordinary-user refusal, reload, committed response loss
+without false success/retry, basic keyboard/responsive/private boundaries, logout/unmount. This is
+US1 browser qualification, not whole-feature accessibility or general role-assignment qualification.
+
+Random synthetic credentials and proof/cookie/CSRF values stay in private transient memory; only
+the fixture seed file is retained temporarily at mode 600 in the owned root and deleted after test.
+No screenshots/HAR/traces/private diagnostic printing. Console uses actual packaged operator main
+via PropertiesLauncher and a PTY with non-echoing password prompt, never a test route or startup grant.
+Positive prerequisite AA@3 is explicitly fixture-seeded, not claimed as implemented general granting.
+
+Affected predecessor `HttpSessionFlowTest` (83) and `IdentityFlowTest` (20) keep their assertions;
+the bounded `IamRegressionSchemas` retargets only to new owned UUID schemas in this same approved DB,
+with exact owner/source markers before cleanup. `AccountIsolationTest` proves no implicit Project/
+Group membership or Role Assignment through actual create HTTP. Runner also checks zero schemas
+for the exact executed source, unchanged tools/inputs and empty public. No old F03/F05 DB reuse.
+
+On failure retain safe stage/result and private logs, stop only the owned process/forward, then
+guard cleanup by exact DB/schema/source/owner after JVM exit. Normal first-party defects get a
+committed successor and fresh numbered target; target/tool/dependency/right drift is STOP.
+Do not drop database or delete predecessor logs. No verifier, preview change or merge.

@@ -4,7 +4,7 @@ set +x
 umask 077
 [[ $# == 6 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ ]] || exit 2
 [[ $3 =~ ^(owner|transaction|schema|project-read|authorization|http-contract|adoption|account)-(qualification|red|green)-[0-9]{2}$ && $5 =~ ^[1-9][0-9]*$ ]] || exit 2
-[[ $4 == OwnerSessionEligibilityTest || $4 == IdentityTransactionsTest || $4 == IamSchemaPrivilegeTest || $4 == ProjectAuthorizationReadTest || $4 == AuthorizationDecisionTest || $4 == IamHttpContractTest || $4 == SuperSuccessorAdoptionTest || $4 == SuperSuccessorAdoptionNegativeTest || $4 == IdentityAccountUiContractTest || $4 == CredentialProofReissueTest || $4 == AccountIsolationTest ]] || exit 2
+[[ $4 == OwnerSessionEligibilityTest || $4 == IdentityTransactionsTest || $4 == IamSchemaPrivilegeTest || $4 == ProjectAuthorizationReadTest || $4 == AuthorizationDecisionTest || $4 == IamHttpContractTest || $4 == SuperSuccessorAdoptionTest || $4 == SuperSuccessorAdoptionNegativeTest || $4 == IdentityAccountUiContractTest || $4 == CredentialProofReissueTest || $4 == AccountIsolationTest || $4 == HttpSessionFlowTest || $4 == IdentityFlowTest ]] || exit 2
 [[ $6 == PASS || $6 == RED ]] || exit 2
 owned=/home/phuclam/idea-iam-ui-20261007-46/run-$3
 source_root="$owned/source"
@@ -46,6 +46,8 @@ target=$(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_
   "SELECT current_database()||'|'||current_user||'|'||pg_get_userbyid(datdba) FROM pg_database WHERE datname=current_database()")
 [[ $target == "$db|idea_ddm_migrator|idea_ddm_migrator" ]] || exit 6
 export IDEA_IAM_SOURCE_SHA="$1"
+export IDEA_DATABASE_HOST=127.0.0.1 IDEA_DATABASE_PORT=5432 IDEA_DATABASE_APP_USER=idea_ddm_app IDEA_DATABASE_MIGRATION_USER=idea_ddm_migrator
+export IDEA_F03_TEST_DATABASE_NAME="$db" IDEA_F03B_TEST_DATABASE_NAME="$db"
 export IDEA_IAM_TEST_SCHEMA="iam_ui_$(tr -d '-' < /proc/sys/kernel/random/uuid)"
 schema="$IDEA_IAM_TEST_SCHEMA"
 [[ $schema =~ ^iam_ui_[0-9a-f]{32}$ ]] || exit 6
@@ -79,6 +81,7 @@ else
 fi
 [[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_namespace WHERE nspname='$schema'") == 0 ]] || exit 8
 [[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_tables WHERE schemaname='public'") == 0 ]] || exit 8
+[[ $(psql -X -h 127.0.0.1 -p 5432 -U idea_ddm_migrator -d "$db" -v ON_ERROR_STOP=1 -Atqc "SELECT count(*) FROM pg_namespace WHERE obj_description(oid,'pg_namespace') LIKE 'IDEA_IAM_UI_RUN:$1:%'") == 0 ]] || exit 8
 unset PGPASSWORD IDEA_DATABASE_APP_PASSWORD IDEA_DATABASE_MIGRATION_PASSWORD
 cd "$source_root"
 verify_tools

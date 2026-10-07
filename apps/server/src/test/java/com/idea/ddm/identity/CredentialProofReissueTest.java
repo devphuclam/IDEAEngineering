@@ -21,7 +21,7 @@ class CredentialProofReissueTest {
         withAdmin((client,who)->{var target=create(client,who);var first=issue(client,who,target);var second=issue(client,who,target);
             assertEquals(400,redeem(client,target,first).statusCode());assertEquals(204,redeem(client,target,second).statusCode());return null;});
     }
-    @Test void siblingLoginProofRemainsUnsupersededAndLegacyAmbiguousSetupRefuses()throws Exception{
+    @Test void siblingLoginProofRemainsUnsuperseded()throws Exception{
         withAdmin((client,who)->{var target=create(client,who);var sibling=UUID.randomUUID();
             execute("INSERT INTO login_identity(login_identity_id,account_id,login_identifier,normalized_login_identifier,password_verifier) VALUES (?,?,?,?,NULL)",sibling,target.account,"other-"+sibling,"other-"+sibling);
             var first=issue(client,who,target);var other=issue(client,who,new Target(target.account,sibling));var second=issue(client,who,target);
