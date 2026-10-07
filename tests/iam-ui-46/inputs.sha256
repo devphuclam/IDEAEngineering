@@ -42,7 +42,7 @@ c91285a76d86e0ba4b6b2bd806b3ea5c397bfbf86615c03ea5cf37ecf741817d  apps/server/sr
 1998d773f0bd3f7150e789ef26672411e35efb970cd6f107f04bd05e61d21c42  apps/server/src/main/java/com/idea/ddm/migration/DatabaseMigrationCommand.java
 292e73ea96a89e795b15400781953eb7a7eda71d0e9bb89e9c0f886bcbda22e9  apps/server/src/main/java/com/idea/ddm/operation/SampleOwnerCommandService.java
 e65639ed4312bbfe2bce12855ae9eaa3f5775e7fdb4d8db18923a1c127a67f75  apps/server/src/main/java/com/idea/ddm/ProcessHealthController.java
-c16d2d28b1d4db6f6223666ec77a626568f2253b3b6a6d28e471dfbf06cb17c4  apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceQueries.java
+822c76d91e41a8ebd2567552efc8229cbbe3adfae4c21489aaedc4d65ecdd10a  apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceQueries.java
 6d0bb5ffbe6b49e0a56bb12e9e5129c1b73a11324d64c71fc2fc50ab439e71d1  apps/server/src/main/resources/application.properties
 b3f14fd1f22fc0206daf04c25744b882861517d3f0318bbc01b9b9ccbe4b723e  apps/server/src/main/resources/dev-access/boot.js
 fba3721249067b0351e4a04bb57d1c393569dd9fd0e3b9d19183942563899e8c  apps/server/src/main/resources/dev-access/index.html
