@@ -74,6 +74,108 @@ class OwnerSessionEligibilityTest {
         }
     }
 
+    @Test void rawActorIdWithoutAnAuthenticatedSessionCannotEnterOwnerAdmission() throws Exception {
+        var identity = fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);
+        var authenticated = signIn(identity);
+        assertRefused(new OwnerSessionEligibility(server.getBean(SessionService.class)), new ActorContext(authenticated.actorId(), 1));
+    }
+
+    @Test void revokedSessionIsRefusedWithoutRefreshingActivity() throws Exception {
+        var context = signIn(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY));
+        try (var connection = fixtures.migrator()) {
+            AdministratorBootstrap.insert(connection, "UPDATE session_record SET revoked_at=? WHERE session_id=?",
+                    java.sql.Timestamp.from(clock.instant()), context.sessionId());
+        }
+        assertRefused(context);
+    }
+
+    @Test void changedAccountSecurityVersionMakesOldContextIneligible() throws Exception {
+        var identity = fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);
+        var context = signIn(identity);
+        try (var connection = fixtures.migrator()) {
+            AdministratorBootstrap.insert(connection, "UPDATE idea_account SET security_version=security_version+1 WHERE account_id=?", identity.accountId());
+        }
+        assertRefused(context);
+    }
+
+    @Test void disabledAccountCannotEnterOwnerAdmission() throws Exception {
+        var identity = fixtures.identity(IamIntegrationFixtures.Persona.DISABLED);
+        var context = signIn(identity);
+        try (var connection = fixtures.migrator()) {
+            AdministratorBootstrap.insert(connection, "UPDATE idea_account SET status='DISABLED' WHERE account_id=?", identity.accountId());
+        }
+        assertRefused(context);
+    }
+
+    @Test void disabledActorCannotEnterOwnerAdmissionEvenIfAccountIsActive() throws Exception {
+        var identity = fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);
+        var context = signIn(identity);
+        try (var connection = fixtures.migrator()) {
+            AdministratorBootstrap.insert(connection, "UPDATE actor SET disabled_at=? WHERE actor_id=?",
+                    java.sql.Timestamp.from(clock.instant()), identity.actorId());
+        }
+        assertRefused(context);
+    }
+
+    @Test void idleLifetimeIsHalfOpenAndReadonlyAdmissionDoesNotRefreshIt() throws Exception {
+        var context = signIn(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY));
+        clock.advance(java.time.Duration.ofHours(2).minusNanos(1000));
+        assertAdmitted(context);
+        clock.advance(java.time.Duration.ofNanos(1000));
+        assertRefused(context);
+    }
+
+    @Test void absoluteLifetimeRemainsHalfOpenDespiteRecentEligibleActivity() throws Exception {
+        var context = signIn(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY));
+        var issued = clock.instant();
+        try (var connection = fixtures.migrator()) {
+            AdministratorBootstrap.insert(connection, "UPDATE session_record SET last_eligible_activity_at=? WHERE session_id=?",
+                    java.sql.Timestamp.from(issued.plus(java.time.Duration.ofHours(7))), context.sessionId());
+        }
+        clock.advance(java.time.Duration.ofHours(8).minusNanos(1000));
+        assertAdmitted(context);
+        clock.advance(java.time.Duration.ofNanos(1000));
+        assertRefused(context);
+    }
+
+    @Test void newRuntimeCannotAdoptPersistedSessionMetadata() throws Exception {
+        var context = signIn(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY));
+        assertAdmitted(context);
+        var newRuntime = new SessionService(fixtures.appDataSource(), clock);
+        assertRefused(new OwnerSessionEligibility(newRuntime), context);
+    }
+
+    @Test void ownerAdmissionRequiresAnExplicitCallerTransaction() throws Exception {
+        var context = signIn(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY));
+        try (var connection = fixtures.app()) {
+            assertThrows(java.sql.SQLException.class,
+                    () -> new OwnerSessionEligibility(server.getBean(SessionService.class)).admit(connection, context));
+        }
+    }
+
+    private void assertAdmitted(ActorContext context) throws Exception {
+        try (var connection = fixtures.app()) {
+            connection.setAutoCommit(false);
+            connection.setReadOnly(true);
+            var admitted = new OwnerSessionEligibility(server.getBean(SessionService.class)).admit(connection, context);
+            assertEquals(context.actorId(), admitted.actorId());
+            assertEquals(fixtures.organizationId(), admitted.organizationId());
+            connection.rollback();
+        }
+    }
+    private void assertRefused(ActorContext context) throws Exception {
+        assertRefused(new OwnerSessionEligibility(server.getBean(SessionService.class)), context);
+    }
+    private void assertRefused(OwnerSessionEligibility eligibility, ActorContext context) throws Exception {
+        try (var connection = fixtures.app()) {
+            connection.setAutoCommit(false);
+            connection.setReadOnly(true);
+            var refusal = assertThrows(IdentityRefusal.class, () -> eligibility.admit(connection, context));
+            assertEquals("INELIGIBLE_SESSION", refusal.reason());
+            connection.rollback();
+        }
+    }
+
     private ActorContext signIn(IamIntegrationFixtures.Identity identity) throws Exception {
         var credential = UUID.randomUUID().toString(); // Private test memory, never a retained fixture value.
         try (var connection = fixtures.migrator()) {

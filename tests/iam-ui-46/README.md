@@ -45,6 +45,11 @@ production edits; retain that as previously implemented behavior newly qualified
 the existing seam to manufacture RED. A genuine gap gets a successor failing test before repair.
 Later qualification includes revoked, stale, disabled, idle/absolute and runtime-instance cases.
 
+Successor `owner-qualification-02` executes the 10-case current-eligibility matrix. Boundary time
+is controlled at one microsecond before/exactly expiry, no wall-clock waiting. The new-runtime
+case qualifies the adapter's runtime binding with a second SessionService instance, not full
+process restart/recovery. All cases still enter through the actual HTTP sign-in seam first.
+
 ## Database and cleanup
 
 Only `idea_ddm_iam_ui_20261007_46`, existing migrator/app roles, and one fresh
