@@ -27,9 +27,36 @@ function sessionView(value: unknown): SessionView {
 }
 
 export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => fetch(path, init)) {
+  async function currentCsrf(): Promise<{ headerName: "X-CSRF-TOKEN"; token: string }> {
+    const response = await fetchBoundary("/api/v1/identity/csrf", {
+      ...requestOptions, method: "GET", headers: { Accept: "application/json" },
+    });
+    if (response.status !== 200) throw new Error("CSRF unavailable");
+    const value: unknown = await response.json();
+    if (typeof value !== "object" || value === null) throw new Error("Invalid CSRF response");
+    const proof = value as Record<string, unknown>;
+    if (proof.headerName !== "X-CSRF-TOKEN" || typeof proof.token !== "string" ||
+        proof.token.length < 1 || proof.token.length > 8192 || /[\r\n]/.test(proof.token)) throw new Error("Invalid CSRF response");
+    return { headerName: "X-CSRF-TOKEN", token: proof.token };
+  }
   return {
     async signIn(login: string, password: string): Promise<IamResult<{ actorId: string }>> {
-      throw new Error("IAM sign-in adapter not implemented");
+      let submitted = false;
+      try {
+        const csrf = await currentCsrf();
+        const body = new URLSearchParams({ username: login, password });
+        submitted = true;
+        const response = await fetchBoundary("/api/v1/identity/login", {
+          ...requestOptions, method: "POST", body,
+          headers: { "Content-Type": "application/x-www-form-urlencoded", [csrf.headerName]: csrf.token },
+        });
+        if (response.status !== 200) return response.status >= 500 ? { kind: "unresolved" } : refused(response.status);
+        const value: unknown = await response.json();
+        if (typeof value !== "object" || value === null) return { kind: "unresolved" };
+        const actorId = (value as Record<string, unknown>).actorId;
+        if (typeof actorId !== "string" || !uuid.test(actorId)) return { kind: "unresolved" };
+        return { kind: "confirmed", value: { actorId } };
+      } catch { return { kind: submitted ? "unresolved" : "unavailable" }; }
     },
     async loadSession(): Promise<IamResult<SessionView>> {
       try {
