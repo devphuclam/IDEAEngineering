@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.3` / Draft Analyze-repair successor |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.4` / Draft execution-readiness record; execution BLOCKED |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation / formal applicable PG2/PG3/PG4 and execution readiness NOT-RUN / NOT-APPLICABLE |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; 93-task/zero-finding Analyze accepted for readiness at aaa5596a / formal applicable PG2/PG3/PG4 not explicitly disposed; execution BLOCKED in section 8 / NOT-APPLICABLE |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced / source inspection, supplied exact-head human design disposition and authorized documentation repair; runtime NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / exact-source read-only readiness observations in section 8; runtime qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -146,10 +146,11 @@ unchanged; shared authority/client prerequisites are ordered before their first 
 
 ### Current next step
 
-Documentation checks and read-only Analyze successor are complete as recorded in section 7;
-publish the authorized repair to Draft/Open PR #47, without treating it as execution approval.
-Then T001–T007 must establish explicit applicable gate authority and an exact approved execution
-envelope before any T008+ fixture/test/production/migration edit or runtime/setup execution.
+Documentation checks and read-only Analyze successor are complete as recorded in section 7.
+The authorized exact-source T001–T007 preflight is now recorded in section 8: T002 is partial,
+T007 is BLOCKED. Resolve only its named authority/environment/build-path conditions; do not reopen
+the accepted spec/design/Q14/Q15. No T008+ fixture/test/production/migration edit or runtime/setup
+execution is permitted by this publication.
 After that: foundation/Q15 synthetic qualification → actual Account/Session/private credentials
 MVP → Project/Group → assignment → Custom Role → inspection → final browser/recovery.
 No competing specification or implementation workflow is generated.
@@ -236,3 +237,204 @@ Shared preparation, fixture and handoff tasks additionally trace the applicable 
 and Constitution I–VI; no unmapped task was found. No remaining documentation remediation is
 proposed in this pass. The next eligible action is exact execution-readiness preparation and
 explicit applicable gate disposition, not starting implementation from this author report.
+
+## 8. Exact-source execution readiness — 2026-10-07
+
+**Disposition: BLOCKED — T008+ NOT-STARTED.** The user authorized read-only T001–T007 at
+`aaa5596a0ccb7bebf3c8a67e161afde0cd9bb55a`, not a build, setup, deployment or product-gate
+self-certification. This is the observed preflight, not a runtime PASS or new design review.
+No spec/plan/contract, Java/test source, migration, dependency, tooling or deployment file changed.
+
+### 8.1 Source, ownership and task disposition
+
+PR #47 was OPEN/Draft, base main, head exactly `aaa5596a0ccb7bebf3c8a67e161afde0cd9bb55a`
+both before inspection and before publication; Issue #46 was OPEN. Reused clean owned worktree
+`C:/Users/TD-999/.codex/worktrees/iam-rbac-ui-spec/IDEAEngineering`, branch
+`codex/iam-rbac-ui-integration-spec`; no additional branch/worktree created. Integrated source
+base remains `4e5244430ea89ffe878819e1279f6e05c60d610a`; primary main remains
+`876689d38aa511363f459dd8be0256485e815fda`. The primary user's modified package.json remains
+outside this publication with SHA-256 `BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE`.
+The eventual documentation publication commit is a successor, not the inspected source.
+
+T001 re-read the plan/research/data/three contracts/quickstart. Selected seams are unchanged:
+IAM establishes eligible current Actor/Account/Organization; Project Governance owns Project/Group
+and participation facts; one Access Policy evaluator owns exact-version/scoped assignments;
+existing JDBC/security-write coordination owns atomic commit fate; actual same-origin Web consumes
+those interfaces. Sections 2/4 and the contracts retain the IMPLEMENTED predecessor versus DESIGN
+boundaries. Q14/Q15 and immutable legacy roles are not reopened.
+
+| Task | Actual disposition |
+|---|---|
+| T001, T003 | COMPLETE: selected owner seams, exact lineage and primary preservation recorded. |
+| T004 | COMPLETE: committed migration baseline compared with primary main; next unused version V11. No migration/history execution. |
+| T005 | COMPLETE: proposal-only synthetic/target manifest and guards below; no provisioning. |
+| T006 | COMPLETE: read-only Analyze reinspection of the exact source; 93 unique tasks, 30 FR + 9 SC, 39/39 planned coverage; no new actionable CRITICAL/HIGH/MEDIUM/LOW finding. Input hashes match section 7. No spec/design remediation proposed. |
+| T002 | PARTIAL: existing tools/cache pinned and available as below; full Server package and increment runner/target envelope not cleared. |
+| T007 | BLOCKED: applicable gate/target/execution conditions in 8.5 unresolved. |
+
+Requirements checklist remains 16/16 marked; reviewer-owned design checklist retains its historical
+unchecked markers and the human 20/20 accepted written-design disposition from section 6. It was
+not edited or misrepresented as implementation evidence. Prerequisite resolution selects 009;
+`.specify/extensions.yml` absent, so no Analyze/implementation hooks registered.
+
+### 8.2 Actual tooling/cache observations
+
+SSH used the existing owned key/known-host verification, BatchMode and an 8-second connect timeout
+to `phuclam@192.168.137.33` (ideaddmserver). No private-key contents were read or recorded. Remote
+commands only inspected versions, hashes, filesystem metadata, listeners and PostgreSQL catalogs.
+
+| Input / actual source | Observed result and execution limit |
+|---|---|
+| Temurin JDK 25.0.4.1+1-LTS, `/opt/idea/tools/jdk-25.0.4.1+1` | Version matches; java SHA-256 `7380ce48ed5013735d2c8414db54adb8f981e7933ff594bd36f3baccddaafba3`; javac `86d10cd1c73e976f364291f3c3d10bb167f0bafdd6eb4c9c6dc44bddeffcc45e`. |
+| Maven 3.9.16, `/home/phuclam/.m2/wrapper/dists/apache-maven-3.9.16/510fba38/bin/mvn` | Version inspected with command-local JAVA_HOME; launcher `f9381d0cb98abaaf9592dae421eddc497e84ed9bfb723b84c111d1350863c3a2`. No Maven goal executed. |
+| Installed JDK/Maven/psql envelope | 82/82 hashes match [retained toolchain](../../tests/ph1/f05-qualification/https-loopback/toolchain.tsv), including installed Maven-core JARs and JDK security/cacerts. Missing/drift = 0/0. This reuses provenance, not the expired F05 execution exception. |
+| Boot 4.1.1, JDBC PostgreSQL 42.7.13, existing compile/runtime/test and direct resources/compiler/Surefire inputs | 403 unique retained file paths from [resolved inputs](../../docs/research/inventories/f05a-t028-t030-resolved-inputs.tsv) plus non-core [current-use coordinates](../../docs/research/inventories/ph1-current-use-dispositions-20261006.tsv) exist and hash-match; missing/drift = 0/0. Core-provided rows are checked at actual distribution paths, not invented .m2 copies. Not a new effective-model/plugin resolution or full lifecycle/package PASS. |
+| Approved Windows Node 24.19.0, `C:/Users/TD-999/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe` | v24.19.0; `3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237`; project [admission](../../docs/research/2026-10-05-node24190-project-admission.md) retained. Unrelated Node from PATH not selected. |
+| React 19.3.0 / TypeScript 7.0.2 / Vite 8.3.1 / Vitest 5.0.2 and Windows transitive packages | 44 installed packages at primary apps/web/node_modules match this source's lockfile; 44 corresponding cached archive SHA-512 identities PASS; remaining 44 lock rows are optional other-platform packages, not missing Windows prerequisites. No npm install/ci. Active worktree has no node_modules; isolated cache reuse still needs the execution/setup envelope, not writes to the primary checkout. |
+| Web legal/native retained evidence | 46/46 actual hashes in [local legal-file inventory](../../docs/research/inventories/ph1-web-local-legal-files-20261006.tsv) PASS; NOT_APPLICABLE rows are not missing licenses. Windows Rolldown, TypeScript and LightningCSS binaries match the three hashes in [native correspondence](../../docs/research/2026-10-06-t036-native-correspondence.md). T036's accepted residual limit is retained, not reopened. |
+| Chrome, `C:/Program Files/Google/Chrome/Application/chrome.exe` | Actual 154.0.8037.98; SHA-256 `6849d2982038de9f9489a7b3858f3b785b7fec06a842c93c517281d21995c8ca`. Historical qualification was 154.0.8037.92; new actual browser must be frozen in this increment's future command packet. No browser launched/qualified here. |
+| Codex-cached Playwright + playwright-core 1.62.1 | Both version/manifests/LICENSE/NOTICE/third-party hashes match [retained intake](../../docs/research/2026-10-01-t043-browser-tool-intake.md). Use existing headed Chrome, no Chromium download or new @playwright/test dependency. Exact 009 harness/commands are not yet published/admitted. |
+| Ubuntu Web lifecycle | node is absent from PATH; discovered `/opt/idea/tools/node-v24.21.0-linux-x64/bin/node` is NOT the selected 24.19.0 input and was not executed. Historical Linux node_modules exists; its existence does not admit another Node version. |
+| PostgreSQL / psql | Server and psql 18.6; psql SHA-256 `a200e38c89b111d3abdf26927b186fdd423bef3d84f157af0f4b65db6f8e6c94`. Real app and migrator authenticate separately; catalog findings below. |
+
+Retained known-term components remain subject to [T036 current-use obligations](../../docs/research/2026-10-06-t036-current-use-rights.md)
+and [accepted bounded closure](../../docs/research/2026-10-06-t036-bounded-closure.md).
+Custom/reciprocal/notice classifications alone create no new BLOCKED-LEGAL finding. Node's
+project-wide admission stands. Work-item-specific tooling exceptions are not silently extended.
+JSR305's historical missing-grant finding remains distinct from known-term obligations.
+
+Controlled raw-worktree inputs before these two Markdown edits:
+
+| Input | SHA-256 |
+|---|---|
+| apps/server/pom.xml | `32c4432479955693644a8677b1ed8d209e5b6a823294a11725e8f9afb48d349d` |
+| apps/server/scripts/build-web-static.mjs | `859634a3151e52e354fe57d7335ea73b047a40104debc0e61acd09213c11239d` |
+| apps/web/package.json / package-lock.json | `1cfdf0ea44133085361810266726f190b4013ff930938f2547d3819fd93af80d` / `350e5d24057c55d6acef6fb6a71b73948e2711d9279c12e2fe52071b815f611b` |
+| Resolved Java inputs / current-use inventory | `8c206ecf70d5807630568047aeabfa06d0a8d1a53e540b33f502dbd4e10c57af` / `a1939f7cace4f31635ba46af87189e75c2a4f28ab09045e82a2f58ace12661ad` |
+| Web legal inventory / retained toolchain | `28485244f4bc6d14556775ea133d4f9e9b00249d0afcad7140307cd3ba13a1a4` / `9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1` |
+
+### 8.3 Migration baseline and live read-only database facts
+
+Committed Git blob bytes for all ten migrations match primary main `876689d` exactly. These are
+source SHA-256 checksums, not newly verified Flyway applied-history CRCs. Next unused path is
+`database/migrations/V11__iam_rbac_ui_successor.sql`; it does not exist and was not created.
+
+| Migration | Committed-byte SHA-256 |
+|---|---|
+| V1__ph1_foundation.sql | `1a15298354951ac975201d6a0b12691d69d957386aebc3083c7ebe9890de56d4` |
+| V2__identity_administration.sql | `55b48840b5455f0aa66a18d4ec1b4c9a2f077cdb70a1ad4c22ded2181e13ff91` |
+| V3__account_administration.sql | `a17f1ccbcba5da62031bf28eb335c2ddc9e721058e35ed7496b902e73d5e0946` |
+| V4__native_http_sessions.sql | `be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221` |
+| V5__first_credential_setup.sql | `38d6d292e4c5622e25515b3a149144814de511ae2ee440bc715ad63e8a4edf1e` |
+| V6__credential_reset.sql | `1c5f9ae4e222ca0d7921d489594101a00e525b1051a3154a1588aca86405e421` |
+| V7__bounded_login_failures.sql | `36a1fb5d6b9b42589d7b03d6538b50a602baf0195a2c2a50883c49fd7562a540` |
+| V8__owner_committed_event_foundation.sql | `1ecd0ef59327bcfff1a9d3eb87aa4a1f67221564d4c58a4e9df64cac9d0d5272` |
+| V9__exact_transfer_grant_scope.sql | `1479e8ebd18969ec6102b92b81a3192e8392fa966bb369bfad7c43a8740144ed` |
+| V10__retained_receipt_evidence.sql | `0e5a26a03bc1b52065305a8f774da85d0c1728f5540a59389a2e9cc7881ae19b` |
+
+Catalog-only probes used existing dedicated test DB `idea_ddm_f05a_20261005_t028`,
+127.0.0.1:5432 on Ubuntu, with `PGOPTIONS=-c default_transaction_read_only=on` and psql
+`-X -v ON_ERROR_STOP=1`. This is an availability witness, NOT authorization to reuse/migrate/clean
+that retained DB for 009. Its public has zero base tables and no Flyway history; no applied-history
+qualification can be inferred. No identity/business rows queried.
+
+Both actual current_user values match `idea_ddm_app` and `idea_ddm_migrator`; each lacks
+SUPERUSER/CREATEDB/CREATEROLE/REPLICATION/BYPASSRLS. DB owner is migrator; app database CREATE=false,
+public CREATE=false, membership in migrator=false. Migrator database/public CREATE=true;
+public schema owner is pg_database_owner. No SET ROLE, DDL/DML privilege probes or migrations run.
+Existing credential file mode 600/owner phuclam was checked and used only remotely with tracing off;
+no credential bytes, JDBC URL/password or reusable secret recorded.
+
+Once successor data exists, old Server rollback must fail closed; choose a compatible package or
+approved forward repair. Never drop data or rewrite V1–V10 to enable rollback. This preflight
+qualifies no backup/recovery/deploy behavior.
+
+### 8.4 Proposal-only target/fixture/command manifest
+
+The following names are proposed for explicit authorization, NOT provisioned/approved targets.
+
+| Boundary | Exact proposal / current observation |
+|---|---|
+| Remote owned root | `/home/phuclam/idea-iam-ui-20261007-46`, observed absent. Each later exported build/run has a fresh source/attempt child, not a retained F03/F04/F05 root. |
+| Windows owned build/browser root | `C:/Users/TD-999/.codex/iam-ui-46`; create only after approved setup. Export committed source byte-preserving and verify hashes; never build from the primary dirty package.json. |
+| Dedicated DB | `idea_ddm_iam_ui_20261007_46`, observed absent. Proposed template0/owner idea_ddm_migrator, runtime idea_ddm_app, no new roles/credentials. Creation requires separately authorized operator setup; existing roles cannot CREATE DATABASE. |
+| Per-run schema | `iam_ui_<32 lowercase UUID hex>`, inside that DB only, with run ownership marker `IDEA_IAM_UI_RUN:<executed SHA>:<schema>`. Later test runner must be published/hash-pinned, not invented as already executable. public migration cases require their own bounded empty-public witness; default tests do not clean public. |
+| Synthetic identities/data | `iamtest-super`, `iamtest-aa-v1/v2/v3`, `iamtest-pa-org/pa-project`, `iamtest-pra`, `iamtest-audit`, `iamtest-linh`, ordinary/PENDING/DISABLED and multi-login targets, all with per-run suffixes and fresh UUIDs; synthetic Org A, two Projects/Groups, isolated Org B negative targets. A second fixture Org is only cross-scope refusal data, not multi-Organization product support. |
+| Fixture authority | Existing bootstrap/legacy definitions unchanged; prerequisite grants are attributable synthetic fixtures, not role API completion. Q15 is a separate synthetic console qualification, never live preview/company adoption. No company usernames, credentials, files, Vault or production identities. Test credentials ephemeral/private, no Git/log/storage disclosure. |
+| Same-origin browser target | Proposed `https://localhost:18446/` via loopback-only owned test Server/SSH forwarding; no 18444 preview reuse. Windows 18446 and relevant Ubuntu ports had no listener at inspection; no tunnel/listener created. No wildcard/LAN binding. |
+| Trusted TLS | Existing CurrentUser/Root T043 certificate fingerprint `71d16c7626e9ed97c84ec6167fe8e88cb753bff5135ee547fb221eb0828d3de2`, SAN localhost + 127.0.0.1, expires 2026-10-08 03:58:09Z (10:58:09 Asia/Ho_Chi_Minh). Store presence is not a successful HTTPS handshake. No feature keystore/trust approval/running target exists. Prefer fresh feature-only short-lived certificate, fingerprint-reviewed CurrentUser trust through explicit setup approval; no system store/cacerts changes or TLS bypass. |
+| Test runner | Existing JUnit/Surefire for real owner/HTTP/PostgreSQL; existing Vitest for applicable non-browser tests; existing Playwright 1.62.1 + actual headed Chrome for DOM/browser/keyboard. No jsdom, testing-library, @playwright/test or accessibility framework imported. Any scenario needing a different runner requires prior source/rights admission, not install-on-failure. |
+
+Future first owner RED command template, **NOT-RUN / NOT-AUTHORIZED** here, from the approved
+owned exported `apps/server` only: existing Maven above, command-local JDK, `-o -B`, explicit
+`-s` and `-gs` the exported [empty controlled settings](../../tests/ph1/f05-qualification/server-grant/settings.xml),
+`-Dmaven.repo.local=/home/phuclam/.m2/repository`,
+`-Dtest=OwnerSessionEligibilityTest -DfailIfNoTests=true -DargLine=-Djava.net.preferIPv4Stack=true`,
+then direct goals in order:
+
+    org.apache.maven.plugins:maven-resources-plugin:3.5.0:resources
+    org.apache.maven.plugins:maven-resources-plugin:3.5.0:testResources
+    org.apache.maven.plugins:maven-compiler-plugin:3.15.0:compile
+    org.apache.maven.plugins:maven-compiler-plugin:3.15.0:testCompile
+    org.apache.maven.plugins:maven-surefire-plugin:3.5.6:test
+
+This avoids incidental generate-resources/exec/repackage for focused owner tests; it is not full
+Web/package qualification. The test does not exist before T009, and the safe DB/schema runner
+must be published before that run. No `clean`, ordinary lifecycle `test/package`, wrapper download
+or plugin auto-resolution is authorized by this template.
+
+Full same-origin package path is unresolved. Current Server POM binds generate-resources to
+exec-maven-plugin 3.6.3/Node and declares Boot Maven Plugin without the F05 JSR305 exclusion.
+Cached plugin POM inspection confirms buildpack-platform; the retained Q02 path reaches
+tomlj → jsr305:3.0.2, and that unadmitted JAR remains in global cache. Do not execute the unfiltered
+plugin graph. Prefer actual Web build with the approved Windows Node/cache, transfer hash-verified
+generated resources to the owned Linux build, and explicitly select an already-qualified
+JSR305-free packaging graph. This is a build-path proposal, not an authorized POM edit or claim
+that the Server graph has been qualified. No framework/version change or new external dependency
+is proposed. Exact package commands/selected closure need review before build.
+
+STOP/cleanup guards for the proposed envelope:
+
+- Source/tool/package/graph/hash drift, unexpected download/target/permission, expired/untrusted TLS
+  or company/preview data stops execution; never repair with Internet installs or TLS bypass.
+- Before schema cleanup, validate connected DB exactly, exact UUID schema, run marker and ownership;
+  drop only that run-owned schema after its JVM has terminated. No broad prefix cleanup, public,
+  retained F05 DB or database DROP. Retain the new DB for review until explicit disposal authority.
+- Stop only the exact PID started by the owned runner, validating its root/run identity; no Ubuntu
+  restart, broad process kill, service/firewall edits or preview stop/redeploy.
+- Private secrets/cert keys stay outside Git, mode 600 where applicable; do not print environment
+  files, passwords, proof, cookies, CSRF, HAR or reusable session values. Retain sanitized commands,
+  source/tool hashes, exact target/result/cleanup and private-log hashes; raw-log access limit remains.
+- Confirmed rollback is not uncertain outcome. Ordinary future authorized TDD defects are repaired
+  within that approved scope; no migration-history rewrite or silent gate widening.
+
+### 8.5 Gate disposition and smallest remaining decisions
+
+| Gate | Current disposition / responsible authority |
+|---|---|
+| PG2, affected requirement-bearing Core successor | BLOCKED for implementation: accepted spec and Q14/Q15 decisions retained, but no explicit applicable PG2 disposition for this exact successor supplied. Product Decision Authority/named approver must record it; author cannot infer it. |
+| PG3, affected design/data/interaction successor | BLOCKED for implementation: exact design REVIEW PASS retained; formal applicable PG3 disposition not explicitly supplied. Named independent reviewer/approver records the existing accepted baseline, not a fresh design loop. |
+| PG4 / T007 | BLOCKED: named bounded increment authority, owned DB/TLS/setup and full build/runner execution envelope still need explicit disposition. Current human instruction authorizes this read-only preflight only. |
+| Future verification/acceptance | NOT-RUN; no PG5, live adoption, deployment, merge or company/commercial/production readiness inferred. |
+
+| Blocker | Minimal resolution / owner |
+|---|---|
+| B01 — explicit applicable gates/execution authority | Project user routes the accepted `aaa5596a` requirements/design/task packet and this exact preflight to the named PG2/PG3/PG4 authorities for bounded disposition; no re-grill/re-spec. |
+| B02 — named DB/setup target absent | Project user/operator explicitly approves creation of `idea_ddm_iam_ui_20261007_46` and owned roots/schemas with the existing roles; provision through controlled operator setup, then catalog/role preflight. No sudo/password request or DB creation occurred here. |
+| B03 — full offline Server/Web packaging path | Engineering presents exact Windows-Web/Linux-Java package recipe and selected JSR305-free cached plugin closure (or another explicitly approved existing-tool path), retaining notices. Do not execute current lifecycle with unselected Node/JSR305, alter POM or download replacements during readiness. |
+| B04 — actual HTTPS/browser target envelope | Project user approves feature-only TLS setup/trust/loopback target and current Chrome 154.0.8037.98 plus existing Playwright runner reuse; publish exact harness/cert fingerprint before execution. Existing certificate expiry/trust presence is not browser qualification. |
+
+No actual incompatible known-term license or required Windows-package/hash drift was found in this
+preflight. Missing admission/target/full-build proof is not reclassified as a license prohibition.
+After these conditions are resolved and explicitly disposed PASS (or valid PASS-WITH-ACTIONS),
+T008 is the first permitted implementation task, followed by T009 RED before T010 GREEN.
+**At this publication no T008+ task is permitted to start.**
+
+Preflight limits: initial diagnostic commands exposed missing command-local JAVA_HOME, an absent
+public Flyway table, overbroad archive/core-path expectations and PowerShell-to-SSH CRLF/command
+length defects. Corrected read-only checks produced the counts above; no initial failed command
+is called PASS. Optional other-platform archives/core-provided Maven paths were not turned into
+false missing-dependency blockers. No changes/downloads made to repair the diagnostics.
+
+Application/Maven goals/npm build/test, actual browser/HTTPS, migration/DB writes, certificates,
+listener/setup, verifier, deployment, timer actions, merge and issue closure: **NOT-RUN**.

@@ -4,9 +4,9 @@
 
 **Prerequisites**: `plan.md`, `spec.md`, `research.md`, `data-model.md`, `contracts/`, `quickstart.md`.
 
-**Control**: IE-TASK-IAM-UI-001 / Spec Kit delivery decomposition / 0.2 / Draft; Issue #46; Codex, CODEX_ONLY; 2026-10-07 Asia/Ho_Chi_Minh; INTERNAL, retained in Git. Project Reviewer accepted written design at `0a1de66627fccc4597ac753f6c642d1d8d5f7d1d`; this repair follows author Analyze of predecessor `16f98e5c6a7c5919bcb29cf74e850215911594e7`, not implementation approval.
+**Control**: IE-TASK-IAM-UI-001 / Spec Kit delivery decomposition / 0.3 / Draft readiness successor; Issue #46; Codex, CODEX_ONLY; 2026-10-07 Asia/Ho_Chi_Minh; INTERNAL, retained in Git. Project Reviewer accepted written design at `0a1de66627fccc4597ac753f6c642d1d8d5f7d1d`; the authorized 93-task/Analyze repair is retained at `aaa5596a0ccb7bebf3c8a67e161afde0cd9bb55a`. This successor records only the separately requested T001–T007 preflight, not implementation approval.
 
-**Status**: No implementation task is executed or authorized by this file. All runtime/build/browser/PostgreSQL tests and verifier remain NOT-RUN. Every checkbox remains unchecked, including planning/gate tasks: this revision describes the future execution worklist, not their completion.
+**Status**: T001/T003/T004/T005/T006 preparation is complete; T002 is partial and T007 execution readiness is BLOCKED as recorded in [handoff section 8](integration-readiness.md#8-exact-source-execution-readiness--2026-10-07). T008–T093 remain unchecked and NOT-STARTED. Read-only version/hash/catalog checks ran; no application build/test, browser qualification, database mutation or verifier ran. This file grants no implementation authority.
 
 **Organization**: Shared evaluator/read ports and client state are foundational, before any owner uses them. Visible feature slices remain account/session → Project/Group → assignments → Custom Role → inspection → final browser/recovery. Q15 synthetic console qualification is the accepted plan's separate prerequisite sub-slice of US6, not bootstrap/migration seeding or live-estate authorization. No new requirement, route, permission or framework is introduced by decomposition.
 
@@ -18,12 +18,12 @@
 
 **Independent checkpoint**: Read-only preparation, task Analyze and explicitly recorded applicable PG2/PG3/PG4 dispositions; no runtime or environment mutation.
 
-- [ ] T001 Read `specs/009-iam-rbac-ui-integration/plan.md`, `research.md`, `data-model.md`, `contracts/operations.md`, `contracts/permission-delegation.md`, `contracts/web-flow.md`, and `quickstart.md`; record the selected owner seams and all `DESIGN`/`IMPLEMENTED` boundaries in `specs/009-iam-rbac-ui-integration/integration-readiness.md`.
+- [X] T001 Read `specs/009-iam-rbac-ui-integration/plan.md`, `research.md`, `data-model.md`, `contracts/operations.md`, `contracts/permission-delegation.md`, `contracts/web-flow.md`, and `quickstart.md`; record the selected owner seams and all `DESIGN`/`IMPLEMENTED` boundaries in `specs/009-iam-rbac-ui-integration/integration-readiness.md`.
 - [ ] T002 Confirm the exact Java 25, Spring Boot 4.1.1, JDBC/PostgreSQL, React 19.3.0, TypeScript 7.0.2, Vite 8.3.1, Node 24.19.0 and browser/tooling sources already admitted for this increment; record any missing/hash-drift artifact as a STOP in `specs/009-iam-rbac-ui-integration/integration-readiness.md`.
-- [ ] T003 Record the owned branch/worktree, base SHA and primary checkout preservation in `specs/009-iam-rbac-ui-integration/integration-readiness.md`; inspect an existing suitable worktree first, keep the user-owned `apps/web/package.json` outside this publication.
-- [ ] T004 Confirm the current migration number and V1–V10 checksums before adding any migration under `database/migrations/`; record the selected next version and rollback/forward-repair boundary in `specs/009-iam-rbac-ui-integration/integration-readiness.md`.
-- [ ] T005 Publish the synthetic fixture/target manifest in `specs/009-iam-rbac-ui-integration/integration-readiness.md`; define synthetic identities, exact schema/database boundaries, TLS/browser target and cleanup guards without creating Java fixtures, database objects, certificates or listeners.
-- [ ] T006 Run read-only `speckit-analyze` against `specs/009-iam-rbac-ui-integration/spec.md`, `plan.md`, `tasks.md` and their contract/readiness references; resolve blocking contradictions through an authorized documentation repair before seeking execution approval.
+- [X] T003 Record the owned branch/worktree, base SHA and primary checkout preservation in `specs/009-iam-rbac-ui-integration/integration-readiness.md`; inspect an existing suitable worktree first, keep the user-owned `apps/web/package.json` outside this publication.
+- [X] T004 Confirm the current migration number and V1–V10 checksums before adding any migration under `database/migrations/`; record the selected next version and rollback/forward-repair boundary in `specs/009-iam-rbac-ui-integration/integration-readiness.md`.
+- [X] T005 Publish the synthetic fixture/target manifest in `specs/009-iam-rbac-ui-integration/integration-readiness.md`; define synthetic identities, exact schema/database boundaries, TLS/browser target and cleanup guards without creating Java fixtures, database objects, certificates or listeners.
+- [X] T006 Run read-only `speckit-analyze` against `specs/009-iam-rbac-ui-integration/spec.md`, `plan.md`, `tasks.md` and their contract/readiness references; resolve blocking contradictions through an authorized documentation repair before seeking execution approval.
 - [ ] T007 Publish and obtain the explicit execution-readiness disposition in `specs/009-iam-rbac-ui-integration/integration-readiness.md`: applicable PG2/PG3/PG4 authority, exact controlled source/tool/cache/license hashes, admitted test runner, separate app/migrator, named owned targets, permitted command templates and STOP/cleanup rules. Written design PASS is not a formal gate PASS. No production/test source, migration, build/test/browser/DB or setup execution before this gate; each later RED/GREEN run freezes its exact source/command inside the approved envelope.
 
 ## Phase 2: Foundational — one shared authoritative seam
@@ -282,4 +282,4 @@ Predecessor is `16f98e5c6a7c5919bcb29cf74e850215911594e7`, 75 tasks, all uncheck
 | T074 | T006 | Read-only Analyze moved before execution gate |
 | T075 | T093 | Retained, ordered and clarified |
 
-Additive tasks: T005, T016, T021, T024, T033, T034, T038, T039, T045, T051, T053, T057, T063, T067, T073, T081. All 93 tasks are planned/unchecked; 16 additive tasks plus explicit splits, no requirement additions.
+Additive tasks: T005, T016, T021, T024, T033, T034, T038, T039, T045, T051, T053, T057, T063, T067, T073, T081. At the frozen decomposition source `aaa5596a`, all 93 tasks were planned/unchecked; 16 additive tasks plus explicit splits, no requirement additions. Current preparation completion is recorded above without rewriting that historical state.
