@@ -61,8 +61,8 @@ class CredentialProofReissueTest {
             var first=json.readTree(firstResponse.body()).path("proof").asString();
             var secondResponse=issueResponse(client,who,target,"RESET");assertEquals(200,secondResponse.statusCode());
             var second=json.readTree(secondResponse.body()).path("proof").asString();
-            try(var c=fixtures.app();var q=c.prepareStatement("SELECT purpose,count(*),count(superseded_at) FROM credential_setup_proof WHERE account_id=? AND login_identity_id=? GROUP BY purpose ORDER BY purpose")){
-                q.setObject(1,target.account);q.setObject(2,target.login);try(var row=q.executeQuery()){
+            try(var c=fixtures.app();var q=c.prepareStatement("SELECT purpose,count(*),count(superseded_at) FROM (SELECT purpose,superseded_at FROM credential_setup_proof WHERE account_id=? AND login_identity_id=? UNION ALL SELECT purpose,superseded_at FROM credential_reset_proof WHERE account_id=? AND login_identity_id=?) proofs GROUP BY purpose ORDER BY purpose")){
+                q.setObject(1,target.account);q.setObject(2,target.login);q.setObject(3,target.account);q.setObject(4,target.login);try(var row=q.executeQuery()){
                     assertTrue(row.next());assertEquals("FIRST_SETUP",row.getString(1));assertEquals(1,row.getLong(2));assertEquals(0,row.getLong(3));
                     assertTrue(row.next());assertEquals("RESET",row.getString(1));assertEquals(2,row.getLong(2));assertEquals(1,row.getLong(3));assertFalse(row.next());
                 }
