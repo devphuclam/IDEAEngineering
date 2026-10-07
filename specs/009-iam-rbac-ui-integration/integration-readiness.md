@@ -107,13 +107,15 @@ These checks concern document quality, not independent design approval or implem
 | Accepted spec semantics | PASS: all 30 FR and 9 SC definition texts match e227cb1d ignoring line endings; only metadata/trace pointers updated |
 | Candidate identities | PASS: 25 unique Permission codes, 8 exact built-in versions, 32 unique operation IDs; 20 reviewer criteria all unchecked |
 | Core identity/version alignment | PASS: DOC-03@0.8, DOC-04@0.16 with 94 unique requirement IDs, DOC-05@0.27, DOC-06@0.19, DOC-08@0.14; historical approval records untouched |
-| Active-feature/template/hook checks | PASS: PathsOnly resolves 009; no unresolved case-sensitive authoring marker; no extension hooks registered; tasks.md not created |
+| Active-feature/template/hook checks | PASS: PathsOnly resolves 009; no unresolved case-sensitive authoring marker; no extension hooks registered |
+| Task decomposition | PASS: `tasks.md` has 75 sequential tasks (`T001`–`T075`), all checklist-format valid with repository paths; US1–US6 counts are 9/9/10/8/7/10; Q15 is a separate US6 console slice |
 | Bounded factual review | Two read-only research workers identified and author repaired compatibility clarifications: exact AA/PA composition limits, Q15 exception, predecessor source pins, canonical revoked state, separate immutable-version staging and console throttle fate. This is not human acceptance. |
 | Whitespace/preservation | PASS: git diff --check; primary user package.json remains BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE and outside publication |
-| Runtime tests/browser/DB/build/verifier; tasks/Analyze | NOT-RUN / not started in this documentation stage |
+| Runtime tests/browser/DB/build/verifier; Analyze | NOT-RUN / not started in this documentation stage; task decomposition is planning only |
 
-Next: review exact Core/design/contract packet and 20 unchecked checklist criteria. Then
-speckit-tasks → read-only speckit-analyze → explicit gated TDD. No tasks or competing spec generated here.
+Next: review the exact Core/design/contract packet, 20 unchecked checklist criteria and the
+75-task decomposition. Then run read-only speckit-analyze → explicit gated TDD. No competing spec
+workflow is generated here.
 
 First proposed implementation slice after readiness: actual session + authorized account directory/detail + account UI using qualified commands. Project/Group, assignment/delegation, Custom Role and access inspection follow in testable vertical slices. This is ordering, not execution approval.
 
