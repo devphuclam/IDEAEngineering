@@ -107,6 +107,7 @@ async function privateBoundary(page) {
 
 try {
   assert.equal(process.version, "v24.19.0");
+  assert.ok(process.execArgv.includes("--use-system-ca")); // Node route.fetch uses normal Windows trust, never ignore TLS.
   assert.equal(sha(await readFile(process.execPath)), "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237");
   assert.equal(sha(await readFile("C:/Program Files/Google/Chrome/Application/chrome.exe")), "6849d2982038de9f9489a7b3858f3b785b7fec06a842c93c517281d21995c8ca");
   const base = "C:/Users/TD-999/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/";
@@ -129,12 +130,16 @@ try {
   for (const tab of [page, recipient, ordinary]) tab.on("console", message => { if (secrets.some(secret => message.text().includes(secret))) leaked = true; });
   stage = "actual-branded-login";
   const initial = await page.goto(url); assert.equal(initial.status(), 200);
+  stage = "anonymous-brand-assets";
   await page.getByRole("heading", { name: "Cổng Đăng Nhập Kỹ Thuật" }).waitFor();
   await page.waitForFunction(() => { const img = document.querySelector('.brand-showcase-panel img'); return img instanceof HTMLImageElement && img.complete && img.naturalWidth > 0; });
-  await signIn(page, fixture.adminLogin, fixture.adminPassword);
+  stage = "admin-sign-in"; await signIn(page, fixture.adminLogin, fixture.adminPassword);
+  stage = "ordinary-cookie-attributes";
   const cookie = (await adminContext.cookies(url)).find(cookie => cookie.name === "IDEA_SESSION");
   assert.ok(cookie); assert.equal(cookie.secure && cookie.httpOnly && cookie.sameSite === "Strict", true); assert.equal(cookie.domain, "localhost");
+  stage = "server-actor-context";
   assert.equal(await page.getByTestId("session-actor").innerText(), `${fixture.adminActorId.slice(0,8)}...${fixture.adminActorId.slice(-4)}`);
+  stage = "authored-admin-navigation";
   await page.getByRole("button", { name: "Cổng Quản Trị", exact: true }).click();
   await page.getByRole("heading", { name: "Tài Khoản & Định Danh" }).waitFor(); pass("W01_REAL_BRANDED_SESSION_ADMIN");
   stage = "create-pending";

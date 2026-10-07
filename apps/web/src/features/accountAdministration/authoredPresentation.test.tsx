@@ -5,6 +5,7 @@ import { LoginForm } from "../../components/auth/LoginForm";
 import { SessionLanding } from "../../components/auth/SessionLanding";
 import { AdminApp } from "../../components/admin/AdminApp";
 import { AccountsView } from "../../components/admin/AccountsView";
+import sealUrl from "../../assets/LOGO_IDEA_full_L.png";
 
 const id = "00000000-0000-4000-8000-000000000046";
 const noop = () => {};
@@ -12,7 +13,7 @@ describe("Authored UI connected to current authority", () => {
   it("keeps the IDEA brand/login screen and ordinary masked login control", () => {
     const html = renderToStaticMarkup(<><BrandShowcase /><LoginForm username="" password="" busy={false}
       statusMessage="Chưa đăng nhập" onUsernameChange={noop} onPasswordChange={noop} onSubmit={noop} /></>);
-    expect(html).toContain("IDEA GROUP"); expect(html).toContain("/LOGO_IDEA_full_L.png");
+    expect(html).toContain("IDEA GROUP"); expect(html).toContain(sealUrl);
     expect(html).toContain("Cổng Đăng Nhập Kỹ Thuật"); expect(html).toContain('name="password"');
     expect(html).toContain('type="password"'); expect(html).not.toContain("dev-sim");
   });

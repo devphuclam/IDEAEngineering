@@ -1,4 +1,5 @@
 import { formatDisplayId } from "../../utils/identity";
+import logoUrl from "../../assets/logo-idea.png";
 
 export interface TopbarProps {
   actorId: string;
@@ -14,7 +15,7 @@ export function Topbar({
   actorId,
   displayName,
   busy,
-  logoSrc = "/logo-idea.png",
+  logoSrc = logoUrl,
   onLogout,
   onOpenAdmin,
   onOpenProfile,

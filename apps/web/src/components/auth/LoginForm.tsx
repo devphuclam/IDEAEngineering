@@ -1,5 +1,6 @@
 import type { FormEvent } from "react";
 import { StatusBanner, type BannerType } from "./StatusBanner";
+import logoUrl from "../../assets/logo-idea.png";
 
 export interface LoginFormProps {
   username: string;
@@ -19,7 +20,7 @@ export function LoginForm({
   busy,
   statusMessage,
   statusType = "neutral",
-  logoSrc = "/logo-idea.png",
+  logoSrc = logoUrl,
   onUsernameChange,
   onPasswordChange,
   onSubmit,

@@ -1,9 +1,11 @@
+import sealUrl from "../../assets/LOGO_IDEA_full_L.png";
+
 export interface BrandShowcaseProps {
   sealSrc?: string;
 }
 
 export function BrandShowcase({
-  sealSrc = "/LOGO_IDEA_full_L.png",
+  sealSrc = sealUrl,
 }: BrandShowcaseProps) {
   return (
     <aside className="brand-showcase-panel">

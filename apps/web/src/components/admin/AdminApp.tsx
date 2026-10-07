@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { AdministrationContext } from "../../api/iamClient";
 import { formatDisplayId } from "../../utils/identity";
 import { AdminRail } from "./AdminRail";
+import logoUrl from "../../assets/logo-idea.png";
 
 // Presentation from feat/f04-admin-iam-ui @ 9160ec27. No mock collections or authority fallback.
 export function AdminApp({ context, busy, onExitAdmin, onLogout, children }: {
@@ -15,7 +16,7 @@ export function AdminApp({ context, busy, onExitAdmin, onLogout, children }: {
     <div className="admin-shell" aria-label="IDEA DDM Administration Console" data-testid="idea-web-app">
       <header className="admin-topbar">
         <div className="admin-topbar-brand">
-          <img src="/logo-idea.png" alt="IDEA Logo" className="admin-topbar-logo" />
+          <img src={logoUrl} alt="IDEA Logo" className="admin-topbar-logo" />
           <div className="admin-topbar-title">
             <strong>IDEA DDM Administration</strong>
             <small>Cổng Quản Trị Hệ Thống &amp; Phân Quyền RBAC</small>
