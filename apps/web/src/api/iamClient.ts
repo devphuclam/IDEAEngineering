@@ -17,6 +17,12 @@ function refused<T>(status: number): IamResult<T> {
   return { kind: "unavailable" };
 }
 
+function mutationRefusal<T>(status: number): IamResult<T> {
+  if ([400, 401, 403, 404, 409].includes(status)) return refused(status);
+  // A missing/unexpected response is not proof of rollback or permission to resubmit.
+  return { kind: "unresolved" };
+}
+
 function sessionView(value: unknown): SessionView {
   if (typeof value !== "object" || value === null) throw new Error("Invalid session response");
   const data = value as Record<string, unknown>;
@@ -41,7 +47,15 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
   }
   return {
     async signOut(): Promise<IamResult<void>> {
-      throw new Error("IAM sign-out adapter not implemented");
+      let submitted = false;
+      try {
+        const csrf = await currentCsrf();
+        submitted = true;
+        const response = await fetchBoundary("/api/v1/identity/logout", {
+          ...requestOptions, method: "POST", headers: { [csrf.headerName]: csrf.token },
+        });
+        return response.status === 204 ? { kind: "confirmed", value: undefined } : mutationRefusal(response.status);
+      } catch { return { kind: submitted ? "unresolved" : "unavailable" }; }
     },
     async signIn(login: string, password: string): Promise<IamResult<{ actorId: string }>> {
       let submitted = false;
@@ -53,13 +67,14 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
           ...requestOptions, method: "POST", body,
           headers: { "Content-Type": "application/x-www-form-urlencoded", [csrf.headerName]: csrf.token },
         });
-        if (response.status !== 200) return response.status >= 500 ? { kind: "unresolved" } : refused(response.status);
+        if (response.status !== 200) return mutationRefusal(response.status);
         const value: unknown = await response.json();
         if (typeof value !== "object" || value === null) return { kind: "unresolved" };
         const actorId = (value as Record<string, unknown>).actorId;
         if (typeof actorId !== "string" || !uuid.test(actorId)) return { kind: "unresolved" };
         return { kind: "confirmed", value: { actorId } };
       } catch { return { kind: submitted ? "unresolved" : "unavailable" }; }
+      finally { password = ""; }
     },
     async loadSession(): Promise<IamResult<SessionView>> {
       try {
