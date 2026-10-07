@@ -198,7 +198,10 @@ try {
   stage = "committed-response-loss-ui";
   await page.getByTestId("account-status").filter({ hasText: "Chưa xác định được kết quả" }).waitFor();
   assert.equal(committedStatus, 201);
-  assert.equal(await create.locator("fieldset").isDisabled(), true);
+  assert.equal(await create.locator("fieldset").evaluate(fieldset => fieldset.disabled), true);
+  assert.equal(await create.locator('[name="login"]').isDisabled(), true);
+  assert.equal(await create.getByRole("button", { name: "Tạo PENDING" }).isDisabled(), true);
+  assert.equal(lossAttempts, 1);
   await responseLoss.send("Fetch.disable"); await responseLoss.detach(); pass("W07_LOST_RESPONSE_NO_FALSE_SUCCESS_NO_AUTO_RETRY");
   stage = "keyboard-responsive-privacy";
   await page.setViewportSize({ width: 780, height: 900 }); await page.keyboard.press("Tab");
