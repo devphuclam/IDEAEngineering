@@ -31,6 +31,18 @@ tracing off; they are not Maven properties, command arguments, log output or rep
 
 ## Test seam and oracle
 
+T021/T023 shared Web state is tested through exported client/state functions with the already
+admitted Vitest 5.0.2. `run-web-tests.ps1 -SourceRoot <fresh-owned-export>/source -SourceSha <SHA>
+-Oracle RED|PASS -ExpectedCount <count>` pins Windows Node 24.19.0, 44 installed locked package
+versions and their existing cache archives; every used package member must match raw cached
+archive bytes before copying to an isolated owned dependency projection. Full package notices
+remain with the copies. No primary checkout/cache writes, junction, npm/install or download.
+Native config loading and a private cacheDir keep all Vitest outputs in that export. Source,
+Node and all shared/projected package-file hashes are rechecked afterwards. RED/GREEN report/log
+hashes are retained. These non-browser client/state tests use an external fetch boundary where
+needed, never mock our own modules or invent authenticated Server authority. They do not replace
+the actual same-origin HTTPS/browser qualification required by each owner story.
+
 First case uses real Boot HTTP sign-in + ordinary session/CSRF on one ephemeral loopback-only
 port. A test-only filter observes the principal on the existing protected session route; no new
 test/product route. A forged caller ActorId in query/header cannot establish authority. The
