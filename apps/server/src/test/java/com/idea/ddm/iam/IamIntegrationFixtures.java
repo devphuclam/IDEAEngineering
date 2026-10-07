@@ -48,6 +48,11 @@ public final class IamIntegrationFixtures {
     }
 
     public void createSchema() throws Exception {
+        createSchema(null);
+    }
+
+    /** An upgrade qualification may stop at the immutable predecessor before seeding history. */
+    public void createSchema(String targetVersion) throws Exception {
         try (var connection = migrator(); var statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             requireTarget(connection, "idea_ddm_migrator");
@@ -55,9 +60,11 @@ public final class IamIntegrationFixtures {
             statement.execute("COMMENT ON SCHEMA " + schema + " IS 'IDEA_IAM_UI_RUN:" + source + ":" + schema + "'");
             connection.commit();
         }
-        var result = Flyway.configure().dataSource(url(), "idea_ddm_migrator", required("IDEA_DATABASE_MIGRATION_PASSWORD"))
+        var configuration = Flyway.configure().dataSource(url(), "idea_ddm_migrator", required("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).createSchemas(false).cleanDisabled(true)
-                .locations("classpath:db/migration").load().migrate();
+                .locations("classpath:db/migration");
+        if (targetVersion != null) configuration.target(targetVersion);
+        var result = configuration.load().migrate();
         try (var connection = migrator(); var statement = connection.createStatement()) {
             statement.execute("GRANT USAGE ON SCHEMA " + schema + " TO idea_ddm_app");
             statement.execute("REVOKE INSERT,UPDATE,DELETE,TRUNCATE ON " + schema + ".flyway_schema_history FROM idea_ddm_app");
@@ -70,6 +77,12 @@ public final class IamIntegrationFixtures {
         }
         try (var connection = app()) { requireTarget(connection, "idea_ddm_app"); }
         System.out.println("IAM_SCHEMA_READY=" + schema + ";SOURCE=" + source + ";MIGRATIONS=" + result.migrationsExecuted);
+    }
+
+    public int migrateSuccessor() {
+        return Flyway.configure().dataSource(url(), "idea_ddm_migrator", required("IDEA_DATABASE_MIGRATION_PASSWORD"))
+                .schemas(schema).defaultSchema(schema).createSchemas(false).cleanDisabled(true)
+                .locations("classpath:db/migration").load().migrate().migrationsExecuted;
     }
 
     private static void requireTarget(Connection connection, String role) throws Exception {

@@ -58,6 +58,14 @@ authority at coordinated admission and finalization; the shared seam derives Act
 from IAM, holds lock 73003002, and owns commit/rollback. It does not invent Project/RBAC rules,
 an HTTP route, Permission, generic CRUD coordinator or owner evidence schema.
 
+T013 first schema RED: `schema-red-01 IamSchemaPrivilegeTest 1 RED`. Migrate V1–V10 in the
+owned schema, then invoke the successor migration path and require migrator-owned Project,
+Project Membership, Business Group and Group Membership tables. Missing successor state is a
+real RED; no fixture grants or product HTTP behavior are inferred. Later vertical schema tests
+qualify retained predecessor revocation, immutable role/version content, separate candidate
+staging, same-Org/Project constraints and direct app protected-DML/SET ROLE refusal. The schema
+is still discarded only through the published exact-marker runner after the test JVM exits.
+
 ## Database and cleanup
 
 Only `idea_ddm_iam_ui_20261007_46`, existing migrator/app roles, and one fresh
