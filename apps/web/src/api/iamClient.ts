@@ -40,6 +40,9 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
     return { headerName: "X-CSRF-TOKEN", token: proof.token };
   }
   return {
+    async signOut(): Promise<IamResult<void>> {
+      throw new Error("IAM sign-out adapter not implemented");
+    },
     async signIn(login: string, password: string): Promise<IamResult<{ actorId: string }>> {
       let submitted = false;
       try {
