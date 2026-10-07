@@ -109,6 +109,7 @@ a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/sr
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
+974d05c40e4a1340deb023e9952533cbd73f278eeb54542a3ef3356c2928f100  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceAtomicityTest.java
 3337b0744383052b9c4d309c19a4fd0ebb17cf900cffaa32bce7aaf6305bf2f3  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
 3c2d2056b7f76444f2ca11cfa44e3cd9ca02f2d694599b37c0b320913cb5e819  apps/server/src/test/java/com/idea/ddm/project/ProjectPrerequisiteFixture.java
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
@@ -166,7 +167,7 @@ fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-4
 520893c7de617ad79a3049c4a7620762baf30757db15aaeebbc769f6aae0e498  tests/iam-ui-46/account-browser.sh
 86d07bdacafd2a2b143f8650e5e53a50dd02d9fdb67b499ade77a989ef773869  tests/iam-ui-46/README.md
 c8e5118e5e0c1a3a32c2b4edd8bfbaef172ffb6392e071249a1a67e5fd3ab62b  tests/iam-ui-46/run-owner-tests.sh
-0e2240a5729a6b414f618451ae9420fbd86cdfb2370d44047f9b60ad8840c9eb  tests/iam-ui-46/run-web-tests.ps1
+e082d788f4c9e8e8bfadbb77467e3873ea1e7bb08c105ea1b1e99e6f49113faf  tests/iam-ui-46/run-web-tests.ps1
 5d4506c387a34e4b32d886bf684cb77d4504168e246b2eba6a641e3db4417844  tests/iam-ui-46/vitest.config.mjs
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml

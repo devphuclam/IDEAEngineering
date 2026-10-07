@@ -74,7 +74,7 @@ $log=$owned+'/web-private.log'
 $typecheck='NOT-RUN'
 Push-Location $web
 try {
-    $testSelection=if($TestFile){@($TestFile)}else{@()}
+    [string[]]$testSelection=if($TestFile){@($TestFile)}else{@()}
     & $node ($web+'/node_modules/vitest/vitest.mjs') run @testSelection --config ($SourceRoot+'/tests/iam-ui-46/vitest.config.mjs') --configLoader native --reporter=json --outputFile $report --no-color *> $log
     $status=$LASTEXITCODE
     if($Oracle -eq 'PASS' -and $status -eq 0){
