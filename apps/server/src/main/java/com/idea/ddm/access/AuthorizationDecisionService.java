@@ -56,6 +56,9 @@ public final class AuthorizationDecisionService {
         if (!actor.organizationId().equals(scope.organizationId())) {
             return new Decision(actor.actorId(), scope, permission, now, true, List.of(), "WRONG_ORGANIZATION_SCOPE");
         }
+        if (scope.kind() == ScopeKind.PROJECT && projects.authorizationFacts(connection, actor, scope.projectId(), now).isEmpty()) {
+            return new Decision(actor.actorId(), scope, permission, now, true, List.of(), "NO_APPLICABLE_ASSIGNMENT");
+        }
         var paths = directAssignments(connection, actor.actorId(), permission, scope, now);
         return new Decision(actor.actorId(), scope, permission, now, true, paths, paths.isEmpty() ? "NO_APPLICABLE_ASSIGNMENT" : null);
     }
@@ -63,15 +66,15 @@ public final class AuthorizationDecisionService {
     private static List<GrantPath> directAssignments(Connection connection, UUID actorId, String permission,
             Scope scope, Instant now) throws SQLException {
         var paths = new ArrayList<GrantPath>();
-        try (var query = connection.prepareStatement("SELECT a.assignment_id,a.role_version_id,v.role_code,v.version "
+        try (var query = connection.prepareStatement("SELECT a.assignment_id,a.role_version_id,v.role_code,v.version,a.scope_kind,a.project_id "
                 + "FROM identity_role_assignment a JOIN identity_role_version v USING(role_version_id) "
                 + "JOIN identity_role_version_profile profile USING(role_version_id) "
                 + "JOIN identity_role_permission p USING(role_version_id) JOIN permission_registry r USING(permission_code) "
                 + "WHERE a.principal_actor_id=? AND a.organization_id=? AND a.revoked_at IS NULL "
                 + "AND a.effective_from<=? AND (a.effective_until IS NULL OR a.effective_until>?) "
-                + "AND a.scope_kind=? AND a.project_id IS NOT DISTINCT FROM ? AND p.permission_code=? "
+                + "AND (a.scope_kind='ORGANIZATION' OR (a.scope_kind='PROJECT' AND ?='PROJECT' AND a.project_id=?)) AND p.permission_code=? "
                 + "AND a.scope_kind=ANY(profile.scope_kinds) AND 'ACTOR'=ANY(profile.principal_kinds) "
-                + "AND a.scope_kind=ANY(r.scope_kinds) AND 'ACTOR'=ANY(r.principal_kinds) "
+                + "AND ?=ANY(r.scope_kinds) AND 'ACTOR'=ANY(r.principal_kinds) "
                 + "AND NOT r.participant_membership_required ORDER BY a.assignment_id")) {
             query.setObject(1, actorId);
             query.setObject(2, scope.organizationId());
@@ -80,9 +83,11 @@ public final class AuthorizationDecisionService {
             query.setString(5, scope.kind().name());
             query.setObject(6, scope.projectId());
             query.setString(7, permission);
+            query.setString(8, scope.kind().name());
             try (var rows = query.executeQuery()) {
                 while (rows.next()) paths.add(new GrantPath(rows.getObject(1, UUID.class), rows.getObject(2, UUID.class),
-                        rows.getString(3), rows.getInt(4), scope, null, null, null));
+                        rows.getString(3), rows.getInt(4),
+                        new Scope(ScopeKind.valueOf(rows.getString(5)), scope.organizationId(), rows.getObject(6, UUID.class)), null, null, null));
             }
         }
         return List.copyOf(paths);
