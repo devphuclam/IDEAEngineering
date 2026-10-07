@@ -24,4 +24,14 @@ class IamSchemaPrivilegeTest {
             assertEquals(4, row.getInt(1), "Accepted Project/Group relational foundation must exist");
         }
     }
+
+    @Test void activatedRoleProfileAndCandidateStagingHaveSeparateProtectedStorage() throws Exception {
+        try (var connection = fixtures.app(); var query = connection.createStatement(); var row = query.executeQuery(
+                "SELECT count(*) FROM pg_tables WHERE schemaname=current_schema() AND tableowner='idea_ddm_migrator' "
+                + "AND tablename IN ('identity_role_definition','identity_role_version_profile',"
+                + "'identity_role_candidate','identity_role_candidate_permission','permission_registry')")) {
+            assertTrue(row.next());
+            assertEquals(5, row.getInt(1), "Draft candidates must not be mutable activated role content");
+        }
+    }
 }
