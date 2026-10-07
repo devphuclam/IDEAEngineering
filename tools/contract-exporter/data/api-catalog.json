@@ -3,23 +3,27 @@
     "project": "IDEA ENGINEERING",
     "documentTitle": "ĐẶC TẢ GIAO TIẾP API — IDEA DDM CORE v0",
     "documentCode": "Spec • SPEC-API-001 • Phiên bản 1.0",
-    "version": "1.0",
+    "version": "1.1",
     "status": "BẢN PHÁT HÀNH NỘI BỘ",
     "author": "Nguyễn Huỳnh Phúc Lâm",
     "revisions": [
       {
         "version": "0.1",
         "date": "06/10/2026",
-        "commit": "54233b4",
         "author": "Nguyễn Huỳnh Phúc Lâm",
         "description": "Khởi tạo danh mục sơ bộ 14 endpoint Core v0 (Auth, IAM, Vault Transfer, CPD Phase 2)."
       },
       {
         "version": "1.0",
         "date": "07/10/2026",
-        "commit": "168acf3",
         "author": "Nguyễn Huỳnh Phúc Lâm",
         "description": "Chuẩn hóa toàn diện hồ sơ kỹ thuật: Bổ sung từ điển dữ liệu (Data Dictionary), ma trận mã lỗi, quy trình phối hợp và tài liệu tra cứu nội bộ."
+      },
+      {
+        "version": "1.1",
+        "date": "07/10/2026",
+        "author": "Nguyễn Huỳnh Phúc Lâm",
+        "description": "Đồng bộ tự động qua Auto-Discovery Crawler: Thu hoạch thêm 9 thẻ đặc tả từ mã nguồn repo."
       }
     ],
     "subtitle": "Quy ước giao thức, tham số và mã lỗi giữa Backend, Web, Desktop và File Gateway",
@@ -178,7 +182,8 @@
           "remedy": "Thử lại sau ít giây (Retry với backoff)."
         }
       ],
-      "notes": "Token phải được lưu trên RAM của ứng dụng Client (không lưu LocalStorage để tránh rủi ro XSS)."
+      "notes": "Token phải được lưu trên RAM của ứng dụng Client (không lưu LocalStorage để tránh rủi ro XSS).",
+      "phase": "Phase 1"
     },
     {
       "code": "AUTH-02",
@@ -266,7 +271,8 @@
           "remedy": "Gọi lại GET /csrf để lấy mã mới trước khi gửi lại form."
         }
       ],
-      "notes": "Cookie IDEA_SESSION có thời hạn chờ không hoạt động 2 giờ (idle) và tối đa 8 giờ (absolute). Tuyệt đối không lưu mật khẩu vào LocalStorage."
+      "notes": "Cookie IDEA_SESSION có thời hạn chờ không hoạt động 2 giờ (idle) và tối đa 8 giờ (absolute). Tuyệt đối không lưu mật khẩu vào LocalStorage.",
+      "phase": "Phase 1"
     },
     {
       "code": "AUTH-03",
@@ -334,7 +340,8 @@
           "remedy": "Điều hướng người dùng về màn hình Đăng nhập (AUTH-02)."
         }
       ],
-      "notes": "Client không được tự ý giả mạo ActorId; Server thẩm định tuyệt đối danh tính từ Cookie."
+      "notes": "Client không được tự ý giả mạo ActorId; Server thẩm định tuyệt đối danh tính từ Cookie.",
+      "phase": "Phase 1"
     },
     {
       "code": "AUTH-04",
@@ -376,7 +383,8 @@
           "remedy": "Lấy lại CSRF token mới."
         }
       ],
-      "notes": "Đảm bảo loại bỏ hoàn toàn dấu vết phiên trên trình duyệt người dùng."
+      "notes": "Đảm bảo loại bỏ hoàn toàn dấu vết phiên trên trình duyệt người dùng.",
+      "phase": "Phase 1"
     },
     {
       "code": "IAM-01",
@@ -502,7 +510,8 @@
           "remedy": "Chọn tên đăng nhập khác."
         }
       ],
-      "notes": "Chỉ tạo định danh người dùng. Muốn truy cập dự án cụ thể, phải gán quyền Project Administrator riêng."
+      "notes": "Chỉ tạo định danh người dùng. Muốn truy cập dự án cụ thể, phải gán quyền Project Administrator riêng.",
+      "phase": "Phase 1"
     },
     {
       "code": "IAM-02",
@@ -610,7 +619,8 @@
           "remedy": "Lấy thông tin tài khoản mới nhất và thử lại."
         }
       ],
-      "notes": "Khóa tài khoản không xóa dữ liệu lịch sử và các chữ ký trước đó của người dùng."
+      "notes": "Khóa tài khoản không xóa dữ liệu lịch sử và các chữ ký trước đó của người dùng.",
+      "phase": "Phase 1"
     },
     {
       "code": "IAM-03",
@@ -712,7 +722,8 @@
           "remedy": "Không cần thực hiện mở khóa."
         }
       ],
-      "notes": "Mở khóa tài khoản giữ nguyên mật khẩu cũ của người dùng (trừ khi có yêu cầu cấp lại proof)."
+      "notes": "Mở khóa tài khoản giữ nguyên mật khẩu cũ của người dùng (trừ khi có yêu cầu cấp lại proof).",
+      "phase": "Phase 1"
     },
     {
       "code": "IAM-04",
@@ -832,7 +843,8 @@
           "remedy": "Bật chế độ phân phối tổng hợp (Synthetic delivery opt-in) trong môi trường thử nghiệm."
         }
       ],
-      "notes": "Mã Proof hết hạn sau 15 phút và tự hủy vĩnh viễn ngay sau khi sử dụng một lần."
+      "notes": "Mã Proof hết hạn sau 15 phút và tự hủy vĩnh viễn ngay sau khi sử dụng một lần.",
+      "phase": "Phase 1"
     },
     {
       "code": "IAM-05",
@@ -920,7 +932,8 @@
           "remedy": "Yêu cầu Quản trị viên cấp lại mã proof mới."
         }
       ],
-      "notes": "Sau khi đổi mật khẩu thành công, mã proof bị hủy vĩnh viễn. Người dùng có thể tiến hành đăng nhập tại AUTH-02."
+      "notes": "Sau khi đổi mật khẩu thành công, mã proof bị hủy vĩnh viễn. Người dùng có thể tiến hành đăng nhập tại AUTH-02.",
+      "phase": "Phase 1"
     },
     {
       "code": "VLT-01",
@@ -996,7 +1009,8 @@
           "remedy": "Yêu cầu Server cấp mới Transfer Grant."
         }
       ],
-      "notes": "Kích thước chunk chuẩn là 1 MiB (1,048,576 bytes). Hỗ trợ tiếp tục truyền (Resume) mà không phải tải lại từ đầu."
+      "notes": "Kích thước chunk chuẩn là 1 MiB (1,048,576 bytes). Hỗ trợ tiếp tục truyền (Resume) mà không phải tải lại từ đầu.",
+      "phase": "Phase 1"
     },
     {
       "code": "VLT-02",
@@ -1061,7 +1075,8 @@
           "remedy": "Khởi tạo phiên truyền file mới."
         }
       ],
-      "notes": "Cho phép phục hồi biên lai chuyển giao mà không phải tải lại bất kỳ byte dữ liệu nào."
+      "notes": "Cho phép phục hồi biên lai chuyển giao mà không phải tải lại bất kỳ byte dữ liệu nào.",
+      "phase": "Phase 1"
     },
     {
       "code": "CPD-01",
@@ -1163,7 +1178,8 @@
           "remedy": "Xác nhận liên kết với tài liệu sẵn có thay vì tạo mới."
         }
       ],
-      "notes": "Ngăn chặn việc đăng ký trùng lặp mã chi tiết hoặc ghi đè mù mờ trong hệ thống PDM."
+      "notes": "Ngăn chặn việc đăng ký trùng lặp mã chi tiết hoặc ghi đè mù mờ trong hệ thống PDM.",
+      "phase": "Phase 2 (CPD)"
     },
     {
       "code": "CPD-02",
@@ -1255,7 +1271,8 @@
           "remedy": "Kiểm tra lại DocumentId."
         }
       ],
-      "notes": "Lọc kết quả nghiêm ngặt theo phân quyền Dự án (RBAC Scope)."
+      "notes": "Lọc kết quả nghiêm ngặt theo phân quyền Dự án (RBAC Scope).",
+      "phase": "Phase 2 (CPD)"
     },
     {
       "code": "CPD-03",
@@ -1311,7 +1328,386 @@
           "remedy": "Kiểm tra lại DocumentId."
         }
       ],
-      "notes": "Bảo đảm tính toàn vẹn kiểm toán (Audit Trail) cho toàn bộ hồ sơ kỹ thuật sản phẩm."
+      "notes": "Bảo đảm tính toàn vẹn kiểm toán (Audit Trail) cho toàn bộ hồ sơ kỹ thuật sản phẩm.",
+      "phase": "Phase 2 (CPD)"
+    },
+    {
+      "code": "CPD-1.1",
+      "name": "Inspect Store Existing candidate",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Eligible Actor and applicable access; authorized persisted source file,\r\n  selec",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Inspect Store Existing candidate. Eligible Actor and applicable access; authorized persisted source file,\r\n  selected Document Class/schema, metadata/path/name and candidate content digest. Format/profile\r\n  readability and size valid",
+      "preconditions": "Non-authoritative inspection; no controlled record or published\r\n  Generation committed. Source bytes are unchanged; inspection result/Audit per DOC-06 §5.2.",
+      "stateEffects": "Non-authoritative inspection; no controlled record or published\r\n  Generation committed. Source bytes are unchanged; inspection result/Audit per DOC-06 §5.2.",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Inspection findings and permitted duplicate candidates with metadata, path/name and\r\n  digest evidence. Same digest suggests reusable bytes, never ide",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Inspection findings and permitted duplicate candidates with metadata, path/name and\r\n  digest eviden */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Unreadable/unsupported/invalid source, lost access or unavailable\r\n  evidence prevents a trustworthy preview. Results are a point-in-time observation,",
+          "remedy": "Inspection may be repeated; same file may yield changed candidate\r\n  results. No durable inspection-cache/replay guarantee is selected. HTTP details U"
+        }
+      ],
+      "notes": "Inspection may be repeated; same file may yield changed candidate\r\n  results. No durable inspection-cache/replay guarantee is selected. HTTP details UNKNOWN."
+    },
+    {
+      "code": "CPD-1.2",
+      "name": "Preview mapping and identity choice",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Applicable Actor, class/schema and numbering-policy version, proposed\r\n  metadat",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Preview mapping and identity choice. Applicable Actor, class/schema and numbering-policy version, proposed\r\n  metadata/business number/relations and inspection findings. Existing legacy revision labels\r\n  may be recorded as provenance, n",
+      "preconditions": "No published baseline; invalid metadata blocks registration/publish.\r\n  Governed definitions retain exact version interpretation (REQ-GOV-003/005).",
+      "stateEffects": "No published baseline; invalid metadata blocks registration/publish.\r\n  Governed definitions retain exact version interpretation (REQ-GOV-003/005).",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Validated mapping with each required field/relation resolved or visibly unresolved;\r\n  field/relation/number conflicts and choices create/link/cancel.",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Validated mapping with each required field/relation resolved or visibly unresolved;\r\n  field/relatio */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Required field absent, invalid format, incompatible/changed definition\r\n  or number conflict returns correction findings; active policy at later commi",
+          "remedy": "Correct input then preview again; no frozen preview validity is\r\n  promised. Normalization/equality, numbering cancellation/gaps and policy-change han"
+        }
+      ],
+      "notes": "Correct input then preview again; no frozen preview validity is\r\n  promised. Normalization/equality, numbering cancellation/gaps and policy-change handling U02/U03."
+    },
+    {
+      "code": "CPD-1.3",
+      "name": "Confirm New registration",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Current authorized Actor, Governing Project, selected class/metadata\r\n  definiti",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Confirm New registration. Current authorized Actor, Governing Project, selected class/metadata\r\n  definitions, validated metadata/number choice, explicit new-identity confirmation and\r\n  OperationId/correlation/expected state.",
+      "preconditions": "Registration creates the same Logical Document model as Store Existing.\r\n  Any material committed records/outcome/Audit/applicable outbox agree; no partial acce",
+      "stateEffects": "Registration creates the same Logical Document model as Store Existing.\r\n  Any material committed records/outcome/Audit/applicable outbox agree; no partial acce",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Attributable registration result with one stable DocumentId and governing identity;\r\n  may be Start without published content. Do not fabricate Revisi",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Attributable registration result with one stable DocumentId and governing identity;\r\n  may be Start  */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Lost authority, invalid metadata/number, policy/expected-state conflict\r\n  refuses without a successful partial owner result. Number collisions cannot",
+          "remedy": "OperationId identifies material command; no new DocumentId from the\r\n  same completed logical operation. Exact binding, changed-input and status wire "
+        }
+      ],
+      "notes": "OperationId identifies material command; no new DocumentId from the\r\n  same completed logical operation. Exact binding, changed-input and status wire remain U05.\r\n  First publication is CPD-1.D1, not "
+    },
+    {
+      "code": "CPD-1.4",
+      "name": "Confirm Store Existing identity disposition",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Actor, validated mapping/inspection and explicit create/link/cancel\r\n  choice; e",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Confirm Store Existing identity disposition. Actor, validated mapping/inspection and explicit create/link/cancel\r\n  choice; exact existing target if link is selected; OperationId and current expected context.\r\n  Target access is revalidated, not",
+      "preconditions": "Same-name/path/digest cannot auto-merge identities. Physical Artifact\r\n  deduplication is independent. Source is never modified/deleted. Private verified progre",
+      "stateEffects": "Same-name/path/digest cannot auto-merge identities. Physical Artifact\r\n  deduplication is independent. Source is never modified/deleted. Private verified progre",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Explicit selected disposition. Create registers a new identity using the shared\r\n  model; link refers to the chosen existing identity without silently",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Explicit selected disposition. Create registers a new identity using the shared\r\n  model; link refer */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Stale target/preview, number/metadata conflicts, lost scope or\r\n  unverified bytes block the affected commit. Confirmation revalidates current authori",
+          "remedy": "Same OperationId cannot produce duplicate intake result (DOC-06 §5.2).\r\n  After interrupted transfer preserve verified progress; after uncertain commi"
+        }
+      ],
+      "notes": "Same OperationId cannot produce duplicate intake result (DOC-06 §5.2).\r\n  After interrupted transfer preserve verified progress; after uncertain commit resolve original\r\n  operation. Cancellation/pend"
+    },
+    {
+      "code": "CPD-1.D1",
+      "name": "First publication boundary",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Server-established eligible Actor, current authorization/policy and\r\n  owner val",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: First publication boundary. Server-established eligible Actor, current authorization/policy and\r\n  owner validation, exact privately verified Artifact identity/digest/content role, metadata\r\n  definition/values, required exact s",
+      "preconditions": "Start→In Work only after success. DOC-06 §5.2 describes combined\r\n  registration/first publish; DOC-04 permits prior identity-only registration. Any path must\r\n",
+      "stateEffects": "Start→In Work only after success. DOC-06 §5.2 describes combined\r\n  registration/first publish; DOC-04 permits prior identity-only registration. Any path must\r\n",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "One complete exact initial baseline: DocumentId, Revision A, Version 1,\r\n  GenerationId/manifest and Working Head, plus owner/evidence correlation.",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: One complete exact initial baseline: DocumentId, Revision A, Version 1,\r\n  GenerationId/manifest and */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Missing/mismatched digest, unavailable custody, stale context, lost\r\n  eligibility or any required write failure prevents valid publication. Unused by",
+          "remedy": "REQ-WS-012: same OperationId and identical declared inputs resolves/\r\n  resumes same Check-in; changed input refused; no duplicate Generation/Change S"
+        }
+      ],
+      "notes": "REQ-WS-012: same OperationId and identical declared inputs resolves/\r\n  resumes same Check-in; changed input refused; no duplicate Generation/Change Set. Query and\r\n  input fingerprint wire UNKNOWN. S"
+    },
+    {
+      "code": "CPD-2.1",
+      "name": "Resolve document and current head",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Current eligible Actor, stable DocumentId and requested view; owning\r\n  Organiza",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Resolve document and current head. Current eligible Actor, stable DocumentId and requested view; owning\r\n  Organization/Project authorization. Name/path/business number alone is not exact identity.",
+      "preconditions": "Read-only owner view. Working Head is current at an observation, not a\r\n  Released Baseline or a promise it will still be current at the next command.",
+      "stateEffects": "Read-only owner view. Working Head is current at an observation, not a\r\n  Released Baseline or a promise it will still be current at the next command.",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Authorized identity/current state plus at most one exact Working Head; distinguish\r\n  registered/no-head from published. Governing Project, business n",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Authorized identity/current state plus at most one exact Working Head; distinguish\r\n  registered/no- */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Missing/inaccessible context fails without data leakage. Any later\r\n  command uses an exact expected pin; projection lag is identified, never hidden a",
+          "remedy": "Repeating query writes no product state but may observe a new head.\r\n  Access checked anew. Cache/conditional request semantics and HTTP taxonomy UNKN"
+        }
+      ],
+      "notes": "Repeating query writes no product state but may observe a new head.\r\n  Access checked anew. Cache/conditional request semantics and HTTP taxonomy UNKNOWN."
+    },
+    {
+      "code": "CPD-2.2",
+      "name": "Resolve exact Revision / Version / Generation",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Authorized DocumentId and selected Revision/Version coordinate or\r\n  GenerationI",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Resolve exact Revision / Version / Generation. Authorized DocumentId and selected Revision/Version coordinate or\r\n  GenerationId. Every supplied pin must relate to the same document/Revision (DATA-REL-002/003).\r\n  An incomplete selector is not lic",
+      "preconditions": "Read-only resolution. Later head changes never rewrite historical pins.\r\n  Bytes, if requested, resolve through Artifact Custody to exact retained identity/dige",
+      "stateEffects": "Read-only resolution. Later head changes never rewrite historical pins.\r\n  Bytes, if requested, resolve through Artifact Custody to exact retained identity/dige",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Exact immutable Generation manifest with RevisionId/code, Version within Revision,\r\n  metadata definition/values, exact Artifact references and applic",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Exact immutable Generation manifest with RevisionId/code, Version within Revision,\r\n  metadata defin */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Mismatched document/Revision/Generation, missing/corrupt bytes,\r\n  unavailable custody or denied access cannot return an alternative Generation as suc",
+          "remedy": "Retained immutable content stays pinned; eligibility/location\r\n  availability may change. Retry preserves exact selector and reauthorizes, not “latest"
+        }
+      ],
+      "notes": "Retained immutable content stays pinned; eligibility/location\r\n  availability may change. Retry preserves exact selector and reauthorizes, not “latest.”"
+    },
+    {
+      "code": "CPD-2.3",
+      "name": "Read retained history",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Authorized stable DocumentId, requested history scope; retained\r\n  Revision/Gene",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Read retained history. Authorized stable DocumentId, requested history scope; retained\r\n  Revision/Generation and attributable history are resolved under current read authority.",
+      "preconditions": "Read-only; no rewriting past manifest or treating file timestamp as\r\n  authoritative publication time. Audit query scope is separately authorized.",
+      "stateEffects": "Read-only; no rewriting past manifest or treating file timestamp as\r\n  authoritative publication time. Audit query scope is separately authorized.",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Distinct revision identities/codes and ordered Version/Generation relationships,\r\n  exact retained pins and permitted attribution; no separate Version",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Distinct revision identities/codes and ordered Version/Generation relationships,\r\n  exact retained p */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Hidden objects/entries/counts remain hidden. New commits may extend\r\n  history; cross-page snapshot consistency is not decided. Missing required retai",
+          "remedy": "Repeat after current authorization; collection may grow. No stable\r\n  page token, cache guarantee or new audit-export API is declared."
+        }
+      ],
+      "notes": "Repeat after current authorization; collection may grow. No stable\r\n  page token, cache guarantee or new audit-export API is declared."
+    },
+    {
+      "code": "CPD-2.4",
+      "name": "Authorized placement navigation",
+      "group": "Dữ liệu Sản phẩm PDM (CPD)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Eligible Actor, FolderId/PlacementId and requested navigation scope,\r\n  or selec",
+      "status": "[THIẾT KẾ PH2]",
+      "description": "Đặc tả: Authorized placement navigation. Eligible Actor, FolderId/PlacementId and requested navigation scope,\r\n  or selected placement target. Logical hierarchy is not a filesystem path or access boundary.",
+      "preconditions": "Read-only. One governed primary placement and additional explicit\r\n  links per DATA-REL-017. Move/unlink cannot create a new identity/Generation or delete conte",
+      "stateEffects": "Read-only. One governed primary placement and additional explicit\r\n  links per DATA-REL-017. Move/unlink cannot create a new identity/Generation or delete conte",
+      "headers": [
+        {
+          "name": "Accept",
+          "required": true,
+          "description": "application/json"
+        }
+      ],
+      "fields": [
+        {
+          "name": "payload",
+          "in": "Request/Response",
+          "type": "object",
+          "required": true,
+          "validation": "Chờ phê duyệt DTO chính thức",
+          "description": "Authorized hierarchy/placements and target DocumentId; an exact historical link\r\n  retains selected Revision/Generation. Navigation alias is placement",
+          "example": "{}"
+        }
+      ],
+      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
+      "responseExample": "/* Dữ liệu dự kiến: Authorized hierarchy/placements and target DocumentId; an exact historical link\r\n  retains selected  */",
+      "errors": [
+        {
+          "status": 400,
+          "code": "VALIDATION_FAILED",
+          "reason": "Placement visibility cannot grant target content access. Wrong\r\n  Organization or denied target does not disclose protected details. Cross-Project use",
+          "remedy": "Reauthorize each navigation; hierarchy can change between reads.\r\n  Historical exact pins remain exact. Listing/paging/cursor and HTTP surface UNKNOWN"
+        }
+      ],
+      "notes": "Reauthorize each navigation; hierarchy can change between reads.\r\n  Historical exact pins remain exact. Listing/paging/cursor and HTTP surface UNKNOWN."
     }
   ]
 }

@@ -28,10 +28,14 @@ const TOOL_DIR = __dirname;
 const REPO_ROOT = path.resolve(TOOL_DIR, '../..');
 const DATA_DIR = path.resolve(TOOL_DIR, 'data');
 const OUTPUT_DIR = path.resolve(TOOL_DIR, 'output');
+const ARCHIVE_DIR = path.resolve(OUTPUT_DIR, 'archive');
 const CATALOG_PATH = path.resolve(DATA_DIR, 'api-catalog.json');
 
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+}
+if (!fs.existsSync(ARCHIVE_DIR)) {
+  fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
 }
 
 const exportDate = new Date().toLocaleDateString('vi-VN', {
@@ -44,7 +48,8 @@ const exportDateTime = new Date().toLocaleString('vi-VN');
 // Helper to convert multiline strings safely into OpenXML TextRuns (no literal \n in <w:t>)
 function createSafeTextRuns(text, options = {}) {
   if (!text) return [new TextRun({ text: "", ...options })];
-  const lines = String(text).split(/\r?\n/);
+  const clean = String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = clean.split('\n');
   return lines.map((line, index) => new TextRun({
     text: line || " ",
     break: index > 0 ? 1 : 0,
@@ -72,44 +77,191 @@ function loadCatalog() {
   return JSON.parse(fs.readFileSync(CATALOG_PATH, 'utf-8'));
 }
 
-// 2. Update / Smart Merge function
-function updateCatalog() {
-  console.log('--- Đang quét và đồng bộ dữ liệu từ mã nguồn repository ---');
-  const catalog = loadCatalog();
+// 2. AUTO-DISCOVERY CRAWLER: Quét tự động repo qua các Phase
+function crawlRepository() {
+  console.log('--- KHỞI ĐỘNG AUTO-DISCOVERY CRAWLER ---');
+  const harvested = [];
+  const apiDir = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api');
 
-  const openapiPath = path.resolve(REPO_ROOT, 'apps/server/src/main/resources/dev-access/openapi.json');
-  if (fs.existsSync(openapiPath)) {
-    try {
-      const openapi = JSON.parse(fs.readFileSync(openapiPath, 'utf-8'));
-      if (openapi.paths) {
-        console.log(`[OK] Đã quét OpenAPI Specification (${Object.keys(openapi.paths).length} routes)`);
+  if (fs.existsSync(apiDir)) {
+    const files = fs.readdirSync(apiDir).filter(f => f.endsWith('.md'));
+    const ignoreList = ['README.md', 'guide.vi.md', 'cpd-guide.vi.md', 'overview.vi.md', 'partner-brief.md', 'template.md'];
+
+    for (const file of files) {
+      if (ignoreList.includes(file)) continue;
+      const filePath = path.join(apiDir, file);
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      // 1. Xác định Phase & Title từ tiêu đề hoặc Control Field
+      let phase = 'Giai đoạn kế thừa';
+      const phaseMatch = file.match(/ph(\d+)/i) || content.match(/#\s*PH(\d+)/i) || content.match(/PH(\d+)/i);
+      if (phaseMatch) {
+        phase = `Phase ${phaseMatch[1]}`;
+      } else if (file.includes('identity')) {
+        phase = 'Phase 1';
       }
-    } catch (e) {
-      console.warn('[CẢNH BÁO] Không đọc được openapi.json:', e.message);
+
+      console.log(`[CRAWL] Phát hiện tài liệu: ${file} (${phase})`);
+
+      // 2. Bóc tách Operation Cards (### CODE - TITLE)
+      const cardRegex = /###\s+([A-Z0-9.-]+)\s+[—–-]\s+([^\r\n]+)\r?\n([\s\S]*?)(?=\r?\n###|\r?\n##|$)/g;
+      let match;
+      while ((match = cardRegex.exec(content)) !== null) {
+        const code = match[1].trim();
+        const rawTitle = match[2].trim();
+        const body = match[3];
+
+        const authInput = (body.match(/-\s+\*\*Authority \/ input:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
+        const inputSec = (body.match(/-\s+\*\*Input:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
+        const output = (body.match(/-\s+\*\*Output:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
+        const state = (body.match(/-\s+\*\*State \/ atomicity:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || body.match(/-\s+\*\*Preconditions \/ state effect:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
+        const error = (body.match(/-\s+\*\*Error \/ concurrency:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || body.match(/-\s+\*\*Failure:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
+        const retry = (body.match(/-\s+\*\*Idempotency \/ retry:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || body.match(/-\s+\*\*Retry \/ recovery:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
+
+        // Tự nhận diện HTTP Method & Path nếu có sẵn trong tiêu đề
+        let method = 'TBD';
+        let routePath = 'Chưa xác lập (Design stage)';
+        const methodMatch = rawTitle.match(/^(GET|POST|PUT|DELETE|PATCH)\s+([^\s]+)/i);
+        let cleanName = rawTitle;
+        if (methodMatch) {
+          method = methodMatch[1].toUpperCase();
+          routePath = methodMatch[2];
+          cleanName = rawTitle.replace(/^(GET|POST|PUT|DELETE|PATCH)\s+[^\s]+/, '').trim() || rawTitle;
+        }
+
+        harvested.push({
+          sourceFile: file,
+          phase,
+          code,
+          name: cleanName,
+          method,
+          path: routePath,
+          authInput: authInput || inputSec,
+          output,
+          state,
+          error,
+          retry,
+        });
+      }
     }
   }
 
-  const identityMdPath = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/identity-session.md');
-  const cpdMdPath = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/controlled-product-data.md');
-
-  if (fs.existsSync(identityMdPath)) {
-    console.log('[OK] Đã đối chuẩn tài liệu kỹ thuật: identity-session.md');
+  // 3. Quét các file OpenAPI JSON trong hệ thống
+  const openapiFiles = [
+    path.resolve(REPO_ROOT, 'apps/server/src/main/resources/dev-access/openapi.json'),
+    path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/cpd-openapi.json')
+  ];
+  for (const oasFile of openapiFiles) {
+    if (fs.existsSync(oasFile)) {
+      try {
+        const oas = JSON.parse(fs.readFileSync(oasFile, 'utf-8'));
+        if (oas.paths && Object.keys(oas.paths).length > 0) {
+          console.log(`[CRAWL] Phát hiện OpenAPI: ${path.basename(oasFile)} (${Object.keys(oas.paths).length} routes)`);
+        }
+      } catch (err) {
+        // bỏ qua nếu lỗi cú pháp
+      }
+    }
   }
-  if (fs.existsSync(cpdMdPath)) {
-    console.log('[OK] Đã đối chuẩn tài liệu kỹ thuật: controlled-product-data.md');
+
+  console.log(`[CRAWL] Đã thu hoạch ${harvested.length} thẻ đặc tả từ repo.\n`);
+  return harvested;
+}
+
+// 3. SMART MERGE: Cập nhật thông số kỹ thuật mới nhưng bảo tồn 100% tiếng Việt làm giàu
+function smartMergeCatalog(catalog, harvested) {
+  console.log('--- ĐANG THỰC HIỆN SMART MERGE VÀO CATALOG ---');
+  let updatedCount = 0;
+  let newCount = 0;
+
+  for (const item of harvested) {
+    const existing = catalog.endpoints.find(e =>
+      e.code === item.code ||
+      (e.path !== 'Chưa xác lập (Design stage)' && e.path === item.path && e.method === item.method)
+    );
+
+    if (existing) {
+      // Cập nhật thuộc tính kỹ thuật, giữ nguyên văn giải thích tiếng Việt
+      if (item.phase && !existing.phase) existing.phase = item.phase;
+      if (item.method !== 'TBD') existing.method = item.method;
+      if (!existing.path.includes('api') && item.path.includes('api')) existing.path = item.path;
+      updatedCount++;
+    } else {
+      // Endpoint hoàn toàn mới từ Phase tiếp theo -> Tạo entry chuẩn
+      const newEntry = {
+        code: item.code,
+        name: item.name,
+        group: item.phase.includes('Phase 2') ? 'Dữ liệu Sản phẩm PDM (CPD)' : 'Nghiệp vụ Mở rộng',
+        phase: item.phase,
+        method: item.method || 'TBD',
+        path: item.path || 'TBD (Chưa chốt)',
+        auth: item.authInput ? item.authInput.slice(0, 80) : 'Theo quyền hạn dự án',
+        status: item.phase.includes('Phase 1') ? '[ĐÃ TRIỂN KHAI]' : '[THIẾT KẾ PH2]',
+        description: item.authInput ? `Đặc tả: ${item.name}. ${item.authInput.slice(0, 200)}` : `Quy hoạch đặc tả chức năng ${item.name}`,
+        preconditions: item.state ? item.state.slice(0, 160) : 'Theo quy định kiểm soát phiên và dự án',
+        stateEffects: item.state ? item.state.slice(0, 160) : 'Ghi nhận giao dịch nghiệp vụ có thẩm quyền',
+        headers: [
+          { name: 'Accept', required: true, description: 'application/json' }
+        ],
+        fields: [
+          {
+            name: 'payload',
+            in: 'Request/Response',
+            type: 'object',
+            required: true,
+            validation: 'Chờ phê duyệt DTO chính thức',
+            description: item.output ? item.output.slice(0, 150) : 'Dữ liệu trao đổi nghiệp vụ',
+            example: '{}'
+          }
+        ],
+        requestExample: '/* Đặc tả thiết kế - Chờ chốt wire DTO */',
+        responseExample: `/* Dữ liệu dự kiến: ${item.output ? item.output.slice(0, 100) : 'JSON'} */`,
+        errors: [
+          {
+            status: 400,
+            code: 'VALIDATION_FAILED',
+            reason: item.error ? item.error.slice(0, 150) : 'Dữ liệu không hợp lệ theo quy tắc',
+            remedy: item.retry ? item.retry.slice(0, 150) : 'Thử lại sau khi hiệu chỉnh'
+          }
+        ],
+        notes: item.retry ? item.retry.slice(0, 200) : 'Chờ hoàn tất wire contract ở giai đoạn kế tiếp.'
+      };
+      catalog.endpoints.push(newEntry);
+      newCount++;
+    }
   }
 
-  // Update date
+  // Đảm bảo tất cả endpoint đều có phase
+  catalog.endpoints.forEach(e => {
+    if (!e.phase) {
+      if (e.code.startsWith('CPD') || e.status.includes('PH2')) {
+        e.phase = 'Phase 2 (CPD)';
+      } else {
+        e.phase = 'Phase 1';
+      }
+    }
+  });
+
   catalog.metadata.date = exportDate;
 
+  if (newCount > 0) {
+    catalog.metadata.revisions.push({
+      version: (parseFloat(catalog.metadata.version) + 0.1).toFixed(1),
+      date: exportDate,
+      author: catalog.metadata.author,
+      description: `Đồng bộ tự động qua Auto-Discovery Crawler: Thu hoạch thêm ${newCount} thẻ đặc tả từ mã nguồn repo.`
+    });
+    catalog.metadata.version = (parseFloat(catalog.metadata.version) + 0.1).toFixed(1);
+  }
+
   fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2), 'utf-8');
-  console.log(`[HOÀN TẤT] Dữ liệu được lưu tại ${CATALOG_PATH}\n`);
+  console.log(`[SMART MERGE] Cập nhật ${updatedCount} endpoint hiện hữu, bổ sung ${newCount} endpoint mới.`);
+  console.log(`[HOÀN TẤT] Danh mục Single Source of Truth lưu tại ${CATALOG_PATH}\n`);
   return catalog;
 }
 
-// 3. GENERATE WORD (.DOCX) DOCUMENT
+// 4. GENERATE WORD (.DOCX) DOCUMENT — CHUẨN SPEC-001 & PHÂN NHÓM PHASE RÕ RÀNG
 async function generateDocx(catalog) {
-  // Use real PNG logo from data directory
   const logoPath = path.resolve(DATA_DIR, 'logo-idea-real.png');
   let logoImage = null;
   if (fs.existsSync(logoPath)) {
@@ -125,6 +277,9 @@ async function generateDocx(catalog) {
 
   const headerShading = { type: ShadingType.CLEAR, fill: "2D3748" };
   const subHeaderShading = { type: ShadingType.CLEAR, fill: "F3F4F6" };
+
+  const implementedList = catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP'));
+  const designList = catalog.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP'));
 
   const doc = new Document({
     sections: [
@@ -156,7 +311,7 @@ async function generateDocx(catalog) {
           }),
         },
         children: [
-          // --- KHỐI METADATA ĐẦU TRANG THEO CHUẨN SPEC-001 ---
+          // Khối metadata theo chuẩn SPEC-001
           new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
@@ -187,7 +342,7 @@ async function generateDocx(catalog) {
 
           new Paragraph({ spacing: { before: 500, after: 200 } }),
 
-          // Logo IDEA
+          // Logo chính thức
           ...(logoImage ? [
             new Paragraph({
               alignment: AlignmentType.CENTER,
@@ -253,8 +408,12 @@ async function generateDocx(catalog) {
                       new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "1. Phạm vi và quy ước kiến trúc chung" })] }),
                       new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "2. Lịch sử thay đổi phiên bản (Changelog)" })] }),
                       new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "3. Quy trình phối hợp đa thành phần (Call flows)" })] }),
-                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "4. Ma trận tổng hợp các endpoint Core v0" })] }),
-                      new Paragraph({ spacing: { after: 100 }, children: [new TextRun({ text: "5. Đặc tả chi tiết từng giao tiếp kỹ thuật" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "4. Ma trận tổng hợp các endpoint (Phân theo Phase)" })] }),
+                      new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: "    4.1 Nhóm API đã triển khai (Phase 1 — Sẵn sàng tích hợp)" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "    4.2 Nhóm API quy hoạch các Phase tiếp theo (Phase 2 CPD...)" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "5. Đặc tả chi tiết từng giao tiếp kỹ thuật" })] }),
+                      new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: "    5.1 Chi tiết các API đã triển khai (Phase 1)" })] }),
+                      new Paragraph({ spacing: { after: 100 }, children: [new TextRun({ text: "    5.2 Chi tiết các API quy hoạch các Phase tiếp theo (Phase 2 CPD...)" })] }),
                     ]
                   })
                 ]
@@ -264,7 +423,7 @@ async function generateDocx(catalog) {
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- 1. PHẠM VI VÀ QUY ƯỚC KIẾN TRÚC CHUNG ---
+          // 1. PHẠM VI VÀ QUY ƯỚC KIẾN TRÚC CHUNG
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
@@ -322,7 +481,7 @@ async function generateDocx(catalog) {
             ],
           }),
 
-          // --- 2. LỊCH SỬ THAY ĐỔI PHIÊN BẢN ---
+          // 2. LỊCH SỬ THAY ĐỔI PHIÊN BẢN
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
@@ -352,7 +511,7 @@ async function generateDocx(catalog) {
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- 3. QUY TRÌNH PHỐI HỢP ĐA THÀNH PHẦN ---
+          // 3. QUY TRÌNH PHỐI HỢP ĐA THÀNH PHẦN
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
@@ -362,7 +521,7 @@ async function generateDocx(catalog) {
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: "Phần này chuẩn hóa trình tự giao tiếp giữa các tác tử và máy chủ cho 3 chu trình hoạt động nền tảng của hệ thống."
+                text: "Phần này chuẩn hóa trình tự giao tiếp giữa các tác tử và máy chủ cho các chu trình hoạt động nền tảng của hệ thống."
               })
             ],
           }),
@@ -410,13 +569,19 @@ async function generateDocx(catalog) {
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- 4. MA TRẬN TỔNG HỢP CÁC ENDPOINT ---
+          // 4. MA TRẬN TỔNG HỢP CÁC ENDPOINT (PHÂN TÁCH 2 PHÂN HỆ RÕ RÀNG)
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
             children: [new TextRun({ text: "4. Ma trận tổng hợp các endpoint Core v0", bold: true, color: "111827" })],
           }),
 
+          // 4.1 Danh mục API đã triển khai
+          new Paragraph({
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 150, after: 100 },
+            children: [new TextRun({ text: `4.1 Danh mục API đã triển khai (Phase 1 — Sẵn sàng tích hợp: ${implementedList.length} API)`, bold: true, color: "15803D" })],
+          }),
           new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
@@ -430,18 +595,56 @@ async function generateDocx(catalog) {
                   new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Trạng thái", bold: true, color: "FFFFFF" })] })] }),
                 ],
               }),
-              ...catalog.endpoints.map(item => new TableRow({
+              ...implementedList.map(item => new TableRow({
                 children: [
                   new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.code, bold: true })] })] }),
-                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.name)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.name) })] }),
                   new TableCell({
                     shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "F0FDF4" : "EFF6FF" },
                     borders: borderThin,
                     children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "15803D" : "1D4ED8" })] })]
                   }),
                   new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.path, font: "Consolas", size: 18 })] })] }),
-                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.auth)] })] }),
-                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true })] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.auth) })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true, color: "15803D" })] })] }),
+                ],
+              })),
+            ],
+          }),
+
+          new Paragraph({ spacing: { after: 150 } }),
+
+          // 4.2 Danh mục quy hoạch các Phase tiếp theo
+          new Paragraph({
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 150, after: 100 },
+            children: [new TextRun({ text: `4.2 Danh mục quy hoạch các Phase tiếp theo (Phase 2 CPD... — Đang thiết kế: ${designList.length} API)`, bold: true, color: "C2410C" })],
+          }),
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mã", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 24, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên chức năng", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Giai đoạn", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 28, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Phạm vi thiết kế", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Trạng thái", bold: true, color: "FFFFFF" })] })] }),
+                ],
+              }),
+              ...designList.map(item => new TableRow({
+                children: [
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.code, bold: true })] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.name) })] }),
+                  new TableCell({
+                    shading: { type: ShadingType.CLEAR, fill: "FFF7ED" },
+                    borders: borderThin,
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.phase || "Phase 2", bold: true, color: "C2410C" })] })]
+                  }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.path, font: "Consolas", size: 18 })] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.auth) })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true, color: "C2410C" })] })] }),
                 ],
               })),
             ],
@@ -449,300 +652,302 @@ async function generateDocx(catalog) {
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- 5. ĐẶC TẢ CHI TIẾT TỪNG GIAO TIẾP KỸ THUẬT ---
+          // 5. ĐẶC TẢ CHI TIẾT TỪNG GIAO TIẾP KỸ THUẬT (PHÂN NHÓM 5.1 & 5.2)
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
             children: [new TextRun({ text: "5. Đặc tả chi tiết từng giao tiếp kỹ thuật", bold: true, color: "111827" })],
           }),
 
-          ...catalog.endpoints.flatMap(item => [
-            new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              spacing: { before: 250, after: 80 },
-              children: [
-                new TextRun({ text: `[${item.code}] `, bold: true, color: "1E40AF" }),
-                new TextRun({ text: `${item.name}`, bold: true, color: "111827" }),
-              ],
-            }),
+          // 5.1 Nhóm API đã triển khai
+          new Paragraph({
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 180, after: 120 },
+            children: [new TextRun({ text: "5.1 Nhóm API đã triển khai (Phase 1 — Sẵn sàng gọi trực tiếp)", bold: true, color: "15803D" })],
+          }),
 
-            // Route Information Table
-            new Table({
-              width: { size: 100, type: WidthType.PERCENTAGE },
-              rows: [
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      width: { size: 12, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "F0FDF4" : "EFF6FF" },
-                      borders: borderThin,
-                      children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "15803D" : "1D4ED8" })] })]
-                    }),
-                    new TableCell({
-                      width: { size: 60, type: WidthType.PERCENTAGE },
-                      shading: subHeaderShading,
-                      borders: borderThin,
-                      children: [new Paragraph({ children: [new TextRun({ text: item.path, bold: true, font: "Consolas", size: 18 })] })]
-                    }),
-                    new TableCell({
-                      width: { size: 28, type: WidthType.PERCENTAGE },
-                      shading: subHeaderShading,
-                      borders: borderThin,
-                      children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true })] })]
-                    }),
-                  ],
-                }),
-              ],
-            }),
+          ...implementedList.flatMap(item => renderEndpointCard(item, borderThin, subHeaderShading)),
 
-            // Context & State Effects
-            new Table({
-              width: { size: 100, type: WidthType.PERCENTAGE },
-              rows: [
-                new TableRow({
-                  children: [
-                    new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả chức năng:", bold: true })] })] }),
-                    new TableCell({ width: { size: 78, type: WidthType.PERCENTAGE }, borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.description) })] }),
-                  ],
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn yêu cầu:", bold: true })] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.auth) })] }),
-                  ],
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Điều kiện tiên quyết:", bold: true })] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.preconditions) })] }),
-                  ],
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tác động trạng thái:", bold: true })] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.stateEffects) })] }),
-                  ],
-                }),
-              ],
-            }),
+          new Paragraph({ pageBreakBefore: true }),
 
-            // Headers Table
-            ...(item.headers && item.headers.length > 0 ? [
-              new Paragraph({ spacing: { before: 80, after: 50 }, children: [new TextRun({ text: "HTTP Headers yêu cầu:", bold: true, color: "374151" })] }),
-              new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: [
-                  new TableRow({
-                    children: [
-                      new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên Header", bold: true })] })] }),
-                      new TableCell({ width: { size: 16, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })] }),
-                      new TableCell({ width: { size: 54, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả / Giá trị", bold: true })] })] }),
-                    ],
-                  }),
-                  ...item.headers.map(h => new TableRow({
-                    children: [
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: h.name, font: "Consolas", bold: true })] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(h.required ? "Bắt buộc" : "Tùy chọn")] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(h.description) })] }),
-                    ],
-                  })),
-                ],
-              }),
-            ] : []),
+          // 5.2 Nhóm API quy hoạch Phase tiếp theo
+          new Paragraph({
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 180, after: 120 },
+            children: [new TextRun({ text: "5.2 Nhóm API quy hoạch các Phase tiếp theo (Phase 2 CPD... — Đang thiết kế)", bold: true, color: "C2410C" })],
+          }),
+          new Paragraph({
+            spacing: { after: 120 },
+            children: [
+              new TextRun({
+                text: "Ghi chú quy chuẩn: Các endpoint trong mục này đang ở giai đoạn đặc tả thiết kế nghiệp vụ (DESIGN). " +
+                  "Các chi tiết DTO và route HTTP dây truyền tải cụ thể sẽ được xác lập chính thức khi hoàn tất kiểm chuẩn giai đoạn tương ứng.",
+                italics: true,
+                color: "6B7280"
+              })
+            ]
+          }),
 
-            // Data Dictionary Table
-            ...(item.fields && item.fields.length > 0 ? [
-              new Paragraph({ spacing: { before: 100, after: 50 }, children: [new TextRun({ text: "Từ điển trường dữ liệu (Data Dictionary):", bold: true, color: "374151" })] }),
-              new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: [
-                  new TableRow({
-                    children: [
-                      new TableCell({ width: { size: 24, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên trường", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Kiểu", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Req", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 38, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Ràng buộc & Diễn giải kỹ thuật", bold: true, color: "FFFFFF" })] })] }),
-                    ],
-                  }),
-                  ...item.fields.map(f => new TableRow({
-                    children: [
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: f.name, font: "Consolas", bold: true })] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.in)] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.type)] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(f.required ? "Có" : "Không")] })] }),
-                      new TableCell({ borders: borderThin, children: [
-                        new Paragraph({ children: [
-                          new TextRun({ text: f.description }),
-                          new TextRun({ text: `Ràng buộc: ${f.validation}`, break: 1, italics: true, color: "4B5563" })
-                        ] })
-                      ] }),
-                    ],
-                  })),
-                ],
-              }),
-            ] : []),
-
-            // Payloads Example (Console Box)
-            new Paragraph({ spacing: { before: 100, after: 50 }, children: [new TextRun({ text: "Cấu trúc dữ liệu mẫu (Payload examples):", bold: true, color: "374151" })] }),
-            new Table({
-              width: { size: 100, type: WidthType.PERCENTAGE },
-              rows: [
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      width: { size: 50, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: "F9FAFB" },
-                      borders: borderThin,
-                      children: [
-                        new Paragraph({ children: [new TextRun({ text: "REQUEST PAYLOAD:", bold: true, size: 16, color: "374151" })] }),
-                        new Paragraph({ children: createCodeRuns(item.requestExample) })
-                      ]
-                    }),
-                    new TableCell({
-                      width: { size: 50, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: "F9FAFB" },
-                      borders: borderThin,
-                      children: [
-                        new Paragraph({ children: [new TextRun({ text: "RESPONSE PAYLOAD:", bold: true, size: 16, color: "374151" })] }),
-                        new Paragraph({ children: createCodeRuns(item.responseExample) })
-                      ]
-                    }),
-                  ],
-                }),
-              ],
-            }),
-
-            // Error Handling Matrix
-            ...(item.errors && item.errors.length > 0 ? [
-              new Paragraph({ spacing: { before: 100, after: 50 }, children: [new TextRun({ text: "Ma trận mã lỗi và xử lý ngoại lệ:", bold: true, color: "374151" })] }),
-              new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                rows: [
-                  new TableRow({
-                    children: [
-                      new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Status", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 26, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mã lỗi (Code)", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 34, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Nguyên nhân phát sinh", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 28, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Hướng xử lý / Retry", bold: true, color: "FFFFFF" })] })] }),
-                    ],
-                  }),
-                  ...item.errors.map(err => new TableRow({
-                    children: [
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${err.status}`, bold: true })] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: err.code, font: "Consolas" })] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(err.reason) })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(err.remedy) })] }),
-                    ],
-                  })),
-                ],
-              }),
-            ] : []),
-
-            // Integration Notes
-            new Paragraph({
-              spacing: { before: 80, after: 180 },
-              children: [
-                new TextRun({ text: "Ghi chú kỹ thuật: ", bold: true, color: "374151" }),
-                ...createSafeTextRuns(item.notes, { italics: true }),
-              ],
-            }),
-          ]),
+          ...designList.flatMap(item => renderEndpointCard(item, borderThin, subHeaderShading)),
         ],
       },
     ],
   });
 
-  const buffer = await Packer.toBuffer(doc);
   const docxFile = path.join(OUTPUT_DIR, 'IDEA_Core_v0_API_Contract.docx');
+  const buffer = await Packer.toBuffer(doc);
   fs.writeFileSync(docxFile, buffer);
   return docxFile;
 }
 
-// 4. GENERATE EXCEL (.XLSX) SPREADSHEET (NO GIT REFERENCES)
+// Helper render thẻ Endpoint trong Word
+function renderEndpointCard(item, borderThin, subHeaderShading) {
+  const isImplemented = item.status.includes('TRIỂN KHAI') || item.status.includes('HTTP');
+  return [
+    new Paragraph({
+      heading: HeadingLevel.HEADING_3,
+      spacing: { before: 250, after: 80 },
+      children: [
+        new TextRun({ text: `[${item.code}] `, bold: true, color: isImplemented ? "1E40AF" : "C2410C" }),
+        new TextRun({ text: `${item.name}`, bold: true, color: "111827" }),
+        new TextRun({ text: `  (${item.phase || 'Phase 1'})`, italics: true, color: "6B7280", size: 18 }),
+      ],
+    }),
+
+    // Route Information Table
+    new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: 12, type: WidthType.PERCENTAGE },
+              shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "F0FDF4" : (item.method === 'POST' ? "EFF6FF" : "FFF7ED") },
+              borders: borderThin,
+              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "15803D" : (item.method === 'POST' ? "1D4ED8" : "C2410C") })] })]
+            }),
+            new TableCell({
+              width: { size: 60, type: WidthType.PERCENTAGE },
+              shading: subHeaderShading,
+              borders: borderThin,
+              children: [new Paragraph({ children: [new TextRun({ text: item.path, bold: true, font: "Consolas", size: 18 })] })]
+            }),
+            new TableCell({
+              width: { size: 28, type: WidthType.PERCENTAGE },
+              shading: subHeaderShading,
+              borders: borderThin,
+              children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true, color: isImplemented ? "15803D" : "C2410C" })] })]
+            }),
+          ],
+        }),
+      ],
+    }),
+
+    // Context & State Effects
+    new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả chức năng:", bold: true })] })] }),
+            new TableCell({ width: { size: 78, type: WidthType.PERCENTAGE }, borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.description) })] }),
+          ],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn yêu cầu:", bold: true })] })] }),
+            new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.auth) })] }),
+          ],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Điều kiện tiên quyết:", bold: true })] })] }),
+            new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.preconditions) })] }),
+          ],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tác động trạng thái:", bold: true })] })] }),
+            new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.stateEffects) })] }),
+          ],
+        }),
+      ],
+    }),
+
+    new Paragraph({ spacing: { after: 60 } }),
+
+    // Headers & Fields
+    ...(item.headers && item.headers.length > 0 ? [
+      new Paragraph({ spacing: { before: 80, after: 40 }, children: [new TextRun({ text: "HTTP Headers bắt buộc:", bold: true, color: "4B5563" })] }),
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({ width: { size: 28, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên Header", bold: true })] })] }),
+              new TableCell({ width: { size: 16, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })] }),
+              new TableCell({ width: { size: 56, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Diễn giải", bold: true })] })] }),
+            ]
+          }),
+          ...item.headers.map(h => new TableRow({
+            children: [
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: h.name, font: "Consolas", bold: true })] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(h.required ? "BẮT BUỘC" : "Tùy chọn")] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(h.description) })] }),
+            ]
+          }))
+        ]
+      })
+    ] : []),
+
+    // Data Dictionary / Fields
+    ...(item.fields && item.fields.length > 0 ? [
+      new Paragraph({ spacing: { before: 80, after: 40 }, children: [new TextRun({ text: "Cấu trúc tham số và trường dữ liệu (Data Dictionary):", bold: true, color: "4B5563" })] }),
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true })] })] }),
+              new TableCell({ width: { size: 20, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên trường", bold: true })] })] }),
+              new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Kiểu", bold: true })] })] }),
+              new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })] }),
+              new TableCell({ width: { size: 42, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Ràng buộc & Diễn giải kỹ thuật", bold: true })] })] }),
+            ]
+          }),
+          ...item.fields.map(f => new TableRow({
+            children: [
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.in)] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: f.name, font: "Consolas", bold: true })] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.type)] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.required ? "BẮT BUỘC" : "Tùy chọn")] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [
+                new TextRun({ text: f.validation ? `[${f.validation}] ` : "", bold: true, color: "4B5563" }),
+                ...createSafeTextRuns(f.description)
+              ] })] }),
+            ]
+          }))
+        ]
+      })
+    ] : []),
+
+    // Request / Response Examples
+    new Paragraph({ spacing: { before: 80, after: 40 }, children: [new TextRun({ text: "Mẫu gói tin gửi (Request) & Phản hồi (Response):", bold: true, color: "4B5563" })] }),
+    new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Request Payload / Query", bold: true })] })] }),
+            new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Response JSON Body", bold: true })] })] }),
+          ]
+        }),
+        new TableRow({
+          children: [
+            new TableCell({ borders: borderThin, shading: { type: ShadingType.CLEAR, fill: "F9FAFB" }, children: [new Paragraph({ children: createCodeRuns(item.requestExample || "Không có nội dung body.") })] }),
+            new TableCell({ borders: borderThin, shading: { type: ShadingType.CLEAR, fill: "F9FAFB" }, children: [new Paragraph({ children: createCodeRuns(item.responseExample || "204 No Content") })] }),
+          ]
+        })
+      ]
+    }),
+
+    // Error Matrix
+    ...(item.errors && item.errors.length > 0 ? [
+      new Paragraph({ spacing: { before: 80, after: 40 }, children: [new TextRun({ text: "Danh mục mã lỗi và hướng xử lý (Error Handling):", bold: true, color: "4B5563" })] }),
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "HTTP", bold: true })] })] }),
+              new TableCell({ width: { size: 24, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mã lỗi", bold: true })] })] }),
+              new TableCell({ width: { size: 38, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Nguyên nhân phát sinh", bold: true })] })] }),
+              new TableCell({ width: { size: 26, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Hướng xử lý", bold: true })] })] }),
+            ]
+          }),
+          ...item.errors.map(err => new TableRow({
+            children: [
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: String(err.status), bold: true })] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: err.code, font: "Consolas" })] })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(err.reason) })] }),
+              new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(err.remedy) })] }),
+            ]
+          }))
+        ]
+      })
+    ] : []),
+
+    // Technical Notes
+    new Paragraph({ spacing: { before: 80, after: 180 }, children: [new TextRun({ text: "Ghi chú kỹ thuật: ", bold: true, color: "4B5563" }), ...createSafeTextRuns(item.notes)] }),
+  ];
+}
+
+// 5. GENERATE EXCEL (.XLSX) WORKBOOK — 4 SHEETS KÈM PHÂN NHÓM GIAI ĐOẠN (PHASE)
 async function generateXlsx(catalog) {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = catalog.metadata.author;
   workbook.created = new Date();
-
-  const borderThin = {
-    top: { style: 'thin', color: { argb: 'FFD1D5DB' } },
-    left: { style: 'thin', color: { argb: 'FFD1D5DB' } },
-    bottom: { style: 'thin', color: { argb: 'FFD1D5DB' } },
-    right: { style: 'thin', color: { argb: 'FFD1D5DB' } }
-  };
+  workbook.properties.date1904 = true;
 
   const headerFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2D3748' } };
+  const subHeaderFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
   const headerFont = { name: 'Segoe UI', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+  const borderThin = {
+    top: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+    bottom: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+    left: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+    right: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+  };
 
-  // --- SHEET 1: THÔNG TIN & LỊCH SỬ ---
+  // --- SHEET 1: THÔNG TIN DỰ ÁN & LỊCH SỬ ---
   const ws1 = workbook.addWorksheet('1. Thong tin & Lich su');
-  ws1.views = [{ showGridLines: true, state: 'frozen', ySplit: 7 }];
+  ws1.views = [{ showGridLines: true }];
+  ws1.columns = [{ width: 28 }, { width: 55 }, { width: 35 }];
 
-  ws1.getCell('A1').value = 'DỰ ÁN:';
-  ws1.getCell('B1').value = catalog.metadata.project;
-  ws1.getCell('A2').value = 'TÀI LIỆU:';
-  ws1.getCell('B2').value = `${catalog.metadata.documentTitle} (${catalog.metadata.documentCode})`;
-  ws1.getCell('A3').value = 'NGƯỜI PHỤ TRÁCH:';
-  ws1.getCell('B3').value = `${catalog.metadata.author} — ${catalog.metadata.department}`;
-  ws1.getCell('A4').value = 'PHIÊN BẢN:';
-  ws1.getCell('B4').value = `v${catalog.metadata.version} • Ngày xuất bản: ${exportDate}`;
-  ws1.getCell('A5').value = 'QUY MÔ KỸ THUẬT:';
-  ws1.getCell('B5').value = `Tổng cộng ${catalog.endpoints.length} endpoints (${catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI')).length} đã triển khai, ${catalog.endpoints.filter(e => e.status.includes('THIẾT KẾ')).length} đang thiết kế)`;
+  ws1.addRow(['IDEA ENGINEERING — HỒ SƠ ĐẶC TẢ GIAO TIẾP API', '']);
+  ws1.getCell('A1').font = { name: 'Segoe UI', size: 15, bold: true, color: { argb: 'FF1F2937' } };
+  ws1.addRow([catalog.metadata.subtitle, '']);
+  ws1.getCell('A2').font = { name: 'Segoe UI', size: 10, italics: true, color: { argb: 'FF4B5563' } };
+  ws1.addRow([]);
 
-  ['A1', 'A2', 'A3', 'A4', 'A5'].forEach(cell => {
-    ws1.getCell(cell).font = { name: 'Segoe UI', bold: true, color: { argb: 'FF374151' } };
-  });
-  ['B1', 'B2', 'B3', 'B4', 'B5'].forEach(cell => {
-    ws1.getCell(cell).font = { name: 'Segoe UI', color: { argb: 'FF111827' } };
-  });
+  ws1.addRow(['Mã tài liệu:', catalog.metadata.documentCode]);
+  ws1.addRow(['Phiên bản tài liệu:', `v${catalog.metadata.version}`]);
+  ws1.addRow(['Trạng thái duyệt:', catalog.metadata.status]);
+  ws1.addRow(['Người phụ trách kỹ thuật:', catalog.metadata.author]);
+  ws1.addRow(['Phòng ban ban hành:', catalog.metadata.department]);
+  ws1.addRow(['Ngày biên dịch hồ sơ:', exportDate]);
+  ws1.addRow([]);
 
-  ws1.getCell('A7').value = 'LỊCH SỬ THAY ĐỔI PHIÊN BẢN (REVISION HISTORY / AUDIT TRAIL)';
-  ws1.getCell('A7').font = { name: 'Segoe UI', size: 11, bold: true, color: { argb: 'FF1F2937' } };
+  ws1.addRow(['LỊCH SỬ THAY ĐỔI PHIÊN BẢN (REVISION HISTORY)']);
+  ws1.getCell('A10').font = { name: 'Segoe UI', size: 11, bold: true, color: { argb: 'FF1F2937' } };
 
-  const clHeaders = ['Phiên bản', 'Ngày áp dụng', 'Người thực hiện', 'Nội dung thay đổi chi tiết'];
-  clHeaders.forEach((h, idx) => {
-    const colLetter = String.fromCharCode('A'.charCodeAt(0) + idx);
-    const cell = ws1.getCell(`${colLetter}8`);
-    cell.value = h;
+  const revHeader = ws1.addRow(['Phiên bản', 'Ngày ban hành', 'Người thực hiện', 'Nội dung cập nhật']);
+  revHeader.height = 24;
+  [1, 2, 3, 4].forEach(c => {
+    const cell = revHeader.getCell(c);
     cell.font = headerFont;
     cell.fill = headerFill;
-    cell.alignment = { vertical: 'middle', horizontal: 'center' };
-  });
-  ws1.getRow(8).height = 24;
-
-  catalog.metadata.revisions.forEach((rev, idx) => {
-    const rowNum = 9 + idx;
-    ws1.getCell(`A${rowNum}`).value = `v${rev.version}`;
-    ws1.getCell(`B${rowNum}`).value = rev.date;
-    ws1.getCell(`C${rowNum}`).value = rev.author;
-    ws1.getCell(`D${rowNum}`).value = rev.description;
-
-    ['A', 'B', 'C', 'D'].forEach(c => {
-      ws1.getCell(`${c}${rowNum}`).border = borderThin;
-      ws1.getCell(`${c}${rowNum}`).font = { name: 'Segoe UI', size: 10 };
-    });
-    ws1.getCell(`A${rowNum}`).alignment = { horizontal: 'center' };
-    ws1.getCell(`B${rowNum}`).alignment = { horizontal: 'center' };
-    ws1.getRow(rowNum).height = 22;
+    cell.border = borderThin;
   });
 
-  ws1.getColumn('A').width = 14;
-  ws1.getColumn('B').width = 24;
-  ws1.getColumn('C').width = 26;
-  ws1.getColumn('D').width = 80;
+  catalog.metadata.revisions.forEach(rev => {
+    const row = ws1.addRow([`v${rev.version}`, rev.date, rev.author, rev.description]);
+    row.height = 20;
+    row.eachCell((cell) => { cell.border = borderThin; cell.font = { name: 'Segoe UI', size: 9 }; });
+  });
 
-  // --- SHEET 2: MA TRẬN API ---
+  // --- SHEET 2: MA TRẬN API (MASTER MATRIX) ---
   const ws2 = workbook.addWorksheet('2. Ma tran API');
   ws2.views = [{ showGridLines: true, state: 'frozen', ySplit: 4 }];
 
-  ws2.getCell('A1').value = 'MA TRẬN GIAO TIẾP API — HỆ THỐNG IDEA DDM CORE v0';
+  ws2.getCell('A1').value = 'MA TRẬN TỔNG HỢP GIAO TIẾP API — IDEA DDM CORE v0';
   ws2.getCell('A1').font = { name: 'Segoe UI', size: 12, bold: true, color: { argb: 'FF1F2937' } };
-  ws2.getCell('A2').value = `Ngày xuất bản: ${exportDateTime}`;
+  ws2.getCell('A2').value = `Tổng số endpoint: ${catalog.endpoints.length} | Ngày xuất: ${exportDate} | Phiên bản: v${catalog.metadata.version}`;
   ws2.getCell('A2').font = { name: 'Segoe UI', size: 9, italics: true, color: { argb: 'FF6B7280' } };
 
   ws2.columns = [
     { header: '', key: 'stt', width: 6 },
+    { header: '', key: 'phase', width: 16 },
     { header: '', key: 'group', width: 26 },
     { header: '', key: 'code', width: 12 },
     { header: '', key: 'name', width: 34 },
@@ -753,7 +958,7 @@ async function generateXlsx(catalog) {
     { header: '', key: 'notes', width: 50 },
   ];
 
-  const h2Headers = ['STT', 'Nhóm chức năng', 'Mã API', 'Tên chức năng', 'Method', 'Đường dẫn URL Endpoint', 'Quyền hạn gọi', 'Trạng thái', 'Ghi chú kỹ thuật'];
+  const h2Headers = ['STT', 'Giai đoạn (Phase)', 'Nhóm chức năng', 'Mã API', 'Tên chức năng', 'Method', 'Đường dẫn URL Endpoint', 'Quyền hạn gọi', 'Trạng thái', 'Ghi chú kỹ thuật'];
   const row4 = ws2.getRow(4);
   row4.height = 26;
   h2Headers.forEach((h, idx) => {
@@ -768,6 +973,7 @@ async function generateXlsx(catalog) {
   catalog.endpoints.forEach((item, index) => {
     const row = ws2.addRow({
       stt: index + 1,
+      phase: item.phase || 'Phase 1',
       group: item.group,
       code: item.code,
       name: item.name,
@@ -781,21 +987,24 @@ async function generateXlsx(catalog) {
     row.eachCell((cell, colNum) => {
       cell.border = borderThin;
       cell.font = { name: 'Segoe UI', size: 10 };
-      if (colNum === 1 || colNum === 3 || colNum === 5) {
+      if (colNum === 1 || colNum === 2 || colNum === 4 || colNum === 6) {
         cell.alignment = { horizontal: 'center', vertical: 'middle' };
       }
-      if (colNum === 5) {
-        cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.method === 'GET' ? 'FF15803D' : 'FF1D4ED8' } };
+      if (colNum === 2) {
+        cell.font = { name: 'Segoe UI', bold: true, color: { argb: (item.phase && item.phase.includes('1')) ? 'FF15803D' : 'FFC2410C' } };
       }
       if (colNum === 6) {
+        cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.method === 'GET' ? 'FF15803D' : (item.method === 'POST' ? 'FF1D4ED8' : 'FFC2410C') } };
+      }
+      if (colNum === 7) {
         cell.font = { name: 'Consolas', size: 9 };
       }
-      if (colNum === 8) {
+      if (colNum === 9) {
         cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.status.includes('TRIỂN KHAI') ? 'FF15803D' : 'FFC2410C' } };
       }
     });
   });
-  ws2.autoFilter = 'A4:I4';
+  ws2.autoFilter = 'A4:J4';
 
   // --- SHEET 3: DATA DICTIONARY ---
   const ws3 = workbook.addWorksheet('3. Data Dictionary');
@@ -808,6 +1017,7 @@ async function generateXlsx(catalog) {
 
   ws3.columns = [
     { header: '', key: 'stt', width: 6 },
+    { header: '', key: 'phase', width: 14 },
     { header: '', key: 'code', width: 12 },
     { header: '', key: 'apiName', width: 28 },
     { header: '', key: 'in', width: 16 },
@@ -819,7 +1029,7 @@ async function generateXlsx(catalog) {
     { header: '', key: 'example', width: 34 },
   ];
 
-  const h3Headers = ['STT', 'Mã API', 'Tên chức năng', 'Vị trí', 'Tên trường (Field Name)', 'Kiểu dữ liệu', 'Bắt buộc', 'Quy tắc / Giới hạn validation', 'Diễn giải kỹ thuật', 'Giá trị mẫu'];
+  const h3Headers = ['STT', 'Giai đoạn', 'Mã API', 'Tên chức năng', 'Vị trí', 'Tên trường (Field Name)', 'Kiểu dữ liệu', 'Bắt buộc', 'Quy tắc / Giới hạn validation', 'Diễn giải kỹ thuật', 'Giá trị mẫu'];
   const row4_3 = ws3.getRow(4);
   row4_3.height = 26;
   h3Headers.forEach((h, idx) => {
@@ -837,6 +1047,7 @@ async function generateXlsx(catalog) {
       item.fields.forEach((f) => {
         const row = ws3.addRow({
           stt: fieldCounter++,
+          phase: item.phase || 'Phase 1',
           code: item.code,
           apiName: item.name,
           in: f.in,
@@ -851,20 +1062,20 @@ async function generateXlsx(catalog) {
         row.eachCell((cell, colNum) => {
           cell.border = borderThin;
           cell.font = { name: 'Segoe UI', size: 10 };
-          if (colNum === 1 || colNum === 2 || colNum === 4 || colNum === 7) {
+          if (colNum === 1 || colNum === 2 || colNum === 3 || colNum === 5 || colNum === 8) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
           }
-          if (colNum === 5) {
+          if (colNum === 6) {
             cell.font = { name: 'Consolas', size: 9, bold: true };
           }
-          if (colNum === 7) {
+          if (colNum === 8) {
             cell.font = { name: 'Segoe UI', bold: true, color: { argb: f.required ? 'FFB91C1C' : 'FF6B7280' } };
           }
         });
       });
     }
   });
-  ws3.autoFilter = 'A4:J4';
+  ws3.autoFilter = 'A4:K4';
 
   // --- SHEET 4: ERROR CATALOG ---
   const ws4 = workbook.addWorksheet('4. Error Catalog');
@@ -877,6 +1088,7 @@ async function generateXlsx(catalog) {
 
   ws4.columns = [
     { header: '', key: 'stt', width: 6 },
+    { header: '', key: 'phase', width: 14 },
     { header: '', key: 'code', width: 12 },
     { header: '', key: 'apiName', width: 28 },
     { header: '', key: 'status', width: 14 },
@@ -885,7 +1097,7 @@ async function generateXlsx(catalog) {
     { header: '', key: 'remedy', width: 44 },
   ];
 
-  const h4Headers = ['STT', 'Mã API', 'Tên chức năng', 'HTTP Status', 'Mã lỗi hệ thống (Error Code)', 'Nguyên nhân phát sinh', 'Hướng xử lý / Quy tắc Retry'];
+  const h4Headers = ['STT', 'Giai đoạn', 'Mã API', 'Tên chức năng', 'HTTP Status', 'Mã lỗi hệ thống (Error Code)', 'Nguyên nhân phát sinh', 'Hướng xử lý / Quy tắc Retry'];
   const row4_4 = ws4.getRow(4);
   row4_4.height = 26;
   h4Headers.forEach((h, idx) => {
@@ -900,153 +1112,168 @@ async function generateXlsx(catalog) {
   let errCounter = 1;
   catalog.endpoints.forEach((item) => {
     if (item.errors && item.errors.length > 0) {
-      item.errors.forEach((e) => {
+      item.errors.forEach((err) => {
         const row = ws4.addRow({
           stt: errCounter++,
+          phase: item.phase || 'Phase 1',
           code: item.code,
           apiName: item.name,
-          status: e.status,
-          errorCode: e.code,
-          reason: e.reason,
-          remedy: e.remedy,
+          status: err.status,
+          errorCode: err.code,
+          reason: err.reason,
+          remedy: err.remedy,
         });
         row.height = 22;
         row.eachCell((cell, colNum) => {
           cell.border = borderThin;
           cell.font = { name: 'Segoe UI', size: 10 };
-          if (colNum === 1 || colNum === 2 || colNum === 4) {
+          if (colNum === 1 || colNum === 2 || colNum === 3 || colNum === 5) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
           }
-          if (colNum === 4) {
-            cell.font = { name: 'Segoe UI', bold: true, color: { argb: e.status >= 500 ? 'FFB91C1C' : (e.status >= 400 ? 'FFC2410C' : 'FF15803D') } };
-          }
           if (colNum === 5) {
+            cell.font = { name: 'Segoe UI', bold: true, color: { argb: err.status >= 500 ? 'FFB91C1C' : 'FFC2410C' } };
+          }
+          if (colNum === 6) {
             cell.font = { name: 'Consolas', size: 9, bold: true };
           }
         });
       });
     }
   });
-  ws4.autoFilter = 'A4:G4';
+  ws4.autoFilter = 'A4:H4';
 
   const xlsxFile = path.join(OUTPUT_DIR, 'IDEA_Core_v0_API_Contract.xlsx');
   await workbook.xlsx.writeFile(xlsxFile);
   return xlsxFile;
 }
 
-// 5. GENERATE CLEAN TECHNICAL HTML (NO GIT REFERENCES)
+// 6. GENERATE OFFLINE INTERACTIVE HTML — 100% OFFLINE, ZERO CDN, TABS LỌC THEO PHASE
 function generateHtml(catalog) {
-  const jsonCatalog = JSON.stringify(catalog);
+  const catalogJson = JSON.stringify(catalog);
+  const implementedCount = catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP')).length;
+  const designCount = catalog.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP')).length;
 
   const html = `<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IDEA DDM Core v0 — Đặc tả giao tiếp API (SPEC-API-001)</title>
+  <title>IDEA DDM Core v0 — Đặc tả giao tiếp API</title>
   <style>
     :root {
       --bg: #FFFFFF;
       --sidebar-bg: #F8FAFC;
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --border: #E2E8F0;
       --card-bg: #FFFFFF;
       --card-border: #E2E8F0;
-      --text-main: #0F172A;
-      --text-muted: #64748B;
       --accent: #2563EB;
-      --accent-hover: #1D4ED8;
       --code-bg: #F8FAFC;
       --code-border: #E2E8F0;
       --code-text: #0F172A;
-      --method-get-bg: #F0FDF4;
-      --method-get-text: #15803D;
-      --method-get-border: #BBF7D0;
+      --method-get-bg: #ECFDF5;
+      --method-get-text: #047857;
+      --method-get-border: #A7F3D0;
       --method-post-bg: #EFF6FF;
       --method-post-text: #1D4ED8;
       --method-post-border: #BFDBFE;
-      --badge-ready: #15803D;
-      --badge-design: #C2410C;
+      --method-design-bg: #FFF7ED;
+      --method-design-text: #C2410C;
+      --method-design-border: #FFEDD5;
+      --badge-ready: #059669;
+      --badge-design: #EA580C;
     }
-    .dark-theme {
-      --bg: #0B0F19;
-      --sidebar-bg: #111827;
-      --card-bg: #111827;
-      --card-border: #1F2937;
-      --text-main: #F9FAFB;
-      --text-muted: #9CA3AF;
-      --accent: #38BDF8;
-      --accent-hover: #0EA5E9;
+
+    body.dark-theme {
+      --bg: #0F172A;
+      --sidebar-bg: #1E293B;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: #334155;
+      --card-bg: #1E293B;
+      --card-border: #334155;
+      --accent: #3B82F6;
       --code-bg: #0F172A;
-      --code-border: #1E293B;
-      --code-text: #F1F5F9;
-      --method-get-bg: rgba(21, 128, 61, 0.15);
-      --method-get-text: #4ADE80;
-      --method-get-border: rgba(74, 222, 128, 0.3);
-      --method-post-bg: rgba(29, 78, 216, 0.15);
+      --code-border: #334155;
+      --code-text: #E2E8F0;
+      --method-get-bg: rgba(6, 95, 70, 0.2);
+      --method-get-text: #34D399;
+      --method-get-border: #065F46;
+      --method-post-bg: rgba(30, 64, 175, 0.2);
       --method-post-text: #60A5FA;
-      --method-post-border: rgba(96, 165, 250, 0.3);
-      --badge-ready: #4ADE80;
-      --badge-design: #FB923C;
+      --method-post-border: #1E40AF;
+      --method-design-bg: rgba(154, 52, 18, 0.2);
+      --method-design-text: #FB923C;
+      --method-design-border: #9A3412;
+      --badge-ready: #10B981;
+      --badge-design: #F97316;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
       color: var(--text-main);
       display: flex;
       height: 100vh;
       overflow: hidden;
+      font-size: 14px;
     }
+
     /* Sidebar */
     #sidebar {
       width: 320px;
-      min-width: 320px;
       background: var(--sidebar-bg);
-      border-right: 1px solid var(--card-border);
+      border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      flex-shrink: 0;
     }
     .brand {
       padding: 18px 20px;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--border);
     }
-    .brand h1 { font-size: 1rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.01em; }
-    .brand p { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
-    .search-box { padding: 12px 16px; border-bottom: 1px solid var(--card-border); }
+    .brand h1 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; color: var(--text-main); }
+    .brand p { font-size: 0.76rem; color: var(--text-muted); margin-top: 3px; }
+
+    .search-box { padding: 12px 16px; border-bottom: 1px solid var(--border); }
     .search-box input {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 8px 12px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
       border-radius: 6px;
-      font-size: 0.85rem;
+      background: var(--bg);
+      color: var(--text-main);
+      font-size: 0.82rem;
       outline: none;
     }
     .search-box input:focus { border-color: var(--accent); }
-    .nav-list { flex: 1; overflow-y: auto; padding: 12px 8px; }
+
+    .nav-list { flex: 1; overflow-y: auto; padding: 12px 0; }
     .nav-group-title {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-muted);
-      padding: 10px 12px 4px;
-      font-weight: 700;
+      padding: 12px 18px 6px;
     }
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 7px 12px;
-      border-radius: 6px;
-      color: var(--text-main);
-      font-size: 0.82rem;
+      gap: 8px;
+      padding: 8px 18px;
       cursor: pointer;
-      margin-bottom: 1px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
       transition: background 0.15s;
     }
-    .nav-item:hover { background: rgba(0, 0, 0, 0.04); }
-    .dark-theme .nav-item:hover { background: rgba(255, 255, 255, 0.05); }
+    .nav-item:hover { background: rgba(0, 0, 0, 0.04); color: var(--text-main); }
+    .dark-theme .nav-item:hover { background: rgba(255, 255, 255, 0.04); }
+    .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--accent); font-weight: 600; }
+
     .method-badge {
       font-family: ui-monospace, "SF Mono", Consolas, monospace;
       font-size: 0.68rem;
@@ -1058,6 +1285,7 @@ function generateHtml(catalog) {
     }
     .badge-GET { background: var(--method-get-bg); color: var(--method-get-text); border-color: var(--method-get-border); }
     .badge-POST { background: var(--method-post-bg); color: var(--method-post-text); border-color: var(--method-post-border); }
+    .badge-TBD { background: var(--method-design-bg); color: var(--method-design-text); border-color: var(--method-design-border); }
 
     /* Main Area */
     #main-content {
@@ -1155,7 +1383,6 @@ function generateHtml(catalog) {
     .spec-table th { background: rgba(0, 0, 0, 0.02); color: var(--text-muted); font-weight: 600; }
     .dark-theme .spec-table th { background: rgba(255, 255, 255, 0.03); }
     .field-name { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-weight: 600; color: var(--accent); }
-    .req-tag { color: #DC2626; font-weight: 600; font-size: 0.75rem; }
 
     /* Code Blocks */
     .code-container {
@@ -1185,42 +1412,6 @@ function generateHtml(catalog) {
     }
     .copy-btn:hover { color: var(--text-main); border-color: var(--text-main); }
 
-    /* Workflows View */
-    .wf-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .wf-timeline { margin-top: 16px; }
-    .wf-step-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-    .wf-step-num {
-      width: 28px;
-      height: 28px;
-      border-radius: 4px;
-      background: var(--text-main);
-      color: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
-    .wf-step-content {
-      flex: 1;
-      background: var(--code-bg);
-      border: 1px solid var(--code-border);
-      border-radius: 6px;
-      padding: 10px 14px;
-    }
-
     /* Toast */
     #toast {
       position: fixed;
@@ -1249,36 +1440,32 @@ function generateHtml(catalog) {
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Tìm theo mã API, đường dẫn, tham số...">
     </div>
-    <div class="nav-list" id="navList">
-      <!-- Generated by JS -->
-    </div>
+    <div class="nav-list" id="navList"></div>
   </div>
 
-  <!-- Main Content Area -->
+  <!-- Main View -->
   <div id="main-content">
     <div class="top-bar">
       <div class="tab-pills">
-        <button class="tab-btn active" onclick="switchTab('apis')">Danh mục API (${catalog.endpoints.length})</button>
-        <button class="tab-btn" onclick="switchTab('workflows')">Quy trình phối hợp (3)</button>
-        <button class="tab-btn" onclick="switchTab('dictionary')">Từ điển dữ liệu</button>
-        <button class="tab-btn" onclick="switchTab('changelog')">Lịch sử phiên bản</button>
+        <button class="tab-btn active" data-tab="all" onclick="setTab('all')">Tất cả (${catalog.endpoints.length})</button>
+        <button class="tab-btn" data-tab="implemented" onclick="setTab('implemented')">Đã triển khai (${implementedCount})</button>
+        <button class="tab-btn" data-tab="design" onclick="setTab('design')">Quy hoạch Phase 2+ (${designCount})</button>
+        <button class="tab-btn" data-tab="workflows" onclick="setTab('workflows')">Quy trình (Call flows)</button>
+        <button class="tab-btn" data-tab="matrix" onclick="setTab('matrix')">Ma trận (Matrix)</button>
+        <button class="tab-btn" data-tab="changelog" onclick="setTab('changelog')">Lịch sử (Changelog)</button>
       </div>
       <div class="top-actions">
-        <span style="font-size: 0.78rem; color: var(--text-muted);">${exportDate}</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()">Giao diện Sáng / Tối</button>
+        <button class="theme-toggle-btn" onclick="toggleTheme()">Chuyển chế độ sáng/tối</button>
       </div>
     </div>
-
-    <div class="scroll-view" id="contentView">
-      <!-- Dynamic Content -->
-    </div>
+    <div class="scroll-view" id="contentArea"></div>
   </div>
 
   <div id="toast">Đã sao chép vào bộ nhớ tạm</div>
 
   <script>
-    const data = ${jsonCatalog};
-    let currentTab = 'apis';
+    const data = ${catalogJson};
+    let currentTab = 'all';
 
     function toggleTheme() {
       document.body.classList.toggle('dark-theme');
@@ -1288,132 +1475,157 @@ function generateHtml(catalog) {
       const t = document.getElementById('toast');
       t.innerText = msg;
       t.style.opacity = '1';
-      setTimeout(() => { t.style.opacity = '0'; }, 2000);
+      setTimeout(() => { t.style.opacity = '0'; }, 1800);
     }
 
-    function copyText(str) {
-      navigator.clipboard.writeText(str).then(() => {
-        showToast('Đã sao chép vào bộ nhớ tạm');
+    function copyFromAttr(btn) {
+      const text = decodeURIComponent(btn.getAttribute('data-clipboard') || '');
+      copyText(btn, text);
+    }
+
+    function copyText(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Đã sao chép vào clipboard');
       });
     }
 
-    function switchTab(tab) {
+    function setTab(tab) {
       currentTab = tab;
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tab);
+      });
       renderMain();
+      renderNav();
     }
 
     function renderNav() {
       const nav = document.getElementById('navList');
+      let filtered = data.endpoints;
+      if (currentTab === 'implemented') {
+        filtered = data.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP'));
+      } else if (currentTab === 'design') {
+        filtered = data.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP'));
+      }
+
       const groups = {};
-      data.endpoints.forEach(ep => {
-        if (!groups[ep.group]) groups[ep.group] = [];
-        groups[ep.group].push(ep);
+      filtered.forEach(e => {
+        const grp = (e.phase && e.phase.includes('1')) ? 'PHÂN HỆ 1: ĐÃ TRIỂN KHAI (HTTP)' : 'PHÂN HỆ 2: QUY HOẠCH PHASE TIẾP THEO';
+        if (!groups[grp]) groups[grp] = [];
+        groups[grp].push(e);
       });
 
       let html = '';
-      for (const [groupName, eps] of Object.entries(groups)) {
-        html += \`<div class="nav-group-title">\${groupName}</div>\`;
-        eps.forEach(ep => {
+      for (const [groupName, items] of Object.entries(groups)) {
+        html += \`<div class="nav-group-title">\${groupName} (\${items.length})</div>\`;
+        items.forEach(item => {
           html += \`
-            <div class="nav-item" onclick="scrollToApi('\${ep.code}')">
-              <span class="method-badge badge-\${ep.method}">\${ep.method}</span>
-              <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">\${ep.name}</span>
-            </div>
+            <a class="nav-item" href="#api-\${item.code}">
+              <span class="method-badge badge-\${item.method}">\${item.method}</span>
+              <span style="font-weight:500;">[\${item.code}]</span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">\${item.name}</span>
+            </a>
           \`;
         });
       }
       nav.innerHTML = html;
     }
 
-    function scrollToApi(code) {
-      if (currentTab !== 'apis') {
-        currentTab = 'apis';
-        document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        renderMain();
-      }
-      setTimeout(() => {
-        const el = document.getElementById('api-' + code);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
-    }
-
     function renderMain() {
-      const view = document.getElementById('contentView');
+      const view = document.getElementById('contentArea');
 
-      if (currentTab === 'apis') {
-        let html = '';
-        data.endpoints.forEach(ep => {
-          html += \`
-            <div class="api-card" id="api-\${ep.code}">
+      if (['all', 'implemented', 'design'].includes(currentTab)) {
+        let items = data.endpoints;
+        if (currentTab === 'implemented') {
+          items = data.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP'));
+        } else if (currentTab === 'design') {
+          items = data.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP'));
+        }
+
+        view.innerHTML = items.map(e => {
+          const isImplemented = e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP');
+          return \`
+            <div class="api-card" id="api-\${e.code}">
               <div class="api-header">
                 <div class="api-route">
-                  <span class="method-badge badge-\${ep.method}">\${ep.method}</span>
-                  <span class="api-path">\${ep.path}</span>
-                  <span style="color:var(--text-muted); font-size:0.85rem;">[\${ep.code}] \${ep.name}</span>
+                  <span class="method-badge badge-\${e.method}">\${e.method}</span>
+                  <span class="api-path">\${e.path}</span>
+                  <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">[\${e.code}] \${e.name}</span>
                 </div>
                 <div>
-                  <span class="status-badge \${ep.status.includes('TRIỂN KHAI') ? 'status-pass' : 'status-design'}">\${ep.status}</span>
+                  <span class="status-badge \${isImplemented ? 'status-pass' : 'status-design'}">\${e.status}</span>
+                  <span style="font-size:0.75rem; color:var(--text-muted); margin-left:6px;">(\${e.phase || 'Phase 1'})</span>
                 </div>
               </div>
 
-              <p class="api-desc">\${ep.description}</p>
+              <div class="api-desc">\${e.description}</div>
 
+              <div class="section-title">Thông tin ngữ cảnh và thẩm quyền</div>
               <table class="spec-table">
-                <tr><th style="width:25%;">Quyền hạn gọi</th><td>\${ep.auth}</td></tr>
-                <tr><th>Điều kiện tiên quyết</th><td>\${ep.preconditions}</td></tr>
-                <tr><th>Tác động trạng thái</th><td>\${ep.stateEffects}</td></tr>
+                <tr><th style="width:22%;">Quyền hạn yêu cầu</th><td>\${e.auth}</td></tr>
+                <tr><th>Điều kiện tiên quyết</th><td>\${e.preconditions}</td></tr>
+                <tr><th>Tác động trạng thái</th><td>\${e.stateEffects}</td></tr>
               </table>
 
-              \${ep.headers && ep.headers.length ? \`
-                <div class="section-title">HTTP Headers yêu cầu</div>
+              \${e.headers && e.headers.length ? \`
+                <div class="section-title">HTTP Headers bắt buộc</div>
                 <table class="spec-table">
-                  <thead><tr><th>Tên Header</th><th>Bắt buộc</th><th>Mô tả / Giá trị</th></tr></thead>
+                  <thead><tr><th>Tên Header</th><th>Bắt buộc</th><th>Diễn giải</th></tr></thead>
                   <tbody>
-                    \${ep.headers.map(h => \`<tr><td class="field-name">\${h.name}</td><td>\${h.required ? '<span class="req-tag">Bắt buộc</span>' : 'Tùy chọn'}</td><td>\${h.description}</td></tr>\`).join('')}
-                  </tbody>
-                </table>
-              \` : ''}
-
-              \${ep.fields && ep.fields.length ? \`
-                <div class="section-title">Từ điển trường dữ liệu (Data Dictionary)</div>
-                <table class="spec-table">
-                  <thead><tr><th>Tên trường</th><th>Vị trí</th><th>Kiểu</th><th>Req</th><th>Ràng buộc & Diễn giải kỹ thuật</th></tr></thead>
-                  <tbody>
-                    \${ep.fields.map(f => \`
+                    \${e.headers.map(h => \`
                       <tr>
-                        <td class="field-name">\${f.name}</td>
-                        <td>\${f.in}</td>
-                        <td>\${f.type}</td>
-                        <td>\${f.required ? '<span class="req-tag">Có</span>' : 'Không'}</td>
-                        <td><strong>\${f.description}</strong><br><small style="color:var(--text-muted);">Ràng buộc: \${f.validation}</small></td>
+                        <td class="field-name">\${h.name}</td>
+                        <td style="color:\${h.required ? '#DC2626' : 'var(--text-muted)'}; font-weight:600;">\${h.required ? 'BẮT BUỘC' : 'Tùy chọn'}</td>
+                        <td>\${h.description}</td>
                       </tr>
                     \`).join('')}
                   </tbody>
                 </table>
               \` : ''}
 
-              <div class="section-title">Request Payload Example</div>
-              <div class="code-container">
-                <button class="copy-btn" onclick="copyText(\\\`\${ep.requestExample.replace(/\`/g, '\\\`')}\\\`)">Sao chép</button>
-                \${ep.requestExample}
-              </div>
-
-              <div class="section-title">Response Payload Example</div>
-              <div class="code-container">
-                <button class="copy-btn" onclick="copyText(\\\`\${ep.responseExample.replace(/\`/g, '\\\`')}\\\`)">Sao chép</button>
-                \${ep.responseExample}
-              </div>
-
-              \${ep.errors && ep.errors.length ? \`
-                <div class="section-title">Ma trận mã lỗi (Error Handling Matrix)</div>
+              \${e.fields && e.fields.length ? \`
+                <div class="section-title">Từ điển trường dữ liệu (Data Dictionary)</div>
                 <table class="spec-table">
-                  <thead><tr><th>Status</th><th>Mã lỗi (Code)</th><th>Nguyên nhân phát sinh</th><th>Hướng xử lý / Retry</th></tr></thead>
+                  <thead><tr><th>Vị trí</th><th>Tên trường</th><th>Kiểu</th><th>Bắt buộc</th><th>Ràng buộc kỹ thuật & Diễn giải</th></tr></thead>
                   <tbody>
-                    \${ep.errors.map(err => \`
+                    \${e.fields.map(f => \`
                       <tr>
-                        <td><strong>\${err.status}</strong></td>
+                        <td>\${f.in}</td>
+                        <td class="field-name">\${f.name}</td>
+                        <td>\${f.type}</td>
+                        <td style="color:\${f.required ? '#DC2626' : 'var(--text-muted)'}; font-weight:600;">\${f.required ? 'BẮT BUỘC' : 'Tùy chọn'}</td>
+                        <td><strong>\${f.validation ? '[' + f.validation + '] ' : ''}</strong>\${f.description}</td>
+                      </tr>
+                    \`).join('')}
+                  </tbody>
+                </table>
+              \` : ''}
+
+              <div class="section-title">Mẫu gói tin gửi (Request) & Phản hồi (Response)</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div>
+                  <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Request</div>
+                  <div class="code-container">
+                    <button class="copy-btn" data-clipboard="\${encodeURIComponent(e.requestExample || '')}" onclick="copyFromAttr(this)">Sao chép</button>
+                    \${e.requestExample}
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Response</div>
+                  <div class="code-container">
+                    <button class="copy-btn" data-clipboard="\${encodeURIComponent(e.responseExample || '')}" onclick="copyFromAttr(this)">Sao chép</button>
+                    \${e.responseExample}
+                  </div>
+                </div>
+              </div>
+
+              \${e.errors && e.errors.length ? \`
+                <div class="section-title">Danh mục mã lỗi (Error Handling & Retry)</div>
+                <table class="spec-table">
+                  <thead><tr><th>HTTP Status</th><th>Mã lỗi</th><th>Nguyên nhân phát sinh</th><th>Hướng xử lý / Retry</th></tr></thead>
+                  <tbody>
+                    \${e.errors.map(err => \`
+                      <tr>
+                        <td style="font-weight:700; color:\${err.status >= 500 ? '#DC2626' : '#D97706'}">\${err.status}</td>
                         <td class="field-name">\${err.code}</td>
                         <td>\${err.reason}</td>
                         <td>\${err.remedy}</td>
@@ -1423,76 +1635,59 @@ function generateHtml(catalog) {
                 </table>
               \` : ''}
 
-              <div style="font-size:0.82rem; color:var(--text-muted); margin-top:10px;">
-                <em>Ghi chú kỹ thuật: \${ep.notes}</em>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:12px; font-style:italic;">
+                Ghi chú kỹ thuật: \${e.notes}
               </div>
             </div>
           \`;
-        });
-        view.innerHTML = html;
+        }).join('');
       } else if (currentTab === 'workflows') {
-        let html = '';
-        data.workflows.forEach(wf => {
-          html += \`
-            <div class="wf-card">
-              <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:6px;">\${wf.id}. \${wf.title}</h2>
-              <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px;">\${wf.description}</p>
-              <div class="wf-timeline">
+        view.innerHTML = data.workflows.map(wf => \`
+          <div class="api-card">
+            <h2 style="font-size:1.15rem; color:var(--accent); margin-bottom:6px;">\${wf.id}. \${wf.title}</h2>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px; font-style:italic;">\${wf.description}</p>
+            <table class="spec-table">
+              <thead><tr><th>Bước</th><th>Bên gửi</th><th>Hành động & Endpoint</th><th>Bên nhận</th><th>Kết quả & Trạng thái</th></tr></thead>
+              <tbody>
                 \${wf.steps.map(s => \`
-                  <div class="wf-step-row">
-                    <div class="wf-step-num">\${s.step}</div>
-                    <div class="wf-step-content">
-                      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">\${s.actor} ➔ \${s.receiver}</div>
-                      <div style="font-weight:600; font-size:0.9rem; margin:2px 0;">\${s.action} (\${s.endpoint})</div>
-                      <div style="font-size:0.82rem; color:var(--text-main);">\${s.outcome}</div>
-                    </div>
-                  </div>
+                  <tr>
+                    <td style="font-weight:700; text-align:center;">\${s.step}</td>
+                    <td>\${s.actor}</td>
+                    <td><strong>\${s.action}</strong><br><span style="font-family:Consolas; font-size:0.75rem; color:var(--accent);">\${s.endpoint}</span></td>
+                    <td>\${s.receiver}</td>
+                    <td>\${s.outcome}</td>
+                  </tr>
                 \`).join('')}
-              </div>
-            </div>
-          \`;
-        });
-        view.innerHTML = html;
-      } else if (currentTab === 'dictionary') {
-        let rows = '';
-        let count = 1;
-        data.endpoints.forEach(ep => {
-          if (ep.fields) {
-            ep.fields.forEach(f => {
-              rows += \`
-                <tr>
-                  <td>\${count++}</td>
-                  <td><strong>\${ep.code}</strong></td>
-                  <td>\${ep.name}</td>
-                  <td>\${f.in}</td>
-                  <td class="field-name">\${f.name}</td>
-                  <td>\${f.type}</td>
-                  <td>\${f.required ? '<span class="req-tag">Bắt buộc</span>' : 'Tùy chọn'}</td>
-                  <td>\${f.validation}</td>
-                  <td>\${f.description}</td>
-                  <td style="font-family:monospace; font-size:0.75rem;">\${f.example || ''}</td>
-                </tr>
-              \`;
-            });
-          }
-        });
+              </tbody>
+            </table>
+          </div>
+        \`).join('');
+      } else if (currentTab === 'matrix') {
+        const rows = data.endpoints.map(e => \`
+          <tr>
+            <td style="font-weight:700;">\${e.code}</td>
+            <td>\${e.phase || 'Phase 1'}</td>
+            <td>\${e.group}</td>
+            <td><strong>\${e.name}</strong></td>
+            <td><span class="method-badge badge-\${e.method}">\${e.method}</span></td>
+            <td style="font-family:Consolas; font-size:0.78rem;">\${e.path}</td>
+            <td>\${e.auth}</td>
+            <td style="font-weight:600; color:\${e.status.includes('TRIỂN KHAI') ? 'var(--badge-ready)' : 'var(--badge-design)'}">\${e.status}</td>
+          </tr>
+        \`).join('');
         view.innerHTML = \`
           <div class="api-card">
-            <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:12px;">Từ điển tham số và trường dữ liệu (Data Dictionary)</h2>
+            <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:12px;">Ma trận tổng hợp các Endpoint Core v0</h2>
             <table class="spec-table">
-              <thead>
-                <tr>
-                  <th>STT</th><th>Mã API</th><th>Tên chức năng</th><th>Vị trí</th><th>Tên trường</th><th>Kiểu</th><th>Bắt buộc</th><th>Ràng buộc validation</th><th>Diễn giải kỹ thuật</th><th>Giá trị mẫu</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Mã API</th><th>Phase</th><th>Nhóm</th><th>Tên chức năng</th><th>Method</th><th>Đường dẫn Endpoint</th><th>Quyền hạn</th><th>Trạng thái</th></tr></thead>
               <tbody>\${rows}</tbody>
             </table>
           </div>
         \`;
       } else if (currentTab === 'changelog') {
-        let revRows = data.metadata.revisions.map(r => \`
+        const revRows = data.metadata.revisions.map(r => \`
           <tr>
-            <td><strong>v\${r.version}</strong></td>
+            <td style="font-weight:700;">v\${r.version}</td>
             <td>\${r.date}</td>
             <td>\${r.author}</td>
             <td>\${r.description}</td>
@@ -1530,7 +1725,23 @@ function generateHtml(catalog) {
   return htmlFile;
 }
 
-// 6. MAIN CLI CONTROLLER
+// 7. ARCHIVE OUTPUT: Lưu bản snapshot có đánh dấu phiên bản và ngày tháng
+function archiveOutput(catalog, docxPath, xlsxPath, htmlPath) {
+  const dateStamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const versionSlug = `v${catalog.metadata.version || '1.0'}`;
+
+  const archiveDocx = path.join(ARCHIVE_DIR, `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}.docx`);
+  const archiveXlsx = path.join(ARCHIVE_DIR, `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}.xlsx`);
+  const archiveHtml = path.join(ARCHIVE_DIR, `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}.html`);
+
+  fs.copyFileSync(docxPath, archiveDocx);
+  fs.copyFileSync(xlsxPath, archiveXlsx);
+  fs.copyFileSync(htmlPath, archiveHtml);
+
+  console.log(`[LƯU TRỮ ARCHIVE] Đã sao lưu bản snapshot vào thư mục: ${ARCHIVE_DIR}`);
+}
+
+// 8. MAIN CLI CONTROLLER
 async function main() {
   const args = process.argv.slice(2);
   const isUpdate = args.includes('--update') || args.includes('-u');
@@ -1538,7 +1749,9 @@ async function main() {
 
   let catalog;
   if (isUpdate) {
-    catalog = updateCatalog();
+    catalog = loadCatalog();
+    const harvested = crawlRepository();
+    catalog = smartMergeCatalog(catalog, harvested);
   } else {
     catalog = loadCatalog();
   }
@@ -1563,6 +1776,9 @@ async function main() {
   const htmlPath = generateHtml(catalog);
   const htmlSize = (fs.statSync(htmlPath).size / 1024).toFixed(1);
   console.log(`[XUẤT THÀNH CÔNG] File HTML (.html):  ${htmlPath} (${htmlSize} KB)`);
+
+  // 4. Archive snapshots
+  archiveOutput(catalog, docxPath, xlsxPath, htmlPath);
 
   console.log('\nHoàn tất xuất bản bộ 3 tài liệu đặc tả giao tiếp API.');
 
