@@ -72,7 +72,7 @@ bfd590e4f09502d4dda3c6c8c8b16dbf40a9cd284bdc9b06adfce4833cd64de6  apps/server/sr
 8bd839e324414f65f6e2d7194863354eaa542978dc69a57fa894c7dba550714c  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationHttpTest.java
 0c39dd6f2f469ebb30dd4444e00d104c9964222ba306e62951da6386cfd9742e  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationTest.java
 c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/src/test/java/com/idea/ddm/F03BPublicMigrationTest.java
-baf139a80e3f5dca34707346420fc748a937a505ba93629570ad7a6d1be7003e  apps/server/src/test/java/com/idea/ddm/iam/IamHttpContractTest.java
+5f7094036d1fd21f5ad5f117ac046630c49b38b6fdb32e907de606a6ebd3115c  apps/server/src/test/java/com/idea/ddm/iam/IamHttpContractTest.java
 0f29ea9f531ca6d0af175504dfb7859eac33295c625460eadc2b6a68f847a2c7  apps/server/src/test/java/com/idea/ddm/iam/IamIntegrationFixtures.java
 c874c6742cf907bf6e5749837576d6577f8ffda001bd0b5554f6de691155c860  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java

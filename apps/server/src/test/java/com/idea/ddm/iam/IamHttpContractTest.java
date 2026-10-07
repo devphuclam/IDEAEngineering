@@ -84,6 +84,13 @@ class IamHttpContractTest {
         });
     }
 
+    @Test void syntacticallyInvalidJsonCannotReachOwnerAndHasSafeShapeRefusal() throws Exception {
+        http.withSignedInClient(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY), (client, context) -> {
+            assertMapped(postWithCsrf(client, "/__iam_http_contract/shape", "{"), 400, "INVALID_INPUT");
+            return null;
+        });
+    }
+
     @Test void anonymousNewAdapterIsRefusedByOrdinarySecurityBeforeApplication() throws Exception {
         var response = get(HttpClient.newHttpClient(), "/__iam_http_contract/invalid");
         assertEquals(401, response.statusCode());
