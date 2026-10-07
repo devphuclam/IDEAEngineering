@@ -13,10 +13,22 @@ import org.junit.jupiter.api.TestInstance;
 class IamSchemaPrivilegeTest {
     private final IamIntegrationFixtures fixtures = new IamIntegrationFixtures();
     private Map<String,String> predecessorRoles;
+    private final IamIntegrationFixtures.Identity legacy = fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);
+    private final java.util.UUID revokedAssignment = java.util.UUID.randomUUID();
+    private String predecessorAssignment;
 
     @BeforeAll void migrateOwnedSuccessor() throws Exception {
         fixtures.createSchema("10");
         predecessorRoles = roleContent();
+        try (var connection = fixtures.migrator()) {
+            execute(connection,"INSERT INTO actor(actor_id,display_name) VALUES (?,?)",legacy.actorId(),legacy.displayName());
+            execute(connection,"INSERT INTO idea_account(account_id,actor_id,organization_id,status) VALUES (?,?,?,'PENDING')",
+                    legacy.accountId(),legacy.actorId(),legacy.organizationId());
+            execute(connection,"INSERT INTO identity_role_assignment(assignment_id,principal_actor_id,role_version_id,organization_id,assigned_by,reason,assigned_at,revoked_at) "
+                    + "VALUES (?,?,'9d80f77e-85a6-4c12-a72d-8ef6b7e0a002',?,?,'Synthetic predecessor revoked history','2026-10-06T01:00:00Z','2026-10-06T02:00:00Z')",
+                    revokedAssignment,legacy.actorId(),legacy.organizationId(),legacy.actorId());
+        }
+        predecessorAssignment = retainedAssignment();
         fixtures.migrateSuccessor();
     }
 
@@ -52,7 +64,7 @@ class IamSchemaPrivilegeTest {
                 + "(SELECT count(*) FROM permission_registry)")) {
             assertTrue(row.next());
             assertEquals(8, row.getInt(1));
-            assertEquals(0, row.getInt(2), "Migration seeds definitions only, never adoption or grants");
+            assertEquals(1, row.getInt(2), "Only the explicit predecessor fixture remains; never migration grants");
             assertEquals(25, row.getInt(3));
         }
     }
@@ -78,5 +90,31 @@ class IamSchemaPrivilegeTest {
             } finally { connection.rollback(); }
         }
         assertEquals(predecessorRoles.get("super-administrator@1"), roleContent().get("super-administrator@1"));
+    }
+
+    @Test void assignmentUsesTypedScopePrincipalAndPeriodWithoutASecondRevocationAuthority() throws Exception {
+        assertEquals(predecessorAssignment,retainedAssignment());
+        try (var connection=fixtures.app(); var statement=connection.createStatement(); var row=statement.executeQuery(
+                "SELECT count(*) FROM information_schema.columns WHERE table_schema=current_schema() "
+                + "AND table_name='identity_role_assignment' AND column_name IN ('scope_kind','project_id','principal_group_id',"
+                + "'effective_from','effective_until','ended_by','end_reason','version')")) {
+            assertTrue(row.next());
+            assertEquals(8,row.getInt(1),"Extend the existing exact assignment, not a separately evaluated mirror");
+        }
+    }
+
+    private String retainedAssignment() throws Exception {
+        try (var connection=fixtures.app(); var query=connection.prepareStatement(
+                "SELECT principal_actor_id||'|'||role_version_id||'|'||organization_id||'|'||assigned_by||'|'||reason||'|'||assigned_at||'|'||revoked_at "
+                + "FROM identity_role_assignment WHERE assignment_id=?")) {
+            query.setObject(1,revokedAssignment);
+            try(var row=query.executeQuery()) { assertTrue(row.next()); return row.getString(1); }
+        }
+    }
+    private static void execute(java.sql.Connection connection,String sql,Object... values) throws Exception {
+        try(var statement=connection.prepareStatement(sql)) {
+            for(int i=0;i<values.length;i++) statement.setObject(i+1,values[i]);
+            assertEquals(1,statement.executeUpdate());
+        }
     }
 }
