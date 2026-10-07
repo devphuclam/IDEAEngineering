@@ -246,3 +246,35 @@ INSERT INTO identity_role_version_profile(role_version_id,definition_id,role_cod
     FROM identity_role_version v JOIN identity_role_definition d USING(role_code)
         JOIN identity_role_permission p USING(role_version_id)
     GROUP BY v.role_version_id,d.definition_id,v.role_code,v.version;
+
+ALTER TABLE identity_role_permission ADD CONSTRAINT identity_role_permission_registered
+    FOREIGN KEY(permission_code) REFERENCES permission_registry(permission_code);
+ALTER TABLE identity_role_version ADD CONSTRAINT identity_role_version_complete_seal
+    FOREIGN KEY(role_version_id) REFERENCES identity_role_version_profile(role_version_id)
+    DEFERRABLE INITIALLY DEFERRED;
+
+-- Freeze the schema at migration time; neither search_path nor a temporary table may redirect it.
+DO $migration$
+BEGIN
+    EXECUTE format($ddl$
+        CREATE FUNCTION %1$I.reject_sealed_role_permission_insert() RETURNS TRIGGER
+        LANGUAGE plpgsql SET search_path=pg_catalog,%1$I AS $body$
+        BEGIN
+            IF EXISTS(SELECT 1 FROM %1$I.identity_role_version_profile WHERE role_version_id=NEW.role_version_id) THEN
+                RAISE EXCEPTION 'Activated role permission content is sealed' USING ERRCODE='42501';
+            END IF;
+            RETURN NEW;
+        END;
+        $body$
+    $ddl$,current_schema());
+END;
+$migration$;
+REVOKE ALL ON FUNCTION reject_sealed_role_permission_insert() FROM PUBLIC;
+CREATE TRIGGER identity_role_permission_sealed BEFORE INSERT ON identity_role_permission
+    FOR EACH ROW EXECUTE FUNCTION reject_sealed_role_permission_insert();
+CREATE TRIGGER identity_role_version_profile_immutable BEFORE UPDATE OR DELETE OR TRUNCATE
+    ON identity_role_version_profile FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
+CREATE TRIGGER permission_registry_immutable BEFORE UPDATE OR DELETE OR TRUNCATE
+    ON permission_registry FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
+CREATE TRIGGER identity_role_definition_immutable BEFORE UPDATE OR DELETE OR TRUNCATE
+    ON identity_role_definition FOR EACH STATEMENT EXECUTE FUNCTION reject_retained_owner_mutation();
