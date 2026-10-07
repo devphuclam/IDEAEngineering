@@ -3,7 +3,7 @@
     "project": "IDEA ENGINEERING",
     "documentTitle": "ĐẶC TẢ GIAO TIẾP API — IDEA DDM CORE v0",
     "documentCode": "Spec • SPEC-API-001 • Phiên bản 1.0",
-    "version": "1.1",
+    "version": "1.0",
     "status": "BẢN PHÁT HÀNH NỘI BỘ",
     "author": "Nguyễn Huỳnh Phúc Lâm",
     "revisions": [
@@ -24,6 +24,12 @@
         "date": "07/10/2026",
         "author": "Nguyễn Huỳnh Phúc Lâm",
         "description": "Đồng bộ tự động qua Auto-Discovery Crawler: Thu hoạch thêm 9 thẻ đặc tả từ mã nguồn repo."
+      },
+      {
+        "version": "1.1",
+        "date": "07/10/2026",
+        "author": "Nguyễn Huỳnh Phúc Lâm",
+        "description": "Đồng bộ tự động qua Auto-Discovery Crawler: Thu hoạch thêm 2 thẻ đặc tả từ mã nguồn repo."
       }
     ],
     "subtitle": "Quy ước giao thức, tham số và mã lỗi giữa Backend, Web, Desktop và File Gateway",
@@ -1079,29 +1085,20 @@
       "phase": "Phase 1"
     },
     {
-      "code": "CPD-01",
+      "code": "CPD-1.1",
       "name": "Kiểm tra & Cảnh báo trùng lặp file (Store Existing)",
       "group": "Dữ liệu Sản phẩm PDM (CPD)",
-      "method": "POST",
-      "path": "/api/v1/cpd/store-existing/inspect",
-      "auth": "Kỹ sư dự án (Project Member)",
+      "phase": "Phase 2",
+      "method": "TBD",
+      "path": "Chưa xác lập (Design stage)",
+      "auth": "Eligible Actor and applicable access; authorized persisted source file,\r\n  selec",
       "status": "[THIẾT KẾ PH2]",
       "description": "Quét file chi tiết cơ khí CAD sẵn có trên máy tính trước khi đưa vào Vault: so sánh mã băm, tên file để cảnh báo trùng lặp Part/Assembly đã có trong kho dữ liệu.",
-      "preconditions": "Người dùng đăng nhập và thuộc nhóm kỹ sư của dự án mục tiêu.",
-      "stateEffects": "Không làm thay đổi dữ liệu sản phẩm, trả về danh sách các ứng viên tương đồng để người dùng xác nhận.",
+      "preconditions": "Non-authoritative inspection; no controlled record or published\r\n  Generation committed. Source bytes are unchanged; inspection result/Audit per DOC-06 §5.2.",
+      "stateEffects": "Non-authoritative inspection; no controlled record or published\r\n  Generation committed. Source bytes are unchanged; inspection result/Audit per DOC-06 §5.2.",
       "headers": [
         {
-          "name": "Cookie",
-          "required": true,
-          "description": "Session của Kỹ sư"
-        },
-        {
-          "name": "X-CSRF-TOKEN",
-          "required": true,
-          "description": "Mã CSRF hợp lệ"
-        },
-        {
-          "name": "Content-Type",
+          "name": "Accept",
           "required": true,
           "description": "application/json"
         }
@@ -1178,200 +1175,7 @@
           "remedy": "Xác nhận liên kết với tài liệu sẵn có thay vì tạo mới."
         }
       ],
-      "notes": "Ngăn chặn việc đăng ký trùng lặp mã chi tiết hoặc ghi đè mù mờ trong hệ thống PDM.",
-      "phase": "Phase 2 (CPD)"
-    },
-    {
-      "code": "CPD-02",
-      "name": "Truy vấn thông tin tài liệu & Thế hệ hiện tại",
-      "group": "Dữ liệu Sản phẩm PDM (CPD)",
-      "method": "GET",
-      "path": "/api/v1/cpd/documents/{documentId}",
-      "auth": "Đọc theo quyền Dự án (Project Scope)",
-      "status": "[THIẾT KẾ PH2]",
-      "description": "Lấy thông tin tài liệu logic, mã số, tên gọi, loại Document Class, Revision hiện hành (A, B...), Version (1, 2...) và thế hệ bất biến (Generation ID).",
-      "preconditions": "Tài khoản có quyền đọc trong dự án chứa tài liệu.",
-      "stateEffects": "Chỉ đọc dữ liệu.",
-      "headers": [
-        {
-          "name": "Cookie",
-          "required": true,
-          "description": "Session của Kỹ sư"
-        }
-      ],
-      "fields": [
-        {
-          "name": "documentId",
-          "in": "Path Param",
-          "type": "string",
-          "required": true,
-          "validation": "Mã tài liệu chuẩn định dạng DOC-YYYY-NNNN",
-          "description": "Mã tài liệu kỹ thuật cần truy vấn.",
-          "example": "DOC-2026-0001"
-        },
-        {
-          "name": "classId",
-          "in": "Response Body",
-          "type": "string",
-          "required": true,
-          "validation": "CAD_ASSEMBLY, CAD_PART, DRAWING...",
-          "description": "Phân lớp tài liệu PDM.",
-          "example": "CAD_ASSEMBLY"
-        },
-        {
-          "name": "title",
-          "in": "Response Body",
-          "type": "string",
-          "required": true,
-          "validation": "Tên bản vẽ / chi tiết",
-          "description": "Tiêu đề tiếng Việt của cụm chi tiết.",
-          "example": "Cụm Bơm Cao Áp 2 cấp"
-        },
-        {
-          "name": "currentRevision",
-          "in": "Response Body",
-          "type": "string",
-          "required": true,
-          "validation": "A, B, C...",
-          "description": "Ký hiệu đợt sửa đổi lớn (Revision).",
-          "example": "A"
-        },
-        {
-          "name": "currentVersion",
-          "in": "Response Body",
-          "type": "integer",
-          "required": true,
-          "validation": "Số nguyên >= 1",
-          "description": "Số phiên bản nội bộ trong đợt sửa đổi.",
-          "example": 1
-        },
-        {
-          "name": "generationId",
-          "in": "Response Body",
-          "type": "string (UUID)",
-          "required": true,
-          "validation": "UUID bất biến",
-          "description": "Mã thế hệ vật lý bất biến gắn liền với file trong Vault.",
-          "example": "GEN-2026-0001-A-1"
-        }
-      ],
-      "requestExample": "GET /api/v1/cpd/documents/DOC-2026-0001 HTTP/1.1\nHost: api.idea-engineering.local\nCookie: IDEA_SESSION=s%3A9a8b...",
-      "responseExample": "{\n  \"documentId\": \"DOC-2026-0001\",\n  \"classId\": \"CAD_ASSEMBLY\",\n  \"title\": \"Cụm Bơm Cao Áp 2 cấp\",\n  \"currentRevision\": \"A\",\n  \"currentVersion\": 1,\n  \"generationId\": \"GEN-2026-0001-A-1\"\n}",
-      "errors": [
-        {
-          "status": 403,
-          "code": "FORBIDDEN",
-          "reason": "Tài liệu thuộc dự án mà người dùng không có quyền truy cập.",
-          "remedy": "Yêu cầu quyền truy cập dự án."
-        },
-        {
-          "status": 404,
-          "code": "DOCUMENT_NOT_FOUND",
-          "reason": "Không tồn tại tài liệu với mã số yêu cầu.",
-          "remedy": "Kiểm tra lại DocumentId."
-        }
-      ],
-      "notes": "Lọc kết quả nghiêm ngặt theo phân quyền Dự án (RBAC Scope).",
-      "phase": "Phase 2 (CPD)"
-    },
-    {
-      "code": "CPD-03",
-      "name": "Xem lịch sử thế hệ bất biến (Revision History)",
-      "group": "Dữ liệu Sản phẩm PDM (CPD)",
-      "method": "GET",
-      "path": "/api/v1/cpd/documents/{documentId}/history",
-      "auth": "Đọc theo quyền Dự án (Project Scope)",
-      "status": "[THIẾT KẾ PH2]",
-      "description": "Truy xuất toàn bộ cây phả hệ lịch sử sửa đổi của tài liệu qua các đợt Check-in/Release. Mỗi thế hệ được cố định vĩnh viễn không bị sửa đổi.",
-      "preconditions": "Tài khoản có quyền đọc tài liệu.",
-      "stateEffects": "Chỉ đọc dữ liệu.",
-      "headers": [
-        {
-          "name": "Cookie",
-          "required": true,
-          "description": "Session của Kỹ sư"
-        }
-      ],
-      "fields": [
-        {
-          "name": "documentId",
-          "in": "Path Param",
-          "type": "string",
-          "required": true,
-          "validation": "Mã tài liệu chuẩn",
-          "description": "Mã tài liệu kỹ thuật.",
-          "example": "DOC-2026-0001"
-        },
-        {
-          "name": "revisions",
-          "in": "Response Body",
-          "type": "array of objects",
-          "required": true,
-          "validation": "Danh sách cây lịch sử",
-          "description": "Mảng chứa danh sách các Revision và Version tương ứng.",
-          "example": "[ { \"revision\": \"A\", \"versions\": [...] } ]"
-        }
-      ],
-      "requestExample": "GET /api/v1/cpd/documents/DOC-2026-0001/history HTTP/1.1\nHost: api.idea-engineering.local\nCookie: IDEA_SESSION=s%3A9a8b...",
-      "responseExample": "{\n  \"documentId\": \"DOC-2026-0001\",\n  \"revisions\": [\n    {\n      \"revision\": \"A\",\n      \"versions\": [\n        {\n          \"version\": 1,\n          \"generation\": \"GEN-2026-0001-A-1\",\n          \"releasedAt\": \"2026-09-25T10:00:00Z\",\n          \"actor\": \"Lê Kỹ Sư\"\n        }\n      ]\n    }\n  ]\n}",
-      "errors": [
-        {
-          "status": 403,
-          "code": "FORBIDDEN",
-          "reason": "Không có quyền đọc tài liệu.",
-          "remedy": "Yêu cầu cấp quyền dự án."
-        },
-        {
-          "status": 404,
-          "code": "DOCUMENT_NOT_FOUND",
-          "reason": "Không tìm thấy tài liệu.",
-          "remedy": "Kiểm tra lại DocumentId."
-        }
-      ],
-      "notes": "Bảo đảm tính toàn vẹn kiểm toán (Audit Trail) cho toàn bộ hồ sơ kỹ thuật sản phẩm.",
-      "phase": "Phase 2 (CPD)"
-    },
-    {
-      "code": "CPD-1.1",
-      "name": "Inspect Store Existing candidate",
-      "group": "Dữ liệu Sản phẩm PDM (CPD)",
-      "phase": "Phase 2",
-      "method": "TBD",
-      "path": "Chưa xác lập (Design stage)",
-      "auth": "Eligible Actor and applicable access; authorized persisted source file,\r\n  selec",
-      "status": "[THIẾT KẾ PH2]",
-      "description": "Đặc tả: Inspect Store Existing candidate. Eligible Actor and applicable access; authorized persisted source file,\r\n  selected Document Class/schema, metadata/path/name and candidate content digest. Format/profile\r\n  readability and size valid",
-      "preconditions": "Non-authoritative inspection; no controlled record or published\r\n  Generation committed. Source bytes are unchanged; inspection result/Audit per DOC-06 §5.2.",
-      "stateEffects": "Non-authoritative inspection; no controlled record or published\r\n  Generation committed. Source bytes are unchanged; inspection result/Audit per DOC-06 §5.2.",
-      "headers": [
-        {
-          "name": "Accept",
-          "required": true,
-          "description": "application/json"
-        }
-      ],
-      "fields": [
-        {
-          "name": "payload",
-          "in": "Request/Response",
-          "type": "object",
-          "required": true,
-          "validation": "Chờ phê duyệt DTO chính thức",
-          "description": "Inspection findings and permitted duplicate candidates with metadata, path/name and\r\n  digest evidence. Same digest suggests reusable bytes, never ide",
-          "example": "{}"
-        }
-      ],
-      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
-      "responseExample": "/* Dữ liệu dự kiến: Inspection findings and permitted duplicate candidates with metadata, path/name and\r\n  digest eviden */",
-      "errors": [
-        {
-          "status": 400,
-          "code": "VALIDATION_FAILED",
-          "reason": "Unreadable/unsupported/invalid source, lost access or unavailable\r\n  evidence prevents a trustworthy preview. Results are a point-in-time observation,",
-          "remedy": "Inspection may be repeated; same file may yield changed candidate\r\n  results. No durable inspection-cache/replay guarantee is selected. HTTP details U"
-        }
-      ],
-      "notes": "Inspection may be repeated; same file may yield changed candidate\r\n  results. No durable inspection-cache/replay guarantee is selected. HTTP details UNKNOWN."
+      "notes": "Ngăn chặn việc đăng ký trùng lặp mã chi tiết hoặc ghi đè mù mờ trong hệ thống PDM."
     },
     {
       "code": "CPD-1.2",
@@ -1543,14 +1347,14 @@
     },
     {
       "code": "CPD-2.1",
-      "name": "Resolve document and current head",
+      "name": "Truy vấn thông tin tài liệu & Thế hệ hiện tại",
       "group": "Dữ liệu Sản phẩm PDM (CPD)",
       "phase": "Phase 2",
       "method": "TBD",
       "path": "Chưa xác lập (Design stage)",
       "auth": "Current eligible Actor, stable DocumentId and requested view; owning\r\n  Organiza",
       "status": "[THIẾT KẾ PH2]",
-      "description": "Đặc tả: Resolve document and current head. Current eligible Actor, stable DocumentId and requested view; owning\r\n  Organization/Project authorization. Name/path/business number alone is not exact identity.",
+      "description": "Lấy thông tin tài liệu logic, mã số, tên gọi, loại Document Class, Revision hiện hành (A, B...), Version (1, 2...) và thế hệ bất biến (Generation ID).",
       "preconditions": "Read-only owner view. Working Head is current at an observation, not a\r\n  Released Baseline or a promise it will still be current at the next command.",
       "stateEffects": "Read-only owner view. Working Head is current at an observation, not a\r\n  Released Baseline or a promise it will still be current at the next command.",
       "headers": [
@@ -1562,26 +1366,77 @@
       ],
       "fields": [
         {
-          "name": "payload",
-          "in": "Request/Response",
-          "type": "object",
+          "name": "documentId",
+          "in": "Path Param",
+          "type": "string",
           "required": true,
-          "validation": "Chờ phê duyệt DTO chính thức",
-          "description": "Authorized identity/current state plus at most one exact Working Head; distinguish\r\n  registered/no-head from published. Governing Project, business n",
-          "example": "{}"
+          "validation": "Mã tài liệu chuẩn định dạng DOC-YYYY-NNNN",
+          "description": "Mã tài liệu kỹ thuật cần truy vấn.",
+          "example": "DOC-2026-0001"
+        },
+        {
+          "name": "classId",
+          "in": "Response Body",
+          "type": "string",
+          "required": true,
+          "validation": "CAD_ASSEMBLY, CAD_PART, DRAWING...",
+          "description": "Phân lớp tài liệu PDM.",
+          "example": "CAD_ASSEMBLY"
+        },
+        {
+          "name": "title",
+          "in": "Response Body",
+          "type": "string",
+          "required": true,
+          "validation": "Tên bản vẽ / chi tiết",
+          "description": "Tiêu đề tiếng Việt của cụm chi tiết.",
+          "example": "Cụm Bơm Cao Áp 2 cấp"
+        },
+        {
+          "name": "currentRevision",
+          "in": "Response Body",
+          "type": "string",
+          "required": true,
+          "validation": "A, B, C...",
+          "description": "Ký hiệu đợt sửa đổi lớn (Revision).",
+          "example": "A"
+        },
+        {
+          "name": "currentVersion",
+          "in": "Response Body",
+          "type": "integer",
+          "required": true,
+          "validation": "Số nguyên >= 1",
+          "description": "Số phiên bản nội bộ trong đợt sửa đổi.",
+          "example": 1
+        },
+        {
+          "name": "generationId",
+          "in": "Response Body",
+          "type": "string (UUID)",
+          "required": true,
+          "validation": "UUID bất biến",
+          "description": "Mã thế hệ vật lý bất biến gắn liền với file trong Vault.",
+          "example": "GEN-2026-0001-A-1"
         }
       ],
-      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
-      "responseExample": "/* Dữ liệu dự kiến: Authorized identity/current state plus at most one exact Working Head; distinguish\r\n  registered/no- */",
+      "requestExample": "GET /api/v1/cpd/documents/DOC-2026-0001 HTTP/1.1\nHost: api.idea-engineering.local\nCookie: IDEA_SESSION=s%3A9a8b...",
+      "responseExample": "{\n  \"documentId\": \"DOC-2026-0001\",\n  \"classId\": \"CAD_ASSEMBLY\",\n  \"title\": \"Cụm Bơm Cao Áp 2 cấp\",\n  \"currentRevision\": \"A\",\n  \"currentVersion\": 1,\n  \"generationId\": \"GEN-2026-0001-A-1\"\n}",
       "errors": [
         {
-          "status": 400,
-          "code": "VALIDATION_FAILED",
-          "reason": "Missing/inaccessible context fails without data leakage. Any later\r\n  command uses an exact expected pin; projection lag is identified, never hidden a",
-          "remedy": "Repeating query writes no product state but may observe a new head.\r\n  Access checked anew. Cache/conditional request semantics and HTTP taxonomy UNKN"
+          "status": 403,
+          "code": "FORBIDDEN",
+          "reason": "Tài liệu thuộc dự án mà người dùng không có quyền truy cập.",
+          "remedy": "Yêu cầu quyền truy cập dự án."
+        },
+        {
+          "status": 404,
+          "code": "DOCUMENT_NOT_FOUND",
+          "reason": "Không tồn tại tài liệu với mã số yêu cầu.",
+          "remedy": "Kiểm tra lại DocumentId."
         }
       ],
-      "notes": "Repeating query writes no product state but may observe a new head.\r\n  Access checked anew. Cache/conditional request semantics and HTTP taxonomy UNKNOWN."
+      "notes": "Lọc kết quả nghiêm ngặt theo phân quyền Dự án (RBAC Scope)."
     },
     {
       "code": "CPD-2.2",
@@ -1627,14 +1482,14 @@
     },
     {
       "code": "CPD-2.3",
-      "name": "Read retained history",
+      "name": "Xem lịch sử thế hệ bất biến (Revision History)",
       "group": "Dữ liệu Sản phẩm PDM (CPD)",
       "phase": "Phase 2",
       "method": "TBD",
       "path": "Chưa xác lập (Design stage)",
       "auth": "Authorized stable DocumentId, requested history scope; retained\r\n  Revision/Gene",
       "status": "[THIẾT KẾ PH2]",
-      "description": "Đặc tả: Read retained history. Authorized stable DocumentId, requested history scope; retained\r\n  Revision/Generation and attributable history are resolved under current read authority.",
+      "description": "Truy xuất toàn bộ cây phả hệ lịch sử sửa đổi của tài liệu qua các đợt Check-in/Release. Mỗi thế hệ được cố định vĩnh viễn không bị sửa đổi.",
       "preconditions": "Read-only; no rewriting past manifest or treating file timestamp as\r\n  authoritative publication time. Audit query scope is separately authorized.",
       "stateEffects": "Read-only; no rewriting past manifest or treating file timestamp as\r\n  authoritative publication time. Audit query scope is separately authorized.",
       "headers": [
@@ -1646,26 +1501,41 @@
       ],
       "fields": [
         {
-          "name": "payload",
-          "in": "Request/Response",
-          "type": "object",
+          "name": "documentId",
+          "in": "Path Param",
+          "type": "string",
           "required": true,
-          "validation": "Chờ phê duyệt DTO chính thức",
-          "description": "Distinct revision identities/codes and ordered Version/Generation relationships,\r\n  exact retained pins and permitted attribution; no separate Version",
-          "example": "{}"
+          "validation": "Mã tài liệu chuẩn",
+          "description": "Mã tài liệu kỹ thuật.",
+          "example": "DOC-2026-0001"
+        },
+        {
+          "name": "revisions",
+          "in": "Response Body",
+          "type": "array of objects",
+          "required": true,
+          "validation": "Danh sách cây lịch sử",
+          "description": "Mảng chứa danh sách các Revision và Version tương ứng.",
+          "example": "[ { \"revision\": \"A\", \"versions\": [...] } ]"
         }
       ],
-      "requestExample": "/* Đặc tả thiết kế - Chờ chốt wire DTO */",
-      "responseExample": "/* Dữ liệu dự kiến: Distinct revision identities/codes and ordered Version/Generation relationships,\r\n  exact retained p */",
+      "requestExample": "GET /api/v1/cpd/documents/DOC-2026-0001/history HTTP/1.1\nHost: api.idea-engineering.local\nCookie: IDEA_SESSION=s%3A9a8b...",
+      "responseExample": "{\n  \"documentId\": \"DOC-2026-0001\",\n  \"revisions\": [\n    {\n      \"revision\": \"A\",\n      \"versions\": [\n        {\n          \"version\": 1,\n          \"generation\": \"GEN-2026-0001-A-1\",\n          \"releasedAt\": \"2026-09-25T10:00:00Z\",\n          \"actor\": \"Lê Kỹ Sư\"\n        }\n      ]\n    }\n  ]\n}",
       "errors": [
         {
-          "status": 400,
-          "code": "VALIDATION_FAILED",
-          "reason": "Hidden objects/entries/counts remain hidden. New commits may extend\r\n  history; cross-page snapshot consistency is not decided. Missing required retai",
-          "remedy": "Repeat after current authorization; collection may grow. No stable\r\n  page token, cache guarantee or new audit-export API is declared."
+          "status": 403,
+          "code": "FORBIDDEN",
+          "reason": "Không có quyền đọc tài liệu.",
+          "remedy": "Yêu cầu cấp quyền dự án."
+        },
+        {
+          "status": 404,
+          "code": "DOCUMENT_NOT_FOUND",
+          "reason": "Không tìm thấy tài liệu.",
+          "remedy": "Kiểm tra lại DocumentId."
         }
       ],
-      "notes": "Repeat after current authorization; collection may grow. No stable\r\n  page token, cache guarantee or new audit-export API is declared."
+      "notes": "Bảo đảm tính toàn vẹn kiểm toán (Audit Trail) cho toàn bộ hồ sơ kỹ thuật sản phẩm."
     },
     {
       "code": "CPD-2.4",

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -196,7 +197,7 @@ function smartMergeCatalog(catalog, harvested) {
         method: item.method || 'TBD',
         path: item.path || 'TBD (Chưa chốt)',
         auth: item.authInput ? item.authInput.slice(0, 80) : 'Theo quyền hạn dự án',
-        status: item.phase.includes('Phase 1') ? '[ĐÃ TRIỂN KHAI]' : '[THIẾT KẾ PH2]',
+        status: item.phase.includes('Phase 1') ? '[ĐÃ TRIỂN KHAI]' : `[THIẾT KẾ ${item.phase.replace('Phase ', 'PH').split(' ')[0]}]`,
         description: item.authInput ? `Đặc tả: ${item.name}. ${item.authInput.slice(0, 200)}` : `Quy hoạch đặc tả chức năng ${item.name}`,
         preconditions: item.state ? item.state.slice(0, 160) : 'Theo quy định kiểm soát phiên và dự án',
         stateEffects: item.state ? item.state.slice(0, 160) : 'Ghi nhận giao dịch nghiệp vụ có thẩm quyền',
@@ -1725,20 +1726,80 @@ function generateHtml(catalog) {
   return htmlFile;
 }
 
-// 7. ARCHIVE OUTPUT: Lưu bản snapshot có đánh dấu phiên bản và ngày tháng
+// 7. ARCHIVE OUTPUT: Lưu bản snapshot có đánh dấu phiên bản và ngày tháng (Tránh ghi đè)
+function getFileSha256(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  return createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function resolveArchiveTarget(baseDir, baseName, ext, sourcePath) {
+  const sourceHash = getFileSha256(sourcePath);
+  let candidate = path.join(baseDir, `${baseName}.${ext}`);
+
+  if (!fs.existsSync(candidate)) {
+    return { targetPath: candidate, action: 'created' };
+  }
+
+  const existingHash = getFileSha256(candidate);
+  if (existingHash === sourceHash) {
+    return { targetPath: candidate, action: 'identical_preserved' };
+  }
+
+  // Nếu nội dung thay đổi trong cùng ngày và cùng version -> Thêm hậu tố tuần tự _01, _02...
+  let seq = 1;
+  while (true) {
+    const seqName = `${baseName}_${String(seq).padStart(2, '0')}.${ext}`;
+    candidate = path.join(baseDir, seqName);
+    if (!fs.existsSync(candidate)) {
+      return { targetPath: candidate, action: 'sequenced' };
+    }
+    if (getFileSha256(candidate) === sourceHash) {
+      return { targetPath: candidate, action: 'identical_preserved' };
+    }
+    seq++;
+  }
+}
+
 function archiveOutput(catalog, docxPath, xlsxPath, htmlPath) {
   const dateStamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const versionSlug = `v${catalog.metadata.version || '1.0'}`;
+  const baseName = `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}`;
+  const contentHash = getFileSha256(htmlPath);
 
-  const archiveDocx = path.join(ARCHIVE_DIR, `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}.docx`);
-  const archiveXlsx = path.join(ARCHIVE_DIR, `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}.xlsx`);
-  const archiveHtml = path.join(ARCHIVE_DIR, `IDEA_Core_API_Contract_${versionSlug}_${dateStamp}.html`);
+  const baseHtmlPath = path.join(ARCHIVE_DIR, `${baseName}.html`);
+  if (!fs.existsSync(baseHtmlPath)) {
+    fs.copyFileSync(docxPath, path.join(ARCHIVE_DIR, `${baseName}.docx`));
+    fs.copyFileSync(xlsxPath, path.join(ARCHIVE_DIR, `${baseName}.xlsx`));
+    fs.copyFileSync(htmlPath, path.join(ARCHIVE_DIR, `${baseName}.html`));
+    console.log(`[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: ${baseName}.*`);
+    return;
+  }
 
-  fs.copyFileSync(docxPath, archiveDocx);
-  fs.copyFileSync(xlsxPath, archiveXlsx);
-  fs.copyFileSync(htmlPath, archiveHtml);
+  if (getFileSha256(baseHtmlPath) === contentHash) {
+    console.log(`[LƯU TRỮ ARCHIVE] Bản snapshot ${baseName} đã tồn tại với nội dung đồng nhất (bảo toàn, không ghi đè).`);
+    return;
+  }
 
-  console.log(`[LƯU TRỮ ARCHIVE] Đã sao lưu bản snapshot vào thư mục: ${ARCHIVE_DIR}`);
+  let seq = 1;
+  let targetSeq = null;
+  while (true) {
+    const seqBase = `${baseName}_${String(seq).padStart(2, '0')}`;
+    const seqHtmlPath = path.join(ARCHIVE_DIR, `${seqBase}.html`);
+    if (!fs.existsSync(seqHtmlPath)) {
+      targetSeq = seqBase;
+      break;
+    }
+    if (getFileSha256(seqHtmlPath) === contentHash) {
+      console.log(`[LƯU TRỮ ARCHIVE] Bản snapshot ${seqBase} đã tồn tại với nội dung đồng nhất (bảo toàn, không ghi đè).`);
+      return;
+    }
+    seq++;
+  }
+
+  fs.copyFileSync(docxPath, path.join(ARCHIVE_DIR, `${targetSeq}.docx`));
+  fs.copyFileSync(xlsxPath, path.join(ARCHIVE_DIR, `${targetSeq}.xlsx`));
+  fs.copyFileSync(htmlPath, path.join(ARCHIVE_DIR, `${targetSeq}.html`));
+  console.log(`[LƯU TRỮ ARCHIVE] Phát hiện bản snapshot cùng ngày có nội dung mới -> Đã lưu thêm bản tuần tự: ${targetSeq}.*`);
 }
 
 // 8. MAIN CLI CONTROLLER
