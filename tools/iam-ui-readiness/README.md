@@ -47,6 +47,13 @@ no provider/tooling leakage into runtime, exact application runtime hash set, ex
 manifest/loader, actual built Web and retained React/ReactDOM/scheduler notices. This package
 is a prerequisite check of predecessor code, not IAM UI or new owner qualification.
 
+After hash-verified transfer of the resulting JAR, `package-preflight.ps1` compares it against
+the accepted 57-JAR Server payload inventory (not the different 38-JAR Gateway graph), checks
+outer/nested JSR305 providers, executable manifest/loader, actual Web, three runtime notices
+and ten immutable migration bytes. Run with `-JarPath <owned-JAR> -RepositoryRoot <LF-export>`.
+The 11 selected starter/annotation-processor JARs are excluded by Boot's packaging rules;
+the retained jarmode-tools 4.1.1 copy is expected, not newly introduced build-tool leakage.
+
 ## Fresh HTTPS environment fixture
 
 `HttpsFixture.java` uses only JDK standard APIs and the existing keytool. It exposes only
