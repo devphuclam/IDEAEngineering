@@ -34,7 +34,7 @@ CREATE TABLE project_membership (
     FOREIGN KEY (ended_by, organization_id) REFERENCES idea_account(actor_id, organization_id),
     CHECK (effective_until IS NULL OR effective_until > effective_from),
     CHECK ((ended_at IS NULL AND ended_by IS NULL AND end_reason IS NULL)
-        OR (ended_at IS NOT NULL AND ended_by IS NOT NULL AND BTRIM(end_reason) <> ''))
+        OR (ended_at IS NOT NULL AND ended_by IS NOT NULL AND end_reason IS NOT NULL AND BTRIM(end_reason) <> ''))
 );
 CREATE UNIQUE INDEX project_membership_unended_once ON project_membership(project_id, actor_id)
     WHERE ended_at IS NULL;
@@ -73,7 +73,7 @@ CREATE TABLE group_membership (
     FOREIGN KEY (ended_by, organization_id) REFERENCES idea_account(actor_id, organization_id),
     CHECK (effective_until IS NULL OR effective_until > effective_from),
     CHECK ((ended_at IS NULL AND ended_by IS NULL AND end_reason IS NULL)
-        OR (ended_at IS NOT NULL AND ended_by IS NOT NULL AND BTRIM(end_reason) <> ''))
+        OR (ended_at IS NOT NULL AND ended_by IS NOT NULL AND end_reason IS NOT NULL AND BTRIM(end_reason) <> ''))
 );
 CREATE UNIQUE INDEX group_membership_unended_once ON group_membership(group_id, actor_id)
     WHERE ended_at IS NULL;
