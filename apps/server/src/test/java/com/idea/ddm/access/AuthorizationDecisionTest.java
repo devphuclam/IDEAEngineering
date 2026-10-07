@@ -78,4 +78,35 @@ class AuthorizationDecisionTest {
             connection.rollback();
         }
     }
+
+    @Test void directAndMultipleMatchingGroupPathsUnionWithCurrentParticipationProvenance() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.LINH);
+        var project = projects.project(actor.identity());
+        var projectMembership = projects.projectMembership(project, actor.identity(), NOW.minusSeconds(1), null);
+        var first = projects.group(project, actor.identity());
+        var second = projects.group(project, actor.identity());
+        var firstMember = projects.groupMembership(first, actor.identity(), NOW.minusSeconds(1), null);
+        var secondMember = projects.groupMembership(second, actor.identity(), NOW.minusSeconds(1), null);
+        var organization = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        var scope = AuthorizationDecisionService.Scope.project(project.organizationId(), project.projectId());
+        var role = roles.participantRole(organization);
+        var direct = roles.actorAssignment(actor.identity(), role, organization, NOW.minusSeconds(1), null);
+        var groupOne = roles.groupAssignment(actor.identity(), role, first, NOW.minusSeconds(1), null);
+        var groupTwo = roles.groupAssignment(actor.identity(), role, second, NOW.minusSeconds(1), null);
+        try (var connection = fixtures.app()) {
+            connection.setReadOnly(true);
+            connection.setAutoCommit(false);
+            var result = policy.evaluate(connection, actor.context(), "project.read", scope);
+            assertTrue(result.rbacGranted());
+            assertEquals(Set.of(direct, groupOne, groupTwo), result.paths().stream().map(AuthorizationDecisionService.GrantPath::assignmentId).collect(Collectors.toSet()));
+            assertEquals(Set.of(projectMembership), result.paths().stream().map(AuthorizationDecisionService.GrantPath::projectMembershipId).collect(Collectors.toSet()));
+            assertEquals(Set.of(firstMember, secondMember), result.paths().stream().map(AuthorizationDecisionService.GrantPath::groupMembershipId)
+                    .filter(java.util.Objects::nonNull).collect(Collectors.toSet()));
+            assertEquals(Set.of(first.groupId(), second.groupId()), result.paths().stream().map(AuthorizationDecisionService.GrantPath::groupId)
+                    .filter(java.util.Objects::nonNull).collect(Collectors.toSet()));
+            assertEquals(Set.of(role), result.paths().stream().map(AuthorizationDecisionService.GrantPath::roleVersionId).collect(Collectors.toSet()));
+            assertFalse(policy.evaluate(connection, actor.context(), "account.create", organization).rbacGranted());
+            connection.rollback();
+        }
+    }
 }
