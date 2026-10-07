@@ -79,6 +79,15 @@ ActorContext constructor, automatic grant, schema cleanup or new production abst
 
 ## Database and cleanup
 
+T016/T017 use `project-read-red-01 ProjectAuthorizationReadTest 1 RED` and its GREEN successor.
+The Project-owned query reads current exact Project, Project Membership and Group Membership
+facts in the caller's connection, filtered to the Server-established Organization and Actor.
+It is not a second policy evaluator, public directory, participant query or UI-P01–P13 API.
+Named migrator-seeded Project/Group rows are synthetic prerequisites only. Read-only PostgreSQL
+transactions prove no mutation, activity refresh, security lock acquisition or IAM mutation
+re-entry. Half-open periods, canonical termination, same-Project and same-Organization filtering
+are incremental tests before the single evaluator. No schema/POM/tool/graph change is needed.
+
 Only `idea_ddm_iam_ui_20261007_46`, existing migrator/app roles, and one fresh
 `iam_ui_<32 lowercase hex>` schema per run. Java verifies DB/owner/role and creates an exact
 `IDEA_IAM_UI_RUN:<source>:<schema>` marker before migrating immutable V1–V10 plus candidate V11 in that schema.
