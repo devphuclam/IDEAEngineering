@@ -28,6 +28,9 @@ function sessionView(value: unknown): SessionView {
 
 export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => fetch(path, init)) {
   return {
+    async signIn(login: string, password: string): Promise<IamResult<{ actorId: string }>> {
+      throw new Error("IAM sign-in adapter not implemented");
+    },
     async loadSession(): Promise<IamResult<SessionView>> {
       try {
         const response = await fetchBoundary("/api/v1/identity/session", {
