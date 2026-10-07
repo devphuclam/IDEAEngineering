@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.6` / Draft Backend-first readiness successor; PG2/PG3 PASS; PG4 PASS-WITH-ACTIONS, actual Chrome HTTPS NOT-RUN |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.7` / Draft readiness result record; PG2/PG3/PG4 PASS; actual trusted Chrome HTTPS PASS 2/2 |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; 93-task/zero-finding Analyze accepted at aaa5596a; explicit human PG2/PG3 PASS for 5b2fb9f; subsequent human Backend-first PG4 PASS-WITH-ACTIONS / current section 10 / 2026-10-07 for this execution disposition only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action with actual results / current section 11 / 2026-10-07 for this readiness disposition only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–9 actual predecessor results, current gate section 10; 009 behavior qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–10 predecessor states, current readiness PASS section 11; 009 behavior qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -490,6 +490,8 @@ SHA-256 `BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE`.
 
 ## 10. Current Backend-first execution gate — 2026-10-07
 
+Historical disposition at d13dd7b; subsequent actual HTTPS/action closure is section 11.
+
 The human's subsequent **“Pass luôn có sao đâu”**, in reply to separating Backend readiness
 from the unexecuted browser prerequisite, authorizes development to proceed. The controlled
 disposition is **PG4 = PASS-WITH-ACTIONS / T007 = COMPLETE**, not a fabricated test PASS.
@@ -506,3 +508,26 @@ Seven readiness tasks T001–T007 are now complete by recorded evidence plus hum
 **Next authorized task: T008 named synthetic fixtures, then T009 real eligible-context RED.**
 T008–T093 remain NOT-STARTED in this documentation-only publication. No test/build/DB mutation,
 trust retry, listener, timer, verifier, deployment or merge performed in this successor.
+
+## 11. Current readiness PASS — 2026-10-07
+
+The human requested the published HTTPS/browser check and confirmed the exact CurrentUser
+certificate import. The unchanged 4c98f226 harness ran at publication head d13dd7b. Actual
+headed Chrome `154.0.8037.98` with cached Playwright/core `1.62.1` and approved Windows Node
+`24.19.0` returned HTTP 200 / exact expected body on **both localhost and 127.0.0.1** using
+normal trust/endpoint verification. **HTTPS environment PASS 2/2**, no TLS bypass or download.
+
+The exact owned fixture and SSH forwarding processes were terminated; no 18446 listener remains
+on either host. Postflight tool/cache/source/TLS hashes and empty DB privilege split remain PASS.
+The socket-inspection representation diagnostic is disclosed, not a hidden application repair.
+Full exact source, commands, actual kernel endpoint, log hashes, cleanup and limits are in
+[envelope section 6](execution-envelope.md#6-trusted-https-execution-and-action-closure--2026-10-07).
+
+**PG2 = PASS; PG3 = PASS; PG4 = PASS. IAM-46-A01 CLOSED. T001–T007 COMPLETE.**
+The originally conditional human readiness authority is now satisfied by actual environment
+results, not by converting NOT-RUN into PASS. T008 remains the next authorized task, followed
+by T009 RED before T010 GREEN. T008–T093 are still NOT-STARTED here.
+
+This is not actual IDEA Web/identity acceptance, a new product baseline, PG5, deployment or merge.
+No application/test/migration/dependency source changed; no feature suite/Maven/package rerun
+was needed for this environment-only check. Verifier NOT-RUN; PR #47 Draft/Open; Issue #46 OPEN.

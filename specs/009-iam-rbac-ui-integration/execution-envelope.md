@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version / status | IE-EXE-IAM-UI-46-20261007 / readiness configuration and gate record / 0.3 / Draft record; PG2/PG3 PASS; PG4 PASS-WITH-ACTIONS for Backend-first development, section 5; actual Chrome HTTPS NOT-RUN |
+| Stable ID / class / version / status | IE-EXE-IAM-UI-46-20261007 / readiness configuration and gate record / 0.4 / Draft result record; PG2/PG3/PG4 PASS, section 6; actual trusted Chrome HTTPS PASS 2/2 |
 | Scope / authority / date | Issue #46 / PR #47, feature 009; explicit human readiness continuation at 5b2fb9f; 2026-10-07 Asia/Ho_Chi_Minh |
 | Owner / author / reviewer | Project user / Codex CODEX_ONLY / Project Reviewer; technical spec/design acceptance retained, formal PG2/PG3 supplied separately below |
 | Normativity / classification / retention | INFORMATIVE product semantics; controlled execution instruction for this increment / INTERNAL / retain historical attempts and exact-source results |
@@ -98,7 +98,7 @@ At the historical 4c98f226 pre-execution publication, package and HTTPS results 
 PG2 **PASS**; PG3 **PASS**; PG4 **BLOCKED** until their actual successor results are recorded.
 T008 remains NOT-STARTED. No verifier, deployment, merge, company/production data or timer action.
 
-## 4. Actual readiness execution — 2026-10-07
+## 4. Historical readiness execution at 4e20db2 — 2026-10-07
 
 ### Exact source and publication lineage
 
@@ -193,7 +193,7 @@ to certify the still-unexecuted browser boundary. PR #47 remains Draft/Open, Iss
 
 ## 5. Human Backend-first gate disposition — 2026-10-07
 
-**Current PG4 = PASS-WITH-ACTIONS; T007 = COMPLETE.** After the assistant proposed separating
+**Disposition at d13dd7b: PG4 = PASS-WITH-ACTIONS; T007 = COMPLETE.** After the assistant proposed separating
 Backend readiness from the not-yet-executed Web/HTTPS prerequisite, the human answered
 **“Pass luôn có sao đâu”**. Record this as human authorization to proceed with Backend-first
 development, not as evidence that the HTTPS or Chrome check ran. It is a successor disposition
@@ -224,3 +224,46 @@ rollback/forward-repair rules, source pinning and all other STOP boundaries stil
 T008 is now the next authorized task, followed by T009 RED before T010 minimum GREEN. None
 has started in this publication. Only gate/status documentation changed; no Java, test,
 migration, dependency, tool, certificate or application result changed, and no tests reran.
+
+## 6. Trusted HTTPS execution and action closure — 2026-10-07
+
+**Current PG4 = PASS; IAM-46-A01 = CLOSED; T007 = COMPLETE.** The human subsequently instructed
+**“Thôi thì bạn chạy cái đó luôn đi”** and confirmed **“yes rồi”** after the exact Windows
+certificate warning. The originally conditional readiness authority is now supported by all
+actual prerequisite results. This supersedes only the pending action/gate status in section 5;
+historical cancellation, BLOCKED and PASS-WITH-ACTIONS records remain true for their dates.
+
+Executed harness source remains **4c98f2266dd159c7609afcab4c95eb4479ae0384**:
+`HttpsFixture.java` on the verified remote LF export and `browser-preflight.mjs` on the verified
+Windows LF export. Both are byte-identical at execution-publication head d13dd7b. No source,
+tool, graph or certificate replacement was made to obtain PASS.
+
+| Check | Actual result |
+|---|---|
+| Exact CurrentUser trust | PASS: human-confirmed import; stored raw DER SHA-256 equals `6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad`; certificate valid. No LocalMachine/system/JDK global trust modification |
+| Remote fixture and loopback scope | PASS: owned JVM PID 12441, exact published `serve` command; one loopback-only listener on 18446. Linux reports the IPv4-mapped representation `[::ffff:127.0.0.1]:18446`, not wildcard `::` or a LAN address |
+| Owned SSH forwarding | PASS: Windows PID 34352, existing key, strict known-host verification and ExitOnForwardFailure; only `127.0.0.1:18446` → remote `127.0.0.1:18446` |
+| Headed actual Chrome / Playwright | PASS: Chrome `154.0.8037.98`, Playwright/core `1.62.1`, approved Windows Node `24.19.0`; source/executable pins checked. Normal certificate and hostname validation, no ignore-TLS option |
+| `https://localhost:18446/__iam_readiness` | PASS: HTTP 200 and exact `IDEA_IAM_UI_READINESS_46` body with trailing LF |
+| `https://127.0.0.1:18446/__iam_readiness` | PASS: HTTP 200 and the same exact body; browser harness exit 0, `ENVIRONMENT_TLS_ONLY=PASS` |
+| Cleanup | PASS: exact JVM command/PID validated before TERM; process absent. Exact SSH command/PID validated before termination. No listener remains on 18446 on Ubuntu or Windows; browser/context closed |
+| Final hashes / DB isolation | PASS: 82 toolchain rows, complete selected-input inventory, 106/106 original exported files, Node-only binary/LICENSE and TLS material unchanged; Windows 10 executable/legal pins unchanged. Both DB-role catalog rechecks still show public 0 tables and the unchanged privilege split |
+
+A first literal-text socket inspection returned nonzero because it expected `127.0.0.1:18446`
+instead of Linux's IPv4-mapped representation. A bounded read-only inspection verified exactly
+one `[::ffff:127.0.0.1]:18446` endpoint and the owned command/PID. No application/fixture change,
+wildcard allowance or TLS weakening was used; this diagnostic failure is not relabelled PASS.
+
+Retained evidence: private remote `tls-01/serve-01.log`, SHA-256
+`8a94e47167e3c338e97ca4d0a16e25ab506e42426fc676c5979e9dcc6bca7540`;
+Windows `C:/Users/TD-999/.codex/iam-ui-46/browser-https-01.log`, SHA-256
+`2a41d17393f4e19d1488a16dfd8c9557be181dce220ac3d79f0cac5dfb756966`.
+Postflight completed `2026-10-07T06:10:21Z` (13:10:21 Asia/Ho_Chi_Minh). No password,
+private-key bytes, cookie, proof, CSRF, HAR or recorded browser profile retained in evidence.
+Private TLS material and the exact CurrentUser test certificate are retained for the approved
+later tests; expiry/revalidation and drift STOP rules continue to apply.
+
+This qualifies **HTTPS/browser environment readiness only**, not the actual IDEA Web application,
+IAM UI, role/session behavior or Spring Boot HTTPS runtime. Product tests, verifier, deployment,
+merge and T008+ implementation remain NOT-RUN / NOT-STARTED. PR #47 Draft/Open; Issue #46 OPEN.
+T008 remains the next authorized task, then T009 RED before T010 minimum GREEN.

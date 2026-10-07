@@ -6,10 +6,10 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.4 / Draft Backend-first gate metadata successor; technical design unchanged |
+| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.5 / Draft readiness PASS metadata successor; technical design unchanged |
 | Authority / owner / author | INFORMATIVE candidate design / Project user / Codex, CODEX_ONLY |
 | Baseline | Main 4e5244430ea89ffe878819e1279f6e05c60d610a; spec review PASS at e227cb1df60e70a1294628b4f153ad50d8f034c6 |
-| Reviewer / acceptance | Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07, supplied through human conversation / explicit human PG2/PG3 PASS for 5b2fb9f; subsequent human Backend-first PG4 PASS-WITH-ACTIONS with HTTPS/Chrome NOT-RUN, see execution-envelope.md section 5; not inferred from design review |
+| Reviewer / acceptance | Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07, supplied through human conversation / explicit human PG2/PG3 PASS for 5b2fb9f; conditional human PG4 now PASS with actual HTTPS/Chrome/cleanup results, see execution-envelope.md section 6; not inferred from design review |
 | Date / effective / classification / retention | 2026-10-07 Asia/Ho_Chi_Minh / NOT-APPLICABLE / INTERNAL / Git |
 | Change / source / downstream | Issue #46 / [change record](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), [research](research.md) / checklist, tasks, Analyze, gated TDD |
 | Supersession / trigger / evidence | No accepted implementation replaced / permission, role, scope, delivery or interface change / source-inspected design; runtime NOT-RUN |
@@ -18,7 +18,7 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 ## Summary
 
 Current readiness metadata: [controlled envelope](execution-envelope.md) and
-[handoff section 10](integration-readiness.md#10-current-backend-first-execution-gate--2026-10-07)
+[handoff section 11](integration-readiness.md#11-current-readiness-pass--2026-10-07)
 supersede the historical NOT-RUN environment/gate observations below. Accepted technical design
 is unchanged; no T008+ implementation has started. The only source adjustment is the separately
 authorized build-tool JSR305 exclusion proven necessary by the actual offline acquisition graph.
