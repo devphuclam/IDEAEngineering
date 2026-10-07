@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.4` / Draft execution-readiness record; execution BLOCKED |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.5` / Draft readiness successor; PG2/PG3 PASS, execution BLOCKED only on pending trusted Chrome HTTPS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; 93-task/zero-finding Analyze accepted for readiness at aaa5596a / formal applicable PG2/PG3/PG4 not explicitly disposed; execution BLOCKED in section 8 / NOT-APPLICABLE |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; 93-task/zero-finding Analyze accepted at aaa5596a; explicit human PG2/PG3 PASS for 5b2fb9f; PG4 conditional on all readiness results / current section 9 / NOT-APPLICABLE |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / exact-source read-only readiness observations in section 8; runtime qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / read-only predecessor in section 8, authorized environment/package successor in section 9; 009 behavior qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -444,3 +444,44 @@ false missing-dependency blockers. No changes/downloads made to repair the diagn
 
 Application/Maven goals/npm build/test, actual browser/HTTPS, migration/DB writes, certificates,
 listener/setup, verifier, deployment, timer actions, merge and issue closure: **NOT-RUN**.
+
+## 9. Authorized readiness successor — 2026-10-07
+
+Section 8 is the frozen read-only predecessor, not the current execution state. The human next
+authorized exactly four blocker repairs at `5b2fb9fbeec9e2edc23532de7b2a81d84289a664`, and
+explicitly confirmed **PG2 = PASS, PG3 = PASS**. Spec/design/Q14/Q15 and the 93-task package were
+not reopened. The controlled current packet is [execution-envelope.md](execution-envelope.md),
+with exact source, inventory, commands, actual results, remaining blocker and retained log hashes.
+
+| Frontier | Actual disposition |
+|---|---|
+| B01 — applicable gates | PG2/PG3 PASS by explicit human decision; PG4 conditional on the actual readiness matrix, not author inference from prior design review |
+| B02 — new PostgreSQL target | CLOSED: operator created only `idea_ddm_iam_ui_20261007_46`; separate existing roles authenticate; owner/least-privilege catalog checks PASS; public 0 tables, no migration/bootstrap/company rows; retain DB, no DROP |
+| B03 — offline package | CLOSED: exact Linux Node 24.21.0 admitted with full LICENSE; unchanged locked Linux cache; actual effective graph proved JSR305 selected in predecessor Boot tooling, then the authorized minimal exclusion removed it without application-graph changes. Actual Web + offline predecessor executable package PASS; 57 nested hashes, notices and V1–V10 bytes PASS |
+| B04 — trusted HTTPS/browser | PARTIAL: fresh SAN localhost/127.0.0.1 certificate identity frozen; Chrome 154.0.8037.98 and cached Playwright/core 1.62.1 pins PASS. CurrentUser import awaits Windows confirmation; trusted actual Chrome probe NOT-RUN; no TLS bypass or listener started |
+
+Published build/fixture source is `4c98f2266dd159c7609afcab4c95eb4479ae0384`; Linux Node intake
+at `04b8b98a46bf62a5669e38450423505451536902` precedes execution; package oracle at
+`94ff88e546c5fc09061f40187848f0ba8d9069bb`. Later evidence publication is a successor, not the
+executed application SHA. No application Java/test/migration, feature API, permission, schema, dependency
+version, architecture, deployment or primary-user source change; only the necessary build-tool
+JSR305 exclusion and environment-readiness utilities/configuration were added.
+
+T001–T006 are COMPLETE; **T007 / PG4 remain BLOCKED only on B04**. Do not start T008+ yet.
+Once the exact certificate import, published normal-trust browser probe and bounded cleanup
+are PASS, record the conditional explicit PG4 disposition and mark T007 complete. Next is
+**T008 named synthetic fixtures → T009 real eligible-context RED → T010 minimum GREEN**,
+using this envelope; do not create another specification/framework or implicit live Q15 adoption.
+
+Actual predecessor Web/Maven/package readiness is PASS, not IAM UI qualification. Product test
+suites, actual 009 browser/owner/HTTP/PostgreSQL behavior, verifier, deployment, merge and timer
+actions remain NOT-RUN. Raw private-log access remains limited. PR #47 Draft/Open; Issue #46 OPEN.
+
+Publication checks: 52 local file links in the four changed handoff/envelope/plan/task documents
+resolve; 93 unique task IDs remain, exactly six T001–T006 checked; whitespace/scope checks PASS.
+Accepted spec/data/operation/permission/Web contracts, application Java/tests, Web manifests and
+V1–V10 have no delta from 5b2fb9f. `.specify/extensions.yml` remains absent, so no implementation
+post-hook is registered. Primary main independently advanced to
+`59515d2f39291ba991694e35c05d5f29cc1cec5c` with a separate contract-exporter commit; no such
+changes were reset, staged or substituted into this execution. Its package.json retains
+SHA-256 `BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE`.
