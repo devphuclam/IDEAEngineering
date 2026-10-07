@@ -3,7 +3,7 @@
     "project": "IDEA Engineering",
     "documentTitle": "ĐẶC TẢ HỢP ĐỒNG GIAO TIẾP API (API CONTRACT)",
     "documentCode": "IE-API-CONTRACT-DOC-001",
-    "version": "1.1",
+    "version": "1.2",
     "status": "APPROVED BASELINE",
     "author": "IDEA Engineering Architecture Team",
     "revisions": [
@@ -20,6 +20,13 @@
         "commit": "59515d2",
         "author": "Architecture Team",
         "description": "Nâng cấp toàn diện: Bổ sung Từ điển trường dữ liệu chi tiết (Data Dictionary), Ma trận mã lỗi, 3 sơ đồ luồng tuần tự (Workflows), hỗ trợ xuất HTML Offline và cơ chế Smart Update."
+      },
+      {
+        "version": "1.2",
+        "date": "2026-10-07",
+        "commit": "f02c340",
+        "author": "Automated Smart Sync",
+        "description": "Đồng bộ hóa tự động từ mã nguồn Git tại commit f02c340. Đã đối chuẩn 14 endpoints."
       }
     ]
   },
