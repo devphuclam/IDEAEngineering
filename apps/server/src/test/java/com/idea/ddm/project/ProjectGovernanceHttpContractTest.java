@@ -48,6 +48,36 @@ class ProjectGovernanceHttpContractTest {
         new AuthorizationPrerequisiteFixture(fixtures).actorAssignment(who, AuthorizationPrerequisiteFixture.PA_V1,
                 scope, Instant.parse("2026-10-07T05:59:59Z"), null);
     }
+    @Test void actualProjectMembershipAndGroupFlowRetainsExplicitParticipationHistory() throws Exception {
+        var admin=fixtures.identity(IamIntegrationFixtures.Persona.PA_ORGANIZATION);
+        var member=fixtures.identity(IamIntegrationFixtures.Persona.LINH);
+        http.withSignedInClient(admin,(client,context)->http.withSignedInClient(member,(unused,memberContext)->{
+            grant(admin,AuthorizationDecisionService.Scope.organization(admin.organizationId()));
+            var created=post(client,"/api/v1/administration/projects",Map.of("operationId",UUID.randomUUID(),"organizationId",admin.organizationId(),"name","Synthetic participation Project","reason","Explicit synthetic creation"));
+            assertEquals(201,created.statusCode());var project=json.readTree(created.body()).path("projectId").asString();
+            var scope=Map.of("kind","PROJECT","organizationId",admin.organizationId(),"projectId",project);
+            var joined=post(client,"/api/v1/administration/projects/"+project+"/members",Map.of("operationId",UUID.randomUUID(),"scope",scope,"targetActorId",member.actorId(),"expectedProjectVersion",1,"reason","Explicit Project participation"));
+            assertEquals(201,joined.statusCode());var membership=json.readTree(joined.body()).path("membershipId").asString();
+            assertEquals(2,json.readTree(joined.body()).path("parentVersion").asLong());
+            var groupResponse=post(client,"/api/v1/administration/projects/"+project+"/groups",Map.of("operationId",UUID.randomUUID(),"scope",scope,"name","Synthetic business Group","expectedProjectVersion",2,"reason","Explicit Group creation"));
+            assertEquals(201,groupResponse.statusCode());var group=json.readTree(groupResponse.body()).path("groupId").asString();
+            var groupJoined=post(client,"/api/v1/administration/groups/"+group+"/members",Map.of("operationId",UUID.randomUUID(),"scope",scope,"targetActorId",member.actorId(),"expectedGroupVersion",1,"reason","Explicit Group participation"));
+            assertEquals(201,groupJoined.statusCode());var groupMembership=json.readTree(groupJoined.body()).path("membershipId").asString();
+            assertEquals(200,get(client,"/api/v1/administration/projects?limit=50").statusCode());
+            assertEquals(200,get(client,"/api/v1/administration/projects/"+project+"/groups").statusCode());
+            assertEquals(200,get(client,"/api/v1/administration/groups/"+group).statusCode());
+            assertEquals(200,get(client,"/api/v1/administration/groups/"+group+"/members").statusCode());
+            assertEquals(200,post(client,"/api/v1/administration/group-memberships/"+groupMembership+"/end",Map.of("operationId",UUID.randomUUID(),"scope",scope,"expectedVersion",1,"reason","Explicit Group departure")).statusCode());
+            assertEquals(200,post(client,"/api/v1/administration/project-memberships/"+membership+"/end",Map.of("operationId",UUID.randomUUID(),"scope",scope,"expectedVersion",1,"reason","Explicit Project departure")).statusCode());
+            var history=get(client,"/api/v1/administration/projects/"+project+"/members");assertEquals(200,history.statusCode());
+            assertTrue(json.readTree(history.body()).path("items").valueStream().anyMatch(row->membership.equals(row.path("membershipId").asString())&&!row.path("endedAt").isNull()&&!row.path("eligible").asBoolean()));
+            assertEquals(200,post(client,"/api/v1/administration/projects/"+project+"/update",Map.of("operationId",UUID.randomUUID(),"scope",scope,"name","Renamed synthetic Project","expectedVersion",4,"reason","Explicit Project rename")).statusCode());
+            assertEquals(200,post(client,"/api/v1/administration/groups/"+group+"/update",Map.of("operationId",UUID.randomUUID(),"scope",scope,"name","Renamed synthetic Group","expectedVersion",3,"reason","Explicit Group rename")).statusCode());
+            assertEquals(0,count("SELECT count(*) FROM project_membership WHERE project_id='"+project+"' AND actor_id='"+admin.actorId()+"'"));
+            return null;
+        }));
+    }
+    long count(String sql)throws Exception{try(var c=fixtures.app();var q=c.createStatement();var row=q.executeQuery(sql)){assertTrue(row.next());return row.getLong(1);}}
     HttpResponse<String> get(HttpClient client, String path) throws Exception {
         return client.send(HttpRequest.newBuilder(http.uri(path)).GET().build(), HttpResponse.BodyHandlers.ofString());
     }

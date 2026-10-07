@@ -108,7 +108,7 @@ a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/sr
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
-e2e2eb813f2c14cb57a77cd4af1b897fb9e30ddae3e084b5e3648f9e1d425443  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
+687ee8c6774538afec1ed4612dfbcaf2128c0d242257bbb97648ee5b53568802  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
 3c2d2056b7f76444f2ca11cfa44e3cd9ca02f2d694599b37c0b320913cb5e819  apps/server/src/test/java/com/idea/ddm/project/ProjectPrerequisiteFixture.java
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 22c5ae230a253b3a896cb3d7382a8d80b0acd57060334e65b78a19f4c33b0600  apps/web/index.html
