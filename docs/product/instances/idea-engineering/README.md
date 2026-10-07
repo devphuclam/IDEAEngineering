@@ -24,6 +24,12 @@ and are not edited as product content.
 
 ## API contract reading package
 
+The [native Account / Project / Group / RBAC UI integration specification](../../../../specs/009-iam-rbac-ui-integration/spec.md)
+is a separate Draft delivery refinement under [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46).
+Its [confirmed-intent and impact record](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md)
+retains the user decisions and required Core/interface incorporation. Written-spec review is pending;
+no new API contract, implementation, product-gate result or timer action is claimed.
+
 The proposed [API Contract v0.2 CPD detail](api/controlled-product-data.md) refines PH2 CPD-1/CPD-2
 without changing requirements or runtime. Use the [current handoff register](api/handoff/README.md)
 for accepted predecessors versus the review-pending successor. CPD wire details remain UNKNOWN.
