@@ -132,7 +132,7 @@ CREATE TABLE identity_role_definition (
     UNIQUE (definition_id,role_code),
     FOREIGN KEY (management_project_id,management_organization_id) REFERENCES project(project_id,organization_id),
     CHECK ((built_in AND management_scope_kind IS NULL AND management_organization_id IS NULL AND management_project_id IS NULL)
-        OR (NOT built_in AND management_organization_id IS NOT NULL AND
+        OR (NOT built_in AND management_organization_id IS NOT NULL AND management_scope_kind IS NOT NULL AND
             ((management_scope_kind='ORGANIZATION' AND management_project_id IS NULL)
             OR (management_scope_kind='PROJECT' AND management_project_id IS NOT NULL))))
 );
