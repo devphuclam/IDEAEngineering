@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.idea.ddm.iam.IamIntegrationFixtures;
 import com.idea.ddm.iam.IamTestFixture;
+import com.idea.ddm.identity.IdentityAdministration;
+import com.idea.ddm.identity.IdentityRefusal;
 import com.idea.ddm.project.ProjectGovernanceQueries;
 import com.idea.ddm.project.ProjectPrerequisiteFixture;
 import java.time.Clock;
@@ -310,6 +312,21 @@ class AuthorizationDecisionTest {
             assertThrows(UnsupportedOperationException.class, () -> original.paths().clear());
         }
         assertFalse(decide(actor, "account.create", scope, NOW).rbacGranted());
+    }
+
+    @Test void legacyAccountAdapterAlsoRefusesFutureEffectiveAssignmentRatherThanKeepingAParallelPolicy() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
+        var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        final Instant future;
+        try (var connection = fixtures.app(); var statement = connection.createStatement(); var row = statement.executeQuery("SELECT CURRENT_TIMESTAMP")) {
+            assertTrue(row.next());
+            future = row.getTimestamp(1).toInstant().plusSeconds(86400);
+        }
+        roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V1, scope, future, null);
+        var accounts = new IdentityAdministration(fixtures.appDataSource()); // historical internal service boundary, not new HTTP authorization
+        var refusal = assertThrows(IdentityRefusal.class, () -> accounts.create(actor.context(), UUID.randomUUID(),
+                actor.identity().organizationId(), "Synthetic future target", "synthetic.future." + UUID.randomUUID()));
+        assertEquals("NO_APPLICABLE_ASSIGNMENT", refusal.reason());
     }
 
     private void refuseAfterSecurityChange(String sql, boolean oneParameter) throws Exception {
