@@ -87,7 +87,7 @@ cfb1cc5fa0140f336b11f1e8d0b2163e12c87e1b0bce55bdaa5317c5db4422d5  apps/server/sr
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java
 c131c3e442aa77b8f1342f23e07dd50d6ba003a292b3a0e511a70448565f356c  apps/server/src/test/java/com/idea/ddm/identity/AccountBrowserFixtureCommand.java
 6d4d4670c37e9fd1fcd40c09d4071d6fcbd2f3e4bd7e87f236daf45ef2c2ad5a  apps/server/src/test/java/com/idea/ddm/identity/AccountIsolationTest.java
-bac879a24cc169990d0698e05eb0630281601d27ff8d9cd4bf9529c985b78807  apps/server/src/test/java/com/idea/ddm/identity/CredentialProofReissueTest.java
+5bd0f411c9391cef47cc2b7f1fc0f356c2b814bc49072f2de81a9d88aeed9b40  apps/server/src/test/java/com/idea/ddm/identity/CredentialProofReissueTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
 0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
