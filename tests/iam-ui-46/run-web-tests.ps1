@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory=$true)][string]$SourceRoot,
     [Parameter(Mandatory=$true)][ValidatePattern('^[0-9a-f]{40}$')][string]$SourceSha,
     [Parameter(Mandatory=$true)][ValidateSet('RED','PASS')][string]$Oracle,
-    [Parameter(Mandatory=$true)][int]$ExpectedCount
+    [Parameter(Mandatory=$true)][int]$ExpectedCount,
+    [ValidateSet('src/features/projectAdministration/projectAdministration.test.tsx')][string]$TestFile
 )
 $ErrorActionPreference='Stop'
 $SourceRoot=[IO.Path]::GetFullPath($SourceRoot)
@@ -73,7 +74,8 @@ $log=$owned+'/web-private.log'
 $typecheck='NOT-RUN'
 Push-Location $web
 try {
-    & $node ($web+'/node_modules/vitest/vitest.mjs') run --config ($SourceRoot+'/tests/iam-ui-46/vitest.config.mjs') --configLoader native --reporter=json --outputFile $report --no-color *> $log
+    $testSelection=if($TestFile){@($TestFile)}else{@()}
+    & $node ($web+'/node_modules/vitest/vitest.mjs') run @testSelection --config ($SourceRoot+'/tests/iam-ui-46/vitest.config.mjs') --configLoader native --reporter=json --outputFile $report --no-color *> $log
     $status=$LASTEXITCODE
     if($Oracle -eq 'PASS' -and $status -eq 0){
         & $node ($web+'/node_modules/typescript/bin/tsc') -p ($web+'/tsconfig.json') --noEmit *>> $log
