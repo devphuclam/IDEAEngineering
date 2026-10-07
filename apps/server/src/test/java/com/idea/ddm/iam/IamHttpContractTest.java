@@ -67,6 +67,47 @@ class IamHttpContractTest {
         });
     }
 
+    @Test void malformedNewRequestHasSafe400RatherThanExceptionOrRawJacksonDetails() throws Exception {
+        http.withSignedInClient(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY), (client, context) -> {
+            assertMapped(postWithCsrf(client, "/__iam_http_contract/shape", "{\"targetId\":\"PRIVATE_INPUT_SENTINEL\"}"),
+                    400, "INVALID_INPUT");
+            return null;
+        });
+    }
+
+    @Test void legacyIdentityValidationKeepsAcceptedEmptyBodyInsteadOfNewEnvelope() throws Exception {
+        http.withSignedInClient(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY), (client, context) -> {
+            var response = postWithCsrf(client, "/api/v1/identity/accounts", "{}");
+            assertEquals(400, response.statusCode());
+            assertEquals("", response.body());
+            return null;
+        });
+    }
+
+    @Test void anonymousNewAdapterIsRefusedByOrdinarySecurityBeforeApplication() throws Exception {
+        var response = get(HttpClient.newHttpClient(), "/__iam_http_contract/invalid");
+        assertEquals(401, response.statusCode());
+        assertEquals("", response.body());
+    }
+
+    @Test void missingCsrfIsOrdinary403AndCannotBeRewrittenAsApplicationSuccess() throws Exception {
+        http.withSignedInClient(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY), (client, context) -> {
+            var response = client.send(HttpRequest.newBuilder(http.uri("/__iam_http_contract/shape"))
+                    .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString("{}")).build(),
+                    HttpResponse.BodyHandlers.ofString());
+            assertEquals(403, response.statusCode());
+            assertEquals("", response.body());
+            return null;
+        });
+    }
+
+    private HttpResponse<String> postWithCsrf(HttpClient client, String path, String body) throws Exception {
+        var proof = json.readTree(get(client, "/api/v1/identity/csrf").body());
+        return client.send(HttpRequest.newBuilder(http.uri(path)).header("Content-Type", "application/json")
+                .header(proof.path("headerName").asString(), proof.path("token").asString())
+                .POST(HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
+    }
+
     private HttpResponse<String> get(HttpClient client, String path) throws Exception {
         return client.send(HttpRequest.newBuilder(http.uri(path)).GET().build(), HttpResponse.BodyHandlers.ofString());
     }
@@ -84,6 +125,9 @@ class IamHttpContractTest {
     @RestController
     @IamWebConfiguration.Boundary
     static class SyntheticAdapter {
+        record Shape(UUID targetId) {}
+        @PostMapping("/__iam_http_contract/shape")
+        Object shape(@RequestBody Shape request) { throw new IamWebConfiguration.Refusal(IamWebConfiguration.RefusalReason.INVALID_INPUT); }
         @GetMapping("/__iam_http_contract/invalid")
         Object invalid() { throw new IamWebConfiguration.Refusal(IamWebConfiguration.RefusalReason.INVALID_INPUT); }
         @GetMapping("/__iam_http_contract/refuse/{reason}")
