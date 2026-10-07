@@ -251,10 +251,16 @@ PR #47 was OPEN/Draft, base main, head exactly `aaa5596a0ccb7bebf3c8a67e161afde0
 both before inspection and before publication; Issue #46 was OPEN. Reused clean owned worktree
 `C:/Users/TD-999/.codex/worktrees/iam-rbac-ui-spec/IDEAEngineering`, branch
 `codex/iam-rbac-ui-integration-spec`; no additional branch/worktree created. Integrated source
-base remains `4e5244430ea89ffe878819e1279f6e05c60d610a`; primary main remains
-`876689d38aa511363f459dd8be0256485e815fda`. The primary user's modified package.json remains
+base remains `4e5244430ea89ffe878819e1279f6e05c60d610a`; primary main was
+`876689d38aa511363f459dd8be0256485e815fda` at initial inspection. The primary user's package.json remains
 outside this publication with SHA-256 `BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE`.
 The eventual documentation publication commit is a successor, not the inspected source.
+
+Post-publication preservation inspection found primary main had independently advanced to
+`615ebd0fe64ecfd2e09e0f29b19998b529442e76` (only apps/web/package.json changed from 876689d),
+with untracked tools/contract-exporter also present. Neither was authored, staged or removed by
+this readiness task. The user's package.json bytes still match the hash above. Migration tree
+and Server POM are unchanged; no primary successor was substituted for inspected source aaa5596a.
 
 T001 re-read the plan/research/data/three contracts/quickstart. Selected seams are unchanged:
 IAM establishes eligible current Actor/Account/Organization; Project Governance owns Project/Group
