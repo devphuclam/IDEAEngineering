@@ -47,5 +47,11 @@ public class IamWebConfiguration {
             // Correlation is Server-owned, never a caller's header or exception diagnostic.
             return ResponseEntity.status(status).body(new SafeRefusal(refusal.reason().name(), UUID.randomUUID()));
         }
+
+        @ExceptionHandler(Exception.class)
+        ResponseEntity<SafeRefusal> unavailable(Exception ignored) {
+            // Never serialize/log exception text, SQL, request fields, credentials or causes.
+            return refused(new Refusal(RefusalReason.UNAVAILABLE));
+        }
     }
 }
