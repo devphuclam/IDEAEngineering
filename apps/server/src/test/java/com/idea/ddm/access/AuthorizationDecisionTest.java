@@ -329,6 +329,28 @@ class AuthorizationDecisionTest {
         assertEquals("NO_APPLICABLE_ASSIGNMENT", refusal.reason());
     }
 
+    @Test void legacyGrantRecheckUsesCurrentTimeRatherThanFrozenTransactionStart() throws Exception {
+        var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
+        var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
+        try (var connection = fixtures.app()) {
+            connection.setAutoCommit(false); // READ COMMITTED, as the existing Identity command seam
+            var eligible = actors.eligibility().admit(connection, actor.context());
+            final Instant from;
+            try (var statement = connection.createStatement(); var row = statement.executeQuery("SELECT CURRENT_TIMESTAMP")) {
+                assertTrue(row.next());
+                from = row.getTimestamp(1).toInstant().plusNanos(1000);
+            }
+            var assignment = roles.actorAssignment(actor.identity(), AuthorizationPrerequisiteFixture.AA_V1, scope, from, null);
+            try (var query = connection.prepareStatement("SELECT clock_timestamp()>?")) {
+                query.setTimestamp(1, java.sql.Timestamp.from(from));
+                try (var row = query.executeQuery()) { assertTrue(row.next()); assertTrue(row.getBoolean(1), "Current time precondition"); }
+            }
+            assertEquals(Set.of(assignment), AuthorizationDecisionService.organizationGrants(connection, eligible, "account.create").stream()
+                    .map(AuthorizationDecisionService.GrantPath::assignmentId).collect(Collectors.toSet()));
+            connection.rollback();
+        }
+    }
+
     private void refuseAfterSecurityChange(String sql, boolean oneParameter) throws Exception {
         var actor = actors.signIn(IamIntegrationFixtures.Persona.AA_V1);
         var scope = AuthorizationDecisionService.Scope.organization(actor.identity().organizationId());
