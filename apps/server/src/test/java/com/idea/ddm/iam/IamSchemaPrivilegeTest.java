@@ -66,4 +66,17 @@ class IamSchemaPrivilegeTest {
         }
         return content;
     }
+
+    @Test void sealedLegacyRoleCannotGainAnAdditionalPermissionEvenThroughTheOwnerRole() throws Exception {
+        try (var connection = fixtures.migrator(); var statement = connection.createStatement()) {
+            connection.setAutoCommit(false);
+            try {
+                var refusal = assertThrows(java.sql.SQLException.class, () -> statement.executeUpdate(
+                        "INSERT INTO identity_role_permission(role_version_id,permission_code) "
+                        + "VALUES ('9d80f77e-85a6-4c12-a72d-8ef6b7e0a001','account.read')"));
+                assertEquals("42501", refusal.getSQLState());
+            } finally { connection.rollback(); }
+        }
+        assertEquals(predecessorRoles.get("super-administrator@1"), roleContent().get("super-administrator@1"));
+    }
 }
