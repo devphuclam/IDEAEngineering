@@ -1,38 +1,54 @@
 # IDEA Core v0 - API Contract Exporter
 
-Công cụ tự động trích xuất thông số kỹ thuật API từ các tài liệu Markdown (`identity-session.md`, `controlled-product-data.md`, `overview.vi.md`) và OpenAPI JSON của hệ thống IDEA Core, biên dịch ra bộ tài liệu chuẩn:
-1. **File Word (`.docx`)**: Báo cáo kỹ thuật và quản lý chính thức (gồm Trang bìa chuẩn nhận diện thương hiệu IDEA, Tóm tắt quản lý Điều hành, Bảng tổng mục API, và Đặc tả kỹ thuật chi tiết từng endpoint Request/Response/Status code).
-2. **File Excel (`.xlsx`)**: Bảng tính ma trận API 3 sheets (Dashboard chỉ số điều hành, Danh mục ma trận 14 API đầy đủ thuộc tính, Chi tiết Payload/Parameters/Mã lỗi).
+Bộ công cụ tự động trích xuất, đồng bộ và biên dịch đặc tả kỹ thuật API Contract của dự án **IDEA Engineering** ra bộ 3 định dạng tài liệu cao cấp:
+1. **File Word (`.docx`)**: Báo cáo kỹ thuật chuẩn Enterprise (Trang bìa nhận diện thương hiệu IDEA, Lịch sử phiên bản Changelog, Tóm lược điều hành, 3 Sơ đồ tiến trình quy trình Call Flows, Ma trận tổng hợp, và Card UI 6 khối đặc tả chi tiết từng endpoint Request/Response/Data Dictionary/Mã lỗi).
+2. **File Excel (`.xlsx`)**: Bảng tính 4 sheets chuyên nghiệp cho Quản trị & QA Test Cases:
+   - `1. Executive & Changelog`: Dashboard chỉ số và Bảng lịch sử sửa đổi.
+   - `2. API Master Matrix`: Danh mục 14+ endpoint chuẩn hóa, có bộ lọc (Filter) và mã màu trực quan.
+   - `3. Data Dictionary`: Từ điển trường dữ liệu 10 cột chi tiết (mỗi dòng là một trường dữ liệu) phục vụ thiết kế test case.
+   - `4. Error Catalog`: Danh mục mã lỗi hệ thống và hướng dẫn xử lý / quy tắc Retry.
+3. **File HTML (`.html`)**: Trang tra cứu tương tác Offline 100% (Zero-CDN, không cần Internet):
+   - Tìm kiếm thời gian thực (Live Search), lọc theo Module và Trạng thái.
+   - Chuyển đổi giao diện Sáng / Tối (Dark / Light mode).
+   - Nút Copy JSON Payload nhanh chóng vào Clipboard.
+   - Trực quan hóa 3 sơ đồ luồng người dùng (Workflows).
 
 ---
 
 ## 🚀 Hướng dẫn sử dụng trên máy Local
 
-Bạn có thể chạy từ bất kỳ thư mục nào trong dự án với **1 lệnh duy nhất**:
-
-### Cách 1: Chạy trực tiếp bằng Node từ thư mục gốc dự án
-```bash
+### 1. Xuất bộ 3 tài liệu (Export)
+```powershell
 node tools/contract-exporter/export.mjs
 ```
+*(Hoặc `npm run export` trong thư mục `tools/contract-exporter`)*
 
-### Cách 2: Chạy qua npm script
-```bash
-cd tools/contract-exporter
-npm run export
+### 2. Cập nhật & Đồng bộ thông minh từ Git/Markdown (Update / Sync)
+Khi có sự thay đổi về mã nguồn hoặc cập nhật tài liệu kỹ thuật trong repo:
+```powershell
+node tools/contract-exporter/export.mjs --update
+```
+*(Hoặc `npm run update`)*
+Lệnh này sẽ quét lại `docs/` và `openapi.json`, thực hiện Smart Merge vào `data/api-catalog.json`, tự động ghi nhận vết thay đổi phiên bản (Changelog Audit Trail) và xuất ra bộ tài liệu mới nhất.
+
+### 3. Xuất và tự động mở trình duyệt xem HTML
+```powershell
+node tools/contract-exporter/export.mjs --open
 ```
 
 ---
 
-## 📂 Kết quả xuất ra (Output)
+## 📂 Thư mục kết quả (Output)
 
-Tài liệu được lưu tại thư mục:
+Tài liệu được sinh tại thư mục:
 `tools/contract-exporter/output/`
-- `IDEA_Core_v0_API_Contract.docx` (~70 KB)
-- `IDEA_Core_v0_API_Contract.xlsx` (~13 KB)
+- `IDEA_Core_v0_API_Contract.docx` (~79 KB)
+- `IDEA_Core_v0_API_Contract.xlsx` (~21 KB)
+- `IDEA_Core_v0_API_Contract.html` (~62 KB)
 
 ---
 
-## 🔒 An toàn & Độc lập
-- Công cụ được đặt độc lập trong `tools/contract-exporter/`, không làm ảnh hưởng đến cấu trúc `node_modules` hay mã nguồn chính của ứng dụng (`apps/web`, `apps/server`).
-- Thư mục `output/` và `node_modules/` đã được cấu hình trong `.gitignore`, không gây rác lịch sử Git.
-- Tự động gắn mã Git Commit SHA và nhãn thời gian thực tế tại thời điểm xuất file.
+## 🔒 An toàn & Bảo lưu dữ liệu
+- File dữ liệu trung tâm: `tools/contract-exporter/data/api-catalog.json` được theo dõi lịch sử qua Git.
+- Mọi thao tác cập nhật (update) đều bảo lưu các tùy biến, mô tả tiếng Việt và ghi chú nghiệp vụ.
+- Nhánh làm việc: `feat/api-contract-exporter`. Có thể rollback về `main` bất cứ lúc nào với `git checkout main`.
