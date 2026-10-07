@@ -1,54 +1,53 @@
-# IDEA Core v0 - API Contract Exporter
+# IDEA DDM Core v0 — Công cụ xuất đặc tả giao tiếp API (SPEC-API-001)
 
-Bộ công cụ tự động trích xuất, đồng bộ và biên dịch đặc tả kỹ thuật API Contract của dự án **IDEA Engineering** ra bộ 3 định dạng tài liệu cao cấp:
-1. **File Word (`.docx`)**: Báo cáo kỹ thuật chuẩn Enterprise (Trang bìa nhận diện thương hiệu IDEA, Lịch sử phiên bản Changelog, Tóm lược điều hành, 3 Sơ đồ tiến trình quy trình Call Flows, Ma trận tổng hợp, và Card UI 6 khối đặc tả chi tiết từng endpoint Request/Response/Data Dictionary/Mã lỗi).
-2. **File Excel (`.xlsx`)**: Bảng tính 4 sheets chuyên nghiệp cho Quản trị & QA Test Cases:
-   - `1. Executive & Changelog`: Dashboard chỉ số và Bảng lịch sử sửa đổi.
-   - `2. API Master Matrix`: Danh mục 14+ endpoint chuẩn hóa, có bộ lọc (Filter) và mã màu trực quan.
-   - `3. Data Dictionary`: Từ điển trường dữ liệu 10 cột chi tiết (mỗi dòng là một trường dữ liệu) phục vụ thiết kế test case.
+Công cụ trích xuất, đối soát và biên dịch hồ sơ đặc tả giao tiếp API của hệ thống **IDEA DDM Core v0** ra 3 định dạng tài liệu kỹ thuật:
+
+1. **Tài liệu Word (`.docx`)**: Hồ sơ kỹ thuật chuẩn theo format quy định của công ty (`SPEC-001`). Gồm khối metadata người phụ trách, logo tỷ lệ chuẩn, phạm vi kiến trúc, lịch sử phiên bản, 3 sơ đồ luồng phối hợp (Call flows), ma trận tổng hợp và đặc tả chi tiết 14 endpoints (Route, Context, Headers, Data Dictionary, Request/Response Payload, Error Matrix).
+2. **Bảng tính Excel (`.xlsx`)**: Sổ tay kỹ thuật 4 sheets phục vụ quản lý và thiết kế Test Matrix:
+   - `1. Thong tin & Lich su`: Thông tin dự án, quy mô và nhật ký thay đổi phiên bản.
+   - `2. Ma tran API`: Danh mục 14 endpoints đầy đủ thuộc tính, có bộ lọc và cố định dòng tiêu đề.
+   - `3. Data Dictionary`: Từ điển tham số 10 cột chi tiết (mỗi dòng là một trường dữ liệu) cho QA/Dev.
    - `4. Error Catalog`: Danh mục mã lỗi hệ thống và hướng dẫn xử lý / quy tắc Retry.
-3. **File HTML (`.html`)**: Trang tra cứu tương tác Offline 100% (Zero-CDN, không cần Internet):
-   - Tìm kiếm thời gian thực (Live Search), lọc theo Module và Trạng thái.
-   - Chuyển đổi giao diện Sáng / Tối (Dark / Light mode).
-   - Nút Copy JSON Payload nhanh chóng vào Clipboard.
-   - Trực quan hóa 3 sơ đồ luồng người dùng (Workflows).
+3. **Tài liệu HTML (`.html`)**: Trang tra cứu tương tác offline (Zero-CDN, không phụ thuộc Internet):
+   - Thiết kế tinh gọn theo chuẩn GitHub Docs / Stripe Docs (không dùng giao diện dashboard màu mè).
+   - Tìm kiếm thời gian thực theo mã API, đường dẫn URL, tên trường.
+   - Chuyển đổi giao diện Sáng / Tối dịu mắt.
+   - Nút sao chép JSON Payload trực tiếp vào bộ nhớ tạm.
 
 ---
 
-## 🚀 Hướng dẫn sử dụng trên máy Local
+## Hướng dẫn sử dụng trên máy cục bộ
 
-### 1. Xuất bộ 3 tài liệu (Export)
+### 1. Xuất bộ 3 tài liệu
 ```powershell
 node tools/contract-exporter/export.mjs
 ```
 *(Hoặc `npm run export` trong thư mục `tools/contract-exporter`)*
 
-### 2. Cập nhật & Đồng bộ thông minh từ Git/Markdown (Update / Sync)
-Khi có sự thay đổi về mã nguồn hoặc cập nhật tài liệu kỹ thuật trong repo:
+### 2. Cập nhật và đồng bộ đối soát với mã nguồn
+Khi có cập nhật tài liệu kỹ thuật hoặc route mới trong repository:
 ```powershell
 node tools/contract-exporter/export.mjs --update
 ```
 *(Hoặc `npm run update`)*
-Lệnh này sẽ quét lại `docs/` và `openapi.json`, thực hiện Smart Merge vào `data/api-catalog.json`, tự động ghi nhận vết thay đổi phiên bản (Changelog Audit Trail) và xuất ra bộ tài liệu mới nhất.
+Lệnh này sẽ quét lại `docs/` và `openapi.json`, thực hiện Smart Merge vào `data/api-catalog.json`, tự động ghi nhận phiên bản mới vào lịch sử sửa đổi và xuất ra tài liệu mới.
 
-### 3. Xuất và tự động mở trình duyệt xem HTML
+### 3. Xuất và tự động mở trình duyệt xem file HTML
 ```powershell
 node tools/contract-exporter/export.mjs --open
 ```
 
 ---
 
-## 📂 Thư mục kết quả (Output)
+## Thư mục kết quả (Output)
 
-Tài liệu được sinh tại thư mục:
-`tools/contract-exporter/output/`
-- `IDEA_Core_v0_API_Contract.docx` (~79 KB)
+Tài liệu được lưu tại thư mục: `tools/contract-exporter/output/`
+- `IDEA_Core_v0_API_Contract.docx` (~88 KB)
 - `IDEA_Core_v0_API_Contract.xlsx` (~21 KB)
-- `IDEA_Core_v0_API_Contract.html` (~62 KB)
+- `IDEA_Core_v0_API_Contract.html` (~63 KB)
 
 ---
 
-## 🔒 An toàn & Bảo lưu dữ liệu
+## Cơ chế lưu trữ và quản lý phiên bản
 - File dữ liệu trung tâm: `tools/contract-exporter/data/api-catalog.json` được theo dõi lịch sử qua Git.
-- Mọi thao tác cập nhật (update) đều bảo lưu các tùy biến, mô tả tiếng Việt và ghi chú nghiệp vụ.
-- Nhánh làm việc: `feat/api-contract-exporter`. Có thể rollback về `main` bất cứ lúc nào với `git checkout main`.
+- Nhánh làm việc: `feat/api-contract-exporter`. Có thể rollback về nhánh `main` bất cứ lúc nào với lệnh: `git checkout main`.

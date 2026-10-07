@@ -57,9 +57,8 @@ function loadCatalog() {
 
 // 3. Update / Smart Merge function
 function updateCatalog() {
-  console.log('🔄 Đang quét các tài liệu Markdown & OpenAPI trong kho mã nguồn...');
+  console.log('--- Đang quét và đồng bộ dữ liệu từ mã nguồn repository ---');
   const catalog = loadCatalog();
-  let updatedCount = 0;
 
   // Scan openapi.json if exists
   const openapiPath = path.resolve(REPO_ROOT, 'apps/server/src/main/resources/dev-access/openapi.json');
@@ -67,10 +66,10 @@ function updateCatalog() {
     try {
       const openapi = JSON.parse(fs.readFileSync(openapiPath, 'utf-8'));
       if (openapi.paths) {
-        console.log(`   - Phát hiện OpenAPI Specification: ${Object.keys(openapi.paths).length} routes.`);
+        console.log(`[OK] Đã quét OpenAPI Specification (${Object.keys(openapi.paths).length} routes)`);
       }
     } catch (e) {
-      console.warn('   ⚠️ Không đọc được openapi.json:', e.message);
+      console.warn('[CẢNH BÁO] Không đọc được openapi.json:', e.message);
     }
   }
 
@@ -79,12 +78,10 @@ function updateCatalog() {
   const cpdMdPath = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/controlled-product-data.md');
 
   if (fs.existsSync(identityMdPath)) {
-    console.log('   - Đã đồng bộ đối soát với docs/api/identity-session.md');
-    updatedCount++;
+    console.log('[OK] Đã đối chuẩn tài liệu kỹ thuật: identity-session.md');
   }
   if (fs.existsSync(cpdMdPath)) {
-    console.log('   - Đã đồng bộ đối soát với docs/api/controlled-product-data.md');
-    updatedCount++;
+    console.log('[OK] Đã đối chuẩn tài liệu kỹ thuật: controlled-product-data.md');
   }
 
   // Record a new revision entry if commit changed
@@ -94,18 +91,18 @@ function updateCatalog() {
     catalog.metadata.version = nextVer;
     catalog.metadata.revisions.push({
       version: nextVer,
-      date: new Date().toISOString().slice(0, 10),
+      date: exportDate,
       commit: gitCommit,
-      author: 'Automated Smart Sync',
-      description: `Đồng bộ hóa tự động từ mã nguồn Git tại commit ${gitCommit}. Đã đối chuẩn ${catalog.endpoints.length} endpoints.`
+      author: catalog.metadata.author,
+      description: `Đồng bộ hóa tự động từ mã nguồn Git tại commit ${gitCommit}. Đối chuẩn ${catalog.endpoints.length} endpoints.`
     });
-    console.log(`   ✨ Đã ghi nhận phiên bản mới: v${nextVer} (Commit: ${gitCommit})`);
+    console.log(`[CẬP NHẬT] Ghi nhận phiên bản mới: v${nextVer} (Commit: ${gitCommit})`);
   } else {
-    console.log(`   ℹ️ Bản ghi hiện tại đã khớp commit SHA ${gitCommit}. Bảo lưu lịch sử phiên bản.`);
+    console.log(`[THÔNG TIN] Phiên bản hiện tại đã khớp commit SHA ${gitCommit}.`);
   }
 
   fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2), 'utf-8');
-  console.log(`✅ Đã cập nhật và lưu trữ thành công vào ${CATALOG_PATH}\n`);
+  console.log(`[HOÀN TẤT] Dữ liệu được lưu tại ${CATALOG_PATH}\n`);
   return catalog;
 }
 
@@ -117,12 +114,15 @@ async function generateDocx(catalog) {
     logoImage = fs.readFileSync(logoPath);
   }
 
-  const tableBorder = {
-    top: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-    bottom: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-    left: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-    right: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+  const borderThin = {
+    top: { style: BorderStyle.SINGLE, size: 1, color: "D1D5DB" },
+    bottom: { style: BorderStyle.SINGLE, size: 1, color: "D1D5DB" },
+    left: { style: BorderStyle.SINGLE, size: 1, color: "D1D5DB" },
+    right: { style: BorderStyle.SINGLE, size: 1, color: "D1D5DB" },
   };
+
+  const headerShading = { type: ShadingType.CLEAR, fill: "2D3748" };
+  const subHeaderShading = { type: ShadingType.CLEAR, fill: "F3F4F6" };
 
   const doc = new Document({
     sections: [
@@ -133,7 +133,7 @@ async function generateDocx(catalog) {
               new Paragraph({
                 alignment: AlignmentType.RIGHT,
                 children: [
-                  new TextRun({ text: "IDEA Engineering — Tài liệu Đặc tả Hợp đồng API (API Contract)", size: 18, color: "888888", italics: true }),
+                  new TextRun({ text: "IDEA Engineering — Đặc tả giao tiếp API (SPEC-API-001)", size: 18, color: "6B7280", italics: true }),
                 ],
               }),
             ],
@@ -145,196 +145,223 @@ async function generateDocx(catalog) {
               new Paragraph({
                 alignment: AlignmentType.SPACE_BETWEEN,
                 children: [
-                  new TextRun({ text: `Bản phát hành ngày ${exportDate} | Git: ${gitCommit}`, size: 16, color: "888888" }),
-                  new TextRun({ text: "Trang ", size: 16, color: "888888" }),
-                  new TextRun({ children: [PageNumber.CURRENT], size: 16, color: "888888" }),
+                  new TextRun({ text: `Bản phát hành nội bộ • Ngày ${exportDate} • Git: ${gitCommit}`, size: 16, color: "6B7280" }),
+                  new TextRun({ text: "Trang ", size: 16, color: "6B7280" }),
+                  new TextRun({ children: [PageNumber.CURRENT], size: 16, color: "6B7280" }),
                 ],
               }),
             ],
           }),
         },
         children: [
-          // --- TRANG BÌA ---
-          new Paragraph({ spacing: { before: 600, after: 300 } }),
+          // --- KHỐI METADATA ĐẦU TRANG THEO CHUẨN SPEC-001 ---
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 60, type: WidthType.PERCENTAGE },
+                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: "Tên dự án: ", bold: true }), new TextRun(catalog.metadata.project)] }),
+                      new Paragraph({ children: [new TextRun({ text: "Mã tài liệu: ", bold: true }), new TextRun(catalog.metadata.documentCode)] }),
+                      new Paragraph({ children: [new TextRun({ text: "Mã Git Commit: ", bold: true }), new TextRun(gitCommit)] }),
+                    ]
+                  }),
+                  new TableCell({
+                    width: { size: 40, type: WidthType.PERCENTAGE },
+                    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                    children: [
+                      new Paragraph({ children: [new TextRun({ text: "Người phụ trách: ", bold: true }), new TextRun(catalog.metadata.author)] }),
+                      new Paragraph({ children: [new TextRun({ text: "Phòng ban: ", bold: true }), new TextRun(catalog.metadata.department)] }),
+                      new Paragraph({ children: [new TextRun({ text: "Ngày soạn thảo: ", bold: true }), new TextRun(exportDate)] }),
+                    ]
+                  }),
+                ]
+              })
+            ]
+          }),
+
+          new Paragraph({ spacing: { before: 500, after: 200 } }),
+
+          // Logo IDEA
           ...(logoImage ? [
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
                 new ImageRun({
                   data: logoImage,
-                  transformation: { width: 130, height: 130 },
+                  transformation: { width: 164, height: 70 },
                 }),
               ],
             })
           ] : []),
+
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 300, after: 150 },
+            spacing: { before: 300, after: 100 },
             children: [
               new TextRun({
-                text: "DỰ ÁN IDEA ENGINEERING",
+                text: "ĐẶC TẢ GIAO TIẾP API",
+                size: 34,
+                bold: true,
+                color: "111827",
+              }),
+            ],
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 50, after: 150 },
+            children: [
+              new TextRun({
+                text: "HỆ THỐNG IDEA DDM CORE v0",
                 size: 26,
                 bold: true,
-                color: "1F497D",
+                color: "1E40AF",
               }),
             ],
           }),
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 100, after: 150 },
+            spacing: { before: 50, after: 400 },
             children: [
               new TextRun({
-                text: "ĐẶC TẢ HỢP ĐỒNG GIAO TIẾP API",
-                size: 36,
-                bold: true,
-                color: "0F243E",
-              }),
-            ],
-          }),
-          new Paragraph({
-            alignment: AlignmentType.CENTER,
-            spacing: { before: 100, after: 400 },
-            children: [
-              new TextRun({
-                text: "Hồ sơ chuẩn hóa giao tiếp kỹ thuật giữa Backend, Frontend, Desktop và Đối tác tích hợp",
+                text: catalog.metadata.subtitle,
                 size: 20,
                 italics: true,
-                color: "555555",
+                color: "4B5563",
               }),
             ],
           }),
 
-          // Metadata Table
+          // Khung Mục lục nội dung (TOC Outline)
           new Table({
             alignment: AlignmentType.CENTER,
             width: { size: 90, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
                 children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Mã tài liệu kiểm soát:", bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(catalog.metadata.documentCode)] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Phiên bản hợp đồng:", bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(`v${catalog.metadata.version} (${catalog.metadata.status})`)] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Thời điểm xuất bản:", bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(exportDateTime)] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Mã nguồn Git Commit SHA:", bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(gitCommit)] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Đơn vị phê duyệt & ban hành:", bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(catalog.metadata.author)] })] }),
-                ],
-              }),
-            ],
+                  new TableCell({
+                    shading: { type: ShadingType.CLEAR, fill: "F9FAFB" },
+                    borders: borderThin,
+                    children: [
+                      new Paragraph({ spacing: { before: 100, after: 100 }, children: [new TextRun({ text: "MỤC LỤC TÀI LIỆU", bold: true, color: "1F2937" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "1. Phạm vi và quy ước kiến trúc chung" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "2. Lịch sử thay đổi phiên bản (Changelog)" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "3. Quy trình phối hợp đa thành phần (Call flows)" })] }),
+                      new Paragraph({ spacing: { after: 60 }, children: [new TextRun({ text: "4. Ma trận tổng hợp các endpoint Core v0" })] }),
+                      new Paragraph({ spacing: { after: 100 }, children: [new TextRun({ text: "5. Đặc tả chi tiết từng giao tiếp kỹ thuật" })] }),
+                    ]
+                  })
+                ]
+              })
+            ]
           }),
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- PHẦN 1: LỊCH SỬ THAY ĐỔI & TỔNG QUAN ĐIỀU HÀNH ---
+          // --- 1. PHẠM VI VÀ QUY ƯỚC KIẾN TRÚC CHUNG ---
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
-            children: [new TextRun({ text: "PHẦN 1. LỊCH SỬ PHIÊN BẢN & TỔNG QUAN ĐIỀU HÀNH", bold: true, color: "1F497D" })],
+            children: [new TextRun({ text: "1. Phạm vi và quy ước kiến trúc chung", bold: true, color: "111827" })],
+          }),
+          new Paragraph({
+            spacing: { after: 120 },
+            children: [
+              new TextRun({
+                text: "Tài liệu này xác lập các quy ước kỹ thuật ràng buộc giữa các thành phần phần mềm thuộc hệ thống IDEA DDM Core v0, " +
+                  "bao gồm Web Application (React), Desktop Workstation Adapter (C#), REST Application Server (Spring Boot) và Cổng truyền dữ liệu tệp tin (File Gateway Vault). " +
+                  "Mọi thông số được kiểm chuẩn trực tiếp dựa trên mã nguồn và các biên bản kiểm thử trong Git."
+              })
+            ],
           }),
 
           new Paragraph({
             heading: HeadingLevel.HEADING_2,
             spacing: { before: 150, after: 100 },
-            children: [new TextRun({ text: "1.1 Bảng lịch sử thay đổi phiên bản (Changelog Matrix)", bold: true, color: "333333" })],
+            children: [new TextRun({ text: "1.1 Bối cảnh phân tầng kiến trúc", bold: true, color: "374151" })],
           }),
-
-          new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            rows: [
-              new TableRow({
-                children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Phiên bản", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Ngày", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Git Commit", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Tác giả", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả nội dung cập nhật", bold: true, color: "FFFFFF" })] })] }),
-                ],
-              }),
-              ...catalog.metadata.revisions.map(rev => new TableRow({
-                children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `v${rev.version}`, bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(rev.date)] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(rev.commit)] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(rev.author)] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(rev.description)] })] }),
-                ],
-              })),
+          new Paragraph({
+            spacing: { after: 100 },
+            children: [
+              new TextRun({ text: "Hệ thống tách biệt triệt để giữa Control Plane (mặt phẳng điều khiển nghiệp vụ) và Data Plane (mặt phẳng truyền dữ liệu nhị phân). " +
+                "REST Application Server chỉ xử lý thông tin định danh, quyền hạn, phiên làm việc và siêu dữ liệu (Metadata) sản phẩm. " +
+                "Các tệp tin CAD và bản vẽ có dung lượng lớn được vận chuyển độc lập qua File Gateway Vault dưới dạng các khối nhị phân 1 MiB có kèm mã băm SHA-256." })
             ],
           }),
 
           new Paragraph({
             heading: HeadingLevel.HEADING_2,
-            spacing: { before: 250, after: 100 },
-            children: [new TextRun({ text: "1.2 Thống kê tiến độ & Khối lượng API", bold: true, color: "333333" })],
+            spacing: { before: 150, after: 100 },
+            children: [new TextRun({ text: "1.2 Quy ước bảo mật phiên làm việc và chống giả mạo", bold: true, color: "374151" })],
+          }),
+          new Paragraph({
+            spacing: { after: 80 },
+            children: [
+              new TextRun({ text: "• Phiên làm việc (Session Cookie): ", bold: true }),
+              new TextRun("Xác thực thông qua cookie HTTP IDEA_SESSION (cờ HttpOnly, Secure, SameSite=Strict). Ứng dụng client tuyệt đối không lưu token vào LocalStorage/SessionStorage nhằm loại bỏ nguy cơ tấn công XSS. Thời hạn phiên: 2 giờ không hoạt động (idle) và tối đa 8 giờ (absolute).")
+            ],
+          }),
+          new Paragraph({
+            spacing: { after: 80 },
+            children: [
+              new TextRun({ text: "• Phòng chống CSRF: ", bold: true }),
+              new TextRun("Mọi phương thức thay đổi trạng thái (POST, PUT, DELETE) bắt buộc phải đính kèm Header X-CSRF-TOKEN đã được cấp phát hợp lệ từ endpoint GET /api/v1/identity/csrf.")
+            ],
+          }),
+          new Paragraph({
+            spacing: { after: 150 },
+            children: [
+              new TextRun({ text: "• Thẩm quyền phân quyền (RBAC): ", bold: true }),
+              new TextRun("Máy chủ xác định danh tính ActorId và quyền hạn thực tế độc lập dựa trên phiên làm việc; Client không được phép tự chỉ định quyền hạn trong request payload.")
+            ],
           }),
 
+          // --- 2. LỊCH SỬ THAY ĐỔI PHIÊN BẢN ---
+          new Paragraph({
+            heading: HeadingLevel.HEADING_1,
+            spacing: { before: 200, after: 150 },
+            children: [new TextRun({ text: "2. Lịch sử thay đổi phiên bản (Changelog)", bold: true, color: "111827" })],
+          }),
           new Table({
             width: { size: 100, type: WidthType.PERCENTAGE },
             rows: [
               new TableRow({
                 children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Chỉ số thống kê", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Số lượng / Tỷ lệ", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Ghi chú đánh giá", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Phiên bản", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Ngày", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Git Commit", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Người sửa", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 38, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Nội dung cập nhật", bold: true, color: "FFFFFF" })] })] }),
                 ],
               }),
-              new TableRow({
+              ...catalog.metadata.revisions.map(rev => new TableRow({
                 children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun("Tổng số Endpoint đã chuẩn hóa")] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${catalog.endpoints.length} Endpoint`, bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun("Phủ trọn vẹn Phase 1 và mở đầu Phase 2")] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: `v${rev.version}`, bold: true })] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.date)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.commit)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.author)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.description)] })] }),
                 ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun("Đã kiểm thử thành công (PASS)")] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${catalog.endpoints.filter(e => e.status.includes('PASS')).length} Endpoint (${((catalog.endpoints.filter(e => e.status.includes('PASS')).length / catalog.endpoints.length) * 100).toFixed(1)}%)`, bold: true, color: "008000" })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun("Đạt chuẩn 100% Phase 1 (Auth, IAM, Vault Transfer)")] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun("Đang thiết kế (DESIGN)")] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${catalog.endpoints.filter(e => e.status.includes('DESIGN')).length} Endpoint (${((catalog.endpoints.filter(e => e.status.includes('DESIGN')).length / catalog.endpoints.length) * 100).toFixed(1)}%)`, bold: true, color: "D9534F" })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun("Chuẩn bị triển khai cho Phase 2 (CPD PDM)")] })] }),
-                ],
-              }),
+              })),
             ],
           }),
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- PHẦN 2: SƠ ĐỒ LUỒNG TIẾN TRÌNH KỸ THUẬT ---
+          // --- 3. QUY TRÌNH PHỐI HỢP ĐA THÀNH PHẦN ---
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
-            children: [new TextRun({ text: "PHẦN 2. SƠ ĐỒ TIẾN TRÌNH KỸ THUẬT (CALL FLOWS)", bold: true, color: "1F497D" })],
+            children: [new TextRun({ text: "3. Quy trình phối hợp đa thành phần (Call flows)", bold: true, color: "111827" })],
           }),
           new Paragraph({
-            spacing: { after: 150 },
+            spacing: { after: 120 },
             children: [
               new TextRun({
-                text: "Để đảm bảo các đội ngũ phát triển (Frontend, Desktop, Backend) phối hợp nhịp nhàng, " +
-                  "phần này trực quan hóa thứ tự gọi và kết quả trao đổi trạng thái cho 3 chu trình cốt lõi của hệ thống."
+                text: "Phần này chuẩn hóa trình tự giao tiếp giữa các tác tử và máy chủ cho 3 chu trình hoạt động nền tảng của hệ thống."
               })
             ],
           }),
@@ -342,46 +369,46 @@ async function generateDocx(catalog) {
           ...catalog.workflows.flatMap(wf => [
             new Paragraph({
               heading: HeadingLevel.HEADING_2,
-              spacing: { before: 200, after: 100 },
-              children: [new TextRun({ text: `[${wf.id}] ${wf.title}`, bold: true, color: "1F497D" })],
+              spacing: { before: 180, after: 80 },
+              children: [new TextRun({ text: `${wf.id}. ${wf.title}`, bold: true, color: "1E40AF" })],
             }),
             new Paragraph({
               spacing: { after: 100 },
-              children: [new TextRun({ text: wf.description, italics: true })],
+              children: [new TextRun({ text: wf.description, italics: true, color: "4B5563" })],
             }),
             new Table({
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
                 new TableRow({
                   children: [
-                    new TableCell({ width: { size: 8, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "333333" }, children: [new Paragraph({ children: [new TextRun({ text: "Bước", bold: true, color: "FFFFFF" })] })] }),
-                    new TableCell({ width: { size: 18, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "333333" }, children: [new Paragraph({ children: [new TextRun({ text: "Bên gửi (Caller)", bold: true, color: "FFFFFF" })] })] }),
-                    new TableCell({ width: { size: 24, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "333333" }, children: [new Paragraph({ children: [new TextRun({ text: "Hành động & Endpoint", bold: true, color: "FFFFFF" })] })] }),
-                    new TableCell({ width: { size: 15, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "333333" }, children: [new Paragraph({ children: [new TextRun({ text: "Bên nhận", bold: true, color: "FFFFFF" })] })] }),
-                    new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "333333" }, children: [new Paragraph({ children: [new TextRun({ text: "Kết quả & Dữ liệu trao đổi", bold: true, color: "FFFFFF" })] })] }),
+                    new TableCell({ width: { size: 8, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Bước", bold: true, color: "FFFFFF" })] })] }),
+                    new TableCell({ width: { size: 18, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Bên gửi (Caller)", bold: true, color: "FFFFFF" })] })] }),
+                    new TableCell({ width: { size: 26, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Hành động & Endpoint", bold: true, color: "FFFFFF" })] })] }),
+                    new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Bên nhận", bold: true, color: "FFFFFF" })] })] }),
+                    new TableCell({ width: { size: 34, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Kết quả & Dữ liệu trao đổi", bold: true, color: "FFFFFF" })] })] }),
                   ],
                 }),
                 ...wf.steps.map(s => new TableRow({
                   children: [
-                    new TableCell({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${s.step}`, bold: true })] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [new TextRun(s.actor)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: s.action, bold: true }), new TextRun(`\n${s.endpoint}`) ] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [new TextRun(s.receiver)] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [new TextRun(s.outcome)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${s.step}`, bold: true })] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(s.actor)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: s.action, bold: true }), new TextRun(`\n${s.endpoint}`) ] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(s.receiver)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(s.outcome)] })] }),
                   ],
                 })),
               ],
             }),
-            new Paragraph({ spacing: { after: 150 } }),
+            new Paragraph({ spacing: { after: 120 } }),
           ]),
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- PHẦN 3: MA TRẬN TỔNG HỢP TOÀN BỘ API ---
+          // --- 4. MA TRẬN TỔNG HỢP CÁC ENDPOINT ---
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
-            children: [new TextRun({ text: "PHẦN 3. MA TRẬN TỔNG HỢP TOÀN BỘ API CORE V0", bold: true, color: "1F497D" })],
+            children: [new TextRun({ text: "4. Ma trận tổng hợp các endpoint Core v0", bold: true, color: "111827" })],
           }),
 
           new Table({
@@ -389,33 +416,26 @@ async function generateDocx(catalog) {
             rows: [
               new TableRow({
                 children: [
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Mã", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Tên chức năng", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Method", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Đường dẫn URL", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Trạng thái", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mã", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 24, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên chức năng", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Method", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 28, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Đường dẫn URL", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Trạng thái", bold: true, color: "FFFFFF" })] })] }),
                 ],
               }),
               ...catalog.endpoints.map(item => new TableRow({
                 children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: item.code, bold: true })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(item.name)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.code, bold: true })] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.name)] })] }),
                   new TableCell({
-                    shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "E6F4EA" : "E8F0FE" },
-                    children: [new Paragraph({ children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "137333" : "1A73E8" })] })]
+                    shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "F0FDF4" : "EFF6FF" },
+                    borders: borderThin,
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "15803D" : "1D4ED8" })] })]
                   }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(item.path)] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun(item.auth)] })] }),
-                  new TableCell({
-                    children: [new Paragraph({
-                      children: [new TextRun({
-                        text: item.status.includes('PASS') ? "✅ Sẵn sàng" : "⏳ Thiết kế",
-                        bold: true,
-                        color: item.status.includes('PASS') ? "008000" : "D9534F"
-                      })]
-                    })]
-                  }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.path, font: "Consolas", size: 18 })] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.auth)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true })] })] }),
                 ],
               })),
             ],
@@ -423,128 +443,137 @@ async function generateDocx(catalog) {
 
           new Paragraph({ pageBreakBefore: true }),
 
-          // --- PHẦN 4: ĐẶC TẢ CHI TIẾT TỪNG API (CARD UI 6 KHỐI) ---
+          // --- 5. ĐẶC TẢ CHI TIẾT TỪNG GIAO TIẾP KỸ THUẬT ---
           new Paragraph({
             heading: HeadingLevel.HEADING_1,
             spacing: { before: 200, after: 150 },
-            children: [new TextRun({ text: "PHẦN 4. ĐẶC TẢ KỸ THUẬT CHI TIẾT TỪNG API", bold: true, color: "1F497D" })],
+            children: [new TextRun({ text: "5. Đặc tả chi tiết từng giao tiếp kỹ thuật", bold: true, color: "111827" })],
           }),
 
           ...catalog.endpoints.flatMap(item => [
-            // 1. Header Card
             new Paragraph({
               heading: HeadingLevel.HEADING_2,
-              spacing: { before: 300, after: 80 },
+              spacing: { before: 250, after: 80 },
               children: [
-                new TextRun({ text: `[${item.code}] `, bold: true, color: "1F497D" }),
-                new TextRun({ text: `${item.name}`, bold: true, color: "0F243E" }),
+                new TextRun({ text: `[${item.code}] `, bold: true, color: "1E40AF" }),
+                new TextRun({ text: `${item.name}`, bold: true, color: "111827" }),
               ],
             }),
 
+            // Route Information Table
             new Table({
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
                 new TableRow({
                   children: [
                     new TableCell({
-                      width: { size: 15, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "E6F4EA" : "E8F0FE" },
-                      children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "137333" : "1A73E8" })] })]
+                      width: { size: 12, type: WidthType.PERCENTAGE },
+                      shading: { type: ShadingType.CLEAR, fill: item.method === 'GET' ? "F0FDF4" : "EFF6FF" },
+                      borders: borderThin,
+                      children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: item.method, bold: true, color: item.method === 'GET' ? "15803D" : "1D4ED8" })] })]
                     }),
                     new TableCell({
                       width: { size: 60, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: "F9F9F9" },
-                      children: [new Paragraph({ children: [new TextRun({ text: item.path, bold: true, font: "Consolas" })] })]
+                      shading: subHeaderShading,
+                      borders: borderThin,
+                      children: [new Paragraph({ children: [new TextRun({ text: item.path, bold: true, font: "Consolas", size: 18 })] })]
                     }),
                     new TableCell({
-                      width: { size: 25, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: "F9F9F9" },
-                      children: [new Paragraph({ children: [new TextRun({ text: item.auth, italics: true })] })]
+                      width: { size: 28, type: WidthType.PERCENTAGE },
+                      shading: subHeaderShading,
+                      borders: borderThin,
+                      children: [new Paragraph({ children: [new TextRun({ text: item.status, bold: true })] })]
                     }),
                   ],
                 }),
               ],
             }),
 
-            // 2. Business Context & Invariants
+            // Context & State Effects
             new Table({
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
                 new TableRow({
                   children: [
-                    new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả chức năng:", bold: true })] })] }),
-                    new TableCell({ width: { size: 78, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun(item.description)] })] }),
+                    new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả chức năng:", bold: true })] })] }),
+                    new TableCell({ width: { size: 78, type: WidthType.PERCENTAGE }, borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.description)] })] }),
                   ],
                 }),
                 new TableRow({
                   children: [
-                    new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Điều kiện tiên quyết:", bold: true })] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [new TextRun(item.preconditions)] })] }),
+                    new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn yêu cầu:", bold: true })] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.auth)] })] }),
                   ],
                 }),
                 new TableRow({
                   children: [
-                    new TableCell({ shading: { type: ShadingType.CLEAR, fill: "F2F2F2" }, children: [new Paragraph({ children: [new TextRun({ text: "Tác động trạng thái:", bold: true })] })] }),
-                    new TableCell({ children: [new Paragraph({ children: [new TextRun(item.stateEffects)] })] }),
+                    new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Điều kiện tiên quyết:", bold: true })] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.preconditions)] })] }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tác động trạng thái:", bold: true })] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.stateEffects)] })] }),
                   ],
                 }),
               ],
             }),
 
-            // 3. Required Headers
+            // Headers Table
             ...(item.headers && item.headers.length > 0 ? [
-              new Paragraph({ spacing: { before: 100, after: 60 }, children: [new TextRun({ text: "• HTTP Headers bắt buộc:", bold: true, color: "333333" })] }),
+              new Paragraph({ spacing: { before: 80, after: 50 }, children: [new TextRun({ text: "HTTP Headers yêu cầu:", bold: true, color: "374151" })] }),
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 rows: [
                   new TableRow({
                     children: [
-                      new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "EAEAEA" }, children: [new Paragraph({ children: [new TextRun({ text: "Header Name", bold: true })] })] }),
-                      new TableCell({ width: { size: 15, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "EAEAEA" }, children: [new Paragraph({ children: [new TextRun({ text: "Required", bold: true })] })] }),
-                      new TableCell({ width: { size: 55, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "EAEAEA" }, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả / Giá trị", bold: true })] })] }),
+                      new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên Header", bold: true })] })] }),
+                      new TableCell({ width: { size: 16, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })] }),
+                      new TableCell({ width: { size: 54, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả / Giá trị", bold: true })] })] }),
                     ],
                   }),
                   ...item.headers.map(h => new TableRow({
                     children: [
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: h.name, font: "Consolas", bold: true })] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(h.required ? "Bắt buộc" : "Tùy chọn")] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(h.description)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: h.name, font: "Consolas", bold: true })] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(h.required ? "Bắt buộc" : "Tùy chọn")] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(h.description)] })] }),
                     ],
                   })),
                 ],
               }),
             ] : []),
 
-            // 4. Data Dictionary Table
+            // Data Dictionary Table
             ...(item.fields && item.fields.length > 0 ? [
-              new Paragraph({ spacing: { before: 120, after: 60 }, children: [new TextRun({ text: "• Từ điển trường dữ liệu (Data Dictionary):", bold: true, color: "333333" })] }),
+              new Paragraph({ spacing: { before: 100, after: 50 }, children: [new TextRun({ text: "Từ điển trường dữ liệu (Data Dictionary):", bold: true, color: "374151" })] }),
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 rows: [
                   new TableRow({
                     children: [
-                      new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Tên trường", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Kiểu", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Req", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 40, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "1F497D" }, children: [new Paragraph({ children: [new TextRun({ text: "Ràng buộc & Mô tả nghiệp vụ", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 24, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tên trường", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Kiểu", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 10, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Req", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 38, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Ràng buộc & Diễn giải kỹ thuật", bold: true, color: "FFFFFF" })] })] }),
                     ],
                   }),
                   ...item.fields.map(f => new TableRow({
                     children: [
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: f.name, font: "Consolas", bold: true })] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(f.in)] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(f.type)] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(f.required ? "Có" : "Không")] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${f.description}\n`, bold: false }), new TextRun({ text: `Ràng buộc: ${f.validation}`, italics: true, color: "555555" })] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: f.name, font: "Consolas", bold: true })] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.in)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.type)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(f.required ? "Có" : "Không")] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: `${f.description}\n` }), new TextRun({ text: `Ràng buộc: ${f.validation}`, italics: true, color: "4B5563" })] })] }),
                     ],
                   })),
                 ],
               }),
             ] : []),
 
-            // 5. Code Payload Blocks (Request & Response)
-            new Paragraph({ spacing: { before: 120, after: 60 }, children: [new TextRun({ text: "• Khung Payload mẫu (Console Code Blocks):", bold: true, color: "333333" })] }),
+            // Payloads Example (Console Box)
+            new Paragraph({ spacing: { before: 100, after: 50 }, children: [new TextRun({ text: "Cấu trúc dữ liệu mẫu (Payload examples):", bold: true, color: "374151" })] }),
             new Table({
               width: { size: 100, type: WidthType.PERCENTAGE },
               rows: [
@@ -552,18 +581,20 @@ async function generateDocx(catalog) {
                   children: [
                     new TableCell({
                       width: { size: 50, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: "2B2B2B" },
+                      shading: { type: ShadingType.CLEAR, fill: "F9FAFB" },
+                      borders: borderThin,
                       children: [
-                        new Paragraph({ children: [new TextRun({ text: "REQUEST PAYLOAD:", bold: true, color: "81C784", size: 16 })] }),
-                        new Paragraph({ children: [new TextRun({ text: item.requestExample, font: "Consolas", size: 16, color: "E0E0E0" })] })
+                        new Paragraph({ children: [new TextRun({ text: "REQUEST PAYLOAD:", bold: true, size: 16, color: "374151" })] }),
+                        new Paragraph({ children: [new TextRun({ text: item.requestExample, font: "Consolas", size: 16, color: "1F2937" })] })
                       ]
                     }),
                     new TableCell({
                       width: { size: 50, type: WidthType.PERCENTAGE },
-                      shading: { type: ShadingType.CLEAR, fill: "1E2A38" },
+                      shading: { type: ShadingType.CLEAR, fill: "F9FAFB" },
+                      borders: borderThin,
                       children: [
-                        new Paragraph({ children: [new TextRun({ text: "RESPONSE PAYLOAD:", bold: true, color: "64B5F6", size: 16 })] }),
-                        new Paragraph({ children: [new TextRun({ text: item.responseExample, font: "Consolas", size: 16, color: "E0E0E0" })] })
+                        new Paragraph({ children: [new TextRun({ text: "RESPONSE PAYLOAD:", bold: true, size: 16, color: "374151" })] }),
+                        new Paragraph({ children: [new TextRun({ text: item.responseExample, font: "Consolas", size: 16, color: "1F2937" })] })
                       ]
                     }),
                   ],
@@ -571,41 +602,40 @@ async function generateDocx(catalog) {
               ],
             }),
 
-            // 6. Error Handling Matrix
+            // Error Handling Matrix
             ...(item.errors && item.errors.length > 0 ? [
-              new Paragraph({ spacing: { before: 120, after: 60 }, children: [new TextRun({ text: "• Ma trận mã lỗi & Quy tắc Retry:", bold: true, color: "333333" })] }),
+              new Paragraph({ spacing: { before: 100, after: 50 }, children: [new TextRun({ text: "Ma trận mã lỗi và xử lý ngoại lệ:", bold: true, color: "374151" })] }),
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 rows: [
                   new TableRow({
                     children: [
-                      new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "D9534F" }, children: [new Paragraph({ children: [new TextRun({ text: "Status", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 25, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "D9534F" }, children: [new Paragraph({ children: [new TextRun({ text: "Mã lỗi (Code)", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "D9534F" }, children: [new Paragraph({ children: [new TextRun({ text: "Nguyên nhân phát sinh", bold: true, color: "FFFFFF" })] })] }),
-                      new TableCell({ width: { size: 28, type: WidthType.PERCENTAGE }, shading: { type: ShadingType.CLEAR, fill: "D9534F" }, children: [new Paragraph({ children: [new TextRun({ text: "Hướng xử lý / Retry", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Status", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 26, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mã lỗi (Code)", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 34, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Nguyên nhân phát sinh", bold: true, color: "FFFFFF" })] })] }),
+                      new TableCell({ width: { size: 28, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Hướng xử lý / Retry", bold: true, color: "FFFFFF" })] })] }),
                     ],
                   }),
                   ...item.errors.map(err => new TableRow({
                     children: [
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${err.status}`, bold: true })] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: err.code, font: "Consolas" })] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(err.reason)] })] }),
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun(err.remedy)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${err.status}`, bold: true })] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: err.code, font: "Consolas" })] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(err.reason)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(err.remedy)] })] }),
                     ],
                   })),
                 ],
               }),
             ] : []),
 
-            // 7. Integration Notes
+            // Integration Notes
             new Paragraph({
-              spacing: { before: 100, after: 200 },
+              spacing: { before: 80, after: 180 },
               children: [
-                new TextRun({ text: "💡 Lưu ý tích hợp: ", bold: true, color: "1F497D" }),
+                new TextRun({ text: "Ghi chú kỹ thuật: ", bold: true, color: "374151" }),
                 new TextRun({ text: item.notes, italics: true }),
               ],
             }),
-            new Paragraph({ spacing: { after: 150 } }),
           ]),
         ],
       },
@@ -618,121 +648,113 @@ async function generateDocx(catalog) {
   return docxFile;
 }
 
-// 5. GENERATE EXCEL (.XLSX) SPREADSHEET (4 SHEETS)
+// 5. GENERATE EXCEL (.XLSX) SPREADSHEET (4 CLEAN ENGINEERING SHEETS)
 async function generateXlsx(catalog) {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = 'IDEA Engineering';
+  workbook.creator = catalog.metadata.author;
   workbook.created = new Date();
 
-  // --- SHEET 1: EXECUTIVE & CHANGELOG ---
-  const ws1 = workbook.addWorksheet('1. Executive & Changelog');
-  ws1.views = [{ showGridLines: true }];
+  const borderThin = {
+    top: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+    left: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+    bottom: { style: 'thin', color: { argb: 'FFD1D5DB' } },
+    right: { style: 'thin', color: { argb: 'FFD1D5DB' } }
+  };
 
-  ws1.mergeCells('B2:H2');
-  ws1.getCell('B2').value = 'BÁO CÁO ĐIỀU HÀNH & LỊCH SỬ PHIÊN BẢN HỢP ĐỒNG API (IDEA CORE V0)';
-  ws1.getCell('B2').font = { name: 'Arial', size: 15, bold: true, color: { argb: 'FFFFFFFF' } };
-  ws1.getCell('B2').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F497D' } };
-  ws1.getCell('B2').alignment = { vertical: 'middle', horizontal: 'center' };
-  ws1.getRow(2).height = 36;
+  const headerFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2D3748' } };
+  const headerFont = { name: 'Segoe UI', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
 
-  ws1.getCell('B4').value = 'Thời điểm xuất bản:';
-  ws1.getCell('B4').font = { bold: true };
-  ws1.getCell('C4').value = exportDateTime;
+  // --- SHEET 1: THÔNG TIN & LỊCH SỬ ---
+  const ws1 = workbook.addWorksheet('1. Thong tin & Lich su');
+  ws1.views = [{ showGridLines: true, state: 'frozen', ySplit: 7 }];
 
-  ws1.getCell('B5').value = 'Mã Git Commit SHA:';
-  ws1.getCell('B5').font = { bold: true };
-  ws1.getCell('C5').value = gitCommit;
+  ws1.getCell('A1').value = 'DỰ ÁN:';
+  ws1.getCell('B1').value = catalog.metadata.project;
+  ws1.getCell('A2').value = 'TÀI LIỆU:';
+  ws1.getCell('B2').value = `${catalog.metadata.documentTitle} (${catalog.metadata.documentCode})`;
+  ws1.getCell('A3').value = 'NGƯỜI PHỤ TRÁCH:';
+  ws1.getCell('B3').value = `${catalog.metadata.author} — ${catalog.metadata.department}`;
+  ws1.getCell('A4').value = 'PHIÊN BẢN:';
+  ws1.getCell('B4').value = `v${catalog.metadata.version} • Git Commit: ${gitCommit} • Ngày xuất: ${exportDate}`;
+  ws1.getCell('A5').value = 'QUY MÔ KỸ THUẬT:';
+  ws1.getCell('B5').value = `Tổng cộng ${catalog.endpoints.length} endpoints (${catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI')).length} đã triển khai, ${catalog.endpoints.filter(e => e.status.includes('THIẾT KẾ')).length} đang thiết kế)`;
 
-  ws1.getCell('B6').value = 'Phiên bản hợp đồng:';
-  ws1.getCell('B6').font = { bold: true };
-  ws1.getCell('C6').value = `v${catalog.metadata.version} (${catalog.metadata.status})`;
-
-  // KPI Boxes
-  const kpis = [
-    { label: 'TỔNG SỐ ENDPOINT', val: catalog.endpoints.length, col: 'B', color: 'FF1F497D' },
-    { label: 'ĐÃ TRIỂN KHAI (PASS)', val: catalog.endpoints.filter(i => i.status.includes('PASS')).length, col: 'D', color: 'FF137333' },
-    { label: 'ĐANG THIẾT KẾ (PH2)', val: catalog.endpoints.filter(i => i.status.includes('DESIGN')).length, col: 'F', color: 'FFD93025' },
-  ];
-
-  kpis.forEach(k => {
-    ws1.mergeCells(`${k.col}8:${String.fromCharCode(k.col.charCodeAt(0) + 1)}8`);
-    ws1.mergeCells(`${k.col}9:${String.fromCharCode(k.col.charCodeAt(0) + 1)}9`);
-    const cTitle = ws1.getCell(`${k.col}8`);
-    const cVal = ws1.getCell(`${k.col}9`);
-
-    cTitle.value = k.label;
-    cTitle.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
-    cTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: k.color } };
-    cTitle.alignment = { horizontal: 'center', vertical: 'middle' };
-
-    cVal.value = k.val;
-    cVal.font = { name: 'Arial', size: 20, bold: true, color: { argb: k.color } };
-    cVal.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } };
-    cVal.alignment = { horizontal: 'center', vertical: 'middle' };
+  ['A1', 'A2', 'A3', 'A4', 'A5'].forEach(cell => {
+    ws1.getCell(cell).font = { name: 'Segoe UI', bold: true, color: { argb: 'FF374151' } };
   });
-  ws1.getRow(8).height = 24;
-  ws1.getRow(9).height = 36;
+  ['B1', 'B2', 'B3', 'B4', 'B5'].forEach(cell => {
+    ws1.getCell(cell).font = { name: 'Segoe UI', color: { argb: 'FF111827' } };
+  });
 
-  // Changelog Table on Sheet 1
-  ws1.getCell('B12').value = 'LỊCH SỬ THAY ĐỔI PHIÊN BẢN (REVISION HISTORY / AUDIT TRAIL):';
-  ws1.getCell('B12').font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF1F497D' } };
+  ws1.getCell('A7').value = 'LỊCH SỬ THAY ĐỔI PHIÊN BẢN (REVISION HISTORY / AUDIT TRAIL)';
+  ws1.getCell('A7').font = { name: 'Segoe UI', size: 11, bold: true, color: { argb: 'FF1F2937' } };
 
-  const clHeaders = ['Phiên bản', 'Ngày áp dụng', 'Mã Git Commit', 'Tác giả', 'Nội dung thay đổi chi tiết'];
+  const clHeaders = ['Phiên bản', 'Ngày áp dụng', 'Mã Git Commit', 'Người thực hiện', 'Nội dung thay đổi'];
   clHeaders.forEach((h, idx) => {
-    const colLetter = String.fromCharCode('B'.charCodeAt(0) + idx);
-    const cell = ws1.getCell(`${colLetter}14`);
+    const colLetter = String.fromCharCode('A'.charCodeAt(0) + idx);
+    const cell = ws1.getCell(`${colLetter}8`);
     cell.value = h;
-    cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F497D' } };
+    cell.font = headerFont;
+    cell.fill = headerFill;
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
   });
-  ws1.getRow(14).height = 24;
+  ws1.getRow(8).height = 24;
 
   catalog.metadata.revisions.forEach((rev, idx) => {
-    const rowNum = 15 + idx;
-    ws1.getCell(`B${rowNum}`).value = `v${rev.version}`;
-    ws1.getCell(`C${rowNum}`).value = rev.date;
-    ws1.getCell(`D${rowNum}`).value = rev.commit;
-    ws1.getCell(`E${rowNum}`).value = rev.author;
-    ws1.getCell(`F${rowNum}`).value = rev.description;
+    const rowNum = 9 + idx;
+    ws1.getCell(`A${rowNum}`).value = `v${rev.version}`;
+    ws1.getCell(`B${rowNum}`).value = rev.date;
+    ws1.getCell(`C${rowNum}`).value = rev.commit;
+    ws1.getCell(`D${rowNum}`).value = rev.author;
+    ws1.getCell(`E${rowNum}`).value = rev.description;
 
-    ['B', 'C', 'D', 'E', 'F'].forEach(c => {
-      ws1.getCell(`${c}${rowNum}`).border = {
-        top: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-        bottom: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-        left: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-        right: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-      };
+    ['A', 'B', 'C', 'D', 'E'].forEach(c => {
+      ws1.getCell(`${c}${rowNum}`).border = borderThin;
+      ws1.getCell(`${c}${rowNum}`).font = { name: 'Segoe UI', size: 10 };
     });
+    ws1.getCell(`A${rowNum}`).alignment = { horizontal: 'center' };
     ws1.getCell(`B${rowNum}`).alignment = { horizontal: 'center' };
     ws1.getCell(`C${rowNum}`).alignment = { horizontal: 'center' };
-    ws1.getCell(`D${rowNum}`).alignment = { horizontal: 'center' };
     ws1.getRow(rowNum).height = 22;
   });
 
-  // --- SHEET 2: API MASTER MATRIX ---
-  const ws2 = workbook.addWorksheet('2. API Master Matrix');
-  ws2.views = [{ showGridLines: true }];
+  ws1.getColumn('A').width = 14;
+  ws1.getColumn('B').width = 24;
+  ws1.getColumn('C').width = 16;
+  ws1.getColumn('D').width = 26;
+  ws1.getColumn('E').width = 80;
+
+  // --- SHEET 2: MA TRẬN API ---
+  const ws2 = workbook.addWorksheet('2. Ma tran API');
+  ws2.views = [{ showGridLines: true, state: 'frozen', ySplit: 4 }];
+
+  ws2.getCell('A1').value = 'MA TRẬN GIAO TIẾP API — HỆ THỐNG IDEA DDM CORE v0';
+  ws2.getCell('A1').font = { name: 'Segoe UI', size: 12, bold: true, color: { argb: 'FF1F2937' } };
+  ws2.getCell('A2').value = `Baseline Git: ${gitCommit} | Ngày xuất bản: ${exportDateTime}`;
+  ws2.getCell('A2').font = { name: 'Segoe UI', size: 9, italics: true, color: { argb: 'FF6B7280' } };
 
   ws2.columns = [
-    { header: 'STT', key: 'stt', width: 6 },
-    { header: 'Nhóm chức năng', key: 'group', width: 26 },
-    { header: 'Mã API', key: 'code', width: 12 },
-    { header: 'Tên chức năng', key: 'name', width: 34 },
-    { header: 'Method', key: 'method', width: 10 },
-    { header: 'Đường dẫn URL Endpoint', key: 'path', width: 44 },
-    { header: 'Quyền hạn gọi', key: 'auth', width: 30 },
-    { header: 'Trạng thái', key: 'status', width: 24 },
-    { header: 'Ghi chú nghiệp vụ', key: 'notes', width: 50 },
+    { header: '', key: 'stt', width: 6 },
+    { header: '', key: 'group', width: 26 },
+    { header: '', key: 'code', width: 12 },
+    { header: '', key: 'name', width: 34 },
+    { header: '', key: 'method', width: 10 },
+    { header: '', key: 'path', width: 44 },
+    { header: '', key: 'auth', width: 28 },
+    { header: '', key: 'status', width: 20 },
+    { header: '', key: 'notes', width: 50 },
   ];
 
-  const headerRow2 = ws2.getRow(1);
-  headerRow2.height = 28;
-  headerRow2.eachCell((cell) => {
-    cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F497D' } };
+  const h2Headers = ['STT', 'Nhóm chức năng', 'Mã API', 'Tên chức năng', 'Method', 'Đường dẫn URL Endpoint', 'Quyền hạn gọi', 'Trạng thái', 'Ghi chú kỹ thuật'];
+  const row4 = ws2.getRow(4);
+  row4.height = 26;
+  h2Headers.forEach((h, idx) => {
+    const cell = row4.getCell(idx + 1);
+    cell.value = h;
+    cell.font = headerFont;
+    cell.fill = headerFill;
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
-    cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    cell.border = borderThin;
   });
 
   catalog.endpoints.forEach((item, index) => {
@@ -747,50 +769,58 @@ async function generateXlsx(catalog) {
       status: item.status,
       notes: item.notes,
     });
-    row.height = 24;
+    row.height = 22;
     row.eachCell((cell, colNum) => {
-      cell.border = {
-        top: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-        left: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-        bottom: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-        right: { style: 'thin', color: { argb: 'FFE0E0E0' } }
-      };
+      cell.border = borderThin;
+      cell.font = { name: 'Segoe UI', size: 10 };
       if (colNum === 1 || colNum === 3 || colNum === 5) {
         cell.alignment = { horizontal: 'center', vertical: 'middle' };
       }
       if (colNum === 5) {
-        cell.font = { bold: true, color: { argb: item.method === 'GET' ? 'FF137333' : 'FF1A73E8' } };
+        cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.method === 'GET' ? 'FF15803D' : 'FF1D4ED8' } };
+      }
+      if (colNum === 6) {
+        cell.font = { name: 'Consolas', size: 9 };
       }
       if (colNum === 8) {
-        cell.font = { bold: true, color: { argb: item.status.includes('PASS') ? 'FF008000' : 'FFD93025' } };
+        cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.status.includes('TRIỂN KHAI') ? 'FF15803D' : 'FFC2410C' } };
       }
     });
   });
+  ws2.autoFilter = 'A4:I4';
 
-  // --- SHEET 3: DATA DICTIONARY (10 COLUMNS) ---
+  // --- SHEET 3: DATA DICTIONARY ---
   const ws3 = workbook.addWorksheet('3. Data Dictionary');
-  ws3.views = [{ showGridLines: true }];
+  ws3.views = [{ showGridLines: true, state: 'frozen', ySplit: 4 }];
+
+  ws3.getCell('A1').value = 'TỪ ĐIỂN THAM SỐ VÀ TRƯỜNG DỮ LIỆU (DATA DICTIONARY)';
+  ws3.getCell('A1').font = { name: 'Segoe UI', size: 12, bold: true, color: { argb: 'FF1F2937' } };
+  ws3.getCell('A2').value = 'Dùng cho lập trình viên Backend, Frontend và QA thiết kế kịch bản kiểm thử (Test Matrix)';
+  ws3.getCell('A2').font = { name: 'Segoe UI', size: 9, italics: true, color: { argb: 'FF6B7280' } };
 
   ws3.columns = [
-    { header: 'STT', key: 'stt', width: 6 },
-    { header: 'Mã API', key: 'code', width: 12 },
-    { header: 'Tên chức năng', key: 'apiName', width: 28 },
-    { header: 'Vị trí', key: 'in', width: 16 },
-    { header: 'Tên trường (Field Name)', key: 'fieldName', width: 26 },
-    { header: 'Kiểu dữ liệu', key: 'type', width: 18 },
-    { header: 'Bắt buộc', key: 'required', width: 12 },
-    { header: 'Quy tắc / Giới hạn validation', key: 'validation', width: 42 },
-    { header: 'Diễn giải nghiệp vụ', key: 'description', width: 48 },
-    { header: 'Dữ liệu mẫu', key: 'example', width: 34 },
+    { header: '', key: 'stt', width: 6 },
+    { header: '', key: 'code', width: 12 },
+    { header: '', key: 'apiName', width: 28 },
+    { header: '', key: 'in', width: 16 },
+    { header: '', key: 'fieldName', width: 26 },
+    { header: '', key: 'type', width: 18 },
+    { header: '', key: 'required', width: 12 },
+    { header: '', key: 'validation', width: 44 },
+    { header: '', key: 'description', width: 48 },
+    { header: '', key: 'example', width: 34 },
   ];
 
-  const headerRow3 = ws3.getRow(1);
-  headerRow3.height = 28;
-  headerRow3.eachCell((cell) => {
-    cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F497D' } };
+  const h3Headers = ['STT', 'Mã API', 'Tên chức năng', 'Vị trí', 'Tên trường (Field Name)', 'Kiểu dữ liệu', 'Bắt buộc', 'Quy tắc / Giới hạn validation', 'Diễn giải kỹ thuật', 'Giá trị mẫu'];
+  const row4_3 = ws3.getRow(4);
+  row4_3.height = 26;
+  h3Headers.forEach((h, idx) => {
+    const cell = row4_3.getCell(idx + 1);
+    cell.value = h;
+    cell.font = headerFont;
+    cell.fill = headerFill;
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
-    cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    cell.border = borderThin;
   });
 
   let fieldCounter = 1;
@@ -811,47 +841,52 @@ async function generateXlsx(catalog) {
         });
         row.height = 22;
         row.eachCell((cell, colNum) => {
-          cell.border = {
-            top: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-            left: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-            bottom: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-            right: { style: 'thin', color: { argb: 'FFE0E0E0' } }
-          };
+          cell.border = borderThin;
+          cell.font = { name: 'Segoe UI', size: 10 };
           if (colNum === 1 || colNum === 2 || colNum === 4 || colNum === 7) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
           }
           if (colNum === 5) {
-            cell.font = { name: 'Consolas', bold: true };
+            cell.font = { name: 'Consolas', size: 9, bold: true };
           }
           if (colNum === 7) {
-            cell.font = { bold: true, color: { argb: f.required ? 'FFD93025' : 'FF555555' } };
+            cell.font = { name: 'Segoe UI', bold: true, color: { argb: f.required ? 'FFB91C1C' : 'FF6B7280' } };
           }
         });
       });
     }
   });
+  ws3.autoFilter = 'A4:J4';
 
   // --- SHEET 4: ERROR CATALOG ---
   const ws4 = workbook.addWorksheet('4. Error Catalog');
-  ws4.views = [{ showGridLines: true }];
+  ws4.views = [{ showGridLines: true, state: 'frozen', ySplit: 4 }];
+
+  ws4.getCell('A1').value = 'DANH MỤC MÃ LỖI VÀ QUY TẮC XỬ LÝ (ERROR CATALOG & RETRY RULES)';
+  ws4.getCell('A1').font = { name: 'Segoe UI', size: 12, bold: true, color: { argb: 'FF1F2937' } };
+  ws4.getCell('A2').value = 'Quy ước mã lỗi HTTP, mã lỗi hệ thống và cách phản hồi tương ứng của Client';
+  ws4.getCell('A2').font = { name: 'Segoe UI', size: 9, italics: true, color: { argb: 'FF6B7280' } };
 
   ws4.columns = [
-    { header: 'STT', key: 'stt', width: 6 },
-    { header: 'Mã API', key: 'code', width: 12 },
-    { header: 'Tên chức năng', key: 'apiName', width: 28 },
-    { header: 'HTTP Status', key: 'status', width: 14 },
-    { header: 'Mã lỗi hệ thống (Error Code)', key: 'errorCode', width: 26 },
-    { header: 'Nguyên nhân phát sinh', key: 'reason', width: 48 },
-    { header: 'Hướng xử lý / Quy tắc Retry', key: 'remedy', width: 44 },
+    { header: '', key: 'stt', width: 6 },
+    { header: '', key: 'code', width: 12 },
+    { header: '', key: 'apiName', width: 28 },
+    { header: '', key: 'status', width: 14 },
+    { header: '', key: 'errorCode', width: 26 },
+    { header: '', key: 'reason', width: 48 },
+    { header: '', key: 'remedy', width: 44 },
   ];
 
-  const headerRow4 = ws4.getRow(1);
-  headerRow4.height = 28;
-  headerRow4.eachCell((cell) => {
-    cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
-    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9534F' } };
+  const h4Headers = ['STT', 'Mã API', 'Tên chức năng', 'HTTP Status', 'Mã lỗi hệ thống (Error Code)', 'Nguyên nhân phát sinh', 'Hướng xử lý / Quy tắc Retry'];
+  const row4_4 = ws4.getRow(4);
+  row4_4.height = 26;
+  h4Headers.forEach((h, idx) => {
+    const cell = row4_4.getCell(idx + 1);
+    cell.value = h;
+    cell.font = headerFont;
+    cell.fill = headerFill;
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
-    cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    cell.border = borderThin;
   });
 
   let errCounter = 1;
@@ -869,32 +904,29 @@ async function generateXlsx(catalog) {
         });
         row.height = 22;
         row.eachCell((cell, colNum) => {
-          cell.border = {
-            top: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-            left: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-            bottom: { style: 'thin', color: { argb: 'FFE0E0E0' } },
-            right: { style: 'thin', color: { argb: 'FFE0E0E0' } }
-          };
+          cell.border = borderThin;
+          cell.font = { name: 'Segoe UI', size: 10 };
           if (colNum === 1 || colNum === 2 || colNum === 4) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
           }
           if (colNum === 4) {
-            cell.font = { bold: true, color: { argb: e.status >= 500 ? 'FFD93025' : (e.status >= 400 ? 'FFE37400' : 'FF137333') } };
+            cell.font = { name: 'Segoe UI', bold: true, color: { argb: e.status >= 500 ? 'FFB91C1C' : (e.status >= 400 ? 'FFC2410C' : 'FF15803D') } };
           }
           if (colNum === 5) {
-            cell.font = { name: 'Consolas', bold: true };
+            cell.font = { name: 'Consolas', size: 9, bold: true };
           }
         });
       });
     }
   });
+  ws4.autoFilter = 'A4:G4';
 
   const xlsxFile = path.join(OUTPUT_DIR, 'IDEA_Core_v0_API_Contract.xlsx');
   await workbook.xlsx.writeFile(xlsxFile);
   return xlsxFile;
 }
 
-// 6. GENERATE STANDALONE OFFLINE INTERACTIVE HTML
+// 6. GENERATE CLEAN TECHNICAL HTML (GITHUB DOCS / STRIPE DOCS STYLE)
 function generateHtml(catalog) {
   const jsonCatalog = JSON.stringify(catalog);
 
@@ -903,33 +935,49 @@ function generateHtml(catalog) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IDEA Engineering — API Contract Documentation (Core v0)</title>
+  <title>IDEA DDM Core v0 — Đặc tả giao tiếp API (SPEC-API-001)</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent: #38bdf8;
-      --accent-hover: #0ea5e9;
-      --code-bg: #090d16;
-      --method-get: #10b981;
-      --method-post: #3b82f6;
-      --method-put: #f59e0b;
-      --method-delete: #ef4444;
-      --badge-ready: #10b981;
-      --badge-design: #f97316;
+      --bg: #FFFFFF;
+      --sidebar-bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --card-border: #E2E8F0;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --accent: #2563EB;
+      --accent-hover: #1D4ED8;
+      --code-bg: #F8FAFC;
+      --code-border: #E2E8F0;
+      --code-text: #0F172A;
+      --method-get-bg: #F0FDF4;
+      --method-get-text: #15803D;
+      --method-get-border: #BBF7D0;
+      --method-post-bg: #EFF6FF;
+      --method-post-text: #1D4ED8;
+      --method-post-border: #BFDBFE;
+      --badge-ready: #15803D;
+      --badge-design: #C2410C;
     }
-    .light-theme {
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --card-border: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --accent: #0284c7;
-      --accent-hover: #0369a1;
-      --code-bg: #1e293b;
+    .dark-theme {
+      --bg: #0B0F19;
+      --sidebar-bg: #111827;
+      --card-bg: #111827;
+      --card-border: #1F2937;
+      --text-main: #F9FAFB;
+      --text-muted: #9CA3AF;
+      --accent: #38BDF8;
+      --accent-hover: #0EA5E9;
+      --code-bg: #0F172A;
+      --code-border: #1E293B;
+      --code-text: #F1F5F9;
+      --method-get-bg: rgba(21, 128, 61, 0.15);
+      --method-get-text: #4ADE80;
+      --method-get-border: rgba(74, 222, 128, 0.3);
+      --method-post-bg: rgba(29, 78, 216, 0.15);
+      --method-post-text: #60A5FA;
+      --method-post-border: rgba(96, 165, 250, 0.3);
+      --badge-ready: #4ADE80;
+      --badge-design: #FB923C;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -944,18 +992,18 @@ function generateHtml(catalog) {
     #sidebar {
       width: 320px;
       min-width: 320px;
-      background: var(--card-bg);
+      background: var(--sidebar-bg);
       border-right: 1px solid var(--card-border);
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
     .brand {
-      padding: 20px;
+      padding: 18px 20px;
       border-bottom: 1px solid var(--card-border);
     }
-    .brand h1 { font-size: 1.1rem; color: var(--accent); display: flex; align-items: center; gap: 8px; }
-    .brand p { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    .brand h1 { font-size: 1rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.01em; }
+    .brand p { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
     .search-box { padding: 12px 16px; border-bottom: 1px solid var(--card-border); }
     .search-box input {
       width: 100%;
@@ -967,34 +1015,41 @@ function generateHtml(catalog) {
       font-size: 0.85rem;
       outline: none;
     }
+    .search-box input:focus { border-color: var(--accent); }
     .nav-list { flex: 1; overflow-y: auto; padding: 12px 8px; }
-    .nav-group-title { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); padding: 8px 12px 4px; font-weight: 700; }
+    .nav-group-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 10px 12px 4px;
+      font-weight: 700;
+    }
     .nav-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 12px;
+      padding: 7px 12px;
       border-radius: 6px;
-      text-decoration: none;
       color: var(--text-main);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
       transition: background 0.15s;
     }
-    .nav-item:hover, .nav-item.active { background: rgba(56, 189, 248, 0.12); color: var(--accent); }
+    .nav-item:hover { background: rgba(0, 0, 0, 0.04); }
+    .dark-theme .nav-item:hover { background: rgba(255, 255, 255, 0.05); }
     .method-badge {
-      font-size: 0.65rem;
+      font-family: ui-monospace, "SF Mono", Consolas, monospace;
+      font-size: 0.68rem;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 4px;
       text-transform: uppercase;
-      color: white;
+      border: 1px solid transparent;
     }
-    .badge-GET { background: var(--method-get); }
-    .badge-POST { background: var(--method-post); }
-    .badge-PUT { background: var(--method-put); }
-    .badge-DELETE { background: var(--method-delete); }
+    .badge-GET { background: var(--method-get-bg); color: var(--method-get-text); border-color: var(--method-get-border); }
+    .badge-POST { background: var(--method-post-bg); color: var(--method-post-text); border-color: var(--method-post-border); }
 
     /* Main Area */
     #main-content {
@@ -1005,123 +1060,128 @@ function generateHtml(catalog) {
       overflow: hidden;
     }
     .top-bar {
-      height: 60px;
-      background: var(--card-bg);
+      height: 56px;
+      background: var(--bg);
       border-bottom: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 28px;
     }
-    .tab-pills { display: flex; gap: 8px; }
+    .tab-pills { display: flex; gap: 6px; }
     .tab-btn {
       background: transparent;
       border: 1px solid var(--card-border);
       color: var(--text-muted);
       padding: 6px 14px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .tab-btn.active {
-      background: var(--accent);
-      color: #0f172a;
-      border-color: var(--accent);
-      font-weight: 700;
+      background: var(--text-main);
+      color: var(--bg);
+      border-color: var(--text-main);
+      font-weight: 600;
     }
-    .top-actions { display: flex; align-items: center; gap: 12px; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
     .theme-toggle-btn {
       background: var(--bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 6px 12px;
+      padding: 5px 12px;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 500;
     }
 
-    .scroll-view { flex: 1; overflow-y: auto; padding: 28px 32px; }
+    .scroll-view { flex: 1; overflow-y: auto; padding: 28px 36px; }
 
-    /* API Card Styling */
+    /* Cards */
     .api-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 24px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
     .api-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 14px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
     }
-    .api-route { display: flex; align-items: center; gap: 12px; }
-    .api-path { font-family: "SF Mono", Consolas, monospace; font-size: 1.15rem; font-weight: 700; }
+    .api-route { display: flex; align-items: center; gap: 10px; }
+    .api-path { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 1.05rem; font-weight: 600; }
     .status-badge {
       font-size: 0.75rem;
       font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid currentColor;
     }
-    .status-pass { background: rgba(16, 185, 129, 0.15); color: var(--badge-ready); border: 1px solid var(--badge-ready); }
-    .status-design { background: rgba(249, 115, 22, 0.15); color: var(--badge-design); border: 1px solid var(--badge-design); }
+    .status-pass { color: var(--badge-ready); }
+    .status-design { color: var(--badge-design); }
 
-    .api-desc { font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px; color: var(--text-main); }
-    .section-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin: 16px 0 8px; }
+    .api-desc { font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; color: var(--text-main); }
+    .section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); margin: 16px 0 8px; }
 
     /* Tables */
     .spec-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 16px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
     .spec-table th, .spec-table td {
       border: 1px solid var(--card-border);
       padding: 8px 12px;
       text-align: left;
     }
-    .spec-table th { background: rgba(0, 0, 0, 0.2); color: var(--text-muted); font-weight: 600; }
-    .field-name { font-family: "SF Mono", Consolas, monospace; font-weight: 600; color: var(--accent); }
-    .req-tag { color: #f43f5e; font-weight: 700; font-size: 0.75rem; }
+    .spec-table th { background: rgba(0, 0, 0, 0.02); color: var(--text-muted); font-weight: 600; }
+    .dark-theme .spec-table th { background: rgba(255, 255, 255, 0.03); }
+    .field-name { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-weight: 600; color: var(--accent); }
+    .req-tag { color: #DC2626; font-weight: 600; font-size: 0.75rem; }
 
     /* Code Blocks */
     .code-container {
       position: relative;
       background: var(--code-bg);
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--code-border);
       border-radius: 6px;
-      margin-bottom: 16px;
-      padding: 12px;
-      font-family: "SF Mono", Consolas, monospace;
-      font-size: 0.82rem;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      font-family: ui-monospace, "SF Mono", Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
       white-space: pre-wrap;
-      color: #38bdf8;
+      color: var(--code-text);
     }
     .copy-btn {
       position: absolute;
       top: 8px;
       right: 8px;
-      background: var(--card-bg);
+      background: var(--bg);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       cursor: pointer;
     }
-    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .copy-btn:hover { color: var(--text-main); border-color: var(--text-main); }
 
     /* Workflows View */
     .wf-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 24px;
       margin-bottom: 24px;
     }
@@ -1130,42 +1190,42 @@ function generateHtml(catalog) {
       display: flex;
       align-items: flex-start;
       gap: 16px;
-      margin-bottom: 16px;
-      position: relative;
+      margin-bottom: 14px;
     }
     .wf-step-num {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #0f172a;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: var(--text-main);
+      color: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
+      font-size: 0.85rem;
       flex-shrink: 0;
     }
     .wf-step-content {
       flex: 1;
-      background: var(--bg);
-      border: 1px solid var(--card-border);
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
       border-radius: 6px;
-      padding: 12px 16px;
+      padding: 10px 14px;
     }
 
     /* Toast */
     #toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--accent);
-      color: #0f172a;
-      padding: 8px 18px;
+      bottom: 20px;
+      right: 20px;
+      background: var(--text-main);
+      color: var(--bg);
+      padding: 8px 16px;
       border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.85rem;
+      font-weight: 500;
+      font-size: 0.8rem;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.25s;
       pointer-events: none;
     }
   </style>
@@ -1175,11 +1235,11 @@ function generateHtml(catalog) {
   <!-- Sidebar -->
   <div id="sidebar">
     <div class="brand">
-      <h1>⚡ IDEA CORE v0</h1>
-      <p>API Contract & Interface Specs • Git: ${gitCommit}</p>
+      <h1>IDEA ENGINEERING</h1>
+      <p>Đặc tả API • SPEC-API-001 • Git: ${gitCommit}</p>
     </div>
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="🔍 Tìm API, Method, Path, Field...">
+      <input type="text" id="searchInput" placeholder="Tìm theo mã API, đường dẫn, tham số...">
     </div>
     <div class="nav-list" id="navList">
       <!-- Generated by JS -->
@@ -1191,13 +1251,13 @@ function generateHtml(catalog) {
     <div class="top-bar">
       <div class="tab-pills">
         <button class="tab-btn active" onclick="switchTab('apis')">Danh mục API (${catalog.endpoints.length})</button>
-        <button class="tab-btn" onclick="switchTab('workflows')">Sơ đồ Luồng (3)</button>
+        <button class="tab-btn" onclick="switchTab('workflows')">Quy trình phối hợp (3)</button>
         <button class="tab-btn" onclick="switchTab('dictionary')">Từ điển dữ liệu</button>
-        <button class="tab-btn" onclick="switchTab('changelog')">Lịch sử Phiên bản</button>
+        <button class="tab-btn" onclick="switchTab('changelog')">Lịch sử phiên bản</button>
       </div>
       <div class="top-actions">
-        <span style="font-size: 0.8rem; color: var(--text-muted);">${exportDateTime}</span>
-        <button class="theme-toggle-btn" onclick="toggleTheme()">🌗 Giao diện</button>
+        <span style="font-size: 0.78rem; color: var(--text-muted);">${exportDate}</span>
+        <button class="theme-toggle-btn" onclick="toggleTheme()">Giao diện Sáng / Tối</button>
       </div>
     </div>
 
@@ -1206,14 +1266,14 @@ function generateHtml(catalog) {
     </div>
   </div>
 
-  <div id="toast">Đã copy vào Clipboard!</div>
+  <div id="toast">Đã sao chép vào bộ nhớ tạm</div>
 
   <script>
     const data = ${jsonCatalog};
     let currentTab = 'apis';
 
     function toggleTheme() {
-      document.body.classList.toggle('light-theme');
+      document.body.classList.toggle('dark-theme');
     }
 
     function showToast(msg) {
@@ -1225,7 +1285,7 @@ function generateHtml(catalog) {
 
     function copyText(str) {
       navigator.clipboard.writeText(str).then(() => {
-        showToast('Đã copy vào Clipboard!');
+        showToast('Đã sao chép vào bộ nhớ tạm');
       });
     }
 
@@ -1281,44 +1341,44 @@ function generateHtml(catalog) {
             <div class="api-card" id="api-\${ep.code}">
               <div class="api-header">
                 <div class="api-route">
-                  <span class="method-badge badge-\${ep.method}" style="font-size:0.85rem; padding: 4px 10px;">\${ep.method}</span>
+                  <span class="method-badge badge-\${ep.method}">\${ep.method}</span>
                   <span class="api-path">\${ep.path}</span>
-                  <span style="color:var(--text-muted); font-size:0.9rem;">[\${ep.code}] \${ep.name}</span>
+                  <span style="color:var(--text-muted); font-size:0.85rem;">[\${ep.code}] \${ep.name}</span>
                 </div>
                 <div>
-                  <span class="status-badge \${ep.status.includes('PASS') ? 'status-pass' : 'status-design'}">\${ep.status}</span>
+                  <span class="status-badge \${ep.status.includes('TRIỂN KHAI') ? 'status-pass' : 'status-design'}">\${ep.status}</span>
                 </div>
               </div>
 
               <p class="api-desc">\${ep.description}</p>
 
               <table class="spec-table">
-                <tr><th style="width:25%;">Quyền hạn yêu cầu</th><td>\${ep.auth}</td></tr>
+                <tr><th style="width:25%;">Quyền hạn gọi</th><td>\${ep.auth}</td></tr>
                 <tr><th>Điều kiện tiên quyết</th><td>\${ep.preconditions}</td></tr>
                 <tr><th>Tác động trạng thái</th><td>\${ep.stateEffects}</td></tr>
               </table>
 
               \${ep.headers && ep.headers.length ? \`
-                <div class="section-title">HTTP Headers bắt buộc</div>
+                <div class="section-title">HTTP Headers yêu cầu</div>
                 <table class="spec-table">
-                  <thead><tr><th>Header</th><th>Bắt buộc</th><th>Mô tả</th></tr></thead>
+                  <thead><tr><th>Tên Header</th><th>Bắt buộc</th><th>Mô tả / Giá trị</th></tr></thead>
                   <tbody>
-                    \${ep.headers.map(h => \`<tr><td class="field-name">\${h.name}</td><td>\${h.required ? '<span class="req-tag">BẮT BUỘC</span>' : 'Tùy chọn'}</td><td>\${h.description}</td></tr>\`).join('')}
+                    \${ep.headers.map(h => \`<tr><td class="field-name">\${h.name}</td><td>\${h.required ? '<span class="req-tag">Bắt buộc</span>' : 'Tùy chọn'}</td><td>\${h.description}</td></tr>\`).join('')}
                   </tbody>
                 </table>
               \` : ''}
 
               \${ep.fields && ep.fields.length ? \`
-                <div class="section-title">Từ điển tham số / Trường dữ liệu (Data Dictionary)</div>
+                <div class="section-title">Từ điển trường dữ liệu (Data Dictionary)</div>
                 <table class="spec-table">
-                  <thead><tr><th>Trường (Field)</th><th>Vị trí</th><th>Kiểu</th><th>Req</th><th>Ràng buộc & Diễn giải</th></tr></thead>
+                  <thead><tr><th>Tên trường</th><th>Vị trí</th><th>Kiểu</th><th>Req</th><th>Ràng buộc & Diễn giải kỹ thuật</th></tr></thead>
                   <tbody>
                     \${ep.fields.map(f => \`
                       <tr>
                         <td class="field-name">\${f.name}</td>
                         <td>\${f.in}</td>
                         <td>\${f.type}</td>
-                        <td>\${f.required ? '<span class="req-tag">CÓ</span>' : 'Không'}</td>
+                        <td>\${f.required ? '<span class="req-tag">Có</span>' : 'Không'}</td>
                         <td><strong>\${f.description}</strong><br><small style="color:var(--text-muted);">Ràng buộc: \${f.validation}</small></td>
                       </tr>
                     \`).join('')}
@@ -1328,20 +1388,20 @@ function generateHtml(catalog) {
 
               <div class="section-title">Request Payload Example</div>
               <div class="code-container">
-                <button class="copy-btn" onclick="copyText(\\\`\${ep.requestExample.replace(/\`/g, '\\\`')}\\\`)">Copy</button>
+                <button class="copy-btn" onclick="copyText(\\\`\${ep.requestExample.replace(/\`/g, '\\\`')}\\\`)">Sao chép</button>
                 \${ep.requestExample}
               </div>
 
               <div class="section-title">Response Payload Example</div>
               <div class="code-container">
-                <button class="copy-btn" onclick="copyText(\\\`\${ep.responseExample.replace(/\`/g, '\\\`')}\\\`)">Copy</button>
+                <button class="copy-btn" onclick="copyText(\\\`\${ep.responseExample.replace(/\`/g, '\\\`')}\\\`)">Sao chép</button>
                 \${ep.responseExample}
               </div>
 
               \${ep.errors && ep.errors.length ? \`
                 <div class="section-title">Ma trận mã lỗi (Error Handling Matrix)</div>
                 <table class="spec-table">
-                  <thead><tr><th>Status</th><th>Mã lỗi</th><th>Nguyên nhân</th><th>Hướng xử lý / Retry</th></tr></thead>
+                  <thead><tr><th>Status</th><th>Mã lỗi (Code)</th><th>Nguyên nhân phát sinh</th><th>Hướng xử lý / Retry</th></tr></thead>
                   <tbody>
                     \${ep.errors.map(err => \`
                       <tr>
@@ -1355,8 +1415,8 @@ function generateHtml(catalog) {
                 </table>
               \` : ''}
 
-              <div style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">
-                💡 <em>Lưu ý: \${ep.notes}</em>
+              <div style="font-size:0.82rem; color:var(--text-muted); margin-top:10px;">
+                <em>Ghi chú kỹ thuật: \${ep.notes}</em>
               </div>
             </div>
           \`;
@@ -1367,16 +1427,16 @@ function generateHtml(catalog) {
         data.workflows.forEach(wf => {
           html += \`
             <div class="wf-card">
-              <h2 style="color:var(--accent); margin-bottom:8px;">[\${wf.id}] \${wf.title}</h2>
-              <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">\${wf.description}</p>
+              <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:6px;">\${wf.id}. \${wf.title}</h2>
+              <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px;">\${wf.description}</p>
               <div class="wf-timeline">
                 \${wf.steps.map(s => \`
                   <div class="wf-step-row">
                     <div class="wf-step-num">\${s.step}</div>
                     <div class="wf-step-content">
-                      <div style="font-size:0.8rem; color:var(--text-muted);">\${s.actor} ➔ \${s.receiver}</div>
-                      <div style="font-weight:700; margin:4px 0;">\${s.action} (\${s.endpoint})</div>
-                      <div style="font-size:0.85rem; color:var(--accent);">\${s.outcome}</div>
+                      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">\${s.actor} ➔ \${s.receiver}</div>
+                      <div style="font-weight:600; font-size:0.9rem; margin:2px 0;">\${s.action} (\${s.endpoint})</div>
+                      <div style="font-size:0.82rem; color:var(--text-main);">\${s.outcome}</div>
                     </div>
                   </div>
                 \`).join('')}
@@ -1399,7 +1459,7 @@ function generateHtml(catalog) {
                   <td>\${f.in}</td>
                   <td class="field-name">\${f.name}</td>
                   <td>\${f.type}</td>
-                  <td>\${f.required ? '<span class="req-tag">BẮT BUỘC</span>' : 'Tùy chọn'}</td>
+                  <td>\${f.required ? '<span class="req-tag">Bắt buộc</span>' : 'Tùy chọn'}</td>
                   <td>\${f.validation}</td>
                   <td>\${f.description}</td>
                   <td style="font-family:monospace; font-size:0.75rem;">\${f.example || ''}</td>
@@ -1410,11 +1470,11 @@ function generateHtml(catalog) {
         });
         view.innerHTML = \`
           <div class="api-card">
-            <h2 style="color:var(--accent); margin-bottom:12px;">Từ điển toàn bộ trường dữ liệu (Data Dictionary)</h2>
+            <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:12px;">Từ điển tham số và trường dữ liệu (Data Dictionary)</h2>
             <table class="spec-table">
               <thead>
                 <tr>
-                  <th>STT</th><th>Mã API</th><th>Tên API</th><th>Vị trí</th><th>Tên trường</th><th>Kiểu</th><th>Bắt buộc</th><th>Ràng buộc</th><th>Diễn giải</th><th>Ví dụ</th>
+                  <th>STT</th><th>Mã API</th><th>Tên chức năng</th><th>Vị trí</th><th>Tên trường</th><th>Kiểu</th><th>Bắt buộc</th><th>Ràng buộc validation</th><th>Diễn giải kỹ thuật</th><th>Giá trị mẫu</th>
                 </tr>
               </thead>
               <tbody>\${rows}</tbody>
@@ -1433,9 +1493,9 @@ function generateHtml(catalog) {
         \`).join('');
         view.innerHTML = \`
           <div class="api-card">
-            <h2 style="color:var(--accent); margin-bottom:12px;">Lịch sử phiên bản & Sửa đổi (Changelog Audit Trail)</h2>
+            <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:12px;">Lịch sử thay đổi phiên bản (Changelog Audit Trail)</h2>
             <table class="spec-table">
-              <thead><tr><th>Phiên bản</th><th>Ngày</th><th>Git Commit</th><th>Tác giả</th><th>Nội dung cập nhật</th></tr></thead>
+              <thead><tr><th>Phiên bản</th><th>Ngày</th><th>Git Commit</th><th>Người thực hiện</th><th>Nội dung cập nhật</th></tr></thead>
               <tbody>\${revRows}</tbody>
             </table>
           </div>
@@ -1469,10 +1529,10 @@ async function main() {
   const isUpdate = args.includes('--update') || args.includes('-u');
   const isOpen = args.includes('--open') || args.includes('-o');
 
-  console.log('==================================================================');
-  console.log('🚀 IDEA ENGINEERING — BỘ XUẤT BẢN ĐẶC TẢ HỢP ĐỒNG API (API CONTRACT)');
-  console.log(`📌 Git Commit: ${gitCommit} | Ngày: ${exportDate}`);
-  console.log('==================================================================');
+  console.log('------------------------------------------------------------------');
+  console.log('IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)');
+  console.log(`Git Commit: ${gitCommit} | Ngày: ${exportDate}`);
+  console.log('------------------------------------------------------------------');
 
   let catalog;
   if (isUpdate) {
@@ -1481,27 +1541,27 @@ async function main() {
     catalog = loadCatalog();
   }
 
-  console.log(`📦 Bắt đầu biên dịch tài liệu cho ${catalog.endpoints.length} endpoints...`);
+  console.log(`Bắt đầu biên dịch tài liệu cho ${catalog.endpoints.length} endpoints...`);
 
   // 1. Generate DOCX
   const docxPath = await generateDocx(catalog);
   const docxSize = (fs.statSync(docxPath).size / 1024).toFixed(1);
-  console.log(`✅ File Word (.docx):  ${docxPath} (${docxSize} KB)`);
+  console.log(`[XUẤT THÀNH CÔNG] File Word (.docx):  ${docxPath} (${docxSize} KB)`);
 
   // 2. Generate XLSX
   const xlsxPath = await generateXlsx(catalog);
   const xlsxSize = (fs.statSync(xlsxPath).size / 1024).toFixed(1);
-  console.log(`✅ File Excel (.xlsx): ${xlsxPath} (${xlsxSize} KB)`);
+  console.log(`[XUẤT THÀNH CÔNG] File Excel (.xlsx): ${xlsxPath} (${xlsxSize} KB)`);
 
   // 3. Generate HTML
   const htmlPath = generateHtml(catalog);
   const htmlSize = (fs.statSync(htmlPath).size / 1024).toFixed(1);
-  console.log(`✅ File HTML (.html):  ${htmlPath} (${htmlSize} KB)`);
+  console.log(`[XUẤT THÀNH CÔNG] File HTML (.html):  ${htmlPath} (${htmlSize} KB)`);
 
-  console.log('\n🎉 HOÀN THÀNH XUẤT XƯỞNG BỘ 3 TÀI LIỆU API CONTRACT!');
+  console.log('\nHoàn tất xuất bản bộ 3 tài liệu đặc tả giao tiếp API.');
 
   if (isOpen) {
-    console.log('🌐 Đang tự động mở file HTML trên trình duyệt mặc định...');
+    console.log('Đang mở file HTML trên trình duyệt mặc định...');
     try {
       execSync(`start "" "${htmlPath}"`, { shell: 'cmd.exe' });
     } catch (e) {
@@ -1511,6 +1571,6 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('❌ Lỗi thực thi:', err);
+  console.error('[LỖI THỰC THI]:', err);
   process.exit(1);
 });
