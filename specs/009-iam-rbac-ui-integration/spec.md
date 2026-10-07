@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft — written spec accepted for planning at e227cb1df60e70a1294628b4f153ad50d8f034c6; successor design review pending; implementation NOT-STARTED
+**Status**: Draft — written spec accepted at e227cb1df60e70a1294628b4f153ad50d8f034c6; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; task/Analyze metadata repair only; implementation NOT-STARTED
 
 **Input**: User-confirmed native account, Project/Group and RBAC journeys: explicit scopes, two principal modes, independent multiple roles, immutable role versions, constrained delegation and separation of administration from engineering participation.
 
@@ -12,15 +12,15 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.1` |
+| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.2` metadata successor; 30 FR/9 SC unchanged |
 | Product normativity | INFORMATIVE relative to the Core baseline; FRs are candidate delivery obligations. DOC-04 remains the sole product SRS; no Core obligation or gate is independently approved here. |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / `CODEX_ONLY` |
-| Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d on 2026-10-07 / applicable Product Decision Authority; successor Core/design and increment readiness NOT-RUN |
+| Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d and DESIGN REVIEW PASS for 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 through human conversation / applicable formal Product Decision Authority gates and increment readiness NOT-RUN |
 | Applicable baseline | Integrated main `4e5244430ea89ffe878819e1279f6e05c60d610a`; accepted PH1 and API predecessors retained |
 | Date / effective date | 2026-10-07, `Asia/Ho_Chi_Minh` / `NOT-APPLICABLE` until applicable approval |
 | Classification / retention | `INTERNAL`; retain specification and supersession history in Git |
 | Upstream / change | [Decision and impact record](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), [Work Item #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
-| Downstream | [Candidate plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md); tasks and execution not generated/run |
+| Downstream | [Reviewed written plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md), [repaired tasks](tasks.md) and [current handoff](integration-readiness.md); runtime execution NOT-RUN |
 | Supersession | Does not supersede PH1, accepted ADR-0012 or existing API contracts. UI branches are presentation lineage. |
 | Review trigger / evidence | Scope, permission, role-version, delegation, credential channel or owner-interface change / source inspection and user decisions only; runtime tests and verifier `NOT-RUN` |
 | Standards tailoring | `IE-STD-AUTH-001`: clarity/trace guided by STD-REQ-001, record identity by STD-INFO-001, acceptance design by STD-TEST-001…004. No conformity claim. |

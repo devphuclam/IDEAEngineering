@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.1 / Draft DESIGN |
+| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.2 metadata successor / Draft DESIGN; technical contract v0.1 unchanged |
 | Authority / owner / author | INFORMATIVE refinement of DOC-06/REQ-AUTH-001…010 / Access Policy; named accountable owner UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer + Product Decision Authority, design NOT-RUN / NOT-APPLICABLE |
+| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; formal Product Decision Authority gates/runtime NOT-RUN / NOT-APPLICABLE |
 | Date / classification / retention | 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL / Git and immutable referenced versions |
 | Change / upstream / downstream | Issue #46 / [Core data owner](../../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md), [change record](../../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / [operations](operations.md), [data model](../data-model.md), future tests |
 | Supersession / trigger / evidence | Old role/Permission semantics not replaced / code, version, principal, scope or delegation change / proposed exact values; no seed execution |

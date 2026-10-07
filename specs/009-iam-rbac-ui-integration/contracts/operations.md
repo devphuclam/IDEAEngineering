@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.1 / Draft DESIGN |
+| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.2 metadata successor / Draft DESIGN; technical contract v0.1 unchanged |
 | Authority / owner / author | INFORMATIVE refinement / IAM, Project Governance, Access Policy and Audit; named owners UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer + Product Decision Authority, design NOT-RUN / NOT-APPLICABLE |
+| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; formal Product Decision Authority gates/runtime NOT-RUN / NOT-APPLICABLE |
 | Date / classification / retention | 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL / Git |
 | Change / upstream / downstream | Issue #46 / [permissions](permission-delegation.md), [data](../data-model.md), accepted [Identity contract](../../../docs/product/instances/idea-engineering/api/identity-session.md) / [Web flow](web-flow.md), future tasks/tests |
 | Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / proposed, runtime NOT-RUN |

@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-RES-IAM-UI-PLAN-001 / first-party planning research / 0.1 / Draft |
+| ID / class / version / state | IE-RES-IAM-UI-PLAN-001 / first-party planning research / 0.2 metadata successor / Draft; technical decisions unchanged |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
-| Baseline / date / review | Main 4e524443; accepted spec e227cb1d / 2026-10-07 Asia/Ho_Chi_Minh / design review NOT-RUN |
+| Baseline / date / review | Main 4e524443; accepted spec e227cb1d / 2026-10-07 Asia/Ho_Chi_Minh / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; formal readiness NOT-RUN |
 | Change / downstream | Issue #46 / [plan](plan.md), [data model](data-model.md), [contracts](contracts/permission-delegation.md) |
 | Classification / effective / retention / supersession / trigger | INTERNAL / NOT-APPLICABLE / Git / historical results unchanged / owner, role, wire or tooling change |
-| Method / limit | First-party source/doc inspection and two bounded research workers; no external research/import, execution or independent human acceptance |
+| Method / limit | Historical method: first-party source/doc inspection and two bounded research workers, no external research/import/execution; later exact-source human written-design acceptance recorded separately in current handoff |
 
 | ID | Source fact | Proposed decision / rationale / alternative rejected |
 |---|---|---|
@@ -27,7 +27,7 @@ Foundations: stable identity/principal/scope, immutable versions/provenance, own
 transaction fate. Additive later: registered owner actions, supported scopes/delivery adapters.
 Domain payloads, arbitrary conditions, nesting, broker and generic policy language are deferred.
 
-All design questions above have a selected candidate. Review must accept exact proposed
-catalogue/Core/console contracts; environment/cache/hash/admitted-tool and target checks remain
+All design questions above have a selected candidate accepted in the exact written-design review
+recorded above; environment/cache/hash/admitted-tool and target checks remain
 execution-preflight obligations, not permission to install. SPEC-OPEN-03/06 are not wholly closed.
-Runtime tests, verifier, production/rollout and independent gate acceptance remain NOT-RUN.
+Runtime tests, verifier, production/rollout and formal independent gate acceptance remain NOT-RUN.

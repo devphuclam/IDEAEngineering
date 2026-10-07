@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.2` / Draft planning successor |
+| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.3` / Draft documentation-repair successor |
 | Product normativity / process state | INFORMATIVE record of confirmed intent and required baseline refinement / NOT-APPLICABLE |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / CODEX_ONLY |
-| Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d; Core/design review NOT-RUN / applicable Product Decision Authority; execution readiness NOT-RUN |
+| Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d and DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d via human conversation on 2026-10-07 / applicable formal Product Decision Authority gates and execution readiness NOT-RUN |
 | Baseline / publication / effective date | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / NOT-APPLICABLE until applicable approval |
 | Classification / retention | INTERNAL / retain decisions, predecessor sources and supersession history in Git |
 | Upstream | [DOC-04](../DOC-04-software-requirements-specification.md), [DOC-05](../DOC-05-architecture-description.md), [DOC-06](../DOC-06-data-integration-and-migration-specification.md), [DOC-08](../DOC-08-ui-ux-and-interaction-specification.md), [ADR-0012](../../../../adr/0012-use-principal-role-scope-rbac.md), [domain language](../../../../../CONTEXT.md) |
@@ -62,7 +62,8 @@ the refinements into DOC-03@0.8, DOC-04@0.16, DOC-05@0.27, DOC-06@0.19 and DOC-0
 with corresponding terminology/catalogue changes. Separately verifiable candidate REQ-AUTH-011…014
 are owned by DOC-04; original 30 delivery FR/9 SC semantics are unchanged. Exact historical
 approval records and their hashes are preserved, not relabelled as approval of these Draft successors.
-Design/Core review is pending.
+Project Reviewer accepted this exact written Core/design packet at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d.
+That written-design acceptance does not constitute or imply formal PG2/PG3/PG4 or execution approval.
 
 SPEC-OPEN-03/06 remain partially clarified. Document Class, Workflow, Reservation, company/MFA policy, deployment, full product configuration and unrelated support decisions remain outside this resolution.
 
@@ -92,16 +93,33 @@ Hard-to-change foundations: stable Actor/principal/scope identity, exact immutab
 
 ## 6. Next controlled stage
 
-The written spec is accepted for planning at e227cb1d. Review the
+The written spec is accepted for planning at e227cb1d. Project Reviewer reported DESIGN REVIEW
+PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d for the
 [plan](../../../../../specs/009-iam-rbac-ui-integration/plan.md),
 [exact catalogue](../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md),
 [operations](../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md) and
 [20-item reviewer checklist](../../../../../specs/009-iam-rbac-ui-integration/checklists/design-review.md).
-Then generate tasks, run read-only Analyze and obtain explicit execution readiness before TDD.
+The 20/20 written-design quality criteria are accepted; the historical author checkbox view is
+retained separately. The task predecessor at 16f98e5c6a7c5919bcb29cf74e850215911594e7 has now
+received an authorized documentation-only Analyze repair. See the [93-task worklist and ID crosswalk](../../../../../specs/009-iam-rbac-ui-integration/tasks.md)
+and [current handoff](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md).
+Read-only Analyze and explicit applicable gate/target/tooling readiness precede all code/test/schema
+writing or runtime setup; current execution remains NOT-RUN.
 
-Planning source version 0.2 supersedes the current-reading status of 0.1; Git retains original
+Current record version 0.3 supersedes current-reading metadata of 0.2/0.1; Git retains original
 spec/preparation history. New package source/definition/assignment authority must be accepted,
 not assumed from prior PH1 completion. Named owner/security/gate attribution is resolved before
 approval/execution. Existing briefs/renditions tied to old Core hashes are stale for these specific
 refinements, not rewritten. Runtime/browser/PostgreSQL tests and verifier NOT-RUN; no merge,
 execution, deployment or timer action.
+
+## 7. Authorized task/Analyze repair — 2026-10-07
+
+Scope: repair C1/I1/I2/U1/U2/I3/D1/I4 from the author Analyze, as explicitly approved by the user.
+Move the gate/Analyze before every implementation/test task; move one evaluator/owner read facts
+and shared client state to foundations; make exact Project HTTP, recipient/reissue qualification
+and per-slice routes explicit; give inspection adapters a single owner; record actual review lineage.
+Retain all 30 FR/9 SC and technical catalogue/data/operation/Web semantics. Renumber tasks and
+preserve all 75 old IDs in a crosswalk. No Core requirement, Java, Web, test implementation, SQL,
+dependency, tooling, runtime or deployment change. Original author checks/review/execution history
+remain attributable. This repair authorization is not production implementation or integration authority.

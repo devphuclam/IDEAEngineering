@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-DATA-IAM-UI-001 / implementation data design / 0.1 / Draft |
+| ID / class / version / state | IE-DATA-IAM-UI-001 / implementation data design / 0.2 metadata successor / Draft; technical design unchanged |
 | Authority / owner / author | INFORMATIVE candidate refining DOC-06 / Project user / Codex, CODEX_ONLY |
-| Baseline / review / date | Accepted spec e227cb1d; main 4e524443 / design NOT-RUN / 2026-10-07 Asia/Ho_Chi_Minh |
+| Baseline / review / date | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; formal readiness/runtime NOT-RUN / 2026-10-07 Asia/Ho_Chi_Minh |
 | Change / source / downstream | Issue #46 / [DOC-06](../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md), [research](research.md) / [operations](contracts/operations.md), future qualification |
 | Effective / classification / retention / supersession / trigger | NOT-APPLICABLE / INTERNAL / Git / V1–V10 unchanged / schema, role, scope, retention or retry change |
 

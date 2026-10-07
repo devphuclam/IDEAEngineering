@@ -18,7 +18,7 @@ and are not edited as product content.
 | Product decision authority | The boss, acting as `Product Decision Authority`, decides Feature, Spec and Tech |
 | Editable authority | English Markdown source under version control |
 | Boss-facing language | Vietnamese decision briefs, with common technical terms retained |
-| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.8`; DOC-04 at `Draft 0.16`; DOC-05 at `Draft 0.27`; DOC-06 at `Draft 0.19`; DOC-07 at `Draft 0.17`; DOC-08 at `Draft 0.14`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.19`; CHG records at their catalogue versions. IAM refinement successors are review-pending under IE-CHG-IAM-UI-001@0.2; historical approvals do not automatically cover them. |
+| Current Core source versions | DOC-01 at `Draft 0.7`; DOC-02 at `Draft 0.2`; DOC-03 at `Draft 0.8`; DOC-04 at `Draft 0.16`; DOC-05 at `Draft 0.27`; DOC-06 at `Draft 0.19`; DOC-07 at `Draft 0.17`; DOC-08 at `Draft 0.14`; coverage GOV at `Draft 0.3`; future-commercial GOV at `Draft 0.1`; VVP at `Draft 0.19`; CHG records at their catalogue versions. IAM written design is accepted at exact 0a1de666 under IE-CHG-IAM-UI-001@0.3; formal applicable gates/runtime remain NOT-RUN, and historical approvals do not automatically cover successors. |
 | Product decision status | Feature, Spec and Tech predecessor baseline `APPROVED` by the Product Decision Authority on 17-09-2026 under [`IE-CHG-PDA-APPROVAL-001`](registers/CHG-2026-09-17-product-decision-authority-approval.md). The Approval Policy correction is `APPROVED` on 19-09-2026, Node.js 24 LTS is `APPROVED` for Web build on 23-09-2026, and the three Check-in scope-policy branches are `APPROVED` on 25-09-2026 under [`IE-CHG-PDA-APPROVAL-003`](registers/CHG-2026-09-25-pda-approval-checkin-scope.md). Exact Web build and remaining successor runtime evidence remain `NOT-RUN`. |
 | First approved version | Successor `Approved 1.0` management renditions are pending controlled publication; the approval decision itself is already pinned to the exact reviewed sources and hashes |
 
@@ -29,7 +29,10 @@ is a separate Draft delivery refinement under [Issue #46](https://github.com/dev
 Its [confirmed-intent and impact record](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md)
 retains the decisions and Core/interface incorporation. Written-spec PASS is reported at exact
 e227cb1df60e70a1294628b4f153ad50d8f034c6; the [plan and contracts](../../../../specs/009-iam-rbac-ui-integration/plan.md)
-are review-pending DESIGN. No implementation, successor product-gate result or timer action is claimed.
+have Project Reviewer DESIGN REVIEW PASS at exact 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d.
+The [tasks/Analyze repair](../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md)
+records current status separately from historical author checks. No implementation, formal successor
+product-gate result or timer action is claimed.
 
 The proposed [API Contract v0.2 CPD detail](api/controlled-product-data.md) refines PH2 CPD-1/CPD-2
 without changing requirements or runtime. Use the [current handoff register](api/handoff/README.md)

@@ -2,16 +2,19 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design / 0.1 / Draft |
-| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer, review NOT-RUN |
+| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design / 0.2 / Draft task-order repair; technical oracles unchanged |
+| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; runtime/readiness NOT-RUN |
 | Baseline / change / date | Spec e227cb1d + [plan](plan.md) / Issue #46 / 2026-10-07 Asia/Ho_Chi_Minh |
 | Effective / classification / retention / supersession / trigger | NOT-APPLICABLE / INTERNAL / Git / no old run replaced / contract, source, environment or tooling change |
 
 ## Prerequisites and exact commands
 
-Accept Core/design/catalogue/console contract; generate reviewer checklist/tasks; Analyze before
-execution. Publish exact executed source, binary/cache/license hashes, separate migrator/app,
-approved new DB or owned UUID schema, synthetic native identities and trusted HTTPS fixture.
+Written design/catalogue/console contract is accepted for task planning. [Tasks](tasks.md)
+T001–T007 prepare the envelope, run read-only Analyze and obtain explicit applicable PG2/PG3/PG4
+and execution readiness before any production/test/schema writing or runtime/setup command.
+Publish permitted commands/targets and pin each later RED/GREEN run's exact source,
+binary/cache/license hashes, separate migrator/app, approved new DB or owned UUID schema,
+synthetic native identities and trusted HTTPS fixture.
 No current DB/listener/root approved by this document; no old build exception carried forward.
 
 Source/template checks are available now:
@@ -29,6 +32,25 @@ Exact Maven directory/repository/goals and package lifecycle must be inspected b
 generate-resources binds Web tooling. Missing/new/hash-drift artifact STOP; no npm install/ci,
 Maven download, trust bypass or broad DB cleanup. New test class/runner names belong to tasks;
 do not claim these commands are runnable before implementation and approved preflight.
+
+## Qualification order
+
+- T008–T024: named fixtures, eligibility/UoW, additive schema, Project-owned read facts and the
+  single shared evaluator, plus Web adapter/error/state. No second evaluator pending US3.
+- T025–T029: separate synthetic Q15 console qualification; live adoption needs its own exact
+  target/operator authorization and is not bootstrap or migration setup.
+- T030–T042: real account/private handoff/recipient redemption, with reissue RED tests for exact
+  login + purpose, other-login/purpose isolation, outcome/Audit rollback and lost-response privacy.
+  Wire actual routes here; intentional temporary proof/password controls are allowed then cleared.
+- T043–T054: Project/Group owner plus UI-P01–P13 real HTTP adapters/tests and actual Web routes,
+  using the already-qualified evaluator. T055–T064 adds assignment UI-R05–R09/wizard only.
+- T065–T074: immutable Custom Role; T075–T082: single UI-R10/UI-A01/UI-O01 query adapter/inspector.
+- T083–T087: final actual browser/accessibility/network/recovery matrix, not first client wiring;
+  T088–T093: affected regression, trace/handoff and independent review packet.
+
+Every slice writes/executes its focused RED before minimum GREEN and qualifies actual HTTP/Web
+where applicable before recording completion. Presentation/owner tests alone are not real HTTP
+adapter/browser acceptance. The final suite is not the first execution of earlier story tests.
 
 ## Scenario/oracle crosswalk
 

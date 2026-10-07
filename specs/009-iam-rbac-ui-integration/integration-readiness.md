@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.2` / Draft planning successor |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.3` / Draft Analyze-repair successor |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer spec PASS at e227cb1d; Core/design review NOT-RUN / applicable Product Decision Authority / NOT-APPLICABLE |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation / formal applicable PG2/PG3/PG4 and execution readiness NOT-RUN / NOT-APPLICABLE |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted predecessor replaced / read-only source inspection, no new execution/approval |
+| Supersession / evidence | No accepted technical predecessor replaced / source inspection, supplied exact-head human design disposition and authorized documentation repair; runtime NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -89,12 +89,14 @@ Product Configuration operations remain DESIGN. Group business-grant qualificati
 
 Historical preparation at e227cb1d retained the table above. Project Reviewer subsequently reported SPEC REVIEW PASS for that exact head on 2026-10-07 and accepted planning, not implementation.
 
-Current planning successor: [plan](plan.md), [research](research.md), [data](data-model.md),
+Historical planning successor at 0a1de666: [plan](plan.md), [research](research.md), [data](data-model.md),
 [exact Permission/delegation](contracts/permission-delegation.md), [operations](contracts/operations.md),
 [Web interaction](contracts/web-flow.md), [validation design](quickstart.md) and
 [reviewer-owned checklist](checklists/design-review.md). Q15 console adoption design is confirmed
 for inclusion, not execution. D09/D10/D11 are recorded in Draft owning Core successors;
-acceptance remains pending. New runtime/browser/PostgreSQL tests/verifier NOT-RUN.
+written design acceptance was pending when that packet was authored; the later exact-source
+disposition is recorded below. Formal applicable gates and runtime readiness are not inferred.
+New runtime/browser/PostgreSQL tests/verifier NOT-RUN.
 
 ### Planning-successor author checks — 2026-10-07
 
@@ -113,10 +115,124 @@ These checks concern document quality, not independent design approval or implem
 | Whitespace/preservation | PASS: git diff --check; primary user package.json remains BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE and outside publication |
 | Runtime tests/browser/DB/build/verifier; Analyze | NOT-RUN / not started in this documentation stage; task decomposition is planning only |
 
-Next: review the exact Core/design/contract packet, 20 unchecked checklist criteria and the
-75-task decomposition. Then run read-only speckit-analyze → explicit gated TDD. No competing spec
-workflow is generated here.
+## 6. Exact human design disposition and authorized Analyze repair
 
-First proposed implementation slice after readiness: actual session + authorized account directory/detail + account UI using qualified commands. Project/Group, assignment/delegation, Custom Role and access inspection follow in testable vertical slices. This is ordering, not execution approval.
+Project Reviewer reported DESIGN REVIEW PASS on 2026-10-07 for exact source
+`0a1de66627fccc4597ac753f6c642d1d8d5f7d1d`, including CHK001–CHK020 **20/20 written
+requirements/contract-quality criteria PASS**. Authority is the review supplied through human
+conversation; no GitHub submitted review/comment is claimed. This is not runtime, security
+qualification or formal PG2/PG3/PG4 PASS. Accepted spec source remains
+`e227cb1df60e70a1294628b4f153ad50d8f034c6`.
+
+Author Analyze of task predecessor `16f98e5c6a7c5919bcb29cf74e850215911594e7` identified
+eight findings. The user approved the proposed documentation-only repair, including renumbering
+with a preserved old-ID crosswalk; no production/test/schema/runtime changes were authorized.
+
+| Finding | Authorized successor repair / trace |
+|---|---|
+| C1 — gate after code; Analyze at end | T006 read-only Analyze and T007 explicit gate precede every source/runtime task, including T008 fixture Java; plan/quickstart aligned. |
+| I1 — Project needs later evaluator | T016–T019 provide Project-owned read facts and one foundational evaluator; Project APIs never use temporary/parallel RBAC. T055/T059 also explicitly qualify the existing UI-R01 catalogue adapter before the wizard, not as later Custom Role wiring. |
+| I2 — absolute password/proof display ban | T032–T033 retain only approved temporary credential/private handoff controls; clear after submit/unmount, never persist/log/URL/evidence. |
+| U1 — missing Project HTTP task | T045 real HTTP RED and T051 exact UI-P01–P13 adapter; T053 actual HTTP/Web qualification. No route invented. |
+| U2 — missing recipient/reissue work | T033–T034 RED, T037–T039 implementation plan and T041 qualification explicitly cover exact login/purpose supersession, rollback, lost response and recipient proof authority. |
+| I3 — shared state/routes too late | T021–T023 foundational client state; actual routing in each US1–US5 slice; T086 final integration is not first wiring. |
+| D1 — duplicate inspection adapter | T061 covers assignment UI-R05–R09 only; T079 alone covers UI-R10/UI-A01/UI-O01. |
+| I4 — stale review/task metadata | Exact design source/disposition recorded; original author checks and acceptance boundaries retained; tasks generated, not implemented. |
+
+The [repaired worklist](tasks.md) has 93 unchecked tasks, with all 75 predecessor IDs mapped.
+US1–US6 counts are 13/12/10/10/8/10; US6 includes five separately bounded prerequisite Q15
+tasks and five final browser/recovery tasks. The approved plan's visible owner-story sequence is
+unchanged; shared authority/client prerequisites are ordered before their first caller.
+
+### Current next step
+
+Documentation checks and read-only Analyze successor are complete as recorded in section 7;
+publish the authorized repair to Draft/Open PR #47, without treating it as execution approval.
+Then T001–T007 must establish explicit applicable gate authority and an exact approved execution
+envelope before any T008+ fixture/test/production/migration edit or runtime/setup execution.
+After that: foundation/Q15 synthetic qualification → actual Account/Session/private credentials
+MVP → Project/Group → assignment → Custom Role → inspection → final browser/recovery.
+No competing specification or implementation workflow is generated.
 
 No Delivery Card/timer, application/database/migration/dependency/deployment mutation, Work Item closure or merge occurs in this preparation step.
+
+## 7. Documentation-only successor checks and author Analyze — 2026-10-07
+
+This is the separately authorized publication record after the read-only Analyze pass; Analyze
+itself did not edit files. Subject: documentation worktree successor based on
+`16f98e5c6a7c5919bcb29cf74e850215911594e7`, with the exact analyzed input hashes below.
+No new independent Project Reviewer acceptance, formal gate PASS or runtime result is claimed.
+
+| Check | Actual result / limit |
+|---|---|
+| Publication scope | PASS: 13 existing Markdown files only; no application, test implementation, SQL, dependency, runtime/tooling, deployment or historical approval file changed. |
+| Task structure | PASS: T001–T093 unique/sequential/unchecked, repository paths and US1–US6 labels; 13/12/10/10/8/10 story tasks. Every one of 75 old IDs mapped; no old execution inferred. |
+| Semantic preservation | PASS: 30 FR + 9 SC definition texts match accepted e227cb1d; technical bodies of operation/permission/Web contracts and data model match accepted 0a1de666, ignoring line endings. |
+| Catalogue identities | PASS: 32 unique operation rows, 25 Permission rows and 8 exact role versions retained. |
+| Relative links | PASS: 255 local file links across 14 Markdown documents (feature including retained author checklist, plus change record/catalogue) resolve; no external URL/runtime qualification. |
+| Whitespace/markers | PASS: git diff --check; no unresolved authoring placeholder. Literal historical statements saying no NEEDS CLARIFICATION marker are not open markers. |
+| Active feature/hooks | PASS: prerequisite resolves 009 with spec/plan/tasks; .specify/extensions.yml absent, before/after task/Analyze hooks not registered. |
+| Primary user file | PASS: apps/web/package.json outside this worktree remains SHA-256 BF29C4DC757894DE0CD5CE5A63B29795DA7765D97591A4EED4ABD92F8A09C4AE. |
+| Analyze detection passes | No remaining actionable findings: CRITICAL/HIGH/MEDIUM/LOW = 0/0/0/0; ambiguity/duplicate conflict = 0/0. Requirement coverage 39/39 planned, not implemented. Constitution I–VI no conflict found; formal execution gate still required. |
+| Runtime/build/browser/PostgreSQL tests and verifier | NOT-RUN; no task completion, deployment, timer action, issue closure or merge. |
+
+The first documentation-check command stopped on a PowerShell regex argument-precedence error;
+the corrected read-only command completed all listed checks. This was a check-script defect,
+not product failure, and the initial attempt is not reported as PASS. A follow-up dependency
+inspection made existing UI-R01 catalogue HTTP ownership explicit before the US3 wizard; final
+read-only Analyze inspected that clarified candidate without adding a route/requirement.
+
+| Analyzed input (raw worktree bytes) | SHA-256 |
+|---|---|
+| specs/009-iam-rbac-ui-integration/spec.md | EEC8ECDCC53A2659A6B6104AE5EA42F24CBC8709A26D7EDCC9CEEB67D3593C3D |
+| specs/009-iam-rbac-ui-integration/plan.md | 73B0D46F1385C7386B587BF36D4D55534C4F63BC3E9EBD3FC1D16DCEC7CC70D8 |
+| specs/009-iam-rbac-ui-integration/tasks.md | 6633478A97B3353D94640A3460EC7059317D671B57E1E45CAFC87688132A313A |
+
+### Planned acceptance coverage from the read-only analysis
+
+| Requirement / criterion | Has planned task? | Representative task IDs |
+|---|---|---|
+| FR-001 | Yes | T009, T021, T040, T083, T085 |
+| FR-002 | Yes | T009, T010, T035 |
+| FR-003 | Yes | T035, T045, T048, T059, T075, T079 |
+| FR-004 | Yes | T030, T031, T036 |
+| FR-005 | Yes | T030, T036, T041, T089 |
+| FR-006 | Yes | T030, T033, T037, T039 |
+| FR-007 | Yes | T032, T033, T037, T039, T085 |
+| FR-008 | Yes | T030, T037, T041 |
+| FR-009 | Yes | T030, T033, T038, T041 |
+| FR-010 | Yes | T043, T045, T049, T051 |
+| FR-011 | Yes | T016, T018, T019, T043, T045 |
+| FR-012 | Yes | T043, T044, T050 |
+| FR-013 | Yes | T016, T018, T043, T044, T050 |
+| FR-014 | Yes | T055, T057, T062 |
+| FR-015 | Yes | T055, T060, T062, T064 |
+| FR-016 | Yes | T018, T058, T060, T063, T075 |
+| FR-017 | Yes | T055, T057, T059, T060, T062 |
+| FR-018 | Yes | T018, T019, T055, T056, T060, T069 |
+| FR-019 | Yes | T013, T014, T025, T027, T029, T059, T066, T070 |
+| FR-020 | Yes | T065, T067, T069, T070, T071 |
+| FR-021 | Yes | T055, T058, T060, T068, T072 |
+| FR-022 | Yes | T018, T019, T075, T078, T080 |
+| FR-023 | Yes | T009, T012, T027, T047, T058, T077 |
+| FR-024 | Yes | T011, T012, T027, T034, T038, T047, T058, T068 |
+| FR-025 | Yes | T020, T021, T032, T034, T041, T055, T068, T075, T079, T085 |
+| FR-026 | Yes | T057, T067, T084, T087 |
+| FR-027 | Yes | T039, T040, T057, T062, T067, T084, T086 |
+| FR-028 | Yes | T021, T022, T023, T040, T052, T072, T080, T085 |
+| FR-029 | Yes | T013, T014, T025, T026, T027, T056, T058 |
+| FR-030 | Yes | T018, T030, T034, T037, T041, T089 |
+| SC-001 | Yes | T030, T031, T033, T034, T041, T042 |
+| SC-002 | Yes | T043, T045, T047, T049, T053, T054 |
+| SC-003 | Yes | T055, T060, T062, T063, T075, T080 |
+| SC-004 | Yes | T055, T057, T060, T062, T063 |
+| SC-005 | Yes | T013, T014, T018, T026, T056, T058, T065, T066, T069 |
+| SC-006 | Yes | T065, T068, T070, T073, T074 |
+| SC-007 | Yes | T011, T012, T027, T034, T047, T058, T068, T077, T085 |
+| SC-008 | Yes | T057, T067, T084, T087 |
+| SC-009 | Yes | T007, T024, T029, T042, T054, T064, T074, T082, T087, T088, T090, T091, T092, T093 |
+
+Shared preparation, fixture and handoff tasks additionally trace the applicable story acceptance
+and Constitution I–VI; no unmapped task was found. No remaining documentation remediation is
+proposed in this pass. The next eligible action is exact execution-readiness preparation and
+explicit applicable gate disposition, not starting implementation from this author report.

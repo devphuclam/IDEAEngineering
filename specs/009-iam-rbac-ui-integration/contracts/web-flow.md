@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.1 / Draft DESIGN / INFORMATIVE |
-| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer, NOT-RUN |
+| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.2 metadata successor / Draft DESIGN; technical contract v0.1 unchanged / INFORMATIVE |
+| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; runtime/readiness NOT-RUN |
 | Baseline / change / date | Spec accepted e227cb1d; [operations](operations.md) / Issue #46 / 2026-10-07 Asia/Ho_Chi_Minh |
 | Classification / effective / retention / trigger | INTERNAL / NOT-APPLICABLE / Git / operation, privacy, authority or interaction change |
 | Supersession / downstream | Mock/security behavior not accepted; no current live contract replaced / actual Web qualification |
