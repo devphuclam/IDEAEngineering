@@ -38,8 +38,13 @@ public final class IamSessionFixture implements AutoCloseable {
     private final int port;
 
     public IamSessionFixture(IamIntegrationFixtures fixtures, Class<?>... qualificationSources) {
+        this(fixtures, false, qualificationSources);
+    }
+    public IamSessionFixture(IamIntegrationFixtures fixtures, boolean manualDelivery, Class<?>... qualificationSources) {
         this.fixtures = fixtures;
         server = new SpringApplicationBuilder(IdeaServerApplication.class).sources(qualificationSources).initializers(context -> {
+            context.getEnvironment().getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource(
+                    "iamManualDeliveryFixture", java.util.Map.of("idea.identity.manual-credential-delivery.enabled", manualDelivery)));
             context.getBeanFactory().registerSingleton("iamFixtureClock", clock);
             context.getBeanFactory().registerSingleton("dataSource", fixtures.appDataSource());
             context.getBeanFactory().registerSingleton("iamPrincipalCapture", new PrincipalCapture());
