@@ -14,6 +14,7 @@ const sshOptions = ["-i", key, "-o", "BatchMode=yes", "-o", "StrictHostKeyChecki
 const command = `bash ${owned}/source/tests/iam-ui-46/account-browser.sh ${source} ${manifest} ${label}`;
 const sha = bytes => createHash("sha256").update(bytes).digest("hex");
 let stage = "preflight", browser, fixture;
+let diagnosticPage, lossStatus, lossAttempts = 0;
 const secrets = [];
 const passed = [];
 const pass = name => { passed.push(name); console.log(`${name}=PASS`); };
@@ -183,10 +184,12 @@ try {
   stage = "committed-response-loss";
   // Intercept Chrome's actual response, not a Node HTTP proxy with a different trust context.
   const responseLoss = await adminContext.newCDPSession(page); let committedStatus;
+  diagnosticPage = page;
   await responseLoss.send("Fetch.enable", { patterns: [{ urlPattern: "*/api/v1/identity/accounts", requestStage: "Response" }] });
   responseLoss.on("Fetch.requestPaused", async event => {
     if (event.request.method !== "POST") return responseLoss.send("Fetch.continueResponse", { requestId: event.requestId });
     committedStatus = event.responseStatusCode;
+    lossStatus = committedStatus; lossAttempts++;
     await responseLoss.send("Fetch.failRequest", { requestId: event.requestId, errorReason: "Failed" });
   });
   await page.getByRole("button", { name: "Tạo tài khoản", exact: true }).click();
@@ -208,5 +211,12 @@ try {
   assert.equal(await page.getByTestId("private-proof").count(), 0); await privateBoundary(page); pass("W09_LOGOUT_PROTECTED_UI_UNMOUNT");
   await adminContext.close(); await recipientContext.close(); await ordinaryContext.close();
   console.log(`ACCOUNT_MVP_BROWSER=PASS;SOURCE=${source};CASES=${passed.length};CHROME=154.0.8037.98;HTTPS=NORMAL_TRUST;RETAINED_SECRETS=0`);
-} catch { console.error(`ACCOUNT_MVP_BROWSER=FAIL;STAGE=${stage};NO_PRIVATE_DIAGNOSTICS_RETAINED=true`); process.exitCode = 1; }
+} catch (error) {
+  if (diagnosticPage && stage.startsWith("committed-response-loss")) {
+    const message = await diagnosticPage.getByTestId("account-status").innerText().catch(() => "");
+    const ui = message.includes("Chưa xác định được kết quả") ? "UNRESOLVED" : message.includes("đã tạo") ? "CONFIRMED" : message.includes("Chưa gửi thao tác") ? "NOT_SUBMITTED" : message.includes("từ chối") ? "REFUSED" : "OTHER";
+    console.error(`LOSS_ORACLE_STATUS=${lossStatus ?? "NOT_OBSERVED"};INTERCEPTS=${lossAttempts};UI=${ui};ERROR_TYPE=${["TimeoutError","AssertionError","Error"].includes(error?.name) ? error.name : "OTHER"}`);
+  }
+  console.error(`ACCOUNT_MVP_BROWSER=FAIL;STAGE=${stage};NO_PRIVATE_DIAGNOSTICS_RETAINED=true`); process.exitCode = 1;
+}
 finally { if (browser) await browser.close(); secrets.length = 0; fixture = undefined; }
