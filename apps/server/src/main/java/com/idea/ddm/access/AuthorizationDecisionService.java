@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /** One Access Policy seam: current IAM and all applicable grants, never owner business success. */
@@ -56,26 +57,35 @@ public final class AuthorizationDecisionService {
         if (!actor.organizationId().equals(scope.organizationId())) {
             return new Decision(actor.actorId(), scope, permission, now, true, List.of(), "WRONG_ORGANIZATION_SCOPE");
         }
-        if (scope.kind() == ScopeKind.PROJECT && projects.authorizationFacts(connection, actor, scope.projectId(), now).isEmpty()) {
+        var facts = scope.kind() == ScopeKind.PROJECT
+                ? projects.authorizationFacts(connection, actor, scope.projectId(), now)
+                : Optional.<ProjectGovernanceQueries.ProjectFacts>empty();
+        if (scope.kind() == ScopeKind.PROJECT && facts.isEmpty()) {
             return new Decision(actor.actorId(), scope, permission, now, true, List.of(), "NO_APPLICABLE_ASSIGNMENT");
         }
-        var paths = directAssignments(connection, actor.actorId(), permission, scope, now);
+        var paths = applicableAssignments(connection, actor.actorId(), permission, scope, now, facts);
         return new Decision(actor.actorId(), scope, permission, now, true, paths, paths.isEmpty() ? "NO_APPLICABLE_ASSIGNMENT" : null);
     }
 
-    private static List<GrantPath> directAssignments(Connection connection, UUID actorId, String permission,
-            Scope scope, Instant now) throws SQLException {
+    private static List<GrantPath> applicableAssignments(Connection connection, UUID actorId, String permission,
+            Scope scope, Instant now, Optional<ProjectGovernanceQueries.ProjectFacts> facts) throws SQLException {
         var paths = new ArrayList<GrantPath>();
-        try (var query = connection.prepareStatement("SELECT a.assignment_id,a.role_version_id,v.role_code,v.version,a.scope_kind,a.project_id "
+        var projectMembership = facts.flatMap(ProjectGovernanceQueries.ProjectFacts::projectMembership);
+        var groups = facts.map(ProjectGovernanceQueries.ProjectFacts::groupMemberships).orElse(List.of()).stream()
+                .collect(java.util.stream.Collectors.toMap(ProjectGovernanceQueries.GroupPath::groupId, path -> path));
+        try (var query = connection.prepareStatement("SELECT a.assignment_id,a.role_version_id,v.role_code,v.version,a.scope_kind,a.project_id,"
+                + "a.principal_group_id,r.participant_membership_required "
                 + "FROM identity_role_assignment a JOIN identity_role_version v USING(role_version_id) "
                 + "JOIN identity_role_version_profile profile USING(role_version_id) "
                 + "JOIN identity_role_permission p USING(role_version_id) JOIN permission_registry r USING(permission_code) "
-                + "WHERE a.principal_actor_id=? AND a.organization_id=? AND a.revoked_at IS NULL "
+                + "WHERE (a.principal_actor_id=? OR a.principal_group_id IS NOT NULL) AND a.organization_id=? AND a.revoked_at IS NULL "
                 + "AND a.effective_from<=? AND (a.effective_until IS NULL OR a.effective_until>?) "
                 + "AND (a.scope_kind='ORGANIZATION' OR (a.scope_kind='PROJECT' AND ?='PROJECT' AND a.project_id=?)) AND p.permission_code=? "
-                + "AND a.scope_kind=ANY(profile.scope_kinds) AND 'ACTOR'=ANY(profile.principal_kinds) "
-                + "AND ?=ANY(r.scope_kinds) AND 'ACTOR'=ANY(r.principal_kinds) "
-                + "AND NOT r.participant_membership_required ORDER BY a.assignment_id")) {
+                + "AND a.scope_kind=ANY(profile.scope_kinds) "
+                + "AND (CASE WHEN a.principal_group_id IS NULL THEN 'ACTOR' ELSE 'PROJECT_GROUP' END)=ANY(profile.principal_kinds) "
+                + "AND ?=ANY(r.scope_kinds) "
+                + "AND (CASE WHEN a.principal_group_id IS NULL THEN 'ACTOR' ELSE 'PROJECT_GROUP' END)=ANY(r.principal_kinds) "
+                + "AND (a.principal_group_id IS NULL OR profile.classification='BUSINESS') ORDER BY a.assignment_id")) {
             query.setObject(1, actorId);
             query.setObject(2, scope.organizationId());
             query.setTimestamp(3, Timestamp.from(now));
@@ -85,9 +95,18 @@ public final class AuthorizationDecisionService {
             query.setString(7, permission);
             query.setString(8, scope.kind().name());
             try (var rows = query.executeQuery()) {
-                while (rows.next()) paths.add(new GrantPath(rows.getObject(1, UUID.class), rows.getObject(2, UUID.class),
-                        rows.getString(3), rows.getInt(4),
-                        new Scope(ScopeKind.valueOf(rows.getString(5)), scope.organizationId(), rows.getObject(6, UUID.class)), null, null, null));
+                while (rows.next()) {
+                    var group = rows.getObject(7, UUID.class);
+                    var participant = rows.getBoolean(8);
+                    if ((participant || group != null) && projectMembership.isEmpty()) continue;
+                    var groupPath = group == null ? null : groups.get(group);
+                    if (group != null && groupPath == null) continue;
+                    paths.add(new GrantPath(rows.getObject(1, UUID.class), rows.getObject(2, UUID.class),
+                            rows.getString(3), rows.getInt(4),
+                            new Scope(ScopeKind.valueOf(rows.getString(5)), scope.organizationId(), rows.getObject(6, UUID.class)), group,
+                            participant || group != null ? projectMembership.orElseThrow().membershipId() : null,
+                            groupPath == null ? null : groupPath.membership().membershipId()));
+                }
             }
         }
         return List.copyOf(paths);
