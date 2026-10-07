@@ -72,7 +72,7 @@ bfd590e4f09502d4dda3c6c8c8b16dbf40a9cd284bdc9b06adfce4833cd64de6  apps/server/sr
 8bd839e324414f65f6e2d7194863354eaa542978dc69a57fa894c7dba550714c  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationHttpTest.java
 0c39dd6f2f469ebb30dd4444e00d104c9964222ba306e62951da6386cfd9742e  apps/server/src/test/java/com/idea/ddm/DevelopmentApiDocumentationTest.java
 c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/src/test/java/com/idea/ddm/F03BPublicMigrationTest.java
-5f7094036d1fd21f5ad5f117ac046630c49b38b6fdb32e907de606a6ebd3115c  apps/server/src/test/java/com/idea/ddm/iam/IamHttpContractTest.java
+10480126dccaed714e744da50f87132d9c8ec86984b03b4fb34ab615aecabbdc  apps/server/src/test/java/com/idea/ddm/iam/IamHttpContractTest.java
 0f29ea9f531ca6d0af175504dfb7859eac33295c625460eadc2b6a68f847a2c7  apps/server/src/test/java/com/idea/ddm/iam/IamIntegrationFixtures.java
 c874c6742cf907bf6e5749837576d6577f8ffda001bd0b5554f6de691155c860  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java
@@ -82,7 +82,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
 edcbdcefa65c07fe11dc7eba7f30008a9a28598f4539754f5ba3c75830c88658  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
-d25ada93bec1bc5a919a5f90ddfe52baf9a85b0b251ada687be2e0dacc387e48  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
+32f9eb6988f25ba8e781c369f484caa9226e612217526b063940084d9e839aed  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
 8cae7ffa8da7ffefdd2cf1b6471af2de172d1735f2ba0e3c3d7e0bd48e1d448e  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/src/test/java/com/idea/ddm/identity/IdentityTransactionsTest.java
 276fe48a6d07d34d6ed19eb06eaab215c8f02e72e40a06f7911b2e07cb3888bd  apps/server/src/test/java/com/idea/ddm/identity/OwnedHandoffCleanupTest.java

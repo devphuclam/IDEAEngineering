@@ -108,6 +108,26 @@ class IamHttpContractTest {
         });
     }
 
+    @Test void actualServerWiresTheQualifiedReadEvaluatorAndOwnerTransactionWithoutImplicitGrants() throws Exception {
+        http.withSignedInClient(fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY), (client, context) -> {
+            assertNotNull(http.service(com.idea.ddm.identity.IdentityTransactions.class));
+            assertNotNull(http.service(com.idea.ddm.project.ProjectGovernanceQueries.class));
+            try (var connection = fixtures.app()) {
+                connection.setTransactionIsolation(java.sql.Connection.TRANSACTION_REPEATABLE_READ);
+                connection.setAutoCommit(false);
+                connection.setReadOnly(true);
+                var decision = http.service(com.idea.ddm.access.AuthorizationDecisionService.class).evaluate(connection, context,
+                        "account.read", com.idea.ddm.access.AuthorizationDecisionService.Scope.organization(fixtures.organizationId()));
+                assertTrue(decision.eligible());
+                assertFalse(decision.rbacGranted());
+                assertEquals(context.actorId(), decision.actorId());
+                assertTrue(decision.paths().isEmpty());
+                connection.rollback();
+            }
+            return null;
+        });
+    }
+
     private HttpResponse<String> postWithCsrf(HttpClient client, String path, String body) throws Exception {
         var proof = json.readTree(get(client, "/api/v1/identity/csrf").body());
         return client.send(HttpRequest.newBuilder(http.uri(path)).header("Content-Type", "application/json")
