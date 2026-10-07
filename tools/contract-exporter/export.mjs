@@ -34,12 +34,6 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-// 1. Get current Git Commit SHA & Date
-let gitCommit = 'UNKNOWN';
-try {
-  gitCommit = execSync('git rev-parse --short HEAD', { cwd: REPO_ROOT }).toString().trim();
-} catch {}
-
 const exportDate = new Date().toLocaleDateString('vi-VN', {
   year: 'numeric',
   month: '2-digit',
@@ -47,7 +41,30 @@ const exportDate = new Date().toLocaleDateString('vi-VN', {
 });
 const exportDateTime = new Date().toLocaleString('vi-VN');
 
-// 2. Load API Catalog
+// Helper to convert multiline strings safely into OpenXML TextRuns (no literal \n in <w:t>)
+function createSafeTextRuns(text, options = {}) {
+  if (!text) return [new TextRun({ text: "", ...options })];
+  const lines = String(text).split(/\r?\n/);
+  return lines.map((line, index) => new TextRun({
+    text: line || " ",
+    break: index > 0 ? 1 : 0,
+    ...options
+  }));
+}
+
+function createCodeRuns(codeText) {
+  if (!codeText) return [new TextRun({ text: "" })];
+  const lines = String(codeText).split(/\r?\n/);
+  return lines.map((line, index) => new TextRun({
+    text: line || " ",
+    break: index > 0 ? 1 : 0,
+    font: "Consolas",
+    size: 16,
+    color: "1F2937"
+  }));
+}
+
+// 1. Load API Catalog
 function loadCatalog() {
   if (!fs.existsSync(CATALOG_PATH)) {
     throw new Error(`Không tìm thấy file catalog dữ liệu tại: ${CATALOG_PATH}`);
@@ -55,12 +72,11 @@ function loadCatalog() {
   return JSON.parse(fs.readFileSync(CATALOG_PATH, 'utf-8'));
 }
 
-// 3. Update / Smart Merge function
+// 2. Update / Smart Merge function
 function updateCatalog() {
   console.log('--- Đang quét và đồng bộ dữ liệu từ mã nguồn repository ---');
   const catalog = loadCatalog();
 
-  // Scan openapi.json if exists
   const openapiPath = path.resolve(REPO_ROOT, 'apps/server/src/main/resources/dev-access/openapi.json');
   if (fs.existsSync(openapiPath)) {
     try {
@@ -73,7 +89,6 @@ function updateCatalog() {
     }
   }
 
-  // Scan markdown docs
   const identityMdPath = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/identity-session.md');
   const cpdMdPath = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/controlled-product-data.md');
 
@@ -84,31 +99,18 @@ function updateCatalog() {
     console.log('[OK] Đã đối chuẩn tài liệu kỹ thuật: controlled-product-data.md');
   }
 
-  // Record a new revision entry if commit changed
-  const lastRev = catalog.metadata.revisions[catalog.metadata.revisions.length - 1];
-  if (lastRev.commit !== gitCommit) {
-    const nextVer = (parseFloat(catalog.metadata.version) + 0.1).toFixed(1);
-    catalog.metadata.version = nextVer;
-    catalog.metadata.revisions.push({
-      version: nextVer,
-      date: exportDate,
-      commit: gitCommit,
-      author: catalog.metadata.author,
-      description: `Đồng bộ hóa tự động từ mã nguồn Git tại commit ${gitCommit}. Đối chuẩn ${catalog.endpoints.length} endpoints.`
-    });
-    console.log(`[CẬP NHẬT] Ghi nhận phiên bản mới: v${nextVer} (Commit: ${gitCommit})`);
-  } else {
-    console.log(`[THÔNG TIN] Phiên bản hiện tại đã khớp commit SHA ${gitCommit}.`);
-  }
+  // Update date
+  catalog.metadata.date = exportDate;
 
   fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2), 'utf-8');
   console.log(`[HOÀN TẤT] Dữ liệu được lưu tại ${CATALOG_PATH}\n`);
   return catalog;
 }
 
-// 4. GENERATE WORD (.DOCX) DOCUMENT
+// 3. GENERATE WORD (.DOCX) DOCUMENT
 async function generateDocx(catalog) {
-  const logoPath = path.resolve(REPO_ROOT, 'logo-idea.png');
+  // Use real PNG logo from data directory
+  const logoPath = path.resolve(DATA_DIR, 'logo-idea-real.png');
   let logoImage = null;
   if (fs.existsSync(logoPath)) {
     logoImage = fs.readFileSync(logoPath);
@@ -145,7 +147,7 @@ async function generateDocx(catalog) {
               new Paragraph({
                 alignment: AlignmentType.SPACE_BETWEEN,
                 children: [
-                  new TextRun({ text: `Bản phát hành nội bộ • Ngày ${exportDate} • Git: ${gitCommit}`, size: 16, color: "6B7280" }),
+                  new TextRun({ text: `Bản phát hành nội bộ • Ngày ${exportDate}`, size: 16, color: "6B7280" }),
                   new TextRun({ text: "Trang ", size: 16, color: "6B7280" }),
                   new TextRun({ children: [PageNumber.CURRENT], size: 16, color: "6B7280" }),
                 ],
@@ -166,7 +168,7 @@ async function generateDocx(catalog) {
                     children: [
                       new Paragraph({ children: [new TextRun({ text: "Tên dự án: ", bold: true }), new TextRun(catalog.metadata.project)] }),
                       new Paragraph({ children: [new TextRun({ text: "Mã tài liệu: ", bold: true }), new TextRun(catalog.metadata.documentCode)] }),
-                      new Paragraph({ children: [new TextRun({ text: "Mã Git Commit: ", bold: true }), new TextRun(gitCommit)] }),
+                      new Paragraph({ children: [new TextRun({ text: "Trạng thái: ", bold: true }), new TextRun(catalog.metadata.status)] }),
                     ]
                   }),
                   new TableCell({
@@ -193,6 +195,7 @@ async function generateDocx(catalog) {
                 new ImageRun({
                   data: logoImage,
                   transformation: { width: 164, height: 70 },
+                  type: "png"
                 }),
               ],
             })
@@ -273,7 +276,7 @@ async function generateDocx(catalog) {
               new TextRun({
                 text: "Tài liệu này xác lập các quy ước kỹ thuật ràng buộc giữa các thành phần phần mềm thuộc hệ thống IDEA DDM Core v0, " +
                   "bao gồm Web Application (React), Desktop Workstation Adapter (C#), REST Application Server (Spring Boot) và Cổng truyền dữ liệu tệp tin (File Gateway Vault). " +
-                  "Mọi thông số được kiểm chuẩn trực tiếp dựa trên mã nguồn và các biên bản kiểm thử trong Git."
+                  "Mọi thông số được kiểm chuẩn trực tiếp dựa trên mã nguồn và các biên bản kiểm thử hệ thống."
               })
             ],
           }),
@@ -330,20 +333,18 @@ async function generateDocx(catalog) {
             rows: [
               new TableRow({
                 children: [
-                  new TableCell({ width: { size: 12, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Phiên bản", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Ngày", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ width: { size: 14, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Git Commit", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Người sửa", bold: true, color: "FFFFFF" })] })] }),
-                  new TableCell({ width: { size: 38, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Nội dung cập nhật", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 15, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Phiên bản", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 20, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Ngày áp dụng", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 25, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Người thực hiện", bold: true, color: "FFFFFF" })] })] }),
+                  new TableCell({ width: { size: 40, type: WidthType.PERCENTAGE }, shading: headerShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Nội dung cập nhật", bold: true, color: "FFFFFF" })] })] }),
                 ],
               }),
               ...catalog.metadata.revisions.map(rev => new TableRow({
                 children: [
                   new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: `v${rev.version}`, bold: true })] })] }),
                   new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.date)] })] }),
-                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.commit)] })] }),
                   new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.author)] })] }),
-                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(rev.description)] })] }),
+                  new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(rev.description) })] }),
                 ],
               })),
             ],
@@ -392,9 +393,14 @@ async function generateDocx(catalog) {
                   children: [
                     new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${s.step}`, bold: true })] })] }),
                     new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(s.actor)] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: s.action, bold: true }), new TextRun(`\n${s.endpoint}`) ] })] }),
+                    new TableCell({ borders: borderThin, children: [
+                      new Paragraph({ children: [
+                        new TextRun({ text: s.action, bold: true }),
+                        new TextRun({ text: s.endpoint, break: 1, font: "Consolas", size: 16 })
+                      ] })
+                    ] }),
                     new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(s.receiver)] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(s.outcome)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(s.outcome) })] }),
                   ],
                 })),
               ],
@@ -496,25 +502,25 @@ async function generateDocx(catalog) {
                 new TableRow({
                   children: [
                     new TableCell({ width: { size: 22, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Mô tả chức năng:", bold: true })] })] }),
-                    new TableCell({ width: { size: 78, type: WidthType.PERCENTAGE }, borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.description)] })] }),
+                    new TableCell({ width: { size: 78, type: WidthType.PERCENTAGE }, borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.description) })] }),
                   ],
                 }),
                 new TableRow({
                   children: [
                     new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Quyền hạn yêu cầu:", bold: true })] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.auth)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.auth) })] }),
                   ],
                 }),
                 new TableRow({
                   children: [
                     new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Điều kiện tiên quyết:", bold: true })] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.preconditions)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.preconditions) })] }),
                   ],
                 }),
                 new TableRow({
                   children: [
                     new TableCell({ shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Tác động trạng thái:", bold: true })] })] }),
-                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(item.stateEffects)] })] }),
+                    new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(item.stateEffects) })] }),
                   ],
                 }),
               ],
@@ -537,7 +543,7 @@ async function generateDocx(catalog) {
                     children: [
                       new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: h.name, font: "Consolas", bold: true })] })] }),
                       new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(h.required ? "Bắt buộc" : "Tùy chọn")] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(h.description)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(h.description) })] }),
                     ],
                   })),
                 ],
@@ -565,7 +571,12 @@ async function generateDocx(catalog) {
                       new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.in)] })] }),
                       new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(f.type)] })] }),
                       new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(f.required ? "Có" : "Không")] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: `${f.description}\n` }), new TextRun({ text: `Ràng buộc: ${f.validation}`, italics: true, color: "4B5563" })] })] }),
+                      new TableCell({ borders: borderThin, children: [
+                        new Paragraph({ children: [
+                          new TextRun({ text: f.description }),
+                          new TextRun({ text: `Ràng buộc: ${f.validation}`, break: 1, italics: true, color: "4B5563" })
+                        ] })
+                      ] }),
                     ],
                   })),
                 ],
@@ -585,7 +596,7 @@ async function generateDocx(catalog) {
                       borders: borderThin,
                       children: [
                         new Paragraph({ children: [new TextRun({ text: "REQUEST PAYLOAD:", bold: true, size: 16, color: "374151" })] }),
-                        new Paragraph({ children: [new TextRun({ text: item.requestExample, font: "Consolas", size: 16, color: "1F2937" })] })
+                        new Paragraph({ children: createCodeRuns(item.requestExample) })
                       ]
                     }),
                     new TableCell({
@@ -594,7 +605,7 @@ async function generateDocx(catalog) {
                       borders: borderThin,
                       children: [
                         new Paragraph({ children: [new TextRun({ text: "RESPONSE PAYLOAD:", bold: true, size: 16, color: "374151" })] }),
-                        new Paragraph({ children: [new TextRun({ text: item.responseExample, font: "Consolas", size: 16, color: "1F2937" })] })
+                        new Paragraph({ children: createCodeRuns(item.responseExample) })
                       ]
                     }),
                   ],
@@ -620,8 +631,8 @@ async function generateDocx(catalog) {
                     children: [
                       new TableCell({ borders: borderThin, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${err.status}`, bold: true })] })] }),
                       new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: err.code, font: "Consolas" })] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(err.reason)] })] }),
-                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: [new TextRun(err.remedy)] })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(err.reason) })] }),
+                      new TableCell({ borders: borderThin, children: [new Paragraph({ children: createSafeTextRuns(err.remedy) })] }),
                     ],
                   })),
                 ],
@@ -633,7 +644,7 @@ async function generateDocx(catalog) {
               spacing: { before: 80, after: 180 },
               children: [
                 new TextRun({ text: "Ghi chú kỹ thuật: ", bold: true, color: "374151" }),
-                new TextRun({ text: item.notes, italics: true }),
+                ...createSafeTextRuns(item.notes, { italics: true }),
               ],
             }),
           ]),
@@ -648,7 +659,7 @@ async function generateDocx(catalog) {
   return docxFile;
 }
 
-// 5. GENERATE EXCEL (.XLSX) SPREADSHEET (4 CLEAN ENGINEERING SHEETS)
+// 4. GENERATE EXCEL (.XLSX) SPREADSHEET (NO GIT REFERENCES)
 async function generateXlsx(catalog) {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = catalog.metadata.author;
@@ -675,7 +686,7 @@ async function generateXlsx(catalog) {
   ws1.getCell('A3').value = 'NGƯỜI PHỤ TRÁCH:';
   ws1.getCell('B3').value = `${catalog.metadata.author} — ${catalog.metadata.department}`;
   ws1.getCell('A4').value = 'PHIÊN BẢN:';
-  ws1.getCell('B4').value = `v${catalog.metadata.version} • Git Commit: ${gitCommit} • Ngày xuất: ${exportDate}`;
+  ws1.getCell('B4').value = `v${catalog.metadata.version} • Ngày xuất bản: ${exportDate}`;
   ws1.getCell('A5').value = 'QUY MÔ KỸ THUẬT:';
   ws1.getCell('B5').value = `Tổng cộng ${catalog.endpoints.length} endpoints (${catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI')).length} đã triển khai, ${catalog.endpoints.filter(e => e.status.includes('THIẾT KẾ')).length} đang thiết kế)`;
 
@@ -689,7 +700,7 @@ async function generateXlsx(catalog) {
   ws1.getCell('A7').value = 'LỊCH SỬ THAY ĐỔI PHIÊN BẢN (REVISION HISTORY / AUDIT TRAIL)';
   ws1.getCell('A7').font = { name: 'Segoe UI', size: 11, bold: true, color: { argb: 'FF1F2937' } };
 
-  const clHeaders = ['Phiên bản', 'Ngày áp dụng', 'Mã Git Commit', 'Người thực hiện', 'Nội dung thay đổi'];
+  const clHeaders = ['Phiên bản', 'Ngày áp dụng', 'Người thực hiện', 'Nội dung thay đổi chi tiết'];
   clHeaders.forEach((h, idx) => {
     const colLetter = String.fromCharCode('A'.charCodeAt(0) + idx);
     const cell = ws1.getCell(`${colLetter}8`);
@@ -704,25 +715,22 @@ async function generateXlsx(catalog) {
     const rowNum = 9 + idx;
     ws1.getCell(`A${rowNum}`).value = `v${rev.version}`;
     ws1.getCell(`B${rowNum}`).value = rev.date;
-    ws1.getCell(`C${rowNum}`).value = rev.commit;
-    ws1.getCell(`D${rowNum}`).value = rev.author;
-    ws1.getCell(`E${rowNum}`).value = rev.description;
+    ws1.getCell(`C${rowNum}`).value = rev.author;
+    ws1.getCell(`D${rowNum}`).value = rev.description;
 
-    ['A', 'B', 'C', 'D', 'E'].forEach(c => {
+    ['A', 'B', 'C', 'D'].forEach(c => {
       ws1.getCell(`${c}${rowNum}`).border = borderThin;
       ws1.getCell(`${c}${rowNum}`).font = { name: 'Segoe UI', size: 10 };
     });
     ws1.getCell(`A${rowNum}`).alignment = { horizontal: 'center' };
     ws1.getCell(`B${rowNum}`).alignment = { horizontal: 'center' };
-    ws1.getCell(`C${rowNum}`).alignment = { horizontal: 'center' };
     ws1.getRow(rowNum).height = 22;
   });
 
   ws1.getColumn('A').width = 14;
   ws1.getColumn('B').width = 24;
-  ws1.getColumn('C').width = 16;
-  ws1.getColumn('D').width = 26;
-  ws1.getColumn('E').width = 80;
+  ws1.getColumn('C').width = 26;
+  ws1.getColumn('D').width = 80;
 
   // --- SHEET 2: MA TRẬN API ---
   const ws2 = workbook.addWorksheet('2. Ma tran API');
@@ -730,7 +738,7 @@ async function generateXlsx(catalog) {
 
   ws2.getCell('A1').value = 'MA TRẬN GIAO TIẾP API — HỆ THỐNG IDEA DDM CORE v0';
   ws2.getCell('A1').font = { name: 'Segoe UI', size: 12, bold: true, color: { argb: 'FF1F2937' } };
-  ws2.getCell('A2').value = `Baseline Git: ${gitCommit} | Ngày xuất bản: ${exportDateTime}`;
+  ws2.getCell('A2').value = `Ngày xuất bản: ${exportDateTime}`;
   ws2.getCell('A2').font = { name: 'Segoe UI', size: 9, italics: true, color: { argb: 'FF6B7280' } };
 
   ws2.columns = [
@@ -926,7 +934,7 @@ async function generateXlsx(catalog) {
   return xlsxFile;
 }
 
-// 6. GENERATE CLEAN TECHNICAL HTML (GITHUB DOCS / STRIPE DOCS STYLE)
+// 5. GENERATE CLEAN TECHNICAL HTML (NO GIT REFERENCES)
 function generateHtml(catalog) {
   const jsonCatalog = JSON.stringify(catalog);
 
@@ -1236,7 +1244,7 @@ function generateHtml(catalog) {
   <div id="sidebar">
     <div class="brand">
       <h1>IDEA ENGINEERING</h1>
-      <p>Đặc tả API • SPEC-API-001 • Git: ${gitCommit}</p>
+      <p>Đặc tả API • SPEC-API-001 • v${catalog.metadata.version}</p>
     </div>
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Tìm theo mã API, đường dẫn, tham số...">
@@ -1486,7 +1494,6 @@ function generateHtml(catalog) {
           <tr>
             <td><strong>v\${r.version}</strong></td>
             <td>\${r.date}</td>
-            <td><code>\${r.commit}</code></td>
             <td>\${r.author}</td>
             <td>\${r.description}</td>
           </tr>
@@ -1495,7 +1502,7 @@ function generateHtml(catalog) {
           <div class="api-card">
             <h2 style="color:var(--text-main); font-size:1.1rem; margin-bottom:12px;">Lịch sử thay đổi phiên bản (Changelog Audit Trail)</h2>
             <table class="spec-table">
-              <thead><tr><th>Phiên bản</th><th>Ngày</th><th>Git Commit</th><th>Người thực hiện</th><th>Nội dung cập nhật</th></tr></thead>
+              <thead><tr><th>Phiên bản</th><th>Ngày</th><th>Người thực hiện</th><th>Nội dung cập nhật</th></tr></thead>
               <tbody>\${revRows}</tbody>
             </table>
           </div>
@@ -1523,16 +1530,11 @@ function generateHtml(catalog) {
   return htmlFile;
 }
 
-// 7. MAIN CLI CONTROLLER
+// 6. MAIN CLI CONTROLLER
 async function main() {
   const args = process.argv.slice(2);
   const isUpdate = args.includes('--update') || args.includes('-u');
   const isOpen = args.includes('--open') || args.includes('-o');
-
-  console.log('------------------------------------------------------------------');
-  console.log('IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)');
-  console.log(`Git Commit: ${gitCommit} | Ngày: ${exportDate}`);
-  console.log('------------------------------------------------------------------');
 
   let catalog;
   if (isUpdate) {
@@ -1541,6 +1543,10 @@ async function main() {
     catalog = loadCatalog();
   }
 
+  console.log('------------------------------------------------------------------');
+  console.log('IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)');
+  console.log(`Phiên bản: v${catalog.metadata.version} | Ngày: ${exportDate}`);
+  console.log('------------------------------------------------------------------');
   console.log(`Bắt đầu biên dịch tài liệu cho ${catalog.endpoints.length} endpoints...`);
 
   // 1. Generate DOCX
