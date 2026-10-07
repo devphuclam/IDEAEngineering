@@ -4,7 +4,7 @@ set +x
 umask 077
 [[ $# == 6 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ ]] || exit 2
 [[ $3 =~ ^(owner|transaction)-(qualification|red|green)-[0-9]{2}$ && $5 =~ ^[1-9][0-9]*$ ]] || exit 2
-[[ $4 == OwnerSessionEligibilityTest || $4 == IdentityTransactionsTest || $4 == OwnerSessionEligibilityTest,IdentityTransactionsTest ]] || exit 2
+[[ $4 == OwnerSessionEligibilityTest || $4 == IdentityTransactionsTest ]] || exit 2
 [[ $6 == PASS || $6 == RED ]] || exit 2
 owned=/home/phuclam/idea-iam-ui-20261007-46/run-$3
 source_root="$owned/source"

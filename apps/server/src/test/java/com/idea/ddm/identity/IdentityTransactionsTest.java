@@ -67,11 +67,13 @@ class IdentityTransactionsTest {
         assignFixtureAuthority(identity);
         var operation = UUID.randomUUID();
         var base = command(identity, context, operation);
+        var target = fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);
+        http.signIn(target); // Separate owner target: caller/session must remain eligible.
         var guarded = new IdentityTransactions.OwnerCommand<String>() {
             @Override public void revalidate(Connection connection, OwnerSessionEligibility.EligibleActor actor) throws SQLException {
                 base.revalidate(connection, actor);
                 try (var query = connection.prepareStatement("SELECT security_version FROM idea_account WHERE account_id=?")) {
-                    query.setObject(1, identity.accountId());
+                    query.setObject(1, target.accountId());
                     try (var row = query.executeQuery()) {
                         if (!row.next() || row.getLong(1) != 1) throw new IdentityRefusal("STALE_ACCOUNT_VERSION");
                     }
@@ -79,13 +81,39 @@ class IdentityTransactionsTest {
             }
             @Override public String apply(Connection connection, OwnerSessionEligibility.EligibleActor actor) throws SQLException {
                 var result = base.apply(connection, actor);
-                AdministratorBootstrap.insert(connection, "UPDATE idea_account SET security_version=2 WHERE account_id=?", identity.accountId());
+                AdministratorBootstrap.insert(connection, "UPDATE idea_account SET security_version=2 WHERE account_id=?", target.accountId());
                 return result;
             }
         };
         var refusal = assertThrows(IdentityRefusal.class, () -> transactions().executeOwner(context, guarded));
         assertEquals("STALE_ACCOUNT_VERSION", refusal.reason());
         assertUnchanged(identity, operation);
+        assertEquals(1, new IdentityAdministration(fixtures.appDataSource()).inspect(target.accountId()).securityVersion());
+    }
+
+    @Test void existingAccountLifecycleKeepsItsAuthenticatedTransactionAndStableIdentity() throws Exception {
+        var identity = fixtures.identity(IamIntegrationFixtures.Persona.AA_V1);
+        var context = http.signIn(identity);
+        assignFixtureAuthority(identity);
+        var accounts = new IdentityAdministration(fixtures.appDataSource(), http.sessions());
+        var create = UUID.randomUUID();
+        var created = accounts.create(context, create, identity.organizationId(), "Synthetic lifecycle target", "iam.lifecycle." + UUID.randomUUID());
+        assertEquals("PENDING", created.status());
+        assertEquals(0, created.roleAssignments());
+        var disable = UUID.randomUUID();
+        var disabled = accounts.disable(context, disable, identity.organizationId(), created.accountId(), 1, "Synthetic disable");
+        assertEquals("DISABLED", disabled.status());
+        var reenable = UUID.randomUUID();
+        var restored = accounts.reenable(context, reenable, identity.organizationId(), created.accountId(), 2, "Synthetic re-enable");
+        assertEquals("PENDING", restored.status());
+        assertEquals(3, restored.securityVersion());
+        assertEquals(created.actorId(), restored.actorId());
+        assertEquals(created.accountId(), restored.accountId());
+        assertEquals(created.loginIdentityId(), restored.loginIdentityId());
+        assertEquals(3, accounts.history(created.accountId()).size());
+        for (var operation : java.util.List.of(create, disable, reenable)) {
+            assertEquals(new IdentityAdministration.Evidence("ACCEPTED", 1, 1), accounts.evidence(operation));
+        }
     }
 
     private IdentityTransactions transactions() { return new IdentityTransactions(fixtures.appDataSource(), new OwnerSessionEligibility(http.sessions())); }
@@ -122,7 +150,8 @@ class IdentityTransactionsTest {
         var context = http.signIn(identity);
         assignFixtureAuthority(identity);
         var operation = UUID.randomUUID();
-        try (var executor = java.util.concurrent.Executors.newSingleThreadExecutor(); var writer = fixtures.migrator()) {
+        try (var executor = java.util.concurrent.Executors.newSingleThreadExecutor(); var writer = fixtures.migrator();
+                var observer = fixtures.migrator(); var observation = observer.createStatement()) {
             writer.setAutoCommit(false);
             AdministratorBootstrap.execute(writer, "SELECT pg_advisory_xact_lock(73003002)");
             var owner = executor.submit(() -> transactions().executeOwner(context, command(identity, context, operation)));
@@ -130,10 +159,11 @@ class IdentityTransactionsTest {
             boolean waiting = false;
             try {
                 while (System.nanoTime() < deadline && !waiting) {
-                    try (var statement = writer.createStatement(); var row = statement.executeQuery(
+                    // Separate autocommit observations avoid the writer's cached statistics snapshot.
+                    try (var row = observation.executeQuery(
                             "SELECT EXISTS(SELECT 1 FROM pg_locks l JOIN pg_stat_activity a ON a.pid=l.pid "
                             + "WHERE a.datname=current_database() AND a.usename='idea_ddm_app' "
-                            + "AND l.locktype='advisory' AND l.classid=0 AND l.objid=73003002 AND NOT l.granted)")) {
+                            + "AND l.locktype='advisory' AND l.classid=0 AND l.objid=73003002 AND l.objsubid=1 AND NOT l.granted)")) {
                         assertTrue(row.next()); waiting = row.getBoolean(1);
                     }
                     if (!waiting) Thread.sleep(10);
