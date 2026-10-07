@@ -2,10 +2,21 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design / 0.2 / Draft task-order repair; technical oracles unchanged |
-| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; runtime/readiness NOT-RUN |
+| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design / 0.3 / Draft Account MVP execution guidance; technical oracles unchanged |
+| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; PG2/PG3/PG4 PASS; Account engineering milestone in handoff section 16, independent implementation review NOT-RUN |
 | Baseline / change / date | Spec e227cb1d + [plan](plan.md) / Issue #46 / 2026-10-07 Asia/Ho_Chi_Minh |
 | Effective / classification / retention / supersession / trigger | NOT-APPLICABLE / INTERNAL / Git / no old run replaced / contract, source, environment or tooling change |
+
+## Current Account MVP milestone
+
+Account MVP has actual same-origin packaged Web + Server + PostgreSQL + trusted headed Chrome
+qualification, with the authored Login/Admin presentation retained. [Handoff section 16](integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)
+is the current exact-source result and command record. Historical validation design below is
+not relabelled as execution. PG2/PG3/PG4 are PASS under [the envelope](execution-envelope.md).
+T034 remains partial; Project/Group, assignment, Custom Role and inspector screens are not
+implemented by this Account milestone. There is **no persistent Account UI deployment** yet:
+qualification port 18446 was closed, owned schema removed and database retained. Do not mistake
+an ephemeral test URL or the unchanged predecessor preview at 18444 for this package.
 
 ## Prerequisites and exact commands
 
@@ -54,7 +65,7 @@ adapter/browser acceptance. The final suite is not the first execution of earlie
 
 ## Scenario/oracle crosswalk
 
-All rows are planned, actual result NOT-RUN.
+The table below retains planned whole-feature oracles. Actual Account portions V01/V02/V08 and synthetic V09 are recorded separately in handoff section 16; other story/final qualification remains NOT-RUN.
 
 | Case | FR / SC | Procedure and expected oracle |
 |---|---|---|

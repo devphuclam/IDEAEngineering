@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.11` / Draft partial foundational execution result record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.12` / Draft Account MVP engineering milestone record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 15; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 16; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, section 15 current shared HTTP/Web adapter/state; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, section 15 historical HTTP/Web adapter/state, section 16 current Account MVP; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -961,3 +961,177 @@ Account UI MVP** before Project/Group/Custom/inspection. This follows the existi
 does not waive security evidence or reopen product design, and adds no framework/research loop.
 PR #47 remains Draft/Open; Issue #46 remains OPEN. Independent implementation review, actual
 Account UI/browser qualification, deployment, verifier and merge remain NOT-RUN. No timer action.
+
+## 16. Account UI MVP fast-delivery milestone — 2026-10-07
+
+**Engineering milestone: Account MVP usable; not whole-US1/whole-feature acceptance.**
+PG2/PG3/PG4 remain PASS. T001–T033 and T035–T042 complete (**41/93**). T034 is explicitly
+partial for outcome-insert-specific and different-purpose reissue tests; T043–T093 remain open.
+Sections 1–15 retain their original inspected/historical checkpoint facts; this section supersedes
+their current/next-step status, not their execution evidence. Issue #46 OPEN; PR #47 Draft/Open.
+Independent implementation review, persistent deployment, verifier and merge **NOT-RUN**.
+
+### 16.1 User-visible vertical flow and retained presentation
+
+The existing authored UI is retained from admin `9160ec27dec2b80b96c36adf94460864fd265099`
+and login `8811521b831f597275d7b86ff0f50245f0a4510b`: BrandShowcase/LoginForm/Topbar,
+SessionLanding, admin rail/three-pane composition, styles and first-party logos. `App.tsx`
+owns readable real session/hash-route composition; no replacement mock app or second router.
+Two logos moved into Vite-imported `src/assets` so anonymous login uses the already-approved
+`/assets/**` surface, not a broader Server public-resource permission.
+
+Actual flow:
+eligible recorded context → authorized account list/detail → create **PENDING** →
+explicit exact-login setup proof → intentional masked private handoff → anonymous recipient
+proof + CSRF redemption → fresh sign-in → disable/old-session refusal → reset **while DISABLED** →
+still DISABLED → separate re-enable → fresh sign-in using new credential; stable Actor/Account IDs.
+No automatic Project/Group membership or Role Assignment. Super-only is not an implicit Account
+Administrator. Browser AA@3 is a synthetic test prerequisite, not an implemented grant UI.
+
+List/detail queries use current session/IAM and the shared evaluator, bounded scope/page/filter,
+redacted exact Login Identity metadata and no unauthorized global counts/verifiers/proofs.
+Manual delivery is a separate opt-in setting (default off), not enabled by the synthetic flag.
+Additive V12 records exact-login/purpose supersession; V1–V11 stay immutable. Reissue changes only
+the matching unconsumed proof set in the issuance transaction. Required Audit failure preserves
+the prior proof and rolls back new issuance. Recipient proof is one-use/15-minute, never an AA role.
+Password/proof are temporary intentional controls, cleared on submission/unmount/handoff removal;
+no URL/storage/auto-clipboard/log/HAR/trace/screenshot secret retention.
+
+Network loss after a real Server **201** is **unresolved**, not success/rollback. Mutation controls
+stay disabled; Chrome observes exactly one POST, no automatic retry. Ordinary-user refusal,
+reload/current Server authority, invalidated session and logout unmount are actual Web behaviors.
+Other Project/Group/assignment/Custom/inspection navigation is visibly disabled, not fake usable UI.
+
+### 16.2 Minimum GREEN, executed RED and affected regression
+
+The [20-run backend ledger](evidence/account-mvp-runs.tsv) records exact source, manifest/archive,
+schema, counts and private-log hashes, including failed attempts. These are separate executed
+sources, **not one same-source suite total**.
+
+| Boundary | Genuine RED / retained failure | Qualified GREEN / exact source |
+|---|---|---|
+| T024 foundation regression | Historical REDs remain in §§12–15 | Five foundation suites 70/70 rerun at `2f4424e2d8d815e14d41fd305048d4a9bf672036` |
+| Q15 successor | 7a0e2bc: 1 error, unimplemented seam; 92b90d8: 1/6 fail, sole effective Super@2 recovery | Positive 1/1 at 687692e; expanded negative 8/8 at `dc68571da7fcd82974e809d72b853431e99b338e` |
+| Account HTTP/context/directory | a9b3461: 6/6 fail, missing actual adapters | 6/6 at `4c74daec202791613259924288a61205db0a9e35` |
+| Exact-login setup reissue | 7e4bb87: 3/3 fail, old proof not superseded | 3/3 at 4c74dae: exact login, sibling isolation, forced Audit rollback |
+| No implicit product access | Already-correct create behavior, no manufactured RED | AccountIsolationTest 1/1 at `232e2198350c63a28257b0ebf9e8aa139dd91347` |
+| Legacy Identity | 20 tests PASS; first runner postflight mistakenly counted another parallel browser schema | 20/20 at 232e219; independent exact 20-schema cleanup PASS, not original runner PASS |
+| Legacy HTTP/session/credential | 232e219: 1/83 fail, successor history assertion still expected V1–V10 | 83/83 at `de30be700c2552433608db9c8950d4691f7ac475`; expected V1–V12 only in scoped successor fixture |
+| Web Account/recipient/state | ad4d6a3: 6/20 fail, missing client operations | Final 28/28 + TypeScript no-emit at 4c74dae |
+| Packaged actual Web/browser | Earlier fixture/harness failures below, not broad product failures | Headed trusted Chrome 10/10 at `b50272136295a9f2fed7142ba6442e44c6738d17` |
+
+Q15 negatives include exact Actor/Organization/version, revoked/disabled/stale state, real/dummy
+BCrypt and shared HTTP/console throttle, block deadline preservation, success-clear/Audit rollback,
+unknown-login no durable rows, headless refusal and last effective Super@2 preservation.
+Actual packaged PTY below qualifies **ADOPTED → ALREADY_ADOPTED** separately: same immutable
+Super@1/bootstrap, one Super@2 assignment, zero console-created HTTP sessions; no live adoption.
+
+New HTTP 6/6 + existing 83/83 together cover current account context/read boundaries, malformed/
+wrong-scope/ordinary/stale refusals, lifecycle stable IDs, exact reset L1/L2, disabled reset, one-use,
+controlled-time 15-minute expiry, CSRF, session invalidation and legacy atomicity. Old qualified
+cases were reused, not rewritten merely to inflate new test counts. The three reissue tests do
+**not** independently establish outcome-insert-specific fault or different-purpose isolation;
+T034 retains those obligations. No claim of final whole-feature recovery/race/browser matrix.
+
+Web final private log SHA-256:
+`cbf37a496f5294a16400556c546a8fceef802343d102348bdea2f01e95c641fb`;
+result JSON SHA-256:
+`ecd8de8c1857eda6546f49566f9301eaf83971010b65114885c8edec38d0f246`.
+Windows Node 24.19.0, 44 exact locked cached packages/archives and 1,255 byte-matched members;
+original/projected/shared inputs and Node postflight unchanged, no npm install or new package.
+
+Retained Web intermediate failures: b19d97b tests passed 20/20 but typecheck failed on a first-party
+event type; not full PASS. 74ee732 had 1/24 failure from an overbroad SSR privacy assertion matching
+a legitimate option value, not retained proof text. a44079f passed 24/24 + typecheck; dc68571 passed
+28/28 + typecheck after authored presentation reuse. Final 4c74dae additionally qualified imported
+brand assets and actual browser integration.
+
+### 16.3 Exact final package, Chrome cases and command identity
+
+Final exported/package/browser test source: **`b50272136295a9f2fed7142ba6442e44c6738d17`**.
+Final application/Web source: **`4c74daec202791613259924288a61205db0a9e35`**.
+The delta 4c74dae → b502721 changes only the browser harness/README/input manifest, not application,
+Web, migrations or dependencies. No production Java/migration delta after dc68571; no Server source
+delta from de30be7 to 4c74dae. Application/test inputs were committed and pinned before their
+executions; FAST DELIVERY batches the remote push into this coherent milestone, not each microtask.
+
+Owned root: `/home/phuclam/idea-iam-ui-20261007-46/run-account-qualification-14`.
+Local/remote raw inputs **166/166 PASS**.
+Manifest SHA-256: `0ae194f1ef5e9f482ce387a4b4c8cb0fa763b404917baa9f9e05367d7af77237`.
+Byte-preserving Git archive/identical transferred archive SHA-256:
+`6d3ff8681a5059f621712472ada3ea2e76806ec6254c55ba9e96ade24f4fecf7`.
+Final JAR SHA-256: **`0382a2c13bc8de8d73f22b9a25c7644640846e48cb20bb93c335f2dfffee78e5`**.
+Offline package and executable manifest/loader PASS; actual Web present, exact **57 nested runtime
+JAR hashes**, **0 JSR305 providers**, **0 build-tool payload**, **3/3 retained notices** and
+**V1–V12 byte/hash** oracle PASS. No dependency/POM/version change.
+
+Published runner commands used:
+```text
+bash tests/iam-ui-46/account-browser.sh b50272136295a9f2fed7142ba6442e44c6738d17 0ae194f1ef5e9f482ce387a4b4c8cb0fa763b404917baa9f9e05367d7af77237 account-qualification-14 build
+bash tests/iam-ui-46/account-browser.sh <same SHA> <same manifest> account-qualification-14 start
+<approved Windows Node> <exact export>/tests/iam-ui-46/account-browser.mjs <same SHA> <same manifest> account-qualification-14
+bash tests/iam-ui-46/account-browser.sh <same SHA> <same manifest> account-qualification-14 verify
+bash tests/iam-ui-46/account-browser.sh <same SHA> <same manifest> account-qualification-14 stop
+```
+Build runs the admitted Linux Node 24.21.0 Web builder and pinned offline direct Maven goals
+resources/testResources/compile/testCompile/jar/Boot-repackage, not the nested online lifecycle.
+Backend ledger rows use the published `run-owner-tests.sh <SHA> <manifest> <label> <selector>
+<count> <oracle>`. Web uses `run-web-tests.ps1 -SourceRoot <exact export> -SourceSha 4c74dae...
+-Oracle PASS -ExpectedCount 28`. Source/command/target remain attributable, no dynamic uncommitted
+execution repair. Full owned paths/pins are in [runner instructions](../../tests/iam-ui-46/README.md)
+and [execution envelope](execution-envelope.md).
+
+| Actual headed Chrome / packaged boundary | Result |
+|---|---|
+| Q15 real packaged console initial/repeat via PTY | PASS |
+| W01 authored anonymous brand assets, real session/server Actor, admin navigation, cookie attributes | PASS |
+| W02 actual PENDING create/detail/exact target | PASS |
+| W03 private reissue; old proof refusal; recipient redemption/input clearing | PASS |
+| W04 disable invalidates old session and credential sign-in | PASS |
+| W05 DISABLED reset cannot enable; separate re-enable; stable IDs; new-password fresh sign-in | PASS |
+| W06 ordinary refusal/direct route; reload from current Server | PASS |
+| W07 real committed 201 response loss; unresolved UI; disabled fields/button; exactly one POST | PASS |
+| W08 labelled keyboard focus, 780px responsive/no page overflow, bounded private/URL/storage/console checks | PASS |
+| W09 logout/protected UI unmount | PASS |
+
+Installed Chrome **154.0.8037.98**, Playwright/playwright-core **1.62.1**, approved Windows Node
+**24.19.0** with unchanged binary hashes. Actual normal-trust HTTPS `https://localhost:18446/`
+over owned loopback SSH forward; Server bound only `127.0.0.1:18446`, no TLS bypass.
+Existing trusted test certificate SHA-256
+`6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad`,
+SAN localhost/127.0.0.1, valid 2026-10-07T05:19:50Z → 2026-10-14T05:19:50Z. No trust-store change.
+
+Browser safe-log SHA-256: `c783f11c90d72cc16e9ae31c78fe5bff31538b2720bec8dc74bac125452e3791`.
+Private offline Maven log: `ce46f6b06ebd5ce62e3ece939a33f1d68bf41dea618d6884a9cb3b9df939132b`.
+Private Web build log: `d38a609cb7b4c01026158ffa7eebcb4b29c682a955efcbb82b24cfc887bc4cbf`.
+Source final-check log: `8139a9d69e0feaea6eb206be988db58e78ed4e4e865e5cd5e790decfeb39468c`.
+Retained hashes identify files, **not independent access to private raw logs through GitHub**.
+No credential/cookie/CSRF/proof values are retained in the browser evidence.
+
+### 16.4 Retained engineering failures, cleanup and remaining work
+
+All earlier owned attempt directories/evidence remain retained, not reused or rewritten as PASS:
+root04/232e219 package passed but startup lacked TLS alias (browser NOT-RUN);
+root07/f5d64ac actual Q15 passed, W01 found inaccessible anonymous brand assets (fixed by import);
+root09/4c74dae reached W01–W06 but response-loss proxy used Node's distinct TLS trust context;
+root12/fcfbab1 and root13/d47d680 used actual Chrome response interception and stopped at the
+harness's inappropriate Playwright fieldset-disabled predicate. Root13 diagnostic retained
+only **HTTP 201 / intercepts 1 / UI UNRESOLVED / AssertionError**, no private diagnostics.
+Final harness tests native fieldset.disabled **and** effective login/button disabled state.
+It does not weaken the unresolved/result/no-retry oracle.
+
+Only DB `idea_ddm_iam_ui_20261007_46`, existing real `idea_ddm_migrator` owner and
+`idea_ddm_app` runtime. Final exact schema `iam_ui_2d717ded6c7343388afd983690d14eab`.
+Database oracle PASS: no Project/Group membership or implicit roles on newly created Accounts,
+preserved bootstrap/Super@1, one Super@2, zero console sessions. Final controlled source/82 tools/
+544 selected inputs/package rehash PASS. Owned JVM stopped **before** exact marker/owner-guarded
+schema cleanup; final exact remainder **0**, public tables **0**, private fixture JSON removed,
+owned Windows SSH forward stopped, both qualification listeners absent. **Database retained**.
+Earlier schema cleanups likewise checked exact ownership/source, not a broad DROP DATABASE.
+Preview 18444, company/Vault/production data and other DBs untouched.
+
+Account MVP checkpoint may now receive implementation review. Do not wait for microtask approvals
+or rerun full readiness merely to continue authorized work. Next bounded work: close the explicit
+remaining T034 targeted reissue coverage, then T043–T054 Project/Group vertical slice; later
+assignment/Custom/inspector/final recovery remain separate accepted tasks. No new requirement,
+framework, speculative work, timer action, deployment, verifier, merge or whole-feature PASS.

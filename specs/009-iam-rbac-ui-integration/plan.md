@@ -6,7 +6,7 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.7 / Draft partial execution metadata successor; accepted technical design unchanged |
+| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.8 / Draft Account MVP execution metadata successor; accepted technical design unchanged |
 | Authority / owner / author | INFORMATIVE candidate design / Project user / Codex, CODEX_ONLY |
 | Baseline | Main 4e5244430ea89ffe878819e1279f6e05c60d610a; spec review PASS at e227cb1df60e70a1294628b4f153ad50d8f034c6 |
 | Reviewer / acceptance | Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07, supplied through human conversation / explicit human PG2/PG3 PASS for 5b2fb9f; conditional human PG4 now PASS with actual HTTPS/Chrome/cleanup results, see execution-envelope.md section 6; not inferred from design review |
@@ -18,20 +18,22 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 ## Summary
 
 Current execution metadata: [controlled envelope](execution-envelope.md) and
-[handoff section 15](integration-readiness.md#15-shared-http-and-web-state-checkpoint--2026-10-07)
-supersede the historical NOT-RUN environment/gate and NOT-STARTED observations below. Accepted
-technical design is unchanged. T001–T023 are complete: HTTP 9/9, Web adapter/state 14/14 and
-TypeScript no-emit PASS at source 2f4424e. Section 14 retains 70/70 backend tests at ee48c94,
-not a successor rerun. T024 affected foundation qualification is next; actual Account UI,
-owner APIs, Q15 adoption and whole-feature acceptance remain incomplete. Finish prerequisites
-then prioritize the accepted US1 Account UI MVP before other owner stories; no new framework.
-The historical readiness build-tool JSR305 exclusion is unchanged; no further graph/version change.
+[handoff section 16](integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)
+supersede historical NOT-RUN/NOT-STARTED observations below. Accepted technical design is unchanged.
+**FAST DELIVERY / CODEX_ONLY**: Account MVP is usable through actual authored Web, ordinary
+session/CSRF, redacted context/list/detail, PENDING creation, private proof handoff/redemption and
+separate disable/reset/re-enable. Final package/browser source is b502721; application/Web source
+is 4c74dae. T001–T033 and T035–T042 are complete (41/93); T034 retains explicitly unqualified
+reissue fault/purpose tests, so whole US1/feature acceptance is not claimed. Q15 synthetic packaged
+console initial/repeat passes without a live-estate grant or HTTP bypass. Existing UI presentation
+is reused, not replaced by a four-line app or mock authority. No graph/framework change.
+Consolidated evidence is published once for this milestone; no per-microtask approval loop.
 
 Connect the useful existing presentation to Identity and Accounts, Project Governance and Access
 Policy. Reuse ordinary session/CSRF and qualified account commands. Add missing owner queries,
 Project/Group state, constrained role administration and one current all-path evaluator. No new
 service, identity protocol or generic policy framework. [Permissions](contracts/permission-delegation.md)
-and [operation contracts](contracts/operations.md) are exact proposed design, not implemented routes.
+and [operation contracts](contracts/operations.md) distinguish qualified Account/console operations from remaining DESIGN routes.
 
 D09/D10/D11 are incorporated through their Core owners in the reviewed written design. Q15 adds a
 separately bounded console adoption transition, not bootstrap reuse or widening Super@1. Written

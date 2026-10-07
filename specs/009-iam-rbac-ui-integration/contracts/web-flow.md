@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.2 metadata successor / Draft DESIGN; technical contract v0.1 unchanged / INFORMATIVE |
-| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; runtime/readiness NOT-RUN |
+| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.3 execution status successor / Draft Account portion qualified; accepted technical semantics unchanged / INFORMATIVE |
+| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; PG2/PG3/PG4 PASS; actual Account browser qualification in handoff section 16; remaining stories/independent implementation review NOT-RUN |
 | Baseline / change / date | Spec accepted e227cb1d; [operations](operations.md) / Issue #46 / 2026-10-07 Asia/Ho_Chi_Minh |
 | Classification / effective / retention / trigger | INTERNAL / NOT-APPLICABLE / Git / operation, privacy, authority or interaction change |
 | Supersession / downstream | Mock/security behavior not accepted; no current live contract replaced / actual Web qualification |
@@ -43,3 +43,13 @@ Qualification uses actual same-origin packaged Web + trusted HTTPS Server, ordin
 Secure/SameSite cookie, real session/CSRF, refusal/invalidated session, no client caller ActorId,
 network-loss behavior and secret-retention inspection. Presentation tests alone are insufficient.
 Exact existing UI commits and desired visual intent are retained in [readiness](../integration-readiness.md).
+
+## Current delivery status — Account MVP
+
+The actual authored Login/Admin layout is retained and connected through `App.tsx`, not a mock
+or a second route framework. Account context/list/detail, PENDING create, manual proof handoff,
+recipient setup/reset, separate disable/re-enable, reload/refusal and uncertain-result handling
+are qualified by headed Chrome **10/10** at `b50272136295a9f2fed7142ba6442e44c6738d17`.
+See [handoff section 16](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07).
+Other screens remain explicitly unavailable until their owner slices are implemented. This
+milestone is not final whole-feature accessibility, independent review or deployment acceptance.

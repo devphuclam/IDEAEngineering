@@ -2,16 +2,16 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.2 metadata successor / Draft DESIGN; technical contract v0.1 unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.3 status successor / Draft partial IMPLEMENTED; accepted technical semantics unchanged |
 | Authority / owner / author | INFORMATIVE refinement / IAM, Project Governance, Access Policy and Audit; named owners UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; formal Product Decision Authority gates/runtime NOT-RUN / NOT-APPLICABLE |
+| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; Account/console engineering evidence in handoff section 16, independent implementation review NOT-RUN / NOT-APPLICABLE |
 | Date / classification / retention | 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL / Git |
 | Change / upstream / downstream | Issue #46 / [permissions](permission-delegation.md), [data](../data-model.md), accepted [Identity contract](../../../docs/product/instances/idea-engineering/api/identity-session.md) / [Web flow](web-flow.md), future tasks/tests |
-| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / proposed, runtime NOT-RUN |
+| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / Account/console qualified in handoff section 16; remaining families DESIGN |
 
 ## 1. Common wire and authority
 
-New HTTP paths below are proposed exact adapters, not available routes. JSON UUID identifiers,
+Account rows explicitly marked IMPLEMENTED are qualified adapters in this branch, not a deployed estate. Other new HTTP paths remain proposed DESIGN, not available routes; see [handoff section 16](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07). JSON UUID identifiers,
 UTC ISO-8601 instants and integer expectedVersion are used. No client ActorId establishes caller
 authority; a targetActorId is permitted as an explicit admin target, checked against scope.
 Ordinary eligible session + existing CSRF protects every mutation; recipient redemption still
@@ -50,12 +50,12 @@ semantics preserved in section 4. Every DESIGN row needs real implementation + q
 
 | ID / status | Adapter | Request → response / state | Exact authority / retry profile |
 |---|---|---|---|
-| UI-I01 DESIGN | GET A/context | Current eligible self → Actor/Account/Org IDs, recorded display names and bounded action/scope availability | Eligible self; Q; no fabricated profile, password or permission token |
-| UI-I02 DESIGN | GET A/accounts; GET A/accounts/{id} | O, bounded filter/page; exact Account → redacted status/securityVersion + exact login IDs/status | account.read at O; Q |
+| UI-I01 IMPLEMENTED | GET A/context | Current eligible self → Actor/Account/Org IDs, recorded display names and bounded action/scope availability | Eligible self; Q; no fabricated profile, password or permission token |
+| UI-I02 IMPLEMENTED | GET A/accounts; GET A/accounts/{id} | O, bounded filter/page; exact Account → redacted status/securityVersion + exact login IDs/status | account.read at O; Q |
 | UI-I03 IMPLEMENTED | POST I/accounts | Existing operationId/O/displayName/login → 201 stable IDs/PENDING/version | account.create; L; no implicit grants |
 | UI-I04 IMPLEMENTED | POST I/accounts/{id}/disable or /re-enable | Existing operationId/O/expectedSecurityVersion/reason → 200 stable IDs/current state | Matching account action; L; no identity replacement |
-| UI-I05 DESIGN manual successor | POST I/accounts/{id}/credential-proofs | operationId/O/purpose/loginIdentityId/expectedSecurityVersion/reason → transient proof/expiresAt | Separate setup/reset permission; section 4; no-store |
-| UI-I06 IMPLEMENTED + recipient UI DESIGN | POST I/credentials | Existing operationId/accountId/purpose/proof/password → 204 | Exact proof authority + CSRF; section 4 |
+| UI-I05 IMPLEMENTED manual successor | POST I/accounts/{id}/credential-proofs | operationId/O/purpose/loginIdentityId/expectedSecurityVersion/reason → transient proof/expiresAt | Separate setup/reset permission; section 4; no-store |
+| UI-I06 IMPLEMENTED including recipient UI | POST I/credentials | Existing operationId/accountId/purpose/proof/password → 204 | Exact proof authority + CSRF; section 4 |
 | UI-P01 DESIGN | GET A/projects; GET A/projects/{id} | O/page or exact Project → Project ID/name/version | project.admin.read; Q, admin not required to be member |
 | UI-P02 DESIGN | POST A/projects | operationId/O/name/reason → 201 Project/version | project.create at O; C; zero creator membership/grant |
 | UI-P03 DESIGN | POST A/projects/{id}/update | operationId/scope/name/expectedVersion/reason → 200 Project/version | project.update; C |
@@ -81,7 +81,7 @@ semantics preserved in section 4. Every DESIGN row needs real implementation + q
 | UI-R10 DESIGN | POST A/access-inspections | targetActorId/permissionCode/scope/resourceId → redacted eligibility + all contributing paths + RBAC result | access.inspect; query/no owner mutation; owner gates distinguished |
 | UI-A01 DESIGN | GET A/history | scope/target/page → attributable administration change/outcome and safe before/after | audit.read; Q; no generic Audit export |
 | UI-O01 DESIGN | GET A/operations/{operationId} | Original operation → safe retained terminal metadata/result or unresolved | Current eligible originator + current relevant read authority, or independently scoped authorized inspector; no secret result |
-| UI-C01 DESIGN | Local console adoption only | Exact old Super assignment/new Super@2, O, same Actor, OperationId/reason/reauth → separate assignment | Section 5; not HTTP/product bypass |
+| UI-C01 IMPLEMENTED; synthetic qualification only | Local console adoption only | Exact old Super assignment/new Super@2, O, same Actor, OperationId/reason/reauth → separate assignment | Section 5; not HTTP/product bypass |
 
 Candidate resource scopes/role values are identifiers resolved by owners, never trusted client
 claims. Nullable interval/condition fields have the exact profile in the permission contract.
@@ -143,7 +143,7 @@ No automatic cross-owner retry/compensation engine.
 Existing create/disable/re-enable operationId is attribution, not a canonical-success promise.
 Resolve retained outcome metadata and current authorized account state; do not claim same-ID
 replay is safe or use a new UUID blindly. Status/conflict/error and login/session semantics remain
-the accepted Identity v0.1 contract. API handoff must label manual-delivery/targeting changes DESIGN.
+the accepted Identity v0.1 contract. Manual-delivery/targeting is qualified for the Account MVP; exact evidence and the remaining T034 fault/purpose coverage are separated in handoff section 16. This is not deployment or independent implementation acceptance.
 
 New manual issuance is separately configuration-enabled and qualified, never activated by the
 synthetic-delivery test flag. Require exact loginIdentityId for both purposes. FIRST_SETUP:
@@ -158,7 +158,7 @@ only in intended recipient control/submission, cleared after submit/unmount; no 
 
 Lost issuance response cannot recover plaintext. Lookup returns metadata only. Explicit reissue
 uses a new OperationId and atomically supersedes prior unconsumed matching-purpose proofs for that
-exact target, with reason/Audit; this invalidation is proposed successor behavior, not current.
+exact target, with reason/Audit; this invalidation is implemented successor behavior qualified for exact-login setup reissue/Audit rollback. Explicit outcome-insert and different-purpose coverage remains T034, not an implied PASS.
 Client confirms the consequence; no speculative proof regeneration or automatic retry.
 
 Redemption remains one-use and 15-minute; invalid/reused/expired/stale proof gives bounded refusal.
