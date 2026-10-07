@@ -29,6 +29,10 @@ final class CredentialResetService {
 
     CredentialSetupService.IssuedProof issue(ActorContext issuer, UUID operation, UUID organization,
             UUID target, UUID targetLoginIdentity, long expectedVersion, String reason) {
+        return issue(issuer,operation,organization,target,targetLoginIdentity,expectedVersion,reason,false);
+    }
+    CredentialSetupService.IssuedProof issue(ActorContext issuer,UUID operation,UUID organization,
+            UUID target,UUID targetLoginIdentity,long expectedVersion,String reason,boolean manualReissue) {
         if (operation == null || organization == null || target == null || targetLoginIdentity == null || expectedVersion < 1
                 || reason == null || reason.isBlank() || reason.length() > 500
                 || reason.codePoints().anyMatch(Character::isISOControl)) throw new IdentityRefusal("INVALID_INPUT");
@@ -51,6 +55,7 @@ final class CredentialResetService {
                             var proof = Base64.getUrlEncoder().withoutPadding().encodeToString(entropy);
                             var issued = now();
                             var expires = issued.plus(Duration.ofMinutes(15));
+                            if(manualReissue)CredentialProofDelivery.supersede(connection,CredentialProofDelivery.Purpose.RESET,target,targetLoginIdentity,operation,issued);
                             AdministratorBootstrap.insert(connection, "INSERT INTO credential_reset_proof "
                                     + "(proof_id,account_id,login_identity_id,purpose,security_version,proof_digest,issued_by,"
                                     + "issue_operation_id,reason,issued_at,expires_at) VALUES (?,?,?,'RESET',?,?,?,?,?,?,?)",
@@ -80,7 +85,7 @@ final class CredentialResetService {
                         + "JOIN idea_account a USING(account_id) JOIN actor p USING(actor_id) "
                         + "JOIN login_identity l ON l.login_identity_id=f.login_identity_id AND l.account_id=f.account_id "
                         + "WHERE f.proof_digest=? AND f.account_id=? AND f.purpose='RESET' "
-                        + "AND f.consumed_at IS NULL AND f.issued_at<=? AND f.expires_at>? "
+                        + "AND f.consumed_at IS NULL AND f.superseded_at IS NULL AND f.issued_at<=? AND f.expires_at>? "
                         + "AND a.security_version=f.security_version AND l.password_verifier IS NOT NULL "
                         + "AND ((a.status='ACTIVE' AND p.disabled_at IS NULL) "
                         + "OR (a.status='DISABLED' AND p.disabled_at IS NOT NULL))")) {

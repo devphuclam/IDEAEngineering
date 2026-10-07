@@ -23,15 +23,18 @@ class IdentityController {
     private final CredentialResetService resets;
     private final IdentityAdministration accounts;
     private final boolean syntheticDelivery;
+    private final boolean manualDelivery;
 
     IdentityController(SessionService sessions, CredentialSetupService credentials, CredentialResetService resets,
             IdentityAdministration accounts,
-            @Value("${idea.identity.synthetic-credential-delivery.enabled:false}") boolean syntheticDelivery) {
+            @Value("${idea.identity.synthetic-credential-delivery.enabled:false}") boolean syntheticDelivery,
+            @Value("${idea.identity.manual-credential-delivery.enabled:false}") boolean manualDelivery) {
         this.sessions = sessions;
         this.credentials = credentials;
         this.resets = resets;
         this.accounts = accounts;
         this.syntheticDelivery = syntheticDelivery;
+        this.manualDelivery = manualDelivery;
     }
 
     record CsrfProof(String headerName, String token) {}
@@ -103,14 +106,15 @@ class IdentityController {
     @PostMapping("/accounts/{account}/credential-proofs")
     ResponseEntity<CredentialSetupService.IssuedProof> issueProof(@PathVariable UUID account, @RequestBody IssueCredential request,
             Authentication authentication) {
-        // No live delivery channel is qualified. Explicit opt-in is for the protected synthetic harness only.
-        if (!syntheticDelivery) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        // Separate opt-ins: old synthetic harness is not authority for ordinary manual delivery.
+        if (!syntheticDelivery && !manualDelivery) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         try {
             var identity = authentication.getPrincipal() instanceof SessionService.Identity value ? value : null;
-            if ("RESET".equals(request.purpose())) return ResponseEntity.ok(resets.issue(sessions.context(identity),
-                    request.operationId(), request.organizationId(), account, request.loginIdentityId(), request.expectedSecurityVersion(), request.reason()));
-            return ResponseEntity.ok(credentials.issue(sessions.context(identity), request.operationId(), request.organizationId(), account,
-                    request.purpose(), request.expectedSecurityVersion(), request.reason()));
+            if(manualDelivery && request.loginIdentityId()==null)return ResponseEntity.badRequest().build();
+            var issued="RESET".equals(request.purpose())
+                    ? resets.issue(sessions.context(identity),request.operationId(),request.organizationId(),account,request.loginIdentityId(),request.expectedSecurityVersion(),request.reason(),manualDelivery)
+                    : credentials.issue(sessions.context(identity),request.operationId(),request.organizationId(),account,request.loginIdentityId(),request.purpose(),request.expectedSecurityVersion(),request.reason(),manualDelivery);
+            return ResponseEntity.ok().cacheControl(org.springframework.http.CacheControl.noStore()).body(issued);
         } catch (AuthenticationException exception) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); }
         catch (IdentityRefusal exception) {
             return ResponseEntity.status("INELIGIBLE_SESSION".equals(exception.reason()) ? HttpStatus.UNAUTHORIZED

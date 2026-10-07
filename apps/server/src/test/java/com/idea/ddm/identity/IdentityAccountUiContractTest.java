@@ -82,7 +82,8 @@ class IdentityAccountUiContractTest {
             var target=created.path("accountId").asString();
             var change=json.writeValueAsString(java.util.Map.of("operationId",UUID.randomUUID(),"organizationId",who.organizationId(),"expectedSecurityVersion",1,"reason","Synthetic disable"));
             var disabled=post(client,"/api/v1/identity/accounts/"+target+"/disable",change);assertEquals(200,disabled.statusCode());assertEquals("DISABLED",json.readTree(disabled.body()).path("status").asString());
-            assertEquals(409,post(client,"/api/v1/identity/accounts/"+target+"/re-enable",change).statusCode());
+            var stale=json.writeValueAsString(java.util.Map.of("operationId",UUID.randomUUID(),"organizationId",who.organizationId(),"expectedSecurityVersion",1,"reason","Synthetic stale re-enable"));
+            assertEquals(409,post(client,"/api/v1/identity/accounts/"+target+"/re-enable",stale).statusCode());
             var enabled=post(client,"/api/v1/identity/accounts/"+target+"/re-enable",json.writeValueAsString(java.util.Map.of("operationId",UUID.randomUUID(),"organizationId",who.organizationId(),"expectedSecurityVersion",2,"reason","Synthetic re-enable")));
             assertEquals(200,enabled.statusCode());var value=json.readTree(enabled.body());assertEquals("PENDING",value.path("status").asString());assertEquals(created.path("actorId").asString(),value.path("actorId").asString());assertEquals(target,value.path("accountId").asString());return null;});
     }
