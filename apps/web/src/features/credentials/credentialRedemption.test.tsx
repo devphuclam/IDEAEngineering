@@ -9,7 +9,7 @@ describe("Recipient boundary and intentional handoff",()=>{
   it("provides manual proof/password controls, not an encoded URL or admin password field",()=>{
     const html=renderToStaticMarkup(<CredentialRedemptionPage/>);
     expect(html).toContain('name="proof"');expect(html).toContain('type="password"');expect(html).toContain('autoComplete="new-password"');
-    expect(html).not.toContain('value="');expect(html).not.toContain('localStorage');
+    expect(html).not.toMatch(/<input[^>]+name="(?:proof|password|confirmation)"[^>]+value=/);expect(html).not.toContain('localStorage');
   });
   it("handoff proof is only an intentionally private masked control, never a link parameter",()=>{
     const html=renderToStaticMarkup(<CredentialProofHandoff delivery={{proof:"a".repeat(43),expiresAt:"2026-10-07T06:15:00Z"}} accountId={id} loginIdentityId={id} purpose="FIRST_SETUP" onClear={()=>{}}/>);

@@ -29,10 +29,10 @@ export function AccountAdministrationPage({ context, onInvalidated }: { context:
   async function load(offset = 0) {
     const request = ++epoch.current; setLoading(true); setPage(null); setDetail(null); setDelivery(null); setPendingAction(null);
     const result = await client.loadAccounts(filter, offset);
-    if (request !== epoch.current) return;
+    if (request !== epoch.current) return false;
     setLoading(false);
-    if (result.kind === "confirmed") { setPage(result.value); setMessage(result.value.items.length ? "Dữ liệu hiện tại từ Server." : "Danh sách được phép truy cập hiện không có Account phù hợp."); }
-    else refuse(result);
+    if (result.kind === "confirmed") { setPage(result.value); setMessage(result.value.items.length ? "Dữ liệu hiện tại từ Server." : "Danh sách được phép truy cập hiện không có Account phù hợp."); return true; }
+    refuse(result); return false;
   }
   useEffect(() => { if (can("account.read")) void load(); else { setLoading(false); setMessage("Không có quyền đọc danh sách Account. Không suy quyền từ tên vai trò."); } return () => { epoch.current++; }; }, [context.actorId, context.organizationId]);
   async function select(accountId: string) {
@@ -110,7 +110,7 @@ export function AccountAdministrationPage({ context, onInvalidated }: { context:
         {delivery && <CredentialProofHandoff delivery={delivery} accountId={delivery.accountId} loginIdentityId={delivery.loginIdentityId} purpose={delivery.purpose} onClear={clearDelivery} />}
       </>}
       {unresolved && <p role="alert">Kết quả chưa rõ: các mutation đang bị khóa, không tự retry. Tải lại để xem trạng thái; quyết định thao tác mới chỉ sau khi đối chiếu Operation ở trên.</p>}
-      {unresolved && <button type="button" disabled={busy} onClick={async () => { await load(); setUnresolved(false); }}>Đối chiếu lại trước thao tác mới</button>}
+      {unresolved && <button type="button" disabled={busy} onClick={async () => { if (await load()) setUnresolved(false); }}>Đối chiếu lại trước thao tác mới</button>}
     </aside>
   </div>;
 }

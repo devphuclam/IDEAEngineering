@@ -21,7 +21,8 @@ public final class IdentityAccountAdministration {
     IdentityAccountAdministration(IdentityDirectoryQueries directory,SessionService sessions){this.directory=directory;this.sessions=sessions;}
     private ActorContext context(Authentication auth){
         if(auth==null || !(auth.getPrincipal() instanceof SessionService.Identity identity))throw new IamWebConfiguration.Refusal(IamWebConfiguration.RefusalReason.INELIGIBLE_SESSION);
-        return sessions.context(identity);
+        try { sessions.current(identity); return sessions.context(identity); }
+        catch(org.springframework.security.core.AuthenticationException refused){throw new IamWebConfiguration.Refusal(IamWebConfiguration.RefusalReason.INELIGIBLE_SESSION);}
     }
     @GetMapping("/context")
     ResponseEntity<IdentityDirectoryQueries.Context> current(Authentication auth){return safe(directory.context(context(auth)));}
