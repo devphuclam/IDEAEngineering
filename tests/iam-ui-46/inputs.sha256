@@ -11,7 +11,7 @@ b6caecfff4e8482e328f7796f2c8680a0e3200d343be34fc02d658943ce50028  apps/server/sc
 f1f09f45c5c1fda1cf961901e1d0fe2d4b97aef12f6b62c5f26c4b41f125d7b8  apps/server/scripts/run-f03b-postgresql-checks.sh
 86b4912a18bd084afd58c41855131088f337d5be7725f77c14e1b10fede7f9e9  apps/server/scripts/run-f04-postgresql-checks.sh
 7d7ce17876dc763f8f26fab14af5bc7b91b7379aa7a55c583c9bcd079924f5b8  apps/server/src/main/java/com/idea/ddm/access/AuthorizationDecisionService.java
-b8663ced06ca64dc4f49b913a4e8d5e5a181844ecc32a067f72d4b31c69b6cbf  apps/server/src/main/java/com/idea/ddm/access/SuperSuccessorAdoptionService.java
+de546f47289e7b5ffda465da93cc0129ffb22832ed31911dc948ab98063a3867  apps/server/src/main/java/com/idea/ddm/access/SuperSuccessorAdoptionService.java
 9db01a2754a7160f1c7f937f777087813f022e5a884943f8ff7b22303fa28455  apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java
 ab74624c75be477812df3db84dcf19bf8fb0f593582d6847110aee8ccf495e27  apps/server/src/main/java/com/idea/ddm/custody/GrantEnvelope.java
 c0bf3e9aeb4a84713ad9e996f142c3418b21923d963e5aa7f5d118115fa10329  apps/server/src/main/java/com/idea/ddm/custody/ReceiptEnvelope.java
@@ -38,6 +38,7 @@ c91285a76d86e0ba4b6b2bd806b3ea5c397bfbf86615c03ea5cf37ecf741817d  apps/server/sr
 820111e642f133f136a8cd9e2582b89ad4fd203f31ca0f70e67a92237556683b  apps/server/src/main/java/com/idea/ddm/identity/LoginFailures.java
 14cf02e3f9c9ba675477c49199e644a7aa131d314cf7c3b77115f4af730cb47c  apps/server/src/main/java/com/idea/ddm/identity/LogoutBoundary.java
 4fdcb39c19822598adc8f15ceab0b3f79096faca54df94895c30f17a85d94a7f  apps/server/src/main/java/com/idea/ddm/identity/NativePasswordVerifier.java
+a9ebc2772e8a34ebefb2e62aad681768bc129fd7f1da54c103ab0ef88b8c0dc1  apps/server/src/main/java/com/idea/ddm/identity/NativeReauthentication.java
 539a0c9fd46b215443c5463077d0d53403366f06fa789a2149032ae4c3dc93dc  apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java
 87aaa8851c90bd2d44a7ec935650adcfabd009ba3eee0370fa3a80f3c866f865  apps/server/src/main/java/com/idea/ddm/identity/RoleAssignmentAdministration.java
 0a355f5782b87e179043fc95401511e3f0f80c575391766f8e62becc6dda45b1  apps/server/src/main/java/com/idea/ddm/identity/SessionService.java
