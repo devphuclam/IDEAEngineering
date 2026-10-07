@@ -48,6 +48,7 @@ public final class AuthorizationDecisionService {
     public Decision evaluate(Connection connection, ActorContext context, String permission, Scope scope) throws SQLException {
         Objects.requireNonNull(scope);
         Objects.requireNonNull(permission);
+        requireConsistentState(connection);
         var now = clock.instant();
         final OwnerSessionEligibility.EligibleActor actor;
         try { actor = eligibility.admit(connection, context); }
@@ -65,6 +66,19 @@ public final class AuthorizationDecisionService {
         }
         var paths = applicableAssignments(connection, actor.actorId(), permission, scope, now, facts);
         return new Decision(actor.actorId(), scope, permission, now, true, paths, paths.isEmpty() ? "NO_APPLICABLE_ASSIGNMENT" : null);
+    }
+
+    private static void requireConsistentState(Connection connection) throws SQLException {
+        if (connection.getAutoCommit()) throw new SQLException("Caller-owned authorization transaction required");
+        var isolation = connection.getTransactionIsolation();
+        if (isolation == Connection.TRANSACTION_REPEATABLE_READ || isolation == Connection.TRANSACTION_SERIALIZABLE) return;
+        // Owner UoW keeps READ COMMITTED to observe security writes that won while it waited.
+        try (var statement = connection.createStatement(); var row = statement.executeQuery(
+                "SELECT EXISTS(SELECT 1 FROM pg_locks WHERE pid=pg_backend_pid() AND locktype='advisory' "
+                + "AND classid=0 AND objid=73003002 AND objsubid=1 AND mode='ExclusiveLock' AND granted)")) {
+            if (row.next() && row.getBoolean(1)) return;
+        }
+        throw new SQLException("Consistent read snapshot or coordinated owner write required");
     }
 
     private static List<GrantPath> applicableAssignments(Connection connection, UUID actorId, String permission,
