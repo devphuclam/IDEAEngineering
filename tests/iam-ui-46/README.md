@@ -79,6 +79,14 @@ ActorContext constructor, automatic grant, schema cleanup or new production abst
 
 ## Database and cleanup
 
+T018 first evaluator RED is `authorization-red-01 AuthorizationDecisionTest 1 RED`.
+It enters through the actual Server-established context, uses current read-only IAM eligibility
+and resolves all applicable exact assignment/version paths on the same app transaction.
+The first tracer expects the positive union of separate legacy AA@1 and AA@2 prerequisites;
+no account type, role-name bypass, LIMIT-1 result, owner business success or client capability.
+Later direct/Group/scope/period/unavailable cases precede any necessary repair. Supported legacy
+callers must delegate to the same resolution logic without rewriting historical one-path evidence.
+
 T016/T017 use `project-read-red-01 ProjectAuthorizationReadTest 1 RED` and its GREEN successor.
 The Project-owned query reads current exact Project, Project Membership and Group Membership
 facts in the caller's connection, filtered to the Server-established Organization and Actor.
