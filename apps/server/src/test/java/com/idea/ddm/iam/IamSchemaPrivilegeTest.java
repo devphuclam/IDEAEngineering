@@ -60,7 +60,7 @@ class IamSchemaPrivilegeTest {
     private Map<String,String> roleContent() throws Exception {
         var content = new TreeMap<String,String>();
         try (var connection = fixtures.app(); var statement = connection.createStatement(); var rows = statement.executeQuery(
-                "SELECT v.role_code||'@'||v.version,string_agg(p.permission_code,',' ORDER BY p.permission_code) "
+                "SELECT v.role_code||'@'||v.version,string_agg(p.permission_code,',' ORDER BY p.permission_code COLLATE \"C\") "
                 + "FROM identity_role_version v JOIN identity_role_permission p USING(role_version_id) GROUP BY v.role_code,v.version")) {
             while (rows.next()) content.put(rows.getString(1), rows.getString(2));
         }

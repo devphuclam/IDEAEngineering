@@ -242,7 +242,7 @@ INSERT INTO identity_role_version_profile(role_version_id,definition_id,role_cod
         encode(sha256(convert_to(v.role_code||'|'||v.version||'|'
             ||CASE WHEN v.role_code IN ('super-administrator','privileged-role-administrator') THEN 'HIGHEST' ELSE 'ADMINISTRATION' END||'|'
             ||CASE WHEN v.role_code IN ('account-administrator','super-administrator') THEN 'ORGANIZATION' ELSE 'ORGANIZATION,PROJECT' END
-            ||'|ACTOR|'||string_agg(p.permission_code,',' ORDER BY p.permission_code),'UTF8')),'hex')
+            ||'|ACTOR|'||string_agg(p.permission_code,',' ORDER BY p.permission_code COLLATE "C"),'UTF8')),'hex')
     FROM identity_role_version v JOIN identity_role_definition d USING(role_code)
         JOIN identity_role_permission p USING(role_version_id)
     GROUP BY v.role_version_id,d.definition_id,v.role_code,v.version;
