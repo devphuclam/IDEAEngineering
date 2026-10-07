@@ -296,6 +296,19 @@ class IamSchemaPrivilegeTest {
         }
         return checksums;
     }
+
+    @Test void aCustomDefinitionCannotOmitItsManagementScopeKind() throws Exception {
+        try(var connection=fixtures.migrator()) {
+            connection.setAutoCommit(false);
+            try {
+                var failure=assertThrows(java.sql.SQLException.class,()->execute(connection,
+                        "INSERT INTO identity_role_definition(definition_id,role_code,display_name,built_in,management_organization_id) "
+                        + "VALUES (?,?,'Synthetic invalid management scope',FALSE,?)",
+                        java.util.UUID.randomUUID(),"synthetic-custom-"+java.util.UUID.randomUUID(),legacy.organizationId()));
+                assertEquals("23514",failure.getSQLState());
+            } finally { connection.rollback(); }
+        }
+    }
     private static void execute(java.sql.Connection connection,String sql,Object... values) throws Exception {
         try(var statement=connection.prepareStatement(sql)) {
             for(int i=0;i<values.length;i++) statement.setObject(i+1,values[i]);
