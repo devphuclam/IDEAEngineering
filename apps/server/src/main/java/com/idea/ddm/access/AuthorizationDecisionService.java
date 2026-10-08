@@ -58,6 +58,20 @@ public final class AuthorizationDecisionService {
         if (!actor.organizationId().equals(scope.organizationId())) {
             return new Decision(actor.actorId(), scope, permission, now, true, List.of(), "WRONG_ORGANIZATION_SCOPE");
         }
+        return evaluateActor(connection, actor, permission, scope, now);
+    }
+
+    /** Inspection-only target facts, admitted by an independently authorized query owner.
+     * No session is fabricated for the inspected Actor and no alternate grant evaluator exists. */
+    Decision inspectActor(Connection connection, OwnerSessionEligibility.EligibleActor actor,
+            String permission, Scope scope) throws SQLException {
+        requireConsistentState(connection);
+        if (!actor.organizationId().equals(scope.organizationId())) throw new SQLException("Inspection target boundary");
+        return evaluateActor(connection, actor, permission, scope, clock.instant());
+    }
+
+    private Decision evaluateActor(Connection connection, OwnerSessionEligibility.EligibleActor actor,
+            String permission, Scope scope, Instant now) throws SQLException {
         var facts = scope.kind() == ScopeKind.PROJECT
                 ? projects.authorizationFacts(connection, actor, scope.projectId(), now)
                 : Optional.<ProjectGovernanceQueries.ProjectFacts>empty();
