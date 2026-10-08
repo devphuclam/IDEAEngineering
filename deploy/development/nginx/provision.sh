@@ -51,6 +51,7 @@ fi
 cp /usr/share/doc/libzstd1/copyright "$root/notices/libzstd1-copyright"
 tls=/home/phuclam/idea-iam-ui-20261007-46/tls-01
 [[ $(sha256sum "$tls/fixture.p12" | cut -d' ' -f1) == cb9c804289e7d3e6b4d7e6c9f665a61194b42eac7b55146f5eecd023ef8cab2f ]] || exit 3
+[[ $(sha256sum "$tls/fixture.cer" | cut -d' ' -f1) == 6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad ]] || exit 3
 [[ $(stat -c '%U:%a' "$tls/password.private") == phuclam:600 ]] || exit 3
 openssl x509 -inform DER -in "$tls/fixture.cer" -out "$root/tls/certificate.pem"
 openssl x509 -in "$root/tls/certificate.pem" -checkend 3600 -noout >/dev/null

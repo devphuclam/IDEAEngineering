@@ -4,12 +4,20 @@
 |---|---|
 | ID / version / class | IE-RES-NGINX-DEV-49-001 / 0.1 / dependency intake and bounded execution recipe |
 | Status / normativity | Draft; INFORMATIVE for product behavior |
+| Repository process authority / instruction state | NOT-APPLICABLE; this recipe is not a new repository policy |
+| Acceptance authority / evidence status | Project user / qualification IN_PROGRESS, independent human acceptance NOT-RUN |
 | Owner / author / review | Project user / Codex, CODEX_ONLY / human review NOT-RUN |
 | Authority / date | User authorizes development Nginx slice and exact two-package download/private extraction on 2026-10-08, Asia/Ho_Chi_Minh |
 | Baseline / Work Item | main 7fd542b36a2a0887721b82df5dca323da8809058 / [Issue49](https://github.com/devphuclam/IDEAEngineering/issues/49) |
 | Classification / retention | INTERNAL; retain package rights, hashes and sanitized results; no automatic database deletion |
 | Supersession / trigger | New deployment slice, no historical acceptance rewritten; reopen for package/hash/graph/target/trust or distribution change |
 | Trace | TECH-D02/TECH-D05 in [technology views](../../../docs/product/instances/idea-engineering/technology/IDEA-core-v0-technology-architecture-views.md); [intake procedure](../../../docs/agents/external-source-intake.md) |
+| Downstream | control.sh, provision.sh, nginx.conf, launch.ps1, tests/nginx-dev, README.md and results.md in this slice |
+
+This is a tailored development-intake/verification envelope under IE-STD-AUTH-001:
+no product requirement, effective product baseline, standards-conformity or legal
+acceptance is created. Work Item49/Git history is the change record; superseded-by
+NOT-APPLICABLE. Historical product/gate/qualification evidence remains separate.
 
 ## Exact third-party inputs
 
@@ -40,7 +48,8 @@ qualified here, and no new license rights are created by the user approval.
 Existing Ubuntu host dependencies: libc6 2.43-2ubuntu2.4, libcrypt1 1:4.5.1-1,
 PCRE2 10.46-1build1, libssl3t64 3.5.5-1ubuntu3.7, zlib1g
 1:1.3.dfsg+really1.3.1-1ubuntu3.1; OpenSSL also links existing libzstd1
-1.5.7+dfsg-3. Dynamic-library paths/hashes must be frozen
+1.5.7+dfsg-3 (use its BSD-3-Clause option and retain the complete installed notice).
+Dynamic-library paths/hashes must be frozen
 after extraction and verified before each launch. They remain host dependencies,
 not application JAR payload. Retain their installed copyright records beside
 the deployment. No optional dynamic Nginx module is loaded.

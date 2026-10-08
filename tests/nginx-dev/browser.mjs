@@ -11,6 +11,9 @@ const root = '/home/phuclam/idea-nginx-dev-20261008-49';
 const fixtureRoot = '/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-44';
 const launcher = fileURLToPath(new URL('../../deploy/development/nginx/launch.ps1', import.meta.url));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const predecessorSockets = 'ss -H -ltnp "sport = :18444 or sport = :18446 or sport = :5173"';
+const predecessorForward = 'C:/Users/TD-999/.codex/iam-ui-46/dev-forward.json';
+const predecessorLauncher = fileURLToPath(new URL('../../tools/iam-ui-dev/launch.ps1', import.meta.url));
 const ssh = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=8', 'phuclam@192.168.137.33'];
 const secrets = new Set();
 let browser, fixture, stage = 'preflight', leaked = false;
@@ -23,6 +26,14 @@ function control(action) {
   const r = spawnSync('powershell.exe', ['-NoProfile', '-File', launcher, '-Action', action], { encoding: 'utf8', windowsHide: true, timeout: 45000 });
   assert.ok(r.status === 0, 'Owned launcher action failed');
   return r.stdout;
+}
+function preservedSockets() {
+  return remote(predecessorSockets).trim().split('\n').map(line => ({ address: line.trim().split(/\s+/)[3], pids: [...line.matchAll(/pid=(\d+)/g)].map(m => m[1]).sort() })).sort((a, b) => a.address.localeCompare(b.address));
+}
+function preservedForward() {
+  const r = spawnSync('powershell.exe', ['-NoProfile', '-File', predecessorLauncher, '-Action', 'Status'], { encoding: 'utf8', windowsHide: true, timeout: 30000 });
+  assert.ok(r.status === 0 && r.stdout.includes('IAM_DEV_FORWARD=RUNNING'), 'Predecessor owned forward remains live');
+  return readFileSync(predecessorForward, 'utf8');
 }
 function request(ca, headers = {}, servername = 'localhost') {
   return new Promise((resolve, reject) => {
@@ -82,6 +93,8 @@ try {
     assert.equal(sha(readFileSync(base + name + '/LICENSE')), '45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb');
     assert.equal(sha(readFileSync(base + name + '/NOTICE')), '6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d');
   }
+  const predecessor = preservedSockets();
+  const oldForward = preservedForward();
   assert.ok(control('Start').includes('NGINX_ENTRY=READY'));
   const certificate = remote(`cat ${root}/tls/certificate.pem`);
   fixture = JSON.parse(remote(`test "$(stat -c '%U:%a' ${fixtureRoot}/fixture.private.json)" = phuclam:600 && cat ${fixtureRoot}/fixture.private.json`));
@@ -161,8 +174,11 @@ try {
   console.log('N06_OWNED_RESTART_DATA_STABLE_ACTOR_OLD_SESSION_REFUSED=PASS');
   stage = 'scope';
   const sockets = remote('ss -H -ltn "sport = :18448 or sport = :18449"');
-  assert.ok(sockets.includes('127.0.0.1:18448') && sockets.includes('127.0.0.1:18449') && !sockets.includes('0.0.0.0:') && !sockets.includes('[::]'));
-  assert.ok(remote('ss -H -ltn "sport = :18444 or sport = :18446 or sport = :5173"').includes(':18446'));
+  // ss's peer column is normally wildcard even when the LOCAL bind is loopback.
+  const localBindings = sockets.trim().split('\n').map(line => line.trim().split(/\s+/)[3]).sort();
+  assert.deepEqual(localBindings, ['127.0.0.1:18448', '127.0.0.1:18449']);
+  assert.deepEqual(preservedSockets(), predecessor);
+  assert.equal(preservedForward(), oldForward);
   assert.ok(control('Status').includes('POSTGRESQL=UP'));
   console.log('N07_LOOPBACK_OWNERSHIP_PREDECESSOR_RETAINED=PASS');
   stage = 'privacy';
@@ -170,7 +186,15 @@ try {
   assert.equal(await page.evaluate(async t => (await fetch('/api/v1/identity/logout', { method: 'POST', headers: { 'X-CSRF-TOKEN': t } })).status, token), 204);
   await privateState(page, context);
   console.log('N08_PRIVATE_STATE_NO_SECRET_RETENTION=PASS');
-  console.log('NGINX_DEV_BROWSER=8/8_PASS;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DEPLOYMENT_ONLY=true');
+  stage = 'upstream-tls-refusals';
+  const upstream = remote('bash /home/phuclam/idea-nginx-dev-control-49/upstream.test.sh');
+  assert.ok(upstream.includes('NGINX_UPSTREAM_wrong-name=PASS') && upstream.includes('NGINX_UPSTREAM_untrusted=PASS'));
+  assert.ok(control('Status').includes('NGINX_DEV_STATE=RUNNING'));
+  assert.equal((await request(certificate)).status, 200);
+  assert.deepEqual(preservedSockets(), predecessor);
+  assert.equal(preservedForward(), oldForward);
+  console.log('N09_UPSTREAM_TLS_REFUSALS_AND_RESTORATION=PASS');
+  console.log('NGINX_DEV_BROWSER=9/9_PASS;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DEPLOYMENT_ONLY=true');
 } catch {
   console.error('NGINX_DEV_BROWSER=STOP;STAGE=' + stage + ';NO_SECRET_DIAGNOSTICS=true'); process.exitCode = 1;
 } finally {

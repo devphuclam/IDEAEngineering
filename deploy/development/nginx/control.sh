@@ -59,32 +59,43 @@ inputs() {
   [[ $(sha256sum "$jar" | cut -d' ' -f1) == 318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c ]] || exit 3
   [[ $(sha256sum "$tls/fixture.p12" | cut -d' ' -f1) == cb9c804289e7d3e6b4d7e6c9f665a61194b42eac7b55146f5eecd023ef8cab2f ]] || exit 3
   [[ $(stat -c '%U:%a' "$tls/password.private") == phuclam:600 ]] || exit 3
+  [[ $(openssl x509 -in "$root/tls/certificate.pem" -outform DER | sha256sum | cut -d' ' -f1) == 6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad ]] || exit 3
   openssl x509 -in "$root/tls/certificate.pem" -checkend 3600 -noout >/dev/null
 }
 health() {
+  local port=${1:-18449}
   curl --noproxy '*' --fail --silent --show-error --max-time 5 --cacert "$root/tls/certificate.pem" \
-    --resolve localhost:18449:127.0.0.1 https://localhost:18449/health/database >/dev/null 2>&1
+    --resolve "localhost:$port:127.0.0.1" "https://localhost:$port/health/database" >/dev/null 2>&1
 }
 close_owned() {
-  local pid=$1 signal=$2
+  local kind=$1 pid=$2 signal=$3 current result stamp
   [[ -n $pid ]] || return 0
+  # Another owned process may exit while the first one drains. Never signal a
+  # cached bare PID after that wait; validate its exact live identity again.
+  if current=$(owned "$kind"); then [[ $current == "$pid" ]] || return 4
+  else result=$?; [[ $result == 1 ]] && return 0; return "$result"; fi
+  stamp=$(ticks "$pid")
   kill -"$signal" "$pid"
-  for attempt in {1..100}; do [[ ! -e /proc/$pid/exe ]] && return 0; sleep 0.1; done
+  for attempt in {1..100}; do
+    [[ ! -e /proc/$pid/exe ]] && return 0
+    [[ $(ticks "$pid") != "$stamp" ]] && return 0
+    sleep 0.1
+  done
   echo 'NGINX_DEV_STOP=TIMEOUT;NO_FORCED_KILL=true'; return 1
 }
 # Stop is available even if package/cert inputs drift or expire; identity still must match.
 get_owned nginx || true; nginx_pid=$process_id
 get_owned backend || true; backend_pid=$process_id
 if [[ $action == stop ]]; then
-  close_owned "$nginx_pid" QUIT
-  close_owned "$backend_pid" TERM
+  close_owned nginx "$nginx_pid" QUIT
+  close_owned backend "$backend_pid" TERM
   [[ -z $(ss -H -ltn 'sport = :18448 or sport = :18449') ]] || exit 4
   echo 'NGINX_DEV_STATE=STOPPED;EXISTING_PROCESSES_AND_DATABASE_RETAINED=true'
   exit 0
 fi
 inputs
 if [[ $action == status ]]; then
-  if [[ -n $nginx_pid && -n $backend_pid ]] && health; then
+  if [[ -n $nginx_pid && -n $backend_pid ]] && health && health 18448; then
     echo 'NGINX_DEV_STATE=RUNNING;NGINX=UP;SERVER=UP;POSTGRESQL=UP;UPSTREAM_TLS=VERIFIED;DATABASE_RETAINED=true'
   elif [[ -z $nginx_pid && -z $backend_pid ]]; then
     echo 'NGINX_DEV_STATE=STOPPED;DATABASE_RETAINED=true'
@@ -99,8 +110,8 @@ failed_start() {
   local result=$?
   trap - EXIT
   if [[ $result != 0 ]]; then
-    [[ -z $new_nginx ]] || close_owned "$new_nginx" QUIT || true
-    [[ -z $new_backend ]] || close_owned "$new_backend" TERM || true
+    [[ -z $new_nginx ]] || close_owned nginx "$new_nginx" QUIT || true
+    [[ -z $new_backend ]] || close_owned backend "$new_backend" TERM || true
     echo 'NGINX_DEV_START=FAILED;DATABASE_RETAINED=true'
   fi
   exit "$result"
