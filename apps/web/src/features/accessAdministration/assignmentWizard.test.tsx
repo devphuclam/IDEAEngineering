@@ -1,5 +1,9 @@
 import { describe,expect,it } from "vitest";
 import { createIamClient,type IamResult } from "../../api/iamClient";
+import { renderToStaticMarkup } from "react-dom/server";
+import { RbacView } from "../../components/admin/RbacView";
+import { AssignmentWizard } from "./AssignmentWizard";
+import type {AssignmentView,RoleView} from "../../api/iamClient";
 const id="00000000-0000-4000-8000-000000000046";
 const scope={kind:"PROJECT",organizationId:id,projectId:id};
 const role={definitionId:id,roleVersionId:id,roleCode:"account-administrator",version:3,displayName:"Same display label",builtIn:true,classification:"ADMINISTRATION",scopeKinds:["ORGANIZATION"],principalKinds:["ACTOR"],contentDigest:"a".repeat(64),permissions:[],selectable:true,availabilityReason:null,managementScope:null};
@@ -38,5 +42,13 @@ describe("Role Assignment actual client boundary",()=>{
     expect((await client.loadAssignments(scope,{kind:"ACTOR",actorId:id})).kind).toBe("confirmed");
     const bad=createIamClient(async path=>path.endsWith("/csrf")?Response.json({headerName:"X-CSRF-TOKEN",token:"test-csrf"}):Response.json({success:true},{status:201})) as unknown as PlannedClient;
     expect((await bad.grantAssignment({})).kind).toBe("unresolved");
+  });
+  it("preserves authored RBAC presentation and multiple independent exact role versions",()=>{
+    const html=renderToStaticMarkup(<RbacView assignments={[assignment,{...assignment,assignmentId:"00000000-0000-4000-8000-000000000047",roleVersion:2} ] as AssignmentView[]} roles={[role] as RoleView[]} busy={false} canGrant onAdd={()=>{}} onSelect={()=>{}} status={null}>{null}</RbacView>);
+    expect(html).toContain("admin-tabs-row");expect(html).toContain("admin-data-table");expect(html).toContain("account-administrator@3");expect(html).toContain("account-administrator@2");expect(html).toContain("Kiểm tra quyền thực tế · chưa triển khai");expect(html).not.toContain("INITIAL_GROUPS");
+  });
+  it("uses real Organization context and does not invent Department or all-system authority",()=>{
+    const html=renderToStaticMarkup(<AssignmentWizard context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Actual Organization",actions:["role.catalogue.read","access.inspect"]}} onInvalidated={()=>{}} />);
+    expect(html).toContain("Actual Organization");expect(html).toContain("Phạm vi assignment");expect(html).not.toContain("Toàn hệ thống");expect(html).not.toContain("demo-admin");
   });
 });

@@ -64,6 +64,7 @@ class RoleAssignmentContractTest {
             var first=post(client,"/api/v1/administration/assignments",input);assertEquals(201,first.statusCode());
             var repeat=post(client,"/api/v1/administration/assignments",input);assertEquals(201,repeat.statusCode());assertEquals(json.readTree(first.body()),json.readTree(repeat.body()));
             var changed=new HashMap<>(input);changed.put("roleVersionId",AuthorizationPrerequisiteFixture.AA_V3);assertEquals(409,post(client,"/api/v1/administration/assignments",changed).statusCode());
+            changed.put("roleVersionId",UUID.randomUUID());assertEquals(409,post(client,"/api/v1/administration/assignments",changed).statusCode(),"Committed intent resolves before changed unknown target lookup");
             var refused=post(second,"/api/v1/administration/assignments",input);assertEquals(403,refused.statusCode());assertFalse(refused.body().contains(target.actorId().toString()));
             assertEquals(1,count("SELECT count(*) FROM audit_evidence WHERE operation_id='"+op+"'"));assertEquals(2,count("SELECT count(*) FROM assignment_authorization_evidence WHERE operation_id='"+op+"'"));return null;
         })));

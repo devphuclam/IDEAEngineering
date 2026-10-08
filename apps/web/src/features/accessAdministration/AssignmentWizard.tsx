@@ -30,9 +30,9 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
     if(a.kind==="confirmed")setPage(a.value);else failed(a);
     return r.kind==="confirmed"&&a.kind==="confirmed";
   }
-  async function targetPage(offset=0,filter=targetFilter,group=groupFilter){
+  async function targetPage(offset=0,filter=targetFilter,group=groupFilter,principalMode=mode){
     const request=++epoch.current;setTargets(null);setPrincipal(null);setPreview(null);
-    if(mode==="PROJECT_GROUP")return;
+    if(principalMode==="PROJECT_GROUP")return;
     const result=scope.kind==="ORGANIZATION"?await client.loadAccounts(filter,offset):group?await client.loadGroupMembers(group,filter,offset):await client.loadProjectMembers(scope.projectId,filter,offset);
     if(!alive.current||request!==epoch.current)return;
     if(result.kind!=="confirmed"){failed(result);return;}
@@ -48,8 +48,8 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
   useEffect(()=>{if(step!==null)requestAnimationFrame(()=>title.current?.focus());},[step]);
   async function changeScope(value:string){
     const s:AssignmentScope=value==="ORGANIZATION"?{kind:"ORGANIZATION",organizationId:context.organizationId}:{kind:"PROJECT",organizationId:context.organizationId,projectId:value};
-    setScope(s);setPrincipal(null);setGroupFilter("");setTargets(null);setRoleId("");setPreview(null);setGroups(null);await load(s);
-    if(s.kind==="PROJECT"){const g=await client.loadGroups(s.projectId);if(alive.current){if(g.kind==="confirmed")setGroups(g.value);else failed(g);}}
+    setScope(s);setPrincipal(null);setGroupFilter("");setTargets(null);setRoleId("");setPreview(null);setGroups(null);const loaded=await load(s);if(!loaded)return;const request=epoch.current;
+    if(s.kind==="PROJECT"){const g=await client.loadGroups(s.projectId);if(alive.current&&request===epoch.current){if(g.kind==="confirmed")setGroups(g.value);else failed(g);}}
   }
   function open(before:AssignmentView|null=null){
     returnFocus.current=document.activeElement as HTMLElement;setReplacing(before);setPreview(null);setPrincipal(before?.principal??null);setRoleId("");setFrom("");setUntil("");setTargets(null);setMode(before?.principal.kind??"ACTOR");setGroupFilter("");setMessage("");setStep(before?3:1);
@@ -80,14 +80,14 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
   function end(event:FormEvent<HTMLFormElement>){event.preventDefault();if(locked||!selected)return;const a=selected,input={operationId:crypto.randomUUID(),scope:a.scope,expectedVersion:a.version,reason:String(new FormData(event.currentTarget).get("reason"))};void execute({operationId:input.operationId,run:()=>client.endAssignment(a.assignmentId,input)});}
   const scopeControl=<label>Phạm vi assignment<select aria-label="Phạm vi assignment" value={scope.kind==="ORGANIZATION"?"ORGANIZATION":scope.projectId} disabled={locked||replacing!==null} onChange={e=>void changeScope(e.target.value)}><option value="ORGANIZATION">Organization · {context.organizationName}</option>{projects?.items.map(p=><option key={p.projectId} value={p.projectId}>Project · {p.name} — {p.projectId}</option>)}</select></label>;
   return <div className="account-layout assignment-layout">
-    <RbacView assignments={page?.items??null} roles={roles?.items??null} busy={locked||step!==null} canGrant={canGrant} selectedId={selected?.assignmentId} onAdd={()=>open()} onSelect={setSelected}
+    <RbacView inactive={step!==null} assignments={page?.items??null} roles={roles?.items??null} busy={locked||step!==null} canGrant={canGrant} selectedId={selected?.assignmentId} onAdd={()=>open()} onSelect={setSelected}
       status={<><p role="status" aria-live="polite" ref={status} tabIndex={-1} data-testid="assignment-status" className="status-message">{message}</p>{operation&&<p className="hint">Operation: <code>{operation}</code></p>}{pending&&<div role="alert"><p>Kết quả chưa rõ. Không tự gửi lại hoặc tạo OperationId mới. Resolve dùng đúng intent đã gửi.</p><button type="button" disabled={busy} onClick={()=>void execute(pending)}>Resolve lại cùng OperationId</button></div>}</>}>
       <div className="admin-toolbar">{step===null&&scopeControl}<button type="button" className="admin-btn" disabled={locked||step!==null} onClick={()=>void load()}>Tải lại assignment</button></div>
       {projects?.hasMore&&<button type="button" disabled={locked||step!==null} onClick={()=>void client.loadProjects("",projects.offset+projects.limit).then(r=>{if(r.kind==="confirmed")setProjects(r.value);else failed(r);})}>Trang Project tiếp theo</button>}
       {page&&<Pager page={page} disabled={locked||step!==null} change={offset=>void load(scope,offset)} />}
       {roles?.hasMore&&<button type="button" disabled={locked} onClick={()=>void client.loadRoles(scope,roles.offset+roles.limit).then(r=>{if(r.kind==="confirmed")setRoles(r.value);else failed(r);})}>Trang role tiếp theo</button>}
     </RbacView>
-    <aside className="admin-inspector" aria-label="Chi tiết assignment"><div className="admin-inspector-body">{!selected?<p>Chọn assignment để xem exact version, người cấp, reason và history.</p>:<>
+    <aside inert={step!==null} className="admin-inspector" aria-label="Chi tiết assignment"><div className="admin-inspector-body">{!selected?<p>Chọn assignment để xem exact version, người cấp, reason và history.</p>:<>
       <h2>{selected.roleCode}@{selected.roleVersion}</h2><dl><dt>Assignment ID</dt><dd>{selected.assignmentId}</dd><dt>Role Version ID</dt><dd>{selected.roleVersionId}</dd><dt>Principal</dt><dd>{selected.principal.kind} · {selected.principal.kind==="ACTOR"?selected.principal.actorId:selected.principal.groupId}</dd><dt>Assigned by</dt><dd>{selected.assignedBy}</dd><dt>Reason</dt><dd>{selected.reason}</dd><dt>Interval</dt><dd>{selected.effectiveFrom} → {selected.effectiveUntil??"Không định thời kết thúc"}</dd><dt>Version</dt><dd>{selected.version}</dd><dt>Canonical end</dt><dd>{selected.revokedAt??"Chưa kết thúc"} · {selected.endReason}</dd></dl>
       {canGrant&&!selected.revokedAt&&<><button className="admin-btn" type="button" disabled={locked} onClick={()=>open(selected)}>Thay thế assignment</button><form aria-label="Kết thúc assignment" className="form-card" onSubmit={end}><fieldset disabled={locked}><legend>Kết thúc assignment riêng</legend><p>Không xóa history hoặc Role khác. Server bảo vệ last effective Super recovery và kiểm quyền hiện tại.</p><label>Lý do kết thúc<input name="reason" required maxLength={500} /></label><label className="check-label"><input type="checkbox" required />Tôi xác nhận đúng assignment và hậu quả kết thúc.</label><button type="submit">Xác nhận kết thúc assignment</button></fieldset></form></>}
     </>}</div></aside>
@@ -96,7 +96,7 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
       <div className="admin-drawer-steps">{["Phạm vi","Đối tượng","Role / version","Xác nhận"].map((label,i)=><span className={`admin-step-pill ${step===i+1?"active":""}`} key={label} aria-current={step===i+1?"step":undefined}>{i+1}. {label}</span>)}</div>
       <div className="admin-drawer-body"><p className="hint">Mỗi assignment có ID riêng. Cấp thêm một role không thay thế các role khác; không tự tạo membership.</p>
         {step===1&&<>{scopeControl}<p className="hint">Organization rộng hơn Project nhưng chỉ áp dụng đúng supported profile. Group luôn thuộc một Project, không phải Department/global scope.</p></>}
-        {step===2&&<><label>Loại principal<select value={mode} disabled={locked} onChange={e=>{const value=e.target.value as typeof mode;setMode(value);setPrincipal(null);setPreview(null);}}><option value="ACTOR">Actor · cấp riêng cho người được chọn</option><option value="PROJECT_GROUP" disabled={scope.kind!=="PROJECT"}>Project Group · cấp cho principal Group</option></select></label>
+        {step===2&&<><label>Loại principal<select value={mode} disabled={locked} onChange={e=>{const value=e.target.value as typeof mode;setMode(value);setPrincipal(null);setPreview(null);if(value==="ACTOR")void targetPage(0,targetFilter,groupFilter,value);}}><option value="ACTOR">Actor · cấp riêng cho người được chọn</option><option value="PROJECT_GROUP" disabled={scope.kind!=="PROJECT"}>Project Group · cấp cho principal Group</option></select></label>
           {scope.kind==="PROJECT"&&<label>{mode==="ACTOR"?"Lọc người trong Group (không cấp cho Group)":"Chọn Group principal"}<select value={mode==="ACTOR"?groupFilter:principal?.kind==="PROJECT_GROUP"?principal.groupId:""} onChange={e=>{if(mode==="ACTOR"){setGroupFilter(e.target.value);void targetPage(0,"",e.target.value);}else setPrincipal(e.target.value?{kind:"PROJECT_GROUP",groupId:e.target.value}:null);}}><option value="">{mode==="ACTOR"?"Mọi Actor hợp lệ cùng Organization":"Chọn exact Group"}</option>{groups?.items.map(g=><option key={g.groupId} value={g.groupId}>{g.name} — {g.groupId}</option>)}</select></label>}
           {groups?.hasMore&&scope.kind==="PROJECT"&&<button type="button" onClick={()=>void client.loadGroups(scope.projectId,"",groups.offset+groups.limit).then(r=>{if(r.kind==="confirmed")setGroups(r.value);else failed(r);})}>Trang Group tiếp theo</button>}
           {mode==="ACTOR"&&<><form aria-label="Lọc Actor đích" onSubmit={e=>{e.preventDefault();void targetPage();}}><label>Tìm người<input maxLength={200} value={targetFilter} onChange={e=>setTargetFilter(e.target.value)} /></label><button type="submit">Tìm người</button></form><label>Actor đích<select value={principal?.kind==="ACTOR"?principal.actorId:""} onChange={e=>setPrincipal(e.target.value?{kind:"ACTOR",actorId:e.target.value}:null)}><option value="">Chọn exact Actor</option>{targets?.items.map(t=><option key={t.actorId} value={t.actorId}>{t.displayName} — {t.actorId}</option>)}</select></label>{targets&&<Pager page={targets} disabled={locked} change={offset=>void targetPage(offset)} />}</>}
@@ -107,7 +107,7 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
           <p>{preview.allowed?"Delegation preview cho phép · commit sẽ kiểm lại":"Server từ chối delegation; không được xác nhận cấp."}</p><ul>{preview.consequences.map(c=><li key={c}>{c}</li>)}</ul><p className="hint">Không phải membership hay đảm bảo owner-specific engineering gates đều đạt.</p>
           <label>Lý do cấp / thay thế<input name="reason" maxLength={500} required /></label><label className="check-label"><input type="checkbox" required />Tôi đã kiểm tra exact scope, principal, role version và hậu quả.</label><button className="admin-btn primary" type="submit" disabled={!preview.allowed}>Xác nhận phân quyền trên Server</button>
         </fieldset></form>}
-        {message&&<p role="status" className="status-message">{message}</p>}
+        {message&&<p role="status" className="status-message">{message}</p>}{pending&&<div role="alert"><p>Kết quả chưa rõ. Giữ nguyên intent và OperationId; không tạo grant mới.</p><button type="button" disabled={busy} onClick={()=>void execute(pending)}>Resolve lại cùng OperationId</button></div>}
       </div>
       <div className="admin-drawer-footer">{step>1&&<button className="admin-btn" type="button" disabled={locked||(replacing!==null&&step===3)} onClick={()=>{setPreview(null);setStep((step-1) as 1|2|3);}}>← Quay lại</button>}{step<4&&<button className="admin-btn primary" type="button" disabled={locked||(step===2&&!principal)||(step===3&&!roleId)} onClick={()=>void next()}>Tiếp tục →</button>}</div>
     </div></div>}

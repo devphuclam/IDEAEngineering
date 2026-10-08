@@ -51,6 +51,7 @@ public final class RoleAssignmentAdministration {
     public Preview preview(ActorContext context,Principal principal,Scope scope,UUID role,Interval interval,UUID predecessor,long expected,JsonNode condition){
         var intent=intent(predecessor==null?"GRANT":"REPLACE",principal,scope,role,predecessor,expected,interval,"Preview only",condition);
         return catalogue.read(context,(c,who)->{
+            requireAnyAssignmentAuthority(c,context,scope);
             var targets=targets(c,intent);var authority=authority(c,context,intent,targets);
             for(var decision:authority.decisions())RoleCatalogueQueries.require(decision);
             verifyTargets(c,intent,targets,true);if(targets.before()!=null)expected(targets.before(),expected);
@@ -71,26 +72,31 @@ public final class RoleAssignmentAdministration {
         var digest=digest(intent);var attempt=UUID.randomUUID();var correlation=UUID.randomUUID();
         final Reply reply;
         try{reply=transactions.executeOwner(context,new IdentityTransactions.OwnerCommand<Reply>(){
-            Targets targets;Authority initial;boolean replay,accepted;
+            Targets targets;Authority initial;boolean replay,accepted;Reply cached;Scope replayScope;
             @Override public void revalidate(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException{
-                if(initial==null){targets=targets(c,intent);initial=authority(c,context,intent,targets);return;}
-                if(replay){RoleCatalogueQueries.require(authorization.evaluate(c,context,"access.inspect",intent.scope()));return;}
+                if(initial==null&&!replay){
+                    // Resolve a committed intent before touching changed/obsolete target inputs.
+                    try(var q=c.prepareStatement("SELECT e.actor_id,e.organization_id,e.action,e.input_digest,e.result::text,o.outcome,o.reason_code,(SELECT requested_scope::text FROM assignment_authorization_evidence a WHERE a.operation_id=e.operation_id AND a.stage='REQUEST' ORDER BY evaluated_at,evidence_id LIMIT 1) FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?")){
+                        q.setObject(1,operation);try(var r=q.executeQuery()){if(r.next()){
+                            replay=true;var value=json.readTree(r.getString(8));
+                            replayScope=new Scope(AuthorizationDecisionService.ScopeKind.valueOf(value.path("kind").asString()),UUID.fromString(value.path("organizationId").asString()),value.path("projectId").isNull()?null:UUID.fromString(value.path("projectId").asString()));
+                            if(!actor.actorId().equals(r.getObject(1,UUID.class))||!actor.organizationId().equals(r.getObject(2,UUID.class)))cached=new Reply(null,RefusalReason.AUTHORITY_REFUSED);
+                            else if(!intent.kind().equals(r.getString(3))||!digest.equals(r.getString(4)))cached=new Reply(null,RefusalReason.STATE_CONFLICT);
+                            else cached=new Reply(json.readTree(r.getString(5)),"REFUSED".equals(r.getString(6))?RefusalReason.valueOf(r.getString(7)):null);
+                        }}
+                    }
+                    if(!replay){requireAnyAssignmentAuthority(c,context,intent.scope());targets=targets(c,intent);initial=authority(c,context,intent,targets);return;}
+                }
+                if(replay){RoleCatalogueQueries.require(authorization.evaluate(c,context,"access.inspect",replayScope));return;}
                 var current=authority(c,context,intent,targets);
                 if(accepted){requireAuthority(current);verifyTargets(c,intent,targets,!"END".equals(intent.kind()));if(forbiddenSelf(context,intent,targets,current))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);}
-                retain(c,attempt,operation,"COMMIT",actor.organizationId(),current);
+                retain(c,attempt,operation,"COMMIT",actor.organizationId(),intent.scope(),current);
             }
             @Override public Reply apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException{
-                try(var q=c.prepareStatement("SELECT e.actor_id,e.organization_id,e.action,e.input_digest,e.result::text,o.outcome,o.reason_code FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?")){
-                    q.setObject(1,operation);try(var r=q.executeQuery()){if(r.next()){
-                        replay=true;
-                        if(!actor.actorId().equals(r.getObject(1,UUID.class))||!actor.organizationId().equals(r.getObject(2,UUID.class)))return new Reply(null,RefusalReason.AUTHORITY_REFUSED);
-                        if(!intent.kind().equals(r.getString(3))||!digest.equals(r.getString(4)))return new Reply(null,RefusalReason.STATE_CONFLICT);
-                        return new Reply(json.readTree(r.getString(5)),"REFUSED".equals(r.getString(6))?RefusalReason.valueOf(r.getString(7)):null);
-                    }}
-                }
+                if(replay)return cached;
                 // Legacy operations are not silently reused as this successor command envelope.
                 try(var q=c.prepareStatement("SELECT 1 FROM access_policy_owner_outcome WHERE operation_id=?")){q.setObject(1,operation);try(var r=q.executeQuery()){if(r.next())return new Reply(null,RefusalReason.STATE_CONFLICT);}}
-                retain(c,attempt,operation,"REQUEST",actor.organizationId(),initial);
+                retain(c,attempt,operation,"REQUEST",actor.organizationId(),intent.scope(),initial);
                 if(initial.decisions().stream().anyMatch(d->!d.rbacGranted())||!initial.delegated()){
                     audit(c,operation,actor.actorId(),intent.kind(),intent.scope().organizationId(),"REFUSED","AUTHORITY_REFUSED");return new Reply(null,RefusalReason.AUTHORITY_REFUSED);
                 }
@@ -128,12 +134,20 @@ public final class RoleAssignmentAdministration {
         if(t.before()!=null&&!t.before().roleVersionId().equals(t.role().roleVersionId()))roles.add(RoleCatalogueQueries.role(c,t.before().roleVersionId()));
         var decisions=new ArrayList<AuthorizationDecisionService.Decision>();boolean allowed=true;
         for(var role:roles){
-            var d=authorization.evaluate(c,context,permission(role),i.scope());decisions.add(d);
+            var permission=permission(role);var authorityScope=permission.equals("role.assignment.manage.highest")?Scope.organization(i.scope().organizationId()):i.scope();
+            var d=authorization.evaluate(c,context,permission,authorityScope);decisions.add(d);
             allowed&=d.paths().stream().anyMatch(path->envelope(path,role,i.scope(),t.principal()));
         }
         return new Authority(List.copyOf(decisions),allowed);
     }
     private static String permission(RoleCatalogueQueries.Role r){return switch(r.classification()){case "BUSINESS"->"role.assignment.manage.business";case "HIGHEST"->"role.assignment.manage.highest";default->"role.assignment.manage.administration";};}
+    private void requireAnyAssignmentAuthority(Connection c,ActorContext context,Scope scope)throws SQLException{
+        for(var action:List.of("role.assignment.manage.business","role.assignment.manage.administration","role.assignment.manage.highest")){
+            var evaluated=action.equals("role.assignment.manage.highest")?Scope.organization(scope.organizationId()):scope;
+            if(authorization.evaluate(c,context,action,evaluated).rbacGranted())return;
+        }
+        throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
+    }
     private static boolean envelope(AuthorizationDecisionService.GrantPath path,RoleCatalogueQueries.Role target,Scope scope,Principal principal){
         if(!path.assignmentScope().organizationId().equals(scope.organizationId())||(path.assignmentScope().projectId()!=null&&!path.assignmentScope().projectId().equals(scope.projectId())))return false;
         // Built-in declaration is exact code AND version, on this same applicable permission path.
@@ -207,8 +221,8 @@ public final class RoleAssignmentAdministration {
         return new Intent(kind,principal,scope,role,before,version,interval==null?new Interval(null,null):interval,reason.trim());
     }
     private static void requireAuthority(Authority a){for(var d:a.decisions())RoleCatalogueQueries.require(d);if(!a.delegated())throw new Refusal(RefusalReason.AUTHORITY_REFUSED);}
-    private void retain(Connection c,UUID attempt,UUID operation,String stage,UUID org,Authority a)throws SQLException{
-        var d=a.decisions().getFirst();insert(c,"INSERT INTO assignment_authorization_evidence(evidence_id,attempt_id,operation_id,stage,actor_id,organization_id,requested_scope,permission_code,evaluated_at,eligible,granted,delegation_allowed,paths,reason_code) VALUES (?,?,?,?,?,?,?::jsonb,?,?,?,?,?,?::jsonb,?)",UUID.randomUUID(),attempt,operation,stage,d.actorId(),org,json.writeValueAsString(d.scope()),d.permission(),Timestamp.from(d.evaluatedAt()),a.decisions().stream().allMatch(AuthorizationDecisionService.Decision::eligible),a.decisions().stream().allMatch(AuthorizationDecisionService.Decision::rbacGranted),a.delegated(),json.writeValueAsString(a.decisions()),a.delegated()?d.refusal():"DELEGATION_REFUSED");
+    private void retain(Connection c,UUID attempt,UUID operation,String stage,UUID org,Scope requestedScope,Authority a)throws SQLException{
+        var d=a.decisions().getFirst();insert(c,"INSERT INTO assignment_authorization_evidence(evidence_id,attempt_id,operation_id,stage,actor_id,organization_id,requested_scope,permission_code,evaluated_at,eligible,granted,delegation_allowed,paths,reason_code) VALUES (?,?,?,?,?,?,?::jsonb,?,?,?,?,?,?::jsonb,?)",UUID.randomUUID(),attempt,operation,stage,d.actorId(),org,json.writeValueAsString(requestedScope),d.permission(),Timestamp.from(d.evaluatedAt()),a.decisions().stream().allMatch(AuthorizationDecisionService.Decision::eligible),a.decisions().stream().allMatch(AuthorizationDecisionService.Decision::rbacGranted),a.delegated(),json.writeValueAsString(a.decisions()),a.delegated()?d.refusal():"DELEGATION_REFUSED");
     }
     private static void audit(Connection c,UUID operation,UUID actor,String kind,UUID target,String outcome,String reason)throws SQLException{insert(c,"INSERT INTO audit_evidence(evidence_id,operation_id,actor_id,action,target_type,target_id,outcome,reason_code) VALUES (?,?,?,?,?,?,?,?)",UUID.randomUUID(),operation,actor,"role.assignment."+kind.toLowerCase(Locale.ROOT),"Role Assignment",target.toString(),outcome,reason);}
     private String digest(Intent i){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(json.writeValueAsString(i).getBytes(StandardCharsets.UTF_8)));}catch(java.security.NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}}

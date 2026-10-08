@@ -3,12 +3,12 @@ import type {AssignmentView,RoleView} from "../../api/iamClient";
 
 // Authored RbacView @ 9160ec27: preserve header, tabs, table and visual tokens.
 // No mock department inheritance, local permission evaluator or unsupported Inspector tab.
-export function RbacView({assignments,roles,busy,canGrant,selectedId,onSelect,onAdd,children,status}:{
+export function RbacView({assignments,roles,busy,canGrant,selectedId,onSelect,onAdd,children,status,inactive=false}:{
   assignments:AssignmentView[]|null;roles:RoleView[]|null;busy:boolean;canGrant:boolean;selectedId?:string;
-  onSelect(value:AssignmentView):void;onAdd():void;children:ReactNode;status:ReactNode;
+  onSelect(value:AssignmentView):void;onAdd():void;children:ReactNode;status:ReactNode;inactive?:boolean;
 }){
   const [tab,setTab]=useState<"assignments"|"roles">("assignments");
-  return <div className="admin-main"><div className="admin-main-head"><div><div className="admin-crumbs">Quản trị hệ thống &gt; Phân quyền vai trò RBAC</div>
+  return <div inert={inactive} className="admin-main"><div className="admin-main-head"><div><div className="admin-crumbs">Quản trị hệ thống &gt; Phân quyền vai trò RBAC</div>
     <h1 className="admin-main-title">Phân Quyền Vai Trò RBAC</h1><p className="admin-main-desc">Assignment độc lập, đúng scope và exact Role code/version. Quyền do Server quyết định.</p></div>
     <div className="admin-head-actions">{canGrant&&<button className="admin-btn primary" type="button" disabled={busy} onClick={onAdd}><span>Thêm phân quyền vai trò</span></button>}</div></div>
     <div className="admin-tabs-row" aria-label="Chế độ phân quyền"><button className={`admin-tab-btn ${tab==="assignments"?"active":""}`} aria-pressed={tab==="assignments"} type="button" onClick={()=>setTab("assignments")}>Bảng gán vai trò</button><button className={`admin-tab-btn ${tab==="roles"?"active":""}`} aria-pressed={tab==="roles"} type="button" onClick={()=>setTab("roles")}>Danh mục vai trò</button><button className="admin-tab-btn" type="button" disabled title="Inspector thuộc slice sau">Kiểm tra quyền thực tế · chưa triển khai</button></div>
