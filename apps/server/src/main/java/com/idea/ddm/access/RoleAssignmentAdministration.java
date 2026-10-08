@@ -54,7 +54,7 @@ public final class RoleAssignmentAdministration {
             var targets=targets(c,intent);var authority=authority(c,context,intent,targets);
             for(var decision:authority.decisions())RoleCatalogueQueries.require(decision);
             verifyTargets(c,intent,targets,true);if(targets.before()!=null)expected(targets.before(),expected);
-            boolean self=forbiddenSelf(context,intent,targets);
+            boolean self=forbiddenSelf(context,intent,targets,authority);
             var consequences=new ArrayList<String>();consequences.add("Independent exact-version assignment; no Project or Group membership is created.");
             if(scope.kind()==AuthorizationDecisionService.ScopeKind.ORGANIZATION)consequences.add("Organization breadth: applicable descendant Projects only where the role profile supports them.");
             if("PROJECT_GROUP".equals(targets.principal().kind()))consequences.add("Only current eligible Project + Group members receive participant access.");
@@ -76,7 +76,7 @@ public final class RoleAssignmentAdministration {
                 if(initial==null){targets=targets(c,intent);initial=authority(c,context,intent,targets);return;}
                 if(replay){RoleCatalogueQueries.require(authorization.evaluate(c,context,"access.inspect",intent.scope()));return;}
                 var current=authority(c,context,intent,targets);
-                if(accepted){requireAuthority(current);verifyTargets(c,intent,targets,!"END".equals(intent.kind()));if(forbiddenSelf(context,intent,targets))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);}
+                if(accepted){requireAuthority(current);verifyTargets(c,intent,targets,!"END".equals(intent.kind()));if(forbiddenSelf(context,intent,targets,current))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);}
                 retain(c,attempt,operation,"COMMIT",actor.organizationId(),current);
             }
             @Override public Reply apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException{
@@ -96,7 +96,7 @@ public final class RoleAssignmentAdministration {
                 }
                 JsonNode result;RefusalReason refused=null;var savepoint=c.setSavepoint();
                 try{
-                    if(forbiddenSelf(context,intent,targets))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
+                    if(forbiddenSelf(context,intent,targets,initial))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
                     verifyTargets(c,intent,targets,!"END".equals(intent.kind()));
                     if(targets.before()!=null)expected(targets.before(),intent.expectedVersion());
                     var now=clock.instant();
@@ -169,9 +169,10 @@ public final class RoleAssignmentAdministration {
         if(until!=null&&!until.isAfter(from))throw new Refusal(RefusalReason.INVALID_INPUT);
         if(assigning&&"HIGHEST".equals(role.classification())&&(until!=null||from.isAfter(clock.instant())))throw new Refusal(RefusalReason.STATE_CONFLICT);
     }
-    private static boolean forbiddenSelf(ActorContext context,Intent i,Targets t){
+    private static boolean forbiddenSelf(ActorContext context,Intent i,Targets t,Authority authority){
         if("END".equals(i.kind())||!"ACTOR".equals(t.principal().kind())||!context.actorId().equals(t.principal().actorId())||"BUSINESS".equals(t.role().classification()))return false;
-        return !(t.role().roleCode().equals("account-administrator")&&Set.of(1,2,3).contains(t.role().version()));
+        return !(t.role().roleCode().equals("account-administrator")&&Set.of(1,2,3).contains(t.role().version())
+                &&authority.decisions().stream().flatMap(d->d.paths().stream()).anyMatch(p->p.roleCode().equals("super-administrator")&&p.roleVersion()==2));
     }
     private UUID insertAssignment(Connection c,OwnerSessionEligibility.EligibleActor actor,Intent i,Targets t,Instant now)throws SQLException{
         // Serialize through IAM security lock, then explicitly detect the retained unended tuple.

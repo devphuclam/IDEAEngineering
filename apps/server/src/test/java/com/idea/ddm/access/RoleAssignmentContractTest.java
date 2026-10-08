@@ -41,7 +41,8 @@ class RoleAssignmentContractTest {
         http.withSignedInClient(admin,(client,context)->http.withSignedInClient(target,(unused,targetContext)->{
             grant(admin,AuthorizationPrerequisiteFixture.SUPER_V2,org());
             var input=grantInput(target.actorId(),AuthorizationPrerequisiteFixture.AA_V3,org());
-            var preview=post(client,"/api/v1/administration/assignments/preview",input);assertEquals(200,preview.statusCode());
+            var previewInput=new HashMap<>(input);previewInput.remove("operationId");previewInput.remove("reason");
+            var preview=post(client,"/api/v1/administration/assignments/preview",previewInput);assertEquals(200,preview.statusCode());
             assertTrue(json.readTree(preview.body()).path("allowed").asBoolean());
             assertEquals(0,count("SELECT count(*) FROM identity_role_assignment WHERE principal_actor_id='"+target.actorId()+"'"));
             var result=post(client,"/api/v1/administration/assignments",input);assertEquals(201,result.statusCode());
