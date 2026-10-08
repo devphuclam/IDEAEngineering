@@ -11,6 +11,8 @@ b6caecfff4e8482e328f7796f2c8680a0e3200d343be34fc02d658943ce50028  apps/server/sc
 f1f09f45c5c1fda1cf961901e1d0fe2d4b97aef12f6b62c5f26c4b41f125d7b8  apps/server/scripts/run-f03b-postgresql-checks.sh
 86b4912a18bd084afd58c41855131088f337d5be7725f77c14e1b10fede7f9e9  apps/server/scripts/run-f04-postgresql-checks.sh
 7d7ce17876dc763f8f26fab14af5bc7b91b7379aa7a55c583c9bcd079924f5b8  apps/server/src/main/java/com/idea/ddm/access/AuthorizationDecisionService.java
+72d92c7d52cf4df68bff6b46249539ab0e9042a19d9345ce5ab84bc464af60fb  apps/server/src/main/java/com/idea/ddm/access/RoleCatalogueController.java
+85f924bf9159fa7366094671453df0987d65aafbf30a65318fd6f179bcf8514f  apps/server/src/main/java/com/idea/ddm/access/RoleCatalogueQueries.java
 de546f47289e7b5ffda465da93cc0129ffb22832ed31911dc948ab98063a3867  apps/server/src/main/java/com/idea/ddm/access/SuperSuccessorAdoptionService.java
 9db01a2754a7160f1c7f937f777087813f022e5a884943f8ff7b22303fa28455  apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java
 ab74624c75be477812df3db84dcf19bf8fb0f593582d6847110aee8ccf495e27  apps/server/src/main/java/com/idea/ddm/custody/GrantEnvelope.java
