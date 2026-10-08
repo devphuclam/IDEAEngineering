@@ -5,10 +5,14 @@ import com.idea.ddm.iam.IamIntegrationFixtures;
 import java.util.*;
 import org.junit.jupiter.api.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccessInspectionContractTest {
+    final CustomRoleQualificationFixture f=new CustomRoleQualificationFixture();
+    @BeforeAll void start()throws Exception{f.start();}
+    @AfterAll void stop(){f.close();}
     @Test void everyDirectAndGroupPathIsExplainedAndMembershipIsNotAdministrativeAuthority() throws Exception {
-        try(var f=new CustomRoleQualificationFixture()) {
-            f.start();var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var member=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
+        {
+            var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var member=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
             f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(member,(unused,target)->{
                 f.delegate(admin);var p=new com.idea.ddm.project.ProjectPrerequisiteFixture(f.rows);var project=p.project(admin);var group=p.group(project,admin);
                 var now=java.time.Instant.parse("2026-10-07T05:59:59Z");var pm=p.projectMembership(project,member,now,null);var gm=p.groupMembership(group,member,now,null);
@@ -25,8 +29,8 @@ class AccessInspectionContractTest {
         }
     }
     @Test void committedProjectResultIsResolvedWithoutReplayAndAbsentResultIsNotRollback() throws Exception {
-        try(var f=new CustomRoleQualificationFixture()){
-            f.start();var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+        {
+            var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
             f.http.withSignedInClient(admin,(client,ctx)->{
                 f.delegate(admin);new AuthorizationPrerequisiteFixture(f.rows).actorAssignment(admin,AuthorizationPrerequisiteFixture.PA_V1,f.scope(),java.time.Instant.parse("2026-10-07T05:59:59Z"),null);
                 var operation=UUID.randomUUID();assertEquals(201,f.post(client,"/api/v1/administration/projects",Map.of("operationId",operation,"organizationId",f.rows.organizationId(),"name","Resolved synthetic project","reason","Actual owner result")).statusCode());
@@ -37,16 +41,16 @@ class AccessInspectionContractTest {
         }
     }
     @Test void auditHistoryIsIndependentlyGatedAndDesignAuditIsNotAnExecutableGrant() throws Exception {
-        try(var f=new CustomRoleQualificationFixture()){
-            f.start();var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+        {
+            var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
             f.http.withSignedInClient(admin,(client,ctx)->{f.delegate(admin);
                 var history=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(403,history.statusCode());
                 var inspect=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","audit.read","scope",f.scope()));assertEquals(200,inspect.statusCode());assertEquals("UNSUPPORTED",f.json.readTree(inspect.body()).path("rbacResult").asString());assertEquals("DESIGN",f.json.readTree(inspect.body()).path("implementationState").asString());return null;});
         }
     }
     @Test void actualHttpInspectionUsesCurrentAuthorityAndExactContributingVersion() throws Exception {
-        try(var f=new CustomRoleQualificationFixture()) {
-            f.start(); var who=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+        {
+            var who=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
             f.http.withSignedInClient(who,(client,context)->{
                 var assignment=f.delegate(who);
                 var r=f.post(client,"/api/v1/administration/access-inspections",Map.of(
