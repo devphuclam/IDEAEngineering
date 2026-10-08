@@ -31,9 +31,9 @@ No documentation website, generator, new dependency or runtime is introduced.
 
 ## Current baseline register
 
-### IAM integration branch — engineering-qualified, acceptance pending
+### IAM integration — human accepted, controlled integration authorized
 
-Under [Issue #46 / Draft PR #47](https://github.com/devphuclam/IDEAEngineering/pull/47),
+Under [Issue #46 / PR #47](https://github.com/devphuclam/IDEAEngineering/pull/47),
 spec e227cb1df60e70a1294628b4f153ad50d8f034c6 has reported SPEC REVIEW PASS for planning.
 Candidate [plan](../../../../../../specs/009-iam-rbac-ui-integration/plan.md),
 [Permission/delegation](../../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
@@ -41,15 +41,18 @@ and [operations](../../../../../../specs/009-iam-rbac-ui-integration/contracts/o
 have accepted design with Core successors DOC-03@0.8/04@0.16/05@0.27/06@0.19/08@0.14.
 PG2/PG3/PG4 and execution readiness were subsequently recorded explicitly. Current usable
 Account, Project/Group, Assignment, Custom Role and Inspector flows, source/qualification and
-known unsupported rights are in [current repair handoff](../../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#22-independent-review-repair-successor--2026-10-08).
+known supported-profile limits are in [repair handoff](../../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#22-independent-review-repair-successor--2026-10-08).
 The [whole-feature engineering matrix](../../../../../../specs/009-iam-rbac-ui-integration/evidence/feature-009-closure-matrix.md)
-is the operation → source/test → executed evidence → pending external acceptance crosswalk.
+is the operation → source/test → executed evidence → separate human acceptance crosswalk.
 Existing Identity retry is not upgraded by general operation lookup: legacy outcomes are
 metadata-only. Independently authorized bounded administration history is now qualified, not
 general Audit export. The three independent AA/PA/PRA and exact confirmation-diff gaps have
-successor evidence; predecessor independent review FAIL remains historical. This is an internal branch reviewer packet, not
-deployment, PG5, external sharing or recipient/team acceptance. Earlier accepted design and
-per-story evidence remain retained; no new framework/OpenAPI generator is claimed.
+successor evidence; predecessor independent review FAIL remains historical. The human Project user
+confirmed all manual steps and explicitly authorized push/merge on 2026-10-08: **93/93 tasks,
+COMPLETED / ACCEPTED / PASS, successor PG5 PASS**, recorded separately in
+[section23](../../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#23-human-acceptance-and-controlled-integration--2026-10-08).
+This is not deployment, PG6 release, external sharing or recipient/team acceptance. Earlier
+accepted design and exact per-story evidence remain retained; no new framework/generator claim.
 
 ### v0.2 CPD successor — review pending
 

@@ -2,12 +2,21 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design and result wayfinding / 0.6 / Draft review-repair successor packet; historical technical oracles unchanged |
-| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–22; predecessor independent review FAIL, successor PG5 pending |
+| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design and result wayfinding / 0.7 / Approved human-acceptance wayfinding; historical technical oracles unchanged |
+| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / historical design and PG2/PG3/PG4 PASS; execution sections16–22, human acceptance section23; predecessor independent FAIL retained, successor PG5 PASS by human Project user on 2026-10-08 |
 | Baseline / change / date | Spec e227cb1d + [plan](plan.md) / Issue #46 / 2026-10-08 Asia/Ho_Chi_Minh |
 | Effective / classification / retention / supersession / trigger | NOT-APPLICABLE / INTERNAL / Git / no old run replaced / contract, source, environment or tooling change |
 
-## Current engineering milestone — 92/93 tasks
+## Current closure — 93/93 tasks, ACCEPTED / PASS
+
+[Section23](integration-readiness.md#23-human-acceptance-and-controlled-integration--2026-10-08)
+records all 22 human-reported review steps and explicit push/merge authority, separate from
+automated qualification. Reviewed application remains 9d3732c / JAR318a52cf; owned development
+URL https://localhost:5174/ retains synthetic accounts/history. Use
+[the dev guide](../../tools/iam-ui-dev/README.md) for Start/Status/Stop; this is not production
+deployment or live adoption. Verifier NOT-RUN, no timer action.
+
+## Historical engineering milestone before human acceptance — 92/93 tasks
 
 Account MVP has actual same-origin packaged Web + Server + PostgreSQL + trusted headed Chrome
 qualification, with the authored Login/Admin presentation retained. [Handoff section 16](integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)

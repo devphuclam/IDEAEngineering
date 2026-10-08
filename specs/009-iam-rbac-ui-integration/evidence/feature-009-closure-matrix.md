@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-VR-IAM-UI-CLOSURE-001 / verification crosswalk / 0.2 / Draft independent-review repair successor packet |
+| ID / class / version / state | IE-VR-IAM-UI-CLOSURE-001 / verification crosswalk / 0.3 / Approved human-acceptance closure |
 | Authority / owner / author | INFORMATIVE; no new requirement or gate decision / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Accepted spec/design and task package aaa5596a; predecessor reviewed 73b5d95; final repaired application/Web/test/harness 9d3732cb173e8094195b9bdd60b5588ac3cfa42e / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective | Independent predecessor review recommended FAIL (S1/F1 HIGH, F2 MEDIUM); user authorized repair; current engineering successor in section22; independent successor acceptance / PG5 pending / not a deployment authorization |
+| Reviewer / acceptance / effective | Independent predecessor FAIL (S1/F1 HIGH, F2 MEDIUM) and repair retained; human Project user accepted the successor and explicitly authorized integration on 2026-10-08 at c379c6a / ACCEPTED, successor PG5 PASS, section23 / not a deployment authorization |
 | Upstream / downstream / change | [Spec](../spec.md), [operations](../contracts/operations.md), [permissions](../contracts/permission-delegation.md), [tasks](../tasks.md) / reviewer handoff / Issue #46, PR #47 |
-| Evidence / retention / trigger | [Readiness sections16–22](../integration-readiness.md), historical + successor exact run ledgers; retain in Git / source, contract, supported rights, graph or environment change |
+| Evidence / retention / trigger | [Readiness sections16–23](../integration-readiness.md), historical + successor exact run ledgers and separate human acceptance; retain in Git / source, contract, supported rights, graph or environment change |
 | Supersession / limits | Historical checkpoints unchanged; no raw-log access, verifier, deployment, live adoption, Desktop or production claim |
 
 ## 1. Operation → owner/source → tests → exact execution → disposition
@@ -17,8 +17,9 @@ Paths below identify the actual owner implementation, not another implementation
 unidentified run. Earlier owner suites were not all rerun at the final Inspector SHA. Their
 affected shared evaluator, schema, Identity/session and Web boundaries were requalified in S21.
 S22 records the three externally requested repairs and affected successor tests, not a full
-same-SHA rerun. Every row's **successor external disposition is PENDING**; prior independent
-FAIL is retained, engineering PASS does not establish PG5.
+same-SHA rerun. Every row's **successor external disposition is ACCEPTED** under the human
+Project user's whole-feature acceptance and explicit integration authorization in S23.
+Prior independent FAIL is retained; engineering PASS alone did not establish PG5.
 
 | Operations | Owner / source | Tests / actual client | Exact executed source / evidence | Engineering status |
 |---|---|---|---|---|
@@ -39,8 +40,8 @@ The sealed Role contents/delegation, schema and 25-code registry are unchanged.
 
 ## 2. Requirements and success criteria
 
-Each row is an engineering PASS within the approved supported profile; all await independent
-whole-feature acceptance. Core REQ/IF trace remains in the [spec crosswalk](../spec.md#upstream-and-acceptance-trace)
+Each row is an engineering PASS within the approved supported profile; human whole-feature
+acceptance is recorded separately in S23. Core REQ/IF trace remains in the [spec crosswalk](../spec.md#upstream-and-acceptance-trace)
 and [operation owner crosswalk](../contracts/operations.md). No original FR or SC was changed.
 
 | Delivery obligations | Criteria | Source / qualification | Boundary |
@@ -74,14 +75,17 @@ role is made executable.
   remove their own exact source-marked schema via IamRegressionSchemas. It does not mean the
   runner's declared unused schema was created. Actual names are retained in private Maven logs;
   aggregate postflight is zero schemas/public tables. Database retained, no test listener.
-- Tracked-secret detector **automated NOT-PASS/exit1/nine author-reviewed matches** (eight historical
-  + new synthetic history canary); user's manual PASS report separately retained. No working
+- Tracked-secret detector **automated NOT-PASS/exit1/ten reviewed matches** (nine retained in S22
+  + dev launcher's private TLS-file read); user's manual PASS report separately retained. No working
   committed credential identified; no exemption, masking, bypass or false automated PASS.
 - Private log hashes identify retained artifacts, not independent raw-log access on GitHub.
-- **92/93 engineering tasks; T093 pending; predecessor independent PG5 recommendation FAIL,
-  repaired successor PG5 pending; verifier NOT-RUN; PR Draft/Open; Issue open.**
-- No persistent UI deployment, live console adoption, company data, Desktop, merge or timer change.
+- **93/93 tasks complete; feature COMPLETED / ACCEPTED / PASS; successor PG5 PASS by human
+  approver authority in S23; predecessor independent FAIL retained; verifier NOT-RUN.**
+- Reviewed development URL https://localhost:5174/ retains synthetic data and the exact repaired
+  application above; no production deployment, live adoption, company data, Desktop or timer
+  change. Integration/Issue final state is verified on GitHub after merge.
 
-Next action is independent successor review of S1/F1/F2 and whole-feature coverage. Publish-only status
-changes do not justify new runtime runs; changed application/test/tooling inputs would require
-the affected successor qualification. No automatic feature acceptance or integration.
+Next action is explicitly authorized normal PR #47 merge and Issue #46 completed closure after
+controlled integration checks. Status publication does not justify new runtime runs; changed
+application/test/tooling inputs would require affected successor qualification. Human acceptance
+and engineering qualification are not interchangeable evidence classes.

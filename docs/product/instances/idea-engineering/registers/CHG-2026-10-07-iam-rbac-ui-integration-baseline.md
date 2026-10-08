@@ -2,17 +2,17 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.5` / Draft review-repair status successor; independent successor acceptance pending |
+| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.6` / Approved bounded feature-acceptance closure |
 | Product normativity / process state | INFORMATIVE record of confirmed intent and required baseline refinement / NOT-APPLICABLE |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / CODEX_ONLY |
-| Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d and DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d via human conversation on 2026-10-07; explicit successor PG2/PG3/PG4 PASS recorded in readiness / whole-feature external review and PG5 pending |
-| Baseline / publication / effective date | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / NOT-APPLICABLE until applicable approval |
+| Reviewer / acceptance authority | Historical spec/design and PG2/PG3/PG4 PASS retained; human Project user accepted the manual review and explicitly authorized push/merge on 2026-10-08 at c379c6a / feature ACCEPTED, successor PG5 PASS; readiness section23 |
+| Baseline / publication / effective date | Historical design main `4e5244430ea89ffe878819e1279f6e05c60d610a`; integration main `6153cb92a3658bc0c81c8c5ca0b70b421cff1134` / closure 2026-10-08 Asia/Ho_Chi_Minh / 2026-10-08 for bounded feature acceptance, not rollout |
 | Classification / retention | INTERNAL / retain decisions, predecessor sources and supersession history in Git |
 | Upstream | [DOC-04](../DOC-04-software-requirements-specification.md), [DOC-05](../DOC-05-architecture-description.md), [DOC-06](../DOC-06-data-integration-and-migration-specification.md), [DOC-08](../DOC-08-ui-ux-and-interaction-specification.md), [ADR-0012](../../../../adr/0012-use-principal-role-scope-rbac.md), [domain language](../../../../../CONTEXT.md) |
 | Downstream / change | [Spec Kit 009](../../../../../specs/009-iam-rbac-ui-integration/spec.md), [source inventory](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md), [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
 | Supersession | No accepted record superseded; UI presentation specs 007/008 remain lineage rather than authoritative integration requirements |
 | Review trigger | Role/scope/delegation, credential channel, supported actions or owner-contract changes |
-| Evidence | Historical user-confirmed design/read-only source inspection and sections 16–21 retained; current review-repair execution in readiness section 22; no company rollout or independent acceptance claim |
+| Evidence | Historical design and sections16–21 retained; repair execution section22; separate human acceptance/integration section23; no company rollout claim |
 | Standards tailoring | IE-STD-AUTH-001 control/decision rules; STD-INFO-001 and STD-CM-001 STANDARD-GUIDED identity/change accounting, no conformity claim |
 
 ## 1. Intent and approval boundary
@@ -28,11 +28,14 @@ on the retained original presentation. Final actual-browser/recovery and affecte
 are linked in sections 16–21. Independent review at 73b5d95 recommended FAIL for S1/F1/F2;
 the user authorized all three repairs. Section 22 qualifies committed-scope/replay, actual bounded
 independent history/ordinary AA+PA+PRA granting, and exact confirmation diff/interval. 92/93 tasks
-engineering complete, T093 awaits successor external review. Automated secret detector remains
+engineering complete at that historical checkpoint, T093 then awaited successor external review. Automated secret detector remains
 NOT-PASS with manual canary/private-read dispositions; user's manual PASS is separately reported.
 Verifier NOT-RUN.
-This does not alter Q14/Q15/30 FR/9 SC or historical gate/review text. No live adoption,
-deployment, merge, Issue closure, PG5 or Tracker action is authorized by this publication.
+Current closure supersedes that pending status: **93/93**, **COMPLETED / ACCEPTED / PASS**,
+successor **PG5 PASS** under independent human approver authority, not author certification.
+Section23 records explicit push/merge authority separately from execution. Q14/Q15/30 FR/9 SC
+and historical gate/review text are unchanged. No live adoption, deployment, PG6 release claim
+or Tracker action is authorized by closure.
 
 The request does not restart F03/F04/PH1, start a Delivery Card or modify its timer. No new production authority is inferred from an old UI branch/spec labelled F04.
 
@@ -104,7 +107,7 @@ Hard-to-change foundations: stable Actor/principal/scope identity, exact immutab
 | Plans / operations / release | Existing roadmap, actual effort, retained review databases and preview unchanged; deployment/rollout/merge are separate actions |
 | Existing accepted evidence | PH1 and API predecessors unchanged; no prior result is relabelled as current qualification |
 
-## 6. Next controlled stage
+## 6. Historical next controlled stage at the design/task publication
 
 The written spec is accepted for planning at e227cb1d. Project Reviewer reported DESIGN REVIEW
 PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d for the
@@ -136,3 +139,24 @@ Retain all 30 FR/9 SC and technical catalogue/data/operation/Web semantics. Renu
 preserve all 75 old IDs in a crosswalk. No Core requirement, Java, Web, test implementation, SQL,
 dependency, tooling, runtime or deployment change. Original author checks/review/execution history
 remain attributable. This repair authorization is not production implementation or integration authority.
+
+## 8. Human acceptance and authorized integration — 2026-10-08
+
+The human Project user confirmed all 22 guided manual review steps PASS and explicitly instructed
+push/merge at published head c379c6a9e87a7429dba15bb6f8011c31e2f8ebbb. Application source
+9d3732cb173e8094195b9bdd60b5588ac3cfa42e and JAR SHA-256
+318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c were the actual reviewed
+synthetic development generation. See [readiness section23](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#23-human-acceptance-and-controlled-integration--2026-10-08)
+for individual/aggregate confirmations, engineering lineage and explicit limits.
+
+This closes only Feature009 T093: **93/93**, **COMPLETED / ACCEPTED / PASS**, successor **PG5 PASS**.
+Historical independent FAIL and S1/F1/F2 repair evidence remain attributable. Automated detector
+NOT-PASS/exit1/ten findings, human manual disposition and verifier NOT-RUN remain distinct.
+No new runtime execution, company data, live adoption, deployment, PG6 or timer action.
+
+Integration preserves current main's merged exporter/planning files and the accepted IAM source.
+The only source conflict is competing development entries in apps/web/package.json: retain the
+owned IAM launcher and main's existing Vite preview alias without changing dependency/build/test
+semantics. Normal merge commit and Issue #46 completed closure are expressly authorized by the
+human, subject to final GitHub head/merge/check verification. Publish resulting SHA/state in the
+PR/Issue after integration; do not record successful merge before it occurs.

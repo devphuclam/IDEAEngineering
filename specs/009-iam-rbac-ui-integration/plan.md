@@ -6,7 +6,7 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.8 / Draft Account MVP execution metadata successor; accepted technical design unchanged |
+| ID / class / version / state | IE-PLAN-IAM-UI-001 / Spec Kit implementation design / 0.9 / Approved human-acceptance metadata successor; accepted technical design unchanged |
 | Authority / owner / author | INFORMATIVE candidate design / Project user / Codex, CODEX_ONLY |
 | Baseline | Main 4e5244430ea89ffe878819e1279f6e05c60d610a; spec review PASS at e227cb1df60e70a1294628b4f153ad50d8f034c6 |
 | Reviewer / acceptance | Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07, supplied through human conversation / explicit human PG2/PG3 PASS for 5b2fb9f; conditional human PG4 now PASS with actual HTTPS/Chrome/cleanup results, see execution-envelope.md section 6; not inferred from design review |
@@ -16,6 +16,13 @@ Branch: codex/iam-rbac-ui-integration-spec | Date: 2026-10-07 | [Spec](spec.md)
 | Standards tailoring | IE-STD-AUTH-001; STD-ARC-001 ownership/views, STD-INFO-001 identity, STD-TEST-001…004 verification design; no conformity claim |
 
 ## Summary
+
+Current closure, 2026-10-08: **93/93 tasks, COMPLETED / ACCEPTED / PASS**, successor **PG5 PASS**
+by the human Project user's manual review and explicit integration authority; see
+[readiness section23](integration-readiness.md#23-human-acceptance-and-controlled-integration--2026-10-08).
+Application source remains 9d3732c; no technical design/contract change. The Account MVP status
+below is a retained historical milestone, not current whole-feature status. Verifier NOT-RUN;
+no production deployment, live adoption or timer action.
 
 Current execution metadata: [controlled envelope](execution-envelope.md) and
 [handoff section 16](integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)

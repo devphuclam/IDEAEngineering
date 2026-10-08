@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.17` / Draft independent-review repair successor; PG2/PG3/PG4 PASS, successor PG5 pending |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.18` / Approved human-acceptance closure; PG2/PG3/PG4 and successor PG5 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11; independent review at 73b5d95 recommended FAIL for S1/F1/F2; user authorized all repairs on 2026-10-08; engineering successor section 22, independent acceptance / PG5 pending / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Historical SPEC/DESIGN/PG2–4 decisions and independent FAIL at 73b5d95 retained below; repaired engineering successor section 22; human Project user accepted the manual review and explicitly authorized push/merge at published head c379c6a9e87a7429dba15bb6f8011c31e2f8ebbb on 2026-10-08 / successor PG5 PASS, section 23 / 2026-10-08 for bounded feature acceptance, not deployment |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | Accepted design/requirements unchanged; historical sections retained / sections 8–11 readiness, 12–14 foundation, 15–21 historical engineering checkpoints, section 22 current review-repair qualification; predecessor claims of complete coverage do not supersede the independent findings; successor whole-feature acceptance pending |
+| Supersession / evidence | Accepted design/requirements unchanged; historical sections retained / sections 8–11 readiness, 12–14 foundation, 15–21 historical checkpoints, section 22 repair execution, section 23 human acceptance/integration; historical independent findings are not erased or relabelled |
 
 ## 1. Exact lineage and ownership
 
@@ -2059,3 +2059,125 @@ PG5 recommendation FAIL retained, successor PG5 disposition pending. Verifier NO
 PR #47 Draft/Open, Issue #46 open. No merge, deployment, live adoption or Tracker/timer action.
 Next action: review S1/F1/F2 successor and whole-feature coverage at the published exact head,
 then let the authorized independent reviewer determine T093/PG5 and integration readiness.
+
+## 23. Human acceptance and controlled integration — 2026-10-08
+
+### 23.1 Authority, exact configuration and evidence class
+
+The human Project user completed the guided manual review, reported every step **PASS**, and
+explicitly instructed: **push and merge to main**. After the first 18 individually reported
+steps, the user separately confirmed that the remaining four steps also passed. This is
+**human-reported acceptance**, not an agent-observed replay, a new automated qualification run,
+or a submitted GitHub APPROVED review. It supplies independent human approver authority for
+the repaired feature: **COMPLETED / ACCEPTED / PASS**, successor **PG5 = PASS**, T093 complete.
+It is not a self-certified gate or inferred from task counts.
+
+| Configuration | Exact identity |
+|---|---|
+| Published review/development head | c379c6a9e87a7429dba15bb6f8011c31e2f8ebbb |
+| Actual reviewed application and Web source | 9d3732cb173e8094195b9bdd60b5588ac3cfa42e |
+| Reviewed Assignment/development JAR SHA-256 | 318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c |
+| Human browser URL | https://localhost:5174/; owned HTTPS Vite forwarding to the actual synthetic Server, not a production deployment |
+| Retained test data | idea_ddm_iam_ui_20261007_46 / iam_ui_c3b8cde44f9a4d1199306c381c12d1bb; public-empty boundary, existing separate app/migrator |
+| Main before integration | 6153cb92a3658bc0c81c8c5ca0b70b421cff1134 |
+
+Ubuntu dev controls were executed from b33e197, Windows launcher from f684265, and the bounded
+development browser check from 21b6584, as retained in [the dev guide](../../tools/iam-ui-dev/README.md).
+Those sources do not replace 9d3732c as application identity. Section 22's exact two-source Server
+ledger and separate Web/package/browser runs remain the engineering basis; no runs are combined
+into a fictitious final-head execution. Private raw logs remain inaccessible through GitHub.
+
+### 23.2 Expected outcomes and human-reported results
+
+All rows below are **PASS reported by the human**, not newly executed automated tests.
+No password, credential proof, cookie, CSRF value or private-key bytes are retained.
+
+| Step | Expected observable outcome confirmed by the human |
+|---|---|
+| 01 | Existing synthetic administrator signs in through the actual session flow |
+| 02 | Create synthetic Account as PENDING, without implicit participation or role grants |
+| 03 | Recipient first-credential setup activates the account; ordinary sign-in gives no administrative role |
+| 04 | Disable account; old session/sign-in refused, account remains DISABLED |
+| 05 | Reset credential while DISABLED; account remains DISABLED |
+| 06 | Refuse stale re-enable; after refresh, separate re-enable succeeds and recipient can sign in |
+| 07 | Create Project without automatic creator membership/assignment |
+| 08 | Add Project Membership without conferring an administrative role |
+| 09 | Create Group and add an eligible same-Project member, without automatic role grant |
+| 10 | Grant exact Project Administrator@1 to Actor through Group-based person filtering; not to the Group principal |
+| 11 | Grant independent Account Administrator@3 in Organization scope; preserve Project Administrator assignment |
+| 12 | End only Account Administrator assignment; preserve Project administration and history |
+| 13 | Grant independent Privileged Role Administrator@1; Custom Role UI available without implicit Super/Account Administrator authority |
+| 14 | Validate and activate constrained Custom Role v1; no automatic assignment |
+| 15 | Grant exact Custom Role v1 to explicit Group principal |
+| 16 | Inspector shows the Group contribution, exact provenance and RBAC/owner-gate distinction |
+| 17 | Add direct Actor assignment; Inspector shows both independent direct and Group paths |
+| 18 | End Project Membership: engineering permission becomes BLOCKED without ending roles; rejoin restores both paths while administrative authority stays separate |
+| 19 | Activate immutable Custom Role successor; existing v1 assignments do not automatically retarget |
+| 20 | Out-of-envelope delegation refuses rather than granting authority |
+| 21 | Administration history and operation resolution use independently authorized reads |
+| 22 | Credential/session/logout recovery follows the qualified session contract |
+
+Steps 19–22 were confirmed together after the initial merge request; no separate browser trace
+or exact action transcript was supplied. Earlier setup/reset attempts used the same secret value,
+so that earlier observation alone did **not** prove old-versus-new password discrimination.
+No additional negative-password experiment is claimed from the aggregate final confirmation.
+Automated reset/session qualification remains separately retained in sections 16–22.
+
+### 23.3 Secret handling and preserved acceptance limits
+
+The unchanged tracked-secret detector remains **NOT-PASS / exit 1**: ten paths after the dev
+launcher addition. The existing nine-match section 22 disposition is preserved; the tenth is
+`tools/iam-ui-dev/backend.sh` reading an existing mode600 TLS secret file, not a committed secret
+value. Human manual PASS and feature/integration acceptance do not convert this command to PASS.
+Known matches are synthetic negative-test canaries, generated TLS/private-file reads, or the
+historical redaction quotation; no working committed credential was identified. No rule,
+exemption manifest, canary or detector exit status is changed for closure.
+
+The original independent S1/F1/F2 findings and FAIL disposition remain historical; section 22
+records their engineering repair and affected execution, and this section records the subsequent
+human acceptance. History is the qualified bounded administration projection, not general Audit
+export. Verifier **NOT-RUN**; no company data, live console adoption, Desktop, production/HA,
+general product RBAC beyond the supported profile, or PG6 release readiness claim.
+
+### 23.4 Integration boundary and checks
+
+Main advanced through the already merged API Contract Exporter. A controlled merge of main into
+the feature branch found one content conflict in `apps/web/package.json`: both branches added a
+`dev` script. Preserve the human-qualified owned `dev`/`dev:status`/`dev:stop`/`dev:credentials`
+commands and main's `preview: vite preview`. This is the existing launcher entry, not replacement
+authentication or new application behavior. Dependency sets, versions, build/test scripts and
+lockfile are unchanged. Other main files are retained byte-for-byte; no exporter redesign.
+
+Before push/merge: check conflict resolution/JSON, indexed committed LF input hashes, unchanged actual
+application/Web/migration trees, documentation links/counts/whitespace and applicable read-only
+launcher checks. Retain actual results in the PR integration comment; do not prelabel planned
+checks PASS. No Maven/PostgreSQL/package/browser rerun is needed for unchanged product source.
+No rebuild/redeploy, process restart, DB cleanup/drop or timer action is authorized by this
+integration. The retained user test environment is left in its established state.
+
+Normal merge-commit integration and Issue #46 completed closure follow explicit human authority,
+not the task list alone. Exact final branch/merge/main SHA and GitHub state are published after
+successful verification, rather than embedding a self-referential commit SHA in this record.
+
+### 23.5 Actual closure checks
+
+- Indexed Git blobs: **226/226 SHA-256 PASS** against the updated input manifest. Windows
+  package.json checkout uses CRLF; its raw checkout hash is not claimed to match the LF manifest.
+  No new archive was transferred or executed. Any future export must use the existing
+  byte-preserving recipe and independently pass its raw-byte checks before execution.
+- JSON/conflict oracle PASS: only main's existing preview alias is added to the accepted package
+  definition; dependency/build/test sets unchanged; zero unmerged index entries.
+- Product Server/Web source, product tests, migrations and lockfile unchanged from 9d3732c;
+  main's exporter/planning files retained byte-for-byte. Historical executed inputs remain valid
+  for their recorded scope, not a new package built from this closure commit.
+- TypeScript no-emit PASS and launcher PowerShell parse PASS using admitted existing tooling.
+- Supplementary Standards and Spec integration reviews: no blocking finding; these reviews do
+  not replace the human approver or relabel automated qualification.
+- The read-only dev Status check could not complete: SSH to 192.168.137.33 timed out.
+  The assertion run FAIL is an environment-access result, not PASS or product-source regression.
+  No restart, deployment or process signal was attempted; present remote process state is
+  **UNKNOWN**. Repository integration does not depend on a new remote qualification run.
+- Unchanged secret detector rerun: **NOT-PASS / exit1 / same ten paths**; no rule or exemption
+  changed. Link/count/whitespace checks and exact GitHub integration state are retained in the
+  final PR record. Application suites, package/browser qualification and verifier **NOT-RUN**
+  for this closure; no full-suite rerun implied.

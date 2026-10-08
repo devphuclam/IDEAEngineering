@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft — written spec/design accepted at their retained exact heads; PG2/PG3/PG4 PASS; predecessor independent review found S1/F1/F2, all three now engineering-repaired/qualified. Successor whole-feature acceptance/PG5 pending; not deployed or merged.
+**Status**: Approved bounded feature closure — written spec/design and PG2/PG3/PG4 accepted; historical independent S1/F1/F2 findings and repair retained. Human Project user accepted all manual steps and authorized integration on 2026-10-08; feature COMPLETED / ACCEPTED / PASS, successor PG5 PASS, 93/93 tasks. No production deployment or release claim.
 
 **Input**: User-confirmed native account, Project/Group and RBAC journeys: explicit scopes, two principal modes, independent multiple roles, immutable role versions, constrained delegation and separation of administration from engineering participation.
 
@@ -12,15 +12,15 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.4` repair-status successor; 30 FR/9 SC unchanged |
+| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.5` human-acceptance status successor; 30 FR/9 SC unchanged |
 | Product normativity | INFORMATIVE relative to the Core baseline; FRs are candidate delivery obligations. DOC-04 remains the sole product SRS; no Core obligation or gate is independently approved here. |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / `CODEX_ONLY` |
-| Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d and DESIGN REVIEW PASS for 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 through human conversation; explicit PG2/PG3/PG4 PASS recorded in readiness / independent whole-feature review and PG5 pending |
+| Reviewer / acceptance authority | Historical SPEC/DESIGN and explicit PG2/PG3/PG4 PASS retained; human Project user accepted the manual review and explicitly authorized push/merge at c379c6a on 2026-10-08 / successor PG5 PASS, readiness section23; not an author-issued or GitHub submitted approval |
 | Applicable baseline | Integrated main `4e5244430ea89ffe878819e1279f6e05c60d610a`; accepted PH1 and API predecessors retained |
-| Date / effective date | 2026-10-07, `Asia/Ho_Chi_Minh` / `NOT-APPLICABLE` until applicable approval |
+| Date / effective date | Created 2026-10-07; closure 2026-10-08, `Asia/Ho_Chi_Minh` / 2026-10-08 for bounded feature acceptance |
 | Classification / retention | `INTERNAL`; retain specification and supersession history in Git |
 | Upstream / change | [Decision and impact record](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), [Work Item #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
-| Downstream | [Reviewed written plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md), [tasks](tasks.md) and [current executed handoff](integration-readiness.md); qualification is branch engineering evidence, not acceptance |
+| Downstream | [Reviewed written plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md), [tasks](tasks.md) and [handoff](integration-readiness.md); engineering execution sections16–22, separate human acceptance section23 |
 | Supersession | Does not supersede PH1, accepted ADR-0012 or existing API contracts. UI branches are presentation lineage. |
 | Review trigger / evidence | Scope, permission, role-version, delegation, credential channel or owner-interface change / source inspection and user decisions only; runtime tests and verifier `NOT-RUN` |
 | Standards tailoring | `IE-STD-AUTH-001`: clarity/trace guided by STD-REQ-001, record identity by STD-INFO-001, acceptance design by STD-TEST-001…004. No conformity claim. |
@@ -263,10 +263,14 @@ No plan/tasks are fabricated before their lifecycle stage. Publication of this D
 Design, Tasks and read-only Analyze were subsequently accepted at the recorded exact sources;
 explicit PG2/PG3/PG4 and FAST DELIVERY authority enabled bounded implementation. The historical
 next-step paragraph above is not the current gate. Engineering qualification now covers the
-supported Account/Project/Group/Assignment/Custom Role/Inspector profile, **92/93 tasks**.
+supported Account/Project/Group/Assignment/Custom Role/Inspector profile; human acceptance now
+closes T093, **93/93 tasks**.
 See [section 22](integration-readiness.md#22-independent-review-repair-successor--2026-10-08)
 and the [closure matrix](evidence/feature-009-closure-matrix.md) for actual source/test/evidence,
 the real independently authorized history/ordinary three-role/confirmation repairs, retained
 failed runs and unchanged automated secret detector NOT-PASS with separately reported human PASS.
-Next action is independent successor review / T093 / PG5, not another spec/planning cycle.
-No feature acceptance, deployment, live adoption, merge or Tracker action is inferred here.
+Human acceptance and explicit push/merge authority are recorded in
+[section23](integration-readiness.md#23-human-acceptance-and-controlled-integration--2026-10-08):
+**COMPLETED / ACCEPTED / PASS**, successor **PG5 PASS**, not another spec/planning cycle or
+author self-certification. Next action is authorized controlled integration, not deployment,
+live adoption, PG6 release or Tracker/timer mutation.
