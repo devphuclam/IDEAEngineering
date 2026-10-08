@@ -63,22 +63,22 @@ public final class AccessInspectionQueries {
         RoleCatalogueQueries.page("",offset,limit);
         return reads.read(context,(c,caller)->{
             RoleCatalogueQueries.require(authorization.evaluate(c,context,"audit.read",scope));
-            var items=new ArrayList<History>();int skipped=0;boolean more=false;
+            var items=new ArrayList<History>();boolean more=false;
             // Exact immutable owner outcomes only, not login activity, credentials or arbitrary Audit export.
             String sources="SELECT e.operation_id,'ASSIGNMENT'::text owner,e.actor_id,e.organization_id,"+CommittedAdministrationScope.ASSIGNMENT+" scope,'role.assignment.'||lower(e.action) action,o.target_id,o.outcome,o.reason_code,e.reason,e.correlation_id::text,e.occurred_at,e.before_state::text before_state,e.result::text result FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) UNION ALL "
                 +"SELECT e.operation_id,'ROLE_DEFINITION',e.actor_id,e.organization_id,e.requested_scope::text,o.action,o.target_id,o.outcome,o.reason_code,e.reason,e.correlation_id::text,e.occurred_at,NULL::text,e.result::text FROM role_definition_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) UNION ALL "
                 +"SELECT e.operation_id,'PROJECT',e.actor_id,e.organization_id,"+CommittedAdministrationScope.PROJECT+",e.action,e.target_id::text,e.outcome,e.reason_code,NULL::text,e.correlation_id::text,e.created_at,NULL::text,e.result::text FROM project_owner_outcome e UNION ALL "
                 +"SELECT e.operation_id,'IAM',e.actor_id,a.organization_id,NULL::text,e.action,e.target_id,e.outcome,e.reason_code,NULL::text,NULL::text,e.occurred_at,NULL::text,NULL::text FROM iam_owner_outcome e JOIN idea_account a USING(actor_id) WHERE e.action IN ('account.create','account.disable','account.re-enable','account.credential.setup.issue','account.credential.reset.issue')";
-            try(var q=c.prepareStatement("SELECT * FROM ("+sources+") h WHERE organization_id=? AND (?::text IS NULL OR target_id=?) ORDER BY occurred_at DESC,operation_id")){
-                q.setObject(1,scope.organizationId());q.setString(2,target==null?null:target.toString());q.setString(3,target==null?null:target.toString());
+            try(var q=c.prepareStatement("SELECT * FROM ("+sources+") h WHERE organization_id=? AND (?::text IS NULL OR target_id=?) AND (scope::jsonb=?::jsonb OR (owner='IAM' AND ?::uuid IS NULL)) AND EXISTS(SELECT 1 FROM audit_evidence a WHERE a.operation_id=h.operation_id AND a.actor_id=h.actor_id AND a.action=h.action AND a.outcome=h.outcome) ORDER BY occurred_at DESC,operation_id,owner OFFSET ? LIMIT ?")){
+                q.setObject(1,scope.organizationId());q.setString(2,target==null?null:target.toString());q.setString(3,target==null?null:target.toString());q.setString(4,new tools.jackson.databind.json.JsonMapper().writeValueAsString(scope));q.setObject(5,scope.projectId());q.setInt(6,offset);q.setInt(7,limit+1);
                 try(var r=q.executeQuery()){while(r.next()){
                     String owner=r.getString("owner"),serialized=r.getString("scope");
                     if(serialized==null&&!"IAM".equals(owner))continue;
                     var retained=serialized==null?Scope.organization(scope.organizationId()):new tools.jackson.databind.json.JsonMapper().readValue(serialized,Scope.class);
                     if(!scope.equals(retained))continue;
                     var id=r.getObject("operation_id",UUID.class);var actor=r.getObject("actor_id",UUID.class);
-                    if(!com.idea.ddm.audit.AuditEvidenceRepository.hasAdministrationCompanion(c,id,actor,r.getString("action"),r.getString("outcome")))continue;
-                    if(skipped++<offset)continue;if(items.size()==limit){more=true;break;}
+                    if(!com.idea.ddm.audit.AuditEvidenceRepository.hasAdministrationCompanion(c,id,actor,r.getString("action"),r.getString("outcome")))throw new SQLException("Retained Audit companion unavailable");
+                    if(items.size()==limit){more=true;break;}
                     items.add(new History(id,owner,actor,retained,r.getString("action"),r.getString("target_id"),r.getString("outcome"),r.getString("reason_code"),r.getString("reason"),r.getString("correlation_id"),r.getTimestamp("occurred_at").toInstant(),snapshot(owner,r.getString("before_state"),false),"ACCEPTED".equals(r.getString("outcome"))?snapshot(owner,r.getString("result"),true):null));
                 }}
             }

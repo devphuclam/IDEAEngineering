@@ -23,7 +23,8 @@ public final class RoleAssignmentAdministration {
             Instant effectiveFrom,Instant effectiveUntil,UUID assignedBy,String reason,Instant assignedAt,
             Instant revokedAt,UUID endedBy,String endReason,long version,boolean effective){}
     public record Preview(boolean allowed,RoleCatalogueQueries.Role role,Principal principal,Scope scope,Interval interval,
-            Assignment before,List<String> consequences,String refusalReason){}
+            Assignment before,RoleCatalogueQueries.Role beforeRole,RoleDefinitionCandidateService.Difference difference,
+            List<String> consequences,String refusalReason){}
     private record Intent(String kind,Principal principal,Scope scope,UUID roleVersionId,UUID predecessor,long expectedVersion,Interval interval,String reason){}
     private record Targets(Principal principal,RoleCatalogueQueries.Role role,Assignment before){}
     private record Authority(List<AuthorizationDecisionService.Decision> decisions,boolean delegated){}
@@ -60,7 +61,11 @@ public final class RoleAssignmentAdministration {
             if(scope.kind()==AuthorizationDecisionService.ScopeKind.ORGANIZATION)consequences.add("Organization breadth: applicable descendant Projects only where the role profile supports them.");
             if("PROJECT_GROUP".equals(targets.principal().kind()))consequences.add("Only current eligible Project + Group members receive participant access.");
             if(targets.before()!=null)consequences.add("The predecessor ends atomically; the successor has a new ID. History and other roles are retained.");
-            return new Preview(authority.delegated()&&!self,targets.role(),targets.principal(),scope,interval,targets.before(),List.copyOf(consequences),authority.delegated()&&!self?null:"DELEGATION_REFUSED");
+            var beforeRole=targets.before()==null?null:RoleCatalogueQueries.role(c,targets.before().roleVersionId());
+            var prior=beforeRole==null?Set.<String>of():beforeRole.permissions().stream().map(RoleCatalogueQueries.Permission::code).collect(java.util.stream.Collectors.toSet());
+            var next=targets.role().permissions().stream().map(RoleCatalogueQueries.Permission::code).collect(java.util.stream.Collectors.toSet());
+            var difference=new RoleDefinitionCandidateService.Difference(next.stream().filter(p->!prior.contains(p)).sorted().toList(),prior.stream().filter(p->!next.contains(p)).sorted().toList(),next.stream().filter(prior::contains).sorted().toList());
+            return new Preview(authority.delegated()&&!self,targets.role(),targets.principal(),scope,intent.interval(),targets.before(),beforeRole,difference,List.copyOf(consequences),authority.delegated()&&!self?null:"DELEGATION_REFUSED");
         });
     }
     public JsonNode grant(ActorContext context,UUID operation,Principal principal,Scope scope,UUID role,Interval interval,String reason,JsonNode condition){return command(context,operation,intent("GRANT",principal,scope,role,null,0,interval,reason,condition));}

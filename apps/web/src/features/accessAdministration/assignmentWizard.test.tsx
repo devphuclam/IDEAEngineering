@@ -2,21 +2,26 @@ import { describe,expect,it } from "vitest";
 import { createIamClient,type IamResult } from "../../api/iamClient";
 import { renderToStaticMarkup } from "react-dom/server";
 import { RbacView } from "../../components/admin/RbacView";
-import { AssignmentWizard } from "./AssignmentWizard";
-import type {AssignmentView,RoleView} from "../../api/iamClient";
+import { AssignmentWizard,AssignmentConfirmation } from "./AssignmentWizard";
+import type {AssignmentView,RoleView,AssignmentPreview} from "../../api/iamClient";
 const id="00000000-0000-4000-8000-000000000046";
 const scope={kind:"PROJECT",organizationId:id,projectId:id};
 const role={definitionId:id,roleVersionId:id,roleCode:"account-administrator",version:3,displayName:"Same display label",builtIn:true,classification:"ADMINISTRATION",scopeKinds:["ORGANIZATION"],principalKinds:["ACTOR"],contentDigest:"a".repeat(64),permissions:[],selectable:true,availabilityReason:null,managementScope:null};
 const assignment={assignmentId:id,principal:{kind:"ACTOR",actorId:id,groupId:null},scope:{kind:"ORGANIZATION",organizationId:id,projectId:null},roleVersionId:id,roleCode:"account-administrator",roleVersion:3,effectiveFrom:"2026-10-08T00:00:00Z",effectiveUntil:null,assignedBy:id,reason:"Explicit assignment",assignedAt:"2026-10-08T00:00:00Z",revokedAt:null,endedBy:null,endReason:null,version:1,effective:true};
 type PlannedClient={loadRoles(scope:unknown,offset?:number):Promise<IamResult<unknown>>;previewAssignment(input:unknown):Promise<IamResult<unknown>>;grantAssignment(input:unknown):Promise<IamResult<unknown>>;endAssignment(id:string,input:unknown):Promise<IamResult<unknown>>;replaceAssignment(id:string,input:unknown):Promise<IamResult<unknown>>;loadAssignments(scope:unknown,principal?:unknown,offset?:number):Promise<IamResult<unknown>>};
 describe("Role Assignment actual client boundary",()=>{
+  it("confirmation renders actual predecessor content, successor, interval and added permissions",()=>{
+    const permissions=(codes:string[])=>codes.map(code=>({code,owner:"IAM",scopeKinds:["ORGANIZATION"],principalKinds:["ACTOR"],participantMembershipRequired:false,implementationState:"IMPLEMENTED" as const}));
+    const preview={allowed:true,role:{...role,version:2,permissions:permissions(["account.create","account.credential.setup.issue","account.credential.reset.issue"])},before:{...assignment,roleVersion:1},beforeRole:{...role,version:1,permissions:permissions(["account.create"])},principal:assignment.principal,scope:assignment.scope,interval:{effectiveFrom:"2026-10-09T01:00:00Z",effectiveUntil:"2026-10-10T01:00:00Z"},difference:{added:["account.credential.setup.issue","account.credential.reset.issue"],removed:[],unchanged:["account.create"]},consequences:[],refusalReason:null} as AssignmentPreview;
+    const html=renderToStaticMarkup(<AssignmentConfirmation preview={preview}/>);for(const term of ["account-administrator@1","account-administrator@2","2026-10-09T01:00:00Z","2026-10-10T01:00:00Z","account.credential.setup.issue","account.credential.reset.issue","Giữ nguyên","assignment này"])expect(html).toContain(term);
+  });
   it("loads exact code version and availability without promoting DESIGN",async()=>{
     const client=createIamClient(async(path,init)=>{expect(path).toBe(`/api/v1/administration/roles?organizationId=${id}&projectId=${id}&offset=0&limit=50`);expect(new Headers(init.headers).has("ActorId")).toBe(false);return Response.json({items:[role,{...role,roleVersionId:"00000000-0000-4000-8000-000000000047",roleCode:"privileged-role-administrator",selectable:false,availabilityReason:"OWNER_ACTION_NOT_QUALIFIED",password:"discard"}],offset:0,limit:50,hasMore:false});}) as unknown as PlannedClient;
     const result=await client.loadRoles(scope);expect(result.kind).toBe("confirmed");expect(JSON.stringify(result)).toContain('"selectable":false');expect(JSON.stringify(result)).not.toContain("password");
   });
   it("previews exact scope principal version through ordinary CSRF with no mutation operation",async()=>{
     const input={scope,principal:{kind:"PROJECT_GROUP",groupId:id},roleVersionId:id};let calls=0;
-    const client=createIamClient(async(path,init)=>{if(path.endsWith("/csrf"))return Response.json({headerName:"X-CSRF-TOKEN",token:"test-csrf"});calls++;expect(path).toBe("/api/v1/administration/assignments/preview");expect(JSON.parse(String(init.body))).toEqual(input);expect(new Headers(init.headers).get("X-CSRF-TOKEN")).toBe("test-csrf");return Response.json({allowed:true,role,principal:{kind:"PROJECT_GROUP",actorId:null,groupId:id},scope,interval:null,before:null,consequences:["No implicit membership"],refusalReason:null});}) as unknown as PlannedClient;
+    const client=createIamClient(async(path,init)=>{if(path.endsWith("/csrf"))return Response.json({headerName:"X-CSRF-TOKEN",token:"test-csrf"});calls++;expect(path).toBe("/api/v1/administration/assignments/preview");expect(JSON.parse(String(init.body))).toEqual(input);expect(new Headers(init.headers).get("X-CSRF-TOKEN")).toBe("test-csrf");return Response.json({allowed:true,role,principal:{kind:"PROJECT_GROUP",actorId:null,groupId:id},scope,interval:null,before:null,beforeRole:null,difference:{added:[],removed:[],unchanged:[]},consequences:["No implicit membership"],refusalReason:null});}) as unknown as PlannedClient;
     expect((await client.previewAssignment(input)).kind).toBe("confirmed");expect(calls).toBe(1);
   });
   it("distinguishes Actor filtered in Group from explicit Group principal payload",async()=>{
