@@ -10,6 +10,7 @@ import org.junit.jupiter.api.*;
 class RoleAssignmentRecoveryTest {
     final AssignmentQualificationFixture f=new AssignmentQualificationFixture();
     @BeforeAll void start()throws Exception{f.start();}
+    @BeforeEach void isolateRecoveryHolders()throws Exception{f.sql("UPDATE identity_role_assignment SET revoked_at=clock_timestamp() WHERE role_version_id IN (SELECT role_version_id FROM identity_role_version WHERE role_code='super-administrator') AND revoked_at IS NULL");}
     @AfterAll void stop(){f.close();}
     @Test void lastRecoveryIsCountedByEligibleActorAcrossExactSuperVersionsNotByAssignmentCount()throws Exception{
         var admin=f.rows.identity(IamIntegrationFixtures.Persona.SUPER);

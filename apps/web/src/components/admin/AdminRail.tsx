@@ -106,7 +106,7 @@ export function AdminRail({
           type="button"
           className={`admin-nav-item ${activeSection === "rbac" ? "active" : ""}`}
           disabled={!availableSections.includes("rbac")}
-          title="Chưa có trong Account MVP"
+          title={availableSections.includes("rbac")?"Assignment và exact Role catalogue từ Server":"Không có quyền catalogue Role"}
           onClick={() => onSelectSection("rbac")}
           aria-current={activeSection === "rbac" ? "page" : undefined}
         >
