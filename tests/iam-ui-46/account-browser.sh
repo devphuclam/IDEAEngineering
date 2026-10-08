@@ -2,11 +2,12 @@
 set -euo pipefail
 set +x
 umask 077
-[[ $# == 4 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ && $3 =~ ^(account|project|assignment)-qualification-[0-9]{2}$ ]] || exit 2
+[[ $# == 4 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ && $3 =~ ^(account|project|assignment|custom-role)-qualification-[0-9]{2}$ ]] || exit 2
 [[ $4 == build || $4 == start || $4 == console || $4 == verify || $4 == stop ]] || exit 2
 fixture_class=com.idea.ddm.identity.AccountBrowserFixtureCommand
 if [[ $3 == project-* ]]; then fixture_class=com.idea.ddm.identity.ProjectBrowserFixtureCommand; [[ $4 != console ]] || exit 2; fi
 if [[ $3 == assignment-* ]]; then fixture_class=com.idea.ddm.identity.AssignmentBrowserFixtureCommand; [[ $4 != console ]] || exit 2; fi
+if [[ $3 == custom-role-* ]]; then fixture_class=com.idea.ddm.identity.CustomRoleBrowserFixtureCommand; [[ $4 != console ]] || exit 2; fi
 owned=/home/phuclam/idea-iam-ui-20261007-46/run-$3
 source_root="$owned/source"
 [[ $(id -un) == phuclam && $(realpath -e "$owned") == "$owned" && $(realpath -e "$source_root") == "$source_root" ]] || exit 3
