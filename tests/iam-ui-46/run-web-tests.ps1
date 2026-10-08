@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory=$true)][ValidatePattern('^[0-9a-f]{40}$')][string]$SourceSha,
     [Parameter(Mandatory=$true)][ValidateSet('RED','PASS')][string]$Oracle,
     [Parameter(Mandatory=$true)][int]$ExpectedCount,
-    [ValidateSet('src/features/projectAdministration/projectAdministration.test.tsx','src/features/accessAdministration/assignmentWizard.test.tsx','src/features/accessAdministration/customRoleEditor.test.tsx')][string]$TestFile
+    [ValidateSet('src/features/projectAdministration/projectAdministration.test.tsx','src/features/accessAdministration/assignmentWizard.test.tsx','src/features/accessAdministration/customRoleEditor.test.tsx','src/features/accessInspection/accessInspection.test.tsx')][string]$TestFile
 )
 $ErrorActionPreference='Stop'
 $SourceRoot=[IO.Path]::GetFullPath($SourceRoot)

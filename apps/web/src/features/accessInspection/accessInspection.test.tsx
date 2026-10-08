@@ -1,0 +1,30 @@
+import {describe,it,expect} from "vitest";
+import {createIamClient,type IamResult} from "../../api/iamClient";
+const id="00000000-0000-4000-8000-000000000046",scope={kind:"ORGANIZATION",organizationId:id};
+const value={actorId:id,scope,permissionCode:"access.inspect",implementationState:"IMPLEMENTED",accountEligible:true,projectMembershipEligible:false,rbacResult:"ALLOW",ownerBusinessGate:"NOT_EVALUATED",evaluatedAt:"2026-10-08T06:00:00Z",paths:[{assignmentId:id,roleVersionId:id,roleCode:"project-administrator",roleVersion:1,assignmentScope:scope,groupId:null,projectMembershipId:null,groupMembershipId:null,assignedBy:id,reason:"Independent assignment",assignedAt:"2026-10-07T06:00:00Z"}]};
+type Planned={inspectAccess(i:unknown):Promise<IamResult<unknown>>;resolveOperation(id:string,s:unknown):Promise<IamResult<unknown>>;loadHistory(s:unknown):Promise<IamResult<unknown>>};
+describe("Inspector is advisory not another mutation or authority model",()=>{
+  it("submits only the target and exact scope via ordinary session/CSRF and redacts unrecognized fields",async()=>{
+    const input={targetActorId:id,scope,permissionCode:"access.inspect"};
+    const client=createIamClient(async(path,init)=>{if(path.endsWith("/csrf"))return Response.json({headerName:"X-CSRF-TOKEN",token:"synthetic-csrf"});expect(path).toBe("/api/v1/administration/access-inspections");expect(init.credentials).toBe("same-origin");expect(JSON.parse(String(init.body))).toEqual(input);expect(init.headers).toHaveProperty("X-CSRF-TOKEN");return Response.json({...value,privateDiagnostic:"discard"});}) as unknown as Planned;
+    const result=await client.inspectAccess(input);expect(result.kind).toBe("confirmed");expect(JSON.stringify(result)).not.toContain("discard");
+  });
+  it("a lost read-only inspection response is unavailable not an uncertain mutation and has no automatic retry",async()=>{
+    let attempts=0;const client=createIamClient(async path=>{if(path.endsWith("/csrf"))return Response.json({headerName:"X-CSRF-TOKEN",token:"synthetic-csrf"});attempts++;throw new Error("Synthetic loss");}) as unknown as Planned;
+    expect((await client.inspectAccess({targetActorId:id,scope,permissionCode:"access.inspect"})).kind).toBe("unavailable");expect(attempts).toBe(1);
+  });
+  it("wrong target or owner-gate claim cannot be accepted from malformed responses",async()=>{
+    for(const v of [{...value,actorId:"00000000-0000-4000-8000-000000000999"},{...value,ownerBusinessGate:"PASSED"},{...value,paths:[{...value.paths[0],roleVersion:0}]}]){
+      const client=createIamClient(async path=>path.endsWith("/csrf")?Response.json({headerName:"X-CSRF-TOKEN",token:"synthetic-csrf"}):Response.json(v)) as unknown as Planned;
+      expect((await client.inspectAccess({targetActorId:id,scope,permissionCode:"access.inspect"})).kind).toBe("unavailable");
+    }
+  });
+  it("operation lookup cannot label absence rollback or blindly replay a command",async()=>{
+    const client=createIamClient(async(path,init)=>{expect(path).toBe(`/api/v1/administration/operations/${id}?organizationId=${id}`);expect(init.method).toBe("GET");return Response.json({operationId:id,state:"UNRESOLVED",owner:null,actorId:null,scope:null,action:null,outcome:null,reasonCode:null,correlationId:null,occurredAt:null,retryProfile:null});}) as unknown as Planned;
+    expect(await client.resolveOperation(id,scope)).toEqual({kind:"confirmed",value:{operationId:id,state:"UNRESOLVED"}});
+  });
+  it("history 403 stays refused and does not infer audit authority from inspection",async()=>{
+    const client=createIamClient(async()=>new Response(null,{status:403})) as unknown as Planned;
+    expect(await client.loadHistory(scope)).toEqual({kind:"refused",status:403});
+  });
+});
