@@ -300,3 +300,22 @@ This record authorizes resumption inside the already approved Project/Group vert
 Actual Project/Group browser results are **NOT-RUN** at this pre-execution publication;
 record the successor result separately. No whole-feature acceptance, deploy, merge or timer
 action is implied.
+
+## 8. US3 FAST DELIVERY execution continuation — 2026-10-08
+
+The human explicitly authorizes T055–T064 at publication head 45da65c9b92231dda5214318df515afa2cddb2fc:
+actual Roles/Assignment HTTP, PostgreSQL, Web and Chrome qualification, inside the same accepted
+design and PG2/PG3/PG4 envelope. Reuse the section 7 installed Chrome 155 exact binary, unchanged
+Playwright/core, Node, JDK/Maven/cache, TLS certificate/trust and owned database/schema/18446
+boundary; no new rights, tooling, listener scope or persistent deployment. Check relevant pins,
+source inputs and exact fresh target before each execution, not a repeated complete readiness run.
+Internal owner/HTTP tests use the already qualified ephemeral HTTP fixture; final actual Web
+uses normal trusted same-origin HTTPS. No Custom publication or Inspector implementation.
+
+The first tracer is RoleAssignmentContractTest, expecting actual GET administration/roles with
+exact immutable roleVersionId/code/version and explicit non-selectable DESIGN content. Execute
+assignment-red-01 with one test before catalogue implementation. Later approved grant/end/replace
+and preview tests run vertically with fresh assignment-red/green/qualification-NN roots.
+Source commits/manifests precede runs; coherent milestone is pushed once. Same guarded schema
+cleanup after owned JVM exit, database/logs retained, no broad cleanup. Verifier/deploy/merge
+NOT-RUN; Issue #46 remains open, PR #47 Draft/Open. Historical sections and hashes unchanged.
