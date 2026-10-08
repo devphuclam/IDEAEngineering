@@ -1677,7 +1677,7 @@ class HttpSessionFlowTest {
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
         // 009 adds V11/V12; predecessor execution evidence keeps its original chain.
         var expected = System.getenv("IDEA_IAM_SOURCE_SHA") != null
-                ? java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
+                ? java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17")
                 : java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
         assertEquals(expected, java.util.Arrays.stream(flyway.info().applied())
                 .filter(migration -> migration.getVersion() != null).map(migration -> migration.getVersion().toString()).toList());

@@ -119,7 +119,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0b9d0fb8953378478a3857335600212d9a1c0bd4f7e2c754ce41242dc3482efd  apps/server/src/test/java/com/idea/ddm/identity/F05GrantMigrationTest.java
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
-2e5ad41cdc755b259af375916d9124cbb8d05f85603d415228ebf847fd96b0ed  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
+3fbf50631c4e5a13ae8d7697b26ffc869c7fb1189fb44f9a8d66d180e11ed23e  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
 fcc86b2b95f3e2f13a1940a74d3e3d9e06b67a08979c2d99681af19c38c345f3  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
 cdad6ad89637a329ebf984beb727556f9291d9c6cd8789db663206c756d90479  apps/server/src/test/java/com/idea/ddm/identity/IdentityAccountUiContractTest.java
 a38581d0a75a4e0c37296cd66ccd71b34b4a9697472fe42f87ceb807d82b28a2  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
@@ -170,7 +170,7 @@ ab4a5923c15fce26298ccaaf86a45d08f810c4eb35debf9b657428697d82272d  apps/web/src/f
 87f0feded2edf44880e030a0b34a8931ced7decc6d4fcfad221270fd62aa2d77  apps/web/src/features/credentials/CredentialProofHandoff.tsx
 d92fb3d3e7f30eac08c442cd29eb7f2f4f0b2bdb32c8770e556cf16f6eb76e86  apps/web/src/features/credentials/credentialRedemption.test.tsx
 4340eaff7bc950b768ce101ff1c7255be5739b4908cb12f5d189959d0955afb0  apps/web/src/features/credentials/CredentialRedemptionPage.tsx
-77fa930955098297d9c65d7444984d2a47c561ec139aebb3da0c0bee8739aa4c  apps/web/src/features/iamIntegration/iamIntegration.accessibility.test.ts
+006199232c45f720a9ade58209f25b028c456dcfa724b4d678c84c69f258f89a  apps/web/src/features/iamIntegration/iamIntegration.accessibility.test.ts
 55dcc4e3dc3fd3a8e64d3425cf9e6e3262fbd311b1154aafcd850699b21c983b  apps/web/src/features/iamIntegration/iamIntegration.browser.test.ts
 e9ed72a99cbd7b84f067cbe051b89fa2c217c6eced7f1eec476a8e8dab89de5d  apps/web/src/features/iamIntegration/iamIntegration.failure.test.ts
 313c3dc27716b4b55556ab1d58ea1e6cd031b66f99ce012b9ac3a52b426401d3  apps/web/src/features/iamIntegration/iamIntegrationState.test.ts
@@ -208,7 +208,7 @@ fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-4
 c8046a026f27845b8e221a03230a2de32f7e337741e87016d3e5e356f24cbba7  tests/iam-ui-46/account-browser.sh
 81270968fc08187e8bb502f2febd3bb6ff118e77757d0e1187cc76e2b851d527  tests/iam-ui-46/assignment-browser.mjs
 d9d6cac72bab3c6b158dc331ea901139d035a353fd781870f9345eda0163e838  tests/iam-ui-46/custom-role-browser.mjs
-c7ec6768fedb0040b123cf2e1a831db1d9657930e8452c47a87025c634266c42  tests/iam-ui-46/inspection-browser.mjs
+48641297704d17c03720fddef510152d0fbaa0682773fc5831a567e22e58238b  tests/iam-ui-46/inspection-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs
 4d876e8936bf6174b8c0bce9fe0d40f165beeeabbb7340750c8c55d3db4aa610  tests/iam-ui-46/README.md
 75a8490a31089f1222ec413bcfabf2127f3bd2165c87fac98c58c1f8b3ea826e  tests/iam-ui-46/run-owner-tests.sh
