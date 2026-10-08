@@ -51,6 +51,7 @@ class AccessInspectionPrivacyTest {
             roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeB,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);
             var op=UUID.randomUUID();
             assertEquals(403,f.post(client,"/api/v1/administration/projects/"+a.projectId()+"/update",Map.of("operationId",op,"scope",scopeA,"name","Denied A","expectedVersion",1,"reason","Synthetic refused attempt")).statusCode());
+            f.http.advance(java.time.Duration.ofSeconds(1));
             assertEquals(200,f.post(client,"/api/v1/administration/projects/"+b.projectId()+"/update",Map.of("operationId",op,"scope",scopeB,"name","Committed B","expectedVersion",1,"reason","Synthetic committed attempt")).statusCode());
             long audit=f.count("SELECT count(*) FROM audit_evidence");
             var hidden=get(reader,operation(op)+"&projectId="+a.projectId());assertEquals(200,hidden.statusCode());assertEquals("UNRESOLVED",f.json.readTree(hidden.body()).path("state").asString(),"A reader must not see B through an earlier refused scope");
@@ -67,6 +68,7 @@ class AccessInspectionPrivacyTest {
             var temporary=roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);
             var op=UUID.randomUUID();var refused=Map.of("operationId",op,"principal",Map.of("kind","ACTOR","actorId",target.actorId()),"scope",scopeA,"roleVersionId",AuthorizationPrerequisiteFixture.AA_V3,"reason","Denied admin delegation");
             assertEquals(403,f.post(client,"/api/v1/administration/assignments",refused).statusCode());
+            f.http.advance(java.time.Duration.ofSeconds(1));
             roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PRA_V1,scopeB,now,null);
             var accepted=Map.of("operationId",op,"principal",Map.of("kind","ACTOR","actorId",target.actorId()),"scope",scopeB,"roleVersionId",AuthorizationPrerequisiteFixture.PA_V1,"reason","Committed exact Project delegation");
             var first=f.post(client,"/api/v1/administration/assignments",accepted);assertEquals(201,first.statusCode());

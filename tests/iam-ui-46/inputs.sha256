@@ -81,7 +81,7 @@ cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/sr
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
 69032fb50bdb035e6e6069be681856e5043855f1cbac9a838a8f326c98c8f5db  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionAtomicityTest.java
 92038f875261be0def568f8d71e4998d554e230a9cb7a12abe973257f4eb7188  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionContractTest.java
-8b121721969b125f07084c64808d628854ab93fa4de154e93b4bc804e3917c63  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionPrivacyTest.java
+c5811714b230282bbb89c03455c8db5c0a337101020cceef1742d56d583ad56c  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionPrivacyTest.java
 4b92d286675aa05743e747d3b5b35a6a32245c8dec46eddda03c831c778d0341  apps/server/src/test/java/com/idea/ddm/access/AssignmentQualificationFixture.java
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
@@ -120,7 +120,7 @@ e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/sr
 0d796dec9ee21e9a0894c793bcb4f98d51446292e1fada04524e96de7e9a2a2c  apps/server/src/test/java/com/idea/ddm/identity/F05ReceiptMigrationTest.java
 22895ecdf1ddc4dd99d3d87e14c11e7348a6dc1a8bee266e313eeb6abda5ae65  apps/server/src/test/java/com/idea/ddm/identity/F05SessionFixture.java
 3fbf50631c4e5a13ae8d7697b26ffc869c7fb1189fb44f9a8d66d180e11ed23e  apps/server/src/test/java/com/idea/ddm/identity/HttpSessionFlowTest.java
-fcc86b2b95f3e2f13a1940a74d3e3d9e06b67a08979c2d99681af19c38c345f3  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
+ef21ddff04be82e39af52bf1562d63bfdce8eedb1d8ba438770e80cc9b0518b3  apps/server/src/test/java/com/idea/ddm/identity/IamSessionFixture.java
 cdad6ad89637a329ebf984beb727556f9291d9c6cd8789db663206c756d90479  apps/server/src/test/java/com/idea/ddm/identity/IdentityAccountUiContractTest.java
 a38581d0a75a4e0c37296cd66ccd71b34b4a9697472fe42f87ceb807d82b28a2  apps/server/src/test/java/com/idea/ddm/identity/IdentityFlowTest.java
 a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/src/test/java/com/idea/ddm/identity/IdentityTransactionsTest.java

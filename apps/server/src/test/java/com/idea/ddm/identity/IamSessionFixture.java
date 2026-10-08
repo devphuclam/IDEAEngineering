@@ -55,6 +55,7 @@ public final class IamSessionFixture implements AutoCloseable {
 
     public SessionService sessions() { return server.getBean(SessionService.class); }
     public <T> T service(Class<T> type) { return server.getBean(type); }
+    public void advance(java.time.Duration duration) { clock.advance(duration); }
     @Override public void close() { server.close(); captured.set(null); }
 
     public ActorContext signIn(IamIntegrationFixtures.Identity identity) throws Exception {
