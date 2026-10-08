@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version | IE-VER-NGINX-DEV-49-001 / verification record / 0.1 |
+| Stable ID / class / version | IE-VER-NGINX-DEV-49-001 / verification record / 0.2 |
 | Status / product normativity | Draft / INFORMATIVE; no new product requirement |
 | Repository process authority / instruction state | NOT-APPLICABLE; not a repository policy |
 | Owner / author | Project user / Codex, CODEX_ONLY |
@@ -29,8 +29,8 @@ were agreed before implementation in the user conversation and intake recipe.
 
 | Identity | Exact value |
 |---|---|
-| Final executed deployment/test source | `a040cf21ab99948c55c4f871c63fad398302c8c9` |
-| Controlled remote files | Published at `b1de93c43333c04478dbb5cc3e1b4d91ccc3525d`; byte-identical at final executed source |
+| Final executed deployment/test source | `87462d135877fcf9c4e30bf240806bcf344ed407` |
+| Controlled remote files | Successor at `ad1bc783a88ebd055c75518142ed6da3c4901867`; byte-identical at final executed source |
 | Application/Web source | `9d3732cb173e8094195b9bdd60b5588ac3cfa42e` (retained accepted package, not rebuilt) |
 | Application JAR SHA-256 | `318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c` |
 | Ubuntu deployment / control root | `/home/phuclam/idea-nginx-dev-20261008-49` / `/home/phuclam/idea-nginx-dev-control-49`, private phuclam-owned roots |
@@ -46,10 +46,13 @@ were agreed before implementation in the user conversation and intake recipe.
 Before transfer, all six committed controlled files matched `inputs.sha256`.
 Git archive used command-local `core.autocrlf=false`; no global/repository Git
 configuration was changed. Local archive and remote archive SHA-256 both equal
-`590b97cbe59a6e3fadba8e70669310bb988b92e51099c75fd6cf05eddc728fda`.
-Remote `packet-v4` extraction passed **6/6** raw-byte input checks, then bash
+`82b6905a7898002b5f77b6e2fa9a97ebd81f9bd24d8399f798ab6fd14c86be15`.
+Remote `packet-v5` extraction passed **6/6** raw-byte input checks, then bash
 syntax checks for control/provision/upstream test scripts passed. Existing JDK
 `jar` extracted the ZIP; no missing `unzip` installation was attempted.
+The predecessor `packet-v4` archive/hash
+`590b97cbe59a6e3fadba8e70669310bb988b92e51099c75fd6cf05eddc728fda`
+and its 6/6 execution remain retained separately.
 
 Final Windows commands, from the feature worktree, with the pinned Node binary:
 
@@ -76,7 +79,10 @@ Session login/logout writes are the expected existing Server behavior.
 | `b658aa5...` | Real login/context 200; account list 403. Harness incorrectly assumed historical fixture still had account.read. No role/data change was made to satisfy that assumption. |
 | `274a814...` | N01–N06 passed with current-authority oracle. N07 wrongly read the `ss` peer wildcard as a LOCAL wildcard listener. Parser failure, not an exposed listener. |
 | `b1de93c...` | Control/review repairs and upstream negative harness published. Status PASS; browser stopped at preflight because predecessor dev/forward was already STOPPED, rather than assumed RUNNING. No qualification success claimed. |
-| `a040cf2...` | Preserve observed predecessor state, including STOPPED. Final Status **1/1 PASS**; actual browser/proxy qualification **9/9 PASS**, exits 0/0. |
+| `a040cf2...` | Preserve observed predecessor state, including STOPPED. Predecessor Status **1/1 PASS**; actual browser/proxy qualification **9/9 PASS**, exits 0/0. |
+| `31b7860...` agent review | Spec PASS; Standards found cleanup registered after graceful-stop wait. No new application defect or new feature requested. |
+| `ad1bc78...` | Install restoration before QUIT; bounded exact-process drain, no force kill. Two browser attempts stopped at N09: the harness retained its own browser connections during graceful shutdown. SSH transfer was also briefly interrupted before remote v5 installation, then exact transfer/input checks passed. Original logs retained. Normal owned Start restored service, with no data/schema change. |
+| `87462d1...` | Release owned browser and Node keep-alive connections before N09. Successor Status **1/1 PASS**, actual headed Chrome/proxy **9/9 PASS**, exits 0/0; final exact-source qualification. |
 
 These are distinct source executions, not one aggregated run. Original source,
 archives and private diagnostic logs remain retained; no failed checkpoint is
@@ -98,7 +104,10 @@ rewritten into PASS. Final source adds no application behavior change.
 
 N09 stops/restarts **only the owned Nginx process**, keeps its owned backend
 running, and uses the same port rather than a second listener. System CA bundle
-is read only for the negative case. EXIT cleanup restores the canonical config.
+is read only for the negative case. EXIT cleanup is registered before shutdown
+and restores the canonical config on the successful qualified path. Pending
+shutdown beyond the bounded wait reports BLOCKED rather than force-killing or
+claiming restoration; the harness releases its own connections before the test.
 No error-log content is published. TLS negatives test both browser-facing TLS
 and Nginx-to-Server verification, not merely configuration text.
 
@@ -117,6 +126,11 @@ Sanitized final logs:
 |---|---|
 | `C:/Users/TD-999/.codex/nginx-dev-49/status-a040cf2.log` | `066a27eee621669d58df7d391e8e7c0bce4e897fe7a48584290a6b6f05997293` |
 | `C:/Users/TD-999/.codex/nginx-dev-49/browser-a040cf2.log` | `97d9bab1118f3d6590384213b825592215e8b1ccbf565202ef058753eb323405` |
+| `C:/Users/TD-999/.codex/nginx-dev-49/status-87462d1.log` (final) | `066a27eee621669d58df7d391e8e7c0bce4e897fe7a48584290a6b6f05997293` |
+| `C:/Users/TD-999/.codex/nginx-dev-49/browser-87462d1.log` (final) | `97d9bab1118f3d6590384213b825592215e8b1ccbf565202ef058753eb323405` |
+
+The final sanitized outcome text is byte-identical to the successful predecessor
+text; distinct log filenames/source lineage identify the separate executions.
 
 Hashes identify retained files; they do not make private on-host raw logs
 independently readable through GitHub. No independent raw-log review claim.
@@ -134,8 +148,50 @@ or outside scope. No timer action, deployment to company data or auto merge.
 
 ## 5. Two-axis agent review
 
-Standards and Spec review renewal is pending publication of this record.
-Their initial findings prompted ownership revalidation, exact certificate pin,
-explicit authoring-envelope tailoring, frontend health checks, upstream TLS
-negatives and exact predecessor-state preservation. Agent review is separate
-from independent human acceptance and does not authorize merge.
+### Standards
+
+At `ad1bc78`, the affected Standards finding is PASS: restoration is registered
+before QUIT, waits boundedly for original PID/start ticks and reports BLOCKED if
+pending, without force/foreign termination. Prior ownership, certificate-pin and
+control-envelope findings are repaired. No remaining documented breach or
+actionable heuristic smell was identified in that repair. This was read-only
+source review; no tests, remote calls or private-log inspection.
+
+### Spec
+
+At `31b7860`, Spec PASS: no remaining actionable mismatch or scope creep against
+Issue49/intake. Front/backend health, exact predecessor preservation, upstream
+negative cases, execution lineage and operator handoff resolved prior findings.
+Read-only source/evidence review, not an independent rerun/raw-log review.
+
+The final connection-release harness change at `87462d1` and this successor
+record are pending renewed affected review. Agent review is separate from
+independent human acceptance and does not authorize merge.
+
+## 6. Secret-detector disposition
+
+Unchanged `pwsh tests/ph1/check-no-secrets.ps1 -RepositoryRoot <owned worktree>`
+ran at `ad1bc78`: automated **NOT-PASS / exit1 / eleven finding paths**. No rule,
+exemption manifest or exit-status suppression was changed. Ten paths are
+unchanged accepted predecessor findings in Feature009's retained closure
+record. The one new path is `deploy/development/nginx/control.sh`: it reads the
+existing mode-600 TLS password file into runtime environment; no password value
+is committed. Manual changed-source inspection found no working credential,
+private-key bytes, cookie, CSRF or proof value in this slice. This is not an
+automated PASS or company security approval.
+
+Retained findings-only log:
+`C:/Users/TD-999/.codex/nginx-dev-49/secret-review-ad1bc78-retry2.log`, SHA-256
+`26aa7340acaf07a24c9d988951a6d39e8cb3c0d60a5e479ad26ce030ea44fc29`.
+Subsequent test changes only bounded timeout/connection cleanup; no credential
+assignment added. Human acceptance remains separate.
+
+## 7. Handoff
+
+Engineering execution is complete for this bounded development slice. PR #50
+remains Open; no merge or Issue49 closure performed. Follow the operator guide
+to review actual UI/Swagger at `https://localhost:18448/`; synthetic identity
+and current authority remain unchanged. Verify the reviewed head before any
+separate acceptance/merge action. No application rebuild is needed merely for
+publication-only evidence changes. `git diff --check` and local document links
+**8/8 PASS**; these are document checks, not runtime qualification.
