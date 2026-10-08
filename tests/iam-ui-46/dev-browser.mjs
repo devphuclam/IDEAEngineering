@@ -17,13 +17,17 @@ function remote(command) {
   return result;
 }
 async function login(page) {
+  stage = "login-form";
   await page.goto(url);
   await page.getByRole("form", { name: "Đăng nhập", exact: true }).waitFor();
   await page.locator('[name="username"]').fill(fixture.adminLogin);
   await page.locator('[name="password"]').fill(fixture.adminPassword);
   const response = page.waitForResponse(r => new URL(r.url()).pathname === "/api/v1/identity/login" && r.request().method() === "POST");
   await page.getByRole("button", { name: "Đăng nhập", exact: true }).click();
-  assert.equal((await response).status(), 200);
+  const status = (await response).status();
+  console.log("DEV_LOGIN_HTTP=" + status);
+  assert.equal(status, 200);
+  stage = "server-actor-visible";
   await page.getByTestId("session-actor").waitFor();
   assert.ok((await page.getByTestId("session-actor").innerText()).includes(fixture.adminActorId));
 }
@@ -50,6 +54,7 @@ try {
   console.log("D01_TRUSTED_HTTPS_ANONYMOUS_REFUSAL=PASS");
   stage = "real-login-context-cookie";
   await login(page);
+  stage = "cookie-attributes";
   const cookie = (await context.cookies(url)).find(c => c.name === "IDEA_SESSION");
   assert.ok(cookie && cookie.secure && cookie.httpOnly && cookie.sameSite === "Strict" && cookie.domain === "localhost");
   const facts = await page.evaluate(async () => {
@@ -57,7 +62,9 @@ try {
     const accounts = await fetch("/api/v1/administration/accounts?offset=0&limit=50");
     return { context: context.status, accounts: accounts.status };
   });
+  console.log("DEV_CONTEXT_HTTP=" + facts.context + ";ACCOUNTS_HTTP=" + facts.accounts);
   assert.deepEqual(facts, { context: 200, accounts: 200 });
+  stage = "account-screen";
   await page.goto(url + "#accounts");
   await page.getByRole("heading", { name: "Tài Khoản & Định Danh", exact: true }).waitFor();
   await page.getByRole("button", { name: "Tạo tài khoản", exact: true }).waitFor();
