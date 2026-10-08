@@ -72,10 +72,12 @@ try{
   const region=page.getByRole("region",{name:"Group đã chọn",exact:true});assert.ok((await region.innerText()).includes("INELIGIBLE"));
   await submit(page,"Gán Project Membership",{actorId:fixture.memberActorId},201);await settled(page);await group(page);assert.ok((await region.innerText()).includes("ELIGIBLE"));
   await end(page,true);assert.ok((await region.innerText()).includes("ENDED"));pass("P03_ENDED_HISTORY_REJOIN_NEW_ASSOCIATION_GROUP_ELIGIBILITY");
-  stage="scoped-ordinary-refusal";await login(scoped,fixture.scopedLogin,fixture.scopedPassword);await projects(scoped);
+  stage="scoped-allowed-list";await login(scoped,fixture.scopedLogin,fixture.scopedPassword);await projects(scoped);
+  await scoped.getByRole("button",{name:"Mở Project Synthetic scoped Project",exact:true}).waitFor();
   assert.equal(await scoped.getByRole("button",{name:"Tạo Project",exact:true}).count(),0);assert.equal(await scoped.getByRole("table",{name:"Danh sách Project"}).locator("tbody tr").count(),1);
   assert.equal(await scoped.getByRole("button",{name:"Mở Project Synthetic hidden Project",exact:true}).count(),0);
-  await login(ordinary,fixture.memberLogin,fixture.memberPassword);assert.equal(await ordinary.getByRole("button",{name:"Cổng Quản Trị",exact:true}).count(),0);
+  stage="ordinary-no-admin-action";await login(ordinary,fixture.memberLogin,fixture.memberPassword);assert.equal(await ordinary.getByRole("button",{name:"Cổng Quản Trị",exact:true}).count(),0);
+  stage="ordinary-direct-route-refusal";
   await ordinary.goto(url+"#projects");await ordinary.getByTestId("project-status").filter({hasText:"Server từ chối"}).waitFor();assert.equal(await ordinary.getByRole("button",{name:"Tạo Project",exact:true}).count(),0);pass("P04_PROJECT_ONLY_NO_CREATE_ORDINARY_NON_DISCLOSURE");
   stage="stale-exact-version";const second=await contexts[0].newPage();await second.goto(url+"#projects");await open(second,"Synthetic browser Project");
   await submit(second,"Đổi tên Project",{name:"Synthetic browser Project"},200);await settled(second);
