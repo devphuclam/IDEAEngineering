@@ -260,3 +260,37 @@ Executed failures and observation/fixture corrections remain in [section 19](../
 and [ledger](../../specs/009-iam-rbac-ui-integration/evidence/assignment-runs.tsv). V1–V14 immutable;
 V15 protects owner state/evidence and narrows assignment termination, not blanket app DML.
 All fixture listeners and schemas cleaned after owned JVM exit; DB/logs retained, no deploy/merge.
+
+## Custom Role consolidated milestone
+
+Current US4 evidence is [handoff section 20](../../specs/009-iam-rbac-ui-integration/integration-readiness.md#20-custom-role-ui-usable-vertical-slice--2026-10-08)
+and [exact PostgreSQL ledger](../../specs/009-iam-rbac-ui-integration/evidence/custom-role-runs.tsv).
+UI-R02–R04 implement actual candidate/validation/immutable activation; UI-R01 remains its sole
+existing adapter. V16/V17 are additive and V1–V15 bytes remain unchanged. No Inspector, generic
+policy engine, arbitrary Permission, built-in edit or automatic assignment replacement.
+
+At application/test source `2a572ba39757b7bd2632de119cc2d508fc7b3bed`: Custom HTTP6/atomicity6/
+immutability3 and affected schema/privilege16, all PASS; Web52 + TypeScript PASS. Assignment17
+regression is at `31a49b9`, before the Custom-only refusal repair; do not imply one same-source total.
+Final headed Chrome9 + fixture DB oracle/package are at `f223e3ee348847490927b5d484a8b996e4fda173`;
+only browser harness/manifest changed after the application/test source.
+
+    bash tests/iam-ui-46/run-owner-tests.sh <source> <manifest> custom-role-qualification-NN <one class> <count> PASS
+    pwsh tests/iam-ui-46/run-web-tests.ps1 -SourceRoot <raw export> -SourceSha 2a572ba… -Oracle PASS -ExpectedCount 52
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> custom-role-qualification-19 build
+    pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical JAR> -RepositoryRoot <raw export>
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> custom-role-qualification-19 start
+    <admitted Windows Node> <raw export>/tests/iam-ui-46/custom-role-browser.mjs <source> <manifest> custom-role-qualification-19
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> custom-role-qualification-19 verify
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> custom-role-qualification-19 stop
+
+Same approved DB/UUID-schema ownership, migrator/app identities, offline cached tools and normally
+trusted loopback HTTPS18446; Chrome155/Playwright1.62.1 pins unchanged. Fixture seeds only synthetic
+identities/preexisting delegation: every Custom Role/version is published by actual UI/HTTP.
+The browser uses its own normally trusted same-origin fetch for the preserved-assignment read;
+no Node-side request client, TLS bypass, private diagnostics, HAR or screenshots are retained.
+DB oracle: six accepted Custom mutations + one stale refused; seven Audit/fourteen authorization
+rows; two definitions/three sealed versions; two explicit assignment transitions/no implicit
+assignment or retry duplicate. Owned JVM exits before exact schema cleanup; DB/logs retained.
+Historical failed roots are preserved. Inspector/final whole-feature work, verifier, deployment
+and merge remain NOT-RUN.

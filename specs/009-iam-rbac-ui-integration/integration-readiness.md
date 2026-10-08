@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.14` / Draft Account + Project/Group + Assignment engineering milestone record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.15` / Draft Account + Project/Group + Assignment + Custom Role engineering milestone record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–19; independent US2/US3 implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–20; independent US4 implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, sections 15–16 historical Account MVP, section 17 T034 closure, section 18 historical Project/Group milestone, section 19 current Assignment milestone; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, sections 15–16 historical Account MVP, section 17 T034 closure, sections 18–19 historical Project/Group and Assignment milestones, section 20 current Custom Role milestone; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -144,7 +144,7 @@ US1–US6 counts are 13/12/10/10/8/10; US6 includes five separately bounded prer
 tasks and five final browser/recovery tasks. The approved plan's visible owner-story sequence is
 unchanged; shared authority/client prerequisites are ordered before their first caller.
 
-### Current next step
+### Historical preparation next step (superseded by section 20)
 
 Documentation checks and read-only Analyze successor are complete as recorded in section 7.
 The authorized exact-source T001–T007 preflight is now recorded in section 8: T002 is partial,
@@ -1503,3 +1503,186 @@ independent secret-review acceptance.
 PR #47 stays Draft/Open and Issue #46 stays open. T065–T093, Custom Role publication,
 Inspector/history/general resolution and full US6/whole-feature qualification remain later work.
 No persistent deployment, live adoption, verifier, merge, timer action or company/Vault data.
+
+## 20. Custom Role UI usable vertical slice — 2026-10-08
+
+**US4 T065–T074 engineering COMPLETE; 74/93 tasks.** Human FAST DELIVERY authorization starts
+from accepted predecessor `febe59dee53fbee060a18692a7d15ce3b4f50b7e`. This is author engineering
+qualification, not Project Reviewer implementation acceptance, full US6 or whole-feature PG5.
+Original RBAC presentation is preserved; its Custom Role link opens the actual `#custom-role`
+route. No mock authority, built-in edit, new Permission, policy engine or Inspector implementation.
+
+### 20.1 Objective, behavior and trace
+
+Qualify a real eligible Server session/PRA delegation preparing a candidate, observing the
+supported ceiling/diff, validating current content and activating a complete immutable version.
+Then explicitly assign v1, activate v2 while preserving that assignment, and separately replace
+it with a new assignment ID. Scope is Organization/Project management; a Group is a supported
+business principal in its Project, never a new management scope.
+
+| Requirement / operation | Source and exercised oracle |
+|---|---|
+| FR-019/020; UI-R01–R04; REQ-AUTH-002/004/006/009/010; IF-RBAC-ADMIN | Existing sole UI-R01 catalogue; `RoleDefinitionCandidateService`, activation service/controller and real Web route. Nonempty supported profile, exact management scope, code/version/base/digest, registered qualified Permission content only |
+| FR-018/020; T066/T069/T070 | V16 separates draft content from authority; V17 exposes a fixed-schema narrow activation function. Raw app DML and late insertion into sealed permission content refuse 42501; activation inserts complete immutable content once |
+| FR-020/021/029; T068/T072/T073; SC-005/006 | Existing v1 content/result and assignment remain unchanged after v2; explicit US3 replacement retains predecessor history/new successor ID. Stale candidate/base, unsupported/self-authorizing content and wrong delegation refuse |
+| FR-023/025/028; T068/T073 | Current ordinary session/CSRF plus existing evaluator/IAM UoW; request/commit recheck, atomic candidate/version + owner result + authorization evidence + Audit; required-write/deferred commit faults cannot leave partial success |
+| FR-026/027/029; T067/T072/T073 | Exact input/Actor-bound same-OperationId resolution, concurrent arbitration, changed-input refusal and different-Actor non-disclosure. Actual response loss leaves a locked unresolved intent, not an automatic new request |
+
+The current Custom ceiling is `project.read`, `role.catalogue.read`, `access.inspect`, `audit.read`.
+Only the first three have qualified applicable implementation; `audit.read` remains DESIGN and
+disabled. `project.read` is Project-supported business content, optionally Actor + Project Group;
+administrative read/inspection profiles are Actor-only. Project management cannot manufacture
+Organization support. A candidate cannot supply assignment/delegation/definition mutation rights.
+Prepared draft content grants nothing. The public workflow does not expose arbitrary conditions.
+
+Complete qualified Custom content becomes selectable by exact roleVersionId/code/version.
+Legacy AA/PA/Super contents and existing assignments are untouched. Full PRA@1/Audit Reader@1/
+ordinary Super@2 grant selection remains unqualified while `audit.read` is DESIGN; the browser
+fixture's preexisting PRA/PA/AA assignments are explicit migrator-owned prerequisites, not proof
+of general role seeding/adoption or live administrative assignment. No DESIGN role is unlocked.
+
+V16/V17 are additive. V1–V15 bytes, POM/runtime graph, authentication/session/CSRF and existing
+UI-R01/R05–R09 adapter ownership are unchanged. SQL ports do not grant blanket app UPDATE/DELETE.
+Future candidate edits are new proposals, not mutation of an activated Role Definition version.
+
+### 20.2 Targeted RED/GREEN and retained failures
+
+Exact PostgreSQL source/schema/count/hash identities are in [custom-role-runs.tsv](evidence/custom-role-runs.tsv).
+Every row uses `idea_ddm_iam_ui_20261007_46`, separate app/migrator and fresh marked schemas.
+
+- Candidate tracer `10dc0ab…`: real HTTP 404, 1/1 failed; `822df5e…`: 1/1 GREEN.
+- Validation/activation tracer `b4a17eb…`: real HTTP 404, two tests/one failure;
+  `0459355…`: 2/2 GREEN. No fabricated RED for preexisting protected-role SQL invariants.
+- Web configuration `3b470af…` selected no tests: **NOT-RUN**, not RED. Correct selection
+  `c78c97c…` ran five failing client tracers; `f45e333…` ran them 5/5 GREEN + TypeScript.
+  RED log `3f2a1a3bf8fe7538f7ae46673eb7f957de3e0fd8f7d455c15bce2eb4a5d04ff4`;
+  GREEN log `17ab4757981637f8d05a545794442afb7b1ac593ad5288838d6c2369b0a07120`.
+- Qualification -01 stopped on the runner's one-class allowlist before Maven; **NOT-RUN**.
+  Tests run in separate fresh roots afterward; no weakening of schema/cleanup guards.
+- Contract -02: six tests/one fixture error, because a Project prerequisite referenced an
+  unseeded Actor before real sign-in. Repair seeded that Actor through the existing session
+  fixture first; -05 returned 6/6. This is not a product authorization repair.
+- Schema -11: 16 tests/one stale test expectation (12 versus actual 17 migrations). The
+  test now expects the additive current chain while retaining predecessor checksum checks;
+  -16 returned 16/16. No migration bytes were edited to satisfy the assertion.
+- Internal two-axis review found missing initial-refusal security evidence and a lost selected
+  successor intent after catalogue paging. `68292b5…` is executed RED: atomicity 6 tests/2
+  failures; Web 8 tests/1 failure. `2a572ba…` is GREEN. Initial denial now retains one REQUEST
+  decision and required REFUSED security Audit, **no owner result/candidate**; suppressed Audit
+  returns 503 and rolls back both. Revoked authority waiting for the IAM lock cannot activate.
+  A selected base missing from the current page now refuses locally, never falls back to New.
+  RED Web log `b2ee14291886d9c39213593d451955ca923e778661b3dd3e5a9e0983c1e67cb8`;
+  result JSON `559bdba3c28cfd54e8d510a3c16daed40bb0d6e32d496e9c21ba48c7de0ecdeb`.
+- Standards review also found a confirmed activation message overwriting a failed catalogue
+  refresh. The UI now independently states confirmed activation + unavailable refresh and
+  forbids a new activation; actual Chrome C07 forces that read failure and verifies the message.
+- Browser -17/-18 passed C01–C03, then stopped inside C04. Failure diagnostics were initially
+  too coarse. The observation was narrowed and its preserved-assignment read moved from a
+  separate Node-side request context/noncanonical URL into the actual normally trusted browser
+  using same-origin fetch. These failed attempts are **not** Chrome transfer/qualification PASS;
+  no exact raw exception/root-cause claim is made. No application/TLS behavior changed to make
+  the observation pass. Final -19 passes all cases with the same application/test source.
+  Safe failed logs -17 `83dd067d8032ac44e89bfd690be4ee67d7cf650c70381620fe3fd2c73dedbb18`,
+  -18 `cd85e10b1c8cad9682419ff8a1018f8a226871d1643301d71b418e9326f64bde`.
+
+### 20.3 Consolidated result and exact source lineage
+
+| Exact executed source | Qualification | Actual result |
+|---|---|---|
+| `31a49b9113163ad44a3cc40dfa6480d3abe55d12` | Affected assignment HTTP10 + atomicity4 + recovery3, roots -08/-09/-10 | 17/17 PASS; zero failure/error/skip |
+| `2a572ba39757b7bd2632de119cc2d508fc7b3bed` | Custom HTTP6 + atomicity6 + immutability3, roots -14/-12/-15 | 15/15 PASS; zero failure/error/skip |
+| `2a572ba39757b7bd2632de119cc2d508fc7b3bed` | Affected schema/privilege/checksum/repeat, root -16 | 16/16 PASS; zero failure/error/skip |
+| `2a572ba39757b7bd2632de119cc2d508fc7b3bed` | Consolidated Web (44 predecessor + 8 Custom), TypeScript | 52/52 PASS; typecheck PASS |
+| `f223e3ee348847490927b5d484a8b996e4fda173` | Offline executable package/content, actual headed Chrome, fixture PostgreSQL oracle/postflight | PASS; Chrome 9/9 |
+
+No single same-source grand total or new historical 103-test run is implied. The assignment
+17-test source precedes a repair confined to Custom owner authorization/UI and a stale schema
+test count. Existing assignment implementation did not change; actual explicit assignment/
+replacement was also exercised in the final browser. From application/test `2a572ba…` through
+final package/browser `f223e3e…`, **only** `custom-role-browser.mjs` and `inputs.sha256` changed.
+Publication after the final package changes records/task status/operation availability/README
+and their controlled manifest hashes only, not production Java/Web/tests/migrations/dependencies.
+
+Web raw 207/207, 44 existing package/archive projections, 1,255 members before/after unchanged.
+Safe Web log `601ec25f7ecb6330f0f5f94700d9126a878694c689c36250e83db6796c5077e7`;
+result JSON `701e9691dcf3d1c75b313e0a921c8c31e7c71b950cc197d44576257e8fabec84`.
+
+Final fresh root `/home/phuclam/idea-iam-ui-20261007-46/run-custom-role-qualification-19`:
+raw inputs 207/207 locally and after extraction; byte-identical transfer archive
+`b5b02a508a15cab967c4f91da3621b5670d33a66d9ceab11f31773f6b20087e4`;
+manifest `2f099fdbd3b6fde1db9096c10cb29644359d08a24920631c43849198bd8bcf40`.
+**Final JAR SHA-256 `136087d4ed84411779af6d98a43f1ffc6a032207208e99c2b6925d158273abcd`.**
+Manifest/loader/actual Web, 57 exact nested runtime hashes, zero JSR305/provider/build-tool
+payload, notices3/3 and V1–V17 raw migration projection PASS. Test fixtures remain excluded
+from the application; no test F04/product route or Swagger operation added.
+
+Commands use admitted absolute JDK25.0.4.1+1/Maven3.9.16/Node24.21.0 paths, offline direct goals
+only, as [published command packet](../../tests/iam-ui-46/README.md#custom-role-consolidated-milestone).
+Browser: installed headed Chrome155.0.8059.39, Playwright/core1.62.1, Windows Node24.19.0,
+existing normally trusted SAN localhost + 127.0.0.1 certificate/validity from section 6. Final
+Node/Chrome/certificate hashes match the admitted pins. No npm/Maven/download/install or TLS
+bypass/trust change. Synthetic same-origin Web is served by the actual package on loopback18446;
+no persistent preview18444/deployment change.
+
+### 20.4 Actual browser, internal review and limits
+
+| Case | Actual result |
+|---|---|
+| C01 original RBAC link, actual ceiling, DESIGN disabled, private ordinary session/cookie | PASS |
+| C02 real candidate → diff/validate → sealed immutable v1 | PASS |
+| C03 separate exact v1 Actor assignment via actual US3 wizard | PASS |
+| C04 committed activation response loss → same-ID resolution; assignment remains v1 | PASS |
+| C05 explicit replacement/new ID, original version/assignment history retained | PASS |
+| C06 obsolete base refuses, no false activation | PASS |
+| C07 exact Project management; confirmed activation + failed catalogue refresh truthfully separated | PASS |
+| C08 bad CSRF/ordinary authority/unavailable reads fail closed | PASS |
+| C09 keyboard/780px page width/private DOM-storage-cookie boundaries/logout/reload | PASS |
+
+Fixture schema `iam_ui_2b546918073f41cc86c585a151482d1b`: six accepted Custom mutations + one
+stale business REFUSED, fourteen request/commit decisions and seven Audit rows; two Custom
+definitions/three sealed versions. Two explicit assignment transitions, no implicit assignment,
+zero retry duplicates; v1 history preserved. This does not claim all US5/US6 functionality.
+Safe browser log `f8a5d5a417b383cce8ff2a80bde18d3b93a08933e2f22d7bd4fc5770c2f82949`;
+private package log `469bf9a0b943b9c3576199e20a819027c0cde4c2a419bed3b911182be8681c86`;
+Web build `c83da4cf0f577039d1e8254a8a7f62a3db6f11b7a0159be012b1c6827fdc49ee`;
+raw source final check `ec9d2951528d414c276a3b8570cacf3e842422d0f53fdb2a237c622ced55bade`.
+
+Owned JVM323676 stopped before source/owner-marked schema cleanup; owned SSH forward31920
+stopped. Independent final DB read reports zero `iam_ui_<UUID>` schemas and zero public tables;
+both18446 listeners absent, private fixture removed, DB/failed roots/logs retained. No company/
+production account, other DB, Vault, preview or live console adoption touched. All 82 toolchain
+and 544 resolved-input rows and original controlled inputs/package rechecked unchanged.
+
+Internal author review is separate from external acceptance:
+
+- **Standards:** two documented findings (initial refusal evidence, refresh-status overwrite)
+  repaired; RED/GREEN and final Chrome C07 retained. One non-blocking heuristic remains: similar
+  CSRF/payload helpers in `CustomRoleContractTest` and the named qualification fixture. No new
+  standard is inferred from that duplication; no unrelated refactor undertaken.
+- **Spec:** two source findings (vanished selected base, initial refusal evidence) repaired and
+  source-rechecked at 2a572ba by the internal spec worker. Its partial-delivery finding (T073/
+  T074 recording) is fulfilled by this milestone publication. No scope creep reported. Reviewers
+  performed read-only source reviews; they did not independently execute the tests above.
+
+Tracked-secret detector remains **NOT-PASS**: seven credential-assignment matches. The six
+historical matches retain section19's manual dispositions; the new `customRoleEditor.test.tsx`
+match injects dummy `password: "discard"` solely into an HTTP double to test DTO redaction.
+No retained working credential identified; detector unchanged, not relabelled automated PASS.
+No password/session cookie/CSRF/private proof/HAR/screenshot/private fixture bytes published.
+Private raw-log hashes are retained identities, **not** independent GitHub raw-log access.
+
+Publication checks: 119 relative feature-document links resolve; 32 unique operation IDs and
+74/93 task markers agree; diff whitespace check PASS. One first author-accounting command used
+an overly narrow status regex and stopped (it omitted existing qualified status suffixes);
+counting exact unique operation IDs corrected the check, not the contract. Final package
+explicitly contains zero Custom browser/contract/atomicity/immutability test-fixture classes.
+No extension hooks are registered (`.specify/extensions.yml` absent). No complete feature claim
+is made from completion of this requested slice.
+
+### Current next step and stop boundary
+
+Custom Role UI is usable for this qualified profile. **T075–T093 remain open**: Access Inspector/
+history/general resolution, final cross-screen accessibility/recovery and whole-feature integration.
+US5 T075 is the next planned slice, not executed under this bounded US4 request. PR #47 stays
+Draft/Open, Issue #46 open. Independent US4/whole-feature acceptance, verifier, deployment and
+merge NOT-RUN; no timer/Tracker action. No spec/design/Q14/Q15/architecture reopening.
