@@ -208,7 +208,7 @@ fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-4
 c8046a026f27845b8e221a03230a2de32f7e337741e87016d3e5e356f24cbba7  tests/iam-ui-46/account-browser.sh
 81270968fc08187e8bb502f2febd3bb6ff118e77757d0e1187cc76e2b851d527  tests/iam-ui-46/assignment-browser.mjs
 d9d6cac72bab3c6b158dc331ea901139d035a353fd781870f9345eda0163e838  tests/iam-ui-46/custom-role-browser.mjs
-48641297704d17c03720fddef510152d0fbaa0682773fc5831a567e22e58238b  tests/iam-ui-46/inspection-browser.mjs
+c15cfa66598be85fd5cf11317f9b6cc6eb58684320d11db9c5083a5bcf1c07ca  tests/iam-ui-46/inspection-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs
 4d876e8936bf6174b8c0bce9fe0d40f165beeeabbb7340750c8c55d3db4aa610  tests/iam-ui-46/README.md
 75a8490a31089f1222ec413bcfabf2127f3bd2165c87fac98c58c1f8b3ea826e  tests/iam-ui-46/run-owner-tests.sh
