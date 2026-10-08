@@ -346,3 +346,18 @@ Normal first-party test/harness errors are fixed within this authorization and r
 STOP on tool/graph/hash/trust/target drift or requirement/security contradiction. No Access
 Inspector, generic policy engine, arbitrary Permission or built-in rewrite. PR remains Draft/Open;
 whole feature, verifier, deployment, merge and timer changes remain NOT-RUN.
+
+## 10. US5 and final FAST DELIVERY continuation — 2026-10-08
+
+Human authorization at `b4559915abbbb3d8dd097e388d556418656a9c68` covers T075–T082,
+then T083–T093 execution/reviewer preparation, not PG5 acceptance or integration. Reuse
+the admitted section 7–9 tool/cache/Chrome/TLS/18446/database envelope unchanged. Inspector
+is a read-only client of the existing evaluator; history never promotes DESIGN audit.read.
+Owned `inspection-{red,green,qualification}-NN` and `final-qualification-NN` roots run one
+allowed HTTP/owner test class per fresh source-marked schema. The first tracer expects a
+200 all-path result through real session + CSRF at POST administration/access-inspections;
+before implementation that route is missing. Each exact committed raw input manifest and
+archive identity precedes execution. Same offline direct Maven goals, guarded JVM-before-schema
+cleanup and retained DB/private logs. Actual browser fixture/harness is published before use.
+No dependency/install, production data, persistent preview, deployment, verifier, timer or merge.
+Independent review and final qualification remain distinct; secret detector findings retained.

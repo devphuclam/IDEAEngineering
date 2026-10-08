@@ -77,6 +77,7 @@ a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  apps/server/sr
 4bdde37d18c43a19e03ac5ad6bfd1d8e3c4040843dc1938eadd8f6f6d326595d  apps/server/src/main/resources/third-party/ph1-runtime/SOURCES-NOTICE.txt
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/src/main/resources/third-party/swagger-ui/LICENSE.txt
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
+bb7d3b65f9ed413c3f6c73a04bf74d2d8efb0480e81b2baf5c44df5941662cc2  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionContractTest.java
 4b92d286675aa05743e747d3b5b35a6a32245c8dec46eddda03c831c778d0341  apps/server/src/test/java/com/idea/ddm/access/AssignmentQualificationFixture.java
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
@@ -199,7 +200,7 @@ f766f4c67d297f7ac1ae48244d45a592089c2cd0113d8250d55366a2c024558a  tests/iam-ui-4
 d9d6cac72bab3c6b158dc331ea901139d035a353fd781870f9345eda0163e838  tests/iam-ui-46/custom-role-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs
 4d876e8936bf6174b8c0bce9fe0d40f165beeeabbb7340750c8c55d3db4aa610  tests/iam-ui-46/README.md
-a22e75df814be10b332e716691429360acdfbd76e88b21c6fadb63f236aaf9bd  tests/iam-ui-46/run-owner-tests.sh
+75a8490a31089f1222ec413bcfabf2127f3bd2165c87fac98c58c1f8b3ea826e  tests/iam-ui-46/run-owner-tests.sh
 a8d9d6328aeeaeb11c71a0c6bbd055ab89bc79b7ac187073cb559884e9210245  tests/iam-ui-46/run-web-tests.ps1
 959ea72814036f4a014b737d313d29506918f9a55506f2bf8b32d9f9e65bad4c  tests/iam-ui-46/vitest.config.mjs
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
