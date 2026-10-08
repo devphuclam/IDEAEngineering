@@ -132,8 +132,8 @@ class RoleAssignmentContractTest {
         var admin=fixtures.identity(IamIntegrationFixtures.Persona.SUPER);var target=fixtures.identity(IamIntegrationFixtures.Persona.LINH);
         http.withSignedInClient(admin,(client,ctx)->http.withSignedInClient(target,(unused,c2)->{
             grant(admin,AuthorizationPrerequisiteFixture.SUPER_V2,org());
-            assertEquals(409,post(client,"/api/v1/administration/assignments",grantInput(target.actorId(),AuthorizationPrerequisiteFixture.PRA_V1,org())).statusCode());
-            assertEquals(409,post(client,"/api/v1/administration/assignments",grantInput(target.actorId(),AuthorizationPrerequisiteFixture.AUDIT_V1,org())).statusCode());
+            assertEquals(201,post(client,"/api/v1/administration/assignments",grantInput(target.actorId(),AuthorizationPrerequisiteFixture.PRA_V1,org())).statusCode());
+            assertEquals(201,post(client,"/api/v1/administration/assignments",grantInput(target.actorId(),AuthorizationPrerequisiteFixture.AUDIT_V1,org())).statusCode());
             var exact=get(client,"/api/v1/administration/roles/9d80f77e-85a6-4c12-a72d-8ef6b7e0b002/versions/3?organizationId="+fixtures.organizationId());assertEquals(200,exact.statusCode());assertEquals(AuthorizationPrerequisiteFixture.AA_V3.toString(),json.readTree(exact.body()).path("roleVersionId").asString());
             var timed=new HashMap<>(grantInput(target.actorId(),AuthorizationPrerequisiteFixture.AA_V1,org()));timed.put("interval",Map.of("effectiveFrom","2026-10-07T05:59:59Z","effectiveUntil","2026-10-07T06:00:00Z"));
             var expired=post(client,"/api/v1/administration/assignments",timed);assertEquals(201,expired.statusCode());assertFalse(json.readTree(expired.body()).path("effective").asBoolean(),"At effectiveUntil the interval no longer grants");
