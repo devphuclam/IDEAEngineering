@@ -137,6 +137,21 @@ class RoleAssignmentContractTest {
             var invalid=new HashMap<>(grantInput(target.actorId(),AuthorizationPrerequisiteFixture.AA_V2,org()));invalid.put("interval",Map.of("effectiveFrom","2026-10-07T06:01:00Z","effectiveUntil","2026-10-07T06:01:00Z"));assertEquals(400,post(client,"/api/v1/administration/assignments",invalid).statusCode());return null;
         }));
     }
+    @Test void highestDelegationUsesOrganizationAuthorityForSupportedProjectTarget()throws Exception{
+        var admin=fixtures.identity(IamIntegrationFixtures.Persona.SUPER);var target=fixtures.identity(IamIntegrationFixtures.Persona.PRA);
+        http.withSignedInClient(admin,(client,ctx)->http.withSignedInClient(target,(unused,c2)->{
+            grant(admin,AuthorizationPrerequisiteFixture.SUPER_V2,org());var project=new ProjectPrerequisiteFixture(fixtures).project(admin);
+            var scope=AuthorizationDecisionService.Scope.project(fixtures.organizationId(),project.projectId());var existing=new AuthorizationPrerequisiteFixture(fixtures).actorAssignment(target,AuthorizationPrerequisiteFixture.PRA_V1,scope,Instant.parse("2026-10-07T05:59:59Z"),null);
+            assertEquals(200,post(client,"/api/v1/administration/assignments/"+existing+"/end",Map.of("operationId",UUID.randomUUID(),"scope",scope,"expectedVersion",1,"reason","Org-authorized Super ends covered Project highest assignment")).statusCode());return null;
+        }));
+    }
+    @Test void unauthorizedMutationCannotProbeWhetherAnAssignmentIdExists()throws Exception{
+        var ordinary=fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);var target=fixtures.identity(IamIntegrationFixtures.Persona.LINH);
+        http.withSignedInClient(ordinary,(client,ctx)->http.withSignedInClient(target,(unused,c2)->{
+            var existing=new AuthorizationPrerequisiteFixture(fixtures).actorAssignment(target,AuthorizationPrerequisiteFixture.AA_V1,org(),Instant.parse("2026-10-07T05:59:59Z"),null);
+            for(var id:java.util.List.of(existing,UUID.randomUUID()))assertEquals(403,post(client,"/api/v1/administration/assignments/"+id+"/end",Map.of("operationId",UUID.randomUUID(),"scope",org(),"expectedVersion",1,"reason","Ordinary Actor must not probe target existence")).statusCode());return null;
+        }));
+    }
     AuthorizationDecisionService.Scope org(){return AuthorizationDecisionService.Scope.organization(fixtures.organizationId());}
     void grant(IamIntegrationFixtures.Identity identity,UUID role,AuthorizationDecisionService.Scope scope)throws Exception{new AuthorizationPrerequisiteFixture(fixtures).actorAssignment(identity,role,scope,Instant.parse("2026-10-07T05:59:59Z"),null);}
     Map<String,Object> grantInput(UUID target,UUID role,AuthorizationDecisionService.Scope scope){return Map.of("operationId",UUID.randomUUID(),"principal",Map.of("kind","ACTOR","actorId",target),"scope",scope,"roleVersionId",role,"reason","Explicit synthetic assignment");}
