@@ -109,7 +109,6 @@ a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/sr
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
-9b8ad8217e75352fd5be934180bf18fa427aa84f69b60ce4a446ae6b4bee1726  apps/server/src/test/java/com/idea/ddm/project/ProjectBrowserFixtureCommand.java
 974d05c40e4a1340deb023e9952533cbd73f278eeb54542a3ef3356c2928f100  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceAtomicityTest.java
 0b9e2f4a8d0e6bea2ecc0b3cf199b2677467b9628e4712d125f1289379602d59  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceContractTest.java
 37f1e8193ce1afec9bf294b3e4b2d8831b77d35bafa8b2f50e38d0bd5b26d4aa  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceDataTest.java
@@ -169,7 +168,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 5368d16c9a6baa11eab4ee7c0731578971c17284ded80979639b9dfd45ee08a9  docs/research/inventories/iam-ui-46-resolved-inputs.tsv
 f4dde1be1c251665f5304e6b6d0a89c6f9aec62bc30e7368856374d89f8e51da  docs/research/inventories/ph1-packaged-notice-map-20261006.tsv
 fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-46/account-browser.mjs
-d01ba3966dd208941989a29b92436c9300248447d8eb0087b698cd28dbd74209  tests/iam-ui-46/account-browser.sh
+e36518deed06694be86ea033bd56d2a47ed41481bb97cc0ffaf04e2dd4f15492  tests/iam-ui-46/account-browser.sh
 4a1554aa3556619e39ab527a976af939f376bcd10a8040f66c9e46fd17942dd5  tests/iam-ui-46/project-browser.mjs
 86d07bdacafd2a2b143f8650e5e53a50dd02d9fdb67b499ade77a989ef773869  tests/iam-ui-46/README.md
 c8e5118e5e0c1a3a32c2b4edd8bfbaef172ffb6392e071249a1a67e5fd3ab62b  tests/iam-ui-46/run-owner-tests.sh

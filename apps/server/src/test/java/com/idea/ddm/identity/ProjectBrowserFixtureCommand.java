@@ -1,9 +1,9 @@
-package com.idea.ddm.project;
+package com.idea.ddm.identity;
 
 import com.idea.ddm.iam.IamIntegrationFixtures;
 import com.idea.ddm.access.AuthorizationPrerequisiteFixture;
 import com.idea.ddm.access.AuthorizationDecisionService;
-import com.idea.ddm.identity.NativePasswordVerifier;
+import com.idea.ddm.project.ProjectPrerequisiteFixture;
 import java.nio.file.*;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
