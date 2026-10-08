@@ -6,6 +6,44 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 
 class AccessInspectionContractTest {
+    @Test void everyDirectAndGroupPathIsExplainedAndMembershipIsNotAdministrativeAuthority() throws Exception {
+        try(var f=new CustomRoleQualificationFixture()) {
+            f.start();var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var member=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
+            f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(member,(unused,target)->{
+                f.delegate(admin);var p=new com.idea.ddm.project.ProjectPrerequisiteFixture(f.rows);var project=p.project(admin);var group=p.group(project,admin);
+                var now=java.time.Instant.parse("2026-10-07T05:59:59Z");var pm=p.projectMembership(project,member,now,null);var gm=p.groupMembership(group,member,now,null);
+                var scope=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),project.projectId());var a=new AuthorizationPrerequisiteFixture(f.rows);var role=a.participantRole(scope);
+                var direct=a.actorAssignment(member,role,scope,now,null);var grouped=a.groupAssignment(admin,role,group,now,null);
+                var response=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",member.actorId(),"permissionCode","project.read","scope",scope));
+                assertEquals(200,response.statusCode());var result=f.json.readTree(response.body());assertEquals("ALLOW",result.path("rbacResult").asString());assertEquals(2,result.path("paths").size());
+                var ids=new HashSet<String>();for(var path:result.path("paths")){ids.add(path.path("assignmentId").asString());assertEquals(pm.toString(),path.path("projectMembershipId").asString());assertTrue(path.has("assignedBy"));assertEquals(role.toString(),path.path("roleVersionId").asString());if(!path.path("groupId").isNull())assertEquals(gm.toString(),path.path("groupMembershipId").asString());}assertEquals(Set.of(direct.toString(),grouped.toString()),ids);
+                f.sql("UPDATE project_membership SET ended_at='2026-10-07T06:00:00Z' WHERE membership_id='"+pm+"'");
+                result=f.json.readTree(f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",member.actorId(),"permissionCode","project.read","scope",scope)).body());assertEquals("BLOCKED",result.path("rbacResult").asString());assertEquals(0,result.path("paths").size());assertFalse(result.path("projectMembershipEligible").asBoolean());
+                a.actorAssignment(admin,AuthorizationPrerequisiteFixture.PA_V1,scope,now,null);
+                result=f.json.readTree(f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","project.admin.read","scope",scope)).body());assertEquals("ALLOW",result.path("rbacResult").asString());assertFalse(result.path("projectMembershipEligible").asBoolean());assertEquals("NOT_EVALUATED",result.path("ownerBusinessGate").asString());return null;
+            }));
+        }
+    }
+    @Test void committedProjectResultIsResolvedWithoutReplayAndAbsentResultIsNotRollback() throws Exception {
+        try(var f=new CustomRoleQualificationFixture()){
+            f.start();var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+            f.http.withSignedInClient(admin,(client,ctx)->{
+                f.delegate(admin);new AuthorizationPrerequisiteFixture(f.rows).actorAssignment(admin,AuthorizationPrerequisiteFixture.PA_V1,f.scope(),java.time.Instant.parse("2026-10-07T05:59:59Z"),null);
+                var operation=UUID.randomUUID();assertEquals(201,f.post(client,"/api/v1/administration/projects",Map.of("operationId",operation,"organizationId",f.rows.organizationId(),"name","Resolved synthetic project","reason","Actual owner result")).statusCode());
+                var response=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/operations/"+operation+"?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());
+                assertEquals(200,response.statusCode(),"Actual owner resolution query must work");var result=f.json.readTree(response.body());assertEquals("COMMITTED_ACCEPTED",result.path("state").asString());assertEquals("PROJECT",result.path("owner").asString());assertEquals(admin.actorId().toString(),result.path("actorId").asString());assertEquals("SAME_ID_UNCHANGED_INPUT_ONLY",result.path("retryProfile").asString());
+                var absent=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/operations/"+UUID.randomUUID()+"?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,absent.statusCode());assertEquals("UNRESOLVED",f.json.readTree(absent.body()).path("state").asString());return null;
+            });
+        }
+    }
+    @Test void auditHistoryIsIndependentlyGatedAndDesignAuditIsNotAnExecutableGrant() throws Exception {
+        try(var f=new CustomRoleQualificationFixture()){
+            f.start();var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+            f.http.withSignedInClient(admin,(client,ctx)->{f.delegate(admin);
+                var history=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(403,history.statusCode());
+                var inspect=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","audit.read","scope",f.scope()));assertEquals(200,inspect.statusCode());assertEquals("UNSUPPORTED",f.json.readTree(inspect.body()).path("rbacResult").asString());assertEquals("DESIGN",f.json.readTree(inspect.body()).path("implementationState").asString());return null;});
+        }
+    }
     @Test void actualHttpInspectionUsesCurrentAuthorityAndExactContributingVersion() throws Exception {
         try(var f=new CustomRoleQualificationFixture()) {
             f.start(); var who=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
