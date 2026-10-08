@@ -6,6 +6,16 @@ const id="00000000-0000-4000-8000-000000000046",scope={kind:"ORGANIZATION",organ
 const value={actorId:id,scope,permissionCode:"access.inspect",implementationState:"IMPLEMENTED",accountEligible:true,projectMembershipEligible:false,rbacResult:"ALLOW",ownerBusinessGate:"NOT_EVALUATED",evaluatedAt:"2026-10-08T06:00:00Z",paths:[{assignmentId:id,roleVersionId:id,roleCode:"project-administrator",roleVersion:1,assignmentScope:scope,groupId:null,projectMembershipId:null,groupMembershipId:null,assignedBy:id,reason:"Independent assignment",assignedAt:"2026-10-07T06:00:00Z"}]};
 type Planned={inspectAccess(i:unknown):Promise<IamResult<unknown>>;resolveOperation(id:string,s:unknown):Promise<IamResult<unknown>>;loadHistory(s:unknown):Promise<IamResult<unknown>>};
 describe("Inspector is advisory not another mutation or authority model",()=>{
+  it("canonical UUID identities match uppercase user input without accepting another target",async()=>{
+    const lower="abcdef01-abcd-4abc-8abc-abcdefabcdef",upper=lower.toUpperCase(),s={kind:"PROJECT",organizationId:lower,projectId:lower};
+    const client=createIamClient(async path=>path.endsWith("/csrf")?Response.json({headerName:"X-CSRF-TOKEN",token:"synthetic-csrf"}):path.includes("access-inspections")?Response.json({...value,actorId:lower,scope:s}):Response.json({operationId:lower,state:"UNRESOLVED"})) as unknown as Planned;
+    expect((await client.inspectAccess({targetActorId:upper,scope:{kind:"PROJECT",organizationId:upper,projectId:upper},permissionCode:"access.inspect"})).kind).toBe("confirmed");
+    expect((await client.resolveOperation(upper,{kind:"PROJECT",organizationId:upper,projectId:upper})).kind).toBe("confirmed");
+  });
+  it("invalid operation identity produces a bounded input refusal without making a request or rejecting",async()=>{
+    const client=createIamClient(async()=>{throw new Error("Must not fetch invalid input");}) as unknown as Planned;
+    expect(await client.resolveOperation("-".repeat(36),scope)).toEqual({kind:"refused",status:400});
+  });
   it("preserves authored administration surface with explicitly unsupported independent Audit history",()=>{
     const html=renderToStaticMarkup(<AccessInspectionPage context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Recorded Organization",actions:["access.inspect"]}} onInvalidated={()=>{}}/>);
     expect(html).toContain("admin-main-title");expect(html).toContain("admin-inspector");expect(html).toContain("Recorded Organization");expect(html).toContain("History · chưa hỗ trợ");expect(html).toContain('aria-label="Tra cứu operation"');
