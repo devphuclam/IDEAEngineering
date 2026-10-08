@@ -179,8 +179,9 @@ public final class IdentityAdministration {
         try (var statement = connection.prepareStatement("SELECT DISTINCT a.principal_actor_id "
                 + "FROM identity_role_assignment a JOIN identity_role_version r USING(role_version_id) "
                 + "JOIN idea_account c ON c.actor_id=a.principal_actor_id JOIN actor p ON p.actor_id=c.actor_id "
-                + "WHERE r.role_code='super-administrator' AND r.version=1 AND a.organization_id=? "
-                + "AND a.revoked_at IS NULL AND a.assigned_at<=CURRENT_TIMESTAMP "
+                + "WHERE r.role_code='super-administrator' AND r.version IN (1,2) AND a.organization_id=? "
+                + "AND a.scope_kind='ORGANIZATION' AND a.project_id IS NULL AND a.revoked_at IS NULL "
+                + "AND a.effective_from<=clock_timestamp() AND (a.effective_until IS NULL OR a.effective_until>clock_timestamp()) "
                 + "AND c.status='ACTIVE' AND p.disabled_at IS NULL")) {
             statement.setObject(1, organization);
             var holders = new ArrayList<UUID>();

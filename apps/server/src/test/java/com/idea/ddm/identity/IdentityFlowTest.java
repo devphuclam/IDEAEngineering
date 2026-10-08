@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /** Agreed F03-A seam: Server identity services + real PostgreSQL. Not an HTTP/session test. */
 @EnabledIfEnvironmentVariable(named = "IDEA_F03_TEST_DATABASE_NAME",
-        matches = "idea_ddm_f02_20260929_a52f44f6|idea_ddm_f03a_20260930_c91e7a42|idea_ddm_f05a_20261005_t028")
+        matches = "idea_ddm_f02_20260929_a52f44f6|idea_ddm_f03a_20260930_c91e7a42|idea_ddm_f05a_20261005_t028|idea_ddm_iam_ui_20261007_46")
 class IdentityFlowTest {
     private String schema;
     private DriverManagerDataSource app;
@@ -25,7 +25,9 @@ class IdentityFlowTest {
     void isolatedMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
-        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
+        if(System.getenv("IDEA_IAM_SOURCE_SHA")!=null) {
+            schema=com.idea.ddm.iam.IamRegressionSchemas.create();
+        } else if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
             schema=F05DatabaseFixture.createRegressionSchema();
         } else if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             schema = F04SchemaTest.createRegressionSchema();
@@ -46,6 +48,7 @@ class IdentityFlowTest {
 
     @AfterEach
     void removeOnlyThisTestsUuidSchema() throws Exception {
+        if(schema!=null && System.getenv("IDEA_IAM_SOURCE_SHA")!=null){com.idea.ddm.iam.IamRegressionSchemas.remove(schema);return;}
         if(schema!=null && System.getenv("IDEA_F05_SOURCE_SHA")!=null){F05DatabaseFixture.removeRegressionSchema(schema);return;}
         if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             F04SchemaTest.removeRegressionSchema(schema);

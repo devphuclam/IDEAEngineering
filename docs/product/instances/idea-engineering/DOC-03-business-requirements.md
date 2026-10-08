@@ -1,6 +1,6 @@
 # IDEA Engineering Core v0 Business Requirements
 
-> **Instance state**: controlled `Draft 0.7`. These are internal product needs and business rules
+> **Instance state**: controlled `Draft 0.8`. These are internal product needs and business rules
 > for the proposed Core v0 scope. They do not select a technology stack and do not become approved
 > software obligations until the Feature decision and their DOC-04 translation are controlled.
 
@@ -13,7 +13,8 @@
 | Title | IDEA Engineering Core v0 Business Requirements |
 | Owner | `Principal Product Author`; named person attribution is `BLOCKED` before `Proposed` |
 | Document Status | `Draft` |
-| Document Version | `0.7` |
+| Document Version | `0.8` |
+| Current IAM refinement review | 0.8 is a Draft successor under [IE-CHG-IAM-UI-001](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), reviewed spec e227cb1d; Core/design acceptance NOT-RUN. Historical approved source/hash records are not changed or inherited. |
 | Applicable Baseline | `IDEA-C1-ANALYSIS-DESIGN-001` |
 | Effective Date | `NOT APPLICABLE` until approval |
 | Authors | `Principal Product Author`; named identity not yet recorded |
@@ -22,7 +23,7 @@
 | Source Links | [DOC-01](DOC-01-product-vision-and-scope.md), [DOC-02](DOC-02-feasibility-and-options-assessment.md), [accepted design lessons](../../knowledge/idea-design-lessons.md), [domain language](../../../../CONTEXT.md), [coverage register](registers/GOV-material-and-behavioral-coverage.md) |
 | Downstream Links | [DOC-04](DOC-04-software-requirements-specification.md), requirement-bearing [DOC-06](DOC-06-data-integration-and-migration-specification.md) and [DOC-08](DOC-08-ui-ux-and-interaction-specification.md), [DOC-07](DOC-07-mvp-roadmap-and-delivery-plan.md), [FEATURE-001](decision-briefs/FEATURE-001-feature-definition-and-scope.md), [VVP](registers/VVP-core-v0-verification-validation-plan.md) and CHG records; future RSK |
 | Evidence / Claim Status | Proposed needs derived from accepted product decisions and bounded reference evidence; internal representative validation remains `BLOCKED` |
-| Change History | 0.7: replace the former group/Project-Role/Permission-Set chain with one principal-role-scope RBAC model; define Group and direct assignments, Scope, built-in/custom roles, constrained administration and highest-role protection; [IE-ADR-C1-010](../../../adr/0012-use-principal-role-scope-rbac.md), [IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md). 0.6: clarify the prior administration boundary. Earlier history remains in the controlled change records. |
+| Change History | 0.8: Refine Project Administrator business responsibility for D09/D11; separate administration from technical participation. [IE-CHG-IAM-UI-001](registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md). 0.7: replace the former group/Project-Role/Permission-Set chain with one principal-role-scope RBAC model; define Group and direct assignments, Scope, built-in/custom roles, constrained administration and highest-role protection; [IE-ADR-C1-010](../../../adr/0012-use-principal-role-scope-rbac.md), [IE-CHG-RBAC-ARCH-001](registers/CHG-2026-09-10-rbac-and-diagram-governance.md). 0.6: clarify the prior administration boundary. Earlier history remains in the controlled change records. |
 | Access Classification | `INTERNAL` |
 | Retention Rule | Retain with the product-definition baseline; exact organizational period is `UNKNOWN`, owned by Product Decision Authority and reviewed before `Approved` |
 | Content State | `COMPLETE CONTROLLED DRAFT` with explicit unresolved actions |
@@ -38,7 +39,7 @@
 | Approver | Makes an approval/rejection decision under the applicable policy. | Receive a complete eligible scope; rationale and decision must be attributable. | `BN-005`, `BR-012`…`BR-015` | Seeded role; independent approver assignment `BLOCKED` |
 | Release Authority | Releases only an approved, complete and reproducible scope. | Ensure release pins exact documents, structure, approvals and policy versions. | `BN-005`…`BN-007`, `BS-006` | Role may be combined only when policy explicitly permits; named authority `UNKNOWN` |
 | Product Configuration Administrator | Maintains governed document classes, metadata, numbering, workflow, localization and format profiles. | Prepare controlled product configuration without provisioning accounts, defining access roles, assigning Project access or gaining document/decision authority by implication. | `BN-006`, `BN-008`, `BN-009`, `BR-016`…`BR-018`, `BR-030` | Project user may perform this duty during development; future production assignees and review remain `UNKNOWN` before PG3 |
-| Project Administrator | Manages one explicitly assigned Project. | Add/remove Project Membership, maintain Project Groups and assign only the approved Project roles allowed by its own assignment. | `BN-006`, `BN-011`, `BS-011`, `BR-017`, `BR-030` | Initial assignee and permitted delegation catalogue remain `UNKNOWN` before pilot |
+| Project Administrator | Manages explicitly covered Projects; Organization-scoped creation requires a declared create Permission. | Create only when authorized; add/remove participation, maintain Project Groups and assign allowed business roles. Administration is separate from personal engineering participation; creation grants no implicit membership/role. | `BN-006`, `BN-011`, `BS-011`, `BR-017`, `BR-030` | Initial assignee and permitted delegation catalogue remain `UNKNOWN` before pilot |
 | Privileged Role Administrator | Maintains permitted Role Definitions and administrative Role Assignments. | Delegate only within constrained roles, principals and Scopes; cannot grant Super Administrator or broaden its own assignment. | `BN-006`, `BS-011`, `BR-030` | Project user may hold bootstrap capability during development; production assignment and security review remain `BLOCKED` |
 | Super Administrator | Provides initial bootstrap and governed recovery of the highest administration authority. | Use only for setup/recovery; protect the last effective recovery path and keep routine work under narrower roles. | `BN-006`, `BR-028`, `BR-030` | Temporary named holder is the project user during development; production recovery arrangement remains `UNKNOWN` |
 | Quality / Auditor | Investigates what happened and whether an exact baseline can be reproduced. | Use an Audit Reader assignment to read/export authorized evidence without changing it. | `BN-005`…`BN-007`, `BS-007`, `BR-030` | Specialist population and competence `BLOCKED` until assigned |

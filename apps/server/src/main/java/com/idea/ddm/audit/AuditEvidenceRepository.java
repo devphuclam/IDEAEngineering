@@ -14,6 +14,16 @@ public final class AuditEvidenceRepository {
 
     private AuditEvidenceRepository() {}
 
+    /** Read port for an already-authorized, exact owner result; never exports arbitrary Audit rows. */
+    public static boolean hasAdministrationCompanion(Connection c, UUID operation, UUID actor,
+            String action, String outcome) throws SQLException {
+        if (c.getAutoCommit() || !c.isReadOnly()) throw new SQLException("Caller read transaction required");
+        try (var q = c.prepareStatement("SELECT EXISTS(SELECT 1 FROM audit_evidence WHERE operation_id=? AND actor_id=? AND action=? AND outcome=?)")) {
+            q.setObject(1, operation); q.setObject(2, actor); q.setString(3, action); q.setString(4, outcome);
+            try (var r = q.executeQuery()) { r.next(); return r.getBoolean(1); }
+        }
+    }
+
     public static void append(Connection connection, Entry entry) throws SQLException {
         Objects.requireNonNull(connection, "caller connection required");
         Objects.requireNonNull(entry, "audit entry required");

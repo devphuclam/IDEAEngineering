@@ -1,140 +1,109 @@
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { createIamClient, type AdministrationContext } from "./api/iamClient";
+import { BrandShowcase } from "./components/auth/BrandShowcase";
+import { LoginForm } from "./components/auth/LoginForm";
+import { SessionLanding } from "./components/auth/SessionLanding";
+import { StatusBanner, type BannerType } from "./components/auth/StatusBanner";
+import { Topbar } from "./components/auth/Topbar";
+import { AdminApp } from "./components/admin/AdminApp";
+import { AccountAdministrationPage } from "./features/accountAdministration/AccountAdministrationPage";
+import { ProjectAdministrationPage } from "./features/projectAdministration/ProjectAdministrationPage";
+import { AssignmentWizard } from "./features/accessAdministration/AssignmentWizard";
+import { CustomRoleEditor } from "./features/accessAdministration/CustomRoleEditor";
+import { AccessInspectionPage } from "./features/accessInspection/AccessInspectionPage";
+import { CredentialRedemptionPage } from "./features/credentials/CredentialRedemptionPage";
+import { outcomeMessage } from "./features/iamIntegration/IamStatus";
+import "./styles/auth.css";
+import "./styles/admin.css";
+import "./app/iam.css";
 
-type CsrfProof = { headerName: string; token: string };
-type SessionView = { actorId: string; accountId: string };
-
-async function readJson<T>(response: Response): Promise<T> {
-  if (!response.ok) throw new Error("REQUEST_REFUSED");
-  return response.json() as Promise<T>;
-}
+const client = createIamClient();
+const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : location.hash === "#projects" ? "projects" : location.hash === "#rbac" ? "rbac" : location.hash === "#custom-role" ? "custom-role" : location.hash === "#access" ? "access" : "session";
 
 export function App() {
-  const [csrf, setCsrf] = useState<CsrfProof | null>(null);
-  const [session, setSession] = useState<SessionView | null>(null);
-  const [login, setLogin] = useState("");
+  const [route, setRoute] = useState(currentRoute);
+  const [context, setContext] = useState<AdministrationContext | null>(null);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Đang kết nối IDEA Server…");
+  const [statusType, setStatusType] = useState<BannerType>("neutral");
   const [busy, setBusy] = useState(false);
+  const epoch = useRef(0);
 
-  const refreshSession = async () => {
-    try {
-      const proof = await readJson<CsrfProof>(await fetch("/api/v1/identity/csrf", {
-        credentials: "include",
-        headers: { Accept: "application/json" },
-      }));
-      setCsrf(proof);
-      const current = await fetch("/api/v1/identity/session", {
-        credentials: "include",
-        headers: { Accept: "application/json" },
-      });
-      if (current.ok) {
-        setSession(await current.json() as SessionView);
-        setMessage("Đã đăng nhập");
-      } else {
-        setSession(null);
-        setMessage("Chưa đăng nhập");
-      }
-    } catch {
-      setSession(null);
-      setMessage("Không kết nối được IDEA Server");
+  async function refresh() {
+    const request = ++epoch.current;
+    const result = await client.loadContext();
+    if (request !== epoch.current) return;
+    if (result.kind === "confirmed") {
+      setContext(result.value); setMessage("Đã đăng nhập"); setStatusType("success");
+    } else {
+      setContext(null);
+      setMessage(result.kind === "refused" && result.status === 401 ? "Chưa đăng nhập" : outcomeMessage(result));
+      setStatusType(result.kind === "refused" && result.status === 401 ? "neutral" : "warning");
     }
-  };
+  }
 
   useEffect(() => {
-    void refreshSession();
+    const change = () => { setPassword(""); setRoute(currentRoute()); };
+    window.addEventListener("hashchange", change); void refresh();
+    return () => { epoch.current++; window.removeEventListener("hashchange", change); };
   }, []);
 
-  const submitLogin = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!csrf || busy) return;
-    setBusy(true);
-    setMessage("Đang xác thực…");
-    const submittedPassword = password;
-    setPassword("");
+  async function signIn(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); if (busy) return;
+    epoch.current++;
+    let submittedPassword = password;
+    (event.currentTarget.elements.namedItem("password") as HTMLInputElement).value = "";
+    setPassword(""); setBusy(true); setContext(null);
+    setMessage("Đang xác thực…"); setStatusType("neutral");
     try {
-      const body = new URLSearchParams({ username: login, password: submittedPassword });
-      const response = await fetch("/api/v1/identity/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          [csrf.headerName]: csrf.token,
-        },
-        body,
-      });
-      if (!response.ok) throw new Error("LOGIN_REFUSED");
-      setLogin("");
-      await refreshSession();
-    } catch {
-      setMessage("Đăng nhập bị từ chối");
-    } finally {
-      setPassword("");
-      setBusy(false);
-    }
-  };
+      const result = await client.signIn(username, submittedPassword);
+      if (result.kind === "confirmed") await refresh();
+      else { setMessage(outcomeMessage(result)); setStatusType("warning"); }
+    } finally { submittedPassword = ""; setBusy(false); }
+  }
 
-  const submitLogout = async () => {
-    if (!csrf || busy) return;
-    setBusy(true);
+  async function signOut() {
+    if (busy) return;
+    epoch.current++; setPassword(""); setBusy(true); setContext(null);
     try {
-      const response = await fetch("/api/v1/identity/logout", {
-        method: "POST",
-        credentials: "include",
-        headers: { [csrf.headerName]: csrf.token },
-      });
-      if (!response.ok) throw new Error("LOGOUT_REFUSED");
-      setSession(null);
-      setMessage("Đã đăng xuất");
-      await refreshSession();
-    } catch {
-      setMessage("Đăng xuất bị từ chối");
-    } finally {
-      setBusy(false);
-    }
-  };
+      const result = await client.signOut();
+      setMessage(result.kind === "confirmed" ? "Đã đăng xuất" : outcomeMessage(result));
+      setStatusType(result.kind === "confirmed" ? "success" : "warning");
+    } finally { setBusy(false); }
+  }
 
+  function invalidate() {
+    epoch.current++; setContext(null); setPassword("");
+    setMessage("Phiên không còn hợp lệ. Hãy đăng nhập lại."); setStatusType("warning");
+  }
+  const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read"||action==="access.inspect"||action==="audit.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":context.actions.includes("role.catalogue.read")?"rbac":"access"; } : undefined;
+
+  if (route === "credentials") return <CredentialRedemptionPage />;
+  if (context && (route === "accounts" || route === "projects" || route === "rbac" || route === "custom-role" || route === "access")) return (
+    <AdminApp context={context} busy={busy} activeSection={route==="custom-role"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
+      {route==="accounts"?<AccountAdministrationPage context={context} onInvalidated={invalidate} />:route==="projects"?<ProjectAdministrationPage context={context} onInvalidated={invalidate} />:route==="custom-role"?<CustomRoleEditor context={context} onInvalidated={invalidate} />:route==="access"?<AccessInspectionPage context={context} onInvalidated={invalidate} />:<AssignmentWizard context={context} onInvalidated={invalidate} />}
+    </AdminApp>
+  );
   return (
-    <main aria-label="IDEA Engineering" data-testid="idea-web-app">
-      <header>
-        <h1>IDEA Engineering</h1>
-        <p>Core v0 · Web qualification</p>
-      </header>
-      <p role="status" aria-live="polite">{message}</p>
-      {session ? (
-        <section aria-label="Phiên hiện tại">
-          <p data-testid="session-actor">Actor: {session.actorId}</p>
-          <button type="button" onClick={() => void submitLogout()} disabled={busy}>
-            Đăng xuất
-          </button>
+    <div className="auth-viewport-root" data-testid="idea-web-app">
+      {context ? <>
+        <Topbar actorId={context.actorId} displayName={context.displayName} busy={busy} onLogout={() => void signOut()} onOpenAdmin={openAdmin} />
+        <div className="session-status"><StatusBanner type={statusType} message={message} /></div>
+        <SessionLanding actorId={context.actorId} accountId={context.accountId} organizationName={context.organizationName} onOpenAdmin={openAdmin} />
+      </> : <main className="auth-split-layout">
+        <BrandShowcase />
+        <section className="auth-stage-container" aria-label="Đăng nhập IDEA">
+          <div className="auth-stage-content">
+            <LoginForm username={username} password={password} busy={busy} statusMessage={message} statusType={statusType}
+              onUsernameChange={setUsername} onPasswordChange={setPassword} onSubmit={event => void signIn(event)} />
+            <div className="auth-support-actions">
+              <button type="button" className="admin-btn" disabled={busy} onClick={() => void refresh()}>Kiểm tra phiên</button>
+              <a href="#credentials">Tôi có proof để thiết lập / reset credential</a>
+            </div>
+          </div>
         </section>
-      ) : (
-        <form aria-label="Đăng nhập" onSubmit={(event) => void submitLogin(event)}>
-          <label>
-            Login
-            <input
-              name="username"
-              autoComplete="username"
-              value={login}
-              onChange={(event) => setLogin(event.target.value)}
-              disabled={busy}
-              required
-            />
-          </label>
-          <label>
-            Mật khẩu
-            <input
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              disabled={busy}
-              required
-            />
-          </label>
-          <button type="submit" disabled={busy || csrf === null}>Đăng nhập</button>
-        </form>
-      )}
-    </main>
+      </main>}
+    </div>
   );
 }

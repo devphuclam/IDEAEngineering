@@ -133,6 +133,14 @@ public final class SessionService {
         boolean committed;
     }
 
+    /** Server adapter bridge for owner modules; never constructs context from client identifiers. */
+    public ActorContext currentContext(org.springframework.security.core.Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof Identity identity)) throw refused();
+        current(identity);
+        return context(identity);
+    }
+
     View current(Identity identity) {
         if (identity == null) throw refused();
         try (var connection = dataSource.getConnection()) {

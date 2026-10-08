@@ -43,7 +43,9 @@ class HttpSessionFlowTest {
     void startServerWithOnlyThisTestsMigratorOwnedSchema() throws Exception {
         assertEquals("idea_ddm_app", env("IDEA_DATABASE_APP_USER"));
         assertEquals("idea_ddm_migrator", env("IDEA_DATABASE_MIGRATION_USER"));
-        if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
+        if(System.getenv("IDEA_IAM_SOURCE_SHA")!=null) {
+            schema=com.idea.ddm.iam.IamRegressionSchemas.create();
+        } else if(System.getenv("IDEA_F05_SOURCE_SHA")!=null) {
             schema=F05DatabaseFixture.createRegressionSchema();
         } else if (System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             schema = F04SchemaTest.createRegressionSchema();
@@ -70,7 +72,7 @@ class HttpSessionFlowTest {
         if (syntheticDelivery) arguments.add("--idea.identity.synthetic-credential-delivery.enabled=true");
         server = new SpringApplicationBuilder(IdeaServerApplication.class)
                 .initializers(context -> {
-                    if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)context.getBeanFactory().registerSingleton("dataSource",appDataSource());
+                    if(System.getenv("IDEA_F05_SOURCE_SHA")!=null || System.getenv("IDEA_IAM_SOURCE_SHA")!=null)context.getBeanFactory().registerSingleton("dataSource",appDataSource());
                     context.getBeanFactory().registerSingleton("testIdentityClock", clock);
                     context.getBeanFactory().registerSingleton("testContextRepository", bindingRepository);
                     context.getBeanFactory().registerSingleton("testSessionBudgetListener", new HttpSessionListener() {
@@ -85,6 +87,7 @@ class HttpSessionFlowTest {
     @AfterEach
     void closeServerAndRemoveOnlyOwnedUuidSchema() throws Exception {
         if (server != null) server.close();
+        if(schema!=null && System.getenv("IDEA_IAM_SOURCE_SHA")!=null){com.idea.ddm.iam.IamRegressionSchemas.remove(schema);return;}
         if(schema!=null && System.getenv("IDEA_F05_SOURCE_SHA")!=null){F05DatabaseFixture.removeRegressionSchema(schema);return;}
         if (schema != null && System.getenv("IDEA_F04_SOURCE_SHA") != null) {
             F04SchemaTest.removeRegressionSchema(schema);
@@ -1672,8 +1675,11 @@ class HttpSessionFlowTest {
         var fixture = fixture();
         var flyway = Flyway.configure().dataSource(url(), env("IDEA_DATABASE_MIGRATION_USER"), env("IDEA_DATABASE_MIGRATION_PASSWORD"))
                 .schemas(schema).defaultSchema(schema).locations("classpath:db/migration").cleanDisabled(true).load();
-        // Current chain includes additive F05 V9/V10; retained F03/F04 evidence keeps its original chain.
-        assertEquals(java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), java.util.Arrays.stream(flyway.info().applied())
+        // 009 adds V11/V12; predecessor execution evidence keeps its original chain.
+        var expected = System.getenv("IDEA_IAM_SOURCE_SHA") != null
+                ? java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17")
+                : java.util.List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        assertEquals(expected, java.util.Arrays.stream(flyway.info().applied())
                 .filter(migration -> migration.getVersion() != null).map(migration -> migration.getVersion().toString()).toList());
         assertEquals(0, flyway.migrate().migrationsExecuted);
         var loginId = new IdentityAdministration(appDataSource()).inspect(fixture.accountId()).loginIdentityId();
@@ -2388,6 +2394,7 @@ class HttpSessionFlowTest {
     }
 
     private String url() {
+        if(System.getenv("IDEA_IAM_SOURCE_SHA")!=null)return com.idea.ddm.iam.IamRegressionSchemas.url();
         if(System.getenv("IDEA_F05_SOURCE_SHA")!=null)return "jdbc:postgresql://127.0.0.1:5432/"+F05DatabaseFixture.DATABASE;
         var database = env("IDEA_F03B_TEST_DATABASE_NAME");
         if (!database.equals("idea_ddm_f03a_20260930_c91e7a42")) {

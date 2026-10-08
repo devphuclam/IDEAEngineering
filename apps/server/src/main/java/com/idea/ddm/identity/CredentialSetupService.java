@@ -32,8 +32,13 @@ final class CredentialSetupService {
 
     IssuedProof issue(ActorContext issuer, UUID operation, UUID organization, UUID target,
             String purpose, long expectedVersion, String reason) {
+        return issue(issuer,operation,organization,target,null,purpose,expectedVersion,reason,false);
+    }
+
+    IssuedProof issue(ActorContext issuer, UUID operation, UUID organization, UUID target,UUID targetLogin,
+            String purpose,long expectedVersion,String reason,boolean manualReissue) {
         if (operation == null || organization == null || target == null || expectedVersion < 1
-                || !"FIRST_SETUP".equals(purpose) || reason == null || reason.isBlank() || reason.length() > 500
+                || (manualReissue && targetLogin==null) || !"FIRST_SETUP".equals(purpose) || reason == null || reason.isBlank() || reason.length() > 500
                 || reason.codePoints().anyMatch(Character::isISOControl)) throw new IdentityRefusal("INVALID_INPUT");
         return transactions.mutate(issuer, operation, organization, "account.credential.setup.issue",
                 "IDEA_ACCOUNT", target.toString(), IdentityTransactions.Owner.IAM, connection -> {
@@ -42,18 +47,23 @@ final class CredentialSetupService {
                     try (var query = connection.prepareStatement("SELECT l.login_identity_id FROM idea_account a "
                             + "JOIN actor p USING(actor_id) JOIN login_identity l USING(account_id) "
                             + "WHERE a.account_id=? AND a.organization_id=? AND a.status='PENDING' "
-                            + "AND a.security_version=? AND p.disabled_at IS NULL AND l.password_verifier IS NULL")) {
+                            + "AND a.security_version=? AND p.disabled_at IS NULL AND l.password_verifier IS NULL "
+                            + "AND (?::uuid IS NULL OR l.login_identity_id=?)")) {
                         query.setObject(1, target);
                         query.setObject(2, organization);
                         query.setLong(3, expectedVersion);
+                        query.setObject(4,targetLogin);query.setObject(5,targetLogin);
                         try (var row = query.executeQuery()) {
                             if (!row.next()) throw new IdentityRefusal("INELIGIBLE_TARGET");
                             var loginId = row.getObject(1, UUID.class);
+                            // Legacy omitted selector is safe only for exactly one eligible Login Identity.
+                            if(row.next())throw new IdentityRefusal("INELIGIBLE_TARGET");
                             var entropy = new byte[32];
                             random.nextBytes(entropy);
                             var proof = Base64.getUrlEncoder().withoutPadding().encodeToString(entropy);
                             var issued = now();
                             var expires = issued.plus(Duration.ofMinutes(15));
+                            if(manualReissue)CredentialProofDelivery.supersede(connection,CredentialProofDelivery.Purpose.FIRST_SETUP,target,loginId,operation,issued);
                             AdministratorBootstrap.insert(connection, "INSERT INTO credential_setup_proof "
                                     + "(proof_id,account_id,login_identity_id,purpose,security_version,proof_digest,issued_by,"
                                     + "issue_operation_id,reason,issued_at,expires_at) VALUES (?,?,?,'FIRST_SETUP',?,?,?,?,?,?,?)",
@@ -83,7 +93,7 @@ final class CredentialSetupService {
                         + "JOIN idea_account a USING(account_id) JOIN actor p USING(actor_id) "
                         + "JOIN login_identity l ON l.login_identity_id=f.login_identity_id AND l.account_id=f.account_id "
                         + "WHERE f.proof_digest=? AND f.account_id=? AND f.purpose='FIRST_SETUP' "
-                        + "AND f.consumed_at IS NULL AND f.issued_at<=? AND f.expires_at>? "
+                        + "AND f.consumed_at IS NULL AND f.superseded_at IS NULL AND f.issued_at<=? AND f.expires_at>? "
                         + "AND a.status='PENDING' AND a.security_version=f.security_version "
                         + "AND p.disabled_at IS NULL AND l.password_verifier IS NULL")) {
                     query.setString(1, CredentialProofDigest.sha256AsciiToHex(proof));
