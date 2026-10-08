@@ -190,6 +190,10 @@ try {
   await privateState(page, context);
   console.log('N08_PRIVATE_STATE_NO_SECRET_RETENTION=PASS');
   stage = 'upstream-tls-refusals';
+  // Release our own keep-alive connections before asking the foreground master
+  // to drain gracefully. Otherwise the harness itself can keep QUIT pending.
+  await browser.close(); browser = undefined;
+  https.globalAgent.destroy();
   const upstream = remote('bash /home/phuclam/idea-nginx-dev-control-49/upstream.test.sh', 60000);
   assert.ok(upstream.includes('NGINX_UPSTREAM_wrong-name=PASS') && upstream.includes('NGINX_UPSTREAM_untrusted=PASS'));
   assert.ok(control('Status').includes('NGINX_DEV_STATE=RUNNING'));
