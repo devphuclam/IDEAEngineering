@@ -79,7 +79,9 @@ a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  apps/server/sr
 4bdde37d18c43a19e03ac5ad6bfd1d8e3c4040843dc1938eadd8f6f6d326595d  apps/server/src/main/resources/third-party/ph1-runtime/SOURCES-NOTICE.txt
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/src/main/resources/third-party/swagger-ui/LICENSE.txt
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
+69032fb50bdb035e6e6069be681856e5043855f1cbac9a838a8f326c98c8f5db  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionAtomicityTest.java
 cd914fbf2e62b9be6e3fd1bcdb106b7049ca73f7c766e651835797e9b656f5b1  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionContractTest.java
+7afd7b72d83e5ff2e34f9a482f70c9a311853360201f452b8067786faa1d7a1f  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionPrivacyTest.java
 4b92d286675aa05743e747d3b5b35a6a32245c8dec46eddda03c831c778d0341  apps/server/src/test/java/com/idea/ddm/access/AssignmentQualificationFixture.java
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
