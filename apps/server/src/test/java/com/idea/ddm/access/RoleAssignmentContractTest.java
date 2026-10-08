@@ -32,7 +32,7 @@ class RoleAssignmentContractTest {
             assertEquals("account-administrator",aa3.path("roleCode").asString());
             assertEquals(3,aa3.path("version").asInt());assertTrue(aa3.path("selectable").asBoolean());
             var pra=items.valueStream().filter(row->row.path("roleVersionId").asString().equals(AuthorizationPrerequisiteFixture.PRA_V1.toString())).findFirst().orElseThrow();
-            assertFalse(pra.path("selectable").asBoolean(),"Custom publication is still DESIGN, not grantable through this slice");
+            assertTrue(pra.path("selectable").asBoolean(),"Qualified Audit/history completes the immutable PRA profile");
             return null;
         });
     }
@@ -49,7 +49,8 @@ class RoleAssignmentContractTest {
             assertEquals(AuthorizationPrerequisiteFixture.AA_V3.toString(),json.readTree(result.body()).path("roleVersionId").asString());
             assertEquals(target.actorId().toString(),json.readTree(result.body()).path("principal").path("actorId").asString());
             assertEquals(201,post(client,"/api/v1/administration/assignments",grantInput(target.actorId(),AuthorizationPrerequisiteFixture.PA_V1,org())).statusCode());
-            assertEquals(2,count("SELECT count(*) FROM identity_role_assignment WHERE principal_actor_id='"+target.actorId()+"' AND revoked_at IS NULL"));
+            assertEquals(201,post(client,"/api/v1/administration/assignments",grantInput(target.actorId(),AuthorizationPrerequisiteFixture.PRA_V1,org())).statusCode());
+            assertEquals(3,count("SELECT count(*) FROM identity_role_assignment WHERE principal_actor_id='"+target.actorId()+"' AND revoked_at IS NULL"));
             var op=input.get("operationId");
             assertEquals(1,count("SELECT count(*) FROM access_policy_owner_outcome WHERE operation_id='"+op+"' AND outcome='ACCEPTED'"));
             assertEquals(1,count("SELECT count(*) FROM audit_evidence WHERE operation_id='"+op+"' AND outcome='ACCEPTED'"));

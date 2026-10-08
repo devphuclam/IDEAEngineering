@@ -40,12 +40,16 @@ class AccessInspectionContractTest {
             });
         }
     }
-    @Test void auditHistoryIsIndependentlyGatedAndDesignAuditIsNotAnExecutableGrant() throws Exception {
+    @Test void auditHistoryIsIndependentlyGatedAndReturnsActualAttributableChanges() throws Exception {
         {
             var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
             f.http.withSignedInClient(admin,(client,ctx)->{f.delegate(admin);
-                var history=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(409,history.statusCode(),"Even registered PRA audit.read stays unsupported, not unlocked");
-                var inspect=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","audit.read","scope",f.scope()));assertEquals(200,inspect.statusCode());assertEquals("UNSUPPORTED",f.json.readTree(inspect.body()).path("rbacResult").asString());assertEquals("DESIGN",f.json.readTree(inspect.body()).path("implementationState").asString());return null;});
+                new AuthorizationPrerequisiteFixture(f.rows).actorAssignment(admin,AuthorizationPrerequisiteFixture.PA_V1,f.scope(),java.time.Instant.parse("2026-10-07T05:59:59Z"),null);
+                var operation=UUID.randomUUID();assertEquals(201,f.post(client,"/api/v1/administration/projects",Map.of("operationId",operation,"organizationId",f.rows.organizationId(),"name","History synthetic project","reason","Attributable creation")).statusCode());
+                long before=f.count("SELECT count(*) FROM audit_evidence");
+                var history=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+f.rows.organizationId()+"&limit=1")).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,history.statusCode(),"Qualified independent audit.read must return retained history");
+                var page=f.json.readTree(history.body());assertEquals(1,page.path("items").size());var row=page.path("items").get(0);assertEquals(operation.toString(),row.path("operationId").asString());assertEquals(admin.actorId().toString(),row.path("actorId").asString());assertEquals("ACCEPTED",row.path("outcome").asString());assertEquals("Attributable creation",row.path("reason").asString());assertEquals("History synthetic project",row.path("after").path("name").asString());assertTrue(row.path("before").isNull());assertEquals(before,f.count("SELECT count(*) FROM audit_evidence"));
+                var inspect=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","audit.read","scope",f.scope()));assertEquals(200,inspect.statusCode());assertEquals("ALLOW",f.json.readTree(inspect.body()).path("rbacResult").asString());assertEquals("IMPLEMENTED",f.json.readTree(inspect.body()).path("implementationState").asString());return null;});
         }
     }
     @Test void actualHttpInspectionUsesCurrentAuthorityAndExactContributingVersion() throws Exception {
