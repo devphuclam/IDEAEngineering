@@ -25,7 +25,7 @@ class AccessInspectionPrivacyTest {
         });
     }
     @Test void disabledTargetIsBlockedAndRevokedCallerCannotInspect()throws Exception{
-        var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA),target=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
+        var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var target=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
         f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(target,(unused,tc)->{
             f.delegate(admin);f.delegate(target);f.sql("UPDATE idea_account SET status='DISABLED' WHERE actor_id='"+target.actorId()+"'");
             var response=f.post(client,"/api/v1/administration/access-inspections",input(target.actorId(),f.scope()));assertEquals(200,response.statusCode());var result=f.json.readTree(response.body());assertEquals("BLOCKED",result.path("rbacResult").asString());assertFalse(result.path("accountEligible").asBoolean());assertEquals(0,result.path("paths").size());
@@ -34,12 +34,12 @@ class AccessInspectionPrivacyTest {
         }));
     }
     @Test void legacyIamLookupIsMetadataOnlyAndAnotherReadAuthorizedActorCannotLearnItsResult()throws Exception{
-        var admin=f.rows.identity(IamIntegrationFixtures.Persona.AA_V3),other=f.rows.identity(IamIntegrationFixtures.Persona.AA_V3);
+        var admin=f.rows.identity(IamIntegrationFixtures.Persona.AA_V3);var other=f.rows.identity(IamIntegrationFixtures.Persona.AA_V3);
         f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(other,(second,oc)->{
             var a=new AuthorizationPrerequisiteFixture(f.rows);var now=Instant.parse("2026-10-07T05:59:59Z");a.actorAssignment(admin,AuthorizationPrerequisiteFixture.AA_V3,f.scope(),now,null);a.actorAssignment(other,AuthorizationPrerequisiteFixture.AA_V3,f.scope(),now,null);
             var id=UUID.randomUUID();assertEquals(201,f.post(client,"/api/v1/identity/accounts",Map.of("operationId",id,"organizationId",f.rows.organizationId(),"displayName","Synthetic metadata target","login","lookup."+UUID.randomUUID())).statusCode());
             var own=get(client,operation(id));assertEquals(200,own.statusCode());var value=f.json.readTree(own.body());assertEquals("COMMITTED_ACCEPTED",value.path("state").asString());assertEquals("METADATA_ONLY_NO_SAFE_REPLAY",value.path("retryProfile").asString());assertFalse(value.has("result"));
-            var denied=get(second,operation(id));assertEquals(200,denied.statusCode());var unknown=get(second,operation(UUID.randomUUID()));var d=f.json.readTree(denied.body()),u=f.json.readTree(unknown.body());assertEquals("UNRESOLVED",d.path("state").asString());for(String key:List.of("owner","actorId","scope","action","outcome","reasonCode","correlationId","occurredAt","retryProfile")){assertTrue(d.path(key).isNull());assertEquals(d.path(key),u.path(key));}return null;
+            var denied=get(second,operation(id));assertEquals(200,denied.statusCode());var unknown=get(second,operation(UUID.randomUUID()));var d=f.json.readTree(denied.body());var u=f.json.readTree(unknown.body());assertEquals("UNRESOLVED",d.path("state").asString());for(String key:List.of("owner","actorId","scope","action","outcome","reasonCode","correlationId","occurredAt","retryProfile")){assertTrue(d.path(key).isNull());assertEquals(d.path(key),u.path(key));}return null;
         }));
     }
     Map<String,Object> input(UUID actor,AuthorizationDecisionService.Scope scope){return Map.of("targetActorId",actor,"permissionCode","access.inspect","scope",scope);}

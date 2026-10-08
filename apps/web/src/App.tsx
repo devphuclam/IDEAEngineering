@@ -10,6 +10,7 @@ import { AccountAdministrationPage } from "./features/accountAdministration/Acco
 import { ProjectAdministrationPage } from "./features/projectAdministration/ProjectAdministrationPage";
 import { AssignmentWizard } from "./features/accessAdministration/AssignmentWizard";
 import { CustomRoleEditor } from "./features/accessAdministration/CustomRoleEditor";
+import { AccessInspectionPage } from "./features/accessInspection/AccessInspectionPage";
 import { CredentialRedemptionPage } from "./features/credentials/CredentialRedemptionPage";
 import { outcomeMessage } from "./features/iamIntegration/IamStatus";
 import "./styles/auth.css";
@@ -17,7 +18,7 @@ import "./styles/admin.css";
 import "./app/iam.css";
 
 const client = createIamClient();
-const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : location.hash === "#projects" ? "projects" : location.hash === "#rbac" ? "rbac" : location.hash === "#custom-role" ? "custom-role" : "session";
+const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : location.hash === "#projects" ? "projects" : location.hash === "#rbac" ? "rbac" : location.hash === "#custom-role" ? "custom-role" : location.hash === "#access" ? "access" : "session";
 
 export function App() {
   const [route, setRoute] = useState(currentRoute);
@@ -79,9 +80,9 @@ export function App() {
   const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":"rbac"; } : undefined;
 
   if (route === "credentials") return <CredentialRedemptionPage />;
-  if (context && (route === "accounts" || route === "projects" || route === "rbac" || route === "custom-role")) return (
-    <AdminApp context={context} busy={busy} activeSection={route==="custom-role"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
-      {route==="accounts"?<AccountAdministrationPage context={context} onInvalidated={invalidate} />:route==="projects"?<ProjectAdministrationPage context={context} onInvalidated={invalidate} />:route==="custom-role"?<CustomRoleEditor context={context} onInvalidated={invalidate} />:<AssignmentWizard context={context} onInvalidated={invalidate} />}
+  if (context && (route === "accounts" || route === "projects" || route === "rbac" || route === "custom-role" || route === "access")) return (
+    <AdminApp context={context} busy={busy} activeSection={route==="custom-role"||route==="access"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
+      {route==="accounts"?<AccountAdministrationPage context={context} onInvalidated={invalidate} />:route==="projects"?<ProjectAdministrationPage context={context} onInvalidated={invalidate} />:route==="custom-role"?<CustomRoleEditor context={context} onInvalidated={invalidate} />:route==="access"?<AccessInspectionPage context={context} onInvalidated={invalidate} />:<AssignmentWizard context={context} onInvalidated={invalidate} />}
     </AdminApp>
   );
   return (
