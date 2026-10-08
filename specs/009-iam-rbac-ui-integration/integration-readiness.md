@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.15` / Draft Account + Project/Group + Assignment + Custom Role engineering milestone record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.16` / Draft Inspector + final engineering reviewer packet; PG2/PG3/PG4 PASS, PG5 NOT-RUN |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–20; independent US4 implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–21; independent whole-feature acceptance / PG5 NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, sections 15–16 historical Account MVP, section 17 T034 closure, sections 18–19 historical Project/Group and Assignment milestones, section 20 current Custom Role milestone; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness, 12–14 foundation, 15–20 historical US1–US4, section 21 current Inspector/final engineering qualification; whole-feature external acceptance pending |
 
 ## 1. Exact lineage and ownership
 
@@ -1679,10 +1679,210 @@ explicitly contains zero Custom browser/contract/atomicity/immutability test-fix
 No extension hooks are registered (`.specify/extensions.yml` absent). No complete feature claim
 is made from completion of this requested slice.
 
-### Current next step and stop boundary
+### Historical US4 next step and stop boundary
 
 Custom Role UI is usable for this qualified profile. **T075–T093 remain open**: Access Inspector/
 history/general resolution, final cross-screen accessibility/recovery and whole-feature integration.
 US5 T075 is the next planned slice, not executed under this bounded US4 request. PR #47 stays
 Draft/Open, Issue #46 open. Independent US4/whole-feature acceptance, verifier, deployment and
 merge NOT-RUN; no timer/Tracker action. No spec/design/Q14/Q15/architecture reopening.
+
+## 21. Access Inspector and final engineering qualification — 2026-10-08
+
+### 21.1 Authority, delivered scope and exact lineage
+
+Human-authorized predecessor is **b4559915abbbb3d8dd097e388d556418656a9c68**. FAST DELIVERY
+covers T075–T082 and continuation through T083–T093, not PG5 or integration. CODEX_ONLY;
+original authored shell/tokens/layout retained. `#access` uses real Server session/CSRF and
+UI-R10/UI-O01. Existing AdminApp is the final cross-screen shell, not a new routing abstraction
+or a delegate-only IamAdministrationShell. No Java/schema/dependency/framework/architecture
+change outside the approved Inspector boundary; V1–V17 and runtime graph remain unchanged.
+
+**Access Inspector UI usable:** exact authorized Organization/Project + target Actor + one
+registered Permission → every effective direct/Group path, immutable role code/version/scope,
+membership/assignment/assigner/time/reason → advisory RBAC and eligibility snapshot. Querying
+successive actions provides effective-permission explanations; no client evaluator or impersonation.
+Project administration ALLOW without personal membership is distinguished from engineering
+participation and NOT_EVALUATED owner business gates. Disabled targets have no contributing paths.
+
+UI-O01 retains original provenance and current independent query authority. Originator/current
+owner-read or independently scoped inspector/current owner-read may see safe terminal metadata.
+Other Actor, absent or undisclosable result → identical UNRESOLVED; this is not rollback proof.
+No stored result JSON, credential/proof/session data or mutation replay is returned. Legacy IAM
+remains METADATA_ONLY_NO_SAFE_REPLAY. No common idempotency upgrade is inferred.
+
+**Unsupported rights:** audit.read/history projection stays DESIGN. UI-A01 is a real fail-closed
+adapter: ordinary 403; a present but unqualified Audit permission 409. The UI history action is
+disabled. PRA@1, Super@2 and Audit Reader@1 ordinary grants remain non-selectable because their
+whole contents include unqualified audit.read. Q15 adoption and already-existing qualified paths
+are not ordinary grant or live-estate authorization. Other product-domain DESIGN actions remain
+unavailable. This is not Audit export, product content authorization or deployment acceptance.
+
+Final production application change: **a451459a2d20cda8f0dcbbc1564bc32570559ace**.
+Final executed package/browser/Web source: **11bba5ff7eb583d5f594d8dbcdb4388dd1fe2246**.
+Between those sources only the scoped F03 test migration expectation, accessibility assertion
+diagnostic, browser harness and manifest changed; production Java/Web, migrations/dependencies
+did not. Publication after 11bba5f changes status/contract/evidence/handoff only.
+
+### 21.2 RED, repaired defects and honest failed-run accounting
+
+- a422ebf: genuine first HTTP RED, 1 failure (expected 200, missing route 404). Minimal GREEN
+  491d4a3: 1/1. Expanded fe030a9: 4/4, then current contract 5/5 including independent inspector
+  authority removal, business REFUSED metadata and no duplicate Audit.
+- a15a367: four fixture errors from repeated same-schema creation, not four product REDs.
+  1be2c83: real operation-query 503 RED plus an incorrect history expectation and missing fixture
+  end provenance. Fixed exact owner columns, expected unsupported 409 and complete fixture fields.
+- c29510e: zero Web tests selected, NOT-RUN. b3ed212: five executed Web REDs for absent client
+  methods. 843658d: 6/6 + typecheck. 4cdf64b: test compilation error accessing private context
+  fields, NOT-RUN; revoke by controlled fixture Actor instead, Privacy 3/3 at 88a3c45.
+- 89c20f0 consolidated Web: 57/58; old authored-presentation test still expected Inspector to be
+  disabled. Updated to the actual `#access` link; no design change. Its actual Chrome predecessor
+  was 8/8; no retained raw browser log was created for that first tool-output-only run.
+- Internal reviews found uppercase UUID false-unavailable and malformed OperationId unhandled
+  rejection. **9ca68d3 Web RED: 6 pass / 2 fail**; log SHA-256
+  f9ee2107da8dc6872055efbc49b1e2de07202f0edebae9f88d848b63fbbc9cf0,
+  JSON f8c6ff51da4613a81c67174f983014e4627a64d7a92322a99a8744499f42d456.
+  a451459 validates strict UUIDs, keeps target/op/scope matching case-equivalent, returns bounded
+  invalid-input refusal before fetch. Web 60/60 + typecheck; actual browser exercises uppercase
+  Actor/Project/Operation and malformed native input validation.
+- a451459 F03 HTTP: 82/83, retained successor-fixture history expected V1–V12 rather than V1–V17;
+  no migration changed. 5d60b27 fixes only that explicit IAM fixture expectation; successor 83/83.
+- Browser final-03 and final-11: I01–I07 passed, I08 failed. Named diagnostic isolated focus
+  restoration/visible focus being read before the existing requestAnimationFrame completed.
+  11bba5f waits for completed focus restoration, preserves every oracle and makes no UI change.
+  Final-13 **8/8 PASS**. Failed log identities: final-03
+  e0ca4a5f5edbc2f92bca196132c405818b9fa5e8a335288e9f3c2ecda2a544a4;
+  final-11 fee3eb6b0c9f1f55b1b42e9c1f8561157c7610152a84e65cb828739e202f473b.
+
+Failed roots/archives/logs remain retained. No failure was erased or labelled PASS. Previously
+implemented cookie/CSRF/dialog/session behavior receives added qualification GREEN; it was not
+broken deliberately to manufacture RED. The three final `.test.ts` assertion modules consume
+actual Chrome observations via the headed harness, not a mock or additional Vitest browser count.
+
+### 21.3 Consolidated engineering results
+
+All counts below have zero failure/error/skip unless explicitly retained as failed above. See
+[exact Server run ledger](evidence/inspection-final-runs.tsv). Do not infer one same-source total.
+
+| Executed source | Seam / owned label | Actual result |
+|---|---|---|
+| a451459a2d20cda8f0dcbbc1564bc32570559ace | Inspector HTTP contract/privacy/read-only fault; final-08/09/10 | 5 + 3 + 2 = 10/10 PASS |
+| 89c20f066ac068a843c88fcea00db15f896499a7 | Shared evaluator, final-01 | 22/22 PASS; same production evaluator as final |
+| a451459a2d20cda8f0dcbbc1564bc32570559ace | F03-A Identity, final-06 | 20/20 PASS |
+| 5d60b2765c42017be2b2b04391405730f7e63c89 | F03-B actual HTTP/session, final-12 | 83/83 PASS |
+| a451459a2d20cda8f0dcbbc1564bc32570559ace | Schema, privilege, predecessor checksums and repeat, final-07 | 16/16 PASS |
+| 5d60b2765c42017be2b2b04391405730f7e63c89 | Existing process/down-DB health HTTP; offline direct Surefire | 2/2 PASS; no product DB used by this health-negative fixture |
+| 11bba5ff7eb583d5f594d8dbcdb4388dd1fe2246 | Consolidated existing Web + Inspector, final-14 | 60/60 PASS + TypeScript PASS; 44 exact archives/1,255 members unchanged |
+| 11bba5ff7eb583d5f594d8dbcdb4388dd1fe2246 | Offline actual Web/executable Server package + headed Chrome, final-13 | Content PASS; Chrome 8/8; authoritative fixture DB oracle PASS |
+
+Server total **153 PASS across the exact-source rows**, not 153 at one SHA or full PH1 rerun.
+Earlier separately qualified Account/recipient/Q15/Project/assignment/Custom transactions remain
+sections 15–20. This final integration does not repeat live adoption or the entire F05 transfer
+matrix. Untouched production modules are not newly qualified by these counts.
+
+### 21.4 Actual browser/package/target and retained identities
+
+Normal trusted HTTPS `https://localhost:18446/`, owned SSH forward to Ubuntu loopback only,
+installed headed Chrome **155.0.8059.39**, Playwright/core **1.62.1** unchanged. Windows Node
+**24.19.0** binary SHA-256 3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237;
+Chrome SHA-256 d3784ffbf1f6109348416064b3e4cd739b06fa61d89a81b262c780df9f32270c. Existing
+CurrentUser test certificate SHA-256 6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad,
+SAN localhost/127.0.0.1, validity retained in section 11. No TLS bypass/new trust installation.
+Same admitted Linux JDK/Maven/Node, 82 tool pins + 544 artifact rows; offline only, no graph drift.
+
+Final source raw manifest **219/219**, SHA-256
+5af79ba5a05ed65690341abdd0863faf492a8f60ffa413f535f04a8326b8a64a;
+identical local/transfer/extracted archive
+483d767c0c5934b310d130ecd3c0bdbb4b5bd70d8fefde5987955c314d869cb9.
+Final JAR SHA-256 **79224c146ee3719b83ff083fcc8a8b03de933279028710f835b668cbd7d72a09**.
+Actual package oracle: 57 exact runtime JARs/hashes, zero JSR305/providers/build-tool payload,
+notices 3/3, immutable migrations 17/17, executable manifest/loader and actual Web present.
+
+I01 all direct/Group paths + exact provenance; I02 admin/membership/owner gate separation;
+I03 independent history unsupported; I04 exact owner result/unknown non-disclosure/no replay;
+I05 real response loss after Server 200 and real bad-CSRF 403, plus controlled **Web-only**
+409/503 fail-closed projection; I06 ordinary actual refusal; I07 invalidated session/fresh
+sign-in/reload; I08 Account/Project/Custom/RBAC/Inspector navigation, keyboard order,
+dialog focus/trap/Escape/restoration/visible focus, responsive viewport, privacy/logout.
+No claim that browser-injected 409/503 qualifies Server storage failure; the actual PostgreSQL
+SELECT-denial test independently proves real query failure returns safe 503 without mutation.
+
+Database remains **idea_ddm_iam_ui_20261007_46**, separate existing migrator/app identities.
+Final browser schema **iam_ui_455c6f28031c4d1ca29c684531893046**, source-marked/migrator-owned.
+Three synthetic preexisting identities and five prerequisite assignments; exactly one actual
+Project operation + one required Audit, zero assignment/custom owner operations or committed
+events. Repeated inspection/result reads did not add state. JVM PID 439149 terminated before
+exact schema cleanup; owned Windows forward PID 27764 stopped; no test listener remains.
+Private fixture removed, DB/logs retained, public stays empty. F03 suites own/remove their
+individual source-marked schemas; the runner's unused declared marker is not claimed as used.
+Preview18444/company/production/Vault untouched.
+
+Independent aggregate postflight on 2026-10-08 confirms zero `iam_ui_<UUID>` / F03 marked
+test schemas, zero public tables, database owner `idea_ddm_migrator`, and no Ubuntu or Windows
+18446 listener. Only exact owned schemas were removed by the runners; the approved database
+remains retained. This read-only check is not migration, bootstrap or deployment.
+
+Retained safe/private log SHA-256:
+
+| Evidence | SHA-256 |
+|---|---|
+| Final headed Chrome safe log | 77cec861ae587872c72a3b5472a3dcf4d0ab89bf39d014a9e0d1693e7044c695 |
+| Final Web log / JSON | 007716aff8f92b5e5ebaf6537ed81f6311417076c8ebe61e8fbf4b621c80d2f5 / 055c6f31e1b7c0732f93997a05e9e84e36d82c007a69395b95588d7328550eeb |
+| Server package / Web build | e8740c79372676e6d099c619c769e567d146938f477d996525d1569b7ce6876d / c697cebe1ed6080c8b04f364671c118955a2b2164a62702e7c7ee111c700d32f |
+| Final private Server / fixture | 0ed8ebd63272cdc0342b02481e1668b4c9e62c26bba0846740a35e3bdad05449 / ae87dbe49666c0d276a22462d4a378c625c3b3ee9b9c8efaff835e91babbc0c5 |
+| Final source postflight / bounded cleanup | ebfccb9d562321673aeacada69ca93e145080321d1c59c43262c921fdd518186 / c94ea5a07facfd02401ab221bab7ffea0155f2b4d46413999afca6576551e795 |
+| Health negative log | a53badfe95d93e043c14ef9da5fad4cbb614bd313d863259e1938b78562690d0 |
+
+Ubuntu raw logs are private mode600 under `/home/phuclam/idea-iam-ui-20261007-46/run-<label>`.
+Hashes identify retained files; they are **not independent raw-log access through GitHub**.
+No fixture passwords/cookie/CSRF/proof, HAR, screenshot, private key or request-body diagnostics
+are published. Inspector has no credential/proof handoff; US1's permitted temporary controls
+and clearing behavior remain separately qualified, not prohibited retroactively.
+
+### 21.5 Internal review, detector disposition and final gate
+
+**Standards axis:** one judgment UUID/primitive identity finding, no hard documented-standard
+breach; fixed with response-to-request matching preserved. Narrow successor source recheck
+reported zero remaining actionable findings. **Spec axis:** two defects (UUID case, malformed
+lookup error) fixed after genuine RED; successor source recheck reported zero new defects or
+scope creep. Both are internal read-only agent reviews, not independent human PG5 acceptance.
+
+Tracked-secret detector stays **NOT-PASS**, unchanged. Actual current run reported **eight**
+credential-assignment matches, not a false PASS:
+
+| Match | Manual author disposition |
+|---|---|
+| TransferClientBoundaryTest; GatewayHttpQualification | Generated/private TLS material reads, retained PH1 disposition; no literal working credential |
+| account-browser.sh | Reads controlled mode600 harness TLS password at runtime; not a committed password value |
+| credentialRedemption.test.tsx; projectAdministration.test.tsx; assignmentWizard.test.tsx; customRoleEditor.test.tsx | Synthetic HTTP doubles/DTO redaction canaries; not company or operational credentials |
+| This handoff | Historical section20 quotes the dummy redaction canary; detector matches the documentation quotation, not a working credential |
+
+No detector exemption/disablement or concealment was added. Author manual review identified no
+retained working secret; independent final disposition of these findings remains for the reviewer.
+The eight-match result is not a security certification or an automated gate PASS.
+
+Unchanged `pwsh tests/ph1/check-no-secrets.ps1 -RepositoryRoot <owned worktree>` was rerun
+against the tracked publication inputs over application source 11bba5f: exit **1**, the same
+eight paths above. Retained safe findings-only log SHA-256
+**3b5b7aa839be64ef1a68699d77df4784fa6c86151390b91e4d9fae68b822a660**.
+Subsequent publication-only wording/hash accounting adds no credential content or detector exemption.
+
+T075–T082 and T083–T092 engineering obligations are recorded complete (**92/93**). Audit
+history projection remains explicitly DESIGN as authorized; no newly usable unsupported role
+is claimed. T093 awaits independent external review/acceptance and final integration authority.
+PG5 **NOT-RUN**, verifier **NOT-RUN**, PR #47 **Draft/Open**, Issue #46 **open**. No deployment,
+live adoption, merge, company identity, Desktop binding or timer/Tracker change. No extension
+hooks registered. Next eligible action is external whole-feature review of this exact packet;
+do not merge or label Feature 009 COMPLETED from engineering qualification alone.
+
+The [whole-feature closure matrix](evidence/feature-009-closure-matrix.md) maps all 32 operation
+IDs and FR-001–030 / SC-001–009 to source, tests and retained exact-source evidence. All entries
+are engineering dispositions; external acceptance remains pending. Current document checks
+are recorded separately from runtime qualification and cannot establish PG5.
+
+Publication checks: **231 relative links resolve; 32 distinct operation IDs, 25 Permission
+codes, 30 FR, 9 SC and 92/93 task markers agree**. Every operation and FR/SC is represented in
+the closure matrix. Current operation/matrix documents contain no unresolved template markers;
+diff whitespace check PASS. The publication successor changes only documentation/evidence/
+status and the pinned README manifest entry, not production/test/runner behavior, migrations,
+dependencies or the qualified package. No runtime rerun is inferred from these document checks.

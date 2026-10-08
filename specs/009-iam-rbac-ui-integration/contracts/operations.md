@@ -2,16 +2,16 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.6 status successor / Draft partial IMPLEMENTED; accepted technical semantics unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console contract / 0.7 status successor / Draft engineering-qualified branch; acceptance pending |
 | Authority / owner / author | INFORMATIVE refinement / IAM, Project Governance, Access Policy and Audit; named owners UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; Account/console, Project/Group, Assignment and Custom Role engineering evidence in handoff sections 16–20, independent US4 implementation review NOT-RUN / NOT-APPLICABLE |
+| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–21, independent whole-feature review / PG5 pending / NOT-APPLICABLE for deployment |
 | Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git |
 | Change / upstream / downstream | Issue #46 / [permissions](permission-delegation.md), [data](../data-model.md), accepted [Identity contract](../../../docs/product/instances/idea-engineering/api/identity-session.md) / [Web flow](web-flow.md), future tasks/tests |
-| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / Account/console, UI-P01–P13 and UI-R01–R09 qualified in handoff sections 16–20; other families DESIGN |
+| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / qualified operation/source/test crosswalk in [closure matrix](../evidence/feature-009-closure-matrix.md); Audit history projection remains DESIGN |
 
 ## 1. Common wire and authority
 
-Account, Project, Assignment and Custom Role rows explicitly marked IMPLEMENTED are qualified adapters in this branch,
+Account, Project, Assignment, Custom Role and Inspector rows explicitly marked IMPLEMENTED are qualified adapters in this branch,
 not a deployed estate. Other new HTTP paths remain proposed DESIGN, not available routes; see
 [Account evidence](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)
 and [Project/Group evidence](../integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08), plus [Assignment evidence](../integration-readiness.md#19-role-assignment-ui-usable-vertical-slice--2026-10-08) and [Custom Role evidence](../integration-readiness.md#20-custom-role-ui-usable-vertical-slice--2026-10-08). JSON UUID identifiers,
@@ -81,13 +81,34 @@ semantics preserved in section 4. Every DESIGN row needs real implementation + q
 | UI-R07 IMPLEMENTED | POST A/assignments | operationId/principal/roleVersionId/scope/interval/reason → 201 new assignment | Corresponding grant permission + exact envelope; C |
 | UI-R08 IMPLEMENTED | POST A/assignments/{id}/end | operationId/scope/expectedVersion/reason → 200 ended assignment | Corresponding grant permission; C, last recovery check |
 | UI-R09 IMPLEMENTED | POST A/assignments/{id}/replace | operationId/scope/expectedVersion/newRoleVersionId/interval/reason → 200 old/new IDs | Corresponding grant permission; C; atomic end + new grant |
-| UI-R10 DESIGN | POST A/access-inspections | targetActorId/permissionCode/scope/resourceId → redacted eligibility + all contributing paths + RBAC result | access.inspect; query/no owner mutation; owner gates distinguished |
-| UI-A01 DESIGN | GET A/history | scope/target/page → attributable administration change/outcome and safe before/after | audit.read; Q; no generic Audit export |
-| UI-O01 DESIGN | GET A/operations/{operationId} | Original operation → safe retained terminal metadata/result or unresolved | Current eligible originator + current relevant read authority, or independently scoped authorized inspector; no secret result |
+| UI-R10 IMPLEMENTED | POST A/access-inspections | targetActorId/permissionCode/scope/resourceId → redacted eligibility + all contributing paths + RBAC result | access.inspect; query/no owner mutation; owner gates NOT_EVALUATED |
+| UI-A01 DESIGN projection; IMPLEMENTED refusal adapter | GET A/history | scope/target/page → future attributable history; currently no history returned | Independent audit.read; ordinary 403, present-but-unqualified permission 409; no export or automatic unlock |
+| UI-O01 IMPLEMENTED | GET A/operations/{operationId} | Exact OperationId + query organizationId/projectId → redacted terminal metadata or UNRESOLVED | Current eligible originator + current relevant read authority, or independently scoped inspector + relevant owner read; no secret result |
 | UI-C01 IMPLEMENTED; synthetic qualification only | Local console adoption only | Exact old Super assignment/new Super@2, O, same Actor, OperationId/reason/reauth → separate assignment | Section 5; not HTTP/product bypass |
 
 Candidate resource scopes/role values are identifiers resolved by owners, never trusted client
 claims. Nullable interval/condition fields have the exact profile in the permission contract.
+
+### Current Inspector and resolution projection
+
+Engineering qualification is [handoff section 21](../integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+The sole adapters are `AccessInspectionController`/`AccessInspectionQueries`; inspection uses
+the existing AuthorizationDecisionService, never a client or parallel evaluator. One exact
+Permission is inspected per request; the UI can inspect successive catalogue actions. The result
+contains account/project-membership eligibility, RBAC ALLOW/BLOCKED/UNSUPPORTED, observation time
+and every effective direct/Group contribution with assignment/role-version/scope/membership IDs,
+assigned_by/time/reason. RBAC ALLOW is advisory; owner business gates remain NOT_EVALUATED.
+Current valid caller authority is checked in a read-only consistent transaction before/after
+the query. No inspection owner result, assignment, Audit or committed event is inserted.
+
+UI-O01 projects only OperationId, state, owner, original Actor, scope, action, outcome, reason
+code, correlation, time and retry profile. It never returns stored arbitrary result JSON, login,
+credential verifier, proof or session data. Absent and undisclosable results are identically
+UNRESOLVED; this is not confirmed rollback and never authorizes blind retry. Legacy IAM is
+METADATA_ONLY_NO_SAFE_REPLAY; newer owner metadata preserves SAME_ID_UNCHANGED_INPUT_ONLY.
+Read response loss/unavailable storage is unavailable, not an uncertain mutation success.
+JSON UUID letter case does not change identity; malformed client input has a bounded 400 refusal.
+History stays DESIGN and the UI disabled until its independent owner query is qualified.
 
 | Owner operation family | Operation IDs | Governing trace / acceptance |
 |---|---|---|

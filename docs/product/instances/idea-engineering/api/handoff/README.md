@@ -31,17 +31,23 @@ No documentation website, generator, new dependency or runtime is introduced.
 
 ## Current baseline register
 
-### IAM integration planning successor — not implemented
+### IAM integration branch — engineering-qualified, acceptance pending
 
 Under [Issue #46 / Draft PR #47](https://github.com/devphuclam/IDEAEngineering/pull/47),
 spec e227cb1df60e70a1294628b4f153ad50d8f034c6 has reported SPEC REVIEW PASS for planning.
 Candidate [plan](../../../../../../specs/009-iam-rbac-ui-integration/plan.md),
 [Permission/delegation](../../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
 and [operations](../../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md)
-are DESIGN and review-pending with Core successors DOC-03@0.8/04@0.16/05@0.27/06@0.19/08@0.14.
-Existing Identity wire/retry behavior is the accepted predecessor, not automatically replaced
-by new route/proof-handoff proposals. No new OpenAPI/runtime/deployment or team handoff acceptance
-is claimed. After design review, tasks/Analyze precede explicit TDD execution readiness.
+have accepted design with Core successors DOC-03@0.8/04@0.16/05@0.27/06@0.19/08@0.14.
+PG2/PG3/PG4 and execution readiness were subsequently recorded explicitly. Current usable
+Account, Project/Group, Assignment, Custom Role and Inspector flows, source/qualification and
+known unsupported rights are in [current handoff](../../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+The [whole-feature engineering matrix](../../../../../../specs/009-iam-rbac-ui-integration/evidence/feature-009-closure-matrix.md)
+is the operation → source/test → executed evidence → pending external acceptance crosswalk.
+Existing Identity retry is not upgraded by general operation lookup: legacy outcomes are
+metadata-only. Audit history stays DESIGN. This is an internal branch reviewer packet, not
+deployment, PG5, external sharing or recipient/team acceptance. Earlier accepted design and
+per-story evidence remain retained; no new framework/OpenAPI generator is claimed.
 
 ### v0.2 CPD successor — review pending
 

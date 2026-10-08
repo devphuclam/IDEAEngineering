@@ -23,12 +23,16 @@ caller can use it. HTTP means Hypertext Transfer Protocol; QA means quality assu
 
 ## 1. Read this package
 
-Native Account/Project/Group/RBAC integration is a separate review-pending design under Issue #46:
+Native Account/Project/Group/RBAC integration is a separate engineering-qualified branch under Issue #46:
 [plan](../../../../../specs/009-iam-rbac-ui-integration/plan.md),
 [exact Permission/delegation](../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
 and [operation contracts](../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md).
-The accepted Identity v0.1 predecessor remains unchanged unless an explicitly accepted successor
-applies. Proposed new routes/manual handoff/console adoption are DESIGN, not a deployed API.
+The accepted Identity v0.1 predecessor remains historical; the exact current branch availability,
+source/tests and limits are in [Feature 009 evidence](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+Account, Project/Group, assignment, Custom Role, Inspector and safe resolution adapters are
+IMPLEMENTED/qualified in Draft PR #47, not deployed or independently accepted. Audit history
+projection and other product-domain DESIGN permissions remain unavailable. Console adoption
+is separately qualified synthetic behavior, not authorization to upgrade a live estate.
 Current Core successors are registered in the instance catalogue; old approval hashes stay historical.
 
 Version 0.2 adds [PH2 CPD-1/CPD-2 semantic contracts](controlled-product-data.md),

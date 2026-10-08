@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design / 0.4 / Draft Account + Project/Group execution guidance; technical oracles unchanged |
-| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; PG2/PG3/PG4 PASS; Account and Project/Group engineering milestones in handoff sections 16–18, independent US2 implementation review NOT-RUN |
+| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design and result wayfinding / 0.5 / Draft final engineering reviewer packet; historical technical oracles unchanged |
+| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–21; whole-feature external review / PG5 pending |
 | Baseline / change / date | Spec e227cb1d + [plan](plan.md) / Issue #46 / 2026-10-08 Asia/Ho_Chi_Minh |
 | Effective / classification / retention / supersession / trigger | NOT-APPLICABLE / INTERNAL / Git / no old run replaced / contract, source, environment or tooling change |
 
-## Current Account and Project/Group milestones
+## Current engineering milestone — 92/93 tasks
 
 Account MVP has actual same-origin packaged Web + Server + PostgreSQL + trusted headed Chrome
 qualification, with the authored Login/Admin presentation retained. [Handoff section 16](integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)
@@ -16,8 +16,12 @@ not relabelled as execution. PG2/PG3/PG4 are PASS under [the envelope](execution
 T034 is now closed by [section 17](integration-readiness.md#17-t034-account-reissue-coverage-closure--2026-10-08).
 Project/Group UI-P01–P13 and its actual UI are qualified in [section 18](integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08):
 HTTP/owner/data/atomicity 6/3/3/3, affected Account 12, Web 36 and actual Chrome 8 all PASS.
-These are explicitly distinct-source runs. Assignment, Custom Role and inspector are still
-DESIGN/unavailable. There is **no persistent Account/Project UI deployment** yet:
+Assignment, immutable Custom Role and Inspector/final integration results are retained in
+sections 19–21. The [whole-feature matrix](evidence/feature-009-closure-matrix.md) maps every
+operation and all FR/SC groups to actual source/tests and executed evidence. Final Web60 +
+typecheck and actual headed Chrome8 are PASS at `11bba5ff7eb583d5f594d8dbcdb4388dd1fe2246`;
+affected Server153 are explicitly distinct-source runs. Audit history remains DESIGN, its
+refusal adapter is implemented. T093 and PG5 await external review. There is **no persistent UI deployment** yet:
 qualification port 18446 was closed, owned schema removed and database retained. Do not mistake
 an ephemeral test URL or the unchanged predecessor preview at 18444 for this package.
 
@@ -36,7 +40,7 @@ Source/template checks are available now:
     git diff --check
     ./.specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly
 
-Future runtime command templates (NOT-RUN and not complete execution packets):
+Historical pre-readiness runtime templates (not the commands used for qualification):
 
     mvn -o -Dtest=<published focused test classes> test
     npm run test
@@ -46,6 +50,29 @@ Exact Maven directory/repository/goals and package lifecycle must be inspected b
 generate-resources binds Web tooling. Missing/new/hash-drift artifact STOP; no npm install/ci,
 Maven download, trust bypass or broad DB cleanup. New test class/runner names belong to tasks;
 do not claim these commands are runnable before implementation and approved preflight.
+
+Current bounded commands are the published direct-offline runners; do not substitute Maven
+lifecycle `test/package`, PATH Node, npm install or an old process exception. Examples below
+identify executed final targets, not authorization to overwrite/reuse them:
+
+    bash tests/iam-ui-46/run-owner-tests.sh <a451459 full SHA> <its manifest> final-qualification-08 AccessInspectionContractTest 5 PASS
+    bash tests/iam-ui-46/run-owner-tests.sh <a451459 full SHA> <its manifest> final-qualification-09 AccessInspectionPrivacyTest 3 PASS
+    bash tests/iam-ui-46/run-owner-tests.sh <a451459 full SHA> <its manifest> final-qualification-10 AccessInspectionAtomicityTest 2 PASS
+    pwsh tests/iam-ui-46/run-web-tests.ps1 -SourceRoot <11bba5f raw export> -SourceSha <11bba5f full SHA> -Oracle PASS -ExpectedCount 60
+    bash tests/iam-ui-46/account-browser.sh <11bba5f full SHA> <its manifest> final-qualification-13 build
+    pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical transferred JAR> -RepositoryRoot <11bba5f raw export>
+    bash tests/iam-ui-46/account-browser.sh <11bba5f full SHA> <its manifest> final-qualification-13 start
+    <approved Windows Node> tests/iam-ui-46/inspection-browser.mjs <11bba5f full SHA> <its manifest> final-qualification-13
+    bash tests/iam-ui-46/account-browser.sh <11bba5f full SHA> <its manifest> final-qualification-13 verify
+    bash tests/iam-ui-46/account-browser.sh <11bba5f full SHA> <its manifest> final-qualification-13 stop
+
+Exact manifests/archives/logs and retained RED/harness failures are in
+[section 21](integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08)
+and its [Server ledger](evidence/inspection-final-runs.tsv). Final health-negative qualification
+used direct offline Surefire `ServerSmokeTest` against the already compiled `5d60b27` target;
+it was not a product PostgreSQL health claim. Every actual browser uses installed Chrome155,
+Playwright1.62.1, normal certificate trust and the owned ephemeral loopback18446 fixture.
+Database retained, marked schemas/listeners/private fixture removed; preview18444 untouched.
 
 ## Qualification order
 
@@ -68,7 +95,7 @@ adapter/browser acceptance. The final suite is not the first execution of earlie
 
 ## Scenario/oracle crosswalk
 
-The table below retains planned whole-feature oracles. Actual Account portions V01/V02/V08 and synthetic V09 are retained in handoff section 16, T034 successor in section 17, and Project V03 plus bounded Project V07/V08 in section 18. Assignment/Custom/Inspector/final cross-screen qualification remains NOT-RUN; Project participation is not general assignment qualification.
+The table below retains planned whole-feature oracles. Actual Account V01/V02/V08 and synthetic V09 are in handoff section 16, T034 successor in section 17, Project in section 18, assignments in section 19, Custom Role in section 20, Inspector/final cross-screen and affected regression in section 21. These are engineering results, not independent whole-feature acceptance. Project participation is not general product authorization; UI-A01 qualifies only the approved fail-closed history boundary.
 
 | Case | FR / SC | Procedure and expected oracle |
 |---|---|---|

@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.3 execution status successor / Draft partially IMPLEMENTED; accepted technical semantics unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.4 execution status successor / Draft engineering-qualified branch profile; audit.read remains DESIGN; accepted technical semantics unchanged |
 | Authority / owner / author | INFORMATIVE refinement of DOC-06/REQ-AUTH-001…010 / Access Policy; named accountable owner UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; qualified subsets in handoff sections 16/18/19; remaining runtime NOT-RUN / NOT-APPLICABLE |
+| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; qualified action evidence in handoff sections 16–21; whole-feature external review / PG5 pending / NOT-APPLICABLE for deployment |
 | Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git and immutable referenced versions |
 | Change / upstream / downstream | Issue #46 / [Core data owner](../../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md), [change record](../../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / [operations](operations.md), [data model](../data-model.md), future tests |
-| Supersession / trigger / evidence | Old role/Permission semantics not replaced / code, version, principal, scope or delegation change / exact role/profile seed qualified; actual action availability in handoff sections 16/18/19 |
+| Supersession / trigger / evidence | Old role/Permission semantics not replaced / code, version, principal, scope or delegation change / exact role/profile seed qualified; actual action availability in handoff sections 16–21 and [closure matrix](../evidence/feature-009-closure-matrix.md) |
 
 ## 1. Registry
 
@@ -35,16 +35,16 @@ a direct/Org assignment. Org inheritance covers only the declared descendant act
 | project.group.membership.remove | Project Governance: end selected Group membership | O/P; direct administration | IMPLEMENTED branch qualification |
 | project.read | Project Governance: participant's bounded Project identity/context | O/P; participant membership required | IMPLEMENTED branch qualification |
 | role.catalogue.read | Access Policy: supported catalogue/version/diff | O/P; redacted authorized administration | IMPLEMENTED branch qualification |
-| role.definition.prepare | Access Policy: prepare/validate permitted Custom candidate | O/P; declared delegation envelope | DESIGN |
-| role.definition.activate | Access Policy: seal immutable permitted Custom successor | O/P; current envelope + expected base | DESIGN |
+| role.definition.prepare | Access Policy: prepare/validate permitted Custom candidate | O/P; declared delegation envelope | IMPLEMENTED; US4 qualification |
+| role.definition.activate | Access Policy: seal immutable permitted Custom successor | O/P; current envelope + expected base | IMPLEMENTED; US4 qualification |
 | role.assignment.manage.business | Access Policy: preview/grant/end/replace business role | O/P; exact delegation/principal/scope | IMPLEMENTED branch qualification |
 | role.assignment.manage.administration | Access Policy: AA/PA/Audit Reader or permitted administrative Custom assignments | O/P; exact profile below | IMPLEMENTED branch qualification |
 | role.assignment.manage.highest | Access Policy: exact Super/PRA assignment changes | O-authorized effective protected Super; Super targets O, PRA targets declared O/P inside same Org | IMPLEMENTED branch qualification |
-| access.inspect | Access Policy: safely redacted assignment/path explanation | O/P; authorized read scope | IMPLEMENTED bounded assignment reads; Inspector UI-R10 DESIGN |
+| access.inspect | Access Policy: safely redacted assignment/path explanation | O/P; authorized read scope | IMPLEMENTED bounded assignment reads and UI-R10 Inspector; US5 qualification |
 | audit.read | Audit owner: bounded attributable administration history | O/P; authorized read scope | DESIGN; no export/mutation |
 | role.assign.account-administrator | Access Policy: legacy exact AA@1/@2 grant | O; direct Actor; legacy profile unchanged | IMPLEMENTED INTERNAL |
 
-The frozen design has 25 exact codes (historically 6 predecessor + 19 DESIGN). Current qualified owner actions are 22; Custom prepare/activate and audit.read remain DESIGN. Redemption authenticates with
+The frozen design has 25 exact codes (historically 6 predecessor + 19 DESIGN). Current qualified owner actions are 24; only audit.read remains DESIGN. Redemption authenticates with
 target-bound proof, not an issuance Permission. Session/context is ordinary eligible-self access,
 not an added role. DESIGN availability is not assignable/executable until the owner action is
 implemented and qualified. Document/Checkout/Approval/Release and Product Configuration remain
@@ -56,10 +56,11 @@ Current US3 availability is an exact Server projection, not inferred from this d
 AA@1/@2/@3, PA@1 and Super@1 content is qualified for ordinary supported granting; PRA@1,
 Audit Reader@1 and Super@2 ordinary granting are non-selectable until all their content is
 qualified. Existing Q15-adopted Super@2 can exercise its qualified current assignment paths;
-this does not qualify ordinary granting of its remaining content. `access.inspect` currently
-qualifies UI-R05 assignment reads, not UI-R10 Inspector. Existing sealed business roles may be
-assigned within their declared scope/envelope; the US3 synthetic prerequisite is not Custom
-prepare/activation implementation. See [current evidence](../integration-readiness.md#19-role-assignment-ui-usable-vertical-slice--2026-10-08).
+this does not qualify ordinary granting of its remaining content. `access.inspect` now qualifies
+UI-R05 assignment reads and UI-R10 Inspector. Existing sealed business roles and US4-activated
+Custom versions may be assigned within their declared scope/envelope. No assignment is moved
+automatically. PRA@1/Super@2/Audit Reader@1 remain non-selectable because audit.read is DESIGN.
+See [current evidence](../integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
 
 | Exact role | Declared content / support |
 |---|---|

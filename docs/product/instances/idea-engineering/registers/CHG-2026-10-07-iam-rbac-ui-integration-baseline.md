@@ -2,17 +2,17 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.3` / Draft documentation-repair successor |
+| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.4` / Draft execution-status successor; independent acceptance pending |
 | Product normativity / process state | INFORMATIVE record of confirmed intent and required baseline refinement / NOT-APPLICABLE |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / CODEX_ONLY |
-| Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d and DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d via human conversation on 2026-10-07 / applicable formal Product Decision Authority gates and execution readiness NOT-RUN |
+| Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d and DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d via human conversation on 2026-10-07; explicit successor PG2/PG3/PG4 PASS recorded in readiness / whole-feature external review and PG5 pending |
 | Baseline / publication / effective date | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / NOT-APPLICABLE until applicable approval |
 | Classification / retention | INTERNAL / retain decisions, predecessor sources and supersession history in Git |
 | Upstream | [DOC-04](../DOC-04-software-requirements-specification.md), [DOC-05](../DOC-05-architecture-description.md), [DOC-06](../DOC-06-data-integration-and-migration-specification.md), [DOC-08](../DOC-08-ui-ux-and-interaction-specification.md), [ADR-0012](../../../../adr/0012-use-principal-role-scope-rbac.md), [domain language](../../../../../CONTEXT.md) |
 | Downstream / change | [Spec Kit 009](../../../../../specs/009-iam-rbac-ui-integration/spec.md), [source inventory](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md), [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
 | Supersession | No accepted record superseded; UI presentation specs 007/008 remain lineage rather than authoritative integration requirements |
 | Review trigger | Role/scope/delegation, credential channel, supported actions or owner-contract changes |
-| Evidence | User-confirmed design session and read-only source inspection; no new execution, gate PASS, company-rollout or independence claim |
+| Evidence | Historical user-confirmed design/read-only source inspection retained; current engineering execution in readiness section 21; no company rollout or independent acceptance claim |
 | Standards tailoring | IE-STD-AUTH-001 control/decision rules; STD-INFO-001 and STD-CM-001 STANDARD-GUIDED identity/change accounting, no conformity claim |
 
 ## 1. Intent and approval boundary
@@ -20,6 +20,15 @@
 The user wants the existing account/permission UI connected to actual native IDEA identity, scoped RBAC and Project/Group state. They do not want a standalone mock or only account CRUD. The confirmed presentation is retained where practical.
 
 The user confirmed Q14 on 2026-10-07. At original spec head e227cb1df60e70a1294628b4f153ad50d8f034c6 this recorded preparation, not independent written review. Subsequently the Project Reviewer reported SPEC REVIEW PASS for that exact head and accepted planning, not implementation. Q15 separately confirms inclusion of a narrow console successor-adoption design. No successor PG2/PG3/PG4 or runtime/rollout PASS is inferred.
+
+Current-reading successor, 2026-10-08: explicit PG2/PG3/PG4 and subsequent FAST DELIVERY
+execution authority are recorded in [readiness](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md).
+Account → Project/Group → Assignment → immutable Custom Role → Inspector are engineering-qualified
+on the retained original presentation. Final actual-browser/recovery and affected regression
+are linked in section 21; 92/93 tasks complete, T093 awaits external review. audit.read/history
+projection remains DESIGN, secret detector NOT-PASS with manual dispositions, verifier NOT-RUN.
+This does not alter Q14/Q15/30 FR/9 SC or historical gate/review text. No live adoption,
+deployment, merge, Issue closure, PG5 or Tracker action is authorized by this publication.
 
 The request does not restart F03/F04/PH1, start a Delivery Card or modify its timer. No new production authority is inferred from an old UI branch/spec labelled F04.
 

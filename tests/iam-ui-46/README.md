@@ -292,5 +292,37 @@ no Node-side request client, TLS bypass, private diagnostics, HAR or screenshots
 DB oracle: six accepted Custom mutations + one stale refused; seven Audit/fourteen authorization
 rows; two definitions/three sealed versions; two explicit assignment transitions/no implicit
 assignment or retry duplicate. Owned JVM exits before exact schema cleanup; DB/logs retained.
-Historical failed roots are preserved. Inspector/final whole-feature work, verifier, deployment
-and merge remain NOT-RUN.
+Historical failed roots are preserved. At that US4 checkpoint, Inspector/final whole-feature
+work was NOT-RUN. Current successor qualification is below; verifier/deployment/merge remain NOT-RUN.
+
+## Access Inspector and final integration milestone
+
+[Handoff section 21](../../specs/009-iam-rbac-ui-integration/integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08)
+and [closure matrix](../../specs/009-iam-rbac-ui-integration/evidence/feature-009-closure-matrix.md)
+are the current reviewer entry points. Final production change is a451459; final executed
+package/Web/browser source is `11bba5ff7eb583d5f594d8dbcdb4388dd1fe2246`. Published status/docs
+successors do not imply another build or qualification. Inspector uses the one existing
+evaluator; history remains DESIGN and refuses; exact safe operation metadata never replays.
+
+Executed final Web60 + typecheck, headed Chrome8 and package/fixture oracle PASS. Affected
+Server153 PASS are distinct-source runs listed in the [ledger](../../specs/009-iam-rbac-ui-integration/evidence/inspection-final-runs.tsv),
+not one same-SHA total. Historical slice qualification remains unchanged. Browser I05 includes
+actual response loss and bad-CSRF refusal plus separately labelled Web-only injected errors;
+real query failure is qualified by PostgreSQL SELECT denial, not that injection.
+
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> final-qualification-13 build
+    pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical JAR> -RepositoryRoot <raw export>
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> final-qualification-13 start
+    <approved Windows Node> <raw export>/tests/iam-ui-46/inspection-browser.mjs <source> <manifest> final-qualification-13
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> final-qualification-13 verify
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> final-qualification-13 stop
+
+Same approved database, marked migrator-owned fresh schema, app/migrator separation,
+offline cached tool/graph, normally trusted HTTPS and admitted Chrome155/Playwright1.62.1.
+The three `iamIntegration.*.test.ts` modules assert actual headed Chrome observations, not
+additional Vitest browser counts. Synthetic prerequisite identities/assignments are disclosed
+as fixture setup. Exactly one real Project outcome/Audit and no inspection-generated state.
+Owned JVM exits before exact guarded schema cleanup; forward/listeners/private fixture removed,
+DB and failed roots/logs retained. No public migration, live adoption, preview or company data.
+Tracked-secret detector remains NOT-PASS with author manual dispositions; no exemption added.
+T093 / external acceptance / PG5 pending. PR #47 Draft/Open; no timer action or merge.

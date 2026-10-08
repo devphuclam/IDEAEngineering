@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft — written spec accepted at e227cb1df60e70a1294628b4f153ad50d8f034c6; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; task/Analyze metadata repair only; implementation NOT-STARTED
+**Status**: Draft — written spec/design accepted at their retained exact heads; PG2/PG3/PG4 PASS; branch engineering qualification completed through US5/final browser. Independent whole-feature review/PG5 pending; not deployed or merged.
 
 **Input**: User-confirmed native account, Project/Group and RBAC journeys: explicit scopes, two principal modes, independent multiple roles, immutable role versions, constrained delegation and separation of administration from engineering participation.
 
@@ -12,15 +12,15 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.2` metadata successor; 30 FR/9 SC unchanged |
+| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.3` execution-status successor; 30 FR/9 SC unchanged |
 | Product normativity | INFORMATIVE relative to the Core baseline; FRs are candidate delivery obligations. DOC-04 remains the sole product SRS; no Core obligation or gate is independently approved here. |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / `CODEX_ONLY` |
-| Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d and DESIGN REVIEW PASS for 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 through human conversation / applicable formal Product Decision Authority gates and increment readiness NOT-RUN |
+| Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d and DESIGN REVIEW PASS for 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 through human conversation; explicit PG2/PG3/PG4 PASS recorded in readiness / independent whole-feature review and PG5 pending |
 | Applicable baseline | Integrated main `4e5244430ea89ffe878819e1279f6e05c60d610a`; accepted PH1 and API predecessors retained |
 | Date / effective date | 2026-10-07, `Asia/Ho_Chi_Minh` / `NOT-APPLICABLE` until applicable approval |
 | Classification / retention | `INTERNAL`; retain specification and supersession history in Git |
 | Upstream / change | [Decision and impact record](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md), [Work Item #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
-| Downstream | [Reviewed written plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md), [repaired tasks](tasks.md) and [current handoff](integration-readiness.md); runtime execution NOT-RUN |
+| Downstream | [Reviewed written plan](plan.md), [Permission/delegation catalogue](contracts/permission-delegation.md), [operations](contracts/operations.md), [reviewer checklist](checklists/design-review.md), [tasks](tasks.md) and [current executed handoff](integration-readiness.md); qualification is branch engineering evidence, not acceptance |
 | Supersession | Does not supersede PH1, accepted ADR-0012 or existing API contracts. UI branches are presentation lineage. |
 | Review trigger / evidence | Scope, permission, role-version, delegation, credential channel or owner-interface change / source inspection and user decisions only; runtime tests and verifier `NOT-RUN` |
 | Standards tailoring | `IE-STD-AUTH-001`: clarity/trace guided by STD-REQ-001, record identity by STD-INFO-001, acceptance design by STD-TEST-001…004. No conformity claim. |
@@ -250,10 +250,22 @@ Verification methods: positive/negative controlled flow, state/history inspectio
 - Existing UI branches remain untouched. Reuse is selective; mock security behavior is not accepted implementation. An explicitly isolated mock preview may remain; live failure cannot enable it.
 - Company data/accounts, new tooling authority, environment mutation and rollout require their applicable separate readiness decisions.
 
-## Review and lifecycle disposition
+## Historical written-spec publication disposition
 
 Conversational decisions including Q14 are confirmed. Project Reviewer reported written-spec PASS at exact e227cb1df60e70a1294628b4f153ad50d8f034c6 on 2026-10-07 and authorized planning only. The original 30 FR/9 SC semantics are unchanged. Q15 separately authorizes preparing a narrow console adoption design, recorded as D13, not running it. Successor Core/design review remains pending; SPEC-OPEN-03/06 are only partially clarified.
 
 Current next step: review the Core/interface successors, plan and exact contracts with the reviewer-owned checklist → speckit-tasks → read-only speckit-analyze → explicitly authorized TDD vertical slices → standards/spec review and convergence.
 
 No plan/tasks are fabricated before their lifecycle stage. Publication of this Draft does not authorize implementation, runtime testing, product-gate approval, timer action, merge or deployment.
+
+## Current execution and reviewer handoff — 2026-10-08
+
+Design, Tasks and read-only Analyze were subsequently accepted at the recorded exact sources;
+explicit PG2/PG3/PG4 and FAST DELIVERY authority enabled bounded implementation. The historical
+next-step paragraph above is not the current gate. Engineering qualification now covers the
+supported Account/Project/Group/Assignment/Custom Role/Inspector profile, **92/93 tasks**.
+See [section 21](integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08)
+and the [closure matrix](evidence/feature-009-closure-matrix.md) for actual source/test/evidence,
+unsupported audit.read/history, retained failed runs and tracked-secret detector NOT-PASS.
+Next action is independent whole-feature review / T093 / PG5, not another spec/planning cycle.
+No feature acceptance, deployment, live adoption, merge or Tracker action is inferred here.
