@@ -1,5 +1,7 @@
 import {describe,it,expect} from "vitest";
 import {createIamClient,type IamResult} from "../../api/iamClient";
+import {renderToStaticMarkup} from "react-dom/server";
+import {CustomRoleEditor} from "./CustomRoleEditor";
 const id="00000000-0000-4000-8000-000000000046",scope={kind:"ORGANIZATION",organizationId:id};
 const candidate={candidateId:id,definitionId:id,roleCode:"custom-"+id,displayName:"Synthetic",managementScope:scope,baseVersionId:null,proposedRoleVersion:1,classification:"BUSINESS",support:{scopeKinds:["PROJECT"],principalKinds:["ACTOR","PROJECT_GROUP"]},permissionCodes:["project.read"],contentDigest:"a".repeat(64),version:1,state:"CANDIDATE",activatedVersionId:null,difference:{added:["project.read"],removed:[],unchanged:[]}};
 const permission={code:"project.read",owner:"Project",scopeKinds:["PROJECT"],principalKinds:["ACTOR","PROJECT_GROUP"],participantMembershipRequired:true,implementationState:"IMPLEMENTED"};
@@ -25,5 +27,13 @@ describe("Custom Role ordinary session and immutable owner boundary",()=>{
   it("malformed candidate or validation cannot be called confirmed",async()=>{
     const client=createIamClient(async path=>path.endsWith("/csrf")?csrf():Response.json({success:true},{status:201})) as unknown as Planned;
     expect((await client.prepareRole({})).kind).toBe("unresolved");
+  });
+  it("uses original authored presentation and explicitly separates activation from assignments",()=>{
+    const html=renderToStaticMarkup(<CustomRoleEditor context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Actual Organization",actions:["role.definition.prepare","role.definition.activate"]}} onInvalidated={()=>{}}/>);
+    expect(html).toContain("admin-main-title");expect(html).toContain("admin-inspector");expect(html).toContain("Actual Organization");expect(html).toContain("Không sửa built-in hoặc tự chuyển assignment");expect(html).not.toContain("demo-admin");
+  });
+  it("no preparation authority cannot render a pretend mutation form",()=>{
+    const html=renderToStaticMarkup(<CustomRoleEditor context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Actual Organization",actions:[]}} onInvalidated={()=>{}}/>);
+    expect(html).toContain("Chưa có authority prepare");expect(html).not.toContain('aria-label="Chuẩn bị Custom Role"');
   });
 });

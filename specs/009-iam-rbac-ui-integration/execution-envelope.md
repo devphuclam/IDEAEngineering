@@ -319,3 +319,30 @@ and preview tests run vertically with fresh assignment-red/green/qualification-N
 Source commits/manifests precede runs; coherent milestone is pushed once. Same guarded schema
 cleanup after owned JVM exit, database/logs retained, no broad cleanup. Verifier/deploy/merge
 NOT-RUN; Issue #46 remains open, PR #47 Draft/Open. Historical sections and hashes unchanged.
+
+## 9. US4 FAST DELIVERY continuation — 2026-10-08
+
+Human authorization at accepted predecessor `febe59dee53fbee060a18692a7d15ce3b4f50b7e` covers
+T065–T074 only: real Custom candidate/validation/immutable activation, explicit assignment
+preservation/replacement regression and original Web integration. CODEX_ONLY. Reuse the exact
+section 7/8 tooling, normally trusted HTTPS/Chrome and dedicated database; no download, dependency,
+architecture, deployment or trust change. UI-R01 remains the US3 adapter. Audit query and Inspector
+remain outside this slice; registry presence is not qualification. Existing PRA prerequisites are
+synthetic controlled fixtures, not qualification of every built-in PRA permission.
+
+Controlled commands: `run-owner-tests.sh <source> <manifest> custom-role-{red,green,qualification}-NN
+<one allowed test class> <exact count> {RED,PASS}`; separate source-marked fresh schemas per class,
+offline direct Maven goals. `run-web-tests.ps1` uses existing hash-checked Windows cache/Node,
+either targeted Custom tests or the consolidated unchanged Web suites. Final
+`account-browser.sh <source> <manifest> custom-role-qualification-NN {build,start,verify,stop}`
+uses the new synthetic CustomRoleBrowserFixtureCommand, followed by headed
+`custom-role-browser.mjs <source> <manifest> <label>`. Only test loopback 18446 and owned SSH
+forward, generated private synthetic credentials in a mode-600 fixture, no retained secrets.
+The full manifest/raw export/transfer checks precede execution. Package oracle pins unchanged
+57 runtime JARs/notices plus exact additive migrations. Terminate owned JVM before exact marked
+schema cleanup; retain database and sanitized/hash evidence, remove private browser fixture.
+
+Normal first-party test/harness errors are fixed within this authorization and retained honestly.
+STOP on tool/graph/hash/trust/target drift or requirement/security contradiction. No Access
+Inspector, generic policy engine, arbitrary Permission or built-in rewrite. PR remains Draft/Open;
+whole feature, verifier, deployment, merge and timer changes remain NOT-RUN.

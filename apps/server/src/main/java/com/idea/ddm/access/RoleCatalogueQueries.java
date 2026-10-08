@@ -19,7 +19,7 @@ public final class RoleCatalogueQueries {
     private final DataSource source;
     private final OwnerSessionEligibility eligibility;
     private final AuthorizationDecisionService authorization;
-    // These owner boundaries are implemented/qualified; Custom publication and Audit queries are not.
+    // Current owner boundaries only; registry presence never qualifies Audit queries or other DESIGN actions.
     static boolean implemented(String code){return Set.of("account.read","account.create","account.disable","account.re-enable","account.credential.setup.issue","account.credential.reset.issue","project.create","project.admin.read","project.update","project.membership.assign","project.membership.remove","project.group.create","project.group.update","project.group.membership.assign","project.group.membership.remove","project.read","role.catalogue.read","role.definition.prepare","role.definition.activate","role.assignment.manage.business","role.assignment.manage.administration","role.assignment.manage.highest","access.inspect","role.assign.account-administrator").contains(code);}
     public RoleCatalogueQueries(DataSource source,OwnerSessionEligibility eligibility,AuthorizationDecisionService authorization){this.source=source;this.eligibility=eligibility;this.authorization=authorization;}
     public Page<Role> roles(ActorContext context,AuthorizationDecisionService.Scope scope,String filter,int offset,int limit){
