@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 
-const url = "https://localhost:5173/";
+const url = "https://localhost:5174/";
 const owned = "/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-44";
 const control = "/home/phuclam/idea-iam-ui-20261007-46/manual-dev-01/backend.sh";
 const source = "9d3732cb173e8094195b9bdd60b5588ac3cfa42e";

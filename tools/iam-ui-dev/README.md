@@ -42,7 +42,8 @@ Fixtures seed named synthetic prerequisites, not a product adoption operation.
 - Existing admitted Linux Node24.21.0/hash and Vite8.3.1/React plugin cache only;
   cached Java25/JAR as above. No PATH Node or download. Existing bundle terms remain.
 - Server: HTTPS `127.0.0.1:18446`, unchanged packaged configuration.
-- Vite: HTTPS `127.0.0.1:5173`; Windows forward `127.0.0.1:5173` only.
+- Vite: HTTPS `127.0.0.1:5173`; Windows forward `127.0.0.1:5174` only.
+  Initial Windows5173 conflict was refused without signalling its unrelated owner.
 - `/api` forwards to HTTPS127.0.0.1:18446 using the dedicated certificate as CA,
   normal endpoint verification, `secure: true`; no CORS/auth change or TLS bypass.
 - Existing test certificate SHA-256
@@ -68,7 +69,7 @@ cd C:\Users\TD-999\.codex\worktrees\iam-rbac-ui-spec\IDEAEngineering\apps\web
 npm run dev
 ```
 
-Keep that terminal open; browse `https://localhost:5173/` without any TLS warning.
+Keep that terminal open; browse `https://localhost:5174/` without any TLS warning.
 In a second **private, non-recorded** terminal, `npm run dev:credentials` gives
 the synthetic passwords. Never send them to chat or capture them in evidence.
 The command requires an interactive output terminal; automated tests read the
