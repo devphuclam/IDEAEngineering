@@ -1488,6 +1488,18 @@ SSH forward PID30328 owned and stopped; both listeners absent. Exact schema rema
 public tables 0; private fixture removed, database and historical failure logs retained.
 82 toolchain + 544 resolved inputs/source/package rechecked; final Node/Chrome hashes unchanged.
 
+Publication checks: 80 relative documentation links resolve; 32 unique operation IDs and
+64/93 task markers agree. The final JAR hash matches and excludes assignment browser/test
+fixture classes. The tracked-secret detector remains **NOT-PASS** (six credential-assignment
+matches), not an automated PASS. Manual inspection found no retained working credential:
+`TransferClientBoundaryTest` and `GatewayHttpQualification` generate/read private test TLS
+material; `account-browser.sh` reads the existing owner-only TLS/database credential files;
+credential redemption tests submit a fixed synthetic string only to an in-memory HTTP double;
+Project and Assignment Web tests deliberately inject dummy `password` fields to qualify
+redaction. The new US3 match is `assignmentWizard.test.tsx`'s dummy redaction input. No detector
+rule was weakened or finding erased; these are manual author dispositions, not verifier or
+independent secret-review acceptance.
+
 PR #47 stays Draft/Open and Issue #46 stays open. T065–T093, Custom Role publication,
 Inspector/history/general resolution and full US6/whole-feature qualification remain later work.
 No persistent deployment, live adoption, verifier, merge, timer action or company/Vault data.
