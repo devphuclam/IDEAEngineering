@@ -18,12 +18,15 @@ class ProjectGovernanceDataTest {
         var actor=fixtures.identity(IamIntegrationFixtures.Persona.ORDINARY);
         http.withSignedInClient(actor,(client,context)->{
             var prerequisite=new ProjectPrerequisiteFixture(fixtures);var p=prerequisite.project(actor);var other=prerequisite.project(actor);var g=prerequisite.group(p,actor);var org=UUID.randomUUID();var foreign=UUID.randomUUID();
-            prerequisite.insert("INSERT INTO operating_organization(organization_id,display_name) VALUES (?,?)",org,"Synthetic other Organization");
+            // Core v0 deliberately permits one operating Organization. Never weaken that invariant
+            // to fabricate a second runtime tenant; test mismatched exact foreign keys instead.
+            assertEquals("23505",assertThrows(SQLException.class,()->prerequisite.insert("INSERT INTO operating_organization(organization_id,display_name) VALUES (?,?)",org,"Synthetic other Organization")).getSQLState());
             prerequisite.insert("INSERT INTO actor(actor_id,display_name) VALUES (?,?)",foreign,"Synthetic foreign Actor");
-            prerequisite.insert("INSERT INTO idea_account(account_id,actor_id,organization_id,status) VALUES (?,?,?,'ACTIVE')",UUID.randomUUID(),foreign,org);
+            assertEquals("23503",assertThrows(SQLException.class,()->prerequisite.insert("INSERT INTO idea_account(account_id,actor_id,organization_id,status) VALUES (?,?,?,'ACTIVE')",UUID.randomUUID(),foreign,org)).getSQLState());
             rejected("23503","INSERT INTO project_membership(membership_id,project_id,organization_id,actor_id,effective_from,reason,created_by) VALUES (?,?,?,?,CURRENT_TIMESTAMP,'Boundary',?)",UUID.randomUUID(),p.projectId(),actor.organizationId(),foreign,actor.actorId());
             rejected("23503","INSERT INTO group_membership(membership_id,group_id,project_id,organization_id,actor_id,effective_from,reason,created_by) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP,'Boundary',?)",UUID.randomUUID(),g.groupId(),other.projectId(),actor.organizationId(),actor.actorId(),actor.actorId());
             rejected("23503","INSERT INTO group_membership(membership_id,group_id,project_id,organization_id,actor_id,effective_from,reason,created_by) VALUES (?,?,?,?,?,CURRENT_TIMESTAMP,'Boundary',?)",UUID.randomUUID(),g.groupId(),p.projectId(),actor.organizationId(),foreign,actor.actorId());
+            rejected("23503","INSERT INTO project_membership(membership_id,project_id,organization_id,actor_id,effective_from,reason,created_by) VALUES (?,?,?,?,CURRENT_TIMESTAMP,'Boundary',?)",UUID.randomUUID(),p.projectId(),org,actor.actorId(),actor.actorId());
             assertEquals(0,count("SELECT count(*) FROM information_schema.columns WHERE table_schema=current_schema() AND table_name IN ('business_group','group_membership') AND column_name IN ('parent_group_id','principal_group_id')"));return null;
         });
     }
@@ -51,11 +54,15 @@ class ProjectGovernanceDataTest {
                 var column=table.equals("project_owner_outcome")?"target_id":table.equals("project_authorization_evidence")?"actor_id":"version";
                 rejected("42501","UPDATE "+table+" SET "+column+"="+column);
             }
-            try(var c=fixtures.app();var s=c.createStatement()){
+            rejected("42501","CREATE TEMP TABLE project(project_id UUID)");
+            // The existing DB denies app TEMP. Migrator creates only this owned temporary decoy;
+            // the actual narrow-function invocation still runs as the separate app role.
+            try(var c=fixtures.migrator();var s=c.createStatement()){
                 s.execute("CREATE TEMP TABLE project(project_id UUID,organization_id UUID,display_name TEXT,version BIGINT)");
+                s.execute("GRANT SELECT ON pg_temp.project TO idea_ddm_app");s.execute("SET ROLE idea_ddm_app");
                 try(var q=c.prepareStatement("SELECT project_change(?,?,?,?)")){q.setObject(1,p.projectId());q.setObject(2,p.organizationId());q.setLong(3,1);q.setString(4,"Exact permanent Project");try(var r=q.executeQuery()){assertTrue(r.next());assertTrue(r.getBoolean(1));}}
                 try(var r=s.executeQuery("SELECT count(*) FROM pg_temp.project")){assertTrue(r.next());assertEquals(0,r.getLong(1));}
-                s.execute("DROP TABLE pg_temp.project");
+                s.execute("RESET ROLE");s.execute("DROP TABLE pg_temp.project");
             }
             assertEquals(2,count("SELECT version FROM project WHERE project_id='"+p.projectId()+"'"));return null;
         });
