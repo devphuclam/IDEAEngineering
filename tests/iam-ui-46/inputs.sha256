@@ -76,7 +76,7 @@ cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/sr
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
-b52bf77fa91dee9c98ca2aecd3a7656e4c30b7118ee44411cb9b60cacc907afc  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentContractTest.java
+f8781cc4bbda623ec5556776d2ac6b7641987bf8986b44036d428615287934c3  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentContractTest.java
 555f23c4e60120f87a7db007eea3a9739dac1f94a3a63f0339d6b06f1114fa0c  apps/server/src/test/java/com/idea/ddm/access/SuperSuccessorAdoptionNegativeTest.java
 6e75e012283ee45f618b6cb38082df20a7efa6385b774ef8e1dfdb0458774244  apps/server/src/test/java/com/idea/ddm/access/SuperSuccessorAdoptionTest.java
 82931e01c2e997ee4c3d700b7010645f853ef2f7ad44f5b7bbeac1f7b489b030  apps/server/src/test/java/com/idea/ddm/audit/AuditEvidenceRepositoryTest.java
