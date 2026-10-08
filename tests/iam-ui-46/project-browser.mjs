@@ -99,6 +99,6 @@ try{
   stage="keyboard-cookie-privacy-logout";await page.setViewportSize({width:780,height:900});await page.keyboard.press("Tab");assert.equal(await page.evaluate(()=>document.activeElement!==document.body),true);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   for(const tab of [page,scoped,ordinary])await privacy(tab);assert.equal(leak||callerActor,false);
   await page.getByRole("button",{name:"Đăng xuất",exact:true}).click();await page.getByRole("form",{name:"Đăng nhập",exact:true}).waitFor();await page.reload();await page.getByRole("form",{name:"Đăng nhập",exact:true}).waitFor();pass("P08_KEYBOARD_RESPONSIVE_PRIVATE_SESSION_LOGOUT");
-  for(const context of contexts)await context.close();console.log(`PROJECT_GROUP_BROWSER=PASS;SOURCE=${source};CASES=${passed.length};HTTPS=NORMAL_TRUST;CHROME=154.0.8037.98;RETAINED_SECRETS=0`);
+  for(const context of contexts)await context.close();console.log(`PROJECT_GROUP_BROWSER=PASS;SOURCE=${source};CASES=${passed.length};HTTPS=NORMAL_TRUST;CHROME=155.0.8059.39;RETAINED_SECRETS=0`);
 }catch{console.error(`PROJECT_GROUP_BROWSER=FAIL;STAGE=${stage};NO_PRIVATE_DIAGNOSTICS_RETAINED=true`);process.exitCode=1;}
 finally{if(browser)await browser.close();secrets.length=0;fixture=undefined;}
