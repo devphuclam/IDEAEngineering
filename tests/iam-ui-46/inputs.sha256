@@ -184,7 +184,7 @@ e36518deed06694be86ea033bd56d2a47ed41481bb97cc0ffaf04e2dd4f15492  tests/iam-ui-4
 e9799071bcf0c3e452a451ffb417a0a8f403804f94a55923cffeb330ed8b48af  tests/iam-ui-46/README.md
 14ea90166d85901c0f2a70afb423ded0b19c9e9f6a9ee41d422ce76ad38f1d51  tests/iam-ui-46/run-owner-tests.sh
 8e827c5ced48105260bb3c8c7af2ec7777d2d1903cf205f4f1d208a88e1756da  tests/iam-ui-46/run-web-tests.ps1
-5d4506c387a34e4b32d886bf684cb77d4504168e246b2eba6a641e3db4417844  tests/iam-ui-46/vitest.config.mjs
+ce43edb2bebe35c94729affcf7aaa7afa59de6ed6f53cf767cfe4fa3aba19bee  tests/iam-ui-46/vitest.config.mjs
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
 7d949e38c84368a297c51b3fb0932128ae73b8c56efec8d4591508d0d6ed9395  tools/iam-ui-readiness/package-preflight.ps1
