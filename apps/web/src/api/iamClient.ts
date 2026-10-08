@@ -54,9 +54,9 @@ function historySnapshot(value:unknown):HistorySnapshot|null{
   for(const field of fields){const v=data[field];if(v===undefined||v===null)continue;if(typeof v==="string")safe[field]=text(v,500);else if(typeof v==="number"&&Number.isSafeInteger(v)&&v>=1)safe[field]=v;else if(field==="permissionCodes"&&Array.isArray(v)&&v.length<=25)safe[field]=v.map(c=>text(c,120));else throw new Error("Invalid retained history state");}return safe;
 }
 function historyView(value:unknown,requested:AssignmentScope):AdministrationHistory{
-  const d=object(value),scope=assignmentScope(d.scope);if(scope.kind!==requested.kind||scope.organizationId!==requested.organizationId||scope.projectId!==requested.projectId&&!((scope.projectId??null)===(requested.projectId??null)))throw new Error("Unexpected history scope");
+  const d=object(value),scope=assignmentScope(d.scope),occurredAt=nullableInstant(d.occurredAt);if(!sameScope(scope,requested)||!occurredAt)throw new Error("Unexpected history scope/time");
   if(!["IAM","PROJECT","ASSIGNMENT","ROLE_DEFINITION"].includes(String(d.owner))||!["ACCEPTED","REFUSED"].includes(String(d.outcome)))throw new Error("Invalid history owner/outcome");
-  return {operationId:identifier(d.operationId),owner:text(d.owner,30),actorId:identifier(d.actorId),scope,action:text(d.action,120),targetId:d.targetId===null?null:identifier(d.targetId),outcome:d.outcome as AdministrationHistory["outcome"],reasonCode:d.reasonCode===null?null:text(d.reasonCode,120),reason:d.reason===null?null:text(d.reason,500),correlationId:d.correlationId===null?null:text(d.correlationId,120),occurredAt:instant(d.occurredAt),before:historySnapshot(d.before),after:historySnapshot(d.after)};
+  return {operationId:identifier(d.operationId),owner:text(d.owner,30),actorId:identifier(d.actorId),scope,action:text(d.action,120),targetId:d.targetId===null?null:identifier(d.targetId),outcome:d.outcome as AdministrationHistory["outcome"],reasonCode:d.reasonCode===null?null:text(d.reasonCode,120),reason:d.reason===null?null:text(d.reason,500),correlationId:d.correlationId===null?null:text(d.correlationId,120),occurredAt,before:historySnapshot(d.before),after:historySnapshot(d.after)};
 }
 const requestOptions = { credentials: "same-origin", cache: "no-store", redirect: "error" } as const;
 
