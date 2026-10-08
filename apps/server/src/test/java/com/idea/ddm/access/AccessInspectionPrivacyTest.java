@@ -49,7 +49,7 @@ class AccessInspectionPrivacyTest {
             var projects=new com.idea.ddm.project.ProjectPrerequisiteFixture(f.rows);var a=projects.project(writer);var b=projects.project(writer);
             var scopeA=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),a.projectId());var scopeB=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),b.projectId());
             var roles=new AuthorizationPrerequisiteFixture(f.rows);var now=Instant.parse("2026-10-07T05:59:59Z");
-            roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeB,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);
+            roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeB,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.AUDIT_V1,scopeA,now,null);
             var op=UUID.randomUUID();
             assertEquals(403,f.post(client,"/api/v1/administration/projects/"+a.projectId()+"/update",Map.of("operationId",op,"scope",scopeA,"name","Denied A","expectedVersion",1,"reason","Synthetic refused attempt")).statusCode());
             f.http.advance(java.time.Duration.ofSeconds(1));
@@ -57,7 +57,7 @@ class AccessInspectionPrivacyTest {
             long audit=f.count("SELECT count(*) FROM audit_evidence");
             var hidden=get(reader,operation(op)+"&projectId="+a.projectId());assertEquals(200,hidden.statusCode());assertEquals("UNRESOLVED",f.json.readTree(hidden.body()).path("state").asString(),"A reader must not see B through an earlier refused scope");
             var own=get(client,operation(op)+"&projectId="+b.projectId());assertEquals(200,own.statusCode());assertEquals("COMMITTED_ACCEPTED",f.json.readTree(own.body()).path("state").asString());assertEquals(b.projectId().toString(),f.json.readTree(own.body()).path("scope").path("projectId").asString());
-            assertEquals(audit,f.count("SELECT count(*) FROM audit_evidence"));return null;
+            var history=get(reader,"/api/v1/administration/history?organizationId="+f.rows.organizationId()+"&projectId="+a.projectId());assertEquals(200,history.statusCode());assertEquals(0,f.json.readTree(history.body()).path("items").size(),"Denied A scope cannot reveal a later committed B owner result");assertEquals(audit,f.count("SELECT count(*) FROM audit_evidence"));return null;
         }));
     }
     @Test void refusedAssignmentAttemptCannotPoisonScopeLookupOrCanonicalReplay()throws Exception{
@@ -66,7 +66,7 @@ class AccessInspectionPrivacyTest {
             var projects=new com.idea.ddm.project.ProjectPrerequisiteFixture(f.rows);var a=projects.project(writer);var b=projects.project(writer);
             var scopeA=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),a.projectId());var scopeB=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),b.projectId());
             var roles=new AuthorizationPrerequisiteFixture(f.rows);var now=Instant.parse("2026-10-07T05:59:59Z");
-            var temporary=roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);
+            var temporary=roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.AUDIT_V1,scopeA,now,null);
             var op=UUID.randomUUID();var refused=Map.of("operationId",op,"principal",Map.of("kind","ACTOR","actorId",target.actorId()),"scope",scopeA,"roleVersionId",AuthorizationPrerequisiteFixture.AA_V3,"reason","Denied admin delegation");
             assertEquals(403,f.post(client,"/api/v1/administration/assignments",refused).statusCode());
             f.http.advance(java.time.Duration.ofSeconds(1));
@@ -77,7 +77,7 @@ class AccessInspectionPrivacyTest {
             long audit=f.count("SELECT count(*) FROM audit_evidence");
             var hidden=get(reader,operation(op)+"&projectId="+a.projectId());assertEquals(200,hidden.statusCode());assertEquals("UNRESOLVED",f.json.readTree(hidden.body()).path("state").asString());
             var replay=f.post(client,"/api/v1/administration/assignments",accepted);assertEquals(201,replay.statusCode(),"Replay must use the committed B scope, not the denied A scope");assertEquals(f.json.readTree(first.body()),f.json.readTree(replay.body()));
-            assertEquals(audit,f.count("SELECT count(*) FROM audit_evidence"));return null;
+            var history=get(reader,"/api/v1/administration/history?organizationId="+f.rows.organizationId()+"&projectId="+a.projectId());assertEquals(200,history.statusCode());assertEquals(0,f.json.readTree(history.body()).path("items").size(),"Denied A scope cannot reveal a later committed B owner result");assertEquals(audit,f.count("SELECT count(*) FROM audit_evidence"));return null;
         })));
     }
     Map<String,Object> input(UUID actor,AuthorizationDecisionService.Scope scope){return Map.of("targetActorId",actor,"permissionCode","access.inspect","scope",scope);}

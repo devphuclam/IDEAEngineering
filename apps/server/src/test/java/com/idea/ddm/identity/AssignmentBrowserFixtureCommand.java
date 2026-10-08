@@ -22,11 +22,11 @@ public final class AssignmentBrowserFixtureCommand {
             if(!ProjectBrowserFixtureCommand.required("IDEA_IAM_SOURCE_SHA").equals(values.path("source").asString()))throw new SecurityException("Fixture source");
             var member=UUID.fromString(values.path("memberActorId").asString());var admin=UUID.fromString(values.path("adminActorId").asString());
             try(var c=fixture.app();var s=c.createStatement()){
-                expect(s,"SELECT count(*) FROM assignment_owner_operation",8);
-                expect(s,"SELECT count(*) FROM access_policy_owner_outcome WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation) AND outcome='ACCEPTED'",7);
+                expect(s,"SELECT count(*) FROM assignment_owner_operation",9);
+                expect(s,"SELECT count(*) FROM access_policy_owner_outcome WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation) AND outcome='ACCEPTED'",8);
                 expect(s,"SELECT count(*) FROM access_policy_owner_outcome WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation) AND outcome='REFUSED'",1);
-                expect(s,"SELECT count(*) FROM assignment_authorization_evidence WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation)",16);
-                expect(s,"SELECT count(*) FROM audit_evidence WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation)",8);
+                expect(s,"SELECT count(*) FROM assignment_authorization_evidence WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation)",18);
+                expect(s,"SELECT count(*) FROM audit_evidence WHERE operation_id IN(SELECT operation_id FROM assignment_owner_operation)",9);
                 expect(s,"SELECT count(*) FROM assignment_owner_operation o WHERE NOT EXISTS(SELECT 1 FROM audit_evidence a WHERE a.operation_id=o.operation_id)",0);
                 expect(s,"SELECT count(*) FROM identity_role_assignment a JOIN identity_role_version v USING(role_version_id) WHERE a.principal_actor_id='"+member+"' AND v.role_code='account-administrator' AND v.version IN(2,3) AND a.revoked_at IS NULL",2);
                 expect(s,"SELECT count(*) FROM identity_role_assignment WHERE principal_group_id IS NOT NULL",1);
@@ -34,7 +34,7 @@ public final class AssignmentBrowserFixtureCommand {
                 expect(s,"SELECT count(*) FROM group_membership WHERE actor_id='"+member+"'",1);
                 expect(s,"SELECT count(*) FROM project_membership WHERE actor_id='"+admin+"'",0);
             }
-            System.out.println("ASSIGNMENT_BROWSER_DB=PASS;ACCEPTED=7;REFUSED=1;EVIDENCE=16;AUDIT=8;ACTIVE_INDEPENDENT_AA=2;GROUP_PRINCIPAL=1;IMPLICIT_MEMBERSHIP=0;RETRY_DUPLICATES=0");return;
+            System.out.println("ASSIGNMENT_BROWSER_DB=PASS;ACCEPTED=8;REFUSED=1;EVIDENCE=18;AUDIT=9;ACTIVE_INDEPENDENT_AA=2;GROUP_PRINCIPAL=1;IMPLICIT_MEMBERSHIP=0;RETRY_DUPLICATES=0");return;
         }
         if(Files.exists(file))throw new SecurityException("Reused fixture");fixture.createSchema();
         var admin=fixture.identity(IamIntegrationFixtures.Persona.SUPER);var member=fixture.identity(IamIntegrationFixtures.Persona.LINH);var ordinary=fixture.identity(IamIntegrationFixtures.Persona.ORDINARY);

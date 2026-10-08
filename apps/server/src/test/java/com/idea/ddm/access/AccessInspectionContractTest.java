@@ -71,6 +71,34 @@ class AccessInspectionContractTest {
             });
         }
     }
+    @Test void historyReadAuthorityIsIndependentScopedRevocableAndBounded()throws Exception{
+        var writer=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var reader=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
+        f.http.withSignedInClient(writer,(client,ctx)->f.http.withSignedInClient(reader,(view,rc)->{
+            f.delegate(writer);var roles=new AuthorizationPrerequisiteFixture(f.rows);roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,f.scope(),java.time.Instant.parse("2026-10-07T05:59:59Z"),null);
+            var audit=roles.actorAssignment(reader,AuthorizationPrerequisiteFixture.AUDIT_V1,f.scope(),java.time.Instant.parse("2026-10-07T05:59:59Z"),null);
+            var op=UUID.randomUUID();assertEquals(201,f.post(client,"/api/v1/administration/projects",Map.of("operationId",op,"organizationId",f.rows.organizationId(),"name","Independent reader project","reason","Synthetic independent history")).statusCode());
+            String path="/api/v1/administration/history?organizationId="+f.rows.organizationId();long before=f.count("SELECT count(*) FROM audit_evidence");
+            var get=view.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path)).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,get.statusCode());assertTrue(f.json.readTree(get.body()).path("items").valueStream().anyMatch(v->v.path("operationId").asString().equals(op.toString())));
+            assertEquals(403,f.post(view,"/api/v1/administration/access-inspections",Map.of("targetActorId",writer.actorId(),"permissionCode","access.inspect","scope",f.scope())).statusCode());
+            assertEquals(403,view.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+UUID.randomUUID())).GET().build(),java.net.http.HttpResponse.BodyHandlers.discarding()).statusCode());
+            assertEquals(400,view.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path+"&limit=101")).GET().build(),java.net.http.HttpResponse.BodyHandlers.discarding()).statusCode());
+            var empty=view.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path+"&targetId="+UUID.randomUUID())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,empty.statusCode());assertEquals(0,f.json.readTree(empty.body()).path("items").size());assertEquals(before,f.count("SELECT count(*) FROM audit_evidence"));
+            f.sql("UPDATE identity_role_assignment SET revoked_at='2026-10-07T06:00:00Z',ended_by='"+writer.actorId()+"',end_reason='Withdraw independent history permission',version=version+1 WHERE assignment_id='"+audit+"'");
+            assertEquals(403,view.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path)).GET().build(),java.net.http.HttpResponse.BodyHandlers.discarding()).statusCode());return null;
+        }));
+    }
+    @Test void replacementHistoryPreservesSafeBeforeAfterAndPagingWithoutPrivateIdentityData()throws Exception{
+        var admin=f.rows.identity(IamIntegrationFixtures.Persona.SUPER);var target=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
+        f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(target,(unused,tc)->{
+            new AuthorizationPrerequisiteFixture(f.rows).actorAssignment(admin,AuthorizationPrerequisiteFixture.SUPER_V2,f.scope(),java.time.Instant.parse("2026-10-07T05:59:59Z"),null);
+            var grant=f.post(client,"/api/v1/administration/assignments",Map.of("operationId",UUID.randomUUID(),"scope",f.scope(),"principal",Map.of("kind","ACTOR","actorId",target.actorId()),"roleVersionId",AuthorizationPrerequisiteFixture.AA_V1,"reason","History predecessor"));assertEquals(201,grant.statusCode());var id=f.json.readTree(grant.body()).path("assignmentId").asString();var op=UUID.randomUUID();
+            assertEquals(200,f.post(client,"/api/v1/administration/assignments/"+id+"/replace",Map.of("operationId",op,"scope",f.scope(),"expectedVersion",1,"newRoleVersionId",AuthorizationPrerequisiteFixture.AA_V2,"reason","Explicit history successor")).statusCode());
+            String path="/api/v1/administration/history?organizationId="+f.rows.organizationId()+"&targetId="+id+"&limit=1";long before=f.count("SELECT count(*) FROM audit_evidence");
+            var response=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path)).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,response.statusCode());var page=f.json.readTree(response.body());assertEquals(1,page.path("items").size());var row=page.path("items").get(0);assertEquals(op.toString(),row.path("operationId").asString());assertEquals(1,row.path("before").path("roleVersion").asInt());assertEquals(2,row.path("after").path("roleVersion").asInt());assertEquals("Explicit history successor",row.path("reason").asString());assertNotEquals(id,row.path("after").path("assignmentId").asString());
+            for(String secret:List.of("passwordVerifier","normalizedLogin","proof","sessionProof","csrf"))assertFalse(response.body().contains(secret));
+            var next=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path+"&offset=1")).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,next.statusCode());assertEquals(0,f.json.readTree(next.body()).path("items").size());assertEquals(before,f.count("SELECT count(*) FROM audit_evidence"));return null;
+        }));
+    }
     @Test void customTerminalResolutionAllowsIndependentInspectorButRechecksWithdrawnReadAuthority()throws Exception{
         var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var inspector=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
         f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(inspector,(second,ic)->{
