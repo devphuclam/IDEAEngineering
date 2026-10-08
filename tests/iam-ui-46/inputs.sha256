@@ -112,7 +112,7 @@ b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/sr
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
 974d05c40e4a1340deb023e9952533cbd73f278eeb54542a3ef3356c2928f100  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceAtomicityTest.java
 0b9e2f4a8d0e6bea2ecc0b3cf199b2677467b9628e4712d125f1289379602d59  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceContractTest.java
-d8acf3eda51c65a1ed4a11f27a3c8ec7e04acde2fdd76c0d5aeb880e98c41f7a  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceDataTest.java
+d00933725b6cbe6e9c9e8cbda5ef7ba5857c13db282f2aa430131fbbcdabe930  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceDataTest.java
 3337b0744383052b9c4d309c19a4fd0ebb17cf900cffaa32bce7aaf6305bf2f3  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
 3c2d2056b7f76444f2ca11cfa44e3cd9ca02f2d694599b37c0b320913cb5e819  apps/server/src/test/java/com/idea/ddm/project/ProjectPrerequisiteFixture.java
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
