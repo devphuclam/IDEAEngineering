@@ -77,11 +77,11 @@ export function App() {
     epoch.current++; setContext(null); setPassword("");
     setMessage("Phiên không còn hợp lệ. Hãy đăng nhập lại."); setStatusType("warning");
   }
-  const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":"rbac"; } : undefined;
+  const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read"||action==="access.inspect") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":context.actions.includes("role.catalogue.read")?"rbac":"access"; } : undefined;
 
   if (route === "credentials") return <CredentialRedemptionPage />;
   if (context && (route === "accounts" || route === "projects" || route === "rbac" || route === "custom-role" || route === "access")) return (
-    <AdminApp context={context} busy={busy} activeSection={route==="custom-role"||route==="access"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
+    <AdminApp context={context} busy={busy} activeSection={route==="custom-role"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
       {route==="accounts"?<AccountAdministrationPage context={context} onInvalidated={invalidate} />:route==="projects"?<ProjectAdministrationPage context={context} onInvalidated={invalidate} />:route==="custom-role"?<CustomRoleEditor context={context} onInvalidated={invalidate} />:route==="access"?<AccessInspectionPage context={context} onInvalidated={invalidate} />:<AssignmentWizard context={context} onInvalidated={invalidate} />}
     </AdminApp>
   );

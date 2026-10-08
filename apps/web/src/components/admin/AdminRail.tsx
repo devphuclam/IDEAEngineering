@@ -1,4 +1,4 @@
-export type AdminSection = "accounts" | "departments" | "projects" | "rbac";
+export type AdminSection = "accounts" | "departments" | "projects" | "rbac" | "access";
 
 export interface AdminRailProps {
   activeSection: AdminSection;
@@ -125,6 +125,7 @@ export function AdminRail({
           <span>Phân quyền vai trò RBAC</span>
           {counts.assignments !== undefined && <span className="admin-nav-badge">{counts.assignments}</span>}
         </button>
+        <button type="button" className={`admin-nav-item ${activeSection==="access"?"active":""}`} disabled={!availableSections.includes("access")} onClick={()=>onSelectSection("access")} aria-current={activeSection==="access"?"page":undefined}><span>Kiểm tra quyền thực tế</span></button>
       </div>
 
       <div className="admin-rail-footer">

@@ -1,9 +1,15 @@
 import {describe,it,expect} from "vitest";
 import {createIamClient,type IamResult} from "../../api/iamClient";
+import {renderToStaticMarkup} from "react-dom/server";
+import {AccessInspectionPage} from "./AccessInspectionPage";
 const id="00000000-0000-4000-8000-000000000046",scope={kind:"ORGANIZATION",organizationId:id};
 const value={actorId:id,scope,permissionCode:"access.inspect",implementationState:"IMPLEMENTED",accountEligible:true,projectMembershipEligible:false,rbacResult:"ALLOW",ownerBusinessGate:"NOT_EVALUATED",evaluatedAt:"2026-10-08T06:00:00Z",paths:[{assignmentId:id,roleVersionId:id,roleCode:"project-administrator",roleVersion:1,assignmentScope:scope,groupId:null,projectMembershipId:null,groupMembershipId:null,assignedBy:id,reason:"Independent assignment",assignedAt:"2026-10-07T06:00:00Z"}]};
 type Planned={inspectAccess(i:unknown):Promise<IamResult<unknown>>;resolveOperation(id:string,s:unknown):Promise<IamResult<unknown>>;loadHistory(s:unknown):Promise<IamResult<unknown>>};
 describe("Inspector is advisory not another mutation or authority model",()=>{
+  it("preserves authored administration surface with explicitly unsupported independent Audit history",()=>{
+    const html=renderToStaticMarkup(<AccessInspectionPage context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Recorded Organization",actions:["access.inspect"]}} onInvalidated={()=>{}}/>);
+    expect(html).toContain("admin-main-title");expect(html).toContain("admin-inspector");expect(html).toContain("Recorded Organization");expect(html).toContain("History · chưa hỗ trợ");expect(html).toContain('aria-label="Tra cứu operation"');
+  });
   it("submits only the target and exact scope via ordinary session/CSRF and redacts unrecognized fields",async()=>{
     const input={targetActorId:id,scope,permissionCode:"access.inspect"};
     const client=createIamClient(async(path,init)=>{if(path.endsWith("/csrf"))return Response.json({headerName:"X-CSRF-TOKEN",token:"synthetic-csrf"});expect(path).toBe("/api/v1/administration/access-inspections");expect(init.credentials).toBe("same-origin");expect(JSON.parse(String(init.body))).toEqual(input);expect(init.headers).toHaveProperty("X-CSRF-TOKEN");return Response.json({...value,privateDiagnostic:"discard"});}) as unknown as Planned;

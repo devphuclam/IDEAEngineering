@@ -38,7 +38,7 @@ export function AdminApp({ context, busy, onExitAdmin, onLogout, children, activ
         <span className="admin-surface-badge">{context.organizationName}</span>
       </nav>
       <main className="admin-workspace">
-        <AdminRail activeSection={activeSection} availableSections={[...(context.actions.includes("account.read")?["accounts" as const]:[]),...(context.actions.includes("project.admin.read")?["projects" as const]:[]),...(context.actions.includes("role.catalogue.read")?["rbac" as const]:[])]} onSelectSection={onSelectSection} />
+        <AdminRail activeSection={activeSection} availableSections={[...(context.actions.includes("account.read")?["accounts" as const]:[]),...(context.actions.includes("project.admin.read")?["projects" as const]:[]),...(context.actions.includes("role.catalogue.read")?["rbac" as const]:[]),...(context.actions.includes("access.inspect")?["access" as const]:[])]} onSelectSection={onSelectSection} />
         {children}
       </main>
       <footer className="admin-statusbar">
