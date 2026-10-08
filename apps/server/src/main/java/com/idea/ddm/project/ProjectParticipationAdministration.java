@@ -38,7 +38,8 @@ public final class ProjectParticipationAdministration {
             else ProjectGovernanceAdministration.insert(c,"INSERT INTO project_membership(membership_id,project_id,organization_id,actor_id,effective_from,effective_until,reason,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
                     id,project,actor.organizationId(),target,Timestamp.from(effectiveFrom),until==null?null:Timestamp.from(until),normalized,actor.actorId(),Timestamp.from(now));
             return owner.result(owner.queries().membershipRow(c,actor.organizationId(),id,group,now));
-        });
+        },(c,actor)->requireTarget(c,actor.organizationId(),target,
+                group?owner.queries().groupRow(c,actor.organizationId(),parent).projectId():null,owner.clock().instant()));
     }
     public JsonNode end(ActorContext context,UUID operation,Scope scope,UUID id,boolean group,long expected,String reason){
         if(scope==null || id==null)throw new Refusal(RefusalReason.INVALID_INPUT);

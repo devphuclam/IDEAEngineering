@@ -148,8 +148,12 @@ public final class ProjectGovernanceAdministration {
     ProjectGovernanceQueries queries(){return queries;}
     JsonNode result(Object value){return json.valueToTree(value);}
     @FunctionalInterface interface Mutation { JsonNode apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException; }
+    @FunctionalInterface interface CommitCheck { void validate(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException; }
     private record Reply(JsonNode value,RefusalReason refusal){}
     JsonNode command(ActorContext context,UUID operation,Scope scope,String action,String digest,Mutation mutation) {
+        return command(context,operation,scope,action,digest,mutation,(c,actor)->{});
+    }
+    JsonNode command(ActorContext context,UUID operation,Scope scope,String action,String digest,Mutation mutation,CommitCheck commitCheck) {
         if(operation==null)throw new Refusal(RefusalReason.INVALID_INPUT);
         var attempt=UUID.randomUUID(); var correlation=UUID.randomUUID();
         final Reply reply;
@@ -157,10 +161,12 @@ public final class ProjectGovernanceAdministration {
             reply=transactions.executeOwner(context,new IdentityTransactions.OwnerCommand<Reply>() {
                 private AuthorizationDecisionService.Decision request;
                 private boolean replay;
+                private boolean accepted;
                 @Override public void revalidate(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException {
                     var current=authorization.evaluate(c,context,action,scope);
                     if(request==null){request=current;return;}
                     if(request.rbacGranted())require(current);
+                    if(accepted&&!replay)commitCheck.validate(c,actor);
                     if(replay)require(authorization.evaluate(c,context,"project.admin.read",scope));
                     else retain(c,attempt,operation,"COMMIT",current,actor.organizationId());
                 }
@@ -190,6 +196,7 @@ public final class ProjectGovernanceAdministration {
                     var target=result.has(targetField)?UUID.fromString(result.path(targetField).asString()):scope.projectId();
                     if(target==null)target=scope.organizationId();
                     var outcome=refused==null?"ACCEPTED":"REFUSED";
+                    accepted=refused==null;
                     insert(c,"INSERT INTO project_owner_outcome(operation_id,actor_id,organization_id,action,input_digest,target_id,outcome,reason_code,correlation_id,result) VALUES (?,?,?,?,?,?,?,?,?,?::jsonb)",
                             operation,actor.actorId(),actor.organizationId(),action,digest,target,outcome,refused==null?null:refused.name(),correlation,json.writeValueAsString(result));
                     audit(c,operation,actor.actorId(),action,target,outcome,refused==null?null:refused.name());

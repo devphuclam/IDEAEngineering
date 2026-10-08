@@ -2,8 +2,10 @@
 set -euo pipefail
 set +x
 umask 077
-[[ $# == 4 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ && $3 =~ ^account-qualification-[0-9]{2}$ ]] || exit 2
+[[ $# == 4 && $1 =~ ^[0-9a-f]{40}$ && $2 =~ ^[0-9a-f]{64}$ && $3 =~ ^(account|project)-qualification-[0-9]{2}$ ]] || exit 2
 [[ $4 == build || $4 == start || $4 == console || $4 == verify || $4 == stop ]] || exit 2
+fixture_class=com.idea.ddm.identity.AccountBrowserFixtureCommand
+if [[ $3 == project-* ]]; then fixture_class=com.idea.ddm.project.ProjectBrowserFixtureCommand; [[ $4 != console ]] || exit 2; fi
 owned=/home/phuclam/idea-iam-ui-20261007-46/run-$3
 source_root="$owned/source"
 [[ $(id -un) == phuclam && $(realpath -e "$owned") == "$owned" && $(realpath -e "$source_root") == "$source_root" ]] || exit 3
@@ -58,7 +60,7 @@ if [[ $4 == start ]]; then
   [[ ! -e "$owned/server.pid" && ! -e "$owned/schema.name" && -z $(ss -H -ltn 'sport = :18446') ]] || exit 3
   export IDEA_IAM_TEST_SCHEMA="iam_ui_$(tr -d '-' < /proc/sys/kernel/random/uuid)"
   printf '%s\n' "$IDEA_IAM_TEST_SCHEMA" > "$owned/schema.name"
-  "$JAVA_HOME/bin/java" -cp "$classpath" com.idea.ddm.identity.AccountBrowserFixtureCommand seed > "$owned/fixture-private.log" 2>&1
+  "$JAVA_HOME/bin/java" -cp "$classpath" "$fixture_class" seed > "$owned/fixture-private.log" 2>&1
   tls=/home/phuclam/idea-iam-ui-20261007-46/tls-01
   [[ $(sha256sum "$tls/fixture.p12" | cut -d' ' -f1) == cb9c804289e7d3e6b4d7e6c9f665a61194b42eac7b55146f5eecd023ef8cab2f ]] || exit 4
   [[ $(stat -c '%U:%a' "$tls/password.private") == phuclam:600 ]] || exit 4
@@ -75,7 +77,7 @@ if [[ $4 == console ]]; then
   exec "$JAVA_HOME/bin/java" -Dloader.main=com.idea.ddm.identity.SuperSuccessorAdoptionCommand -cp "$jar" org.springframework.boot.loader.launch.PropertiesLauncher --adopt
 fi
 if [[ $4 == verify ]]; then
-  "$JAVA_HOME/bin/java" -cp "$classpath" com.idea.ddm.identity.AccountBrowserFixtureCommand verify
+  "$JAVA_HOME/bin/java" -cp "$classpath" "$fixture_class" verify
   cd "$source_root"; sha256sum --strict -c "$manifest" > "$owned/source-final-check.log"
   printf 'SOURCE_TOOL_PACKAGE_POSTFLIGHT=PASS\n'; exit 0
 fi
