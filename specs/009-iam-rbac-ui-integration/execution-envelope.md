@@ -361,3 +361,17 @@ archive identity precedes execution. Same offline direct Maven goals, guarded JV
 cleanup and retained DB/private logs. Actual browser fixture/harness is published before use.
 No dependency/install, production data, persistent preview, deployment, verifier, timer or merge.
 Independent review and final qualification remain distinct; secret detector findings retained.
+
+Published actual-browser contract: `account-browser.sh <source> <manifest>
+inspection-qualification-NN {build,start,verify,stop}` plus headed
+`inspection-browser.mjs <source> <manifest> <label>`, normal trusted HTTPS only. I01–I08
+cover actual direct/Group provenance, owner-gate separation, unsupported independent Audit,
+one real synthetic Project owner operation/read resolution, actual lost-read/bad-CSRF refusal,
+controlled Web-only 409/503 projection, ordinary refusal, invalidated session/reload and authored
+cross-screen keyboard/focus/Escape/privacy. Uppercase UUIDs are equivalent identities; malformed
+UUIDs do not submit. The three `iamIntegration.{browser,accessibility,failure}.test.ts` modules
+assert actual Chrome observations within this harness, not a separate mock browser suite.
+Previously implemented behavior may be qualification GREEN without manufactured RED.
+DB oracle: exactly one Project outcome + its Audit, five unchanged prerequisite assignments,
+zero assignment/custom owner operations or committed events. Private fixture RAM/mode600 only,
+no HAR, screenshot, request-body/token or console retention. Guarded teardown is mandatory.

@@ -45,7 +45,7 @@ describe("Role Assignment actual client boundary",()=>{
   });
   it("preserves authored RBAC presentation and multiple independent exact role versions",()=>{
     const html=renderToStaticMarkup(<RbacView assignments={[assignment,{...assignment,assignmentId:"00000000-0000-4000-8000-000000000047",roleVersion:2} ] as AssignmentView[]} roles={[role] as RoleView[]} busy={false} canGrant onAdd={()=>{}} onSelect={()=>{}} status={null}>{null}</RbacView>);
-    expect(html).toContain("admin-tabs-row");expect(html).toContain("admin-data-table");expect(html).toContain("account-administrator@3");expect(html).toContain("account-administrator@2");expect(html).toContain("Kiểm tra quyền thực tế · chưa triển khai");expect(html).not.toContain("INITIAL_GROUPS");
+    expect(html).toContain("admin-tabs-row");expect(html).toContain("admin-data-table");expect(html).toContain("account-administrator@3");expect(html).toContain("account-administrator@2");expect(html).toContain('href="#access"');expect(html).toContain("Kiểm tra quyền thực tế");expect(html).not.toContain("INITIAL_GROUPS");
   });
   it("uses real Organization context and does not invent Department or all-system authority",()=>{
     const html=renderToStaticMarkup(<AssignmentWizard context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Actual Organization",actions:["role.catalogue.read","access.inspect"]}} onInvalidated={()=>{}} />);
