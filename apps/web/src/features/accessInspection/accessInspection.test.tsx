@@ -18,7 +18,7 @@ describe("Inspector is advisory not another mutation or authority model",()=>{
   });
   it("preserves authored administration surface with explicitly unsupported independent Audit history",()=>{
     const html=renderToStaticMarkup(<AccessInspectionPage context={{actorId:id,accountId:id,organizationId:id,displayName:"Synthetic",organizationName:"Recorded Organization",actions:["access.inspect"]}} onInvalidated={()=>{}}/>);
-    expect(html).toContain("admin-main-title");expect(html).toContain("admin-inspector");expect(html).toContain("Recorded Organization");expect(html).toContain("History · chưa hỗ trợ");expect(html).toContain('aria-label="Tra cứu operation"');
+    expect(html).toContain("admin-main-title");expect(html).toContain("admin-inspector");expect(html).toContain("Recorded Organization");expect(html).toContain("Chưa có quyền audit.read");expect(html).toContain('aria-label="Tra cứu operation"');
   });
   it("submits only the target and exact scope via ordinary session/CSRF and redacts unrecognized fields",async()=>{
     const input={targetActorId:id,scope,permissionCode:"access.inspect"};
@@ -42,5 +42,9 @@ describe("Inspector is advisory not another mutation or authority model",()=>{
   it("history 403 stays refused and does not infer audit authority from inspection",async()=>{
     const client=createIamClient(async()=>new Response(null,{status:403})) as unknown as Planned;
     expect(await client.loadHistory(scope)).toEqual({kind:"refused",status:403});
+  });
+  it("reads bounded actual history without retaining private fields or inventing missing prior state",async()=>{
+    const client=createIamClient(async(path,init)=>{expect(path).toBe(`/api/v1/administration/history?organizationId=${id}&offset=0&limit=50`);expect(init.method).toBe("GET");return Response.json({items:[{operationId:id,owner:"ASSIGNMENT",actorId:id,scope,action:"role.assignment.grant",targetId:id,outcome:"ACCEPTED",reasonCode:null,reason:"Independent grant",correlationId:id,occurredAt:"2026-10-08T06:00:00Z",before:null,after:{assignmentId:id,roleCode:"account-administrator",roleVersion:2,password:"discard"},proof:"discard"}],offset:0,limit:50,hasMore:false});});
+    const result=await client.loadHistory(scope as Parameters<typeof client.loadHistory>[0]);expect(result.kind).toBe("confirmed");expect(JSON.stringify(result)).toContain('"before":null');expect(JSON.stringify(result)).not.toContain("discard");
   });
 });
