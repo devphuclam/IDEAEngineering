@@ -39,7 +39,8 @@ qualified here, and no new license rights are created by the user approval.
 
 Existing Ubuntu host dependencies: libc6 2.43-2ubuntu2.4, libcrypt1 1:4.5.1-1,
 PCRE2 10.46-1build1, libssl3t64 3.5.5-1ubuntu3.7, zlib1g
-1:1.3.dfsg+really1.3.1-1ubuntu3.1. Dynamic-library paths/hashes must be frozen
+1:1.3.dfsg+really1.3.1-1ubuntu3.1; OpenSSL also links existing libzstd1
+1.5.7+dfsg-3. Dynamic-library paths/hashes must be frozen
 after extraction and verified before each launch. They remain host dependencies,
 not application JAR payload. Retain their installed copyright records beside
 the deployment. No optional dynamic Nginx module is loaded.
