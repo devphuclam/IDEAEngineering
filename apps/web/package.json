@@ -8,6 +8,10 @@
     "node": ">=24 <25"
   },
   "scripts": {
+    "dev": "powershell -NoProfile -File ../../tools/iam-ui-dev/launch.ps1",
+    "dev:status": "powershell -NoProfile -File ../../tools/iam-ui-dev/launch.ps1 -Action Status",
+    "dev:stop": "powershell -NoProfile -File ../../tools/iam-ui-dev/launch.ps1 -Action Stop",
+    "dev:credentials": "powershell -NoProfile -File ../../tools/iam-ui-dev/launch.ps1 -Action Credentials",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
     "test": "vitest run"
   },

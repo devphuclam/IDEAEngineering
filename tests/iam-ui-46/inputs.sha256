@@ -142,7 +142,7 @@ d00933725b6cbe6e9c9e8cbda5ef7ba5857c13db282f2aa430131fbbcdabe930  apps/server/sr
 cbe4d3ed3cae530ea3d4848222f9875d851260a74b6d276f8dc5bde6be494a63  apps/server/src/test/java/com/idea/ddm/ServerSmokeTest.java
 22c5ae230a253b3a896cb3d7382a8d80b0acd57060334e65b78a19f4c33b0600  apps/web/index.html
 1c011f5ebfea15e039e236b4713c3ed7e0b1657a654a95887b3b13d0c84b803d  apps/web/package-lock.json
-48a622c0c48ef68e76e74d5fcf3a4622212e28648d48d0a191865e29a4e1f5bd  apps/web/package.json
+9ae6088f0683eb2d1d21008518b2095f943190115c12f023113b89769c8afdf3  apps/web/package.json
 6dec5672e74013fc7a7f5c6d54fd2e07e26b2c72d79da0f7530fe23aa2aa975a  apps/web/src/api/iamClient.ts
 54be8ca64eb5e9619c9e874fd77beecdb7195fe27fb6fb462ce2be1baeed3f80  apps/web/src/App.test.tsx
 dbb426af2ba5f286183fcd75c45982f5c3aa92b8b33ff27214e26e4817d3ea51  apps/web/src/App.tsx
@@ -218,3 +218,9 @@ d1da673a41141d3b83023cba0e6872071b2204626f41df47d088331a58cb62b0  tests/iam-ui-4
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
 082107d2142327a09a10fe730cc0fc0be83af101a379210693ddf0283edbac3a  tests/ph1/f05-qualification/server-grant/settings.xml
 7d949e38c84368a297c51b3fb0932128ae73b8c56efec8d4591508d0d6ed9395  tools/iam-ui-readiness/package-preflight.ps1
+e45302a936a54d8c57f811b5f246947dd85a19197137fdf7147131baafe9bcf7  tools/iam-ui-dev/launch.ps1
+a38eb537cd5bf3aec65544e7b253d0de0645d5c1afbac4aa3d0ef2b2a5d1cfc4  tools/iam-ui-dev/backend.sh
+2a99ac9b21999d56202f900f2024bee93c1c19cd2b82c6cf57eb4edb353db760  tools/iam-ui-dev/vite-dev.mjs
+edbc3bd929362ddf37d803b78ea9330015168023947a55fc9f0dc2f90864f944  tools/iam-ui-dev/README.md
+d426ef37c9193c172c5b4bb22e614625437ad9f995a0d5e79024cf82d13eaffe  tests/iam-ui-46/dev-status.test.mjs
+4410cb3df95da0565a208601ef85828c25bca564821aace1ca90f6bcad1a7585  tests/iam-ui-46/dev-browser.mjs
