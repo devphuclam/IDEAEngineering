@@ -87,7 +87,8 @@ try{
   await page.getByRole("button",{name:"Tạo Project",exact:true}).click();await page.getByRole("form",{name:"Tạo Project",exact:true}).locator('[name="name"]').fill("Synthetic lost Project");
   await page.getByRole("form",{name:"Tạo Project",exact:true}).locator('[name="reason"]').fill("Synthetic lost response");await page.getByRole("form",{name:"Tạo Project",exact:true}).locator('button[type="submit"]').click();
   await page.getByTestId("project-status").filter({hasText:"Chưa xác định được kết quả"}).waitFor();assert.equal(lostStatus,201);assert.equal(attempts,1);
-  assert.equal(await page.getByRole("form",{name:"Tạo Project",exact:true}).locator("fieldset").isDisabled(),true);
+  assert.equal(await page.getByRole("form",{name:"Tạo Project",exact:true}).locator("fieldset").evaluate(fieldset=>fieldset.disabled),true);
+  assert.equal(await page.getByRole("form",{name:"Tạo Project",exact:true}).locator('[name="name"]').isDisabled(),true);
   await loss.send("Fetch.disable");await loss.detach();const resolved=page.waitForResponse(r=>r.request().method()==="POST"&&new URL(r.url()).pathname==="/api/v1/administration/projects");
   await page.getByRole("button",{name:"Resolve lại cùng OperationId",exact:true}).click();assert.equal((await resolved).status(),201);await settled(page);pass("P06_LOST_RESPONSE_SAME_OPERATION_RESOLUTION_ONCE");
   stage="confirmed-write-unavailable-refresh";
