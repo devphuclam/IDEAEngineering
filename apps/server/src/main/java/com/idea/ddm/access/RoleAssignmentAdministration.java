@@ -76,9 +76,11 @@ public final class RoleAssignmentAdministration {
             @Override public void revalidate(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException{
                 if(initial==null&&!replay){
                     // Resolve a committed intent before touching changed/obsolete target inputs.
-                    try(var q=c.prepareStatement("SELECT e.actor_id,e.organization_id,e.action,e.input_digest,e.result::text,o.outcome,o.reason_code,(SELECT requested_scope::text FROM assignment_authorization_evidence a WHERE a.operation_id=e.operation_id AND a.stage='REQUEST' ORDER BY evaluated_at,evidence_id LIMIT 1) FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?")){
+                    try(var q=c.prepareStatement("SELECT e.actor_id,e.organization_id,e.action,e.input_digest,e.result::text,o.outcome,o.reason_code,"+CommittedAdministrationScope.ASSIGNMENT+" FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?")){
                         q.setObject(1,operation);try(var r=q.executeQuery()){if(r.next()){
-                            replay=true;var value=json.readTree(r.getString(8));
+                            replay=true;
+                            if(r.getString(8)==null)throw new Refusal(RefusalReason.UNAVAILABLE);
+                            var value=json.readTree(r.getString(8));
                             replayScope=new Scope(AuthorizationDecisionService.ScopeKind.valueOf(value.path("kind").asString()),UUID.fromString(value.path("organizationId").asString()),value.path("projectId").isNull()?null:UUID.fromString(value.path("projectId").asString()));
                             if(!actor.actorId().equals(r.getObject(1,UUID.class))||!actor.organizationId().equals(r.getObject(2,UUID.class)))cached=new Reply(null,RefusalReason.AUTHORITY_REFUSED);
                             else if(!intent.kind().equals(r.getString(3))||!digest.equals(r.getString(4)))cached=new Reply(null,RefusalReason.STATE_CONFLICT);

@@ -74,14 +74,15 @@ public final class AccessInspectionQueries {
             if(!inspect&&!account&&!project&&!role)throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
             // Fixed owner-specific projections, not arbitrary table/JSON export or a replay service.
             var queries=List.of(
-                new OperationSource("ASSIGNMENT","SELECT e.actor_id,e.organization_id,e.action,o.outcome,o.reason_code,e.correlation_id::text,e.occurred_at,(SELECT requested_scope::text FROM assignment_authorization_evidence a WHERE a.operation_id=e.operation_id AND a.stage='REQUEST' ORDER BY evaluated_at,evidence_id LIMIT 1) FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?",inspect),
+                new OperationSource("ASSIGNMENT","SELECT e.actor_id,e.organization_id,e.action,o.outcome,o.reason_code,e.correlation_id::text,e.occurred_at,"+CommittedAdministrationScope.ASSIGNMENT+" FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?",inspect),
                 new OperationSource("ROLE_DEFINITION","SELECT e.actor_id,e.organization_id,e.action,o.outcome,o.reason_code,e.correlation_id::text,e.occurred_at,e.requested_scope::text FROM role_definition_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?",role),
-                new OperationSource("PROJECT","SELECT e.actor_id,e.organization_id,e.action,e.outcome,e.reason_code,e.correlation_id::text,e.created_at,(SELECT paths->'requestedScope' FROM project_authorization_evidence a WHERE a.operation_id=e.operation_id AND a.stage='REQUEST' ORDER BY evaluated_at,evidence_id LIMIT 1)::text FROM project_owner_outcome e WHERE e.operation_id=?",project),
+                new OperationSource("PROJECT","SELECT e.actor_id,e.organization_id,e.action,e.outcome,e.reason_code,e.correlation_id::text,e.created_at,"+CommittedAdministrationScope.PROJECT+" FROM project_owner_outcome e WHERE e.operation_id=?",project),
                 new OperationSource("IAM","SELECT e.actor_id,a.organization_id,e.action,e.outcome,e.reason_code,NULL::text,e.occurred_at,NULL::text FROM iam_owner_outcome e JOIN idea_account a USING(actor_id) WHERE e.operation_id=?",account));
             for(var source:queries)try(var q=c.prepareStatement(source.sql())){
                 q.setObject(1,id);try(var r=q.executeQuery()){
                     if(!r.next())continue;
                     var originating=r.getObject(1,UUID.class);var org=r.getObject(2,UUID.class);
+                    if(r.getString(8)==null&&!"IAM".equals(source.owner()))return unresolved(id);
                     var retained=r.getString(8)==null?Scope.organization(org):new tools.jackson.databind.json.JsonMapper().readValue(r.getString(8),Scope.class);
                     // Absent and undisclosable are identical unresolved results, not rollback proof.
                     if(!retained.equals(scope)||!org.equals(caller.organizationId())||(!originating.equals(caller.actorId())&&!inspect)||!source.readable())return unresolved(id);
