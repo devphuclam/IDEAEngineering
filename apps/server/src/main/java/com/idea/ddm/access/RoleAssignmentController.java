@@ -17,7 +17,7 @@ public final class RoleAssignmentController {
     private final RoleAssignmentAdministration owner;private final SessionService sessions;
     RoleAssignmentController(RoleAssignmentAdministration owner,SessionService sessions){this.owner=owner;this.sessions=sessions;}
     record Grant(UUID operationId,RoleAssignmentAdministration.Principal principal,AuthorizationDecisionService.Scope scope,UUID roleVersionId,RoleAssignmentAdministration.Interval interval,String reason,JsonNode condition){}
-    record Preview(RoleAssignmentAdministration.Principal principal,AuthorizationDecisionService.Scope scope,UUID roleVersionId,RoleAssignmentAdministration.Interval interval,UUID assignmentId,long expectedVersion,JsonNode condition){}
+    record Preview(RoleAssignmentAdministration.Principal principal,AuthorizationDecisionService.Scope scope,UUID roleVersionId,RoleAssignmentAdministration.Interval interval,UUID assignmentId,Long expectedVersion,JsonNode condition){}
     record End(UUID operationId,AuthorizationDecisionService.Scope scope,long expectedVersion,String reason){}
     record Replace(UUID operationId,AuthorizationDecisionService.Scope scope,long expectedVersion,UUID newRoleVersionId,RoleAssignmentAdministration.Interval interval,String reason,JsonNode condition){}
     @GetMapping("/api/v1/administration/assignments")
@@ -25,7 +25,7 @@ public final class RoleAssignmentController {
     @GetMapping("/api/v1/administration/assignments/{id}")
     ResponseEntity<?> exact(Authentication auth,@PathVariable UUID id,@RequestParam UUID organizationId,@RequestParam(required=false)UUID projectId){return RoleCatalogueController.safe(200,owner.assignment(context(auth),RoleCatalogueController.scope(organizationId,projectId),id));}
     @PostMapping("/api/v1/administration/assignments/preview")
-    ResponseEntity<?> preview(Authentication auth,@RequestBody Preview r){return RoleCatalogueController.safe(200,owner.preview(context(auth),r.principal(),r.scope(),r.roleVersionId(),r.interval(),r.assignmentId(),r.expectedVersion(),r.condition()));}
+    ResponseEntity<?> preview(Authentication auth,@RequestBody Preview r){return RoleCatalogueController.safe(200,owner.preview(context(auth),r.principal(),r.scope(),r.roleVersionId(),r.interval(),r.assignmentId(),r.expectedVersion()==null?0:r.expectedVersion(),r.condition()));}
     @PostMapping("/api/v1/administration/assignments")
     ResponseEntity<?> grant(Authentication auth,@RequestBody Grant r){return RoleCatalogueController.safe(201,owner.grant(context(auth),r.operationId(),r.principal(),r.scope(),r.roleVersionId(),r.interval(),r.reason(),r.condition()));}
     @PostMapping("/api/v1/administration/assignments/{id}/end")
