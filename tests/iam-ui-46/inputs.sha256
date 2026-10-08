@@ -80,7 +80,7 @@ a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  apps/server/sr
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/src/main/resources/third-party/swagger-ui/LICENSE.txt
 0d20d1adef18aee3f40dd258172155521ce702ac445cb5f7b7d60ed32dad2fb2  apps/server/src/main/resources/third-party/swagger-ui/NOTICE.txt
 69032fb50bdb035e6e6069be681856e5043855f1cbac9a838a8f326c98c8f5db  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionAtomicityTest.java
-cd914fbf2e62b9be6e3fd1bcdb106b7049ca73f7c766e651835797e9b656f5b1  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionContractTest.java
+92038f875261be0def568f8d71e4998d554e230a9cb7a12abe973257f4eb7188  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionContractTest.java
 ee353875eba1c2ce74143353c91d08cec08678a4edbc470ec6bf79645a285953  apps/server/src/test/java/com/idea/ddm/access/AccessInspectionPrivacyTest.java
 4b92d286675aa05743e747d3b5b35a6a32245c8dec46eddda03c831c778d0341  apps/server/src/test/java/com/idea/ddm/access/AssignmentQualificationFixture.java
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
@@ -108,6 +108,7 @@ c718c5ba1d5abc264983225dacc3dccd283d4565d20650ef4b20f4ffce4c6d82  apps/server/sr
 e9f7be1133e0d0ddea576a87c66fcc33b8443d1a6a257157ad41d99411cfd5be  apps/server/src/test/java/com/idea/ddm/iam/IamRegressionSchemas.java
 81f04105e87f51684bbe64ce8b8cdcb36f6df128ee13e1eade322b8be6998604  apps/server/src/test/java/com/idea/ddm/iam/IamSchemaPrivilegeTest.java
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java
+e2b432ecc295d7b2193ce9de84121158e15c1a3a97e237b2c93f1a3e67c11d16  apps/server/src/test/java/com/idea/ddm/identity/AccessInspectionBrowserFixtureCommand.java
 c131c3e442aa77b8f1342f23e07dd50d6ba003a292b3a0e511a70448565f356c  apps/server/src/test/java/com/idea/ddm/identity/AccountBrowserFixtureCommand.java
 6d4d4670c37e9fd1fcd40c09d4071d6fcbd2f3e4bd7e87f236daf45ef2c2ad5a  apps/server/src/test/java/com/idea/ddm/identity/AccountIsolationTest.java
 16322cac451acd09701559d888648623e407f2e8875ae9f28d2182341611a4c4  apps/server/src/test/java/com/idea/ddm/identity/AssignmentBrowserFixtureCommand.java
@@ -201,7 +202,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 5368d16c9a6baa11eab4ee7c0731578971c17284ded80979639b9dfd45ee08a9  docs/research/inventories/iam-ui-46-resolved-inputs.tsv
 f4dde1be1c251665f5304e6b6d0a89c6f9aec62bc30e7368856374d89f8e51da  docs/research/inventories/ph1-packaged-notice-map-20261006.tsv
 fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-46/account-browser.mjs
-f766f4c67d297f7ac1ae48244d45a592089c2cd0113d8250d55366a2c024558a  tests/iam-ui-46/account-browser.sh
+c8046a026f27845b8e221a03230a2de32f7e337741e87016d3e5e356f24cbba7  tests/iam-ui-46/account-browser.sh
 81270968fc08187e8bb502f2febd3bb6ff118e77757d0e1187cc76e2b851d527  tests/iam-ui-46/assignment-browser.mjs
 d9d6cac72bab3c6b158dc331ea901139d035a353fd781870f9345eda0163e838  tests/iam-ui-46/custom-role-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs

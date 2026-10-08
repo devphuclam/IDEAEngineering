@@ -67,4 +67,15 @@ class AccessInspectionContractTest {
             });
         }
     }
+    @Test void customTerminalResolutionAllowsIndependentInspectorButRechecksWithdrawnReadAuthority()throws Exception{
+        var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var inspector=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+        f.http.withSignedInClient(admin,(client,ctx)->f.http.withSignedInClient(inspector,(second,ic)->{
+            f.delegate(admin);var grant=f.delegate(inspector);var input=f.proposal();var id=(UUID)input.get("operationId");assertEquals(201,f.post(client,"/api/v1/administration/roles/candidates",input).statusCode());
+            var path="/api/v1/administration/operations/"+id+"?organizationId="+f.rows.organizationId();long before=f.count("SELECT count(*) FROM audit_evidence");
+            for(var c:List.of(client,second)){var r=c.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path)).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,r.statusCode());assertEquals("ROLE_DEFINITION",f.json.readTree(r.body()).path("owner").asString());assertEquals(admin.actorId().toString(),f.json.readTree(r.body()).path("actorId").asString());}assertEquals(before,f.count("SELECT count(*) FROM audit_evidence"));
+            f.sql("UPDATE identity_role_assignment SET revoked_at='2026-10-07T06:00:00Z',ended_by='"+admin.actorId()+"',end_reason='Withdraw query authority',version=version+1 WHERE assignment_id='"+grant+"'");
+            assertEquals(403,second.send(java.net.http.HttpRequest.newBuilder(f.http.uri(path)).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString()).statusCode());
+            var refused=new HashMap<String,Object>(f.proposal());refused.put("permissionCodes",List.of("audit.read"));assertEquals(409,f.post(client,"/api/v1/administration/roles/candidates",refused).statusCode());var r=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/operations/"+refused.get("operationId")+"?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(200,r.statusCode());assertEquals("COMMITTED_REFUSED",f.json.readTree(r.body()).path("state").asString());return null;
+        }));
+    }
 }
