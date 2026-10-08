@@ -79,7 +79,7 @@ cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/sr
 4b92d286675aa05743e747d3b5b35a6a32245c8dec46eddda03c831c778d0341  apps/server/src/test/java/com/idea/ddm/access/AssignmentQualificationFixture.java
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
-617418b9e03fccd7bcd7230fa1e02d097903519ee4772865045c94aab40c6f9e  apps/server/src/test/java/com/idea/ddm/access/CustomRoleContractTest.java
+b458f68cb0699e64a91e7e9326d3358eca42b29fc4419777e0d9cf93f2f65eb0  apps/server/src/test/java/com/idea/ddm/access/CustomRoleContractTest.java
 4f2eee673329f7efba7211eee376c3fd5973cd3b8874e8e54345b9ea2768f425  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentAtomicityTest.java
 d66932a3029da09fcaf2b6a02f629dc16499b4a8753c30b6c96f3f584c666a78  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentContractTest.java
 764f2f76fb075665b2521ba1d4253e8f688547e6c8a6a4551a5b8b8ddebeb8db  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentRecoveryTest.java
