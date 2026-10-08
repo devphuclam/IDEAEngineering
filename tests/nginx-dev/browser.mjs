@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -32,8 +32,11 @@ function preservedSockets() {
 }
 function preservedForward() {
   const r = spawnSync('powershell.exe', ['-NoProfile', '-File', predecessorLauncher, '-Action', 'Status'], { encoding: 'utf8', windowsHide: true, timeout: 30000 });
-  assert.ok(r.status === 0 && r.stdout.includes('IAM_DEV_FORWARD=RUNNING'), 'Predecessor owned forward remains live');
-  return readFileSync(predecessorForward, 'utf8');
+  const status = r.stdout.match(/IAM_DEV_FORWARD=(RUNNING|STOPPED)/)?.[1];
+  assert.ok(r.status === 0 && status, 'Predecessor owned forward status resolves');
+  // Preserve the state actually found, including a predecessor already stopped
+  // by its owner. This slice must neither restart it nor require it to be live.
+  return { status, record: existsSync(predecessorForward) ? readFileSync(predecessorForward, 'utf8') : null };
 }
 function request(ca, headers = {}, servername = 'localhost') {
   return new Promise((resolve, reject) => {
@@ -178,7 +181,7 @@ try {
   const localBindings = sockets.trim().split('\n').map(line => line.trim().split(/\s+/)[3]).sort();
   assert.deepEqual(localBindings, ['127.0.0.1:18448', '127.0.0.1:18449']);
   assert.deepEqual(preservedSockets(), predecessor);
-  assert.equal(preservedForward(), oldForward);
+  assert.deepEqual(preservedForward(), oldForward);
   assert.ok(control('Status').includes('POSTGRESQL=UP'));
   console.log('N07_LOOPBACK_OWNERSHIP_PREDECESSOR_RETAINED=PASS');
   stage = 'privacy';
@@ -192,7 +195,7 @@ try {
   assert.ok(control('Status').includes('NGINX_DEV_STATE=RUNNING'));
   assert.equal((await request(certificate)).status, 200);
   assert.deepEqual(preservedSockets(), predecessor);
-  assert.equal(preservedForward(), oldForward);
+  assert.deepEqual(preservedForward(), oldForward);
   console.log('N09_UPSTREAM_TLS_REFUSALS_AND_RESTORATION=PASS');
   console.log('NGINX_DEV_BROWSER=9/9_PASS;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DEPLOYMENT_ONLY=true');
 } catch {
