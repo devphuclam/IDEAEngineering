@@ -26,14 +26,26 @@ stop_child() {
 restore() {
   result=$?; trap - EXIT
   stop_child || result=2
+  # Install this cleanup before requesting graceful shutdown. If the ordinary
+  # five-second wait expires, an in-flight proxy request may still be draining.
+  # Wait boundedly for that exact process, never signal a reused/foreign PID.
+  for attempt in {1..700}; do
+    [[ ! -e /proc/$original/exe ]] && break
+    [[ $(ticks "$original") != "$stamp" ]] && break
+    sleep 0.05
+  done
+  if [[ -e /proc/$original/exe && $(ticks "$original") == "$stamp" ]]; then
+    echo 'NGINX_UPSTREAM_RESTORE=BLOCKED;OWNED_SHUTDOWN_PENDING=true;NO_FORCED_KILL=true'
+    exit 2
+  fi
   flock -u 9
   bash "$tools/control.sh" start >/dev/null || result=2
   exit "$result"
 }
+trap restore EXIT
 kill -QUIT "$original"
 for attempt in {1..100}; do [[ ! -e /proc/$original/exe ]] && break; sleep 0.05; done
 [[ ! -e /proc/$original/exe ]] || exit 2
-trap restore EXIT
 for mode in wrong-name untrusted; do
   if [[ $mode == wrong-name ]]; then
     sed -e 's/proxy_ssl_name localhost;/proxy_ssl_name wrong.invalid;/' \

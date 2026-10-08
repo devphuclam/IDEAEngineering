@@ -17,8 +17,8 @@ const predecessorLauncher = fileURLToPath(new URL('../../tools/iam-ui-dev/launch
 const ssh = ['-i', 'C:/Users/TD-999/.ssh/idea_ddm_dev_ed25519', '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=8', 'phuclam@192.168.137.33'];
 const secrets = new Set();
 let browser, fixture, stage = 'preflight', leaked = false;
-function remote(command) {
-  const r = spawnSync('C:/Windows/System32/OpenSSH/ssh.exe', [...ssh, command], { encoding: 'utf8', windowsHide: true, timeout: 30000 });
+function remote(command, timeout = 30000) {
+  const r = spawnSync('C:/Windows/System32/OpenSSH/ssh.exe', [...ssh, command], { encoding: 'utf8', windowsHide: true, timeout });
   assert.ok(r.status === 0, 'Controlled remote check failed');
   return r.stdout;
 }
@@ -190,7 +190,7 @@ try {
   await privateState(page, context);
   console.log('N08_PRIVATE_STATE_NO_SECRET_RETENTION=PASS');
   stage = 'upstream-tls-refusals';
-  const upstream = remote('bash /home/phuclam/idea-nginx-dev-control-49/upstream.test.sh');
+  const upstream = remote('bash /home/phuclam/idea-nginx-dev-control-49/upstream.test.sh', 60000);
   assert.ok(upstream.includes('NGINX_UPSTREAM_wrong-name=PASS') && upstream.includes('NGINX_UPSTREAM_untrusted=PASS'));
   assert.ok(control('Status').includes('NGINX_DEV_STATE=RUNNING'));
   assert.equal((await request(certificate)).status, 200);
