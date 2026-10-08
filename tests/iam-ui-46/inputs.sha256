@@ -103,6 +103,7 @@ a38581d0a75a4e0c37296cd66ccd71b34b4a9697472fe42f87ceb807d82b28a2  apps/server/sr
 a6b18f215b74925f0f3bae2b1848503783e323281835c0588ccc3cac52b3e40a  apps/server/src/test/java/com/idea/ddm/identity/IdentityTransactionsTest.java
 276fe48a6d07d34d6ed19eb06eaab215c8f02e72e40a06f7911b2e07cb3888bd  apps/server/src/test/java/com/idea/ddm/identity/OwnedHandoffCleanupTest.java
 8e14bc1f3a3da3111a71a5a41bc7e56e54dee89865f3eb80111154bf15adce71  apps/server/src/test/java/com/idea/ddm/identity/OwnerSessionEligibilityTest.java
+a0ea6f4de6c2736968878b80449d783016f37302f18eb8d259c1224bfbcab2cd  apps/server/src/test/java/com/idea/ddm/identity/ProjectBrowserFixtureCommand.java
 63dd8d1f3764bd00f136b15b4ed03a15648b08e8375aab0cbc678aaaadf4803b  apps/server/src/test/java/com/idea/ddm/identity/ServerRestartFlowTest.java
 466a43ab985e0ba55c5204e63255bb605608761e062d47e267eeb3b9a2789cc3  apps/server/src/test/java/com/idea/ddm/identity/TransferClientBoundaryTest.java
 2e08d303e06f4808e3a3fcb7b8a15aa51c5f008d0b0565a560d7ad94e229ff38  apps/server/src/test/java/com/idea/ddm/operation/F04PredecessorMigrationTest.java
