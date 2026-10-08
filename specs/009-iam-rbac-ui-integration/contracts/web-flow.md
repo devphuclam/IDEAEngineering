@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.3 execution status successor / Draft Account portion qualified; accepted technical semantics unchanged / INFORMATIVE |
-| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; PG2/PG3/PG4 PASS; actual Account browser qualification in handoff section 16; remaining stories/independent implementation review NOT-RUN |
-| Baseline / change / date | Spec accepted e227cb1d; [operations](operations.md) / Issue #46 / 2026-10-07 Asia/Ho_Chi_Minh |
+| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.4 execution status successor / Draft Account + Project/Group portions qualified; accepted technical semantics unchanged / INFORMATIVE |
+| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; PG2/PG3/PG4 PASS; actual Account/Project browser qualification in handoff sections 16/18; remaining stories/independent US2 implementation review NOT-RUN |
+| Baseline / change / date | Spec accepted e227cb1d; [operations](operations.md) / Issue #46 / 2026-10-08 Asia/Ho_Chi_Minh |
 | Classification / effective / retention / trigger | INTERNAL / NOT-APPLICABLE / Git / operation, privacy, authority or interaction change |
 | Supersession / downstream | Mock/security behavior not accepted; no current live contract replaced / actual Web qualification |
 
@@ -44,12 +44,17 @@ Secure/SameSite cookie, real session/CSRF, refusal/invalidated session, no clien
 network-loss behavior and secret-retention inspection. Presentation tests alone are insufficient.
 Exact existing UI commits and desired visual intent are retained in [readiness](../integration-readiness.md).
 
-## Current delivery status — Account MVP
+## Current delivery status — Account and Project/Group
 
 The actual authored Login/Admin layout is retained and connected through `App.tsx`, not a mock
 or a second route framework. Account context/list/detail, PENDING create, manual proof handoff,
 recipient setup/reset, separate disable/re-enable, reload/refusal and uncertain-result handling
 are qualified by headed Chrome **10/10** at `b50272136295a9f2fed7142ba6442e44c6738d17`.
 See [handoff section 16](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07).
-Other screens remain explicitly unavailable until their owner slices are implemented. This
-milestone is not final whole-feature accessibility, independent review or deployment acceptance.
+Project/Group now uses the authored Project presentation and Server context/list/detail/actions,
+explicit membership/history and Group target prerequisite through `App.tsx#projects`.
+Actual headed Chrome **8/8** at `1d3fbd4d35650ec2c561032ae605e440a639473c` qualifies scope refusal,
+stale state, committed-response loss/same-ID resolution, unavailable refresh and bounded keyboard/
+privacy/session behavior. See [handoff section 18](../integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08).
+Assignment/Custom/Inspector screens remain unavailable until their owner slices are implemented.
+This milestone is not final whole-feature accessibility, independent US2 review or deployment acceptance.

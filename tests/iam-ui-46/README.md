@@ -190,3 +190,41 @@ On failure retain safe stage/result and private logs, stop only the owned proces
 guard cleanup by exact DB/schema/source/owner after JVM exit. Normal first-party defects get a
 committed successor and fresh numbered target; target/tool/dependency/right drift is STOP.
 Do not drop database or delete predecessor logs. No verifier, preview change or merge.
+
+## Project/Group consolidated milestone
+
+UI-P01–P13 uses the same owner/session/evaluator boundary and actual authored Web, not fixture
+HTTP routes. `ProjectBrowserFixtureCommand` is test-only and not in the executable package.
+`account-browser.sh` also accepts `project-qualification-NN` and selects that named fixture;
+the `console` mode is deliberately unavailable for Project runs. V1–V12 remain unchanged;
+additive V13/V14 protect owner evidence and provide four narrow state ports without blanket DML.
+
+Executed final source `1d3fbd4d35650ec2c561032ae605e440a639473c`, manifest
+`98013f5adae745c779e1809caf650ca1b2f9c8f157198d22fb987f50e8d2cc77`, fresh owned
+`/home/phuclam/idea-iam-ui-20261007-46/run-project-qualification-27`:
+
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> project-qualification-27 build
+    pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical JAR> -RepositoryRoot <raw verified export>
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> project-qualification-27 start
+    <admitted Windows Node> <raw verified export>/tests/iam-ui-46/project-browser.mjs <source> <manifest> project-qualification-27
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> project-qualification-27 verify
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> project-qualification-27 stop
+
+Actual installed Chrome 155.0.8059.39 was separately human-approved and pinned before this run
+in [execution envelope section 7](../../specs/009-iam-rbac-ui-integration/execution-envelope.md#7-projectgroup-browser-tooling-successor--2026-10-08).
+Historical Chrome 154 Account evidence/harness remains unchanged. Browser P01–P08 qualifies
+Org versus Project-only scope, explicit Project→Group participation/history, ordinary refusal,
+stale state, actual lost committed response with unchanged-ID resolution, unavailable refresh,
+bounded keyboard/private/cookie and logout/reload. Same normal TLS trust/loopback18446, no bypass,
+HAR/screenshots/secret diagnostics or preview18444 change. Final fixture verifies actual DB state.
+
+Affected backend runs use the named Project owner/data/atomicity/HTTP selectors in
+`run-owner-tests.sh`, each with a fresh marked schema. The expanded reissue 5/5, Account HTTP6/6
+and isolation1/1 are affected US1 regression; do not rerun the full legacy suite for every task.
+Web runner supports an optional exact `-TestFile` for targeted RED/GREEN and complete 36-case
+milestone + TypeScript, always from verified cached packages, no npm install/download.
+Full exact-source results, retained failures/limitations, hashes and cleanup are in
+[handoff section 18](../../specs/009-iam-rbac-ui-integration/integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08)
+and the [run ledger](../../specs/009-iam-rbac-ui-integration/evidence/project-group-runs.tsv).
+Both listeners and owned schemas have been cleaned; DB and historical logs retained. Next is
+the authorized US3 assignment slice, not deployment/merge or whole-feature completion.

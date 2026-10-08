@@ -2,16 +2,19 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.3 status successor / Draft partial IMPLEMENTED; accepted technical semantics unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.4 status successor / Draft partial IMPLEMENTED; accepted technical semantics unchanged |
 | Authority / owner / author | INFORMATIVE refinement / IAM, Project Governance, Access Policy and Audit; named owners UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; Account/console engineering evidence in handoff section 16, independent implementation review NOT-RUN / NOT-APPLICABLE |
-| Date / classification / retention | 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL / Git |
+| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; Account/console and Project/Group engineering evidence in handoff sections 16–18, independent implementation review NOT-RUN / NOT-APPLICABLE |
+| Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git |
 | Change / upstream / downstream | Issue #46 / [permissions](permission-delegation.md), [data](../data-model.md), accepted [Identity contract](../../../docs/product/instances/idea-engineering/api/identity-session.md) / [Web flow](web-flow.md), future tasks/tests |
-| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / Account/console qualified in handoff section 16; remaining families DESIGN |
+| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / Account/console and UI-P01–P13 qualified in handoff sections 16–18; remaining families DESIGN |
 
 ## 1. Common wire and authority
 
-Account rows explicitly marked IMPLEMENTED are qualified adapters in this branch, not a deployed estate. Other new HTTP paths remain proposed DESIGN, not available routes; see [handoff section 16](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07). JSON UUID identifiers,
+Account and Project rows explicitly marked IMPLEMENTED are qualified adapters in this branch,
+not a deployed estate. Other new HTTP paths remain proposed DESIGN, not available routes; see
+[Account evidence](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)
+and [Project/Group evidence](../integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08). JSON UUID identifiers,
 UTC ISO-8601 instants and integer expectedVersion are used. No client ActorId establishes caller
 authority; a targetActorId is permitted as an explicit admin target, checked against scope.
 Ordinary eligible session + existing CSRF protects every mutation; recipient redemption still
@@ -56,19 +59,19 @@ semantics preserved in section 4. Every DESIGN row needs real implementation + q
 | UI-I04 IMPLEMENTED | POST I/accounts/{id}/disable or /re-enable | Existing operationId/O/expectedSecurityVersion/reason → 200 stable IDs/current state | Matching account action; L; no identity replacement |
 | UI-I05 IMPLEMENTED manual successor | POST I/accounts/{id}/credential-proofs | operationId/O/purpose/loginIdentityId/expectedSecurityVersion/reason → transient proof/expiresAt | Separate setup/reset permission; section 4; no-store |
 | UI-I06 IMPLEMENTED including recipient UI | POST I/credentials | Existing operationId/accountId/purpose/proof/password → 204 | Exact proof authority + CSRF; section 4 |
-| UI-P01 DESIGN | GET A/projects; GET A/projects/{id} | O/page or exact Project → Project ID/name/version | project.admin.read; Q, admin not required to be member |
-| UI-P02 DESIGN | POST A/projects | operationId/O/name/reason → 201 Project/version | project.create at O; C; zero creator membership/grant |
-| UI-P03 DESIGN | POST A/projects/{id}/update | operationId/scope/name/expectedVersion/reason → 200 Project/version | project.update; C |
-| UI-P04 DESIGN | GET A/projects/{id}/members | Scope/page → retained direct membership state, redacted eligible targets | project.admin.read; Q |
-| UI-P05 DESIGN | POST A/projects/{id}/members | operationId/scope/targetActorId/expectedProjectVersion/interval/reason → 201 membership/version | project.membership.assign; C; same Org/eligible Actor |
-| UI-P06 DESIGN | POST A/project-memberships/{id}/end | operationId/scope/expectedVersion/reason → 200 ended association | project.membership.remove; C; retained history |
-| UI-P07 DESIGN | GET A/projects/{id}/groups; GET A/groups/{id} | Scope/page or exact Group → Group ID/Project/name/version | project.admin.read; Q |
-| UI-P08 DESIGN | POST A/projects/{id}/groups | operationId/scope/name/expectedProjectVersion/reason → 201 Group/version | project.group.create; C |
-| UI-P09 DESIGN | POST A/groups/{id}/update | operationId/scope/name/expectedVersion/reason → 200 Group/version | project.group.update; C |
-| UI-P10 DESIGN | GET A/groups/{id}/members | Scope/page → direct membership IDs/version/eligibility | project.admin.read; Q |
-| UI-P11 DESIGN | POST A/groups/{id}/members | operationId/scope/targetActorId/expectedGroupVersion/interval/reason → 201 association/version | project.group.membership.assign; C; current same-Project membership |
-| UI-P12 DESIGN | POST A/group-memberships/{id}/end | operationId/scope/expectedVersion/reason → 200 ended association | project.group.membership.remove; C |
-| UI-P13 DESIGN | GET P/{id} | Exact Project → bounded participant Project ID/name | project.read + Project Membership; Q; no roster or document access implied |
+| UI-P01 IMPLEMENTED | GET A/projects; GET A/projects/{id} | O/page or exact Project → Project ID/name/version | project.admin.read; Q, admin not required to be member |
+| UI-P02 IMPLEMENTED | POST A/projects | operationId/O/name/reason → 201 Project/version | project.create at O; C; zero creator membership/grant |
+| UI-P03 IMPLEMENTED | POST A/projects/{id}/update | operationId/scope/name/expectedVersion/reason → 200 Project/version | project.update; C |
+| UI-P04 IMPLEMENTED | GET A/projects/{id}/members | Scope/page → retained direct membership state, redacted eligible targets | project.admin.read; Q |
+| UI-P05 IMPLEMENTED | POST A/projects/{id}/members | operationId/scope/targetActorId/expectedProjectVersion/interval/reason → 201 membership/version | project.membership.assign; C; same Org/eligible Actor |
+| UI-P06 IMPLEMENTED | POST A/project-memberships/{id}/end | operationId/scope/expectedVersion/reason → 200 ended association | project.membership.remove; C; retained history |
+| UI-P07 IMPLEMENTED | GET A/projects/{id}/groups; GET A/groups/{id} | Scope/page or exact Group → Group ID/Project/name/version | project.admin.read; Q |
+| UI-P08 IMPLEMENTED | POST A/projects/{id}/groups | operationId/scope/name/expectedProjectVersion/reason → 201 Group/version | project.group.create; C |
+| UI-P09 IMPLEMENTED | POST A/groups/{id}/update | operationId/scope/name/expectedVersion/reason → 200 Group/version | project.group.update; C |
+| UI-P10 IMPLEMENTED | GET A/groups/{id}/members | Scope/page → direct membership IDs/version/eligibility | project.admin.read; Q |
+| UI-P11 IMPLEMENTED | POST A/groups/{id}/members | operationId/scope/targetActorId/expectedGroupVersion/interval/reason → 201 association/version | project.group.membership.assign; C; current same-Project membership |
+| UI-P12 IMPLEMENTED | POST A/group-memberships/{id}/end | operationId/scope/expectedVersion/reason → 200 ended association | project.group.membership.remove; C |
+| UI-P13 IMPLEMENTED | GET P/{id} | Exact Project → bounded participant Project ID/name | project.read + Project Membership; Q; no roster or document access implied |
 | UI-R01 DESIGN | GET A/permissions; GET A/roles; GET A/roles/{id}/versions/{version} | scope/page/exact version → supported code/role content/profile/state | role.catalogue.read; Q; DESIGN not selectable |
 | UI-R02 DESIGN | POST A/roles/candidates | operationId/scope/definitionId or new name/baseVersionId/permissionCodes/support/reason → 201 candidate ID/version/diff | role.definition.prepare + delegable-content envelope; C |
 | UI-R03 DESIGN | POST A/roles/candidates/{id}/validate | candidate expectedVersion → nonauthoritative validation/diff | role.definition.prepare + current envelope; preview only, no activation |
@@ -143,7 +146,7 @@ No automatic cross-owner retry/compensation engine.
 Existing create/disable/re-enable operationId is attribution, not a canonical-success promise.
 Resolve retained outcome metadata and current authorized account state; do not claim same-ID
 replay is safe or use a new UUID blindly. Status/conflict/error and login/session semantics remain
-the accepted Identity v0.1 contract. Manual-delivery/targeting is qualified for the Account MVP; exact evidence and the remaining T034 fault/purpose coverage are separated in handoff section 16. This is not deployment or independent implementation acceptance.
+the accepted Identity v0.1 contract. Manual-delivery/targeting is qualified for the Account MVP; historical evidence is retained in handoff section 16 and successor T034 fault/purpose coverage is qualified in section 17. This is not deployment or independent implementation acceptance.
 
 New manual issuance is separately configuration-enabled and qualified, never activated by the
 synthetic-delivery test flag. Require exact loginIdentityId for both purposes. FIRST_SETUP:
@@ -158,7 +161,7 @@ only in intended recipient control/submission, cleared after submit/unmount; no 
 
 Lost issuance response cannot recover plaintext. Lookup returns metadata only. Explicit reissue
 uses a new OperationId and atomically supersedes prior unconsumed matching-purpose proofs for that
-exact target, with reason/Audit; this invalidation is implemented successor behavior qualified for exact-login setup reissue/Audit rollback. Explicit outcome-insert and different-purpose coverage remains T034, not an implied PASS.
+exact target, with reason/Audit; this invalidation is implemented successor behavior qualified for exact-login setup reissue, sibling isolation and outcome/Audit rollback. Different-purpose history isolation is qualified separately; see handoff section 17, without claiming that a stale FIRST_SETUP proof becomes eligible on an ACTIVE account.
 Client confirms the consequence; no speculative proof regeneration or automatic retry.
 
 Redemption remains one-use and 15-minute; invalid/reused/expired/stale proof gives bounded refusal.

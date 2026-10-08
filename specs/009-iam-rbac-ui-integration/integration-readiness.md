@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.12` / Draft Account MVP engineering milestone record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.13` / Draft Account + Project/Group engineering milestone record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
-| Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, current engineering results section 16; independent implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–18; independent US2 implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, section 15 historical HTTP/Web adapter/state, section 16 current Account MVP; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, sections 15–16 historical Account MVP, section 17 T034 closure, section 18 current Project/Group milestone; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -1135,3 +1135,210 @@ or rerun full readiness merely to continue authorized work. Next bounded work: c
 remaining T034 targeted reissue coverage, then T043–T054 Project/Group vertical slice; later
 assignment/Custom/inspector/final recovery remain separate accepted tasks. No new requirement,
 framework, speculative work, timer action, deployment, verifier, merge or whole-feature PASS.
+
+## 17. T034 Account reissue coverage closure — 2026-10-08
+
+The Project Reviewer accepted the published Account MVP at `06004b5d9e6a3f2f1fa38276657357b216310fd8`
+through the human conversation, then authorized closing the two explicit T034 obligations before
+Project/Group. Historical section 16 remains unchanged. T034 and US1 are now engineering-complete;
+this does not complete 009 or grant live deployment/merge authority.
+
+`CredentialProofReissueTest` adds outcome-insert-specific rollback and different-purpose history
+isolation to the existing exact-login, sibling-login and Audit rollback cases. It uses real HTTP
+and the existing qualified issuance implementation. Already-correct product behavior was not
+altered to manufacture RED. An initial first-party test queried the wrong purpose table and
+failed 1/5 at `8e621feb7ac8fb4f6988163ab36806310a8a5400`; that failure remains retained.
+
+Corrected exact test source **`15a98ca0281330283614db8e784011afd8532c62`**:
+**5/5 PASS**, zero failure/error/skip, owned `account-qualification-16`, schema
+`iam_ui_c1987fafa263468cb957102c139cce9e`. Log SHA-256
+`27c87c8f6e9e753ede897067bfc33de1002535cb8aef3e02668fd6df11ba7e33`.
+Local/remote raw inputs 166/166; manifest
+`ad1b609f867a3c26a0979f5c74ddd72c406d78ff7633e581e6076a5bdd9506dc`;
+identical archive `ad843fb60a146e8140de21299abd5359ba99d7463786bee8f74f9ae9a38f1eff`.
+Affected successor requalification is also 5/5 at `818ccbd`, ledger below.
+
+The different-purpose fixture retains FIRST_SETUP metadata while testing RESET issuance on an
+ACTIVE Account. It proves RESET does not supersede FIRST_SETUP history; it does **not** claim
+the retained FIRST_SETUP proof remains redeemable on an ACTIVE Account. Required outcome failure
+rolls back both new issuance and matching-proof supersession. Private browser handoff/response-loss
+evidence remains section 16, not newly claimed from these five tests.
+
+## 18. Project/Group usable vertical slice — 2026-10-08
+
+### 18.1 Scope, usable flow and implementation trace
+
+**T043–T054 / US2 engineering-complete; current tasks 54/93.** This coherent FAST DELIVERY
+milestone implements only the accepted UI-P01–P13 contracts. It is not whole-feature PASS,
+independent US2 implementation acceptance, deployment or general Assignment UI completion.
+
+The authored Login/Admin/Project shell is preserved. Actual `App.tsx#projects` uses Server
+context, authorized Project list/detail/actions, explicit reason/version/scope commands and
+real reads. Usable flow: **create Project → create Group → assign Project Membership →
+assign Group Membership → inspect/end/rejoin history**, including rename, permitted filters/pages,
+ordinary/scoped refusal, stale version, unavailable reads and same-ID response-loss resolution.
+Project creation creates no membership or Role Assignment. Admin authority remains separate
+from engineering participation; Group target must be a currently eligible member of its Project.
+Assignment/Custom Role/Inspector screens remain unavailable.
+
+| Accepted obligation / task | Source and executed qualification |
+|---|---|
+| Org creation, no implicit participation; scope-filtered reads; UI-P01–P13, T043/T045/T048/T049/T051 | `ProjectGovernanceAdministration`, `ProjectGovernanceQueries`, `ProjectGovernanceController`; actual HTTP 6/6, P01/P04; participant UI-P13 returns only ID/name and requires permission + membership |
+| Explicit Project/Group membership, history, no nesting/same-Org constraints, T044/T050 | `ProjectParticipationAdministration`; HTTP 6/6 + owner 3/3 + data 3/3; browser P02/P03 and DB postflight |
+| Atomic owner outcome/authorization evidence/Audit; version/concurrent/replay/refusal, T047 | Shared `IdentityTransactions` lock 73003002 and the same `AuthorizationDecisionService`; atomicity 3/3, owner 3/3 and HTTP retry tests; no second evaluator |
+| Target eligibility at authoritative commit | Genuine RED at 82a3116; target-check callback before commit in e9e814a; controlled-clock Project membership expiry rolls back Group assignment, versions and accepted evidence |
+| Protected owner storage | Additive V13 outcome/evidence and V14 four narrow owner functions; direct protected mutations/TEMP refused with 42501; exact function owner/fixed qualified search path inspected and actual app function invocation qualified |
+| Actual authored Project UI, T046/T052 | `ProjectAdministrationPage`, `ProjectsView`, ordinary same-origin `iamClient`; Project Web 8 + affected Account/Web 28 = 36/36 and TypeScript PASS; headed browser P01–P08 |
+| Consolidated affected qualification and evidence, T053/T054 | Distinct exact-source runs below, ledger, final packaged browser/DB/postflight, affected Account 12/12 |
+
+V1–V12 bytes are unchanged; V13/V14 are additive in fresh UUID test schemas only. V14 ports
+use fixed schema-qualified SQL and SECURITY DEFINER with fixed pg_catalog/schema search_path,
+no PUBLIC execution and no blanket app UPDATE/DELETE/TRUNCATE. Migrator/app separation was
+not weakened. Core v0's single operating Organization invariant remains: these tests reject
+invalid Org/Actor/Group tuples and inspect the actual constraints, not claim multi-tenant runtime.
+
+### 18.2 Genuine RED and retained engineering failures
+
+- Create route: `38e952d` HTTP expected 201, observed 404 (1 failure/1); minimal owner/query/adapter
+  GREEN `80ecc4b` 1/1. Membership route: `551a686` 1 failure/2; `f29aee2` GREEN 2/2.
+- Expanded negatives: `eef2a3a` 2 failures/6: wrong-scope request incorrectly became 503 because
+  evidence used the requested unknown Organization FK, plus a first-party raw JSON ordering
+  assertion. `0b83c4c` retains originating Organization/requested scope separately and compares
+  parsed JSON; HTTP 6/6. No wire taxonomy or authority requirement changed.
+- Web adapter RED at `aea1681`, followed by minimal actual Project integration at `18ad91b`;
+  initial targeted Web 4/4, successor Project tests 8/8 plus all affected Web 36/36.
+- **Commit-target expiry RED** `82a3116d20aff38d7460fb61c744f3b3ab70f441`, 1 failure/3:
+  admission-time Project membership was insufficient when it expired before Group commit.
+  Log `34a8adc3580d049a52924052a17cdf40d8ff09c0ccf7cc0d36fc862a278007be`.
+  `e9e814a` adds exact target recheck at commit; GREEN 3/3 at `4732918`, and final 3/3 at
+  `818ccbd`. This is a product repair, not an evidence-only change.
+- Earlier runner/export diagnostics (unavailable unzip; orchestration CRLF) stopped before
+  applicable Maven/schema execution. JDK jar and raw LF transport reused admitted tooling.
+- Browser fixture initially referenced package-private password utility from outside Identity:
+  compile stopped before tests. Fixture moved into Identity; its renamed source was then added
+  to the manifest. The intermediate 179-file owner run covered owner inputs but not that unused
+  browser fixture; final source/export has all 180 controlled inputs.
+- Data test oracles initially tried a second operating Organization, app TEMP and migrator
+  SET ROLE app. Actual baseline correctly refused these. Corrected tests respect those
+  restrictions; no privilege relaxation, second Organization or schema-rule weakening.
+- Historical Project browser root22 stopped before Chrome because installed Chrome drifted.
+  Root26 at `691fc2d` passed P01–P03, then a harness list-count assertion ran before the scoped
+  asynchronous list was ready. Safe log `933b0c0b5a1a6fa699c592378994f45eb3f07318772b6034bd246b8f93840e95`.
+  `1d3fbd4` waits for the exact permitted Project row before asserting list count/non-disclosure;
+  no product or oracle weakening. Previous roots/logs remain retained and cleaned, not reused.
+
+### 18.3 Consolidated milestone results and exact-source lineage
+
+[Run ledger](evidence/project-group-runs.tsv) retains source, class/count/result, schema, raw-input
+count, manifest/archive and private-log hash for predecessor RED/engineering failures and GREEN.
+Counts below are **distinct source executions**, not a single same-source aggregate.
+
+| Qualification | Exact executed source | Result |
+|---|---|---|
+| Project actual HTTP contracts | `5f1fca9f6c650381b1e47d7eb426776730367d1a` | 6/6, 0 failure/error/skip; log 83d429db… |
+| Project data/relationship/privilege | `f25a3a0de0bc3036368f5ecee318926ef21e97d5` | 3/3; log 9a1b47a6… |
+| Project atomicity/concurrency | `818ccbdd6b8c15cb8e81ca4bbb2b5ecb0cda7286` | 3/3; log fa777e92… |
+| Project owner/expiry/history/refused replay | Same `818ccbd` | 3/3; log ff23cc56… |
+| Affected Account directory/credential/lifecycle | Same `818ccbd` | 6/6; log 645e5f94… |
+| Affected reissue/outcome/purpose | Same `818ccbd` | 5/5; log b91d0efd… |
+| Affected zero implicit membership/roles | Same `818ccbd` | 1/1; log 63cba4a4… |
+| Complete affected Web + TypeScript | `e9e814a6fcf617b90862d35b7e84e711f1c2a51a` | 36/36 (28 prior + 8 Project); TypeScript PASS |
+| Final offline package/content/actual headed Chrome | `1d3fbd4d35650ec2c561032ae605e440a639473c` | Package PASS, browser 8/8, fixture DB oracle PASS |
+
+Latest application/Web source is **e9e814a6fcf617b90862d35b7e84e711f1c2a51a**.
+From that commit through the final browser source, only test fixture/data oracles, browser/runner,
+input manifest and execution record changed; production Java, Web, dependencies and migrations
+are byte-identical. Repaired application is what the final package actually built. Further
+publication changes only status/evidence/handoff/runner README documentation and the README's
+input-manifest hash; no application/test/runner behavior changes. Executed raw manifest identities
+remain those recorded above, not retrospectively replaced by the publication manifest.
+
+Web exact manifest `6799687e5f95e2b8fa45188a99fbd88c47d5e3816aafb2298a0854f8c3f1a624`;
+archive `e85cb05d0672bec3d442732d08ab4c73d5d9196367fcbdb869ee0ff25d8abfed`;
+180 raw inputs. Retained safe Web log
+`ee3094c7f9762bc53b8d11175dea08eba60d2baaa5e870387f8b38a6fab6fa43`;
+JSON result `7b73d7ba6203d06090d82bd2f269ce12a7cdd2a0c1482a0f23ff6c3dbe8176fa`.
+44 cached Windows packages/1,255 members and original/projected inputs checked before/after;
+no install/download. Full legacy 103 regression is retained from section 16 and was not
+rerun after each microtask. Applicable Account regression here is 12/12, not a new 103 claim.
+
+### 18.4 Final actual package and browser
+
+Owned root: `/home/phuclam/idea-iam-ui-20261007-46/run-project-qualification-27`.
+Exact source/package/browser: **1d3fbd4d35650ec2c561032ae605e440a639473c**.
+Local/remote raw 180/180 PASS; manifest
+`98013f5adae745c779e1809caf650ca1b2f9c8f157198d22fb987f50e8d2cc77`;
+identical transferred archive
+`371e81e088fb7441d1c841afb290a1a973c43f3510e57fac405898965fa86537`.
+JAR SHA-256 **`1f45b1eac8a57fc0a17f9f2194fb9851ef7b519ee83cee64b559ad82b7179592`**.
+Executable loader/manifest/actual Web, 57 exact nested JAR hashes, 0 JSR305 providers,
+0 build-tool payload, 3/3 notices and immutable controlled V1–V14 bytes: PASS.
+
+Exact published commands:
+```text
+bash tests/iam-ui-46/account-browser.sh 1d3fbd4d35650ec2c561032ae605e440a639473c 98013f5adae745c779e1809caf650ca1b2f9c8f157198d22fb987f50e8d2cc77 project-qualification-27 build
+pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical transferred JAR> -RepositoryRoot <raw verified export>
+bash tests/iam-ui-46/account-browser.sh <same SHA> <same manifest> project-qualification-27 start
+<admitted Windows Node> <raw verified export>/tests/iam-ui-46/project-browser.mjs <same SHA> <same manifest> project-qualification-27
+bash tests/iam-ui-46/account-browser.sh <same SHA> <same manifest> project-qualification-27 verify
+bash tests/iam-ui-46/account-browser.sh <same SHA> <same manifest> project-qualification-27 stop
+```
+Backend ledger uses `run-owner-tests.sh <source> <manifest> <label> <selector> <count> PASS|RED`.
+Web used `run-web-tests.ps1 -SourceRoot <verified export> -SourceSha e9e814a… -Oracle PASS -ExpectedCount 36`.
+Only admitted absolute Node, direct offline Maven goals, cached tools/dependencies; no lifecycle
+exec/clean, new dependency, package/browser download or Python execution.
+
+| Actual browser oracle | Result |
+|---|---|
+| P01 actual current context, Org create, no implicit participation | PASS |
+| P02 Group target prerequisite and explicit Project → Group membership | PASS |
+| P03 ended history, rejoin new association, Group eligibility and explicit Group end | PASS |
+| P04 Project-only scope cannot create/list hidden Project; ordinary direct route refuses | PASS |
+| P05 exact-version stale write refuses, no false success | PASS |
+| P06 real committed 201 response loss, locked controls, same OperationId resolution once | PASS |
+| P07 confirmed write + unavailable refresh stays unavailable, not replaced by success | PASS |
+| P08 labelled keyboard, 780px no page overflow, cookie/private boundaries, logout/reload | PASS |
+
+Human-approved installed Chrome **155.0.8059.39** / SHA-256
+`d3784ffbf1f6109348416064b3e4cd739b06fa61d89a81b262c780df9f32270c`,
+recorded before execution in [envelope section 7](execution-envelope.md#7-projectgroup-browser-tooling-successor--2026-10-08).
+Playwright/core 1.62.1; Windows Node 24.19.0. Actual same-origin packaged Web via
+normally trusted `https://localhost:18446/`; one Server listener `127.0.0.1:18446`,
+owned Windows loopback SSH forwarding. Same section 16 certificate/validity, no TLS bypass
+or trust-store modification. This does not requalify historical Chrome 154 runs as Chrome 155.
+
+Safe browser log `07fc9ba884f17e51787cea82666e500262eadf0d259be4c03e0506c89ed4f884`;
+private package log `fe61d2b4825e65577e64f502ff5a9e4ec48bab9adf82cf73807cc89c91e05683`;
+Web build `7b17bc17fd76f8be4bf6f7c3dad4ab076bc1d7d4d306512ad544e9216966f275`;
+raw source pre/final check `bd37e527464046e6c245b2a4f160f4ff70a7abf6937ac1a5f6448f1fdf48cc5a`.
+Raw private log access limitation remains: hash identifies a retained file, not independent
+GitHub access. No password, cookie, proof, CSRF, HAR, screenshot or private diagnostic in evidence.
+
+### 18.5 Postflight, limits and next unit
+
+Final schema `iam_ui_8c2ef21cd8b2467da45aed4a2da93a2b`. Actual fixture DB oracle PASS:
+creator Project membership 0, implicit assignments 0, retained Project association history 2
+with one ended, Group ended history 1, accepted owner results each have required Audit and no
+duplicate operation result. Source/tools/package postflight unchanged, 82 toolchain + 544
+resolved inputs rechecked. Owned JVM was terminated before exact source-marker/owner-guarded
+schema removal; exact remainder 0, all owned IAM UUID schemas 0, public tables 0.
+Private fixture JSON removed; both qualification listeners/owned SSH forward stopped.
+**Database retained**, no DROP DATABASE; failed roots/logs preserved.
+
+Final Windows Node/approved Chrome executable rehashes also match their admitted pins.
+Publication checks: 84 local document links, 32 unique operation IDs, 93 task IDs / 54 complete,
+historical V1–V12 unchanged, application/Web/migration/dependency lineage unchanged after e9e814a,
+test fixture/classes absent from executable payload, repository tracked-file hygiene and diff
+whitespace PASS. No implementation extension hooks configured. These are author/configuration
+checks, not runtime or independent-review acceptance. The untracked local Vitest cache is not
+part of the publication; no unrelated user file is adopted or deleted.
+
+Only `idea_ddm_iam_ui_20261007_46`, existing separate migrator/app identities, synthetic data.
+Preview 18444, other databases, company/Vault/production data untouched. No live Q15 adoption.
+No persistent Project/Group deployment: do not interpret the closed test URL as a running preview.
+
+Next authorized vertical slice: **US3 T055–T064 role catalogue/independent assignment wizard**.
+Custom Role/Inspector/final cross-screen accessibility remain later tasks. The browser cases
+above qualify this slice, not full US6 accessibility/recovery or whole-feature PG5.
+PR #47 stays Draft/Open, Issue #46 stays open. Verifier, deployment, merge and timer action
+remain NOT-RUN / not performed. No accepted spec/design/Q14/Q15 or architecture reopened.
