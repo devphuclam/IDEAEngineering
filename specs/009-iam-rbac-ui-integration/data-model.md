@@ -87,6 +87,15 @@ bootstrap marker remain unchanged. No adoption grant is migration data.
 
 ## 5. Migration/rollback validation — actual NOT-RUN
 
+The heading above is the frozen design's execution state, not the current successor result.
+Current foundation/account/Project/assignment qualification is recorded in
+[handoff sections 12–19](integration-readiness.md#19-role-assignment-ui-usable-vertical-slice--2026-10-08).
+US3 adds V15 only: immutable Access Policy command envelope + request/commit authorization
+evidence and a fixed-schema narrow assignment termination function. Grant/end/replace/regrant,
+raw DML refusal, distinct Super recovery, atomic failure, retry/concurrency and current authority
+recheck are qualified in isolated schemas; V1–V14 remain immutable. Full feature upgrade/rollback,
+Custom publication/Inspector and deployment qualification are not inferred from these runs.
+
 Qualify predecessor upgrade/fresh isolated migration, exact legacy seeds/history, same-Org
 constraints, period edges, concurrent tuple/regrant/replacement, immutable content, app DML/SET ROLE
 refusal and required-evidence failure. Separate migrator/app; only approved UUID-owned schemas or

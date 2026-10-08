@@ -228,3 +228,35 @@ Full exact-source results, retained failures/limitations, hashes and cleanup are
 and the [run ledger](../../specs/009-iam-rbac-ui-integration/evidence/project-group-runs.tsv).
 Both listeners and owned schemas have been cleaned; DB and historical logs retained. Next is
 the authorized US3 assignment slice, not deployment/merge or whole-feature completion.
+
+## Role Assignment consolidated milestone
+
+UI-R01 and UI-R05–R09 use real current IAM/evaluator/delegation and authored RBAC/wizard UI.
+No Custom Role publication, Inspector route, DESIGN-to-executable fallback or test-only HTTP
+route. `AssignmentBrowserFixtureCommand` is excluded from the application; its sealed business
+role is a migrator-only prerequisite, not qualification of Custom Role activation.
+
+Final package/browser source `6687439cd6c26ee2612effadba69b4e647b3cf42`, manifest
+`e99f5a2a25aec13359a5e6b0afedeb494851dd0c20ec76419ef25f20e6449cc5`, owned
+`/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-25`:
+
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> assignment-qualification-25 build
+    pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical JAR> -RepositoryRoot <raw export>
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> assignment-qualification-25 start
+    <admitted Windows Node> <raw export>/tests/iam-ui-46/assignment-browser.mjs <source> <manifest> assignment-qualification-25
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> assignment-qualification-25 verify
+    bash tests/iam-ui-46/account-browser.sh <source> <manifest> assignment-qualification-25 stop
+
+Console mode is forbidden for assignment runs. Same exact database, fresh marked UUID schema,
+offline tools/cache, Chrome155/Playwright1.62.1, normal loopback HTTPS18446; preview18444 untouched.
+R01–R09 cover exact independent roles, preview, atomic replace/end history, stale/refused states,
+Project filtered Actor versus Group principal, DESIGN option refusal, actual committed response
+loss/same-ID resolution, unavailable reads, keyboard/privacy/logout. Final DB oracle requires
+7 accepted + 1 refused, 16 authorization rows/8 Audit, no duplicate or implicit membership.
+
+Assignment HTTP10/atomicity4/recovery3; affected Account11/Project9/evaluator22 across retained
+exact-source runs; complete Web44 + TypeScript. No same-source grand total or new legacy103 claim.
+Executed failures and observation/fixture corrections remain in [section 19](../../specs/009-iam-rbac-ui-integration/integration-readiness.md#19-role-assignment-ui-usable-vertical-slice--2026-10-08)
+and [ledger](../../specs/009-iam-rbac-ui-integration/evidence/assignment-runs.tsv). V1–V14 immutable;
+V15 protects owner state/evidence and narrows assignment termination, not blanket app DML.
+All fixture listeners and schemas cleaned after owned JVM exit; DB/logs retained, no deploy/merge.

@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.2 metadata successor / Draft DESIGN; technical contract v0.1 unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.3 execution status successor / Draft partially IMPLEMENTED; accepted technical semantics unchanged |
 | Authority / owner / author | INFORMATIVE refinement of DOC-06/REQ-AUTH-001…010 / Access Policy; named accountable owner UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; formal Product Decision Authority gates/runtime NOT-RUN / NOT-APPLICABLE |
-| Date / classification / retention | 2026-10-07 Asia/Ho_Chi_Minh / INTERNAL / Git and immutable referenced versions |
+| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; qualified subsets in handoff sections 16/18/19; remaining runtime NOT-RUN / NOT-APPLICABLE |
+| Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git and immutable referenced versions |
 | Change / upstream / downstream | Issue #46 / [Core data owner](../../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md), [change record](../../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / [operations](operations.md), [data model](../data-model.md), future tests |
-| Supersession / trigger / evidence | Old role/Permission semantics not replaced / code, version, principal, scope or delegation change / proposed exact values; no seed execution |
+| Supersession / trigger / evidence | Old role/Permission semantics not replaced / code, version, principal, scope or delegation change / exact role/profile seed qualified; actual action availability in handoff sections 16/18/19 |
 
 ## 1. Registry
 
@@ -18,39 +18,48 @@ a direct/Org assignment. Org inheritance covers only the declared descendant act
 
 | Code | Owner / meaning | Supported scope / applicability | Source state |
 |---|---|---|---|
-| account.read | IAM: redacted directory/detail/login-state read | O; direct administration | DESIGN |
+| account.read | IAM: redacted directory/detail/login-state read | O; direct administration | IMPLEMENTED branch qualification |
 | account.create | IAM: PENDING Actor/Account/native login creation | O; direct administration | IMPLEMENTED predecessor |
 | account.disable | IAM: eligibility disable | O; direct administration | IMPLEMENTED |
 | account.re-enable | IAM: separate enablement | O; direct administration | IMPLEMENTED |
 | account.credential.setup.issue | IAM: first-credential proof | O; direct administration | IMPLEMENTED synthetic-delivery subset |
 | account.credential.reset.issue | IAM: exact-login reset proof | O; direct administration | IMPLEMENTED synthetic-delivery subset |
-| project.create | Project Governance: create Project | O only; direct administration | DESIGN |
-| project.admin.read | Project Governance: administrative Project/Group/roster queries | O/P; direct administration | DESIGN |
-| project.update | Project Governance: Project display-name update | O/P; direct administration | DESIGN |
-| project.membership.assign | Project Governance: add explicit participation | O/P; direct administration | DESIGN |
-| project.membership.remove | Project Governance: end selected participation | O/P; direct administration | DESIGN |
-| project.group.create | Project Governance: create Project-scoped Group | O/P; direct administration | DESIGN |
-| project.group.update | Project Governance: Group display-name update | O/P; direct administration | DESIGN |
-| project.group.membership.assign | Project Governance: direct eligible member to Group | O/P; direct administration; target active Project Member | DESIGN |
-| project.group.membership.remove | Project Governance: end selected Group membership | O/P; direct administration | DESIGN |
-| project.read | Project Governance: participant's bounded Project identity/context | O/P; participant membership required | DESIGN actual owner query, not document read |
-| role.catalogue.read | Access Policy: supported catalogue/version/diff | O/P; redacted authorized administration | DESIGN |
+| project.create | Project Governance: create Project | O only; direct administration | IMPLEMENTED branch qualification |
+| project.admin.read | Project Governance: administrative Project/Group/roster queries | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.update | Project Governance: Project display-name update | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.membership.assign | Project Governance: add explicit participation | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.membership.remove | Project Governance: end selected participation | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.group.create | Project Governance: create Project-scoped Group | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.group.update | Project Governance: Group display-name update | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.group.membership.assign | Project Governance: direct eligible member to Group | O/P; direct administration; target active Project Member | IMPLEMENTED branch qualification |
+| project.group.membership.remove | Project Governance: end selected Group membership | O/P; direct administration | IMPLEMENTED branch qualification |
+| project.read | Project Governance: participant's bounded Project identity/context | O/P; participant membership required | IMPLEMENTED branch qualification |
+| role.catalogue.read | Access Policy: supported catalogue/version/diff | O/P; redacted authorized administration | IMPLEMENTED branch qualification |
 | role.definition.prepare | Access Policy: prepare/validate permitted Custom candidate | O/P; declared delegation envelope | DESIGN |
 | role.definition.activate | Access Policy: seal immutable permitted Custom successor | O/P; current envelope + expected base | DESIGN |
-| role.assignment.manage.business | Access Policy: preview/grant/end/replace business role | O/P; exact delegation/principal/scope | DESIGN |
-| role.assignment.manage.administration | Access Policy: AA/PA/Audit Reader or permitted administrative Custom assignments | O/P; exact profile below | DESIGN |
-| role.assignment.manage.highest | Access Policy: exact Super/PRA assignment changes | O-authorized effective protected Super; Super targets O, PRA targets declared O/P inside same Org | DESIGN |
-| access.inspect | Access Policy: safely redacted assignment/path explanation | O/P; authorized read scope | DESIGN |
+| role.assignment.manage.business | Access Policy: preview/grant/end/replace business role | O/P; exact delegation/principal/scope | IMPLEMENTED branch qualification |
+| role.assignment.manage.administration | Access Policy: AA/PA/Audit Reader or permitted administrative Custom assignments | O/P; exact profile below | IMPLEMENTED branch qualification |
+| role.assignment.manage.highest | Access Policy: exact Super/PRA assignment changes | O-authorized effective protected Super; Super targets O, PRA targets declared O/P inside same Org | IMPLEMENTED branch qualification |
+| access.inspect | Access Policy: safely redacted assignment/path explanation | O/P; authorized read scope | IMPLEMENTED bounded assignment reads; Inspector UI-R10 DESIGN |
 | audit.read | Audit owner: bounded attributable administration history | O/P; authorized read scope | DESIGN; no export/mutation |
 | role.assign.account-administrator | Access Policy: legacy exact AA@1/@2 grant | O; direct Actor; legacy profile unchanged | IMPLEMENTED INTERNAL |
 
-This is 25 exact codes: 6 predecessor codes and 19 DESIGN codes. Redemption authenticates with
+The frozen design has 25 exact codes (historically 6 predecessor + 19 DESIGN). Current qualified owner actions are 22; Custom prepare/activate and audit.read remain DESIGN. Redemption authenticates with
 target-bound proof, not an issuance Permission. Session/context is ordinary eligible-self access,
 not an added role. DESIGN availability is not assignable/executable until the owner action is
 implemented and qualified. Document/Checkout/Approval/Release and Product Configuration remain
 DESIGN outside this registry; administrators cannot create codes.
 
 ## 2. Exact built-in version manifest
+
+Current US3 availability is an exact Server projection, not inferred from this design manifest.
+AA@1/@2/@3, PA@1 and Super@1 content is qualified for ordinary supported granting; PRA@1,
+Audit Reader@1 and Super@2 ordinary granting are non-selectable until all their content is
+qualified. Existing Q15-adopted Super@2 can exercise its qualified current assignment paths;
+this does not qualify ordinary granting of its remaining content. `access.inspect` currently
+qualifies UI-R05 assignment reads, not UI-R10 Inspector. Existing sealed business roles may be
+assigned within their declared scope/envelope; the US3 synthetic prerequisite is not Custom
+prepare/activation implementation. See [current evidence](../integration-readiness.md#19-role-assignment-ui-usable-vertical-slice--2026-10-08).
 
 | Exact role | Declared content / support |
 |---|---|

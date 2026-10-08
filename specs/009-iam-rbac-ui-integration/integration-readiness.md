@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.13` / Draft Account + Project/Group engineering milestone record; PG2/PG3/PG4 PASS |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.14` / Draft Account + Project/Group + Assignment engineering milestone record; PG2/PG3/PG4 PASS |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–18; independent US2 implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–19; independent US2/US3 implementation acceptance NOT-RUN / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, sections 15–16 historical Account MVP, section 17 T034 closure, section 18 current Project/Group milestone; whole 009 qualification NOT-RUN |
+| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness lineage, sections 12–14 foundation predecessors, sections 15–16 historical Account MVP, section 17 T034 closure, section 18 historical Project/Group milestone, section 19 current Assignment milestone; whole 009 qualification NOT-RUN |
 
 ## 1. Exact lineage and ownership
 
@@ -1342,3 +1342,152 @@ Custom Role/Inspector/final cross-screen accessibility remain later tasks. The b
 above qualify this slice, not full US6 accessibility/recovery or whole-feature PG5.
 PR #47 stays Draft/Open, Issue #46 stays open. Verifier, deployment, merge and timer action
 remain NOT-RUN / not performed. No accepted spec/design/Q14/Q15 or architecture reopened.
+
+## 19. Role Assignment UI usable vertical slice — 2026-10-08
+
+**US3 T055–T064 engineering COMPLETE; 64/93 tasks.** Human FAST DELIVERY authority begins at
+`45da65c9b92231dda5214318df515afa2cddb2fc`; this is author qualification, not independent
+implementation acceptance or whole-feature PG5. No Custom Role publication/Inspector was opened.
+The original RBAC header/tabs/table/drawer and visual tokens are retained, with actual Server data
+and the approved Scope → Actor within Group filter OR explicitly labelled Group principal → exact
+Role/version → Server delegation preview/consequences/reason/confirm flow. No Department scope,
+mock authority, bootstrap shortcut or role-name authorization.
+
+### 19.1 Implemented boundaries and trace
+
+| Requirement / operation | Source and qualification |
+|---|---|
+| Exact catalogue and qualified availability, UI-R01 | `RoleCatalogueQueries` / `RoleCatalogueController`; bounded scope-authorized reads, exact IDs/code/version, per-Permission IMPLEMENTED/DESIGN; unqualified content not selectable |
+| Independent Actor/Project Group grants, UI-R05–R07 | `RoleAssignmentAdministration` / controller; Org/Project scope, Group confined to its Project, same applicable permission path AND delegation envelope; preview is advisory; target ActorId never establishes caller identity |
+| End/replace/regrant history, UI-R08/R09 | Canonical `revoked_at`, expected row version, immutable before/result envelope, new successor ID; atomic end + insert + Access Policy outcome + request/commit authorization evidence + Audit |
+| Commit-time current authority / recovery | Existing shared IAM security-write lock/UoW and evaluator; authority recheck, self-elevation refusal, distinct eligible Actors across supported Super@1/@2; no last-recovery removal |
+| Browser multi-role/scope/retry | `AssignmentWizard`, authored `RbacView`, ordinary same-origin client, actual `#rbac` route; separate assignment IDs and exact code/version, stale/refused/unavailable/unresolved states; no automatic retry/new OperationId |
+
+Trace: FR-014–019/021/029, REQ-AUTH-001/003/004/006/010, IF-RBAC-ADMIN; catalogue FR-019–021
+and REQ-AUTH-002/009/010; existing Q14 administration versus participation remains unchanged.
+V15 is additive: immutable `assignment_owner_operation` / `assignment_authorization_evidence`
+and a fixed-schema, app-executable narrow `role_assignment_end` port. Raw assignment DML still
+returns SQLSTATE 42501. V1–V14, legacy role contents, dependency graph and auth/session contracts
+are unchanged. This is not blanket UPDATE/DELETE authority or a generic operation framework.
+
+Ordinary granting selects only complete qualified role content. AA@1/@2/@3, PA@1 and legacy
+Super@1 are qualified; PRA@1, Audit Reader@1 and ordinary Super@2 granting remain non-selectable
+while their complete content includes unimplemented Audit/Custom actions. Existing separately
+adopted Super@2 authority still evaluates exact supported assignment actions: catalogue
+assignability and an existing assignment's effective permission are different questions.
+Group/business qualification uses an exact sealed `project.read` prerequisite role seeded only
+by the migrator fixture. This does **not** implement Custom Role publication or claim a production
+business-role catalogue is populated; that is US4. Administrative roles remain Actor-only.
+
+### 19.2 Targeted RED/GREEN and retained failures
+
+Exact-source PostgreSQL rows/hashes are in [assignment-runs.tsv](evidence/assignment-runs.tsv).
+All use the approved database, separate app/migrator and fresh source-marked UUID schemas.
+
+- Catalogue tracer `f8aeabf…`: real HTTP 404, 1/1 failed; `d386c63…`: 1/1 GREEN.
+- Grant tracer `5625058…`: real HTTP 404, 2 tests/1 failure. Early GREEN attempts exposed a
+  preview DTO missing-value defect and PRA self-grant defect; final successor `680ae3a…`: 8/8.
+- `39d0802…` has 10 tests/2 genuine failures: highest Org authority incorrectly evaluated at
+  Project scope, and ordinary existing/missing AssignmentId disclosure. `456aabd…`: 10/10 GREEN.
+- Web first config attempt discovered no tests and is **NOT an executed RED**. Corrected
+  `540e0bd…` ran six client tracers, 6/6 failed; `2c1bea4…` ran them 6/6 GREEN + TypeScript.
+  Safe RED log `7413cdf76ad6e35d433b4e66b5af76db8f5c5710a1a88d97bb3e14e6505cbc65`;
+  RED JSON `343bde1183f71057f0a24f246ee3d3588c3448cbd777cbfc9261d0edc417d39e`.
+- Recovery initial qualification had cross-test preexisting holders; isolated fixture repair
+  produced 3/3 GREEN. Atomicity/recovery oracles already implemented correctly are qualification
+  GREEN, not fabricated pre-implementation RED. T056/T058 behavior obligations are qualified;
+  task wording's historical RED intent is not a claim every case initially failed.
+- Affected Project concurrency initially returned CSRF 403 while two threads initialized a
+  fresh post-login token. Explicit ordinary CSRF initialization before racing owner commands
+  repairs the **test**, not Server CSRF. Retained failed run -19; exact successor -23: 3/3 PASS.
+- Runner -10 expected seven Account tests but executed six, all PASS; the command still stopped
+  for count mismatch. Correct six-test successor -16 is PASS, not a retrospective runner PASS.
+- Browser -04 stopped at ambiguous select labels; named controls and independent target/catalogue
+  request lifetimes were corrected. -15 stopped at a harness `isDisabled()` option false negative:
+  the native DOM `option.disabled=true` and Server `selectable=false` were verified; native property
+  oracle replaces that assertion. -22 passed R01–R08/DB oracle but stopped at immediate focus
+  observation; successor waits for the rendered title focus without weakening the focus condition.
+  Failed logs/roots are retained, not rewritten: safe log hashes -04
+  `73f114e4244b80a46f239e060032eedb1dbadd6b8a0e531d868b3e4a8e8da421`, -15
+  `899ba113fbe5a61b71ed3b944b6f52cbe653337fdb1f7275cf1680f4b13552af`, -22
+  `6fbae69e87989fac0be6304b9e2cf178e29b178468d618486a0f5f436715a5fe`.
+
+### 19.3 Consolidated qualification and exact lineage
+
+| Executed source | Actual checks | Result |
+|---|---|---|
+| `b38849831618d7229b6dcf66d6bc95ab5dc65861` | Assignment HTTP 10, atomicity 4, recovery 3; fresh roots -07/-08/-09 | 17/17 PASS; failures/errors/skips 0 |
+| `0c92f7597ff1dc924a3a40a431d05c4fa3277157` | Affected Account 6 + proof reissue 5 + Project HTTP 6, roots -16/-17/-18 | 17/17 PASS |
+| `7ff2e3085a5f5624423083f9059ea0473eca626e` | Affected Project atomicity 3 + evaluator 22, roots -23/-24 | 25/25 PASS |
+| `0c92f7597ff1dc924a3a40a431d05c4fa3277157` | Complete affected Web (36 prior + 8 assignment), TypeScript | 44/44 PASS + typecheck PASS |
+| `6687439cd6c26ee2612effadba69b4e647b3cf42` | Offline package/content, actual headed Chrome, fixture DB/postflight | PASS; Chrome 9/9 |
+
+No single same-source backend total is implied. Affected regression is 42 tests across the
+recorded pins, not a rerun of historical legacy 103. Production Java/migrations/dependencies
+are identical from b388498 through final package source; production Web is identical from
+0c92f759 through final package source. Later changes are test fixture/CSRF initialization,
+browser observation/runner manifest only. Publication changes status/contracts/evidence/README
+and its manifest hash only; no post-qualification implementation change.
+
+Web raw manifest `acd483f1797d9cbc4e988cf791de7da2060c1959a7ca30e9792f8bead9a429e4`;
+archive `cb08e9a3349f9d3e53066749cf3c52d39feb9ab6342838cbda35de5e6b609a8c`;
+194 inputs, 44 cached packages/archives, 1,255 original/projected members unchanged. Safe log
+`be153e478917da5dcea7b01ad8899235f04484a316c21ee36e45b6be5d4eae92`; result JSON
+`c6ecd47a0d1e5d2e454f0d2d4b7736670d277b821785d6f8b493d6bedde63485`.
+
+Final fresh owned package root `/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-25`;
+local/remote raw 194/194 PASS. Manifest
+`e99f5a2a25aec13359a5e6b0afedeb494851dd0c20ec76419ef25f20e6449cc5`; identical transfer archive
+`231d336b8550b20356911958da47ccda74189574034fe81b0ef4685909914329`.
+**JAR SHA-256 `86fc24cf3b4acacc46346b47b54d4a5987d48d95f2c494f68de54cbeb11ff433`.**
+Executable manifest/loader/actual Web, 57 exact runtime JARs, 0 JSR305 providers/build-tool payload,
+3/3 notices and V1–V15 raw migration projection PASS. Test-only fixture classes are not product routes.
+
+Published command family (actual source/manifest above, admitted absolute tool paths):
+```text
+bash tests/iam-ui-46/run-owner-tests.sh <source> <manifest> assignment-qualification-NN <exact class> <actual count> PASS
+pwsh tests/iam-ui-46/run-web-tests.ps1 -SourceRoot <raw export> -SourceSha 0c92f759… -Oracle PASS -ExpectedCount 44
+bash tests/iam-ui-46/account-browser.sh 6687439cd6c26ee2612effadba69b4e647b3cf42 e99f5a2a25aec13359a5e6b0afedeb494851dd0c20ec76419ef25f20e6449cc5 assignment-qualification-25 build
+pwsh tools/iam-ui-readiness/package-preflight.ps1 -JarPath <identical transferred JAR> -RepositoryRoot <raw export>
+bash tests/iam-ui-46/account-browser.sh <same source> <same manifest> assignment-qualification-25 start
+<admitted Windows Node> <raw export>/tests/iam-ui-46/assignment-browser.mjs <same source> <same manifest> assignment-qualification-25
+bash tests/iam-ui-46/account-browser.sh <same source> <same manifest> assignment-qualification-25 verify
+bash tests/iam-ui-46/account-browser.sh <same source> <same manifest> assignment-qualification-25 stop
+```
+
+### 19.4 Actual browser and postflight
+
+| Browser case | Result |
+|---|---|
+| R01 authored RBAC, actual catalogue/context, ordinary private session | PASS |
+| R02 explicit Org, exact Actor/code/version, independent multiple assignments | PASS |
+| R03 atomic replacement/new ID, separate end, other-role/history retained | PASS |
+| R04 stale predecessor version refuses without false success | PASS |
+| R05 Project-scoped Actor filtered within Group versus explicit Group principal | PASS |
+| R06 DESIGN roles disabled; ordinary direct route fails closed | PASS |
+| R07 actual committed 201 response loss, locked intent, same-OperationId resolution | PASS |
+| R08 unavailable read is not an empty/successful assignment list | PASS |
+| R09 title focus/Tab/Shift-Tab/Escape, 780px no page overflow, private boundaries, logout/reload | PASS |
+
+Actual headed Chrome 155.0.8059.39, admitted Playwright/core 1.62.1, Windows Node 24.19.0;
+unchanged approved hashes, current normally trusted section 6 certificate/SAN/validity. Actual
+same-origin Web from repaired package via loopback `https://localhost:18446/`; no TLS bypass,
+trust change, JWT or localStorage auth. Probe target is synthetic; preview18444 unchanged.
+Safe final browser log `680e9d38d780d2fda9f5a4b3e745ff93d22d7ebcec040ac74f86b69ba209da84`;
+private package log `c0abf1f823f58c30026c21191d867449e84f03022b14b19aff54fac760fa7d71`;
+Web build `953b1181971b66cc8414c1b7197c1826c910e4ea2a2e126dbadb3e68da74fac6`;
+raw source final check `1bbc8bb6face3e132fc22dc2d9125c23969450f88e88e916e5cdee2f107855a3`.
+Raw host-log access limitation remains: recorded hash is not independent GitHub log access.
+No password/cookie/CSRF/proof/HAR/screenshot/private fixture bytes are published.
+
+Fixture schema `iam_ui_89c8074916e84b6ca34f41b40d312d10`: 7 ACCEPTED + 1 stale REFUSED,
+16 request/commit evidence rows + 8 Audit rows; two independent live AA roles, one Group
+principal; no retry duplicate or implicit membership. Existing direct admin has zero personal
+Project Membership. JVM PID226120 stopped before exact source/owner-guarded schema cleanup;
+SSH forward PID30328 owned and stopped; both listeners absent. Exact schema remainder 0,
+public tables 0; private fixture removed, database and historical failure logs retained.
+82 toolchain + 544 resolved inputs/source/package rechecked; final Node/Chrome hashes unchanged.
+
+PR #47 stays Draft/Open and Issue #46 stays open. T065–T093, Custom Role publication,
+Inspector/history/general resolution and full US6/whole-feature qualification remain later work.
+No persistent deployment, live adoption, verifier, merge, timer action or company/Vault data.

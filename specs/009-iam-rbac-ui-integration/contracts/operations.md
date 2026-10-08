@@ -2,19 +2,19 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.4 status successor / Draft partial IMPLEMENTED; accepted technical semantics unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console design / 0.5 status successor / Draft partial IMPLEMENTED; accepted technical semantics unchanged |
 | Authority / owner / author | INFORMATIVE refinement / IAM, Project Governance, Access Policy and Audit; named owners UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; Account/console and Project/Group engineering evidence in handoff sections 16–18, independent implementation review NOT-RUN / NOT-APPLICABLE |
+| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; Account/console, Project/Group and Assignment engineering evidence in handoff sections 16–19, independent implementation review NOT-RUN / NOT-APPLICABLE |
 | Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git |
 | Change / upstream / downstream | Issue #46 / [permissions](permission-delegation.md), [data](../data-model.md), accepted [Identity contract](../../../docs/product/instances/idea-engineering/api/identity-session.md) / [Web flow](web-flow.md), future tasks/tests |
-| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / Account/console and UI-P01–P13 qualified in handoff sections 16–18; remaining families DESIGN |
+| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / Account/console, UI-P01–P13, UI-R01 and UI-R05–R09 qualified in handoff sections 16–19; other families DESIGN |
 
 ## 1. Common wire and authority
 
-Account and Project rows explicitly marked IMPLEMENTED are qualified adapters in this branch,
+Account, Project and Assignment rows explicitly marked IMPLEMENTED are qualified adapters in this branch,
 not a deployed estate. Other new HTTP paths remain proposed DESIGN, not available routes; see
 [Account evidence](../integration-readiness.md#16-account-ui-mvp-fast-delivery-milestone--2026-10-07)
-and [Project/Group evidence](../integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08). JSON UUID identifiers,
+and [Project/Group evidence](../integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08), plus [Assignment evidence](../integration-readiness.md#19-role-assignment-ui-usable-vertical-slice--2026-10-08). JSON UUID identifiers,
 UTC ISO-8601 instants and integer expectedVersion are used. No client ActorId establishes caller
 authority; a targetActorId is permitted as an explicit admin target, checked against scope.
 Ordinary eligible session + existing CSRF protects every mutation; recipient redemption still
@@ -72,15 +72,15 @@ semantics preserved in section 4. Every DESIGN row needs real implementation + q
 | UI-P11 IMPLEMENTED | POST A/groups/{id}/members | operationId/scope/targetActorId/expectedGroupVersion/interval/reason → 201 association/version | project.group.membership.assign; C; current same-Project membership |
 | UI-P12 IMPLEMENTED | POST A/group-memberships/{id}/end | operationId/scope/expectedVersion/reason → 200 ended association | project.group.membership.remove; C |
 | UI-P13 IMPLEMENTED | GET P/{id} | Exact Project → bounded participant Project ID/name | project.read + Project Membership; Q; no roster or document access implied |
-| UI-R01 DESIGN | GET A/permissions; GET A/roles; GET A/roles/{id}/versions/{version} | scope/page/exact version → supported code/role content/profile/state | role.catalogue.read; Q; DESIGN not selectable |
+| UI-R01 IMPLEMENTED | GET A/permissions; GET A/roles; GET A/roles/{id}/versions/{version} | scope/page/exact version → supported code/role content/profile/state | role.catalogue.read; Q; DESIGN not selectable |
 | UI-R02 DESIGN | POST A/roles/candidates | operationId/scope/definitionId or new name/baseVersionId/permissionCodes/support/reason → 201 candidate ID/version/diff | role.definition.prepare + delegable-content envelope; C |
 | UI-R03 DESIGN | POST A/roles/candidates/{id}/validate | candidate expectedVersion → nonauthoritative validation/diff | role.definition.prepare + current envelope; preview only, no activation |
 | UI-R04 DESIGN | POST A/roles/candidates/{id}/activate | operationId/scope/expectedVersion/baseVersionId/reason → 201 immutable exact role version | role.definition.activate + current envelope; C; old assignments untouched |
-| UI-R05 DESIGN | GET A/assignments; GET A/assignments/{id} | scope/target/page → exact assignment/history/state | access.inspect; Q; redact cross-scope facts |
-| UI-R06 DESIGN | POST A/assignments/preview | principal/scope/roleVersionId/interval, optional old assignment/version → exact diff/eligibility/consequences | Corresponding business/admin/highest grant permission + envelope; no mutation |
-| UI-R07 DESIGN | POST A/assignments | operationId/principal/roleVersionId/scope/interval/reason → 201 new assignment | Corresponding grant permission + exact envelope; C |
-| UI-R08 DESIGN | POST A/assignments/{id}/end | operationId/scope/expectedVersion/reason → 200 ended assignment | Corresponding grant permission; C, last recovery check |
-| UI-R09 DESIGN | POST A/assignments/{id}/replace | operationId/scope/expectedVersion/newRoleVersionId/interval/reason → 200 old/new IDs | Corresponding grant permission; C; atomic end + new grant |
+| UI-R05 IMPLEMENTED | GET A/assignments; GET A/assignments/{id} | scope/target/page → exact assignment/history/state | access.inspect; Q; redact cross-scope facts |
+| UI-R06 IMPLEMENTED | POST A/assignments/preview | principal/scope/roleVersionId/interval, optional old assignment/version → exact diff/eligibility/consequences | Corresponding business/admin/highest grant permission + envelope; no mutation |
+| UI-R07 IMPLEMENTED | POST A/assignments | operationId/principal/roleVersionId/scope/interval/reason → 201 new assignment | Corresponding grant permission + exact envelope; C |
+| UI-R08 IMPLEMENTED | POST A/assignments/{id}/end | operationId/scope/expectedVersion/reason → 200 ended assignment | Corresponding grant permission; C, last recovery check |
+| UI-R09 IMPLEMENTED | POST A/assignments/{id}/replace | operationId/scope/expectedVersion/newRoleVersionId/interval/reason → 200 old/new IDs | Corresponding grant permission; C; atomic end + new grant |
 | UI-R10 DESIGN | POST A/access-inspections | targetActorId/permissionCode/scope/resourceId → redacted eligibility + all contributing paths + RBAC result | access.inspect; query/no owner mutation; owner gates distinguished |
 | UI-A01 DESIGN | GET A/history | scope/target/page → attributable administration change/outcome and safe before/after | audit.read; Q; no generic Audit export |
 | UI-O01 DESIGN | GET A/operations/{operationId} | Original operation → safe retained terminal metadata/result or unresolved | Current eligible originator + current relevant read authority, or independently scoped authorized inspector; no secret result |
