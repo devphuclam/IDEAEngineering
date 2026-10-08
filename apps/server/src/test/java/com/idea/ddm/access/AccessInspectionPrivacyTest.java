@@ -30,7 +30,7 @@ class AccessInspectionPrivacyTest {
             f.delegate(admin);f.delegate(target);f.sql("UPDATE idea_account SET status='DISABLED' WHERE actor_id='"+target.actorId()+"'");
             var response=f.post(client,"/api/v1/administration/access-inspections",input(target.actorId(),f.scope()));assertEquals(200,response.statusCode());var result=f.json.readTree(response.body());assertEquals("BLOCKED",result.path("rbacResult").asString());assertFalse(result.path("accountEligible").asBoolean());assertEquals(0,result.path("paths").size());
             assertEquals(Set.of("actorId","scope","permissionCode","implementationState","accountEligible","projectMembershipEligible","rbacResult","ownerBusinessGate","evaluatedAt","paths"),fields(result));
-            f.sql("UPDATE session_record SET revoked_at='2026-10-07T06:00:00Z' WHERE session_id='"+ctx.sessionId()+"'");assertEquals(401,f.post(client,"/api/v1/administration/access-inspections",input(target.actorId(),f.scope())).statusCode());return null;
+            f.sql("UPDATE session_record SET revoked_at='2026-10-07T06:00:00Z' WHERE actor_id='"+admin.actorId()+"' AND revoked_at IS NULL");assertEquals(401,f.post(client,"/api/v1/administration/access-inspections",input(target.actorId(),f.scope())).statusCode());return null;
         }));
     }
     @Test void legacyIamLookupIsMetadataOnlyAndAnotherReadAuthorizedActorCannotLearnItsResult()throws Exception{
