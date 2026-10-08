@@ -28,10 +28,11 @@ Native Account/Project/Group/RBAC integration is a separate engineering-qualifie
 [exact Permission/delegation](../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
 and [operation contracts](../../../../../specs/009-iam-rbac-ui-integration/contracts/operations.md).
 The accepted Identity v0.1 predecessor remains historical; the exact current branch availability,
-source/tests and limits are in [Feature 009 evidence](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+source/tests and limits are in [Feature 009 successor evidence](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#22-independent-review-repair-successor--2026-10-08).
 Account, Project/Group, assignment, Custom Role, Inspector and safe resolution adapters are
-IMPLEMENTED/qualified in Draft PR #47, not deployed or independently accepted. Audit history
-projection and other product-domain DESIGN permissions remain unavailable. Console adoption
+IMPLEMENTED/qualified in Draft PR #47, not deployed or independently accepted. Bounded independent
+administration history, ordinary AA/PA/PRA grants and exact confirmation diff are now repaired/
+qualified; general Audit export and other product-domain DESIGN permissions remain unavailable. Console adoption
 is separately qualified synthetic behavior, not authorization to upgrade a live estate.
 Current Core successors are registered in the instance catalogue; old approval hashes stay historical.
 

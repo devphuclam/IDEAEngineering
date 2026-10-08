@@ -41,11 +41,13 @@ and [operations](../../../../../../specs/009-iam-rbac-ui-integration/contracts/o
 have accepted design with Core successors DOC-03@0.8/04@0.16/05@0.27/06@0.19/08@0.14.
 PG2/PG3/PG4 and execution readiness were subsequently recorded explicitly. Current usable
 Account, Project/Group, Assignment, Custom Role and Inspector flows, source/qualification and
-known unsupported rights are in [current handoff](../../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+known unsupported rights are in [current repair handoff](../../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md#22-independent-review-repair-successor--2026-10-08).
 The [whole-feature engineering matrix](../../../../../../specs/009-iam-rbac-ui-integration/evidence/feature-009-closure-matrix.md)
 is the operation → source/test → executed evidence → pending external acceptance crosswalk.
 Existing Identity retry is not upgraded by general operation lookup: legacy outcomes are
-metadata-only. Audit history stays DESIGN. This is an internal branch reviewer packet, not
+metadata-only. Independently authorized bounded administration history is now qualified, not
+general Audit export. The three independent AA/PA/PRA and exact confirmation-diff gaps have
+successor evidence; predecessor independent review FAIL remains historical. This is an internal branch reviewer packet, not
 deployment, PG5, external sharing or recipient/team acceptance. Earlier accepted design and
 per-story evidence remain retained; no new framework/OpenAPI generator is claimed.
 

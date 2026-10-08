@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.4 execution status successor / Draft engineering-qualified branch profile; audit.read remains DESIGN; accepted technical semantics unchanged |
+| ID / class / version / state | IE-IF-IAM-UI-POLICY-001 / supported administration profile / 0.5 execution status successor / Draft review-repair qualified branch profile; bounded audit.read IMPLEMENTED; sealed role contents and delegation unchanged |
 | Authority / owner / author | INFORMATIVE refinement of DOC-06/REQ-AUTH-001…010 / Access Policy; named accountable owner UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; qualified action evidence in handoff sections 16–21; whole-feature external review / PG5 pending / NOT-APPLICABLE for deployment |
+| Baseline / reviewer / effective | Accepted spec e227cb1d; main 4e524443 / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; qualified action evidence in handoff sections 16–22; successor whole-feature review / PG5 pending / NOT-APPLICABLE for deployment |
 | Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git and immutable referenced versions |
 | Change / upstream / downstream | Issue #46 / [Core data owner](../../../docs/product/instances/idea-engineering/DOC-06-data-integration-and-migration-specification.md), [change record](../../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / [operations](operations.md), [data model](../data-model.md), future tests |
-| Supersession / trigger / evidence | Old role/Permission semantics not replaced / code, version, principal, scope or delegation change / exact role/profile seed qualified; actual action availability in handoff sections 16–21 and [closure matrix](../evidence/feature-009-closure-matrix.md) |
+| Supersession / trigger / evidence | Old role/Permission semantics not replaced; historical unavailable audit.read evidence unchanged / code, version, principal, scope or delegation change / exact role/profile seed qualified; actual action availability in handoff sections 16–22 and [closure matrix](../evidence/feature-009-closure-matrix.md) |
 
 ## 1. Registry
 
@@ -41,10 +41,12 @@ a direct/Org assignment. Org inheritance covers only the declared descendant act
 | role.assignment.manage.administration | Access Policy: AA/PA/Audit Reader or permitted administrative Custom assignments | O/P; exact profile below | IMPLEMENTED branch qualification |
 | role.assignment.manage.highest | Access Policy: exact Super/PRA assignment changes | O-authorized effective protected Super; Super targets O, PRA targets declared O/P inside same Org | IMPLEMENTED branch qualification |
 | access.inspect | Access Policy: safely redacted assignment/path explanation | O/P; authorized read scope | IMPLEMENTED bounded assignment reads and UI-R10 Inspector; US5 qualification |
-| audit.read | Audit owner: bounded attributable administration history | O/P; authorized read scope | DESIGN; no export/mutation |
+| audit.read | Audit owner: bounded attributable administration history | O/P; independent authorized read scope | IMPLEMENTED bounded owner projection; no general export/mutation |
 | role.assign.account-administrator | Access Policy: legacy exact AA@1/@2 grant | O; direct Actor; legacy profile unchanged | IMPLEMENTED INTERNAL |
 
-The frozen design has 25 exact codes (historically 6 predecessor + 19 DESIGN). Current qualified owner actions are 24; only audit.read remains DESIGN. Redemption authenticates with
+The frozen design has 25 exact codes (historically 6 predecessor + 19 DESIGN). All 25 current
+codes now have their bounded owner implementations qualified; this does not unlock any action
+outside this registry. Redemption authenticates with
 target-bound proof, not an issuance Permission. Session/context is ordinary eligible-self access,
 not an added role. DESIGN availability is not assignable/executable until the owner action is
 implemented and qualified. Document/Checkout/Approval/Release and Product Configuration remain
@@ -52,22 +54,22 @@ DESIGN outside this registry; administrators cannot create codes.
 
 ## 2. Exact built-in version manifest
 
-Current US3 availability is an exact Server projection, not inferred from this design manifest.
-AA@1/@2/@3, PA@1 and Super@1 content is qualified for ordinary supported granting; PRA@1,
-Audit Reader@1 and Super@2 ordinary granting are non-selectable until all their content is
-qualified. Existing Q15-adopted Super@2 can exercise its qualified current assignment paths;
-this does not qualify ordinary granting of its remaining content. `access.inspect` now qualifies
-UI-R05 assignment reads and UI-R10 Inspector. Existing sealed business roles and US4-activated
-Custom versions may be assigned within their declared scope/envelope. No assignment is moved
-automatically. PRA@1/Super@2/Audit Reader@1 remain non-selectable because audit.read is DESIGN.
-See [current evidence](../integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+Current availability is an exact Server projection, not inferred from this manifest. The eight
+sealed built-in versions below are selectable only under their unchanged exact principal/scope/
+delegation rules, now that their full declared content has a qualified bounded implementation.
+This includes PRA@1, Audit Reader@1 and Super@2 ordinary granting; an availability flag alone did
+not qualify them. Actual ordinary HTTP and browser journeys now prove AA + PA + PRA as three
+independent assignments on one Actor. Audit Reader-only history read succeeds while access
+inspection refuses. Existing sealed business roles and US4-activated Custom versions remain
+bounded by their declared scope/envelope; no assignment is moved automatically and old version
+content is untouched. See [current evidence](../integration-readiness.md#22-independent-review-repair-successor--2026-10-08).
 
 | Exact role | Declared content / support |
 |---|---|
 | super-administrator@1 | Existing role.assign.account-administrator only; existing seed ID/content unchanged. Legacy AA@1/@2 target map unchanged. |
 | account-administrator@1 | Existing account.create, account.disable, account.re-enable only. |
 | account-administrator@2 | account.create, account.disable, account.re-enable, account.credential.setup.issue, account.credential.reset.issue; no directory read added. |
-| account-administrator@3 | Exact @2 actions + account.read; O, Actor only. DESIGN successor. |
+| account-administrator@3 | Exact @2 actions + account.read; O, Actor only. Implemented immutable successor. |
 | super-administrator@2 | role.catalogue.read, role.assignment.manage.administration, role.assignment.manage.highest, access.inspect, audit.read; O, Actor only. No account CRUD, Project administration, Custom activation or content action. |
 | privileged-role-administrator@1 | role.catalogue.read, role.definition.prepare, role.definition.activate, role.assignment.manage.business, role.assignment.manage.administration, access.inspect, audit.read; O/P, Actor only. |
 | project-administrator@1 | project.create, project.admin.read, project.update, project.membership.assign, project.membership.remove, project.group.create, project.group.update, project.group.membership.assign, project.group.membership.remove, role.catalogue.read, role.assignment.manage.business, access.inspect; O/P, Actor only. project.create never applies from P. |
@@ -142,4 +144,5 @@ RBAC_GRANTED never means a future document owner business gate passed.
 FR-010–023/029 and D09/D10/D11/Q15 trace REQ-AUTH-001…010, candidate REQ-AUTH-011…014 and
 IF-PROJECT-ACCESS-ADMIN / IF-RBAC-ADMIN / IF-AUTHORIZATION-DECISION. Qualify old-version immutability,
 no automatic authority, multi-role/multi-path, Group mode, scope containment, equivalent Custom
-privilege, self-broadening, expiration and last recovery. Actual results NOT-RUN.
+privilege, self-broadening, expiration and last recovery. Actual scoped execution results are
+retained in handoff sections 15–22; successor independent acceptance remains pending.

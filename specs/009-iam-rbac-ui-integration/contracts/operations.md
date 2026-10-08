@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console contract / 0.7 status successor / Draft engineering-qualified branch; acceptance pending |
+| ID / class / version / state | IE-IF-IAM-UI-OPS-001 / owner + HTTP + console contract / 0.8 status successor / Draft externally requested repair qualified; successor acceptance pending |
 | Authority / owner / author | INFORMATIVE refinement / IAM, Project Governance, Access Policy and Audit; named owners UNKNOWN before approval / Codex |
-| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–21, independent whole-feature review / PG5 pending / NOT-APPLICABLE for deployment |
+| Baseline / reviewer / effective | Main 4e524443; spec accepted e227cb1d / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; explicit PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–22; predecessor whole-feature review found S1/F1/F2, successor PG5 pending / NOT-APPLICABLE for deployment |
 | Date / classification / retention | 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL / Git |
 | Change / upstream / downstream | Issue #46 / [permissions](permission-delegation.md), [data](../data-model.md), accepted [Identity contract](../../../docs/product/instances/idea-engineering/api/identity-session.md) / [Web flow](web-flow.md), future tasks/tests |
-| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor / wire, target, retry or authority change / qualified operation/source/test crosswalk in [closure matrix](../evidence/feature-009-closure-matrix.md); Audit history projection remains DESIGN |
+| Supersession / trigger / evidence | Existing Identity contract unchanged unless explicitly stated as successor; historical unsupported history preserved in sections 19–21 / wire, target, retry or authority change / qualified operation/source/test crosswalk in [closure matrix](../evidence/feature-009-closure-matrix.md); bounded Audit administration history IMPLEMENTED in section 22 |
 
 ## 1. Common wire and authority
 
@@ -82,7 +82,7 @@ semantics preserved in section 4. Every DESIGN row needs real implementation + q
 | UI-R08 IMPLEMENTED | POST A/assignments/{id}/end | operationId/scope/expectedVersion/reason → 200 ended assignment | Corresponding grant permission; C, last recovery check |
 | UI-R09 IMPLEMENTED | POST A/assignments/{id}/replace | operationId/scope/expectedVersion/newRoleVersionId/interval/reason → 200 old/new IDs | Corresponding grant permission; C; atomic end + new grant |
 | UI-R10 IMPLEMENTED | POST A/access-inspections | targetActorId/permissionCode/scope/resourceId → redacted eligibility + all contributing paths + RBAC result | access.inspect; query/no owner mutation; owner gates NOT_EVALUATED |
-| UI-A01 DESIGN projection; IMPLEMENTED refusal adapter | GET A/history | scope/target/page → future attributable history; currently no history returned | Independent audit.read; ordinary 403, present-but-unqualified permission 409; no export or automatic unlock |
+| UI-A01 IMPLEMENTED bounded projection | GET A/history | organizationId/projectId, optional exact targetId, offset/limit → attributable administration history page | Independent audit.read + current eligible session; ordinary/wrong scope 403, ineligible 401, invalid page 400, storage failure 503; no general Audit export |
 | UI-O01 IMPLEMENTED | GET A/operations/{operationId} | Exact OperationId + query organizationId/projectId → redacted terminal metadata or UNRESOLVED | Current eligible originator + current relevant read authority, or independently scoped inspector + relevant owner read; no secret result |
 | UI-C01 IMPLEMENTED; synthetic qualification only | Local console adoption only | Exact old Super assignment/new Super@2, O, same Actor, OperationId/reason/reauth → separate assignment | Section 5; not HTTP/product bypass |
 
@@ -91,7 +91,8 @@ claims. Nullable interval/condition fields have the exact profile in the permiss
 
 ### Current Inspector and resolution projection
 
-Engineering qualification is [handoff section 21](../integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08).
+Predecessor qualification is [handoff section 21](../integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08);
+the externally requested scope/history/confirmation repairs are [section 22](../integration-readiness.md#22-independent-review-repair-successor--2026-10-08).
 The sole adapters are `AccessInspectionController`/`AccessInspectionQueries`; inspection uses
 the existing AuthorizationDecisionService, never a client or parallel evaluator. One exact
 Permission is inspected per request; the UI can inspect successive catalogue actions. The result
@@ -108,7 +109,37 @@ UNRESOLVED; this is not confirmed rollback and never authorizes blind retry. Leg
 METADATA_ONLY_NO_SAFE_REPLAY; newer owner metadata preserves SAME_ID_UNCHANGED_INPUT_ONLY.
 Read response loss/unavailable storage is unavailable, not an uncertain mutation success.
 JSON UUID letter case does not change identity; malformed client input has a bounded 400 refusal.
-History stays DESIGN and the UI disabled until its independent owner query is qualified.
+Assignment and Project terminal scope resolves from the unique admitted REQUEST/COMMIT pair
+for the same attempt, original Actor, Organization and scope, not the earliest attempted request
+for an OperationId. Missing/ambiguous retained provenance fails closed. Initial authority-refused
+attempts cannot poison later terminal resolution or canonical assignment replay.
+
+UI-A01 now uses independently authorized `audit.read` in the existing read-only consistent query
+boundary, with current eligibility checked before/after the read. It selects retained terminal
+IAM account-administration, Project, Assignment and Role Definition outcomes with an exact
+matching operation/Actor/action/outcome Audit companion. Organization, exact requested scope and
+optional exact targetId filtering occurs before paging. Ordering is occurredAt descending, then
+OperationId and owner; offset >=0, limit 1..100/default 50, `{items,offset,limit,hasMore}` only.
+An Organization-authorized reader may explicitly select a covered Project; it does not receive
+all descendant history by selecting Organization. IAM history is Organization-only. Missing
+authority is refusal, not an empty page. Audit Reader does not thereby gain access.inspect.
+
+Each item is `{operationId,owner,actorId,scope,action,targetId,outcome,reasonCode,reason,
+correlationId,occurredAt,before,after}`. Nullable facts mean not retained; prior Project/IAM
+state, Project/IAM input reason and legacy IAM correlation were not retained by their owner
+records. The UI says so rather than inventing them. Assignment before/after includes exact
+role code/version/IDs and interval; REPLACE projects predecessor then successor. Other snapshots
+use a fixed safe field allowlist, never arbitrary owner result/Audit JSON. No login activity,
+credential/proof/session/CSRF, security-log export or history-write API is exposed. Reads add no
+owner result, assignment, Audit or event; read loss/failure is unavailable, never replay.
+
+UI-R06 preview now returns `beforeRole` (the exact immutable predecessor Role content or null)
+and `difference:{added,removed,unchanged}` Permission-code lists alongside the existing before,
+role, principal, scope, normalized interval, eligibility and consequences. The difference compares
+only this assignment's old/new content, not the Actor's entire effective union. Confirmation
+shows exact predecessor/new code+version+IDs, old/new interval, all three difference lists and
+the bounded replacement/Organization/Group consequences. Commit still revalidates authority and
+expected state; this projection is not a capability token or authorization shortcut.
 
 | Owner operation family | Operation IDs | Governing trace / acceptance |
 |---|---|---|

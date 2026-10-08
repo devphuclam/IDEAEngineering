@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.16` / Draft Inspector + final engineering reviewer packet; PG2/PG3/PG4 PASS, PG5 NOT-RUN |
+| Stable ID / class / version / state | `IE-HO-IAM-UI-001` / supporting source inventory/handoff / `0.17` / Draft independent-review repair successor; PG2/PG3/PG4 PASS, successor PG5 pending |
 | Authority / owner / author | INFORMATIVE / Project user / Codex, CODEX_ONLY |
 | Baseline / date / classification | Main `4e5244430ea89ffe878819e1279f6e05c60d610a` / 2026-10-08 Asia/Ho_Chi_Minh / INTERNAL |
-| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11, engineering results sections 16–21; independent whole-feature acceptance / PG5 NOT-RUN / 2026-10-07 for readiness only |
+| Reviewer / acceptance / effective date | Project Reviewer SPEC REVIEW PASS at e227cb1d; DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 via human conversation; accepted task/Analyze at aaa5596a, explicit PG2/PG3 PASS for 5b2fb9f; human-authorized HTTPS execution closes PG4 action / readiness section 11; independent review at 73b5d95 recommended FAIL for S1/F1/F2; user authorized all repairs on 2026-10-08; engineering successor section 22, independent acceptance / PG5 pending / 2026-10-07 for readiness only |
 | Upstream / downstream | [Spec](spec.md), [decisions](../../docs/product/instances/idea-engineering/registers/CHG-2026-10-07-iam-rbac-ui-integration-baseline.md) / reviewed design and execution packet |
 | Change / retention / trigger | [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46); retain in Git; re-inspect after source, UI lineage or interface changes |
-| Supersession / evidence | No accepted technical predecessor replaced; historical sections retained / sections 8–11 readiness, 12–14 foundation, 15–20 historical US1–US4, section 21 current Inspector/final engineering qualification; whole-feature external acceptance pending |
+| Supersession / evidence | Accepted design/requirements unchanged; historical sections retained / sections 8–11 readiness, 12–14 foundation, 15–21 historical engineering checkpoints, section 22 current review-repair qualification; predecessor claims of complete coverage do not supersede the independent findings; successor whole-feature acceptance pending |
 
 ## 1. Exact lineage and ownership
 
@@ -1886,3 +1886,176 @@ the closure matrix. Current operation/matrix documents contain no unresolved tem
 diff whitespace check PASS. The publication successor changes only documentation/evidence/
 status and the pinned README manifest entry, not production/test/runner behavior, migrations,
 dependencies or the qualified package. No runtime rerun is inferred from these document checks.
+
+## 22. Independent-review repair successor — 2026-10-08
+
+### 22.1 Authority, findings and exact successor
+
+At reviewed head **73b5d9501ab63723b7fbf7d68ae002edf7e805a6**, independent review recommended
+PG5 **FAIL**, Critical 0 / High 2 / Medium 1. The user explicitly authorized fixing all findings.
+This is implementation repair inside the accepted spec/design/tasks and execution envelope,
+not a new requirement, permission, role content, schema, framework or workflow. Sections 19–21
+remain unchanged historical execution records. Their assertion that DESIGN history was an
+accepted whole-feature limitation was not sufficient to satisfy US3.1/SC-003/T078; this successor
+corrects that coverage gap rather than retrospectively relabelling the old execution.
+
+Final executed application/Web/test/harness source:
+**9d3732cb173e8094195b9bdd60b5588ac3cfa42e**. Java and Server tests were frozen at
+**1601b6e0f03e91148fb2a0ece723cd3de6080bb7**; the only successor change is the Web history
+timestamp/scope parser and its mechanical input manifest. No Java, Server test, POM, dependency,
+toolchain, migration or runner change occurs between those sources. This publication adds only
+documentation/evidence/status, not another application generation.
+
+| Finding | Repair / exact source | New qualifying behavior |
+|---|---|---|
+| S1 HIGH: earliest refused REQUEST could supply terminal scope/replay authority | [CommittedAdministrationScope](../../apps/server/src/main/java/com/idea/ddm/access/CommittedAdministrationScope.java), [AccessInspectionQueries](../../apps/server/src/main/java/com/idea/ddm/access/AccessInspectionQueries.java), [RoleAssignmentAdministration](../../apps/server/src/main/java/com/idea/ddm/access/RoleAssignmentAdministration.java) | Unique admitted REQUEST/COMMIT pair, same attempt/Actor/Organization/scope; initial refused A cannot disclose later B or alter replay. Missing/ambiguous provenance fails closed. |
+| F1 HIGH: audit.read/history missing and ordinary AA + PA + PRA flow unavailable | [AuditEvidenceRepository](../../apps/server/src/main/java/com/idea/ddm/audit/AuditEvidenceRepository.java), AccessInspectionQueries/controller, [RoleCatalogueQueries](../../apps/server/src/main/java/com/idea/ddm/access/RoleCatalogueQueries.java), IdentityDirectoryQueries, actual AccessInspectionPage/App/client | Independent bounded history query with matching Audit companion, exact scope/target/page, safe fields, current eligibility; standard HTTP/browser now grant all three roles separately. Availability follows actual implementation, not flag-only unlocking. |
+| F2 MEDIUM: assignment confirmation omitted predecessor/content diff/interval | RoleAssignmentAdministration preview, [AssignmentWizard](../../apps/web/src/features/accessAdministration/AssignmentWizard.tsx), iamClient | Server-derived exact beforeRole, added/removed/unchanged Permission codes, normalized interval; actual confirmation AA@1 → AA@2 visibly adds setup/reset rights and retains independent roles. |
+
+History reads use the existing evaluator/query boundary, independently require audit.read, and
+do not grant access.inspect. Org/Project scope and target filtering precede bounded paging in a
+read-only consistent transaction; all returned terminal rows require exact Audit companionship.
+Only fixed administration-owner fields are projected. Prior Project/IAM state and their input
+reason were not retained; the UI labels null as not retained. Legacy IAM correlation is likewise
+null. No fabricated historical snapshot or arbitrary Audit/result JSON is exposed. This is not
+full Audit/security-log export or login activity history. Repeated reads create no owner result,
+Audit, assignment or event. Operation lookup is still metadata-only, never a replay mechanism.
+
+The 25 current Permission codes are implemented in their bounded profile. All eight sealed
+built-in Role versions are selectable only under unchanged exact delegation/principal/scope
+rules. Old Role contents/assignments, self-broadening refusal, last Super recovery, Custom ceiling,
+Group prerequisites and Project participation separation remain unchanged. No seed or migration
+was edited to add authority; V1–V17 and dependency graph are unchanged.
+
+### 22.2 TDD and retained failures
+
+The [repair Server ledger](evidence/review-repair-runs.tsv) retains exact source, counts, owned
+schemas, manifest/archive/log identities for RED, intermediate failure and GREEN. It is not a
+combined same-SHA execution.
+
+- S1: 24315b7 `inspection-red-20` ran 5 tests with 1 failure. fe20af1 then ordered the refused-A
+  and committed-B attempts using controlled time: both disclosure/replay witnesses failed
+  (2 failures), plus a separate revoked-at fixture error. 4af8c09 repaired committed scope;
+  `inspection-green-20` retained 1 fixture error, not PASS. 2b542f9 resets the test Clock before
+  each case; `inspection-green-21` **5/5 PASS**. No product timestamp/authority rule was loosened.
+- F1: ef547d8 `inspection-red-22` **5 tests / 1 failure**, expected history 200, actual 409.
+  9dbaf3e implements the independently authorized projection: `inspection-green-22` **5/5 PASS**.
+- F2: ea8799a `assignment-red-21` **10 tests / 1 failure**, predecessor/difference absent.
+  b26f5e2 `assignment-green-21` **10/10 PASS**. 0365801 history-client RED also ran 9 Web cases
+  with 2 failures; log dd57e01a4560ab46db1147e8404b20e6242340583f1091a6e0634074c7e54a8d,
+  report e53e1a4be316b5d87ad0fcfea78ddf9382aa1ecf27edac2171c54d0b14675577.
+  `assignment-red-20 -Web` was local raw export only, not a Server execution.
+- Consolidated Web at 1601b6e retained **61/62**, because history parsing called a nonexistent
+  timestamp helper. 9d3732c fixes it through the existing qualified timestamp parser/canonical
+  scope comparison; final **62/62 + TypeScript PASS**. No weakening of a response oracle.
+
+Fresh-root guards rejected one previously existing local export before execution; a wrong-arity
+manual browser build invocation also refused before build/listener. Correct fresh targets ran
+below. These are retained pre-execution harness/operator refusals, not product RED or test PASS.
+No source was dynamically repaired inside a running qualification.
+
+### 22.3 Consolidated affected execution
+
+| Exact source | Actual tests / fresh owned labels | Result |
+|---|---|---|
+| 1601b6e0f03e91148fb2a0ece723cd3de6080bb7 | Inspector contract/privacy/read-only atomicity: inspection-qualification-20/21/22 | 7 + 5 + 2 = 14 PASS |
+| 1601b6e0f03e91148fb2a0ece723cd3de6080bb7 | Assignment contract/atomicity/recovery: assignment-qualification-20/21/41 | 10 + 4 + 3 = 17 PASS |
+| 1601b6e0f03e91148fb2a0ece723cd3de6080bb7 | Custom Role contract/immutability/atomicity: custom-role-qualification-20/41/42 | 6 + 3 + 6 = 15 PASS |
+| 1601b6e0f03e91148fb2a0ece723cd3de6080bb7 | Authoritative evaluator + F03-A Identity: final-qualification-41/42 | 22 + 20 = 42 PASS |
+| 9d3732cb173e8094195b9bdd60b5588ac3cfa42e | F03-B real HTTP/session: final-qualification-44 | 83 PASS |
+| 9d3732cb173e8094195b9bdd60b5588ac3cfa42e | Consolidated Web, final-qualification-43 | 62/62 PASS + TypeScript PASS |
+| 9d3732cb173e8094195b9bdd60b5588ac3cfa42e | Actual offline Web/Server package + headed Chrome Inspector, inspection-qualification-41 | Content PASS, Chrome 8/8, authoritative DB oracle PASS |
+| 9d3732cb173e8094195b9bdd60b5588ac3cfa42e | Actual offline Web/Server package + headed Chrome Assignment, assignment-qualification-43 | Content PASS, Chrome 9/9, authoritative DB oracle PASS |
+
+**171 Server PASS across two sources**, zero failure/error/skip; **17 actual Chrome PASS across
+two separately built packages**, not one byte-identical JAR or a full feature/PH1 rerun. Earlier
+schema/privilege/health, Account, Project, Custom-browser and synthetic Q15 evidence remain
+sections 15–21. Their unchanged paths are not falsely claimed rerun at this successor SHA.
+
+Contract/privacy oracles include scoped history success; Audit Reader-only history 200 versus
+Inspector 403; wrong Organization/withdrawn permission 403; invalid limit 400; exact target
+filter/page; retained replacement predecessor/AA@1 and successor/AA@2; SELECT-denial 503;
+read-only zero mutation; and poisoned-scope non-disclosure/replay. The standard HTTP journey
+grants AA@3/PA@1/PRA@1 as three distinct records on one Actor. Actual Chrome R02 grants
+AA@1/PA@1/PRA@1 independently; R03 confirms AA@1 → AA@2 permission additions/interval and
+retains other roles. Inspector I03 now reads real independent history; I04 reads actual Project
+history/result without replay. Existing refusal/loss/CSRF/session/keyboard/privacy oracles pass.
+Browser-controlled 409/503 remain Web fail-closed tests, not PostgreSQL storage-failure evidence.
+
+### 22.4 Exact inputs, packages and cleanup
+
+The admitted environment is unchanged: JDK25.0.4.1+1, Maven3.9.16 direct offline goals,
+Linux Node24.21.0, Windows Node24.19.0, Chrome155.0.8059.39, Playwright/core1.62.1;
+82 tool pins and 544 cached artifact rows. No install/download/dependency/intake drift.
+The prior trusted test certificate and normal endpoint verification are reused, no TLS bypass
+or trust-store change. Each source is committed before byte-preserving export; raw hashes checked
+locally, after transfer and after execution. Final source **220/220**, manifest
+**29e1975f3fae8b0fe9a2d085fa8783654179528863b3e2591af4a2851cceee7f**;
+identical transfer archive **97ac01ded74058bc15cd4af75bdb82122dcf7d55269a6dbe8051baf7563f2169**.
+
+| Actual package / root / schema | Exact JAR SHA-256 |
+|---|---|
+| inspection-qualification-41 / `/home/phuclam/idea-iam-ui-20261007-46/run-inspection-qualification-41` / iam_ui_d309064e033e44789c7c2873efa24af3 | e15e29fe869bf0f6d2b28807a262a569a656fc55c81141f0049141bc3cd13fc5 |
+| assignment-qualification-43 / `/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-43` / iam_ui_9d2b1de162b84753b116c361d3d3cd80 | 318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c |
+
+Both exact transferred JARs pass the retained package-preflight: **57 runtime JAR/hash set,
+JSR305/providers 0, unexpected build tooling 0, notices 3/3, unchanged migrations 17/17,
+manifest/loader and actual static Web present**. The separate builds have distinct JAR hashes;
+both are built/tested from 9d3732c. No persistent preview is upgraded.
+
+All PostgreSQL runs use only **idea_ddm_iam_ui_20261007_46**, existing separate migrator/app,
+owned source-marked UUID schemas. [Exact F03 schema ledger](evidence/review-repair-f03-schemas.tsv)
+lists the 20 + 83 self-managed schemas actually created/removed; the runner's unused declared
+schemas are not reported as used. Other exact schemas are in the repair ledger. Browser JVMs
+535619 / 548175 terminated before guarded exact schema cleanup; owned Windows forwards
+27620 / 30636 stopped. Browser private fixture files removed; logs/DB retained. Inspector oracle:
+one Project owner result + one Audit, five prerequisite assignments, zero read mutations.
+Assignment oracle: eight ACCEPTED + one REFUSED owner/Audit, 18 authorization records,
+independent roles preserved and no implicit membership/retry duplicates.
+
+Final independent read-only postflight: database migrator-owned and retained, **zero marked
+iam_ui schemas, zero public tables, no Windows/Ubuntu 18446 listener**. No public migration,
+DROP DATABASE, company/Vault/production/preview18444 change, live adoption or deployment.
+
+| Retained safe/private evidence | SHA-256 |
+|---|---|
+| Inspector actual Chrome log | c8c8908a1eba2594f0f92f366af32a954f3440583e7eed6836d1c3e8d69ecaa4 |
+| Assignment actual Chrome log | 4d6bfb234201d1f0a5cf415ddfbc74e8ff3baf8829865c12a3476f9cd632567b |
+| Final Web log / JSON | 98282ce8a31f68d68fd14066e391f4018278572ab7c81972864ea844fb90c544 / 1ecb6be24a2382d1eeba3bfffa0998eb571d12adf7a04aeb65f34ba6f0d4ac7a |
+| Inspector package / Web build | cf95affe9ed4e60a642e0a4a70389bff9c2ad34cf5b5a8bee0b9c5548d805300 / ad56fca1de28dc6a7c90f1ab39a8ff332ce0315549b548509a1fedb550ad879e |
+| Assignment package | 5f740787490367e3a5ba0ce0122b8ee7f1d73a3a8c5bce9258e6b9e1c06985d9 |
+| Common successful final 220-input check log | 8c7bc9466a9dd237b495c2af4e640dc51b92f653e90a199dee1572ceeeb098cf |
+| Unchanged secret detector findings-only log over 1601b6e | 880961cf46e7dc5a20e5b5c54a9721c0023e04c726ee9ec1f34fd262b57a27e6 |
+
+Raw mode600 Ubuntu logs remain private under the exact run roots. Hash retention is not
+independent raw-log access through GitHub. No credential/cookie/CSRF/proof/private key or request
+body is published. Safe Chrome logs retain only named oracles/source/tool identity.
+
+### 22.5 Detector, independent acceptance and next action
+
+The user reports **manual secret-detector PASS** on 2026-10-08, without an exact command/head
+for that human check. This is retained as a human report, not substituted for the unchanged
+automated command or represented as an independent check of the new history canary. Actual automated detector result
+over successor tracked inputs is **NOT-PASS / exit 1 / nine matches**: the eight historical
+paths in section21 plus the new synthetic history redaction canary in accessInspection.test.tsx.
+Author review finds only generated/private-file TLS reads, synthetic negative-test canaries and
+the historical documentation quotation; no working committed credential identified. Detector,
+exit status and canaries are not disabled, hidden or exempted. Human review and raw automated
+outcome remain separately attributable; no automatic PG5 PASS is inferred from either.
+
+The unchanged detector was rerun over the staged documentation/evidence successor before
+publication: again exit1, the same nine paths and identical findings-only log SHA-256
+880961cf46e7dc5a20e5b5c54a9721c0023e04c726ee9ec1f34fd262b57a27e6.
+Documentation checks over 12 selected spec/plan/task/contract/matrix/handoff documents:
+**212 relative links resolve; 32 operation IDs, 25 Permission codes, 30 FR, 9 SC, 92/93 task
+markers, 171 affected Server ledger results and 103 actual F03 schemas agree; historical
+sections16–21 unchanged; whitespace PASS**. No after_implement extension file/hooks exist.
+These checks are document consistency, not runtime or independent acceptance.
+
+All three findings now have engineering repair + affected execution evidence. They are
+**READY FOR INDEPENDENT SUCCESSOR REVIEW**, not independently closed by the author. T001–T092
+remain **92/93 engineering complete**, T093 unchecked. PG2/PG3/PG4 unchanged PASS; predecessor
+PG5 recommendation FAIL retained, successor PG5 disposition pending. Verifier NOT-RUN;
+PR #47 Draft/Open, Issue #46 open. No merge, deployment, live adoption or Tracker/timer action.
+Next action: review S1/F1/F2 successor and whole-feature coverage at the published exact head,
+then let the authorized independent reviewer determine T093/PG5 and integration readiness.

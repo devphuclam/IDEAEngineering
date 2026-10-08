@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft — written spec/design accepted at their retained exact heads; PG2/PG3/PG4 PASS; branch engineering qualification completed through US5/final browser. Independent whole-feature review/PG5 pending; not deployed or merged.
+**Status**: Draft — written spec/design accepted at their retained exact heads; PG2/PG3/PG4 PASS; predecessor independent review found S1/F1/F2, all three now engineering-repaired/qualified. Successor whole-feature acceptance/PG5 pending; not deployed or merged.
 
 **Input**: User-confirmed native account, Project/Group and RBAC journeys: explicit scopes, two principal modes, independent multiple roles, immutable role versions, constrained delegation and separation of administration from engineering participation.
 
@@ -12,7 +12,7 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.3` execution-status successor; 30 FR/9 SC unchanged |
+| Stable ID / class / version | `IE-SPEC-IAM-UI-001` / Spec Kit delivery specification / `0.4` repair-status successor; 30 FR/9 SC unchanged |
 | Product normativity | INFORMATIVE relative to the Core baseline; FRs are candidate delivery obligations. DOC-04 remains the sole product SRS; no Core obligation or gate is independently approved here. |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / `CODEX_ONLY` |
 | Reviewer / acceptance authority | Project Reviewer reported SPEC REVIEW PASS for e227cb1d and DESIGN REVIEW PASS for 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d on 2026-10-07 through human conversation; explicit PG2/PG3/PG4 PASS recorded in readiness / independent whole-feature review and PG5 pending |
@@ -264,8 +264,9 @@ Design, Tasks and read-only Analyze were subsequently accepted at the recorded e
 explicit PG2/PG3/PG4 and FAST DELIVERY authority enabled bounded implementation. The historical
 next-step paragraph above is not the current gate. Engineering qualification now covers the
 supported Account/Project/Group/Assignment/Custom Role/Inspector profile, **92/93 tasks**.
-See [section 21](integration-readiness.md#21-access-inspector-and-final-engineering-qualification--2026-10-08)
+See [section 22](integration-readiness.md#22-independent-review-repair-successor--2026-10-08)
 and the [closure matrix](evidence/feature-009-closure-matrix.md) for actual source/test/evidence,
-unsupported audit.read/history, retained failed runs and tracked-secret detector NOT-PASS.
-Next action is independent whole-feature review / T093 / PG5, not another spec/planning cycle.
+the real independently authorized history/ordinary three-role/confirmation repairs, retained
+failed runs and unchanged automated secret detector NOT-PASS with separately reported human PASS.
+Next action is independent successor review / T093 / PG5, not another spec/planning cycle.
 No feature acceptance, deployment, live adoption, merge or Tracker action is inferred here.

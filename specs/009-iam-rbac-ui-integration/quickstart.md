@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design and result wayfinding / 0.5 / Draft final engineering reviewer packet; historical technical oracles unchanged |
-| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–21; whole-feature external review / PG5 pending |
+| ID / class / version / state | IE-VVP-IAM-UI-001 / feature validation design and result wayfinding / 0.6 / Draft review-repair successor packet; historical technical oracles unchanged |
+| Authority / owner / author / reviewer | INFORMATIVE / test/integration owner / Codex / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d; PG2/PG3/PG4 PASS; engineering evidence in handoff sections 16–22; predecessor independent review FAIL, successor PG5 pending |
 | Baseline / change / date | Spec e227cb1d + [plan](plan.md) / Issue #46 / 2026-10-08 Asia/Ho_Chi_Minh |
 | Effective / classification / retention / supersession / trigger | NOT-APPLICABLE / INTERNAL / Git / no old run replaced / contract, source, environment or tooling change |
 
@@ -18,10 +18,13 @@ Project/Group UI-P01–P13 and its actual UI are qualified in [section 18](integ
 HTTP/owner/data/atomicity 6/3/3/3, affected Account 12, Web 36 and actual Chrome 8 all PASS.
 Assignment, immutable Custom Role and Inspector/final integration results are retained in
 sections 19–21. The [whole-feature matrix](evidence/feature-009-closure-matrix.md) maps every
-operation and all FR/SC groups to actual source/tests and executed evidence. Final Web60 +
-typecheck and actual headed Chrome8 are PASS at `11bba5ff7eb583d5f594d8dbcdb4388dd1fe2246`;
-affected Server153 are explicitly distinct-source runs. Audit history remains DESIGN, its
-refusal adapter is implemented. T093 and PG5 await external review. There is **no persistent UI deployment** yet:
+operation and all FR/SC groups to actual source/tests and executed evidence. Section 21 is the
+historical pre-review qualification, not final acceptance. [Current section 22](integration-readiness.md#22-independent-review-repair-successor--2026-10-08)
+repairs all three independent findings: authoritative committed scope, qualified independent
+history and ordinary AA/PA/PRA grants, exact confirmation diff/interval. Server171 are distinct-source
+runs; Web62 + TypeScript and actual InspectorChrome8/AssignmentChrome9 PASS at
+`9d3732cb173e8094195b9bdd60b5588ac3cfa42e`. History is a bounded read-only owner projection,
+not a general Audit export. T093 and successor PG5 await external review. There is **no persistent UI deployment** yet:
 qualification port 18446 was closed, owned schema removed and database retained. Do not mistake
 an ephemeral test URL or the unchanged predecessor preview at 18444 for this package.
 
@@ -74,6 +77,22 @@ it was not a product PostgreSQL health claim. Every actual browser uses installe
 Playwright1.62.1, normal certificate trust and the owned ephemeral loopback18446 fixture.
 Database retained, marked schemas/listeners/private fixture removed; preview18444 untouched.
 
+The examples above are historical S21 commands. Current repair execution uses the same admitted
+direct-offline boundaries with fresh labels; exact Server selectors/counts/targets are retained
+in the [S22 ledger](evidence/review-repair-runs.tsv). Representative actual successor commands:
+
+    bash tests/iam-ui-46/run-owner-tests.sh 1601b6e0f03e91148fb2a0ece723cd3de6080bb7 8d788375d60db63b686a1e0f76966acc825a28784b8442585f5d02828679615f inspection-qualification-20 AccessInspectionContractTest 7 PASS
+    bash tests/iam-ui-46/run-owner-tests.sh 9d3732cb173e8094195b9bdd60b5588ac3cfa42e 29e1975f3fae8b0fe9a2d085fa8783654179528863b3e2591af4a2851cceee7f final-qualification-44 HttpSessionFlowTest 83 PASS
+    pwsh tests/iam-ui-46/run-web-tests.ps1 -SourceRoot <raw 9d3732c export>/source -SourceSha 9d3732cb173e8094195b9bdd60b5588ac3cfa42e -Oracle PASS -ExpectedCount 62
+    bash tests/iam-ui-46/account-browser.sh 9d3732cb173e8094195b9bdd60b5588ac3cfa42e 29e1975f3fae8b0fe9a2d085fa8783654179528863b3e2591af4a2851cceee7f inspection-qualification-41 build
+    <approved Windows Node> tests/iam-ui-46/inspection-browser.mjs 9d3732cb173e8094195b9bdd60b5588ac3cfa42e 29e1975f3fae8b0fe9a2d085fa8783654179528863b3e2591af4a2851cceee7f inspection-qualification-41
+    <approved Windows Node> tests/iam-ui-46/assignment-browser.mjs 9d3732cb173e8094195b9bdd60b5588ac3cfa42e 29e1975f3fae8b0fe9a2d085fa8783654179528863b3e2591af4a2851cceee7f assignment-qualification-43
+
+Each browser run also uses its exact label's build → package-preflight → start → verify → stop
+recipe already shown above. Owned SSH forwarding is temporary and exact-PID terminated; synthetic
+passwords stay in memory/mode600 fixture, never command arguments. These commands identify runs
+already executed, not permission to reuse roots, launch an active listener or redeploy preview.
+
 ## Qualification order
 
 - T008–T024: named fixtures, eligibility/UoW, additive schema, Project-owned read facts and the
@@ -95,7 +114,7 @@ adapter/browser acceptance. The final suite is not the first execution of earlie
 
 ## Scenario/oracle crosswalk
 
-The table below retains planned whole-feature oracles. Actual Account V01/V02/V08 and synthetic V09 are in handoff section 16, T034 successor in section 17, Project in section 18, assignments in section 19, Custom Role in section 20, Inspector/final cross-screen and affected regression in section 21. These are engineering results, not independent whole-feature acceptance. Project participation is not general product authorization; UI-A01 qualifies only the approved fail-closed history boundary.
+The table below retains planned whole-feature oracles. Actual Account V01/V02/V08 and synthetic V09 are in handoff section 16, T034 successor in section 17, Project in section 18, assignments in section 19, Custom Role in section 20, pre-review Inspector/final integration in section 21, and externally requested repair qualification in section 22. These are engineering results, not independent whole-feature acceptance. Project participation is not general product authorization; UI-A01 now qualifies independent bounded administration history, not general Audit export.
 
 | Case | FR / SC | Procedure and expected oracle |
 |---|---|---|

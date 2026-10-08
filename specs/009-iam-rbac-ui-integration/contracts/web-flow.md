@@ -2,8 +2,8 @@
 
 | Field | Value |
 |---|---|
-| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.5 execution status successor / Draft Account + Project/Group + Assignment portions qualified; accepted technical semantics unchanged / INFORMATIVE |
-| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; PG2/PG3/PG4 PASS; actual Account/Project/Assignment browser qualification in handoff sections 16/18/19; remaining stories/independent US2/US3 implementation review NOT-RUN |
+| ID / version / state / authority | IE-UX-IAM-UI-001 / 0.6 execution status successor / Draft Account through Inspector plus review repairs qualified; accepted technical semantics unchanged / INFORMATIVE |
+| Owner / author / review | UI integration owner / Codex, CODEX_ONLY / Project Reviewer DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d through human conversation; PG2/PG3/PG4 PASS; actual browser qualification in handoff sections 16/18–22; predecessor independent review FAIL, successor acceptance pending |
 | Baseline / change / date | Spec accepted e227cb1d; [operations](operations.md) / Issue #46 / 2026-10-08 Asia/Ho_Chi_Minh |
 | Classification / effective / retention / trigger | INTERNAL / NOT-APPLICABLE / Git / operation, privacy, authority or interaction change |
 | Supersession / downstream | Mock/security behavior not accepted; no current live contract replaced / actual Web qualification |
@@ -44,7 +44,7 @@ Secure/SameSite cookie, real session/CSRF, refusal/invalidated session, no clien
 network-loss behavior and secret-retention inspection. Presentation tests alone are insufficient.
 Exact existing UI commits and desired visual intent are retained in [readiness](../integration-readiness.md).
 
-## Current delivery status — Account and Project/Group
+## Historical delivery qualification — Account and Project/Group
 
 The actual authored Login/Admin layout is retained and connected through `App.tsx`, not a mock
 or a second route framework. Account context/list/detail, PENDING create, manual proof handoff,
@@ -56,5 +56,17 @@ explicit membership/history and Group target prerequisite through `App.tsx#proje
 Actual headed Chrome **8/8** at `1d3fbd4d35650ec2c561032ae605e440a639473c` qualifies scope refusal,
 stale state, committed-response loss/same-ID resolution, unavailable refresh and bounded keyboard/
 privacy/session behavior. See [handoff section 18](../integration-readiness.md#18-projectgroup-usable-vertical-slice--2026-10-08).
-Assignment/Custom/Inspector screens remain unavailable until their owner slices are implemented.
-This milestone is not final whole-feature accessibility, independent US2 review or deployment acceptance.
+At that historical milestone, Assignment/Custom/Inspector were not yet delivered. It was not
+whole-feature accessibility, independent review or deployment acceptance.
+
+## Current successor delivery — review repairs
+
+Assignment/Custom/Inspector now use actual Server adapters on the retained shell; per-story
+results remain sections 19–21. [Section 22](../integration-readiness.md#22-independent-review-repair-successor--2026-10-08)
+qualifies the external findings at source 9d3732cb173e8094195b9bdd60b5588ac3cfa42e:
+actual Chrome Assignment9/9 and Inspector8/8, Web62/62 + TypeScript. The three-role journey
+uses ordinary AA/PA/PRA grants, not prerequisite fixture grants. Assignment confirmation shows
+exact predecessor/new Role version/content, interval and added/removed/unchanged permissions.
+History uses independent audit.read and truthful safe owner facts; not-retained snapshots are
+labelled, no arbitrary Audit or secret export. Keyboard/privacy/session/loss oracles still pass.
+These are engineering results. T093/PG5 successor review, deployment and integration remain pending.

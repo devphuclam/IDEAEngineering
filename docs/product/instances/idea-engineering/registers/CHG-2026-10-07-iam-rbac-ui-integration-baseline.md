@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.4` / Draft execution-status successor; independent acceptance pending |
+| Stable ID / class / version / status | `IE-CHG-IAM-UI-001` / CHG, decision and impact record / `0.5` / Draft review-repair status successor; independent successor acceptance pending |
 | Product normativity / process state | INFORMATIVE record of confirmed intent and required baseline refinement / NOT-APPLICABLE |
 | Owner / author / worker mode | Project user / Codex, Primary Implementation Worker / CODEX_ONLY |
 | Reviewer / acceptance authority | Project Reviewer spec PASS at e227cb1d and DESIGN REVIEW PASS at 0a1de66627fccc4597ac753f6c642d1d8d5f7d1d via human conversation on 2026-10-07; explicit successor PG2/PG3/PG4 PASS recorded in readiness / whole-feature external review and PG5 pending |
@@ -12,7 +12,7 @@
 | Downstream / change | [Spec Kit 009](../../../../../specs/009-iam-rbac-ui-integration/spec.md), [source inventory](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md), [Issue #46](https://github.com/devphuclam/IDEAEngineering/issues/46) |
 | Supersession | No accepted record superseded; UI presentation specs 007/008 remain lineage rather than authoritative integration requirements |
 | Review trigger | Role/scope/delegation, credential channel, supported actions or owner-contract changes |
-| Evidence | Historical user-confirmed design/read-only source inspection retained; current engineering execution in readiness section 21; no company rollout or independent acceptance claim |
+| Evidence | Historical user-confirmed design/read-only source inspection and sections 16–21 retained; current review-repair execution in readiness section 22; no company rollout or independent acceptance claim |
 | Standards tailoring | IE-STD-AUTH-001 control/decision rules; STD-INFO-001 and STD-CM-001 STANDARD-GUIDED identity/change accounting, no conformity claim |
 
 ## 1. Intent and approval boundary
@@ -25,8 +25,12 @@ Current-reading successor, 2026-10-08: explicit PG2/PG3/PG4 and subsequent FAST 
 execution authority are recorded in [readiness](../../../../../specs/009-iam-rbac-ui-integration/integration-readiness.md).
 Account → Project/Group → Assignment → immutable Custom Role → Inspector are engineering-qualified
 on the retained original presentation. Final actual-browser/recovery and affected regression
-are linked in section 21; 92/93 tasks complete, T093 awaits external review. audit.read/history
-projection remains DESIGN, secret detector NOT-PASS with manual dispositions, verifier NOT-RUN.
+are linked in sections 16–21. Independent review at 73b5d95 recommended FAIL for S1/F1/F2;
+the user authorized all three repairs. Section 22 qualifies committed-scope/replay, actual bounded
+independent history/ordinary AA+PA+PRA granting, and exact confirmation diff/interval. 92/93 tasks
+engineering complete, T093 awaits successor external review. Automated secret detector remains
+NOT-PASS with manual canary/private-read dispositions; user's manual PASS is separately reported.
+Verifier NOT-RUN.
 This does not alter Q14/Q15/30 FR/9 SC or historical gate/review text. No live adoption,
 deployment, merge, Issue closure, PG5 or Tracker action is authorized by this publication.
 
