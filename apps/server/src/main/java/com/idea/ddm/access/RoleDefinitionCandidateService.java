@@ -27,6 +27,8 @@ public final class RoleDefinitionCandidateService {
     final Clock clock;
     final JsonMapper json=JsonMapper.builder().build();
     public static final Set<String> CEILING=Set.of("project.read","role.catalogue.read","access.inspect","audit.read");
+    public static final List<String> ACTIONS=List.of("role.definition.prepare","role.definition.activate");
+    public record Validation(boolean valid,Candidate candidate,Difference difference,List<String> consequences){}
     public RoleDefinitionCandidateService(IdentityTransactions transactions,AuthorizationDecisionService authorization,RoleCatalogueQueries catalogue,Clock clock){this.transactions=transactions;this.authorization=authorization;this.catalogue=catalogue;this.clock=clock;}
     public JsonNode prepare(ActorContext context,UUID operation,Scope scope,UUID definition,String name,UUID base,List<String> codes,Support support,String reason,JsonNode condition){
         if(scope==null||(definition==null)==(name==null)||(definition==null&&base!=null)||(definition!=null&&base==null)||(condition!=null&&!condition.isNull()))throw new Refusal(RefusalReason.INVALID_INPUT);
@@ -45,6 +47,15 @@ public final class RoleDefinitionCandidateService {
             }
             return json.valueToTree(candidate(c,scope,id));
         });
+    }
+    public Validation validate(ActorContext context,Scope scope,UUID id,long expected){
+        if(scope==null||id==null||expected<1)throw new Refusal(RefusalReason.INVALID_INPUT);
+        return catalogue.read(context,(c,actor)->{requireDelegate(c,context,"role.definition.prepare",scope);var candidate=candidate(c,scope,id);checkCandidate(c,candidate,expected,candidate.baseVersionId());return new Validation(true,candidate,candidate.difference(),List.of("Activation appends an immutable version; no assignment is changed.","Assignment replacement is a separate explicitly authorized operation.","Management scope and supported principals/scopes do not grant authority."));});
+    }
+    void checkCandidate(Connection c,Candidate candidate,long expected,UUID base)throws SQLException{
+        if(candidate.version()!=expected||candidate.activatedVersionId()!=null||!Objects.equals(candidate.baseVersionId(),base)||!Objects.equals(latest(c,candidate.definitionId()),base))throw new Refusal(RefusalReason.STATE_CONFLICT);
+        checkContent(c,candidate.managementScope(),candidate.permissionCodes(),candidate.support());
+        if(!candidate.contentDigest().equals(contentDigest(candidate.roleCode(),candidate.proposedRoleVersion(),candidate.classification(),candidate.support(),candidate.permissionCodes())))throw new Refusal(RefusalReason.STATE_CONFLICT);
     }
     @FunctionalInterface interface Mutation {JsonNode apply(Connection c)throws SQLException;}
     JsonNode write(ActorContext context,UUID operation,Scope scope,String action,String permission,Object input,String reason,Mutation mutation){
