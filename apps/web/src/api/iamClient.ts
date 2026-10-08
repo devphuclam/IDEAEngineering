@@ -32,6 +32,14 @@ export type AssignmentView={assignmentId:string;principal:AssignmentPrincipal;sc
 export type AssignmentPreview={allowed:boolean;role:RoleView;principal:AssignmentPrincipal;scope:AssignmentScope;interval:ParticipationInterval|null;before:AssignmentView|null;consequences:string[];refusalReason:string|null};
 export type AssignmentProposal={principal:AssignmentPrincipal;scope:AssignmentScope;roleVersionId:string;interval?:ParticipationInterval;assignmentId?:string;expectedVersion?:number};
 export type AssignmentGrant=AssignmentProposal&{operationId:string;reason:string};
+export const customRoleActions=["role.definition.prepare","role.definition.activate"] as const;
+export const customRoleCeiling=["project.read","role.catalogue.read","access.inspect","audit.read"] as const;
+export type RoleSupport={scopeKinds:string[];principalKinds:string[]};
+export type PermissionDifference={added:string[];removed:string[];unchanged:string[]};
+export type RoleCandidate={candidateId:string;definitionId:string;roleCode:string;displayName:string;managementScope:AssignmentScope;baseVersionId:string|null;proposedRoleVersion:number;classification:"BUSINESS"|"ADMINISTRATION";support:RoleSupport;permissionCodes:string[];contentDigest:string;version:number;state:"CANDIDATE"|"ACTIVATED";activatedVersionId:string|null;difference:PermissionDifference};
+export type RoleProposal={operationId:string;scope:AssignmentScope;definitionId?:string;name?:string;baseVersionId?:string|null;permissionCodes:string[];support:RoleSupport;reason:string};
+export type RoleValidation={valid:true;candidate:RoleCandidate;difference:PermissionDifference;consequences:string[]};
+export type RoleActivation={operationId:string;scope:AssignmentScope;expectedVersion:number;baseVersionId:string|null;reason:string};
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const requestOptions = { credentials: "same-origin", cache: "no-store", redirect: "error" } as const;
@@ -119,6 +127,15 @@ function roleView(value:unknown):RoleView{
 function assignmentView(value:unknown):AssignmentView{const d=object(value),from=nullableInstant(d.effectiveFrom),at=nullableInstant(d.assignedAt);if(!from||!at||typeof d.effective!=="boolean")throw new Error("Invalid retained assignment");return {assignmentId:identifier(d.assignmentId),principal:assignmentPrincipal(d.principal),scope:assignmentScope(d.scope),roleVersionId:identifier(d.roleVersionId),roleCode:text(d.roleCode,120),roleVersion:version(d.roleVersion),effectiveFrom:from,effectiveUntil:nullableInstant(d.effectiveUntil),assignedBy:identifier(d.assignedBy),reason:text(d.reason,500),assignedAt:at,revokedAt:nullableInstant(d.revokedAt),endedBy:d.endedBy===null?null:identifier(d.endedBy),endReason:d.endReason===null?null:text(d.endReason,500),version:version(d.version),effective:d.effective};}
 function assignmentPreview(value:unknown):AssignmentPreview{const d=object(value);if(typeof d.allowed!=="boolean"||!Array.isArray(d.consequences)||d.consequences.length>20)throw new Error("Invalid delegation preview");let interval:ParticipationInterval|null=null;if(d.interval!==null){const p=object(d.interval);interval={effectiveFrom:nullableInstant(p.effectiveFrom),effectiveUntil:nullableInstant(p.effectiveUntil)};}return {allowed:d.allowed,role:roleView(d.role),principal:assignmentPrincipal(d.principal),scope:assignmentScope(d.scope),interval,before:d.before===null?null:assignmentView(d.before),consequences:d.consequences.map(v=>text(v,500)),refusalReason:d.refusalReason===null?null:text(d.refusalReason,120)};}
 function scopeQuery(scope:AssignmentScope):string{const s=assignmentScope(scope);return `organizationId=${s.organizationId}${s.kind==="PROJECT"?`&projectId=${s.projectId}`:""}`;}
+function permissionView(value:unknown):PermissionView{const p=object(value);if(typeof p.participantMembershipRequired!=="boolean"||!["IMPLEMENTED","DESIGN"].includes(String(p.implementationState)))throw new Error("Invalid Permission");return {code:text(p.code,120),owner:text(p.owner,120),scopeKinds:choiceList(p.scopeKinds,["ORGANIZATION","PROJECT"]),principalKinds:choiceList(p.principalKinds,["ACTOR","PROJECT_GROUP"]),participantMembershipRequired:p.participantMembershipRequired,implementationState:p.implementationState as PermissionView["implementationState"]};}
+function difference(value:unknown):PermissionDifference{const d=object(value);const codes=(v:unknown)=>{if(!Array.isArray(v)||v.length>25)throw new Error("Invalid difference");return v.map(c=>text(c,120));};return {added:codes(d.added),removed:codes(d.removed),unchanged:codes(d.unchanged)};}
+function roleCandidate(value:unknown):RoleCandidate{
+  const d=object(value);if(!["BUSINESS","ADMINISTRATION"].includes(String(d.classification))||!["CANDIDATE","ACTIVATED"].includes(String(d.state))||typeof d.contentDigest!=="string"||!/^[0-9a-f]{64}$/.test(d.contentDigest))throw new Error("Invalid candidate");
+  const support=object(d.support),base=d.baseVersionId===null?null:identifier(d.baseVersionId),active=d.activatedVersionId===null?null:identifier(d.activatedVersionId);
+  if((d.state==="CANDIDATE")!==(active===null))throw new Error("Invalid candidate state");
+  return {candidateId:identifier(d.candidateId),definitionId:identifier(d.definitionId),roleCode:text(d.roleCode,120),displayName:text(d.displayName),managementScope:assignmentScope(d.managementScope),baseVersionId:base,proposedRoleVersion:version(d.proposedRoleVersion),classification:d.classification as RoleCandidate["classification"],support:{scopeKinds:choiceList(support.scopeKinds,["ORGANIZATION","PROJECT"]),principalKinds:choiceList(support.principalKinds,["ACTOR","PROJECT_GROUP"])},permissionCodes:choiceList(d.permissionCodes,[...customRoleCeiling]),contentDigest:d.contentDigest,version:version(d.version),state:d.state as RoleCandidate["state"],activatedVersionId:active,difference:difference(d.difference)};
+}
+function roleValidation(value:unknown):RoleValidation{const d=object(value);if(d.valid!==true||!Array.isArray(d.consequences)||d.consequences.length>20)throw new Error("Invalid validation");const candidate=roleCandidate(d.candidate),diff=difference(d.difference);if(JSON.stringify(candidate.difference)!==JSON.stringify(diff))throw new Error("Validation difference mismatch");return {valid:true,candidate,difference:diff,consequences:d.consequences.map(c=>text(c,500))};}
 
 export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => fetch(path, init)) {
   async function currentCsrf(): Promise<{ headerName: "X-CSRF-TOKEN"; token: string }> {
@@ -156,7 +173,7 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
     loadContext(): Promise<IamResult<AdministrationContext>> {
       return read("/api/v1/administration/context", value => {
         const data = object(value);
-        const allowed = ["account.read", "account.create", "account.disable", "account.re-enable", "account.credential.setup.issue", "account.credential.reset.issue", ...projectActions,...assignmentActions];
+        const allowed = ["account.read", "account.create", "account.disable", "account.re-enable", "account.credential.setup.issue", "account.credential.reset.issue", ...projectActions,...assignmentActions,...customRoleActions];
         if (!Array.isArray(data.actions) || data.actions.some(action => typeof action !== "string" || !allowed.includes(action))) throw new Error("Invalid action availability");
         return { ...sessionView(data), organizationId: identifier(data.organizationId), displayName: text(data.displayName), organizationName: text(data.organizationName), actions: [...data.actions] };
       });
@@ -171,6 +188,10 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
     },
     loadAccount(accountId: string): Promise<IamResult<AccountView>> { return read(`/api/v1/administration/accounts/${identifier(accountId)}`, accountView); },
     loadRoles(scope:AssignmentScope,offset=0):Promise<IamResult<BoundedPage<RoleView>>>{return read(`/api/v1/administration/roles?${scopeQuery(scope)}&offset=${offset}&limit=50`,v=>boundedPage(v,roleView));},
+    loadPermissions(scope:AssignmentScope,offset=0):Promise<IamResult<BoundedPage<PermissionView>>>{return read(`/api/v1/administration/permissions?${scopeQuery(scope)}&offset=${offset}&limit=50`,v=>boundedPage(v,permissionView));},
+    prepareRole(input:RoleProposal):Promise<IamResult<RoleCandidate>>{return command("/api/v1/administration/roles/candidates",input,201,async r=>roleCandidate(await r.json()));},
+    validateRole(id:string,input:{scope:AssignmentScope;expectedVersion:number}):Promise<IamResult<RoleValidation>>{return command(`/api/v1/administration/roles/candidates/${identifier(id)}/validate`,input,200,async r=>roleValidation(await r.json()));},
+    activateRole(id:string,input:RoleActivation):Promise<IamResult<RoleView>>{return command(`/api/v1/administration/roles/candidates/${identifier(id)}/activate`,input,201,async r=>roleView(await r.json()));},
     loadAssignments(scope:AssignmentScope,principal?:AssignmentPrincipal,offset=0):Promise<IamResult<BoundedPage<AssignmentView>>>{const target=principal?assignmentPrincipal(principal):null;return read(`/api/v1/administration/assignments?${scopeQuery(scope)}${target?target.kind==="ACTOR"?`&actorId=${target.actorId}`:`&groupId=${target.groupId}`:""}&offset=${offset}&limit=50`,v=>boundedPage(v,assignmentView));},
     loadAssignment(id:string,scope:AssignmentScope):Promise<IamResult<AssignmentView>>{return read(`/api/v1/administration/assignments/${identifier(id)}?${scopeQuery(scope)}`,assignmentView);},
     previewAssignment(input:AssignmentProposal):Promise<IamResult<AssignmentPreview>>{return command("/api/v1/administration/assignments/preview",input,200,async r=>assignmentPreview(await r.json()));},
