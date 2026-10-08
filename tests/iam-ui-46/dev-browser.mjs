@@ -29,7 +29,9 @@ async function login(page) {
   assert.equal(status, 200);
   stage = "server-actor-visible";
   await page.getByTestId("session-actor").waitFor();
-  assert.ok((await page.getByTestId("session-actor").innerText()).includes(fixture.adminActorId));
+  // The authored UI intentionally abbreviates UUIDs; exact identity comes from IAM.
+  const currentActor = await page.evaluate(async () => (await (await fetch("/api/v1/identity/session")).json()).actorId);
+  assert.equal(currentActor, fixture.adminActorId);
 }
 try {
   assert.equal(process.version, "v24.19.0");
