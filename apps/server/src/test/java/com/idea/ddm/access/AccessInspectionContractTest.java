@@ -21,7 +21,7 @@ class AccessInspectionContractTest {
                 var response=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",member.actorId(),"permissionCode","project.read","scope",scope));
                 assertEquals(200,response.statusCode());var result=f.json.readTree(response.body());assertEquals("ALLOW",result.path("rbacResult").asString());assertEquals(2,result.path("paths").size());
                 var ids=new HashSet<String>();for(var path:result.path("paths")){ids.add(path.path("assignmentId").asString());assertEquals(pm.toString(),path.path("projectMembershipId").asString());assertTrue(path.has("assignedBy"));assertEquals(role.toString(),path.path("roleVersionId").asString());if(!path.path("groupId").isNull())assertEquals(gm.toString(),path.path("groupMembershipId").asString());}assertEquals(Set.of(direct.toString(),grouped.toString()),ids);
-                f.sql("UPDATE project_membership SET ended_at='2026-10-07T06:00:00Z' WHERE membership_id='"+pm+"'");
+                f.sql("UPDATE project_membership SET ended_at='2026-10-07T06:00:00Z',ended_by='"+admin.actorId()+"',end_reason='Synthetic end' WHERE membership_id='"+pm+"'");
                 result=f.json.readTree(f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",member.actorId(),"permissionCode","project.read","scope",scope)).body());assertEquals("BLOCKED",result.path("rbacResult").asString());assertEquals(0,result.path("paths").size());assertFalse(result.path("projectMembershipEligible").asBoolean());
                 a.actorAssignment(admin,AuthorizationPrerequisiteFixture.PA_V1,scope,now,null);
                 result=f.json.readTree(f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","project.admin.read","scope",scope)).body());assertEquals("ALLOW",result.path("rbacResult").asString());assertFalse(result.path("projectMembershipEligible").asBoolean());assertEquals("NOT_EVALUATED",result.path("ownerBusinessGate").asString());return null;
@@ -44,7 +44,7 @@ class AccessInspectionContractTest {
         {
             var admin=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
             f.http.withSignedInClient(admin,(client,ctx)->{f.delegate(admin);
-                var history=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(403,history.statusCode());
+                var history=client.send(java.net.http.HttpRequest.newBuilder(f.http.uri("/api/v1/administration/history?organizationId="+f.rows.organizationId())).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString());assertEquals(409,history.statusCode(),"Even registered PRA audit.read stays unsupported, not unlocked");
                 var inspect=f.post(client,"/api/v1/administration/access-inspections",Map.of("targetActorId",admin.actorId(),"permissionCode","audit.read","scope",f.scope()));assertEquals(200,inspect.statusCode());assertEquals("UNSUPPORTED",f.json.readTree(inspect.body()).path("rbacResult").asString());assertEquals("DESIGN",f.json.readTree(inspect.body()).path("implementationState").asString());return null;});
         }
     }
