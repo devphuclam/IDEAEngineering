@@ -44,12 +44,12 @@ async function privacy(page){
 }
 try{
   assert.equal(process.version,"v24.19.0");assert.equal(sha(await readFile(process.execPath)),"3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237");
-  assert.equal(sha(await readFile("C:/Program Files/Google/Chrome/Application/chrome.exe")),"6849d2982038de9f9489a7b3858f3b785b7fec06a842c93c517281d21995c8ca");
+  assert.equal(sha(await readFile("C:/Program Files/Google/Chrome/Application/chrome.exe")),"d3784ffbf1f6109348416064b3e4cd739b06fa61d89a81b262c780df9f32270c");
   const base="C:/Users/TD-999/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/";
   for(const name of ["playwright","playwright-core"])assert.equal(JSON.parse(await readFile(base+name+"/package.json","utf8")).version,"1.62.1");
   const read=spawnSync("C:/Windows/System32/OpenSSH/ssh.exe",[...sshOptions,"phuclam@192.168.137.33",`test "$(stat -c '%U:%a' ${root}/fixture.private.json)" = phuclam:600 && cat ${root}/fixture.private.json`],{encoding:"utf8",windowsHide:true,timeout:10000});
   assert.equal(read.status,0);fixture=JSON.parse(read.stdout);read.stdout="";assert.equal(fixture.source,source);secrets.push(fixture.adminPassword,fixture.scopedPassword,fixture.memberPassword);
-  const {chromium}=createRequire(import.meta.url)(base+"playwright");browser=await chromium.launch({channel:"chrome",headless:false});assert.equal(browser.version(),"154.0.8037.98");
+  const {chromium}=createRequire(import.meta.url)(base+"playwright");browser=await chromium.launch({channel:"chrome",headless:false});assert.equal(browser.version(),"155.0.8059.39");
   const contexts=await Promise.all([browser.newContext(),browser.newContext(),browser.newContext()]);
   for(const context of contexts){context.on("page",page=>page.on("console",message=>{if(secrets.some(secret=>message.text().includes(secret)))leak=true;}));context.on("request",request=>{
     const headers=request.headers();if(Object.entries(headers).some(([key,value])=>/^(actorid|x-actor-id)$/i.test(key)||value===fixture.adminActorId))callerActor=true;

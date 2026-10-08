@@ -2,7 +2,7 @@
 
 | Control | Value |
 |---|---|
-| Stable ID / class / version / status | IE-EXE-IAM-UI-46-20261007 / readiness configuration and gate record / 0.4 / Draft result record; PG2/PG3/PG4 PASS, section 6; actual trusted Chrome HTTPS PASS 2/2 |
+| Stable ID / class / version / status | IE-EXE-IAM-UI-46-20261007 / readiness configuration and gate record / 0.5 / Draft result record; PG2/PG3/PG4 PASS, section 6; approved Project/Group browser successor in section 7 |
 | Scope / authority / date | Issue #46 / PR #47, feature 009; explicit human readiness continuation at 5b2fb9f; 2026-10-07 Asia/Ho_Chi_Minh |
 | Owner / author / reviewer | Project user / Codex CODEX_ONLY / Project Reviewer; technical spec/design acceptance retained, formal PG2/PG3 supplied separately below |
 | Normativity / classification / retention | INFORMATIVE product semantics; controlled execution instruction for this increment / INTERNAL / retain historical attempts and exact-source results |
@@ -267,3 +267,36 @@ This qualifies **HTTPS/browser environment readiness only**, not the actual IDEA
 IAM UI, role/session behavior or Spring Boot HTTPS runtime. Product tests, verifier, deployment,
 merge and T008+ implementation remain NOT-RUN / NOT-STARTED. PR #47 Draft/Open; Issue #46 OPEN.
 T008 remains the next authorized task, then T009 RED before T010 minimum GREEN.
+
+## 7. Project/Group browser tooling successor — 2026-10-08
+
+Before the Project/Group actual browser execution, the controlled preflight discovered that
+the installed Chrome no longer matched the historical 154 pin. It stopped before launching
+Chrome or executing a product/browser case. The owned qualification JVM and SSH forwarding
+were terminated; its exact marked schema was removed after JVM termination. Historical
+Chrome 154 readiness and Account qualification records remain unchanged.
+
+The human explicitly answered **“Duyệt Chrome đang cài cho qualification Project/Group”**
+after being presented the new version and exact executable hash. This prospectively admits
+the existing installed browser for this Project/Group qualification, not a claim that an
+unexecuted test passed or that automatic-update provenance was independently established.
+
+| Controlled input | Exact approved successor |
+|---|---|
+| Existing executable / publisher | `C:/Program Files/Google/Chrome/Application/chrome.exe`; VersionInfo Google LLC |
+| Version / SHA-256 | `155.0.8059.39`; `d3784ffbf1f6109348416064b3e4cd739b06fa61d89a81b262c780df9f32270c` |
+| Installed-file signature | Authenticode `Valid`, signer CN/O Google LLC, certificate thumbprint `607A3EDAA64933E94422FC8F0C80388E0590986C` |
+| Unchanged automation | Windows Node 24.19.0 at its admitted absolute path/hash; Playwright and playwright-core 1.62.1, installed branded Chrome only |
+| Unchanged trust / target | Existing section 6 normally trusted test certificate, SAN localhost + 127.0.0.1, valid until 2026-10-14; dedicated loopback 18446 and owned forwarding only |
+| Intended use / obligations | Internal test tool only, not application payload; retain applicable existing browser/tool license and notice records. No browser/package download, install, TLS bypass or trust-store mutation |
+
+Only `project-browser.mjs` receives this successor executable/version pin before execution.
+Its exact source and input manifest are committed before the run. The historical Account
+browser harness remains pinned to the version actually used for its prior evidence. Browser
+source/hash/version, certificate validity, graph or target drift still stops the affected
+execution. No application contract, authority, dependency or qualification oracle changes.
+
+This record authorizes resumption inside the already approved Project/Group vertical slice.
+Actual Project/Group browser results are **NOT-RUN** at this pre-execution publication;
+record the successor result separately. No whole-feature acceptance, deploy, merge or timer
+action is implied.

@@ -170,7 +170,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 f4dde1be1c251665f5304e6b6d0a89c6f9aec62bc30e7368856374d89f8e51da  docs/research/inventories/ph1-packaged-notice-map-20261006.tsv
 fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-46/account-browser.mjs
 e36518deed06694be86ea033bd56d2a47ed41481bb97cc0ffaf04e2dd4f15492  tests/iam-ui-46/account-browser.sh
-65fb7a8a3739404d4c32fa51ceb5844ea3dc0bb820f95421e3b3752a95c0cdcc  tests/iam-ui-46/project-browser.mjs
+3893d6ef9401e5cfb4a3e5df4586a9a637d241a8262804b4a35fe8d9c796f2ec  tests/iam-ui-46/project-browser.mjs
 86d07bdacafd2a2b143f8650e5e53a50dd02d9fdb67b499ade77a989ef773869  tests/iam-ui-46/README.md
 c8e5118e5e0c1a3a32c2b4edd8bfbaef172ffb6392e071249a1a67e5fd3ab62b  tests/iam-ui-46/run-owner-tests.sh
 e082d788f4c9e8e8bfadbb77467e3873ea1e7bb08c105ea1b1e99e6f49113faf  tests/iam-ui-46/run-web-tests.ps1
