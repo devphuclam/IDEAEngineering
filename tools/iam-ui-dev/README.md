@@ -5,7 +5,7 @@
 | ID / version / class | IE-DEV-IAM-46-001 / 0.1 / internal engineering execution recipe |
 | Owner / author | Project user / Codex, CODEX_ONLY |
 | Authority / date | User selects dedicated Feature009 test DB and retained synthetic accounts, after requesting npm development flow; 2026-10-08, Asia/Ho_Chi_Minh |
-| Status / review | Authorized setup; execution NOT-RUN at recipe publication; human acceptance and PG5 pending |
+| Status / review | Development path executed PASS; human acceptance and PG5 pending |
 | Scope / classification | Issue46 / Draft PR47; INTERNAL, synthetic manual review only |
 | Supersession / retention | Supplements qualification recipes, never rewrites them; retain recipe/results; no automatic schema/database deletion |
 | Upstream | [execution envelope](../../specs/009-iam-rbac-ui-integration/execution-envelope.md), [repair handoff §22](../../specs/009-iam-rbac-ui-integration/integration-readiness.md#22-independent-review-repair-successor--2026-10-08) |
@@ -99,3 +99,65 @@ and allow a fresh sign-in; it must not revive the prior servlet proof.
 These checks qualify this development path only. Existing production package and
 Feature009 regression evidence remain their separately frozen lineage. This does
 not close T093 or imply PG5, deploy, production readiness or merge approval.
+
+## Actual setup / focused qualification — 2026-10-08
+
+Publication lineage, not a single collapsed execution SHA:
+
+- Initial recipe `da97b6fb7854881610b137ad415fa03322fea5da`; successor
+  `b33e19766d6e9d72e5f32f5d470cd88da88ed90e` corrects the package manifest to
+  committed LF bytes before transfer/setup. No source-byte mismatch was executed.
+- Ubuntu control scripts executed from `b33e197`; their raw exported inputs6/6,
+  transfer ZIP identity and remote extracted6/6 passed. ZIP SHA-256
+  `f77e94a6617aa875ae8dc8d0042850fe73d06dfa4d67b02d265609ad5bf9caa9`.
+- Backend/Vite controls retain their original checked hashes respectively
+  `a38eb537cd5bf3aec65544e7b253d0de0645d5c1afbac4aa3d0ef2b2a5d1cfc4` /
+  `2a99ac9b21999d56202f900f2024bee93c1c19cd2b82c6cf57eb4edb353db760`.
+- Local5173 conflict: safe STOP after remote setup, no unrelated process signalled.
+  Windows launcher successor `f684265965600926571c5f9cecf5b24fba2aaad3`
+  chooses local5174→remote5173; Ubuntu scripts need no port/source change.
+- Initial browser stopped after login200 because a new harness assertion compared
+  full UUID to the UI's intentionally abbreviated text. Source diagnosis, not a
+  product/proxy authentication defect. Final harness checks the exact IAM session
+  Actor and separately waits for the authored display. No UI change.
+- Final dev-browser source `21b6584b32a71b4c52aeb246123aba2ab9f35452`, exact file
+  `94d50e3f571c653d0f140170dcbaa867a54010b7992fc38aac499a156c4097d8`:
+  **4/4 PASS** using normally trusted headed Chrome155.0.8059.39, admitted
+  Node24.19.0/Playwright1.62.1. Login200, context200, account-list200, same
+  server-established Actor after runtime restart, old proof401, logout204→401,
+  actual Secure/HttpOnly/Strict host-only cookie and bounded no-secret persistence.
+- Read-only Status: RED before launcher existed; GREEN before provisioning and
+  after start. Windows Stop→Status(STOPPED/forwardSTOPPED)→Start succeeded,
+  preserving schema/accounts. No broad process termination or cleanup.
+
+Retained target: `idea_ddm_iam_ui_20261007_46` /
+`iam_ui_c3b8cde44f9a4d1199306c381c12d1bb`. Initial synthetic fixture has
+three accounts; `iam-assignment.admin` has independent Super@2/AA@3/PA@1,
+Linh has explicit membership, and ordinary has no role. Passwords remain only
+in mode600 fixture data; the human-only terminal command does not retain them.
+Schema, credential identities and public-empty boundary are preserved. No
+application build/package or whole-feature regression/verifier was rerun.
+
+The repaired JAR and mirrored `apps/web/src` are still the previously qualified
+`9d3732c` generation. These development commands do **not** replace production
+packaging evidence or independent review. Historical stopped qualification
+roots/private-log limitations remain unchanged. This result retains the owned
+test processes/forward for the user's next review; stop explicitly when finished.
+
+The Windows launcher was executed directly with PowerShell, not via PATH npm.
+PATH currently resolves Node24.16.0/npm11.13.0 under the user's Notes directory;
+that runtime is not substituted for admitted Node24.19.0 or the remote24.21.0.
+The `dev` npm script is only the convenience alias for this exact PowerShell
+command. To use the already checked path without invoking PATH Node/npm:
+
+```powershell
+cd C:\Users\TD-999\.codex\worktrees\iam-rbac-ui-spec\IDEAEngineering\apps\web
+powershell -NoProfile -File ../../tools/iam-ui-dev/launch.ps1
+```
+
+Unchanged standalone tracked-secret detector: exit1/10 findings, **NOT-PASS**;
+the historical9 are preserved. New `backend.sh` finding is the shell assignment
+reading the existing mode600 TLS password file into the process environment;
+it contains no committed password/key bytes. Author disposition: private runtime
+read, not a working committed credential; no detector exclusion or false PASS.
+Prior user-reported manual PASS is not silently extended to this new source.

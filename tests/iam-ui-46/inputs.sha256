@@ -221,6 +221,6 @@ d1da673a41141d3b83023cba0e6872071b2204626f41df47d088331a58cb62b0  tests/iam-ui-4
 cfda8ba959856e72ef1f09cadb415ac8d5d8a31fb5a87f24b68a50301f9fd2b2  tools/iam-ui-dev/launch.ps1
 a38eb537cd5bf3aec65544e7b253d0de0645d5c1afbac4aa3d0ef2b2a5d1cfc4  tools/iam-ui-dev/backend.sh
 2a99ac9b21999d56202f900f2024bee93c1c19cd2b82c6cf57eb4edb353db760  tools/iam-ui-dev/vite-dev.mjs
-e147ea36e24068f43f857ae6ff0665af4e6b565d9a8c7e84a2d9cbea50a0638f  tools/iam-ui-dev/README.md
+4d26517427cff5dd71ab0a7c2ff16af2161dfc07d637f3de479cb447ba14e761  tools/iam-ui-dev/README.md
 d426ef37c9193c172c5b4bb22e614625437ad9f995a0d5e79024cf82d13eaffe  tests/iam-ui-46/dev-status.test.mjs
 94d50e3f571c653d0f140170dcbaa867a54010b7992fc38aac499a156c4097d8  tests/iam-ui-46/dev-browser.mjs
