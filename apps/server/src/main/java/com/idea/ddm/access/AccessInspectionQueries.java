@@ -18,6 +18,10 @@ public final class AccessInspectionQueries {
             String ownerBusinessGate,Instant evaluatedAt,List<Path> paths) {}
     public record Resolution(UUID operationId,String state,String owner,UUID actorId,Scope scope,
             String action,String outcome,String reasonCode,String correlationId,Instant occurredAt,String retryProfile) {}
+    public record History(UUID operationId,String owner,UUID actorId,Scope scope,String action,String targetId,
+            String outcome,String reasonCode,String reason,String correlationId,Instant occurredAt,
+            Map<String,Object> before,Map<String,Object> after) {}
+    public static final List<String> ACTIONS=List.of("audit.read");
     private final RoleCatalogueQueries reads;
     private final AuthorizationDecisionService authorization;
     AccessInspectionQueries(RoleCatalogueQueries reads,AuthorizationDecisionService authorization){this.reads=reads;this.authorization=authorization;}
@@ -55,13 +59,45 @@ public final class AccessInspectionQueries {
         });
     }
 
-    public Object history(ActorContext context,Scope scope,int offset,int limit){
+    public RoleCatalogueQueries.Page<History> history(ActorContext context,Scope scope,UUID target,int offset,int limit){
         RoleCatalogueQueries.page("",offset,limit);
         return reads.read(context,(c,caller)->{
             RoleCatalogueQueries.require(authorization.evaluate(c,context,"audit.read",scope));
-            // Registry content is not executable Audit authority. Never unlock a DESIGN owner.
-            throw new Refusal(RefusalReason.STATE_CONFLICT);
+            var items=new ArrayList<History>();int skipped=0;boolean more=false;
+            // Exact immutable owner outcomes only, not login activity, credentials or arbitrary Audit export.
+            String sources="SELECT e.operation_id,'ASSIGNMENT'::text owner,e.actor_id,e.organization_id,"+CommittedAdministrationScope.ASSIGNMENT+" scope,'role.assignment.'||lower(e.action) action,o.target_id,o.outcome,o.reason_code,e.reason,e.correlation_id::text,e.occurred_at,e.before_state::text before_state,e.result::text result FROM assignment_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) UNION ALL "
+                +"SELECT e.operation_id,'ROLE_DEFINITION',e.actor_id,e.organization_id,e.requested_scope::text,o.action,o.target_id,o.outcome,o.reason_code,e.reason,e.correlation_id::text,e.occurred_at,NULL::text,e.result::text FROM role_definition_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) UNION ALL "
+                +"SELECT e.operation_id,'PROJECT',e.actor_id,e.organization_id,"+CommittedAdministrationScope.PROJECT+",e.action,e.target_id::text,e.outcome,e.reason_code,NULL::text,e.correlation_id::text,e.created_at,NULL::text,e.result::text FROM project_owner_outcome e UNION ALL "
+                +"SELECT e.operation_id,'IAM',e.actor_id,a.organization_id,NULL::text,e.action,e.target_id,e.outcome,e.reason_code,NULL::text,NULL::text,e.occurred_at,NULL::text,NULL::text FROM iam_owner_outcome e JOIN idea_account a USING(actor_id) WHERE e.action IN ('account.create','account.disable','account.re-enable','account.credential.setup.issue','account.credential.reset.issue')";
+            try(var q=c.prepareStatement("SELECT * FROM ("+sources+") h WHERE organization_id=? AND (?::text IS NULL OR target_id=?) ORDER BY occurred_at DESC,operation_id")){
+                q.setObject(1,scope.organizationId());q.setString(2,target==null?null:target.toString());q.setString(3,target==null?null:target.toString());
+                try(var r=q.executeQuery()){while(r.next()){
+                    String owner=r.getString("owner"),serialized=r.getString("scope");
+                    if(serialized==null&&!"IAM".equals(owner))continue;
+                    var retained=serialized==null?Scope.organization(scope.organizationId()):new tools.jackson.databind.json.JsonMapper().readValue(serialized,Scope.class);
+                    if(!scope.equals(retained))continue;
+                    var id=r.getObject("operation_id",UUID.class);var actor=r.getObject("actor_id",UUID.class);
+                    if(!com.idea.ddm.audit.AuditEvidenceRepository.hasAdministrationCompanion(c,id,actor,r.getString("action"),r.getString("outcome")))continue;
+                    if(skipped++<offset)continue;if(items.size()==limit){more=true;break;}
+                    items.add(new History(id,owner,actor,retained,r.getString("action"),r.getString("target_id"),r.getString("outcome"),r.getString("reason_code"),r.getString("reason"),r.getString("correlation_id"),r.getTimestamp("occurred_at").toInstant(),snapshot(owner,r.getString("before_state"),false),"ACCEPTED".equals(r.getString("outcome"))?snapshot(owner,r.getString("result"),true):null));
+                }}
+            }
+            return new RoleCatalogueQueries.Page<>(List.copyOf(items),offset,limit,more);
         });
+    }
+
+    /** Project/IAM did not retain complete prior-state snapshots; null explicitly means not retained. */
+    private static Map<String,Object> snapshot(String owner,String serialized,boolean after){
+        if(serialized==null)return null;var json=new tools.jackson.databind.json.JsonMapper();var value=json.readTree(serialized);
+        if("ASSIGNMENT".equals(owner)&&after&&value.has("successor"))value=value.path("successor");
+        var fields=switch(owner){
+            case "ASSIGNMENT" -> List.of("assignmentId","roleVersionId","roleCode","roleVersion","effectiveFrom","effectiveUntil","assignedBy","reason","revokedAt","version");
+            case "ROLE_DEFINITION" -> List.of("candidateId","definitionId","roleCode","displayName","baseVersionId","proposedRoleVersion","permissionCodes","version","state","activatedVersionId");
+            case "PROJECT" -> List.of("projectId","groupId","membershipId","targetActorId","name","version","effectiveFrom","effectiveUntil","endedAt");
+            default -> List.<String>of();
+        };
+        var safe=new LinkedHashMap<String,Object>();for(String field:fields){var v=value.path(field);if(v.isMissingNode()||v.isNull())continue;if(v.isString())safe.put(field,v.asString());else if(v.isNumber())safe.put(field,v.asLong());else if("permissionCodes".equals(field)&&v.isArray())safe.put(field,v.valueStream().map(tools.jackson.databind.JsonNode::asString).toList());}
+        return safe.isEmpty()?null:Collections.unmodifiableMap(safe);
     }
 
     public Resolution operation(ActorContext context,UUID id,Scope scope){
