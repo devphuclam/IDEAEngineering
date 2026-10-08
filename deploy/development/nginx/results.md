@@ -164,9 +164,19 @@ Issue49/intake. Front/backend health, exact predecessor preservation, upstream
 negative cases, execution lineage and operator handoff resolved prior findings.
 Read-only source/evidence review, not an independent rerun/raw-log review.
 
-The final connection-release harness change at `87462d1` and this successor
-record are pending renewed affected review. Agent review is separate from
-independent human acceptance and does not authorize merge.
+Final renewal at `5cff79445184c50cff6275701a28a8aa9442eff0`:
+
+- **Standards PASS**: browser/Node connection release precedes N09, restoration
+  remains bounded with truthful BLOCKED handling, and separate execution/secret
+  dispositions are preserved. Zero remaining actionable documented violations
+  or heuristic smells in the affected changes.
+- **Spec PASS**: zero remaining actionable mismatch or scope creep; exact
+  executed-source lineage and engineering evidence match the bounded scope.
+
+Both renewals were read-only source/evidence review: no tests, server access,
+secret reads or independent raw-log inspection. This publication changes only
+this evidence record. Agent review is separate from independent human acceptance
+and does not authorize merge.
 
 ## 6. Secret-detector disposition
 
