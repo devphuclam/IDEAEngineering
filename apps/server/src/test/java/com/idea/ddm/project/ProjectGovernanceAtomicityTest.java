@@ -40,6 +40,8 @@ class ProjectGovernanceAtomicityTest {
         var admin=fixtures.identity(IamIntegrationFixtures.Persona.PA_ORGANIZATION);
         http.withSignedInClient(admin,(client,context)->{
             grant(admin);var op=UUID.randomUUID();var input=Map.of("operationId",op,"organizationId",admin.organizationId(),"name","Concurrent synthetic Project","reason","Same exact operation intent");
+            // Initialize the new post-login session token before racing owner commands, not two token initializers.
+            assertEquals(200,client.send(HttpRequest.newBuilder(http.uri("/api/v1/identity/csrf")).GET().build(),HttpResponse.BodyHandlers.discarding()).statusCode());
             var responses=concurrent(()->post(client,"/api/v1/administration/projects",input),()->post(client,"/api/v1/administration/projects",input));
             assertEquals(201,responses.get(0).statusCode());assertEquals(201,responses.get(1).statusCode());
             assertEquals(json.readTree(responses.get(0).body()),json.readTree(responses.get(1).body()));
@@ -54,6 +56,7 @@ class ProjectGovernanceAtomicityTest {
             grant(admin);var project=new ProjectPrerequisiteFixture(fixtures).project(admin);
             var input=Map.of("operationId",UUID.randomUUID(),"scope",scope(project),"name","Concurrent Group A","expectedProjectVersion",1,"reason","Expected parent version");
             var other=Map.of("operationId",UUID.randomUUID(),"scope",scope(project),"name","Concurrent Group B","expectedProjectVersion",1,"reason","Expected parent version");
+            assertEquals(200,client.send(HttpRequest.newBuilder(http.uri("/api/v1/identity/csrf")).GET().build(),HttpResponse.BodyHandlers.discarding()).statusCode());
             var responses=concurrent(()->post(client,"/api/v1/administration/projects/"+project.projectId()+"/groups",input),()->post(client,"/api/v1/administration/projects/"+project.projectId()+"/groups",other));
             assertEquals(List.of(201,409),responses.stream().map(HttpResponse::statusCode).sorted().toList());
             assertEquals(2,count("SELECT version FROM project WHERE project_id='"+project.projectId()+"'"));

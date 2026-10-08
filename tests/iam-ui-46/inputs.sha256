@@ -119,7 +119,7 @@ a0ea6f4de6c2736968878b80449d783016f37302f18eb8d259c1224bfbcab2cd  apps/server/sr
 e61a7a6d7815557ae6aa9cbe8b3fbdd7bb49986344bd1d853dc5054ee61d0a23  apps/server/src/test/java/com/idea/ddm/operation/F04SchemaTest.java
 b15e75bdeef2e8bf4209776bff71ed00077ad1c6362474cd1522c8b0a4253deb  apps/server/src/test/java/com/idea/ddm/operation/OwnerOutcomeTest.java
 d5df3059fc3c6f177bee8d94f7ff1c927b0d40c3e9a43d32f2f938fd9c0d720c  apps/server/src/test/java/com/idea/ddm/project/ProjectAuthorizationReadTest.java
-974d05c40e4a1340deb023e9952533cbd73f278eeb54542a3ef3356c2928f100  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceAtomicityTest.java
+e1de9a5f50de2efcf5720236043c03f43c23350083f6d8be2a1b2f2033769830  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceAtomicityTest.java
 0b9e2f4a8d0e6bea2ecc0b3cf199b2677467b9628e4712d125f1289379602d59  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceContractTest.java
 d00933725b6cbe6e9c9e8cbda5ef7ba5857c13db282f2aa430131fbbcdabe930  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceDataTest.java
 3337b0744383052b9c4d309c19a4fd0ebb17cf900cffaa32bce7aaf6305bf2f3  apps/server/src/test/java/com/idea/ddm/project/ProjectGovernanceHttpContractTest.java
@@ -183,7 +183,7 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 f4dde1be1c251665f5304e6b6d0a89c6f9aec62bc30e7368856374d89f8e51da  docs/research/inventories/ph1-packaged-notice-map-20261006.tsv
 fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-46/account-browser.mjs
 f4fa78183a47479017bc59ef432bceed7b56e90b19fcb99fce2894288915182d  tests/iam-ui-46/account-browser.sh
-ea83cc35a92a14116518ede4dca1cc075ccaf749da941e0eabaf618bb0351a56  tests/iam-ui-46/assignment-browser.mjs
+118f5059f15c2211a40b128b5e0e829bb2a362e66d7d695ec0e7bda33fb013d6  tests/iam-ui-46/assignment-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs
 e9799071bcf0c3e452a451ffb417a0a8f403804f94a55923cffeb330ed8b48af  tests/iam-ui-46/README.md
 14ea90166d85901c0f2a70afb423ded0b19c9e9f6a9ee41d422ce76ad38f1d51  tests/iam-ui-46/run-owner-tests.sh
