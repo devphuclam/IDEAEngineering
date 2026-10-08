@@ -164,7 +164,7 @@ class IamSchemaPrivilegeTest {
 
     @Test void predecessorFlywayChecksumsRemainIdenticalAndRepeatHasNoNewMigration() throws Exception {
         var after=migrationChecksums();
-        assertEquals(12,after.size());
+        assertEquals(17,after.size());
         for(var entry:predecessorChecksums.entrySet()) assertEquals(entry.getValue(),after.get(entry.getKey()));
         assertEquals(0,fixtures.migrateSuccessor());
     }

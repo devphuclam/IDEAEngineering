@@ -63,7 +63,7 @@ public final class RoleDefinitionCandidateService {
         var digest=hash(json.writeValueAsString(input));var attempt=UUID.randomUUID();var correlation=UUID.randomUUID();
         final Reply reply;
         try{reply=transactions.executeOwner(context,new IdentityTransactions.OwnerCommand<Reply>(){
-            AuthorizationDecisionService.Decision initial;boolean replay;Reply cached;
+            AuthorizationDecisionService.Decision initial;boolean replay,initialRefusal;Reply cached;
             @Override public void revalidate(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException{
                 if(initial==null&&!replay){
                     try(var q=c.prepareStatement("SELECT e.actor_id,e.organization_id,e.action,e.input_digest,e.result::text,o.outcome,o.reason_code FROM role_definition_owner_operation e JOIN access_policy_owner_outcome o USING(operation_id) WHERE e.operation_id=?")){
@@ -74,13 +74,19 @@ public final class RoleDefinitionCandidateService {
                             else cached=new Reply(json.readTree(r.getString(5)),"REFUSED".equals(r.getString(6))?RefusalReason.valueOf(r.getString(7)):null);
                         }}
                     }
-                    if(!replay){initial=requireDelegate(c,context,permission,scope);return;}
+                    if(!replay){initial=authorization.evaluate(c,context,permission,scope);if(!initial.eligible())throw new Refusal(RefusalReason.INELIGIBLE_SESSION);initialRefusal=!delegated(initial,scope);return;}
                 }
                 if(replay){RoleCatalogueQueries.require(authorization.evaluate(c,context,"role.catalogue.read",scope));return;}
+                if(initialRefusal)return; // Current IAM is still rechecked by the UoW before commit.
                 retain(c,operation,attempt,"COMMIT",requireDelegate(c,context,permission,scope));
             }
             @Override public Reply apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException{
                 if(replay)return cached;
+                if(initialRefusal){
+                    retain(c,operation,attempt,"REQUEST",initial);
+                    insert(c,"INSERT INTO audit_evidence(evidence_id,operation_id,actor_id,action,target_type,target_id,outcome,reason_code) VALUES (?,?,?,?,?,?,?,?)",UUID.randomUUID(),operation,actor.actorId(),"role.definition."+action.toLowerCase(Locale.ROOT),"Authorization request",scope.organizationId().toString(),"REFUSED",RefusalReason.AUTHORITY_REFUSED.name());
+                    return new Reply(null,RefusalReason.AUTHORITY_REFUSED); // No owner result or candidate on initial denial.
+                }
                 try(var q=c.prepareStatement("SELECT 1 FROM access_policy_owner_outcome WHERE operation_id=?")){q.setObject(1,operation);try(var r=q.executeQuery()){if(r.next())return new Reply(null,RefusalReason.STATE_CONFLICT);}}
                 retain(c,operation,attempt,"REQUEST",initial);
                 JsonNode result;RefusalReason refusal=null;var savepoint=c.setSavepoint();
@@ -96,9 +102,10 @@ public final class RoleDefinitionCandidateService {
     }
     AuthorizationDecisionService.Decision requireDelegate(Connection c,ActorContext context,String permission,Scope scope)throws SQLException{
         var decision=authorization.evaluate(c,context,permission,scope);RoleCatalogueQueries.require(decision);
-        if(decision.paths().stream().noneMatch(p->p.roleCode().equals("privileged-role-administrator")&&p.roleVersion()==1&&p.assignmentScope().organizationId().equals(scope.organizationId())&&(p.assignmentScope().projectId()==null||p.assignmentScope().projectId().equals(scope.projectId()))))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
+        if(!delegated(decision,scope))throw new Refusal(RefusalReason.AUTHORITY_REFUSED);
         return decision;
     }
+    private static boolean delegated(AuthorizationDecisionService.Decision decision,Scope scope){return decision.rbacGranted()&&decision.paths().stream().anyMatch(p->p.roleCode().equals("privileged-role-administrator")&&p.roleVersion()==1&&p.assignmentScope().organizationId().equals(scope.organizationId())&&(p.assignmentScope().projectId()==null||p.assignmentScope().projectId().equals(scope.projectId())));}
     void checkContent(Connection c,Scope management,List<String> codes,Support support)throws SQLException{
         if(!CEILING.containsAll(codes)||codes.stream().anyMatch(code->!RoleCatalogueQueries.implemented(code)))throw new Refusal(RefusalReason.STATE_CONFLICT);
         if(!Set.of("ORGANIZATION","PROJECT").containsAll(support.scopeKinds())||!Set.of("ACTOR","PROJECT_GROUP").containsAll(support.principalKinds())||(management.projectId()!=null&&support.scopeKinds().contains("ORGANIZATION")))throw new Refusal(RefusalReason.INVALID_INPUT);
