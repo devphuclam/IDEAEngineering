@@ -42,6 +42,41 @@ class AccessInspectionPrivacyTest {
             var denied=get(second,operation(id));assertEquals(200,denied.statusCode());var unknown=get(second,operation(UUID.randomUUID()));var d=f.json.readTree(denied.body());var u=f.json.readTree(unknown.body());assertEquals("UNRESOLVED",d.path("state").asString());for(String key:List.of("owner","actorId","scope","action","outcome","reasonCode","correlationId","occurredAt","retryProfile")){assertTrue(d.path(key).isNull());assertEquals(d.path(key),u.path(key));}return null;
         }));
     }
+    @Test void refusedProjectAttemptCannotRelabelLaterCommittedScope()throws Exception{
+        var writer=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var inspector=f.rows.identity(IamIntegrationFixtures.Persona.PRA);
+        f.http.withSignedInClient(writer,(client,ctx)->f.http.withSignedInClient(inspector,(reader,rc)->{
+            var projects=new com.idea.ddm.project.ProjectPrerequisiteFixture(f.rows);var a=projects.project(writer);var b=projects.project(writer);
+            var scopeA=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),a.projectId());var scopeB=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),b.projectId());
+            var roles=new AuthorizationPrerequisiteFixture(f.rows);var now=Instant.parse("2026-10-07T05:59:59Z");
+            roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeB,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);
+            var op=UUID.randomUUID();
+            assertEquals(403,f.post(client,"/api/v1/administration/projects/"+a.projectId()+"/update",Map.of("operationId",op,"scope",scopeA,"name","Denied A","expectedVersion",1,"reason","Synthetic refused attempt")).statusCode());
+            assertEquals(200,f.post(client,"/api/v1/administration/projects/"+b.projectId()+"/update",Map.of("operationId",op,"scope",scopeB,"name","Committed B","expectedVersion",1,"reason","Synthetic committed attempt")).statusCode());
+            long audit=f.count("SELECT count(*) FROM audit_evidence");
+            var hidden=get(reader,operation(op)+"&projectId="+a.projectId());assertEquals(200,hidden.statusCode());assertEquals("UNRESOLVED",f.json.readTree(hidden.body()).path("state").asString(),"A reader must not see B through an earlier refused scope");
+            var own=get(client,operation(op)+"&projectId="+b.projectId());assertEquals(200,own.statusCode());assertEquals("COMMITTED_ACCEPTED",f.json.readTree(own.body()).path("state").asString());assertEquals(b.projectId().toString(),f.json.readTree(own.body()).path("scope").path("projectId").asString());
+            assertEquals(audit,f.count("SELECT count(*) FROM audit_evidence"));return null;
+        }));
+    }
+    @Test void refusedAssignmentAttemptCannotPoisonScopeLookupOrCanonicalReplay()throws Exception{
+        var writer=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var inspector=f.rows.identity(IamIntegrationFixtures.Persona.PRA);var target=f.rows.identity(IamIntegrationFixtures.Persona.LINH);
+        f.http.withSignedInClient(writer,(client,ctx)->f.http.withSignedInClient(inspector,(reader,rc)->f.http.withSignedInClient(target,(unused,tc)->{
+            var projects=new com.idea.ddm.project.ProjectPrerequisiteFixture(f.rows);var a=projects.project(writer);var b=projects.project(writer);
+            var scopeA=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),a.projectId());var scopeB=AuthorizationDecisionService.Scope.project(f.rows.organizationId(),b.projectId());
+            var roles=new AuthorizationPrerequisiteFixture(f.rows);var now=Instant.parse("2026-10-07T05:59:59Z");
+            var temporary=roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);roles.actorAssignment(inspector,AuthorizationPrerequisiteFixture.PA_V1,scopeA,now,null);
+            var op=UUID.randomUUID();var refused=Map.of("operationId",op,"principal",Map.of("kind","ACTOR","actorId",target.actorId()),"scope",scopeA,"roleVersionId",AuthorizationPrerequisiteFixture.AA_V3,"reason","Denied admin delegation");
+            assertEquals(403,f.post(client,"/api/v1/administration/assignments",refused).statusCode());
+            roles.actorAssignment(writer,AuthorizationPrerequisiteFixture.PRA_V1,scopeB,now,null);
+            var accepted=Map.of("operationId",op,"principal",Map.of("kind","ACTOR","actorId",target.actorId()),"scope",scopeB,"roleVersionId",AuthorizationPrerequisiteFixture.PA_V1,"reason","Committed exact Project delegation");
+            var first=f.post(client,"/api/v1/administration/assignments",accepted);assertEquals(201,first.statusCode());
+            f.sql("UPDATE identity_role_assignment SET revoked_at='2026-10-07T06:00:00Z',ended_by='"+writer.actorId()+"',end_reason='Remove unrelated A authority',version=version+1 WHERE assignment_id='"+temporary+"'");
+            long audit=f.count("SELECT count(*) FROM audit_evidence");
+            var hidden=get(reader,operation(op)+"&projectId="+a.projectId());assertEquals(200,hidden.statusCode());assertEquals("UNRESOLVED",f.json.readTree(hidden.body()).path("state").asString());
+            var replay=f.post(client,"/api/v1/administration/assignments",accepted);assertEquals(201,replay.statusCode(),"Replay must use the committed B scope, not the denied A scope");assertEquals(f.json.readTree(first.body()),f.json.readTree(replay.body()));
+            assertEquals(audit,f.count("SELECT count(*) FROM audit_evidence"));return null;
+        })));
+    }
     Map<String,Object> input(UUID actor,AuthorizationDecisionService.Scope scope){return Map.of("targetActorId",actor,"permissionCode","access.inspect","scope",scope);}
     String operation(UUID id){return "/api/v1/administration/operations/"+id+"?organizationId="+f.rows.organizationId();}
     HttpResponse<String> get(HttpClient c,String path)throws Exception{return c.send(HttpRequest.newBuilder(f.http.uri(path)).GET().build(),HttpResponse.BodyHandlers.ofString());}
