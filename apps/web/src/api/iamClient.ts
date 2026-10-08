@@ -14,6 +14,15 @@ export type AccountPage = { items: AccountView[]; offset: number; limit: number;
 export type AccountChange = SessionView & { status: AccountView["status"]; securityVersion: number; loginIdentityId?: string };
 export type ProofPurpose = "FIRST_SETUP" | "RESET";
 export type PrivateProof = { proof: string; expiresAt: string };
+export const projectActions = ["project.create", "project.admin.read", "project.update", "project.membership.assign", "project.membership.remove", "project.group.create", "project.group.update", "project.group.membership.assign", "project.group.membership.remove"] as const;
+export type ProjectScope = { kind: "PROJECT"; organizationId: string; projectId: string };
+export type ProjectView = { projectId: string; organizationId: string; name: string; version: number; actions: string[] };
+export type GroupView = { groupId: string; projectId: string; organizationId: string; name: string; version: number; parentVersion: number };
+export type BoundedPage<T> = { items: T[]; offset: number; limit: number; hasMore: boolean };
+export type ParticipationView = { membershipId: string; projectId: string; groupId: string | null; organizationId: string; targetActorId: string; displayName: string; effectiveFrom: string; effectiveUntil: string | null; endedAt: string | null; version: number; parentVersion: number; eligible: boolean };
+export type ParticipationPage = BoundedPage<ParticipationView> & { parentVersion: number; eligibleTargets: BoundedPage<{ actorId: string; displayName: string }> };
+export type ProjectCommand = { operationId: string; scope: ProjectScope; reason: string };
+export type ParticipationInterval = { effectiveFrom?: string | null; effectiveUntil?: string | null };
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const requestOptions = { credentials: "same-origin", cache: "no-store", redirect: "error" } as const;
@@ -62,6 +71,33 @@ function accountView(value: unknown): AccountView {
   return { ...sessionView(data), organizationId: identifier(data.organizationId), displayName: text(data.displayName),
     status: status(data.status), securityVersion: version(data.securityVersion), loginIdentities: logins };
 }
+function boundedPage<T>(value: unknown, decode: (value: unknown) => T): BoundedPage<T> {
+  const data = object(value);
+  if (!Array.isArray(data.items) || data.items.length > 100 || typeof data.offset !== "number" || !Number.isSafeInteger(data.offset) || data.offset < 0 ||
+      typeof data.limit !== "number" || !Number.isSafeInteger(data.limit) || data.limit < 1 || data.limit > 100 || data.items.length > data.limit || typeof data.hasMore !== "boolean") throw new Error("Invalid bounded page");
+  return { items: data.items.map(decode), offset: data.offset, limit: data.limit, hasMore: data.hasMore };
+}
+function projectView(value: unknown): ProjectView {
+  const data=object(value);
+  if (!Array.isArray(data.actions) || data.actions.some(action => typeof action !== "string" || !(projectActions as readonly string[]).includes(action))) throw new Error("Invalid Project availability");
+  return { projectId: identifier(data.projectId), organizationId: identifier(data.organizationId), name: text(data.name), version: version(data.version), actions: [...data.actions] };
+}
+function groupView(value: unknown): GroupView {
+  const data=object(value);return { groupId: identifier(data.groupId), projectId: identifier(data.projectId), organizationId: identifier(data.organizationId), name: text(data.name), version: version(data.version), parentVersion: version(data.parentVersion) };
+}
+function nullableInstant(value: unknown): string | null {
+  if(value===null)return null;
+  if(typeof value!=="string" || !Number.isFinite(Date.parse(value)))throw new Error("Invalid period");return value;
+}
+function participationView(value: unknown): ParticipationView {
+  const data=object(value);const from=nullableInstant(data.effectiveFrom);
+  if(from===null || typeof data.eligible!=="boolean")throw new Error("Invalid participation");
+  return { membershipId: identifier(data.membershipId), projectId: identifier(data.projectId), groupId: data.groupId===null?null:identifier(data.groupId), organizationId: identifier(data.organizationId), targetActorId: identifier(data.targetActorId), displayName: text(data.displayName),
+    effectiveFrom: from, effectiveUntil: nullableInstant(data.effectiveUntil), endedAt: nullableInstant(data.endedAt), version: version(data.version), parentVersion: version(data.parentVersion), eligible: data.eligible };
+}
+function participationPage(value: unknown): ParticipationPage {
+  const data=object(value);return { ...boundedPage(value,participationView), parentVersion: version(data.parentVersion), eligibleTargets: boundedPage(data.eligibleTargets,value=>{const target=object(value);return {actorId:identifier(target.actorId),displayName:text(target.displayName)};}) };
+}
 
 export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => fetch(path, init)) {
   async function currentCsrf(): Promise<{ headerName: "X-CSRF-TOKEN"; token: string }> {
@@ -99,7 +135,7 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
     loadContext(): Promise<IamResult<AdministrationContext>> {
       return read("/api/v1/administration/context", value => {
         const data = object(value);
-        const allowed = ["account.read", "account.create", "account.disable", "account.re-enable", "account.credential.setup.issue", "account.credential.reset.issue"];
+        const allowed = ["account.read", "account.create", "account.disable", "account.re-enable", "account.credential.setup.issue", "account.credential.reset.issue", ...projectActions];
         if (!Array.isArray(data.actions) || data.actions.some(action => typeof action !== "string" || !allowed.includes(action))) throw new Error("Invalid action availability");
         return { ...sessionView(data), organizationId: identifier(data.organizationId), displayName: text(data.displayName), organizationName: text(data.organizationName), actions: [...data.actions] };
       });
@@ -113,6 +149,20 @@ export function createIamClient(fetchBoundary: FetchBoundary = (path, init) => f
       });
     },
     loadAccount(accountId: string): Promise<IamResult<AccountView>> { return read(`/api/v1/administration/accounts/${identifier(accountId)}`, accountView); },
+    loadProjects(filter = "", offset = 0): Promise<IamResult<BoundedPage<ProjectView>>> { return read(`/api/v1/administration/projects?filter=${encodeURIComponent(filter)}&offset=${offset}&limit=50`,value=>boundedPage(value,projectView)); },
+    loadProject(project: string): Promise<IamResult<ProjectView>> { return read(`/api/v1/administration/projects/${identifier(project)}`,projectView); },
+    loadGroups(project: string,filter = "",offset = 0): Promise<IamResult<BoundedPage<GroupView>>> { return read(`/api/v1/administration/projects/${identifier(project)}/groups?filter=${encodeURIComponent(filter)}&offset=${offset}&limit=50`,value=>boundedPage(value,groupView)); },
+    loadGroup(group: string): Promise<IamResult<GroupView>> { return read(`/api/v1/administration/groups/${identifier(group)}`,groupView); },
+    loadProjectMembers(project: string,filter = "",offset = 0): Promise<IamResult<ParticipationPage>> { return read(`/api/v1/administration/projects/${identifier(project)}/members?filter=${encodeURIComponent(filter)}&offset=${offset}&limit=50`,participationPage); },
+    loadGroupMembers(group: string,filter = "",offset = 0): Promise<IamResult<ParticipationPage>> { return read(`/api/v1/administration/groups/${identifier(group)}/members?filter=${encodeURIComponent(filter)}&offset=${offset}&limit=50`,participationPage); },
+    createProject(input: { operationId: string; organizationId: string; name: string; reason: string }): Promise<IamResult<ProjectView>> { return command("/api/v1/administration/projects",input,201,async r=>projectView(await r.json())); },
+    renameProject(project: string,input: ProjectCommand & { name: string; expectedVersion: number }): Promise<IamResult<ProjectView>> { return command(`/api/v1/administration/projects/${identifier(project)}/update`,input,200,async r=>projectView(await r.json())); },
+    createGroup(project: string,input: ProjectCommand & { name: string; expectedProjectVersion: number }): Promise<IamResult<GroupView>> { return command(`/api/v1/administration/projects/${identifier(project)}/groups`,input,201,async r=>groupView(await r.json())); },
+    renameGroup(group: string,input: ProjectCommand & { name: string; expectedVersion: number }): Promise<IamResult<GroupView>> { return command(`/api/v1/administration/groups/${identifier(group)}/update`,input,200,async r=>groupView(await r.json())); },
+    joinProject(project: string,input: ProjectCommand & { targetActorId: string; expectedProjectVersion: number; interval?: ParticipationInterval }): Promise<IamResult<ParticipationView>> { return command(`/api/v1/administration/projects/${identifier(project)}/members`,input,201,async r=>participationView(await r.json())); },
+    joinGroup(group: string,input: ProjectCommand & { targetActorId: string; expectedGroupVersion: number; interval?: ParticipationInterval }): Promise<IamResult<ParticipationView>> { return command(`/api/v1/administration/groups/${identifier(group)}/members`,input,201,async r=>participationView(await r.json())); },
+    endProjectMembership(id: string,input: ProjectCommand & { expectedVersion: number }): Promise<IamResult<ParticipationView>> { return command(`/api/v1/administration/project-memberships/${identifier(id)}/end`,input,200,async r=>participationView(await r.json())); },
+    endGroupMembership(id: string,input: ProjectCommand & { expectedVersion: number }): Promise<IamResult<ParticipationView>> { return command(`/api/v1/administration/group-memberships/${identifier(id)}/end`,input,200,async r=>participationView(await r.json())); },
     createAccount(input: { operationId: string; organizationId: string; displayName: string; login: string }): Promise<IamResult<AccountChange>> {
       return command("/api/v1/identity/accounts", input, 201, async response => accountChange(await response.json()));
     },

@@ -51,7 +51,7 @@ export function AdminRail({
           type="button"
           className={`admin-nav-item ${activeSection === "departments" ? "active" : ""}`}
           disabled={!availableSections.includes("departments")}
-          title="Chưa có trong Account MVP"
+          title="Group được quản trị trong đúng Project"
           onClick={() => onSelectSection("departments")}
           aria-current={activeSection === "departments" ? "page" : undefined}
         >
@@ -78,7 +78,7 @@ export function AdminRail({
           type="button"
           className={`admin-nav-item ${activeSection === "projects" ? "active" : ""}`}
           disabled={!availableSections.includes("projects")}
-          title="Chưa có trong Account MVP"
+          title={availableSections.includes("projects")?"Quản trị Project và Group":"Không có quyền quản trị Project"}
           onClick={() => onSelectSection("projects")}
           aria-current={activeSection === "projects" ? "page" : undefined}
         >
@@ -94,7 +94,7 @@ export function AdminRail({
           >
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
-          <span>Dự án &amp; Nhóm cơ khí</span>
+          <span>Dự án &amp; Nhóm</span>
           {counts.projects !== undefined && <span className="admin-nav-badge">{counts.projects}</span>}
         </button>
 

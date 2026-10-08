@@ -13,7 +13,8 @@ import java.util.UUID;
 
 /** Project-owned read facts in the caller's transaction, not an authorization evaluator. */
 public final class ProjectGovernanceQueries {
-    public record Project(UUID projectId, UUID organizationId, String name, long version) {}
+    public static final List<String> ADMIN_ACTIONS=List.of("project.create","project.admin.read","project.update","project.membership.assign","project.membership.remove","project.group.create","project.group.update","project.group.membership.assign","project.group.membership.remove");
+    public record Project(UUID projectId, UUID organizationId, String name, long version,List<String> actions) { public Project { actions=List.copyOf(actions); } }
     public record Group(UUID groupId, UUID projectId, UUID organizationId, String name, long version, long parentVersion) {}
     public record Participation(UUID membershipId, UUID projectId, UUID groupId, UUID organizationId,
             UUID targetActorId, String displayName, Instant effectiveFrom, Instant effectiveUntil,
@@ -26,7 +27,7 @@ public final class ProjectGovernanceQueries {
         try(var q=connection.prepareStatement("SELECT display_name,version FROM project WHERE project_id=? AND organization_id=?")){
             q.setObject(1,id);q.setObject(2,organization);try(var row=q.executeQuery()){
                 if(!row.next())throw new com.idea.ddm.iam.IamWebConfiguration.Refusal(com.idea.ddm.iam.IamWebConfiguration.RefusalReason.TARGET_NOT_AVAILABLE);
-                return new Project(id,organization,row.getString(1),row.getLong(2));
+                return new Project(id,organization,row.getString(1),row.getLong(2),List.of());
             }
         }
     }

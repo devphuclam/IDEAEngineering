@@ -30,7 +30,7 @@ public final class ProjectGovernanceController {
     @GetMapping("/api/v1/administration/projects/{id}")
     ResponseEntity<?> project(Authentication auth,@PathVariable UUID id,@RequestParam(required=false)UUID organizationId){return safe(200,owner.project(context(auth),organizationId,id,false));}
     @GetMapping("/api/v1/projects/{id}")
-    ResponseEntity<?> participant(Authentication auth,@PathVariable UUID id){return safe(200,owner.project(context(auth),null,id,true));}
+    ResponseEntity<?> participant(Authentication auth,@PathVariable UUID id){var project=owner.project(context(auth),null,id,true);return safe(200,java.util.Map.of("projectId",project.projectId(),"name",project.name()));}
     @GetMapping("/api/v1/administration/projects")
     ResponseEntity<?> projects(Authentication auth,@RequestParam(required=false)UUID organizationId,@RequestParam(defaultValue="")String filter,@RequestParam(defaultValue="0")int offset,@RequestParam(defaultValue="50")int limit){return safe(200,owner.projects(context(auth),organizationId,filter,offset,limit));}
     @PostMapping("/api/v1/administration/projects/{id}/update")

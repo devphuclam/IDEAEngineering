@@ -1,16 +1,18 @@
 import type { ReactNode } from "react";
 import type { AdministrationContext } from "../../api/iamClient";
 import { formatDisplayId } from "../../utils/identity";
-import { AdminRail } from "./AdminRail";
+import { AdminRail, type AdminSection } from "./AdminRail";
 import logoUrl from "../../assets/logo-idea.png";
 
 // Presentation from feat/f04-admin-iam-ui @ 9160ec27. No mock collections or authority fallback.
-export function AdminApp({ context, busy, onExitAdmin, onLogout, children }: {
+export function AdminApp({ context, busy, onExitAdmin, onLogout, children, activeSection="accounts", onSelectSection=()=>{} }: {
   context: AdministrationContext;
   busy: boolean;
   onExitAdmin(): void;
   onLogout(): void;
   children: ReactNode;
+  activeSection?: AdminSection;
+  onSelectSection?(section: AdminSection): void;
 }) {
   return (
     <div className="admin-shell" aria-label="IDEA DDM Administration Console" data-testid="idea-web-app">
@@ -36,11 +38,11 @@ export function AdminApp({ context, busy, onExitAdmin, onLogout, children }: {
         <span className="admin-surface-badge">{context.organizationName}</span>
       </nav>
       <main className="admin-workspace">
-        <AdminRail activeSection="accounts" onSelectSection={() => {}} />
+        <AdminRail activeSection={activeSection} availableSections={[...(context.actions.includes("account.read")?["accounts" as const]:[]),...(context.actions.includes("project.admin.read")?["projects" as const]:[])]} onSelectSection={onSelectSection} />
         {children}
       </main>
       <footer className="admin-statusbar">
-        <div className="admin-status-item">Account MVP · Dữ liệu từ Server, không có demo fallback</div>
+        <div className="admin-status-item">Account / Project · Dữ liệu từ Server, không có demo fallback</div>
         <span className="admin-status-spacer" />
         <a href="#credentials">Nhận credential</a>
       </footer>

@@ -22,6 +22,14 @@ public final class IdentityDirectoryQueries {
     public Context context(ActorContext context){return read(context,(c,actor)->{
         var actions=new ArrayList<String>();var scope=AuthorizationDecisionService.Scope.organization(actor.organizationId());
         for(String action:ACCOUNT_ACTIONS)if(authorization.evaluate(c,context,action,scope).rbacGranted())actions.add(action);
+        // Availability is advisory across actual applicable scopes; create remains Organization-only.
+        for(String action:com.idea.ddm.project.ProjectGovernanceQueries.ADMIN_ACTIONS)if(authorization.evaluate(c,context,action,scope).rbacGranted())actions.add(action);
+        try(var q=c.prepareStatement("SELECT project_id FROM project WHERE organization_id=? ORDER BY project_id")){
+            q.setObject(1,actor.organizationId());try(var rows=q.executeQuery()){while(rows.next()){
+                var projectScope=AuthorizationDecisionService.Scope.project(actor.organizationId(),rows.getObject(1,UUID.class));
+                for(String action:com.idea.ddm.project.ProjectGovernanceQueries.ADMIN_ACTIONS)if(!actions.contains(action)&&authorization.evaluate(c,context,action,projectScope).rbacGranted())actions.add(action);
+            }}
+        }
         try(var q=c.prepareStatement("SELECT a.account_id,p.display_name,o.display_name FROM idea_account a JOIN actor p USING(actor_id) JOIN operating_organization o USING(organization_id) WHERE a.actor_id=? AND a.organization_id=?")){
             q.setObject(1,actor.actorId());q.setObject(2,actor.organizationId());try(var r=q.executeQuery()){
                 if(!r.next())throw new Refusal(RefusalReason.INELIGIBLE_SESSION);

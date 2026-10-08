@@ -38,14 +38,14 @@ public final class ProjectGovernanceAdministration {
                     var id=UUID.randomUUID();
                     insert(c,"INSERT INTO project(project_id,organization_id,display_name,created_by,created_at) VALUES (?,?,?,?,?)",
                             id,actor.organizationId(),normalizedName,actor.actorId(),Timestamp.from(clock.instant()));
-                    return json.valueToTree(queries.projectRow(c,actor.organizationId(),id));
+                    return json.valueToTree(withActions(c,context,queries.projectRow(c,actor.organizationId(),id)));
                 });
     }
     public ProjectGovernanceQueries.Project project(ActorContext context, UUID organization, UUID id, boolean participant) {
         return read(context,(c,actor)->{
             var targetScope=scope(organization==null?actor.organizationId():organization,id);
             require(authorization.evaluate(c,context,participant?"project.read":"project.admin.read",targetScope));
-            return queries.projectRow(c,actor.organizationId(),id);
+            return participant?queries.projectRow(c,actor.organizationId(),id):withActions(c,context,queries.projectRow(c,actor.organizationId(),id));
         });
     }
     public ProjectGovernanceQueries.Page<ProjectGovernanceQueries.Project> projects(ActorContext context,UUID organization,String filter,int offset,int limit){
@@ -59,7 +59,7 @@ public final class ProjectGovernanceAdministration {
                 q.setObject(1,org);try(var r=q.executeQuery()){while(r.next()){
                     var id=r.getObject(1,UUID.class);
                     if(!authorization.evaluate(c,context,"project.admin.read",Scope.project(org,id)).rbacGranted())continue;
-                    granted=true;var project=queries.projectRow(c,org,id);
+                    granted=true;var project=withActions(c,context,queries.projectRow(c,org,id));
                     if(project.name().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT)))authorized.add(project);
                 }}
             }
@@ -120,7 +120,7 @@ public final class ProjectGovernanceAdministration {
             UUID project=group?queries.groupRow(c,actor.organizationId(),id).projectId():queries.projectRow(c,actor.organizationId(),id).projectId();
             matches(scope,actor.organizationId(),project);
             changed(c,group?"SELECT project_group_change(?,?,?,?)":"SELECT project_change(?,?,?,?)",id,actor.organizationId(),expected,normalizedName);
-            return json.valueToTree(group?queries.groupRow(c,actor.organizationId(),id):queries.projectRow(c,actor.organizationId(),id));
+            return json.valueToTree(group?queries.groupRow(c,actor.organizationId(),id):withActions(c,context,queries.projectRow(c,actor.organizationId(),id)));
         });
     }
     public JsonNode createGroup(ActorContext context,UUID operation,Scope scope,UUID project,String name,long expectedProjectVersion,String reason){
@@ -140,6 +140,11 @@ public final class ProjectGovernanceAdministration {
     }
     static void pageInput(String filter,int offset,int limit){if(filter==null||filter.length()>200||filter.codePoints().anyMatch(Character::isISOControl)||offset<0||limit<1||limit>100)throw new Refusal(RefusalReason.INVALID_INPUT);}
     Clock clock(){return clock;}
+    private ProjectGovernanceQueries.Project withActions(Connection c,ActorContext context,ProjectGovernanceQueries.Project project)throws SQLException{
+        var scope=Scope.project(project.organizationId(),project.projectId());var actions=new ArrayList<String>();
+        for(var action:ProjectGovernanceQueries.ADMIN_ACTIONS)if(authorization.evaluate(c,context,action,scope).rbacGranted())actions.add(action);
+        return new ProjectGovernanceQueries.Project(project.projectId(),project.organizationId(),project.name(),project.version(),actions);
+    }
     ProjectGovernanceQueries queries(){return queries;}
     JsonNode result(Object value){return json.valueToTree(value);}
     @FunctionalInterface interface Mutation { JsonNode apply(Connection c,OwnerSessionEligibility.EligibleActor actor)throws SQLException; }

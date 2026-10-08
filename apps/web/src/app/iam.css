@@ -37,6 +37,9 @@ a { color: var(--admin-blue); text-underline-offset: 3px; }
 .account-layout dt { margin-top: 10px; color: var(--admin-muted); }
 .account-layout dd { margin: 0; overflow-wrap: anywhere; }
 .account-layout h3 { margin-top: 20px; }
+.project-inspector { width: auto; min-width: 0; }
+.project-inspector section { border-top: 1px solid var(--admin-line); margin-top: 20px; padding-top: 12px; }
+.project-layout .admin-table-container code { font-size: 11px; }
 .login-identities { list-style: none; padding: 0; }
 .login-identities li { padding: 12px 0; border-bottom: 1px solid var(--admin-line); }
 .login-identities strong, .login-identities code, .login-identities span { display: block; }

@@ -7,6 +7,7 @@ import { StatusBanner, type BannerType } from "./components/auth/StatusBanner";
 import { Topbar } from "./components/auth/Topbar";
 import { AdminApp } from "./components/admin/AdminApp";
 import { AccountAdministrationPage } from "./features/accountAdministration/AccountAdministrationPage";
+import { ProjectAdministrationPage } from "./features/projectAdministration/ProjectAdministrationPage";
 import { CredentialRedemptionPage } from "./features/credentials/CredentialRedemptionPage";
 import { outcomeMessage } from "./features/iamIntegration/IamStatus";
 import "./styles/auth.css";
@@ -14,7 +15,7 @@ import "./styles/admin.css";
 import "./app/iam.css";
 
 const client = createIamClient();
-const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : "session";
+const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : location.hash === "#projects" ? "projects" : "session";
 
 export function App() {
   const [route, setRoute] = useState(currentRoute);
@@ -73,12 +74,12 @@ export function App() {
     epoch.current++; setContext(null); setPassword("");
     setMessage("Phiên không còn hợp lệ. Hãy đăng nhập lại."); setStatusType("warning");
   }
-  const openAdmin = context?.actions.includes("account.read") ? () => { location.hash = "accounts"; } : undefined;
+  const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":"projects"; } : undefined;
 
   if (route === "credentials") return <CredentialRedemptionPage />;
-  if (context && route === "accounts") return (
-    <AdminApp context={context} busy={busy} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
-      <AccountAdministrationPage context={context} onInvalidated={invalidate} />
+  if (context && (route === "accounts" || route === "projects")) return (
+    <AdminApp context={context} busy={busy} activeSection={route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
+      {route==="accounts"?<AccountAdministrationPage context={context} onInvalidated={invalidate} />:<ProjectAdministrationPage context={context} onInvalidated={invalidate} />}
     </AdminApp>
   );
   return (
