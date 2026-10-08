@@ -98,6 +98,7 @@ cfb1cc5fa0140f336b11f1e8d0b2163e12c87e1b0bce55bdaa5317c5db4422d5  apps/server/sr
 5948b1674268400fe0dca0d4ae78e3c5076dc607a311eee3ea93080941017b8e  apps/server/src/test/java/com/idea/ddm/iam/IamTestFixture.java
 c131c3e442aa77b8f1342f23e07dd50d6ba003a292b3a0e511a70448565f356c  apps/server/src/test/java/com/idea/ddm/identity/AccountBrowserFixtureCommand.java
 6d4d4670c37e9fd1fcd40c09d4071d6fcbd2f3e4bd7e87f236daf45ef2c2ad5a  apps/server/src/test/java/com/idea/ddm/identity/AccountIsolationTest.java
+16322cac451acd09701559d888648623e407f2e8875ae9f28d2182341611a4c4  apps/server/src/test/java/com/idea/ddm/identity/AssignmentBrowserFixtureCommand.java
 0ac49655d28eb9670e3592e09dd16d8e056eee1293b2d79e95ed4843bc6251ba  apps/server/src/test/java/com/idea/ddm/identity/CredentialProofReissueTest.java
 2cd064535be266d31c1972112db977ab49ad7f250ab57e68a9dca1818acffbd5  apps/server/src/test/java/com/idea/ddm/identity/F04SessionFixture.java
 e9b7a248d180c7eedd6159930c99889778afdcf5d405f1fd9b1134e1e2f785c7  apps/server/src/test/java/com/idea/ddm/identity/F05DatabaseFixture.java
@@ -181,7 +182,8 @@ be43f6d2800b90f09a235fb58ff95e78e2980052f61581969dd6b01698333221  database/migra
 5368d16c9a6baa11eab4ee7c0731578971c17284ded80979639b9dfd45ee08a9  docs/research/inventories/iam-ui-46-resolved-inputs.tsv
 f4dde1be1c251665f5304e6b6d0a89c6f9aec62bc30e7368856374d89f8e51da  docs/research/inventories/ph1-packaged-notice-map-20261006.tsv
 fd51f661416877993986317ef33b1525df23eb7adb160e8f716dd77fa02b9348  tests/iam-ui-46/account-browser.mjs
-e36518deed06694be86ea033bd56d2a47ed41481bb97cc0ffaf04e2dd4f15492  tests/iam-ui-46/account-browser.sh
+f4fa78183a47479017bc59ef432bceed7b56e90b19fcb99fce2894288915182d  tests/iam-ui-46/account-browser.sh
+ea83cc35a92a14116518ede4dca1cc075ccaf749da941e0eabaf618bb0351a56  tests/iam-ui-46/assignment-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs
 e9799071bcf0c3e452a451ffb417a0a8f403804f94a55923cffeb330ed8b48af  tests/iam-ui-46/README.md
 14ea90166d85901c0f2a70afb423ded0b19c9e9f6a9ee41d422ce76ad38f1d51  tests/iam-ui-46/run-owner-tests.sh
