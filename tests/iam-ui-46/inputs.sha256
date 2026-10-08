@@ -77,6 +77,7 @@ cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apps/server/sr
 4b92d286675aa05743e747d3b5b35a6a32245c8dec46eddda03c831c778d0341  apps/server/src/test/java/com/idea/ddm/access/AssignmentQualificationFixture.java
 2c5bc0ab6f6ff6f25dea5d7b9e8919e514db1aec04dd09fbe4353e85f967e3d6  apps/server/src/test/java/com/idea/ddm/access/AuthorizationDecisionTest.java
 48eae8d947a480c4534a355ac9bea9067259ca0edc26be021bfae55d00433299  apps/server/src/test/java/com/idea/ddm/access/AuthorizationPrerequisiteFixture.java
+617418b9e03fccd7bcd7230fa1e02d097903519ee4772865045c94aab40c6f9e  apps/server/src/test/java/com/idea/ddm/access/CustomRoleContractTest.java
 4f2eee673329f7efba7211eee376c3fd5973cd3b8874e8e54345b9ea2768f425  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentAtomicityTest.java
 d66932a3029da09fcaf2b6a02f629dc16499b4a8753c30b6c96f3f584c666a78  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentContractTest.java
 764f2f76fb075665b2521ba1d4253e8f688547e6c8a6a4551a5b8b8ddebeb8db  apps/server/src/test/java/com/idea/ddm/access/RoleAssignmentRecoveryTest.java
@@ -186,7 +187,7 @@ f4fa78183a47479017bc59ef432bceed7b56e90b19fcb99fce2894288915182d  tests/iam-ui-4
 81270968fc08187e8bb502f2febd3bb6ff118e77757d0e1187cc76e2b851d527  tests/iam-ui-46/assignment-browser.mjs
 7e97d967818f38852d5492fec79bc1ef62535e030595251412e64521fec059ca  tests/iam-ui-46/project-browser.mjs
 ea1fb8eed450d10785a27bdeca9c4f3f6a25ab72db1099b496cfa9a720319941  tests/iam-ui-46/README.md
-14ea90166d85901c0f2a70afb423ded0b19c9e9f6a9ee41d422ce76ad38f1d51  tests/iam-ui-46/run-owner-tests.sh
+a22e75df814be10b332e716691429360acdfbd76e88b21c6fadb63f236aaf9bd  tests/iam-ui-46/run-owner-tests.sh
 8e827c5ced48105260bb3c8c7af2ec7777d2d1903cf205f4f1d208a88e1756da  tests/iam-ui-46/run-web-tests.ps1
 ce43edb2bebe35c94729affcf7aaa7afa59de6ed6f53cf767cfe4fa3aba19bee  tests/iam-ui-46/vitest.config.mjs
 9de1ec4ca37990ca8cfe8ca2f84450c0c5c53201f8aa8b92b81f6d7396bf29a1  tests/ph1/f05-qualification/https-loopback/toolchain.tsv
