@@ -1,13 +1,17 @@
 import {describe,it,expect} from "vitest";
 import {createIamClient,type IamResult} from "../../api/iamClient";
 import {renderToStaticMarkup} from "react-dom/server";
-import {CustomRoleEditor} from "./CustomRoleEditor";
+import {CustomRoleEditor,roleProposalTarget} from "./CustomRoleEditor";
 const id="00000000-0000-4000-8000-000000000046",scope={kind:"ORGANIZATION",organizationId:id};
 const candidate={candidateId:id,definitionId:id,roleCode:"custom-"+id,displayName:"Synthetic",managementScope:scope,baseVersionId:null,proposedRoleVersion:1,classification:"BUSINESS",support:{scopeKinds:["PROJECT"],principalKinds:["ACTOR","PROJECT_GROUP"]},permissionCodes:["project.read"],contentDigest:"a".repeat(64),version:1,state:"CANDIDATE",activatedVersionId:null,difference:{added:["project.read"],removed:[],unchanged:[]}};
 const permission={code:"project.read",owner:"Project",scopeKinds:["PROJECT"],principalKinds:["ACTOR","PROJECT_GROUP"],participantMembershipRequired:true,implementationState:"IMPLEMENTED"};
 type Planned={loadPermissions(s:unknown):Promise<IamResult<unknown>>;prepareRole(i:unknown):Promise<IamResult<unknown>>;validateRole(id:string,i:unknown):Promise<IamResult<unknown>>;activateRole(id:string,i:unknown):Promise<IamResult<unknown>>};
 const csrf=()=>Response.json({headerName:"X-CSRF-TOKEN",token:"synthetic-csrf"});
 describe("Custom Role ordinary session and immutable owner boundary",()=>{
+  it("a selected successor missing after catalogue paging cannot silently become a new definition",()=>{
+    expect(roleProposalTarget(id,[],"Retained successor display name")).toBeNull();
+    expect(roleProposalTarget("",[]," Explicit new role ")).toEqual({name:"Explicit new role"});
+  });
   it("reuses existing Permission catalogue including DESIGN without promoting availability",async()=>{
     const client=createIamClient(async path=>{expect(path).toBe(`/api/v1/administration/permissions?organizationId=${id}&offset=0&limit=50`);return Response.json({items:[permission,{...permission,code:"audit.read",implementationState:"DESIGN"}],offset:0,limit:50,hasMore:false});}) as unknown as Planned;
     expect((await client.loadPermissions(scope)).kind).toBe("confirmed");
