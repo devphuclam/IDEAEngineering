@@ -38,13 +38,18 @@ function request(ca, headers = {}, servername = 'localhost') {
   });
 }
 async function login(page) {
+  stage = 'login-form';
   await page.goto(origin);
   await page.getByRole('form', { name: 'Đăng nhập', exact: true }).waitFor();
   await page.locator('[name=username]').fill(fixture.adminLogin);
   await page.locator('[name=password]').fill(fixture.adminPassword);
   const response = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/identity/login' && r.request().method() === 'POST');
   await page.getByRole('button', { name: 'Đăng nhập', exact: true }).click();
-  assert.ok((await response).status() === 200, 'UI sign-in must succeed');
+  const status = (await response).status();
+  console.log('NGINX_UI_LOGIN_HTTP=' + status);
+  stage = 'login-response';
+  assert.ok(status === 200, 'UI sign-in must succeed');
+  stage = 'login-server-actor';
   await page.getByTestId('session-actor').waitFor();
   const actor = await page.evaluate(async () => (await (await fetch('/api/v1/identity/session')).json()).actorId);
   assert.ok(actor === fixture.adminActorId, 'Server-established stable Actor');
@@ -105,12 +110,15 @@ try {
   await page.getByRole('form', { name: 'Đăng nhập', exact: true }).waitFor();
   console.log('N02_ACTUAL_PACKAGED_WEB_ANONYMOUS=PASS');
   stage = 'login-context-cookie'; await login(page);
+  stage = 'cookie-profile';
   const cookie = (await context.cookies(origin)).find(c => c.name === 'IDEA_SESSION');
   assert.ok(cookie && cookie.secure && cookie.httpOnly && cookie.sameSite === 'Strict' && cookie.domain === 'localhost');
   secrets.add(cookie.value);
+  stage = 'context-account-reads';
   const reads = await page.evaluate(async () => ({ context: (await fetch('/api/v1/administration/context')).status,
     accounts: (await fetch('/api/v1/administration/accounts?offset=0&limit=50')).status }));
-  assert.deepEqual(reads, { context: 200, accounts: 200 }); await privateState(page, context);
+  console.log('NGINX_CONTEXT_HTTP=' + reads.context + ';ACCOUNTS_HTTP=' + reads.accounts);
+  assert.deepEqual(reads, { context: 200, accounts: 200 }); stage = 'post-login-private-state'; await privateState(page, context);
   console.log('N03_UI_LOGIN_ACTOR_CONTEXT_COOKIE=PASS');
   stage = 'origin-csrf';
   assert.equal((await request(certificate, { Host: 'attacker.invalid' })).status, 400);
