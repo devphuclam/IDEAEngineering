@@ -104,9 +104,18 @@ function EnsureBackend {
     else{if((Remote 'backend' 'status') -notmatch 'BACKEND_ENDPOINT=UP'){throw 'Configured external Backend unavailable; start it with its own operator'} }
 }
 function StartFrontend {
-    if($frontendUrl.Scheme -ne 'http' -or $frontendUrl.Host -ne '127.0.0.1'){throw 'Local frontend command requires the configured loopback SSH endpoint; external Web hosting is separately managed'}
     $backend=Remote 'backend' 'status'
     if($backend -notmatch 'BACKEND_ENDPOINT=UP'){throw 'Configured Backend unavailable. Start local Backend or the independently hosted endpoint first.'}
+    if($frontendUrl.Scheme -eq 'https'){
+        if((Owned 'frontend') -or (Owned 'reverse')){throw 'Stop the owned local Frontend before selecting externally hosted Web'}
+        Remote 'edge' 'stop';Remote 'edge' 'start dev'
+        $newForward=$false
+        try{$newForward=EnsureForward;Ready}catch{
+            $failure=$_;try{Remote 'edge' 'stop'}catch{Write-Warning 'REMOTE_CLEANUP=PENDING'}
+            if($newForward){CloseLocal 'forward'};throw $failure
+        }
+        Write-Host ('FRONTEND=EXTERNAL;ORIGIN='+$devConfig.frontendOrigin+';MODE=dev');return
+    }
     $existing=Owned 'frontend'
     if($existing -and $records['frontend'].webRoot -ne $WebRoot){throw 'Another frontend checkout is active. Stop it explicitly before switching source.'}
     $newFrontend=$false;$newReverse=$false;$newEdge=$false;$newForward=$false
@@ -178,7 +187,7 @@ try{
             if($Action -eq 'Dev'){EnsureBackend}
             StartFrontend
             if(!$NoBrowser){Start-Process ($devConfig.publicOrigin+'/')}
-            if(!$NoWait){
+            if(!$NoWait -and $frontendUrl.Scheme -eq 'http'){
                 Write-Host 'Keep this terminal open. Ctrl+C stops Frontend/dev edge only; Backend and data remain.'
                 $generation=$records['frontend'].generation
                 $lock.Dispose();$lock=$null

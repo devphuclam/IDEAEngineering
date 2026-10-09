@@ -2,7 +2,7 @@
 set -euo pipefail
 set +x
 umask 077
-root=/home/phuclam/idea-dev-access-20261009-51-03
+root=/home/phuclam/idea-dev-access-20261009-51-04
 source_root=$root/build-source
 [[ $(id -un) == phuclam && $(realpath -e "$source_root") == "$source_root" && $(stat -c '%U:%a' "$root") == phuclam:700 ]] || exit 3
 cd "$source_root"

@@ -21,6 +21,7 @@ backend_ca=${c.backendCa}
 backend_origin=${c.backendOrigin}
 backend_managed=${c.backendOrigin === 'https://127.0.0.1:18449' ? 'true' : 'false'}
 frontend_origin=${c.frontendOrigin}
+frontend_ca=${c.frontendCa}
 public_origin=${c.publicOrigin}
 edge_port=${new URL(c.publicOrigin).port || '443'}
 `));

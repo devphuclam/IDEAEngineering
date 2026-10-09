@@ -13,7 +13,13 @@ inputs
 [[ $# == 2 && $mode =~ ^(dev|review)$ ]] || exit 2
 if [[ -n $edge_pid ]]; then [[ $(<"$root/mode") == "$mode" ]] || { echo 'EDGE=MODE_CONFLICT;STOP_EDGE_BEFORE_SWITCH=true'; exit 4; }; exit 0; fi
 health || { echo 'EDGE=BACKEND_UNAVAILABLE;NO_SUCCESS_CLAIM=true'; exit 5; }
-if [[ $mode == dev ]]; then curl --noproxy '*' --fail --silent --max-time 5 "$frontend_origin/@vite/client" >/dev/null || { echo 'EDGE=FRONTEND_UNAVAILABLE;NO_SNAPSHOT_FALLBACK=true'; exit 5; }; fi
+if [[ $mode == dev ]]; then
+  if [[ $frontend_origin == https://* ]]; then
+    curl --noproxy '*' --fail --silent --max-time 5 --cacert "$frontend_ca" "$frontend_origin/" >/dev/null || { echo 'EDGE=FRONTEND_UNAVAILABLE;NO_SNAPSHOT_FALLBACK=true'; exit 5; }
+  else
+    curl --noproxy '*' --fail --silent --max-time 5 "$frontend_origin/@vite/client" >/dev/null || { echo 'EDGE=FRONTEND_UNAVAILABLE;NO_SNAPSHOT_FALLBACK=true'; exit 5; }
+  fi
+fi
 [[ -z $(ss -H -ltn "sport = :$edge_port") ]] || exit 4
 "$nginx" -p "$root/" -c "$root/nginx-$mode.conf" -t > "$root/logs/config-$mode-private.log" 2>&1
 new_edge=1
