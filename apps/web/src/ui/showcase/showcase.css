@@ -1,0 +1,86 @@
+/* ==========================================================================
+   IDEA ENGINEERING — COMPONENT SHOWCASE CSS
+   ========================================================================== */
+
+.idea-showcase {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.idea-showcase__header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--idea-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.idea-showcase__title {
+  margin: 0;
+  font-size: var(--idea-font-size-xl);
+  font-weight: var(--idea-font-weight-bold);
+  color: var(--idea-color-text);
+}
+
+.idea-showcase__subtitle {
+  margin-top: 4px;
+  font-size: var(--idea-font-size-sm);
+  color: var(--idea-color-text-muted);
+}
+
+.idea-showcase__section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background-color: var(--idea-color-surface);
+  border: 1px solid var(--idea-color-border);
+  border-radius: var(--idea-radius-md);
+}
+
+.idea-showcase__section-title {
+  font-size: var(--idea-font-size-md);
+  font-weight: var(--idea-font-weight-semibold);
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--idea-color-text);
+  border-bottom: 1px solid var(--idea-color-border-subtle);
+  padding-bottom: 8px;
+}
+
+.idea-showcase__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.idea-showcase__swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.idea-showcase__swatch {
+  border-radius: var(--idea-radius-sm);
+  border: 1px solid var(--idea-color-border);
+  overflow: hidden;
+  font-size: 11px;
+}
+
+.idea-showcase__swatch-color {
+  height: 40px;
+  width: 100%;
+}
+
+.idea-showcase__swatch-label {
+  padding: 6px 8px;
+  background-color: var(--idea-color-surface);
+  color: var(--idea-color-text);
+  font-family: var(--idea-font-family-mono);
+}

@@ -16,9 +16,26 @@ import { outcomeMessage } from "./features/iamIntegration/IamStatus";
 import "./styles/auth.css";
 import "./styles/admin.css";
 import "./app/iam.css";
+import "./ui/tokens/tokens.css";
+import "./ui/primitives/primitives.css";
+import { ComponentShowcase } from "./ui/showcase/ComponentShowcase";
+import { RbacPilotPage } from "./features/accessAdministration/RbacPilotPage";
+import { AppShell, NavItem } from "./ui/layout/AppShell";
 
 const client = createIamClient();
-const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : location.hash === "#projects" ? "projects" : location.hash === "#rbac" ? "rbac" : location.hash === "#custom-role" ? "custom-role" : location.hash === "#access" ? "access" : "session";
+const currentHash = () => typeof location !== "undefined" ? location.hash : "";
+const currentRoute = () => {
+  const hash = currentHash();
+  if (hash === "#uikit") return "uikit";
+  if (hash === "#rbac-pilot") return "rbac-pilot";
+  if (hash === "#credentials") return "credentials";
+  if (hash === "#accounts") return "accounts";
+  if (hash === "#projects") return "projects";
+  if (hash === "#rbac") return "rbac";
+  if (hash === "#custom-role") return "custom-role";
+  if (hash === "#access") return "access";
+  return "session";
+};
 
 export function App() {
   const [route, setRoute] = useState(currentRoute);
@@ -79,6 +96,78 @@ export function App() {
   }
   const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read"||action==="access.inspect"||action==="audit.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":context.actions.includes("role.catalogue.read")?"rbac":"access"; } : undefined;
 
+const PaletteIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+    <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+    <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+  </svg>
+);
+
+const ShieldIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+);
+
+const LockIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
+  const uikitNavItems: NavItem[] = [
+    ...(import.meta.env.DEV ? [{ id: "uikit", label: "UI Kit DevKit", href: "#uikit", active: route === "uikit", icon: <PaletteIcon /> }] : []),
+    { id: "rbac-pilot", label: "Quản lý vai trò (RBAC)", href: "#rbac-pilot", active: route === "rbac-pilot", icon: <ShieldIcon /> },
+    { id: "session", label: context ? "Phiên làm việc" : "Cổng đăng nhập", href: "#session", active: false, icon: <LockIcon /> },
+  ];
+
+  if (route === "uikit") {
+    if (!import.meta.env.DEV) {
+      return (
+        <div style={{ padding: "48px 24px", textAlign: "center", maxWidth: "600px", margin: "0 auto" }}>
+          <h2>Môi trường phát triển</h2>
+          <p style={{ color: "var(--idea-color-text-muted)", margin: "12px 0 24px" }}>
+            UI Kit DevKit chỉ khả dụng trong môi trường development preview.
+          </p>
+          <a href="#session" className="idea-btn idea-btn--primary" style={{ textDecoration: "none" }}>
+            Về cổng đăng nhập
+          </a>
+        </div>
+      );
+    }
+    return (
+      <AppShell
+        brandTitle="IDEA Engineering"
+        brandSubtitle="DevKit v0.1"
+        navItems={uikitNavItems}
+      >
+        <ComponentShowcase />
+      </AppShell>
+    );
+  }
+
+  if (route === "rbac-pilot") {
+    return (
+      <AppShell
+        brandTitle="IDEA Engineering"
+        brandSubtitle="RBAC Pilot"
+        navItems={uikitNavItems}
+      >
+        <RbacPilotPage
+          context={context}
+          onInvalidated={invalidate}
+          onNavigateBack={() => {
+            location.hash = context ? "rbac" : "session";
+          }}
+        />
+      </AppShell>
+    );
+  }
+
   if (route === "credentials") return <CredentialRedemptionPage />;
   if (context && (route === "accounts" || route === "projects" || route === "rbac" || route === "custom-role" || route === "access")) return (
     <AdminApp context={context} busy={busy} activeSection={route==="custom-role"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
@@ -100,6 +189,11 @@ export function App() {
             <div className="auth-support-actions">
               <button type="button" className="admin-btn" disabled={busy} onClick={() => void refresh()}>Kiểm tra phiên</button>
               <a href="#credentials">Tôi có proof để thiết lập / reset credential</a>
+              {import.meta.env.DEV && (
+                <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+                  <a href="#uikit" className="admin-btn" style={{ textDecoration: 'none' }}>UI Kit DevKit (Môi trường phát triển)</a>
+                </div>
+              )}
             </div>
           </div>
         </section>

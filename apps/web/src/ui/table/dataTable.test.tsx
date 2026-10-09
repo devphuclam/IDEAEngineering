@@ -1,0 +1,144 @@
+import { describe, it, expect, vi } from 'vitest';
+import { renderToStaticMarkup } from 'react-dom/server';
+import React from 'react';
+import { DataTable, Column, handleRowKeyDown } from './DataTable';
+
+interface TestItem {
+  id: string;
+  name: string;
+  count: number;
+}
+
+const TEST_DATA: TestItem[] = [
+  { id: '1', name: 'Alpha', count: 10 },
+  { id: '2', name: 'Beta', count: 5 },
+  { id: '3', name: 'Gamma', count: 20 },
+];
+
+const COLUMNS: Column<TestItem>[] = [
+  { key: 'id', header: 'ID', sortable: true, width: '60px' },
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'count', header: 'Count', sortable: false },
+];
+
+describe('Semantic DataTable', () => {
+  it('renders semantic table structure with headers and rows', () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        ariaLabel="Bảng thử nghiệm"
+      />
+    );
+
+    expect(html).toContain('<table');
+    expect(html).toContain('aria-label="Bảng thử nghiệm"');
+    expect(html).toContain('<thead');
+    expect(html).toContain('<tbody');
+    expect(html).toContain('Alpha');
+    expect(html).toContain('Beta');
+    expect(html).toContain('Gamma');
+    expect(html).toContain('Hiển thị <strong>3</strong> / 3 bản ghi');
+  });
+
+  it('strictly places aria-sort on th elements only for sortable columns', () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+      />
+    );
+
+    // Sortable columns should have aria-sort="none" initially
+    expect(html).toContain('<th style="width:60px" aria-sort="none">');
+    // Non-sortable column should not have aria-sort attribute
+    expect(html).toMatch(/<th><span>Count<\/span><\/th>/);
+  });
+
+  it('renders empty message when data is empty', () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={[]}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        emptyMessage="Không có dữ liệu nào ở đây"
+      />
+    );
+
+    expect(html).toContain('Không có dữ liệu nào ở đây');
+  });
+
+  it('highlights selected row and displays selected id in footer', () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        selectedId="2"
+      />
+    );
+
+    expect(html).toContain('idea-table-row--selected');
+    expect(html).toContain('Đang chọn ID: 2');
+  });
+
+  it('renders custom toolbar actions alongside search input', () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        toolbarActions={<button id="export-btn">Xuất CSV</button>}
+      />
+    );
+
+    expect(html).toContain('id="export-btn"');
+    expect(html).toContain('Xuất CSV');
+  });
+
+  it('filters data using custom filterFn', () => {
+    const filterOnlyOverTen = (item: TestItem, query: string) => item.count > 10;
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        initialSearchQuery="filter-active"
+        filterFn={filterOnlyOverTen}
+      />
+    );
+
+    expect(html).toContain('Gamma');
+    expect(html).not.toContain('Beta');
+  });
+
+  it('handles row keyboard selection when Enter or Space is pressed via handleRowKeyDown', () => {
+    const onSelectRow = vi.fn();
+    const preventDefault = vi.fn();
+
+    // Render table markup to verify keyboard accessibility markup
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        onSelectRow={onSelectRow}
+      />
+    );
+    expect(html).toContain('tabindex="0"');
+    expect(html).toContain('role="row"');
+
+    // Test row keyboard handler directly with real key event objects
+    const enterEvent = { key: 'Enter', preventDefault };
+    handleRowKeyDown(enterEvent, TEST_DATA[0], 0, onSelectRow);
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(onSelectRow).toHaveBeenCalledWith(TEST_DATA[0]);
+
+    const spaceEvent = { key: ' ', preventDefault };
+    handleRowKeyDown(spaceEvent, TEST_DATA[1], 1, onSelectRow);
+    expect(preventDefault).toHaveBeenCalledTimes(2);
+    expect(onSelectRow).toHaveBeenCalledWith(TEST_DATA[1]);
+  });
+});
