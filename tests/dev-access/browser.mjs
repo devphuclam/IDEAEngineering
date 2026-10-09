@@ -93,8 +93,10 @@ try {
   const generation=record.frontend.generation;
   assert.ok(control('FrontendStop').includes('BACKEND_UNCHANGED=true'));
   assert.equal(remote(`cat ${config.remoteRoot}/backend.state`).trim(),backendIdentity);
-  assert.equal(await page.evaluate(async()=>(await fetch('/api/v1/identity/session')).status),200);
+  // The dev edge is also stopped: check the independent Backend directly here.
+  assert.ok(control('Status').includes('BACKEND_ENDPOINT=UP'));
   assert.ok(control('Frontend').includes('FRONTEND=LOCAL_CHECKOUT'));
+  assert.equal(await page.evaluate(async()=>(await fetch('/api/v1/identity/session')).status),200);
   assert.ok(control('FrontendStop',['-ExpectedFrontendGeneration',generation]).includes('SKIPPED_SUCCESSOR_GENERATION'));
   assert.ok(control('Status').includes('FRONTEND=UP'));
   await page.goto(origin);await page.getByTestId('session-actor').waitFor();
