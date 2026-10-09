@@ -7,6 +7,10 @@ import { loadConfig, nginxConfig } from './topology.mjs';
 const c = loadConfig(), target = resolve(process.argv[2]);
 mkdirSync(target, { recursive: false, mode: 0o700 });
 const here = dirname(fileURLToPath(import.meta.url));
+const artifact=JSON.parse(readFileSync(resolve(here,'artifact.json'),'utf8'));
+if(!/^\/home\/phuclam\/[a-zA-Z0-9_./-]+\.jar$/.test(artifact.jar)||artifact.jar.split('/').includes('..')
+  ||!/^[a-f0-9]{64}$/.test(artifact.sha256)||!/^[a-f0-9]{40}$/.test(artifact.applicationSource)
+  ||!/^[a-f0-9]{40}$/.test(artifact.documentationSource))throw Error('Invalid controlled package identity');
 const files = new Map(['common.sh', 'backend.sh', 'edge.sh'].map(name => [name, readFileSync(resolve(here, name))]));
 files.set('nginx-dev.conf', Buffer.from(nginxConfig(c, 'dev')));
 files.set('nginx-review.conf', Buffer.from(nginxConfig(c, 'review')));
@@ -15,7 +19,10 @@ files.set('environment.sh', Buffer.from(`retained=/home/phuclam/idea-nginx-dev-2
 nginx=$retained/package/usr/sbin/nginx
 java=/opt/idea/tools/jdk-25.0.4.1+1/bin/java
 tls=/home/phuclam/idea-iam-ui-20261007-46/tls-01
-jar=/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-44/source/apps/server/target/idea-server-0.1.0-SNAPSHOT.jar
+jar=${artifact.jar}
+jar_sha256=${artifact.sha256}
+application_source=${artifact.applicationSource}
+documentation_source=${artifact.documentationSource}
 certificate=${c.certificate}
 backend_ca=${c.backendCa}
 backend_origin=${c.backendOrigin}

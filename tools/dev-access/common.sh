@@ -45,7 +45,7 @@ inputs() {
   sha256sum --strict -c "$retained/libraries.sha256" >/dev/null
   sha256sum --strict -c "$retained/tls.sha256" >/dev/null
   [[ $(sha256sum "$java" | cut -d' ' -f1) == 7380ce48ed5013735d2c8414db54adb8f981e7933ff594bd36f3baccddaafba3 ]] || exit 3
-  [[ $(sha256sum "$jar" | cut -d' ' -f1) == 318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c ]] || exit 3
+  [[ $(sha256sum "$jar" | cut -d' ' -f1) == "$jar_sha256" ]] || exit 3
   openssl x509 -in "$certificate" -checkend 3600 -noout >/dev/null
 }
 health() {
