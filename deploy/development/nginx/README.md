@@ -1,5 +1,10 @@
 # Nginx development entry
 
+**Historical Issue49 recipe.** The current local-source development entry is
+[tools/dev-access](../../../tools/dev-access/README.md), owned by Issue51. Stop
+one entry with its own launcher before using the shared ports from the other.
+The recipe/results below remain unchanged evidence for the packaged predecessor.
+
 Đầu vào dev đã chạy thật: **https://localhost:18448/**.
 Swagger: **https://localhost:18448/dev-api/**, chỉ dùng sau khi đăng nhập.
 

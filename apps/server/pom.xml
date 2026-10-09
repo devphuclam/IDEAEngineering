@@ -106,6 +106,27 @@
     </dependency>
   </dependencies>
 
+  <!-- Independent API packaging. The default bundled-Web package remains compatible. -->
+  <profiles>
+    <profile>
+      <id>backend-only</id>
+      <properties><exec.skip>true</exec.skip></properties>
+      <build>
+        <directory>${project.basedir}/target/backend-only</directory>
+        <resources combine.self="override">
+          <resource>
+            <directory>src/main/resources</directory><filtering>false</filtering>
+            <excludes><exclude>static/**</exclude></excludes>
+          </resource>
+          <resource>
+            <directory>${project.basedir}/../../database/migrations</directory>
+            <targetPath>db/migration</targetPath><filtering>false</filtering>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
       <!-- T043 internal build-tool intake/exception: IE-RES-T043-MAVEN-WEB-INTAKE-20261001. -->
