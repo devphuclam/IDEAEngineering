@@ -34,18 +34,41 @@ snapshot() {
           password_verifier IS NOT NULL AS credential_present FROM login_identity) x));"
 }
 snapshot > "$stage/identity-before.private.json"
+phase=unchanged
+recover() {
+  result=$?
+  trap - EXIT INT TERM
+  if [[ $result != 0 && $phase != unchanged && $phase != committed ]]; then
+    if [[ $phase == starting || $phase == started ]]; then
+      if ! bash "$root/backend.sh" stop; then
+        echo 'DOCUMENTATION_DEPLOY=FAIL;ROLLBACK=BLOCKED_OWNERSHIP_OR_STOP;NO_UNKNOWN_PROCESS_SIGNALLED=true'
+        exit "$result"
+      fi
+    fi
+    # A failed copy before start has no candidate process; restore only these
+    # exact owned controls. Preserve all package/snapshot/failure evidence.
+    for name in common.sh backend.sh edge.sh nginx-dev.conf nginx-review.conf environment.sh inputs.sha256; do
+      cp -p -- "$stage/control-predecessor/$name" "$root/$name" || exit "$result"
+    done
+    if bash "$root/backend.sh" start; then
+      echo 'DOCUMENTATION_DEPLOY=FAIL;PREDECESSOR_RESTORED=true'
+    else
+      echo 'DOCUMENTATION_DEPLOY=FAIL;PREDECESSOR_RESTART=FAIL'
+    fi
+  fi
+  exit "$result"
+}
+trap recover EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 bash "$root/backend.sh" stop
+phase=stopped
 for name in common.sh backend.sh edge.sh nginx-dev.conf nginx-review.conf environment.sh inputs.sha256; do
   cp -- "$stage/control-candidate/$name" "$root/$name"; chmod 600 "$root/$name"
 done
-if ! bash "$root/backend.sh" start; then
-  # The candidate launcher has the same ownership guard and cleans a failed start.
-  # Never restore a predecessor pin while an unverified candidate process survives.
-  bash "$root/backend.sh" stop || exit 5
-  for name in common.sh backend.sh edge.sh nginx-dev.conf nginx-review.conf environment.sh inputs.sha256; do cp -p -- "$stage/control-predecessor/$name" "$root/$name"; done
-  bash "$root/backend.sh" start
-  echo 'DOCUMENTATION_DEPLOY=FAIL;PREDECESSOR_RESTORED=true';exit 5
-fi
+phase=starting
+bash "$root/backend.sh" start
+phase=started
 snapshot > "$stage/identity-after.private.json"
 cmp -- "$stage/identity-before.private.json" "$stage/identity-after.private.json"
 cmp -- "$stage/edge-before.state" "$root/edge.state"
@@ -55,4 +78,5 @@ curl --noproxy '*' --fail --silent --max-time 5 --cacert /home/phuclam/idea-ngin
   https://localhost:18448/health/database >/dev/null
 unset IDEA_DATABASE_APP_PASSWORD IDEA_DATABASE_MIGRATION_PASSWORD PGPASSWORD
 sha256sum --strict -c install.sha256
+phase=committed
 echo 'DOCUMENTATION_DEPLOY=PASS;IDENTITY_STATE_BYTE_IDENTICAL=true;EDGE_PROCESS_UNCHANGED=true;HTTPS_POSTGRESQL=UP;MIGRATION=NOT_RUN;BOOTSTRAP=NOT_RUN'
