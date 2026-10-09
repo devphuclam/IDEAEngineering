@@ -31,6 +31,20 @@ No documentation website, generator, new dependency or runtime is introduced.
 
 ## Current baseline register
 
+### Current HTTP synchronization / exporter — Issue #53
+
+The source-aligned HTTP inventory successor is under
+[Issue #53](https://github.com/devphuclam/IDEAEngineering/issues/53): baseline main
+`91cf6c25e516ce2b3ae628d59c2a20b90076bcff`, 2026-10-09 Asia/Ho_Chi_Minh,
+INTERNAL / INFORMATIVE, author Codex, independent acceptance pending.
+[Exporter usage and maintenance](../../../../../../tools/contract-exporter/README.md)
+connect the canonical Server OpenAPI, separate Gateway OpenAPI and exact owner semantic contracts.
+Current inventory: 44 Server + 2 Gateway HTTP operations, plus nine CPD DESIGN cards; a static
+read-only check detects missing/stale routes and review-required source drift.
+Generated Word/Excel/HTML are projections, not new authority or deployed artifact evidence.
+Historical registers below retain their publication baseline; this successor does not change
+business semantics, authorize external sharing or claim a complete Core product wire contract.
+
 ### IAM integration — human accepted, controlled integration authorized
 
 Under [Issue #46 / PR #47](https://github.com/devphuclam/IDEAEngineering/pull/47),

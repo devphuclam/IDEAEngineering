@@ -1,53 +1,127 @@
-# IDEA DDM Core v0 — Công cụ xuất đặc tả giao tiếp API (SPEC-API-001)
+# API contract exporter
 
-Công cụ trích xuất, đối soát và biên dịch hồ sơ đặc tả giao tiếp API của hệ thống **IDEA DDM Core v0** ra 3 định dạng tài liệu kỹ thuật:
+Nguồn HTTP có kiểm soát → catalog GENERATED → Word / Excel / HTML.
+Không còn “Smart Merge” tự đoán API.
 
-1. **Tài liệu Word (`.docx`)**: Hồ sơ kỹ thuật chuẩn theo format quy định của công ty (`SPEC-001`). Gồm khối metadata người phụ trách, logo tỷ lệ chuẩn, phạm vi kiến trúc, lịch sử phiên bản, 3 sơ đồ luồng phối hợp (Call flows), ma trận tổng hợp và đặc tả chi tiết 14 endpoints (Route, Context, Headers, Data Dictionary, Request/Response Payload, Error Matrix).
-2. **Bảng tính Excel (`.xlsx`)**: Sổ tay kỹ thuật 4 sheets phục vụ quản lý và thiết kế Test Matrix:
-   - `1. Thong tin & Lich su`: Thông tin dự án, quy mô và nhật ký thay đổi phiên bản.
-   - `2. Ma tran API`: Danh mục 14 endpoints đầy đủ thuộc tính, có bộ lọc và cố định dòng tiêu đề.
-   - `3. Data Dictionary`: Từ điển tham số 10 cột chi tiết (mỗi dòng là một trường dữ liệu) cho QA/Dev.
-   - `4. Error Catalog`: Danh mục mã lỗi hệ thống và hướng dẫn xử lý / quy tắc Retry.
-3. **Tài liệu HTML (`.html`)**: Trang tra cứu tương tác offline (Zero-CDN, không phụ thuộc Internet):
-   - Thiết kế tinh gọn theo chuẩn GitHub Docs / Stripe Docs (không dùng giao diện dashboard màu mè).
-   - Tìm kiếm thời gian thực theo mã API, đường dẫn URL, tên trường.
-   - Chuyển đổi giao diện Sáng / Tối dịu mắt.
-   - Nút sao chép JSON Payload trực tiếp vào bộ nhớ tạm.
+## Chạy từ root repository
 
----
+~~~powershell
+node .\tools\contract-exporter\export.mjs --check
+node --test .\tools\contract-exporter\contract.test.mjs
+node .\tools\contract-exporter\export.mjs --update --open
+node .\tools\contract-exporter\export.mjs --check
+~~~
 
-## Hướng dẫn sử dụng trên máy cục bộ
+Nếu đang ở **tools/contract-exporter**, dùng đường dẫn ngắn:
 
-### 1. Xuất bộ 3 tài liệu
-```powershell
-node tools/contract-exporter/export.mjs
-```
-*(Hoặc `npm run export` trong thư mục `tools/contract-exporter`)*
+~~~powershell
+npm run check
+npm test
+npm run update
+~~~
 
-### 2. Cập nhật và đồng bộ đối soát với mã nguồn
-Khi có cập nhật tài liệu kỹ thuật hoặc route mới trong repository:
-```powershell
-node tools/contract-exporter/export.mjs --update
-```
-*(Hoặc `npm run update`)*
-Lệnh này sẽ quét lại `docs/` và `openapi.json`, thực hiện Smart Merge vào `data/api-catalog.json`, tự động ghi nhận phiên bản mới vào lịch sử sửa đổi và xuất ra tài liệu mới.
+**Không lặp lại tools/contract-exporter trong đường dẫn khi đang ở chính thư mục đó.**
 
-### 3. Xuất và tự động mở trình duyệt xem file HTML
-```powershell
-node tools/contract-exporter/export.mjs --open
-```
+Check/test chỉ dùng Node built-ins, không tải package, không cần Server/PostgreSQL. Lượt execution
+đã ghi nhận dùng Node 24.19.0 được project chấp nhận. Nếu PATH là Node khác, dùng binary đã admit,
+không tự install/upgrade. Trên workstation hiện tại:
 
----
+~~~powershell
+& 'C:\Users\TD-999\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe' .\tools\contract-exporter\export.mjs --check
+~~~
 
-## Thư mục kết quả (Output)
+Expected baseline Issue #53:
 
-Tài liệu được lưu tại thư mục: `tools/contract-exporter/output/`
-- `IDEA_Core_v0_API_Contract.docx` (~88 KB)
-- `IDEA_Core_v0_API_Contract.xlsx` (~21 KB)
-- `IDEA_Core_v0_API_Contract.html` (~63 KB)
+~~~text
+API CONTRACT CHECK = PASS; routes=46; operations=46
+~~~
 
----
+44 Server operations (42 product + 2 health), 2 Gateway operations; 9 CPD cards vẫn DESIGN/UNKNOWN.
+Catalog = 55 mục. Số lượng được thay đổi khi API thật đổi; PASS này **không phải runtime/security PASS**.
 
-## Cơ chế lưu trữ và quản lý phiên bản
-- File dữ liệu trung tâm: `tools/contract-exporter/data/api-catalog.json` được theo dõi lịch sử qua Git.
-- Nhánh làm việc: `feat/api-contract-exporter`. Có thể rollback về nhánh `main` bất cứ lúc nào với lệnh: `git checkout main`.
+## Kết quả và version
+
+Output tại tools/contract-exporter/output/:
+
+- IDEA_Core_v0_API_Contract.docx
+- IDEA_Core_v0_API_Contract.xlsx
+- IDEA_Core_v0_API_Contract.html
+
+--open mở browser mặc định Windows; có thể mở HTML thủ công. Rendering dùng docx/exceljs đã có
+trong lockfile, không thay graph và không tự cài khi thiếu. Thiếu cache vẫn chạy được check/test
+hoặc --update --data-only. Rendering thiếu dependency báo lỗi, không giả vờ xuất thành công.
+
+Version/date/status là metadata trong contract-config.json, không tự tăng vì bấm update.
+Repeat cùng nội dung giữ archive cũ. Output/archive bị Git ignore; lịch sử predecessor giữ trong Git.
+
+## Nguồn sửa và quy trình API change
+
+| Nội dung | Nguồn |
+|---|---|
+| Server HTTP/schema | [openapi.json](../../apps/server/src/main/resources/dev-access/openapi.json) |
+| Gateway binary/signed Grant | [gateway-openapi.json](../../docs/product/instances/idea-engineering/api/gateway-openapi.json) |
+| Authority/state/atomicity/concurrency/retry/trace | x-idea-contract tại từng operation, dẫn semanticSource về owner contract |
+| CPD DESIGN | [controlled-product-data.md](../../docs/product/instances/idea-engineering/api/controlled-product-data.md) |
+| Source review/config | [contract-config.json](contract-config.json), [source-review.json](source-review.json) |
+| Generated output data | data/api-catalog.json — không sửa trực tiếp |
+
+1. Sửa API theo owner requirement/contract đã duyệt. Quyết định chưa có phải UNKNOWN, không invent.
+2. Sửa canonical OpenAPI tương ứng: operationId, parameters, schema, responses và x-idea-contract.
+3. Review controller/DTO/owner/security diff; thêm source mới vào reviewedSources khi cần. Sau review,
+   cập nhật **từng** fingerprint bị đổi trong source-review.json. Lệnh dưới chỉ in hashes,
+   **không tự chấp nhận**: node tools/contract-exporter/export.mjs --print-source-hashes.
+   Không bulk-refresh để che lỗi; ghi lý do review trong PR.
+4. Chạy application tests theo Work Item, rồi --update, --check và npm test.
+5. Commit source + contract + generated catalog cùng PR, review semantic diff trước merge.
+   Xem [change/versioning template](../../docs/product/instances/idea-engineering/api/handoff/template.md).
+
+--check read-only, exit 0 khi đạt / exit 1 khi thiếu-lệch. --update cũng check source/OpenAPI
+trước ghi, không dùng placeholder để một API mới “đủ contract”. Catalog stale sau contract hợp lệ
+mới được regenerate.
+
+Server session và Gateway Grant là hai authority/origin khác nhau. Test qualification routes
+không thành product API. Dev documentation resources chỉ exclude bằng source + method + exact
+path. Các Swagger adapter mới được mô tả nhưng giữ documentation-only, không mở thêm Try it out
+cho mutation/credential operation.
+
+Đầu mối bàn giao vẫn là [API Documentation](../../docs/product/instances/idea-engineering/api/handoff/README.md).
+
+## Tự thử lỗi thật, không phá source
+
+~~~powershell
+node --test .\tools\contract-exporter\contract.test.mjs
+~~~
+
+24 tests (~11 giây trong lượt ghi nhận) tạo fixture repository tạm riêng, thử thiếu API,
+đổi method/path variable/DTO, xóa route/parameter, ref/schema lỗi, thiếu authority và sửa catalog.
+Expected các lỗi bị từ chối/exit 1, không ghi output; chính tests PASS khi guard bắt lỗi đúng.
+Cleanup chỉ exact thư mục tạm đã tạo.
+
+Rendering qualification riêng (cần cache hiện có):
+
+~~~powershell
+node --test .\tools\contract-exporter\render.test.mjs
+~~~
+
+Expected 2 PASS: đọc Word/Excel OOXML thật và mọi operation; chạy HTML script, tab 46 HTTP / 9
+DESIGN; repeat archive; text escaping. Không đồng nghĩa actual-browser hoặc Word layout review.
+
+## CI và required merge check
+
+[Workflow](../../.github/workflows/api-contract.yml) chạy read-only check/test, không npm install.
+Runner phải cung cấp đúng approved Node; thiếu/sai binary thì fail preflight, không tự download.
+
+Workflow **không tạo branch protection**. Maintainer cần xác minh runner và đặt
+API contract synchronization thành required check trên main để thật sự chặn merge.
+Repository hiện chưa enforce check này; CI/rule activation không được suy từ local PASS.
+
+## Giới hạn
+
+- Scanner tĩnh: Spring literal mappings + hai login/logout adapters, không phải runtime
+  registered-route introspection. Không tuyên bố bắt mọi framework/registration.
+- Dynamic/composed/implicit mappings và registration mới chưa hỗ trợ fail-closed; cần adapter
+  được test trước dùng. Pins bắt drift ở các owner liệt kê, không tự chứng minh semantic đúng.
+- Schema/ref/parameter/metadata checks là bounded validation, không phải full OpenAPI conformance.
+- DESIGN không có fabricated DTO. Không export secret value. Không deploy/DB/verifier/auto-merge.
+
+[Verification and handoff](verification.md).
