@@ -17,7 +17,7 @@ export const defaults = {
 
 function origin(value, loopbackHttp = false) {
   const url = new URL(value);
-  if (url.username || url.password || url.pathname !== '/' || url.search || url.hash ||
+  if (value !== url.origin || url.username || url.password || url.pathname !== '/' || url.search || url.hash ||
       !/^[a-zA-Z0-9.-]+$/.test(url.hostname) ||
       (url.protocol !== 'https:' && !(loopbackHttp && url.protocol === 'http:' && url.hostname === '127.0.0.1'))) {
     throw new Error('Use an HTTPS origin; HTTP is allowed only for the loopback SSH frontend endpoint');
@@ -28,6 +28,11 @@ function origin(value, loopbackHttp = false) {
 export function configure(input = defaults) {
   for (const key of Object.keys(input)) if (!(key in defaults)) throw new Error(`Unknown setting: ${key}`);
   const config = { ...defaults, ...input };
+  // URL parsing removes some controls; shell/Nginx generation must never receive
+  // the unvalidated original bytes (including a trailing newline in a path).
+  for (const [key, value] of Object.entries(config)) {
+    if (key !== 'frontendPort' && (typeof value !== 'string' || /[^\x21-\x7e]/u.test(value))) throw new Error(`Invalid raw setting: ${key}`);
+  }
   origin(config.publicOrigin); origin(config.backendOrigin); origin(config.frontendOrigin, true);
   for (const key of ['backendTlsName', 'sshHost', 'sshUser']) {
     if (!/^[a-zA-Z0-9._-]+$/.test(config[key])) throw new Error(`Invalid ${key}`);

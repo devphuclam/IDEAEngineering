@@ -28,3 +28,11 @@ test('reject unencrypted remote upstreams and config injection', () => {
     assert.throws(() => configure({ ...defaults, ...change }));
   }
 });
+
+test('reject raw controls even when URL parsing or regex anchors would normalize them', () => {
+  for (const key of ['publicOrigin', 'backendOrigin', 'frontendOrigin', 'backendTlsName', 'sshHost', 'remoteRoot', 'certificate']) {
+    for (const control of ['\n', '\r', '\t', ' ']) assert.throws(() => configure({ ...defaults, [key]: defaults[key] + control }));
+  }
+  assert.throws(() => configure({ ...defaults, backendOrigin: 'https://a.\nid' }));
+  assert.throws(() => configure({ ...defaults, backendOrigin: null }));
+});
