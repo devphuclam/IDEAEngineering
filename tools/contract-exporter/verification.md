@@ -3,13 +3,13 @@
 | Control field | Value |
 |---|---|
 | ID / class | IE-VEV-API-CONTRACT-SYNC-053 / focused engineering verification |
-| Version / status | 0.2 / engineering PASS; independent Project Reviewer acceptance pending |
+| Version / status | 0.3 / engineering PASS; independent Project Reviewer acceptance pending |
 | Normativity / classification | INFORMATIVE / INTERNAL |
 | Author / intended reviewer | Codex / Project Reviewer |
 | Publication | 2026-10-09, Asia/Ho_Chi_Minh |
 | Scope / change | [Issue #53](https://github.com/devphuclam/IDEAEngineering/issues/53); CODEX_ONLY |
 | Baseline | main `91cf6c25e516ce2b3ae628d59c2a20b90076bcff` |
-| Current executed source | `bfbf1d6619d7ef1b72f4f5eba04f9d4de7d6f6d3`; predecessor execution below retained |
+| Current executed source | `6f8df13e0ba9f095704bdbf1dd5e28044967e1d6`; predecessor executions below retained |
 | Downstream | [tool instructions](README.md), [API handoff](../../docs/product/instances/idea-engineering/api/handoff/README.md) |
 | Review trigger | Route/owner/DTO/security/contract/tool behavior change; CI runner/rule activation |
 | Retention | Git; predecessor source and review findings remain historical |
@@ -84,7 +84,7 @@ Generated final HTML content SHA-256:
 Rendering tests inspect content/script; actual Chrome, Word page layout and Excel UI
 qualification are NOT-RUN. No new runtime behavior claim is inferred from these results.
 
-## Concise presentation successor — current execution
+## Historical concise presentation successor
 
 The user requested the simple presentation of the tool on main, not an expanded specification.
 Source `bfbf1d6619d7ef1b72f4f5eba04f9d4de7d6f6d3` preserves the existing renderer/template,
@@ -106,6 +106,54 @@ owned `output/concise-review` directory, including repeat archive handling. Clos
 the normal `--update` permits the standard output names to be regenerated. Browser/Word layout
 qualification remains NOT-RUN. The CI runner / required-check conditions below remain open.
 
+## Current successor — missing sources fed into the original tool
+
+The user's clarification supersedes the preceding presentation approach: retain the original
+exporter and curated catalogue, and supply its missing source inputs. The original
+`export.mjs` again owns the update/merge/export/open workflow and Word/Excel/HTML renderers;
+the separately introduced renderer module is removed. No new format or document framework.
+
+Input reconciliation now feeds the Server and Gateway OpenAPI sources, Identity/Session,
+Feature 009 operation contracts, F05 boundary semantics and CPD DESIGN cards into that tool.
+F05 internal Grant/Receipt services and test-only routes are not invented product endpoints.
+The editorial catalogue retains its Vietnamese names/descriptions, author, metadata,
+historical revisions and three workflows. Technical wire fields are refreshed from controlled
+sources. Historical inaccuracies in the workflows are corrected, not preserved as API promises.
+The catalogue is version 1.2, with an attributable source-addition revision; repeat update does
+not create another revision. Original historical revisions remain unchanged.
+
+One additional targeted RED witness demonstrated unwanted replacement of editorial text,
+metadata and history. The repair preserves them while still correcting a stale technical path.
+The existing route/schema/security and rendering regressions remain in place.
+
+Executed source: `6f8df13e0ba9f095704bdbf1dd5e28044967e1d6`.
+Commands used the same explicit approved Node binary and unchanged cached renderer dependencies:
+
+~~~text
+node --test tools/contract-exporter/contract.test.mjs tools/contract-exporter/render.test.mjs
+node tools/contract-exporter/export.mjs --update
+node tools/contract-exporter/export.mjs --check
+~~~
+
+| Oracle | Actual result |
+|---|---|
+| Guard / renderer tests | 32 + 2 = 34/34 PASS; zero failure/cancel/skip; 13.648 seconds |
+| Controlled HTTP coverage | PASS; 46 routes / 46 operations |
+| Catalogue | 46 HTTP + 9 DESIGN = 55 entries; metadata/history/editorial preservation PASS |
+| Normal update | Successful; zero new/changed entries on repeat source; version stays 1.2 |
+| Standard output | Word, Excel and HTML regenerated at the original default output names |
+| Repeat / malformed-source refusal | PASS in the existing regression fixtures |
+| Scope | No Java, runtime API, migration, dependency, deployment or format change |
+
+[Retained Node test output](evidence/20261009-original-tool-node-test.txt).
+SHA-256 of the retained LF bytes:
+`8aa6edd4c97e895f780eed0f0cbc5e0b00dd13008dec89cab9d4b5ba4d6f1f3a`.
+The preceding Word file-lock failure remains historical; the current standard export succeeded.
+Word/Excel content is tested, but actual Word layout/browser UI qualification remains NOT-RUN.
+The engineering review identified stale catalogue-ownership instructions; README now distinguishes
+editable editorial fields from source-controlled technical fields. This documentation-only
+publication does not constitute another source execution or independent human acceptance.
+
 ## Remaining integration condition
 
 `main` was read back at the baseline above with `protected=false`.
@@ -125,8 +173,9 @@ preflight failed with `Approved Node 24.19.0 unavailable; provisioning/intake is
 The contract check and guard regression were consequently skipped: remote execution is
 NOT-RUN, not PASS and not a contract regression failure. No fallback version, installation or
 download was used. The runner's actual Node version was not retained; no version is inferred.
-This evidence-only publication does not change the final local executed source or its 30/30
-result. Permitted runner provisioning and required-check configuration remain integration
+That historical evidence-only publication did not change its local executed source or 30/30
+result. The current 34/34 local successor is recorded separately above. Permitted runner
+provisioning and required-check configuration remain integration
 conditions; no merge-enforcement claim is made.
 
 Static supported-route discovery and source fingerprints are not universal runtime route

@@ -1,7 +1,8 @@
 # API contract exporter
 
-Nguồn HTTP có kiểm soát → catalog GENERATED → Word / Excel / HTML.
-Không còn “Smart Merge” tự đoán API.
+Tool cũ vẫn dùng catalog đã biên tập → Word / Excel / HTML.
+`--update` nạp thêm nguồn HTTP/contract còn thiếu, giữ diễn giải tiếng Việt, metadata và lịch sử;
+không thay catalog bằng một tài liệu tự sinh khác.
 
 Giữ bộ 3 tài liệu và bố cục của tool trên `main`: không thêm định dạng hay thiết kế lại.
 Bảng dữ liệu chỉ liệt kê tham số, trường request/response chính và kiểu model lồng nhau;
@@ -56,7 +57,8 @@ Output tại tools/contract-exporter/output/:
 trong lockfile, không thay graph và không tự cài khi thiếu. Thiếu cache vẫn chạy được check/test
 hoặc --update --data-only. Rendering thiếu dependency báo lỗi, không giả vờ xuất thành công.
 
-Version/date/status là metadata trong contract-config.json, không tự tăng vì bấm update.
+Version/date/status và lịch sử nằm trong `data/api-catalog.json` như tool cũ.
+Chỉ bổ sung mục mới mới tạo revision kế tiếp; chạy lại cùng nguồn không tăng version.
 Repeat cùng nội dung giữ archive cũ. Output/archive bị Git ignore; lịch sử predecessor giữ trong Git.
 
 ## Nguồn sửa và quy trình API change
@@ -68,7 +70,8 @@ Repeat cùng nội dung giữ archive cũ. Output/archive bị Git ignore; lịc
 | Authority/state/atomicity/concurrency/retry/trace | x-idea-contract tại từng operation, dẫn semanticSource về owner contract |
 | CPD DESIGN | [controlled-product-data.md](../../docs/product/instances/idea-engineering/api/controlled-product-data.md) |
 | Source review/config | [contract-config.json](contract-config.json), [source-review.json](source-review.json) |
-| Generated output data | data/api-catalog.json — không sửa trực tiếp |
+| Nội dung biên tập | data/api-catalog.json: metadata, tên/nhóm/diễn giải tiếng Việt, workflows; được biên tập và review |
+| Dữ liệu kỹ thuật trong catalog | method/path, authority, state, headers, fields, responses/errors/retry: cập nhật từ nguồn contract; không sửa để che drift |
 
 1. Sửa API theo owner requirement/contract đã duyệt. Quyết định chưa có phải UNKNOWN, không invent.
 2. Sửa canonical OpenAPI tương ứng: operationId, parameters, schema, responses và x-idea-contract.
@@ -77,7 +80,7 @@ Repeat cùng nội dung giữ archive cũ. Output/archive bị Git ignore; lịc
    **không tự chấp nhận**: node tools/contract-exporter/export.mjs --print-source-hashes.
    Không bulk-refresh để che lỗi; ghi lý do review trong PR.
 4. Chạy application tests theo Work Item, rồi --update, --check và npm test.
-5. Commit source + contract + generated catalog cùng PR, review semantic diff trước merge.
+5. Commit source + contract + catalog đã cập nhật cùng PR, review semantic diff trước merge.
    Xem [change/versioning template](../../docs/product/instances/idea-engineering/api/handoff/template.md).
 
 --check read-only, exit 0 khi đạt / exit 1 khi thiếu-lệch. --update cũng check source/OpenAPI
@@ -97,10 +100,11 @@ cho mutation/credential operation.
 node --test .\tools\contract-exporter\contract.test.mjs
 ~~~
 
-31 tests tạo fixture repository tạm riêng, thử thiếu API,
+32 tests tạo fixture repository tạm riêng, thử thiếu API,
 đổi method/path variable/DTO, xóa route/parameter, ref/schema lỗi, thiếu authority và sửa catalog.
 Expected các lỗi bị từ chối/exit 1, không ghi output; chính tests PASS khi guard bắt lỗi đúng.
-Cleanup chỉ exact thư mục tạm đã tạo.
+Cleanup chỉ exact thư mục tạm đã tạo. Có regression riêng chứng minh update giữ metadata/lịch sử/
+diễn giải nhưng vẫn sửa đúng technical route từ nguồn.
 
 Rendering qualification riêng (cần cache hiện có):
 
