@@ -214,10 +214,20 @@ export function readContract(root) {
   return {root,tool,config,operations,routes,errors,documents};
 }
 
-function schemaFields(document, schema, location, prefix = '', required = false, ancestors = []) {
+function schemaType(document, schema) {
+  const resolved = resolve(document,schema);
+  if (schema?.$ref) return schema.$ref.split('/').at(-1);
+  if (resolved?.type === 'array') return 'array<' + schemaType(document,resolved.items) + '>';
+  return resolved?.type ?? (resolved?.oneOf ? 'oneOf' : 'object');
+}
+
+// Keep the existing short endpoint dictionary. Refer to nested models by name rather
+// than copying the complete model tree into every endpoint/document three times.
+function schemaFields(document, schema, location, prefix = '', required = false) {
   const resolved = resolve(document,schema);
   if (!resolved) return [];
-  if (ancestors.includes(resolved)) return [];
+  if (!prefix && resolved.properties) return Object.entries(resolved.properties).flatMap(([name,child]) =>
+    schemaFields(document,child,location,name,(resolved.required ?? []).includes(name)));
   const conditions = [
     resolved.format, resolved.enum && 'enum: ' + resolved.enum.join(', '),
     resolved.minimum !== undefined && 'minimum=' + resolved.minimum,
@@ -226,13 +236,10 @@ function schemaFields(document, schema, location, prefix = '', required = false,
     resolved.maxLength !== undefined && 'maxLength=' + resolved.maxLength,
     resolved.pattern && 'pattern=' + resolved.pattern, resolved.nullable && 'nullable',
     resolved.writeOnly && 'writeOnly', resolved.readOnly && 'readOnly'
-  ].filter(Boolean).join('; ') || 'See canonical schema / semantic contract';
-  const field = {name:prefix || 'body',in:location,type:resolved.type ?? (resolved.oneOf ? 'oneOf' : 'object'),
+  ].filter(Boolean).join('; ');
+  const field = {name:prefix || 'body',in:location,type:schemaType(document,schema),
     required,validation:conditions,description:resolved.description ?? '',example:resolved.example ?? ''};
-  return [field,...Object.entries(resolved.properties ?? {}).flatMap(([name,child]) =>
-    schemaFields(document,child,location,prefix ? prefix + '.' + name : name,
-      (resolved.required ?? []).includes(name),[...ancestors,resolved])),
-    ...(resolved.items ? schemaFields(document,resolved.items,location,prefix + '[]',false,[...ancestors,resolved]) : [])];
+  return [field];
 }
 
 export function projectCatalog(packet) {
@@ -242,6 +249,7 @@ export function projectCatalog(packet) {
     for (const [media,content] of Object.entries(operation.requestBody?.content ?? {}))
       fields.push(...schemaFields(document,content.schema,'Request Body (' + media + ')','',operation.requestBody.required));
     for (const [status,response] of Object.entries(operation.responses ?? {})) {
+      if (!status.startsWith('2')) continue; // Refusals already have the existing error matrix.
       for (const [media,content] of Object.entries(resolve(document,response).content ?? {}))
         fields.push(...schemaFields(document,content.schema,'Response ' + status + ' (' + media + ')'));
     }
@@ -256,17 +264,19 @@ export function projectCatalog(packet) {
       responseExample:operation['x-idea-response-example'] ?? 'See canonical OpenAPI schema; no inferred response.',
       errors:Object.entries(operation.responses).filter(([status]) => !status.startsWith('2')).map(([status,r]) => ({
         status,code:'HTTP ' + status,reason:resolve(document,r).description,remedy:contract.retry})),
-      notes:`operationId=${operation.operationId}; surface=${surface}; concurrency=${contract.concurrency}; retry=${contract.retry}; trace=${contract.trace.join(', ')}; semanticSource=${contract.semanticSource}`
+      notes:`operationId=${operation.operationId}; surface=${surface}; concurrency=${contract.concurrency}; retry=${contract.retry}; trace=${contract.trace.join(', ')}; semanticSource=${contract.semanticSource}; schema đầy đủ: ${config.surfaces.find(s=>s.id===surface).openapi}`
     };
   });
-  // CPD is still semantic DESIGN. Copy the exact cards as text, not a fabricated wire schema.
+  // CPD is still semantic DESIGN. Keep a short index to the original cards, not a second
+  // copy of the semantic specification and not a fabricated wire schema.
   const source = config.designSource;
   const text = fs.readFileSync(inside(packet.root,source),'utf8');
   const cards = /###\s+(CPD-[A-Z0-9.]+)\s+[—–-]\s+([^\r\n]+)\r?\n([\s\S]*?)(?=\r?\n###|\r?\n##|$)/g;
   for (const match of text.matchAll(cards)) endpoints.push({
     code:match[1],name:match[2],group:'Controlled Product Data',phase:'Phase 2 (CPD)',method:'UNKNOWN',path:'UNKNOWN',
     auth:'UNKNOWN wire; see approved semantic authority',status:'[DESIGN — chưa triển khai HTTP]',
-    description:match[3].trim(),preconditions:'See exact semantic card',stateEffects:'No runtime claim',
+    description:`Thiết kế, chưa có API HTTP. Xem thẻ ${match[1]} trong controlled-product-data.md.`,
+    preconditions:'See exact semantic card',stateEffects:'No runtime claim',
     headers:[],fields:[],requestExample:'UNKNOWN — semantic examples are not wire DTOs.',
     responseExample:'UNKNOWN — no implemented endpoint.',errors:[],notes:'Source: ' + source
   });

@@ -54,6 +54,30 @@ test('all 46 actual Server/Gateway operations are covered; CPD remains nine DESI
   assert.equal(result.catalog.endpoints.length,55);
 });
 
+test('export stays a concise endpoint reference without expanding nested or error schemas',()=>{
+  const catalog=projectCatalog(checkContract(root));
+  const directory=catalog.endpoints.find(e=>e.path==='/api/v1/administration/accounts'&&e.method==='GET');
+  assert.ok(directory.fields.some(f=>f.name==='organizationId'&&f.in==='query'));
+  assert.ok(directory.fields.some(f=>f.name==='items'&&f.type==='array<DirectoryAccount>'));
+  assert.ok(!directory.fields.some(f=>f.name.startsWith('items[]')),'nested models stay in canonical OpenAPI');
+  assert.ok(!catalog.endpoints.some(e=>e.fields.some(f=>/^Response [45]/.test(f.in))),
+    'error details belong in the existing error matrix, not repeated data dictionary rows');
+  assert.ok(directory.errors.some(e=>e.status==='401'&&/empty/i.test(e.reason)),
+    'compact output must retain authentication refusal semantics');
+  assert.equal(catalog.endpoints.filter(e=>e.method!=='UNKNOWN').length,46);
+});
+
+test('DESIGN entries stay short and point to the full semantic source instead of copying it',()=>{
+  const design=projectCatalog(checkContract(root)).endpoints.filter(e=>e.method==='UNKNOWN');
+  assert.equal(design.length,9);
+  for (const entry of design) {
+    assert.ok(entry.description.length<200,'short reference card: '+entry.code);
+    assert.match(entry.description,/chưa có API HTTP/);
+    assert.ok(entry.notes.includes('controlled-product-data.md'));
+    assert.deepEqual(entry.fields,[],'no fabricated design DTO');
+  }
+});
+
 test('new executable route without contract refuses check AND update without writes', () => fixture(target=>{
   const dir=path.join(target,'apps/server/src/main/java/com/idea/ddm');
   fs.writeFileSync(path.join(dir,'NewController.java'),'@RestController class NewController { @GetMapping("/api/v1/new-capability") Object read(){return null;} }');
