@@ -54,6 +54,15 @@ export function getStackDepth(): number {
 }
 
 /**
+ * Checks whether the overlay with the given id is currently the topmost active overlay in the stack.
+ * Only the top overlay should respond to modal keyboard events (Escape, Tab, Shift+Tab).
+ */
+export function isTopOverlay(id: string): boolean {
+  if (stack.length === 0) return false;
+  return stack[stack.length - 1].id === id;
+}
+
+/**
  * Checks if an element is a valid, currently interactive focus target
  */
 export function isInteractiveFocusTarget(el: HTMLElement | null): boolean {

@@ -26,6 +26,31 @@ export interface DataTableProps<T> {
   className?: string;
 }
 
+export function handleRowKeyDown<T>(
+  e: React.KeyboardEvent<HTMLTableRowElement> | { key: string; preventDefault: () => void },
+  item: T,
+  index: number,
+  onSelectRow?: (item: T) => void,
+  tableRef?: React.RefObject<HTMLTableElement | null>
+): void {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    onSelectRow?.(item);
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    const rows = tableRef?.current?.querySelectorAll('tbody tr');
+    if (rows && index < rows.length - 1) {
+      (rows[index + 1] as HTMLElement).focus();
+    }
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const rows = tableRef?.current?.querySelectorAll('tbody tr');
+    if (rows && index > 0) {
+      (rows[index - 1] as HTMLElement).focus();
+    }
+  }
+}
+
 export function DataTable<T>({
   data,
   columns,
@@ -95,29 +120,6 @@ export function DataTable<T>({
       return sortDirection === 'ascending' ? compare : -compare;
     });
   }, [filteredData, sortKey, sortDirection]);
-
-  const handleRowKeyDown = (
-    e: React.KeyboardEvent<HTMLTableRowElement>,
-    item: T,
-    index: number
-  ) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onSelectRow?.(item);
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      const rows = tableRef.current?.querySelectorAll('tbody tr');
-      if (rows && index < rows.length - 1) {
-        (rows[index + 1] as HTMLElement).focus();
-      }
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      const rows = tableRef.current?.querySelectorAll('tbody tr');
-      if (rows && index > 0) {
-        (rows[index - 1] as HTMLElement).focus();
-      }
-    }
-  };
 
   return (
     <div className={`idea-table-container ${className}`}>
@@ -204,7 +206,7 @@ export function DataTable<T>({
                     role="row"
                     aria-selected={isSelected}
                     onClick={() => onSelectRow?.(item)}
-                    onKeyDown={(e) => handleRowKeyDown(e, item, index)}
+                    onKeyDown={(e) => handleRowKeyDown(e, item, index, onSelectRow, tableRef)}
                     style={{ cursor: onSelectRow ? 'pointer' : 'default' }}
                   >
                     {columns.map((col) => (

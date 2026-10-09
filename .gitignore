@@ -9,6 +9,7 @@ dist/
 build/
 *.log
 .env*
+.vite/
 
 # Historical manually copied Web output; Maven now builds resources under ignored target/
 /apps/server/src/main/resources/static/

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
-import { DataTable, Column } from './DataTable';
+import { DataTable, Column, handleRowKeyDown } from './DataTable';
 
 interface TestItem {
   id: string;
@@ -114,11 +114,11 @@ describe('Semantic DataTable', () => {
     expect(html).not.toContain('Beta');
   });
 
-  it('handles row keyboard selection when Enter or Space is pressed', () => {
+  it('handles row keyboard selection when Enter or Space is pressed via handleRowKeyDown', () => {
     const onSelectRow = vi.fn();
     const preventDefault = vi.fn();
 
-    // Render table
+    // Render table markup to verify keyboard accessibility markup
     const html = renderToStaticMarkup(
       <DataTable
         data={TEST_DATA}
@@ -128,19 +128,17 @@ describe('Semantic DataTable', () => {
       />
     );
     expect(html).toContain('tabindex="0"');
+    expect(html).toContain('role="row"');
 
-    // Test row keyboard handler directly with event
-    const enterEvent = {
-      key: 'Enter',
-      preventDefault,
-    } as unknown as React.KeyboardEvent<HTMLTableRowElement>;
-
-    // Emulate keyboard enter selection
-    if (enterEvent.key === 'Enter') {
-      enterEvent.preventDefault();
-      onSelectRow(TEST_DATA[0]);
-    }
-    expect(preventDefault).toHaveBeenCalled();
+    // Test row keyboard handler directly with real key event objects
+    const enterEvent = { key: 'Enter', preventDefault };
+    handleRowKeyDown(enterEvent, TEST_DATA[0], 0, onSelectRow);
+    expect(preventDefault).toHaveBeenCalledTimes(1);
     expect(onSelectRow).toHaveBeenCalledWith(TEST_DATA[0]);
+
+    const spaceEvent = { key: ' ', preventDefault };
+    handleRowKeyDown(spaceEvent, TEST_DATA[1], 1, onSelectRow);
+    expect(preventDefault).toHaveBeenCalledTimes(2);
+    expect(onSelectRow).toHaveBeenCalledWith(TEST_DATA[1]);
   });
 });

@@ -5,6 +5,7 @@ import {
   pushOverlay,
   popOverlay,
   getStackDepth,
+  isTopOverlay,
   isInteractiveFocusTarget,
   resetOverlayStackForTesting,
 } from './overlayStack';
@@ -270,5 +271,49 @@ describe('overlayStack manager', () => {
       getAttribute: vi.fn((attr: string) => (attr === 'aria-hidden' ? 'true' : null)),
     } as unknown as HTMLElement;
     expect(isInteractiveFocusTarget(ariaHiddenTarget)).toBe(false);
+  });
+
+  it('correctly tracks isTopOverlay for topmost overlay during nesting and unmounting', () => {
+    const drawerEl = {
+      id: 'drawer-overlay',
+      inert: false,
+      setAttribute: vi.fn(),
+      removeAttribute: vi.fn(),
+      hasAttribute: vi.fn(() => false),
+      getAttribute: vi.fn(() => null),
+    } as unknown as HTMLElement;
+
+    const dialogEl = {
+      id: 'dialog-overlay',
+      inert: false,
+      setAttribute: vi.fn(),
+      removeAttribute: vi.fn(),
+      hasAttribute: vi.fn(() => false),
+      getAttribute: vi.fn(() => null),
+    } as unknown as HTMLElement;
+
+    // Initially empty
+    expect(isTopOverlay('drawer-1')).toBe(false);
+    expect(isTopOverlay('dialog-1')).toBe(false);
+
+    // Push drawer
+    pushOverlay('drawer-1', drawerEl, '#appRoot');
+    expect(isTopOverlay('drawer-1')).toBe(true);
+    expect(isTopOverlay('dialog-1')).toBe(false);
+
+    // Push dialog on top of drawer
+    pushOverlay('dialog-1', dialogEl, '#appRoot');
+    expect(isTopOverlay('drawer-1')).toBe(false); // Drawer is no longer top!
+    expect(isTopOverlay('dialog-1')).toBe(true);  // Dialog is top!
+
+    // Pop dialog -> Drawer becomes top again
+    popOverlay('dialog-1');
+    expect(isTopOverlay('drawer-1')).toBe(true);
+    expect(isTopOverlay('dialog-1')).toBe(false);
+
+    // Pop drawer -> Neither is top
+    popOverlay('drawer-1');
+    expect(isTopOverlay('drawer-1')).toBe(false);
+    expect(isTopOverlay('dialog-1')).toBe(false);
   });
 });

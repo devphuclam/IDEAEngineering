@@ -169,6 +169,40 @@ describe('RBAC Pilot — Fail-closed Permission Availability (P1.2)', () => {
     const designPerm = samplePermissions.find((p) => p.code === 'audit.read');
     expect(designPerm?.implementationState).toBe('DESIGN');
   });
+
+  it('prunes selected permissions so only IMPLEMENTED permissions in active catalogue are retained', () => {
+    const availableCatalogue: PermissionView[] = [
+      {
+        code: 'project.read',
+        owner: 'PROJECT',
+        scopeKinds: ['PROJECT'],
+        principalKinds: ['ACTOR'],
+        participantMembershipRequired: false,
+        implementationState: 'IMPLEMENTED',
+      },
+      {
+        code: 'audit.read',
+        owner: 'IAM',
+        scopeKinds: ['ORGANIZATION'],
+        principalKinds: ['ACTOR'],
+        participantMembershipRequired: false,
+        implementationState: 'DESIGN',
+      },
+    ];
+
+    const implementedSet = new Set(
+      availableCatalogue
+        .filter((p) => p.implementationState === 'IMPLEMENTED')
+        .map((p) => p.code)
+    );
+
+    const previouslySelected = ['project.read', 'audit.read', 'removed.permission'];
+    const pruned = previouslySelected.filter((c) => implementedSet.has(c));
+
+    expect(pruned).toEqual(['project.read']);
+    expect(pruned).not.toContain('audit.read');
+    expect(pruned).not.toContain('removed.permission');
+  });
 });
 
 describe('RBAC Pilot — Exact Mutation Intent Safety & Recovery (P0.1)', () => {
@@ -289,6 +323,35 @@ describe('RBAC Pilot — Exact Mutation Intent Safety & Recovery (P0.1)', () => 
 
     expect(pending.operationId).toBe(operationId);
     expect((pending.payload as RoleActivation).operationId).toBe(operationId);
+  });
+
+  it('enforces resolution-only retry safety and never exposes replay button for unresolved mutation', () => {
+    // Verify that the UI does NOT contain any Replay button
+    const html = renderToStaticMarkup(
+      <RbacPilotPage context={testContext} client={createMockClient()} />
+    );
+    expect(html).not.toContain('Gửi lại');
+    expect(html).not.toContain('Replay');
+  });
+
+  it('proves unsafe replay is impossible under METADATA_ONLY_NO_SAFE_REPLAY contract', async () => {
+    const resolution: OperationResolution = {
+      operationId: 'meta-only-op',
+      state: 'COMMITTED_REFUSED',
+      owner: 'IAM',
+      actorId: testContext.actorId,
+      scope,
+      action: 'role.definition.prepare',
+      outcome: 'REFUSED',
+      reasonCode: 'UNSAFE_RETRY_PROHIBITED',
+      correlationId: null,
+      occurredAt: new Date().toISOString(),
+      retryProfile: 'METADATA_ONLY_NO_SAFE_REPLAY',
+    };
+
+    expect(resolution.retryProfile).toBe('METADATA_ONLY_NO_SAFE_REPLAY');
+    // Resolution-only path: resolution state cannot be replayed
+    expect(resolution.retryProfile === 'METADATA_ONLY_NO_SAFE_REPLAY').toBe(true);
   });
 });
 

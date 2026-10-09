@@ -292,6 +292,11 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       setIsLoading(true);
       setErrorMessage(null);
 
+      // Immediately invalidate roles and permissions to prevent stale actions or stale selections during load
+      setRoles([]);
+      setPermissions(null);
+      setSelectedRole(null);
+
       try {
         const [rolesRes, permsRes] = await Promise.all([
           activeClient.loadRoles(targetScope, 0),
@@ -310,6 +315,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             setSelectedRole(null);
           }
         } else {
+          setRoles([]);
+          setSelectedRole(null);
           handleClientFailure(rolesRes);
         }
 
@@ -318,18 +325,33 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             // Fail-closed: incomplete permission catalogue pagination prevents preparation
             setPermissions(null);
             setPermissionsIncomplete(true);
+            setFormSelectedPermissions([]);
             setErrorMessage('Danh mục quyền hạn (Permissions) trên máy chủ chưa tải đầy đủ qua phân trang (hasMore=true). Hệ thống khóa chuẩn bị vai trò để đảm bảo an toàn fail-closed.');
           } else {
             setPermissions(permsRes.value.items);
             setPermissionsIncomplete(false);
+            // Prune formSelectedPermissions: only keep permissions present in current catalogue and IMPLEMENTED
+            const implementedCodes = new Set(
+              permsRes.value.items
+                .filter((p) => p.implementationState === 'IMPLEMENTED')
+                .map((p) => p.code)
+            );
+            setFormSelectedPermissions((prev) => {
+              const pruned = prev.filter((c) => implementedCodes.has(c));
+              return pruned.length > 0 ? pruned : (implementedCodes.has('project.read') ? ['project.read'] : []);
+            });
           }
         } else {
           setPermissions(null);
           setPermissionsIncomplete(true);
+          setFormSelectedPermissions([]);
           handleClientFailure(permsRes);
         }
       } catch {
         if (alive.current) {
+          setRoles([]);
+          setPermissions(null);
+          setSelectedRole(null);
           setErrorMessage('Không thể kết nối đến máy chủ IDEA Server. Vui lòng kiểm tra kết nối mạng.');
         }
       } finally {
@@ -380,27 +402,40 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     setValidation(null);
     setActiveRole(null);
     setFormBaseVersion('');
+    setRoles([]);
+    setPermissions(null);
+    setSelectedRole(null);
     await loadCatalogue(newScope);
   };
 
-  // Valid proposal submission check
+  // Valid proposal submission check (Fail-closed & Implemented permissions only)
   const canSubmitProposal = useMemo(() => {
     const isNameValid = formDisplayName.trim().length >= 3;
-    const isPermissionsAvailable = permissions !== null && !permissionsIncomplete;
+    const isPermissionsAvailable = permissions !== null && !permissionsIncomplete && !isLoading;
+    const areSelectedPermissionsValid =
+      permissions !== null &&
+      formSelectedPermissions.length > 0 &&
+      formSelectedPermissions.every((code) => {
+        const p = permissions.find((perm) => perm.code === code);
+        return p && p.implementationState === 'IMPLEMENTED';
+      });
+
     return (
       isNameValid &&
       isPermissionsAvailable &&
-      formSelectedPermissions.length > 0 &&
+      areSelectedPermissionsValid &&
       formScopeKinds.length > 0 &&
       formPrincipalKinds.length > 0 &&
       formReason.trim().length >= 5 &&
       canPrepare &&
-      !isLocked
+      !isLocked &&
+      !isLoading
     );
   }, [
     formDisplayName,
     permissions,
     permissionsIncomplete,
+    isLoading,
     formSelectedPermissions,
     formScopeKinds,
     formPrincipalKinds,
@@ -410,10 +445,11 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
   ]);
 
   const handleOpenDrawer = () => {
-    if (isLocked) return;
+    if (isLocked || isLoading || permissions === null || permissionsIncomplete) return;
     setFormBaseVersion('');
     setFormDisplayName('');
-    setFormSelectedPermissions(['project.read']);
+    const canRead = permissions.some((p) => p.code === 'project.read' && p.implementationState === 'IMPLEMENTED');
+    setFormSelectedPermissions(canRead ? ['project.read'] : []);
     setFormScopeKinds(['PROJECT']);
     setFormPrincipalKinds(['ACTOR']);
     setFormReason('');
@@ -444,12 +480,27 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       const implementedCodes = selected.permissions
         .filter((p) => p.implementationState === 'IMPLEMENTED')
         .map((p) => p.code);
-      setFormSelectedPermissions(implementedCodes.length > 0 ? implementedCodes : ['project.read']);
+      const activeImplementedSet = new Set(
+        permissions
+          ? permissions.filter((p) => p.implementationState === 'IMPLEMENTED').map((p) => p.code)
+          : []
+      );
+      const validCodes = implementedCodes.filter((code) => activeImplementedSet.has(code));
+      setFormSelectedPermissions(
+        validCodes.length > 0
+          ? validCodes
+          : activeImplementedSet.has('project.read')
+          ? ['project.read']
+          : []
+      );
       setFormScopeKinds(selected.scopeKinds);
       setFormPrincipalKinds(selected.principalKinds);
     } else {
       setFormDisplayName('');
-      setFormSelectedPermissions(['project.read']);
+      const canRead = permissions?.some(
+        (p) => p.code === 'project.read' && p.implementationState === 'IMPLEMENTED'
+      );
+      setFormSelectedPermissions(canRead ? ['project.read'] : []);
     }
   };
 
@@ -660,56 +711,6 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       if (alive.current) {
         setErrorMessage('Lỗi kết nối trong quá trình đối soát giao dịch.');
       }
-    } finally {
-      if (alive.current) setIsBusy(false);
-    }
-  };
-
-  // Replay exact intent with same operationId (P0.1)
-  const handleReplayPendingMutation = async () => {
-    if (!pendingMutation || isBusy) return;
-    setIsBusy(true);
-    setErrorMessage(null);
-    setStatusMessage(`Đang gửi lại đúng intent gốc cùng OperationId [${pendingMutation.operationId}]...`);
-
-    try {
-      if (pendingMutation.kind === 'PREPARE') {
-        const res = await activeClient.prepareRole(pendingMutation.payload as RoleProposal);
-        if (!alive.current) return;
-        if (res.kind === 'confirmed') {
-          setPendingMutation(null);
-          setCandidate(res.value);
-          setValidation(null);
-          setStatusMessage(`Máy chủ đã xác nhận lưu bản thảo vai trò [${res.value.roleCode}] thành công.`);
-        } else if (res.kind === 'unresolved') {
-          setErrorMessage('Giao dịch vẫn chưa rõ kết quả sau khi gửi lại. Vui lòng nhấn "Đối soát trên máy chủ".');
-        } else {
-          setPendingMutation(null);
-          handleClientFailure(res);
-        }
-      } else if (pendingMutation.kind === 'ACTIVATE') {
-        const res = await activeClient.activateRole(
-          pendingMutation.candidateId || '',
-          pendingMutation.payload as RoleActivation
-        );
-        if (!alive.current) return;
-        if (res.kind === 'confirmed') {
-          setPendingMutation(null);
-          setActiveRole(res.value);
-          setCandidate(null);
-          setValidation(null);
-          setStatusMessage(`Kích hoạt thành công phiên bản chính thức [${res.value.roleCode}@${res.value.version}].`);
-          await loadCatalogue(scope);
-          setSelectedRole(res.value);
-        } else if (res.kind === 'unresolved') {
-          setErrorMessage('Giao dịch kích hoạt vẫn chưa rõ kết quả sau khi gửi lại.');
-        } else {
-          setPendingMutation(null);
-          handleClientFailure(res);
-        }
-      }
-    } catch {
-      if (alive.current) setErrorMessage('Lỗi kết nối khi gửi lại intent.');
     } finally {
       if (alive.current) setIsBusy(false);
     }
@@ -939,7 +940,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             variant="primary"
             size="sm"
             onClick={handleOpenDrawer}
-            disabled={!canPrepare || isLocked || isLoading || permissionsIncomplete}
+            disabled={!canPrepare || isLocked || isLoading || permissionsIncomplete || permissions === null}
             title={canPrepare ? 'Soạn thảo bản thảo vai trò tùy biến mới' : 'Tài khoản thiếu quyền role.definition.prepare'}
           >
             + Tạo Candidate
@@ -949,25 +950,22 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
       {/* Global Alerts / Status Feedbacks */}
       <div style={{ padding: '8px 16px 0 16px' }}>
-        {/* Pending Mutation Recovery Banner (P0.1) */}
+        {/* Pending Mutation Recovery Banner (P0.1 & BLOCKER 1 Resolution-only Safety) */}
         {pendingMutation && (
           <div style={{ marginBottom: '12px', padding: '12px', border: '1px solid var(--idea-color-warning)', backgroundColor: 'var(--idea-color-warning-subtle, rgba(234, 179, 8, 0.1))', borderRadius: '6px' }} role="alert">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
               <span style={{ fontWeight: 600, fontSize: '13px', color: 'var(--idea-color-text)' }}>
-                Cảnh báo an toàn đột biến: Giao dịch [{pendingMutation.kind}] chưa xác định kết quả (UNRESOLVED)
+                Cảnh báo an toàn giao dịch: Thao tác [{pendingMutation.kind === 'PREPARE' ? 'Soạn bản thảo' : 'Kích hoạt'}] chưa xác định kết quả (UNRESOLVED)
               </span>
-              <Badge variant="highest">LOCKED</Badge>
+              <Badge variant="highest">ĐÃ KHÓA (LOCKED)</Badge>
             </div>
             <p style={{ margin: '0 0 8px 0', fontSize: '12px', color: 'var(--idea-color-text-muted)' }}>
-              Intent gốc được giữ nguyên trong bộ nhớ với mã giao dịch: <code style={{ fontWeight: 600 }}>{pendingMutation.operationId}</code>.
-              Hệ thống đã khóa các thao tác đột biến khác để tránh gửi trùng lặp hoặc vi phạm tính bất biến.
+              Mã giao dịch gốc được bảo lưu bất biến trong bộ nhớ: <code style={{ fontWeight: 600 }}>{pendingMutation.operationId}</code>.
+              Theo nguyên tắc an toàn, hệ thống chỉ hỗ trợ đối soát trạng thái (resolution-only) và khóa toàn bộ thao tác ghi mới để tránh gửi trùng lặp hoặc vi phạm tính toàn vẹn dữ liệu.
             </p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <Button size="sm" variant="primary" disabled={isBusy} onClick={() => void handleResolveOperation()}>
                 {isBusy ? <Spinner size="sm" /> : 'Đối soát trên máy chủ (resolveOperation)'}
-              </Button>
-              <Button size="sm" variant="secondary" disabled={isBusy} onClick={() => void handleReplayPendingMutation()}>
-                Gửi lại đúng Intent gốc (Cùng OperationId)
               </Button>
             </div>
           </div>

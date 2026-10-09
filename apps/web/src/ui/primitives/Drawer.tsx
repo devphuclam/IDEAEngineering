@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useId, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { getOverlayRoot, pushOverlay } from "./overlayStack";
+import { getOverlayRoot, pushOverlay, isTopOverlay } from "./overlayStack";
 import "./primitives.css";
 
 export interface DrawerProps {
@@ -56,6 +56,9 @@ export function Drawer({
     }, 20);
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Only the topmost active overlay may handle keyboard events
+      if (!isTopOverlay(overlayId)) return;
+
       if (e.key === "Escape" && onCloseRef.current) {
         e.preventDefault();
         e.stopPropagation();
