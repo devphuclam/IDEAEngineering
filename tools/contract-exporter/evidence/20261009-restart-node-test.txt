@@ -1,0 +1,84 @@
+✔ a new reviewed HTTP contract updates the three old output formats (2650.6545ms)
+✔ AI names in source catalogue stop update without catalogue writes (772.7984ms)
+✔ published catalogue includes the actual account directory HTTP adapter (2.3571ms)
+✔ source update preserves the old catalog editorial text, metadata and history (718.5676ms)
+✔ all 46 actual Server/Gateway operations are covered; CPD remains nine DESIGN cards (61.3609ms)
+✔ export stays a concise endpoint reference without expanding nested or error schemas (46.6193ms)
+✔ DESIGN entries stay short and point to the full semantic source instead of copying it (43.2861ms)
+✔ compact array rows retain the supported Permission ceiling without expanding models (42.1581ms)
+✔ new executable route without contract refuses check AND update without writes (808.051ms)
+✔ method drift is rejected, not silently smart-merged (518.2849ms)
+✔ deleted source route leaves a stale contract finding (508.2538ms)
+✔ request/response DTO or owner behavior change requires explicit source review (733.2616ms)
+✔ unresolved references refuse publication (523.6692ms)
+✔ required path parameters cannot disappear (527.0792ms)
+✔ duplicate operation identities refuse publication (563.8219ms)
+✔ missing authority/retry metadata cannot be replaced with guesses (577.173ms)
+✔ modified generated catalogue is stale; update restores it deterministically (1061.2364ms)
+✔ --check is read-only and needs no renderer/npm dependencies (685.2072ms)
+✔ login and logout filter routes are discovered from actual framework source (36.7425ms)
+✔ unsupported dynamic mapping fails closed rather than disappearing (505.9642ms)
+✔ implicit mapping fails closed (522.9271ms)
+✔ mapping-looking comments are not executable routes (555.3576ms)
+✔ Gateway status is POST with binary response, Account path uses Account identity (42.8712ms)
+✔ reset supports DISABLED + exact Login Identity; re-enable can return PENDING (38.2025ms)
+✔ external refs are refused (519.1863ms)
+✔ another controller cannot hide a new API behind the documentation prefix (506.5144ms)
+✔ unreviewed custom filter cannot silently become another HTTP surface (504.5221ms)
+✔ path variable identity must match the executable contract (609.7658ms)
+✔ configuration paths cannot escape the repository (706.6899ms)
+✔ new Swagger descriptions do not unlock Try it out or promise login 503 (1.882ms)
+✔ business type fields in a valid JSON example are not schema declarations (552.3499ms)
+✔ invalid actual schema shape is refused (526.7819ms)
+✔ fully qualified Spring annotations cannot hide an undocumented route (554.8651ms)
+✔ documented refusal/nullable/public semantics match actual boundaries (2.3944ms)
+✔ login/logout retry describes committed effects rather than read-only replay (2.0082ms)
+✔ credential-proof target/version refusal documents the actual 403 mapping (2.0279ms)
+✔ export refuses AI attribution instead of publishing it (6.9162ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+✔ all three outputs retain human owner and contain no AI names (1246.66ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+[LƯU TRỮ ARCHIVE] Bản snapshot IDEA_Core_API_Contract_v1.2_20261009 đã tồn tại với nội dung đồng nhất (bảo toàn, không ghi đè).
+✔ actual Word/Excel/HTML export retains every operation and truthful HTTP/DESIGN tabs (1364.205ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+✔ contract text cannot become executable HTML or terminate the data script (563.2633ms)
+✔ check detects missing administration contracts without writing exports (735.362ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17179.4455
+API CONTRACT CHECK = PASS; routes=46; operations=46
+--- ĐỐI SOÁT NGUỒN API ---
+[SOURCE] apps/server/src/main/resources/dev-access/openapi.json
+[SOURCE] docs/product/instances/idea-engineering/api/gateway-openapi.json
+[SEMANTIC] docs/product/instances/idea-engineering/api/identity-session.md
+[SEMANTIC] specs/009-iam-rbac-ui-integration/contracts/operations.md
+[SEMANTIC] specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md
+[DESIGN] docs/product/instances/idea-engineering/api/controlled-product-data.md
+[SMART MERGE] Cập nhật 0 mục, bổ sung 0 mục; giữ metadata/lịch sử và diễn giải.
+IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)
+Phiên bản: v1.2 | 55 mục
+[LƯU TRỮ ARCHIVE] Phát hiện bản snapshot cùng ngày có nội dung mới -> Đã lưu thêm bản tuần tự: IDEA_Core_API_Contract_v1.2_20261009_01.*
+EXPORTED C:\Users\TD-999\.codex\worktrees\api-contract-restart\IDEAEngineering\tools\contract-exporter\output\IDEA_Core_v0_API_Contract.docx
+EXPORTED C:\Users\TD-999\.codex\worktrees\api-contract-restart\IDEAEngineering\tools\contract-exporter\output\IDEA_Core_v0_API_Contract.xlsx
+EXPORTED C:\Users\TD-999\.codex\worktrees\api-contract-restart\IDEAEngineering\tools\contract-exporter\output\IDEA_Core_v0_API_Contract.html
+API CONTRACT CHECK = PASS; routes=46; operations=46
+API CONTRACT CHECK = PASS; routes=46; operations=46
+--- ĐỐI SOÁT NGUỒN API ---
+[SOURCE] apps/server/src/main/resources/dev-access/openapi.json
+[SOURCE] docs/product/instances/idea-engineering/api/gateway-openapi.json
+[SEMANTIC] docs/product/instances/idea-engineering/api/identity-session.md
+[SEMANTIC] specs/009-iam-rbac-ui-integration/contracts/operations.md
+[SEMANTIC] specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md
+[DESIGN] docs/product/instances/idea-engineering/api/controlled-product-data.md
+[SMART MERGE] Cập nhật 0 mục, bổ sung 0 mục; giữ metadata/lịch sử và diễn giải.
+IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)
+Phiên bản: v1.2 | 55 mục
+[LƯU TRỮ ARCHIVE] Bản snapshot IDEA_Core_API_Contract_v1.2_20261009_01 đã tồn tại với nội dung đồng nhất (bảo toàn, không ghi đè).
+EXPORTED C:\Users\TD-999\.codex\worktrees\api-contract-restart\IDEAEngineering\tools\contract-exporter\output\IDEA_Core_v0_API_Contract.docx
+EXPORTED C:\Users\TD-999\.codex\worktrees\api-contract-restart\IDEAEngineering\tools\contract-exporter\output\IDEA_Core_v0_API_Contract.xlsx
+EXPORTED C:\Users\TD-999\.codex\worktrees\api-contract-restart\IDEAEngineering\tools\contract-exporter\output\IDEA_Core_v0_API_Contract.html
