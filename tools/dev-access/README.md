@@ -4,7 +4,7 @@
 |---|---|
 | ID / class / version | IE-DEV-SEPARATE-WEB-SERVER-051 / internal development recipe / 0.1 |
 | Owner / author / authority | Project user / Codex, CODEX_ONLY / user authorizes separate Backend/Frontend and configurable multi-host connections on 2026-10-09, Asia/Ho_Chi_Minh |
-| Status / review | Implementation in progress; qualification results recorded separately; independent acceptance NOT-RUN |
+| Status / review | Engineering qualification PASS; [results and lineage](results.md); human acceptance/merge pending |
 | Normativity / scope | INFORMATIVE product behavior; Issue #51 development tooling only, not a new product architecture or multi-site acceptance |
 | Classification / retention | INTERNAL, synthetic data only; retain historical controls/evidence and the existing DB |
 | Predecessor / trace | [merged Nginx entry](../../deploy/development/nginx/README.md), [snapshot review path](../iam-ui-dev/README.md), [Issue #51](https://github.com/devphuclam/IDEAEngineering/issues/51) |
@@ -53,6 +53,8 @@ equivalent does not require invoking PATH npm:
 `IDEA-Dev.cmd Dev` starts the two independent processes together for convenience;
 this does not make Frontend a Backend dependency. `IDEA-Dev.cmd Start` selects the
 qualified packaged review UI. It is not a build or an update to current main.
+The menu's first choice is current local development; historical review is labelled
+separately. A launcher is only process control, not the application's network boundary.
 
 `IDEA-Dev.cmd Status` reports Backend, edge mode, Frontend source directory and SSH
 state. `FrontendStop` stops dev Frontend/reverse tunnel/dev edge only. `BackendStop`
@@ -129,3 +131,16 @@ manifest, set directory700/files600 and create logs/temp directories. If the roo
 exists, stop rather than overwrite historical inputs. Existing legacy Nginx entry
 must be stopped through its owned launcher before these ports can be adopted.
 Normal human Start never provisions, downloads, builds, migrates or seeds.
+
+## Using the reviewed branch before merge
+
+The primary checkout is not silently modified while PR52 is open. To serve its
+existing UI edits with the candidate launcher, use:
+
+```powershell
+& 'C:\Users\TD-999\.codex\worktrees\separate-web-server-dev\IDEAEngineering\tools\dev-access\launch.ps1' -Action Dev -WebRoot 'C:\Users\TD-999\Research\Projects\IDEA\IDEAEngineering\apps\web'
+```
+
+The displayed `SOURCE` must be that primary `apps/web`; save edits there. After
+normal merge/sync, use the short `BackendStart` + `npm run dev` commands above.
+Do not run the old and new launchers simultaneously on the same ports.

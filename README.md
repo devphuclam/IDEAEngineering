@@ -5,6 +5,10 @@ can grow toward PLM in the same application. An IDEA Platform requires an indepe
 
 ## Start here
 
+For the running application and local UI development, use the
+[Backend / Frontend development guide](tools/dev-access/README.md). It distinguishes
+the current edited Web checkout from an explicitly selected historical review package.
+
 The project has **eight authored product-document drafts**, three management decision briefs,
 UI prototypes and a delivery roadmap. PH1 implementation has started: F01-A supplies buildable
 Server, Web, Desktop and Workspace scaffolds, not working product workflows or a usable Core v0.

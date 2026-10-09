@@ -1,5 +1,10 @@
 # Feature009 manual-review development entry point
 
+**Historical Feature009 snapshot recipe.** Current `npm run dev` uses the
+[independent local Web / Backend entry](../dev-access/README.md). The published
+snapshot, commands and acceptance lineage below are retained, not the source of
+arbitrary edits in the current Windows checkout.
+
 | Control | Value |
 |---|---|
 | ID / version / class | IE-DEV-IAM-46-001 / 0.1 / internal engineering execution recipe |
