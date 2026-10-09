@@ -121,16 +121,25 @@ function resolve(document, value) {
 function validateDocument(document) {
   if (document.openapi !== '3.0.3' || !document.info?.version || !document.paths)
     throw Error('Expected a versioned OpenAPI 3.0.3 document');
-  function walk(value) {
+  function walk(value, inSchema = false) {
     if (!value || typeof value !== 'object') return;
+    if (Array.isArray(value)) { for (const child of value) walk(child,inSchema); return; }
     if (value.$ref) resolve(document,value);
-    if (value.type === 'object' && value.required
+    if (inSchema && value.type === 'object' && value.required
       && value.required.some(name => !Object.hasOwn(value.properties ?? {},name)))
       throw Error('Required property absent from schema');
-    if (value.type === 'array' && !value.items) throw Error('Array schema needs items');
-    if (value.type && !['object','array','string','integer','number','boolean','apiKey','http','oauth2','openIdConnect'].includes(value.type))
+    if (inSchema && value.type === 'array' && !value.items) throw Error('Array schema needs items');
+    if (inSchema && value.type && !['object','array','string','integer','number','boolean'].includes(value.type))
       throw Error('Unsupported OpenAPI schema type: ' + value.type);
-    for (const child of Object.values(value)) walk(child);
+    for (const [name,child] of Object.entries(value)) {
+      // Literal payloads may legitimately contain keys called type, required or $ref.
+      if (['example','default','enum'].includes(name) || name.startsWith('x-')) continue;
+      if (name === 'examples') {
+        for (const example of Object.values(child ?? {})) if (example?.$ref) resolve(document,example);
+      } else if (child === document.components?.schemas || (inSchema && name === 'properties')) {
+        for (const schema of Object.values(child)) walk(schema,true);
+      } else walk(child,name === 'schema' || (inSchema && ['items','allOf','anyOf','oneOf','not','additionalProperties'].includes(name)));
+    }
   }
   walk(document);
 }

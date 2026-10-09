@@ -217,3 +217,16 @@ test('new Swagger descriptions do not unlock Try it out or promise login 503',()
   assert.equal(doc.paths['/api/v1/identity/credentials'].post['x-idea-documentation-only'],true);
   assert.equal(doc.paths['/api/v1/identity/accounts/{account}/credential-proofs'].post.responses['200'].content['application/json'].schema.$ref,'#/components/schemas/IssuedProof');
 });
+
+test('business type fields in a valid JSON example are not schema declarations',()=>fixture(target=>{
+  editOas(target,doc=>{
+    doc.paths['/api/v1/administration/assignments'].post.requestBody.content['application/json'].example=
+      {principal:{type:'ACTOR',id:'00000000-0000-4000-8000-000000000001'}};
+  });
+  assert.deepEqual(checkContract(target,{checkCatalog:false}).errors,[]);
+}));
+
+test('invalid actual schema shape is refused',()=>fixture(target=>{
+  editOas(target,doc=>doc.components.schemas.Bad={type:'array'});
+  assert.ok(checkContract(target).errors.some(e=>e.includes('Array schema needs items')));
+}));

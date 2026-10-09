@@ -92,7 +92,7 @@ cho mutation/credential operation.
 node --test .\tools\contract-exporter\contract.test.mjs
 ~~~
 
-24 tests (~11 giây trong lượt ghi nhận) tạo fixture repository tạm riêng, thử thiếu API,
+26 tests (~12 giây trong lượt ghi nhận) tạo fixture repository tạm riêng, thử thiếu API,
 đổi method/path variable/DTO, xóa route/parameter, ref/schema lỗi, thiếu authority và sửa catalog.
 Expected các lỗi bị từ chối/exit 1, không ghi output; chính tests PASS khi guard bắt lỗi đúng.
 Cleanup chỉ exact thư mục tạm đã tạo.
