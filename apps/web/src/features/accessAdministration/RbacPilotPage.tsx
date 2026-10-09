@@ -28,6 +28,16 @@ import { outcomeMessage } from '../iamIntegration/IamStatus';
 
 export { roleProposalTarget };
 
+export function sameAssignmentScope(a: AssignmentScope | null, b: AssignmentScope | null): boolean {
+  if (!a || !b) return false;
+  if (a.kind !== b.kind) return false;
+  if (a.organizationId !== b.organizationId) return false;
+  if (a.kind === 'PROJECT' && b.kind === 'PROJECT') {
+    return a.projectId === b.projectId;
+  }
+  return true;
+}
+
 export type IamClientInstance = {
   loadRoles: (scope: AssignmentScope, offset?: number) => Promise<IamResult<BoundedPage<RoleView>>>;
   loadPermissions: (scope: AssignmentScope, offset?: number) => Promise<IamResult<BoundedPage<PermissionView>>>;
@@ -218,6 +228,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       ? { kind: 'ORGANIZATION', organizationId: context.organizationId }
       : { kind: 'ORGANIZATION', organizationId: '' }
   );
+  const [catalogueReady, setCatalogueReady] = useState(false);
+  const [catalogueScope, setCatalogueScope] = useState<AssignmentScope | null>(null);
   const [projects, setProjects] = useState<BoundedPage<ProjectView> | null>(null);
   const [roles, setRoles] = useState<RoleView[]>([]);
   const [permissions, setPermissions] = useState<PermissionView[] | null>(null);
@@ -263,6 +275,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         setValidation(null);
         setRoles([]);
         setPermissions(null);
+        setCatalogueReady(false);
+        setCatalogueScope(null);
         setPendingMutation(null);
         setErrorMessage('Phiên làm việc đã hết hạn hoặc không hợp lệ (401 Unauthorized). Vui lòng đăng nhập lại.');
         onInvalidated?.();
@@ -292,10 +306,13 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       setIsLoading(true);
       setErrorMessage(null);
 
-      // Immediately invalidate roles and permissions to prevent stale actions or stale selections during load
+      // Immediately invalidate authoritative readiness, roles, and permissions to prevent stale actions or stale selections during load
+      setCatalogueReady(false);
+      setCatalogueScope(null);
       setRoles([]);
       setPermissions(null);
       setSelectedRole(null);
+      setPermissionsIncomplete(false);
 
       try {
         const [rolesRes, permsRes] = await Promise.all([
@@ -305,7 +322,13 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
         if (!alive.current || currentRequest !== epoch.current) return;
 
-        if (rolesRes.kind === 'confirmed') {
+        const rolesConfirmed = rolesRes.kind === 'confirmed';
+        const permsConfirmed = permsRes.kind === 'confirmed';
+        const rolesIncomplete = rolesConfirmed && rolesRes.value.hasMore;
+        const permsIncomplete = permsConfirmed && permsRes.value.hasMore;
+
+        if (rolesConfirmed && !rolesIncomplete && permsConfirmed && !permsIncomplete) {
+          // BOTH required API reads succeeded with complete pagination for current scope
           setRoles(rolesRes.value.items);
           if (rolesRes.value.items.length > 0) {
             setSelectedRole((prev) =>
@@ -314,44 +337,51 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
           } else {
             setSelectedRole(null);
           }
-        } else {
-          setRoles([]);
-          setSelectedRole(null);
-          handleClientFailure(rolesRes);
-        }
 
-        if (permsRes.kind === 'confirmed') {
-          if (permsRes.value.hasMore) {
-            // Fail-closed: incomplete permission catalogue pagination prevents preparation
-            setPermissions(null);
-            setPermissionsIncomplete(true);
-            setFormSelectedPermissions([]);
-            setErrorMessage('Danh mục quyền hạn (Permissions) trên máy chủ chưa tải đầy đủ qua phân trang (hasMore=true). Hệ thống khóa chuẩn bị vai trò để đảm bảo an toàn fail-closed.');
-          } else {
-            setPermissions(permsRes.value.items);
-            setPermissionsIncomplete(false);
-            // Prune formSelectedPermissions: only keep permissions present in current catalogue and IMPLEMENTED
-            const implementedCodes = new Set(
-              permsRes.value.items
-                .filter((p) => p.implementationState === 'IMPLEMENTED')
-                .map((p) => p.code)
-            );
-            setFormSelectedPermissions((prev) => {
-              const pruned = prev.filter((c) => implementedCodes.has(c));
-              return pruned.length > 0 ? pruned : (implementedCodes.has('project.read') ? ['project.read'] : []);
-            });
-          }
+          setPermissions(permsRes.value.items);
+          setPermissionsIncomplete(false);
+
+          // Prune formSelectedPermissions: only keep permissions present in current catalogue and IMPLEMENTED
+          const implementedCodes = new Set(
+            permsRes.value.items
+              .filter((p) => p.implementationState === 'IMPLEMENTED')
+              .map((p) => p.code)
+          );
+          setFormSelectedPermissions((prev) => {
+            const pruned = prev.filter((c) => implementedCodes.has(c));
+            return pruned.length > 0 ? pruned : (implementedCodes.has('project.read') ? ['project.read'] : []);
+          });
+
+          setCatalogueReady(true);
+          setCatalogueScope(targetScope);
         } else {
+          // Fail-closed: failure of EITHER API (or incomplete pagination) clears authoritative readiness and clears both states
+          setCatalogueReady(false);
+          setCatalogueScope(null);
+          setRoles([]);
           setPermissions(null);
-          setPermissionsIncomplete(true);
+          setSelectedRole(null);
           setFormSelectedPermissions([]);
-          handleClientFailure(permsRes);
+
+          if (permsIncomplete) {
+            setPermissionsIncomplete(true);
+            setErrorMessage('Danh mục quyền hạn (Permissions) trên máy chủ chưa tải đầy đủ qua phân trang (hasMore=true). Hệ thống khóa chuẩn bị vai trò để đảm bảo an toàn fail-closed.');
+          } else if (rolesIncomplete) {
+            setErrorMessage('Danh mục vai trò (Roles) trên máy chủ chưa tải đầy đủ qua phân trang (hasMore=true). Hệ thống khóa chuẩn bị vai trò để đảm bảo an toàn fail-closed.');
+          } else if (!rolesConfirmed) {
+            handleClientFailure(rolesRes);
+          } else if (!permsConfirmed) {
+            handleClientFailure(permsRes);
+          }
         }
       } catch {
         if (alive.current) {
+          setCatalogueReady(false);
+          setCatalogueScope(null);
           setRoles([]);
           setPermissions(null);
           setSelectedRole(null);
+          setFormSelectedPermissions([]);
           setErrorMessage('Không thể kết nối đến máy chủ IDEA Server. Vui lòng kiểm tra kết nối mạng.');
         }
       } finally {
@@ -398,6 +428,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         : { kind: 'PROJECT', organizationId: context.organizationId, projectId: scopeValue };
 
     setScope(newScope);
+    setCatalogueReady(false);
+    setCatalogueScope(null);
     setCandidate(null);
     setValidation(null);
     setActiveRole(null);
@@ -405,13 +437,20 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     setRoles([]);
     setPermissions(null);
     setSelectedRole(null);
+    setFormSelectedPermissions([]);
     await loadCatalogue(newScope);
   };
 
   // Valid proposal submission check (Fail-closed & Implemented permissions only)
   const canSubmitProposal = useMemo(() => {
+    const isScopeReady =
+      catalogueReady &&
+      sameAssignmentScope(scope, catalogueScope) &&
+      permissions !== null &&
+      !permissionsIncomplete &&
+      !isLoading;
+
     const isNameValid = formDisplayName.trim().length >= 3;
-    const isPermissionsAvailable = permissions !== null && !permissionsIncomplete && !isLoading;
     const areSelectedPermissionsValid =
       permissions !== null &&
       formSelectedPermissions.length > 0 &&
@@ -421,17 +460,19 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       });
 
     return (
+      isScopeReady &&
       isNameValid &&
-      isPermissionsAvailable &&
       areSelectedPermissionsValid &&
       formScopeKinds.length > 0 &&
       formPrincipalKinds.length > 0 &&
       formReason.trim().length >= 5 &&
       canPrepare &&
-      !isLocked &&
-      !isLoading
+      !isLocked
     );
   }, [
+    catalogueReady,
+    catalogueScope,
+    scope,
     formDisplayName,
     permissions,
     permissionsIncomplete,
@@ -445,7 +486,16 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
   ]);
 
   const handleOpenDrawer = () => {
-    if (isLocked || isLoading || permissions === null || permissionsIncomplete) return;
+    if (
+      isLocked ||
+      isLoading ||
+      !catalogueReady ||
+      !sameAssignmentScope(scope, catalogueScope) ||
+      permissions === null ||
+      permissionsIncomplete
+    ) {
+      return;
+    }
     setFormBaseVersion('');
     setFormDisplayName('');
     const canRead = permissions.some((p) => p.code === 'project.read' && p.implementationState === 'IMPLEMENTED');
@@ -506,7 +556,15 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
   // Prepare candidate with exact mutation intent safety (P0.1 & P1.1)
   const handlePrepareCandidate = async () => {
-    if (!canSubmitProposal || !context || isLocked) return;
+    if (
+      !canSubmitProposal ||
+      !context ||
+      isLocked ||
+      !catalogueReady ||
+      !sameAssignmentScope(scope, catalogueScope)
+    ) {
+      return;
+    }
     setIsBusy(true);
     setErrorMessage(null);
     setStatusMessage('Máy chủ đang kiểm tra quyền và lưu bản thảo vai trò (Candidate)...');
@@ -691,9 +749,27 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         const resolution = res.value;
         if (resolution.state === 'COMMITTED_ACCEPTED') {
           // Mutation committed successfully on server
-          setStatusMessage(`Máy chủ xác nhận giao dịch đã commit thành công (COMMITTED_ACCEPTED)! Đang cập nhật dữ liệu...`);
-          setPendingMutation(null);
-          await loadCatalogue(pendingMutation.scope);
+          if (pendingMutation.kind === 'PREPARE') {
+            // When a lost-response PREPARE is resolved as COMMITTED_ACCEPTED,
+            // the initial response containing Candidate ID was lost and OperationResolution
+            // contract does not provide Candidate ID. Do not imply candidate can continue
+            // without authoritative candidateId.
+            setPendingMutation(null);
+            setCandidate(null);
+            setValidation(null);
+            setStatusMessage(
+              `Giao dịch lưu bản thảo [${pendingMutation.operationId}] đã được máy chủ ghi nhận (COMMITTED_ACCEPTED). Tuy nhiên, do phản hồi ban đầu bị gián đoạn và giao thức đối soát hiện tại không trả về Candidate ID, hệ thống không thể tự động tiếp tục tiến trình Kích hoạt cho bản thảo này. Vui lòng tạo bản thảo mới nếu cần kích hoạt vai trò ngay.`
+            );
+            await loadCatalogue(pendingMutation.scope);
+          } else {
+            setPendingMutation(null);
+            setCandidate(null);
+            setValidation(null);
+            setStatusMessage(
+              `Giao dịch kích hoạt vai trò [${pendingMutation.operationId}] đã được máy chủ xác nhận thành công (COMMITTED_ACCEPTED). Danh mục vai trò đã được cập nhật.`
+            );
+            await loadCatalogue(pendingMutation.scope);
+          }
         } else if (resolution.state === 'COMMITTED_REFUSED') {
           // Mutation was definitively refused
           setErrorMessage(`Máy chủ đã từ chối giao dịch: ${resolution.reasonCode || resolution.outcome || 'COMMITTED_REFUSED'}.`);
@@ -940,8 +1016,22 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             variant="primary"
             size="sm"
             onClick={handleOpenDrawer}
-            disabled={!canPrepare || isLocked || isLoading || permissionsIncomplete || permissions === null}
-            title={canPrepare ? 'Soạn thảo bản thảo vai trò tùy biến mới' : 'Tài khoản thiếu quyền role.definition.prepare'}
+            disabled={
+              !canPrepare ||
+              isLocked ||
+              isLoading ||
+              !catalogueReady ||
+              !sameAssignmentScope(scope, catalogueScope) ||
+              permissionsIncomplete ||
+              permissions === null
+            }
+            title={
+              !catalogueReady || !sameAssignmentScope(scope, catalogueScope)
+                ? 'Danh mục vai trò và quyền hạn chưa sẵn sàng trên máy chủ cho phạm vi này'
+                : canPrepare
+                ? 'Soạn thảo bản thảo vai trò tùy biến mới'
+                : 'Tài khoản thiếu quyền role.definition.prepare'
+            }
           >
             + Tạo Candidate
           </Button>
