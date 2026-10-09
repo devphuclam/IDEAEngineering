@@ -1,0 +1,45 @@
+✔ published catalogue includes the actual account directory HTTP adapter (3.4943ms)
+✔ source update preserves the old catalog editorial text, metadata and history (716.5142ms)
+✔ all 46 actual Server/Gateway operations are covered; CPD remains nine DESIGN cards (62.6638ms)
+✔ export stays a concise endpoint reference without expanding nested or error schemas (49.7185ms)
+✔ DESIGN entries stay short and point to the full semantic source instead of copying it (47.5479ms)
+✔ compact array rows retain the supported Permission ceiling without expanding models (47.2742ms)
+✔ new executable route without contract refuses check AND update without writes (825.4541ms)
+✔ method drift is rejected, not silently smart-merged (582.3059ms)
+✔ deleted source route leaves a stale contract finding (503.4464ms)
+✔ request/response DTO or owner behavior change requires explicit source review (662.2453ms)
+✔ unresolved references refuse publication (497.7614ms)
+✔ required path parameters cannot disappear (497.6913ms)
+✔ duplicate operation identities refuse publication (493.9427ms)
+✔ missing authority/retry metadata cannot be replaced with guesses (494.757ms)
+✔ modified generated catalogue is stale; update restores it deterministically (992.683ms)
+✔ --check is read-only and needs no renderer/npm dependencies (664.1651ms)
+✔ login and logout filter routes are discovered from actual framework source (34.8768ms)
+✔ unsupported dynamic mapping fails closed rather than disappearing (490.982ms)
+✔ implicit mapping fails closed (532.9017ms)
+✔ mapping-looking comments are not executable routes (952.6281ms)
+✔ Gateway status is POST with binary response, Account path uses Account identity (46.6425ms)
+✔ reset supports DISABLED + exact Login Identity; re-enable can return PENDING (40.5062ms)
+✔ external refs are refused (511.9727ms)
+✔ another controller cannot hide a new API behind the documentation prefix (501.9131ms)
+✔ unreviewed custom filter cannot silently become another HTTP surface (524.4922ms)
+✔ path variable identity must match the executable contract (524.3063ms)
+✔ configuration paths cannot escape the repository (662.3112ms)
+✔ new Swagger descriptions do not unlock Try it out or promise login 503 (1.9048ms)
+✔ business type fields in a valid JSON example are not schema declarations (550.2278ms)
+✔ invalid actual schema shape is refused (507.4388ms)
+✔ fully qualified Spring annotations cannot hide an undocumented route (489.5054ms)
+✔ documented refusal/nullable/public semantics match actual boundaries (1.9479ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+[LƯU TRỮ ARCHIVE] Bản snapshot IDEA_Core_API_Contract_v1.2_20261009 đã tồn tại với nội dung đồng nhất (bảo toàn, không ghi đè).
+✔ actual Word/Excel/HTML export retains every operation and truthful HTTP/DESIGN tabs (1763.3927ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+✔ contract text cannot become executable HTML or terminate the data script (605.4423ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13648.4706

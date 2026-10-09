@@ -23,6 +23,14 @@ caller can use it. HTTP means Hypertext Transfer Protocol; QA means quality assu
 
 ## 1. Read this package
 
+For the current main HTTP surface and generated documents, use the
+[Issue #53 synchronization/tool guide](../../../../../tools/contract-exporter/README.md):
+44 Server operations and 2 Gateway operations are source-aligned; nine CPD semantic cards
+remain DESIGN/UNKNOWN. This inventory successor is INTERNAL/INFORMATIVE, independent review
+pending, at main baseline `91cf6c25e516ce2b3ae628d59c2a20b90076bcff` on
+2026-10-09 Asia/Ho_Chi_Minh. The v0.1/v0.2 catalogue and snapshots below retain historical
+publication claims; they are not a statement that merged Feature 009 is still a Draft branch.
+
 Native Account/Project/Group/RBAC integration is a separate engineering-qualified branch under Issue #46:
 [plan](../../../../../specs/009-iam-rbac-ui-integration/plan.md),
 [exact Permission/delegation](../../../../../specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md)
@@ -147,9 +155,10 @@ all Core requirements or adapters have passed qualification.
 ## 4. Current HTTP description, not a new universal convention
 
 The existing [OpenAPI 3.0.3 asset](../../../../../apps/server/src/main/resources/dev-access/openapi.json)
-describes 11 paths: nine Identity paths and two health paths. This package supplements it with
-human-readable semantics; it does not replace or modify the runtime asset. Its schemas do not
-fully express the validation/conditional fields described in the Identity example.
+historically described 11 paths: nine Identity paths and two health paths. Issue #53 extends
+the source-aligned asset with current merged administration adapters and keeps new operations
+documentation-only in Swagger. Human-readable owner semantics remain necessary; synchronization
+does not qualify runtime behavior or replace owner contracts.
 
 - Existing `/api/v1` paths remain unchanged. No date header, new Uniform Resource Identifier (URI)
   version or compatibility policy is selected. An OpenAPI operation name is not a request's

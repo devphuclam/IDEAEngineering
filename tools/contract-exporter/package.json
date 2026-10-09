@@ -5,6 +5,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check": "node export.mjs --check",
+    "test": "node --test contract.test.mjs",
+    "test:render": "node --test render.test.mjs",
+    "update:data": "node export.mjs --update --data-only",
     "export": "node export.mjs",
     "update": "node export.mjs --update",
     "open": "node export.mjs --open"

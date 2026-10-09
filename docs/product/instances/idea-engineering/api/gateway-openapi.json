@@ -1,0 +1,177 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "IDEA Gateway — existing binary transfer contract",
+    "version": "contract-0.3",
+    "description": "Dedicated HTTPS data plane. Signed Grant, not Server session; no Server product route inferred."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Gateway origin is separately configured, not Server origin"
+    }
+  ],
+  "security": [
+    {
+      "transferGrant": []
+    }
+  ],
+  "paths": {
+    "/transfer/range": {
+      "post": {
+        "operationId": "uploadTransferRange",
+        "summary": "Upload one bounded verified range",
+        "description": "HTTPS required. Binary response: big-endian int64 verifiedBytes + int32 receiptLength + exactly receiptLength signed Receipt bytes. Not JSON. Negative bodies are empty.",
+        "parameters": [
+          {
+            "name": "X-IDEA-Range-Start",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$"
+            },
+            "description": "Inclusive byte offset; must fit long"
+          },
+          {
+            "name": "X-IDEA-Range-End",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$"
+            },
+            "description": "Exclusive endpoint; end-start <=1048576"
+          },
+          {
+            "name": "X-IDEA-Chunk-SHA256",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Binary verified-progress/Receipt frame",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed/range/size/hash refusal; empty body"
+          },
+          "403": {
+            "description": "Invalid Grant authority/HTTPS; empty body"
+          },
+          "408": {
+            "description": "Absolute request or inactivity timeout; empty body"
+          },
+          "409": {
+            "description": "Busy/range/completion conflict; empty body"
+          },
+          "503": {
+            "description": "I/O/storage failure; no transfer success inferred"
+          }
+        },
+        "x-idea-contract": {
+          "code": "VLT-01",
+          "status": "HTTP",
+          "owner": "Gateway / FilesystemVaultAdapter",
+          "authority": "HTTPS + exact signed Grant; no ordinary Server session, CSRF or product RBAC here.",
+          "state": "Declared range/chunk hash and exact Grant/Vault/allocation; validated bytes, not custody publication.",
+          "atomicity": "Filesystem completion is not PostgreSQL custody. Server Receipt verification + current IAM/allocation commit remain a separate owner operation.",
+          "concurrency": "Adapter serializes compatible ranges; conflicting/busy input refuses; no hidden overwrite.",
+          "retry": "Identical range retry/status resolution uses qualified transfer identity; interruption/lost response do not imply custody success. Expired Grant requires explicit Server renewal.",
+          "trace": [
+            "REQ-WS-016",
+            "REQ-SEC-002",
+            "IF-ARTIFACT-TRANSFER"
+          ],
+          "semanticSource": "specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md"
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary",
+                "description": "Exactly the declared range; at most 1 MiB. No JSON body."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transfer/status": {
+      "post": {
+        "operationId": "resolveTransferStatus",
+        "summary": "Resolve verified byte count and signed Receipt",
+        "description": "HTTPS required. Binary response: big-endian int64 verifiedBytes + int32 receiptLength + exactly receiptLength signed Receipt bytes. Not JSON. Negative bodies are empty.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Binary verified-progress/Receipt frame",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed/range/size/hash refusal; empty body"
+          },
+          "403": {
+            "description": "Invalid Grant authority/HTTPS; empty body"
+          },
+          "408": {
+            "description": "Absolute request or inactivity timeout; empty body"
+          },
+          "409": {
+            "description": "Busy/range/completion conflict; empty body"
+          },
+          "503": {
+            "description": "I/O/storage failure; no transfer success inferred"
+          }
+        },
+        "x-idea-contract": {
+          "code": "VLT-02",
+          "status": "HTTP",
+          "owner": "Gateway / FilesystemVaultAdapter",
+          "authority": "HTTPS + exact signed Grant; no ordinary Server session, CSRF or product RBAC here.",
+          "state": "No request body. Current verified progress / exact signed Receipt.",
+          "atomicity": "Filesystem completion is not PostgreSQL custody. Server Receipt verification + current IAM/allocation commit remain a separate owner operation.",
+          "concurrency": "Adapter serializes compatible ranges; conflicting/busy input refuses; no hidden overwrite.",
+          "retry": "Identical range retry/status resolution uses qualified transfer identity; interruption/lost response do not imply custody success. Expired Grant requires explicit Server renewal.",
+          "trace": [
+            "REQ-WS-016",
+            "REQ-SEC-002",
+            "IF-ARTIFACT-TRANSFER"
+          ],
+          "semanticSource": "specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "transferGrant": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-IDEA-Grant",
+        "description": "Canonical base64url signed Grant. Never retain a real Grant in examples."
+      }
+    }
+  }
+}
