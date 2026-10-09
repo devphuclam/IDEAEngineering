@@ -18,6 +18,14 @@ Follow [`docs/agents/collaboration.md`](docs/agents/collaboration.md) for provid
 
 Lần sau tôi mà có nói là push lên main thì push lên luôn.
 
+### API contract synchronization
+
+When adding, changing or removing a Server/Gateway HTTP API, follow
+[the contract exporter workflow](tools/contract-exporter/README.md). Review the canonical
+OpenAPI/owner semantics and affected source fingerprints, regenerate the catalog, and pass
+`node tools/contract-exporter/export.mjs --check` plus the tool regression before publishing.
+This is a contributor instruction; GitHub merge enforcement depends on actual required-check settings.
+
 ### External sources and licenses
 
 Before cloning or pulling an external project for adaptation, adding a submodule or dependency,
