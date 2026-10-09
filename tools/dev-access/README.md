@@ -105,8 +105,14 @@ data replication are not introduced or qualified here.
 - Existing Nginx1.28.3-2ubuntu1.11, JDK25.0.4.1 and their previously checked
   binary/library/TLS manifests are reused, not reacquired. Known current-use
   rights/notice obligations remain; no new tool or dependency graph is admitted.
-- The retained JAR remains source `9d3732cb173e8094195b9bdd60b5588ac3cfa42e`, hash
-  `318a52cf1e658a53bc9fa54137346c15277060667998d2f10f33454d15bb8c1c`.
+- Current dev artifact pin: [artifact.json](artifact.json). Application code remains
+  source `9d3732cb173e8094195b9bdd60b5588ac3cfa42e`; documentation source is
+  `ca310947ebc2115bf166a2688952c1f6ecaeb126`. JAR SHA-256 is
+  `103b5bc8fa628f7a83e56dfa3393e24b7f29d3d9c7f7e201dc344385da2e0a44`.
+  Only the OpenAPI resource changed; classes/runtime libraries unchanged. The
+  predecessor JAR `318a52cf...bb8c1c` remains retained, not overwritten.
+  [Issue53 successor result](../contract-exporter/verification.md) records adoption
+  and 46-operation/eight-group Swagger qualification; Issue51 results remain historical.
 - Retained DB `idea_ddm_iam_ui_20261007_46`, schema
   `iam_ui_c3b8cde44f9a4d1199306c381c12d1bb`, migrator owner/app runtime split.
   No migration/bootstrap/fixture/credential or authority mutation.

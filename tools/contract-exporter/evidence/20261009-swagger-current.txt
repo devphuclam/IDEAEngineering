@@ -1,0 +1,169 @@
+IE-VER-API-EXPORTER-RESTART-20261009 successor execution
+Date: 2026-10-09 Asia/Ho_Chi_Minh
+Final focused/browser executed source: 9010545027f653fc66bf4cdd0ec98471984d51be
+Documentation/package input source: ca310947ebc2115bf166a2688952c1f6ecaeb126
+Adopted installer/control source: 675eb88c8aa23370561744fb896adac0748fcbc4
+Unchanged application source: 9d3732cb173e8094195b9bdd60b5588ac3cfa42e
+No credentials, verifier values, cookies, CSRF or proofs retained.
+
+Predecessor/failed witness summary (not a combined execution):
+- Shared projection RED: 44 actual operations instead of required 46.
+- Live predecessor Chrome: S01 trust/anonymous and S02 existing sign-in PASS;
+  S03 complete shared-contract coverage FAIL (old 11-operation document).
+- First post-adoption Chrome at675eb88: S01-S03 PASS; S04 FAIL because the
+  first-party helper selected data-path on .opblock instead of its path child.
+-9010545 repaired only the test locator/nonsecret diagnostic stages.
+
+Frozen resource-only package qualification:
+- Three local/remote raw Git inputs PASS; before/after inputs unchanged.
+- Package archive SHA-256:
+  a8d32e1a24ee8c675ea84dd1a8c0c96430a45bec985cd04e10320e14a4bae4a7
+- Controls archive SHA-256:
+  86a54adec31595b1ca954b26ebd60cb69848211d1f8dae50117d2787a6563958
+- Executed installer SHA-256:
+  16e4a1fa8ab356a0369b2d2e821f69f434f82f7af246d7cf9105173c980b3ced
+- Resource exact LF SHA-256:
+  b1472c764ac8f06933ffbe595f676641bb35b458bcd4af3572ad313978edcc42
+- Final deployed package SHA-256:
+  103b5bc8fa628f7a83e56dfa3393e24b7f29d3d9c7f7e201dc344385da2e0a44
+- Package probe: 379 other non-directory ZIP entries unchanged,
+  276 class entries unchanged, 57 nested runtime libraries unchanged.
+- No Maven/product compilation, new dependency, migration or bootstrap.
+
+Exact remote adoption command after transfer/hash/shell-syntax checks:
+bash /home/phuclam/idea-api-docs-20261009-53-01/install-documentation.sh
+Selected actual stdout:
+install-documentation.sh: OK
+control-candidate/backend.sh: OK
+control-candidate/common.sh: OK
+control-candidate/edge.sh: OK
+control-candidate/environment.sh: OK
+control-candidate/inputs.sha256: OK
+control-candidate/nginx-dev.conf: OK
+control-candidate/nginx-review.conf: OK
+install-documentation.sh: OK
+control-candidate/backend.sh: OK
+control-candidate/common.sh: OK
+control-candidate/edge.sh: OK
+control-candidate/environment.sh: OK
+control-candidate/inputs.sha256: OK
+control-candidate/nginx-dev.conf: OK
+control-candidate/nginx-review.conf: OK
+BACKEND=STOPPED;DATABASE_RETAINED=true;FRONTEND_UNCHANGED=true
+BACKEND=UP;POSTGRESQL=UP;BUILD=NOT_RUN;MIGRATION=NOT_RUN;BOOTSTRAP=NOT_RUN;FRONTEND_INDEPENDENT=true
+BACKEND=UP;BACKEND_ENDPOINT=UP;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DOCUMENTATION_SOURCE=ca310947ebc2115bf166a2688952c1f6ecaeb126;JAR_SHA256=103b5bc8fa628f7a83e56dfa3393e24b7f29d3d9c7f7e201dc344385da2e0a44;DATABASE=idea_ddm_iam_ui_20261007_46;SCHEMA=iam_ui_c3b8cde44f9a4d1199306c381c12d1bb;FRONTEND_INDEPENDENT=true
+EDGE=RUNNING;MODE=dev
+install-documentation.sh: OK
+control-candidate/backend.sh: OK
+control-candidate/common.sh: OK
+control-candidate/edge.sh: OK
+control-candidate/environment.sh: OK
+control-candidate/inputs.sha256: OK
+control-candidate/nginx-dev.conf: OK
+control-candidate/nginx-review.conf: OK
+DOCUMENTATION_DEPLOY=PASS;IDENTITY_STATE_BYTE_IDENTICAL=true;EDGE_PROCESS_UNCHANGED=true;HTTPS_POSTGRESQL=UP;MIGRATION=NOT_RUN;BOOTSTRAP=NOT_RUN
+
+Exact final focused command from tools/contract-exporter, using admitted Node:
+node --test contract.test.mjs render.test.mjs restart.test.mjs swagger.test.mjs
+Actual stdout:
+✔ a new reviewed HTTP contract updates the three old output formats (2680.5893ms)
+✔ AI names in source catalogue stop update without catalogue writes (730.8748ms)
+✔ published catalogue includes the actual account directory HTTP adapter (2.1117ms)
+✔ source update preserves the old catalog editorial text, metadata and history (719.0701ms)
+✔ all 46 actual Server/Gateway operations are covered; CPD remains nine DESIGN cards (61.1847ms)
+✔ export stays a concise endpoint reference without expanding nested or error schemas (48.4881ms)
+✔ DESIGN entries stay short and point to the full semantic source instead of copying it (45.5849ms)
+✔ compact array rows retain the supported Permission ceiling without expanding models (46.7587ms)
+✔ new executable route without contract refuses check AND update without writes (810.7637ms)
+✔ method drift is rejected, not silently smart-merged (633.3526ms)
+✔ deleted source route leaves a stale contract finding (570.9249ms)
+✔ request/response DTO or owner behavior change requires explicit source review (712.1278ms)
+✔ unresolved references refuse publication (525.9729ms)
+✔ required path parameters cannot disappear (526.4607ms)
+✔ duplicate operation identities refuse publication (525.6776ms)
+✔ missing authority/retry metadata cannot be replaced with guesses (505.73ms)
+✔ modified generated catalogue is stale; update restores it deterministically (1129.8519ms)
+✔ --check is read-only and needs no renderer/npm dependencies (756.097ms)
+✔ login and logout filter routes are discovered from actual framework source (38.532ms)
+✔ unsupported dynamic mapping fails closed rather than disappearing (504.6798ms)
+✔ implicit mapping fails closed (497.2674ms)
+✔ mapping-looking comments are not executable routes (572.4583ms)
+✔ Gateway status is POST with binary response, Account path uses Account identity (40.2136ms)
+✔ reset supports DISABLED + exact Login Identity; re-enable can return PENDING (36.4557ms)
+✔ external refs are refused (539.6303ms)
+✔ another controller cannot hide a new API behind the documentation prefix (502.7466ms)
+✔ unreviewed custom filter cannot silently become another HTTP surface (498.5867ms)
+✔ path variable identity must match the executable contract (527.1395ms)
+✔ configuration paths cannot escape the repository (658.0871ms)
+✔ new Swagger descriptions do not unlock Try it out or promise login 503 (2.0356ms)
+✔ business type fields in a valid JSON example are not schema declarations (611.8577ms)
+✔ invalid actual schema shape is refused (616.3885ms)
+✔ fully qualified Spring annotations cannot hide an undocumented route (551.6813ms)
+✔ documented refusal/nullable/public semantics match actual boundaries (2.2503ms)
+✔ login/logout retry describes committed effects rather than read-only replay (1.9627ms)
+✔ credential-proof target/version refusal documents the actual 403 mapping (2.0095ms)
+✔ Swagger drift is refused read-only and update restores the shared-source view (1228.6419ms)
+✔ export refuses AI attribution instead of publishing it (8.4602ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+✔ all three outputs retain human owner and contain no AI names (1366.02ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+[LƯU TRỮ ARCHIVE] Bản snapshot IDEA_Core_API_Contract_v1.2_20261009 đã tồn tại với nội dung đồng nhất (bảo toàn, không ghi đè).
+✔ actual Word/Excel/HTML export retains every operation and truthful HTTP/DESIGN tabs (1236.3105ms)
+[LƯU TRỮ ARCHIVE] Đã lưu bản snapshot mới: IDEA_Core_API_Contract_v1.2_20261009.*
+✔ contract text cannot become executable HTML or terminate the data script (540.7352ms)
+✔ check detects missing administration contracts without writing exports (829.2944ms)
+✔ Swagger describes all current Server and Gateway operations, without invented DESIGN endpoints (10.7054ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18598.9557
+
+Exact final controller/topology command from repository root:
+node --test tests/dev-access/documentation-packet.test.mjs tests/dev-access/topology.test.mjs
+Actual aggregate result: tests5; pass5; fail0; cancelled0; skipped0;
+duration_ms213.3065.
+
+Exact final browser command from repository root:
+node tests/dev-access/swagger-current-browser.mjs
+Actual stdout:
+S01_TRUSTED_HTTPS_ANONYMOUS_REFUSAL=PASS
+S02_EXISTING_IDENTITY_LOGIN=PASS
+S03_COMPLETE_SHARED_CONTRACT_46_OPERATIONS=PASS
+S04_ADMIN_DESCRIPTIONS_SCHEMAS_AND_SAFE_GATEWAY=PASS
+S05_ALLOWLIST_AND_SESSION_TRYOUT=PASS
+S06_BAD_CSRF_REFUSAL=PASS
+S07_SWAGGER_LOGOUT_204_THEN_401=PASS
+SWAGGER_CURRENT_CHROME=PASS;CASES=7;BROWSER=155.0.8059.39;TLS_BYPASS=false;SECRETS_RETAINED=false
+
+Exact final exporter commands from tools/contract-exporter:
+node export.mjs --update
+node export.mjs --check
+node export.mjs --update
+All use absolute admitted Node binary24.19.0, not PATH selection.
+Actual check: PASS; routes46; operations46.
+Actual smart merge:0 updated,0 new;55 entries, version1.2.
+Actual outputs: original DOCX/XLSX/HTML generated.
+First command retained sequential archive IDEA_Core_API_Contract_v1.2_20261009_02;
+repeat found the identical archive, preserved it without overwrite/duplication.
+
+Primary checkout normal Status command:
+.\IDEA-Dev.cmd Status
+Actual state: BackendUP/endpointUP, edgeRUNNING MODEdev,
+FrontendUP from primary apps/web; edge-forwardUP/reverseUP.
+Backend output confirms exact application/documentation/package identities above.
+
+Tool pins:
+Node24.19.0 SHA-2563602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237
+Chrome155.0.8059.39 SHA-256d3784ffbf1f6109348416064b3e4cd739b06fa61d89a81b262c780df9f32270c
+Existing admitted Playwright/core1.62.1 version/LICENSE/NOTICE hashes PASS.
+JDK25.0.4.1+1 java7380ce48ed5013735d2c8414db54adb8f981e7933ff594bd36f3baccddaafba3
+JDK jar033a730b1e74f26f7345ec4754bd6fa8a0d075973475d18695b386da516738b2
+
+Runtime/focused browser qualification PASS does not imply human acceptance,
+full feature regression, Word layout acceptance or verifier execution.
+Private metadata snapshots remain mode600 on the host; raw access limitation retained.
+No merge, company data, DB DDL/reset/seed, global trust-store or new listener.
