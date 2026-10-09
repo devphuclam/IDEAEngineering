@@ -6,11 +6,12 @@
 
 | File | Disposition | Use |
 |---|---|---|
+| [`iam-visual-concept.html`](iam-visual-concept.html) | User-liked visual reference, 2026-10-09 | Roles & Permissions aesthetics for subsequent UI Kit work; [open/run and limits](iam-visual-concept.md). Synthetic only, not the current application. |
 | [`idea-ddm-workbench.html`](idea-ddm-workbench.html) | Current user prototype | Open this file for the IDEA DDM workbench, document operations, review and staged-release walkthrough. It contains no administration surface. |
 | [`idea-ddm-administration.html`](idea-ddm-administration.html) | Current administration prototype | Open this separate application for user/access administration and PDM operating-policy administration. The two administrator roles see different functions. |
 | [`controlled-document-workspace.html`](controlled-document-workspace.html) | Earlier accepted design reference | Retain the Engineering Explorer direction and its earlier review evidence. Do not treat it as the current workbench. |
 
-All three files are self-contained HTML simulations. They use in-memory sample data and require no
+The three earlier workbench prototypes are self-contained HTML simulations. They use in-memory sample data and require no
 server, package installation, database or network connection. New review changes belong in
 the corresponding IDEA DDM prototype; the Engineering Explorer remains stable as an earlier design reference.
 
