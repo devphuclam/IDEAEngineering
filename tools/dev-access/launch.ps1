@@ -3,7 +3,8 @@ param(
     [string]$Action='Status',
     [switch]$NoWait,
     [switch]$NoBrowser,
-    [string]$WebRoot
+    [string]$WebRoot,
+    [string]$ExpectedFrontendGeneration
 )
 $ErrorActionPreference='Stop'
 $repository=Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
@@ -40,7 +41,13 @@ function Remote([string]$Kind,[string]$Command){
     & $ssh @sshOptions $remote $remoteCommand
     if($LASTEXITCODE -ne 0){throw ($Kind+' action failed. No ready claim; retained data untouched.')}
 }
-function Persist {$records | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $stateFile -Encoding UTF8}
+function Persist {
+    $temporary=$stateFile+'.'+[Guid]::NewGuid().ToString('N')+'.tmp'
+    try{
+        $records | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $temporary -Encoding UTF8
+        if(Test-Path -LiteralPath $stateFile){[IO.File]::Replace($temporary,$stateFile,$null)}else{[IO.File]::Move($temporary,$stateFile)}
+    }finally{if(Test-Path -LiteralPath $temporary){Remove-Item -LiteralPath $temporary}}
+}
 function Owned([string]$Kind){
     if(!$records.ContainsKey($Kind)){return $null}
     $record=$records[$Kind]
@@ -60,7 +67,7 @@ function Save([string]$Kind,$Process){
     if(!$details){throw ('Process exited before ownership could be recorded: '+$Kind)}
     $records[$Kind]=@{pid=$Process.Id;started=$Process.StartTime.ToUniversalTime().ToString('o');
         executable=$details.ExecutablePath;command=$details.CommandLine;remote=$remote;root=$devConfig.remoteRoot;
-        script=$frontendScript;webRoot=$WebRoot}
+        script=$frontendScript;webRoot=$WebRoot;generation=[Guid]::NewGuid().ToString('N')}
     Persist
 }
 function CloseLocal([string]$Kind){
@@ -69,12 +76,13 @@ function CloseLocal([string]$Kind){
     $records.Remove($Kind);Persist
 }
 function EnsureForward {
-    if(Owned 'forward'){return}
+    if(Owned 'forward'){return $false}
     if(Get-NetTCPConnection -LocalPort $publicUrl.Port -State Listen -ErrorAction SilentlyContinue){throw 'Public port occupied by another owner'}
     $arguments=$sshOptions+@('-N','-T','-L',('127.0.0.1:'+$publicUrl.Port+':127.0.0.1:'+$publicUrl.Port),
         '-o','ExitOnForwardFailure=yes','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',$remote)
     $process=Start-Process -FilePath $ssh -ArgumentList $arguments -WindowStyle Hidden -PassThru
-    Start-Sleep -Milliseconds 150;Save 'forward' $process
+    try{Start-Sleep -Milliseconds 150;Save 'forward' $process}catch{CloseLocal 'forward';throw}
+    return $true
 }
 function Ready {
     $response=Invoke-WebRequest -UseBasicParsing -Uri ($devConfig.publicOrigin+'/health/database') -TimeoutSec 10
@@ -82,24 +90,32 @@ function Ready {
     Write-Host ('IDEA_URL='+$devConfig.publicOrigin+'/;SWAGGER='+$devConfig.publicOrigin+'/dev-api/;HTTPS=VERIFIED')
 }
 function StopFrontend {
-    $edge=Remote 'edge' 'status'
-    if($edge -match 'MODE=dev'){Remote 'edge' 'stop'}
-    CloseLocal 'reverse';CloseLocal 'frontend'
+    if($ExpectedFrontendGeneration -and (!$records.ContainsKey('frontend') -or $records['frontend'].generation -ne $ExpectedFrontendGeneration)){
+        Write-Host 'FRONTEND_CLEANUP=SKIPPED_SUCCESSOR_GENERATION';return
+    }
+    $failures=@()
+    try{$edge=Remote 'edge' 'status';if($edge -match 'MODE=dev'){Remote 'edge' 'stop'}}catch{$failures+= $_;Write-Warning 'REMOTE_CLEANUP=PENDING;local owned cleanup still proceeds'}
+    foreach($kind in @('reverse','frontend')){try{CloseLocal $kind}catch{$failures+=$_}}
+    if($failures.Count){throw 'Frontend cleanup incomplete; remote/ownership error retained, local cleanup attempted. Retry Status/Stop when reachable.'}
     Write-Host 'FRONTEND=STOPPED;BACKEND_UNCHANGED=true'
+}
+function EnsureBackend {
+    if($devConfig.backendOrigin -eq 'https://127.0.0.1:18449'){Remote 'backend' 'start'}
+    else{if((Remote 'backend' 'status') -notmatch 'BACKEND_ENDPOINT=UP'){throw 'Configured external Backend unavailable; start it with its own operator'} }
 }
 function StartFrontend {
     if($frontendUrl.Scheme -ne 'http' -or $frontendUrl.Host -ne '127.0.0.1'){throw 'Local frontend command requires the configured loopback SSH endpoint; external Web hosting is separately managed'}
     $backend=Remote 'backend' 'status'
-    if($backend -notmatch 'BACKEND=UP'){throw 'Start Backend first: IDEA-Dev.cmd BackendStart'}
+    if($backend -notmatch 'BACKEND_ENDPOINT=UP'){throw 'Configured Backend unavailable. Start local Backend or the independently hosted endpoint first.'}
     $existing=Owned 'frontend'
     if($existing -and $records['frontend'].webRoot -ne $WebRoot){throw 'Another frontend checkout is active. Stop it explicitly before switching source.'}
-    $newFrontend=$false;$newReverse=$false
+    $newFrontend=$false;$newReverse=$false;$newEdge=$false;$newForward=$false
     try{
         if(!$existing){
             if(Get-NetTCPConnection -LocalPort $devConfig.frontendPort -State Listen -ErrorAction SilentlyContinue){throw 'Frontend port occupied; no unrelated process stopped'}
             $env:IDEA_WEB_ROOT=$WebRoot
             $process=Start-Process -FilePath $node -ArgumentList @(('"'+$frontendScript+'"')) -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $stateRoot 'frontend.log') -RedirectStandardError (Join-Path $stateRoot 'frontend-error.log')
-            Start-Sleep -Milliseconds 150;Save 'frontend' $process;$newFrontend=$true
+            $newFrontend=$true;Start-Sleep -Milliseconds 150;Save 'frontend' $process
         }
         $viteReady=$false
         for($attempt=0;$attempt -lt 60;$attempt++){
@@ -113,14 +129,20 @@ function StartFrontend {
             $arguments=$sshOptions+@('-N','-T','-R',('127.0.0.1:'+$frontendUrl.Port+':127.0.0.1:'+$devConfig.frontendPort),
                 '-o','ExitOnForwardFailure=yes','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',$remote)
             $process=Start-Process -FilePath $ssh -ArgumentList $arguments -WindowStyle Hidden -PassThru
-            Start-Sleep -Milliseconds 200;Save 'reverse' $process;$newReverse=$true
+            $newReverse=$true;Start-Sleep -Milliseconds 200;Save 'reverse' $process
             if(!(Owned 'reverse')){throw 'Reverse SSH unavailable; no LAN fallback'}
         }
         # Explicitly selected dev mode; stop only this owned edge, never the Backend.
-        Remote 'edge' 'stop';Remote 'edge' 'start dev';EnsureForward;Ready
-        Write-Host ('FRONTEND=LOCAL_CHECKOUT;SOURCE='+$WebRoot+';BACKEND=PINNED;MODE=dev')
+        Remote 'edge' 'stop';Remote 'edge' 'start dev';$newEdge=$true;$newForward=EnsureForward;Ready
+        Write-Host ('FRONTEND=LOCAL_CHECKOUT;SOURCE='+$WebRoot+';BACKEND_ENDPOINT='+$devConfig.backendOrigin+';MODE=dev')
     }catch{
-        if($newReverse){CloseLocal 'reverse'};if($newFrontend){CloseLocal 'frontend'};throw
+        $failure=$_
+        if($newEdge){try{Remote 'edge' 'stop'}catch{Write-Warning 'REMOTE_CLEANUP=PENDING'}}
+        foreach($kind in @('forward','reverse','frontend')){
+            $created=switch($kind){'forward'{$newForward}'reverse'{$newReverse}'frontend'{$newFrontend}}
+            if($created){try{CloseLocal $kind}catch{Write-Warning ('LOCAL_CLEANUP=PENDING;KIND='+$kind)}}
+        }
+        throw $failure
     }finally{$env:IDEA_WEB_ROOT=$null}
 }
 try{
@@ -135,21 +157,38 @@ try{
             Write-Host ('FRONTEND='+$(if($front){'UP;SOURCE='+$records['frontend'].webRoot}else{'STOPPED'}))
             Write-Host ('EDGE_FORWARD='+$(if($forward){'UP'}else{'STOPPED'})+';REVERSE='+$(if($reverse){'UP'}else{'STOPPED'}))
         }
-        'Stop' {StopFrontend;Remote 'edge' 'stop';CloseLocal 'forward';Remote 'backend' 'stop'}
+        'Stop' {
+            $failures=@()
+            foreach($operation in @({StopFrontend},{Remote 'edge' 'stop'},{CloseLocal 'forward'},{Remote 'backend' 'stop'})){
+                try{& $operation}catch{$failures+=$_}
+            }
+            if($failures.Count){throw 'Owned cleanup incomplete; local cleanup attempted. Retry remote Status/Stop when reachable.'}
+        }
         'Start' {
-            StopFrontend;Remote 'backend' 'start';Remote 'edge' 'stop';Remote 'edge' 'start review';EnsureForward;Ready
+            StopFrontend;EnsureBackend;Remote 'edge' 'stop';Remote 'edge' 'start review'
+            $newForward=$false
+            try{$newForward=EnsureForward;Ready}catch{
+                $failure=$_;try{Remote 'edge' 'stop'}catch{Write-Warning 'REMOTE_CLEANUP=PENDING'}
+                if($newForward){CloseLocal 'forward'};throw $failure
+            }
             Write-Host 'MODE=review;WEB=QUALIFIED_JAR;CURRENT_CHECKOUT_EDITS_NOT_DEPLOYED=true'
             if(!$NoBrowser){Start-Process ($devConfig.publicOrigin+'/')}
         }
         default {
-            if($Action -eq 'Dev'){Remote 'backend' 'start'}
+            if($Action -eq 'Dev'){EnsureBackend}
             StartFrontend
             if(!$NoBrowser){Start-Process ($devConfig.publicOrigin+'/')}
             if(!$NoWait){
                 Write-Host 'Keep this terminal open. Ctrl+C stops Frontend/dev edge only; Backend and data remain.'
+                $generation=$records['frontend'].generation
                 $lock.Dispose();$lock=$null
-                try{while((Owned 'frontend') -and (Owned 'reverse')){Start-Sleep -Milliseconds 500}}
-                finally{& "$PSHOME/powershell.exe" -NoProfile -File $PSCommandPath -Action FrontendStop -WebRoot $WebRoot}
+                try{
+                    while($true){
+                        $current=Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
+                        if(!$current.frontend -or $current.frontend.generation -ne $generation -or !(Owned 'frontend') -or !(Owned 'reverse')){break}
+                        Start-Sleep -Milliseconds 500
+                    }
+                }finally{& "$PSHOME/powershell.exe" -NoProfile -File $PSCommandPath -Action FrontendStop -WebRoot $WebRoot -ExpectedFrontendGeneration $generation}
             }
         }
     }

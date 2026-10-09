@@ -1,16 +1,15 @@
 import { access, copyFile, mkdir, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { dirname, resolve, relative, sep } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { assertBuildOutput } from './build-output.mjs';
 
 const web = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const outputArgument = args.indexOf('--outDir');
-const output = outputArgument < 0 ? resolve(web, 'dist') : resolve(web, args[outputArgument + 1]);
-const serverTarget = resolve(web, '../server/target');
-const within = (parent, child) => { const path = relative(parent, child); return path !== '' && !path.startsWith('..' + sep) && path !== '..' && !resolve(path).startsWith('\\'); };
-if (output !== resolve(web, 'dist') && !within(serverTarget, output)) throw new Error('Build output must be Web dist or a generated Server target child');
+if (outputArgument >= 0 && !args[outputArgument + 1]) throw new Error('--outDir requires an owned output path');
+const output = await assertBuildOutput(web, outputArgument < 0 ? resolve(web, 'dist') : resolve(web, args[outputArgument + 1]));
 if (Number(process.versions.node.split('.')[0]) !== 24) throw new Error('Approved Node24 required');
 for (const command of [
   [resolve(web, 'node_modules/typescript/bin/tsc'), '-p', 'tsconfig.json', '--noEmit'],

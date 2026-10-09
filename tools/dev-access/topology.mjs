@@ -7,7 +7,7 @@ export const defaults = {
   backendOrigin: 'https://127.0.0.1:18449', backendTlsName: 'localhost',
   frontendOrigin: 'http://127.0.0.1:18450', frontendPort: 5175,
   sshHost: '192.168.137.33', sshUser: 'phuclam',
-  remoteRoot: '/home/phuclam/idea-dev-access-20261009-51-02',
+  remoteRoot: '/home/phuclam/idea-dev-access-20261009-51-03',
   certificate: '/home/phuclam/idea-nginx-dev-20261008-49/tls/certificate.pem',
   encryptedKey: '/home/phuclam/idea-nginx-dev-20261008-49/tls/key.encrypted.pem',
   tlsPasswordFile: '/home/phuclam/idea-iam-ui-20261007-46/tls-01/password.private',

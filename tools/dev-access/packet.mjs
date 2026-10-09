@@ -19,6 +19,7 @@ jar=/home/phuclam/idea-iam-ui-20261007-46/run-assignment-qualification-44/source
 certificate=${c.certificate}
 backend_ca=${c.backendCa}
 backend_origin=${c.backendOrigin}
+backend_managed=${c.backendOrigin === 'https://127.0.0.1:18449' ? 'true' : 'false'}
 frontend_origin=${c.frontendOrigin}
 public_origin=${c.publicOrigin}
 edge_port=${new URL(c.publicOrigin).port || '443'}

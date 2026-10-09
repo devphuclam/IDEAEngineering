@@ -80,7 +80,8 @@ Connection settings are loaded from an optional private local JSON file through
 For example, `backendOrigin=https://server.internal:9443` and
 `frontendOrigin=https://web.internal:5173` can represent separate hosts. Match
 `backendTlsName`, CA paths and normal certificate verification to those hosts.
-The current controller only manages the existing Ubuntu synthetic Server and
+An external `backendOrigin` is checked as an endpoint, not as a locally owned PID;
+the controller will not start a redundant local Server for it. The current controller only manages the existing Ubuntu synthetic Server and
 Windows Vite; it is not a remote fleet installer. Independently hosted upstreams
 are provisioned by their own operators, then selected by edge configuration.
 
@@ -103,7 +104,7 @@ data replication are not introduced or qualified here.
 - Retained DB `idea_ddm_iam_ui_20261007_46`, schema
   `iam_ui_c3b8cde44f9a4d1199306c381c12d1bb`, migrator owner/app runtime split.
   No migration/bootstrap/fixture/credential or authority mutation.
-- Fresh remote root `/home/phuclam/idea-dev-access-20261009-51-02`, phuclam:700;
+- Fresh remote root `/home/phuclam/idea-dev-access-20261009-51-03`, phuclam:700;
   loopback edge18448, Server18449, SSH reverse18450; local Vite5175 only.
 - TLS material remains on Ubuntu, pin
   `6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad`,

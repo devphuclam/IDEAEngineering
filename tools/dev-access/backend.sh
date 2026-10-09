@@ -4,13 +4,19 @@
 action=$1
 exec 9> "$root/backend.lock"; flock -n 9 || exit 4
 if [[ $action == stop ]]; then close_owned backend TERM; echo 'BACKEND=STOPPED;DATABASE_RETAINED=true;FRONTEND_UNCHANGED=true'; exit 0; fi
-inputs
 get_owned backend || true
 if [[ $action == status ]]; then
-  if [[ -n $process_id ]] && health; then state=UP; elif [[ -z $process_id ]]; then state=STOPPED; else state=DEGRADED; fi
-  echo "BACKEND=$state;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DATABASE=idea_ddm_iam_ui_20261007_46;SCHEMA=iam_ui_c3b8cde44f9a4d1199306c381c12d1bb;FRONTEND_INDEPENDENT=true"
-  [[ $state != DEGRADED ]]; exit
+  if health; then endpoint=UP; else endpoint=UNAVAILABLE; fi
+  if [[ $backend_managed != true ]]; then
+    echo "BACKEND=EXTERNAL;BACKEND_ENDPOINT=$endpoint;ORIGIN=$backend_origin;FRONTEND_INDEPENDENT=true"
+  else
+    if [[ -n $process_id && $endpoint == UP ]]; then state=UP; elif [[ -z $process_id ]]; then state=STOPPED; else state=DEGRADED; fi
+    echo "BACKEND=$state;BACKEND_ENDPOINT=$endpoint;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DATABASE=idea_ddm_iam_ui_20261007_46;SCHEMA=iam_ui_c3b8cde44f9a4d1199306c381c12d1bb;FRONTEND_INDEPENDENT=true"
+  fi
+  exit 0
 fi
+[[ $backend_managed == true ]] || { echo 'BACKEND=EXTERNAL;START_WITH_ITS_OWN_OPERATOR=true'; exit 4; }
+inputs
 if [[ -z $process_id ]]; then
   [[ -z $(ss -H -ltn 'sport = :18449') ]] || { echo 'BACKEND=PORT_OCCUPIED;NO_PROCESS_SIGNALLED=true'; exit 4; }
   credentials=/home/phuclam/.config/idea/f03a-test.env

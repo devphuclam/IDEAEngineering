@@ -4,12 +4,12 @@
 action=$1; mode=${2:-}
 exec 9> "$root/edge.lock"; flock -n 9 || exit 4
 if [[ $action == stop ]]; then close_owned edge QUIT; echo 'EDGE=STOPPED;BACKEND_UNCHANGED=true'; exit 0; fi
-inputs
 get_owned edge || true; edge_pid=$process_id
 if [[ $action == status ]]; then
   if [[ -n $edge_pid ]]; then echo "EDGE=RUNNING;MODE=$(<"$root/mode")"; else echo 'EDGE=STOPPED'; fi
   exit 0
 fi
+inputs
 [[ $# == 2 && $mode =~ ^(dev|review)$ ]] || exit 2
 if [[ -n $edge_pid ]]; then [[ $(<"$root/mode") == "$mode" ]] || { echo 'EDGE=MODE_CONFLICT;STOP_EDGE_BEFORE_SWITCH=true'; exit 4; }; exit 0; fi
 health || { echo 'EDGE=BACKEND_UNAVAILABLE;NO_SUCCESS_CLAIM=true'; exit 5; }
