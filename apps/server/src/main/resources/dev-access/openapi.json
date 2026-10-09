@@ -33,7 +33,7 @@
           "authority": "Public operational liveness/readiness; no identity authority",
           "state": "Process liveness (not database readiness)",
           "atomicity": "Observation only, no business success.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Public process observation; no account/session/security-version or credential-proof check; not a transaction outcome.",
           "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
           "trace": [
             "REQ-OPS-004"
@@ -62,7 +62,7 @@
           "authority": "Public operational liveness/readiness; no identity authority",
           "state": "Actual PostgreSQL readiness",
           "atomicity": "Observation only, no business success.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Public database observation at request time; a later operation may observe a different state; no credential proof or eligible-session prerequisite.",
           "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
           "trace": [
             "REQ-OPS-004"
@@ -96,7 +96,7 @@
           "authority": "Public session-backed CSRF acquisition",
           "state": "JSON CSRF acquisition (automatic in this console)",
           "atomicity": "Observation only, no business success.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Session-backed CSRF acquisition, including anonymous acquisition. This token is not a one-use credential setup/reset proof.",
           "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
           "trace": [
             "REQ-IAM-001",
@@ -163,7 +163,7 @@
           "authority": "Native credential verification + CSRF; generic refusal; server-derived Actor",
           "state": "Session-backed CSRF is required even for login. Generic refusal covers invalid/disabled/blocked credentials. Successful login rotates servlet proof; Actor is determined by Server. Use the existing Web password control, not an API-console body or generated curl.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.",
           "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
           "trace": [
             "REQ-IAM-001",
@@ -200,7 +200,7 @@
           "authority": "Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.",
           "state": "Read the eligible Server-derived identity",
           "atomicity": "Observation only, no business success.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Current session/account/runtime/security-version eligibility; observation is not permission for a later owner commit.",
           "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
           "trace": [
             "REQ-IAM-001",
@@ -237,7 +237,7 @@
           "authority": "Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.",
           "state": "No body. Automatic CSRF header; eligible session required. Success revokes only the current session. Failure does not claim logout success.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.",
           "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
           "trace": [
             "REQ-IAM-001",
@@ -297,7 +297,7 @@
           "authority": "Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.",
           "state": "Exact Organization Scope and role assignment are required. Super Administrator alone cannot create accounts. Does not grant project/group/product access or activate credentials.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Current exact scoped account-create authority and owner validation at authoritative commit; no implicit role or project entitlement.",
           "retry": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
           "trace": [
             "REQ-IAM-001",
@@ -361,7 +361,7 @@
           "authority": "Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.",
           "state": "Disable an account; identities/history remain stable",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Expected account security version and current eligible administrator authority rechecked under security-write coordination.",
           "retry": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
           "trace": [
             "REQ-IAM-001",
@@ -425,7 +425,7 @@
           "authority": "Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.",
           "state": "DISABLED -> ACTIVE if a credential exists, otherwise PENDING; fresh sign-in required.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Expected account security version and current authority rechecked; enablement is separate from credential recovery.",
           "retry": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
           "trace": [
             "REQ-IAM-001",
@@ -439,7 +439,7 @@
     "/api/v1/identity/accounts/{account}/credential-proofs": {
       "post": {
         "operationId": "issueCredentialProof",
-        "summary": "Setup/reset proof issuance (delivery not enabled in preview)",
+        "summary": "Issue setup/reset proof through an explicitly enabled delivery mode (documentation-only)",
         "x-idea-documentation-only": true,
         "description": "Separate setup/reset Permissions (supported AA@2/AA@3), eligible scoped issuer. RESET requires exact loginIdentityId and ACTIVE or DISABLED target. Manual delivery requires exact loginIdentityId for either purpose. One-use expiring proof; transient private handoff only; no guaranteed delivery/deployment claim.",
         "parameters": [
@@ -459,7 +459,7 @@
         },
         "responses": {
           "200": {
-            "description": "Synthetic qualified-delivery mode only; contains a sensitive proof, never retained in this console",
+            "description": "Target-bound one-use expiring proof; private handoff only, no-store; no logging or retained credential examples.",
             "content": {
               "application/json": {
                 "schema": {
@@ -481,7 +481,7 @@
             "description": "Stale version or invalid target/credential state"
           },
           "503": {
-            "description": "Delivery disabled in preview, or required persistence failed"
+            "description": "Delivery mode is disabled or required persistence/delivery failed; do not report proof delivery success."
           }
         },
         "x-idea-contract": {
@@ -491,7 +491,7 @@
           "authority": "Independent setup/reset Permission at exact Organization Scope + eligible session + CSRF",
           "state": "FIRST_SETUP appropriate PENDING target; RESET ACTIVE or DISABLED, exact Login Identity and expected security version. Manual delivery requires exact loginIdentityId for both purposes.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Exact purpose/target/version and current scoped issuance authority at commit; target-bound, one-use, expiring proof; same-purpose supersession only.",
           "retry": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
           "trace": [
             "REQ-IAM-001",
@@ -540,7 +540,7 @@
           "authority": "Exact target-bound one-use expiring proof + CSRF; no administrator role required",
           "state": "Reset preserves DISABLED and actor disabled_at; old Account sessions/proofs invalidate.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
-          "concurrency": "Current eligibility/security-version check; password proof is one-use and expiring.",
+          "concurrency": "Proof purpose/target/version/expiry/use status atomically checked; concurrent redemption cannot consume the proof twice.",
           "retry": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
           "trace": [
             "REQ-IAM-001",
@@ -580,7 +580,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -590,7 +590,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -716,7 +716,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -726,7 +726,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -831,7 +831,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -841,7 +841,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -967,7 +967,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -977,7 +977,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1073,7 +1073,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1083,7 +1083,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1190,7 +1190,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1200,7 +1200,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1308,7 +1308,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1318,7 +1318,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1455,7 +1455,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1465,7 +1465,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1571,7 +1571,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1581,7 +1581,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1689,7 +1689,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1699,7 +1699,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1836,7 +1836,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1846,7 +1846,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1952,7 +1952,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1962,7 +1962,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2069,7 +2069,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2079,7 +2079,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2187,7 +2187,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2197,7 +2197,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2334,7 +2334,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2344,7 +2344,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2450,7 +2450,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2460,7 +2460,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2568,7 +2568,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2578,7 +2578,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2676,7 +2676,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2686,7 +2686,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2823,7 +2823,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2833,7 +2833,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2960,7 +2960,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2970,7 +2970,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3094,7 +3094,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3104,7 +3104,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3201,7 +3201,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3211,7 +3211,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3318,7 +3318,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3328,7 +3328,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3435,7 +3435,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3445,7 +3445,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3590,7 +3590,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3600,7 +3600,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3695,7 +3695,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3705,7 +3705,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3820,7 +3820,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3830,7 +3830,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3927,7 +3927,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3937,7 +3937,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4044,7 +4044,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4054,7 +4054,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4161,7 +4161,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4171,7 +4171,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4268,7 +4268,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4278,7 +4278,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4414,7 +4414,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4424,7 +4424,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4539,7 +4539,7 @@
             }
           },
           "401": {
-            "description": "Ineligible current session",
+            "description": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4549,7 +4549,7 @@
             }
           },
           "403": {
-            "description": "Required authority/scope or CSRF refused",
+            "description": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5266,7 +5266,31 @@
             "nullable": true
           },
           "managementScope": {
-            "$ref": "#/components/schemas/Scope"
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "ORGANIZATION",
+                  "PROJECT"
+                ]
+              },
+              "organizationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "projectId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true,
+                "description": "Required for PROJECT; null/absent for ORGANIZATION"
+              }
+            },
+            "required": [
+              "kind",
+              "organizationId"
+            ],
+            "nullable": true
           }
         }
       },
@@ -5483,10 +5507,159 @@
             "$ref": "#/components/schemas/Interval"
           },
           "before": {
-            "$ref": "#/components/schemas/Assignment"
+            "type": "object",
+            "properties": {
+              "assignmentId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "principal": {
+                "$ref": "#/components/schemas/Principal"
+              },
+              "scope": {
+                "$ref": "#/components/schemas/Scope"
+              },
+              "roleVersionId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "roleCode": {
+                "type": "string"
+              },
+              "roleVersion": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "effectiveFrom": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "effectiveUntil": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "assignedBy": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "assignedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "revokedAt": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "endedBy": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true
+              },
+              "endReason": {
+                "type": "string",
+                "nullable": true
+              },
+              "version": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "effective": {
+                "type": "boolean"
+              }
+            },
+            "nullable": true
           },
           "beforeRole": {
-            "$ref": "#/components/schemas/Role"
+            "type": "object",
+            "properties": {
+              "definitionId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "roleVersionId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "roleCode": {
+                "type": "string"
+              },
+              "version": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "builtIn": {
+                "type": "boolean"
+              },
+              "classification": {
+                "type": "string"
+              },
+              "scopeKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "principalKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "contentDigest": {
+                "type": "string"
+              },
+              "permissions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Permission"
+                }
+              },
+              "selectable": {
+                "type": "boolean"
+              },
+              "availabilityReason": {
+                "type": "string",
+                "nullable": true
+              },
+              "managementScope": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "ORGANIZATION",
+                      "PROJECT"
+                    ]
+                  },
+                  "organizationId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "nullable": true,
+                    "description": "Required for PROJECT; null/absent for ORGANIZATION"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "organizationId"
+                ],
+                "nullable": true
+              }
+            },
+            "nullable": true
           },
           "difference": {
             "$ref": "#/components/schemas/Difference"
@@ -5615,7 +5788,31 @@
             "nullable": true
           },
           "scope": {
-            "$ref": "#/components/schemas/Scope"
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "ORGANIZATION",
+                  "PROJECT"
+                ]
+              },
+              "organizationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "projectId": {
+                "type": "string",
+                "format": "uuid",
+                "nullable": true,
+                "description": "Required for PROJECT; null/absent for ORGANIZATION"
+              }
+            },
+            "required": [
+              "kind",
+              "organizationId"
+            ],
+            "nullable": true
           },
           "action": {
             "type": "string",
@@ -5639,7 +5836,8 @@
             "nullable": true
           },
           "retryProfile": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -5678,7 +5876,8 @@
             "nullable": true
           },
           "correlationId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "occurredAt": {
             "type": "string",

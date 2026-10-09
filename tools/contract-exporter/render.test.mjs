@@ -75,6 +75,7 @@ test('contract text cannot become executable HTML or terminate the data script',
   try {
     const catalog=json(path.join(tool,'data/api-catalog.json'));
     catalog.endpoints[0].description='</script><img src=x onerror="throw 1">';
+    catalog.endpoints[0].errors=[{status:'400',code:'<img src=x>',reason:'<img src=x>',remedy:'<img src=x>'}];
     const files=await renderContract(catalog,tool,target);
     const html=fs.readFileSync(files[2],'utf8');
     const page=pageScript(html);

@@ -37,7 +37,7 @@
       "requestExample": "See canonical OpenAPI schema; no inferred request or secret value.",
       "responseExample": "See canonical OpenAPI schema; no inferred response.",
       "errors": [],
-      "notes": "operationId=processHealth; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-OPS-004; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=processHealth; surface=server; concurrency=Public process observation; no account/session/security-version or credential-proof check; not a transaction outcome.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-OPS-004; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "OPS-02",
@@ -63,7 +63,7 @@
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         }
       ],
-      "notes": "operationId=databaseHealth; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-OPS-004; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=databaseHealth; surface=server; concurrency=Public database observation at request time; a later operation may observe a different state; no credential proof or eligible-session prerequisite.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-OPS-004; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "AUTH-01",
@@ -110,7 +110,7 @@
       "requestExample": "See canonical OpenAPI schema; no inferred request or secret value.",
       "responseExample": "See canonical OpenAPI schema; no inferred response.",
       "errors": [],
-      "notes": "operationId=csrfAcquisition; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=csrfAcquisition; surface=server; concurrency=Session-backed CSRF acquisition, including anonymous acquisition. This token is not a one-use credential setup/reset proof.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "AUTH-02",
@@ -188,7 +188,7 @@
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         }
       ],
-      "notes": "operationId=nativeSignIn; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=nativeSignIn; surface=server; concurrency=Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "AUTH-03",
@@ -242,7 +242,7 @@
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         }
       ],
-      "notes": "operationId=currentSession; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=currentSession; surface=server; concurrency=Current session/account/runtime/security-version eligibility; observation is not permission for a later owner commit.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "AUTH-04",
@@ -280,7 +280,7 @@
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         }
       ],
-      "notes": "operationId=signOut; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=signOut; surface=server; concurrency=Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.; retry=Read-only current observation; safe to repeat, never replay a mutation.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "IAM-01",
@@ -430,7 +430,7 @@
           "remedy": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
         }
       ],
-      "notes": "operationId=createAccount; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=createAccount; surface=server; concurrency=Current exact scoped account-create authority and owner validation at authoritative commit; no implicit role or project entitlement.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "IAM-02",
@@ -580,7 +580,7 @@
           "remedy": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
         }
       ],
-      "notes": "operationId=disableAccount; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=disableAccount; surface=server; concurrency=Expected account security version and current eligible administrator authority rechecked under security-write coordination.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "IAM-03",
@@ -730,11 +730,11 @@
           "remedy": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
         }
       ],
-      "notes": "operationId=reenableAccount; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=reenableAccount; surface=server; concurrency=Expected account security version and current authority rechecked; enablement is separate from credential recovery.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "IAM-04",
-      "name": "Setup/reset proof issuance (delivery not enabled in preview)",
+      "name": "Issue setup/reset proof through an explicitly enabled delivery mode (documentation-only)",
       "group": "IAM",
       "phase": "Current Server",
       "method": "POST",
@@ -876,11 +876,11 @@
         {
           "status": "503",
           "code": "HTTP 503",
-          "reason": "Delivery disabled in preview, or required persistence failed",
+          "reason": "Delivery mode is disabled or required persistence/delivery failed; do not report proof delivery success.",
           "remedy": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
         }
       ],
-      "notes": "operationId=issueCredentialProof; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=issueCredentialProof; surface=server; concurrency=Exact purpose/target/version and current scoped issuance authority at commit; target-bound, one-use, expiring proof; same-purpose supersession only.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "IAM-05",
@@ -973,7 +973,7 @@
           "remedy": "operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
         }
       ],
-      "notes": "operationId=redeemCredentialProof; surface=server; concurrency=Current eligibility/security-version check; password proof is one-use and expiring.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
+      "notes": "operationId=redeemCredentialProof; surface=server; concurrency=Proof purpose/target/version/expiry/use status atomically checked; concurrent redemption cannot consume the proof twice.; retry=operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.; trace=REQ-IAM-001, REQ-IAM-003, IF-ACCOUNT-SESSION; semanticSource=docs/product/instances/idea-engineering/api/identity-session.md"
     },
     {
       "code": "UI-I01",
@@ -1236,13 +1236,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -1644,13 +1644,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -1989,13 +1989,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -2352,13 +2352,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -2679,13 +2679,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -2979,13 +2979,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -3351,13 +3351,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -3858,13 +3858,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -4311,13 +4311,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -4728,13 +4728,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -5100,13 +5100,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -5472,13 +5472,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -5772,13 +5772,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -6144,13 +6144,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -6651,13 +6651,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -7104,13 +7104,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -7521,13 +7521,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -7776,13 +7776,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -8113,7 +8113,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -8346,13 +8346,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -8727,13 +8727,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -9037,7 +9037,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -9243,13 +9243,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -9894,13 +9894,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -10545,13 +10545,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -10909,7 +10909,7 @@
           "in": "Response 201 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -11115,13 +11115,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -11640,13 +11640,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -12210,13 +12210,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -12663,13 +12663,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -13099,7 +13099,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -13234,7 +13234,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -13441,7 +13441,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -13666,7 +13666,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -13962,13 +13962,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -14469,13 +14469,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -15237,13 +15237,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success."
         },
         {
@@ -15789,13 +15789,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -16018,7 +16018,7 @@
           "in": "Response 200 (application/json)",
           "type": "string",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -16251,13 +16251,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "Read-only current observation; safe to repeat, never replay a mutation."
         },
         {
@@ -16372,7 +16372,7 @@
           "in": "Response 200 (application/json)",
           "type": "object",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -16453,7 +16453,7 @@
           "in": "Response 200 (application/json)",
           "type": "string",
           "required": false,
-          "validation": "See canonical schema / semantic contract",
+          "validation": "nullable",
           "description": "",
           "example": ""
         },
@@ -16632,13 +16632,13 @@
         {
           "status": "401",
           "code": "HTTP 401",
-          "reason": "Ineligible current session",
+          "reason": "Ineligible/anonymous session. Authentication filter may return an empty body; owner-boundary refusals may use SafeRefusal JSON. Do not require a JSON body on every 401.",
           "remedy": "UNRESOLVED does not prove rollback. Metadata-only legacy IAM results never promise canonical success or reproduce proofs. Owner-specific command retry remains separate."
         },
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Required authority/scope or CSRF refused",
+          "reason": "CSRF filter may return an empty body; owner permission/scope/delegation refusal may use SafeRefusal JSON. Do not require a JSON body on every 403.",
           "remedy": "UNRESOLVED does not prove rollback. Metadata-only legacy IAM results never promise canonical success or reproduce proofs. Owner-specific command retry remains separate."
         },
         {
@@ -17012,7 +17012,7 @@
         "surface": "server",
         "path": "apps/server/src/main/resources/dev-access/openapi.json",
         "version": "contract-0.3",
-        "sha256": "cee28a519537362297133e56f20631e331cab939e19c2f487987bd2415f56b09"
+        "sha256": "51a89afec54f81fa7f031d67948384f676ae59408881ad61b360dd3e06858fcc"
       },
       {
         "surface": "gateway",

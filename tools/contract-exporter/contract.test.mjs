@@ -230,3 +230,21 @@ test('invalid actual schema shape is refused',()=>fixture(target=>{
   editOas(target,doc=>doc.components.schemas.Bad={type:'array'});
   assert.ok(checkContract(target).errors.some(e=>e.includes('Array schema needs items')));
 }));
+
+test('fully qualified Spring annotations cannot hide an undocumented route',()=>fixture(target=>{
+  fs.writeFileSync(path.join(target,'apps/server/src/main/java/QualifiedController.java'),
+    '@org.springframework.web.bind.annotation.RestController class QualifiedController { @org.springframework.web.bind.annotation.GetMapping("/api/v1/qualified") Object read(){return null;} }');
+  assert.ok(checkContract(target).errors.some(e=>e.includes('UNDOCUMENTED_ROUTE server GET /api/v1/qualified')));
+}));
+
+test('documented refusal/nullable/public semantics match actual boundaries',()=>{
+  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const schema=doc.components.schemas;
+  for(const [name,field] of [['Role','managementScope'],['AssignmentPreview','before'],['AssignmentPreview','beforeRole'],
+    ['Resolution','scope'],['Resolution','retryProfile'],['History','correlationId']])
+    assert.equal(schema[name].properties[field].nullable,true,name+'.'+field);
+  const refusals=doc.paths['/api/v1/administration/assignments'].post.responses;
+  assert.match(refusals['401'].description,/empty/i);assert.match(refusals['403'].description,/empty/i);
+  for(const route of ['/health','/health/database','/api/v1/identity/csrf'])
+    assert.doesNotMatch(doc.paths[route].get['x-idea-contract'].concurrency,/password proof|eligibility\/security-version/);
+});

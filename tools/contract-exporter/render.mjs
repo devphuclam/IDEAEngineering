@@ -1227,7 +1227,7 @@ function generateHtml(catalog) {
   <div id="sidebar">
     <div class="brand">
       <h1>IDEA ENGINEERING</h1>
-      <p>Đặc tả API • SPEC-API-001 • v${catalog.metadata.version}</p>
+      <p>Đặc tả API • SPEC-API-001 • v${escapeHTML(catalog.metadata.version)}</p>
     </div>
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Tìm theo mã API, đường dẫn, tham số...">
@@ -1418,10 +1418,10 @@ function generateHtml(catalog) {
                   <tbody>
                     \${e.errors.map(err => \`
                       <tr>
-                        <td style="font-weight:700; color:\${err.status >= 500 ? '#DC2626' : '#D97706'}">\${err.status}</td>
-                        <td class="field-name">\${err.code}</td>
-                        <td>\${err.reason}</td>
-                        <td>\${err.remedy}</td>
+                        <td style="font-weight:700; color:\${err.status >= 500 ? '#DC2626' : '#D97706'}">\${escapeHTML(err.status)}</td>
+                        <td class="field-name">\${escapeHTML(err.code)}</td>
+                        <td>\${escapeHTML(err.reason)}</td>
+                        <td>\${escapeHTML(err.remedy)}</td>
                       </tr>
                     \`).join('')}
                   </tbody>

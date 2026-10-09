@@ -26,7 +26,7 @@ function withoutComments(source) {
 }
 function annotations(source) {
   const result = [];
-  const pattern = /@(RequestMapping|GetMapping|PostMapping|PutMapping|PatchMapping|DeleteMapping)\s*\(/g;
+  const pattern = /@(?:org\.springframework\.web\.bind\.annotation\.)?(RequestMapping|GetMapping|PostMapping|PutMapping|PatchMapping|DeleteMapping)\s*\(/g;
   for (const match of source.matchAll(pattern)) {
     let depth = 1, quote = false, escaped = false, end = match.index + match[0].length;
     for (; end < source.length && depth; end++) {
@@ -64,12 +64,12 @@ export function discoverRoutes(root, config) {
         && !config.reviewedSources.includes(relative))
         throw Error('Unreviewed filter/servlet registration: ' + relative);
       // A user-defined composed mapping would otherwise silently evade the scanner.
-      if (/@interface\s+\w+/.test(source) && /@(RequestMapping|GetMapping|PostMapping)/.test(source))
+      if (/@interface\s+\w+/.test(source) && /@(?:org\.springframework\.web\.bind\.annotation\.)?(RequestMapping|GetMapping|PostMapping)/.test(source))
         throw Error('Composed route annotation needs an explicit discovery adapter: ' + file);
       if (/RouterFunction|RouterFunctions|registerMapping\s*\(/.test(source))
         throw Error('Programmatic route registration needs an explicit discovery adapter: ' + file);
       const mappings = annotations(source);
-      const declared = [...source.matchAll(/@(RequestMapping|GetMapping|PostMapping|PutMapping|PatchMapping|DeleteMapping)\b/g)];
+      const declared = [...source.matchAll(/@(?:org\.springframework\.web\.bind\.annotation\.)?(RequestMapping|GetMapping|PostMapping|PutMapping|PatchMapping|DeleteMapping)\b/g)];
       if (declared.length !== mappings.length) throw Error('Implicit/unsupported route annotation needs review: ' + file);
       const classIndex = source.search(/\bclass\s+\w+/);
       const base = mappings.filter(a => a.index < classIndex);
