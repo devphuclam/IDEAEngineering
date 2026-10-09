@@ -117,3 +117,23 @@ FRONTEND_BUILD=READY;ARTIFACT=STATIC_WEB;BACKEND_BUILD=NOT_REQUIRED;NOTICES=3
 3. **Màn hình RBAC Pilot chuẩn Server Authority**: [`apps/web/src/features/accessAdministration/RbacPilotPage.tsx`](file:///c:/Users/TD-999/Research/Projects/IDEA/IDEAEngineering/apps/web/src/features/accessAdministration/RbacPilotPage.tsx)
 4. **Kiểm thử tích hợp RBAC Pilot**: [`apps/web/src/features/accessAdministration/rbacPilot.test.tsx`](file:///c:/Users/TD-999/Research/Projects/IDEA/IDEAEngineering/apps/web/src/features/accessAdministration/rbacPilot.test.tsx)
 5. **Cấu hình kiểm thử không loại trừ**: [`apps/web/vite.config.ts`](file:///c:/Users/TD-999/Research/Projects/IDEA/IDEAEngineering/apps/web/vite.config.ts)
+
+---
+
+## 5. Tinh Chỉnh Giao Diện Theo TasteSkill & Ngôn Ngữ Trực Quan, Dễ Hiểu
+
+Tuân thủ nguyên tắc thiết kế **Anti-Slop Frontend** và yêu cầu nâng cao tính thân thiện của ngôn ngữ giao diện:
+
+1. **Việt hóa tự nhiên và giải thích ngữ cảnh rõ ràng**:
+   - Thay thế toàn bộ thuật ngữ máy móc khô cứng bằng giải thích trực quan:
+     - `Candidate` $\rightarrow$ "Bản thảo vai trò" (kèm giải thích: bản thảo đã lưu trên máy chủ, chưa có hiệu lực cho đến khi hoàn tất kích hoạt).
+     - `Content Digest` $\rightarrow$ "Mã băm kiểm tra tính toàn vẹn (SHA-256 Digest)" (kèm giải thích: giúp máy chủ đảm bảo nội dung không bị sửa đổi trái phép giữa bước kiểm tra và kích hoạt).
+     - `Immutable Activation` $\rightarrow$ "Kích hoạt phiên bản chính thức" (kèm xác nhận an toàn: bảo lưu toàn bộ phân quyền cũ của người dùng, không gây gián đoạn).
+   - Bổ sung **Permission Metadata** có tiêu đề và mô tả tiếng Việt chi tiết cho từng quyền hạn (`project.read`: "Xem dữ liệu & tài liệu dự án", `role.catalogue.read`: "Tra cứu danh mục vai trò", `access.inspect`: "Đối soát quyền truy cập thực tế", `audit.read`: "Xem nhật ký kiểm toán hệ thống").
+2. **Quy trình trực quan 3 bước (Lifecycle Stepper)**:
+   - Thêm thanh tiến trình 3 bước trong Inspector: **1. Soạn bản thảo $\rightarrow$ 2. Kiểm tra hợp lệ $\rightarrow$ 3. Kích hoạt chính thức**, giúp người dùng luôn nhận biết rõ mình đang ở giai đoạn nào trong vòng đời cấu hình.
+3. **Loại bỏ Emoji thô, chuyển sang chuẩn SVG tinh tế**:
+   - Thay thế toàn bộ emoji thô (`🎨`, `🛡️`, `🔐`, `📂`) bằng các biểu tượng vector SVG mượt mà (`PaletteIcon`, `ShieldIcon`, `LockIcon`, `DefaultFolderIcon`), đồng bộ độ dày nét (`strokeWidth: 2` hoặc `1.5`), chuẩn hóa kích thước và căn chỉnh typographic chuyên nghiệp.
+4. **Phân cấp thị giác và khoảng thở (Spatial Craft & Rhythm)**:
+   - Sử dụng thẻ phân nhóm (cards) tinh tế với viền mảnh `1px solid var(--idea-color-border-subtle)` và nền `var(--idea-color-surface-subtle)`.
+   - Các badge phân loại hiển thị nhãn song ngữ thân thiện: `Tối cao (HIGHEST)`, `Quản trị (ADMIN)`, `Nghiệp vụ (BUSINESS)`, `Mặc định hệ thống`, `Tùy biến tổ chức`.
