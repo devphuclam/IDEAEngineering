@@ -3,13 +3,13 @@
 | Control field | Value |
 |---|---|
 | ID / class | IE-VEV-API-CONTRACT-SYNC-053 / focused engineering verification |
-| Version / status | 0.1 / engineering PASS; independent Project Reviewer acceptance pending |
+| Version / status | 0.2 / engineering PASS; independent Project Reviewer acceptance pending |
 | Normativity / classification | INFORMATIVE / INTERNAL |
 | Author / intended reviewer | Codex / Project Reviewer |
 | Publication | 2026-10-09, Asia/Ho_Chi_Minh |
 | Scope / change | [Issue #53](https://github.com/devphuclam/IDEAEngineering/issues/53); CODEX_ONLY |
 | Baseline | main `91cf6c25e516ce2b3ae628d59c2a20b90076bcff` |
-| Final executed source | `8f2a28a69ccee0b8641cabd22e70df32bb3a2cf1` |
+| Current executed source | `bfbf1d6619d7ef1b72f4f5eba04f9d4de7d6f6d3`; predecessor execution below retained |
 | Downstream | [tool instructions](README.md), [API handoff](../../docs/product/instances/idea-engineering/api/handoff/README.md) |
 | Review trigger | Route/owner/DTO/security/contract/tool behavior change; CI runner/rule activation |
 | Retention | Git; predecessor source and review findings remain historical |
@@ -51,7 +51,7 @@ only in contracts/projections. The reviewers rechecked `8f2a28a...` and resolved
 findings; no remaining blocking finding was reported in those bounded rechecks.
 This is an engineering review, not a submitted independent human GitHub approval.
 
-## Final execution
+## Predecessor execution — source `8f2a28a69ccee0b8641cabd22e70df32bb3a2cf1`
 
 Commands below used the approved Node binary explicitly rather than PATH:
 
@@ -83,6 +83,28 @@ Generated final HTML content SHA-256:
 `2f82a019601abf679419e8f6482d2e44e1c5bfe3c2cc42669459bab2cdfc7c1c`.
 Rendering tests inspect content/script; actual Chrome, Word page layout and Excel UI
 qualification are NOT-RUN. No new runtime behavior claim is inferred from these results.
+
+## Concise presentation successor — current execution
+
+The user requested the simple presentation of the tool on main, not an expanded specification.
+Source `bfbf1d6619d7ef1b72f4f5eba04f9d4de7d6f6d3` preserves the existing renderer/template,
+three output formats and all 46 HTTP / nine DESIGN entries. Dictionary rows decrease from
+1,601 to 473: nested models are named rather than expanded, refusal schemas stay in the error
+matrix, and DESIGN entries point to their original cards instead of copying full specifications.
+The canonical OpenAPI and semantic sources are unchanged. Array-item constraints remain in the
+same compact row. No product, dependency, framework, runtime or deployment change.
+
+Three focused RED witnesses (nested expansion, copied DESIGN cards, missing array-item enum)
+were repaired. Both engineering review axes rechecked the changes; the array-item finding is
+resolved. Exact-source consolidated execution: 31 guard + two rendering tests = 33/33 PASS,
+zero failure/skip, 12.949 seconds. [Retained output](evidence/20261009-concise-node-test.txt).
+Read-only check: PASS, 46 routes / 46 operations.
+
+Default export encountered EBUSY on the existing open/locked Word output; it did not report
+success. That file was preserved. Actual three-format rendering passed under the ignored
+owned `output/concise-review` directory, including repeat archive handling. Closing Word before
+the normal `--update` permits the standard output names to be regenerated. Browser/Word layout
+qualification remains NOT-RUN. The CI runner / required-check conditions below remain open.
 
 ## Remaining integration condition
 

@@ -3,6 +3,11 @@
 Nguồn HTTP có kiểm soát → catalog GENERATED → Word / Excel / HTML.
 Không còn “Smart Merge” tự đoán API.
 
+Giữ bộ 3 tài liệu và bố cục của tool trên `main`: không thêm định dạng hay thiết kế lại.
+Bảng dữ liệu chỉ liệt kê tham số, trường request/response chính và kiểu model lồng nhau;
+không bung cả cây schema hoặc lặp schema lỗi. Ràng buộc và ma trận lỗi vẫn giữ.
+Schema đầy đủ ở OpenAPI nguồn; mục DESIGN chỉ là chỉ mục ngắn đến thẻ thiết kế gốc.
+
 ## Chạy từ root repository
 
 ~~~powershell
@@ -92,7 +97,7 @@ cho mutation/credential operation.
 node --test .\tools\contract-exporter\contract.test.mjs
 ~~~
 
-28 tests (~14 giây cùng rendering trong lượt ghi nhận) tạo fixture repository tạm riêng, thử thiếu API,
+31 tests tạo fixture repository tạm riêng, thử thiếu API,
 đổi method/path variable/DTO, xóa route/parameter, ref/schema lỗi, thiếu authority và sửa catalog.
 Expected các lỗi bị từ chối/exit 1, không ghi output; chính tests PASS khi guard bắt lỗi đúng.
 Cleanup chỉ exact thư mục tạm đã tạo.
