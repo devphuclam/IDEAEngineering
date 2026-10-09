@@ -1,0 +1,180 @@
+/* ==========================================================================
+   IDEA ENGINEERING — LAYOUT CSS (AppShell & InspectorLayout)
+   ========================================================================== */
+
+/* --- AppShell --- */
+.idea-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--idea-color-bg);
+  color: var(--idea-color-text);
+  font-family: var(--idea-font-family-sans);
+}
+
+.idea-shell-header {
+  height: 48px;
+  background-color: var(--idea-color-surface);
+  border-bottom: 1px solid var(--idea-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.idea-shell-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: var(--idea-font-weight-semibold);
+  font-size: var(--idea-font-size-md);
+  letter-spacing: -0.2px;
+}
+
+.idea-shell-header__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--idea-color-primary);
+  color: #FFFFFF;
+  border-radius: var(--idea-radius-xs);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.idea-shell-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.idea-shell-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 48px);
+}
+
+/* Sidebar */
+.idea-shell-sidebar {
+  width: 220px;
+  background-color: var(--idea-color-surface-subtle);
+  border-right: 1px solid var(--idea-color-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width var(--idea-transition-normal);
+}
+
+.idea-shell-sidebar--collapsed {
+  width: 52px;
+}
+
+.idea-shell-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 2px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.idea-shell-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--idea-radius-sm);
+  color: var(--idea-color-text-muted);
+  text-decoration: none;
+  font-size: var(--idea-density-font-size-base);
+  font-weight: var(--idea-font-weight-medium);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--idea-transition-fast);
+}
+
+.idea-shell-nav-item:hover {
+  background-color: var(--idea-color-surface-hover);
+  color: var(--idea-color-text);
+}
+
+.idea-shell-nav-item--active {
+  background-color: var(--idea-color-primary-subtle);
+  color: var(--idea-color-primary);
+  border-color: var(--idea-color-primary-border);
+  font-weight: var(--idea-font-weight-semibold);
+}
+
+.idea-shell-nav-item__icon {
+  font-size: 16px;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.idea-shell-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--idea-color-bg);
+}
+
+/* --- InspectorLayout --- */
+.idea-inspector-container {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.idea-inspector-master {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  min-width: 0;
+}
+
+.idea-inspector-panel {
+  width: 360px;
+  background-color: var(--idea-color-surface);
+  border-left: 1px solid var(--idea-color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width var(--idea-transition-normal), transform var(--idea-transition-normal);
+}
+
+.idea-inspector-panel--closed {
+  display: none;
+}
+
+.idea-inspector-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--idea-color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--idea-color-surface-subtle);
+}
+
+.idea-inspector-title {
+  font-size: var(--idea-font-size-sm);
+  font-weight: var(--idea-font-weight-semibold);
+  color: var(--idea-color-text);
+  margin: 0;
+}
+
+.idea-inspector-body {
+  padding: 14px;
+  flex: 1;
+  overflow-y: auto;
+  font-size: var(--idea-density-font-size-base);
+}

@@ -1,3 +1,5 @@
+import { useAdminLayout } from "./AdminApp";
+
 export type AdminSection = "accounts" | "departments" | "projects" | "rbac" | "access";
 
 export interface AdminRailProps {
@@ -13,6 +15,7 @@ export function AdminRail({
   availableSections = ["accounts"],
   onSelectSection,
 }: AdminRailProps) {
+  const layout = useAdminLayout();
   return (
     <aside className="admin-rail" aria-label="Thanh điều hướng phân hệ quản trị">
       <div className="admin-rail-head">
@@ -134,6 +137,15 @@ export function AdminRail({
           Được bảo vệ bằng chính sách IAM fail-closed của IDEA Engineering.
         </p>
       </div>
+      <div
+        className="admin-resizer admin-rail-resizer"
+        onMouseDown={layout.startRailResize}
+        onDoubleClick={layout.resetRailWidth}
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Thanh điều chỉnh độ rộng menu"
+        title="Kéo sang trái/phải để chỉnh độ rộng menu (Nhấp đúp để đặt lại 238px)"
+      />
     </aside>
   );
 }

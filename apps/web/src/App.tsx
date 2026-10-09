@@ -16,9 +16,26 @@ import { outcomeMessage } from "./features/iamIntegration/IamStatus";
 import "./styles/auth.css";
 import "./styles/admin.css";
 import "./app/iam.css";
+import "./ui/tokens/tokens.css";
+import "./ui/primitives/primitives.css";
+import { ComponentShowcase } from "./ui/showcase/ComponentShowcase";
+import { RbacPilotPage } from "./features/accessAdministration/RbacPilotPage";
+import { AppShell, NavItem } from "./ui/layout/AppShell";
 
 const client = createIamClient();
-const currentRoute = () => location.hash === "#credentials" ? "credentials" : location.hash === "#accounts" ? "accounts" : location.hash === "#projects" ? "projects" : location.hash === "#rbac" ? "rbac" : location.hash === "#custom-role" ? "custom-role" : location.hash === "#access" ? "access" : "session";
+const currentHash = () => typeof location !== "undefined" ? location.hash : "";
+const currentRoute = () => {
+  const hash = currentHash();
+  if (hash === "#uikit") return "uikit";
+  if (hash === "#rbac-pilot") return "rbac-pilot";
+  if (hash === "#credentials") return "credentials";
+  if (hash === "#accounts") return "accounts";
+  if (hash === "#projects") return "projects";
+  if (hash === "#rbac") return "rbac";
+  if (hash === "#custom-role") return "custom-role";
+  if (hash === "#access") return "access";
+  return "session";
+};
 
 export function App() {
   const [route, setRoute] = useState(currentRoute);
@@ -79,6 +96,36 @@ export function App() {
   }
   const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read"||action==="access.inspect"||action==="audit.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":context.actions.includes("role.catalogue.read")?"rbac":"access"; } : undefined;
 
+  const uikitNavItems: NavItem[] = [
+    { id: "uikit", label: "UI Kit DevKit", href: "#uikit", active: route === "uikit", icon: "🎨" },
+    { id: "rbac-pilot", label: "RBAC Pilot", href: "#rbac-pilot", active: route === "rbac-pilot", icon: "🛡️" },
+    { id: "session", label: "Cổng đăng nhập", href: "#session", active: false, icon: "🔐" },
+  ];
+
+  if (route === "uikit") {
+    return (
+      <AppShell
+        brandTitle="IDEA Engineering"
+        brandSubtitle="DevKit v0.1"
+        navItems={uikitNavItems}
+      >
+        <ComponentShowcase />
+      </AppShell>
+    );
+  }
+
+  if (route === "rbac-pilot") {
+    return (
+      <AppShell
+        brandTitle="IDEA Engineering"
+        brandSubtitle="RBAC Pilot"
+        navItems={uikitNavItems}
+      >
+        <RbacPilotPage onNavigateBack={() => { location.hash = "uikit"; }} />
+      </AppShell>
+    );
+  }
+
   if (route === "credentials") return <CredentialRedemptionPage />;
   if (context && (route === "accounts" || route === "projects" || route === "rbac" || route === "custom-role" || route === "access")) return (
     <AdminApp context={context} busy={busy} activeSection={route==="custom-role"?"rbac":route} onSelectSection={section=>{location.hash=section;}} onExitAdmin={() => { location.hash = "session"; }} onLogout={() => void signOut()}>
@@ -100,6 +147,10 @@ export function App() {
             <div className="auth-support-actions">
               <button type="button" className="admin-btn" disabled={busy} onClick={() => void refresh()}>Kiểm tra phiên</button>
               <a href="#credentials">Tôi có proof để thiết lập / reset credential</a>
+              <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+                <a href="#uikit" className="admin-btn" style={{ textDecoration: 'none' }}>🎨 UI Kit DevKit</a>
+                <a href="#rbac-pilot" className="admin-btn" style={{ textDecoration: 'none' }}>🛡️ RBAC Pilot</a>
+              </div>
             </div>
           </div>
         </section>

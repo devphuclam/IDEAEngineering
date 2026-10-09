@@ -1,0 +1,205 @@
+/* ==========================================================================
+   IDEA ENGINEERING — DESIGN TOKENS (Nordic Functionalist + Technical Precision)
+   Foundation Increment 1: Color, Typography, Spacing, Sizing, Density & Themes
+   ========================================================================== */
+
+:root {
+  /* --- 1. Primitive Palette: Nordic Functionalist (Slate & Cool Grey) --- */
+  --idea-primitive-slate-50: #F8FAFC;
+  --idea-primitive-slate-100: #F1F5F9;
+  --idea-primitive-slate-200: #E2E8F0;
+  --idea-primitive-slate-300: #CBD5E1;
+  --idea-primitive-slate-400: #94A3B8;
+  --idea-primitive-slate-500: #64748B;
+  --idea-primitive-slate-600: #475569;
+  --idea-primitive-slate-700: #334155;
+  --idea-primitive-slate-800: #1E293B;
+  --idea-primitive-slate-900: #0F172A;
+  --idea-primitive-slate-950: #020617;
+
+  /* Technical Precision Accent (Nordic Sea & Technical Blue) */
+  --idea-primitive-blue-50: #F0F7FF;
+  --idea-primitive-blue-100: #E0EFFF;
+  --idea-primitive-blue-200: #B9DCFF;
+  --idea-primitive-blue-500: #0284C7;
+  --idea-primitive-blue-600: #0369A1;
+  --idea-primitive-blue-700: #075985;
+  --idea-primitive-blue-800: #0C4A6E;
+
+  /* Semantic Feedback */
+  --idea-primitive-green-50: #F0FDF4;
+  --idea-primitive-green-600: #16A34A;
+  --idea-primitive-green-700: #15803D;
+
+  --idea-primitive-amber-50: #FFFBEB;
+  --idea-primitive-amber-500: #F59E0B;
+  --idea-primitive-amber-700: #B45309;
+
+  --idea-primitive-red-50: #FEF2F2;
+  --idea-primitive-red-600: #DC2626;
+  --idea-primitive-red-700: #B91C1C;
+
+  --idea-primitive-purple-50: #FAF5FF;
+  --idea-primitive-purple-600: #9333EA;
+  --idea-primitive-purple-700: #7E22CE;
+
+  /* --- 2. Typography Stack --- */
+  --idea-font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --idea-font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --idea-font-size-2xs: 10px;
+  --idea-font-size-xs: 11px;
+  --idea-font-size-sm: 12px;
+  --idea-font-size-base: 13px;
+  --idea-font-size-md: 14px;
+  --idea-font-size-lg: 16px;
+  --idea-font-size-xl: 18px;
+
+  --idea-font-weight-normal: 400;
+  --idea-font-weight-medium: 500;
+  --idea-font-weight-semibold: 600;
+  --idea-font-weight-bold: 700;
+
+  /* --- 3. Spacing Scale --- */
+  --idea-space-1: 2px;
+  --idea-space-2: 4px;
+  --idea-space-3: 6px;
+  --idea-space-4: 8px;
+  --idea-space-5: 10px;
+  --idea-space-6: 12px;
+  --idea-space-8: 16px;
+  --idea-space-10: 20px;
+  --idea-space-12: 24px;
+  --idea-space-16: 32px;
+
+  /* --- 4. Radii & Borders --- */
+  --idea-radius-xs: 2px;
+  --idea-radius-sm: 4px;
+  --idea-radius-md: 6px;
+  --idea-radius-lg: 8px;
+  --idea-radius-full: 9999px;
+
+  --idea-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --idea-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --idea-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --idea-shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+
+  /* --- 5. Transitions --- */
+  --idea-transition-fast: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  --idea-transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   THEME: LIGHT (Default)
+   ========================================================================== */
+:root, [data-theme="light"] {
+  --idea-color-bg: #F8FAFC;
+  --idea-color-surface: #FFFFFF;
+  --idea-color-surface-subtle: #F1F5F9;
+  --idea-color-surface-hover: #E2E8F0;
+  --idea-color-surface-active: #CBD5E1;
+
+  --idea-color-border: #CBD5E1;
+  --idea-color-border-subtle: #E2E8F0;
+  --idea-color-border-focus: #0284C7;
+
+  --idea-color-text: #0F172A;
+  --idea-color-text-muted: #475569;
+  --idea-color-text-faint: #64748B;
+  --idea-color-text-inverse: #FFFFFF;
+
+  --idea-color-primary: #0369A1;
+  --idea-color-primary-hover: #075985;
+  --idea-color-primary-subtle: #F0F7FF;
+  --idea-color-primary-border: #B9DCFF;
+  --idea-color-primary-text: #FFFFFF;
+
+  --idea-color-success: #16A34A;
+  --idea-color-success-subtle: #F0FDF4;
+  --idea-color-success-border: #BBF7D0;
+
+  --idea-color-warning: #B45309;
+  --idea-color-warning-subtle: #FFFBEB;
+  --idea-color-warning-border: #FDE68A;
+
+  --idea-color-danger: #DC2626;
+  --idea-color-danger-subtle: #FEF2F2;
+  --idea-color-danger-border: #FECACA;
+
+  --idea-color-focus-ring: rgba(2, 132, 199, 0.4);
+  --idea-color-backdrop: rgba(15, 23, 42, 0.5);
+}
+
+/* ==========================================================================
+   THEME: DARK
+   ========================================================================== */
+:root[data-theme="dark"], [data-theme="dark"] {
+  --idea-color-bg: #090D16;
+  --idea-color-surface: #0F172A;
+  --idea-color-surface-subtle: #1E293B;
+  --idea-color-surface-hover: #334155;
+  --idea-color-surface-active: #475569;
+
+  --idea-color-border: #334155;
+  --idea-color-border-subtle: #1E293B;
+  --idea-color-border-focus: #38BDF8;
+
+  --idea-color-text: #F8FAFC;
+  --idea-color-text-muted: #CBD5E1;
+  --idea-color-text-faint: #94A3B8;
+  --idea-color-text-inverse: #0F172A;
+
+  --idea-color-primary: #0284C7;
+  --idea-color-primary-hover: #38BDF8;
+  --idea-color-primary-subtle: #082F49;
+  --idea-color-primary-border: #0369A1;
+  --idea-color-primary-text: #FFFFFF;
+
+  --idea-color-success: #22C55E;
+  --idea-color-success-subtle: #052E16;
+  --idea-color-success-border: #14532D;
+
+  --idea-color-warning: #F59E0B;
+  --idea-color-warning-subtle: #451A03;
+  --idea-color-warning-border: #78350F;
+
+  --idea-color-danger: #EF4444;
+  --idea-color-danger-subtle: #450A0A;
+  --idea-color-danger-border: #7F1D1D;
+
+  --idea-color-focus-ring: rgba(56, 189, 248, 0.4);
+  --idea-color-backdrop: rgba(2, 6, 23, 0.7);
+}
+
+/* ==========================================================================
+   DENSITY MODES: COMFORTABLE (Default) vs. COMPACT (High Information Density)
+   ========================================================================== */
+:root, [data-density="comfortable"] {
+  --idea-density-row-height: 40px;
+  --idea-density-cell-padding-y: 8px;
+  --idea-density-cell-padding-x: 12px;
+  --idea-density-font-size-base: 13px;
+  --idea-density-font-size-sm: 12px;
+  --idea-density-btn-height: 32px;
+  --idea-density-btn-padding-x: 12px;
+  --idea-density-input-height: 32px;
+  --idea-density-input-padding-x: 10px;
+  --idea-density-gap-sm: 8px;
+  --idea-density-gap-md: 12px;
+  --idea-density-gap-lg: 16px;
+}
+
+:root[data-density="compact"], [data-density="compact"] {
+  --idea-density-row-height: 32px;
+  --idea-density-cell-padding-y: 4px;
+  --idea-density-cell-padding-x: 8px;
+  --idea-density-font-size-base: 12px;
+  --idea-density-font-size-sm: 11px;
+  --idea-density-btn-height: 26px;
+  --idea-density-btn-padding-x: 8px;
+  --idea-density-input-height: 26px;
+  --idea-density-input-padding-x: 8px;
+  --idea-density-gap-sm: 4px;
+  --idea-density-gap-md: 8px;
+  --idea-density-gap-lg: 12px;
+}

@@ -19,7 +19,7 @@ export function ProjectsView({ projects, selectedProjectId, filter, loading, bus
       <button className="admin-btn" disabled={busy||loading} type="submit">Tìm</button><button className="admin-btn" disabled={busy||loading} type="button" onClick={onReload}>Tải lại Project</button>
     </form>{status}
     {loading ? <p role="status">Đang đọc Project được phép truy cập…</p> : projects===null ? <p>Chưa có dữ liệu được Server xác nhận. Không hiển thị danh sách giả.</p> : projects.length===0 ? <p>Danh sách được phép truy cập hiện không có Project phù hợp.</p> :
-      <div className="admin-table-container"><table className="admin-data-table" aria-label="Danh sách Project"><thead><tr><th>Project ID</th><th>Tên Project</th><th>Version</th><th>Thao tác</th></tr></thead><tbody>
+      <div className="admin-table-container"><div className="admin-table-meta"><span className="admin-table-counter">Đang hiển thị <strong>{projects.length}</strong> dự án</span></div><table className="admin-data-table" aria-label="Danh sách Project"><thead><tr><th>Project ID</th><th>Tên Project</th><th>Version</th><th>Thao tác</th></tr></thead><tbody>
         {projects.map(project=><tr key={project.projectId} className={project.projectId===selectedProjectId?"selected":""}><td><code>{project.projectId}</code></td><td>{project.name}</td><td>{project.version}</td><td>
           <button type="button" className="admin-btn" disabled={busy} onClick={()=>onSelectProject(project)} aria-label={`Mở Project ${project.name}`}>Mở</button>
         </td></tr>)}

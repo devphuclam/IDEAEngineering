@@ -8,7 +8,9 @@ a { color: var(--admin-blue); text-underline-offset: 3px; }
 .session-status { max-width: 960px; width: 100%; margin: 24px auto 0; padding: 0 24px; }
 .session-status + .session-landing-content { margin-top: 0; }
 .account-layout { display: contents; }
-.admin-workspace { grid-template-columns: 238px minmax(380px, 1fr) 310px; }
+.admin-workspace { grid-template-columns: 238px minmax(500px, 1fr) auto; }
+.form-card.destructive-warning { border-color: #fca5a5; background: #fffbfb; }
+.form-card.destructive-warning legend { color: var(--admin-red); }
 .admin-topbar .actor-pill { color: #cbd5e1; }
 .admin-topbar .actor-pill strong { color: #fff; }
 .admin-topbar .admin-btn { background: var(--admin-navy-2); color: #fff; border-color: #476182; }
@@ -55,7 +57,7 @@ code { overflow-wrap: anywhere; font-family: var(--font-mono); font-size: .85em;
 .credential-page p { margin: 12px 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media(max-width:1150px) {
-  .admin-workspace { grid-template-columns: 180px minmax(280px, 1fr) 290px; }
+  .admin-workspace { grid-template-columns: 180px minmax(280px, 1fr) auto; }
   .admin-topbar-brand { min-width: 0; }
 }
 @media(max-width:900px) {
@@ -68,7 +70,9 @@ code { overflow-wrap: anywhere; font-family: var(--font-mono); font-size: .85em;
   .admin-rail-scroll { display: flex; flex-wrap: wrap; gap: 4px; }
   .admin-rail-section-label, .admin-rail-footer { display: none; }
   .admin-nav-item { width: auto; }
-  .admin-inspector { border-left: 0; border-top: 1px solid var(--admin-line); }
+  .admin-inspector { border-left: 0; border-top: 1px solid var(--admin-line); width: 100%!important; }
+  .admin-inspector.collapsed { width: 100%!important; height: auto; }
+  .admin-inspector-expand-btn { writing-mode: horizontal-tb; min-height: 32px; width: 100%; }
   .admin-main-head, .admin-topbar-title { min-width: 0; }
   .admin-main-head { flex-wrap: wrap; }
   .admin-table-container { overflow-x: auto; }

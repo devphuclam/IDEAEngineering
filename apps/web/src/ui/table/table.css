@@ -1,0 +1,115 @@
+/* ==========================================================================
+   IDEA ENGINEERING — SEMANTIC DATA TABLE CSS
+   ========================================================================== */
+
+.idea-table-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--idea-color-surface);
+  border: 1px solid var(--idea-color-border);
+  border-radius: var(--idea-radius-md);
+}
+
+.idea-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--idea-color-border-subtle);
+  background-color: var(--idea-color-surface-subtle);
+  gap: 12px;
+}
+
+.idea-table-scroll-wrapper {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+.idea-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--idea-font-family-sans);
+  font-size: var(--idea-density-font-size-base);
+  text-align: left;
+}
+
+.idea-table th {
+  position: sticky;
+  top: 0;
+  background-color: var(--idea-color-surface-subtle);
+  color: var(--idea-color-text-muted);
+  font-size: var(--idea-font-size-xs);
+  font-weight: var(--idea-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 12px;
+  height: var(--idea-density-table-row-height);
+  border-bottom: 1px solid var(--idea-color-border);
+  z-index: 10;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.idea-table th[aria-sort] {
+  cursor: pointer;
+}
+
+.idea-table th[aria-sort]:hover {
+  background-color: var(--idea-color-surface-hover);
+  color: var(--idea-color-text);
+}
+
+.idea-table-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+
+.idea-table td {
+  padding: 0 12px;
+  height: var(--idea-density-table-row-height);
+  border-bottom: 1px solid var(--idea-color-border-subtle);
+  color: var(--idea-color-text);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.idea-table tbody tr {
+  transition: background-color var(--idea-transition-fast);
+}
+
+.idea-table tbody tr:hover {
+  background-color: var(--idea-color-surface-hover);
+}
+
+.idea-table tbody tr.idea-table-row--selected {
+  background-color: var(--idea-color-primary-subtle);
+}
+
+.idea-table tbody tr:focus-visible {
+  outline: 2px solid var(--idea-color-border-focus);
+  outline-offset: -2px;
+}
+
+.idea-table-footer {
+  padding: 6px 12px;
+  border-top: 1px solid var(--idea-color-border-subtle);
+  background-color: var(--idea-color-surface-subtle);
+  font-size: var(--idea-font-size-xs);
+  color: var(--idea-color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
