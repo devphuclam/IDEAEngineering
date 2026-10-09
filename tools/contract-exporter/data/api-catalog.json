@@ -166,7 +166,7 @@
       "notes": "Đồng thời: Public process observation; no account/session/security-version or credential-proof check; not a transaction outcome.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "processHealth",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-OPS-004"
@@ -200,7 +200,7 @@
       "notes": "Đồng thời: Public database observation at request time; a later operation may observe a different state; no credential proof or eligible-session prerequisite.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "databaseHealth",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-OPS-004"
@@ -246,7 +246,7 @@
       "notes": "Đồng thời: Session-backed CSRF acquisition, including anonymous acquisition. This token is not a one-use credential setup/reset proof.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "csrfAcquisition",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -316,7 +316,7 @@
       "notes": "Đồng thời: Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.\nRetry: Lost response may follow committed sign-in. Inspect the current session before a new login; repeated login is a new authentication attempt, not canonical result replay.",
       "source": {
         "operationId": "nativeSignIn",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -371,7 +371,7 @@
       "notes": "Đồng thời: Current session/account/runtime/security-version eligibility; observation is not permission for a later owner commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "currentSession",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -419,7 +419,7 @@
       "notes": "Đồng thời: Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.\nRetry: After committed logout the old session is ineligible; retry can return 401 rather than another 204. Lost response does not prove rollback. On persistence failure no logout success is reported.",
       "source": {
         "operationId": "signOut",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -561,7 +561,7 @@
       "notes": "Đồng thời: Current exact scoped account-create authority and owner validation at authoritative commit; no implicit role or project entitlement.\nRetry: operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
       "source": {
         "operationId": "createAccount",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -703,7 +703,7 @@
       "notes": "Đồng thời: Expected account security version and current eligible administrator authority rechecked under security-write coordination.\nRetry: operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
       "source": {
         "operationId": "disableAccount",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -845,7 +845,7 @@
       "notes": "Đồng thời: Expected account security version and current authority rechecked; enablement is separate from credential recovery.\nRetry: operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
       "source": {
         "operationId": "reenableAccount",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -981,7 +981,7 @@
       "notes": "Đồng thời: Exact purpose/target/version and current scoped issuance authority at commit; target-bound, one-use, expiring proof; same-purpose supersession only.\nRetry: operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
       "source": {
         "operationId": "issueCredentialProof",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -1075,7 +1075,7 @@
       "notes": "Đồng thời: Proof purpose/target/version/expiry/use status atomically checked; concurrent redemption cannot consume the proof twice.\nRetry: operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
       "source": {
         "operationId": "redeemCredentialProof",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md",
         "trace": [
           "REQ-IAM-001",
@@ -1196,7 +1196,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_I01",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-IAM-002",
@@ -1334,7 +1334,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_I02_LIST",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-IAM-002",
@@ -1481,7 +1481,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_I02_EXACT",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-IAM-002",
@@ -1619,7 +1619,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P01_LIST",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -1768,7 +1768,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P02",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -1899,7 +1899,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P01_EXACT",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -2066,7 +2066,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P03",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -2233,7 +2233,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P04",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -2472,7 +2472,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P05",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -2693,7 +2693,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P06",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -2842,7 +2842,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P07_LIST",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -3018,7 +3018,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P08",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -3158,7 +3158,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P07_EXACT",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -3334,7 +3334,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P09",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -3501,7 +3501,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P10",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -3740,7 +3740,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P11",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -3961,7 +3961,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_P12",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -4056,7 +4056,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_P13",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-011",
@@ -4205,7 +4205,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R01_ROLES",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -4344,7 +4344,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R01_PERMISSIONS",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -4573,7 +4573,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R01_EXACT",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -4856,7 +4856,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_R02",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -4986,7 +4986,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R03",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -5233,7 +5233,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_R04",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -5390,7 +5390,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R05_LIST",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -5664,7 +5664,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_R07",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -5902,7 +5902,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R05_EXACT",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -6122,7 +6122,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R06",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -6378,7 +6378,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_R08",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -6535,7 +6535,7 @@
       "notes": "Đồng thời: Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\nRetry: Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
       "source": {
         "operationId": "UI_R09",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -6728,7 +6728,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_R10",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -6876,7 +6876,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
       "source": {
         "operationId": "UI_A01",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUD-001",
@@ -7069,7 +7069,7 @@
       "notes": "Đồng thời: Current/advisory observation; does not reserve or authorize later commit.\nRetry: UNRESOLVED does not prove rollback. Metadata-only legacy IAM results never promise canonical success or reproduce proofs. Owner-specific command retry remains separate.",
       "source": {
         "operationId": "UI_O01",
-        "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
+        "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md",
         "trace": [
           "REQ-AUTH-001",
@@ -7446,7 +7446,7 @@
     "sources": [
       {
         "surface": "server",
-        "path": "apps/server/src/main/resources/dev-access/openapi.json",
+        "path": "docs/product/instances/idea-engineering/api/server-openapi.json",
         "version": "contract-0.3",
         "sha256": "a4fb92b3459b97efac7f290f29da9f9a1ae4a21cf35460b875663a0610a2f9fc"
       },

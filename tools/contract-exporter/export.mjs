@@ -4,6 +4,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkContract, sourceHashes, json, stableJSON, assertHumanDocument } from './contract.mjs';
+import {checkSwagger,updateSwagger} from './swagger.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const TOOL_DIR = path.dirname(__filename);
@@ -1660,6 +1661,7 @@ async function main() {
   if (args.has('--check') && isUpdate) throw Error('--check is read-only; do not combine with --update');
   if (args.has('--data-only') && !isUpdate) throw Error('--data-only requires --update');
   const packet = checkContract(REPO_ROOT,{checkCatalog:!isUpdate});
+  if(!packet.errors.length&&!isUpdate)packet.errors.push(...checkSwagger(packet));
   const summary = {status:packet.errors.length?'FAIL':'PASS',routes:packet.routes.length,
     operations:packet.operations.length,errors:packet.errors};
   if (args.has('--json')) console.log(stableJSON(summary));
@@ -1670,7 +1672,11 @@ async function main() {
   if (packet.errors.length) { process.exitCode=1; return; }
   if (args.has('--check')) return;
   let catalog = loadCatalog();
-  if (isUpdate) catalog = smartMergeCatalog(catalog,crawlRepository(packet));
+  if (isUpdate) {
+    // Validate the complete view before any catalog or projection write.
+    updateSwagger(packet);
+    catalog = smartMergeCatalog(catalog,crawlRepository(packet));
+  }
   if (args.has('--data-only')) return;
   console.log('IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)');
   console.log('Phiên bản: v' + catalog.metadata.version + ' | ' + catalog.endpoints.length + ' mục');

@@ -20,7 +20,7 @@ function fixture(run) {
       'docs/product/instances/idea-engineering/api']) {
       fs.cpSync(path.join(root,folder),path.join(target,folder),{recursive:true});
     }
-    for (const file of ['export.mjs','contract.mjs','contract-config.json','source-review.json','data/api-catalog.json']) {
+    for (const file of ['export.mjs','contract.mjs','swagger.mjs','contract-config.json','source-review.json','data/api-catalog.json']) {
       const dest=path.join(target,'tools/contract-exporter',file);
       fs.mkdirSync(path.dirname(dest),{recursive:true}); fs.copyFileSync(path.join(tool,file),dest);
     }
@@ -32,7 +32,7 @@ function fixture(run) {
   }
 }
 function editOas(target,edit) {
-  const file=path.join(target,'apps/server/src/main/resources/dev-access/openapi.json');
+  const file=path.join(target,'docs/product/instances/idea-engineering/api/server-openapi.json');
   const doc=json(file);edit(doc);fs.writeFileSync(file,stableJSON(doc));
 }
 function cli(target,...args) {
@@ -297,7 +297,7 @@ test('configuration paths cannot escape the repository',()=>fixture(target=>{
 }));
 
 test('new Swagger descriptions do not unlock Try it out or promise login 503',()=>{
-  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const doc=json(path.join(root,'docs/product/instances/idea-engineering/api/server-openapi.json'));
   for(const [route,item] of Object.entries(doc.paths)) {
     if(route.startsWith('/api/v1/administration/')||route==='/api/v1/projects/{id}')
       for(const operation of Object.values(item))assert.equal(operation['x-idea-documentation-only'],true);
@@ -328,7 +328,7 @@ test('fully qualified Spring annotations cannot hide an undocumented route',()=>
 }));
 
 test('documented refusal/nullable/public semantics match actual boundaries',()=>{
-  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const doc=json(path.join(root,'docs/product/instances/idea-engineering/api/server-openapi.json'));
   const schema=doc.components.schemas;
   for(const [name,field] of [['Role','managementScope'],['AssignmentPreview','before'],['AssignmentPreview','beforeRole'],
     ['Resolution','scope'],['Resolution','retryProfile'],['History','correlationId']])
@@ -340,7 +340,7 @@ test('documented refusal/nullable/public semantics match actual boundaries',()=>
 });
 
 test('login/logout retry describes committed effects rather than read-only replay',()=>{
-  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const doc=json(path.join(root,'docs/product/instances/idea-engineering/api/server-openapi.json'));
   const login=doc.paths['/api/v1/identity/login'].post['x-idea-contract'].retry;
   const logout=doc.paths['/api/v1/identity/logout'].post['x-idea-contract'].retry;
   assert.doesNotMatch(login,/read-only|safe to repeat/i);
@@ -351,9 +351,26 @@ test('login/logout retry describes committed effects rather than read-only repla
 });
 
 test('credential-proof target/version refusal documents the actual 403 mapping',()=>{
-  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const doc=json(path.join(root,'docs/product/instances/idea-engineering/api/server-openapi.json'));
   const responses=doc.paths['/api/v1/identity/accounts/{account}/credential-proofs'].post.responses;
   assert.equal(responses['409'],undefined);
   assert.match(responses['403'].description,/stale version/i);
   assert.match(responses['403'].description,/target/i);
 });
+
+test('Swagger drift is refused read-only and update restores the shared-source view',()=>fixture(target=>{
+  const file=path.join(target,'apps/server/src/main/resources/dev-access/openapi.json');
+  const doc=json(file);doc.paths['/api/v1/administration/accounts'].get.summary='Stale view';
+  fs.writeFileSync(file,stableJSON(doc));
+  const bytes=fs.readFileSync(file),catalog=fs.readFileSync(path.join(target,'tools/contract-exporter/data/api-catalog.json'));
+  const refused=cli(target,'--check');
+  assert.equal(refused.status,1);assert.match(refused.stderr,/STALE_SWAGGER_DOCUMENT/);
+  assert.deepEqual(fs.readFileSync(file),bytes,'check cannot rewrite Swagger');
+  assert.deepEqual(fs.readFileSync(path.join(target,'tools/contract-exporter/data/api-catalog.json')),catalog);
+  assert.equal(cli(target,'--update','--data-only').status,0);
+  assert.equal(cli(target,'--check').status,0);
+  assert.equal(Object.keys(json(file).paths).length,41);
+  const repaired=fs.readFileSync(file);
+  assert.equal(cli(target,'--update','--data-only').status,0);
+  assert.deepEqual(fs.readFileSync(file),repaired,'repeat projection unchanged');
+}));

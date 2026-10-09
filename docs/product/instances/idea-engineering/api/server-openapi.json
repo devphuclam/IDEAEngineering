@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "IDEA · API Contract",
+    "title": "IDEA · Development API",
     "version": "contract-0.3",
-    "description": "API đã có trong Server và Gateway. Các mục DESIGN chưa có wire contract không phải endpoint. Gateway dùng HTTPS/Grant riêng; ở đây chỉ đọc tài liệu."
+    "description": "Current implemented HTTP adapters plus reviewed semantic trace. No deployment claim. Existing credential operations remain documentation-only; all newly catalogued Feature 009 operations are documentation-only here so this document repair does not enable a new Swagger mutation surface."
   },
   "servers": [
     {
@@ -19,7 +19,7 @@
     "/health": {
       "get": {
         "operationId": "processHealth",
-        "summary": "Kiểm tra tiến trình Server",
+        "summary": "Process liveness (not database readiness)",
         "security": [],
         "responses": {
           "200": {
@@ -39,18 +39,13 @@
             "REQ-OPS-004"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "System"
-        ],
-        "x-idea-surface": "server",
-        "description": "Process liveness (not database readiness)\n\n**Thẩm quyền:** Public operational liveness/readiness; no identity authority\n\n**Giao dịch:** Observation only, no business success.\n\n**Đồng thời:** Public process observation; no account/session/security-version or credential-proof check; not a transaction outcome.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation."
+        }
       }
     },
     "/health/database": {
       "get": {
         "operationId": "databaseHealth",
-        "summary": "Kiểm tra kết nối PostgreSQL",
+        "summary": "Actual PostgreSQL readiness",
         "security": [],
         "responses": {
           "200": {
@@ -73,18 +68,13 @@
             "REQ-OPS-004"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "System"
-        ],
-        "x-idea-surface": "server",
-        "description": "Actual PostgreSQL readiness\n\n**Thẩm quyền:** Public operational liveness/readiness; no identity authority\n\n**Giao dịch:** Observation only, no business success.\n\n**Đồng thời:** Public database observation at request time; a later operation may observe a different state; no credential proof or eligible-session prerequisite.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation."
+        }
       }
     },
     "/api/v1/identity/csrf": {
       "get": {
         "operationId": "csrfAcquisition",
-        "summary": "Lấy mã bảo vệ CSRF",
+        "summary": "JSON CSRF acquisition (automatic in this console)",
         "security": [],
         "x-idea-documentation-only": true,
         "responses": {
@@ -114,21 +104,16 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Identity / Session"
-        ],
-        "x-idea-surface": "server",
-        "description": "JSON CSRF acquisition (automatic in this console)\n\n**Thẩm quyền:** Public session-backed CSRF acquisition\n\n**Giao dịch:** Observation only, no business success.\n\n**Đồng thời:** Session-backed CSRF acquisition, including anonymous acquisition. This token is not a one-use credential setup/reset proof.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation."
+        }
       }
     },
     "/api/v1/identity/login": {
       "post": {
         "operationId": "nativeSignIn",
-        "summary": "Đăng nhập hệ thống (Login)",
+        "summary": "Sign in through IDEA Web, not Swagger",
         "security": [],
         "x-idea-documentation-only": true,
-        "description": "Session-backed CSRF is required even for login. Generic refusal covers invalid/disabled/blocked credentials. Successful login rotates servlet proof; Actor is determined by Server. Use the existing Web password control, not an API-console body or generated curl.\n\n**Thẩm quyền:** Native credential verification + CSRF; generic refusal; server-derived Actor\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.\n\n**Retry:** Lost response may follow committed sign-in. Inspect the current session before a new login; repeated login is a new authentication attempt, not canonical result replay.",
+        "description": "Session-backed CSRF is required even for login. Generic refusal covers invalid/disabled/blocked credentials. Successful login rotates servlet proof; Actor is determined by Server. Use the existing Web password control, not an API-console body or generated curl.",
         "requestBody": {
           "required": true,
           "content": {
@@ -186,17 +171,13 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Identity / Session"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/identity/session": {
       "get": {
         "operationId": "currentSession",
-        "summary": "Kiểm tra phiên hiện tại (Session)",
+        "summary": "Read the eligible Server-derived identity",
         "responses": {
           "200": {
             "description": "Eligible session; actorId and accountId",
@@ -227,19 +208,14 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Identity / Session"
-        ],
-        "x-idea-surface": "server",
-        "description": "Read the eligible Server-derived identity\n\n**Thẩm quyền:** Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.\n\n**Giao dịch:** Observation only, no business success.\n\n**Đồng thời:** Current session/account/runtime/security-version eligibility; observation is not permission for a later owner commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation."
+        }
       }
     },
     "/api/v1/identity/logout": {
       "post": {
         "operationId": "signOut",
-        "summary": "Đăng xuất hệ thống (Logout)",
-        "description": "No body. Automatic CSRF header; eligible session required. Success revokes only the current session. Failure does not claim logout success.\n\n**Thẩm quyền:** Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.\n\n**Retry:** After committed logout the old session is ineligible; retry can return 401 rather than another 204. Lost response does not prove rollback. On persistence failure no logout success is reported.",
+        "summary": "Sign out this eligible session only",
+        "description": "No body. Automatic CSRF header; eligible session required. Success revokes only the current session. Failure does not claim logout success.",
         "responses": {
           "204": {
             "description": "Current session revoked"
@@ -269,18 +245,14 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Identity / Session"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/identity/accounts": {
       "post": {
         "operationId": "createAccount",
-        "summary": "Tạo tài khoản người dùng mới",
-        "description": "Exact Organization Scope and role assignment are required. Super Administrator alone cannot create accounts. Does not grant project/group/product access or activate credentials.\n\n**Thẩm quyền:** Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Current exact scoped account-create authority and owner validation at authoritative commit; no implicit role or project entitlement.\n\n**Retry:** operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
+        "summary": "Create a pending account (explicit Account Administrator required)",
+        "description": "Exact Organization Scope and role assignment are required. Super Administrator alone cannot create accounts. Does not grant project/group/product access or activate credentials.",
         "requestBody": {
           "required": true,
           "content": {
@@ -333,17 +305,13 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/identity/accounts/{account}/disable": {
       "post": {
         "operationId": "disableAccount",
-        "summary": "Vô hiệu hóa tài khoản (Disable)",
+        "summary": "Disable an account; identities/history remain stable",
         "parameters": [
           {
             "$ref": "#/components/parameters/Account"
@@ -401,18 +369,13 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server",
-        "description": "Disable an account; identities/history remain stable\n\n**Thẩm quyền:** Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Expected account security version and current eligible administrator authority rechecked under security-write coordination.\n\n**Retry:** operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
+        }
       }
     },
     "/api/v1/identity/accounts/{account}/re-enable": {
       "post": {
         "operationId": "reenableAccount",
-        "summary": "Kích hoạt lại tài khoản (Re-enable)",
+        "summary": "Re-enable separately from password recovery; fresh login required",
         "parameters": [
           {
             "$ref": "#/components/parameters/Account"
@@ -470,20 +433,15 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server",
-        "description": "DISABLED -> ACTIVE if a credential exists, otherwise PENDING; fresh sign-in required.\n\n**Thẩm quyền:** Eligible Server session; account mutations require matching explicit Account Administrator Permission and Organization Scope; POST requires CSRF.\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Expected account security version and current authority rechecked; enablement is separate from credential recovery.\n\n**Retry:** operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused."
+        }
       }
     },
     "/api/v1/identity/accounts/{account}/credential-proofs": {
       "post": {
         "operationId": "issueCredentialProof",
-        "summary": "Cấp mã thiết lập / đặt lại mật khẩu (Proof)",
+        "summary": "Issue setup/reset proof through an explicitly enabled delivery mode (documentation-only)",
         "x-idea-documentation-only": true,
-        "description": "Separate setup/reset Permissions (supported AA@2/AA@3), eligible scoped issuer. RESET requires exact loginIdentityId and ACTIVE or DISABLED target. Manual delivery requires exact loginIdentityId for either purpose. One-use expiring proof; transient private handoff only; no guaranteed delivery/deployment claim.\n\nFIRST_SETUP appropriate PENDING target; RESET ACTIVE or DISABLED, exact Login Identity and expected security version. Manual delivery requires exact loginIdentityId for both purposes.\n\n**Thẩm quyền:** Independent setup/reset Permission at exact Organization Scope + eligible session + CSRF\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Exact purpose/target/version and current scoped issuance authority at commit; target-bound, one-use, expiring proof; same-purpose supersession only.\n\n**Retry:** operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
+        "description": "Separate setup/reset Permissions (supported AA@2/AA@3), eligible scoped issuer. RESET requires exact loginIdentityId and ACTIVE or DISABLED target. Manual delivery requires exact loginIdentityId for either purpose. One-use expiring proof; transient private handoff only; no guaranteed delivery/deployment claim.",
         "parameters": [
           {
             "$ref": "#/components/parameters/Account"
@@ -538,20 +496,16 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/identity/credentials": {
       "post": {
         "operationId": "redeemCredentialProof",
-        "summary": "Đổi mật khẩu bằng mã Proof",
+        "summary": "Redeem through the official credential flow, not Swagger",
         "security": [],
         "x-idea-documentation-only": true,
-        "description": "Proof authorizes the exact target, not an administrator role. CSRF still required. Reset changes only the pinned Login Identity credential, increases Account security version and invalidates old sessions/proofs; it cannot re-enable a disabled account.\n\nReset preserves DISABLED and actor disabled_at; old Account sessions/proofs invalidate.\n\n**Thẩm quyền:** Exact target-bound one-use expiring proof + CSRF; no administrator role required\n\n**Giao dịch:** Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.\n\n**Đồng thời:** Proof purpose/target/version/expiry/use status atomically checked; concurrent redemption cannot consume the proof twice.\n\n**Retry:** operationId is attribution, not universal idempotency. Do not blindly replay create or disclose/recreate proofs. Inspect current state after lost response; reset/setup redemption cannot be reused.",
+        "description": "Proof authorizes the exact target, not an administrator role. CSRF still required. Reset changes only the pinned Login Identity credential, increases Account security version and invalidates old sessions/proofs; it cannot re-enable a disabled account.",
         "requestBody": {
           "required": true,
           "content": {
@@ -591,18 +545,14 @@
             "IF-ACCOUNT-SESSION"
           ],
           "semanticSource": "docs/product/instances/idea-engineering/api/identity-session.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/context": {
       "get": {
         "operationId": "UI_I01",
-        "summary": "Ngữ cảnh quản trị hiện tại",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; eligible self; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Current administration context",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [],
         "responses": {
@@ -691,18 +641,14 @@
             "IF-DIRECTORY-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Identity / Session"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/accounts": {
       "get": {
         "operationId": "UI_I02_LIST",
-        "summary": "Danh sách tài khoản được phép quản trị",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; account.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "List authorized accounts",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -831,18 +777,14 @@
             "IF-DIRECTORY-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/accounts/{account}": {
       "get": {
         "operationId": "UI_I02_EXACT",
-        "summary": "Chi tiết tài khoản",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; account.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read exact Account, not Actor selector",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -950,18 +892,14 @@
             "IF-DIRECTORY-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Accounts"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/projects": {
       "get": {
         "operationId": "UI_P01_LIST",
-        "summary": "Danh sách Project được phép quản trị",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.admin.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "List administered Projects",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1092,16 +1030,12 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       },
       "post": {
         "operationId": "UI_P02",
-        "summary": "Tạo Project",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.create at Organization; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Create Project; no automatic membership or Role",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [],
         "requestBody": {
@@ -1202,18 +1136,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/projects/{id}": {
       "get": {
         "operationId": "UI_P01_EXACT",
-        "summary": "Chi tiết Project quản trị",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.admin.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read administered Project",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1323,18 +1253,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/projects/{id}/update": {
       "post": {
         "operationId": "UI_P03",
-        "summary": "Đổi tên Project",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.update; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Rename Project; not general product write",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1445,18 +1371,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/projects/{id}/members": {
       "get": {
         "operationId": "UI_P04",
-        "summary": "Danh sách thành viên Project",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.admin.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read direct Project membership and eligible targets",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1596,16 +1518,12 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       },
       "post": {
         "operationId": "UI_P05",
-        "summary": "Thêm thành viên Project",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.membership.assign; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Assign direct Project participation",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1716,18 +1634,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/project-memberships/{id}/end": {
       "post": {
         "operationId": "UI_P06",
-        "summary": "Kết thúc tư cách thành viên Project",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.membership.remove; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "End Project participation; retain history",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1838,18 +1752,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/projects/{id}/groups": {
       "get": {
         "operationId": "UI_P07_LIST",
-        "summary": "Danh sách Group trong Project",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.admin.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "List Project Groups",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -1989,16 +1899,12 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       },
       "post": {
         "operationId": "UI_P08",
-        "summary": "Tạo Group",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.group.create; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Create Project Group",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2109,18 +2015,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/groups/{id}": {
       "get": {
         "operationId": "UI_P07_EXACT",
-        "summary": "Chi tiết Group",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.admin.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read exact Project Group",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2230,18 +2132,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/groups/{id}/update": {
       "post": {
         "operationId": "UI_P09",
-        "summary": "Đổi tên Group",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.group.update; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Rename Project Group",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2352,18 +2250,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/groups/{id}/members": {
       "get": {
         "operationId": "UI_P10",
-        "summary": "Danh sách thành viên Group",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.admin.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read direct Group membership and eligible targets",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2503,16 +2397,12 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       },
       "post": {
         "operationId": "UI_P11",
-        "summary": "Thêm thành viên Group",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.group.membership.assign and current Project Membership; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Assign direct Group membership",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2623,18 +2513,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/group-memberships/{id}/end": {
       "post": {
         "operationId": "UI_P12",
-        "summary": "Kết thúc tư cách thành viên Group",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.group.membership.remove; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "End direct Group membership",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2745,18 +2631,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/projects/{id}": {
       "get": {
         "operationId": "UI_P13",
-        "summary": "Xem Project với quyền tham gia",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; project.read AND current Project Membership; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read bounded participant Project",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -2857,18 +2739,14 @@
             "IF-PROJECT-ACCESS-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Projects / Groups"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/roles": {
       "get": {
         "operationId": "UI_R01_ROLES",
-        "summary": "Danh sách Role và phiên bản được hỗ trợ",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; role.catalogue.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "List exact supported Role versions",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -3007,18 +2885,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Roles"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/permissions": {
       "get": {
         "operationId": "UI_R01_PERMISSIONS",
-        "summary": "Danh sách Permission được hỗ trợ",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; role.catalogue.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "List registered supported Permissions",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -3148,18 +3022,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Roles"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/roles/{id}/versions/{version}": {
       "get": {
         "operationId": "UI_R01_EXACT",
-        "summary": "Chi tiết phiên bản Role bất biến",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; role.catalogue.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read exact immutable Role version",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -3286,18 +3156,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Roles"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/roles/candidates": {
       "post": {
         "operationId": "UI_R02",
-        "summary": "Tạo bản dự thảo Custom Role",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; role.definition.prepare AND current delegable ceiling; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Prepare Custom Role candidate; no self-authorization",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [],
         "requestBody": {
@@ -3397,18 +3263,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Roles"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/roles/candidates/{id}/validate": {
       "post": {
         "operationId": "UI_R03",
-        "summary": "Kiểm tra bản dự thảo Custom Role",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; role.definition.prepare AND current delegable ceiling; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Validate candidate without activation",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -3518,18 +3380,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Roles"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/roles/candidates/{id}/activate": {
       "post": {
         "operationId": "UI_R04",
-        "summary": "Kích hoạt phiên bản Custom Role mới",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; role.definition.activate AND current delegable ceiling; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Activate immutable Custom Role successor",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -3639,18 +3497,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Roles"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/assignments": {
       "get": {
         "operationId": "UI_R05_LIST",
-        "summary": "Danh sách Role Assignment",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; access.inspect; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "List separately scoped Role assignments",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -3798,16 +3652,12 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Assignments"
-        ],
-        "x-idea-surface": "server"
+        }
       },
       "post": {
         "operationId": "UI_R07",
-        "summary": "Cấp Role Assignment độc lập",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; matching business/administration/highest delegation permission; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Grant independent exact-version assignment",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [],
         "requestBody": {
@@ -3907,18 +3757,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Assignments"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/assignments/{id}": {
       "get": {
         "operationId": "UI_R05_EXACT",
-        "summary": "Chi tiết Role Assignment",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; access.inspect; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read exact retained Role assignment",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -4036,18 +3882,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Assignments"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/assignments/preview": {
       "post": {
         "operationId": "UI_R06",
-        "summary": "Xem trước quyền và hệ quả của Role Assignment",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; matching business/administration/highest delegation permission; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Preview exact Role/version, principal and consequences",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [],
         "requestBody": {
@@ -4147,18 +3989,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Assignments"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/assignments/{id}/end": {
       "post": {
         "operationId": "UI_R08",
-        "summary": "Thu hồi Role Assignment",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; matching delegation permission; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "End assignment with last-Super recovery protection",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -4268,18 +4106,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Assignments"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/assignments/{id}/replace": {
       "post": {
         "operationId": "UI_R09",
-        "summary": "Thay thế Role Assignment",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; matching delegation permission; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Authoritative owner state, outcome, Access Policy evidence and Audit share transaction fate; commit-time authority/state recheck.\n\n**Đồng thời:** Expected-version checks and security-write coordination; stale snapshots must be reviewed again.\n\n**Retry:** Committed identical operationId/input resolves the original result; changed input refuses; confirmed rollback has no success. Lost response: resolve/retry the same command, never invent a new success.",
+        "summary": "Atomic end predecessor and grant successor",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -4389,18 +4223,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Assignments"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/access-inspections": {
       "post": {
         "operationId": "UI_R10",
-        "summary": "Giải thích các đường đóng góp quyền",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; access.inspect; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Inspect all contributing access paths; owner gates not evaluated",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [],
         "requestBody": {
@@ -4500,18 +4330,14 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Access"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/history": {
       "get": {
         "operationId": "UI_A01",
-        "summary": "Lịch sử quản trị trong phạm vi được phép",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; independent audit.read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** Read-only current observation; safe to repeat, never replay a mutation.",
+        "summary": "Read bounded administration history, not general Audit export",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -4650,18 +4476,14 @@
             "IF-PRODUCT-QUERY"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Access"
-        ],
-        "x-idea-surface": "server"
+        }
       }
     },
     "/api/v1/administration/operations/{id}": {
       "get": {
         "operationId": "UI_O01",
-        "summary": "Tra cứu kết quả thao tác được phép",
-        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.\n\nExact Organization/Project target; current scope/eligibility; management is not engineering participation.\n\n**Thẩm quyền:** Eligible Server-established session; eligible originator + relevant read authority OR independently scoped inspector + relevant owner read; mutations and POST queries require ordinary CSRF.\n\n**Giao dịch:** Read-only; no mutation, assignment or replay of owner command.\n\n**Đồng thời:** Current/advisory observation; does not reserve or authorize later commit.\n\n**Retry:** UNRESOLVED does not prove rollback. Metadata-only legacy IAM results never promise canonical success or reproduce proofs. Owner-specific command retry remains separate.",
+        "summary": "Resolve authorized owner metadata; not mutation replay",
+        "description": "Existing Feature 009 adapter. See semantic contract for exact delegation, target state and retry limits.",
         "x-idea-documentation-only": true,
         "parameters": [
           {
@@ -4779,177 +4601,7 @@
             "IF-RBAC-ADMIN"
           ],
           "semanticSource": "specs/009-iam-rbac-ui-integration/contracts/operations.md"
-        },
-        "tags": [
-          "Access"
-        ],
-        "x-idea-surface": "server"
-      }
-    },
-    "/transfer/range": {
-      "post": {
-        "operationId": "uploadTransferRange",
-        "summary": "Tải lên từng mảnh file (Range Upload)",
-        "description": "Client → Gateway trực tiếp qua HTTPS và signed Grant; không gọi đường dẫn này trên Server. Try it out tắt để không nhập hoặc hiển thị Grant trong console.\n\nHTTPS required. Binary response: big-endian int64 verifiedBytes + int32 receiptLength + exactly receiptLength signed Receipt bytes. Not JSON. Negative bodies are empty.\n\nDeclared range/chunk hash and exact Grant/Vault/allocation; validated bytes, not custody publication.\n\n**Thẩm quyền:** HTTPS + exact signed Grant; no ordinary Server session, CSRF or product RBAC here.\n\n**Giao dịch:** Filesystem completion is not PostgreSQL custody. Server Receipt verification + current IAM/allocation commit remain a separate owner operation.\n\n**Đồng thời:** Adapter serializes compatible ranges; conflicting/busy input refuses; no hidden overwrite.\n\n**Retry:** Identical range retry/status resolution uses qualified transfer identity; interruption/lost response do not imply custody success. Expired Grant requires explicit Server renewal.",
-        "parameters": [
-          {
-            "name": "X-IDEA-Range-Start",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^(0|[1-9][0-9]{0,18})$"
-            },
-            "description": "Inclusive byte offset; must fit long"
-          },
-          {
-            "name": "X-IDEA-Range-End",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^(0|[1-9][0-9]{0,18})$"
-            },
-            "description": "Exclusive endpoint; end-start <=1048576"
-          },
-          {
-            "name": "X-IDEA-Chunk-SHA256",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Binary verified-progress/Receipt frame",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Malformed/range/size/hash refusal; empty body"
-          },
-          "403": {
-            "description": "Invalid Grant authority/HTTPS; empty body"
-          },
-          "408": {
-            "description": "Absolute request or inactivity timeout; empty body"
-          },
-          "409": {
-            "description": "Busy/range/completion conflict; empty body"
-          },
-          "503": {
-            "description": "I/O/storage failure; no transfer success inferred"
-          }
-        },
-        "x-idea-contract": {
-          "code": "VLT-01",
-          "status": "HTTP",
-          "owner": "Gateway / FilesystemVaultAdapter",
-          "authority": "HTTPS + exact signed Grant; no ordinary Server session, CSRF or product RBAC here.",
-          "state": "Declared range/chunk hash and exact Grant/Vault/allocation; validated bytes, not custody publication.",
-          "atomicity": "Filesystem completion is not PostgreSQL custody. Server Receipt verification + current IAM/allocation commit remain a separate owner operation.",
-          "concurrency": "Adapter serializes compatible ranges; conflicting/busy input refuses; no hidden overwrite.",
-          "retry": "Identical range retry/status resolution uses qualified transfer identity; interruption/lost response do not imply custody success. Expired Grant requires explicit Server renewal.",
-          "trace": [
-            "REQ-WS-016",
-            "REQ-SEC-002",
-            "IF-ARTIFACT-TRANSFER"
-          ],
-          "semanticSource": "specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md"
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary",
-                "description": "Exactly the declared range; at most 1 MiB. No JSON body."
-              }
-            }
-          }
-        },
-        "tags": [
-          "Gateway"
-        ],
-        "x-idea-surface": "gateway",
-        "x-idea-documentation-only": true,
-        "security": [
-          {
-            "Gateway_transferGrant": []
-          }
-        ]
-      }
-    },
-    "/transfer/status": {
-      "post": {
-        "operationId": "resolveTransferStatus",
-        "summary": "Kiểm tra tiến độ & Lấy lại biên lai (Transfer Status)",
-        "description": "Client → Gateway trực tiếp qua HTTPS và signed Grant; không gọi đường dẫn này trên Server. Try it out tắt để không nhập hoặc hiển thị Grant trong console.\n\nHTTPS required. Binary response: big-endian int64 verifiedBytes + int32 receiptLength + exactly receiptLength signed Receipt bytes. Not JSON. Negative bodies are empty.\n\nNo request body. Current verified progress / exact signed Receipt.\n\n**Thẩm quyền:** HTTPS + exact signed Grant; no ordinary Server session, CSRF or product RBAC here.\n\n**Giao dịch:** Filesystem completion is not PostgreSQL custody. Server Receipt verification + current IAM/allocation commit remain a separate owner operation.\n\n**Đồng thời:** Adapter serializes compatible ranges; conflicting/busy input refuses; no hidden overwrite.\n\n**Retry:** Identical range retry/status resolution uses qualified transfer identity; interruption/lost response do not imply custody success. Expired Grant requires explicit Server renewal.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Binary verified-progress/Receipt frame",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Malformed/range/size/hash refusal; empty body"
-          },
-          "403": {
-            "description": "Invalid Grant authority/HTTPS; empty body"
-          },
-          "408": {
-            "description": "Absolute request or inactivity timeout; empty body"
-          },
-          "409": {
-            "description": "Busy/range/completion conflict; empty body"
-          },
-          "503": {
-            "description": "I/O/storage failure; no transfer success inferred"
-          }
-        },
-        "x-idea-contract": {
-          "code": "VLT-02",
-          "status": "HTTP",
-          "owner": "Gateway / FilesystemVaultAdapter",
-          "authority": "HTTPS + exact signed Grant; no ordinary Server session, CSRF or product RBAC here.",
-          "state": "No request body. Current verified progress / exact signed Receipt.",
-          "atomicity": "Filesystem completion is not PostgreSQL custody. Server Receipt verification + current IAM/allocation commit remain a separate owner operation.",
-          "concurrency": "Adapter serializes compatible ranges; conflicting/busy input refuses; no hidden overwrite.",
-          "retry": "Identical range retry/status resolution uses qualified transfer identity; interruption/lost response do not imply custody success. Expired Grant requires explicit Server renewal.",
-          "trace": [
-            "REQ-WS-016",
-            "REQ-SEC-002",
-            "IF-ARTIFACT-TRANSFER"
-          ],
-          "semanticSource": "specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md"
-        },
-        "tags": [
-          "Gateway"
-        ],
-        "x-idea-surface": "gateway",
-        "x-idea-documentation-only": true,
-        "security": [
-          {
-            "Gateway_transferGrant": []
-          }
-        ]
+        }
       }
     }
   },
@@ -4960,12 +4612,6 @@
         "in": "cookie",
         "name": "IDEA_SESSION",
         "description": "Ordinary HttpOnly Server session. Sign in at IDEA Web; never paste cookie/proof. Browser sends cookie automatically; this console has no Authorize input."
-      },
-      "Gateway_transferGrant": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-IDEA-Grant",
-        "description": "Canonical base64url signed Grant. Never retain a real Grant in examples."
       }
     },
     "parameters": {
@@ -6924,31 +6570,5 @@
         }
       }
     }
-  },
-  "tags": [
-    {
-      "name": "System"
-    },
-    {
-      "name": "Identity / Session"
-    },
-    {
-      "name": "Accounts"
-    },
-    {
-      "name": "Projects / Groups"
-    },
-    {
-      "name": "Roles"
-    },
-    {
-      "name": "Assignments"
-    },
-    {
-      "name": "Access"
-    },
-    {
-      "name": "Gateway"
-    }
-  ]
+  }
 }

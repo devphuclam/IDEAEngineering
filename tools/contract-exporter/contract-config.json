@@ -4,7 +4,7 @@
     {
       "id": "server",
       "sourceRoot": "apps/server/src/main/java",
-      "openapi": "apps/server/src/main/resources/dev-access/openapi.json"
+      "openapi": "docs/product/instances/idea-engineering/api/server-openapi.json"
     },
     {
       "id": "gateway",
