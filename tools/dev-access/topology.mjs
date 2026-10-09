@@ -7,7 +7,7 @@ export const defaults = {
   backendOrigin: 'https://127.0.0.1:18449', backendTlsName: 'localhost',
   frontendOrigin: 'http://127.0.0.1:18450', frontendPort: 5175,
   sshHost: '192.168.137.33', sshUser: 'phuclam',
-  remoteRoot: '/home/phuclam/idea-dev-access-20261009-51',
+  remoteRoot: '/home/phuclam/idea-dev-access-20261009-51-02',
   certificate: '/home/phuclam/idea-nginx-dev-20261008-49/tls/certificate.pem',
   encryptedKey: '/home/phuclam/idea-nginx-dev-20261008-49/tls/key.encrypted.pem',
   tlsPasswordFile: '/home/phuclam/idea-iam-ui-20261007-46/tls-01/password.private',
@@ -83,6 +83,7 @@ events { worker_connections 256; }
 http {
   access_log off; server_tokens off;
   client_body_temp_path temp/client; proxy_temp_path temp/proxy;
+  fastcgi_temp_path temp/fastcgi; uwsgi_temp_path temp/uwsgi; scgi_temp_path temp/scgi;
   map $http_host $known_host { default 0; "${authority}" 1; }
   map "$http_host|$http_origin" $same_origin {
     default 0; "${authority}|" 1; "${authority}|${c.publicOrigin}" 1;

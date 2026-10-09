@@ -103,7 +103,7 @@ data replication are not introduced or qualified here.
 - Retained DB `idea_ddm_iam_ui_20261007_46`, schema
   `iam_ui_c3b8cde44f9a4d1199306c381c12d1bb`, migrator owner/app runtime split.
   No migration/bootstrap/fixture/credential or authority mutation.
-- Fresh remote root `/home/phuclam/idea-dev-access-20261009-51`, phuclam:700;
+- Fresh remote root `/home/phuclam/idea-dev-access-20261009-51-02`, phuclam:700;
   loopback edge18448, Server18449, SSH reverse18450; local Vite5175 only.
 - TLS material remains on Ubuntu, pin
   `6cee40386182902343aeb0ad6db1110656b1c293dcc3c33fbc3fe32251d965ad`,
