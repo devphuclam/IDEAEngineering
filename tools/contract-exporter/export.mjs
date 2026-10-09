@@ -3,49 +3,64 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import {
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  Table,
-  TableRow,
-  TableCell,
-  HeadingLevel,
-  AlignmentType,
-  BorderStyle,
-  WidthType,
-  ShadingType,
-  ImageRun,
-  Header,
-  Footer,
-  PageNumber
-} from 'docx';
-import ExcelJS from 'exceljs';
+import { checkContract, sourceHashes, json, stableJSON, assertHumanDocument } from './contract.mjs';
+import {checkSwagger,updateSwagger} from './swagger.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const TOOL_DIR = __dirname;
+const TOOL_DIR = path.dirname(__filename);
 const REPO_ROOT = path.resolve(TOOL_DIR, '../..');
-const DATA_DIR = path.resolve(TOOL_DIR, 'data');
-const OUTPUT_DIR = path.resolve(TOOL_DIR, 'output');
-const ARCHIVE_DIR = path.resolve(OUTPUT_DIR, 'archive');
-const CATALOG_PATH = path.resolve(DATA_DIR, 'api-catalog.json');
+const CATALOG_PATH = path.join(TOOL_DIR, 'data/api-catalog.json');
+let DATA_DIR, OUTPUT_DIR, ARCHIVE_DIR, exportDate, exportDateTime;
+let Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, HeadingLevel, AlignmentType, BorderStyle, WidthType, ShadingType, ImageRun, Header, Footer, PageNumber, ExcelJS;
 
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-}
-if (!fs.existsSync(ARCHIVE_DIR)) {
-  fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
+function loadCatalog() {
+  return json(CATALOG_PATH);
 }
 
-const exportDate = new Date().toLocaleDateString('vi-VN', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-});
-const exportDateTime = new Date().toLocaleString('vi-VN');
+// The old exporter still consumes its editorial catalog. These declared sources
+// now supply the missing current HTTP adapters instead of only logging route counts.
+function crawlRepository(packet) {
+  console.log('--- ĐỐI SOÁT NGUỒN API ---');
+  for (const source of packet.config.surfaces) console.log('[SOURCE] ' + source.openapi);
+  for (const source of new Set(packet.operations.map(entry=>entry.contract.semanticSource)))
+    console.log('[SEMANTIC] ' + source);
+  console.log('[DESIGN] ' + packet.config.designSource);
+  return packet.catalog;
+}
 
+function smartMergeCatalog(catalog, sources) {
+  const existing = new Map(catalog.endpoints.map(entry=>[entry.code,entry]));
+  const newCount = sources.endpoints.filter(entry=>!existing.has(entry.code)).length;
+  const updatedCount = sources.endpoints.filter(entry=>existing.has(entry.code)
+    && stableJSON(existing.get(entry.code)) !== stableJSON(entry)).length;
+  catalog.endpoints = sources.endpoints;
+  catalog.provenance = sources.provenance;
+  const latestVersion = Math.max(...[catalog.metadata.version,...catalog.metadata.revisions.map(entry=>entry.version)]
+    .map(Number).filter(Number.isFinite));
+  if (newCount || Number(catalog.metadata.version) < latestVersion) {
+    const versions = [catalog.metadata.version,...catalog.metadata.revisions.map(entry=>entry.version)]
+      .map(Number).filter(Number.isFinite);
+    catalog.metadata.version = (Math.max(...versions) + 0.1).toFixed(1);
+    catalog.metadata.documentCode = catalog.metadata.documentCode.replace(/Phiên bản [\d.]+/,
+      'Phiên bản ' + catalog.metadata.version);
+    catalog.metadata.revisions.push({
+      version:catalog.metadata.version,date:new Date().toLocaleDateString('vi-VN'),
+      author:catalog.metadata.author,description:newCount ? 'Bổ sung ' + newCount + ' mục API từ nguồn.' : 'Đồng bộ danh mục API hiện tại.'
+    });
+  }
+  const text = stableJSON(catalog);
+  if (fs.readFileSync(CATALOG_PATH,'utf8').replace(/\r\n/g,'\n') !== text) {
+    fs.writeFileSync(CATALOG_PATH + '.tmp',text);
+    fs.renameSync(CATALOG_PATH + '.tmp',CATALOG_PATH);
+  }
+  console.log('[SMART MERGE] Cập nhật ' + updatedCount + ' mục, bổ sung ' + newCount + ' mục; giữ metadata/lịch sử và diễn giải.');
+  return catalog;
+}
+
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+}
 // Helper to convert multiline strings safely into OpenXML TextRuns (no literal \n in <w:t>)
 function createSafeTextRuns(text, options = {}) {
   if (!text) return [new TextRun({ text: "", ...options })];
@@ -70,196 +85,6 @@ function createCodeRuns(codeText) {
   }));
 }
 
-// 1. Load API Catalog
-function loadCatalog() {
-  if (!fs.existsSync(CATALOG_PATH)) {
-    throw new Error(`Không tìm thấy file catalog dữ liệu tại: ${CATALOG_PATH}`);
-  }
-  return JSON.parse(fs.readFileSync(CATALOG_PATH, 'utf-8'));
-}
-
-// 2. AUTO-DISCOVERY CRAWLER: Quét tự động repo qua các Phase
-function crawlRepository() {
-  console.log('--- KHỞI ĐỘNG AUTO-DISCOVERY CRAWLER ---');
-  const harvested = [];
-  const apiDir = path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api');
-
-  if (fs.existsSync(apiDir)) {
-    const files = fs.readdirSync(apiDir).filter(f => f.endsWith('.md'));
-    const ignoreList = ['README.md', 'guide.vi.md', 'cpd-guide.vi.md', 'overview.vi.md', 'partner-brief.md', 'template.md'];
-
-    for (const file of files) {
-      if (ignoreList.includes(file)) continue;
-      const filePath = path.join(apiDir, file);
-      const content = fs.readFileSync(filePath, 'utf-8');
-
-      // 1. Xác định Phase & Title từ tiêu đề hoặc Control Field
-      let phase = 'Giai đoạn kế thừa';
-      const phaseMatch = file.match(/ph(\d+)/i) || content.match(/#\s*PH(\d+)/i) || content.match(/PH(\d+)/i);
-      if (phaseMatch) {
-        phase = `Phase ${phaseMatch[1]}`;
-      } else if (file.includes('identity')) {
-        phase = 'Phase 1';
-      }
-
-      console.log(`[CRAWL] Phát hiện tài liệu: ${file} (${phase})`);
-
-      // 2. Bóc tách Operation Cards (### CODE - TITLE)
-      const cardRegex = /###\s+([A-Z0-9.-]+)\s+[—–-]\s+([^\r\n]+)\r?\n([\s\S]*?)(?=\r?\n###|\r?\n##|$)/g;
-      let match;
-      while ((match = cardRegex.exec(content)) !== null) {
-        const code = match[1].trim();
-        const rawTitle = match[2].trim();
-        const body = match[3];
-
-        const authInput = (body.match(/-\s+\*\*Authority \/ input:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
-        const inputSec = (body.match(/-\s+\*\*Input:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
-        const output = (body.match(/-\s+\*\*Output:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
-        const state = (body.match(/-\s+\*\*State \/ atomicity:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || body.match(/-\s+\*\*Preconditions \/ state effect:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
-        const error = (body.match(/-\s+\*\*Error \/ concurrency:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || body.match(/-\s+\*\*Failure:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
-        const retry = (body.match(/-\s+\*\*Idempotency \/ retry:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || body.match(/-\s+\*\*Retry \/ recovery:\*\*\s*([^\r\n]+(?:\r?\n(?!-\s+\*\*)[^\r\n]+)*)/i) || [])[1]?.replace(/\r?\n\s*/g, ' ').trim() || '';
-
-        // Tự nhận diện HTTP Method & Path nếu có sẵn trong tiêu đề
-        let method = 'TBD';
-        let routePath = 'Chưa xác lập (Design stage)';
-        const methodMatch = rawTitle.match(/^(GET|POST|PUT|DELETE|PATCH)\s+([^\s]+)/i);
-        let cleanName = rawTitle;
-        if (methodMatch) {
-          method = methodMatch[1].toUpperCase();
-          routePath = methodMatch[2];
-          cleanName = rawTitle.replace(/^(GET|POST|PUT|DELETE|PATCH)\s+[^\s]+/, '').trim() || rawTitle;
-        }
-
-        harvested.push({
-          sourceFile: file,
-          phase,
-          code,
-          name: cleanName,
-          method,
-          path: routePath,
-          authInput: authInput || inputSec,
-          output,
-          state,
-          error,
-          retry,
-        });
-      }
-    }
-  }
-
-  // 3. Quét các file OpenAPI JSON trong hệ thống
-  const openapiFiles = [
-    path.resolve(REPO_ROOT, 'apps/server/src/main/resources/dev-access/openapi.json'),
-    path.resolve(REPO_ROOT, 'docs/product/instances/idea-engineering/api/cpd-openapi.json')
-  ];
-  for (const oasFile of openapiFiles) {
-    if (fs.existsSync(oasFile)) {
-      try {
-        const oas = JSON.parse(fs.readFileSync(oasFile, 'utf-8'));
-        if (oas.paths && Object.keys(oas.paths).length > 0) {
-          console.log(`[CRAWL] Phát hiện OpenAPI: ${path.basename(oasFile)} (${Object.keys(oas.paths).length} routes)`);
-        }
-      } catch (err) {
-        // bỏ qua nếu lỗi cú pháp
-      }
-    }
-  }
-
-  console.log(`[CRAWL] Đã thu hoạch ${harvested.length} thẻ đặc tả từ repo.\n`);
-  return harvested;
-}
-
-// 3. SMART MERGE: Cập nhật thông số kỹ thuật mới nhưng bảo tồn 100% tiếng Việt làm giàu
-function smartMergeCatalog(catalog, harvested) {
-  console.log('--- ĐANG THỰC HIỆN SMART MERGE VÀO CATALOG ---');
-  let updatedCount = 0;
-  let newCount = 0;
-
-  for (const item of harvested) {
-    const existing = catalog.endpoints.find(e =>
-      e.code === item.code ||
-      (e.path !== 'Chưa xác lập (Design stage)' && e.path === item.path && e.method === item.method)
-    );
-
-    if (existing) {
-      // Cập nhật thuộc tính kỹ thuật, giữ nguyên văn giải thích tiếng Việt
-      if (item.phase && !existing.phase) existing.phase = item.phase;
-      if (item.method !== 'TBD') existing.method = item.method;
-      if (!existing.path.includes('api') && item.path.includes('api')) existing.path = item.path;
-      updatedCount++;
-    } else {
-      // Endpoint hoàn toàn mới từ Phase tiếp theo -> Tạo entry chuẩn
-      const newEntry = {
-        code: item.code,
-        name: item.name,
-        group: item.phase.includes('Phase 2') ? 'Dữ liệu Sản phẩm PDM (CPD)' : 'Nghiệp vụ Mở rộng',
-        phase: item.phase,
-        method: item.method || 'TBD',
-        path: item.path || 'TBD (Chưa chốt)',
-        auth: item.authInput ? item.authInput.slice(0, 80) : 'Theo quyền hạn dự án',
-        status: item.phase.includes('Phase 1') ? '[ĐÃ TRIỂN KHAI]' : `[THIẾT KẾ ${item.phase.replace('Phase ', 'PH').split(' ')[0]}]`,
-        description: item.authInput ? `Đặc tả: ${item.name}. ${item.authInput.slice(0, 200)}` : `Quy hoạch đặc tả chức năng ${item.name}`,
-        preconditions: item.state ? item.state.slice(0, 160) : 'Theo quy định kiểm soát phiên và dự án',
-        stateEffects: item.state ? item.state.slice(0, 160) : 'Ghi nhận giao dịch nghiệp vụ có thẩm quyền',
-        headers: [
-          { name: 'Accept', required: true, description: 'application/json' }
-        ],
-        fields: [
-          {
-            name: 'payload',
-            in: 'Request/Response',
-            type: 'object',
-            required: true,
-            validation: 'Chờ phê duyệt DTO chính thức',
-            description: item.output ? item.output.slice(0, 150) : 'Dữ liệu trao đổi nghiệp vụ',
-            example: '{}'
-          }
-        ],
-        requestExample: '/* Đặc tả thiết kế - Chờ chốt wire DTO */',
-        responseExample: `/* Dữ liệu dự kiến: ${item.output ? item.output.slice(0, 100) : 'JSON'} */`,
-        errors: [
-          {
-            status: 400,
-            code: 'VALIDATION_FAILED',
-            reason: item.error ? item.error.slice(0, 150) : 'Dữ liệu không hợp lệ theo quy tắc',
-            remedy: item.retry ? item.retry.slice(0, 150) : 'Thử lại sau khi hiệu chỉnh'
-          }
-        ],
-        notes: item.retry ? item.retry.slice(0, 200) : 'Chờ hoàn tất wire contract ở giai đoạn kế tiếp.'
-      };
-      catalog.endpoints.push(newEntry);
-      newCount++;
-    }
-  }
-
-  // Đảm bảo tất cả endpoint đều có phase
-  catalog.endpoints.forEach(e => {
-    if (!e.phase) {
-      if (e.code.startsWith('CPD') || e.status.includes('PH2')) {
-        e.phase = 'Phase 2 (CPD)';
-      } else {
-        e.phase = 'Phase 1';
-      }
-    }
-  });
-
-  catalog.metadata.date = exportDate;
-
-  if (newCount > 0) {
-    catalog.metadata.revisions.push({
-      version: (parseFloat(catalog.metadata.version) + 0.1).toFixed(1),
-      date: exportDate,
-      author: catalog.metadata.author,
-      description: `Đồng bộ tự động qua Auto-Discovery Crawler: Thu hoạch thêm ${newCount} thẻ đặc tả từ mã nguồn repo.`
-    });
-    catalog.metadata.version = (parseFloat(catalog.metadata.version) + 0.1).toFixed(1);
-  }
-
-  fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2), 'utf-8');
-  console.log(`[SMART MERGE] Cập nhật ${updatedCount} endpoint hiện hữu, bổ sung ${newCount} endpoint mới.`);
-  console.log(`[HOÀN TẤT] Danh mục Single Source of Truth lưu tại ${CATALOG_PATH}\n`);
-  return catalog;
-}
 
 // 4. GENERATE WORD (.DOCX) DOCUMENT — CHUẨN SPEC-001 & PHÂN NHÓM PHASE RÕ RÀNG
 async function generateDocx(catalog) {
@@ -279,10 +104,12 @@ async function generateDocx(catalog) {
   const headerShading = { type: ShadingType.CLEAR, fill: "2D3748" };
   const subHeaderShading = { type: ShadingType.CLEAR, fill: "F3F4F6" };
 
-  const implementedList = catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP'));
-  const designList = catalog.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP'));
+  const implementedList = catalog.endpoints.filter(e => e.method !== 'UNKNOWN');
+  const designList = catalog.endpoints.filter(e => e.method === 'UNKNOWN');
 
   const doc = new Document({
+    creator: catalog.metadata.author,
+    title: catalog.metadata.documentTitle,
     sections: [
       {
         headers: {
@@ -435,8 +262,8 @@ async function generateDocx(catalog) {
             children: [
               new TextRun({
                 text: "Tài liệu này xác lập các quy ước kỹ thuật ràng buộc giữa các thành phần phần mềm thuộc hệ thống IDEA DDM Core v0, " +
-                  "bao gồm Web Application (React), Desktop Workstation Adapter (C#), REST Application Server (Spring Boot) và Cổng truyền dữ liệu tệp tin (File Gateway Vault). " +
-                  "Mọi thông số được kiểm chuẩn trực tiếp dựa trên mã nguồn và các biên bản kiểm thử hệ thống."
+                  "bao gồm các HTTP operation hiện có của Server/Gateway và các operation CPD còn DESIGN. " +
+                  "Đối soát source không thay thế runtime qualification, deployment hoặc nghiệm thu; nguồn semantic và trạng thái được ghi ở từng operation."
               })
             ],
           }),
@@ -471,7 +298,7 @@ async function generateDocx(catalog) {
             spacing: { after: 80 },
             children: [
               new TextRun({ text: "• Phòng chống CSRF: ", bold: true }),
-              new TextRun("Mọi phương thức thay đổi trạng thái (POST, PUT, DELETE) bắt buộc phải đính kèm Header X-CSRF-TOKEN đã được cấp phát hợp lệ từ endpoint GET /api/v1/identity/csrf.")
+              new TextRun("Server session-authenticated mutations dùng X-CSRF-TOKEN từ GET /api/v1/identity/csrf. Gateway dùng signed Grant; credential redemption dùng target-bound proof. Không áp cùng một cơ chế xác thực cho mọi POST.")
             ],
           }),
           new Paragraph({
@@ -522,7 +349,7 @@ async function generateDocx(catalog) {
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: "Phần này chuẩn hóa trình tự giao tiếp giữa các tác tử và máy chủ cho các chu trình hoạt động nền tảng của hệ thống."
+                text: "Luồng semantic được quản lý ở tài liệu Identity/Session, Feature 009 và PH1 boundary. Không tự sinh một protocol mới từ route; xem semanticSource tại từng operation."
               })
             ],
           }),
@@ -703,7 +530,7 @@ async function generateDocx(catalog) {
 
 // Helper render thẻ Endpoint trong Word
 function renderEndpointCard(item, borderThin, subHeaderShading) {
-  const isImplemented = item.status.includes('TRIỂN KHAI') || item.status.includes('HTTP');
+  const isImplemented = item.method !== 'UNKNOWN';
   return [
     new Paragraph({
       heading: HeadingLevel.HEADING_3,
@@ -840,7 +667,7 @@ function renderEndpointCard(item, borderThin, subHeaderShading) {
         new TableRow({
           children: [
             new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Request Payload / Query", bold: true })] })] }),
-            new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Response JSON Body", bold: true })] })] }),
+            new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, shading: subHeaderShading, borders: borderThin, children: [new Paragraph({ children: [new TextRun({ text: "Response / Body (xem media type)", bold: true })] })] }),
           ]
         }),
         new TableRow({
@@ -992,7 +819,7 @@ async function generateXlsx(catalog) {
         cell.alignment = { horizontal: 'center', vertical: 'middle' };
       }
       if (colNum === 2) {
-        cell.font = { name: 'Segoe UI', bold: true, color: { argb: (item.phase && item.phase.includes('1')) ? 'FF15803D' : 'FFC2410C' } };
+        cell.font = { name: 'Segoe UI', bold: true, color: { argb: (item.method !== 'UNKNOWN') ? 'FF15803D' : 'FFC2410C' } };
       }
       if (colNum === 6) {
         cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.method === 'GET' ? 'FF15803D' : (item.method === 'POST' ? 'FF1D4ED8' : 'FFC2410C') } };
@@ -1001,7 +828,7 @@ async function generateXlsx(catalog) {
         cell.font = { name: 'Consolas', size: 9 };
       }
       if (colNum === 9) {
-        cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.status.includes('TRIỂN KHAI') ? 'FF15803D' : 'FFC2410C' } };
+        cell.font = { name: 'Segoe UI', bold: true, color: { argb: item.method !== 'UNKNOWN' ? 'FF15803D' : 'FFC2410C' } };
       }
     });
   });
@@ -1150,9 +977,9 @@ async function generateXlsx(catalog) {
 
 // 6. GENERATE OFFLINE INTERACTIVE HTML — 100% OFFLINE, ZERO CDN, TABS LỌC THEO PHASE
 function generateHtml(catalog) {
-  const catalogJson = JSON.stringify(catalog);
-  const implementedCount = catalog.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP')).length;
-  const designCount = catalog.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP')).length;
+  const catalogJson = JSON.stringify(catalog).replace(/</g, '\\u003c');
+  const implementedCount = catalog.endpoints.filter(e => e.method !== 'UNKNOWN').length;
+  const designCount = catalog.endpoints.filter(e => e.method === 'UNKNOWN').length;
 
   const html = `<!DOCTYPE html>
 <html lang="vi">
@@ -1436,7 +1263,7 @@ function generateHtml(catalog) {
   <div id="sidebar">
     <div class="brand">
       <h1>IDEA ENGINEERING</h1>
-      <p>Đặc tả API • SPEC-API-001 • v${catalog.metadata.version}</p>
+      <p>Đặc tả API • SPEC-API-001 • v${escapeHTML(catalog.metadata.version)}</p>
     </div>
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Tìm theo mã API, đường dẫn, tham số...">
@@ -1466,6 +1293,7 @@ function generateHtml(catalog) {
 
   <script>
     const data = ${catalogJson};
+    ${escapeHTML.toString()}
     let currentTab = 'all';
 
     function toggleTheme() {
@@ -1503,14 +1331,14 @@ function generateHtml(catalog) {
       const nav = document.getElementById('navList');
       let filtered = data.endpoints;
       if (currentTab === 'implemented') {
-        filtered = data.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP'));
+        filtered = data.endpoints.filter(e => e.method !== 'UNKNOWN');
       } else if (currentTab === 'design') {
-        filtered = data.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP'));
+        filtered = data.endpoints.filter(e => e.method === 'UNKNOWN');
       }
 
       const groups = {};
       filtered.forEach(e => {
-        const grp = (e.phase && e.phase.includes('1')) ? 'PHÂN HỆ 1: ĐÃ TRIỂN KHAI (HTTP)' : 'PHÂN HỆ 2: QUY HOẠCH PHASE TIẾP THEO';
+        const grp = (e.method !== 'UNKNOWN') ? 'PHÂN HỆ 1: ĐÃ TRIỂN KHAI (HTTP)' : 'PHÂN HỆ 2: QUY HOẠCH PHASE TIẾP THEO';
         if (!groups[grp]) groups[grp] = [];
         groups[grp].push(e);
       });
@@ -1520,10 +1348,10 @@ function generateHtml(catalog) {
         html += \`<div class="nav-group-title">\${groupName} (\${items.length})</div>\`;
         items.forEach(item => {
           html += \`
-            <a class="nav-item" href="#api-\${item.code}">
-              <span class="method-badge badge-\${item.method}">\${item.method}</span>
-              <span style="font-weight:500;">[\${item.code}]</span>
-              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">\${item.name}</span>
+            <a class="nav-item" href="#api-\${escapeHTML(item.code)}">
+              <span class="method-badge badge-\${escapeHTML(item.method)}">\${escapeHTML(item.method)}</span>
+              <span style="font-weight:500;">[\${escapeHTML(item.code)}]</span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">\${escapeHTML(item.name)}</span>
             </a>
           \`;
         });
@@ -1537,34 +1365,34 @@ function generateHtml(catalog) {
       if (['all', 'implemented', 'design'].includes(currentTab)) {
         let items = data.endpoints;
         if (currentTab === 'implemented') {
-          items = data.endpoints.filter(e => e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP'));
+          items = data.endpoints.filter(e => e.method !== 'UNKNOWN');
         } else if (currentTab === 'design') {
-          items = data.endpoints.filter(e => !e.status.includes('TRIỂN KHAI') && !e.status.includes('HTTP'));
+          items = data.endpoints.filter(e => e.method === 'UNKNOWN');
         }
 
         view.innerHTML = items.map(e => {
-          const isImplemented = e.status.includes('TRIỂN KHAI') || e.status.includes('HTTP');
+          const isImplemented = e.method !== 'UNKNOWN';
           return \`
-            <div class="api-card" id="api-\${e.code}">
+            <div class="api-card" id="api-\${escapeHTML(e.code)}">
               <div class="api-header">
                 <div class="api-route">
-                  <span class="method-badge badge-\${e.method}">\${e.method}</span>
-                  <span class="api-path">\${e.path}</span>
-                  <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">[\${e.code}] \${e.name}</span>
+                  <span class="method-badge badge-\${escapeHTML(e.method)}">\${escapeHTML(e.method)}</span>
+                  <span class="api-path">\${escapeHTML(e.path)}</span>
+                  <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">[\${escapeHTML(e.code)}] \${escapeHTML(e.name)}</span>
                 </div>
                 <div>
-                  <span class="status-badge \${isImplemented ? 'status-pass' : 'status-design'}">\${e.status}</span>
+                  <span class="status-badge \${isImplemented ? 'status-pass' : 'status-design'}">\${escapeHTML(e.status)}</span>
                   <span style="font-size:0.75rem; color:var(--text-muted); margin-left:6px;">(\${e.phase || 'Phase 1'})</span>
                 </div>
               </div>
 
-              <div class="api-desc">\${e.description}</div>
+              <div class="api-desc">\${escapeHTML(e.description)}</div>
 
               <div class="section-title">Thông tin ngữ cảnh và thẩm quyền</div>
               <table class="spec-table">
-                <tr><th style="width:22%;">Quyền hạn yêu cầu</th><td>\${e.auth}</td></tr>
-                <tr><th>Điều kiện tiên quyết</th><td>\${e.preconditions}</td></tr>
-                <tr><th>Tác động trạng thái</th><td>\${e.stateEffects}</td></tr>
+                <tr><th style="width:22%;">Quyền hạn yêu cầu</th><td>\${escapeHTML(e.auth)}</td></tr>
+                <tr><th>Điều kiện tiên quyết</th><td>\${escapeHTML(e.preconditions)}</td></tr>
+                <tr><th>Tác động trạng thái</th><td>\${escapeHTML(e.stateEffects)}</td></tr>
               </table>
 
               \${e.headers && e.headers.length ? \`
@@ -1574,9 +1402,9 @@ function generateHtml(catalog) {
                   <tbody>
                     \${e.headers.map(h => \`
                       <tr>
-                        <td class="field-name">\${h.name}</td>
+                        <td class="field-name">\${escapeHTML(h.name)}</td>
                         <td style="color:\${h.required ? '#DC2626' : 'var(--text-muted)'}; font-weight:600;">\${h.required ? 'BẮT BUỘC' : 'Tùy chọn'}</td>
-                        <td>\${h.description}</td>
+                        <td>\${escapeHTML(h.description)}</td>
                       </tr>
                     \`).join('')}
                   </tbody>
@@ -1590,11 +1418,11 @@ function generateHtml(catalog) {
                   <tbody>
                     \${e.fields.map(f => \`
                       <tr>
-                        <td>\${f.in}</td>
-                        <td class="field-name">\${f.name}</td>
-                        <td>\${f.type}</td>
+                        <td>\${escapeHTML(f.in)}</td>
+                        <td class="field-name">\${escapeHTML(f.name)}</td>
+                        <td>\${escapeHTML(f.type)}</td>
                         <td style="color:\${f.required ? '#DC2626' : 'var(--text-muted)'}; font-weight:600;">\${f.required ? 'BẮT BUỘC' : 'Tùy chọn'}</td>
-                        <td><strong>\${f.validation ? '[' + f.validation + '] ' : ''}</strong>\${f.description}</td>
+                        <td><strong>\${f.validation ? '[' + escapeHTML(f.validation) + '] ' : ''}</strong>\${escapeHTML(f.description)}</td>
                       </tr>
                     \`).join('')}
                   </tbody>
@@ -1607,14 +1435,14 @@ function generateHtml(catalog) {
                   <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Request</div>
                   <div class="code-container">
                     <button class="copy-btn" data-clipboard="\${encodeURIComponent(e.requestExample || '')}" onclick="copyFromAttr(this)">Sao chép</button>
-                    \${e.requestExample}
+                    \${escapeHTML(e.requestExample)}
                   </div>
                 </div>
                 <div>
                   <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px;">Response</div>
                   <div class="code-container">
                     <button class="copy-btn" data-clipboard="\${encodeURIComponent(e.responseExample || '')}" onclick="copyFromAttr(this)">Sao chép</button>
-                    \${e.responseExample}
+                    \${escapeHTML(e.responseExample)}
                   </div>
                 </div>
               </div>
@@ -1626,10 +1454,10 @@ function generateHtml(catalog) {
                   <tbody>
                     \${e.errors.map(err => \`
                       <tr>
-                        <td style="font-weight:700; color:\${err.status >= 500 ? '#DC2626' : '#D97706'}">\${err.status}</td>
-                        <td class="field-name">\${err.code}</td>
-                        <td>\${err.reason}</td>
-                        <td>\${err.remedy}</td>
+                        <td style="font-weight:700; color:\${err.status >= 500 ? '#DC2626' : '#D97706'}">\${escapeHTML(err.status)}</td>
+                        <td class="field-name">\${escapeHTML(err.code)}</td>
+                        <td>\${escapeHTML(err.reason)}</td>
+                        <td>\${escapeHTML(err.remedy)}</td>
                       </tr>
                     \`).join('')}
                   </tbody>
@@ -1637,7 +1465,7 @@ function generateHtml(catalog) {
               \` : ''}
 
               <div style="font-size:0.8rem; color:var(--text-muted); margin-top:12px; font-style:italic;">
-                Ghi chú kỹ thuật: \${e.notes}
+                Ghi chú kỹ thuật: \${escapeHTML(e.notes)}
               </div>
             </div>
           \`;
@@ -1645,18 +1473,18 @@ function generateHtml(catalog) {
       } else if (currentTab === 'workflows') {
         view.innerHTML = data.workflows.map(wf => \`
           <div class="api-card">
-            <h2 style="font-size:1.15rem; color:var(--accent); margin-bottom:6px;">\${wf.id}. \${wf.title}</h2>
-            <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px; font-style:italic;">\${wf.description}</p>
+            <h2 style="font-size:1.15rem; color:var(--accent); margin-bottom:6px;">\${escapeHTML(wf.id)}. \${escapeHTML(wf.title)}</h2>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px; font-style:italic;">\${escapeHTML(wf.description)}</p>
             <table class="spec-table">
               <thead><tr><th>Bước</th><th>Bên gửi</th><th>Hành động & Endpoint</th><th>Bên nhận</th><th>Kết quả & Trạng thái</th></tr></thead>
               <tbody>
                 \${wf.steps.map(s => \`
                   <tr>
-                    <td style="font-weight:700; text-align:center;">\${s.step}</td>
-                    <td>\${s.actor}</td>
-                    <td><strong>\${s.action}</strong><br><span style="font-family:Consolas; font-size:0.75rem; color:var(--accent);">\${s.endpoint}</span></td>
-                    <td>\${s.receiver}</td>
-                    <td>\${s.outcome}</td>
+                    <td style="font-weight:700; text-align:center;">\${escapeHTML(s.step)}</td>
+                    <td>\${escapeHTML(s.actor)}</td>
+                    <td><strong>\${escapeHTML(s.action)}</strong><br><span style="font-family:Consolas; font-size:0.75rem; color:var(--accent);">\${escapeHTML(s.endpoint)}</span></td>
+                    <td>\${escapeHTML(s.receiver)}</td>
+                    <td>\${escapeHTML(s.outcome)}</td>
                   </tr>
                 \`).join('')}
               </tbody>
@@ -1666,14 +1494,14 @@ function generateHtml(catalog) {
       } else if (currentTab === 'matrix') {
         const rows = data.endpoints.map(e => \`
           <tr>
-            <td style="font-weight:700;">\${e.code}</td>
+            <td style="font-weight:700;">\${escapeHTML(e.code)}</td>
             <td>\${e.phase || 'Phase 1'}</td>
-            <td>\${e.group}</td>
-            <td><strong>\${e.name}</strong></td>
-            <td><span class="method-badge badge-\${e.method}">\${e.method}</span></td>
-            <td style="font-family:Consolas; font-size:0.78rem;">\${e.path}</td>
-            <td>\${e.auth}</td>
-            <td style="font-weight:600; color:\${e.status.includes('TRIỂN KHAI') ? 'var(--badge-ready)' : 'var(--badge-design)'}">\${e.status}</td>
+            <td>\${escapeHTML(e.group)}</td>
+            <td><strong>\${escapeHTML(e.name)}</strong></td>
+            <td><span class="method-badge badge-\${escapeHTML(e.method)}">\${escapeHTML(e.method)}</span></td>
+            <td style="font-family:Consolas; font-size:0.78rem;">\${escapeHTML(e.path)}</td>
+            <td>\${escapeHTML(e.auth)}</td>
+            <td style="font-weight:600; color:\${e.method !== 'UNKNOWN' ? 'var(--badge-ready)' : 'var(--badge-design)'}">\${escapeHTML(e.status)}</td>
           </tr>
         \`).join('');
         view.innerHTML = \`
@@ -1688,10 +1516,10 @@ function generateHtml(catalog) {
       } else if (currentTab === 'changelog') {
         const revRows = data.metadata.revisions.map(r => \`
           <tr>
-            <td style="font-weight:700;">v\${r.version}</td>
-            <td>\${r.date}</td>
-            <td>\${r.author}</td>
-            <td>\${r.description}</td>
+            <td style="font-weight:700;">v\${escapeHTML(r.version)}</td>
+            <td>\${escapeHTML(r.date)}</td>
+            <td>\${escapeHTML(r.author)}</td>
+            <td>\${escapeHTML(r.description)}</td>
           </tr>
         \`).join('');
         view.innerHTML = \`
@@ -1802,58 +1630,63 @@ function archiveOutput(catalog, docxPath, xlsxPath, htmlPath) {
   console.log(`[LƯU TRỮ ARCHIVE] Phát hiện bản snapshot cùng ngày có nội dung mới -> Đã lưu thêm bản tuần tự: ${targetSeq}.*`);
 }
 
-// 8. MAIN CLI CONTROLLER
-async function main() {
-  const args = process.argv.slice(2);
-  const isUpdate = args.includes('--update') || args.includes('-u');
-  const isOpen = args.includes('--open') || args.includes('-o');
 
-  let catalog;
-  if (isUpdate) {
-    catalog = loadCatalog();
-    const harvested = crawlRepository();
-    catalog = smartMergeCatalog(catalog, harvested);
-  } else {
-    catalog = loadCatalog();
-  }
 
-  console.log('------------------------------------------------------------------');
-  console.log('IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)');
-  console.log(`Phiên bản: v${catalog.metadata.version} | Ngày: ${exportDate}`);
-  console.log('------------------------------------------------------------------');
-  console.log(`Bắt đầu biên dịch tài liệu cho ${catalog.endpoints.length} endpoints...`);
-
-  // 1. Generate DOCX
+export async function renderContract(catalog, toolDir, outputDir) {
+  assertHumanDocument(catalog);
+  // Lazy loading keeps read-only check and source updates independent of Word/Excel cache.
+  ({Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, HeadingLevel, AlignmentType, BorderStyle, WidthType, ShadingType, ImageRun, Header, Footer, PageNumber} = await import('docx'));
+  ExcelJS = (await import('exceljs')).default;
+  DATA_DIR = path.join(toolDir,'data'); OUTPUT_DIR = outputDir; ARCHIVE_DIR = path.join(outputDir,'archive');
+  exportDate = catalog.metadata.date; exportDateTime = catalog.metadata.date;
+  fs.mkdirSync(OUTPUT_DIR,{recursive:true}); fs.mkdirSync(ARCHIVE_DIR,{recursive:true});
   const docxPath = await generateDocx(catalog);
-  const docxSize = (fs.statSync(docxPath).size / 1024).toFixed(1);
-  console.log(`[XUẤT THÀNH CÔNG] File Word (.docx):  ${docxPath} (${docxSize} KB)`);
-
-  // 2. Generate XLSX
   const xlsxPath = await generateXlsx(catalog);
-  const xlsxSize = (fs.statSync(xlsxPath).size / 1024).toFixed(1);
-  console.log(`[XUẤT THÀNH CÔNG] File Excel (.xlsx): ${xlsxPath} (${xlsxSize} KB)`);
-
-  // 3. Generate HTML
   const htmlPath = generateHtml(catalog);
-  const htmlSize = (fs.statSync(htmlPath).size / 1024).toFixed(1);
-  console.log(`[XUẤT THÀNH CÔNG] File HTML (.html):  ${htmlPath} (${htmlSize} KB)`);
+  archiveOutput(catalog,docxPath,xlsxPath,htmlPath);
+  return [docxPath,xlsxPath,htmlPath];
+}
 
-  // 4. Archive snapshots
-  archiveOutput(catalog, docxPath, xlsxPath, htmlPath);
-
-  console.log('\nHoàn tất xuất bản bộ 3 tài liệu đặc tả giao tiếp API.');
-
+// Keep the original export/update/open workflow and the same three output names.
+async function main() {
+  const args = new Set(process.argv.slice(2));
+  const allowed = new Set(['--check','--json','--update','-u','--open','-o','--data-only','--print-source-hashes']);
+  for (const arg of args) if (!allowed.has(arg)) throw Error('Unknown argument: ' + arg);
+  if (args.has('--print-source-hashes')) {
+    console.log(stableJSON(sourceHashes(REPO_ROOT,json(path.join(TOOL_DIR,'contract-config.json')))));
+    return;
+  }
+  const isUpdate = args.has('--update') || args.has('-u');
+  const isOpen = args.has('--open') || args.has('-o');
+  if (args.has('--check') && isUpdate) throw Error('--check is read-only; do not combine with --update');
+  if (args.has('--data-only') && !isUpdate) throw Error('--data-only requires --update');
+  const packet = checkContract(REPO_ROOT,{checkCatalog:!isUpdate});
+  if(!packet.errors.length&&!isUpdate)packet.errors.push(...checkSwagger(packet));
+  const summary = {status:packet.errors.length?'FAIL':'PASS',routes:packet.routes.length,
+    operations:packet.operations.length,errors:packet.errors};
+  if (args.has('--json')) console.log(stableJSON(summary));
+  else {
+    console.log('API CONTRACT CHECK = ' + summary.status + '; routes=' + summary.routes + '; operations=' + summary.operations);
+    for (const error of summary.errors) console.error(error);
+  }
+  if (packet.errors.length) { process.exitCode=1; return; }
+  if (args.has('--check')) return;
+  let catalog = loadCatalog();
+  if (isUpdate) {
+    // Validate the complete view before any catalog or projection write.
+    updateSwagger(packet);
+    catalog = smartMergeCatalog(catalog,crawlRepository(packet));
+  }
+  if (args.has('--data-only')) return;
+  console.log('IDEA ENGINEERING — BỘ XUẤT ĐẶC TẢ GIAO TIẾP API (SPEC-API-001)');
+  console.log('Phiên bản: v' + catalog.metadata.version + ' | ' + catalog.endpoints.length + ' mục');
+  const outputs = await renderContract(catalog,TOOL_DIR,path.join(TOOL_DIR,'output'));
+  for (const output of outputs) console.log('EXPORTED ' + output);
   if (isOpen) {
-    console.log('Đang mở file HTML trên trình duyệt mặc định...');
-    try {
-      execSync(`start "" "${htmlPath}"`, { shell: 'cmd.exe' });
-    } catch (e) {
-      console.warn('Không thể tự động mở trình duyệt:', e.message);
-    }
+    if (process.platform !== 'win32') throw Error('--open is Windows-only; open the HTML path manually');
+    execSync('start "" "' + outputs[2] + '"',{shell:'cmd.exe'});
   }
 }
 
-main().catch(err => {
-  console.error('[LỖI THỰC THI]:', err);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename)
+  main().catch(error=>{console.error('API CONTRACT ERROR: ' + error.message);process.exitCode=1;});

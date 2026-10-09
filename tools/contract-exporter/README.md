@@ -1,53 +1,83 @@
-# IDEA DDM Core v0 — Công cụ xuất đặc tả giao tiếp API (SPEC-API-001)
+# Công cụ xuất API Contract
 
-Công cụ trích xuất, đối soát và biên dịch hồ sơ đặc tả giao tiếp API của hệ thống **IDEA DDM Core v0** ra 3 định dạng tài liệu kỹ thuật:
+Giữ mẫu Word, Excel và HTML hiện tại; cập nhật dữ liệu từ contract nguồn.
+Không tự tạo API, quyền hoặc DTO chưa được quyết định.
 
-1. **Tài liệu Word (`.docx`)**: Hồ sơ kỹ thuật chuẩn theo format quy định của công ty (`SPEC-001`). Gồm khối metadata người phụ trách, logo tỷ lệ chuẩn, phạm vi kiến trúc, lịch sử phiên bản, 3 sơ đồ luồng phối hợp (Call flows), ma trận tổng hợp và đặc tả chi tiết 14 endpoints (Route, Context, Headers, Data Dictionary, Request/Response Payload, Error Matrix).
-2. **Bảng tính Excel (`.xlsx`)**: Sổ tay kỹ thuật 4 sheets phục vụ quản lý và thiết kế Test Matrix:
-   - `1. Thong tin & Lich su`: Thông tin dự án, quy mô và nhật ký thay đổi phiên bản.
-   - `2. Ma tran API`: Danh mục 14 endpoints đầy đủ thuộc tính, có bộ lọc và cố định dòng tiêu đề.
-   - `3. Data Dictionary`: Từ điển tham số 10 cột chi tiết (mỗi dòng là một trường dữ liệu) cho QA/Dev.
-   - `4. Error Catalog`: Danh mục mã lỗi hệ thống và hướng dẫn xử lý / quy tắc Retry.
-3. **Tài liệu HTML (`.html`)**: Trang tra cứu tương tác offline (Zero-CDN, không phụ thuộc Internet):
-   - Thiết kế tinh gọn theo chuẩn GitHub Docs / Stripe Docs (không dùng giao diện dashboard màu mè).
-   - Tìm kiếm thời gian thực theo mã API, đường dẫn URL, tên trường.
-   - Chuyển đổi giao diện Sáng / Tối dịu mắt.
-   - Nút sao chép JSON Payload trực tiếp vào bộ nhớ tạm.
+## Thao tác
 
----
+Trong thư mục `tools/contract-exporter`:
 
-## Hướng dẫn sử dụng trên máy cục bộ
+~~~powershell
+npm run update
+npm run check
+npm test
+~~~
 
-### 1. Xuất bộ 3 tài liệu
-```powershell
-node tools/contract-exporter/export.mjs
-```
-*(Hoặc `npm run export` trong thư mục `tools/contract-exporter`)*
+`update` đối soát nguồn, cập nhật catalog + OpenAPI phục vụ Swagger và xuất ba file.
+`check` không ghi file; nguồn/catalog thiếu hoặc lệch trả exit code 1.
+`test` kiểm tra cập nhật và nội dung file xuất trong fixture riêng.
 
-### 2. Cập nhật và đồng bộ đối soát với mã nguồn
-Khi có cập nhật tài liệu kỹ thuật hoặc route mới trong repository:
-```powershell
-node tools/contract-exporter/export.mjs --update
-```
-*(Hoặc `npm run update`)*
-Lệnh này sẽ quét lại `docs/` và `openapi.json`, thực hiện Smart Merge vào `data/api-catalog.json`, tự động ghi nhận phiên bản mới vào lịch sử sửa đổi và xuất ra tài liệu mới.
+Từ root repository:
 
-### 3. Xuất và tự động mở trình duyệt xem file HTML
-```powershell
-node tools/contract-exporter/export.mjs --open
-```
+~~~powershell
+node tools/contract-exporter/export.mjs --update --open
+node tools/contract-exporter/export.mjs --check
+~~~
 
----
+Không lặp đường dẫn tool khi đang đứng trong chính thư mục đó.
+Lượt kiểm chứng dùng Node 24.19.0 được dự án chấp nhận, không dùng Node khác từ PATH.
+Binary workstation: `C:/Users/TD-999/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe`.
 
-## Thư mục kết quả (Output)
+## Đầu ra
 
-Tài liệu được lưu tại thư mục: `tools/contract-exporter/output/`
-- `IDEA_Core_v0_API_Contract.docx` (~88 KB)
-- `IDEA_Core_v0_API_Contract.xlsx` (~21 KB)
-- `IDEA_Core_v0_API_Contract.html` (~63 KB)
+Trong `output/`:
 
----
+- `IDEA_Core_v0_API_Contract.docx`
+- `IDEA_Core_v0_API_Contract.xlsx`
+- `IDEA_Core_v0_API_Contract.html`
 
-## Cơ chế lưu trữ và quản lý phiên bản
-- File dữ liệu trung tâm: `tools/contract-exporter/data/api-catalog.json` được theo dõi lịch sử qua Git.
-- Nhánh làm việc: `feat/api-contract-exporter`. Có thể rollback về nhánh `main` bất cứ lúc nào với lệnh: `git checkout main`.
+Snapshot ở `output/archive/`; cùng nội dung không tạo bản trùng.
+Giữ metadata, người phụ trách, diễn giải tiếng Việt và lịch sử.
+Không cho tên AI lọt vào nội dung hoặc metadata file xuất.
+Bảng dữ liệu liệt kê trường trực tiếp và tên model lồng nhau; schema đầy đủ ở OpenAPI.
+Retry ghi một lần cho mỗi thao tác, không lặp nguyên đoạn trong mọi dòng lỗi.
+
+## Nguồn và cập nhật API
+
+| Nội dung | Nguồn |
+|---|---|
+| Server HTTP/schema | [server-openapi.json](../../docs/product/instances/idea-engineering/api/server-openapi.json) |
+| Gateway HTTP/schema | [gateway-openapi.json](../../docs/product/instances/idea-engineering/api/gateway-openapi.json) |
+| Quyền/state/concurrency/retry | Contract ngữ nghĩa được từng operation dẫn về |
+| CPD thiết kế | [controlled-product-data.md](../../docs/product/instances/idea-engineering/api/controlled-product-data.md) |
+| Metadata, tên/nhóm/diễn giải, workflows | [api-catalog.json](data/api-catalog.json) |
+| Nguồn và review | [contract-config.json](contract-config.json), [source-review.json](source-review.json) |
+| Swagger phục vụ bởi Backend | [openapi.json](../../apps/server/src/main/resources/dev-access/openapi.json), được tạo từ hai nguồn trên |
+
+1. Cập nhật code và contract/OpenAPI theo quyết định đã duyệt.
+2. Review source/DTO/quyền/lỗi; cập nhật nguồn và từng fingerprint liên quan.
+   `node export.mjs --print-source-hashes` chỉ in hash, không tự chấp nhận.
+3. Chạy update, check và test; review/commit source + contract + catalog.
+4. Không sửa Word/Excel/HTML bằng tay.
+
+Swagger tại `https://localhost:18448/dev-api/` chia nhóm 46 thao tác hiện hữu,
+hiển thị quyền/state/giao dịch/retry và schema từ cùng nguồn của tool xuất.
+Gateway chỉ đọc tài liệu, không proxy bytes qua Server hoặc nhập Grant ở console.
+API credential và các adapter đang documentation-only giữ khóa Try it out.
+CPD DESIGN không được biến thành endpoint. Sau update cần cập nhật package Backend
+và restart có kiểm soát; HMR Frontend không cập nhật OpenAPI trong JAR.
+
+Thiếu contract, method/path lệch, schema/ref lỗi hoặc source chưa review phải được sửa
+ở nguồn. Update dừng trước khi ghi, không tự đoán để che thiếu sót.
+Wire chưa chốt giữ DESIGN/UNKNOWN, không dựng endpoint hoặc JSON giả.
+
+## Giới hạn
+
+46 HTTP operations: 44 Server, 2 Gateway; 9 CPD DESIGN; tổng 55 mục.
+Grant/Receipt nội bộ và route qualification không thành API sản phẩm.
+Scanner hỗ trợ cách đăng ký Spring hiện tại, không phải introspection mọi framework.
+Validation OpenAPI có phạm vi giới hạn, không phải chứng nhận OpenAPI đầy đủ.
+Check/update dữ liệu chỉ dùng Node built-ins; xuất Word/Excel dùng cache docx/exceljs
+hiện có theo lockfile. Thiếu dependency báo lỗi, không tự install.
+Không thay business API/session/CSRF, không migrate/seed hoặc thêm CI/branch protection.
+Việc cập nhật package dev chỉ thay resource tài liệu, không thay class/runtime libraries.

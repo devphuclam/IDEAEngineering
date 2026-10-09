@@ -11,7 +11,7 @@ if [[ $action == status ]]; then
     echo "BACKEND=EXTERNAL;BACKEND_ENDPOINT=$endpoint;ORIGIN=$backend_origin;FRONTEND_INDEPENDENT=true"
   else
     if [[ -n $process_id && $endpoint == UP ]]; then state=UP; elif [[ -z $process_id ]]; then state=STOPPED; else state=DEGRADED; fi
-    echo "BACKEND=$state;BACKEND_ENDPOINT=$endpoint;APPLICATION_SOURCE=9d3732cb173e8094195b9bdd60b5588ac3cfa42e;DATABASE=idea_ddm_iam_ui_20261007_46;SCHEMA=iam_ui_c3b8cde44f9a4d1199306c381c12d1bb;FRONTEND_INDEPENDENT=true"
+    echo "BACKEND=$state;BACKEND_ENDPOINT=$endpoint;APPLICATION_SOURCE=$application_source;DOCUMENTATION_SOURCE=$documentation_source;JAR_SHA256=$jar_sha256;DATABASE=idea_ddm_iam_ui_20261007_46;SCHEMA=iam_ui_c3b8cde44f9a4d1199306c381c12d1bb;FRONTEND_INDEPENDENT=true"
   fi
   exit 0
 fi
