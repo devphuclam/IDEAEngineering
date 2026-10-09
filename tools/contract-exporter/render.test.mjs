@@ -7,7 +7,7 @@ import vm from 'node:vm';
 import {inflateRawSync} from 'node:zlib';
 import {fileURLToPath} from 'node:url';
 import {json} from './contract.mjs';
-import {renderContract} from './render.mjs';
+import {renderContract} from './export.mjs';
 
 const tool=path.dirname(fileURLToPath(import.meta.url));
 // Read OOXML members using only JDK-independent Node built-ins; no ZIP dependency added.

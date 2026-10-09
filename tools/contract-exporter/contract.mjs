@@ -252,6 +252,10 @@ function schemaFields(document, schema, location, prefix = '', required = false)
 
 export function projectCatalog(packet) {
   const {config,operations,documents} = packet;
+  // This is the old tool's editorial catalog, not a disposable generated document.
+  // Keep its Vietnamese names, explanations, metadata and revision history.
+  const current = json(path.join(packet.tool,'data/api-catalog.json'));
+  const editorial = new Map(current.endpoints.map(entry=>[entry.code,entry]));
   const endpoints = operations.map(({surface,method,path:route,operation,contract,document,parameters}) => {
     const fields = parameters.flatMap(p => schemaFields(document,p.schema,p.in,p.name,p.required));
     for (const [media,content] of Object.entries(operation.requestBody?.content ?? {}))
@@ -262,10 +266,11 @@ export function projectCatalog(packet) {
         fields.push(...schemaFields(document,content.schema,'Response ' + status + ' (' + media + ')'));
     }
     return {
-      code:contract.code,name:operation.summary ?? operation.operationId,group:contract.owner,
-      phase:surface === 'gateway' ? 'Gateway' : 'Current Server',method,path:route,
+      code:contract.code,name:editorial.get(contract.code)?.name ?? operation.summary ?? operation.operationId,
+      group:editorial.get(contract.code)?.group ?? contract.owner,
+      phase:surface === 'gateway' ? 'Gateway' : 'Phase 1',method,path:route,
       auth:contract.authority,status:'[ĐÃ TRIỂN KHAI — HTTP; không đồng nghĩa deployed]',
-      description:operation.description ?? operation.summary ?? '',
+      description:editorial.get(contract.code)?.description ?? operation.description ?? operation.summary ?? '',
       preconditions:contract.state,stateEffects:contract.atomicity,
       headers:parameters.filter(p => p.in === 'header').map(p => ({name:p.name,required:p.required,description:p.description ?? ''})),
       fields,requestExample: operation['x-idea-request-example'] ?? 'See canonical OpenAPI schema; no inferred request or secret value.',
@@ -281,14 +286,15 @@ export function projectCatalog(packet) {
   const text = fs.readFileSync(inside(packet.root,source),'utf8');
   const cards = /###\s+(CPD-[A-Z0-9.]+)\s+[—–-]\s+([^\r\n]+)\r?\n([\s\S]*?)(?=\r?\n###|\r?\n##|$)/g;
   for (const match of text.matchAll(cards)) endpoints.push({
-    code:match[1],name:match[2],group:'Controlled Product Data',phase:'Phase 2 (CPD)',method:'UNKNOWN',path:'UNKNOWN',
+    code:match[1],name:editorial.get(match[1])?.name ?? match[2],
+    group:editorial.get(match[1])?.group ?? 'Dữ liệu Sản phẩm PDM (CPD)',phase:'Phase 2 (CPD)',method:'UNKNOWN',path:'UNKNOWN',
     auth:'UNKNOWN wire; see approved semantic authority',status:'[DESIGN — chưa triển khai HTTP]',
-    description:`Thiết kế, chưa có API HTTP. Xem thẻ ${match[1]} trong controlled-product-data.md.`,
+    description:editorial.get(match[1])?.description ?? `Thiết kế, chưa có API HTTP. Xem thẻ ${match[1]} trong controlled-product-data.md.`,
     preconditions:'See exact semantic card',stateEffects:'No runtime claim',
     headers:[],fields:[],requestExample:'UNKNOWN — semantic examples are not wire DTOs.',
     responseExample:'UNKNOWN — no implemented endpoint.',errors:[],notes:'Source: ' + source
   });
-  return {metadata:config.metadata,workflows:config.workflows ?? [],endpoints,
+  return {metadata:current.metadata,workflows:current.workflows ?? [],endpoints,
     provenance:{sources:documents.map(({surface,document}) => ({surface:surface.id,path:surface.openapi,
       version:document.info.version,sha256:digest(stableJSON(document))})),
       semanticSource:source,semanticSHA256:digest(text)}};

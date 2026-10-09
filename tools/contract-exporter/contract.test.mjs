@@ -45,6 +45,26 @@ test('published catalogue includes the actual account directory HTTP adapter', (
     'implemented account directory must not disappear from the exported contract');
 });
 
+test('source update preserves the old catalog editorial text, metadata and history',()=>fixture(target=>{
+  const file=path.join(target,'tools/contract-exporter/data/api-catalog.json');
+  const catalog=json(file);
+  catalog.metadata.author='Người phụ trách tài liệu nội bộ';
+  catalog.metadata.version='1.2';
+  catalog.metadata.revisions=[{version:'1.0',description:'Lịch sử được giữ nguyên'}];
+  const account=catalog.endpoints.find(e=>e.code==='UI-I02-LIST');
+  account.name='Danh sách tài khoản';
+  account.description='Diễn giải tiếng Việt đã biên tập cho người sử dụng.';
+  account.path='/incorrect-path';
+  fs.writeFileSync(file,stableJSON(catalog));
+  assert.equal(cli(target,'--update','--data-only').status,0);
+  const updated=json(file);
+  assert.deepEqual(updated.metadata,catalog.metadata);
+  const entry=updated.endpoints.find(e=>e.code==='UI-I02-LIST');
+  assert.equal(entry.name,account.name);
+  assert.equal(entry.description,account.description);
+  assert.equal(entry.path,'/api/v1/administration/accounts','technical source still wins');
+}));
+
 test('all 46 actual Server/Gateway operations are covered; CPD remains nine DESIGN cards', () => {
   const result=checkContract(root);
   assert.deepEqual(result.errors,[]);

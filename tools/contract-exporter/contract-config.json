@@ -1,24 +1,5 @@
 {
   "schemaVersion": 1,
-  "metadata": {
-    "project": "IDEA ENGINEERING",
-    "documentTitle": "ĐẶC TẢ GIAO TIẾP API — CURRENT HTTP + CPD DESIGN",
-    "documentCode": "SPEC-API-001",
-    "version": "0.3",
-    "status": "INTERNAL — source-aligned; review pending",
-    "author": "IDEA Engineering / Codex",
-    "department": "Engineering",
-    "date": "09/10/2026",
-    "subtitle": "Controlled OpenAPI + exact semantic contracts; no inferred wire behavior",
-    "revisions": [
-      {
-        "version": "0.3",
-        "date": "09/10/2026",
-        "author": "Codex",
-        "description": "Issue #53: current HTTP coverage, fail-closed check, generated catalogue; predecessor history retained in Git."
-      }
-    ]
-  },
   "surfaces": [
     {
       "id": "server",
