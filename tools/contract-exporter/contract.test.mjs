@@ -78,6 +78,13 @@ test('DESIGN entries stay short and point to the full semantic source instead of
   }
 });
 
+test('compact array rows retain the supported Permission ceiling without expanding models',()=>{
+  const role=projectCatalog(checkContract(root)).endpoints.find(e=>e.code==='UI-R02');
+  const permissions=role.fields.find(f=>f.name==='permissionCodes'&&f.in.startsWith('Request Body'));
+  assert.equal(permissions.type,'array<string>');
+  assert.match(permissions.validation,/items: enum: project\.read, role\.catalogue\.read, access\.inspect, audit\.read/);
+});
+
 test('new executable route without contract refuses check AND update without writes', () => fixture(target=>{
   const dir=path.join(target,'apps/server/src/main/java/com/idea/ddm');
   fs.writeFileSync(path.join(dir,'NewController.java'),'@RestController class NewController { @GetMapping("/api/v1/new-capability") Object read(){return null;} }');

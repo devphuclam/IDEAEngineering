@@ -221,6 +221,20 @@ function schemaType(document, schema) {
   return resolved?.type ?? (resolved?.oneOf ? 'oneOf' : 'object');
 }
 
+function schemaConstraints(schema) {
+  return [
+    schema.format, schema.enum && 'enum: ' + schema.enum.join(', '),
+    schema.minimum !== undefined && 'minimum=' + schema.minimum,
+    schema.maximum !== undefined && 'maximum=' + schema.maximum,
+    schema.minLength !== undefined && 'minLength=' + schema.minLength,
+    schema.maxLength !== undefined && 'maxLength=' + schema.maxLength,
+    schema.minItems !== undefined && 'minItems=' + schema.minItems,
+    schema.maxItems !== undefined && 'maxItems=' + schema.maxItems,
+    schema.uniqueItems && 'uniqueItems', schema.pattern && 'pattern=' + schema.pattern,
+    schema.nullable && 'nullable', schema.writeOnly && 'writeOnly', schema.readOnly && 'readOnly'
+  ].filter(Boolean).join('; ');
+}
+
 // Keep the existing short endpoint dictionary. Refer to nested models by name rather
 // than copying the complete model tree into every endpoint/document three times.
 function schemaFields(document, schema, location, prefix = '', required = false) {
@@ -228,15 +242,9 @@ function schemaFields(document, schema, location, prefix = '', required = false)
   if (!resolved) return [];
   if (!prefix && resolved.properties) return Object.entries(resolved.properties).flatMap(([name,child]) =>
     schemaFields(document,child,location,name,(resolved.required ?? []).includes(name)));
-  const conditions = [
-    resolved.format, resolved.enum && 'enum: ' + resolved.enum.join(', '),
-    resolved.minimum !== undefined && 'minimum=' + resolved.minimum,
-    resolved.maximum !== undefined && 'maximum=' + resolved.maximum,
-    resolved.minLength !== undefined && 'minLength=' + resolved.minLength,
-    resolved.maxLength !== undefined && 'maxLength=' + resolved.maxLength,
-    resolved.pattern && 'pattern=' + resolved.pattern, resolved.nullable && 'nullable',
-    resolved.writeOnly && 'writeOnly', resolved.readOnly && 'readOnly'
-  ].filter(Boolean).join('; ');
+  const itemConditions = resolved.items ? schemaConstraints(resolve(document,resolved.items)) : '';
+  const conditions = [schemaConstraints(resolved),itemConditions && 'items: ' + itemConditions]
+    .filter(Boolean).join('; ');
   const field = {name:prefix || 'body',in:location,type:schemaType(document,schema),
     required,validation:conditions,description:resolved.description ?? '',example:resolved.example ?? ''};
   return [field];

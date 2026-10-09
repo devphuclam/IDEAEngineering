@@ -4198,7 +4198,7 @@
           "in": "Request Body (application/json)",
           "type": "array<string>",
           "required": true,
-          "validation": "",
+          "validation": "items: enum: project.read, role.catalogue.read, access.inspect, audit.read",
           "description": "",
           "example": ""
         },
