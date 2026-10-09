@@ -164,7 +164,7 @@
           "state": "Session-backed CSRF is required even for login. Generic refusal covers invalid/disabled/blocked credentials. Successful login rotates servlet proof; Actor is determined by Server. Use the existing Web password control, not an API-console body or generated curl.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
           "concurrency": "Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.",
-          "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
+          "retry": "Lost response may follow committed sign-in. Inspect the current session before a new login; repeated login is a new authentication attempt, not canonical result replay.",
           "trace": [
             "REQ-IAM-001",
             "REQ-IAM-003",
@@ -238,7 +238,7 @@
           "state": "No body. Automatic CSRF header; eligible session required. Success revokes only the current session. Failure does not claim logout success.",
           "atomicity": "Qualified IAM transaction fate; required IAM outcome/Audit and state change commit or rollback together.",
           "concurrency": "Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.",
-          "retry": "Read-only current observation; safe to repeat, never replay a mutation.",
+          "retry": "After committed logout the old session is ineligible; retry can return 401 rather than another 204. Lost response does not prove rollback. On persistence failure no logout success is reported.",
           "trace": [
             "REQ-IAM-001",
             "REQ-IAM-003",
@@ -475,10 +475,7 @@
             "description": "Ineligible session"
           },
           "403": {
-            "description": "Permission/scope or CSRF refusal"
-          },
-          "409": {
-            "description": "Stale version or invalid target/credential state"
+            "description": "Permission/scope, CSRF, stale version or ineligible target/credential state refusal"
           },
           "503": {
             "description": "Delivery mode is disabled or required persistence/delivery failed; do not report proof delivery success."

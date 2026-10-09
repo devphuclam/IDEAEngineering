@@ -313,7 +313,7 @@
           "remedy": "Xem quy tắc retry của thao tác."
         }
       ],
-      "notes": "Đồng thời: Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
+      "notes": "Đồng thời: Qualified verifier work plus durable throttle/security state in the login transaction; session fixation protection rotates the ordinary servlet proof on success.\nRetry: Lost response may follow committed sign-in. Inspect the current session before a new login; repeated login is a new authentication attempt, not canonical result replay.",
       "source": {
         "operationId": "nativeSignIn",
         "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
@@ -416,7 +416,7 @@
           "remedy": "Xem quy tắc retry của thao tác."
         }
       ],
-      "notes": "Đồng thời: Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.\nRetry: Read-only current observation; safe to repeat, never replay a mutation.",
+      "notes": "Đồng thời: Eligibility is rechecked under security-write coordination before current-session revocation and accepted evidence commit.\nRetry: After committed logout the old session is ineligible; retry can return 401 rather than another 204. Lost response does not prove rollback. On persistence failure no logout success is reported.",
       "source": {
         "operationId": "signOut",
         "openapi": "apps/server/src/main/resources/dev-access/openapi.json",
@@ -968,13 +968,7 @@
         {
           "status": "403",
           "code": "HTTP 403",
-          "reason": "Permission/scope or CSRF refusal",
-          "remedy": "Xem quy tắc retry của thao tác."
-        },
-        {
-          "status": "409",
-          "code": "HTTP 409",
-          "reason": "Stale version or invalid target/credential state",
+          "reason": "Permission/scope, CSRF, stale version or ineligible target/credential state refusal",
           "remedy": "Xem quy tắc retry của thao tác."
         },
         {
@@ -7454,7 +7448,7 @@
         "surface": "server",
         "path": "apps/server/src/main/resources/dev-access/openapi.json",
         "version": "contract-0.3",
-        "sha256": "51a89afec54f81fa7f031d67948384f676ae59408881ad61b360dd3e06858fcc"
+        "sha256": "a4fb92b3459b97efac7f290f29da9f9a1ae4a21cf35460b875663a0610a2f9fc"
       },
       {
         "surface": "gateway",

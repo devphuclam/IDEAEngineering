@@ -338,3 +338,22 @@ test('documented refusal/nullable/public semantics match actual boundaries',()=>
   for(const route of ['/health','/health/database','/api/v1/identity/csrf'])
     assert.doesNotMatch(doc.paths[route].get['x-idea-contract'].concurrency,/password proof|eligibility\/security-version/);
 });
+
+test('login/logout retry describes committed effects rather than read-only replay',()=>{
+  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const login=doc.paths['/api/v1/identity/login'].post['x-idea-contract'].retry;
+  const logout=doc.paths['/api/v1/identity/logout'].post['x-idea-contract'].retry;
+  assert.doesNotMatch(login,/read-only|safe to repeat/i);
+  assert.match(login,/lost response/i);
+  assert.match(login,/session/i);
+  assert.match(logout,/401/);
+  assert.doesNotMatch(logout,/read-only|safe to repeat/i);
+});
+
+test('credential-proof target/version refusal documents the actual 403 mapping',()=>{
+  const doc=json(path.join(root,'apps/server/src/main/resources/dev-access/openapi.json'));
+  const responses=doc.paths['/api/v1/identity/accounts/{account}/credential-proofs'].post.responses;
+  assert.equal(responses['409'],undefined);
+  assert.match(responses['403'].description,/stale version/i);
+  assert.match(responses['403'].description,/target/i);
+});
