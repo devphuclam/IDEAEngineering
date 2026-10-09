@@ -94,6 +94,19 @@ runner and make `API contract synchronization` a required check before claiming 
 protection. The contributor instruction and local guards are implemented; that hosting/settings
 action is not silently performed or reported PASS.
 
+### Actual CI attempt — environment BLOCKED
+
+The [API contract synchronization job](https://github.com/devphuclam/IDEAEngineering/actions/runs/37885627747/job/113674875318)
+ran against publication head `14a91548f66417b8a0bbaf6e6fa2cf70b4d56f0e` on
+2026-10-09 (completed at 04:49:10 UTC). Checkout passed. The approved pre-existing Node
+preflight failed with `Approved Node 24.19.0 unavailable; provisioning/intake is a separate action.`
+The contract check and guard regression were consequently skipped: remote execution is
+NOT-RUN, not PASS and not a contract regression failure. No fallback version, installation or
+download was used. The runner's actual Node version was not retained; no version is inferred.
+This evidence-only publication does not change the final local executed source or its 30/30
+result. Permitted runner provisioning and required-check configuration remain integration
+conditions; no merge-enforcement claim is made.
+
 Static supported-route discovery and source fingerprints are not universal runtime route
 discovery or semantic correctness proof. OpenAPI validation is explicitly bounded.
 No Maven/PostgreSQL/application test/deploy/full verifier was run; all are NOT-RUN for this
