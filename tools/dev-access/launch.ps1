@@ -7,6 +7,11 @@ param(
     [string]$ExpectedFrontendGeneration
 )
 $ErrorActionPreference='Stop'
+# npm/Node may inherit PowerShell7's PSModulePath. Use this host's built-in
+# modules explicitly; do not alter user/system module paths or install modules.
+foreach($module in @('Microsoft.PowerShell.Utility','Microsoft.PowerShell.Management','CimCmdlets')){
+    Import-Module (Join-Path $PSHOME ('Modules/'+$module+'/'+$module+'.psd1')) -ErrorAction Stop
+}
 $repository=Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $node=Join-Path $env:USERPROFILE '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe'
 $node=[IO.Path]::GetFullPath($node)
