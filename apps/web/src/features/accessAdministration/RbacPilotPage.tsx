@@ -1,13 +1,19 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
+  createIamClient,
   type AdministrationContext,
   type AssignmentScope,
   type RoleView,
   type RoleCandidate,
   type RoleValidation,
   type PermissionView,
+  type ProjectView,
+  type BoundedPage,
+  type IamResult,
   customRoleCeiling,
 } from '../../api/iamClient';
+import { roleProposalTarget } from './CustomRoleEditor';
+import { outcomeMessage } from '../iamIntegration/IamStatus';
 import { Button } from '../../ui/primitives/Button';
 import { Input } from '../../ui/primitives/Input';
 import { Badge } from '../../ui/primitives/Badge';
@@ -17,146 +23,188 @@ import { Alert, Spinner, EmptyState } from '../../ui/primitives/Feedback';
 import { DataTable, Column } from '../../ui/table/DataTable';
 import { InspectorLayout } from '../../ui/layout/InspectorLayout';
 
+export type IamClientInstance = ReturnType<typeof createIamClient>;
+
 export interface RbacPilotPageProps {
-  context?: AdministrationContext;
+  context?: AdministrationContext | null;
+  client?: IamClientInstance;
+  onInvalidated?: () => void;
   onNavigateBack?: () => void;
 }
 
-const DEFAULT_CONTEXT: AdministrationContext = {
-  actorId: '11111111-1111-4111-8111-111111111111',
-  accountId: '22222222-2222-4222-8222-222222222222',
-  organizationId: '33333333-3333-4333-8333-333333333333',
-  displayName: 'Nguyễn Văn Quản Trị',
-  organizationName: 'IDEA Industrial Hub',
-  actions: [
-    'role.catalogue.read',
-    'role.definition.prepare',
-    'role.definition.activate',
-    'access.inspect',
-    'audit.read',
-    'project.admin.read',
-  ],
-};
-
-const SAMPLE_PERMISSIONS: PermissionView[] = [
-  {
-    code: 'project.read',
-    owner: 'PROJECT',
-    scopeKinds: ['ORGANIZATION', 'PROJECT'],
-    principalKinds: ['ACTOR', 'PROJECT_GROUP'],
-    participantMembershipRequired: false,
-    implementationState: 'IMPLEMENTED',
-  },
-  {
-    code: 'role.catalogue.read',
-    owner: 'IAM',
-    scopeKinds: ['ORGANIZATION', 'PROJECT'],
-    principalKinds: ['ACTOR'],
-    participantMembershipRequired: false,
-    implementationState: 'IMPLEMENTED',
-  },
-  {
-    code: 'access.inspect',
-    owner: 'IAM',
-    scopeKinds: ['ORGANIZATION', 'PROJECT'],
-    principalKinds: ['ACTOR'],
-    participantMembershipRequired: false,
-    implementationState: 'IMPLEMENTED',
-  },
-  {
-    code: 'audit.read',
-    owner: 'IAM',
-    scopeKinds: ['ORGANIZATION', 'PROJECT'],
-    principalKinds: ['ACTOR'],
-    participantMembershipRequired: false,
-    implementationState: 'IMPLEMENTED',
-  },
-];
-
-const INITIAL_ROLES: RoleView[] = [
-  {
-    definitionId: '00000000-0000-4000-8000-000000000001',
-    roleVersionId: '00000000-0000-4000-8000-000000000011',
-    roleCode: 'org-admin',
-    version: 1,
-    displayName: 'Quản trị viên Tổ chức',
-    builtIn: true,
-    classification: 'HIGHEST',
-    scopeKinds: ['ORGANIZATION'],
-    principalKinds: ['ACTOR'],
-    contentDigest: 'a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0',
-    permissions: SAMPLE_PERMISSIONS,
-    selectable: true,
-    availabilityReason: null,
-    managementScope: null,
-  },
-  {
-    definitionId: '00000000-0000-4000-8000-000000000002',
-    roleVersionId: '00000000-0000-4000-8000-000000000012',
-    roleCode: 'project-viewer',
-    version: 1,
-    displayName: 'Người xem Dự án',
-    builtIn: false,
-    classification: 'BUSINESS',
-    scopeKinds: ['ORGANIZATION', 'PROJECT'],
-    principalKinds: ['ACTOR', 'PROJECT_GROUP'],
-    contentDigest: 'b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef01',
-    permissions: [SAMPLE_PERMISSIONS[0], SAMPLE_PERMISSIONS[1]],
-    selectable: true,
-    availabilityReason: null,
-    managementScope: { kind: 'ORGANIZATION', organizationId: '33333333-3333-4333-8333-333333333333' },
-  },
-  {
-    definitionId: '00000000-0000-4000-8000-000000000003',
-    roleVersionId: '00000000-0000-4000-8000-000000000013',
-    roleCode: 'compliance-auditor',
-    version: 1,
-    displayName: 'Kiểm toán viên Tuân thủ',
-    builtIn: false,
-    classification: 'ADMINISTRATION',
-    scopeKinds: ['ORGANIZATION'],
-    principalKinds: ['ACTOR'],
-    contentDigest: 'c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef012',
-    permissions: [SAMPLE_PERMISSIONS[1], SAMPLE_PERMISSIONS[2], SAMPLE_PERMISSIONS[3]],
-    selectable: true,
-    availabilityReason: null,
-    managementScope: { kind: 'ORGANIZATION', organizationId: '33333333-3333-4333-8333-333333333333' },
-  },
-];
+const defaultClient = createIamClient();
 
 export function isValidKebabCase(code: string): boolean {
   return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(code);
 }
 
 export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
-  context = DEFAULT_CONTEXT,
+  context,
+  client = defaultClient,
+  onInvalidated,
   onNavigateBack,
 }) => {
-  const [roles, setRoles] = useState<RoleView[]>(INITIAL_ROLES);
-  const [selectedRole, setSelectedRole] = useState<RoleView | null>(INITIAL_ROLES[1]);
+  const activeClient = client;
+  const alive = useRef(true);
+  const epoch = useRef(0);
+
+  // Authority & Session checks
+  const isAuthenticated = Boolean(context && context.actorId);
+  const canPrepare = Boolean(context?.actions.includes('role.definition.prepare'));
+  const canActivate = Boolean(context?.actions.includes('role.definition.activate'));
+  const canReadProjects = Boolean(context?.actions.includes('project.admin.read'));
+
+  // Scope & Data state
+  const [scope, setScope] = useState<AssignmentScope>(() =>
+    context
+      ? { kind: 'ORGANIZATION', organizationId: context.organizationId }
+      : { kind: 'ORGANIZATION', organizationId: '' }
+  );
+  const [projects, setProjects] = useState<BoundedPage<ProjectView> | null>(null);
+  const [roles, setRoles] = useState<RoleView[]>([]);
+  const [permissions, setPermissions] = useState<PermissionView[]>([]);
+  const [selectedRole, setSelectedRole] = useState<RoleView | null>(null);
   const [inspectorOpen, setInspectorOpen] = useState(true);
-
-  // Drawer Create State
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState(false);
-
-  // Candidate creation form inputs
-  const [formDisplayName, setFormDisplayName] = useState('');
-  const [formRoleCode, setFormRoleCode] = useState('');
-  const [formSelectedPermissions, setFormSelectedPermissions] = useState<string[]>(['project.read']);
-  const [formScopeKinds, setFormScopeKinds] = useState<string[]>(['ORGANIZATION', 'PROJECT']);
-  const [formPrincipalKinds, setFormPrincipalKinds] = useState<string[]>(['ACTOR']);
-  const [formReason, setFormReason] = useState('');
-  const [isFormDirty, setIsFormDirty] = useState(false);
 
   // Candidate Lifecycle State
   const [candidate, setCandidate] = useState<RoleCandidate | null>(null);
   const [validation, setValidation] = useState<RoleValidation | null>(null);
+  const [activeRole, setActiveRole] = useState<RoleView | null>(null);
   const [activationReason, setActivationReason] = useState('');
   const [activationConfirmed, setActivationConfirmed] = useState(false);
+
+  // Status & Feedback
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
+
+  // Drawer Create State
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState(false);
+  const [formBaseVersion, setFormBaseVersion] = useState('');
+  const [formDisplayName, setFormDisplayName] = useState('');
+  const [formRoleCode, setFormRoleCode] = useState('');
+  const [formSelectedPermissions, setFormSelectedPermissions] = useState<string[]>(['project.read']);
+  const [formScopeKinds, setFormScopeKinds] = useState<string[]>(['PROJECT']);
+  const [formPrincipalKinds, setFormPrincipalKinds] = useState<string[]>(['ACTOR']);
+  const [formReason, setFormReason] = useState('');
+  const [isFormDirty, setIsFormDirty] = useState(false);
+
+  const handleClientFailure = useCallback(
+    (res: IamResult<unknown>) => {
+      if (res.kind === 'refused' && res.status === 401) {
+        setCandidate(null);
+        setValidation(null);
+        setRoles([]);
+        setErrorMessage('Phiên làm việc đã hết hạn hoặc không hợp lệ (401 Unauthorized).');
+        onInvalidated?.();
+        return;
+      }
+      if (res.kind === 'unresolved') {
+        setErrorMessage('Chưa xác định kết quả từ Server. Giữ nguyên OperationId để kiểm tra lại intent.');
+        return;
+      }
+      if (res.kind === 'stale') {
+        setErrorMessage('Phiên bản dữ liệu đã cũ (409 Conflict). Vui lòng tải lại danh mục vai trò.');
+        return;
+      }
+      if (res.kind === 'unavailable') {
+        setErrorMessage('Dịch vụ IDEA Server tạm thời không khả dụng (503 Service Unavailable). Khóa thao tác theo fail-closed.');
+        return;
+      }
+      setErrorMessage(outcomeMessage(res));
+    },
+    [onInvalidated]
+  );
+
+  const loadCatalogue = useCallback(
+    async (targetScope: AssignmentScope) => {
+      if (!context) return;
+      const currentRequest = ++epoch.current;
+      setIsLoading(true);
+      setErrorMessage(null);
+
+      try {
+        const [rolesRes, permsRes] = await Promise.all([
+          activeClient.loadRoles(targetScope, 0),
+          activeClient.loadPermissions(targetScope, 0),
+        ]);
+
+        if (!alive.current || currentRequest !== epoch.current) return;
+
+        if (rolesRes.kind === 'confirmed') {
+          setRoles(rolesRes.value.items);
+          if (rolesRes.value.items.length > 0) {
+            setSelectedRole((prev) =>
+              prev ? rolesRes.value.items.find((r) => r.roleVersionId === prev.roleVersionId) || rolesRes.value.items[0] : rolesRes.value.items[0]
+            );
+          } else {
+            setSelectedRole(null);
+          }
+        } else {
+          handleClientFailure(rolesRes);
+        }
+
+        if (permsRes.kind === 'confirmed') {
+          setPermissions(permsRes.value.items);
+        } else {
+          handleClientFailure(permsRes);
+        }
+      } catch {
+        if (alive.current) {
+          setErrorMessage('Không thể kết nối đến máy chủ IDEA Server.');
+        }
+      } finally {
+        if (alive.current && currentRequest === epoch.current) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [context, activeClient, handleClientFailure]
+  );
+
+  // Load initial catalogue and projects
+  useEffect(() => {
+    alive.current = true;
+    if (context) {
+      const initialScope: AssignmentScope = {
+        kind: 'ORGANIZATION',
+        organizationId: context.organizationId,
+      };
+      setScope(initialScope);
+      void loadCatalogue(initialScope);
+
+      if (canReadProjects) {
+        void activeClient.loadProjects().then((projRes) => {
+          if (alive.current && projRes.kind === 'confirmed') {
+            setProjects(projRes.value);
+          }
+        });
+      }
+    }
+
+    return () => {
+      alive.current = false;
+      epoch.current++;
+    };
+  }, [context, activeClient, loadCatalogue, canReadProjects]);
+
+  // Handle scope change
+  const handleChangeScope = async (scopeValue: string) => {
+    if (!context || isBusy) return;
+    const newScope: AssignmentScope =
+      scopeValue === 'ORGANIZATION'
+        ? { kind: 'ORGANIZATION', organizationId: context.organizationId }
+        : { kind: 'PROJECT', organizationId: context.organizationId, projectId: scopeValue };
+
+    setScope(newScope);
+    setCandidate(null);
+    setValidation(null);
+    setActiveRole(null);
+    setFormBaseVersion('');
+    await loadCatalogue(newScope);
+  };
 
   const roleCodeError = useMemo(() => {
     if (!formRoleCode) return null;
@@ -167,35 +215,40 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       return 'Độ dài mã vai trò phải từ 3 đến 50 ký tự.';
     }
     return null;
-  }, [formRoleCode, isValidKebabCase]);
+  }, [formRoleCode]);
 
   const canSubmitProposal = useMemo(() => {
+    const isNameValid = formDisplayName.trim().length >= 3;
+    const isBaseOrNewValid = formBaseVersion ? true : formRoleCode.trim().length >= 3 && roleCodeError === null;
     return (
-      formDisplayName.trim().length >= 3 &&
-      formRoleCode.trim().length >= 3 &&
-      roleCodeError === null &&
+      isNameValid &&
+      isBaseOrNewValid &&
       formSelectedPermissions.length > 0 &&
       formScopeKinds.length > 0 &&
       formPrincipalKinds.length > 0 &&
       formReason.trim().length >= 5 &&
+      canPrepare &&
       !isBusy
     );
   }, [
     formDisplayName,
+    formBaseVersion,
     formRoleCode,
     roleCodeError,
     formSelectedPermissions,
     formScopeKinds,
     formPrincipalKinds,
     formReason,
+    canPrepare,
     isBusy,
   ]);
 
   const handleOpenDrawer = () => {
+    setFormBaseVersion('');
     setFormDisplayName('');
     setFormRoleCode('');
     setFormSelectedPermissions(['project.read']);
-    setFormScopeKinds(['ORGANIZATION', 'PROJECT']);
+    setFormScopeKinds(['PROJECT']);
     setFormPrincipalKinds(['ACTOR']);
     setFormReason('');
     setIsFormDirty(false);
@@ -216,140 +269,156 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     setIsFormDirty(false);
   };
 
-  const handlePrepareCandidate = () => {
-    if (!canSubmitProposal) return;
-    setIsBusy(true);
-    setErrorMessage(null);
-    setStatusMessage('Đang chuẩn bị candidate trên hệ thống...');
-
-    setTimeout(() => {
-      const newCandidateId = `cnd-${Date.now().toString(36)}`;
-      const newDefId = `def-${Date.now().toString(36)}`;
-      const digest = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('');
-
-      const newCandidate: RoleCandidate = {
-        candidateId: newCandidateId,
-        definitionId: newDefId,
-        roleCode: formRoleCode.trim(),
-        displayName: formDisplayName.trim(),
-        managementScope: { kind: 'ORGANIZATION', organizationId: context.organizationId },
-        baseVersionId: null,
-        proposedRoleVersion: 1,
-        classification: 'BUSINESS',
-        support: {
-          scopeKinds: [...formScopeKinds],
-          principalKinds: [...formPrincipalKinds],
-        },
-        permissionCodes: [...formSelectedPermissions],
-        contentDigest: digest,
-        version: 1,
-        state: 'CANDIDATE',
-        activatedVersionId: null,
-        difference: {
-          added: [...formSelectedPermissions],
-          removed: [],
-          unchanged: [],
-        },
-      };
-
-      setCandidate(newCandidate);
-      setValidation(null);
-      setActivationReason('');
-      setActivationConfirmed(false);
-      setIsDrawerOpen(false);
-      setIsBusy(false);
-      setStatusMessage(`Candidate [${newCandidate.roleCode}] đã được tạo thành công.`);
-      setInspectorOpen(true);
-    }, 300);
+  const handleSelectBaseRole = (baseVersionId: string) => {
+    setFormBaseVersion(baseVersionId);
+    setIsFormDirty(true);
+    const selected = roles.find((r) => r.roleVersionId === baseVersionId);
+    if (selected) {
+      setFormDisplayName(selected.displayName);
+      setFormRoleCode(selected.roleCode);
+      setFormSelectedPermissions(selected.permissions.map((p) => p.code));
+      setFormScopeKinds(selected.scopeKinds);
+      setFormPrincipalKinds(selected.principalKinds);
+    } else {
+      setFormDisplayName('');
+      setFormRoleCode('');
+      setFormSelectedPermissions(['project.read']);
+    }
   };
 
-  const handleValidateCandidate = () => {
-    if (!candidate) return;
+  const handlePrepareCandidate = async () => {
+    if (!canSubmitProposal || !context) return;
     setIsBusy(true);
     setErrorMessage(null);
-    setStatusMessage('Đang kiểm tra tính hợp lệ của candidate (Validate)...');
+    setStatusMessage('Server đang kiểm tra authority, scope và chuẩn bị candidate...');
 
-    setTimeout(() => {
-      // Validate constraints: project.read allows PROJECT_GROUP, administrative permissions only ACTOR
-      const hasAdminPerm = candidate.permissionCodes.some((p) => p !== 'project.read');
-      const hasGroupPrincipal = candidate.support.principalKinds.includes('PROJECT_GROUP');
-
-      if (hasAdminPerm && hasGroupPrincipal) {
-        setErrorMessage(
-          'Từ chối hợp lệ: Quyền quản trị và kiểm toán (audit/role.catalogue) chỉ cho phép gán cho ACTOR cá nhân, không thể hỗ trợ PROJECT_GROUP.'
-        );
+    try {
+      const target = roleProposalTarget(formBaseVersion, roles, formDisplayName);
+      if (!target) {
+        setErrorMessage('Exact base version không còn trong danh mục vai trò. Vui lòng chọn lại.');
         setIsBusy(false);
         return;
       }
 
-      const valResult: RoleValidation = {
-        valid: true,
-        candidate,
-        difference: candidate.difference,
-        consequences: [
-          `Tạo bản ghi Role Definition mới với mã ${candidate.roleCode}.`,
-          `Phiên bản khởi tạo ban đầu là v1 (Immutable).`,
-          `Các quyền được gắn: ${candidate.permissionCodes.join(', ')}.`,
-          `Phạm vi quản lý: ORGANIZATION (${candidate.managementScope.organizationId}).`,
-        ],
-      };
-
-      setValidation(valResult);
-      setIsBusy(false);
-      setStatusMessage('Candidate đã được Validate thành công. Sẵn sàng kích hoạt.');
-    }, 300);
-  };
-
-  const handleActivateRole = () => {
-    if (!candidate || !validation || !activationConfirmed || !activationReason.trim()) return;
-    setIsBusy(true);
-    setErrorMessage(null);
-    setStatusMessage('Đang kích hoạt Role Version mới vào hệ thống...');
-
-    setTimeout(() => {
-      const activeRoleVersionId = `ver-${Date.now().toString(36)}`;
-      const activePerms: PermissionView[] = candidate.permissionCodes.map((code) => {
-        const found = SAMPLE_PERMISSIONS.find((p) => p.code === code);
-        return (
-          found || {
-            code,
-            owner: 'IAM',
-            scopeKinds: candidate.support.scopeKinds,
-            principalKinds: candidate.support.principalKinds,
-            participantMembershipRequired: false,
-            implementationState: 'IMPLEMENTED',
-          }
-        );
+      const operationId = crypto.randomUUID();
+      const res = await activeClient.prepareRole({
+        operationId,
+        scope,
+        ...target,
+        permissionCodes: [...formSelectedPermissions],
+        support: {
+          scopeKinds: [...formScopeKinds],
+          principalKinds: [...formPrincipalKinds],
+        },
+        reason: formReason.trim(),
       });
 
-      const newRole: RoleView = {
-        definitionId: candidate.definitionId,
-        roleVersionId: activeRoleVersionId,
-        roleCode: candidate.roleCode,
-        version: candidate.proposedRoleVersion,
-        displayName: candidate.displayName,
-        builtIn: false,
-        classification: candidate.classification,
-        scopeKinds: candidate.support.scopeKinds,
-        principalKinds: candidate.support.principalKinds,
-        contentDigest: candidate.contentDigest,
-        permissions: activePerms,
-        selectable: true,
-        availabilityReason: null,
-        managementScope: candidate.managementScope,
-      };
+      if (!alive.current) return;
 
-      setRoles((prev) => [newRole, ...prev]);
-      setSelectedRole(newRole);
-      setCandidate(null);
-      setValidation(null);
-      setIsBusy(false);
-      setStatusMessage(
-        `Kích hoạt thành công! Role [${newRole.roleCode}@${newRole.version}] đã có hiệu lực (Immutable).`
-      );
-    }, 300);
+      if (res.kind === 'confirmed') {
+        setCandidate(res.value);
+        setValidation(null);
+        setActiveRole(null);
+        setActivationReason('');
+        setActivationConfirmed(false);
+        setIsDrawerOpen(false);
+        setIsFormDirty(false);
+        setStatusMessage(
+          `Server đã tạo và lưu candidate [${res.value.roleCode}] (Candidate ID: ${res.value.candidateId}). Trạng thái: CANDIDATE, chưa active và chưa cấp assignment.`
+        );
+        setInspectorOpen(true);
+      } else {
+        handleClientFailure(res);
+      }
+    } catch {
+      if (alive.current) {
+        setErrorMessage('Không thể kết nối đến máy chủ trong quá trình chuẩn bị candidate.');
+      }
+    } finally {
+      if (alive.current) setIsBusy(false);
+    }
+  };
+
+  const handleValidateCandidate = async () => {
+    if (!candidate || isBusy) return;
+    setIsBusy(true);
+    setErrorMessage(null);
+    setStatusMessage('Server đang xác thực snapshot candidate (Validate)...');
+
+    try {
+      const res = await activeClient.validateRole(candidate.candidateId, {
+        scope: candidate.managementScope,
+        expectedVersion: candidate.version,
+      });
+
+      if (!alive.current) return;
+
+      if (res.kind === 'confirmed') {
+        if (
+          res.value.candidate.candidateId === candidate.candidateId &&
+          res.value.candidate.contentDigest === candidate.contentDigest
+        ) {
+          setValidation(res.value);
+          setCandidate(res.value.candidate);
+          setStatusMessage('Validation đạt tại thời điểm đọc. Server sẽ tiếp tục kiểm tra lại authority và version tại commit activation.');
+        } else {
+          setErrorMessage('Candidate digest hoặc ID không khớp với bản ghi xác thực từ Server.');
+        }
+      } else {
+        handleClientFailure(res);
+      }
+    } catch {
+      if (alive.current) {
+        setErrorMessage('Không thể xác thực candidate do lỗi kết nối Server.');
+      }
+    } finally {
+      if (alive.current) setIsBusy(false);
+    }
+  };
+
+  const handleActivateRole = async () => {
+    if (!candidate || !validation || !canActivate || !activationConfirmed || !activationReason.trim() || isBusy) {
+      return;
+    }
+
+    setIsBusy(true);
+    setErrorMessage(null);
+    setStatusMessage('Server đang commit kích hoạt phiên bản role immutable mới...');
+
+    try {
+      const operationId = crypto.randomUUID();
+      const res = await activeClient.activateRole(validation.candidate.candidateId, {
+        operationId,
+        scope: validation.candidate.managementScope,
+        expectedVersion: validation.candidate.version,
+        baseVersionId: validation.candidate.baseVersionId,
+        reason: activationReason.trim(),
+      });
+
+      if (!alive.current) return;
+
+      if (res.kind === 'confirmed') {
+        const activated = res.value;
+        setActiveRole(activated);
+        setCandidate(null);
+        setValidation(null);
+        setActivationReason('');
+        setActivationConfirmed(false);
+        setStatusMessage(
+          `Server đã xác nhận kích hoạt thành công phiên bản immutable mới: ${activated.roleCode}@${activated.version}. Assignment cũ không đổi; version mới cần được cấp riêng.`
+        );
+        await loadCatalogue(scope);
+        setSelectedRole(activated);
+      } else {
+        handleClientFailure(res);
+      }
+    } catch {
+      if (alive.current) {
+        setErrorMessage('Không thể kích hoạt vai trò do lỗi kết nối Server.');
+      }
+    } finally {
+      if (alive.current) setIsBusy(false);
+    }
   };
 
   const tableColumns: Column<RoleView>[] = [
@@ -398,92 +467,185 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
       },
     },
     {
-      key: 'permissions',
-      header: 'Số quyền',
-      sortable: true,
-      width: '100px',
+      key: 'scopeKinds',
+      header: 'Phạm vi',
       render: (r) => (
-        <span>{r.permissions.length} quyền</span>
+        <span style={{ fontSize: '12px', color: 'var(--idea-color-text-muted)' }}>
+          {r.scopeKinds.join(', ')}
+        </span>
       ),
     },
     {
-      key: 'scopeKinds',
-      header: 'Phạm vi hỗ trợ',
+      key: 'principalKinds',
+      header: 'Chủ thể',
       render: (r) => (
-        <span style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)' }}>
-          {r.scopeKinds.join(' / ')}
+        <span style={{ fontSize: '12px', color: 'var(--idea-color-text-muted)' }}>
+          {r.principalKinds.join(', ')}
         </span>
       ),
     },
   ];
 
+  // Render unauthenticated state (Fail-closed boundary)
+  if (!isAuthenticated || !context) {
+    return (
+      <div style={{ padding: '32px 24px', maxWidth: '800px', margin: '0 auto' }}>
+        <Alert variant="warning" title="Yêu cầu phiên xác thực (AdministrationContext)">
+          Chưa có phiên làm việc được Server xác thực. Theo nguyên tắc bảo mật fail-closed,
+          các chức năng quản trị vai trò RBAC bị khóa hoàn toàn cho tới khi đăng nhập hợp lệ.
+        </Alert>
+        <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
+          {onNavigateBack && (
+            <Button variant="secondary" onClick={onNavigateBack}>
+              ← Quay lại
+            </Button>
+          )}
+          <a
+            href="#session"
+            className="idea-btn idea-btn--primary"
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+          >
+            Đăng nhập vào hệ thống
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-      {/* Top Banner / Breadcrumb */}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 'calc(100vh - 120px)' }}>
+      {/* Scope Toolbar & Action Header */}
       <div
         style={{
-          padding: '10px 16px',
-          borderBottom: '1px solid var(--idea-color-border)',
-          backgroundColor: 'var(--idea-color-surface)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          padding: '12px 16px',
+          borderBottom: '1px solid var(--idea-color-border)',
+          backgroundColor: 'var(--idea-color-surface)',
+          flexWrap: 'wrap',
+          gap: '12px',
         }}
       >
-        <div>
-          <div style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginBottom: '2px' }}>
-            Quản trị hệ thống &gt; Kiểm soát quyền truy cập &gt; Custom Role Pilot
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {onNavigateBack && (
+            <Button variant="ghost" size="sm" onClick={onNavigateBack} title="Quay lại">
+              ←
+            </Button>
+          )}
+          <div>
+            <h2 style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>Quản lý vai trò (RBAC)</h2>
+            <div style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)' }}>
+              Server Scope: {context.organizationName} ({context.organizationId})
+            </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>Quản lý vai trò (RBAC Pilot)</h2>
-            <Badge variant="admin">AUTHORITATIVE SERVER SCOPE</Badge>
+          <div style={{ marginLeft: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <label style={{ fontSize: '12px', color: 'var(--idea-color-text-muted)' }}>Scope:</label>
+            <select
+              aria-label="Management scope"
+              disabled={isBusy || isLoading}
+              value={scope.kind === 'ORGANIZATION' ? 'ORGANIZATION' : scope.projectId}
+              onChange={(e) => void handleChangeScope(e.target.value)}
+              style={{
+                fontSize: '12px',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                border: '1px solid var(--idea-color-border)',
+                backgroundColor: 'var(--idea-color-surface)',
+                color: 'var(--idea-color-text)',
+              }}
+            >
+              <option value="ORGANIZATION">Organization · {context.organizationName}</option>
+              {projects?.items.map((p) => (
+                <option key={p.projectId} value={p.projectId}>
+                  Project · {p.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {onNavigateBack && (
-            <Button variant="outline" size="sm" onClick={onNavigateBack}>
-              ← Quay lại
-            </Button>
-          )}
-          <Button variant="primary" size="sm" onClick={handleOpenDrawer}>
-            + Tạo Custom Role mới
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={isLoading || isBusy}
+            onClick={() => void loadCatalogue(scope)}
+          >
+            {isLoading ? <Spinner size="sm" /> : '↻ Tải lại'}
+          </Button>
+
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleOpenDrawer}
+            disabled={!canPrepare || isBusy || isLoading}
+            title={canPrepare ? 'Chuẩn bị Custom Role Candidate mới' : 'Tài khoản thiếu quyền role.definition.prepare'}
+          >
+            + Tạo Candidate
           </Button>
         </div>
       </div>
 
-      {/* Notifications */}
-      {statusMessage && (
-        <div style={{ padding: '8px 16px 0 16px' }}>
-          <Alert variant="success" onClose={() => setStatusMessage(null)}>
-            {statusMessage}
-          </Alert>
-        </div>
-      )}
-      {errorMessage && (
-        <div style={{ padding: '8px 16px 0 16px' }}>
-          <Alert variant="danger" onClose={() => setErrorMessage(null)}>
-            {errorMessage}
-          </Alert>
-        </div>
-      )}
+      {/* Global Alerts / Status Feedbacks */}
+      <div style={{ padding: '8px 16px 0 16px' }}>
+        {statusMessage && (
+          <div style={{ marginBottom: '8px' }}>
+            <Alert variant="neutral" onClose={() => setStatusMessage(null)}>
+              {statusMessage}
+            </Alert>
+          </div>
+        )}
+        {errorMessage && (
+          <div style={{ marginBottom: '8px' }}>
+            <Alert variant="danger" onClose={() => setErrorMessage(null)}>
+              {errorMessage}
+            </Alert>
+          </div>
+        )}
+        {!canPrepare && (
+          <div style={{ marginBottom: '8px' }}>
+            <Alert variant="neutral">
+              Chế độ chỉ đọc: Tài khoản của bạn không có quyền <code>role.definition.prepare</code>.
+              Chức năng tạo và kích hoạt vai trò tùy biến bị khóa.
+            </Alert>
+          </div>
+        )}
+      </div>
 
-      {/* Master-Detail with InspectorLayout */}
-      <div style={{ flex: 1, minHeight: 0 }}>
+      {/* Main Split Layout: Table on Left, Inspector on Right */}
+      <div style={{ flex: 1, position: 'relative' }}>
         <InspectorLayout
           isOpen={inspectorOpen}
           onToggle={setInspectorOpen}
-          title={candidate ? 'Candidate Lifecycle' : 'Chi tiết vai trò'}
+          title={candidate ? 'Candidate Lifecycle' : 'Chi tiết Vai trò'}
           width={380}
           inspectorContent={
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Candidate Flow in Inspector */}
               {candidate ? (
-                /* Candidate Lifecycle Inspector */
                 <div>
-                  <div style={{ marginBottom: '12px' }}>
-                    <Badge variant={validation ? 'success' : 'warning'}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    <Badge variant={validation ? 'admin' : 'business'}>
                       {validation ? 'VALIDATED CANDIDATE' : 'PREPARED CANDIDATE'}
                     </Badge>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setCandidate(null);
+                        setValidation(null);
+                      }}
+                    >
+                      Bỏ qua
+                    </Button>
                   </div>
 
                   <h3 style={{ margin: '0 0 4px 0', fontSize: '15px' }}>{candidate.displayName}</h3>
@@ -493,12 +655,19 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
                     <div>
-                      <span style={{ color: 'var(--idea-color-text-muted)' }}>Mã Candidate ID: </span>
-                      <code>{candidate.candidateId}</code>
+                      <span style={{ color: 'var(--idea-color-text-muted)' }}>Candidate ID: </span>
+                      <code style={{ fontSize: '11px' }}>{candidate.candidateId}</code>
                     </div>
                     <div>
-                      <span style={{ color: 'var(--idea-color-text-muted)' }}>Phân loại: </span>
-                      <Badge variant="business">{candidate.classification}</Badge>
+                      <span style={{ color: 'var(--idea-color-text-muted)' }}>Phạm vi quản lý: </span>
+                      <span>
+                        {candidate.managementScope.kind} ·{' '}
+                        <code>
+                          {candidate.managementScope.kind === 'PROJECT'
+                            ? candidate.managementScope.projectId
+                            : candidate.managementScope.organizationId}
+                        </code>
+                      </span>
                     </div>
                     <div>
                       <span style={{ color: 'var(--idea-color-text-muted)' }}>Quyền được cấp: </span>
@@ -521,18 +690,18 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       </div>
                     </div>
                     <div>
-                      <span style={{ color: 'var(--idea-color-text-muted)' }}>Digest SHA-256: </span>
+                      <span style={{ color: 'var(--idea-color-text-muted)' }}>Content Digest (Server SHA-256): </span>
                       <code style={{ fontSize: '10px', wordBreak: 'break-all' }}>{candidate.contentDigest}</code>
                     </div>
                   </div>
 
-                  {/* Actions based on state */}
+                  {/* Candidate Actions */}
                   {!validation ? (
                     <div style={{ marginTop: '16px' }}>
                       <Button
                         variant="primary"
                         style={{ width: '100%' }}
-                        onClick={handleValidateCandidate}
+                        onClick={() => void handleValidateCandidate()}
                         disabled={isBusy}
                       >
                         {isBusy ? <Spinner size="sm" /> : 'Xác thực Candidate (Validate)'}
@@ -549,7 +718,14 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       }}
                     >
                       <h4 style={{ margin: '0 0 8px 0', fontSize: '13px' }}>Hệ quả kích hoạt (Consequences):</h4>
-                      <ul style={{ margin: '0 0 12px 0', paddingLeft: '18px', fontSize: '11px', color: 'var(--idea-color-text-muted)' }}>
+                      <ul
+                        style={{
+                          margin: '0 0 12px 0',
+                          paddingLeft: '18px',
+                          fontSize: '11px',
+                          color: 'var(--idea-color-text-muted)',
+                        }}
+                      >
                         {validation.consequences.map((c, i) => (
                           <li key={i}>{c}</li>
                         ))}
@@ -567,7 +743,15 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       </div>
 
                       <div style={{ marginBottom: '12px' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', cursor: 'pointer' }}>
+                        <label
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                          }}
+                        >
                           <input
                             type="checkbox"
                             checked={activationConfirmed}
@@ -580,8 +764,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       <Button
                         variant="primary"
                         style={{ width: '100%' }}
-                        disabled={!activationConfirmed || !activationReason.trim() || isBusy}
-                        onClick={handleActivateRole}
+                        disabled={!activationConfirmed || !activationReason.trim() || isBusy || !canActivate}
+                        onClick={() => void handleActivateRole()}
                       >
                         {isBusy ? <Spinner size="sm" /> : 'Kích hoạt phiên bản (Activate)'}
                       </Button>
@@ -623,7 +807,9 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       <div>{selectedRole.principalKinds.join(', ')}</div>
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600, marginBottom: '6px' }}>Danh sách quyền ({selectedRole.permissions.length}):</div>
+                      <div style={{ fontWeight: 600, marginBottom: '6px' }}>
+                        Danh sách quyền ({selectedRole.permissions.length}):
+                      </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         {selectedRole.permissions.map((p) => (
                           <div
@@ -656,29 +842,35 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         >
           {/* Master View: DataTable */}
           <div style={{ padding: '16px', height: '100%', boxSizing: 'border-box' }}>
-            <DataTable
-              data={roles}
-              columns={tableColumns}
-              getRowId={(r) => r.roleVersionId}
-              selectedId={selectedRole?.roleVersionId}
-              onSelectRow={(r) => {
-                setSelectedRole(r);
-                setCandidate(null);
-                setValidation(null);
-              }}
-              filterPlaceholder="Lọc vai trò theo mã hoặc tên..."
-              ariaLabel="Bảng danh sách vai trò phân quyền"
-            />
+            {isLoading && roles.length === 0 ? (
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '48px' }}>
+                <Spinner size="lg" />
+              </div>
+            ) : (
+              <DataTable
+                data={roles}
+                columns={tableColumns}
+                getRowId={(r) => r.roleVersionId}
+                selectedId={selectedRole?.roleVersionId}
+                onSelectRow={(r) => {
+                  setSelectedRole(r);
+                  setCandidate(null);
+                  setValidation(null);
+                }}
+                filterPlaceholder="Lọc vai trò theo mã hoặc tên..."
+                ariaLabel="Bảng danh sách vai trò phân quyền"
+              />
+            )}
           </div>
         </InspectorLayout>
       </div>
 
-      {/* Slide-over Drawer for Role Creation */}
+      {/* Slide-over Drawer for Role Candidate Creation */}
       <Drawer
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
         title="Tạo Custom Role Candidate mới"
-        description="Nordic Functionalist Candidate Lifecycle Flow"
+        description="Nordic Functionalist Candidate Lifecycle Flow (Authoritative Server API)"
         footer={
           <>
             <Button variant="secondary" onClick={handleCloseDrawer} disabled={isBusy}>
@@ -686,7 +878,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             </Button>
             <Button
               variant="primary"
-              onClick={handlePrepareCandidate}
+              onClick={() => void handlePrepareCandidate()}
               disabled={!canSubmitProposal || isBusy}
             >
               {isBusy ? <Spinner size="sm" /> : 'Chuẩn bị Candidate (Prepare)'}
@@ -697,11 +889,42 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div>
             <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
+              Kế thừa từ vai trò gốc (Base Version)
+            </label>
+            <select
+              aria-label="Kế thừa từ vai trò gốc"
+              value={formBaseVersion}
+              onChange={(e) => handleSelectBaseRole(e.target.value)}
+              disabled={isBusy}
+              style={{
+                width: '100%',
+                padding: '6px 8px',
+                fontSize: '12px',
+                borderRadius: '4px',
+                border: '1px solid var(--idea-color-border)',
+                backgroundColor: 'var(--idea-color-surface)',
+                color: 'var(--idea-color-text)',
+              }}
+            >
+              <option value="">Tạo Custom Role hoàn toàn mới</option>
+              {roles
+                .filter((r) => !r.builtIn)
+                .map((r) => (
+                  <option key={r.roleVersionId} value={r.roleVersionId} disabled={!r.selectable}>
+                    {r.roleCode}@{r.version} — {r.displayName}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
               Tên hiển thị vai trò (Display Name) <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
             </label>
             <Input
               placeholder="Ví dụ: Người đánh giá mô hình CAD"
               value={formDisplayName}
+              disabled={Boolean(formBaseVersion) || isBusy}
               onChange={(e) => {
                 setFormDisplayName(e.target.value);
                 setIsFormDirty(true);
@@ -709,23 +932,26 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             />
           </div>
 
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
-              Mã vai trò (Role Code - Bắt buộc ASCII kebab-case) <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
-            </label>
-            <Input
-              placeholder="vi-du: cad-model-reviewer"
-              value={formRoleCode}
-              onChange={(e) => {
-                setFormRoleCode(e.target.value);
-                setIsFormDirty(true);
-              }}
-              errorMessage={roleCodeError || undefined}
-            />
-            <span style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '2px', display: 'block' }}>
-              Chỉ chấp nhận chữ cái thường ASCII a-z, số 0-9 và dấu gạch nối (-). Không tự sinh từ tiếng Việt.
-            </span>
-          </div>
+          {!formBaseVersion && (
+            <div>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
+                Mã vai trò (Role Code - Bắt buộc ASCII kebab-case) <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
+              </label>
+              <Input
+                placeholder="vi-du: cad-model-reviewer"
+                value={formRoleCode}
+                disabled={isBusy}
+                onChange={(e) => {
+                  setFormRoleCode(e.target.value);
+                  setIsFormDirty(true);
+                }}
+                errorMessage={roleCodeError || undefined}
+              />
+              <span style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '2px', display: 'block' }}>
+                Chỉ chấp nhận chữ cái thường ASCII a-z, số 0-9 và dấu gạch nối (-).
+              </span>
+            </div>
+          )}
 
           <div>
             <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px' }}>
@@ -734,6 +960,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {customRoleCeiling.map((permCode) => {
                 const checked = formSelectedPermissions.includes(permCode);
+                const permObj = permissions.find((p) => p.code === permCode);
+                const isImplemented = permObj ? permObj.implementationState === 'IMPLEMENTED' : true;
                 return (
                   <label
                     key={permCode}
@@ -742,25 +970,28 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       alignItems: 'center',
                       gap: '8px',
                       fontSize: '12px',
-                      cursor: 'pointer',
+                      cursor: isImplemented ? 'pointer' : 'not-allowed',
                       padding: '4px 6px',
                       borderRadius: '4px',
                       backgroundColor: checked ? 'var(--idea-color-primary-subtle)' : 'transparent',
+                      opacity: isImplemented ? 1 : 0.6,
                     }}
                   >
                     <input
                       type="checkbox"
                       checked={checked}
+                      disabled={!isImplemented || isBusy}
                       onChange={() => {
                         setIsFormDirty(true);
                         setFormSelectedPermissions((prev) =>
-                          prev.includes(permCode)
-                            ? prev.filter((p) => p !== permCode)
-                            : [...prev, permCode]
+                          prev.includes(permCode) ? prev.filter((p) => p !== permCode) : [...prev, permCode]
                         );
                       }}
                     />
                     <code>{permCode}</code>
+                    <small style={{ color: 'var(--idea-color-text-muted)' }}>
+                      {permObj?.scopeKinds?.join('/')}
+                    </small>
                   </label>
                 );
               })}
@@ -777,6 +1008,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                   <input
                     type="checkbox"
                     checked={formScopeKinds.includes(sc)}
+                    disabled={scope.kind === 'PROJECT' && sc === 'ORGANIZATION'}
                     onChange={() => {
                       setIsFormDirty(true);
                       setFormScopeKinds((prev) =>
@@ -812,7 +1044,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
               ))}
             </div>
             <span style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '4px', display: 'block' }}>
-              Lưu ý: Chỉ quyền <code>project.read</code> mới có thể gán cho PROJECT_GROUP.
+              Lưu ý: Quyền quản trị chỉ hỗ trợ ACTOR cá nhân; chỉ <code>project.read</code> mới có thể hỗ trợ PROJECT_GROUP.
             </span>
           </div>
 
@@ -823,6 +1055,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             <Input
               placeholder="Nhập lý do tạo vai trò mới..."
               value={formReason}
+              disabled={isBusy}
               onChange={(e) => {
                 setFormReason(e.target.value);
                 setIsFormDirty(true);
@@ -850,7 +1083,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         }
       >
         <p style={{ margin: 0 }}>
-          Các thông tin vai trò bạn vừa nhập chưa được chuẩn bị thành Candidate.
+          Các thông tin vai trò bạn vừa nhập chưa được gửi lên Server để tạo Candidate.
           Nếu rời đi bây giờ, các thông tin này sẽ bị mất. Bạn có chắc chắn muốn hủy không?
         </p>
       </Dialog>

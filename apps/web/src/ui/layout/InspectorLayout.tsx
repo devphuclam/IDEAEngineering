@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
+import { isAnyOverlayActive } from '../primitives/overlayStack';
 import './layout.css';
 
 export interface InspectorLayoutProps {
@@ -23,6 +24,7 @@ export const InspectorLayout: React.FC<InspectorLayoutProps> = ({
   className = '',
 }) => {
   const isOverlayActive = useCallback((): boolean => {
+    if (isAnyOverlayActive()) return true;
     // Check if any modal dialog or drawer is currently mounted and active
     const modalBackdrop = document.querySelector('.idea-modal-backdrop, .idea-drawer-backdrop');
     if (modalBackdrop) return true;

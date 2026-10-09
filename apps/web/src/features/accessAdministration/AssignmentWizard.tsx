@@ -17,7 +17,7 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
   const [step,setStep]=useState<1|2|3|4|null>(null),[preview,setPreview]=useState<AssignmentPreview|null>(null);
   const [from,setFrom]=useState(""),[until,setUntil]=useState("");
   const [busy,setBusy]=useState(false),[message,setMessage]=useState(""),[operation,setOperation]=useState("");
-  const [pending,setPending]=useState<Pending|null>(null),[collapsed,setCollapsed]=useState(false);
+  const [pending,setPending]=useState<Pending|null>(null);
   const epoch=useRef(0),targetEpoch=useRef(0),alive=useRef(true),modal=useRef<HTMLDivElement>(null),title=useRef<HTMLHeadingElement>(null),status=useRef<HTMLParagraphElement>(null),returnFocus=useRef<HTMLElement|null>(null);
   const locked=busy||pending!==null;const canGrant=context.actions.some(a=>a.startsWith("role.assignment.manage."));
   const interval=():ParticipationInterval=>({effectiveFrom:from?new Date(from).toISOString():null,effectiveUntil:until?new Date(until).toISOString():null});
@@ -80,54 +80,17 @@ export function AssignmentWizard({context,onInvalidated}:{context:Administration
   function end(event:FormEvent<HTMLFormElement>){event.preventDefault();if(locked||!selected)return;const a=selected,input={operationId:crypto.randomUUID(),scope:a.scope,expectedVersion:a.version,reason:String(new FormData(event.currentTarget).get("reason"))};void execute({operationId:input.operationId,run:()=>client.endAssignment(a.assignmentId,input)});}
   const scopeControl=<label>Phạm vi assignment<select aria-label="Phạm vi assignment" value={scope.kind==="ORGANIZATION"?"ORGANIZATION":scope.projectId} disabled={locked||replacing!==null} onChange={e=>void changeScope(e.target.value)}><option value="ORGANIZATION">Organization · {context.organizationName}</option>{projects?.items.map(p=><option key={p.projectId} value={p.projectId}>Project · {p.name} — {p.projectId}</option>)}</select></label>;
   return <div className="account-layout assignment-layout">
-    <RbacView inactive={step!==null} assignments={page?.items??null} roles={roles?.items??null} busy={locked||step!==null} canGrant={canGrant} selectedId={selected?.assignmentId} onAdd={()=>open()} onSelect={a=>{setSelected(a);setCollapsed(false);}}
+    <RbacView inactive={step!==null} assignments={page?.items??null} roles={roles?.items??null} busy={locked||step!==null} canGrant={canGrant} selectedId={selected?.assignmentId} onAdd={()=>open()} onSelect={setSelected}
       status={<><p role="status" aria-live="polite" ref={status} tabIndex={-1} data-testid="assignment-status" className="status-message">{message}</p>{operation&&<p className="hint">Operation: <code>{operation}</code></p>}{pending&&<div role="alert"><p>Kết quả chưa rõ. Không tự gửi lại hoặc tạo OperationId mới. Resolve dùng đúng intent đã gửi.</p><button type="button" disabled={busy} onClick={()=>void execute(pending)}>Resolve lại cùng OperationId</button></div>}</>}>
       <div className="admin-toolbar">{step===null&&scopeControl}<button type="button" className="admin-btn" disabled={locked||step!==null} onClick={()=>void load()}>Tải lại assignment</button></div>
       {projects?.hasMore&&<button type="button" disabled={locked||step!==null} onClick={()=>void client.loadProjects("",projects.offset+projects.limit).then(r=>{if(r.kind==="confirmed")setProjects(r.value);else failed(r);})}>Trang Project tiếp theo</button>}
       {page&&<Pager page={page} disabled={locked||step!==null} change={offset=>void load(scope,offset)} />}
       {roles?.hasMore&&<button type="button" disabled={locked} onClick={()=>void client.loadRoles(scope,roles.offset+roles.limit).then(r=>{if(r.kind==="confirmed")setRoles(r.value);else failed(r);})}>Trang role tiếp theo</button>}
     </RbacView>
-    <aside inert={step!==null} className={`admin-inspector ${collapsed ? "collapsed" : ""}`} aria-label="Chi tiết assignment">
-      {collapsed ? (
-        <div className="admin-inspector-collapsed-strip">
-          <button type="button" className="admin-inspector-expand-btn" onClick={() => setCollapsed(false)} aria-label="Mở rộng panel chi tiết" title="Mở rộng panel chi tiết">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            <span>Chi tiết</span>
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="admin-inspector-head">
-            <div className="admin-inspector-head-row">
-              <span className="admin-surface-badge">Chi tiết Assignment</span>
-              <button type="button" className="admin-inspector-toggle-btn" onClick={() => setCollapsed(true)} aria-label="Thu gọn panel chi tiết" title="Thu gọn panel chi tiết">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="admin-inspector-body">{!selected?<p>Chọn assignment để xem exact version, người cấp, reason và history.</p>:<>
-            <h2>{selected.roleCode}@{selected.roleVersion}</h2><dl><dt>Assignment ID</dt><dd>{selected.assignmentId}</dd><dt>Role Version ID</dt><dd>{selected.roleVersionId}</dd><dt>Principal</dt><dd>{selected.principal.kind} · {selected.principal.kind==="ACTOR"?selected.principal.actorId:selected.principal.groupId}</dd><dt>Assigned by</dt><dd>{selected.assignedBy}</dd><dt>Reason</dt><dd>{selected.reason}</dd><dt>Interval</dt><dd>{selected.effectiveFrom} → {selected.effectiveUntil??"Không định thời kết thúc"}</dd><dt>Version</dt><dd>{selected.version}</dd><dt>Canonical end</dt><dd>{selected.revokedAt??"Chưa kết thúc"} · {selected.endReason}</dd></dl>
-            {canGrant&&!selected.revokedAt&&<><button className="admin-btn" type="button" disabled={locked} onClick={()=>open(selected)}>Thay thế assignment</button><form aria-label="Kết thúc assignment" className="form-card destructive-warning" onSubmit={end}><fieldset disabled={locked}><legend>Kết thúc assignment riêng</legend>
-              <div className="admin-warning-box" role="note">
-                <svg className="admin-warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
-                </svg>
-                <div>
-                  <strong>CẢNH BÁO: Thu hồi quyền vai trò</strong>
-                  Assignment này sẽ kết thúc lập tức. Server bảo vệ last effective Super recovery và kiểm quyền hiện tại. Lịch sử audit được giữ nguyên.
-                </div>
-              </div>
-              <p>Không xóa history hoặc Role khác. Server bảo vệ last effective Super recovery và kiểm quyền hiện tại.</p><label>Lý do kết thúc<input name="reason" required maxLength={500} /></label><label className="check-label"><input type="checkbox" required />Tôi xác nhận đúng assignment và hậu quả kết thúc.</label><button className="admin-btn danger" type="submit">Xác nhận kết thúc assignment</button></fieldset></form></>}
-          </>}</div>
-        </>
-      )}
-    </aside>
+    <aside inert={step!==null} className="admin-inspector" aria-label="Chi tiết assignment"><div className="admin-inspector-body">{!selected?<p>Chọn assignment để xem exact version, người cấp, reason và history.</p>:<>
+      <h2>{selected.roleCode}@{selected.roleVersion}</h2><dl><dt>Assignment ID</dt><dd>{selected.assignmentId}</dd><dt>Role Version ID</dt><dd>{selected.roleVersionId}</dd><dt>Principal</dt><dd>{selected.principal.kind} · {selected.principal.kind==="ACTOR"?selected.principal.actorId:selected.principal.groupId}</dd><dt>Assigned by</dt><dd>{selected.assignedBy}</dd><dt>Reason</dt><dd>{selected.reason}</dd><dt>Interval</dt><dd>{selected.effectiveFrom} → {selected.effectiveUntil??"Không định thời kết thúc"}</dd><dt>Version</dt><dd>{selected.version}</dd><dt>Canonical end</dt><dd>{selected.revokedAt??"Chưa kết thúc"} · {selected.endReason}</dd></dl>
+      {canGrant&&!selected.revokedAt&&<><button className="admin-btn" type="button" disabled={locked} onClick={()=>open(selected)}>Thay thế assignment</button><form aria-label="Kết thúc assignment" className="form-card" onSubmit={end}><fieldset disabled={locked}><legend>Kết thúc assignment riêng</legend><p>Không xóa history hoặc Role khác. Server bảo vệ last effective Super recovery và kiểm quyền hiện tại.</p><label>Lý do kết thúc<input name="reason" required maxLength={500} /></label><label className="check-label"><input type="checkbox" required />Tôi xác nhận đúng assignment và hậu quả kết thúc.</label><button type="submit">Xác nhận kết thúc assignment</button></fieldset></form></>}
+    </>}</div></aside>
     {step!==null&&<div className="admin-drawer-overlay"><div ref={modal} className="admin-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="assignment-wizard-title" onKeyDown={keydown}>
       <div className="admin-drawer-head"><h2 className="admin-drawer-title" id="assignment-wizard-title" tabIndex={-1} ref={title}>{replacing?"Thay thế assignment":"Thêm phân quyền vai trò"}</h2><button className="admin-btn" type="button" disabled={locked} onClick={close}>Đóng</button></div>
       <div className="admin-drawer-steps">{["Phạm vi","Đối tượng","Role / version","Xác nhận"].map((label,i)=><span className={`admin-step-pill ${step===i+1?"active":""}`} key={label} aria-current={step===i+1?"step":undefined}>{i+1}. {label}</span>)}</div>

@@ -17,7 +17,6 @@ export function ProjectAdministrationPage({context,onInvalidated}:{context:Admin
   const [message,setMessage]=useState("");const [operation,setOperation]=useState("");
   const [showCreate,setShowCreate]=useState(false);const [pending,setPending]=useState<Pending|null>(null);
   const [ending,setEnding]=useState<{membership:ParticipationView;isGroup:boolean}|null>(null);
-  const [collapsed,setCollapsed]=useState(false);
   const epoch=useRef(0);const alive=useRef(true);const heading=useRef<HTMLHeadingElement>(null);const messageRef=useRef<HTMLParagraphElement>(null);const createName=useRef<HTMLInputElement>(null);
   const locked=busy||pending!==null;
   const can=(action:string)=>project?.actions.includes(action)===true; // Advisory only; every commit rechecks.
@@ -33,14 +32,14 @@ export function ProjectAdministrationPage({context,onInvalidated}:{context:Admin
     const [detail,people,teams]=await Promise.all([client.loadProject(id),client.loadProjectMembers(id,memberFilter,memberOffset),client.loadGroups(id,"",groupOffset)]);
     if(!alive.current||request!==epoch.current)return false;
     if(detail.kind!=="confirmed"){failed(detail);return false;}if(people.kind!=="confirmed"){failed(people);return false;}if(teams.kind!=="confirmed"){failed(teams);return false;}
-    setProject(detail.value);setMembers(people.value);setGroups(teams.value);setCollapsed(false);setMessage("");requestAnimationFrame(()=>heading.current?.focus());return true;
+    setProject(detail.value);setMembers(people.value);setGroups(teams.value);setMessage("");requestAnimationFrame(()=>heading.current?.focus());return true;
   }
   async function selectGroup(id:string,offset=0,memberFilter=""){
     const request=++epoch.current;setGroup(null);setGroupMembers(null);setEnding(null);
     const [detail,people]=await Promise.all([client.loadGroup(id),client.loadGroupMembers(id,memberFilter,offset)]);
     if(!alive.current||request!==epoch.current)return false;
     if(detail.kind!=="confirmed"){failed(detail);return false;}if(people.kind!=="confirmed"){failed(people);return false;}
-    setGroup(detail.value);setGroupMembers(people.value);setCollapsed(false);setMessage("");return true;
+    setGroup(detail.value);setGroupMembers(people.value);setMessage("");return true;
   }
   useEffect(()=>{alive.current=true;void load();return()=>{alive.current=false;epoch.current++;};},[context.actorId,context.organizationId]);
   async function execute(intent:Pending){
@@ -91,65 +90,28 @@ export function ProjectAdministrationPage({context,onInvalidated}:{context:Admin
         <label>Tên Project<input ref={createName} name="name" maxLength={200} required /></label><Reason /><p className="hint">Không tự tạo Project Membership, Group Membership hoặc Role Assignment cho người tạo.</p>
         <button className="admin-btn primary" type="submit">Tạo Project trên Server</button><button className="admin-btn" type="button" onClick={()=>setShowCreate(false)}>Hủy</button></fieldset></form>}
     </ProjectsView>
-    <aside className={`admin-inspector project-inspector ${collapsed ? "collapsed" : ""}`} aria-label="Chi tiết Project và Group">
-      {collapsed ? (
-        <div className="admin-inspector-collapsed-strip">
-          <button type="button" className="admin-inspector-expand-btn" onClick={() => setCollapsed(false)} aria-label="Mở rộng panel chi tiết" title="Mở rộng panel chi tiết">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            <span>Chi tiết</span>
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="admin-inspector-head">
-            <div className="admin-inspector-head-row">
-              <span className="admin-surface-badge">Chi tiết Project</span>
-              <button type="button" className="admin-inspector-toggle-btn" onClick={() => setCollapsed(true)} aria-label="Thu gọn panel chi tiết" title="Thu gọn panel chi tiết">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="admin-inspector-body">
-            {!project?<p>Chọn Project để quản trị membership và Group thật.</p>:<>
-              <h2 tabIndex={-1} ref={heading}>{project.name}</h2><dl><dt>Project ID</dt><dd>{project.projectId}</dd><dt>Project version</dt><dd data-testid="project-version">{project.version}</dd><dt>Phạm vi cố định</dt><dd>Project thuộc {context.organizationName}</dd></dl>
-              <p className="hint">Quản trị không đồng nghĩa tham gia kỹ thuật. Kết thúc Project Membership làm Group access ineligible nhưng không xóa lịch sử Group; rejoin có thể phục hồi Group chưa kết thúc.</p>
-              {can("project.update")&&<form key={project.projectId+project.version} className="form-card" aria-label="Đổi tên Project" onSubmit={e=>projectCommand(e,"rename")}><fieldset disabled={locked}><legend>Đổi tên Project</legend><label>Tên Project<input name="name" defaultValue={project.name} maxLength={200} required /></label><Reason /><button type="submit">Lưu tên Project</button></fieldset></form>}
-              <h3>Project Membership · history</h3><MemberFilter value={targetFilter} set={setTargetFilter} disabled={locked} submit={()=>void select(project.projectId,0,groups?.offset??0,targetFilter)} />
-              {members&&<><Memberships page={members} canEnd={can("project.membership.remove")} disabled={locked} onEnd={membership=>setEnding({membership,isGroup:false})} /><Pager page={members} disabled={locked} change={offset=>void select(project.projectId,offset,groups?.offset??0,targetFilter)} />
-                {can("project.membership.assign")&&<form className="form-card" aria-label="Gán Project Membership" onSubmit={e=>projectCommand(e,"join")}><fieldset disabled={locked}><legend>Gán Project Membership riêng</legend><Targets page={members} /><Reason /><p className="hint">Account/Actor ACTIVE cùng Organization; hiệu lực từ lần commit đầu tiên, không có quyền sản phẩm tự động.</p><button type="submit">Gán Project Membership</button></fieldset></form>}
-                {members.eligibleTargets.hasMore&&<button type="button" disabled={locked} onClick={()=>void select(project.projectId,members.eligibleTargets.offset+members.eligibleTargets.limit,groups?.offset??0,targetFilter)}>Trang đích tiếp theo của Project</button>}
-              </>}
-              <h3>Group trong Project</h3>{groups&&<><ul className="login-identities">{groups.items.map(g=><li key={g.groupId}><button type="button" disabled={locked} onClick={()=>{setTargetFilter("");void selectGroup(g.groupId);}} aria-label={`Mở Group ${g.name}`}>{g.name}</button><code>{g.groupId}</code><span>Version {g.version}</span></li>)}</ul>{groups.items.length===0&&<p>Chưa có Group.</p>}<Pager page={groups} disabled={locked} change={offset=>void select(project.projectId,members?.offset??0,offset,targetFilter)} /></>}
-              {can("project.group.create")&&<form className="form-card" aria-label="Tạo Group" onSubmit={e=>projectCommand(e,"group")}><fieldset disabled={locked}><legend>Tạo Group cùng Project</legend><label>Tên Group<input name="name" maxLength={200} required /></label><Reason /><button type="submit">Tạo Group trên Server</button></fieldset></form>}
-              {group&&groupMembers&&<section aria-label="Group đã chọn"><h3>{group.name}</h3><code>{group.groupId}</code><p data-testid="group-version">Group version {group.version}</p>
-                {can("project.group.update")&&<form key={group.groupId+group.version} className="form-card" aria-label="Đổi tên Group" onSubmit={e=>groupCommand(e,"rename")}><fieldset disabled={locked}><legend>Đổi tên Group</legend><label>Tên Group<input name="name" defaultValue={group.name} maxLength={200} required /></label><Reason /><button type="submit">Lưu tên Group</button></fieldset></form>}
-                <MemberFilter value={targetFilter} set={setTargetFilter} disabled={locked} submit={()=>void selectGroup(group.groupId,0,targetFilter)} />
-                <Memberships page={groupMembers} canEnd={can("project.group.membership.remove")} disabled={locked} onEnd={membership=>setEnding({membership,isGroup:true})} /><Pager page={groupMembers} disabled={locked} change={offset=>void selectGroup(group.groupId,offset,targetFilter)} />
-                {can("project.group.membership.assign")&&<form className="form-card" aria-label="Gán Group Membership" onSubmit={e=>groupCommand(e,"join")}><fieldset disabled={locked}><legend>Gán Group Membership</legend><Targets page={groupMembers} /><Reason /><p className="hint">Chỉ Actor đang là member hiệu lực của đúng Project. Không có nested Group hay vai trò quản trị ngầm.</p><button type="submit">Gán Group Membership</button></fieldset></form>}
-                {groupMembers.eligibleTargets.hasMore&&<button type="button" disabled={locked} onClick={()=>void selectGroup(group.groupId,groupMembers.eligibleTargets.offset+groupMembers.eligibleTargets.limit,targetFilter)}>Trang đích tiếp theo của Group</button>}
-              </section>}
-              {ending&&<form className="form-card destructive-warning" aria-label="Xác nhận kết thúc Membership" onSubmit={end}><fieldset disabled={locked}><legend>Kết thúc {ending.isGroup?"Group":"Project"} Membership</legend>
-                <div className="admin-warning-box" role="note">
-                  <svg className="admin-warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
-                  </svg>
-                  <div>
-                    <strong>CẢNH BÁO: Thu hồi tư cách thành viên</strong>
-                    Kết thúc {ending.isGroup?"Group":"Project"} Membership làm mất quyền truy cập liên quan. Bản ghi lịch sử vẫn được lưu vết trên Server.
-                  </div>
-                </div>
-                <p>Target: {ending.membership.displayName}; association version {ending.membership.version}. Bản ghi/history vẫn được giữ.</p><Reason /><label className="check-label"><input type="checkbox" required />Tôi đã kiểm tra phạm vi, target và ảnh hưởng đến Group eligibility.</label><div className="actions"><button className="admin-btn danger" type="submit">Xác nhận kết thúc</button><button className="admin-btn" type="button" onClick={()=>setEnding(null)}>Hủy</button></div></fieldset></form>}
-            </>}
-          </div>
-        </>
-      )}
-    </aside>
+    <aside className="admin-inspector project-inspector" aria-label="Chi tiết Project và Group"><div className="admin-inspector-body">
+      {!project?<p>Chọn Project để quản trị membership và Group thật.</p>:<>
+        <h2 tabIndex={-1} ref={heading}>{project.name}</h2><dl><dt>Project ID</dt><dd>{project.projectId}</dd><dt>Project version</dt><dd data-testid="project-version">{project.version}</dd><dt>Phạm vi cố định</dt><dd>Project thuộc {context.organizationName}</dd></dl>
+        <p className="hint">Quản trị không đồng nghĩa tham gia kỹ thuật. Kết thúc Project Membership làm Group access ineligible nhưng không xóa lịch sử Group; rejoin có thể phục hồi Group chưa kết thúc.</p>
+        {can("project.update")&&<form key={project.projectId+project.version} className="form-card" aria-label="Đổi tên Project" onSubmit={e=>projectCommand(e,"rename")}><fieldset disabled={locked}><legend>Đổi tên Project</legend><label>Tên Project<input name="name" defaultValue={project.name} maxLength={200} required /></label><Reason /><button type="submit">Lưu tên Project</button></fieldset></form>}
+        <h3>Project Membership · history</h3><MemberFilter value={targetFilter} set={setTargetFilter} disabled={locked} submit={()=>void select(project.projectId,0,groups?.offset??0,targetFilter)} />
+        {members&&<><Memberships page={members} canEnd={can("project.membership.remove")} disabled={locked} onEnd={membership=>setEnding({membership,isGroup:false})} /><Pager page={members} disabled={locked} change={offset=>void select(project.projectId,offset,groups?.offset??0,targetFilter)} />
+          {can("project.membership.assign")&&<form className="form-card" aria-label="Gán Project Membership" onSubmit={e=>projectCommand(e,"join")}><fieldset disabled={locked}><legend>Gán Project Membership riêng</legend><Targets page={members} /><Reason /><p className="hint">Account/Actor ACTIVE cùng Organization; hiệu lực từ lần commit đầu tiên, không có quyền sản phẩm tự động.</p><button type="submit">Gán Project Membership</button></fieldset></form>}
+          {members.eligibleTargets.hasMore&&<button type="button" disabled={locked} onClick={()=>void select(project.projectId,members.eligibleTargets.offset+members.eligibleTargets.limit,groups?.offset??0,targetFilter)}>Trang đích tiếp theo của Project</button>}
+        </>}
+        <h3>Group trong Project</h3>{groups&&<><ul className="login-identities">{groups.items.map(g=><li key={g.groupId}><button type="button" disabled={locked} onClick={()=>{setTargetFilter("");void selectGroup(g.groupId);}} aria-label={`Mở Group ${g.name}`}>{g.name}</button><code>{g.groupId}</code><span>Version {g.version}</span></li>)}</ul>{groups.items.length===0&&<p>Chưa có Group.</p>}<Pager page={groups} disabled={locked} change={offset=>void select(project.projectId,members?.offset??0,offset,targetFilter)} /></>}
+        {can("project.group.create")&&<form className="form-card" aria-label="Tạo Group" onSubmit={e=>projectCommand(e,"group")}><fieldset disabled={locked}><legend>Tạo Group cùng Project</legend><label>Tên Group<input name="name" maxLength={200} required /></label><Reason /><button type="submit">Tạo Group trên Server</button></fieldset></form>}
+        {group&&groupMembers&&<section aria-label="Group đã chọn"><h3>{group.name}</h3><code>{group.groupId}</code><p data-testid="group-version">Group version {group.version}</p>
+          {can("project.group.update")&&<form key={group.groupId+group.version} className="form-card" aria-label="Đổi tên Group" onSubmit={e=>groupCommand(e,"rename")}><fieldset disabled={locked}><legend>Đổi tên Group</legend><label>Tên Group<input name="name" defaultValue={group.name} maxLength={200} required /></label><Reason /><button type="submit">Lưu tên Group</button></fieldset></form>}
+          <MemberFilter value={targetFilter} set={setTargetFilter} disabled={locked} submit={()=>void selectGroup(group.groupId,0,targetFilter)} />
+          <Memberships page={groupMembers} canEnd={can("project.group.membership.remove")} disabled={locked} onEnd={membership=>setEnding({membership,isGroup:true})} /><Pager page={groupMembers} disabled={locked} change={offset=>void selectGroup(group.groupId,offset,targetFilter)} />
+          {can("project.group.membership.assign")&&<form className="form-card" aria-label="Gán Group Membership" onSubmit={e=>groupCommand(e,"join")}><fieldset disabled={locked}><legend>Gán Group Membership</legend><Targets page={groupMembers} /><Reason /><p className="hint">Chỉ Actor đang là member hiệu lực của đúng Project. Không có nested Group hay vai trò quản trị ngầm.</p><button type="submit">Gán Group Membership</button></fieldset></form>}
+          {groupMembers.eligibleTargets.hasMore&&<button type="button" disabled={locked} onClick={()=>void selectGroup(group.groupId,groupMembers.eligibleTargets.offset+groupMembers.eligibleTargets.limit,targetFilter)}>Trang đích tiếp theo của Group</button>}
+        </section>}
+        {ending&&<form className="form-card" aria-label="Xác nhận kết thúc Membership" onSubmit={end}><fieldset disabled={locked}><legend>Kết thúc {ending.isGroup?"Group":"Project"} Membership</legend><p>Target: {ending.membership.displayName}; association version {ending.membership.version}. Bản ghi/history vẫn được giữ.</p><Reason /><label className="check-label"><input type="checkbox" required />Tôi đã kiểm tra phạm vi, target và ảnh hưởng đến Group eligibility.</label><button type="submit">Xác nhận kết thúc</button><button type="button" onClick={()=>setEnding(null)}>Hủy</button></fieldset></form>}
+      </>}
+    </div></aside>
   </div>;
 }
 function Reason(){return <label>Lý do<input name="reason" maxLength={500} required /></label>;}

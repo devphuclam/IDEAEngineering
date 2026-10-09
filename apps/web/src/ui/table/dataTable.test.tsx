@@ -83,4 +83,32 @@ describe('Semantic DataTable', () => {
     expect(html).toContain('idea-table-row--selected');
     expect(html).toContain('Đang chọn ID: 2');
   });
+
+  it('renders custom toolbar actions alongside search input', () => {
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        toolbarActions={<button id="export-btn">Xuất CSV</button>}
+      />
+    );
+
+    expect(html).toContain('id="export-btn"');
+    expect(html).toContain('Xuất CSV');
+  });
+
+  it('filters data using custom filterFn', () => {
+    const filterOnlyOverTen = (item: TestItem, query: string) => item.count > 10;
+    const html = renderToStaticMarkup(
+      <DataTable
+        data={TEST_DATA}
+        columns={COLUMNS}
+        getRowId={(item) => item.id}
+        filterFn={filterOnlyOverTen}
+      />
+    );
+
+    expect(html).toContain('Gamma');
+  });
 });

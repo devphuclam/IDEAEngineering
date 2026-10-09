@@ -1,4 +1,6 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import React, { useEffect, useRef, useId, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { getOverlayRoot, pushOverlay, popOverlay } from "./overlayStack";
 import "./primitives.css";
 
 export interface DrawerProps {
@@ -25,22 +27,20 @@ export function Drawer({
   backgroundSelector = "#appRoot",
 }: DrawerProps) {
   const isActualOpen = open ?? isOpen ?? false;
+  const overlayId = useId();
+  const titleId = `${overlayId}-title`;
+  const subId = `${overlayId}-sub`;
+
+  const containerRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
-  const previousActiveElementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!isActualOpen) return;
+    if (!isActualOpen || !containerRef.current) return;
 
-    previousActiveElementRef.current = document.activeElement as HTMLElement | null;
+    // Register with stack manager to handle nested inert states and focus restoration
+    const cleanupStack = pushOverlay(overlayId, containerRef.current, backgroundSelector);
 
-    // Apply inert to background
-    const bgElements = backgroundSelector ? document.querySelectorAll<HTMLElement>(backgroundSelector) : [];
-    bgElements.forEach((el) => {
-      el.inert = true;
-      el.setAttribute("aria-hidden", "true");
-    });
-
-    // Auto-focus first interactive element
+    // Auto-focus first interactive element inside drawer
     const timer = setTimeout(() => {
       if (!drawerRef.current) return;
       const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
@@ -53,12 +53,7 @@ export function Drawer({
       }
     }, 20);
 
-    // Keydown handler: Escape & Focus Trap
     const handleKeyDown = (e: KeyboardEvent) => {
-      // If a modal dialog is stacked on top of this drawer, let the dialog handle the event!
-      const activeDialog = document.querySelector('.idea-modal-backdrop');
-      if (activeDialog) return;
-
       if (e.key === "Escape" && onClose) {
         e.preventDefault();
         e.stopPropagation();
@@ -67,9 +62,12 @@ export function Drawer({
       }
 
       if (e.key === "Tab" && drawerRef.current) {
-        const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
-          'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]'
-        );
+        const focusable = Array.from(
+          drawerRef.current.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]'
+          )
+        ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+
         if (focusable.length === 0) return;
 
         const first = focusable[0];
@@ -94,26 +92,14 @@ export function Drawer({
     return () => {
       clearTimeout(timer);
       window.removeEventListener("keydown", handleKeyDown, true);
-
-      // Restore background
-      bgElements.forEach((el) => {
-        el.inert = false;
-        el.removeAttribute("aria-hidden");
-      });
-
-      // Restore focus
-      if (previousActiveElementRef.current && typeof previousActiveElementRef.current.focus === "function") {
-        previousActiveElementRef.current.focus();
-      }
+      cleanupStack();
     };
-  }, [isActualOpen, onClose, backgroundSelector]);
+  }, [isActualOpen, onClose, backgroundSelector, overlayId]);
 
   if (!isActualOpen) return null;
 
-  const titleId = "idea-drawer-title";
-
-  return (
-    <>
+  const content = (
+    <div ref={containerRef} className="idea-drawer-wrapper">
       <div className="idea-drawer-backdrop" role="presentation" onClick={onClose} />
       <aside
         ref={drawerRef}
@@ -121,6 +107,7 @@ export function Drawer({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        aria-describedby={subtitle || description ? subId : undefined}
         tabIndex={-1}
       >
         <div className="idea-drawer-header">
@@ -128,9 +115,9 @@ export function Drawer({
             <h2 id={titleId} className="idea-drawer-title">
               {title}
             </h2>
-            {subtitle && (
-              <div style={{ fontSize: "11px", color: "var(--idea-color-text-muted)", marginTop: "2px" }}>
-                {subtitle}
+            {(subtitle || description) && (
+              <div id={subId} style={{ fontSize: "12px", color: "var(--idea-color-text-muted)", marginTop: "2px" }}>
+                {subtitle || description}
               </div>
             )}
           </div>
@@ -139,7 +126,7 @@ export function Drawer({
               type="button"
               className="idea-btn idea-btn--ghost idea-btn--sm"
               onClick={onClose}
-              aria-label="Đóng Drawer"
+              aria-label="Đóng bảng trượt"
             >
               ✕
             </button>
@@ -148,6 +135,13 @@ export function Drawer({
         <div className="idea-drawer-body">{children}</div>
         {footer && <div className="idea-drawer-footer">{footer}</div>}
       </aside>
-    </>
+    </div>
   );
+
+  if (typeof document !== "undefined") {
+    const portalRoot = getOverlayRoot();
+    return createPortal(content, portalRoot);
+  }
+
+  return content;
 }

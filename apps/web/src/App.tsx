@@ -97,12 +97,25 @@ export function App() {
   const openAdmin = context?.actions.some(action=>action==="account.read"||action==="project.admin.read"||action==="role.catalogue.read"||action==="access.inspect"||action==="audit.read") ? () => { location.hash = context.actions.includes("account.read")?"accounts":context.actions.includes("project.admin.read")?"projects":context.actions.includes("role.catalogue.read")?"rbac":"access"; } : undefined;
 
   const uikitNavItems: NavItem[] = [
-    { id: "uikit", label: "UI Kit DevKit", href: "#uikit", active: route === "uikit", icon: "🎨" },
+    ...(import.meta.env.DEV ? [{ id: "uikit", label: "UI Kit DevKit", href: "#uikit", active: route === "uikit", icon: "🎨" }] : []),
     { id: "rbac-pilot", label: "RBAC Pilot", href: "#rbac-pilot", active: route === "rbac-pilot", icon: "🛡️" },
-    { id: "session", label: "Cổng đăng nhập", href: "#session", active: false, icon: "🔐" },
+    { id: "session", label: context ? "Phiên làm việc" : "Cổng đăng nhập", href: "#session", active: false, icon: "🔐" },
   ];
 
   if (route === "uikit") {
+    if (!import.meta.env.DEV) {
+      return (
+        <div style={{ padding: "48px 24px", textAlign: "center", maxWidth: "600px", margin: "0 auto" }}>
+          <h2>Môi trường phát triển</h2>
+          <p style={{ color: "var(--idea-color-text-muted)", margin: "12px 0 24px" }}>
+            UI Kit DevKit chỉ khả dụng trong môi trường development preview.
+          </p>
+          <a href="#session" className="idea-btn idea-btn--primary" style={{ textDecoration: "none" }}>
+            Về cổng đăng nhập
+          </a>
+        </div>
+      );
+    }
     return (
       <AppShell
         brandTitle="IDEA Engineering"
@@ -121,7 +134,13 @@ export function App() {
         brandSubtitle="RBAC Pilot"
         navItems={uikitNavItems}
       >
-        <RbacPilotPage onNavigateBack={() => { location.hash = "uikit"; }} />
+        <RbacPilotPage
+          context={context}
+          onInvalidated={invalidate}
+          onNavigateBack={() => {
+            location.hash = context ? "rbac" : "session";
+          }}
+        />
       </AppShell>
     );
   }
@@ -147,10 +166,11 @@ export function App() {
             <div className="auth-support-actions">
               <button type="button" className="admin-btn" disabled={busy} onClick={() => void refresh()}>Kiểm tra phiên</button>
               <a href="#credentials">Tôi có proof để thiết lập / reset credential</a>
-              <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
-                <a href="#uikit" className="admin-btn" style={{ textDecoration: 'none' }}>🎨 UI Kit DevKit</a>
-                <a href="#rbac-pilot" className="admin-btn" style={{ textDecoration: 'none' }}>🛡️ RBAC Pilot</a>
-              </div>
+              {import.meta.env.DEV && (
+                <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+                  <a href="#uikit" className="admin-btn" style={{ textDecoration: 'none' }}>🎨 UI Kit DevKit (Dev)</a>
+                </div>
+              )}
             </div>
           </div>
         </section>
