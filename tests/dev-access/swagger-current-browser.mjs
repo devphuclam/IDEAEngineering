@@ -14,7 +14,9 @@ const secrets=new Set();
 const check=(value)=>{if(!value)throw Error('Oracle refused');};
 async function run(name,action){stage=name;await action();console.log(name+'=PASS');}
 async function operation(route,method){
-  const block=page.locator(`.opblock[data-path="${route}"]`).filter({has:page.locator('.opblock-summary-method',{hasText:method})});
+  stage+=':OPEN:'+method+':'+route;
+  const block=page.locator('.opblock').filter({has:page.locator(`.opblock-summary-path[data-path="${route}"]`)}).filter({has:page.locator('.opblock-summary-method',{hasText:method})});
+  check(await block.count()===1);
   await block.locator('.opblock-summary').click();
   await block.getByRole('heading',{name:'Responses',exact:true}).first().waitFor();
   return block;
@@ -65,10 +67,12 @@ try{
   });
   await run('S04_ADMIN_DESCRIPTIONS_SCHEMAS_AND_SAFE_GATEWAY',async()=>{
     const account=await operation('/api/v1/administration/accounts','GET');
+    stage='S04_ACCOUNT_DESCRIPTION_AND_SUBMISSION_GUARD';
     check((await account.innerText()).includes('Thẩm quyền'));check((await account.innerText()).includes('Retry'));
     check(await account.getByRole('button',{name:'Try it out',exact:true}).count()===0);
     for(const route of ['/transfer/range','/transfer/status']){
       const block=await operation(route,'POST');check((await block.innerText()).includes('Client → Gateway'));
+      stage='S04_GATEWAY_SUBMISSION_GUARD:'+route;
       check(await block.getByRole('button',{name:'Try it out',exact:true}).count()===0);
     }
     const proof=await operation('/api/v1/identity/accounts/{account}/credential-proofs','POST');
