@@ -137,3 +137,28 @@ Tuân thủ nguyên tắc thiết kế **Anti-Slop Frontend** và yêu cầu nâ
 4. **Phân cấp thị giác và khoảng thở (Spatial Craft & Rhythm)**:
    - Sử dụng thẻ phân nhóm (cards) tinh tế với viền mảnh `1px solid var(--idea-color-border-subtle)` và nền `var(--idea-color-surface-subtle)`.
    - Các badge phân loại hiển thị nhãn song ngữ thân thiện: `Tối cao (HIGHEST)`, `Quản trị (ADMIN)`, `Nghiệp vụ (BUSINESS)`, `Mặc định hệ thống`, `Tùy biến tổ chức`.
+
+---
+
+## 6. Đáp ứng toàn diện các tiêu chí đánh giá Review Round 2
+
+1. **P0.1 — An toàn tuyệt đối Intent giao dịch đột biến (Exact Mutation Intent Safety)**:
+   - Khai báo kiểu `PendingMutation` lưu trữ `operationId`, `kind` (`PREPARE` | `ACTIVATE`), `scope`, và toàn bộ payload bất biến trong RAM.
+   - Khi giao dịch rơi vào trạng thái `UNRESOLVED`, hệ thống không tạo `operationId` mới; khóa toàn bộ các thao tác ghi xung đột (`isLocked = isBusy || Boolean(pendingMutation)`).
+   - Tích hợp đối soát qua `client.resolveOperation(operationId, scope)`, tự động khôi phục dữ liệu khi `COMMITTED_ACCEPTED`, hiển thị lý do khi `COMMITTED_REFUSED`, và cho phép gửi lại đúng intent gốc cùng `operationId` khi `retryProfile` cho phép.
+2. **P0.2 — Vòng đời Overlay chuẩn xác (Overlay Lifecycle Repair)**:
+   - Sử dụng `useRef` cho callback `onClose` trong cả `Dialog` và `Drawer`, loại bỏ callback khỏi dependency array của `useEffect` để tránh re-register overlay khi component cha re-render.
+   - Lưu trữ trạng thái `inert` và `aria-hidden` nguyên bản trước khi mở overlay và khôi phục chính xác (thay vì ép buộc `false` / `removeAttribute`).
+   - Xử lý dọn dẹp out-of-order và unmount đồng thời mà không bao giờ để lại `#appRoot` ở trạng thái `inert`.
+   - Kiểm tra `isInteractiveFocusTarget()` trước khi trả focus; fallback về overlay trên đỉnh hoặc body nếu trigger bị disable/inert/unmount.
+   - Xóa bỏ hoàn toàn duplicate ID `aria-describedby` trong `Dialog.tsx`.
+3. **P1.1 — Khớp hợp đồng RoleProposal với Server Authority**:
+   - Sử dụng `roleProposalTarget(base, roles, name)`: hợp đồng chấp nhận `name`, không nhận `roleCode`.
+   - Xóa bỏ input bắt buộc Role Code khỏi Drawer; hiển thị thông báo rõ ràng mã vai trò do Server tự động cấp phát (hoặc bảo lưu từ version gốc).
+4. **P1.2 — Khóa bảo vệ Fail-closed đối với Permission**:
+   - Khóa chức năng chuẩn bị vai trò khi phân trang Permission chưa hoàn tất (`hasMore: true`).
+   - Các quyền hạn ở trạng thái `DESIGN` hoặc thiếu metadata bị vô hiệu hóa (`disabled={true}`) kèm nhãn cảnh báo trực quan.
+5. **P1.3 — Kiểm thử tương tác thực tế & Bằng chứng trình duyệt**:
+   - Kiểm thử Vitest: **18 test files, 120 tests PASS** (0 lỗi).
+   - Kiểm thử trình duyệt thực tế Chromium/Edge ở 1024px và 1440px: **0 console errors, 0 duplicate IDs**.
+

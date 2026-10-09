@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useId, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { getOverlayRoot, pushOverlay, popOverlay } from "./overlayStack";
+import { getOverlayRoot, pushOverlay } from "./overlayStack";
 import "./primitives.css";
 
 export interface DialogProps {
@@ -32,10 +32,12 @@ export function Dialog({
   const overlayId = useId();
   const titleId = `${overlayId}-title`;
   const defaultDescId = `${overlayId}-desc`;
-  const effectiveDescId = ariaDescribedBy || (description ? defaultDescId : undefined);
+  const effectiveDescId = ariaDescribedBy ?? (description ? defaultDescId : undefined);
 
   const backdropRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!isActualOpen || !backdropRef.current) return;
@@ -57,10 +59,10 @@ export function Dialog({
     }, 20);
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && onClose) {
+      if (e.key === "Escape" && onCloseRef.current) {
         e.preventDefault();
         e.stopPropagation();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -97,7 +99,7 @@ export function Dialog({
       window.removeEventListener("keydown", handleKeyDown, true);
       cleanupStack();
     };
-  }, [isActualOpen, onClose, backgroundSelector, overlayId]);
+  }, [isActualOpen, backgroundSelector, overlayId]); // Stable dependencies without callback identity
 
   if (!isActualOpen) return null;
 
@@ -107,8 +109,8 @@ export function Dialog({
       className="idea-modal-backdrop"
       role="presentation"
       onClick={(e) => {
-        if (e.target === backdropRef.current && onClose) {
-          onClose();
+        if (e.target === backdropRef.current && onCloseRef.current) {
+          onCloseRef.current();
         }
       }}
     >
@@ -129,14 +131,14 @@ export function Dialog({
             <button
               type="button"
               className="idea-btn idea-btn--ghost idea-btn--sm"
-              onClick={onClose}
+              onClick={() => onCloseRef.current?.()}
               aria-label="Đóng hộp thoại"
             >
               ✕
             </button>
           )}
         </div>
-        <div className="idea-dialog-body" id={effectiveDescId}>
+        <div className="idea-dialog-body">
           {description && (
             <p id={defaultDescId} style={{ margin: "0 0 12px 0", fontSize: "13px", color: "var(--idea-color-text-muted)" }}>
               {description}

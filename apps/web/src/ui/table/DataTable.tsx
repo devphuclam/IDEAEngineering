@@ -18,6 +18,7 @@ export interface DataTableProps<T> {
   selectedId?: string;
   onSelectRow?: (item: T) => void;
   filterPlaceholder?: string;
+  initialSearchQuery?: string;
   filterFn?: (item: T, query: string) => boolean;
   emptyMessage?: string;
   toolbarActions?: React.ReactNode;
@@ -32,13 +33,14 @@ export function DataTable<T>({
   selectedId,
   onSelectRow,
   filterPlaceholder = 'Tìm kiếm trong bảng...',
+  initialSearchQuery = '',
   filterFn,
   emptyMessage = 'Không tìm thấy bản ghi nào',
   toolbarActions,
   ariaLabel = 'Bảng dữ liệu',
   className = '',
 }: DataTableProps<T>) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('none');
   const tableRef = useRef<HTMLTableElement>(null);

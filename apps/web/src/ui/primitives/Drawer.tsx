@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useId, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { getOverlayRoot, pushOverlay, popOverlay } from "./overlayStack";
+import { getOverlayRoot, pushOverlay } from "./overlayStack";
 import "./primitives.css";
 
 export interface DrawerProps {
@@ -33,6 +33,8 @@ export function Drawer({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!isActualOpen || !containerRef.current) return;
@@ -54,10 +56,10 @@ export function Drawer({
     }, 20);
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && onClose) {
+      if (e.key === "Escape" && onCloseRef.current) {
         e.preventDefault();
         e.stopPropagation();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -94,54 +96,69 @@ export function Drawer({
       window.removeEventListener("keydown", handleKeyDown, true);
       cleanupStack();
     };
-  }, [isActualOpen, onClose, backgroundSelector, overlayId]);
+  }, [isActualOpen, backgroundSelector, overlayId]); // Stable dependencies without callback identity
 
   if (!isActualOpen) return null;
 
   const content = (
-    <div ref={containerRef} className="idea-drawer-wrapper">
-      <div className="idea-drawer-backdrop" role="presentation" onClick={onClose} />
-      <aside
+    <div
+      ref={containerRef}
+      className="idea-drawer-backdrop"
+      role="presentation"
+      onClick={(e) => {
+        if (e.target === containerRef.current && onCloseRef.current) {
+          onCloseRef.current();
+        }
+      }}
+    >
+      <div
         ref={drawerRef}
         className="idea-drawer"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        aria-describedby={subtitle || description ? subId : undefined}
+        aria-describedby={subtitle ? subId : undefined}
         tabIndex={-1}
       >
         <div className="idea-drawer-header">
-          <div>
+          <div className="idea-drawer-title-group">
             <h2 id={titleId} className="idea-drawer-title">
               {title}
             </h2>
-            {(subtitle || description) && (
-              <div id={subId} style={{ fontSize: "12px", color: "var(--idea-color-text-muted)", marginTop: "2px" }}>
-                {subtitle || description}
-              </div>
+            {subtitle && (
+              <span id={subId} className="idea-drawer-subtitle">
+                {subtitle}
+              </span>
             )}
           </div>
           {onClose && (
             <button
               type="button"
               className="idea-btn idea-btn--ghost idea-btn--sm"
-              onClick={onClose}
+              onClick={() => onCloseRef.current?.()}
               aria-label="Đóng bảng trượt"
             >
               ✕
             </button>
           )}
         </div>
+        {description && (
+          <div style={{ padding: "0 24px", marginBottom: "12px", fontSize: "13px", color: "var(--idea-color-text-muted)" }}>
+            {description}
+          </div>
+        )}
         <div className="idea-drawer-body">{children}</div>
         {footer && <div className="idea-drawer-footer">{footer}</div>}
-      </aside>
+      </div>
     </div>
   );
 
+  // When in browser environment, portal outside #appRoot
   if (typeof document !== "undefined") {
     const portalRoot = getOverlayRoot();
     return createPortal(content, portalRoot);
   }
 
+  // SSR fallback
   return content;
 }

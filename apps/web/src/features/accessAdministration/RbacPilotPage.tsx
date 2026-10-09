@@ -1,79 +1,77 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
-  createIamClient,
   type AdministrationContext,
   type AssignmentScope,
   type RoleView,
   type RoleCandidate,
   type RoleValidation,
+  type RoleProposal,
+  type RoleActivation,
   type PermissionView,
   type ProjectView,
   type BoundedPage,
   type IamResult,
+  type OperationResolution,
+  createIamClient,
   customRoleCeiling,
 } from '../../api/iamClient';
 import { roleProposalTarget } from './CustomRoleEditor';
-import { outcomeMessage } from '../iamIntegration/IamStatus';
 import { Button } from '../../ui/primitives/Button';
 import { Input } from '../../ui/primitives/Input';
 import { Badge } from '../../ui/primitives/Badge';
+import { Alert, Spinner, EmptyState } from '../../ui/primitives/Feedback';
 import { Dialog } from '../../ui/primitives/Dialog';
 import { Drawer } from '../../ui/primitives/Drawer';
-import { Alert, Spinner, EmptyState } from '../../ui/primitives/Feedback';
 import { DataTable, Column } from '../../ui/table/DataTable';
 import { InspectorLayout } from '../../ui/layout/InspectorLayout';
+import { outcomeMessage } from '../iamIntegration/IamStatus';
 
-export type IamClientInstance = ReturnType<typeof createIamClient>;
+export { roleProposalTarget };
+
+export type IamClientInstance = {
+  loadRoles: (scope: AssignmentScope, offset?: number) => Promise<IamResult<BoundedPage<RoleView>>>;
+  loadPermissions: (scope: AssignmentScope, offset?: number) => Promise<IamResult<BoundedPage<PermissionView>>>;
+  loadProjects: (filter?: string, offset?: number) => Promise<IamResult<BoundedPage<ProjectView>>>;
+  prepareRole: (input: RoleProposal) => Promise<IamResult<RoleCandidate>>;
+  validateRole: (id: string, input: { scope: AssignmentScope; expectedVersion: number }) => Promise<IamResult<RoleValidation>>;
+  activateRole: (id: string, input: RoleActivation) => Promise<IamResult<RoleView>>;
+  resolveOperation: (id: string, scope: AssignmentScope) => Promise<IamResult<OperationResolution>>;
+};
+
+export interface PendingMutation {
+  operationId: string;
+  kind: 'PREPARE' | 'ACTIVATE';
+  scope: AssignmentScope;
+  payload: RoleProposal | RoleActivation;
+  candidateId?: string;
+  submittedAt: string;
+}
 
 export interface RbacPilotPageProps {
-  context?: AdministrationContext | null;
+  context: AdministrationContext | null;
   client?: IamClientInstance;
   onInvalidated?: () => void;
   onNavigateBack?: () => void;
 }
 
-const defaultClient = createIamClient();
+const defaultClient: IamClientInstance = createIamClient();
 
-export function isValidKebabCase(code: string): boolean {
-  return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(code);
-}
-
-/** Human-friendly explanations for technical permission codes */
-export const PERMISSION_METADATA: Record<string, { title: string; description: string }> = {
-  'project.read': {
-    title: 'Xem dữ liệu & tài liệu dự án',
-    description: 'Cho phép truy cập, duyệt danh sách và đọc thông tin kỹ thuật trong các dự án được phân quyền.',
-  },
-  'role.catalogue.read': {
-    title: 'Tra cứu danh mục vai trò',
-    description: 'Cho phép xem danh sách các vai trò hệ thống, chính sách phân quyền và quyền hạn của tổ chức.',
-  },
-  'access.inspect': {
-    title: 'Đối soát quyền truy cập thực tế',
-    description: 'Cho phép kiểm tra đường dẫn phân quyền thực tế của cán bộ hoặc nhóm làm việc mà không thay đổi quyền.',
-  },
-  'audit.read': {
-    title: 'Xem nhật ký kiểm toán hệ thống',
-    description: 'Theo dõi lịch sử các thao tác quản trị, kích hoạt vai trò và phân bổ quyền hạn để bảo đảm tính minh bạch.',
-  },
-};
-
-/** SVGs for refined visual craft (Anti-slop / No raw emojis) */
+// SVG Icons
 const ShieldIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
   </svg>
 );
 
 const CheckCircleIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
     <polyline points="22 4 12 14.01 9 11.01" />
   </svg>
 );
 
 const InfoCircleIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="10" />
     <line x1="12" y1="16" x2="12" y2="12" />
     <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -88,39 +86,53 @@ const ArrowLeftIcon = () => (
 );
 
 const RefreshIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <polyline points="23 4 23 10 17 10" />
-    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+    <polyline points="1 20 1 14 7 14" />
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
   </svg>
 );
 
-const PlusIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-);
+// Permission Explanations
+export const PERMISSION_METADATA: Record<string, { title: string; description: string }> = {
+  'project.read': {
+    title: 'Xem dữ liệu & tài liệu dự án',
+    description: 'Cho phép truy cập danh mục hồ sơ kỹ thuật, bản vẽ CAD và trạng thái thẩm định dự án.',
+  },
+  'role.catalogue.read': {
+    title: 'Tra cứu danh mục vai trò',
+    description: 'Đọc thông tin các vai trò hệ thống, phiên bản hiệu lực và giới hạn trần quyền hạn.',
+  },
+  'access.inspect': {
+    title: 'Đối soát quyền truy cập thực tế',
+    description: 'Kiểm tra đường dẫn phân quyền (grant paths) và lý do hợp lệ của từng tài khoản.',
+  },
+  'audit.read': {
+    title: 'Xem nhật ký kiểm toán hệ thống',
+    description: 'Truy vết toàn bộ nhật ký thay đổi vai trò, các phiên kích hoạt và định danh phê duyệt.',
+  },
+};
 
-/** Step indicator for Candidate Lifecycle Flow */
+// Lifecycle Stepper
 const LifecycleStepper: React.FC<{ step: 1 | 2 | 3 }> = ({ step }) => (
-  <div style={{ padding: '12px 14px', backgroundColor: 'var(--idea-color-surface-subtle)', borderRadius: '6px', border: '1px solid var(--idea-color-border-subtle)', marginBottom: '14px' }}>
-    <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--idea-color-text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-      Quy trình kích hoạt vai trò an toàn
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px', padding: '12px', backgroundColor: 'var(--idea-color-surface-subtle)', borderRadius: '6px', border: '1px solid var(--idea-color-border-subtle)' }}>
+    <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--idea-color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+      Tiến trình cấu hình vai trò
     </div>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
         <span
           style={{
-            width: '18px',
-            height: '18px',
+            width: '20px',
+            height: '20px',
             borderRadius: '50%',
+            backgroundColor: step >= 1 ? 'var(--idea-color-primary)' : 'var(--idea-color-surface)',
+            color: step >= 1 ? '#ffffff' : 'var(--idea-color-text-muted)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '10px',
-            fontWeight: 700,
-            backgroundColor: step >= 1 ? 'var(--idea-color-primary)' : 'var(--idea-color-surface)',
-            color: step >= 1 ? '#FFFFFF' : 'var(--idea-color-text-muted)',
+            fontSize: '11px',
+            fontWeight: 600,
             border: '1px solid var(--idea-color-border)',
           }}
         >
@@ -130,20 +142,22 @@ const LifecycleStepper: React.FC<{ step: 1 | 2 | 3 }> = ({ step }) => (
           Soạn bản thảo
         </span>
       </div>
-      <div style={{ flex: 1, height: '1px', backgroundColor: step >= 2 ? 'var(--idea-color-primary)' : 'var(--idea-color-border)' }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+
+      <span style={{ height: '1px', flex: 1, margin: '0 8px', backgroundColor: step >= 2 ? 'var(--idea-color-primary)' : 'var(--idea-color-border)' }} />
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
         <span
           style={{
-            width: '18px',
-            height: '18px',
+            width: '20px',
+            height: '20px',
             borderRadius: '50%',
+            backgroundColor: step >= 2 ? 'var(--idea-color-primary)' : 'var(--idea-color-surface)',
+            color: step >= 2 ? '#ffffff' : 'var(--idea-color-text-muted)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '10px',
-            fontWeight: 700,
-            backgroundColor: step >= 2 ? 'var(--idea-color-primary)' : 'var(--idea-color-surface)',
-            color: step >= 2 ? '#FFFFFF' : 'var(--idea-color-text-muted)',
+            fontSize: '11px',
+            fontWeight: 600,
             border: '1px solid var(--idea-color-border)',
           }}
         >
@@ -153,20 +167,22 @@ const LifecycleStepper: React.FC<{ step: 1 | 2 | 3 }> = ({ step }) => (
           Kiểm tra hợp lệ
         </span>
       </div>
-      <div style={{ flex: 1, height: '1px', backgroundColor: step >= 3 ? 'var(--idea-color-primary)' : 'var(--idea-color-border)' }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+
+      <span style={{ height: '1px', flex: 1, margin: '0 8px', backgroundColor: step >= 3 ? 'var(--idea-color-primary)' : 'var(--idea-color-border)' }} />
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
         <span
           style={{
-            width: '18px',
-            height: '18px',
+            width: '20px',
+            height: '20px',
             borderRadius: '50%',
+            backgroundColor: step >= 3 ? 'var(--idea-color-primary)' : 'var(--idea-color-surface)',
+            color: step >= 3 ? '#ffffff' : 'var(--idea-color-text-muted)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '10px',
-            fontWeight: 700,
-            backgroundColor: step >= 3 ? 'var(--idea-color-primary)' : 'var(--idea-color-surface)',
-            color: step >= 3 ? '#FFFFFF' : 'var(--idea-color-text-muted)',
+            fontSize: '11px',
+            fontWeight: 600,
             border: '1px solid var(--idea-color-border)',
           }}
         >
@@ -204,7 +220,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
   );
   const [projects, setProjects] = useState<BoundedPage<ProjectView> | null>(null);
   const [roles, setRoles] = useState<RoleView[]>([]);
-  const [permissions, setPermissions] = useState<PermissionView[]>([]);
+  const [permissions, setPermissions] = useState<PermissionView[] | null>(null);
+  const [permissionsIncomplete, setPermissionsIncomplete] = useState(false);
   const [selectedRole, setSelectedRole] = useState<RoleView | null>(null);
   const [inspectorOpen, setInspectorOpen] = useState(true);
 
@@ -215,18 +232,24 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
   const [activationReason, setActivationReason] = useState('');
   const [activationConfirmed, setActivationConfirmed] = useState(false);
 
+  // Exact Mutation Intent & Recovery State (P0.1)
+  const [pendingMutation, setPendingMutation] = useState<PendingMutation | null>(null);
+  const [lastOperationId, setLastOperationId] = useState<string | null>(null);
+
   // Status & Feedback
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
 
+  // Conflicting actions lock
+  const isLocked = isBusy || Boolean(pendingMutation);
+
   // Drawer Create State
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState(false);
   const [formBaseVersion, setFormBaseVersion] = useState('');
   const [formDisplayName, setFormDisplayName] = useState('');
-  const [formRoleCode, setFormRoleCode] = useState('');
   const [formSelectedPermissions, setFormSelectedPermissions] = useState<string[]>(['project.read']);
   const [formScopeKinds, setFormScopeKinds] = useState<string[]>(['PROJECT']);
   const [formPrincipalKinds, setFormPrincipalKinds] = useState<string[]>(['ACTOR']);
@@ -239,12 +262,14 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         setCandidate(null);
         setValidation(null);
         setRoles([]);
+        setPermissions(null);
+        setPendingMutation(null);
         setErrorMessage('Phiên làm việc đã hết hạn hoặc không hợp lệ (401 Unauthorized). Vui lòng đăng nhập lại.');
         onInvalidated?.();
         return;
       }
       if (res.kind === 'unresolved') {
-        setErrorMessage('Máy chủ chưa phản hồi kết quả dứt khoát. Yêu cầu đã được lưu lại để kiểm tra đối soát, không gửi lại trùng lặp.');
+        setErrorMessage('Giao dịch chưa xác định kết quả (UNRESOLVED). Intent gốc được giữ nguyên trong RAM; không tạo OperationId mới. Vui lòng đối soát trạng thái giao dịch.');
         return;
       }
       if (res.kind === 'stale') {
@@ -289,8 +314,18 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         }
 
         if (permsRes.kind === 'confirmed') {
-          setPermissions(permsRes.value.items);
+          if (permsRes.value.hasMore) {
+            // Fail-closed: incomplete permission catalogue pagination prevents preparation
+            setPermissions(null);
+            setPermissionsIncomplete(true);
+            setErrorMessage('Danh mục quyền hạn (Permissions) trên máy chủ chưa tải đầy đủ qua phân trang (hasMore=true). Hệ thống khóa chuẩn bị vai trò để đảm bảo an toàn fail-closed.');
+          } else {
+            setPermissions(permsRes.value.items);
+            setPermissionsIncomplete(false);
+          }
         } else {
+          setPermissions(null);
+          setPermissionsIncomplete(true);
           handleClientFailure(permsRes);
         }
       } catch {
@@ -334,7 +369,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
   // Handle scope change
   const handleChangeScope = async (scopeValue: string) => {
-    if (!context || isBusy) return;
+    if (!context || isLocked) return;
     const newScope: AssignmentScope =
       scopeValue === 'ORGANIZATION'
         ? { kind: 'ORGANIZATION', organizationId: context.organizationId }
@@ -348,47 +383,36 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     await loadCatalogue(newScope);
   };
 
-  const roleCodeError = useMemo(() => {
-    if (!formRoleCode) return null;
-    if (!isValidKebabCase(formRoleCode)) {
-      return 'Mã vai trò chỉ chấp nhận chữ thường không dấu (a-z), chữ số (0-9) và dấu gạch nối (-), ví dụ: ky-su-duyet-cad.';
-    }
-    if (formRoleCode.length < 3 || formRoleCode.length > 50) {
-      return 'Độ dài mã vai trò phải từ 3 đến 50 ký tự.';
-    }
-    return null;
-  }, [formRoleCode]);
-
+  // Valid proposal submission check
   const canSubmitProposal = useMemo(() => {
     const isNameValid = formDisplayName.trim().length >= 3;
-    const isBaseOrNewValid = formBaseVersion ? true : formRoleCode.trim().length >= 3 && roleCodeError === null;
+    const isPermissionsAvailable = permissions !== null && !permissionsIncomplete;
     return (
       isNameValid &&
-      isBaseOrNewValid &&
+      isPermissionsAvailable &&
       formSelectedPermissions.length > 0 &&
       formScopeKinds.length > 0 &&
       formPrincipalKinds.length > 0 &&
       formReason.trim().length >= 5 &&
       canPrepare &&
-      !isBusy
+      !isLocked
     );
   }, [
     formDisplayName,
-    formBaseVersion,
-    formRoleCode,
-    roleCodeError,
+    permissions,
+    permissionsIncomplete,
     formSelectedPermissions,
     formScopeKinds,
     formPrincipalKinds,
     formReason,
     canPrepare,
-    isBusy,
+    isLocked,
   ]);
 
   const handleOpenDrawer = () => {
+    if (isLocked) return;
     setFormBaseVersion('');
     setFormDisplayName('');
-    setFormRoleCode('');
     setFormSelectedPermissions(['project.read']);
     setFormScopeKinds(['PROJECT']);
     setFormPrincipalKinds(['ACTOR']);
@@ -417,19 +441,21 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     const selected = roles.find((r) => r.roleVersionId === baseVersionId);
     if (selected) {
       setFormDisplayName(selected.displayName);
-      setFormRoleCode(selected.roleCode);
-      setFormSelectedPermissions(selected.permissions.map((p) => p.code));
+      const implementedCodes = selected.permissions
+        .filter((p) => p.implementationState === 'IMPLEMENTED')
+        .map((p) => p.code);
+      setFormSelectedPermissions(implementedCodes.length > 0 ? implementedCodes : ['project.read']);
       setFormScopeKinds(selected.scopeKinds);
       setFormPrincipalKinds(selected.principalKinds);
     } else {
       setFormDisplayName('');
-      setFormRoleCode('');
       setFormSelectedPermissions(['project.read']);
     }
   };
 
+  // Prepare candidate with exact mutation intent safety (P0.1 & P1.1)
   const handlePrepareCandidate = async () => {
-    if (!canSubmitProposal || !context) return;
+    if (!canSubmitProposal || !context || isLocked) return;
     setIsBusy(true);
     setErrorMessage(null);
     setStatusMessage('Máy chủ đang kiểm tra quyền và lưu bản thảo vai trò (Candidate)...');
@@ -442,8 +468,11 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         return;
       }
 
+      // Generate operationId only for fresh intent
       const operationId = crypto.randomUUID();
-      const res = await activeClient.prepareRole({
+      setLastOperationId(operationId);
+
+      const proposal: RoleProposal = {
         operationId,
         scope,
         ...target,
@@ -453,11 +482,13 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
           principalKinds: [...formPrincipalKinds],
         },
         reason: formReason.trim(),
-      });
+      };
 
+      const res = await activeClient.prepareRole(proposal);
       if (!alive.current) return;
 
       if (res.kind === 'confirmed') {
+        setPendingMutation(null);
         setCandidate(res.value);
         setValidation(null);
         setActiveRole(null);
@@ -469,7 +500,20 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
           `Máy chủ đã lưu bản thảo vai trò [${res.value.roleCode}] thành công. Bản thảo này chưa có hiệu lực cho tới khi bạn hoàn tất bước Kích hoạt.`
         );
         setInspectorOpen(true);
+      } else if (res.kind === 'unresolved') {
+        // UNRESOLVED: Preserve operationId and exact immutable payload in RAM; lock conflicting mutations
+        setPendingMutation({
+          operationId,
+          kind: 'PREPARE',
+          scope,
+          payload: proposal,
+          submittedAt: new Date().toISOString(),
+        });
+        setValidation(null);
+        setActivationConfirmed(false);
+        setErrorMessage('Giao dịch lưu bản thảo chưa rõ kết quả (UNRESOLVED). Intent giao dịch gốc được bảo lưu nguyên vẹn; không sinh OperationId mới. Vui lòng đối soát trạng thái giao dịch.');
       } else {
+        setPendingMutation(null);
         handleClientFailure(res);
       }
     } catch {
@@ -481,8 +525,9 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     }
   };
 
+  // Validate candidate
   const handleValidateCandidate = async () => {
-    if (!candidate || isBusy) return;
+    if (!candidate || isLocked) return;
     setIsBusy(true);
     setErrorMessage(null);
     setStatusMessage('Máy chủ đang đối soát tính hợp lệ và tương thích của vai trò...');
@@ -518,8 +563,9 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     }
   };
 
+  // Activate role with exact mutation intent safety (P0.1)
   const handleActivateRole = async () => {
-    if (!candidate || !validation || !canActivate || !activationConfirmed || !activationReason.trim() || isBusy) {
+    if (!candidate || !validation || !canActivate || !activationConfirmed || !activationReason.trim() || isLocked) {
       return;
     }
 
@@ -529,18 +575,22 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
     try {
       const operationId = crypto.randomUUID();
-      const res = await activeClient.activateRole(validation.candidate.candidateId, {
+      setLastOperationId(operationId);
+
+      const activationPayload: RoleActivation = {
         operationId,
         scope: validation.candidate.managementScope,
         expectedVersion: validation.candidate.version,
         baseVersionId: validation.candidate.baseVersionId,
         reason: activationReason.trim(),
-      });
+      };
 
+      const res = await activeClient.activateRole(validation.candidate.candidateId, activationPayload);
       if (!alive.current) return;
 
       if (res.kind === 'confirmed') {
         const activated = res.value;
+        setPendingMutation(null);
         setActiveRole(activated);
         setCandidate(null);
         setValidation(null);
@@ -551,13 +601,115 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         );
         await loadCatalogue(scope);
         setSelectedRole(activated);
+      } else if (res.kind === 'unresolved') {
+        // UNRESOLVED: Preserve operationId and exact immutable payload in RAM; lock conflicting mutations
+        setPendingMutation({
+          operationId,
+          kind: 'ACTIVATE',
+          candidateId: validation.candidate.candidateId,
+          scope: validation.candidate.managementScope,
+          payload: activationPayload,
+          submittedAt: new Date().toISOString(),
+        });
+        setErrorMessage('Giao dịch kích hoạt chưa rõ kết quả (UNRESOLVED). Intent giao dịch gốc và OperationId được giữ nguyên trong RAM; không tạo OperationId mới. Vui lòng đối soát trạng thái giao dịch.');
       } else {
+        setPendingMutation(null);
         handleClientFailure(res);
       }
     } catch {
       if (alive.current) {
         setErrorMessage('Không thể kích hoạt vai trò do lỗi kết nối máy chủ.');
       }
+    } finally {
+      if (alive.current) setIsBusy(false);
+    }
+  };
+
+  // Authoritative Operation Resolution (P0.1)
+  const handleResolveOperation = async () => {
+    if (!pendingMutation || isBusy) return;
+    setIsBusy(true);
+    setErrorMessage(null);
+    setStatusMessage(`Đang đối soát trạng thái giao dịch [${pendingMutation.operationId}] trên máy chủ...`);
+
+    try {
+      const res = await activeClient.resolveOperation(pendingMutation.operationId, pendingMutation.scope);
+      if (!alive.current) return;
+
+      if (res.kind === 'confirmed') {
+        const resolution = res.value;
+        if (resolution.state === 'COMMITTED_ACCEPTED') {
+          // Mutation committed successfully on server
+          setStatusMessage(`Máy chủ xác nhận giao dịch đã commit thành công (COMMITTED_ACCEPTED)! Đang cập nhật dữ liệu...`);
+          setPendingMutation(null);
+          await loadCatalogue(pendingMutation.scope);
+        } else if (resolution.state === 'COMMITTED_REFUSED') {
+          // Mutation was definitively refused
+          setErrorMessage(`Máy chủ đã từ chối giao dịch: ${resolution.reasonCode || resolution.outcome || 'COMMITTED_REFUSED'}.`);
+          setPendingMutation(null);
+        } else {
+          // Still UNRESOLVED
+          setStatusMessage(`Giao dịch vẫn chưa có kết quả cuối cùng trên máy chủ (state: UNRESOLVED).`);
+        }
+      } else if (res.kind === 'unresolved' || res.kind === 'unavailable') {
+        setErrorMessage('Chưa thể kết nối tới dịch vụ đối soát giao dịch trên máy chủ. Vui lòng thử lại.');
+      } else {
+        handleClientFailure(res);
+      }
+    } catch {
+      if (alive.current) {
+        setErrorMessage('Lỗi kết nối trong quá trình đối soát giao dịch.');
+      }
+    } finally {
+      if (alive.current) setIsBusy(false);
+    }
+  };
+
+  // Replay exact intent with same operationId (P0.1)
+  const handleReplayPendingMutation = async () => {
+    if (!pendingMutation || isBusy) return;
+    setIsBusy(true);
+    setErrorMessage(null);
+    setStatusMessage(`Đang gửi lại đúng intent gốc cùng OperationId [${pendingMutation.operationId}]...`);
+
+    try {
+      if (pendingMutation.kind === 'PREPARE') {
+        const res = await activeClient.prepareRole(pendingMutation.payload as RoleProposal);
+        if (!alive.current) return;
+        if (res.kind === 'confirmed') {
+          setPendingMutation(null);
+          setCandidate(res.value);
+          setValidation(null);
+          setStatusMessage(`Máy chủ đã xác nhận lưu bản thảo vai trò [${res.value.roleCode}] thành công.`);
+        } else if (res.kind === 'unresolved') {
+          setErrorMessage('Giao dịch vẫn chưa rõ kết quả sau khi gửi lại. Vui lòng nhấn "Đối soát trên máy chủ".');
+        } else {
+          setPendingMutation(null);
+          handleClientFailure(res);
+        }
+      } else if (pendingMutation.kind === 'ACTIVATE') {
+        const res = await activeClient.activateRole(
+          pendingMutation.candidateId || '',
+          pendingMutation.payload as RoleActivation
+        );
+        if (!alive.current) return;
+        if (res.kind === 'confirmed') {
+          setPendingMutation(null);
+          setActiveRole(res.value);
+          setCandidate(null);
+          setValidation(null);
+          setStatusMessage(`Kích hoạt thành công phiên bản chính thức [${res.value.roleCode}@${res.value.version}].`);
+          await loadCatalogue(scope);
+          setSelectedRole(res.value);
+        } else if (res.kind === 'unresolved') {
+          setErrorMessage('Giao dịch kích hoạt vẫn chưa rõ kết quả sau khi gửi lại.');
+        } else {
+          setPendingMutation(null);
+          handleClientFailure(res);
+        }
+      }
+    } catch {
+      if (alive.current) setErrorMessage('Lỗi kết nối khi gửi lại intent.');
     } finally {
       if (alive.current) setIsBusy(false);
     }
@@ -599,8 +751,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                   color: 'var(--idea-color-primary)',
                   padding: '1px 5px',
                   borderRadius: '3px',
-                  border: '1px solid var(--idea-color-primary-subtle)',
-                  fontWeight: 500,
+                  border: '1px solid var(--idea-color-primary)',
                 }}
               >
                 Tùy biến tổ chức
@@ -612,11 +763,14 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     },
     {
       key: 'displayName',
-      header: 'Tên hiển thị',
+      header: 'Tên hiển thị vai trò',
       sortable: true,
       render: (r) => (
-        <div style={{ fontWeight: 500, color: 'var(--idea-color-text)' }}>
-          {r.displayName}
+        <div>
+          <div style={{ fontWeight: 500 }}>{r.displayName}</div>
+          <div style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '2px' }}>
+            {r.permissions.length} quyền hạn được gán
+          </div>
         </div>
       ),
     },
@@ -700,6 +854,8 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
     );
   }
 
+  const selectedBaseRole = formBaseVersion ? roles.find((r) => r.roleVersionId === formBaseVersion) : null;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 'calc(100vh - 120px)' }}>
       {/* Scope Toolbar & Action Header */}
@@ -746,7 +902,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             <label style={{ fontSize: '12px', color: 'var(--idea-color-text-muted)' }}>Phạm vi xem:</label>
             <select
               aria-label="Management scope"
-              disabled={isBusy || isLoading}
+              disabled={isLocked || isLoading}
               value={scope.kind === 'ORGANIZATION' ? 'ORGANIZATION' : scope.projectId}
               onChange={(e) => void handleChangeScope(e.target.value)}
               style={{
@@ -772,7 +928,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
           <Button
             variant="secondary"
             size="sm"
-            disabled={isLoading || isBusy}
+            disabled={isLoading || isLocked}
             onClick={() => void loadCatalogue(scope)}
             title="Tải lại danh sách vai trò từ máy chủ"
           >
@@ -783,7 +939,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             variant="primary"
             size="sm"
             onClick={handleOpenDrawer}
-            disabled={!canPrepare || isBusy || isLoading}
+            disabled={!canPrepare || isLocked || isLoading || permissionsIncomplete}
             title={canPrepare ? 'Soạn thảo bản thảo vai trò tùy biến mới' : 'Tài khoản thiếu quyền role.definition.prepare'}
           >
             + Tạo Candidate
@@ -793,6 +949,30 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
       {/* Global Alerts / Status Feedbacks */}
       <div style={{ padding: '8px 16px 0 16px' }}>
+        {/* Pending Mutation Recovery Banner (P0.1) */}
+        {pendingMutation && (
+          <div style={{ marginBottom: '12px', padding: '12px', border: '1px solid var(--idea-color-warning)', backgroundColor: 'var(--idea-color-warning-subtle, rgba(234, 179, 8, 0.1))', borderRadius: '6px' }} role="alert">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <span style={{ fontWeight: 600, fontSize: '13px', color: 'var(--idea-color-text)' }}>
+                Cảnh báo an toàn đột biến: Giao dịch [{pendingMutation.kind}] chưa xác định kết quả (UNRESOLVED)
+              </span>
+              <Badge variant="highest">LOCKED</Badge>
+            </div>
+            <p style={{ margin: '0 0 8px 0', fontSize: '12px', color: 'var(--idea-color-text-muted)' }}>
+              Intent gốc được giữ nguyên trong bộ nhớ với mã giao dịch: <code style={{ fontWeight: 600 }}>{pendingMutation.operationId}</code>.
+              Hệ thống đã khóa các thao tác đột biến khác để tránh gửi trùng lặp hoặc vi phạm tính bất biến.
+            </p>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <Button size="sm" variant="primary" disabled={isBusy} onClick={() => void handleResolveOperation()}>
+                {isBusy ? <Spinner size="sm" /> : 'Đối soát trên máy chủ (resolveOperation)'}
+              </Button>
+              <Button size="sm" variant="secondary" disabled={isBusy} onClick={() => void handleReplayPendingMutation()}>
+                Gửi lại đúng Intent gốc (Cùng OperationId)
+              </Button>
+            </div>
+          </div>
+        )}
+
         {statusMessage && (
           <div style={{ marginBottom: '8px' }}>
             <Alert variant="neutral" onClose={() => setStatusMessage(null)}>
@@ -805,6 +985,11 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             <Alert variant="danger" onClose={() => setErrorMessage(null)}>
               {errorMessage}
             </Alert>
+          </div>
+        )}
+        {lastOperationId && !pendingMutation && (
+          <div style={{ marginBottom: '4px', fontSize: '11px', color: 'var(--idea-color-text-muted)' }}>
+            Giao dịch gần nhất: <code>{lastOperationId}</code>
           </div>
         )}
         {!canPrepare && (
@@ -856,7 +1041,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
 
                   <h3 style={{ margin: '0 0 2px 0', fontSize: '15px' }}>{candidate.displayName}</h3>
                   <div style={{ fontSize: '12px', color: 'var(--idea-color-text-muted)', marginBottom: '12px' }}>
-                    Mã dự kiến: <code style={{ color: 'var(--idea-color-primary)', fontWeight: 600 }}>{candidate.roleCode}@v{candidate.proposedRoleVersion}</code>
+                    Mã hệ thống: <code style={{ color: 'var(--idea-color-primary)', fontWeight: 600 }}>{candidate.roleCode}@v{candidate.proposedRoleVersion}</code>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px' }}>
@@ -921,7 +1106,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                         variant="primary"
                         style={{ width: '100%' }}
                         onClick={() => void handleValidateCandidate()}
-                        disabled={isBusy}
+                        disabled={isLocked}
                       >
                         {isBusy ? <Spinner size="sm" /> : <><CheckCircleIcon /> Kiểm tra tính hợp lệ (Validate)</>}
                       </Button>
@@ -959,6 +1144,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                         <Input
                           placeholder="Ví dụ: Phê duyệt cho đợt phân quyền Quý 4..."
                           value={activationReason}
+                          disabled={isLocked}
                           onChange={(e) => setActivationReason(e.target.value)}
                         />
                       </div>
@@ -977,6 +1163,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                           <input
                             type="checkbox"
                             checked={activationConfirmed}
+                            disabled={isLocked}
                             style={{ marginTop: '2px' }}
                             onChange={(e) => setActivationConfirmed(e.target.checked)}
                           />
@@ -989,7 +1176,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                       <Button
                         variant="primary"
                         style={{ width: '100%' }}
-                        disabled={!activationConfirmed || !activationReason.trim() || isBusy || !canActivate}
+                        disabled={!activationConfirmed || !activationReason.trim() || isLocked || !canActivate}
                         onClick={() => void handleActivateRole()}
                       >
                         {isBusy ? <Spinner size="sm" /> : 'Kích hoạt phiên bản chính thức'}
@@ -1134,7 +1321,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             <Button
               variant="primary"
               onClick={() => void handlePrepareCandidate()}
-              disabled={!canSubmitProposal || isBusy}
+              disabled={!canSubmitProposal || isLocked}
             >
               {isBusy ? <Spinner size="sm" /> : 'Lưu bản thảo (Prepare Candidate)'}
             </Button>
@@ -1156,7 +1343,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
                 aria-label="Kế thừa từ vai trò có sẵn"
                 value={formBaseVersion}
                 onChange={(e) => handleSelectBaseRole(e.target.value)}
-                disabled={isBusy}
+                disabled={isLocked}
                 style={{
                   width: '100%',
                   padding: '6px 8px',
@@ -1181,14 +1368,14 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
               </span>
             </div>
 
-            <div style={{ marginBottom: '12px' }}>
+            <div style={{ marginBottom: '8px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, marginBottom: '4px' }}>
                 Tên hiển thị vai trò <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
               </label>
               <Input
                 placeholder="Ví dụ: Kỹ sư đánh giá thiết kế CAD"
                 value={formDisplayName}
-                disabled={Boolean(formBaseVersion) || isBusy}
+                disabled={Boolean(formBaseVersion) || isLocked}
                 onChange={(e) => {
                   setFormDisplayName(e.target.value);
                   setIsFormDirty(true);
@@ -1196,29 +1383,21 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
               />
             </div>
 
-            {!formBaseVersion && (
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, marginBottom: '4px' }}>
-                  Mã hệ thống (Role Code) <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
-                </label>
-                <Input
-                  placeholder="vi-du: ky-su-duyet-cad"
-                  value={formRoleCode}
-                  disabled={isBusy}
-                  onChange={(e) => {
-                    setFormRoleCode(e.target.value);
-                    setIsFormDirty(true);
-                  }}
-                  errorMessage={roleCodeError || undefined}
-                />
-                <span style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '2px', display: 'block' }}>
-                  Quy chuẩn: Chỉ dùng chữ cái thường không dấu a-z, chữ số 0-9 và dấu gạch nối (-).
-                </span>
+            {/* Role Code Assignment Information (P1.1 Align with Server Contract) */}
+            {formBaseVersion && selectedBaseRole ? (
+              <div style={{ marginTop: '8px', padding: '8px 10px', backgroundColor: 'var(--idea-color-surface)', borderRadius: '4px', border: '1px solid var(--idea-color-border-subtle)', fontSize: '11px' }}>
+                <span style={{ color: 'var(--idea-color-text-muted)' }}>Mã vai trò kế thừa từ phiên bản trước: </span>
+                <code style={{ fontWeight: 600 }}>{selectedBaseRole.roleCode}</code> (phiên bản tiếp theo dự kiến: <code>v{selectedBaseRole.version + 1}</code>)
+              </div>
+            ) : (
+              <div style={{ marginTop: '4px', fontSize: '11px', color: 'var(--idea-color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <InfoCircleIcon />
+                <span>Mã vai trò (Role Code) được Server tự động sinh từ tên hiển thị theo đúng hợp đồng RoleProposal.</span>
               </div>
             )}
           </div>
 
-          {/* Section 2: Quyền hạn */}
+          {/* Section 2: Quyền hạn (P1.2 Fail-closed Permission Availability) */}
           <div>
             <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
               2. Danh mục quyền hạn được phép cấp <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
@@ -1227,77 +1406,92 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
               Giới hạn trần quyền hạn tùy biến (Custom Role Ceiling). Chỉ cấp các quyền thực sự cần thiết.
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {customRoleCeiling.map((permCode) => {
-                const checked = formSelectedPermissions.includes(permCode);
-                const permObj = permissions.find((p) => p.code === permCode);
-                const isImplemented = permObj ? permObj.implementationState === 'IMPLEMENTED' : true;
-                const meta = PERMISSION_METADATA[permCode];
+            {permissions === null ? (
+              <Alert variant="warning">
+                {permissionsIncomplete
+                  ? 'Danh mục quyền hạn trên máy chủ chưa hoàn tất qua phân trang (hasMore=true); chức năng gán quyền bị khóa fail-closed.'
+                  : 'Đang tải danh mục quyền hạn từ máy chủ...'}
+              </Alert>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {customRoleCeiling.map((permCode) => {
+                  const checked = formSelectedPermissions.includes(permCode);
+                  const permObj = permissions.find((p) => p.code === permCode);
+                  const isImplemented = Boolean(permObj && permObj.implementationState === 'IMPLEMENTED');
+                  const meta = PERMISSION_METADATA[permCode];
 
-                return (
-                  <label
-                    key={permCode}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '8px',
-                      fontSize: '12px',
-                      cursor: isImplemented ? 'pointer' : 'not-allowed',
-                      padding: '6px 8px',
-                      borderRadius: '4px',
-                      backgroundColor: checked ? 'var(--idea-color-primary-subtle)' : 'var(--idea-color-surface)',
-                      border: '1px solid',
-                      borderColor: checked ? 'var(--idea-color-primary)' : 'var(--idea-color-border-subtle)',
-                      opacity: isImplemented ? 1 : 0.6,
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      disabled={!isImplemented || isBusy}
-                      style={{ marginTop: '2px' }}
-                      onChange={() => {
-                        setIsFormDirty(true);
-                        setFormSelectedPermissions((prev) =>
-                          prev.includes(permCode) ? prev.filter((p) => p !== permCode) : [...prev, permCode]
-                        );
+                  return (
+                    <label
+                      key={permCode}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '8px',
+                        fontSize: '12px',
+                        cursor: isImplemented && !isLocked ? 'pointer' : 'not-allowed',
+                        padding: '6px 8px',
+                        borderRadius: '4px',
+                        backgroundColor: checked ? 'var(--idea-color-primary-subtle)' : 'var(--idea-color-surface)',
+                        border: '1px solid',
+                        borderColor: checked ? 'var(--idea-color-primary)' : 'var(--idea-color-border-subtle)',
+                        opacity: isImplemented ? 1 : 0.6,
                       }}
-                    />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, color: 'var(--idea-color-text)' }}>
-                        {meta?.title || permCode}
-                      </div>
-                      {meta?.description && (
-                        <div style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '2px' }}>
-                          {meta.description}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={!isImplemented || isLocked}
+                        style={{ marginTop: '2px' }}
+                        onChange={() => {
+                          setIsFormDirty(true);
+                          setFormSelectedPermissions((prev) =>
+                            prev.includes(permCode)
+                              ? prev.filter((p) => p !== permCode)
+                              : [...prev, permCode]
+                          );
+                        }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontWeight: 600 }}>{meta?.title || permCode}</span>
+                          <span style={{ fontFamily: 'var(--idea-font-family-mono)', fontSize: '11px', color: 'var(--idea-color-text-muted)' }}>
+                            ({permCode})
+                          </span>
+                          {!isImplemented && (
+                            <Badge variant="neutral">
+                              {permObj ? permObj.implementationState : 'CHƯA KHẢ DỤNG'}
+                            </Badge>
+                          )}
                         </div>
-                      )}
-                      <div style={{ fontFamily: 'var(--idea-font-family-mono)', fontSize: '10px', color: 'var(--idea-color-text-subtle)', marginTop: '2px' }}>
-                        <code>{permCode}</code>
+                        {meta?.description && (
+                          <div style={{ fontSize: '11px', color: 'var(--idea-color-text-muted)', marginTop: '2px' }}>
+                            {meta.description}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </label>
-                );
-              })}
-            </div>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* Section 3: Phạm vi và Chủ thể */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {/* Section 3: Phạm vi & Chủ thể */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px' }}>
-                3. Phạm vi có thể áp dụng (Scopes)
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
+                3. Phạm vi áp dụng <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
               </label>
-              <div style={{ display: 'flex', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
                 {[
                   { id: 'ORGANIZATION', label: 'Toàn tổ chức' },
-                  { id: 'PROJECT', label: 'Trong từng dự án' },
+                  { id: 'PROJECT', label: 'Trong dự án' },
                 ].map((sc) => (
-                  <label key={sc.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer' }}>
+                  <label key={sc.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: isLocked ? 'not-allowed' : 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={formScopeKinds.includes(sc.id)}
-                      disabled={scope.kind === 'PROJECT' && sc.id === 'ORGANIZATION'}
+                      disabled={isLocked || (scope.kind === 'PROJECT' && sc.id === 'ORGANIZATION')}
                       onChange={() => {
                         setIsFormDirty(true);
                         setFormScopeKinds((prev) =>
@@ -1312,18 +1506,19 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px' }}>
-                4. Đối tượng được phép gán (Principals)
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
+                4. Chủ thể áp dụng <span style={{ color: 'var(--idea-color-danger)' }}>*</span>
               </label>
-              <div style={{ display: 'flex', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px' }}>
                 {[
-                  { id: 'ACTOR', label: 'Cá nhân cán bộ' },
+                  { id: 'ACTOR', label: 'Cá nhân (Người dùng)' },
                   { id: 'PROJECT_GROUP', label: 'Nhóm làm việc dự án' },
                 ].map((pr) => (
-                  <label key={pr.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer' }}>
+                  <label key={pr.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: isLocked ? 'not-allowed' : 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={formPrincipalKinds.includes(pr.id)}
+                      disabled={isLocked}
                       onChange={() => {
                         setIsFormDirty(true);
                         setFormPrincipalKinds((prev) =>
@@ -1349,7 +1544,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
             <Input
               placeholder="Ví dụ: Phục vụ đợt tuyển dụng nhân sự dự án DDM..."
               value={formReason}
-              disabled={isBusy}
+              disabled={isLocked}
               onChange={(e) => {
                 setFormReason(e.target.value);
                 setIsFormDirty(true);
@@ -1362,7 +1557,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
         </div>
       </Drawer>
 
-      {/* Dirty Discard Dialog */}
+      {/* Discard Confirmation Dialog */}
       <Dialog
         isOpen={isDiscardDialogOpen}
         onClose={() => setIsDiscardDialogOpen(false)}
@@ -1374,7 +1569,7 @@ export const RbacPilotPage: React.FC<RbacPilotPageProps> = ({
               Tiếp tục chỉnh sửa
             </Button>
             <Button variant="danger" onClick={handleConfirmDiscard}>
-              Hủy bỏ thay đổi
+              Xác nhận hủy
             </Button>
           </>
         }

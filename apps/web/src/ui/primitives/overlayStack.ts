@@ -8,10 +8,17 @@ interface StackItem {
   id: string;
   element: HTMLElement;
   triggerElement: HTMLElement | null;
-  backgroundElements: HTMLElement[];
+  prevOverlayInert: boolean;
+  prevOverlayAriaHidden: string | null;
+}
+
+interface SavedElementState {
+  prevInert: boolean;
+  prevAriaHidden: string | null;
 }
 
 const stack: StackItem[] = [];
+const backgroundStatesMap = new Map<HTMLElement, SavedElementState>();
 
 /**
  * Ensures a dedicated overlay portal container exists outside #appRoot
@@ -40,6 +47,25 @@ export function isAnyOverlayActive(): boolean {
 }
 
 /**
+ * Returns current depth of the overlay stack (useful for diagnostics and assertions)
+ */
+export function getStackDepth(): number {
+  return stack.length;
+}
+
+/**
+ * Checks if an element is a valid, currently interactive focus target
+ */
+export function isInteractiveFocusTarget(el: HTMLElement | null): boolean {
+  if (!el || typeof document === 'undefined') return false;
+  if (!document.contains(el)) return false;
+  if (el.hasAttribute('disabled') || (el as HTMLButtonElement).disabled) return false;
+  if (el.inert || (typeof el.closest === 'function' && el.closest('[inert]'))) return false;
+  if (el.getAttribute('aria-hidden') === 'true' || (typeof el.closest === 'function' && el.closest('[aria-hidden="true"]'))) return false;
+  return true;
+}
+
+/**
  * Registers an active overlay and safely applies inert to underlying layers
  */
 export function pushOverlay(
@@ -49,20 +75,32 @@ export function pushOverlay(
 ): () => void {
   if (typeof document === 'undefined') return () => {};
 
+  // Check if this overlay is already the top of stack to prevent duplicate registration
+  const existingIdx = stack.findIndex((item) => item.id === id);
+  if (existingIdx !== -1) {
+    return () => {
+      popOverlay(id);
+    };
+  }
+
   const triggerElement = document.activeElement as HTMLElement | null;
-  const backgroundElements: HTMLElement[] = [];
 
   if (stack.length === 0) {
-    // Top-level overlay: inert the main application root
+    // Top-level overlay: safely capture pre-existing inert/aria-hidden states of background elements
     if (backgroundSelector) {
       document.querySelectorAll<HTMLElement>(backgroundSelector).forEach((el) => {
+        if (!backgroundStatesMap.has(el)) {
+          backgroundStatesMap.set(el, {
+            prevInert: Boolean(el.inert),
+            prevAriaHidden: el.getAttribute('aria-hidden'),
+          });
+        }
         el.inert = true;
         el.setAttribute('aria-hidden', 'true');
-        backgroundElements.push(el);
       });
     }
   } else {
-    // Nested overlay (e.g. Dialog on top of Drawer): inert the preceding overlay layer
+    // Nested overlay (e.g. Dialog on top of Drawer): inert the preceding lower overlay layer
     const lowerOverlay = stack[stack.length - 1];
     if (lowerOverlay.element) {
       lowerOverlay.element.inert = true;
@@ -74,7 +112,8 @@ export function pushOverlay(
     id,
     element: overlayElement,
     triggerElement,
-    backgroundElements,
+    prevOverlayInert: false,
+    prevOverlayAriaHidden: null,
   });
 
   return () => {
@@ -92,27 +131,75 @@ export function popOverlay(id: string): void {
   const [removed] = stack.splice(index, 1);
 
   if (stack.length === 0) {
-    // Restoring main application root
-    removed.backgroundElements.forEach((el) => {
-      el.inert = false;
-      el.removeAttribute('aria-hidden');
+    // Restoring main application root and all preserved background elements
+    backgroundStatesMap.forEach((orig, el) => {
+      el.inert = orig.prevInert;
+      if (orig.prevAriaHidden !== null && orig.prevAriaHidden !== undefined) {
+        el.setAttribute('aria-hidden', orig.prevAriaHidden);
+      } else {
+        el.removeAttribute('aria-hidden');
+      }
     });
+    backgroundStatesMap.clear();
   } else {
-    // Restoring the previous overlay layer
+    // Restoring the topmost remaining overlay layer in the stack
     const top = stack[stack.length - 1];
-    if (top.element) {
-      top.element.inert = false;
-      top.element.removeAttribute('aria-hidden');
+    if (top && top.element) {
+      top.element.inert = top.prevOverlayInert;
+      if (top.prevOverlayAriaHidden !== null && top.prevOverlayAriaHidden !== undefined) {
+        top.element.setAttribute('aria-hidden', top.prevOverlayAriaHidden);
+      } else {
+        top.element.removeAttribute('aria-hidden');
+      }
     }
   }
 
-  // Restore focus to trigger element if available
-  if (removed.triggerElement && typeof removed.triggerElement.focus === 'function') {
-    const schedule = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (cb: () => void) => setTimeout(cb, 0);
-    schedule(() => {
-      if (typeof document !== 'undefined' && document.contains(removed.triggerElement)) {
-        removed.triggerElement?.focus();
+  // Restore focus only to a valid, currently interactive target
+  const schedule =
+    typeof requestAnimationFrame === 'function'
+      ? requestAnimationFrame
+      : (cb: () => void) => setTimeout(cb, 0);
+
+  schedule(() => {
+    if (typeof document === 'undefined') return;
+
+    if (isInteractiveFocusTarget(removed.triggerElement)) {
+      removed.triggerElement?.focus();
+      return;
+    }
+
+    // Fallback: if trigger is unmounted/inert/disabled, focus the current topmost active overlay
+    if (stack.length > 0) {
+      const currentTop = stack[stack.length - 1];
+      if (currentTop && currentTop.element) {
+        const focusable = currentTop.element.querySelector<HTMLElement>(
+          'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]'
+        );
+        if (focusable && isInteractiveFocusTarget(focusable)) {
+          focusable.focus();
+          return;
+        }
+        if (isInteractiveFocusTarget(currentTop.element)) {
+          currentTop.element.focus();
+          return;
+        }
       }
-    });
-  }
+    }
+
+    // Fallback for empty stack: ensure document body or appRoot has focus without remaining lost
+    const appRoot = document.getElementById('appRoot');
+    if (appRoot && isInteractiveFocusTarget(appRoot)) {
+      appRoot.focus();
+    } else if (document.body) {
+      document.body.focus();
+    }
+  });
+}
+
+/**
+ * Resets overlay stack and background state map (used exclusively for test isolation)
+ */
+export function resetOverlayStackForTesting(): void {
+  stack.length = 0;
+  backgroundStatesMap.clear();
 }

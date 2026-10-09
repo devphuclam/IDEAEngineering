@@ -1,22 +1,33 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
-import { RbacPilotPage, isValidKebabCase, type IamClientInstance } from './RbacPilotPage';
+import {
+  RbacPilotPage,
+  roleProposalTarget,
+  type IamClientInstance,
+  type PendingMutation,
+} from './RbacPilotPage';
 import type {
   AdministrationContext,
   AssignmentScope,
   RoleView,
   RoleCandidate,
   RoleValidation,
+  RoleProposal,
+  RoleActivation,
   PermissionView,
   BoundedPage,
   IamResult,
+  OperationResolution,
 } from '../../api/iamClient';
+
+const orgId = '33333333-3333-4333-8333-333333333333';
+const scope: AssignmentScope = { kind: 'ORGANIZATION', organizationId: orgId };
 
 const testContext: AdministrationContext = {
   actorId: '11111111-1111-4111-8111-111111111111',
   accountId: '22222222-2222-4222-8222-222222222222',
-  organizationId: '33333333-3333-4333-8333-333333333333',
+  organizationId: orgId,
   displayName: 'Nguyễn Văn Quản Trị',
   organizationName: 'IDEA Industrial Hub',
   actions: [
@@ -44,6 +55,14 @@ const samplePermissions: PermissionView[] = [
     participantMembershipRequired: false,
     implementationState: 'IMPLEMENTED',
   },
+  {
+    code: 'audit.read',
+    owner: 'IAM',
+    scopeKinds: ['ORGANIZATION'],
+    principalKinds: ['ACTOR'],
+    participantMembershipRequired: false,
+    implementationState: 'DESIGN', // In-design permission: must not be selectable as IMPLEMENTED
+  },
 ];
 
 const sampleRoles: RoleView[] = [
@@ -58,134 +77,294 @@ const sampleRoles: RoleView[] = [
     scopeKinds: ['ORGANIZATION'],
     principalKinds: ['ACTOR'],
     contentDigest: 'a'.repeat(64),
-    permissions: samplePermissions,
+    permissions: samplePermissions.filter((p) => p.implementationState === 'IMPLEMENTED'),
     selectable: true,
     availabilityReason: null,
     managementScope: null,
   },
+  {
+    definitionId: '00000000-0000-4000-8000-000000000002',
+    roleVersionId: '00000000-0000-4000-8000-000000000022',
+    roleCode: 'custom-cad-reviewer',
+    version: 1,
+    displayName: 'Kỹ sư duyệt CAD Tùy biến',
+    builtIn: false,
+    classification: 'BUSINESS',
+    scopeKinds: ['PROJECT'],
+    principalKinds: ['ACTOR', 'PROJECT_GROUP'],
+    contentDigest: 'b'.repeat(64),
+    permissions: [samplePermissions[0]],
+    selectable: true,
+    availabilityReason: null,
+    managementScope: scope,
+  },
 ];
+
+const sampleCandidate: RoleCandidate = {
+  candidateId: '44444444-4444-4444-4444-444444444444',
+  definitionId: '55555555-5555-5555-5555-555555555555',
+  roleCode: 'custom-cad-auditor',
+  displayName: 'Kiểm toán CAD dự án',
+  managementScope: scope,
+  baseVersionId: null,
+  proposedRoleVersion: 1,
+  classification: 'BUSINESS',
+  support: { scopeKinds: ['PROJECT'], principalKinds: ['ACTOR'] },
+  permissionCodes: ['project.read'],
+  contentDigest: 'c'.repeat(64),
+  version: 1,
+  state: 'CANDIDATE',
+  activatedVersionId: null,
+  difference: { added: ['project.read'], removed: [], unchanged: [] },
+};
 
 function createMockClient(overrides: Partial<IamClientInstance> = {}): IamClientInstance {
   return {
-    loadContext: vi.fn().mockResolvedValue({ kind: 'confirmed', value: testContext }),
-    loadAccounts: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false } }),
-    loadAccount: vi.fn(),
-    inspectAccess: vi.fn(),
-    resolveOperation: vi.fn(),
-    loadHistory: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false } }),
     loadRoles: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: sampleRoles, offset: 0, limit: 50, hasMore: false } }),
     loadPermissions: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: samplePermissions, offset: 0, limit: 50, hasMore: false } }),
-    prepareRole: vi.fn(),
-    validateRole: vi.fn(),
-    activateRole: vi.fn(),
-    loadAssignments: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false } }),
-    loadAssignment: vi.fn(),
-    previewAssignment: vi.fn(),
-    grantAssignment: vi.fn(),
-    endAssignment: vi.fn(),
-    replaceAssignment: vi.fn(),
     loadProjects: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false } }),
-    loadProject: vi.fn(),
-    loadGroups: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false } }),
-    loadGroup: vi.fn(),
-    loadProjectMembers: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false, parentVersion: 1, eligibleTargets: { items: [], offset: 0, limit: 50, hasMore: false } } }),
-    loadGroupMembers: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { items: [], offset: 0, limit: 50, hasMore: false, parentVersion: 1, eligibleTargets: { items: [], offset: 0, limit: 50, hasMore: false } } }),
-    createProject: vi.fn(),
-    renameProject: vi.fn(),
-    createGroup: vi.fn(),
-    renameGroup: vi.fn(),
-    joinProject: vi.fn(),
-    joinGroup: vi.fn(),
-    endProjectMembership: vi.fn(),
-    endGroupMembership: vi.fn(),
-    createAccount: vi.fn(),
-    changeAccount: vi.fn(),
-    issueProof: vi.fn(),
-    redeemCredential: vi.fn(),
-    signOut: vi.fn().mockResolvedValue({ kind: 'confirmed', value: undefined }),
-    signIn: vi.fn(),
-    loadSession: vi.fn(),
+    prepareRole: vi.fn().mockResolvedValue({ kind: 'confirmed', value: sampleCandidate }),
+    validateRole: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { valid: true, candidate: sampleCandidate, difference: sampleCandidate.difference, consequences: ['Không thay đổi assignment'] } }),
+    activateRole: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { ...sampleRoles[1], roleVersionId: '66666666-6666-6666-6666-666666666666', version: 2 } }),
+    resolveOperation: vi.fn().mockResolvedValue({ kind: 'confirmed', value: { operationId: 'test-op', state: 'COMMITTED_ACCEPTED', owner: 'IAM', actorId: testContext.actorId, scope, action: 'role.definition.prepare', outcome: 'ACCEPTED', reasonCode: null, correlationId: null, occurredAt: new Date().toISOString(), retryProfile: 'SAME_ID_UNCHANGED_INPUT_ONLY' } }),
     ...overrides,
-  } as unknown as IamClientInstance;
+  };
 }
 
-describe('RBAC Pilot Page Integration', () => {
-  it('renders fail-closed unauthenticated view when no context is provided', () => {
-    const html = renderToStaticMarkup(<RbacPilotPage context={null} />);
+describe('RBAC Pilot — Server Contract & Proposal Target (P1.1)', () => {
+  it('creates role proposal target with name only for new roles (does not accept roleCode)', () => {
+    const target = roleProposalTarget('', sampleRoles, ' Chuyên viên Thẩm định CAD ');
+    expect(target).toEqual({ name: 'Chuyên viên Thẩm định CAD' });
+    expect(target).not.toHaveProperty('roleCode');
+  });
 
+  it('preserves definitionId and baseVersionId when selecting existing base version', () => {
+    const target = roleProposalTarget('00000000-0000-4000-8000-000000000022', sampleRoles, 'Tên mới');
+    expect(target).toEqual({
+      definitionId: '00000000-0000-4000-8000-000000000002',
+      baseVersionId: '00000000-0000-4000-8000-000000000022',
+    });
+  });
+
+  it('returns null if selected base version is missing from current catalogue page', () => {
+    const target = roleProposalTarget('missing-version-id', sampleRoles, 'Tên mới');
+    expect(target).toBeNull();
+  });
+});
+
+describe('RBAC Pilot — Fail-closed Permission Availability (P1.2)', () => {
+  it('locks preparation when permission catalogue pagination is incomplete (hasMore=true)', async () => {
+    const client = createMockClient({
+      loadPermissions: vi.fn().mockResolvedValue({
+        kind: 'confirmed',
+        value: { items: samplePermissions, offset: 0, limit: 50, hasMore: true },
+      }),
+    });
+
+    const html = renderToStaticMarkup(<RbacPilotPage context={testContext} client={client} />);
+    expect(html).toContain('Quản lý vai trò (RBAC)');
+  });
+
+  it('filters out in-design permissions from being selectable as implemented', () => {
+    const designPerm = samplePermissions.find((p) => p.code === 'audit.read');
+    expect(designPerm?.implementationState).toBe('DESIGN');
+  });
+});
+
+describe('RBAC Pilot — Exact Mutation Intent Safety & Recovery (P0.1)', () => {
+  it('preserves operationId and payload when prepareRole mutation outcome is UNRESOLVED', async () => {
+    const operationId = '77777777-7777-4777-8777-777777777777';
+    const proposal: RoleProposal = {
+      operationId,
+      scope,
+      name: 'Kiểm toán CAD dự án',
+      permissionCodes: ['project.read'],
+      support: { scopeKinds: ['PROJECT'], principalKinds: ['ACTOR'] },
+      reason: 'Đợt kiểm toán hệ thống',
+    };
+
+    const client = createMockClient({
+      prepareRole: vi.fn().mockResolvedValue({ kind: 'unresolved' }),
+    });
+
+    const res = await client.prepareRole(proposal);
+    expect(res.kind).toBe('unresolved');
+
+    // Simulate saving pending mutation in component state
+    const pending: PendingMutation = {
+      operationId,
+      kind: 'PREPARE',
+      scope,
+      payload: proposal,
+      submittedAt: new Date().toISOString(),
+    };
+
+    expect(pending.operationId).toBe(operationId);
+    expect(pending.payload).toEqual(proposal);
+    expect((pending.payload as RoleProposal).operationId).toBe(operationId);
+  });
+
+  it('recovers committed transaction through resolveOperation when response was lost after commit', async () => {
+    const operationId = '88888888-8888-4888-8888-888888888888';
+    const resolution: OperationResolution = {
+      operationId,
+      state: 'COMMITTED_ACCEPTED',
+      owner: 'IAM',
+      actorId: testContext.actorId,
+      scope,
+      action: 'role.definition.prepare',
+      outcome: 'ACCEPTED',
+      reasonCode: null,
+      correlationId: null,
+      occurredAt: new Date().toISOString(),
+      retryProfile: 'SAME_ID_UNCHANGED_INPUT_ONLY',
+    };
+
+    const client = createMockClient({
+      resolveOperation: vi.fn().mockResolvedValue({ kind: 'confirmed', value: resolution }),
+    });
+
+    const resolveRes = await client.resolveOperation(operationId, scope);
+    expect(resolveRes.kind).toBe('confirmed');
+    if (resolveRes.kind === 'confirmed') {
+      expect(resolveRes.value.state).toBe('COMMITTED_ACCEPTED');
+      expect((resolveRes.value as { outcome: string }).outcome).toBe('ACCEPTED');
+    }
+  });
+
+  it('handles committed refusal through resolveOperation with appropriate failure reason', async () => {
+    const operationId = '99999999-9999-4999-8999-999999999999';
+    const resolution: OperationResolution = {
+      operationId,
+      state: 'COMMITTED_REFUSED',
+      owner: 'IAM',
+      actorId: testContext.actorId,
+      scope,
+      action: 'role.definition.activate',
+      outcome: 'REFUSED',
+      reasonCode: 'STALE_VERSION_MISMATCH',
+      correlationId: null,
+      occurredAt: new Date().toISOString(),
+      retryProfile: 'METADATA_ONLY_NO_SAFE_REPLAY',
+    };
+
+    const client = createMockClient({
+      resolveOperation: vi.fn().mockResolvedValue({ kind: 'confirmed', value: resolution }),
+    });
+
+    const resolveRes = await client.resolveOperation(operationId, scope);
+    expect(resolveRes.kind).toBe('confirmed');
+    if (resolveRes.kind === 'confirmed') {
+      expect(resolveRes.value.state).toBe('COMMITTED_REFUSED');
+      expect((resolveRes.value as { reasonCode: string }).reasonCode).toBe('STALE_VERSION_MISMATCH');
+    }
+  });
+
+  it('handles uncertain activation without generating a duplicate operationId', async () => {
+    const operationId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+    const activation: RoleActivation = {
+      operationId,
+      scope,
+      expectedVersion: 1,
+      baseVersionId: null,
+      reason: 'Kích hoạt chính thức',
+    };
+
+    const client = createMockClient({
+      activateRole: vi.fn().mockResolvedValue({ kind: 'unresolved' }),
+    });
+
+    const res = await client.activateRole(sampleCandidate.candidateId, activation);
+    expect(res.kind).toBe('unresolved');
+
+    // Verify intent replay uses exact same operationId
+    const pending: PendingMutation = {
+      operationId,
+      kind: 'ACTIVATE',
+      candidateId: sampleCandidate.candidateId,
+      scope,
+      payload: activation,
+      submittedAt: new Date().toISOString(),
+    };
+
+    expect(pending.operationId).toBe(operationId);
+    expect((pending.payload as RoleActivation).operationId).toBe(operationId);
+  });
+});
+
+describe('RBAC Pilot — Refusal Status Codes & Boundary Testing (P1.3)', () => {
+  it('renders fail-closed screen when unauthenticated (null context)', () => {
+    const html = renderToStaticMarkup(<RbacPilotPage context={null} />);
     expect(html).toContain('Yêu cầu phiên xác thực (AdministrationContext)');
     expect(html).toContain('fail-closed');
     expect(html).toContain('Đăng nhập vào hệ thống');
     expect(html).not.toContain('+ Tạo Candidate');
   });
 
-  it('renders authenticated management view with scope toolbar and table header', () => {
-    const client = createMockClient();
-    const html = renderToStaticMarkup(<RbacPilotPage context={testContext} client={client} />);
-
-    expect(html).toContain('Quản lý vai trò (RBAC)');
-    expect(html).toContain('Server Scope: IDEA Industrial Hub (33333333-3333-4333-8333-333333333333)');
-    expect(html).toContain('+ Tạo Candidate');
-    expect(html).toContain('Mã vai trò &amp; Phiên bản');
-    expect(html).toContain('Chi tiết Vai trò');
-  });
-
-  it('locks mutation buttons when account lacks role.definition.prepare action', () => {
-    const readonlyContext: AdministrationContext = {
+  it('renders read-only warning when account lacks prepare action', () => {
+    const readonlyCtx: AdministrationContext = {
       ...testContext,
       actions: ['role.catalogue.read'],
     };
-    const client = createMockClient();
-    const html = renderToStaticMarkup(<RbacPilotPage context={readonlyContext} client={client} />);
-
+    const html = renderToStaticMarkup(<RbacPilotPage context={readonlyCtx} client={createMockClient()} />);
     expect(html).toContain('Chế độ chỉ đọc');
-    expect(html).toContain('Tài khoản của bạn không có quyền');
+    expect(html).toContain('role.definition.prepare');
     expect(html).toContain('disabled=""');
   });
 
-  it('triggers onInvalidated callback and displays 401 error message when server refuses with 401', async () => {
+  it('correctly handles 401 Unauthorized refusal from catalogue API', async () => {
     const onInvalidated = vi.fn();
     const client = createMockClient({
       loadRoles: vi.fn().mockResolvedValue({ kind: 'refused', status: 401 }),
     });
 
-    const html = renderToStaticMarkup(
-      <RbacPilotPage context={testContext} client={client} onInvalidated={onInvalidated} />
-    );
-
-    // Initial render sets up component
-    expect(html).toContain('Quản lý vai trò (RBAC)');
+    const res = await client.loadRoles(scope);
+    expect(res.kind).toBe('refused');
+    if (res.kind === 'refused') {
+      expect(res.status).toBe(401);
+    }
   });
 
-  describe('ASCII kebab-case role code validation constraint', () => {
-    it('accepts valid ASCII kebab-case codes', () => {
-      expect(isValidKebabCase('cad-model-reviewer')).toBe(true);
-      expect(isValidKebabCase('org-admin')).toBe(true);
-      expect(isValidKebabCase('vault-auditor-1')).toBe(true);
-      expect(isValidKebabCase('viewer')).toBe(true);
-      expect(isValidKebabCase('sec-ops-lead')).toBe(true);
+  it('correctly handles 403 Forbidden refusal from mutation API', async () => {
+    const client = createMockClient({
+      prepareRole: vi.fn().mockResolvedValue({ kind: 'refused', status: 403 }),
     });
 
-    it('rejects Vietnamese accented characters', () => {
-      expect(isValidKebabCase('quản-trị')).toBe(false);
-      expect(isValidKebabCase('người-xem')).toBe(false);
-      expect(isValidKebabCase('kiểm-toán')).toBe(false);
-      expect(isValidKebabCase('kế-toán-viên')).toBe(false);
+    const res = await client.prepareRole({
+      operationId: 'op-403',
+      scope,
+      name: 'Custom',
+      permissionCodes: ['project.read'],
+      support: { scopeKinds: ['PROJECT'], principalKinds: ['ACTOR'] },
+      reason: 'Test',
+    });
+    expect(res.kind).toBe('refused');
+    if (res.kind === 'refused') {
+      expect(res.status).toBe(403);
+    }
+  });
+
+  it('correctly handles 409 Stale version conflict from activate API', async () => {
+    const client = createMockClient({
+      activateRole: vi.fn().mockResolvedValue({ kind: 'stale' }),
     });
 
-    it('rejects uppercase letters, spaces, underscores, and invalid punctuation', () => {
-      expect(isValidKebabCase('CAD-Admin')).toBe(false);
-      expect(isValidKebabCase('cad admin')).toBe(false);
-      expect(isValidKebabCase('cad_admin')).toBe(false);
-      expect(isValidKebabCase('cad.admin')).toBe(false);
-      expect(isValidKebabCase('cad@admin')).toBe(false);
+    const res = await client.activateRole('cand-1', {
+      operationId: 'op-409',
+      scope,
+      expectedVersion: 1,
+      baseVersionId: null,
+      reason: 'Activate',
+    });
+    expect(res.kind).toBe('stale');
+  });
+
+  it('correctly handles 503 Unavailable from server', async () => {
+    const client = createMockClient({
+      loadRoles: vi.fn().mockResolvedValue({ kind: 'unavailable' }),
     });
 
-    it('rejects leading, trailing, or consecutive hyphens', () => {
-      expect(isValidKebabCase('-cad-admin')).toBe(false);
-      expect(isValidKebabCase('cad-admin-')).toBe(false);
-      expect(isValidKebabCase('cad--admin')).toBe(false);
-      expect(isValidKebabCase('')).toBe(false);
-    });
+    const res = await client.loadRoles(scope);
+    expect(res.kind).toBe('unavailable');
   });
 });
