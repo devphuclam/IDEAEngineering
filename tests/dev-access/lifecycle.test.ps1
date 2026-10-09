@@ -5,7 +5,7 @@ $source=Join-Path $PSScriptRoot '../../tools/dev-access/launch.ps1'
 $errors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($source,[ref]$null,[ref]$errors)
 if($errors.Count){throw 'Launcher syntax error'}
-foreach($name in @('StopFrontend','EnsureBackend','StartFrontend')){
+foreach($name in @('Persist','StopFrontend','EnsureBackend','StartFrontend')){
     $definition=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     Invoke-Expression $definition.Extent.Text
 }
@@ -48,4 +48,17 @@ $calls=@();$closed=@();$ExpectedFrontendGeneration=$null;$refused=$false
 try{StartFrontend}catch{$refused=$true}
 Assert ($refused -and @($calls | Where-Object {$_ -eq 'edge/stop'}).Count -eq 2 -and $closed -contains 'forward' -and $closed -notcontains 'frontend' -and $closed -notcontains 'reverse') 'Startup rollback leaked edge/forward or stopped preexisting frontend'
 Write-Host 'PASS failed readiness rolls back new edge/forward, preserves independent existing resources'
-Write-Host 'LIFECYCLE_UNIT=5/5;REAL_RUNTIME=SEPARATE'
+$temporaryRoot=Join-Path ([IO.Path]::GetTempPath()) ('idea-state-'+[Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $temporaryRoot | Out-Null
+try{
+    $stateFile=Join-Path $temporaryRoot 'state.json'
+    $records=@{generation='first'};Persist
+    $records=@{generation='second'};Persist
+    Assert ((Get-Content -Raw -LiteralPath $stateFile|ConvertFrom-Json).generation -eq 'second') 'Atomic state replacement failed'
+    Assert (@(Get-ChildItem -LiteralPath $temporaryRoot).Count -eq 1) 'Temporary state copies retained'
+}finally{
+    foreach($path in Get-ChildItem -LiteralPath $temporaryRoot){Remove-Item -LiteralPath $path.FullName}
+    Remove-Item -LiteralPath $temporaryRoot
+}
+Write-Host 'PASS Windows PowerShell persists first and successor generations atomically'
+Write-Host 'LIFECYCLE_UNIT=6/6;REAL_RUNTIME=SEPARATE'

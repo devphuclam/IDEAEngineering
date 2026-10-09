@@ -43,10 +43,13 @@ function Remote([string]$Kind,[string]$Command){
 }
 function Persist {
     $temporary=$stateFile+'.'+[Guid]::NewGuid().ToString('N')+'.tmp'
+    $backup=$temporary+'.previous'
     try{
         $records | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $temporary -Encoding UTF8
-        if(Test-Path -LiteralPath $stateFile){[IO.File]::Replace($temporary,$stateFile,$null)}else{[IO.File]::Move($temporary,$stateFile)}
-    }finally{if(Test-Path -LiteralPath $temporary){Remove-Item -LiteralPath $temporary}}
+        if(Test-Path -LiteralPath $stateFile){[IO.File]::Replace($temporary,$stateFile,$backup)}else{[IO.File]::Move($temporary,$stateFile)}
+    }finally{
+        foreach($path in @($temporary,$backup)){if(Test-Path -LiteralPath $path){Remove-Item -LiteralPath $path}}
+    }
 }
 function Owned([string]$Kind){
     if(!$records.ContainsKey($Kind)){return $null}

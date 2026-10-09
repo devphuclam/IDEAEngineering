@@ -45,12 +45,12 @@ try {
     assert.equal(sha(readFileSync(modules+name+'/LICENSE')),'45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb');
     assert.equal(sha(readFileSync(modules+name+'/NOTICE')),'6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d');
   }
-  const beforeSockets=socketState();
+  stage='predecessor-sockets';const beforeSockets=socketState();
   const appFiles=['src/App.tsx','src/app/iam.css','src/components/admin/AccountsView.tsx','src/components/admin/ProjectsView.tsx','src/components/admin/RbacView.tsx','src/features/accessAdministration/AssignmentWizard.tsx','src/features/accessInspection/AccessInspectionPage.tsx','src/features/accountAdministration/AccountAdministrationPage.tsx','src/features/projectAdministration/ProjectAdministrationPage.tsx','src/styles/admin.css'];
   const appHashes=appFiles.map(p=>sha(readFileSync(resolve(web,p))));
-  assert.ok(control('Dev').includes('FRONTEND=LOCAL_CHECKOUT'));
+  stage='owned-dev-launch';assert.ok(control('Dev').includes('FRONTEND=LOCAL_CHECKOUT'));
   const backendIdentity=remote(`cat ${config.remoteRoot}/backend.state`).trim();
-  fixture=JSON.parse(remote(`test "$(stat -c '%U:%a' ${fixtureRoot}/fixture.private.json)" = phuclam:600 && cat ${fixtureRoot}/fixture.private.json`));
+  stage='private-fixture';fixture=JSON.parse(remote(`test "$(stat -c '%U:%a' ${fixtureRoot}/fixture.private.json)" = phuclam:600 && cat ${fixtureRoot}/fixture.private.json`));
   assert.equal(fixture.source,'9d3732cb173e8094195b9bdd60b5588ac3cfa42e');
   for(const key of ['adminPassword','memberPassword','ordinaryPassword']) secrets.add(fixture[key]);
   const {chromium}=createRequire(import.meta.url)(modules+'playwright');
