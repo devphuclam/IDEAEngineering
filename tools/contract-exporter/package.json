@@ -7,6 +7,8 @@
   "scripts": {
     "export": "node export.mjs",
     "update": "node export.mjs --update",
+    "check": "node export.mjs --check",
+    "test": "node --test contract.test.mjs render.test.mjs restart.test.mjs",
     "open": "node export.mjs --open"
   },
   "dependencies": {

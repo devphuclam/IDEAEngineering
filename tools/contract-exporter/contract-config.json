@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "surfaces": [
+    {
+      "id": "server",
+      "sourceRoot": "apps/server/src/main/java",
+      "openapi": "apps/server/src/main/resources/dev-access/openapi.json"
+    },
+    {
+      "id": "gateway",
+      "sourceRoot": "apps/gateway/src/main/java",
+      "openapi": "docs/product/instances/idea-engineering/api/gateway-openapi.json"
+    }
+  ],
+  "excludedRoutes": [
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+      "method": "GET",
+      "path": "/dev-api",
+      "reason": "Owned development documentation resource, not a product API."
+    },
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+      "method": "GET",
+      "path": "/dev-api/",
+      "reason": "Owned development documentation resource, not a product API."
+    },
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+      "method": "GET",
+      "path": "/dev-api/openapi.json",
+      "reason": "Owned development documentation resource, not a product API."
+    },
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+      "method": "GET",
+      "path": "/dev-api/boot.js",
+      "reason": "Owned development documentation resource, not a product API."
+    },
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+      "method": "GET",
+      "path": "/dev-api/assets/{file}",
+      "reason": "Owned development documentation resource, not a product API."
+    },
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+      "method": "GET",
+      "path": "/dev-api/notices/{file}",
+      "reason": "Owned development documentation resource, not a product API."
+    }
+  ],
+  "filterRoutes": [
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/identity/IdentityHttpSecurity.java",
+      "adapter": "spring-login"
+    },
+    {
+      "surface": "server",
+      "source": "apps/server/src/main/java/com/idea/ddm/identity/LogoutBoundary.java",
+      "adapter": "servlet-logout"
+    }
+  ],
+  "designSource": "docs/product/instances/idea-engineering/api/controlled-product-data.md",
+  "reviewedSources": [
+    "apps/server/src/main/java/com/idea/ddm/ProcessHealthController.java",
+    "apps/server/src/main/java/com/idea/ddm/health/DataHealthController.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/IdentityController.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/IdentityAccountAdministration.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/IdentityDirectoryQueries.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/IdentityHttpSecurity.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/LogoutBoundary.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/SignInBoundary.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/IdentityAdministration.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/SessionService.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/CredentialSetupService.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/CredentialResetService.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/CredentialProofDelivery.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/IdentityTransactions.java",
+    "apps/server/src/main/java/com/idea/ddm/identity/OwnerSessionEligibility.java",
+    "apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceController.java",
+    "apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceQueries.java",
+    "apps/server/src/main/java/com/idea/ddm/project/ProjectGovernanceAdministration.java",
+    "apps/server/src/main/java/com/idea/ddm/project/ProjectParticipationAdministration.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleAssignmentController.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleAssignmentAdministration.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleCatalogueController.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleCatalogueQueries.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleDefinitionController.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleDefinitionCandidateService.java",
+    "apps/server/src/main/java/com/idea/ddm/access/RoleDefinitionActivationService.java",
+    "apps/server/src/main/java/com/idea/ddm/access/AccessInspectionController.java",
+    "apps/server/src/main/java/com/idea/ddm/access/AccessInspectionQueries.java",
+    "apps/server/src/main/java/com/idea/ddm/access/AuthorizationDecisionService.java",
+    "apps/server/src/main/java/com/idea/ddm/access/CommittedAdministrationScope.java",
+    "apps/server/src/main/java/com/idea/ddm/iam/IamWebConfiguration.java",
+    "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentApiDocumentation.java",
+    "apps/gateway/src/main/java/com/idea/ddm/gateway/GatewayApplication.java",
+    "apps/gateway/src/main/java/com/idea/ddm/gateway/transfer/GatewayTransferService.java",
+    "apps/gateway/src/main/java/com/idea/ddm/gateway/adapter/FilesystemVaultAdapter.java",
+    "docs/product/instances/idea-engineering/api/identity-session.md",
+    "specs/009-iam-rbac-ui-integration/contracts/operations.md",
+    "specs/009-iam-rbac-ui-integration/contracts/permission-delegation.md",
+    "specs/005-ph1-foundation-custody/contracts/ph1-boundaries.md",
+    "docs/product/instances/idea-engineering/api/controlled-product-data.md",
+    "apps/server/src/main/java/com/idea/ddm/devaccess/DevelopmentDocumentationBoundary.java"
+  ]
+}
